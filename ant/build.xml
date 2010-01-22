@@ -56,7 +56,7 @@
 	-->
 
 	<!-- Where are the local OpenSymbols stored. This folder is copied over to geopublishing.org  -->
-	<property name="OS.location" value="/home/stefan/EigeneDateien/code/atlas/trunk/Atlas-Framework/openmapsymbols" />
+	<property name="OS.location" value="/home/stefan/EigeneDateien/code/atlas/trunk/openmapsymbols" />
 
 	<property name="debuglevel" value="source,lines,vars" />
 	<property name="target" value="1.6" />
@@ -752,7 +752,7 @@
 		<delete failonerror="false" dir="${GT.26x}/../sources">
 		</delete>
 
-		<mkdir dir="${GT.26x}/../sources" />
+		<mkdir dir="${GT.26x}/s../sources" />
 
 		<copy todir="${GT.26x}/../sources">
 			<fileset dir="${GT.26x}">
