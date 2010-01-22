@@ -1,0 +1,279 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Stefan A. Krüger.
+ * 
+ * This file is part of the AtlasViewer application - A GIS viewer application targeting at end-users with no GIS-experience. Its main purpose is to present the atlases created with the Geopublisher application.
+ * http://www.geopublishing.org
+ * 
+ * AtlasViewer is part of the Geopublishing Framework hosted at:
+ * http://wald.intevation.org/projects/atlas-framework/
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License (license.txt)
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * or try this link: http://www.gnu.org/licenses/lgpl.html
+ * 
+ * Contributors:
+ *     Stefan A. Krüger - initial API and implementation
+ ******************************************************************************/
+package skrueger.atlas;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.jnlp.DownloadService;
+import javax.jnlp.DownloadServiceListener;
+import javax.jnlp.ServiceManager;
+import javax.jnlp.SingleInstanceListener;
+import javax.jnlp.SingleInstanceService;
+import javax.jnlp.UnavailableServiceException;
+
+import org.apache.log4j.Logger;
+
+import skrueger.atlas.dp.AtlasJWSCachedResourceLoader;
+import skrueger.atlas.dp.DataPool;
+import skrueger.atlas.dp.DpEntry;
+import skrueger.atlas.dp.DpRef;
+import skrueger.atlas.exceptions.AtlasFatalException;
+import skrueger.atlas.gui.internal.AtlasStatusDialog;
+import skrueger.atlas.gui.internal.AtlasTask;
+import skrueger.atlas.gui.internal.JnlpStatusDialog2;
+import skrueger.atlas.map.Map;
+
+/**
+ * A utility class with static methods that deal with JNLP / JavaWebStart
+ * related stuff.
+ * 
+ * @author Stefan Alfons Krueger
+ * 
+ */
+public class JNLPUtil {
+	final static private Logger LOGGER = Logger.getLogger(JNLPUtil.class);
+
+	private static DownloadService jnlpDownloadService;
+
+	/** Caches whether the AtlasData comes from a **/
+	private static Boolean isAtlasDataFromJWS = null;
+
+	/**
+	 * We cache the JNLP DownloadService object so we don't have to look it up
+	 * again and again.
+	 * 
+	 * @return always the same {@link DownloadService}
+	 * @throws UnavailableServiceException
+	 *             if we are not in a JWS context.
+	 */
+	public static DownloadService getJNLPDownloadService()
+			throws UnavailableServiceException {
+		if (jnlpDownloadService == null) {
+			jnlpDownloadService = (DownloadService) ServiceManager
+					.lookup("javax.jnlp.DownloadService");
+
+		}
+		return jnlpDownloadService;
+	}
+
+	/**
+	 * Registers the given instance to the {@link SingleInstanceService} - if we
+	 * are running in JavaWebStart context.
+	 * 
+	 * @param instance
+	 *            The {@link SingleInstanceListener} instance.
+	 * @param add
+	 *            If <code>true</code> the instance will be added to the
+	 *            {@link SingleInstanceService}. Otherwise it will be removed.
+	 */
+	public static void registerAsSingleInstance(
+			SingleInstanceListener instance, boolean add) {
+
+		Logger LOGGER = Logger.getLogger(instance.getClass());
+
+		try {
+			SingleInstanceService singleInstanceService = (SingleInstanceService) ServiceManager
+					.lookup("javax.jnlp.SingleInstanceService");
+			// add the listener to this application!
+
+			if (add) {
+				LOGGER.info("Registering as a JNLP SingleInstance...");
+				singleInstanceService.addSingleInstanceListener(instance);
+			} else {
+				LOGGER.info("Un-registering as a JNLP SingleInstance...");
+				singleInstanceService.removeSingleInstanceListener(instance);
+			}
+			LOGGER.info(" ...OK!");
+		} catch (UnavailableServiceException use) {
+		}
+	}
+	
+	/**
+	 * Does not manage any GUI feedback! Please run it from an {@link AtlasTask}
+	 * . Will do nothing if the part is already cached.
+	 * @param statusDialog 
+	 */
+	public static void loadPart(String part, AtlasStatusDialog statusDialog)
+			throws IOException {
+		DownloadService ds;
+		try {
+			ds = JNLPUtil.getJNLPDownloadService();
+
+			if (ds.isPartCached(part)) {
+				LOGGER.info("part " + part + " is JWS cached");
+			} else {
+				LOGGER.info("part " + part + " is NOT cached.. start DL ");
+
+				// load the resource into the JWS Cache
+				ds.loadPart(part, getJNLPDialog()); //use statusDialog
+			}
+		} catch (UnavailableServiceException e1) {
+			throw new IOException(e1);
+		}
+	}
+
+	public static DownloadServiceListener getJNLPDialog()
+			throws UnavailableServiceException {
+//		return getJNLPDownloadService().getDefaultProgressWindow();
+		return new JnlpStatusDialog2();
+	}
+
+	public static void loadPart(String[] parts, AtlasStatusDialog statusDialog)
+			throws IOException {
+		DownloadService ds;
+		try {
+			ds = JNLPUtil.getJNLPDownloadService();
+
+			// load the resource into the JWS Cache
+			ds.loadPart(parts, getJNLPDialog()); // use statusDialog
+
+		} catch (UnavailableServiceException e1) {
+			throw new IOException(e1);
+		}
+	}
+
+	/**
+	 * Checks which parts of the JNLP resources have not yet been cached.
+	 * 
+	 * @see #getJWSDownloadAllMenuItem()
+	 * 
+	 * @throws UnavailableServiceException
+	 *             if we are not using JWS
+	 */
+	public static ArrayList<String> countPartsToDownload(DataPool dataPool) {
+		ArrayList<String> haveToDownload = new ArrayList<String>();
+
+		try {
+
+			for (DpEntry dpe : dataPool.values()) {
+				LOGGER.debug("Checking if part "
+						+ dpe.getId()
+						+ " is cached = "
+						+ JNLPUtil.getJNLPDownloadService().isPartCached(
+								dpe.getId()));
+				if (!JNLPUtil.getJNLPDownloadService()
+						.isPartCached(dpe.getId())) {
+					haveToDownload.add(dpe.getId());
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
+
+		LOGGER.debug("There are " + haveToDownload.size()
+				+ " parts that are not yet downloaded.");
+
+		return haveToDownload;
+	}
+
+	/**
+	 * Checks which parts of the JNLP resources have not yet been cached.
+	 * 
+	 * @see #getJWSDownloadAllMenuItem()
+	 * 
+	 * @throws UnavailableServiceException
+	 *             if we are not using JWS
+	 */
+	public static String[] countPartsToDownload(Map map) {
+		ArrayList<String> partsToDownload = new ArrayList<String>();
+
+		DownloadService ds;
+		try {
+			ds = JNLPUtil.getJNLPDownloadService();
+		} catch (final UnavailableServiceException e1) {
+			// return if we are not using JWS
+			return new String[] {};
+		}
+
+		for (final DpRef ref : map.getLayers()) {
+			final DpEntry dpe = ref.getTarget();
+			if (!dpe.isDownloadedAndVisible()) {
+				if (!ds.isPartCached(dpe.getId())) {
+					partsToDownload.add(dpe.getId());
+				}
+			}
+		}
+
+		return partsToDownload.toArray(new String[partsToDownload.size()]);
+	}
+
+	/**
+	 * Evaluates where the atlas.xml comes from. There are 3 options:
+	 * <ul>
+	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed</li>
+	 * <li>* jar://htpp://asdasasda/online/av.jar!/atlas.xml => From the Internet,
+	 * JWS download nötig</li>
+	 * <li>* file://mein/verz/atlas.xml => Aus lokal dir, kein JWS download
+	 * nötig</li>
+	 * </ul>
+	 * The result is cached in {@value #isAtlasDataFromJWS}.
+	 */
+	public static boolean isAtlasDataFromJWS() {
+		
+		if (isAtlasDataFromJWS == null) {
+			URL atlasXmlRes = AtlasConfig.getResLoMan().getResourceAsUrl(
+					AtlasConfig.ATLASDATA_DIRNAME + "/atlas.xml");
+	
+			LOGGER.info("resourceAsUrl " + atlasXmlRes);
+	
+			String protocol = atlasXmlRes.getProtocol();
+	
+			if (protocol.startsWith("file")) {
+				return isAtlasDataFromJWS = Boolean.FALSE;
+			}
+	
+			if (protocol.startsWith("jar")) {
+				LOGGER.info("resourceAsUrl starts with JAR");
+	
+				// First check for JWS and eventually download un-cached JARs
+				if (atlasXmlRes.toString().contains("http")) {
+					LOGGER
+							.info("resourceAsUrl and contains with HTTP => we need to get it via JWS if it is not cached....");
+					LOGGER
+							.debug("the data comes from JARs/URLs, adding it to resman...");
+					// moved up one block
+					AtlasConfig.getResLoMan().addResourceLoader(
+							AtlasJWSCachedResourceLoader.getInstance());
+	
+					return isAtlasDataFromJWS = true;
+				} else
+					return isAtlasDataFromJWS = false;
+	
+			} else {
+				throw new AtlasFatalException(
+						"Failed to see data! atlas.xml comes from "
+								+ atlasXmlRes.toString());
+			}
+		}
+		
+		return isAtlasDataFromJWS;
+	}
+
+}

@@ -1,0 +1,438 @@
+>Beim Löschen aller Layer aus der Marokko-Startkarte bleibt die Karte trotzdem bestehen. Das ganze ist blockiert.
+
+Änderungen in layern bleiben auch bestehen, wenn man andere Karten mit diesen layern neu lädt.
+
+Schneelayer: Wenn ich beim Styler das „Modèle“ in eine andere Farbe ändere, erscheinen die Attribute (Zahlen) in der Karte ??? Wie hängt das zusammen und wieso?
+ 
+Rahmenmit Koordinaten: Auch unter FR steht da „Raster-Wert“ (Vorschlag: „Raster value“, „valeur Raster“). Kann man vor die Zahlen in der rechten unteren Ecke „Koordinaten“, „Coordinates“, „Coordonnées“ setzen?
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+ExtractBoundsFilterVisitorExtractBoundsFilterVisitorExtractBoundsFilterVisitorExtractBoundsFilterVisitor ExtractBoundsFilterVisitor
+	@Override
+	public Object visit(PropertyName expression, Object data) {
+		return null;
+	}
+	ExtractBoundsFilterVisitor
+	
+  /**
+     * Please note we are only visiting literals involved in spatial operations.
+     * @param literal, hopefully a Geometry or Envelope
+     * @param data Incoming BoundingBox (or Envelope or CRS)
+     * 
+     * @return ReferencedEnvelope updated to reflect literal
+     */
+    public Object visit( Literal expression, Object data ) {        
+        ReferencedEnvelope bbox = bbox( data );
+
+        Object value = expression.getValue();
+        if (value instanceof Geometry) {
+                        
+            Geometry geometry = (Geometry) value;
+            Envelope bounds = geometry.getEnvelopeInternal();
+            
+            if(bbox != null) {
+            	bbox.expandToInclude(bounds);
+            	return bbox;
+            } else {
+            	return bbox(bounds);
+            }
+        } else {
+            LOGGER.finer("LiteralExpression ignored!");
+        }
+        return bbox;
+    }
+
+
+
+
+
+shoot StyleBuilder:
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x7b359f59, pid=22744, tid=2058353552
+#
+# JRE version: 6.0_16-b01
+# Java VM: Java HotSpot(TM) Server VM (14.2-b01 mixed mode linux-x86 )
+# Problematic frame:
+# C  [libawt.so+0x57f59]  IntArgbToIntArgbSrcOverMaskBlit+0xb9
+#
+# An error report file with more information is saved as:
+# /home/stefan/EigeneDateien/code/ws.atlas/Atlas-Framework/hs_err_pid22744.log
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+			Stroke outline = STYLE_BUILDER.createStroke(Color.yellow.brighter(), 3);
+			Mark dots = STYLE_BUILDER.createMark("shape://dot", Color.yellow, Color.yellow, 1.);
+			Graphic fillGraphic = STYLE_BUILDER.createGraphic(null, dots, dots, Double.NaN, 4., Double.NaN);
+			Fill fill = STYLE_BUILDER.createFill(Color.yellow.brighter(), null, Double.NaN, fillGraphic);
+			
+			PolygonSymbolizer polS0 = STYLE_BUILDER.createPolygonSymbolizer(outline, fill);
+			symbolizers = LangUtil.extendArray(symbolizers, polS0);
+
+
+    public void testJVMCrashOnLinuxAWT () throws Exception {
+        StyleBuilder STYLE_BUILDER = new StyleBuilder();
+        
+        org.geotools.styling.Stroke outline = STYLE_BUILDER.createStroke(Color.yellow.brighter(), 3);
+        Mark dots = STYLE_BUILDER.createMark("shape://dot", Color.yellow, Color.yellow, 1.);
+        Graphic fillGraphic = STYLE_BUILDER.createGraphic(null, dots, dots, Double.NaN, 4., Double.NaN);
+        Fill fill = STYLE_BUILDER.createFill(Color.yellow.brighter(), null, Double.NaN, fillGraphic);
+        
+        PolygonSymbolizer polS0 = STYLE_BUILDER.createPolygonSymbolizer(outline, fill);
+
+        Style st = STYLE_BUILDER.createStyle(polS0);
+        
+
+        MapContext context = new DefaultMapContext();
+        context.addLayer(TestUtilites.getPolygons().getFeatureSource() , st);
+        ShapefileRenderer renderer = new ShapefileRenderer(context);
+        
+        Envelope env = context.getLayerBounds();
+        
+        TestUtilites.INTERACTIVE = true;
+        
+        TestUtilites.showRender("testJVMcrash", renderer, 2000, env);
+        
+    }
+
+
+
+
+
+
+
+
+
+
+GT2.6
+
+
+
+* reader.setInputTransparentColor(getInputTransparentColor());
+* reader.getMaxRex
+
+GT2.6
+
+
+
+
+
+
+http://www.geopublishing.org/gp/startGP.gif
+http://www.geopublishing.org/gp/startAS.gif
+
+
+<font size="-1">Optional: For users that have no Internet and no Java 1.6 installed, you should copy a recent JRE into the <i>DISK/jre</i> folder. The <i>DISK/jre</i> folder should then contain sub-folders <i>lib</i> and <i>bin</i>.</font>
+<font size="-1">Optionel: Pour permettre aux utilisateurs sans Internet  et sans Java 1.6 d`utiliser l`Atlas,<br/>copier une installation de JRE 1.6 dans le dossier <i>DISK/jre</i>.<br/>Le dossier <i>DISK/jre</i> doit alors contenir <i>bin</i> et <i>lib</i>.</font>
+<font size="-1">Optional: Damit auch Benutzer ohne Internet und ohne Java 1.6 den Atlas benutzen können,<br/>kopieren Sie ein installiertes JRE 1.6 in den Ordern <i>DISK/jre</i>.<br/>Order <i>DISK/jre</i> sollte dann die Unterordner <i>bin</i> und <i>lib</i> enthalten.</font>
+
+
+"Do you want to use the SingleSymbol as the template for the Graduated Colors"); //i8n
+    
+    * PDFMapProducer
+* externe .sld einfach mit zum .sld legen burg01.svg
+shape://slash|pipe
+
+
+http://www.ghostscript.com/~ghostgum/pdftips.htm
+find -iname "*.pdf" -exec java -Xmx500m -classpath /home/stefan/bin/Multivalent20060102.jar tool.pdf.Compress -force -nostruct -noalt -jpeg -old {} \;
+
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dBATCH -sOutputFile=output.pdf klein/impetus_atlas_benin_end_3en.pdf
+
+kill candidates: DpMediaPDF.JOptionPane.ShowMessageDialog.pdf_could_not_found
+
+rsync -r devgis:/home/stefan/atlas/Atlas_Arthur/IIDA2_WorkingCopy/* /home/stefan/Desktop/ATLAS/AtlasWorkingCopies/IIDA2_WorkingCopy
+
+
+jar -if /tmp/AtlasTempFile_export16851000/vector_anschlussstellen_01577333580.jar /home/stefan/Desktop/ATLAS/AtlasWorkingCopies/Atlas_2.2/ad/data/vector_anschlussstellen_01577333580
+
+
+* SimplyHTML um Atlas interne links erweitern?!?! HEy das wäre super cool!
+
+* NumberFOmratter über Translation classe regeln
+
+
+commons-beanutils-1.7.0.jar hinzu!
+DEBUG LayerPanel           updateLegendIcon          Created a new legendPanel for StyledFeatureSourceInterface village_all_v1.5.shp
+DEBUG LayerPanel           layerAdded                layerAdded MapLayerListListener
+DEBUG AtlasMapView         setMap                    Map is supposed to zoom to: Env[-140592.51414511848 : 986491.4254319207, 622485.8 : 1433496.2]
+INFO  AtlasMapView         initialize                No ad/map_logo.png found. Not displaying any icon on top of the map
+31.07.2008 01:49:32 org.geotools.factory.FactoryRegistry scanForPlugins
+WARNUNG: Can't load a service for category "ConverterFactory". Cause is "NoClassDefFoundError: org/apache/commons/beanutils/Converter".
+
+
+highlight CRS
+
+
+native is UTF-8 ????
+-Dfile.encoding=ISO-8859-1 not working in JWS?!?!?!?
+The property element defines a system property that will be available through the System.getProperty and System.setProperties methods. It has two required attributes: name and value. For example:
+    <property name="key" value="overwritten"/> 
+Properties set in the jnlp file will normally be set by Java Web Start after the VM is started but before the application is invoked. Some properties are considered "secure" properties and can be passed as -Dkey=value arguments on the java invocation command line.
+
+
+
+
+
+xulu geotools klassen nach schmitzm verschieben und umbenennen!
+
+
+
+Import von SHP mit Bildern 
+
+so ging das mit dem GPS:
+
+				// GPSDataProcessor gps_data_processor = new
+				// GPSNmeaDataProcessor();
+				//				
+				// Hashtable<String,Object> env = new Hashtable<String,
+				// Object>();
+				// env.put(GPSSerialDevice.PORT_NAME_KEY, "/dev/ttyUSB0");
+				// env.put(GPSSerialDevice.PORT_SPEED_KEY, new Integer(4800));
+				// GPSDevice gps_device = new GPSSerialDevice();
+				// gps_device.init(env);
+				//				
+				// gps_data_processor.setGPSDevice( gps_device);
+				// gps_data_processor.open();
+				//				
+				// PropertyChangeListener listener = new
+				// PropertyChangeListener(){
+				//
+				// public void propertyChange(PropertyChangeEvent event) {
+				// Object value = event.getNewValue();
+				// String name = event.getPropertyName();
+				// if (name.equals( GPSDataProcessor.LOCATION)){
+				// GPSPosition pos = (GPSPosition)value;
+				// log.info("New location = "+ pos.getLatitude() + "/" +
+				// pos.getLongitude());
+				//							
+				// com.vividsolutions.jts.geom.Envelope mapArea =
+				// mapView.getMapPane().getMapArea();
+				//							
+				// MathTransform latlon2Map;
+				// try {
+				// latlon2Map =
+				// CRS.findMathTransform(DefaultGeographicCRS.WGS84,
+				// mapView.getGeoMapPane().getMapContext().getCoordinateReferenceSystem());
+				// DirectPosition2D from = new
+				// DirectPosition2D(pos.getLongitude(), pos.getLatitude());
+				// DirectPosition2D to = new
+				// DirectPosition2D(mapView.getGeoMapPane().getMapContext().getCoordinateReferenceSystem());
+				// latlon2Map.transform(from, to);
+				//							
+				// double w = mapArea.getWidth();
+				// double h = mapArea.getHeight();
+				//							
+				// com.vividsolutions.jts.geom.Envelope mapArea2 = new
+				// com.vividsolutions.jts.geom.Envelope ( new Coordinate(to.x -
+				// w/2, to.y-h/2), new Coordinate(to.x + w/2, to.y+h/2));
+				//							
+				// mapView.getMapPane().setMapArea(mapArea2);
+				//							
+				// log.debug(to);
+				// } catch (FactoryException e) {
+				// AtlasError.handle( e );
+				// } catch (MismatchedDimensionException e) {
+				// AtlasError.handle( e );
+				// } catch (TransformException e) {
+				// AtlasError.handle( e );
+				// }
+				//							
+				// } else {
+				// log.info("event = "+name);
+				// }
+				// }
+				// };
+				//				
+				// gps_data_processor.addGPSDataChangeListener(listener);
+
+
+
+VLC http://trac.videolan.org/jvlc/wiki/WikiStart
+
+
+				final DpLayer<?> dpLayer = (DpLayer<?>) mapRef.getTarget();
+
+				if (dpLayer instanceof DpLayerRaster) {
+					LOGGER.debug("set Styled Layer ");
+					layerManager.addStyledLayer((DpLayerRaster) dpLayer);
+				} else if (dpLayer instanceof DpLayerRasterPyramid) {
+					// ****************************************************************************
+					// Adding a Pyramidlayer to the map
+					// ****************************************************************************
+					final DpLayerRasterPyramid pyramid = (DpLayerRasterPyramid) dpLayer;
+					layerManager.addStyledLayer(pyramid);
+
+					// ****************************************************************************
+					// Adding a listener to the layer that enables us to
+					// optionally disable the
+					// retrival of the pyramid-data during panning. See
+					// AtlasImagePyr...setShowDuringPan
+					// ****************************************************************************
+					getGeoMapPane().getMapPane().addMouseListener(
+							new PyramidListener(pyramid.getGeoObject()));
+
+				} else if (dpLayer instanceof DpLayerVector) {
+					LOGGER.debug("dpLayer instanceof DpLayerVector");
+					// ****************************************************************************
+					// Adding a vectorlayer to the map
+					// ****************************************************************************
+					LOGGER.debug("set Styled Layer ");
+					layerManager.addStyledLayer((DpLayerVector) dpLayer);
+				}
+
+
+
+
+
+
+
+* pack200  => Java 6.0.10
+
+* SHAPE nach export nicht offnebar??? => michael
+
+* 4 bänder bei landsat?!?!
+
+@Martin:
+    okButton = new JButton( "Ok" );
+    cancelButton = new JButton( "Cancel" );
+    applyButton = new JButton( "Apply" );
+    => war english!
+    
+FeatrureLayerFilterDialog: SwingRessource ging nicht... !
+
+* transparent color fuer raster auswählen können im AC.
+
+* icons die im SLD referenziert sind sollen aus dem localen Webbrowser angeboten werden.
+
+* alternative falls DnD nicht klappt: tool menu..
+
+img://
+pdf://filename.dfdf,de{ddf}en{dfdf}
+video://filename.dfdf,de{ddf}en{dfdf}
+
+* SingleInstanceService,
+
+* splashscreen soll auch im atlas.xml definiert sein... 
+
+* statusleiste um die anzeige von zwei CRS erweitern => vielleicht nicht mehr, da info click?!
+
+
+*********************************************************************************
+*********************************************************************************
+PyramidenLayer ******************************************************************
+warten auf Daniele Romagnoli/ ImageIO-GDAL
+
+gdaltindex -tileindex location test *.tif
+
+Pyramidenlayer umkonvertieren:
+find 100.old -iname "*.tiff" -execdir gdal_translate -co "COMPRESS=LZW" {} ../100/{} \; 
+
+Strategie für Pyramidenlayer ist nun:
+* JARs unkomprimiert lassen
+* Das Mosaic mit der besten Auflösung wird mit LZW komprimiert, alle schlechteren Pyramidenlayer werden mit JPEG_QUALITY=85 komprimiert
+* Es werden 5 Mosaice in folgenden Auflösungen erstellt: 100, 75, 50, 25, 10
+* Alle pyramiedenlayer benötigen eine .prj file im hauptverz und in allen "tiles" verzeichnissen.
+! rundungsfehler...
+*********************************************************************************
+*********************************************************************************
+
+* make av.properties editable with l2prod in the ac
+
+* action performed in ac
+
+.gfw wird nicht genommen..!
+
+jMapPane setignorerepaint für resize und pan?!!?!?!?
+
+atlascreator Websevrer ... 
+wenn ein atlas geschlossen wird, dann muss auch der webserver runtergefahren werden?? nö  ;-)
+
+Nutzungshinweise:
+* All endings should be tower case => soll im Atlas schema festgelegt werden
+
+* blinken des objekts => hightlighmanager
+
+//					Point loc = getJFrame().getLocation();
+//					loc.translate(20, 20);
+//					aboutDialog.setLocation(loc);
+//					aboutDialog.setVisible(true);
+
+************* Signierend der JARs, JNLP .. 
+keytool -genkey -alias mysqelf -keypass stefan
+keytool -selfcert -alias myself
+
+Signature löschen mit grafischem ZIP Editor aka WinZIp oder ark. in META.INF die .SIG oder so
+
+hasHTML Type html oder pdf ... hasPDF 
+
+
+isGeoTiffFile public static boolean isGeoTiffFile(java.io.File file)
+
+* DIA von Verzeichnisstruktur
+
+* HTML nicht ins globale html verz sondern in die DP verzeichnisse
+
+
+// Wo taucht Name und beschreibung alles auf:
+--------------------------
+Gruppe : 
+  Im Menu: Name + Desc tooltip
+Video 
+  Name in der Überschift des Players
+  Name + DescTT im Menu
+Raster
+  
+Vector
+
+Atlas:
+  name, desc in webstart JNLP
+  
+Jar:
+  Implementation-Vendor 
+  
+Im JMapPane
+  Tooltip vom Logo
+--------------------------
+
+	
+
+NICE TO HAVE:
+
+* Seperators/Abstaende in den Gruppen einfuehren koennen
+  
+* lazy bei testers, static final!?
+
+
+* Checken des shemas bei export?!
+
+* lock von projektdirs?!
+
+    
+ Videos: mencoder -ovc vfw -xvfwopts codec=iccvid.dll -oac pcm bailey.mpg -o ausgabe.avi
+
+
+	
+	
+	
+
+
+alias updateAtlas='cd /home/stefan/Desktop/atlas && cp atlasViewer.jnlp atlasViewerLocal.jnlp ; cat atlasViewer.jnlp | sed s/192.168.0.184/www.wikisquare.de/g >  atlasViewer.jnlp2 ; mv atlasViewer.jnlp2 atlasViewer.jnlp ; cd /home/stefan/Desktop ; rsync -urv atlas/* prodi:atlas'
+gdalwarp -s_srs 'EPSG:4326' -t_srs '+proj=utm +zone=31 +datum=WGS84' be_dgm.gif be_dgm3.tif

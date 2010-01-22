@@ -1,0 +1,178 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Stefan A. Krüger.
+ * 
+ * This file is part of the AtlasViewer application - A GIS viewer application targeting at end-users with no GIS-experience. Its main purpose is to present the atlases created with the Geopublisher application.
+ * http://www.geopublishing.org
+ * 
+ * AtlasViewer is part of the Geopublishing Framework hosted at:
+ * http://wald.intevation.org/projects/atlas-framework/
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License (license.txt)
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * or try this link: http://www.gnu.org/licenses/lgpl.html
+ * 
+ * Contributors:
+ *     Stefan A. Krüger - initial API and implementation
+ ******************************************************************************/
+/**
+ * 
+ */
+package skrueger.atlas.http;
+
+import java.io.IOException;
+import java.net.BindException;
+
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
+import rachel.http.WebServer;
+import rachel.http.loader.WebResourceManager;
+import rachel.util.NetUtils;
+import skrueger.atlas.AVUtil;
+import skrueger.atlas.exceptions.AtlasFatalException;
+
+/**
+ * A Wrapper that starts the rachel WebServer to provide http access to html
+ * pages which are stored in JARs.
+ * 
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ */
+public class Webserver {
+	static private final Logger log = Logger.getLogger(Webserver.class);
+
+	public static int PORT = 7272;
+
+	public static int DEFAULTPORT = 7272;
+
+	private static WebServer webserver = null;
+
+	/** Under special conditions, this class doesn't start a new webserver. * */
+	boolean startupWebserver = true;
+
+	/**
+	 * Webserver
+	 * 
+	 * @param interactive
+	 *            If false, then the user will not be asked anything. If true
+	 *            and the port is occupied, the user might be asked if he wanto
+	 *            to start the server on another port.
+	 * @throws AtlasFatalException
+	 * @throws IOException
+	 */
+	public Webserver(boolean interactive) throws AtlasFatalException {
+		interactive=true;
+
+		/**
+		 * Replace PORT selection with a random Number iteration
+		 */
+
+		if (webserver == null) {
+			
+			try {
+			log.info("Starting internal webserver");
+			try {
+				webserver = new WebServer(PORT, WebResourceManager
+						.getInstance());
+			} catch (IOException e) {
+				try {
+					PORT = 8282;
+					webserver = new WebServer(PORT, WebResourceManager
+							.getInstance());
+				} catch (BindException e1) {
+					try {
+						PORT = (AVUtil.RANDOM.nextInt(200)) + 9000;
+						webserver = new WebServer(PORT, WebResourceManager
+								.getInstance());
+					} catch (BindException e2) {
+
+						final String msg = "The internal webserver can't be started. All network ports are in use.\n"
+								+ // i8n
+								"You probably have too many instances of the atlas program open. Close\n"
+								+ "all other atlas programs and retry.\n"
+								+ "If you continue, this atlas-software might provide inconsistant HTML information.\n\n"
+								+ "Do you wan't to continue?";
+						log.error(msg);
+
+						int result;
+						if (interactive) {
+							result = JOptionPane.showConfirmDialog(null, msg,
+									"HTML support inconsistent!",
+									JOptionPane.OK_OPTION);
+
+							if (result != JOptionPane.YES_OPTION) {
+								log
+										.info(
+												"Application stopped by user after BindException:",
+												e2);
+								System.exit(-1);
+							}
+						}
+						startupWebserver = false;
+						PORT = DEFAULTPORT;
+					}
+				}
+			}
+
+			if (startupWebserver) {
+				webserver.start();
+			} else {
+				log
+						.info("The constructor of Webserver has been started, but we decided not to start the webserver.");
+			}
+		} catch (Throwable e) {
+			throw new AtlasFatalException("Webserver startup: ",e);
+		}
+		}
+	}
+
+	/**
+	 * Shuts down the WebServer. TODO This is supposed to be not threadsafe!
+	 */
+	public static void dispose() {
+//		if (webserver != null) {
+//			log
+//					.warn("Thread.stop() is supposed to be NOT threadsafe. Disposing the WebServer anyway.");
+//			webserver.shutdown = true;
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				log.error("While waiting for the webserver to shutdown:",e);
+//			}
+//			if (webserver.isAlive()){
+//				log.error("WebServer didn't stop. Doing webserver.stop() now");
+//				webserver.stop();
+//			}
+//			webserver = null;
+//		}
+	}
+
+	/**
+	 * Returns the document base for the internal {@link WebServer}
+	 * 
+	 * Is very slow
+	 * 
+	 * @return somthing like http://localhost:4545
+	 */
+	public static String getDocumentBase() {
+		return "http://" + NetUtils.getLocalHostName() + ":" + Webserver.PORT;
+	}
+
+	public static boolean isRunning() {
+		if (webserver == null)
+			return false;
+		return webserver.isAlive();
+	}
+
+}

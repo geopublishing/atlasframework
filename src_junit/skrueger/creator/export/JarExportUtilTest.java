@@ -1,0 +1,243 @@
+/*******************************************************************************
+ * Copyright (c) 2009 Stefan A. Krüger.
+ * 
+ * This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
+ * http://www.geopublishing.org
+ * 
+ * Geopublisher is part of the Geopublishing Framework hosted at:
+ * http://wald.intevation.org/projects/atlas-framework/
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License (license.txt)
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * or try this link: http://www.gnu.org/licenses/gpl.html
+ * 
+ * Contributors:
+ *     Stefan A. Krüger - initial API and implementation
+ ******************************************************************************/
+package skrueger.creator.export;
+
+import java.io.File;
+import java.io.IOException;
+
+import junit.framework.TestCase;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Test;
+
+import skrueger.atlas.AtlasCancelException;
+import skrueger.atlas.dp.DpEntry;
+import skrueger.creator.AtlasConfigEditable;
+import skrueger.creator.GPProps;
+import skrueger.creator.TestingUtil;
+
+public class JarExportUtilTest extends TestCase {
+	static private final Logger LOGGER = Logger
+			.getLogger(JarExportUtilTest.class);
+
+	final File atlasExportTesttDir = TestingUtil.getAtlasExportTesttDir();
+
+	private AtlasConfigEditable atlasConfig;
+
+	@Override
+	protected void setUp() throws Exception {
+		atlasConfig = TestingUtil.getAtlasConfigE(TestingUtil.Atlas.small);
+	}
+
+	@Test
+	public void testJSmooth() throws Exception {
+
+		assertNotNull(atlasExportTesttDir);
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, true, true);
+
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		String libs = GPProps.get(GPProps.Keys.ClassPathLibs);
+		LOGGER.info("Signer Passwort = " + libs);
+		assertNotNull(libs);
+
+		jeu.export(null);
+
+		String[] files = atlasExportTesttDir.list();
+		assertEquals(files[1], "JWS");
+
+		File atlasDISKDir = new File(atlasExportTesttDir, "DISK");
+		File exeFile = new File(atlasDISKDir, "atlas.exe");
+
+		exeFile.delete();
+		assertTrue(!exeFile.exists());
+
+		jeu.createJSmooth(atlasDISKDir);
+
+		assertTrue(exeFile.exists());
+
+	}
+
+	@Test
+	public void testExportAtlasLibsSignNoGUI() throws Exception {
+
+		assertNotNull(atlasExportTesttDir);
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, true, false);
+
+		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		LOGGER.info("Signer Passwort = " + passwort);
+		assertNotNull(passwort);
+
+		jeu.export(null);
+
+		String[] files = atlasExportTesttDir.list();
+		assertEquals(files[12], "autorun.inf");
+
+		files = new File(atlasExportTesttDir, "lib").list();
+		assertEquals(20, files.length);
+		assertEquals("mlibwrapper_jai.jar", files[2]);
+	}
+
+	@Test
+	public void testJarExecutables() {
+		try {
+			JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
+					atlasExportTesttDir, true, true, false);
+		} catch (Exception e) {
+			fail();
+		}
+	}
+
+	@Test
+	public void testCreateJarFromDpeUnsigned() throws AtlasExportException,
+			IOException, InterruptedException, AtlasCancelException {
+
+		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
+				atlasExportTesttDir, true, true, false);
+
+		File dpeJarFile = new File(atlasExportTesttDir,
+				"vector_landesgrenze_Benin01420640780.jar");
+
+		dpeJarFile.delete();
+
+		assertFalse(dpeJarFile.exists());
+
+		DpEntry dpEntry = (DpEntry) atlasConfig.getDataPool().values()
+				.toArray()[0];
+		assertNotNull(dpEntry);
+
+		assertEquals("vector_landesgrenze_Benin01420640780", dpEntry.getId());
+
+		jarExportUtil.createJarFromDpe(dpEntry);
+
+		assertTrue(dpeJarFile.exists());
+		long length = dpeJarFile.length();
+		System.out.println(length);
+
+		dpeJarFile.delete();
+	}
+
+	@Test
+	public void testCreateJarFromDpeSigned() throws AtlasExportException,
+			IOException, InterruptedException, AtlasCancelException {
+		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
+				atlasExportTesttDir, false, true, false);
+
+		File dpeJarFile = new File(atlasExportTesttDir,
+				"vector_landesgrenze_Benin01420640780.jar");
+
+		dpeJarFile.delete();
+		assertFalse(dpeJarFile.exists());
+
+		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		assertNotNull(passwort);
+
+		DpEntry dpEntry = (DpEntry) atlasConfig.getDataPool().values()
+				.toArray()[0];
+		assertNotNull(dpEntry);
+
+		assertEquals("vector_landesgrenze_Benin01420640780", dpEntry.getId());
+
+		jarExportUtil.createJarFromDpe(dpEntry);
+
+		assertTrue(dpeJarFile.exists());
+		dpeJarFile.delete();
+	}
+
+	@Test
+	public void testExportAtlasNoLibsNoSignNoGUI() throws Exception {
+		assertNotNull(atlasExportTesttDir);
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				false, false, false);
+
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		String libs = GPProps.get(GPProps.Keys.ClassPathLibs);
+		LOGGER.info("Signer Passwort = " + libs);
+		assertNotNull(libs);
+
+		jeu.export(null);
+
+		String[] files = atlasExportTesttDir.list();
+		assertEquals(files[1], "JWS");
+	}
+
+	@Test
+	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
+		assertNotNull(atlasExportTesttDir);
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		// GuiAndTools.deleteDir(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, false, false);
+
+		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		LOGGER.info("Signer Passwort = " + passwort);
+		assertNotNull(passwort);
+
+		jeu.export(null);
+
+		String[] files = atlasExportTesttDir.list();
+		assertEquals(files[12], "autorun.inf");
+
+		files = new File(atlasExportTesttDir, "lib").list();
+		assertEquals(20, files.length);
+		assertEquals("mlibwrapper_jai.jar", files[2]);
+	}
+
+	@After
+	public void cleanAtlasConfig() {
+		atlasConfig = null;
+	}
+
+	public void testCopyJRE() {
+
+	}
+
+}

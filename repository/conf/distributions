@@ -1,0 +1,48 @@
+Codename: lucid
+Components: main
+Architectures: sparc i386 amd64
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
+
+Codename: jaunty
+Components: main
+Architectures: sparc i386 amd64
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
+
+Codename: karmic
+Components: main
+Architectures: sparc i386 amd64
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
+
+Codename: hardy
+Components: main
+Architectures: sparc i386 amd64 
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
+
+Codename: lenny
+Components: main
+Architectures: sparc i386 amd64 
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
+
+
+Codename: etch
+Components: main
+Architectures: sparc i386 amd64 
+Origin: www.geopublishing.org
+Version: 0.1
+Description: Stable releases of Geopublisher and AtlasStyler
+SignWith: yes
