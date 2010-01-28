@@ -531,8 +531,6 @@
 
 		<antcall target="clean_jws_cache" />
 
-		<antcall target="create-deb" />
-
 		<echo message="Rsync Standalone-ZIP" />
 		<exec executable="/usr/bin/rsync">
 			<arg line='-mrcv ${GP.exportAlone.zip} prodi:${release_path}' />
