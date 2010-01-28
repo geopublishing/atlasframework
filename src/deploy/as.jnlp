@@ -27,7 +27,7 @@
 	<property name="file.encoding" value="UTF-8"/>
 	
 	<jar  href="as.jar"  part="main" main="true"/>
-	<jar  href="lib/schmitzm-2.0-RC1.jar"  part="main" />
+	<jar  href="lib/schmitzm-2.0-RC2.jar"  part="main" />
 	
 	<!-- New MigLayout -->
 	<jar  href="lib/gt/miglayout-3.7-swing.jar"  part="main" />

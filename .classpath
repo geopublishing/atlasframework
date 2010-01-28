@@ -10,8 +10,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src_junit"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SCHMITZM"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/colt-statistics"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jai_for_gt2.6-x"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/colt"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jai_for_gt26-x"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jFreeChart-1.0.13"/>
 	<classpathentry kind="lib" path="lib/simplyHTML/gnu-regexp-1.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-1.0.jar"/>
