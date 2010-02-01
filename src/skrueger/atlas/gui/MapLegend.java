@@ -90,6 +90,9 @@ import skrueger.geotools.StyledGridCoverageInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledRasterInterface;
 import skrueger.geotools.StyledRasterPyramidInterface;
+import skrueger.geotools.XMapPaneAction;
+import skrueger.geotools.XMapPaneAction_Select;
+import skrueger.geotools.XMapPaneTool;
 import skrueger.geotools.ZoomRestrictableGridInterface;
 import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.selection.FeatureMapLayerSelectionSynchronizer;
@@ -288,80 +291,37 @@ public class MapLegend extends JXTaskPaneContainer implements
 				.addTool(
 						new MapPaneToolBarAction(
 								MapPaneToolBar.TOOL_SELECTION_SET,
-								getMapPaneToolBar(),
-								"",
-								new ImageIcon(
-										MapView.class
-												.getResource("resource/icons/selection_set.png")),
-								AtlasViewer
-										.R("MapPaneButtons.Selection.SetSelection.TT")) {
+								getMapPaneToolBar(),XMapPaneTool.SELECTION_SET) {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								super.actionPerformed(e);
-								// Set the mouse tool to "Select"
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
+								getGeoMapPane().getMapPane().setTool(XMapPaneTool.SELECTION_SET);
 							}
 
 						}, false);
 
 		// Add Selection
-		getMapPaneToolBar()
-				.addTool(
-						new MapPaneToolBarAction(
-								MapPaneToolBar.TOOL_SELECTION_ADD,
-								getMapPaneToolBar(),
-								"",
-								new ImageIcon(
-										MapView.class
-												.getResource("resource/icons/selection_add.png")),
-								AtlasViewer
-										.R("MapPaneButtons.Selection.AddSelection.TT")) {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								super.actionPerformed(e);
-								// Set the mouse tool to "Select"
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
-								// getGeoMapPane().getMapPane().setNormalCursor(
-								// SwingUtil.CROSSHAIR_CURSOR); // TODO
-								// Nicer
-								// Cursor
-
-								// getGeoMapPane().getMapPane().updateCursorAndRepaintTimer();
-							}
-						}, false);
+		getMapPaneToolBar().addTool(
+				new MapPaneToolBarAction(MapPaneToolBar.TOOL_SELECTION_ADD,
+						getMapPaneToolBar(), XMapPaneTool.SELECTION_ADD) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						super.actionPerformed(e);
+						getGeoMapPane().getMapPane().setTool(
+								XMapPaneTool.SELECTION_ADD);
+					}
+				}, false);
 
 		// Remove Selection
 		getMapPaneToolBar()
 				.addTool(
 						new MapPaneToolBar.MapPaneToolBarAction(
 								MapPaneToolBar.TOOL_SELECTION_REMOVE,
-								getMapPaneToolBar(),
-								"",
-								new ImageIcon(
-										MapView.class
-												.getResource("resource/icons/selection_remove.png")),
-								AtlasViewer
-										.R("MapPaneButtons.Selection.RemoveSelection.TT")) {
+								getMapPaneToolBar(), XMapPaneTool.SELECTION_REMOVE) {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								super.actionPerformed(e);
-								// Set the mouse tool to "Select"
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
-								getGeoMapPane().getMapPane().setState(
-										SelectableXMapPane.SELECT_ALL);
-								// getGeoMapPane().getMapPane().setNormalCursor(
-								// SwingUtil.CROSSHAIR_CURSOR); // TODO
-								// // Nicer
-								// // Cursor
-								//
-								// getGeoMapPane().getMapPane().updateCursorAndRepaintTimer();
+								getGeoMapPane().getMapPane().setTool(XMapPaneTool.SELECTION_REMOVE);
 							}
 						}, false);
 
@@ -455,26 +415,30 @@ public class MapLegend extends JXTaskPaneContainer implements
 								.getSourceObject();
 						org.opengis.filter.Filter filter = fDialog.getFilter();
 
-// There was BUG IN GT.. one had to compare with toString otherwise it return true too often
-// but a BugFix is underway...
+						// There was BUG IN GT.. one had to compare with
+						// toString otherwise it return true too often
+						// but a BugFix is underway...
 						if (fDialog.getFilter().equals(
 								fDialog.getMapLayer().getQuery().getFilter())) {
 							LOGGER
 									.debug("Not reacting to this Filter change, because the filters are equal.");
 							return;
 						}
-						
-						// The changed filter has to be set into the StyledFeaturesInterface, especially in AtlasStyler this was missing
-						StyledLayerInterface<?> styledLayerInterface = rememberId2StyledLayer.get(fDialog.getMapLayer().getTitle());
-						if (styledLayerInterface instanceof StyledFeaturesInterface<?>){
-							StyledFeaturesInterface<?> sf = (StyledFeaturesInterface<?>)styledLayerInterface;
+
+						// The changed filter has to be set into the
+						// StyledFeaturesInterface, especially in AtlasStyler
+						// this was missing
+						StyledLayerInterface<?> styledLayerInterface = rememberId2StyledLayer
+								.get(fDialog.getMapLayer().getTitle());
+						if (styledLayerInterface instanceof StyledFeaturesInterface<?>) {
+							StyledFeaturesInterface<?> sf = (StyledFeaturesInterface<?>) styledLayerInterface;
 							sf.setFilter(filter);
 						}
 
 						String typeName = fDialog.getFilterPanel()
 								.getFeatureType().getTypeName();
 
-						// Will trigger XMapPane repaint  
+						// Will trigger XMapPane repaint
 						fDialog.getMapLayer().setQuery(
 								new DefaultQuery(typeName, filter));
 
@@ -517,11 +481,11 @@ public class MapLegend extends JXTaskPaneContainer implements
 				}
 
 				public void layerRemoved(MapLayerListEvent event) {
-					
+
 					// LOGGER.debug("layerRemoved MapLayerListListener");
 
 					MapLayer removedLayer = event.getLayer();
-					
+
 					// Removes the Selection Synchronizers. If removedLayer ==
 					// null is understood as removing ALL layers.
 					unregisterStyledLayer(removedLayer);
@@ -535,8 +499,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 					}
 				}
 			});
-		
-		setBorder(BorderFactory.createEmptyBorder(5,5,0,5));
+
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 	}
 
 	/**
@@ -614,8 +578,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 					// LOGGER.debug("Style was null, using default ");
 					style = ASUtil.createDefaultStyle(styledFS);
 				}
-				mapLayer = new AtlasMapLayer(styledFS.getFeatureSource(),
-						style);
+				mapLayer = new AtlasMapLayer(styledFS.getFeatureSource(), style);
 
 				/**
 				 * In case that we have a DpLayerVectorFeatureSource, we might
@@ -628,8 +591,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 						DefaultQuery query = new DefaultQuery(
 								dpLayerVectorFeatureSource.getTypeName()
-										.getLocalPart(), dpLayerVectorFeatureSource
-												.getFilter());
+										.getLocalPart(),
+								dpLayerVectorFeatureSource.getFilter());
 
 						mapLayer.setQuery(query);
 					}
@@ -731,7 +694,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 		return null;
 	}
 
-
 	/**
 	 * {@link #recreateLayerList()} works on cached
 	 * {@link #rememberId2MapLayerLegend} only. This method removes the cached
@@ -767,8 +729,9 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * If uses the {@link #rememberId2MapLayerLegend} cache.
 	 */
 	public void recreateLayerList() {
-		
-		if (isValuesAdjusting()) return;
+
+		if (isValuesAdjusting())
+			return;
 
 		removeAll();
 
@@ -790,9 +753,10 @@ public class MapLegend extends JXTaskPaneContainer implements
 				 */
 				StyledLayerInterface<?> styledObj = rememberId2StyledLayer
 						.get(mapLayer.getTitle());
-				
+
 				if (styledObj == null) {
-					// Layers like "maximal map extend" are not layers that should be part of the legend...  
+					// Layers like "maximal map extend" are not layers that
+					// should be part of the legend...
 					continue;
 				}
 
@@ -810,14 +774,15 @@ public class MapLegend extends JXTaskPaneContainer implements
 				 * method might be overridden by DesignMapLegend to return
 				 * DesignMapLayerLegends
 				 */
-				final MapLayerLegend mapLayerLegend = createMapLayerLegend(mapLayer, exportable, styledObj, this);
-				
+				final MapLayerLegend mapLayerLegend = createMapLayerLegend(
+						mapLayer, exportable, styledObj, this);
+
 				if (mapLayerLegend == null) {
 					// For "hidden in atlas legend" layers null is returned.
-					// we continue with the next maplayer 
+					// we continue with the next maplayer
 					continue;
 				}
-		
+
 				// ****************************************************************************
 				// Remember the just created MapLayerLegend
 				// ****************************************************************************
@@ -846,7 +811,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 			// No we definitely find a MapLayerLegend in the cache...
 			MapLayerLegend mapLayerLegend = rememberId2MapLayerLegend
 					.get(mapLayer.getTitle());
-			
+
 			if ((bestRes != Double.MAX_VALUE) && (bestRes != Double.MIN_VALUE)) {
 				// LOGGER.debug("Setting maxZoomScale to " + bestRes / 16.);
 				getGeoMapPane().getMapPane().setMaxZoomScale(bestRes / 16.);
@@ -856,11 +821,12 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			mapLayerLegend.setTitle(getTitleFor(mapLayer));
 			mapLayerLegend.setSpecial(false);
-			 add(mapLayerLegend);
+			add(mapLayerLegend);
 
 		} // for (MapLayer mapLayer : layers )
 
-		// Only when isAdjusting == false, is this method called. So we can repaint all now... 
+		// Only when isAdjusting == false, is this method called. So we can
+		// repaint all now...
 		repaintMapAndTheGUI();
 	}
 
@@ -934,8 +900,9 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * @param layerPanel
 	 *            The parent {@link MapLegend} or {@link DesignAtlasMapLegend}
 	 * 
-	 * @return <code>null</code> if no legend should be visible for this layer. Generally constructs a {@link MapLayerLegend} with the given
-	 *         parameters. This method may be overwritten by sub classes.   
+	 * @return <code>null</code> if no legend should be visible for this layer.
+	 *         Generally constructs a {@link MapLayerLegend} with the given
+	 *         parameters. This method may be overwritten by sub classes.
 	 */
 	protected MapLayerLegend createMapLayerLegend(MapLayer mapLayer,
 			ExportableLayer exportable, StyledLayerInterface<?> styledObj,
@@ -972,7 +939,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 *            The {@link MapLayer} that has been removed.
 	 */
 	protected void unregisterStyledLayer(final MapLayer removedLayer) {
-		
+
 		if (removedLayer != null) {
 
 			/**
@@ -1020,15 +987,16 @@ public class MapLegend extends JXTaskPaneContainer implements
 			rememberId2MapLayerLegend.remove(id);
 			rememberId2StyledLayer.remove(id);
 		} else {
-			// if removed Layer == null, it typically means that ALL layers have been removed. see DefaultmapContext.clearLayerList
-			// Remove all Synchronizers from all SelectionModels 
-			for (StyledLayerSelectionModel sm :rememberSelectionModel.values()){
-				for (FeatureMapLayerSelectionSynchronizer sync : rememberMapLayerSyncronizers.values()) {
-					if (sm.removeSelectionListener(sync) == true){
-//				    	LOGGER.debug("removed a FeatureMapLayerSelectionSynchronizer listener from the selection model");
+			// if removed Layer == null, it typically means that ALL layers have
+			// been removed. see DefaultmapContext.clearLayerList
+			// Remove all Synchronizers from all SelectionModels
+			for (StyledLayerSelectionModel sm : rememberSelectionModel.values()) {
+				for (FeatureMapLayerSelectionSynchronizer sync : rememberMapLayerSyncronizers
+						.values()) {
+					if (sm.removeSelectionListener(sync) == true) {
+						// LOGGER.debug("removed a FeatureMapLayerSelectionSynchronizer listener from the selection model");
 					}
-					getGeoMapPane().getMapPane().removeMapPaneListener(
-							sync);
+					getGeoMapPane().getMapPane().removeMapPaneListener(sync);
 				}
 			}
 			rememberSelectionModel.clear();
@@ -1053,8 +1021,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		rememberId2MapLayerLegend.clear();
 
 		rememberId2StyledLayer.clear();
-		
-		
+
 		rememberMapLayerSyncronizers.clear();
 		rememberSelectionModel.clear();
 	}
@@ -1221,12 +1188,12 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 		final AttributeMetadataMap attributeMetaDataMap = styledFC
 				.getAttributeMetaDataMap();
-		
+
 		return attributeMetaDataMap.sortedValuesVisibleOnly();
-//		
-//		return new ArrayList<AttributeMetadata>(StyledLayerUtil
-//				.getVisibleAttributeMetaData(attributeMetaDataMap, true)
-//				.values());
+		//		
+		// return new ArrayList<AttributeMetadata>(StyledLayerUtil
+		// .getVisibleAttributeMetaData(attributeMetaDataMap, true)
+		// .values());
 	}
 
 	/**

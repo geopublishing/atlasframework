@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -41,6 +42,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
@@ -311,6 +313,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				// If LayerPanel and Info are provided, use a tabbed Pane
 				// **************************************************************
 				JTabbedPane tabbedPane = new JTabbedPane();
+				
 
 				tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 
