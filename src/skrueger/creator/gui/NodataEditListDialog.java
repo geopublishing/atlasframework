@@ -82,14 +82,13 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 		contentPane.add(getValueTextField(), "split 3");
 		contentPane.add(getAddButton());
 		contentPane.add(getRemoveButton());
-		
+
 		contentPane.add(getOkButton(), "tag ok, split 2");
 		contentPane.add(getCancelButton(), "tag cancel");
 
 		setContentPane(contentPane);
 		pack();
 	}
-
 
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
@@ -165,7 +164,8 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void valueChanged(ListSelectionEvent e) {
-							if (e.getValueIsAdjusting() == false &&  e.getFirstIndex() != -1) {
+							if (e.getValueIsAdjusting() == false
+									&& e.getFirstIndex() != -1) {
 								getValueTextField()
 										.setText(
 												attMetaData.getNodataValues()
@@ -205,6 +205,22 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 		@Override
 		public Object getValueAt(int row, int column) {
 			return attMetaData.getNodataValues().toArray()[row];
+		}
+
+		@Override
+		public Class<?> getColumnClass(int columnIndex) {
+			return Double.class;
+		}
+
+		@Override
+		public void setValueAt(Object aValue, int row, int column) {
+			// Remove old value from Set
+			attMetaData.getNodataValues().remove(getValueAt(row, column));
+			// Add new value to set
+			attMetaData.getNodataValues().add(aValue);
+			// This affects all rows because the list will resort
+			((DefaultTableModel) getNODATAValuesJTable().getModel())
+					.fireTableDataChanged();
 		}
 	}
 
