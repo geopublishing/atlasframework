@@ -750,7 +750,7 @@
 		<delete failonerror="false" dir="${GT.26x}/../sources">
 		</delete>
 
-		<mkdir dir="${GT.26x}/s../sources" />
+		<mkdir dir="${GT.26x}/../sources" />
 
 		<copy todir="${GT.26x}/../sources">
 			<fileset dir="${GT.26x}">
