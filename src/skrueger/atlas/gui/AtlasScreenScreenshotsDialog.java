@@ -304,13 +304,15 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		mapView.getGeoMapPane().print(g2g);
 
 		// **********************************************************
-		// Creating screenshot of the JMapPane onlny (without
+		// Creating screenshot of the JMapPane only (without
 		// buttons)
 		// **********************************************************
 		final SelectableXMapPane mp = mapView.getGeoMapPane().getMapPane();
-		mp.setState(SelectableXMapPane.SELECT_ONE_FROM_TOP);
-		mp
-				.setState(schmitzm.geotools.gui.SelectableXMapPane.SELECT_ONE_FROM_TOP);
+
+		
+		// Removed the following line when removing setState from XMapPane... WHat was it good for? 		
+		// mp.setState(SelectableXMapPane.SELECT_ONE_FROM_TOP);
+		
 		dim = mp.getSize();
 
 		BufferedImage mapImage = new BufferedImage(

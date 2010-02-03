@@ -28,6 +28,7 @@ package skrueger.creator.gui.map;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -35,6 +36,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 import org.geotools.map.MapContext;
@@ -96,26 +98,31 @@ public class DesignMapView extends AtlasMapView {
 		if (layerManager == null) {
 			JTabbedPane tabbedPane;
 			tabbedPane = new JTabbedPane();
-
+			
 			final DesignAtlasMapLegend designLayerPanel = new DesignAtlasMapLegend(
 					getGeoMapPane(), map, ace, getToolBar());
+			
 			layerManager = designLayerPanel;
+			JScrollPane scrollPane = new JScrollPane(designLayerPanel);
 			tabbedPane.addTab(AtlasViewer
 					.R("AtlasMapView.tabbedPane.LayersTab_label"),
-					new JScrollPane(designLayerPanel));
+					scrollPane);
+			
 			tabbedPane.setToolTipTextAt(0, AtlasViewer
 					.R("AtlasMapView.tabbedPane.LayersTab_tt"));
 
+			JScrollPane scrollpane2 = new JScrollPane(getDesignInfoPanel());
 			tabbedPane.addTab(AtlasViewer
 					.R("AtlasMapView.tabbedPane.InfoTab_label"),
-					new JScrollPane(getDesignInfoPanel()));
+					scrollpane2);
+			
 			tabbedPane.setToolTipTextAt(1, AtlasViewer
 					.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 			add(tabbedPane, BorderLayout.CENTER);
 
 			leftSide = tabbedPane;
-
+			
 		}
 		return leftSide;
 	}

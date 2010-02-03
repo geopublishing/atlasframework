@@ -32,6 +32,7 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -72,9 +73,13 @@ import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.geometry.BoundingBox;
+import org.opengis.geometry.DirectPosition;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.TransformException;
 
+import schmitzm.geotools.JTSUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.geotools.styling.StylingUtil;
@@ -82,6 +87,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
+import schmitzm.swing.event.MouseInputType;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.dp.DpRef;
 import skrueger.atlas.dp.layer.DpLayer;
@@ -93,7 +99,10 @@ import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GPDialogManager;
 import skrueger.creator.GPProps;
-import skrueger.geotools.MouseSelectionTracker;
+import skrueger.geotools.XMapPane;
+import skrueger.geotools.XMapPaneAction;
+import skrueger.geotools.XMapPaneAction_Zoom;
+import skrueger.geotools.XMapPaneTool;
 import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
@@ -113,6 +122,62 @@ import com.vividsolutions.jts.geom.LineString;
 public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	final static private Logger LOGGER = Logger
 			.getLogger(DesignMapViewJDialog.class);
+
+	class XMapPaneTool_SetMapExtend extends XMapPaneTool {
+		public XMapPaneTool_SetMapExtend() {
+
+			setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR)); // TODO
+			// nicer
+			// cursor
+
+			setMouseAction(MouseInputType.LDrag, new XMapPaneAction_Zoom.In() {
+
+				@Override
+				public void performClick(XMapPane mapPane, MouseEvent ev,
+						DirectPosition coord) {
+				}
+
+				@Override
+				public void performDragged(XMapPane mapPane, MouseEvent ev,
+						Point dragStartPos, Point dragLastPos,
+						DirectPosition startCoord, DirectPosition endCoord) {
+
+					// Re-enable the listeners state
+					getDesignMapView().getMapPane().setTool(backupTool);
+
+					// getDesignMapView().getToolBar().setEnabled(true);
+					getDesignMapView().getToolBar().setAllToolsEnabled(true, false);
+					
+					final ReferencedEnvelope maxExtend = JTSUtil
+							.createReferencedEnvelope(startCoord, endCoord);
+
+					map.setMaxExtend(maxExtend);
+
+					if (maxExtendPreviewCheckBox.isSelected()) {
+						getDesignMapView().getGeoMapPane().getMapPane()
+								.setMaxExtend(map.getMaxExtend());
+					}
+
+					if (maxExtendButton != null)
+						maxExtendButton.setEnabled(false);
+					if (maxExtendResetButton != null)
+						maxExtendResetButton.setEnabled(true);
+
+					updateMapMaxExtendInMapContext();
+				}
+
+				// @Override
+				// public void performDragging(XMapPane mapPane, MouseEvent ev,
+				// Point dragStartPos, Point dragLastPos,
+				// DirectPosition startCoord, DirectPosition endCoord) {
+				// super.p
+				// }
+
+			});
+		}
+	}
+
+	protected final XMapPaneTool defineMaxMapExtendsTool = new XMapPaneTool_SetMapExtend();
 
 	/**
 	 * Updates and applies directly the use of anti-aliasing for all
@@ -138,7 +203,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	/** This is a backup of the original map object. **/
 	private Map backupMap;
 
-	protected int backupWindowSelectionState;
+	protected XMapPaneTool backupTool;
 
 	final private DesignMapView designMapView;
 
@@ -155,53 +220,6 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 	private JButton maxExtendResetButton;
 
-	final MouseSelectionTracker maxExtendSelectionTracker = new MouseSelectionTracker() {
-
-		@Override
-		public void mouseDragged(final MouseEvent event) {
-			super.mouseDragged(event);
-		}
-
-		@Override
-		protected void selectionPerformed(final int ox, final int oy,
-				final int px, final int py) {
-			// LOGGER.debug("A max extend selection has been made.");
-
-			// Remove the listener again
-			getDesignMapView().getMapPane().removeMouseListener(
-					maxExtendSelectionTracker);
-
-			// Re-enable the listeners state
-			getDesignMapView().getMapPane()
-					.setState(backupWindowSelectionState);
-
-			// keine wirkliche box, just a click
-			if (ox == px || oy == py) {
-				return;
-			}
-
-			final ReferencedEnvelope maxExtend = new ReferencedEnvelope(
-					getDesignMapView().getMapPane().tranformWindowToGeo(ox, oy,
-							px, py), getDesignMapView().getMapPane()
-							.getMapContext().getCoordinateReferenceSystem());
-
-			map.setMaxExtend(maxExtend);
-
-			if (maxExtendPreviewCheckBox.isSelected()) {
-				getDesignMapView().getGeoMapPane().getMapPane().setMaxExtend(
-						map.getMaxExtend());
-			}
-
-			if (maxExtendButton != null)
-				maxExtendButton.setEnabled(false);
-			if (maxExtendResetButton != null)
-				maxExtendResetButton.setEnabled(true);
-			updateMapMaxExtendInMapContext();
-			// getMapPane().refresh();
-		}
-
-	};
-	
 	/**
 	 * Creates a {@link DesignMapViewJDialog} and remembers its existence.
 	 * getExisting() can return the existing instance for a {@link Map}
@@ -503,21 +521,13 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 
-					backupWindowSelectionState = getDesignMapView()
-							.getMapPane().getState();
+					backupTool = getDesignMapView().getMapPane().getTool();
 
-					// Disable the default listener
-					getDesignMapView().getMapPane().setState(
-							SelectableXMapPane.NONE);
+					getDesignMapView().getMapPane().setTool(
+							defineMaxMapExtendsTool);
+					
+					getDesignMapView().getToolBar().setAllToolsEnabled(false, false);
 
-					// Add the special listener
-					getDesignMapView().getMapPane().addMouseListener(
-							maxExtendSelectionTracker);
-
-					getDesignMapView().getMapPane().setCursor(
-							Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR));
-
-					// 
 					JOptionPane
 							.showMessageDialog(
 									DesignMapViewJDialog.this,
@@ -857,14 +867,16 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	 */
 	@Override
 	public void dispose() {
-		
-		// This disposing is actually quite expensive, so we do not do it more than once.
+
+		// This disposing is actually quite expensive, so we do not do it more
+		// than once.
 		// the falg is set in #dispose of AtlasDialog
-		if (isDisposed) return;
-		
+		if (isDisposed)
+			return;
+
 		setVisible(false); // Hide while doing the expensive disposing of the
 
-		if (designMapView != null) 
+		if (designMapView != null)
 			designMapView.dispose();
 
 		GPDialogManager.dm_DesignCharts.disposeInstanceForParent(this);
@@ -972,7 +984,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		}
 
-		dispose(); 
+		dispose();
 		return true;
 	}
 
@@ -998,4 +1010,5 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		return rootPane;
 	}
+
 }
