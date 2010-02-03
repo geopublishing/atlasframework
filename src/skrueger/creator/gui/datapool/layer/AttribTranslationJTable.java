@@ -57,6 +57,7 @@ import skrueger.AttributeMetadata;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.gui.internal.TranslationCellRenderer;
 import skrueger.creator.AtlasCreator;
+import skrueger.creator.gui.NodataEditListDialog;
 import skrueger.creator.gui.QualityPercentageTableCellRenderer;
 import skrueger.creator.gui.TableRowHeightAdjustment;
 import skrueger.geotools.AttributeMetadataMap;
@@ -79,9 +80,10 @@ public class AttribTranslationJTable extends JTable {
 	protected static final int COLIDX_NAME = 3;
 	protected static final int COLIDX_TYPE = 4;
 	protected static final int COLIDX_UNIT = 5;
-	protected static final int COLIDX_TRANSLATE = 6;
-	protected static final int COLIDX_TITLES = 7;
-	protected static final int COLIDX_DESCS = 8;
+	protected static final int COLIDX_NODATA = 6;
+	protected static final int COLIDX_TRANSLATE = 7;
+	protected static final int COLIDX_TITLES = 8;
+	protected static final int COLIDX_DESCS = 9;
 
 	public static final Font FATFONT = new JLabel().getFont().deriveFont(
 			Font.BOLD);
@@ -103,7 +105,7 @@ public class AttribTranslationJTable extends JTable {
 		model = new DefaultTableModel() {
 			@Override
 			public int getColumnCount() {
-				return 9;
+				return 10;
 			}
 
 			@Override
@@ -145,6 +147,8 @@ public class AttribTranslationJTable extends JTable {
 					return ad.getType().getBinding().getSimpleName();
 				} else if (column == COLIDX_UNIT) {
 					return attMetadata.getUnit();
+				} else if (column == COLIDX_NODATA) {
+					return attMetadata.getNodataValues();
 				} else if (column == COLIDX_TRANSLATE) {
 					return attMetadata;
 				} else if (column == COLIDX_TITLES) {
@@ -248,6 +252,8 @@ public class AttribTranslationJTable extends JTable {
 					return AtlasCreator.R("Attributes.Edit.Type");
 				case COLIDX_UNIT:
 					return AtlasCreator.R("Unit");
+				case COLIDX_NODATA:
+					return AtlasCreator.R("NodataValues");
 				case COLIDX_TRANSLATE:
 					return AtlasCreator.R("Attributes.Edit.TitleDesc");
 				case COLIDX_TITLES:
@@ -273,8 +279,9 @@ public class AttribTranslationJTable extends JTable {
 				null, null, null);
 		SwingUtil.setColumnLook(this, COLIDX_TYPE, null, null, null, 120);
 		SwingUtil.setColumnLook(this, COLIDX_UNIT, null, null, 40, 100);
+		SwingUtil.setColumnLook(this, COLIDX_NODATA, null, null, 100, 140);
 		SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
-				new ButtonCellRenderer(), null, 60, null);
+				new ButtonCellRenderer(), null, 80, null);
 		SwingUtil.setColumnLook(this, COLIDX_TITLES,
 				new TranslationCellRenderer(dplv_.getAc()), 200, 250, null);
 		SwingUtil.setColumnLook(this, COLIDX_DESCS,
@@ -291,16 +298,20 @@ public class AttribTranslationJTable extends JTable {
 			@Override
 			public Comparator<?> getComparator(int column) {
 				if (column == COLIDX_QUALITY) {
-					
-					// Sorting the QM column is tricky, because it is of class AttributeMetaData and would usually be sorted by the weight.
+
+					// Sorting the QM column is tricky, because it is of class
+					// AttributeMetaData and would usually be sorted by the
+					// weight.
 					return new Comparator<AttributeMetadata>() {
-						
+
 						@Override
 						public int compare(AttributeMetadata o1,
 								AttributeMetadata o2) {
-							return new Double(o1.isVisible() ? o1.getQuality(attMetadataMap
-									.getLanguages()): -1.).compareTo(o2.isVisible() ? o2
-									.getQuality(attMetadataMap.getLanguages()): -1.);
+							return new Double(o1.isVisible() ? o1
+									.getQuality(attMetadataMap.getLanguages())
+									: -1.).compareTo(o2.isVisible() ? o2
+									.getQuality(attMetadataMap.getLanguages())
+									: -1.);
 						}
 					};
 				}
@@ -394,6 +405,19 @@ public class AttribTranslationJTable extends JTable {
 		public void mouseClicked(MouseEvent e) {
 			int column = columnAtPoint(e.getPoint());
 			int row = rowAtPoint(e.getPoint());
+
+			if (convertColumnIndexToModel(column) == COLIDX_NODATA) {
+				AttributeMetadata attMetaData = getAttMetaDataView(row);
+
+				// This is modal
+				NodataEditListDialog ad = new NodataEditListDialog(
+						AttribTranslationJTable.this, dplv, attMetaData);
+				ad.setVisible(true);
+
+				// if (!ad.isCancelled()) {
+				model.fireTableDataChanged();
+				// }
+			}
 
 			if (convertColumnIndexToModel(column) == COLIDX_TRANSLATE) {
 				AttributeMetadata attMetaData = getAttMetaDataView(row);

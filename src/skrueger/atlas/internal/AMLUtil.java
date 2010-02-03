@@ -22,19 +22,29 @@ public class AMLUtil {
 	public static final String OGCURI = "http://www.opengis.net/ogc";
 
 	public static final String GMLURI = "http://www.opengis.net/gml";
+	
+	/** Tag used in AMLURI name-space **/
+	public static final String TAG_nodataValue = "nodataValue";
+	/** Tag used in AMLURI name-space **/	
+	public static final String TAG_attributeMetadata = "dataAttribute";
 
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_majVersion = "majVersion";
+	/** Attribute used in AMLURI name-space **/	
 	public static final String ATT_minVersion = "minVersion";
+	/** Attribute used in AMLURI name-space **/	
 	public static final String ATT_buildVersion = "buildVersion";
-
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_localname = "localname";
-
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_namespace = "namespace";
-
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_weight = "weight";
-
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_functionX = "functionX";
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_functionA = "functionA";
+
 
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.

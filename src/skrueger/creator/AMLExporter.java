@@ -708,7 +708,7 @@ public class AMLExporter {
 
 		for (final AttributeMetadata attrib : dpe.getAttributeMetaDataMap()
 				.values()) {
-			final Element att = exportDataAttribute(dpe, document, attrib);
+			final Element att = exportAttributeMetadata(dpe, document, attrib);
 			if (att != null)
 				element.appendChild(att);
 		}
@@ -846,14 +846,14 @@ public class AMLExporter {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 * @param dpe
-	 *            For backwardcompatibility we also write the col attribute. The
-	 *            'col' attribute has been abandoned in 1.3
+	 *            For backward compatibility we also write the <code>col</code> attribute. The
+	 *            'col' attribute has been abandoned since >= 1.3
 	 */
-	private Element exportDataAttribute(final DpLayerVectorFeatureSource dpe,
+	private Element exportAttributeMetadata(final DpLayerVectorFeatureSource dpe,
 			final Document document, final AttributeMetadata attrib) {
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
-				"dataAttribute");
+				AMLUtil.TAG_attributeMetadata);
 
 		element.setAttribute(AMLUtil.ATT_namespace, attrib.getName()
 				.getNamespaceURI());
@@ -906,6 +906,13 @@ public class AMLExporter {
 		// Creating a aml:desc tag...
 		element.appendChild(exportTranslation(document, "desc", attrib
 				.getDesc()));
+		
+		// Storing the NODATA values
+		for (Object nodatavalue : attrib.getNodataValues()) {
+			Element ndValue = document.createElementNS(AMLUtil.AMLURI,AMLUtil.TAG_nodataValue);
+			ndValue.setTextContent(nodatavalue.toString());
+			element.appendChild(ndValue);
+		}
 
 		return element;
 	}

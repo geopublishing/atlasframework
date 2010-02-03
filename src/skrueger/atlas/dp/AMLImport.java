@@ -40,9 +40,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
+import org.hamcrest.core.IsAnything;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
@@ -57,6 +59,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
 import skrueger.RasterLegendData;
@@ -637,7 +640,7 @@ public class AMLImport {
 	public final static DpLayerRaster parseDatapoolLayerRaster(final Node node,
 			final AtlasConfig ac) throws AtlasRecoverableException {
 
-//		LOGGER.debug("parseDatapoolLayerRaster");
+		// LOGGER.debug("parseDatapoolLayerRaster");
 
 		final DpLayerRaster dpe = new DpLayerRaster(ac);
 
@@ -957,9 +960,9 @@ public class AMLImport {
 				dplvfs.setDesc(parseTranslation(ac.getLanguages(), n));
 			} else if (name.equals("keywords")) {
 				dplvfs.setKeywords(parseTranslation(ac.getLanguages(), n));
-			} else if (name.equals("dataAttribute")) {
-				final AttributeMetadata attribute = parseDataAttribute(dplvfs,
-						ac, n);
+			} else if (name.equals(AMLUtil.TAG_attributeMetadata)) {
+				final AttributeMetadata attribute = parseAttributeMetadata(
+						dplvfs, ac, n);
 				if (attribute != null) {
 					dplvfs.getAttributeMetaDataMap().put(attribute.getName(),
 							attribute);
@@ -1077,7 +1080,7 @@ public class AMLImport {
 	 *         doesn't exist anymore.
 	 * @throws AtlasRecoverableException
 	 */
-	public static AttributeMetadata parseDataAttribute(
+	public static AttributeMetadata parseAttributeMetadata(
 			DpLayerVectorFeatureSource dplvfs, AtlasConfig ac, final Node node)
 			throws AtlasRecoverableException {
 
@@ -1086,7 +1089,6 @@ public class AMLImport {
 		Integer weight = 0;
 		Double functionX = 1.;
 		Double functionA = 0.;
-		// TODO nodata valueas
 		try {
 			nameSpace = String.valueOf(node.getAttributes().getNamedItem(
 					AMLUtil.ATT_namespace).getNodeValue());
@@ -1148,6 +1150,20 @@ public class AMLImport {
 			unit = node.getAttributes().getNamedItem("unit").getNodeValue();
 		}
 
+		// The NameImpl may not b constructed with a "" as namespace, but a
+		// null!
+		final NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
+				.isEmpty() ? null : nameSpace : null, localname);
+
+		// Creating the object
+		AttributeMetadata attributeMetadata = new AttributeMetadata(nameImpl,
+				visible, unit);
+		attributeMetadata.setWeight(weight);
+		attributeMetadata.setFunctionA(functionA);
+		attributeMetadata.setFunctionX(functionX);
+
+		// Parsing the childres
+
 		final NodeList childNodes = node.getChildNodes();
 		Translation name = null;
 		Translation desc = null;
@@ -1159,19 +1175,40 @@ public class AMLImport {
 				name = parseTranslation(ac.getLanguages(), childNodes.item(i));
 			} else if (childNodes.item(i).getLocalName().equals("desc")) {
 				desc = parseTranslation(ac.getLanguages(), childNodes.item(i));
+			} else if (childNodes.item(i).getLocalName().equals(
+					"AMLUtil.TAG_nodataValue")) {
+				// NODATA values
+
+				Node item = childNodes.item(i);
+				if (item != null) {
+					String textValue = item.getTextContent();
+					// Depending on the schema we have to transform the String
+					// to Number.
+					AttributeDescriptor attDesc = dplvfs.getSchema()
+							.getDescriptor(nameImpl);
+					if (attDesc != null
+							&& Number.class.isAssignableFrom(attDesc.getType()
+									.getBinding())) {
+						// Add the NODATA value parsed as a Double
+						try {
+							attributeMetadata.getNodataValues().add(
+									Double.parseDouble(textValue));
+
+						} catch (Exception e) {
+							ExceptionDialog.show(new RuntimeException(
+									"NODATA value '" + textValue
+											+ "' can't be parsed as numeric."));
+							attributeMetadata.getNodataValues().add(textValue);
+						}
+					} else {
+						// Add the NODATA value as a String
+						attributeMetadata.getNodataValues().add(textValue);
+					}
+				}
+
 			}
+
 		}
-
-		// The NameImpl may not b constructed with a "" as namespace, but a
-		// null!
-		final NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
-				.isEmpty() ? null : nameSpace : null, localname);
-		AttributeMetadata attributeMetadata = new AttributeMetadata(nameImpl,
-				visible, name, desc, unit);
-		attributeMetadata.setWeight(weight);
-		attributeMetadata.setFunctionA(functionA);
-		attributeMetadata.setFunctionX(functionX);
-
 		return attributeMetadata;
 	}
 

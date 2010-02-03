@@ -75,11 +75,17 @@ public abstract class AbstractRuleList {
 	RuleChangedEvent lastOpressedEvent = null;
 	Stack<Boolean> stackQuites = new Stack<Boolean>();
 
+	/**
+	 * Add a QUITE-State to the event firing state stack
+	 */
 	public void pushQuite() {
 		stackQuites.push(quite);
 		setQuite(true);
 	}
 
+	/**
+	 * Remove a QUITE-State from the event firing state stack
+	 */
 	public void popQuite() {
 		setQuite(stackQuites.pop());
 		if (quite == false) {

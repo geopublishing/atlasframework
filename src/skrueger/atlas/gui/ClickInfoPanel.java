@@ -139,9 +139,7 @@ public class ClickInfoPanel extends JPanel {
 
 	private JLabel titleLabel;
 
-	
-
-//	private JPanel positionPanel;
+	// private JPanel positionPanel;
 
 	final static String cordinatesMsg = AtlasViewer
 			.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.cordinates");
@@ -161,14 +159,15 @@ public class ClickInfoPanel extends JPanel {
 		this.atlasConfig = atlasConfig;
 
 	}
-//
-//	/**
-//	 * Updates the {@link JPanel}
-//	 */
-//	private void updateGUI() {
-//
-//	
-//	}
+
+	//
+	// /**
+	// * Updates the {@link JPanel}
+	// */
+	// private void updateGUI() {
+	//
+	//	
+	// }
 
 	/**
 	 * Creates a {@link JPanel} which displays information about the
@@ -313,14 +312,14 @@ public class ClickInfoPanel extends JPanel {
 				.getCoordinateReferenceSystem().getName().getCode().replace(
 						'_', ' ');
 
-//		final double x = objectSelectionEvent.getSelectionRange().getMaxX();
-//		final double y = objectSelectionEvent.getSelectionRange().getMaxY();
+		// final double x = objectSelectionEvent.getSelectionRange().getMaxX();
+		// final double y = objectSelectionEvent.getSelectionRange().getMaxY();
 
 		final double x = objectSelectionEvent.getSelectionRange().getMaxX();
 		final double y = objectSelectionEvent.getSelectionRange().getMaxY();
 
-//		objectSelectionEvent.getSelectionRange()
-		
+		// objectSelectionEvent.getSelectionRange()
+
 		final Point2D selectionPoint = new Point2D.Double(x, y);
 
 		// **********************************************************************
@@ -329,36 +328,37 @@ public class ClickInfoPanel extends JPanel {
 		// **********************************************************************
 		JPanel positionPanel = new JPanel(new MigLayout("wrap 2"));
 		{
-			JTextArea xTextLabel = new JTextArea(NumberFormat.getNumberInstance(
-					Locale.getDefault()).format(selectionPoint.getX()));
+			JTextArea xTextLabel = new JTextArea(NumberFormat
+					.getNumberInstance(Locale.getDefault()).format(
+							selectionPoint.getX()));
 			xTextLabel.setEditable(false);
-			
-			JTextArea yTextLabel = new JTextArea(NumberFormat.getNumberInstance(
-					Locale.getDefault()).format(selectionPoint.getY()));
+
+			JTextArea yTextLabel = new JTextArea(NumberFormat
+					.getNumberInstance(Locale.getDefault()).format(
+							selectionPoint.getY()));
 			yTextLabel.setEditable(false);
-			
+
 			JLabel crsLabel = new JLabel(humanReadableCrsString);
 			CRS_LABEL.setLabelFor(crsLabel);
 			CRS_LABEL.setToolTipText(CRSValueToolTip);
 			crsLabel.setToolTipText(CRSValueToolTip);
-			
+
 			positionPanel.add(CRS_LABEL);
 			positionPanel.add(crsLabel);
-			
+
 			X_LABEL.setLabelFor(xTextLabel);
 			positionPanel.add(X_LABEL);
 			positionPanel.add(xTextLabel, "sgx");
-			
+
 			Y_LABEL.setLabelFor(yTextLabel);
 			positionPanel.add(Y_LABEL);
 			positionPanel.add(yTextLabel, "sgx");
 		}
 
-
-//		// Layout the coordinates panel.
-//		SpringUtilities.makeCompactGrid(positionPanel, 3, 2, 5, 0, // initX,
-//				// initY
-//				5, getYPad()); // xPad, yPad
+		// // Layout the coordinates panel.
+		// SpringUtilities.makeCompactGrid(positionPanel, 3, 2, 5, 0, // initX,
+		// // initY
+		// 5, getYPad()); // xPad, yPad
 
 		positionPanel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
 				cordinatesMsg));
@@ -436,8 +436,10 @@ public class ClickInfoPanel extends JPanel {
 						+ ":</html>", SwingConstants.TRAILING);
 				key.setFont(DEFAULT_FONT);
 
-				// find the feature's value for this attribute
-				final Object attribute = feature.getAttribute(col.getName());
+				// Get the value of the attribute. The filter method replaces
+				// NODATA values with null.
+				final Object attribute = col.fiterNodata(feature
+						.getAttribute(col.getName()));
 
 				if (attribute != null) {
 
@@ -462,8 +464,9 @@ public class ClickInfoPanel extends JPanel {
 						try {
 
 							valueString = attribute.toString();
+
 							// **********************************************************
-							// Trying to interpret the value as an Atlas-Link
+							// Checking against NODATA values.
 							// **********************************************************
 							if (valueString.trim().equals("")) {
 								valueComponent = null;
@@ -946,11 +949,11 @@ public class ClickInfoPanel extends JPanel {
 		add(positionPanel);
 		countRows++;
 
-		SpringUtilities.makeCompactGrid(this, countRows, 1, 0, 0, 0, getYPad()); 
-//
+		SpringUtilities.makeCompactGrid(this, countRows, 1, 0, 0, 0, getYPad());
+		//
 		SwingUtil.getParentWindow(this).pack();
 		SwingUtil.getParentWindow(this).pack();
-//		invalidate(); could be interesting too 
+		// invalidate(); could be interesting too
 
 	}
 }
