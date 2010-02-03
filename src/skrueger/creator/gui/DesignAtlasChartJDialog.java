@@ -208,13 +208,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		});
 		buttons.add(attributes);
-		
-		
-		
-		
-		
-		
-		
 
 		okButton = getOkButton();
 		buttons.add(okButton, "right, tag ok");
@@ -229,20 +222,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		}), "right, tag ok");
 
 		return buttons;
-	}
-
-	private OkButton getOkButton() {
-		if (okButton == null) {
-			okButton = new OkButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					okClose();
-				}
-
-			});
-		}
-		return okButton;
 	}
 
 	/**

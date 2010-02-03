@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.HashSet;
-import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.AbstractAction;
@@ -13,23 +12,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.jndi.cosnaming.ExceptionMapper;
-
 import net.miginfocom.swing.MigLayout;
-
 import schmitzm.swing.ExceptionDialog;
 import skrueger.AttributeMetadata;
-import skrueger.atlas.AVUtil;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.creator.AtlasCreator;
-import skrueger.creator.GpUtil;
 import skrueger.swing.CancellableDialogAdapter;
 
 /**
@@ -79,21 +71,25 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 	 */
 	private void initGui() {
 		JPanel contentPane = new JPanel(new MigLayout("wrap 1"));
-		
+
 		JPanel descPane = new JPanel(new MigLayout());
-		descPane.add(new JLabel("<html>NODATA values are...</html>"),BorderLayout.WEST);
+		descPane.add(new JLabel("<html>NODATA values are...</html>"),
+				BorderLayout.WEST);
 		contentPane.add(descPane);
 
 		contentPane.add(new JScrollPane(getNODATAValuesJTable()));
-		
 
 		contentPane.add(getValueTextField(), "split 3");
 		contentPane.add(getAddButton());
 		contentPane.add(getRemoveButton());
+		
+		contentPane.add(getOkButton(), "tag ok, split 2");
+		contentPane.add(getCancelButton(), "tag cancel");
 
 		setContentPane(contentPane);
 		pack();
 	}
+
 
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
@@ -102,13 +98,25 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					int selRow = getNODATAValuesJTable().getSelectedRow();
-					if (selRow > -1)
+					if (selRow > -1) {
+
 						attMetaData
 								.getNodataValues()
 								.remove(
 										attMetaData.getNodataValues().toArray()[selRow]);
+						((DefaultTableModel) getNODATAValuesJTable().getModel())
+								.fireTableDataChanged();
+					}
 				}
 			});
+			getNODATAValuesJTable().getSelectionModel()
+					.addListSelectionListener(new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							removeButton.setEnabled(e.getFirstIndex() >= 0);
+						}
+					});
 		}
 		return removeButton;
 	}
@@ -131,12 +139,16 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 							.getDescriptor(attMetaData.getName()).getType()
 							.getBinding())) {
 						try {
-							uniqueValues.add(Double.parseDouble(valueString));
+							attMetaData.getNodataValues().add(
+									Double.parseDouble(valueString));
 						} catch (Exception ex) {
 							ExceptionDialog.show(ex);
 						}
 					} else
-						uniqueValues.add(valueString);
+						attMetaData.getNodataValues().add(valueString);
+
+					((DefaultTableModel) getNODATAValuesJTable().getModel())
+							.fireTableDataChanged();
 				}
 
 			});
@@ -153,7 +165,7 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void valueChanged(ListSelectionEvent e) {
-							if (e.getFirstIndex() != -1) {
+							if (e.getValueIsAdjusting() == false &&  e.getFirstIndex() != -1) {
 								getValueTextField()
 										.setText(
 												attMetaData.getNodataValues()

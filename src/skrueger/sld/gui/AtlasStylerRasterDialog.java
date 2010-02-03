@@ -126,21 +126,21 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 		return colorMapPanel;
 	}
 
-	private JButton getCancelButton() {
-		CancelButton cancelButton = new CancelButton();
-		cancelButton.addActionListener(new ActionListener() {
+//	protected CancelButton getCancelButton() {
+//		CancelButton cancelButton = new CancelButton();
+//		cancelButton.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				cancel();
+//				dispose();
+//			}
+//
+//		});
+//		return cancelButton;
+//	}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancel();
-				dispose();
-			}
-
-		});
-		return cancelButton;
-	}
-
-	private JButton getOkButton() {
+	protected OkButton getOkButton() {
 		OkButton okButton = new OkButton();
 		okButton.addActionListener(new ActionListener() {
 
@@ -149,7 +149,6 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 				apply();
 				dispose();
 			}
-
 		});
 		return okButton;
 	}

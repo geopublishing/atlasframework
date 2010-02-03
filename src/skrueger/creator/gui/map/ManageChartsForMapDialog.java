@@ -199,32 +199,6 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 		setContentPane(contentPane);
 	}
 
-	private JButton getCancelButton() {
-		CancelButton cancelButton = new CancelButton();
-		cancelButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancelClose();
-			}
-
-		});
-		return cancelButton;
-	}
-
-	private JButton getOkButton() {
-		OkButton okButton = new OkButton();
-		okButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				okClose();
-			}
-
-		});
-		return okButton;
-	}
-
 	@Override
 	public boolean okClose() {
 

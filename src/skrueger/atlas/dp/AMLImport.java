@@ -1176,7 +1176,7 @@ public class AMLImport {
 			} else if (childNodes.item(i).getLocalName().equals("desc")) {
 				desc = parseTranslation(ac.getLanguages(), childNodes.item(i));
 			} else if (childNodes.item(i).getLocalName().equals(
-					"AMLUtil.TAG_nodataValue")) {
+					AMLUtil.TAG_nodataValue)) {
 				// NODATA values
 
 				Node item = childNodes.item(i);
