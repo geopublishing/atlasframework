@@ -1056,7 +1056,6 @@ public class AMLImport {
 			if (attributeMetadata != null) {
 				featureChartStyle.setNoDataValues(idx, attributeMetadata.getNodataValues());
 			}
-			
 		}
 		
 		return featureChartStyle;
