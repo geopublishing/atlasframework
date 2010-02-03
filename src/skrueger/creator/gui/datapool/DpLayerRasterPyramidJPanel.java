@@ -11,6 +11,7 @@ import schmitzm.swing.JPanel;
 import skrueger.atlas.dp.layer.DpLayerRasterPyramid;
 import skrueger.creator.AtlasCreator;
 import skrueger.sld.ASUtil;
+import skrueger.sld.AtlasStyler;
 import skrueger.swing.Cancellable;
 import skrueger.swing.ColorButton;
 
@@ -32,7 +33,7 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 
 		JPanel transparentColorPanel = new JPanel(new MigLayout());
 		transparentColorPanel.setBorder(BorderFactory
-				.createTitledBorder("Transparenz"));
+				.createTitledBorder("Transparenz")); //i8n
 
 		final ColorButton transparentColorButton = new ColorButton(pyr
 				.getInputTransparentColor());
@@ -42,13 +43,13 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 		 * One button to select a color
 		 */
 		transparentColorButton.setAction(new AbstractAction(AtlasCreator
-				.R("DesignAtlasChartJDialog.SeriesColorButton")) {
+				.R("DesignAtlasChartJDialog.TransparentColor.ChooseButton")) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				pyr.setInputTransparentColor(ASUtil.showColorChooser(
 						DpLayerRasterPyramidJPanel.this,
-						"Transparente Farbe wählen", pyr
+						AtlasCreator.R("DesignAtlasChartJDialog.TransparentColor.ChooseColorTitle"), pyr 
 								.getInputTransparentColor()));
 				transparentColorButton.setColor(pyr.getInputTransparentColor());
 
@@ -67,13 +68,12 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 		 * Second button to reset the color
 		 */
 		resetTransparentColorButton.setAction(new AbstractAction(AtlasCreator
-				.R("DesignAtlasChartJDialog.ResetColor")) {
+				.R("DesignAtlasChartJDialog.TransparentColor.Reset")) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				pyr.setInputTransparentColor(null);
-				transparentColorButton.setColor( pyr
-						.getInputTransparentColor());
+				transparentColorButton.setColor(pyr.getInputTransparentColor());
 
 				// TODO Update any JMapPanes that contain that layer!?
 				pyr.uncache();
@@ -82,7 +82,9 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 			}
 
 		});
-		resetTransparentColorButton.setToolTipText(AtlasCreator.R("TT"));
+		resetTransparentColorButton.setToolTipText(AtlasCreator
+				.R("DesignAtlasChartJDialog.TransparentColor.Reset.TT"));
+		transparentColorButton.setColor(pyr.getInputTransparentColor());
 
 		resetTransparentColorButton
 				.setEnabled(pyr.getInputTransparentColor() != null);

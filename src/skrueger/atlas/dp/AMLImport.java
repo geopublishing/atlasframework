@@ -63,6 +63,7 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
 import skrueger.RasterLegendData;
+import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayer;
@@ -82,6 +83,8 @@ import skrueger.atlas.internal.AMLUtil;
 import skrueger.atlas.map.Map;
 import skrueger.atlas.map.MapPool;
 import skrueger.atlas.map.MapRef;
+import skrueger.creator.GpUtil;
+import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.io.GeoImportUtilURL;
 import skrueger.i8n.Translation;
 
@@ -1034,8 +1037,29 @@ public class AMLImport {
 		// LOGGER.debug("sub "+substring);
 		urlStr = substring + "charts/" + filenameValue;
 		URL chartStyleURL = new URL(urlStr);
-		return (FeatureChartStyle) ChartStyleUtil.readStyleFromXML(
+		FeatureChartStyle featureChartStyle = (FeatureChartStyle) ChartStyleUtil.readStyleFromXML(
 				chartStyleURL, FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY);
+		
+		AttributeMetadataMap attributeMetaDataMap = dplvfs.getAttributeMetaDataMap();
+		
+		// Check if the attributes still exist or whether their uppercase/lowercase mode changed
+		if (FeatureChartUtil.correctAttributeNames(featureChartStyle, dplvfs.getSchema())) {
+			// How to handle chartstyles that had attributes removed?
+		}
+		
+		// Pass the NODATA values for the attributes to the ChartStyle
+		for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++){
+			
+			String attributeName = featureChartStyle.getAttributeName(idx);
+			AttributeMetadata attributeMetadata = attributeMetaDataMap.get(attributeName);
+			
+			if (attributeMetadata != null) {
+				featureChartStyle.setNoDataValues(idx, attributeMetadata.getNodataValues());
+			}
+			
+		}
+		
+		return featureChartStyle;
 	}
 
 	/**

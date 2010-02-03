@@ -124,9 +124,10 @@ public class AMLExporter {
 	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml
 	 * 
 	 * @return true if no exceptions where thrown.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public boolean saveAtlasConfigEditable(final AtlasStatusDialog statusWindow) throws Exception {
+	public boolean saveAtlasConfigEditable(final AtlasStatusDialog statusWindow)
+			throws Exception {
 		this.statusWindow = statusWindow;
 
 		// Prepare the output file
@@ -187,7 +188,7 @@ public class AMLExporter {
 			// LOGGER.debug(" saving AtlasConfig... finished.");
 			return true;
 		} catch (Exception e) {
-			
+
 			if (atlasXmlhasBeenBackupped)
 				try {
 					LOGGER.warn("copying atlas.xml.bak to atlas.xml");
@@ -196,12 +197,13 @@ public class AMLExporter {
 				} catch (final IOException ioEx) {
 					LOGGER.error("error copying atlas.xml.bak back.", ioEx);
 					throw (ioEx);
-//					statusWindow.exceptionOccurred(ioEx);
+					// statusWindow.exceptionOccurred(ioEx);
 				}
-				
-			if (e instanceof AtlasCancelException)	
+
+			if (e instanceof AtlasCancelException)
 				return false;
-			else throw e;
+			else
+				throw e;
 		}
 
 	}
@@ -215,21 +217,22 @@ public class AMLExporter {
 	 */
 	private final Document exportAtlasConfig() throws Exception {
 
-//		String msg = "Converting Atlas '" + ace.getTitle() + "' to AtlasML...";
-//		info(msg);
+		// String msg = "Converting Atlas '" + ace.getTitle() +
+		// "' to AtlasML...";
+		// info(msg);
 
 		// Create a DOM builder and parse the fragment
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
 				.newInstance();
 		Document document = null;
-//		try {
-			document = factory.newDocumentBuilder().newDocument();
-//		} catch (final ParserConfigurationException e) {
+		// try {
+		document = factory.newDocumentBuilder().newDocument();
+		// } catch (final ParserConfigurationException e) {
 
-//			msg = "Saving to AtlasML failed!";
-//			info(msg);
-//			throw new AtlasFatalException(msg, e);
-//		}
+		// msg = "Saving to AtlasML failed!";
+		// info(msg);
+		// throw new AtlasFatalException(msg, e);
+		// }
 
 		// XML root element
 		final Element atlas = document.createElementNS(AMLUtil.AMLURI, "atlas");
@@ -293,7 +296,8 @@ public class AMLExporter {
 					final Style style = dpl.getStyle();
 					StylingUtil.saveStyleToSLD(style, DataUtilities
 							.urlToFile(DataUtilities.changeUrlExt(dpl
-									.getUrl(statusWindow), "sld"))); // TODO TODO
+									.getUrl(statusWindow), "sld"))); // TODO
+																		// TODO
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
 					statusWindow.exceptionOccurred(e);
@@ -382,7 +386,7 @@ public class AMLExporter {
 	 *            {@link MapPool}
 	 * @throws AtlasExportException
 	 * @throws DOMException
-	 * @throws AtlasCancelException 
+	 * @throws AtlasCancelException
 	 */
 	private Node exportMapPool(final Document document) throws DOMException,
 			AtlasExportException, AtlasCancelException {
@@ -417,7 +421,7 @@ public class AMLExporter {
 	 */
 	private Node exportMap(final Document document, final Map map)
 			throws AtlasExportException {
-//		info("map: " + map.getTitle()); // i8n
+		// info("map: " + map.getTitle()); // i8n
 
 		final Element element = document.createElementNS(AMLUtil.AMLURI, "map");
 		element.setAttribute("id", map.getId());
@@ -598,7 +602,7 @@ public class AMLExporter {
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
-//		info(dpe.getTitle());
+		// info(dpe.getTitle());
 
 		// Creating a aml:name tag...
 		element
@@ -638,7 +642,7 @@ public class AMLExporter {
 	private final Element exportDatapoolLayerVector(final Document document,
 			final DpLayerVectorFeatureSource dpe) throws IOException {
 
-//		info(dpe.getTitle()); // i8n
+		// info(dpe.getTitle()); // i8n
 
 		if (dpe.isBroken()) {
 			LOGGER.info("Trying to save a broken layer..." + dpe);
@@ -734,7 +738,9 @@ public class AMLExporter {
 		}
 
 		/**
-		 * Exporting the list of charts for this layer if any exist
+		 * Exporting the list of charts for this layer if any exist. This has to
+		 * be called, AFTER the attribute meta data has been exported. (When
+		 * parsing the XML, we need the NODATA values first)
 		 */
 		exportChartStyleDescriptions(document, dpe, element);
 
@@ -846,11 +852,12 @@ public class AMLExporter {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 * @param dpe
-	 *            For backward compatibility we also write the <code>col</code> attribute. The
-	 *            'col' attribute has been abandoned since >= 1.3
+	 *            For backward compatibility we also write the <code>col</code>
+	 *            attribute. The 'col' attribute has been abandoned since >= 1.3
 	 */
-	private Element exportAttributeMetadata(final DpLayerVectorFeatureSource dpe,
-			final Document document, final AttributeMetadata attrib) {
+	private Element exportAttributeMetadata(
+			final DpLayerVectorFeatureSource dpe, final Document document,
+			final AttributeMetadata attrib) {
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
 				AMLUtil.TAG_attributeMetadata);
@@ -906,10 +913,11 @@ public class AMLExporter {
 		// Creating a aml:desc tag...
 		element.appendChild(exportTranslation(document, "desc", attrib
 				.getDesc()));
-		
+
 		// Storing the NODATA values
 		for (Object nodatavalue : attrib.getNodataValues()) {
-			Element ndValue = document.createElementNS(AMLUtil.AMLURI,AMLUtil.TAG_nodataValue);
+			Element ndValue = document.createElementNS(AMLUtil.AMLURI,
+					AMLUtil.TAG_nodataValue);
 			ndValue.setTextContent(nodatavalue.toString());
 			element.appendChild(ndValue);
 		}
@@ -925,7 +933,7 @@ public class AMLExporter {
 	 */
 	private final Element exportDatapoolLayerRaster(final Document document,
 			final DpLayerRaster dpe) {
-//		info(dpe.getTitle()); // i8n
+		// info(dpe.getTitle()); // i8n
 
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
