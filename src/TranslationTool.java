@@ -9,7 +9,7 @@ import java.util.HashMap;
  * This tool helps to find missing frensh translations 
  *
  */
-public class TranlsationTool {
+public class TranslationTool {
 	
 	static File GPenglish = new File ("/home/stefan/EigeneDateien/code/atlas/trunk/Atlas-Framework/bin/skrueger/creator/resource/locales/Geopublisher.properties");
 	static File GPfrensh = new File ("/home/stefan/EigeneDateien/code/atlas/trunk/Atlas-Framework/bin/skrueger/creator/resource/locales/Geopublisher_fr.properties");

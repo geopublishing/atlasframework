@@ -215,7 +215,7 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 
 		@Override
 		public String getColumnName(int column) {
-			return AtlasCreator.R("NoDataValues.EditDialog.ColumnNodata");
+			return AtlasCreator.R("NodataValues");
 		};
 
 		@Override

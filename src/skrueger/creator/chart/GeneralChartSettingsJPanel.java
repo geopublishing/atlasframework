@@ -1,8 +1,11 @@
 package skrueger.creator.chart;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -16,11 +19,13 @@ import org.apache.log4j.Logger;
 
 import schmitzm.jfree.chart.style.ChartLabelStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.JPanel;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.AtlasCreator;
 import skrueger.i8n.Translation;
 import skrueger.sld.ASUtil;
+import skrueger.sld.AtlasStyler;
 import skrueger.swing.ColorButton;
 import skrueger.swing.TranslationEditJPanel;
 
@@ -45,6 +50,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 		add(getTitleTranslationEditPanel(), "span 2, sgx");
 		add(getDescTranslationEditPanel(), "span 2, sgx");
 		add(getColorsPanel(), "span 2, sgx");
+		
 	}
 
 	private JPanel getColorsPanel() {
@@ -54,7 +60,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 		// colorsPanel.add(getChartBackgroundColorButton());
 		// colorsPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
 
-		colorsPanel.setBorder(BorderFactory.createTitledBorder("Farben")); // i8n
+		colorsPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler.R("colors"))); 
 		return colorsPanel;
 	}
 

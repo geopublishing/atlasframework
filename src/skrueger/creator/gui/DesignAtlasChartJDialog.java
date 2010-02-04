@@ -332,7 +332,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 	private JPanel getChartPlotStylePanel() {
 		schmitzm.swing.JPanel panel = new schmitzm.swing.JPanel(new MigLayout(
-				"wrap 1, w 100%", "[grow]"));
+				"wrap 1", "[grow]"));
 
 		// Initialize with non-nulls
 		if (chartStyle.getPlotStyle() == null)
@@ -468,8 +468,12 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			axisCross.add(cb);
 		}
 
-		panel.add(grids, "growx");
-		panel.add(axisCross, "growx");
+		panel.add(grids, "growx, sgx");
+		panel.add(axisCross, "growx, sgx");
+		
+		if (chartStyle instanceof FeatureChartStyle) 
+			add(getNormalizationPanel((FeatureChartStyle)chartStyle), "growx, sgx");
+
 
 		return panel;
 	}
@@ -547,8 +551,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					.R("DesignAtlasChartJDialog.SeriesDataBorderTitle")));
 
 			attPanel.add(attribComboBox, "growx");
-			attPanel.add(getNormalizeJCheckboxFor(ChartStyle.DOMAIN_AXIS),
-					"growx, right");
+//			attPanel.add(getNormalizeJCheckboxFor(ChartStyle.DOMAIN_AXIS),
+//					"growx, right");
 
 			if (chartStyle.getType() != ChartType.SCATTER) {
 				attPanel.add(getDomainSortedJCheckbox(), "growx, right");
@@ -601,15 +605,15 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						getCategoryJCheckbox().setSelected(true);
 					}
 
-					/*
-					 * You may only use normalization , if a numeric att is
-					 * selected
-					 */
-					getNormalizeJCheckboxFor(0).setEnabled(
-							attribComboBox.isNumericalAttribSelected());
-					if (!attribComboBox.isNumericalAttribSelected()) {
-						getNormalizeJCheckboxFor(0).setSelected(false);
-					}
+//					/*
+//					 * You may only use normalization , if a numeric att is
+//					 * selected
+//					 */
+//					getNormalizeJCheckboxFor(0).setEnabled(
+//							attribComboBox.isNumericalAttribSelected());
+//					if (!attribComboBox.isNumericalAttribSelected()) {
+//						getNormalizeJCheckboxFor(0).setSelected(false);
+//					}
 
 					fireChartChangedEvent(true);
 				}
@@ -915,7 +919,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		// (seriesIdx + 2))), "right");
 
 		attPanel.add(attribComboBox, "growx");
-		attPanel.add(getNormalizeJCheckboxFor(seriesIdx + 1), "growx");
+//		attPanel.add(getNormalizeJCheckboxFor(seriesIdx + 1), "growx");
 		//
 		// final TranslationEditJPanel titleTransJPanel = new
 		// TranslationEditJPanel(attributeMetadataFor.getTitle(),
@@ -968,6 +972,48 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		return attPanel;
 	}
+	
+	/**
+	 * A panel to control the normalization of all attributes at once
+	 * @param featureChartStyle
+	 * @return
+	 */
+	private JPanel getNormalizationPanel(final FeatureChartStyle featureChartStyle) {
+		JPanel normPanel = new JPanel(new MigLayout("wrap 2, align center"));
+		
+		JCheckBox cb = new JCheckBox( AtlasCreator
+				.R("AttributeSelectionPanel.NormalizeCheckbox")); 
+	
+		
+		cb.setToolTipText(AtlasCreator
+				.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
+		
+
+		
+		cb.addItemListener(new ItemListener() {
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				final boolean normalize = e.getStateChange() == ItemEvent.SELECTED;
+				
+				for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++)
+					featureChartStyle.setAttributeNormalized(idx, normalize);
+				
+				LOGGER.debug("Setting setAttributeNormalized for all attribs to " + normalize);
+				
+				fireChartChangedEvent(true);
+			}
+
+		});		
+		
+		normPanel.add(cb);
+		// normPanel.add(getChartBackgroundColorButton());
+		// normPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
+
+		normPanel.setBorder(BorderFactory.createTitledBorder("Farben")); // i8n
+		return normPanel;
+	}
+
 
 	/**
 	 * Returns the normlizeCheckBox for the Nth attribute (0 = DOMAIN)
@@ -1246,7 +1292,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				reapplyChartStyleToFeatureCollection = false;
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						DesignAtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), "dialog.title.wait"); 
+						DesignAtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), AtlasViewer.R("dialog.title.wait")); 
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override

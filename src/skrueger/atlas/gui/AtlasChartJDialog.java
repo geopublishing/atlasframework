@@ -103,7 +103,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 				final FeatureChartStyle fschart = (FeatureChartStyle) getChartStyle();
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						AtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), "dialog.title.wait"); 
+						AtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), AtlasViewer.R("dialog.title.wait")); 
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
