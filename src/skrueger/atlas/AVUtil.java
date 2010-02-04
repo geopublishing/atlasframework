@@ -990,7 +990,7 @@ public class AVUtil {
 		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_ID
 				+ cleanFilename(title), postFix);
 
-		new AtlasExportTask(owner, AtlasViewer.R("Msg.CreatingLocalCopy")) {
+		new AtlasExportTask(owner, AtlasViewer.R("dialog.title.wait")) {
 
 			@Override
 			protected Boolean doInBackground() throws Exception {

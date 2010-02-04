@@ -63,7 +63,7 @@ public class DpeImportUtil {
 			DpeImportUtil.askTranslationsBeforeCopy(dpe, owner);
 
 			final AtlasStatusDialog atlasStatusDialog = new AtlasStatusDialog(
-					owner, AtlasViewer.R("AtlasTask.jDialogTitle.please_wait"),
+					owner, AtlasViewer.R("dialog.title.wait"),
 					AtlasCreator.R("ImportingDPE.StatusMessage", dpe.getTitle()
 							.toString()));
 

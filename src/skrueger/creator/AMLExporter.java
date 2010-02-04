@@ -533,6 +533,11 @@ public class AMLExporter {
 		 * Exporting map.getAvailableCharts
 		 */
 		for (final String layerID : map.getAvailableCharts().keySet()) {
+			if (!map.getAc().getDataPool().containsKey(layerID)) {
+				// The corresponing DPE has been deleted?!
+				continue;
+			}
+				
 			final List<String> chartIDs = map.getAvailableChartIDsFor(layerID);
 
 			if (chartIDs.size() == 0)

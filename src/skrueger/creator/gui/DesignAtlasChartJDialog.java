@@ -59,7 +59,9 @@ import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.gui.AtlasChartJPanel;
 import skrueger.atlas.gui.MapLegend;
+import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI;
+import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GPDialogManager;
@@ -149,8 +151,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		backup();
 
 		initGUI();
-		
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
+
+		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
+				SwingUtil.NORTHEAST);
 	}
 
 	private void backup() {
@@ -171,8 +174,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		contentPane.add(getTabbedPane());
 
-		getChartPanel(mapLegend, styledLayer).addZoomToFeatureExtends(mapPane, mapLegend,
-				styledLayer, getChartPanel(mapLegend, styledLayer));
+		getChartPanel(mapLegend, styledLayer).addZoomToFeatureExtends(mapPane,
+				mapLegend, styledLayer, getChartPanel(mapLegend, styledLayer));
 
 		contentPane.add(getButtonsPane());
 
@@ -181,7 +184,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		// super.addZoomToFeatureExtends();
 
 		pack();
-		
+
 		setVisible(true);
 	}
 
@@ -194,19 +197,19 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		buttons.add(getUpdateModeJCheckbox());
 		buttons.add(getUpdateChartJButton());
 
-		JButton attributes = new JButton(new AbstractAction(AtlasViewer
-				.R("LayerToolMenu.table"), BasicMapLayerLegendPaneUI.ICON_TABLE) {
+		JButton attributes = new JButton(
+				new AbstractAction(AtlasViewer.R("LayerToolMenu.table"),
+						BasicMapLayerLegendPaneUI.ICON_TABLE) {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
 
-				AVDialogManager.dm_AttributeTable
-						.getInstanceFor(styledLayer,
-								DesignAtlasChartJDialog.this, styledLayer,
-								mapLegend);
-			}
+						AVDialogManager.dm_AttributeTable.getInstanceFor(
+								styledLayer, DesignAtlasChartJDialog.this,
+								styledLayer, mapLegend);
+					}
 
-		});
+				});
 		buttons.add(attributes);
 
 		okButton = getOkButton();
@@ -884,10 +887,11 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final int seriesIdx) {
 
 		/* prepare data: */
-//		String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
-		
-//		AttributeMetadata attributeMetadataFor = styledLayer.getAttributeMetaDataMap().get(attributeName);
-		
+		// String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
+
+		// AttributeMetadata attributeMetadataFor =
+		// styledLayer.getAttributeMetaDataMap().get(attributeName);
+
 		SimpleFeatureType schema = styledLayer.getFeatureSource().getSchema();
 		// AttributeDescriptor attributeType = schema.getAttributeType(ASUtil
 		// .getAttribIndex(schema, attributeName));
@@ -1079,7 +1083,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	};
 
 	/**
-	 * A private reference to the listeners. When nulled in dispose, the WeakHashMap forgets about them
+	 * A private reference to the listeners. When nulled in dispose, the
+	 * WeakHashMap forgets about them
 	 */
 	private Vector<ChartSelectionSynchronizer> insertedListeners = new Vector<ChartSelectionSynchronizer>();
 
@@ -1240,9 +1245,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 				reapplyChartStyleToFeatureCollection = false;
 
-				JFreeChart newChart = chartStyle
-						.applyToFeatureCollection(styledLayer
+				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
+						DesignAtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), "dialog.title.wait"); 
+				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
+						statusDialog) {
+					@Override
+					protected JFreeChart doInBackground() throws Exception {
+						return chartStyle.applyToFeatureCollection(styledLayer
 								.getFeatureCollection());
+					}
+				};
+				JFreeChart newChart = asw.executeModal();
+				
 				panel.setChart(newChart);
 
 			} else {
@@ -1350,8 +1364,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 					final ChartSelectionSynchronizer synchronizer = new ChartSelectionSynchronizer(
 							selectionModel, dsm);
-					
-					insertedListeners .add(synchronizer);
+
+					insertedListeners.add(synchronizer);
 
 					selectionModel
 							.addSelectionListener((StyledLayerSelectionModelSynchronizer) synchronizer);
@@ -1375,18 +1389,19 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void dispose() {
-		
-		if (isDisposed) return;
-		
+
+		if (isDisposed)
+			return;
+
 		for (ChartSelectionSynchronizer d : insertedListeners) {
 			d.setEnabled(false);
 			d = null;
 		}
 		insertedListeners.clear();
-		
+
 		if (chartPanel != null)
 			chartPanel.dispose();
 		chartPanel = null;

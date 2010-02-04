@@ -232,6 +232,7 @@ public class AtlasChartJPanel extends JPanel implements
 	 */
 	public void setChart(JFreeChart newChart) {
 		this.chart = newChart;
+		getSelectableChartPanel().setChart(chart);
 	}
 
 	protected StyledLayerSelectionModel<?> getSelectionModel() {

@@ -29,6 +29,7 @@ package skrueger.atlas.dp.layer;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -38,20 +39,26 @@ import org.apache.log4j.Logger;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
+import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.ShpFileType;
 import org.geotools.data.shapefile.ShpFiles;
 import org.geotools.data.shapefile.indexed.ShapeFileIndexer;
+import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
+import schmitzm.swing.ExceptionDialog;
+import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntryType;
 import skrueger.atlas.exceptions.AtlasException;
+import skrueger.creator.AtlasCreator;
 
 /**
  * This extension of the {@link DpLayerVectorFeatureSource} is specialized to
@@ -91,7 +98,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 			if (featureSource == null) {
 				// First access to the FeatureStore
 
-				if (dataAccess == null) {
+				if (dataStore == null) {
 
 					checkIndex();
 
@@ -111,36 +118,52 @@ public class DpLayerVectorFeatureSourceShapefile extends
 					// " for "
 					// + getTitle());
 
-					dataAccess = DataStoreFinder.getDataStore(map);
-
+					dataStore = DataStoreFinder.getDataStore(map);
+					
 					// TODO By default we take the first SimpleFeatureType. This
 					// could/should be extended to be defined in the Atlas.XML
-					setTypeName(dataAccess.getNames().get(0));
+					setTypeName(dataStore.getNames().get(0));
 				}
 
 				/**
 				 * Reading the FeatureSource
 				 */
-				featureSource = dataAccess.getFeatureSource(getTypeName());
+				featureSource = dataStore.getFeatureSource(getTypeName());
 
 				/**
 				 * Determining the CRS and saving it in the DpLayer
 				 */
 				crs = featureSource.getSchema().getCoordinateReferenceSystem();
+				
+				if (crs == null ) {
+//					boolean deletePrj = false; 
+					try {
+						((ShapefileDataStore)dataStore).forceSchemaCRS(GeoImportUtil.getDefaultCRS());
+//						deletePrj = true;
+					}catch (FileNotFoundException fe) {
+						ExceptionDialog.show(null, fe, "", "Unable to set default CRS for Shapefile "+getFilename());
+					}
+					featureSource = dataStore.getFeatureSource(getTypeName());
+//					crs = featureSource.getSchema().getCoordinateReferenceSystem();
+//					if (deletePrj) {
+//						try {
+//							DataUtilities.urlToFile( DataUtilities.changeUrlExt(getUrl(),"prj") ).delete();
+//						}
+//						catch (Exception e) {
+//							ExceptionDialog.show("Deleting a temporary", e);
+//						}
+//					}
+					crs = featureSource.getSchema().getCoordinateReferenceSystem();
+				}
 
 				// Cache an Envelope of the BoundingBox of this FeatureSource
-				envelope = dataAccess.getFeatureSource(getTypeName())
+				envelope = dataStore.getFeatureSource(getTypeName())
 						.getBounds();
 
 				/**
 				 * Determine the file type
 				 */
-				// if (dataAccess instanceof IndexedShapefileDataStore) {
-				// IndexedShapefileDataStore iSfDS = (IndexedShapefileDataStore)
-				// dataAccess;
-				// setType(iSfDS.isIndexed() ? DpEntryType.VECTOR_SHP);
-				// }
-
+		
 				switch (FeatureUtil.getGeometryForm(featureSource.getSchema())) {
 				case POINT:
 					setType(DpEntryType.VECTOR_SHP_POINT);

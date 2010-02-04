@@ -1184,16 +1184,16 @@ public class AMLImport {
 		// Parsing the childres
 
 		final NodeList childNodes = node.getChildNodes();
-		Translation name = null;
-		Translation desc = null;
+//		Translation name = null;
+//		Translation desc = null;
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			if (childNodes.item(i).getLocalName() == null)
 				continue;
 
 			if (childNodes.item(i).getLocalName().equals("name")) {
-				name = parseTranslation(ac.getLanguages(), childNodes.item(i));
+				attributeMetadata.setTitle(parseTranslation(ac.getLanguages(), childNodes.item(i)));
 			} else if (childNodes.item(i).getLocalName().equals("desc")) {
-				desc = parseTranslation(ac.getLanguages(), childNodes.item(i));
+				attributeMetadata.setDesc(parseTranslation(ac.getLanguages(), childNodes.item(i)));
 			} else if (childNodes.item(i).getLocalName().equals(
 					AMLUtil.TAG_nodataValue)) {
 				// NODATA values

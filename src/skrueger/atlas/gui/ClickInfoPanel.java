@@ -450,7 +450,8 @@ public class ClickInfoPanel extends JPanel {
 						// Trying to interpret the value as a Number
 						// **********************************************************
 						valueString = NumberFormat.getNumberInstance(
-								Locale.getDefault()).format(attribute);
+								new Locale(Translation.getActiveLang()))
+								.format(attribute);
 						// **********************************************************
 						// Interpreting it as as a String => JTextlabel
 						// **********************************************************
@@ -462,17 +463,8 @@ public class ClickInfoPanel extends JPanel {
 					} catch (final Exception e) {
 
 						try {
-
 							valueString = attribute.toString();
 
-							// **********************************************************
-							// Checking against NODATA values.
-							// **********************************************************
-							if (valueString.trim().equals("")) {
-								valueComponent = null;
-							}
-
-							else
 							// **********************************************************
 							// Trying to interpretate the value as a Atlas-Link
 							// to

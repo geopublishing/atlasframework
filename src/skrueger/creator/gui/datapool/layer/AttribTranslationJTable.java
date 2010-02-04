@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -81,9 +82,9 @@ public class AttribTranslationJTable extends JTable {
 	protected static final int COLIDX_TYPE = 4;
 	protected static final int COLIDX_UNIT = 5;
 	protected static final int COLIDX_NODATA = 6;
-	protected static final int COLIDX_TRANSLATE = 7;
-	protected static final int COLIDX_TITLES = 8;
-	protected static final int COLIDX_DESCS = 9;
+//	protected static final int COLIDX_TRANSLATE = 7;
+	protected static final int COLIDX_TITLES = 7;
+	protected static final int COLIDX_DESCS = 8;
 
 	public static final Font FATFONT = new JLabel().getFont().deriveFont(
 			Font.BOLD);
@@ -105,7 +106,7 @@ public class AttribTranslationJTable extends JTable {
 		model = new DefaultTableModel() {
 			@Override
 			public int getColumnCount() {
-				return 10;
+				return 9;
 			}
 
 			@Override
@@ -149,8 +150,8 @@ public class AttribTranslationJTable extends JTable {
 					return attMetadata.getUnit();
 				} else if (column == COLIDX_NODATA) {
 					return attMetadata.getNodataValues();
-				} else if (column == COLIDX_TRANSLATE) {
-					return attMetadata;
+//				} else if (column == COLIDX_TRANSLATE) {
+//					return attMetadata;
 				} else if (column == COLIDX_TITLES) {
 					return attMetadata.getTitle();
 				} else if (column == COLIDX_DESCS) {
@@ -254,8 +255,8 @@ public class AttribTranslationJTable extends JTable {
 					return AtlasCreator.R("Unit");
 				case COLIDX_NODATA:
 					return AtlasCreator.R("NodataValues");
-				case COLIDX_TRANSLATE:
-					return AtlasCreator.R("Attributes.Edit.TitleDesc");
+//				case COLIDX_TRANSLATE:
+//					return AtlasCreator.R("Attributes.Edit.TitleDesc");
 				case COLIDX_TITLES:
 					return AtlasCreator.R("Attributes.Edit.Title");
 				case COLIDX_DESCS:
@@ -279,9 +280,9 @@ public class AttribTranslationJTable extends JTable {
 				null, null, null);
 		SwingUtil.setColumnLook(this, COLIDX_TYPE, null, null, null, 120);
 		SwingUtil.setColumnLook(this, COLIDX_UNIT, null, null, 40, 100);
-		SwingUtil.setColumnLook(this, COLIDX_NODATA, null, null, 100, 140);
-		SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
-				new ButtonCellRenderer(), null, 80, null);
+		SwingUtil.setColumnLook(this, COLIDX_NODATA, new NoDataTableCellRenderer(), null, 100, 140);
+//		SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
+//				new ButtonCellRenderer(), null, 80, null);
 		SwingUtil.setColumnLook(this, COLIDX_TITLES,
 				new TranslationCellRenderer(dplv_.getAc()), 200, 250, null);
 		SwingUtil.setColumnLook(this, COLIDX_DESCS,
@@ -394,6 +395,45 @@ public class AttribTranslationJTable extends JTable {
 
 	}
 
+	// This renderer nicely paints a list of NoData values. Mainly it just put " around Strings.
+	public class NoDataTableCellRenderer extends DefaultTableCellRenderer {
+
+		// This method is called each time a cell in a column
+		// using this renderer needs to be rendered.
+		public Component getTableCellRendererComponent(final JTable table,
+				final Object value, final boolean isSelected,
+				final boolean hasFocus, final int rowIndex, final int vColIndex) {
+
+			Set<Object> list = (Set<Object>) value;
+			
+			String nicelyFormatted = "";
+			if (list != null){
+				if (list.size() == 0) nicelyFormatted = ""; else {
+					for (Object ndo : list) {
+						if (ndo instanceof String)
+							nicelyFormatted+="\""+ndo+"\"";
+						else
+							nicelyFormatted+=ndo.toString();
+						
+						nicelyFormatted+=",";
+					}
+					// Remove the extra comma
+					nicelyFormatted =nicelyFormatted.substring(0,nicelyFormatted.length()-1);
+				}
+			}
+
+			JLabel tableCellRendererComponent = (JLabel) super
+					.getTableCellRendererComponent(table, nicelyFormatted,
+							isSelected, hasFocus, rowIndex, vColIndex);
+			
+			tableCellRendererComponent.setFont(FATFONT);
+
+			return tableCellRendererComponent;
+		}
+
+	}
+
+
 	/**
 	 * This {@link MouseListener} passes the clicks to the button if they are
 	 * visible.
@@ -419,7 +459,7 @@ public class AttribTranslationJTable extends JTable {
 				// }
 			}
 
-			if (convertColumnIndexToModel(column) == COLIDX_TRANSLATE) {
+			if (convertColumnIndexToModel(column) == COLIDX_TITLES || convertColumnIndexToModel(column) == COLIDX_DESCS) {
 				AttributeMetadata attMetaData = getAttMetaDataView(row);
 
 				if (!attMetaData.isVisible())

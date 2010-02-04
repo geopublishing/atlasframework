@@ -102,7 +102,7 @@ public abstract class DpLayerVectorFeatureSource
 	/**
 	 * The cached {@link DataStore} where the {@link #featureSource} comes from.
 	 */
-	protected DataAccess<SimpleFeatureType, SimpleFeature> dataAccess;
+	protected DataAccess<SimpleFeatureType, SimpleFeature> dataStore;
 
 	private Filter filter = Filter.INCLUDE;
 
@@ -143,7 +143,7 @@ public abstract class DpLayerVectorFeatureSource
 			featureSource = null;
 		}
 
-		if (dataAccess != null) {
+		if (dataStore != null) {
 
 			/**
 			 * java.util.ConcurrentModificationException at
@@ -170,8 +170,8 @@ public abstract class DpLayerVectorFeatureSource
 			 * 
 			 * But what can i do against it?
 			 */
-			dataAccess.dispose();
-			dataAccess = null;
+			dataStore.dispose();
+			dataStore = null;
 		}
 	}
 

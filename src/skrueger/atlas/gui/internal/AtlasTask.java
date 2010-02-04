@@ -70,11 +70,11 @@ public abstract class AtlasTask<K> extends SwingWorker<K, String> {
 		this.owner = owner;
 
 		progressWindow = new AtlasStatusDialog(owner, AtlasViewer
-				.R("AtlasTask.jDialogTitle.please_wait"), startText);
+				.R("dialog.title.wait"), startText);
 
 		progressWindow.started();
 
-//		 progressWindow.setTitle(AtlasViewer.R("AtlasTask.jDialogTitle.please_wait"));
+//		 progressWindow.setTitle(AtlasViewer.R("dialog.title.wait"));
 
 		// SwingUtil.setRelativeFramePosition(progressWindow, owner, 0.5,0.5);
 

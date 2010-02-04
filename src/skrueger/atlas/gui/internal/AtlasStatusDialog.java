@@ -203,9 +203,9 @@ public class AtlasStatusDialog {
 		content.add(panel, BorderLayout.NORTH);
 		content.add(cancelBox, BorderLayout.SOUTH);
 
-		setTitle(AtlasViewer.R("AtlasTask.jDialogTitle.please_wait"));
+		setTitle(AtlasViewer.R("dialog.title.wait"));
 
-		setDescription(AtlasViewer.R("AtlasTask.jDialogTitle.please_wait"));
+		setDescription(AtlasViewer.R("dialog.title.wait"));
 	}
 
 	public AtlasStatusDialog(Component owner, String title, String startText) {

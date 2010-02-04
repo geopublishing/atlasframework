@@ -50,7 +50,7 @@ public class DpLayerVectorFeatureSourceWFSEd extends
 			boolean guiInteraction, Component owner) {
 		super(ace);
 
-		dataAccess = wfsFS.getDataStore();
+		dataStore = wfsFS.getDataStore();
 		featureSource = wfsFS;
 
 		if ((guiInteraction) && (!SwingUtilities.isEventDispatchThread()))

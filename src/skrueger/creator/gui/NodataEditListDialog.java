@@ -19,7 +19,9 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
+import skrueger.atlas.AVUtil;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.creator.AtlasCreator;
 import skrueger.swing.CancellableDialogAdapter;
@@ -46,7 +48,8 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 	public NodataEditListDialog(Component owner,
 			DpLayerVectorFeatureSource dplv, AttributeMetadata attMetaData) {
 
-		super(owner, AtlasCreator.R("asdad")); // i8n
+		super(owner, AtlasCreator.R("NoDataValues.EditDialog.Title",
+				attMetaData.getTitle()));
 		this.dplv = dplv;
 		this.attMetaData = attMetaData;
 
@@ -56,6 +59,8 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 		initGui();
 
 		setModal(true);
+		
+		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.WEST);
 	}
 
 	@Override
@@ -70,10 +75,11 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 	 * Initialize the GUI
 	 */
 	private void initGui() {
-		JPanel contentPane = new JPanel(new MigLayout("wrap 1"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 400"));
 
 		JPanel descPane = new JPanel(new MigLayout());
-		descPane.add(new JLabel("<html>NODATA values are...</html>"),
+		descPane.add(new JLabel(AtlasCreator.R(
+				"NoDataValues.EditDialog.Explain", attMetaData.getTitle())),
 				BorderLayout.WEST);
 		contentPane.add(descPane);
 
@@ -140,6 +146,16 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 						try {
 							attMetaData.getNodataValues().add(
 									Double.parseDouble(valueString));
+						} catch (NumberFormatException nex) {
+							AVUtil
+									.showMessageDialog(
+											NodataEditListDialog.this,
+											AtlasCreator
+													.R(
+															"NoDataValues.EditDialog.NumberParseError",
+															valueString,
+															attMetaData
+																	.getTitle()));
 						} catch (Exception ex) {
 							ExceptionDialog.show(ex);
 						}
@@ -198,6 +214,11 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 		}
 
 		@Override
+		public String getColumnName(int column) {
+			return AtlasCreator.R("NoDataValues.EditDialog.ColumnNodata");
+		};
+
+		@Override
 		public int getRowCount() {
 			return attMetaData.getNodataValues().size();
 		}
@@ -209,7 +230,8 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return Double.class;
+			return dplv.getSchema().getDescriptor(attMetaData.getName())
+					.getType().getBinding();
 		}
 
 		@Override

@@ -568,7 +568,6 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			return;
 		}
 
-		// TODO das besser mit dem modal dialog and AtlasStatusDialogCloser  
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(getJFrame(),
 				null, R("AmlViewer.process.opening_map", newMap.getTitle()));
 
@@ -870,7 +869,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 						// Starting the internal WebServer
 						new Webserver(true);
 
-						publish(R("AtlasTask.jDialogTitle.please_wait")); 
+						publish(R("dialog.title.wait")); 
 						AMLImport.parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
 

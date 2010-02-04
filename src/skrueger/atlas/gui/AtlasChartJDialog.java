@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -20,11 +21,15 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntry;
+import skrueger.atlas.gui.internal.AtlasStatusDialog;
+import skrueger.atlas.swing.AtlasSwingWorker;
+import skrueger.creator.gui.DesignAtlasChartJDialog;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
@@ -96,8 +101,23 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 			if (getChartStyle() instanceof FeatureChartStyle) {
 				final FeatureChartStyle fschart = (FeatureChartStyle) getChartStyle();
-				chart = fschart.applyToFeatureCollection(styledLayer_
-						.getFeatureCollection());
+
+				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
+						AtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), "dialog.title.wait"); 
+				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
+						statusDialog) {
+					@Override
+					protected JFreeChart doInBackground() throws Exception {
+						return fschart.applyToFeatureCollection(styledLayer_
+								.getFeatureCollection());
+					}
+				};
+				try {
+					chart = asw.executeModal();
+				} catch (Exception e) {
+					ExceptionDialog.show(e);
+					chart = null;
+				}
 			} else {
 				throw new RuntimeException(
 						"chartStyles other than ? extends FeatureChartStyle not supported yet!");
