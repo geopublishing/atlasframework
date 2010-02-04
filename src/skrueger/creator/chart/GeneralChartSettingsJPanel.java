@@ -60,7 +60,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 		// colorsPanel.add(getChartBackgroundColorButton());
 		// colorsPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
 
-		colorsPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler.R("colors"))); 
+		colorsPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler.R("colors.border.title"))); 
 		return colorsPanel;
 	}
 

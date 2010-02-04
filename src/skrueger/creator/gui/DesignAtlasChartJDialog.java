@@ -41,6 +41,7 @@ import org.geotools.feature.FeatureCollection;
 import org.jfree.chart.JFreeChart;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.gui.GeoPositionLabel;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
 import schmitzm.jfree.chart.style.ChartAxisStyle;
@@ -472,7 +473,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		panel.add(axisCross, "growx, sgx");
 		
 		if (chartStyle instanceof FeatureChartStyle) 
-			add(getNormalizationPanel((FeatureChartStyle)chartStyle), "growx, sgx");
+			panel.add(getNormalizationPanel((FeatureChartStyle)chartStyle), "growx, sgx");
 
 
 		return panel;
@@ -1006,11 +1007,14 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		});		
 		
+		// If the first attribute is normalized, all are!
+		cb.setSelected(featureChartStyle.isAttributeNormalized(0));
+		
 		normPanel.add(cb);
 		// normPanel.add(getChartBackgroundColorButton());
 		// normPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
 
-		normPanel.setBorder(BorderFactory.createTitledBorder("Farben")); // i8n
+		normPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator.R("Normalize.Border.title"))); 
 		return normPanel;
 	}
 
