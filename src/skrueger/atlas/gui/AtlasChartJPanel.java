@@ -279,9 +279,9 @@ public class AtlasChartJPanel extends JPanel implements
 			toolBar.setFloatable(false);
 
 			ButtonGroup bg = new ButtonGroup();
-
+			
 			/**
-			 * Add an Action to SET the selection.
+			 * Add an Action to ZOOM/MOVE in the chart
 			 */
 			JToggleButton zoomToolButton = new SmallToggleButton(
 					new AbstractAction("", ICON_ZOOM) {

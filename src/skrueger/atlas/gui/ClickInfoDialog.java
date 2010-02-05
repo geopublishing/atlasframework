@@ -29,6 +29,7 @@ package skrueger.atlas.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
@@ -36,6 +37,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -45,13 +47,26 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
+import org.geotools.feature.FeatureCollection;
+import org.geotools.map.DefaultMapContext;
+import org.geotools.map.DefaultMapLayer;
 import org.geotools.map.MapContext;
+import org.geotools.renderer.GTRenderer;
+import org.geotools.renderer.lite.StreamingRenderer;
+import org.geotools.styling.Style;
 
+import com.vividsolutions.jts.geom.Coordinate;
+
+import schmitzm.geotools.GTUtil;
+import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
+import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.map.Map;
 import skrueger.geotools.MapContextManagerInterface;
+import skrueger.geotools.XMapPane;
 
 /**
  * This Dialog wraps a {@link ClickInfoPanel} that shows information when the
@@ -112,7 +127,7 @@ public class ClickInfoDialog extends JDialog {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-//				clickInfoPanel.disposeVideoPlayer();
+				// clickInfoPanel.disposeVideoPlayer();
 				super.windowClosing(e);
 			}
 
@@ -207,6 +222,18 @@ public class ClickInfoDialog extends JDialog {
 	public void setSelectionEvent(
 			final ObjectSelectionEvent<?> objectSelectionEvent) {
 		clickInfoPanel.setSelectionEvent(objectSelectionEvent);
+
+		SelectableXMapPane source = objectSelectionEvent.getSource();
+		
+		// If it is a feature, let it blink for a moment
+		if (source instanceof XMapPane
+				&& objectSelectionEvent instanceof FeatureSelectedEvent) {
+
+			XMapPane mapPane = (XMapPane) objectSelectionEvent.getSource();
+			mapPane.blink(((FeatureSelectedEvent) objectSelectionEvent)
+					.getSelectionResult());
+		}
+		;
 	}
 
 	/**

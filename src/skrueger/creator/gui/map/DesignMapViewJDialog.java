@@ -125,6 +125,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 	class XMapPaneTool_SetMapExtend extends XMapPaneTool {
 		public XMapPaneTool_SetMapExtend() {
+			
+			XMapPaneTool.ZOOM_IN.copyTo(this);
 
 			setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR)); // TODO
 			// nicer

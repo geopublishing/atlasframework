@@ -13,6 +13,11 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.event.ChartChangeEvent;
+import org.jfree.chart.event.ChartChangeEventType;
+import org.jfree.chart.event.ChartChangeListener;
+import org.jfree.chart.event.ChartProgressEvent;
+import org.jfree.chart.event.ChartProgressListener;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.JFreeChartUtil;
@@ -179,8 +184,9 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 		getChartPanel(mapLegend, styledLayer).addZoomToFeatureExtends(mapPane, mapLegend, getStyledLayer(),
 				getChartPanel(mapLegend, getStyledLayer()));
-		addZoomToFullChartExtends();
 		
+		// Adds an ACTION button to zoom to the full extent of the chart		
+		chartPanel.getToolBar().add( createZoomToFullChartExtentButton(chartPanel, chartStyle),0);
 		
 		contentpane.add( getButtonsPanel(),"growx");
 
@@ -210,11 +216,9 @@ public class AtlasChartJDialog extends AtlasDialog {
 	 * the chart to full extends. has to be done in the
 	 * {@link AtlasChartJDialog}, because {@link AtlasChartJPanel} doesn't know
 	 * about the {@link ChartStyle}.
+	 * @return 
 	 */
-	private void addZoomToFullChartExtends() {
-		final AtlasChartJPanel chartPanel = getChartPanel(mapLegend,
-				getStyledLayer());
-
+	public static JButton createZoomToFullChartExtentButton(final AtlasChartJPanel chartPanel, final ChartStyle chartStyle) {
 		/**
 		 * Add an Action to SET the selection.
 		 */
@@ -235,7 +239,8 @@ public class AtlasChartJDialog extends AtlasDialog {
 			}
 
 		}, AtlasViewer.R("AtlasChartJPanel.zoomFullExtent.tt"));
-		chartPanel.getToolBar().add(resetZoomTool, 0);
+		
+		return resetZoomTool;
 	}
 
 

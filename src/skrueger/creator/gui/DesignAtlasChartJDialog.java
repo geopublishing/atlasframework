@@ -41,7 +41,6 @@ import org.geotools.feature.FeatureCollection;
 import org.jfree.chart.JFreeChart;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.gui.GeoPositionLabel;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
 import schmitzm.jfree.chart.style.ChartAxisStyle;
@@ -58,6 +57,7 @@ import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
+import skrueger.atlas.gui.AtlasChartJDialog;
 import skrueger.atlas.gui.AtlasChartJPanel;
 import skrueger.atlas.gui.MapLegend;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
@@ -172,6 +172,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		JPanel contentPane = new JPanel(new MigLayout("wrap 1"));
 
 		contentPane.add(getChartPanel(mapLegend, styledLayer));
+
+		// Adds an ACTION button to zoom to the full extent of the chart
+		chartPanel.getToolBar().add( AtlasChartJDialog.createZoomToFullChartExtentButton(chartPanel, chartStyle),0);
 
 		contentPane.add(getTabbedPane());
 
@@ -913,11 +916,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		attPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
 				.R("DesignAtlasChartJDialog.SeriesDataBorderTitle")));
-		//
-		// attPanel.add(
-		// new JLabel(AtlasCreator.R(
-		// "AttributeSelectionWizardPanel.NthAttribute",
-		// (seriesIdx + 2))), "right");
+	
 
 		attPanel.add(attribComboBox, "growx");
 //		attPanel.add(getNormalizeJCheckboxFor(seriesIdx + 1), "growx");
@@ -980,15 +979,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	 * @return
 	 */
 	private JPanel getNormalizationPanel(final FeatureChartStyle featureChartStyle) {
-		JPanel normPanel = new JPanel(new MigLayout("wrap 2, align center"));
+		JPanel normPanel = new JPanel(new MigLayout("wrap 1"));
 		
+		// An explainting text
+		add(new JLabel(AtlasCreator.R("Normalize.Chart.Explanation")));
+		
+		// The checkbox in the next line
 		JCheckBox cb = new JCheckBox( AtlasCreator
 				.R("AttributeSelectionPanel.NormalizeCheckbox")); 
 	
 		
 		cb.setToolTipText(AtlasCreator
 				.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
-		
 
 		
 		cb.addItemListener(new ItemListener() {
@@ -1000,7 +1002,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++)
 					featureChartStyle.setAttributeNormalized(idx, normalize);
 				
-				LOGGER.debug("Setting setAttributeNormalized for all attribs to " + normalize);
+//				LOGGER.debug("Setting setAttributeNormalized for all attribs to " + normalize);
 				
 				fireChartChangedEvent(true);
 			}

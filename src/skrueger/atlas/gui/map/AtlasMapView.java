@@ -29,6 +29,7 @@ package skrueger.atlas.gui.map;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
@@ -39,6 +40,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -79,6 +81,8 @@ import skrueger.geotools.MapPaneToolBar;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.geotools.XMapPaneTool;
+import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -159,6 +163,28 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		if (getToolBar() != null) {
 			getToolBar().addButtonSelectedListener(
 					listenToToolSelectionToDisposeInfoClickDialog);
+
+			MapPaneToolBarAction defaultZoomAction = new MapPaneToolBarAction(
+					MapPaneToolBar.ACTION_ZOOM_DEFAULT,
+					getToolBar(),
+					"",
+					new ImageIcon(MapView.class
+							.getResource("resource/icons/zoom_full_extend.png")),
+					AtlasViewer.R("MapPaneButtons.DefaultZoom.TT")) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (map.getDefaultMapArea() != null )
+						getMapPane().setMapArea(map.getDefaultMapArea());
+					else if (map.getMaxExtend() != null ) 
+						getMapPane().setMapArea(map.getMaxExtend());
+					else 
+						getMapPane().setMapArea(getMapPane().getMaxExtend());
+				}
+
+			};
+			// Set Selection
+			getToolBar().addAction(defaultZoomAction, false);
+
 		}
 
 		this.atlasConfig = atlasConfig;
@@ -313,7 +339,6 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				// If LayerPanel and Info are provided, use a tabbed Pane
 				// **************************************************************
 				JTabbedPane tabbedPane = new JTabbedPane();
-				
 
 				tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 
@@ -556,10 +581,10 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 			layerManager.dispose();
 
 		AVDialogManager.dm_Styler.disposeAll(); // should go one up in the class
-												// hirachy.. but MapView is in
-												// schmitzm... mmm...the
-												// dialogmanager should go there
-												// to....
+		// hirachy.. but MapView is in
+		// schmitzm... mmm...the
+		// dialogmanager should go there
+		// to....
 
 		AVDialogManager.dm_AtlasStyler.disposeAll();
 		AVDialogManager.dm_AttributeTable.disposeAll();
