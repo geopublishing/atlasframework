@@ -57,7 +57,7 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 
 		// Backup so we can cancel
 		backupNodata = (HashSet<Object>) attMetaData.getNodataValues().clone();
-
+		
 		initGui();
 
 		setModal(true);
