@@ -45,6 +45,7 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.styling.Style;
+import org.geotools.styling.StyledLayer;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.io.GeoImportUtil;
@@ -60,6 +61,7 @@ import skrueger.creator.AtlasCreator;
 import skrueger.creator.GpUtil;
 import skrueger.creator.dp.DpEditableInterface;
 import skrueger.creator.dp.DpeImportUtil;
+import skrueger.geotools.StyledLayerUtil;
 import skrueger.sld.ASUtil;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
@@ -144,6 +146,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 		}
 	}
 
+	@Override
 	public void copyFiles(URL fromUrl, Component owner, File targetDir,
 			AtlasStatusDialog status) throws URISyntaxException, IOException,
 			TransformerException {
@@ -170,18 +173,11 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				 */
 				URL prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
 
-				// if (prjFilename.toExternalForm().startsWith("file:"))
-				// prjFilename = prjFilename.substring(5);
-				// else {
-				// LOGGER
-				// .warn("ShapefileDataStoreFactory.toFilename(url, .prj) did not return a String starting with 'file:'. Strange!");
-				// }
-
 				// final File prjFile = new File(prjFilename);
 				try {
 					AVUtil.copyUrl(prjURL, targetDir, true);
 				} catch (FileNotFoundException e) {
-					LOGGER.debug(prjURL + " not found, trying with '.PRJ'");
+					LOGGER.debug(prjURL + " not found, trying with capital '.PRJ'");
 
 					try {
 						prjURL = IOUtil.changeUrlExt(fromUrl, "PRJ");
@@ -294,12 +290,15 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
 
 				}
-
-				// TODO is that a good idea? What if we do not have a .prj
-				// file?mmm
-				// then the froced CRS should be returned..
-				crs = shapefileDS.getFeatureSource().getSchema()
-						.getGeometryDescriptor().getCoordinateReferenceSystem();
+//
+////				// TODO is that a good idea? What if we do not have a .prj
+////				// file?mmm
+////				// then the froced CRS should be returned..
+//				crs = shapefileDS.getFeatureSource().getSchema()
+//						.getGeometryDescriptor().getCoordinateReferenceSystem();
+				
+				// Add the empty string as a default NODATA-Value to all textual layers
+				StyledLayerUtil.addEmptyStringToAllTextualAttributes(getAttributeMetaDataMap(), getSchema());
 
 			} else {
 				throw new AtlasImportException(

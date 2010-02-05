@@ -953,9 +953,11 @@ public class JarExportUtil {
 						fromURL = new URL(bs.getCodeBase().getProtocol(), bs
 								.getCodeBase().getHost(), bs.getCodeBase()
 								.getPort(), fileAndPath);
+						
+						fromURL.openConnection();
 
 						fromLocal = false;
-					} catch (javax.jnlp.UnavailableServiceException e) {
+					} catch (Exception e) {
 						/**
 						 * The exception means, that we have not been started
 						 * via JWS. So we just copy this file from the local lib
@@ -1069,6 +1071,7 @@ public class JarExportUtil {
 
 					libsFromLocal = false;
 				} catch (javax.jnlp.UnavailableServiceException e) {
+					
 					/**
 					 * The exception means, that we have not been started via
 					 * JWS. So we just copy this file from the local lib
@@ -1086,7 +1089,7 @@ public class JarExportUtil {
 						fromURLPackGZ = new File("./lib/" + lib + ".pack.gz")
 								.toURI().toURL();
 					}
-				}
+				} 
 
 				final String msg = AtlasCreator.R(
 						"Export.progressMsg.copy_lib_to_", lib, destination

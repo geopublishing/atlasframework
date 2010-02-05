@@ -53,6 +53,8 @@ import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import javax.swing.undo.CannotRedoException;
 
+import schmitzm.swing.SwingUtil;
+
 import com.lightdev.app.shtm.SHTMLPanelImpl.FontFamilyPicker;
 import com.lightdev.app.shtm.SHTMLPanelImpl.FontSizePicker;
 import com.sun.demo.ElementTreePanel;
@@ -1807,7 +1809,8 @@ public class SHTMLEditorKitActions {
 			ImageDialog dlg = new ImageDialog(parent, Util
 					.getResourceString("imageDialogTitle"), this.panel
 					.getDocumentPane().getImageDir());
-			Util.center(parent, dlg);
+//			Util.center(parent, dlg);
+			SwingUtil.setRelativeFramePosition(dlg, .5, .5);
 			dlg.setModal(true);
 			dlg.setVisible(true);
 

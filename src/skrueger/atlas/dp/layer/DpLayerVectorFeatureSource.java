@@ -451,7 +451,7 @@ public abstract class DpLayerVectorFeatureSource
 	final AttributeMetadataMap attributeMetaDataMap;
 
 	/**
-	 * @return a {@link Map} with columIdx -> {@link AttributeMetadata}
+	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadata}. 
 	 */
 	public AttributeMetadataMap getAttributeMetaDataMap() {
 		if (!attribMetadataChecked && !AtlasViewer.isRunning()) {
