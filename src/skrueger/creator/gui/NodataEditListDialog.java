@@ -3,6 +3,8 @@ package skrueger.creator.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -129,6 +131,26 @@ public class NodataEditListDialog extends CancellableDialogAdapter {
 	private JTextField getValueTextField() {
 		if (valueField == null) {
 			valueField = new JTextField(8);
+			valueField.addKeyListener(new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {
+					        
+					        int key = e.getKeyCode();
+					        
+					        if (key == KeyEvent.VK_ENTER) {
+					            getAddButton().getAction().actionPerformed(new ActionEvent(valueField, 0, null));
+					        }
+				}
+			});
 		}
 		return valueField;
 	}
