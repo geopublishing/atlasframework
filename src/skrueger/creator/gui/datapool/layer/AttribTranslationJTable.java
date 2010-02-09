@@ -58,7 +58,7 @@ import skrueger.AttributeMetadata;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.gui.internal.TranslationCellRenderer;
 import skrueger.creator.AtlasCreator;
-import skrueger.creator.gui.NodataEditListDialog;
+import skrueger.creator.gui.NoDataEditListDialog;
 import skrueger.creator.gui.QualityPercentageTableCellRenderer;
 import skrueger.creator.gui.TableRowHeightAdjustment;
 import skrueger.geotools.AttributeMetadataMap;
@@ -82,7 +82,7 @@ public class AttribTranslationJTable extends JTable {
 	protected static final int COLIDX_TYPE = 4;
 	protected static final int COLIDX_UNIT = 5;
 	protected static final int COLIDX_NODATA = 6;
-//	protected static final int COLIDX_TRANSLATE = 7;
+	// protected static final int COLIDX_TRANSLATE = 7;
 	protected static final int COLIDX_TITLES = 7;
 	protected static final int COLIDX_DESCS = 8;
 
@@ -150,8 +150,8 @@ public class AttribTranslationJTable extends JTable {
 					return attMetadata.getUnit();
 				} else if (column == COLIDX_NODATA) {
 					return attMetadata.getNodataValues();
-//				} else if (column == COLIDX_TRANSLATE) {
-//					return attMetadata;
+					// } else if (column == COLIDX_TRANSLATE) {
+					// return attMetadata;
 				} else if (column == COLIDX_TITLES) {
 					return attMetadata.getTitle();
 				} else if (column == COLIDX_DESCS) {
@@ -255,8 +255,8 @@ public class AttribTranslationJTable extends JTable {
 					return AtlasCreator.R("Unit");
 				case COLIDX_NODATA:
 					return AtlasCreator.R("NodataValues");
-//				case COLIDX_TRANSLATE:
-//					return AtlasCreator.R("Attributes.Edit.TitleDesc");
+					// case COLIDX_TRANSLATE:
+					// return AtlasCreator.R("Attributes.Edit.TitleDesc");
 				case COLIDX_TITLES:
 					return AtlasCreator.R("Attributes.Edit.Title");
 				case COLIDX_DESCS:
@@ -280,9 +280,10 @@ public class AttribTranslationJTable extends JTable {
 				null, null, null);
 		SwingUtil.setColumnLook(this, COLIDX_TYPE, null, null, null, 120);
 		SwingUtil.setColumnLook(this, COLIDX_UNIT, null, null, 40, 100);
-		SwingUtil.setColumnLook(this, COLIDX_NODATA, new NoDataTableCellRenderer(), null, 100, 140);
-//		SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
-//				new ButtonCellRenderer(), null, 80, null);
+		SwingUtil.setColumnLook(this, COLIDX_NODATA,
+				new NoDataTableCellRenderer(), null, 100, 140);
+		// SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
+		// new ButtonCellRenderer(), null, 80, null);
 		SwingUtil.setColumnLook(this, COLIDX_TITLES,
 				new TranslationCellRenderer(dplv_.getAc()), 200, 250, null);
 		SwingUtil.setColumnLook(this, COLIDX_DESCS,
@@ -395,7 +396,8 @@ public class AttribTranslationJTable extends JTable {
 
 	}
 
-	// This renderer nicely paints a list of NoData values. Mainly it just put " around Strings.
+	// This renderer nicely paints a list of NoData values. Mainly it just put "
+	// around Strings.
 	public class NoDataTableCellRenderer extends DefaultTableCellRenderer {
 
 		// This method is called each time a cell in a column
@@ -404,35 +406,17 @@ public class AttribTranslationJTable extends JTable {
 				final Object value, final boolean isSelected,
 				final boolean hasFocus, final int rowIndex, final int vColIndex) {
 
-			Set<Object> list = (Set<Object>) value;
-			
-			String nicelyFormatted = "";
-			if (list != null){
-				if (list.size() == 0) nicelyFormatted = ""; else {
-					for (Object ndo : list) {
-						if (ndo instanceof String)
-							nicelyFormatted+="\""+ndo+"\"";
-						else
-							nicelyFormatted+=ndo.toString();
-						
-						nicelyFormatted+=",";
-					}
-					// Remove the extra comma
-					nicelyFormatted =nicelyFormatted.substring(0,nicelyFormatted.length()-1);
-				}
-			}
-
 			JLabel tableCellRendererComponent = (JLabel) super
-					.getTableCellRendererComponent(table, nicelyFormatted,
+					.getTableCellRendererComponent(table, AttributeMetadata
+							.formatNoDataValues((Set<Object>) value),
 							isSelected, hasFocus, rowIndex, vColIndex);
-			
+
 			tableCellRendererComponent.setFont(FATFONT);
 
 			return tableCellRendererComponent;
 		}
 
 	}
-
 
 	/**
 	 * This {@link MouseListener} passes the clicks to the button if they are
@@ -450,8 +434,8 @@ public class AttribTranslationJTable extends JTable {
 				AttributeMetadata attMetaData = getAttMetaDataView(row);
 
 				// This is modal
-				NodataEditListDialog ad = new NodataEditListDialog(
-						AttribTranslationJTable.this, dplv, attMetaData);
+				NoDataEditListDialog ad = new NoDataEditListDialog(
+						AttribTranslationJTable.this, dplv.getSchema(), attMetaData);
 				ad.setVisible(true);
 
 				// if (!ad.isCancelled()) {
@@ -459,7 +443,8 @@ public class AttribTranslationJTable extends JTable {
 				// }
 			}
 
-			if (convertColumnIndexToModel(column) == COLIDX_TITLES || convertColumnIndexToModel(column) == COLIDX_DESCS) {
+			if (convertColumnIndexToModel(column) == COLIDX_TITLES
+					|| convertColumnIndexToModel(column) == COLIDX_DESCS) {
 				AttributeMetadata attMetaData = getAttMetaDataView(row);
 
 				if (!attMetaData.isVisible())

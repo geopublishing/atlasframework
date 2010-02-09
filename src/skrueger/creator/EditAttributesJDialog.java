@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 import schmitzm.swing.JPanel;
@@ -33,6 +34,8 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 	
 	private AttributeMetadataMap backupAttributeMetadataMap;
 
+	private AttribTranslationJTable attribTranslationJTable;
+
 	public EditAttributesJDialog(Component owner,
 			DpLayerVectorFeatureSource dpLayerVectorFeatureSource) {
 		super(SwingUtil.getParentWindow(owner), AtlasCreator.R(
@@ -43,7 +46,7 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 		backup();
 
 		final JPanel cp = new JPanel(new BorderLayout());
-		final AttribTranslationJTable attribTranslationJTable = new AttribTranslationJTable(
+		attribTranslationJTable = new AttribTranslationJTable(
 				dplv);
 		cp.add(new JScrollPane(attribTranslationJTable), BorderLayout.CENTER);
 		
@@ -122,6 +125,13 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * May be called outside to 
+	 */
+	public void refreshTable() {
+		((DefaultTableModel)attribTranslationJTable.getModel()).fireTableDataChanged();
 	}
 
 }

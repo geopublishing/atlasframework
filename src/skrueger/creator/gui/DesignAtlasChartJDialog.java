@@ -174,7 +174,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		contentPane.add(getChartPanel(mapLegend, styledLayer));
 
 		// Adds an ACTION button to zoom to the full extent of the chart
-		chartPanel.getToolBar().add( AtlasChartJDialog.createZoomToFullChartExtentButton(chartPanel, chartStyle),0);
+		chartPanel.getToolBar().add(
+				AtlasChartJDialog.createZoomToFullChartExtentButton(chartPanel,
+						chartStyle), 0);
 
 		contentPane.add(getTabbedPane());
 
@@ -474,10 +476,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		panel.add(grids, "growx, sgx");
 		panel.add(axisCross, "growx, sgx");
-		
-		if (chartStyle instanceof FeatureChartStyle) 
-			panel.add(getNormalizationPanel((FeatureChartStyle)chartStyle), "growx, sgx");
 
+		if (chartStyle instanceof FeatureChartStyle)
+			panel.add(getNormalizationPanel((FeatureChartStyle) chartStyle),
+					"growx, sgx");
 
 		return panel;
 	}
@@ -523,17 +525,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * If this is the DOMAIN axis, allow to change the 0. Attribute/Variable
 		 */
 		if (axisNr == ChartStyle.DOMAIN_AXIS) {
-			/* prepare data: */
-			// String attributeName = chartStyle
-			// .getAttributeName(ChartStyle.DOMAIN_AXIS);
-			// AttributeMetaData attributeMetadataFor = ASUtil
-			// .getAttributeMetadataFor(styledLayer, attributeName);
 			SimpleFeatureType schema = styledLayer.getFeatureSource()
 					.getSchema();
-			// AttributeDescriptor attributeType =
-			// schema.getAttributeType(ASUtil
-			// .getAttribIndex(schema, attributeName));
-			// Translation descTranslation = attributeMetadataFor.getDesc();
 
 			final List<String> fieldNames;
 
@@ -545,8 +538,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final AttributesJComboBox attribComboBox = new AttributesJComboBox(
 					schema, styledLayer.getAttributeMetaDataMap(), fieldNames);
 
-			attribComboBox.setSelectedItem(chartStyle
-					.getAttributeName(ChartStyle.DOMAIN_AXIS));
+			final String domainAxisAttributeLocalName = chartStyle
+					.getAttributeName(ChartStyle.DOMAIN_AXIS);
+			attribComboBox.setSelectedItem(domainAxisAttributeLocalName);
 
 			/** build GUI... */
 			final JPanel attPanel = new JPanel(new MigLayout("wrap 1"));
@@ -555,8 +549,22 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					.R("DesignAtlasChartJDialog.SeriesDataBorderTitle")));
 
 			attPanel.add(attribComboBox, "growx");
-//			attPanel.add(getNormalizeJCheckboxFor(ChartStyle.DOMAIN_AXIS),
-//					"growx, right");
+
+			// A JPanel showing the NODATA values for the selected attribute
+			final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
+					.getAttributeMetaDataMap(), domainAxisAttributeLocalName,
+					styledLayer.getSchema());
+			// Update the chart whenever the NODATA values changes
+			noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					if (evt.getPropertyName().equals(
+							NoDataPanel.PROPERTY_NODATAVALUES))
+						fireChartChangedEvent(true);
+				}
+			});
+			attPanel.add(noDataPanel);
 
 			if (chartStyle.getType() != ChartType.SCATTER) {
 				attPanel.add(getDomainSortedJCheckbox(), "growx, right");
@@ -574,15 +582,14 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					if (e.getStateChange() != ItemEvent.SELECTED)
 						return;
 
-					final String attName = (String) attribComboBox
+					final String attLocalName = (String) attribComboBox
 							.getSelectedItem();
 
-					chartStyle
-							.setAttributeName(ChartStyle.DOMAIN_AXIS, attName);
-
-					// LOGGER.debug("Setting attribute " + seriesIdx + 1 +
-					// " to "
-					// + chartStyle.getAttributeName(seriesIdx + 1));
+					chartStyle.setAttributeName(ChartStyle.DOMAIN_AXIS,
+							attLocalName);
+					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS,
+							styledLayer.getAttributeMetaDataMap().get(
+									attLocalName).getNodataValues());
 
 					/**
 					 * Update the legend labeling with the AttributeMetaData
@@ -609,15 +616,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						getCategoryJCheckbox().setSelected(true);
 					}
 
-//					/*
-//					 * You may only use normalization , if a numeric att is
-//					 * selected
-//					 */
-//					getNormalizeJCheckboxFor(0).setEnabled(
-//							attribComboBox.isNumericalAttribSelected());
-//					if (!attribComboBox.isNumericalAttribSelected()) {
-//						getNormalizeJCheckboxFor(0).setSelected(false);
-//					}
+					// Update the NODATA Panel
+					noDataPanel.setAttribute(attLocalName);
 
 					fireChartChangedEvent(true);
 				}
@@ -894,16 +894,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	private JPanel getSeriesDataSelectionJPanel(final int rendererIndex,
 			final int seriesIdx) {
 
-		/* prepare data: */
-		// String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
-
-		// AttributeMetadata attributeMetadataFor =
-		// styledLayer.getAttributeMetaDataMap().get(attributeName);
-
 		SimpleFeatureType schema = styledLayer.getFeatureSource().getSchema();
-		// AttributeDescriptor attributeType = schema.getAttributeType(ASUtil
-		// .getAttribIndex(schema, attributeName));
-		// Translation descTranslation = attributeMetadataFor.getDesc();
 
 		final AttributesJComboBox attribComboBox = new AttributesJComboBox(
 				schema, styledLayer.getAttributeMetaDataMap(), ASUtil
@@ -916,29 +907,26 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		attPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
 				.R("DesignAtlasChartJDialog.SeriesDataBorderTitle")));
-	
 
 		attPanel.add(attribComboBox, "growx");
-//		attPanel.add(getNormalizeJCheckboxFor(seriesIdx + 1), "growx");
-		//
-		// final TranslationEditJPanel titleTransJPanel = new
-		// TranslationEditJPanel(attributeMetadataFor.getTitle(),
-		// atlasConfigEditable.getLanguages(),
-		// AtlasCreator.R("AttributeTitle"));
-		// attPanel.add(titleTransJPanel, "growx");
-		// attPanel.add(new JLabel(attributeMetadataFor.getTitle().toString()),
-		// "left");
-		//
-		// final TranslationEditJPanel descTransJPanel = new
-		// TranslationEditJPanel(attributeMetadataFor.getDesc(),
-		// atlasConfigEditable.getLanguages(), AtlasCreator.R("AttributeDesc"));
-		// attPanel.add(descTransJPanel, "growx");
-		// attPanel.add(new JLabel(AtlasCreator.R("AttributeDesc")), "split 2");
-		// attPanel.add(new JLabel(descTranslation.toString()), "left");
 
-		/**
-		 * When the attribute is changed, a lot of things happen:
-		 */
+		// A Panel that will list all NODATA-Value
+		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
+				.getAttributeMetaDataMap(), chartStyle
+				.getAttributeName(seriesIdx + 1), styledLayer.getSchema());
+		// Update the chart whenever the NODATA values changes
+		noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(
+						NoDataPanel.PROPERTY_NODATAVALUES))
+					fireChartChangedEvent(true);
+			}
+		});
+		attPanel.add(noDataPanel);
+
+		// When the attribute is changed, a lot of things happen:
 		attribComboBox.addItemListener(new ItemListener() {
 
 			@Override
@@ -947,8 +935,13 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				if (e.getStateChange() != ItemEvent.SELECTED)
 					return;
 
-				chartStyle.setAttributeName(seriesIdx + 1,
-						(String) attribComboBox.getSelectedItem());
+				String attLocalName = (String) attribComboBox.getSelectedItem();
+
+				chartStyle.setAttributeName(seriesIdx + 1, attLocalName);
+				chartStyle.setNoDataValues(seriesIdx + 1,
+						styledLayer.getAttributeMetaDataMap().get(
+								attLocalName).getNodataValues());
+				
 
 				// LOGGER.debug("Setting attribute " + seriesIdx + 1 + " to "
 				// + chartStyle.getAttributeName(seriesIdx + 1));
@@ -963,7 +956,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							atlasConfigEditable.getLanguages());
 				}
 
-				// initGUI();
+				noDataPanel.setAttribute(attLocalName);
 
 				fireChartChangedEvent(true);
 			}
@@ -972,54 +965,55 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		return attPanel;
 	}
-	
+
 	/**
 	 * A panel to control the normalization of all attributes at once
+	 * 
 	 * @param featureChartStyle
 	 * @return
 	 */
-	private JPanel getNormalizationPanel(final FeatureChartStyle featureChartStyle) {
+	private JPanel getNormalizationPanel(
+			final FeatureChartStyle featureChartStyle) {
 		JPanel normPanel = new JPanel(new MigLayout("wrap 1"));
-		
+
 		// An explainting text
 		add(new JLabel(AtlasCreator.R("Normalize.Chart.Explanation")));
-		
+
 		// The checkbox in the next line
-		JCheckBox cb = new JCheckBox( AtlasCreator
-				.R("AttributeSelectionPanel.NormalizeCheckbox")); 
-	
-		
+		JCheckBox cb = new JCheckBox(AtlasCreator
+				.R("AttributeSelectionPanel.NormalizeCheckbox"));
+
 		cb.setToolTipText(AtlasCreator
 				.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
 
-		
 		cb.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				final boolean normalize = e.getStateChange() == ItemEvent.SELECTED;
-				
+
 				for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++)
 					featureChartStyle.setAttributeNormalized(idx, normalize);
-				
-//				LOGGER.debug("Setting setAttributeNormalized for all attribs to " + normalize);
-				
+
+				// LOGGER.debug("Setting setAttributeNormalized for all attribs to "
+				// + normalize);
+
 				fireChartChangedEvent(true);
 			}
 
-		});		
-		
+		});
+
 		// If the first attribute is normalized, all are!
 		cb.setSelected(featureChartStyle.isAttributeNormalized(0));
-		
+
 		normPanel.add(cb);
 		// normPanel.add(getChartBackgroundColorButton());
 		// normPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
 
-		normPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator.R("Normalize.Border.title"))); 
+		normPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
+				.R("Normalize.Border.title")));
 		return normPanel;
 	}
-
 
 	/**
 	 * Returns the normlizeCheckBox for the Nth attribute (0 = DOMAIN)
@@ -1298,7 +1292,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				reapplyChartStyleToFeatureCollection = false;
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						DesignAtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), AtlasViewer.R("dialog.title.wait")); 
+						DesignAtlasChartJDialog.this, AtlasViewer
+								.R("dialog.title.wait"), AtlasViewer
+								.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
@@ -1308,7 +1304,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					}
 				};
 				JFreeChart newChart = asw.executeModal();
-				
+
 				panel.setChart(newChart);
 
 			} else {
