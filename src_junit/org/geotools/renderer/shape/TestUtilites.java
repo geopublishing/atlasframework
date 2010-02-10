@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2010 .
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the GNU Lesser Public License v2.1
+ * which accompanies this distribution, and is available at
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * 
+ * Contributors:
+ *      - initial API and implementation
+ ******************************************************************************/
 /*
  *    GeoTools - The Open Source Java GIS Toolkit
  *    http://geotools.org
