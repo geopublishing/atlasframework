@@ -14,6 +14,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import net.miginfocom.swing.MigLayout;
 import schmitzm.swing.JPanel;
 import skrueger.AttributeMetadata;
+import skrueger.creator.AtlasCreator;
 import skrueger.geotools.AttributeMetadataMap;
 
 /**
@@ -32,9 +33,7 @@ public class NoDataPanel extends JPanel {
 	private JTextField noDataTextField;
 	private final AttributeMetadataMap attributeMetaDataMap;
 	private AttributeMetadata atm;
-	private final SimpleFeatureType schema;
-
-	private WeakHashSet<PropertyChangeListener> listeners;
+//	private final SimpleFeatureType schema;
 
 	/**
 	 * @param attributeMetaDataMap
@@ -45,9 +44,9 @@ public class NoDataPanel extends JPanel {
 			String attributeName, final SimpleFeatureType schema) {
 		super(new MigLayout());
 		this.attributeMetaDataMap = attributeMetaDataMap;
-		this.schema = schema;
+//		this.schema = schema;
 
-		add(new JButton(new AbstractAction("NODATA-Werte" + ":") { // i8n
+		add(new JButton(new AbstractAction(AtlasCreator.R("NodataValues") + ":") { 
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
