@@ -27,7 +27,7 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	public SingleRuleList<LineSymbolizer> getDefaultTemplate() {
 		return ASUtil.getDefaultLineTemplate();
 	}
-
+	
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));

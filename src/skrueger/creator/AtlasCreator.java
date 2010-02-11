@@ -43,6 +43,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -76,7 +77,6 @@ import skrueger.swing.CancelButton;
 
 import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
-import com.sun.org.apache.regexp.internal.RE;
 
 /**
  * The mighty mighty {@link AtlasCreator} is a tool that generates runnable
@@ -168,6 +168,22 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (InstantiationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IllegalAccessException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (UnsupportedLookAndFeelException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		System.setProperty("file.encoding", "UTF-8");
 

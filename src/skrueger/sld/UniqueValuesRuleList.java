@@ -41,6 +41,7 @@ import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.swing.SwingUtil;
+import skrueger.AttributeMetadata;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public abstract class UniqueValuesRuleList extends FeatureRuleList {
@@ -52,6 +53,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * is translated to the special "all others" rule *
 	 */
 	public static final String ALLOTHERS_IDENTIFICATION_VALUE = "ALLOTHERS_RULE_ID";
+
 
 	private String propertyFieldName = null;
 
@@ -121,6 +123,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					if (!uV.equals(ALLOTHERS_IDENTIFICATION_VALUE)) {
 						filter = ASUtil.ff2.equals(propertyFieldName2,
 								ASUtil.ff2.literal(uV));
+
+						// Exclude the NODATA values
+						filter = ff2.and(ff2.not(getNoDataFilter()), filter);
+
 						filters.add(filter);
 					}
 				}
@@ -169,6 +175,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				 */
 			} else {
 				filter = ASUtil.ff2.equals(propertyFieldName2, value);
+				// Exclude the NODATA values
+				filter = ff2.and(ff2.not(getNoDataFilter()), filter);
 			}
 
 			/**
@@ -193,7 +201,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 			rule.setFilter(filter);
 			rule.setTitle(getLabels().get(ruleCount));
-			
+
 			rules.add(rule);
 			ruleCount++;
 		}
@@ -294,8 +302,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	public String getPropertyFieldName() {
 		if (propertyFieldName == null) {
-			final List<String> valueFieldNames = ASUtil
-					.getValueFieldNames(getStyledFeatures().getSchema(), false);
+			final List<String> valueFieldNames = ASUtil.getValueFieldNames(
+					getStyledFeatures().getSchema(), false);
 			if (valueFieldNames.size() > 0)
 				propertyFieldName = valueFieldNames.get(0);
 			else
@@ -305,19 +313,21 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		return propertyFieldName;
 	}
 
-	/**
-	 * Sets a template Symbol used for this symbolization. Different from super.
-	 * {@link #setTemplate(SingleRuleList)}, this doesn't fire an envent because
-	 * we wait for the user to apply the template to some rules.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 */
-	@Override
-	public void setTemplate(final SingleRuleList template) {
-		this.template = template;
-		// fireEvents(new RuleChangedEvent("Set template", this));
-	}
+	// /**
+	// * Sets a template Symbol used for this symbolization. Different from
+	// super.
+	// * {@link #setTemplate(SingleRuleList)}, this doesn't fire an envent
+	// because
+	// * we wait for the user to apply the template to some rules.
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// * Kr&uuml;ger</a>
+	// */
+	// @Override
+	// public void setTemplate(final SingleRuleList template) {
+	// this.template = template;
+	// // fireEvents(new RuleChangedEvent("Set template", this));
+	// }
 
 	Integer countNew = 0;
 
@@ -436,7 +446,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					if (countNew > 0)
 						popQuite(new RuleChangedEvent("Added " + countNew
 								+ " values.", UniqueValuesRuleList.this));
-					else popQuite();
+					else
+						popQuite();
 
 					JOptionPane.showMessageDialog(parentGUI, AtlasStyler.R(
 							"UniqueValuesRuleList.AddAllValues.DoneMsg",
@@ -641,7 +652,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			final Not not = (Not) filter;
 			final Or or = (Or) not.getFilter();
 
-			// if (or.getChildren() != null) {
 			// Other rules exist, OR is not empty
 			final PropertyIsEqualTo propertEqualTo = (PropertyIsEqualTo) or
 					.getChildren().get(0);
@@ -649,10 +659,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					.getExpression1();
 			return new String[] { pName.getPropertyName(),
 					ALLOTHERS_IDENTIFICATION_VALUE };
-			// } else {
-			// return new String[] { pName.getPropertyName(),
-			// ALLOTHERS_IDENTIFICATION_VALUE };
-			// }
 
 		}
 
@@ -661,6 +667,37 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	public void setMaxScaleDenominator(double maxScaleDenominator) {
 		this.maxScaleDenominator = maxScaleDenominator;
+	}
+
+	/**
+	 * Return the {@link Filter} that will catch all NODATA values.
+	 */
+	@Override
+	public Filter getNoDataFilter() {
+		String attributeLocalName = getPropertyFieldName();
+		AttributeMetadata amd = getStyledFeatures().getAttributeMetaDataMap()
+				.get(attributeLocalName);
+
+		List<Filter> ors = new ArrayList<Filter>();
+		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
+
+		if (amd.getNodataValues() != null)
+			for (Object ndValue : amd.getNodataValues()) {
+				ors.add(ff2.equals(ff2.property(attributeLocalName), ff2
+						.literal(ndValue)));
+			}
+
+		return ff2.or(ors);
+	}
+
+	/**
+	 * Return a {@link SingleRuleList} that shall be used to paint all NODATA
+	 * values. If <code>null</code>, then all features matching the
+	 * {@link #getNoDataFilter()} shall not be painted at all.
+	 */
+	@Override
+	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
+		return null; // TODO nice default?!
 	}
 
 }

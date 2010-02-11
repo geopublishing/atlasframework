@@ -211,7 +211,8 @@ public class SinglePolygonSymbolRuleList extends
 
 	@Override
 	public SingleRuleList<PolygonSymbolizer> copy() {
-		return copyTo(new SinglePolygonSymbolRuleList(getTitle()));
+		SinglePolygonSymbolRuleList to = new SinglePolygonSymbolRuleList(getTitle());
+		return copyTo(to);
 	}
 
 }

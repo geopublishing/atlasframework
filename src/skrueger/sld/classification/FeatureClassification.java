@@ -30,7 +30,11 @@ public abstract class FeatureClassification extends Classification {
 	
 	public FeatureClassification(
 			StyledFeaturesInterface<?> styledFeatures) {
-				this.styledFeatures = styledFeatures;
+				this.setStyledFeatures(styledFeatures);
+	}
+
+	public void setStyledFeatures(StyledFeaturesInterface<?> styledFeatures) {
+		this.styledFeatures = styledFeatures;
 	}
 
 }

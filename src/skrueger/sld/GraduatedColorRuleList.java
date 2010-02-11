@@ -24,9 +24,11 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
+import skrueger.AttributeMetadata;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.sld.classification.QuantitiesClassification;
 import skrueger.sld.classification.QuantitiesClassification.METHOD;
+import skrueger.sld.gui.SingleSymbolGUI;
 
 /**
  * 
@@ -45,25 +47,27 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	/** KEY-name for the KVPs in the meta information * */
 	private static final String KVP_PALTETTE = "PALETTE";
 
-	// /** KEY-name for the KVPs in the meta information * */
-	// private static final String KVP_EXCLUDE_FILTER = "EXCLUDE";
-
 	/**
 	 * The {@link BrewerPalette} used in this {@link QuantitiesRuleList}
 	 */
-	private BrewerPalette brewerPalette = ASUtil.getPalettes(new PaletteType(true,false),-1)[0];
-//	{
-//		// Setting a default palette
-//		try {
-//			brewerPalette = ColorBrewer.instance(ColorBrewer.QUALITATIVE)
-//					.getPalettes()[0];
-//		} catch (IOException e) {
-//			throw new RuntimeException(
-//					"Colorbrewer palettes are not available.");
-//		}
-//	}
+	private BrewerPalette brewerPalette = ASUtil.getPalettes(new PaletteType(
+			true, false), -1)[0];
 
 	protected METHOD method = QuantitiesClassification.DEFAULT_METHOD;
+
+	/**
+	 * This {@link RuleChangeListener} is added to the template in
+	 * {@link #getTemplate()} and will propagate any template changes to this
+	 * {@link GraduatedColorRuleList}
+	 */
+	private RuleChangeListener listenToTemplateRLChangesAndPropageToGraduateColorsRL = new RuleChangeListener() {
+
+		@Override
+		public void changed(RuleChangedEvent e) {
+			GraduatedColorRuleList.this.fireEvents(new RuleChangedEvent(
+					"template changed", GraduatedColorRuleList.this));
+		}
+	};
 
 	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
@@ -71,6 +75,20 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 	public METHOD getMethod() {
 		return method;
+	}
+
+	/**
+	 * Overriding it to add a listener that will automatically propagate the
+	 * rulelistechange to the graduate color rule list.
+	 */
+	@Override
+	public SingleRuleList<? extends Symbolizer> getTemplate() {
+		SingleRuleList<? extends Symbolizer> temp = super.getTemplate();
+
+		// We may add this listener as often as we want, because the listeners
+		// are registered in a WeakHashSet
+		temp.addListener(listenToTemplateRLChangesAndPropageToGraduateColorsRL);
+		return temp;
 	}
 
 	@Override
@@ -111,12 +129,14 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 			SingleRuleList<? extends Symbolizer> clone = getTemplate().copy();
 
 			final Color newColor = getColors()[i];
-			
-//			LOGGER.debug("Color = " + newColor);
-			
+
 			clone.setColor(newColor);
 
 			rule = clone.getRules().get(0);
+
+			// Exclude the NODATA values for the rule
+			if (getNoDataFilter() != Filter.EXCLUDE)
+				filter = ff2.and(ff2.not(getNoDataFilter()), filter);
 
 			rule.setFilter(filter);
 
@@ -127,6 +147,20 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 			rules.add(rule);
 
+		}
+
+		// The last rule(s) are the NODATA rules
+
+		{
+
+			SingleRuleList<? extends Symbolizer> copy = getNoDataSymbol()
+					.copy();
+			List<Rule> rules2 = copy.getRules();
+			for (Rule noDataRule : rules2) {
+				noDataRule.setName(NODATA_RULE_NAME);
+				noDataRule.setFilter(getNoDataFilter());
+				rules.add(noDataRule);
+			}
 		}
 
 		return rules;
@@ -175,8 +209,9 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		if (super.getColors() == null) {
 			if (getNumClasses() > getBrewerPalette().getMaxColors()) {
-				throw new RuntimeException(
-						" numClasses ("+getNumClasses()+") > getBrewerPalette().getMaxColors() ("+getBrewerPalette().getMaxColors()+")");
+				throw new RuntimeException(" numClasses (" + getNumClasses()
+						+ ") > getBrewerPalette().getMaxColors() ("
+						+ getBrewerPalette().getMaxColors() + ")");
 			}
 
 			setColors(getBrewerPalette().getColors(getNumClasses()));
@@ -205,11 +240,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
 				+ METAINFO_KVP_EQUALS_CHAR + getBrewerPalette().getName();
-		//
-		// metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_EXCLUDE_FILTER
-		// + METAINFO_KVP_EQUALS_CHAR + getExcludeFilterRule();
 
-//		LOGGER.debug("metainfo= " + metaInfoString);
+		// LOGGER.debug("metainfo= " + metaInfoString);
 
 		return metaInfoString;
 	}
@@ -252,7 +284,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 				BrewerPalette foundIt = null;
 
-				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(true,false), getNumClasses())) {
+				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(
+						true, false), getNumClasses())) {
 					if (ppp.getName().equals(brewerPaletteName)) {
 						foundIt = ppp;
 						break;
@@ -266,15 +299,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				}
 			}
 
-			// else
-			//
-			// if (kvp[0].equalsIgnoreCase(KVP_EXCLUDE_FILTER)) {
-			// // FeatureOperationTreeFilter exFilter = new
-			// // FeatureOperationTreeFilter(
-			// // kvp[1]);
-			// setExcludeFilterRule(kvp[1]);
-			// }
-
 		}
 
 		/***********************************************************************
@@ -282,10 +306,42 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		 */
 		importTemplate(importFTS);
 
-		/***********************************************************************
-		 * TODO import anything ?limits from rules...
-		 */
+	}
 
+	/**
+	 * Return the {@link Filter} that will catch all NODATA values.
+	 */
+	@Override
+	public Filter getNoDataFilter() {
+
+		// Checking the value attribute for NODATA values
+		String attributeLocalName = getValue_field_name();
+		AttributeMetadata amd1 = getStyledFeatures().getAttributeMetaDataMap()
+				.get(attributeLocalName);
+
+		List<Filter> ors = new ArrayList<Filter>();
+		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
+		if (amd1 != null && amd1.getNodataValues() != null)
+			for (Object ndValue : amd1.getNodataValues()) {
+				ors.add(ff2.equals(ff2.property(attributeLocalName), ff2
+						.literal(ndValue)));
+			}
+
+		// Checking the normalization attribute for NODATA values
+		String normalizerLocalName = getNormalizer_field_name();
+		if (normalizerLocalName != null) {
+			AttributeMetadata amd2 = getStyledFeatures()
+					.getAttributeMetaDataMap().get(normalizerLocalName);
+
+			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
+			if (amd2 != null && amd2.getNodataValues() != null)
+				for (Object ndValue : amd2.getNodataValues()) {
+					ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2
+							.literal(ndValue)));
+				}
+		}
+
+		return ff2.or(ors);
 	}
 
 }

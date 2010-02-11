@@ -262,7 +262,9 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 							final Graphics2D g2 = (Graphics2D) im.getGraphics();
 							g2.setColor(getBackground());
 							g2.fillRect(0, 0, 16, 16);
-							getIcon().paintIcon(this, g2, 0, 0);
+							
+							if (getIcon() != null)
+								getIcon().paintIcon(this, g2, 0, 0);
 
 							g2.setColor(c);
 							g2.fillRect(0, 1, 4, 15);

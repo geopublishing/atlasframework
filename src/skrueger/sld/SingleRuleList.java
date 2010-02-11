@@ -44,23 +44,27 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	final static protected Logger LOGGER = ASUtil
 			.createLogger(SingleRuleList.class);
 
-	@Deprecated 
+	@Deprecated
 	public SingleRuleList() {
-		setTitle(AtlasStyler.R("GraduatedColorQuantities.Column.Label")); 
-	}
-	
-	/**
-	 * @param title label for the rule
-	 */
-	public SingleRuleList(Translation title) {
-		setTitle(title); 
+		setTitle(AtlasStyler.R("GraduatedColorQuantities.Column.Label"));
 	}
 
 	/**
-	 * @param title label for the rule
+	 * @param title
+	 *            label for the rule
+	 */
+	public SingleRuleList(Translation title) {
+		setTitle(title);
+	}
+
+	/**
+	 * @param title
+	 *            label for the rule
 	 */
 	public SingleRuleList(String title) {
-		setTitle(title); 
+		pushQuite();
+		setTitle(title);
+		popQuite();
 	}
 
 	/**
@@ -69,7 +73,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	protected Vector<SymbolizerType> layers = new Vector<SymbolizerType>();
 
-	private String title = "title missing"; 
+	private String title = "title missing";
 
 	private String styleTitle;
 
@@ -196,55 +200,60 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *         Kr&uuml;ger</a>
 	 */
 	public boolean loadURL(URL url) {
-		String urlString;
+		pushQuite();
 		try {
-			// urlString = new File( url.toURI() ).getName();
-			urlString = url.toURI().getPath();
-		} catch (URISyntaxException e) {
-			LOGGER.error(e);
+			String urlString;
+			try {
+				// urlString = new File( url.toURI() ).getName();
+				urlString = url.toURI().getPath();
+			} catch (URISyntaxException e) {
+				LOGGER.error(e);
 
-			urlString = url.toString();
-		}
-		// LOGGER.info("url to load = " + urlString);
-		Style[] styles = StylingUtil.loadSLD(url);
-		//
-		// LOGGER.debug("URL " + styles.length);
-		// LOGGER.debug("Anzahl Styles in URL " + styles.length);
-
-		setStyleTitle(styles[0].getTitle());
-		setStyleAbstract(styles[0].getAbstract());
-
-		String fileNameWithoutSLD;
-		try {
-			fileNameWithoutSLD = urlString.substring(
-					urlString.lastIndexOf("/") + 1, urlString.length() - 4);
-			// LOGGER.debug("urlstr=" + urlString);
-		} catch (Exception e) {
-			ExceptionDialog.show(null, e);
-			fileNameWithoutSLD = "ILLEGALFILENAME";
-		}
-		setStyleName(fileNameWithoutSLD);
-
-		try {
-			FeatureTypeStyle featureTypeStyle = styles[0].featureTypeStyles()
-					.get(0);
-			Rule rule = featureTypeStyle.rules().get(0);
-			Symbolizer[] symbolizers = rule.getSymbolizers();
-			for (Symbolizer s : symbolizers) {
-				addSymbolizer((SymbolizerType) s);
+				urlString = url.toString();
 			}
-			// System.out.println("SingleRuleList loaded "+symbolizers.length+"
-			// symbolizers from URL "+url.getFile());
-		} catch (Exception e) {
-			LOGGER
-					.warn("Error loading " + url + ": "
-							+ e.getLocalizedMessage());
-			return false;
+			// LOGGER.info("url to load = " + urlString);
+			Style[] styles = StylingUtil.loadSLD(url);
+			//
+			// LOGGER.debug("URL " + styles.length);
+			// LOGGER.debug("Anzahl Styles in URL " + styles.length);
+
+			setStyleTitle(styles[0].getTitle());
+			setStyleAbstract(styles[0].getAbstract());
+
+			String fileNameWithoutSLD;
+			try {
+				fileNameWithoutSLD = urlString.substring(urlString
+						.lastIndexOf("/") + 1, urlString.length() - 4);
+				// LOGGER.debug("urlstr=" + urlString);
+			} catch (Exception e) {
+				ExceptionDialog.show(null, e);
+				fileNameWithoutSLD = "ILLEGALFILENAME";
+			}
+			setStyleName(fileNameWithoutSLD);
+
+			try {
+				FeatureTypeStyle featureTypeStyle = styles[0]
+						.featureTypeStyles().get(0);
+				Rule rule = featureTypeStyle.rules().get(0);
+				Symbolizer[] symbolizers = rule.getSymbolizers();
+				for (Symbolizer s : symbolizers) {
+					addSymbolizer((SymbolizerType) s);
+				}
+				// System.out.println("SingleRuleList loaded "+symbolizers.length+"
+				// symbolizers from URL "+url.getFile());
+			} catch (Exception e) {
+				LOGGER.warn("Error loading " + url + ": "
+						+ e.getLocalizedMessage());
+				return false;
+			}
+
+			fireEvents(new RuleChangedEvent("Loaded from URL " + url, this));
+
+			return true;
+
+		} finally {
+			pushQuite();
 		}
-
-		fireEvents(new RuleChangedEvent("Loaded from URL " + url, this));
-
-		return true;
 	}
 
 	/**
@@ -350,8 +359,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		// AtlasStyler.importStyle when importing a SingleRulesList
 		List<Symbolizer> symbolizers = new ArrayList<Symbolizer>();
 		for (Symbolizer ps : getSymbolizers()) {
-			symbolizers.add(ps
-					);
+			symbolizers.add(ps);
 		}
 		Collections.reverse(symbolizers);
 
@@ -468,11 +476,11 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *         Kr&uuml;ger</a>
 	 */
 	public void setTitle(String title) {
-		
+
 		if (title == null || title.equals("")) {
-//			LOGGER.warn("rule title may not be empty");
+			// LOGGER.warn("rule title may not be empty");
 			title = "title missing";
-		} 
+		}
 
 		// Is the new title really different from the old one?
 		boolean change = true;

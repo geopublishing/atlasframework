@@ -15,9 +15,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.log4j.Logger;
+import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsBetween;
@@ -29,7 +32,7 @@ import skrueger.sld.AtlasStyler.LANGUAGE_MODE;
 
 abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		FeatureRuleList {
-	private  static final Logger LOGGER = Logger
+	private static final Logger LOGGER = Logger
 			.getLogger(QuantitiesRuleList.class);
 
 	/** KEY-name for the KVPs in the meta information * */
@@ -50,9 +53,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private String normalizer_field_name;
 
-	// /** The number of classes * */
-	// private int numClasses = 5;
-
 	private Color[] colors = null;
 
 	public int getNumClasses() {
@@ -62,20 +62,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	/** Caches the limits* */
 	private TreeSet<NUMBERTYPE> classLimits = new TreeSet<NUMBERTYPE>();
 
-	//
-	// public void setNumClasses(int numClasses) {
-	// if (this.numClasses != numClasses) {
-	// LOGGER.debug("setting numclasses to " + numClasses
-	// + " and colors to null");
-	// setColors(null);
-	// this.numClasses = numClasses;
-	// } else {
-	// LOGGER.debug("IGNORING setting numclasses to " + numClasses
-	// + " and colors to null");
-	// }
-	// }
-
-	// ms-01.sn
 	/**
 	 * Defines the number of digits shown in interval description (rule title);
 	 * Default is 3
@@ -100,8 +86,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		this.classDigitsFormat.applyPattern(SwingUtil
 				.getNumberFormatPattern(classDigits));
 	}
-
-	// ms-01.en
 
 	public TreeSet<NUMBERTYPE> getClassLimits() {
 		return classLimits;
@@ -149,18 +133,11 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 			boolean resetRuleTitles) {
 
 		this.classLimits = classLimits;
-//
 		if (classLimits.size() < 2) {
 			LOGGER.error("numClasses < 1 bei setClassLimits. NOT accepting it");
 			// numClasses = 0;
 			return;
 		}
-
-//		 setNumClasses(classLimits.size() - 1);
-//		
-//		 if (numClasses < 0) {
-//		 LOGGER.error("numClasses < 0! bei setClassLimits");
-//		 }
 
 		/***********************************************************************
 		 * Create default Rule Titles..
@@ -274,6 +251,15 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return <code>null</code> if it is not a "BetweenFilter"
 	 */
 	public static double[] interpretBetweenFilter(Filter filter) {
+		
+		if (filter instanceof AndImpl) {
+			// This is a AND ( NOT ( NODATA ) , BETWEENFILTER) construction
+			// We continue the interpretion with only the last filter
+			Iterator<Filter> fi = ((AndImpl)filter).getFilterIterator();
+			while (fi.hasNext())
+				filter = fi.next(); 
+		}
+			
 		if (filter instanceof PropertyIsBetween) {
 			PropertyIsBetween betweenFilter = (PropertyIsBetween) filter;
 			double lower = Double.parseDouble(betweenFilter.getLowerBoundary()
@@ -369,15 +355,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		}
 	}
 
-	/***************************************************************************
-	 * ABSTRACT METHODS BEGIN HERE
-	 * 
-	 * @return
-	 **************************************************************************/
-
-	abstract public void parseMetaInfoString(String metaInfoString,
-			FeatureTypeStyle fts);
-
 	/**
 	 * @param colors
 	 */
@@ -388,5 +365,14 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	public Color[] getColors() {
 		return colors;
 	}
+
+	/***************************************************************************
+	 * ABSTRACT METHODS BEGIN HERE
+	 * 
+	 * @return
+	 **************************************************************************/
+
+	abstract public void parseMetaInfoString(String metaInfoString,
+			FeatureTypeStyle fts);
 
 }

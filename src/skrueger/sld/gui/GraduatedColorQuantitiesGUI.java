@@ -11,11 +11,13 @@
 package skrueger.sld.gui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -61,6 +63,7 @@ import org.geotools.styling.Symbolizer;
 import schmitzm.geotools.map.event.MapLayerAdapter;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.creator.AtlasCreator;
 import skrueger.i8n.Translation;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
@@ -135,6 +138,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				classifier.onFilterChanged();
 		}
 	};
+
+	private JPanel noDataPanel;
 
 	/**
 	 * This is the default constructor
@@ -817,13 +822,27 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 		panel.add(jLabelColorPalette, "left");
 		panel.add(getJComboBoxColors(), "left");
-		panel.add(getInvertColorsButton(), "left");
+		panel.add(getInvertColorsButton(), "gap rel, left");
+		
+		panel.add(getNoDataPanel());
 
 		panel.add(new JPanel(), "growx");
 		panel.add(jLabelTemplate, "gapx unrelated, right");
 		panel.add(getJButtonTemplate(), "right");
 
 		return panel;
+	}
+
+	private JPanel getNoDataPanel() {
+		if (noDataPanel == null) {
+			noDataPanel = new JPanel(new MigLayout());
+			noDataPanel.add(new JLabel(AtlasCreator.R("NodataValues")+":"));
+			
+			SymbolButton noDataSymbolButton = new EditSymbolButton(rulesList.getNoDataSymbol());
+			
+			noDataPanel.add(noDataSymbolButton);
+		}
+		return noDataPanel;
 	}
 
 	/**
@@ -928,46 +947,28 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		return jComboBoxPalettes;
 	}
 
-	/**
-	 * Listens to close/cancel of any {@link SymbolSelectorGUI}.
-	 */
-	PropertyChangeListener listenCancelOkForSelectionInSymbolSelectionGUI = new PropertyChangeListener() {
-
-		public void propertyChange(final PropertyChangeEvent evt) {
-
-			if (evt.getPropertyName().equals(
-					SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-
-				backup.copyTo(rulesList.getTemplate());
-			}
-
-			if (evt.getPropertyName().equals(SymbolSelectorGUI.PROPERTY_CLOSED)) {
-
-			}
-		}
-	};
 
 	/**
 	 * A backup of the template symbol. Used when the GUI opens.
 	 */
 	protected SingleRuleList<? extends Symbolizer> backup;
 
-	/**
-	 * Listens to realtime modifications of the template icon and updates the
-	 * preview
-	 */
-	RuleChangeListener listenerUpdatePreviewIconOnTemplateChange = new RuleChangeListener() {
-
-		public void changed(final RuleChangedEvent e) {
-
-			// LOGGER.debug("reason = " + e.toString());
-			rulesList.setTemplate(rulesList.getTemplate());
-
-			jButtonTemplate.setIcon(new ImageIcon(rulesList.getTemplate()
-					.getImage(ICON_SIZE)));
-		}
-
-	};
+//	/**
+//	 * Listens to real-time modifications of the template icon and updates the
+//	 * preview
+//	 */
+//	RuleChangeListener listenerUpdatePreviewIconOnTemplateChange = new RuleChangeListener() {
+//
+//		public void changed(final RuleChangedEvent e) {
+//
+//			// LOGGER.debug("reason = " + e.toString());
+//			rulesList.setTemplate(rulesList.getTemplate());
+//
+//			getJButtonTemplate().setIcon(new ImageIcon(rulesList.getTemplate()
+//					.getImage(ICON_SIZE)));
+//		}
+//
+//	};
 
 	/**
 	 * This method initializes jButton
@@ -976,36 +977,10 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
-			jButtonTemplate = new JButton();
+			jButtonTemplate = new EditSymbolButton(rulesList.getTemplate(), ICON_SIZE);
 
-			final ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()
-					.getImage(ICON_SIZE));
-			jButtonTemplate.setAction(new AbstractAction("", imageIcon) {
-
-				public void actionPerformed(final ActionEvent e) {
-
-					final SingleRuleList<? extends Symbolizer> template = rulesList
-							.getTemplate();
-					template.getListeners().clear();
-
-					backup = template.copy();
-
-					final SymbolSelectorGUI gui = new SymbolSelectorGUI(
-							GraduatedColorQuantitiesGUI.this, AtlasStyler
-									.R("SymbolSelector.ForTemplate.Title"),
-							template);
-
-					gui
-							.addPropertyChangeListener(listenCancelOkForSelectionInSymbolSelectionGUI);
-
-					template
-							.addListener(listenerUpdatePreviewIconOnTemplateChange);
-
-					gui.setModal(true);
-					gui.setVisible(true);
-				}
-
-			});
+//			final ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()
+//					.getImage(ICON_SIZE));
 
 		}
 		return jButtonTemplate;

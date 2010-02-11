@@ -13,6 +13,7 @@ package skrueger.sld;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.FeatureSource;
@@ -123,7 +125,7 @@ public class AtlasStyler {
 	private final RuleChangeListener listenerFireStyleChange = new RuleChangeListener() {
 
 		public void changed(final RuleChangedEvent e) {
-			style12312 = null;
+			style = null;
 
 			// Only the lastChangedRule will be used to create the Style
 			final AbstractRuleList someRuleList = e.getSourceRL();
@@ -159,7 +161,7 @@ public class AtlasStyler {
 	 * The cache for the {@link Style} that is generated when
 	 * {@link #getStyle()} is called.
 	 */
-	protected Style style12312 = null;
+	protected Style style = null;
 
 	/***************************************************************************
 	 * {@link AbstractRuleList}s aka RuleLists that this {@link AtlasStyler}
@@ -322,7 +324,6 @@ public class AtlasStyler {
 		// with GUI!// TODO in another thread
 		// with GUI! O check attributeMetaDataMap for that?!
 		// avgNN = FeatureUtil.calcAvgNN(styledFeatures);
-		
 
 		setTitle(styledFeatures.getTitle());
 		if (loadStyle != null) {
@@ -363,7 +364,7 @@ public class AtlasStyler {
 	 */
 	public void reset() {
 
-		style12312 = null;
+		style = null;
 
 		lastChangedRuleList = null;
 
@@ -410,8 +411,9 @@ public class AtlasStyler {
 			dupl.visit(importStyle);
 			backupStyle = (Style) dupl.getCopy();
 		}
-		
-		// Makes a copy of the style before importing it. otherwise we might get the same obejct and not recognize changes later... 
+
+		// Makes a copy of the style before importing it. otherwise we might get
+		// the same obejct and not recognize changes later...
 		dupl.visit(importStyle);
 		importStyle = (Style) dupl.getCopy();
 
@@ -425,13 +427,13 @@ public class AtlasStyler {
 			setQuite(true); // Quite the AtlasStyler!
 			//
 			// // TODO Remove
-			// try {
-			// StylingUtil.saveStyleToSLD(importStyle, new File(
-			// "/home/stefan/Desktop/goingToImport.sld"));
-			// } catch (final TransformerException e) {
-			// LOGGER.error("Transforming to XML failed!", e);
-			// } catch (final IOException e) {
-			// }
+			try {
+				StylingUtil.saveStyleToSLD(importStyle, new File(
+						"/home/stefan/Desktop/goingToImport.sld"));
+			} catch (final TransformerException e) {
+				LOGGER.error("Transforming to XML failed!", e);
+			} catch (final IOException e) {
+			}
 
 			for (final FeatureTypeStyle fts : importStyle.featureTypeStyles()) {
 
@@ -568,6 +570,13 @@ public class AtlasStyler {
 					int countRules = 0;
 					uniqueRuleList.setWithDefaultSymbol(false);
 					for (final Rule r : fts.rules()) {
+						
+						if (r.getName().toString().equals(FeatureRuleList.NODATA_RULE_NAME)) {
+							// This rule defines the NoDataSymbol
+							uniqueRuleList.importNoDataRule(r);
+							continue;
+						}
+						
 						// set Title
 						uniqueRuleList.getLabels().add(
 								r.getDescription().getTitle().toString());
@@ -651,62 +660,74 @@ public class AtlasStyler {
 					}
 
 					quantitiesRuleList.pushQuite();
-					// wars
-					// for a while.
+					try {
 
-					// This als imports the template
-					quantitiesRuleList.parseMetaInfoString(metaInfoString, fts);
+						// This also imports the template from the first rule.
+						quantitiesRuleList.parseMetaInfoString(metaInfoString,
+								fts);
 
-					/***********************************************************
-					 * Parsing information in the RULEs
-					 * 
-					 * title, class limits
-					 */
-					int countRules = 0;
-					final TreeSet<Double> classLimits = new TreeSet<Double>();
-					double[] ds = null;
-					for (final Rule r : fts.getRules()) {
-						// set Title
-						quantitiesRuleList.getRuleTitles().put(countRules,
-								r.getTitle());
+						/***********************************************************
+						 * Parsing information in the RULEs
+						 * 
+						 * title, class limits
+						 */
+						int countRules = 0;
+						final TreeSet<Double> classLimits = new TreeSet<Double>();
+						double[] ds = null;
+						for (final Rule r : fts.rules()) {
 
-						// Class Limits
-						ds = QuantitiesRuleList.interpretBetweenFilter(r
-								.getFilter());
-						classLimits.add(ds[0]);
-
-						countRules++;
-					}
-					if (ds != null) {
-						// The last limit is only added if there have been any
-						// rules
-						classLimits.add(ds[1]);
-					}
-					quantitiesRuleList.setClassLimits(classLimits, false);
-
-					/**
-					 * Now determine the colors stored inside the symbolizers.
-					 */
-					for (int ri = 0; ri < countRules; ri++) {
-						// Import the dominant color from the symbolizers
-						// (they can differ from the palette colors, because
-						// they might have been changed manually.
-						for (final Symbolizer s : fts.getRules()[ri]
-								.getSymbolizers()) {
-
-							final Color c = StylingUtil.getSymbolizerColor(s);
-
-							if (c != null) {
-								quantitiesRuleList.getColors()[ri] = c;
-								break;
+							if (r.getName().toString().equals(FeatureRuleList.NODATA_RULE_NAME)) {
+								// This rule defines the NoDataSymbol
+								quantitiesRuleList.importNoDataRule(r);
+								continue;
 							}
+							
+							// set Title
+							quantitiesRuleList.getRuleTitles().put(countRules,
+									r.getDescription().getTitle().toString());
+
+							// Class Limits
+							ds = QuantitiesRuleList.interpretBetweenFilter(r
+									.getFilter());
+							classLimits.add(ds[0]);
+
+							countRules++;
+						}
+						if (ds != null) {
+							// The last limit is only added if there have been
+							// any
+							// rules
+							classLimits.add(ds[1]);
+						}
+						quantitiesRuleList.setClassLimits(classLimits, false);
+
+						/**
+						 * Now determine the colors stored inside the
+						 * symbolizers.
+						 */
+						for (int ri = 0; ri < countRules; ri++) {
+							// Import the dominant color from the symbolizers
+							// (they can differ from the palette colors, because
+							// they might have been changed manually.
+							for (final Symbolizer s : fts.rules().get(ri)
+									.getSymbolizers()) {
+
+								final Color c = StylingUtil
+										.getSymbolizerColor(s);
+
+								if (c != null) {
+									quantitiesRuleList.getColors()[ri] = c;
+									break;
+								}
+							}
+
 						}
 
+						importedThisAbstractRuleList = quantitiesRuleList;
+
+					} finally {
+						quantitiesRuleList.popQuite();
 					}
-
-					quantitiesRuleList.popQuite();
-
-					importedThisAbstractRuleList = quantitiesRuleList;
 				}
 
 				/***************************************************************
@@ -717,7 +738,7 @@ public class AtlasStyler {
 						.toString())) {
 					final TextRuleList textRulesList = getTextRulesList();
 					// textRulesList.setQuite(true);
-					
+
 					boolean enabledAllFilters = true;
 
 					List<Rule> rules = fts.rules();
@@ -740,7 +761,6 @@ public class AtlasStyler {
 								.getMaxScaleDenominator());
 						textRulesList.minScales.add(rule
 								.getMinScaleDenominator());
-
 
 						final Filter importFilter = rule.getFilter();
 						Filter realFilter = importFilter;
@@ -815,12 +835,12 @@ public class AtlasStyler {
 						}
 
 					}
-					
+
 					/*******************************************************
-					 * This checks if we have negated the Filer to simulate
-					 * a "diabled" state TODO das ist doch falsch.. hier
-					 * enablen wir alle classes.. aber nur diese eine hier
-					 * ist disabled...
+					 * This checks if we have negated the Filer to simulate a
+					 * "diabled" state TODO das ist doch falsch.. hier enablen
+					 * wir alle classes.. aber nur diese eine hier ist
+					 * disabled...
 					 */
 					textRulesList.setEnabled(enabledAllFilters);
 					textRulesList.setSelIdx(0);
@@ -928,7 +948,7 @@ public class AtlasStyler {
 		LOGGER.info(" FIREING EVENT to " + listeners.size());
 
 		// try {
-		style12312 = null;
+		style = null;
 		final Style style2 = getStyle();
 		if (style2 == null)
 			return;
@@ -977,27 +997,27 @@ public class AtlasStyler {
 	 *         Kr&uuml;ger</a>
 	 */
 	public Style getStyle() {
-		if (style12312 == null) {
+		if (style == null) {
 
 			// Create an empty Style without any FeatureTypeStlyes
-			style12312 = ASUtil.SB.createStyle();
+			style = ASUtil.SB.createStyle();
 
-			style12312.setName("AtlasStyler " + AVUtil.getVersionInfo());
+			style.setName("AtlasStyler " + AVUtil.getVersionInfo());
 
 			if (lastChangedRuleList == null) {
 
 				LOGGER
 						.warn("Returning empty style because no lastChangedRuleList==null");
 
-				style12312
+				style
 						.getDescription()
 						.setTitle(
 								"AS:Returning empty style because no lastChangedRuleList==null");
-				return style12312;
+				return style;
 			}
 
-			LOGGER.info("*** The Style is generated from "
-					+ lastChangedRuleList.getClass().getSimpleName());
+//			LOGGER.info("*** The Style is generated from "
+//					+ lastChangedRuleList.getClass().getSimpleName());
 
 			if (avgNN != null) {
 
@@ -1021,22 +1041,21 @@ public class AtlasStyler {
 
 			}
 
-			style12312.featureTypeStyles().add(
-					getLastChangedRuleList().getFTS());
+			style.featureTypeStyles().add(getLastChangedRuleList().getFTS());
 
-			style12312.featureTypeStyles().add(getTextRulesList().getFTS());
+			style.featureTypeStyles().add(getTextRulesList().getFTS());
 			//
 			// // TODO Remove
-			// try {
-			// StylingUtil.saveStyleToSLD(style12312, new File(
-			// "/home/stefan/Desktop/update.sld"));
-			// } catch (final TransformerException e) {
-			// LOGGER.error("Transforming to XML failed!", e);
-			// } catch (final IOException e) {
-			// }
+			try {
+				StylingUtil.saveStyleToSLD(style, new File(
+						"/home/stefan/Desktop/update.sld"));
+			} catch (final TransformerException e) {
+				LOGGER.error("Transforming to XML failed!", e);
+			} catch (final IOException e) {
+			}
 
 		}
-		return style12312;
+		return style;
 	}
 
 	public GraduatedColorRuleList getGraduatedColorRuleList(
@@ -1119,7 +1138,7 @@ public class AtlasStyler {
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,
-							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?");
+							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); //i8n
 			if (res == JOptionPane.YES_OPTION) {
 				final GraduatedColorPointRuleList gradColorRL = (GraduatedColorPointRuleList) lastChangedRuleList;
 				final SingleRuleList<?> template = gradColorRL.getTemplate();
@@ -1325,7 +1344,7 @@ public class AtlasStyler {
 	 *         Kr&uuml;ger</a>
 	 */
 	public void dispose() {
-		style12312 = null;
+		style = null;
 		listeners.clear();
 	}
 
@@ -1456,7 +1475,7 @@ public class AtlasStyler {
 	 * Mainly used when cancelling any activity
 	 */
 	public void cancel() {
-		style12312 = backupStyle;
+		style = backupStyle;
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");

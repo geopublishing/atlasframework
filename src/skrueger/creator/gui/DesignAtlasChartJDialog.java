@@ -1294,9 +1294,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		AtlasChartJPanel panel = getChartPanel(mapLegend, styledLayer);
 
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+		
 		try {
-
+			
 			if (isReapplyChartStyleToFeatureCollection()) {
 
 				reapplyChartStyleToFeatureCollection = false;

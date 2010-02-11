@@ -13,27 +13,46 @@ package skrueger.sld;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
+import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 import schmitzm.geotools.FilterUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public abstract class FeatureRuleList extends AbstractRuleList {
+	/**
+	 * Special NODATA value. When exporting by {@link #getRules()}, this value
+	 * is translated to the special "NODATA" rule *
+	 */
+	public static final String NODATA_RULE_NAME = "NODATA_RULE_VALUES";
 
 	final private StyledFeaturesInterface<?> styledFeatures;
-	
+
 	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		this.styledFeatures = styledFeatures;
-	}	
-	
+	}
+
 	public StyledFeaturesInterface<?> getStyledFeatures() {
 		return styledFeatures;
 	}
 
+	/**
+	 * This {@link RuleChangeListener} is added to the template in
+	 * {@link #getNoDataSymbol()} and will propagate any template changes to
+	 * this rule list.
+	 */
+	private RuleChangeListener listenToNoDataRLChangesAndPropageToFeatureRL = new RuleChangeListener() {
+
+		@Override
+		public void changed(RuleChangedEvent e) {
+			FeatureRuleList.this.fireEvents(new RuleChangedEvent(
+					"nodata symbology changed", FeatureRuleList.this));
+		}
+	};
+
 	protected FilterFactory2 ff2 = FilterUtil.FILTER_FAC2;
 
-
-	protected SingleRuleList<? extends Symbolizer> template;
+	private SingleRuleList<? extends Symbolizer> template;
 
 	public static final String METAINFO_SEPERATOR_CHAR = ":";
 
@@ -47,7 +66,8 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	@Override
 	public FeatureTypeStyle getFTS() {
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle(
-				styledFeatures.getSchema().getTypeName(), getRules().toArray(new Rule[] {}));
+				styledFeatures.getSchema().getTypeName(), getRules().toArray(
+						new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
 		return ftstyle;
 	}
@@ -83,4 +103,38 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	abstract public void importTemplate(FeatureTypeStyle importFTS);
 
 	abstract public SingleRuleList<? extends Symbolizer> getDefaultTemplate();
+
+	/**
+	 * Return the {@link Filter} that will catch all NODATA values
+	 */
+	abstract public Filter getNoDataFilter();
+
+	/**
+	 * Return a {@link SingleRuleList} that shall be used to paint all NODATA
+	 * values. If <code>null</code>, then all features matching the
+	 * {@link #getNoDataFilter()} shall not be painted at all.
+	 */
+	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
+		if (noDataSymbol == null) {
+			noDataSymbol = getTemplate().copy();
+//			for (Rule r: noDataSymbol.getRules()) {
+//				r.setName(NODATA_RULE_NAME);
+//			}
+		}
+		noDataSymbol.addListener(listenToNoDataRLChangesAndPropageToFeatureRL);
+		return noDataSymbol;
+	}
+
+	private SingleRuleList<? extends Symbolizer> noDataSymbol = null;
+
+	/**
+	 * Will remove all other {@link Symbolizer}s and add the symbolizers of the
+	 * given rule to the {@link noDataSymbol}.
+	 */
+	public void importNoDataRule(Rule r) {
+		getNoDataSymbol().getSymbolizers().clear();
+		getNoDataSymbol().addSymbolizers(r.symbolizers());
+		getNoDataSymbol().getRules().get(0).setName(FeatureRuleList.NODATA_RULE_NAME);
+	}
+
 }

@@ -29,6 +29,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.lang.LangUtil;
+import skrueger.AttributeMetadata;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
@@ -383,6 +384,9 @@ public class QuantitiesClassification extends FeatureClassification {
 			// stats = new QuantileBin1D(true, anz, 1.e-4, 1.e-3, 100,
 			// rand);
 			final DynamicBin1D stats_local = new DynamicBin1D();
+			
+			// get the AttributeMetaData for the given attribute to filter NODATA values
+			final AttributeMetadata amd = getStyledFeatures().getAttributeMetaDataMap().get(value_field_name);
 
 			/**
 			 * Iterating over the values and inserting them into the statistics
@@ -400,19 +404,11 @@ public class QuantitiesClassification extends FeatureClassification {
 					// }
 
 					final SimpleFeature f = iterator.next();
-					final Object rawValue = f.getAttribute(value_field_name);
+					// Filter for NODATA
+					final Object rawValue = amd.fiterNodata(f.getAttribute(value_field_name));
 
 					if (rawValue == null)
 						continue;
-
-					// Remove the check to be faster... mmm.. smart?
-					// if (!(rawValue instanceof Number)) {
-					// throw new RuntimeException(
-					// "The value returned for attrib "
-					// + value_field_name
-					// + " is not of type Double but "
-					// + rawValue.getClass().getSimpleName());
-					// }
 
 					numValue = ((Number) rawValue).doubleValue();
 
@@ -425,7 +421,7 @@ public class QuantitiesClassification extends FeatureClassification {
 						numValue = numValue / value2;
 					}
 
-					LOGGER.debug("addming " + numValue);
+//					LOGGER.debug("addming " + numValue);
 					stats_local.add(numValue);
 
 					/**

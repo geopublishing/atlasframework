@@ -21,6 +21,8 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 
+import skrueger.sld.gui.SingleSymbolGUI;
+
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)
  * styling {@link Rule}s is presented in AtlasStyler as a
@@ -64,6 +66,12 @@ public abstract class AbstractRuleList {
 	public void pushQuite() {
 		stackQuites.push(quite);
 		setQuite(true);
+		
+//		AbstractRuleList abstractRuleList = AbstractRuleList.this;
+//		if (abstractRuleList instanceof GraduatedColorPolygonRuleList) {
+//			System.err.println(stackQuites+ "   now true"+" "+abstractRuleList);
+//		}
+
 	}
 
 	/**
@@ -74,13 +82,20 @@ public abstract class AbstractRuleList {
 		if (quite == false) {
 			if (lastOpressedEvent != null)
 				fireEvents(lastOpressedEvent);
-			// Not anymore.. if lastOpressedEvent == null, there is no reason to send an event now 
+			// Not anymore.. if lastOpressedEvent == null, there is no reason to
+			// send an event now
 			// else
 			// fireEvents(new RuleChangedEvent("Not quite anymore", this));
 		} else {
 			LOGGER.debug("not firing event because there are "
 					+ stackQuites.size() + " 'quites' still on the stack");
 		}
+		
+//		AbstractRuleList abstractRuleList = AbstractRuleList.this;
+//		if (abstractRuleList instanceof GraduatedColorPolygonRuleList) {
+//			System.err.println(stackQuites+ "   now "+isQuite()+" "+abstractRuleList);
+//		}
+
 	}
 
 	public void popQuite(RuleChangedEvent ruleChangedEvent) {
@@ -114,7 +129,9 @@ public abstract class AbstractRuleList {
 
 	/**
 	 * Adds a {@link RuleChangeListener} which listens to changes in the
-	 * {@link Rule}. Very good to update previews.
+	 * {@link Rule}. Very good to update previews.<br>
+	 * <b>The listening class must keep a reference to the listener (e.g. make it a
+	 * field variable) because the listeners are kept in a WeakHashSet.</b>
 	 * 
 	 * @param listener
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
@@ -181,18 +198,6 @@ public abstract class AbstractRuleList {
 	 *         Kr&uuml;ger</a>
 	 */
 	public void fireEvents(RuleChangedEvent rce) {
-		//
-		// /** Do not fire a TextSymbolizer if it is not enabled */
-		// if (rce.getSourceRL() instanceof TextRuleList) {
-		// TextRuleList sourceRL = (TextRuleList) rce.getSourceRL();
-		//
-		// // Nichts schicken, wenn die Labels deaktviert sind.. Good idea,
-		// // but when we switch it of we need a last Event
-		// if (!sourceRL.isEnabled()
-		// && (!rce.toString().equals(
-		// TextRuleList.RULE_CHANGE_EVENT_ENABLED_STRING)))
-		// return;
-		// }
 
 		if (quite) {
 			lastOpressedEvent = rce;

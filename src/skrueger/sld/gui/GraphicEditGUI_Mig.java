@@ -831,9 +831,10 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 									.R("Fill.ColorChooserDialog.Title"), color);
 
 					if (newColor != null) {
+						Expression colorExpression = StylingUtil.STYLE_BUILDER
+								.colorExpression(newColor);
 						graphic.getMarks()[0].getFill().setColor(
-								StylingUtil.STYLE_BUILDER
-										.colorExpression(newColor));
+								colorExpression);
 
 						GraphicEditGUI_Mig.this.firePropertyChange(
 								PROPERTY_UPDATED, null, null);
