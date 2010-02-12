@@ -12,8 +12,8 @@ package skrueger.sld;
 
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Symbolizer;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
@@ -23,11 +23,11 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	}
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
-
-	@Override
-	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
-		return ASUtil.getDefaultPointTemplate();
-	}
+//
+//	@Override
+//	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
+//		return ASUtil.getDefaultPointTemplate();
+//	}
 
 	@Override
 	public RulesListType getTypeID() {
@@ -35,9 +35,13 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
-	// TODO 2Utilities ?!
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importPointTemplateFromFirstRule(importFTS));
+	}
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POINT;
 	}
 
 }

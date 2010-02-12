@@ -14,7 +14,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -23,11 +22,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.event.ChartChangeEvent;
-import org.jfree.chart.event.ChartChangeEventType;
-import org.jfree.chart.event.ChartChangeListener;
-import org.jfree.chart.event.ChartProgressEvent;
-import org.jfree.chart.event.ChartProgressListener;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.JFreeChartUtil;
@@ -44,7 +38,6 @@ import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.swing.AtlasSwingWorker;
-import skrueger.creator.gui.DesignAtlasChartJDialog;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;

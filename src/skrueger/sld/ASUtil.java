@@ -30,6 +30,7 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
@@ -80,12 +81,15 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.LegendIconFeatureRenderer;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.i8n.Translation;
+import skrueger.sld.AtlasStyler.LANGUAGE_MODE;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 
@@ -213,13 +217,13 @@ public class ASUtil {
 	};
 
 	/**
-	 * @return A list of numerical field names (withouth any null or "") 
+	 * @return A list of numerical field names (withouth any null or "")
 	 */
 	public static Vector<String> getNumericalFieldNames(
 			final SimpleFeatureType schema) {
 		return getNumericalFieldNames(schema, false);
 	}
-	
+
 	/**
 	 * @return A list of fields that can be used for a quantification (e.g.
 	 *         numerical fields)
@@ -574,15 +578,16 @@ public class ASUtil {
 						final boolean isSelected, final boolean hasFocus,
 						final int row, final int column) {
 					final JLabel label = new JLabel();
-					
-					NumberFormat doubleFormat = DecimalFormat.getNumberInstance();
+
+					NumberFormat doubleFormat = DecimalFormat
+							.getNumberInstance();
 					doubleFormat.setMinimumFractionDigits(1);
 					doubleFormat.setMaximumFractionDigits(3);
 					doubleFormat.setMinimumIntegerDigits(1);
-					
+
 					if (value instanceof String) {
 						try {
-							value = doubleFormat.parse((String)value);
+							value = doubleFormat.parse((String) value);
 						} catch (ParseException e) {
 							LOGGER.warn("parsing number string", e);
 						}
@@ -610,21 +615,23 @@ public class ASUtil {
 	public static Graphic createDefaultGraphic() {
 		return SB.createGraphic();
 	}
-//
-//	/**
-//	 * http://www.velocityreviews.com/forums/t146956-popupmenu-for-a-cell-in-a-
-//	 * jtable.html
-//	 * 
-//	 * @param string
-//	 * 
-//	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Kr&uuml;ger</a>
-//	 */
-//	public static void setClipboardContents(final String string) {
-//		final StringSelection selection = new StringSelection(string);
-//		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,
-//				selection);
-//	}
+
+	//
+	// /**
+	// *
+	// http://www.velocityreviews.com/forums/t146956-popupmenu-for-a-cell-in-a-
+	// * jtable.html
+	// *
+	// * @param string
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// * Kr&uuml;ger</a>
+	// */
+	// public static void setClipboardContents(final String string) {
+	// final StringSelection selection = new StringSelection(string);
+	// Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,
+	// selection);
+	// }
 
 	/**
 	 * http://www.velocityreviews.com/forums/t146956-popupmenu-for-a-cell-in-a-
@@ -680,7 +687,8 @@ public class ASUtil {
 
 	public static SinglePointSymbolRuleList importPointTemplateFromFirstRule(
 			final FeatureTypeStyle importFTS) {
-		SinglePointSymbolRuleList tempRL = new SinglePointSymbolRuleList(importFTS.getName());
+		SinglePointSymbolRuleList tempRL = new SinglePointSymbolRuleList(
+				importFTS.getName());
 
 		try {
 
@@ -701,6 +709,9 @@ public class ASUtil {
 		return tempRL;
 	}
 
+	/**
+	 * @return A default symbol to use for points
+	 */
 	public static SinglePointSymbolRuleList getDefaultPointTemplate() {
 
 		final SinglePointSymbolRuleList rl = new SinglePointSymbolRuleList("");
@@ -710,6 +721,9 @@ public class ASUtil {
 		return rl;
 	}
 
+	/**
+	 * @return A default symbol to use for lines
+	 */
 	public static SingleLineSymbolRuleList getDefaultLineTemplate() {
 		final SingleLineSymbolRuleList rl = new SingleLineSymbolRuleList("");
 
@@ -720,10 +734,55 @@ public class ASUtil {
 		return rl;
 	}
 
+	/**
+	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
+	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
+	 * default legend label automatically for all languages.
+	 */
+	public static SingleRuleList getDefaultNoDataSymbol(GeometryForm form) {
+		final SingleRuleList rl;
+		switch (form) {
+		case POINT:
+			rl = new SinglePointSymbolRuleList("");
+			// A white circle is the default NODATA symbol for points
+			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null, SB
+					.createMark("circle", Color.white), null)));
+			break;
+		case POLYGON:
+			rl = new SinglePolygonSymbolRuleList("");
+			// A 50% white fill is the default NODATA symbol for polygons
+			rl.addSymbolizer(SB.createPolygonSymbolizer(SB.createStroke(Color.GRAY.LIGHT_GRAY), SB.createFill(Color.WHITE)));
+			break;
+		default:
+		case LINE:
+			rl = new SingleLineSymbolRuleList("");
+			// A white line is the default NODATA symbol for lines
+			rl.addSymbolizer(SB.createLineSymbolizer(Color.white));
+			break;
+		}
+		
+		// Find suitable default labels
+		if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+
+			Translation nodT = new Translation();
+			for (String lang : AtlasStyler.getLanguages()) {
+
+				// Try to find a default for every language
+				String localized = AtlasStyler.R(new Locale(lang), "NoDataLegendEntry.Default");
+				nodT.put(lang, localized);
+			}
+
+			rl.setTitle(nodT);
+		} else
+			rl.setTitle(AtlasStyler.R("NoDataLegendEntry.Default"));
+		return rl;
+	}
+
 	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(
 			final FeatureTypeStyle importFTS) {
 
-		SingleLineSymbolRuleList tempRL = new SingleLineSymbolRuleList(importFTS.getName());
+		SingleLineSymbolRuleList tempRL = new SingleLineSymbolRuleList(
+				importFTS.getName());
 
 		try {
 
@@ -746,8 +805,20 @@ public class ASUtil {
 		return tempRL;
 	}
 
+	public static SingleRuleList getDefaultTemplate(GeometryForm geomForm) {
+		if (geomForm == GeometryForm.POINT) {
+			return getDefaultPointTemplate();
+		} else if (geomForm == GeometryForm.LINE) {
+			return getDefaultLineTemplate();
+		} else if (geomForm == GeometryForm.POLYGON) {
+			return getDefaultPolygonTemplate();
+		} else
+			throw new IllegalArgumentException();
+	}
+
 	public static SinglePolygonSymbolRuleList getDefaultPolygonTemplate() {
-		final SinglePolygonSymbolRuleList rl = new SinglePolygonSymbolRuleList("");
+		final SinglePolygonSymbolRuleList rl = new SinglePolygonSymbolRuleList(
+				"");
 
 		rl.addSymbolizer((PolygonSymbolizer) createDefaultSymbolizer(rl
 				.getGeometryDescriptor()));
@@ -757,7 +828,8 @@ public class ASUtil {
 
 	public static SinglePolygonSymbolRuleList importPolygonTemplateFromFirstRule(
 			final FeatureTypeStyle importFTS) {
-		SinglePolygonSymbolRuleList tempRL = new SinglePolygonSymbolRuleList(importFTS.getName());
+		SinglePolygonSymbolRuleList tempRL = new SinglePolygonSymbolRuleList(
+				importFTS.getName());
 
 		try {
 
@@ -784,60 +856,61 @@ public class ASUtil {
 			final Expression expression) {
 		if (expression instanceof Literal) {
 			final Literal lit = (Literal) expression;
-			
+
 			if (comboBox.getItemAt(0) instanceof String) {
 				final String stringVal = lit.toString();
 				selectOrInsert(comboBox, stringVal);
-				
+
 			} else
-			
+
 			if (comboBox.getItemAt(0) instanceof Double) {
 				final Double doubleVal = Double.valueOf(lit.toString());
 				selectOrInsert(comboBox, doubleVal);
-				
+
 			}
-			
+
 			else if (comboBox.getItemAt(0) instanceof Float) {
 				Float floatVal = Float.valueOf(lit.toString());
 				selectOrInsert(comboBox, floatVal);
 			} else {
-				throw new RuntimeException("selectOrInsert neede for type "+comboBox.getItemAt(0));
+				throw new RuntimeException("selectOrInsert neede for type "
+						+ comboBox.getItemAt(0));
 			}
 		}
 
 	}
-//
-//	public static <ItemClass> void selectOrInsert(final JComboBox comboBox,
-//			final ItemClass val) {
-//		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
-//				.getModel());
-//		final int indexOf = model.getIndexOf(val);
-//
-//		if (indexOf < 0) {
-//			LOGGER.info("The float expression " + val
-//					+ " had to be inserted into the ComboBox");
-//
-//			final int size = model.getSize();
-//			final Set<ItemClass> ints = new TreeSet<ItemClass>();
-//			ints.add(val);
-//
-//			for (int i = 0; i < size; i++) {
-//				ints.add((ItemClass) model.getElementAt(i));
-//			}
-//			model.removeAllElements();
-//
-//			for (final ItemClass f : ints) {
-//				model.addElement(f);
-//			}
-//		}
-//		model.setSelectedItem(val);
-//	}
-//
-	public static void selectOrInsert(final JComboBox comboBox,
-			float floatVal) {
-		
+
+	//
+	// public static <ItemClass> void selectOrInsert(final JComboBox comboBox,
+	// final ItemClass val) {
+	// final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
+	// .getModel());
+	// final int indexOf = model.getIndexOf(val);
+	//
+	// if (indexOf < 0) {
+	// LOGGER.info("The float expression " + val
+	// + " had to be inserted into the ComboBox");
+	//
+	// final int size = model.getSize();
+	// final Set<ItemClass> ints = new TreeSet<ItemClass>();
+	// ints.add(val);
+	//
+	// for (int i = 0; i < size; i++) {
+	// ints.add((ItemClass) model.getElementAt(i));
+	// }
+	// model.removeAllElements();
+	//
+	// for (final ItemClass f : ints) {
+	// model.addElement(f);
+	// }
+	// }
+	// model.setSelectedItem(val);
+	// }
+	//
+	public static void selectOrInsert(final JComboBox comboBox, float floatVal) {
+
 		// Round the value to the second decimal digit
-		floatVal = (float)Math.floor(floatVal*100f)/100f;
+		floatVal = (float) Math.floor(floatVal * 100f) / 100f;
 
 		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
 				.getModel());
@@ -856,7 +929,8 @@ public class ASUtil {
 				if (elementAt != null) {
 					floats.add(elementAt);
 				} else {
-					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER
+							.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -867,7 +941,6 @@ public class ASUtil {
 		}
 		model.setSelectedItem(floatVal);
 	}
-	
 
 	public static void selectOrInsert(final JComboBox comboBox,
 			final String stringVal) {
@@ -889,7 +962,8 @@ public class ASUtil {
 				if (elementAt != null) {
 					strings.add(elementAt);
 				} else {
-					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER
+							.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -900,18 +974,13 @@ public class ASUtil {
 		}
 		model.setSelectedItem(stringVal);
 	}
-	
-	
-	
 
-	public static void selectOrInsert(final JComboBox comboBox,
-			Double doubleVal) {
-		
+	public static void selectOrInsert(final JComboBox comboBox, Double doubleVal) {
+
 		// Round the value to the second decimal digit
-		
-		doubleVal = Math.floor(doubleVal*100f)/100f;
 
-		
+		doubleVal = Math.floor(doubleVal * 100f) / 100f;
+
 		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
 				.getModel());
 		final int indexOf = model.getIndexOf(doubleVal);
@@ -929,7 +998,8 @@ public class ASUtil {
 				if (elementAt != null) {
 					doubles.add(elementAt);
 				} else {
-					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER
+							.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -1183,7 +1253,7 @@ public class ASUtil {
 		}
 		return null;
 	}
-	
+
 	public static JColorChooser getJcolorChooser() {
 		if (jcolorchooser == null) {
 			jcolorchooser = new JColorChooser();
@@ -1274,22 +1344,24 @@ public class ASUtil {
 	}
 
 	/**
-	 * Returns a {@link Vector} of Attribute LocalNames, excluding any Geometry columns  
+	 * Returns a {@link Vector} of Attribute LocalNames, excluding any Geometry
+	 * columns
 	 */
 	public static Vector<String> getValueFieldNames(SimpleFeatureType schema) {
 		return getValueFieldNames(schema, false);
 	}
-	
+
 	/**
 	 * Creates a default Style that is compatible with AtlasStyler.
 	 */
 	public static Style createDefaultStyle(StyledLayerInterface<?> styledLayer) {
-		Style loadStyle = StylingUtil.createDefaultStyle(styledLayer); 
-		
+		Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
+
 		if (!(styledLayer instanceof StyledFeaturesInterface<?>))
 			return loadStyle;
-		
-		return new AtlasStyler((StyledFeaturesInterface<?>) styledLayer, loadStyle, null, null).getStyle();
+
+		return new AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
+				loadStyle, null, null).getStyle();
 	}
 
 }

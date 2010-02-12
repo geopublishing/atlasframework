@@ -28,7 +28,6 @@ import skrueger.AttributeMetadata;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.sld.classification.QuantitiesClassification;
 import skrueger.sld.classification.QuantitiesClassification.METHOD;
-import skrueger.sld.gui.SingleSymbolGUI;
 
 /**
  * 
@@ -132,7 +131,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 			clone.setColor(newColor);
 
-			rule = clone.getRules().get(0);
+			rule = clone.getRule();
 
 			// Exclude the NODATA values for the rule
 			if (getNoDataFilter() != Filter.EXCLUDE)
@@ -152,12 +151,18 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		// The last rule(s) are the NODATA rules
 
 		{
-
-			SingleRuleList<? extends Symbolizer> copy = getNoDataSymbol()
+			SingleRuleList<? extends Symbolizer> copyOfNoDataSymbol = getNoDataSymbol()
 					.copy();
-			List<Rule> rules2 = copy.getRules();
+			List<Rule> rules2 = copyOfNoDataSymbol.getRules();
 			for (Rule noDataRule : rules2) {
-				noDataRule.setName(NODATA_RULE_NAME);
+
+				if (copyOfNoDataSymbol.isVisibleInLegend())
+					noDataRule
+							.setName(FeatureRuleList.NODATA_RULE_NAME_SHOWINLEGEND);
+				else
+					noDataRule
+							.setName(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND);
+
 				noDataRule.setFilter(getNoDataFilter());
 				rules.add(noDataRule);
 			}

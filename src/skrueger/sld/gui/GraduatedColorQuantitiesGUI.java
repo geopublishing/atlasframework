@@ -11,7 +11,6 @@
 package skrueger.sld.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,6 +36,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -63,18 +63,17 @@ import org.geotools.styling.Symbolizer;
 import schmitzm.geotools.map.event.MapLayerAdapter;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import skrueger.creator.AtlasCreator;
 import skrueger.i8n.Translation;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
 import skrueger.sld.GraduatedColorRuleList;
-import skrueger.sld.RuleChangeListener;
 import skrueger.sld.RuleChangedEvent;
 import skrueger.sld.SingleRuleList;
 import skrueger.sld.classification.ClassificationChangeEvent;
 import skrueger.sld.classification.ClassificationChangedAdapter;
 import skrueger.sld.classification.QuantitiesClassification;
 import skrueger.sld.classification.QuantitiesClassification.METHOD;
+import skrueger.swing.SmallButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
 
@@ -823,7 +822,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		panel.add(jLabelColorPalette, "left");
 		panel.add(getJComboBoxColors(), "left");
 		panel.add(getInvertColorsButton(), "gap rel, left");
-		
+
 		panel.add(getNoDataPanel());
 
 		panel.add(new JPanel(), "growx");
@@ -836,15 +835,98 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private JPanel getNoDataPanel() {
 		if (noDataPanel == null) {
 			noDataPanel = new JPanel(new MigLayout());
-			noDataPanel.add(new JLabel(AtlasCreator.R("NodataValues")+":"));
+
+			final SingleRuleList<? extends Symbolizer> noDataSymbol = rulesList.getNoDataSymbol();
+//			final String noDataLegendString = noDataRule.getTitle();
 			
-			SymbolButton noDataSymbolButton = new EditSymbolButton(rulesList.getNoDataSymbol());
+			final SmallButton noDataLabelButton = new SmallButton(new Translation(noDataSymbol.getTitle()) + ":", AtlasStyler.R("translate_label_for_NODATA_values.tt"));
+			noDataLabelButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					// Open a dialog that allows to edit the NODATA legend
+					// entries label
+
+					final Translation translation = new Translation(
+							noDataSymbol.getTitle());
+
+					final TranslationEditJPanel transLabel = new TranslationEditJPanel(
+							AtlasStyler.R("translate_label_for_NODATA_values"),
+							translation, AtlasStyler.getLanguages());
+
+					TranslationAskJDialog ask = new TranslationAskJDialog(
+							GraduatedColorQuantitiesGUI.this, transLabel);
+
+					// We have to convert the Translation object to a String
+					// when the dialog is closed
+					ask.addPropertyChangeListener(new PropertyChangeListener() {
+
+						public void propertyChange(final PropertyChangeEvent evt) {
+							if (evt
+									.getPropertyName()
+									.equals(
+											TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+								return;
+							} else if (evt
+									.getPropertyName()
+									.equals(
+											TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+
+								noDataLabelButton.setText(translation.toString()+":");
+								noDataSymbol.setTitle(translation.toOneLine());
+
+								rulesList.getNoDataSymbol().fireEvents(
+										new RuleChangedEvent(
+												"nodata legend label changed",
+												rulesList.getNoDataSymbol()));
+								
+
+							}
+
+						}
+
+					});
+					ask.setVisible(true);
+				}
+			});
+
+			noDataPanel.add(noDataLabelButton, "gap 0");
+
+			// A button to change the NODATA symbol
+			SymbolButton noDataSymbolButton = new EditSymbolButton(rulesList
+					.getNoDataSymbol(), new Dimension(14,14));
+			noDataPanel.add(noDataSymbolButton,"gap 0, wrap");
+
 			
-			noDataPanel.add(noDataSymbolButton);
+			// If running in GP/Atlas context, the user may disable the NODATA values from appearing in the legend
+			if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+				
+				final JCheckBox noDataShowInLegendCB = new JCheckBox(AtlasStyler.R("NoDataValues.ShallAppearInLegend.Label"));
+				noDataShowInLegendCB.setToolTipText(AtlasStyler.R("NoDataValues.ShallAppearInLegend.TT"));
+				
+				// Initially set the value depending on the rules's name
+				noDataShowInLegendCB.setSelected(rulesList.getNoDataSymbol().isVisibleInLegend());
+				
+				noDataShowInLegendCB.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						boolean selected = noDataShowInLegendCB.isSelected();
+						rulesList.getNoDataSymbol().setVisibleInLegend(selected);
+					}
+				});
+				
+				noDataPanel.add(noDataShowInLegendCB,"gap 0, span 2");
+				
+			} else {
+			}
+
+
 		}
 		return noDataPanel;
 	}
-
+	
 	/**
 	 * A button to invert the order of the applied colors
 	 * 
@@ -947,28 +1029,28 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		return jComboBoxPalettes;
 	}
 
-
 	/**
 	 * A backup of the template symbol. Used when the GUI opens.
 	 */
 	protected SingleRuleList<? extends Symbolizer> backup;
 
-//	/**
-//	 * Listens to real-time modifications of the template icon and updates the
-//	 * preview
-//	 */
-//	RuleChangeListener listenerUpdatePreviewIconOnTemplateChange = new RuleChangeListener() {
-//
-//		public void changed(final RuleChangedEvent e) {
-//
-//			// LOGGER.debug("reason = " + e.toString());
-//			rulesList.setTemplate(rulesList.getTemplate());
-//
-//			getJButtonTemplate().setIcon(new ImageIcon(rulesList.getTemplate()
-//					.getImage(ICON_SIZE)));
-//		}
-//
-//	};
+	// /**
+	// * Listens to real-time modifications of the template icon and updates the
+	// * preview
+	// */
+	// RuleChangeListener listenerUpdatePreviewIconOnTemplateChange = new
+	// RuleChangeListener() {
+	//
+	// public void changed(final RuleChangedEvent e) {
+	//
+	// // LOGGER.debug("reason = " + e.toString());
+	// rulesList.setTemplate(rulesList.getTemplate());
+	//
+	// getJButtonTemplate().setIcon(new ImageIcon(rulesList.getTemplate()
+	// .getImage(ICON_SIZE)));
+	// }
+	//
+	// };
 
 	/**
 	 * This method initializes jButton
@@ -977,10 +1059,11 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
-			jButtonTemplate = new EditSymbolButton(rulesList.getTemplate(), ICON_SIZE);
+			jButtonTemplate = new EditSymbolButton(rulesList.getTemplate(),
+					ICON_SIZE);
 
-//			final ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()
-//					.getImage(ICON_SIZE));
+			// final ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()
+			// .getImage(ICON_SIZE));
 
 		}
 		return jButtonTemplate;

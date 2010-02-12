@@ -28,7 +28,6 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.styling.Style;
-import org.geotools.styling.StyledLayer;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.io.GeoImportUtil;

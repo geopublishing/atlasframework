@@ -699,5 +699,5 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
 		return null; // TODO nice default?!
 	}
-
+	
 }

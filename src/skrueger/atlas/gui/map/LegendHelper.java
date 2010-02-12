@@ -86,7 +86,7 @@ public class LegendHelper {
 			style = styledLayer.getStyle();
 		}
 		
-		// Remove any selection & text (TODO) FTS before creating the legend
+		// Remove any selection & text 
 		if (style != null)
 			style = StylingUtil.removeSelectionFeatureTypeStyle(style);
 

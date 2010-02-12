@@ -21,7 +21,6 @@ import schmitzm.swing.JPanel;
 import skrueger.atlas.dp.layer.DpLayerRasterPyramid;
 import skrueger.creator.AtlasCreator;
 import skrueger.sld.ASUtil;
-import skrueger.sld.AtlasStyler;
 import skrueger.swing.Cancellable;
 import skrueger.swing.ColorButton;
 

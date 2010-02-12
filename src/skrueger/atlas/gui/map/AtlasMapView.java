@@ -15,7 +15,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -27,7 +26,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
@@ -64,7 +62,6 @@ import skrueger.geotools.MapPaneToolBar;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.XMapPaneTool;
 import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 
 import com.vividsolutions.jts.geom.Envelope;

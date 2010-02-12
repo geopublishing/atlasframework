@@ -73,8 +73,6 @@ import skrueger.geotools.StyledGridCoverageInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledRasterInterface;
 import skrueger.geotools.StyledRasterPyramidInterface;
-import skrueger.geotools.XMapPaneAction;
-import skrueger.geotools.XMapPaneAction_Select;
 import skrueger.geotools.XMapPaneTool;
 import skrueger.geotools.ZoomRestrictableGridInterface;
 import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;

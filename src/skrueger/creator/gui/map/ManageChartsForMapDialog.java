@@ -14,7 +14,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -50,9 +49,7 @@ import skrueger.creator.AtlasCreator;
 import skrueger.creator.GPDialogManager;
 import skrueger.creator.chartwizard.ChartWizard;
 import skrueger.creator.gui.DesignAtlasChartJDialog;
-import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
 
 /**
  * This dialog allows to manage which charts are available in a map. It's not

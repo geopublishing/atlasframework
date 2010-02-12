@@ -44,6 +44,20 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	final static protected Logger LOGGER = ASUtil
 			.createLogger(SingleRuleList.class);
 
+	/**
+	 * This boolean defines whether the entry shall be shown the legend. <b>This
+	 * is only interpreted in GP/Atlas context.</b>
+	 */
+	private boolean visibleInLegend = true;
+
+	/**
+	 * Because a {@link SingleRuleList} only contains one {@link Rule}, this is
+	 * a convenience method to get it.
+	 */
+	public Rule getRule() {
+		return getRules().get(0);
+	}
+
 	@Deprecated
 	public SingleRuleList() {
 		setTitle(AtlasStyler.R("GraduatedColorQuantities.Column.Label"));
@@ -271,6 +285,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		to.pushQuite();
 
 		to.getSymbolizers().clear();
+		
+		to.setVisibleInLegend(isVisibleInLegend());
 
 		// Wrong: This did't make a deep copy!
 		// for (SymbolizerType ps : getSymbolizers()) {
@@ -339,11 +355,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	public BufferedImage getImage(Dimension size) {
 
-		final Rule rule = getRules().get(0);
-
 		BufferedImage image = LegendIconFeatureRenderer
 				.getInstance()
-				.createImageForRule(rule,
+				.createImageForRule(getRule(),
 						ASUtil.createFeatureType(getGeometryDescriptor()), size);
 
 		return image;
@@ -365,8 +379,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 		Rule rule = ASUtil.SB.createRule(symbolizers
 				.toArray(new Symbolizer[symbolizers.size()]));
-
-		rule.setName("AS:" + this.getClass().getSimpleName());
 
 		rule.setMaxScaleDenominator(getMaxScaleDenominator());
 		rule.setMinScaleDenominator(getMinScaleDenominator());
@@ -595,6 +607,21 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	public double getMinScaleDenominator() {
 		return minScaleDenominator;
+	}
+
+	/**
+	 * Changing this property will automatically fire a {@link RuleChangedEvent}
+	 */
+	public void setVisibleInLegend(boolean visibleInLegend) {
+		if (visibleInLegend != this.visibleInLegend) {
+			this.visibleInLegend = visibleInLegend;
+			fireEvents(new RuleChangedEvent("visiblility in legend changed",
+					this));
+		}
+	}
+
+	public boolean isVisibleInLegend() {
+		return visibleInLegend;
 	}
 
 }

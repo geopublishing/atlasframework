@@ -13,6 +13,7 @@ package skrueger.sld;
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
@@ -23,12 +24,12 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public SingleRuleList getDefaultTemplate() {
-		return ASUtil.getDefaultLineTemplate();
-	}
+//
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public SingleRuleList getDefaultTemplate() {
+//		return ASUtil.getDefaultLineTemplate();
+//	}
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
@@ -39,5 +40,10 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.UNIQUE_VALUE_LINE;
+	}
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.LINE;
 	}
 }

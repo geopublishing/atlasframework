@@ -27,7 +27,6 @@ import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.ShpFileType;
 import org.geotools.data.shapefile.ShpFiles;
 import org.geotools.data.shapefile.indexed.ShapeFileIndexer;
-import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -36,12 +35,10 @@ import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntryType;
 import skrueger.atlas.exceptions.AtlasException;
-import skrueger.creator.AtlasCreator;
 
 /**
  * This extension of the {@link DpLayerVectorFeatureSource} is specialized to

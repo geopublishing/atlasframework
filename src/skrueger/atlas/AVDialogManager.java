@@ -15,9 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import org.geotools.map.MapLayer;
-import org.geotools.renderer.lite.gridcoverage2d.StyleVisitorAdapter;
 import org.geotools.styling.Style;
-import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.sld.LayerStyle;
 
 import schmitzm.jfree.chart.style.ChartStyle;

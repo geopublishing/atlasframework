@@ -12,7 +12,6 @@ package skrueger.creator.gui.map;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 import javax.swing.JComponent;
@@ -20,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 import org.geotools.map.MapContext;

@@ -102,9 +102,28 @@ public class AtlasStyler {
 		String string = RESOURCE.getString(key, values);
 		if (string.equals("???")) {
 			string = "???" + key;
-			LOGGER.error("missing key in AS" + key);
+			LOGGER.error("missing key in AS: '" + key+"'");
 		}
 		return string;
+	}
+	
+	/**
+	 * Convenience method to access the {@link AtlasStyler}s translation
+	 * resources for a specific {@link Locale}.
+	 * 
+	 * @param key
+	 *            the key for the AtlasStylerTranslation.properties file
+	 * @param values
+	 *            optional values
+	 */
+	public static String R(Locale locale, String key, final Object... values) {
+		String string = RESOURCE.getString(key, locale, values);
+		if (string.equals("???")) {
+			string = "???" + key;
+			LOGGER.error("missing key in AS: '" + key+"'");
+		}
+		return string;
+
 	}
 
 	/**
@@ -571,7 +590,7 @@ public class AtlasStyler {
 					uniqueRuleList.setWithDefaultSymbol(false);
 					for (final Rule r : fts.rules()) {
 						
-						if (r.getName().toString().equals(FeatureRuleList.NODATA_RULE_NAME)) {
+						if (r.getName().toString().startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
 							// This rule defines the NoDataSymbol
 							uniqueRuleList.importNoDataRule(r);
 							continue;
@@ -676,7 +695,7 @@ public class AtlasStyler {
 						double[] ds = null;
 						for (final Rule r : fts.rules()) {
 
-							if (r.getName().toString().equals(FeatureRuleList.NODATA_RULE_NAME)) {
+							if (r.getName().toString().startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
 								// This rule defines the NoDataSymbol
 								quantitiesRuleList.importNoDataRule(r);
 								continue;
@@ -1482,5 +1501,7 @@ public class AtlasStyler {
 			l.changed(new StyleChangedEvent(backupStyle));
 		}
 	}
+
+	
 
 }

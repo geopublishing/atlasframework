@@ -12,9 +12,6 @@ package skrueger.creator;
 
 import javax.swing.tree.TreeNode;
 
-// TODO Dokumentation
-// TODO Add Charts
-
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadata;
 import skrueger.atlas.dp.DpEntry;

@@ -42,7 +42,6 @@ import skrueger.i8n.Translation;
 import skrueger.sld.AtlasStyler;
 import skrueger.sld.StyleChangeListener;
 import skrueger.sld.StyleChangedEvent;
-import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
 

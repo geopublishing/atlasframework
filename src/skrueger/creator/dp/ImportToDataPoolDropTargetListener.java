@@ -33,7 +33,6 @@ import skrueger.atlas.dp.DataPool;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.creator.AtlasConfigEditable;
-import skrueger.creator.AtlasCreator;
 import skrueger.creator.exceptions.AtlasImportCancelledException;
 import skrueger.creator.gui.internal.AtlasDropTargetListener;
 

@@ -13,6 +13,7 @@ package skrueger.sld;
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
@@ -22,10 +23,10 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 		super(styledFeatures);
 	}
 
-	@Override
-	public SingleRuleList getDefaultTemplate() {
-		return ASUtil.getDefaultPolygonTemplate();
-	}
+//	@Override
+//	public SingleRuleList getDefaultTemplate() {
+//		return ASUtil.getDefaultPolygonTemplate();
+//	}
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
@@ -35,5 +36,10 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.UNIQUE_VALUE_POLYGON;
+	}
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POLYGON;
 	}
 }

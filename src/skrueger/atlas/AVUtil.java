@@ -61,7 +61,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.geotools.resources.CRSUtilities;
-import org.junit.Ignore;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;

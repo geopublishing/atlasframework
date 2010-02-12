@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.log4j.Logger;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;

@@ -47,7 +47,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.Query;
@@ -67,8 +66,6 @@ import schmitzm.geotools.feature.FeatureOperationTreeFilter;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
@@ -84,7 +81,6 @@ import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledLayerUtil;
 import skrueger.geotools.StyledRasterInterface;
-import skrueger.sld.AtlasStyler;
 import skrueger.sld.AtlasStylerSaveLayerToSLDAction;
 import skrueger.sld.gui.StylerDialog;
 
@@ -201,7 +197,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		this.styledLayer = styledObj;
 		this.mapLegend = mapLegend;
 
-		setToolTipText("<html>" + getLegendTooltip() + "</html>");
+		if (getLegendTooltip() != null)
+			setToolTipText("<html>" + getLegendTooltip() + "</html>");
+		else setToolTipText(null);
 
 		// ****************************************************************************
 		// D'n'D stuff

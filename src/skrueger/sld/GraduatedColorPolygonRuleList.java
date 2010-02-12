@@ -12,8 +12,8 @@ package skrueger.sld;
 
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.PolygonSymbolizer;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
@@ -22,11 +22,11 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	public GraduatedColorPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
 	}
-
-	@Override
-	public SingleRuleList<PolygonSymbolizer> getDefaultTemplate() {
-		return ASUtil.getDefaultPolygonTemplate();
-	}
+//
+//	@Override
+//	public SingleRuleList<PolygonSymbolizer> getDefaultTemplate() {
+//		return ASUtil.getDefaultPolygonTemplate();
+//	}
 
 	@Override
 	public RulesListType getTypeID() {
@@ -36,6 +36,11 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
+	}
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POLYGON;
 	}
 
 }

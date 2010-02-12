@@ -12,8 +12,8 @@ package skrueger.sld;
 
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.LineSymbolizer;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
@@ -22,11 +22,11 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	public GraduatedColorLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
 	}
-
-	@Override
-	public SingleRuleList<LineSymbolizer> getDefaultTemplate() {
-		return ASUtil.getDefaultLineTemplate();
-	}
+//
+//	@Override
+//	public SingleRuleList<LineSymbolizer> getDefaultTemplate() {
+//		return ASUtil.getDefaultLineTemplate();
+//	}
 	
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
@@ -37,5 +37,10 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.QUANTITIES_COLORIZED_LINE;
+	}
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.LINE;
 	}
 }

@@ -21,8 +21,6 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 
-import skrueger.sld.gui.SingleSymbolGUI;
-
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)
  * styling {@link Rule}s is presented in AtlasStyler as a

@@ -10,19 +10,15 @@
  ******************************************************************************/
 package skrueger.sld.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.simple.SimpleFeatureType;
-
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
 
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;

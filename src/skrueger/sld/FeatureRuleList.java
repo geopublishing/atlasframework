@@ -17,14 +17,32 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
+import skrueger.geotools.StyledLayerUtil;
 
 public abstract class FeatureRuleList extends AbstractRuleList {
+
 	/**
-	 * Special NODATA value. When exporting by {@link #getRules()}, this value
-	 * is translated to the special "NODATA" rule *
+	 * When importing {@link Rule}s, rules with this name are interpreted as the
+	 * "NODATA" rule.
 	 */
-	public static final String NODATA_RULE_NAME = "NODATA_RULE_VALUES";
+	public static final String NODATA_RULE_NAME = "NODATA_RULE";
+
+	/**
+	 * When importing {@link Rule}s, rules with this name are interpreted as the
+	 * "NODATA" rule. If running in Atlas/GP mode, this rule will appear in the
+	 * legend.
+	 */
+	public static final String NODATA_RULE_NAME_SHOWINLEGEND = NODATA_RULE_NAME;
+
+	/**
+	 * When importing {@link Rule}s, rules with this name are interpreted as the
+	 * "NODATA" rule. If running in Atlas/GP mode, this rule will NOT appear in
+	 * the legend.
+	 */
+	public static final String NODATA_RULE_NAME_HIDEINLEGEND = NODATA_RULE_NAME
+			+ "_" + StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT;
 
 	final private StyledFeaturesInterface<?> styledFeatures;
 
@@ -102,7 +120,11 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 
 	abstract public void importTemplate(FeatureTypeStyle importFTS);
 
-	abstract public SingleRuleList<? extends Symbolizer> getDefaultTemplate();
+	// abstract public SingleRuleList<? extends Symbolizer>
+	// getDefaultTemplate();
+	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
+		return ASUtil.getDefaultTemplate(getGeometryForm());
+	}
 
 	/**
 	 * Return the {@link Filter} that will catch all NODATA values
@@ -116,14 +138,17 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	 */
 	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
 		if (noDataSymbol == null) {
-			noDataSymbol = getTemplate().copy();
-//			for (Rule r: noDataSymbol.getRules()) {
-//				r.setName(NODATA_RULE_NAME);
-//			}
+			noDataSymbol = ASUtil.getDefaultNoDataSymbol(getGeometryForm());
 		}
 		noDataSymbol.addListener(listenToNoDataRLChangesAndPropageToFeatureRL);
 		return noDataSymbol;
 	}
+
+	/**
+	 * Must be overwritten in the class that is specific for line, point or
+	 * polygons
+	 **/
+	public abstract GeometryForm getGeometryForm();
 
 	private SingleRuleList<? extends Symbolizer> noDataSymbol = null;
 
@@ -134,7 +159,12 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	public void importNoDataRule(Rule r) {
 		getNoDataSymbol().getSymbolizers().clear();
 		getNoDataSymbol().addSymbolizers(r.symbolizers());
-		getNoDataSymbol().getRules().get(0).setName(FeatureRuleList.NODATA_RULE_NAME);
+		getNoDataSymbol().setTitle(r.getDescription().getTitle().toString());
+
+		if (r.getName().toString().equals(
+				FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
+			getNoDataSymbol().setVisibleInLegend(false);
+		}
 	}
 
 }
