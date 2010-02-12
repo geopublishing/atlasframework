@@ -89,18 +89,17 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
 
-		this.setLayout( new MigLayout());
-		this.add(jLabelHeading,"span 2, wrap");
+		this.setLayout(new MigLayout());
+		this.add(jLabelHeading, "span 2, wrap");
 		this.add(jLabelSymbol);
-		this.add(getJButtonSymbol(),"wrap");
-		
-		
+		this.add(getJButtonSymbol(), "wrap");
+
 		JLabel jLabelTranslation = new JLabel(AtlasStyler
 				.R("SingleSymbolGUI.Label.Label"));
 		jLabelTranslation.setToolTipText(AtlasStyler
 				.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
-		this.add(getjLabelTranslationEdit(),"wrap");
+		this.add(getjLabelTranslationEdit(), "wrap");
 	}
 
 	/**
@@ -128,8 +127,8 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 								.clone(false);
 
 						symbolSelectorDialog = new SymbolSelectorGUI(
-								SingleSymbolGUI.this,null,
-//								AtlasStyler.R("SymbolSelector.Title.OneForAll"),
+								SingleSymbolGUI.this, null,
+								// AtlasStyler.R("SymbolSelector.Title.OneForAll"),
 								singleSymbolRuleList);
 
 						symbolSelectorDialog
@@ -165,11 +164,10 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 
 								});
 
-						SwingUtil
-//								.setRelativeFramePosition(symbolSelectorDialog, SingleSymbolGUI.this, SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
-						.setRelativeFramePosition(symbolSelectorDialog, SingleSymbolGUI.this, .5, .5);
+						SwingUtil.setRelativeFramePosition(
+								symbolSelectorDialog, SingleSymbolGUI.this, .5,
+								.5);
 					}
-
 
 					symbolSelectorDialog.setVisible(jButtonSymbolSelector
 							.isSelected());
@@ -223,8 +221,8 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 
 					if (ask == null) {
 						TranslationEditJPanel transLabel = new TranslationEditJPanel(
-								AtlasStyler.R("SingleSymbolGUI.EnterLabel"), translation, AtlasStyler
-										.getLanguages());
+								AtlasStyler.R("SingleSymbolGUI.EnterLabel"),
+								translation, AtlasStyler.getLanguages());
 
 						ask = new TranslationAskJDialog(SingleSymbolGUI.this,
 								transLabel);
@@ -256,7 +254,8 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 								});
 
 					}
-					SwingUtil.setRelativeFramePosition(ask, SingleSymbolGUI.this, .5,.5);
+					SwingUtil.setRelativeFramePosition(ask,
+							SingleSymbolGUI.this, .5, .5);
 					ask.setVisible(true);
 
 				} else {
@@ -288,9 +287,9 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 	@Override
 	public void dispose() {
 		// Not needed because its a weak listener list, but can't be bad:
-		singleSymbolRuleList.removeListener(listenToChangesInTheRulesToUpdateButton);
+		singleSymbolRuleList
+				.removeListener(listenToChangesInTheRulesToUpdateButton);
 
-		
 	}
 
 }

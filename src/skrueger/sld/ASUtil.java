@@ -47,6 +47,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 import org.apache.log4j.Logger;
@@ -120,9 +121,6 @@ public class ASUtil {
 	public final static SLDTransformer sldTransformer = new SLDTransformer();
 
 	public static final StyleBuilder SB = StylingUtil.STYLE_BUILDER;
-
-	public static final PropertyIsEqualTo allwaysFalseFilter = ff2.equals(ff2
-			.literal("1"), ff2.literal("2"));
 
 	public static final Filter allwaysTrueFilter = ff2.equals(ff2.literal("1"),
 			ff2.literal("1"));
@@ -571,33 +569,23 @@ public class ASUtil {
 
 	public static TableCellRenderer getDoubleCellRenderer() {
 		if (doubleTableCellRenderer == null)
-			doubleTableCellRenderer = new TableCellRenderer() {
+			doubleTableCellRenderer = new DefaultTableCellRenderer() {
 
 				public Component getTableCellRendererComponent(
 						final JTable table, Object value,
 						final boolean isSelected, final boolean hasFocus,
 						final int row, final int column) {
-					final JLabel label = new JLabel();
+					final JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
 					NumberFormat doubleFormat = DecimalFormat
 							.getNumberInstance();
-					doubleFormat.setMinimumFractionDigits(1);
+					doubleFormat.setMinimumFractionDigits(3);
 					doubleFormat.setMaximumFractionDigits(3);
 					doubleFormat.setMinimumIntegerDigits(1);
-
-					if (value instanceof String) {
-						try {
-							value = doubleFormat.parse((String) value);
-						} catch (ParseException e) {
-							LOGGER.warn("parsing number string", e);
-						}
-					}
-
-					if (value instanceof Number) {
-						final double val = ((Number) value).doubleValue();
-						// String formatted = df.format( (Number)value );
+					
+					if (value instanceof Double) {
+						final Double val = ((Double) value).doubleValue();
 						final String str = doubleFormat.format(val);
-						// TODO Replace the trailing 0s with spaces, AND set a
 
 						label.setText(str);
 					}
@@ -1283,7 +1271,7 @@ public class ASUtil {
 
 		BrewerPalette[] palettes = brewer.getPalettes(paletteTypeGraduation,
 				numClasses);
-
+		
 		try {
 			BrewerPalette arthursPalette = getArthursPalette();
 

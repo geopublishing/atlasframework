@@ -17,7 +17,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -27,7 +26,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.text.NumberFormat;
 import java.util.Arrays;
 
 import javax.swing.AbstractAction;
@@ -41,11 +39,11 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -62,6 +60,7 @@ import org.jfree.ui.TextAnchor;
 
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
 import skrueger.atlas.AVDialogManager;
@@ -102,7 +101,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	private JPanel jPanelLinksOben = null;
 
-	private JLabel jLabel = null;
+	private JLabel jLabelMethodSelection = null;
 
 	private JLabel jLabelParameter = null;
 
@@ -116,11 +115,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	private JTable jTableStats = null;
 
-	private JPanel jPanel3 = null;
+	private JPanel panelLowerPart = null;
 
 	private JLabel jFreeChartJLabel = null;
-
-	private JLabel jLabel2 = null;
 
 	private JToggleButton jToggleButton = null;
 
@@ -130,25 +127,22 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	private JPanel jPanelHistParams = null;
 
-	private JLabel jLabel3 = null;
+	private JLabel jLabelHistogrammColumns = null;
 
 	private JComboBox jComboBoxColumns = null;
 
 	private JCheckBox jCheckBoxShowSD = null;
 
-	private JLabel jLabelShowSD = null;
-
 	private JCheckBox jCheckBoxShowMean = null;
-
-	private JLabel jLabelShowMean = null;
 
 	Integer histogramBins = 14;
 
 	private final AtlasStyler atlasStyler;
 
 	public QuantitiesClassificationGUI(Component owner,
-			QuantitiesClassification classifier, AtlasStyler atlasStyler) {
-		super(SwingUtil.getParentWindow(owner));
+			QuantitiesClassification classifier, AtlasStyler atlasStyler,
+			String title) {
+		super(SwingUtil.getParentWindow(owner), title);
 		this.classifier = classifier;
 		this.atlasStyler = atlasStyler;
 		initialize();
@@ -163,9 +157,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(605, 421);
 		this.setModal(true);
 		this.setContentPane(getJContentPane());
+		pack();
 	}
 
 	/**
@@ -175,44 +169,15 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridwidth = 3;
-			gridBagConstraints31.fill = GridBagConstraints.BOTH;
-			gridBagConstraints31.weightx = 0.0;
-			gridBagConstraints31.weighty = 2.0;
-			gridBagConstraints31.gridy = 5;
-			GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-			gridBagConstraints21.gridx = 1;
-			gridBagConstraints21.fill = GridBagConstraints.BOTH;
-			gridBagConstraints21.gridheight = 5;
-			gridBagConstraints21.weighty = 0.0;
-			gridBagConstraints21.weightx = 2.0;
-			gridBagConstraints21.gridwidth = 2;
-			gridBagConstraints21.gridy = 0;
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.weightx = 0.5;
-			gridBagConstraints14.gridwidth = 1;
-			gridBagConstraints14.gridy = 4;
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 0;
-			gridBagConstraints11.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints11.gridy = 1;
-			GridBagConstraints gridBagConstraints = new GridBagConstraints();
-			gridBagConstraints.gridx = 0;
-			gridBagConstraints.weightx = 0.5;
-			gridBagConstraints.fill = GridBagConstraints.BOTH;
-			gridBagConstraints.gridy = 0;
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(getJPanelLinksOben(), gridBagConstraints);
-			jContentPane.add(getJPanelDataExclusion(), gridBagConstraints11);
-			jContentPane.add(getJPanelHistogramParameters(),
-					gridBagConstraints14);
-			jContentPane.add(getJPanelDescriptiveStatistics(),
-					gridBagConstraints21);
-			jContentPane.add(getJPanel3(), gridBagConstraints31);
+			jContentPane = new JPanel(new MigLayout("flowy"));
+
+			jContentPane.add(getJPanelLinksOben(), "sgx1, split 3");
+			jContentPane.add(getJPanelDataExclusion(), "sgx1");
+			jContentPane.add(getJPanelHistogramParameters());
+			jContentPane
+					.add(getJPanelLowerPart(), "gap related, spanx 2, wrap");
+			jContentPane.add(getJPanelDescriptiveStatistics(), "right, top");
+
 		}
 		return jContentPane;
 	}
@@ -224,45 +189,22 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelLinksOben() {
 		if (jPanelLinksOben == null) {
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.fill = GridBagConstraints.NONE;
-			gridBagConstraints4.gridy = 1;
-			gridBagConstraints4.weightx = 1.0;
-			gridBagConstraints4.insets = new Insets(0, 10, 0, 0);
-			gridBagConstraints4.anchor = GridBagConstraints.WEST;
-			gridBagConstraints4.gridx = 1;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = GridBagConstraints.BOTH;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3.weightx = 0.1;
-			gridBagConstraints3.insets = new Insets(5, 10, 5, 5);
-			gridBagConstraints3.gridx = 1;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 1;
 			jLabelParameter = new JLabel(AtlasStyler
 					.R("ComboBox.NumberOfClasses"));
+
 			jLabelParameter.setToolTipText(AtlasStyler
 					.R("ComboBox.NumberOfClasses.TT"));
 
-			GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText(AtlasStyler
+			jLabelMethodSelection = new JLabel(AtlasStyler
 					.R("QuantitiesClassificationGUI.Combobox.Method"));
-			jPanelLinksOben = new JPanel();
-			jPanelLinksOben
-					.setBorder(BorderFactory
-							.createTitledBorder(AtlasStyler
-									.R("GraduatedColorQuantities.classification.BorderTitle")));
-			jPanelLinksOben.setLayout(new GridBagLayout());
-			jPanelLinksOben.add(jLabel, gridBagConstraints1);
-			jPanelLinksOben.add(jLabelParameter, gridBagConstraints2);
-			jPanelLinksOben.add(getJComboBoxMethod(), gridBagConstraints3);
-			jPanelLinksOben.add(new NumClassesJComboBox(classifier),
-					gridBagConstraints4);
+
+			jPanelLinksOben = new JPanel(new MigLayout("wrap 2"), AtlasStyler
+					.R("GraduatedColorQuantities.classification.BorderTitle"));
+
+			jPanelLinksOben.add(jLabelMethodSelection);
+			jPanelLinksOben.add(getJComboBoxMethod());
+			jPanelLinksOben.add(jLabelParameter);
+			jPanelLinksOben.add(new NumClassesJComboBox(classifier));
 		}
 		return jPanelLinksOben;
 	}
@@ -294,7 +236,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			}
 
 			jPanelData.add(getJButtonAttribTable());
-			SwingUtil.setPreferredWidth(jPanelData, 100);
+			// SwingUtil.setPreferredWidth(jPanelData, 100);
 			// jPanel1.add(getJButtonSampling(), gridBagConstraints6);
 		}
 		return jPanelData;
@@ -386,9 +328,10 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 									.R("QuantitiesClassificationGUI.Statistics.BorderTitle")));
 			final JScrollPane scrollPane = new JScrollPane(
 					getJTableStatistics());
-			SwingUtil.setPreferredWidth(scrollPane, 170);
+			SwingUtil.setPreferredWidth(scrollPane, 250);
+			SwingUtil.setPreferredHeight(scrollPane, 140);
 			jPanelDescriptiveStatistics.add(scrollPane);
-			SwingUtil.setMinimumWidth(jPanelDescriptiveStatistics, 190);
+			SwingUtil.setMinimumWidth(jPanelDescriptiveStatistics, 2);
 
 		}
 		return jPanelDescriptiveStatistics;
@@ -411,6 +354,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			 * Classification.DescriptiveStatistics.Mean=airthm. Mittel:
 			 * Classification.DescriptiveStatistics.Median=Median:
 			 * Classification.DescriptiveStatistics.SD=Standard deviation:
+			 * Classification.DescriptiveStatistics.Excluded=Excluded:
 			 */
 
 			jTableStats.setModel(new DefaultTableModel() {
@@ -428,7 +372,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 						AtlasStyler
 								.R("Classification.DescriptiveStatistics.Median"),
 						AtlasStyler
-								.R("Classification.DescriptiveStatistics.SD") };
+								.R("Classification.DescriptiveStatistics.SD"),
+						AtlasStyler
+								.R("Classification.DescriptiveStatistics.Excluded") };
 
 				@Override
 				public Class<?> getColumnClass(int columnIndex) {
@@ -446,7 +392,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 				@Override
 				public int getRowCount() {
-					return 7;
+					return 8;
 				}
 
 				@Override
@@ -470,6 +416,8 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							return stats.median();
 						if (rowIndex == 6) // SD
 							return stats.standardDeviation();
+						if (rowIndex == 7) // NODATA
+							return classifier.getNoDataValuesCount();						
 					} catch (Exception e) {
 						LOGGER.error("While creating the statistics:", e);
 					}
@@ -523,42 +471,32 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel3() {
-		if (jPanel3 == null) {
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.fill = GridBagConstraints.BOTH;
-			gridBagConstraints12.gridy = 3;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.weighty = 1.0;
-			gridBagConstraints12.gridwidth = 2;
-			gridBagConstraints12.gridx = 1;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 2;
-			gridBagConstraints10.anchor = GridBagConstraints.EAST;
-			gridBagConstraints10.insets = new Insets(0, 0, 0, 5);
-			gridBagConstraints10.gridy = 0;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 1;
-			gridBagConstraints9.gridy = 0;
-			jLabel2 = new JLabel();
-			jLabel2.setText(AtlasStyler.R("Classification.BreakValues"));
-			jLabel2.setToolTipText(AtlasStyler
+	private JPanel getJPanelLowerPart() {
+		if (panelLowerPart == null) {
+			panelLowerPart = new JPanel(new MigLayout("flowy"));
+			JLabel jLabelBreaksTable = new JLabel(AtlasStyler
+					.R("Classification.BreakValues"));
+			jLabelBreaksTable.setToolTipText(AtlasStyler
 					.R("Classification.BreakValues.TT"));
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.gridheight = 5;
-			gridBagConstraints8.insets = new Insets(0, 0, 0, 0);
-			gridBagConstraints8.fill = GridBagConstraints.BOTH;
-			gridBagConstraints8.gridy = 0;
-			jPanel3 = new JPanel();
-			jPanel3.setLayout(new GridBagLayout());
-			jPanel3.add(getHistogram(), gridBagConstraints8);
-			jPanel3.add(jLabel2, gridBagConstraints9);
-			// jPanel3.add(getJToggleButton(), gridBagConstraints10);
-			jPanel3.add(new JScrollPane(getJTableBreakValues()),
-					gridBagConstraints12);
+
+			JLabel jLabelBreaksExplanation = new JLabel(
+					"<html><font size='-2'>"
+							+ AtlasStyler.R("Classification.BreakValues.TT")
+							+ "</html>");
+
+			panelLowerPart.add(getHistogram(), "wrap");
+			panelLowerPart.add(jLabelBreaksTable, "split 3");
+			panelLowerPart.add(jLabelBreaksExplanation);
+			panelLowerPart.add(new JScrollPane(getJTableBreakValues()));
+
+			SwingUtil.setPreferredHeight(panelLowerPart, (int) getHistogram()
+					.getPreferredSize().getHeight());
+
+			SwingUtil.setPreferredWidth(panelLowerPart, (int) getHistogram()
+					.getPreferredSize().getWidth() + 200);
+
 		}
-		return jPanel3;
+		return panelLowerPart;
 	}
 
 	/**
@@ -616,7 +554,6 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			LOGGER.error(e);
 			return ERROR_IMAGE;
 		}
-
 
 		/**
 		 * Label the x-axis. If a NormalizerField has been selected, this has to
@@ -742,6 +679,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 		if (jTableBreakValues == null) {
 			jTableBreakValues = new JTable();
 
+			jTableBreakValues
+					.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 			jTableBreakValues.setModel(new DefaultTableModel() {
 
 				@Override
@@ -749,7 +689,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 					if (columnIndex == 0)
 						return Integer.class;
 					if (columnIndex == 1)
-						return String.class;
+						return Double.class;
 					return null;
 				}
 
@@ -775,10 +715,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 				@Override
 				public Object getValueAt(int rowIndex, int columnIndex) {
 					if (columnIndex == 1)
-						return NumberFormat
-								.getNumberInstance()
-								.format(
-										classifier.getClassLimits().toArray()[rowIndex]);
+						return classifier.getClassLimits().toArray()[rowIndex];
 					return rowIndex;
 				}
 
@@ -798,8 +735,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 					if (columnIndex == 1) {
 
 						try {
-							Number aValue2 = NumberFormat.getNumberInstance()
-									.parse((String) aValue);
+							Double aValue2 = (Double) aValue;
 
 							if (classifier.getMethod() != METHOD.MANUAL) {
 								classifier.setMethod(METHOD.MANUAL);
@@ -808,8 +744,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							Object oldValue = classifier.getClassLimits()
 									.toArray()[rowIndex];
 							classifier.getClassLimits().remove(oldValue);
-							classifier.getClassLimits().add(
-									aValue2.doubleValue());
+							classifier.getClassLimits().add(aValue2);
 						} catch (Exception e) {
 							return;
 						} finally {
@@ -866,6 +801,8 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							cancelCellEditing();
 
 							// create popup menu...
+							jTableBreakValues.getSelectionModel()
+									.addSelectionInterval(row, row);
 							JPopupMenu contextMenu = createContextMenu(row);
 
 							// ... and show it
@@ -893,7 +830,6 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 						public void actionPerformed(ActionEvent e) {
 
-							// The value that the mouse is on
 							Double value = (Double) jTableBreakValues
 									.getModel().getValueAt(rowIndex, 1);
 
@@ -1060,50 +996,17 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelHistogramParameters() {
 		if (jPanelHistParams == null) {
-			GridBagConstraints gridBagConstraints20 = new GridBagConstraints();
-			gridBagConstraints20.gridx = 5;
-			gridBagConstraints20.insets = new Insets(0, 0, 0, 5);
-			gridBagConstraints20.gridy = 0;
-			jLabelShowMean = new JLabel(
-					AtlasStyler
-							.R("QuantitiesClassificationGUI.HistogramParameters.ShowMean"));
-			GridBagConstraints gridBagConstraints19 = new GridBagConstraints();
-			gridBagConstraints19.gridx = 4;
-			gridBagConstraints19.insets = new Insets(0, 20, 0, 0);
-			gridBagConstraints19.gridy = 0;
-			GridBagConstraints gridBagConstraints18 = new GridBagConstraints();
-			gridBagConstraints18.gridx = 3;
-			gridBagConstraints18.gridy = 0;
-			jLabelShowSD = new JLabel(
-					AtlasStyler
-							.R("QuantitiesClassificationGUI.HistogramParameters.ShowSD"));
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 2;
-			gridBagConstraints17.insets = new Insets(0, 20, 0, 0);
-			gridBagConstraints17.gridy = 0;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints16.gridx = 1;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.gridy = 0;
-			jLabel3 = new JLabel(
+			jLabelHistogrammColumns = new JLabel(
 					AtlasStyler
 							.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums"));
-			jLabel3
+			jLabelHistogrammColumns
 					.setToolTipText(AtlasStyler
 							.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums.TT"));
-			jPanelHistParams = new JPanel();
-			jPanelHistParams.setLayout(new GridBagLayout());
-			jPanelHistParams.add(jLabel3, gridBagConstraints15);
-			jPanelHistParams.add(getJComboBoxColumns(), gridBagConstraints16);
-			jPanelHistParams.add(getJCheckBoxShowSD(), gridBagConstraints17);
-			jPanelHistParams.add(jLabelShowSD, gridBagConstraints18);
-			jPanelHistParams.add(getJCheckBoxShowMean(), gridBagConstraints19);
-			jPanelHistParams.add(jLabelShowMean, gridBagConstraints20);
+			jPanelHistParams = new JPanel(new MigLayout());
+			jPanelHistParams.add(jLabelHistogrammColumns);
+			jPanelHistParams.add(getJComboBoxColumns(), "gap rel");
+			jPanelHistParams.add(getJCheckBoxShowSD(), "gap unrel");
+			jPanelHistParams.add(getJCheckBoxShowMean(), "gap unrel");
 		}
 		return jPanelHistParams;
 	}
@@ -1148,17 +1051,17 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JCheckBox getJCheckBoxShowSD() {
 		if (jCheckBoxShowSD == null) {
-			jCheckBoxShowSD = new JCheckBox();
-			jCheckBoxShowSD.setAction(new AbstractAction() {
+			jCheckBoxShowSD = new JCheckBox(
+					new AbstractAction(
+							AtlasStyler
+									.R("QuantitiesClassificationGUI.HistogramParameters.ShowSD")) {
 
-				public void actionPerformed(ActionEvent e) {
-					// THe getHistogrammImage() function checks the state of
-					// this checkbox
-					jFreeChartJLabel
-							.setIcon(new ImageIcon(getHistogramImage()));
-				}
+						public void actionPerformed(ActionEvent e) {
+							jFreeChartJLabel.setIcon(new ImageIcon(
+									getHistogramImage()));
+						}
 
-			});
+					});
 		}
 		return jCheckBoxShowSD;
 	}
@@ -1170,17 +1073,20 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JCheckBox getJCheckBoxShowMean() {
 		if (jCheckBoxShowMean == null) {
-			jCheckBoxShowMean = new JCheckBox();
-			jCheckBoxShowMean.setAction(new AbstractAction() {
+			jCheckBoxShowMean = new JCheckBox(
+					new AbstractAction(
+							AtlasStyler
+									.R("QuantitiesClassificationGUI.HistogramParameters.ShowMean")) {
 
-				public void actionPerformed(ActionEvent e) {
-					// THe getHistogrammImage() function checks the state of
-					// this checkbox
-					jFreeChartJLabel
-							.setIcon(new ImageIcon(getHistogramImage()));
-				}
+						public void actionPerformed(ActionEvent e) {
+							// THe getHistogrammImage() function checks the
+							// state of
+							// this checkbox
+							jFreeChartJLabel.setIcon(new ImageIcon(
+									getHistogramImage()));
+						}
 
-			});
+					});
 		}
 		return jCheckBoxShowMean;
 	}

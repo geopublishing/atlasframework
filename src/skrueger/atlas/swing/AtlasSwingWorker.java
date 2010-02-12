@@ -11,15 +11,22 @@
 package skrueger.atlas.swing;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.SwingWorker;
 
+import org.apache.log4j.Logger;
+
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.gui.internal.AtlasStatusDialogCloser;
+import skrueger.sld.ASUtil;
 
 public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
+	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	protected final AtlasStatusDialog statusDialog;
 
@@ -33,13 +40,26 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 	public AtlasSwingWorker(AtlasStatusDialog statusDialog) {
 		this.statusDialog = statusDialog;
 		addPropertyChangeListener(new AtlasStatusDialogCloser(statusDialog));
+		
+		statusDialog.addCancelListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AtlasSwingWorker.this.cancel(true);
+			}
+		});
 	}
 
 	public AtlasSwingWorker(Component parentGUI) {
 		this(new AtlasStatusDialog(parentGUI));
 	}
 
-	public K executeModal() throws InterruptedException, ExecutionException {
+	/**
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 * @throws CancellationException When cancel has been pressed
+	 */
+	public K executeModal() throws InterruptedException, ExecutionException, CancellationException {
 		execute();
 		statusDialog.startModal();
 		return get();

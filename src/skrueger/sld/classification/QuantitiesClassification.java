@@ -12,17 +12,21 @@ package skrueger.sld.classification;
 
 import hep.aida.bin.DynamicBin1D;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.TreeSet;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
+import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.Attribute;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -30,6 +34,8 @@ import org.opengis.filter.Filter;
 
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadata;
+import skrueger.atlas.gui.internal.AtlasStatusDialog;
+import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
@@ -144,11 +150,13 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	volatile private boolean cancelCalculation;
 
-	volatile private SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
+	volatile private AtlasSwingWorker<TreeSet<Double>> calculateStatisticsWorker;
 
 	protected volatile TreeSet<Double> classLimits;
 
 	private boolean recalcAutomatically = true;
+
+	private Component owner;
 
 	/**
 	 * @param featureSource
@@ -162,9 +170,11 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * @param normalizer_field_name
 	 *            If null, no normalization will be used
 	 */
-	public QuantitiesClassification(StyledFeaturesInterface<?> styledFeatures,
+	public QuantitiesClassification(Component owner,
+			StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name, final String normalizer_field_name) {
 		super(styledFeatures);
+		this.owner = owner;
 		this.value_field_name = value_field_name;
 		this.normalizer_field_name = normalizer_field_name;
 	}
@@ -175,19 +185,19 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * @param value_field_name
 	 *            The column that is used for the classification
 	 */
-	public QuantitiesClassification(
+	public QuantitiesClassification(Component owner,
 			final StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name) {
-		this(styledFeatures, value_field_name, null);
+		this(owner, styledFeatures, value_field_name, null);
 	}
 
 	/**
 	 * @param featureSource
 	 *            The featuresource to use for the statistics
 	 */
-	public QuantitiesClassification(
+	public QuantitiesClassification(Component owner,
 			final StyledFeaturesInterface<?> styledFeatures) {
-		this(styledFeatures, null, null);
+		this(owner, styledFeatures, null, null);
 	}
 
 	@Override
@@ -344,85 +354,49 @@ public class QuantitiesClassification extends FeatureClassification {
 					"value field and the normalizer field may not be equal.");
 
 		if (stats == null) {
-
-			/**
-			 * Fires a START_CALCULATIONS event to inform listening JTables etc.
-			 * about the change *
-			 */
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					// System.out.println("Fire STart Calculations");
-					fireEvent(new ClassificationChangeEvent(
-							CHANGETYPES.START_NEW_STAT_CALCULATION));
-				}
-			});
-
-			// String[] propnames;
-			// if (normalizer_field_name != null)
-			// propnames = new String[] { value_field_name,
-			// normalizer_field_name };
-			// else
-			// propnames = new String[] { value_field_name };
-
-			// final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
-
-			// TODO Of yourse it makes more sense to only get the properties we
-			// // need, but it doesn't seem to work?! 2.10.09
-			// final String typeName = featureSource.getName().getLocalPart();
-			// //
-			// final DefaultQuery query = new DefaultQuery(typeName, filter,
-			// MAX_FEATURES_DEFAULT, propnames, handle+new Random().nextInt());
-			// //
-			// // FeatureCollection<SimpleFeatureType, SimpleFeature> features =
-			// // featureSource
-			// // .getFeatures(query);
+			//
+			// /**
+			// * Fires a START_CALCULATIONS event to inform listening JTables
+			// etc.
+			// * about the change *
+			// */
+			// SwingUtilities.invokeLater(new Runnable() {
+			// public void run() {
+			// // System.out.println("Fire STart Calculations");
+			// fireEvent(new ClassificationChangeEvent(
+			// CHANGETYPES.START_NEW_STAT_CALCULATION));
+			// }
+			// });
 
 			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
 					.getFeatureCollectionFiltered();
-
-			// int anz = features.getNumberOfAttributes();
-			// stats = new QuantileBin1D(true, anz, 1.e-4, 1.e-3, 100,
-			// rand);
-			final DynamicBin1D stats_local = new DynamicBin1D();
 			
-			// get the AttributeMetaData for the given attribute to filter NODATA values
-			final AttributeMetadata amd = getStyledFeatures().getAttributeMetaDataMap().get(value_field_name);
+			// Forget about the count of NODATA values
+			resetNoDataCount();
+
+			final DynamicBin1D stats_local = new DynamicBin1D();
+
+			// get the AttributeMetaData for the given attribute to filter
+			// NODATA values
+			final AttributeMetadata amd = getStyledFeatures()
+					.getAttributeMetaDataMap().get(value_field_name);
+			final AttributeMetadata amdNorm = getStyledFeatures()
+					.getAttributeMetaDataMap().get(normalizer_field_name);
+
+			// // Simulate a slow calculation
+			// try {
+			// Thread.sleep(40);
+			// } catch (InterruptedException e) {
+			// e.printStackTrace();
+			// }
 
 			/**
 			 * Iterating over the values and inserting them into the statistics
 			 */
 			final FeatureIterator<SimpleFeature> iterator = features.features();
 			try {
-				Double numValue, value2;
+				Double numValue, valueNormDivider;
 				while (iterator.hasNext()) {
-
-					// Simulate a slow calculation
-					// try {
-					// Thread.sleep(4);
-					// } catch (InterruptedException e) {
-					// e.printStackTrace();
-					// }
-
-					final SimpleFeature f = iterator.next();
-					// Filter for NODATA
-					final Object rawValue = amd.fiterNodata(f.getAttribute(value_field_name));
-
-					if (rawValue == null)
-						continue;
-
-					numValue = ((Number) rawValue).doubleValue();
-
-					if (normalizer_field_name != null) {
-						final Object rawValue2 = f
-								.getAttribute(normalizer_field_name);
-						if (rawValue2 == null)
-							continue;
-						value2 = ((Number) rawValue2).doubleValue();
-						numValue = numValue / value2;
-					}
-
-//					LOGGER.debug("addming " + numValue);
-					stats_local.add(numValue);
 
 					/**
 					 * The calculation process has been stopped from external.
@@ -432,6 +406,43 @@ public class QuantitiesClassification extends FeatureClassification {
 						throw new InterruptedException(
 								"The statistics calculation has been externally interrupted by setting the 'cancelCalculation' flag.");
 					}
+
+					final SimpleFeature f = iterator.next();
+
+					// Filter VALUE for NODATA
+					final Object filtered = amd.fiterNodata(f
+							.getAttribute(value_field_name));
+					if (filtered == null) {
+						increaseNoDataValue();
+						continue;
+					}
+
+					numValue = ((Number) filtered).doubleValue();
+
+					if (normalizer_field_name != null) {
+
+						// Filter NORMALIZATION DIVIDER for NODATA
+						Object filteredNorm = amdNorm.fiterNodata(f
+								.getAttribute(normalizer_field_name));
+						if (filteredNorm == null) {
+							increaseNoDataValue();
+							continue;
+						}
+
+						valueNormDivider = ((Number) filteredNorm)
+								.doubleValue();
+						if (valueNormDivider == 0) {
+							// Even if it is not defined as a NODATA value,
+							// division by null is not definied.
+							increaseNoDataValue();
+							continue;
+						}
+
+						numValue = numValue / valueNormDivider;
+					}
+
+					stats_local.add(numValue);
+
 				}
 
 				stats = stats_local;
@@ -596,40 +607,53 @@ public class QuantitiesClassification extends FeatureClassification {
 			calculateStatisticsWorker.cancel(true);
 		}
 
-		calculateStatisticsWorker = new SwingWorker<TreeSet<Double>, String>() {
+		AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
+
+		calculateStatisticsWorker = new AtlasSwingWorker<TreeSet<Double>>(
+				statusDialog) {
 
 			@Override
 			protected TreeSet<Double> doInBackground() throws IOException,
 					InterruptedException {
 				return calculateClassLimitsBlocking();
 			}
-
-			@Override
-			protected void done() {
-				LOGGER
-						.debug("DONE with calculateStatisticsWorker\n  new numCLasses = "
-								+ classLimits.size() + " " + numClasses);
-				try {
-					final TreeSet<Double> newLimits = get();
-					LOGGER.debug("newLimits = " + newLimits);
-					setClassLimits(newLimits);
-
-					if (!cancelCalculation)
-						QuantitiesClassification.this
-								.fireEvent(new ClassificationChangeEvent(
-										CHANGETYPES.CLASSES_CHG));
-				} catch (final Exception e) {
-					LOGGER
-							.info(
-									"calculateStatisticsWorker finished with Exception:",
-									e);
-					// ExceptionDialog.show(null, e);
-				}
-			}
+			//
+			// @Override
+			// protected void done() {
+			// LOGGER
+			// .debug("DONE with calculateStatisticsWorker\n  new numCLasses = "
+			// + classLimits.size() + " " + numClasses);
+			// try {
+			//
+			// if (!cancelCalculation) {
+			//
+			// LOGGER.debug("newLimits = " + newLimits);
+			//
+			// }
+			// } catch (final Exception e) {
+			// LOGGER
+			// .info(
+			// "calculateStatisticsWorker finished with Exception:",
+			// e);
+			// // ExceptionDialog.show(null, e);
+			// } finally {
+			// }
+			// }
 
 		};
 
-		calculateStatisticsWorker.execute();
+		pushQuite();
+		TreeSet<Double> newLimits;
+		try {
+			newLimits = calculateStatisticsWorker.executeModal();
+			setClassLimits(newLimits);
+		} catch (InterruptedException e) {
+		} catch (CancellationException e) {
+		} catch (ExecutionException exception) {
+			ExceptionMonitor.show(owner, exception);
+		} finally {
+			popQuite();
+		}
 
 	}
 

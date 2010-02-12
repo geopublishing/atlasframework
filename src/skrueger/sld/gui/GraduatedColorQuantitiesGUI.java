@@ -63,6 +63,7 @@ import org.geotools.styling.Symbolizer;
 import schmitzm.geotools.map.event.MapLayerAdapter;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.Translation;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
@@ -148,70 +149,98 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 		ruleList.pushQuite();
 
-		this.rulesList = ruleList;
-		this.atlasStyler = atlasStyler;
+		try {
 
-		classifier = new QuantitiesClassification(ruleList.getStyledFeatures(),
-				ruleList.getValue_field_name(), ruleList
-						.getNormalizer_field_name());
-		classifier.setMethod(ruleList.getMethod());
-		classifier.setNumClasses(ruleList.getNumClasses());
-		classifier.setClassLimits(ruleList.getClassLimits());
+			this.rulesList = ruleList;
+			this.atlasStyler = atlasStyler;
 
-		/**
-		 * If the ruleList doesn't contain calculated class limits, we have to
-		 * start calculation directly.
-		 */
-		if (ruleList.getClassLimits().size() == 0) {
-			classifier.setMethod(METHOD.QUANTILES);
-			classifier.setNumClasses(5);
-		}
+			classifier = new QuantitiesClassification(
+					GraduatedColorQuantitiesGUI.this, ruleList
+							.getStyledFeatures(), ruleList
+							.getValue_field_name(), ruleList
+							.getNormalizer_field_name());
 
-		/** Any changes to the classifier must be reported to the RuleList */
-		classifier.addListener(new ClassificationChangedAdapter() {
+			classifier.pushQuite();
+			try {
 
-			@Override
-			public void classifierAvailableNewClasses(
-					final ClassificationChangeEvent e) {
-				ruleList.pushQuite();
-				ruleList.setValue_field_name(classifier.getValue_field_name());
-				ruleList.setNormalizer_field_name(classifier
-						.getNormalizer_field_name());
-				ruleList.setMethod(classifier.getMethod());
-				// rulesList.setNumClasses(classifier.getNumClasses());
-				ruleList.setClassLimits(classifier.getClassLimits(), true); // here
+				classifier.setMethod(ruleList.getMethod());
+				classifier.setNumClasses(ruleList.getNumClasses());
+				classifier.setClassLimits(ruleList.getClassLimits());
 
-				if (classifier.getMethod() == METHOD.MANUAL) {
-					getNumClassesJComboBox().setEnabled(false);
-					getNumClassesJComboBox().setSelectedItem(
-							new Integer(ruleList.getNumClasses()));
-				} else
-					getNumClassesJComboBox().setEnabled(true);
+				/**
+				 * If the ruleList doesn't contain calculated class limits, we
+				 * have to start calculation directly.
+				 */
+				if (ruleList.getClassLimits().size() == 0) {
+					classifier.setMethod(METHOD.QUANTILES);
+					classifier.setNumClasses(5);
+				}
 
-				ruleList.popQuite();
+				/**
+				 * Any changes to the classifier must be reported to the
+				 * RuleList
+				 */
+				classifier.addListener(new ClassificationChangedAdapter() {
 
-				// TODO removed the message because it also appears when t calc
-				// thread has been cancelled because another thread staretd
+					@Override
+					public void classifierAvailableNewClasses(
+							final ClassificationChangeEvent e) {
+						ruleList.pushQuite();
 
-				// // Show a warning if the classification didn't create the
-				// expected number of classes
-				// if (classifier.getMethod() != METHOD.MANUAL &&
-				// getNumClassesJComboBox().getSelectedItem() != null &&
-				// !((Number)getNumClassesJComboBox().getSelectedItem()).equals(ruleList.getNumClasses()))
-				// {
-				// AVUtil.showMessageDialog(GraduatedColorQuantitiesGUI.this,
-				// AtlasStyler.R("ClassificationFaildMsg.BadData",
-				// getNumClassesJComboBox().getSelectedItem()));
-				// }
+						try {
+
+							ruleList.setValue_field_name(classifier
+									.getValue_field_name());
+							ruleList.setNormalizer_field_name(classifier
+									.getNormalizer_field_name());
+							ruleList.setMethod(classifier.getMethod());
+							// rulesList.setNumClasses(classifier.getNumClasses());
+							ruleList.setClassLimits(
+									classifier.getClassLimits(), true); // here
+
+							if (classifier.getMethod() == METHOD.MANUAL) {
+								getNumClassesJComboBox().setEnabled(false);
+								getNumClassesJComboBox().setSelectedItem(
+										new Integer(ruleList.getNumClasses()));
+							} else
+								getNumClassesJComboBox().setEnabled(true);
+
+						} finally {
+							ruleList.popQuite();
+						}
+
+						// TODO removed the message because it also appears when
+						// t
+						// calc
+						// thread has been cancelled because another thread
+						// staretd
+
+						// // Show a warning if the classification didn't create
+						// the
+						// expected number of classes
+						// if (classifier.getMethod() != METHOD.MANUAL &&
+						// getNumClassesJComboBox().getSelectedItem() != null &&
+						// !((Number)getNumClassesJComboBox().getSelectedItem()).equals(ruleList.getNumClasses()))
+						// {
+						// AVUtil.showMessageDialog(GraduatedColorQuantitiesGUI.this,
+						// AtlasStyler.R("ClassificationFaildMsg.BadData",
+						// getNumClassesJComboBox().getSelectedItem()));
+						// }
+					}
+				});
+
+			} finally {
+				classifier.popQuite();
 			}
-		});
 
-		atlasStyler.getMapLayer().addMapLayerListener(
-				listenToFilterChangesAndRecalcStatistics);
+			atlasStyler.getMapLayer().addMapLayerListener(
+					listenToFilterChangesAndRecalcStatistics);
 
-		initialize();
+			initialize();
 
-		ruleList.popQuite();
+		} finally {
+			ruleList.popQuite();
+		}
 	}
 
 	/**
@@ -345,7 +374,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private NumClassesJComboBox getNumClassesJComboBox() {
 		if (jComboBoxNumClasses == null) {
 			jComboBoxNumClasses = new NumClassesJComboBox(classifier);
-			;
 		}
 		return jComboBoxNumClasses;
 	}
@@ -383,23 +411,41 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				}
 
 				private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
-					if (quantGUI == null) {
-						quantGUI = new QuantitiesClassificationGUI(
-								jToggleButton_Classify, classifier, atlasStyler);
-						quantGUI.addWindowListener(new WindowAdapter() {
+					// TODO if (quantGUI == null) {
+					AttributeMetadataMap attributeMetaDataMap = rulesList
+							.getStyledFeatures().getAttributeMetaDataMap();
 
-							@Override
-							public void windowClosed(final WindowEvent e) {
-								jToggleButton_Classify.setSelected(false);
-							}
+					// Title like :
+					String titleVariables = attributeMetaDataMap.get(
+							classifier.getValue_field_name()).getTitle()
+							.toString();
 
-							@Override
-							public void windowClosing(final WindowEvent e) {
-								jToggleButton_Classify.setSelected(false);
-							}
-
-						});
+					if (classifier.getNormalizer_field_name() != null
+							&& !classifier.getNormalizer_field_name().isEmpty()) {
+						titleVariables += ":"
+								+ attributeMetaDataMap.get(
+										classifier.getNormalizer_field_name())
+										.getTitle().toString();
 					}
+
+					quantGUI = new QuantitiesClassificationGUI(
+							jToggleButton_Classify, classifier, atlasStyler,
+							AtlasStyler.R("QuantitiesClassificationGUI.Title",
+									titleVariables));
+					quantGUI.addWindowListener(new WindowAdapter() {
+
+						@Override
+						public void windowClosed(final WindowEvent e) {
+							jToggleButton_Classify.setSelected(false);
+						}
+
+						@Override
+						public void windowClosing(final WindowEvent e) {
+							jToggleButton_Classify.setSelected(false);
+						}
+
+					});
+					// }
 					return quantGUI;
 				}
 
@@ -430,29 +476,34 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							if (e.getStateChange() == ItemEvent.SELECTED) {
 
 								final String valueField = (String) e.getItem();
-
-								final Object oldNormSelection = getJComboBoxNormalizationField()
-										.getSelectedIndex();
+								//
+								// final Object oldNormSelection =
+								// getJComboBoxNormalizationField()
+								// .getSelectedIndex();
 
 								getJComboBoxNormalizationField()
 										.setModel(
 												classifier
 														.createNormalizationFieldsComboBoxModel());
 								// jComboBoxNormlization.repaint();
-
-								/**
-								 * We do not divide A/A ! So when Attribute A is
-								 * selected as the value field, the normalized
-								 * field may not be A.
-								 */
-								if (valueField == oldNormSelection) {
-									getJComboBoxNormalizationField()
-											.setSelectedItem(
-													QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
-								} else {
-									getJComboBoxNormalizationField()
-											.setSelectedItem(oldNormSelection);
-								}
+								//
+								// /**
+								// * We do not divide A/A ! So when Attribute A
+								// is
+								// * selected as the value field, the normalized
+								// * field may not be A.
+								// */
+								// if (valueField == oldNormSelection) {
+								// getJComboBoxNormalizationField()
+								// .setSelectedItem(
+								// QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
+								// } else {
+								// getJComboBoxNormalizationField()
+								// .setSelectedItem(oldNormSelection);
+								// }
+//								getJComboBoxNormalizationField()
+//										.setSelectedItem(
+//												QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
 
 								LOGGER.debug("Set valuefield to " + valueField);
 								classifier.setValue_field_name(valueField);
@@ -836,10 +887,13 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		if (noDataPanel == null) {
 			noDataPanel = new JPanel(new MigLayout());
 
-			final SingleRuleList<? extends Symbolizer> noDataSymbol = rulesList.getNoDataSymbol();
-//			final String noDataLegendString = noDataRule.getTitle();
-			
-			final SmallButton noDataLabelButton = new SmallButton(new Translation(noDataSymbol.getTitle()) + ":", AtlasStyler.R("translate_label_for_NODATA_values.tt"));
+			final SingleRuleList<? extends Symbolizer> noDataSymbol = rulesList
+					.getNoDataSymbol();
+			// final String noDataLegendString = noDataRule.getTitle();
+
+			final SmallButton noDataLabelButton = new SmallButton(
+					new Translation(noDataSymbol.getTitle()) + ":", AtlasStyler
+							.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -873,14 +927,15 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 									.equals(
 											TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-								noDataLabelButton.setText(translation.toString()+":");
+								noDataLabelButton.setText(translation
+										.toString()
+										+ ":");
 								noDataSymbol.setTitle(translation.toOneLine());
 
 								rulesList.getNoDataSymbol().fireEvents(
 										new RuleChangedEvent(
 												"nodata legend label changed",
 												rulesList.getNoDataSymbol()));
-								
 
 							}
 
@@ -895,38 +950,41 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			// A button to change the NODATA symbol
 			SymbolButton noDataSymbolButton = new EditSymbolButton(rulesList
-					.getNoDataSymbol(), new Dimension(14,14));
-			noDataPanel.add(noDataSymbolButton,"gap 0, wrap");
+					.getNoDataSymbol(), new Dimension(14, 14));
+			noDataPanel.add(noDataSymbolButton, "gap 0, wrap");
 
-			
-			// If running in GP/Atlas context, the user may disable the NODATA values from appearing in the legend
+			// If running in GP/Atlas context, the user may disable the NODATA
+			// values from appearing in the legend
 			if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-				
-				final JCheckBox noDataShowInLegendCB = new JCheckBox(AtlasStyler.R("NoDataValues.ShallAppearInLegend.Label"));
-				noDataShowInLegendCB.setToolTipText(AtlasStyler.R("NoDataValues.ShallAppearInLegend.TT"));
-				
+
+				final JCheckBox noDataShowInLegendCB = new JCheckBox(
+						AtlasStyler.R("NoDataValues.ShallAppearInLegend.Label"));
+				noDataShowInLegendCB.setToolTipText(AtlasStyler
+						.R("NoDataValues.ShallAppearInLegend.TT"));
+
 				// Initially set the value depending on the rules's name
-				noDataShowInLegendCB.setSelected(rulesList.getNoDataSymbol().isVisibleInLegend());
-				
+				noDataShowInLegendCB.setSelected(rulesList.getNoDataSymbol()
+						.isVisibleInLegend());
+
 				noDataShowInLegendCB.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						boolean selected = noDataShowInLegendCB.isSelected();
-						rulesList.getNoDataSymbol().setVisibleInLegend(selected);
+						rulesList.getNoDataSymbol()
+								.setVisibleInLegend(selected);
 					}
 				});
-				
-				noDataPanel.add(noDataShowInLegendCB,"gap 0, span 2");
-				
+
+				noDataPanel.add(noDataShowInLegendCB, "gap 0, span 2");
+
 			} else {
 			}
-
 
 		}
 		return noDataPanel;
 	}
-	
+
 	/**
 	 * A button to invert the order of the applied colors
 	 * 
@@ -999,6 +1057,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				@Override
 				public void classifierAvailableNewClasses(
 						final ClassificationChangeEvent e) {
+
 					final BrewerPalette oldSelection = (BrewerPalette) jComboBoxPalettes
 							.getSelectedItem();
 

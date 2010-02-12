@@ -42,7 +42,7 @@ public class RuleChangedEvent {
 
 	@Override
 	public String toString() {
-		return string;
+		return string+" from RL: "+sourceRL.toString();
 	}
 
 }

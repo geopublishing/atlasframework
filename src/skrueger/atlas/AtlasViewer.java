@@ -23,6 +23,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.Locale;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.jnlp.SingleInstanceListener;
@@ -622,7 +623,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			else
 				ExceptionMonitor.show(getJFrame(), e);
 		} catch (InterruptedException e) {
-			ExceptionMonitor.show(getJFrame(), e);
+		} catch (CancellationException e) {
 		}
 	}
 

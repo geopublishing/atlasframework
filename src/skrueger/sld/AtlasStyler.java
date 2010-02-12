@@ -102,11 +102,11 @@ public class AtlasStyler {
 		String string = RESOURCE.getString(key, values);
 		if (string.equals("???")) {
 			string = "???" + key;
-			LOGGER.error("missing key in AS: '" + key+"'");
+			LOGGER.error("missing key in AS: '" + key + "'");
 		}
 		return string;
 	}
-	
+
 	/**
 	 * Convenience method to access the {@link AtlasStyler}s translation
 	 * resources for a specific {@link Locale}.
@@ -120,7 +120,7 @@ public class AtlasStyler {
 		String string = RESOURCE.getString(key, locale, values);
 		if (string.equals("???")) {
 			string = "???" + key;
-			LOGGER.error("missing key in AS: '" + key+"'");
+			LOGGER.error("missing key in AS: '" + key + "'");
 		}
 		return string;
 
@@ -589,13 +589,14 @@ public class AtlasStyler {
 					int countRules = 0;
 					uniqueRuleList.setWithDefaultSymbol(false);
 					for (final Rule r : fts.rules()) {
-						
-						if (r.getName().toString().startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+
+						if (r.getName().toString().startsWith(
+								FeatureRuleList.NODATA_RULE_NAME)) {
 							// This rule defines the NoDataSymbol
 							uniqueRuleList.importNoDataRule(r);
 							continue;
 						}
-						
+
 						// set Title
 						uniqueRuleList.getLabels().add(
 								r.getDescription().getTitle().toString());
@@ -695,12 +696,13 @@ public class AtlasStyler {
 						double[] ds = null;
 						for (final Rule r : fts.rules()) {
 
-							if (r.getName().toString().startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+							if (r.getName().toString().startsWith(
+									FeatureRuleList.NODATA_RULE_NAME)) {
 								// This rule defines the NoDataSymbol
 								quantitiesRuleList.importNoDataRule(r);
 								continue;
 							}
-							
+
 							// set Title
 							quantitiesRuleList.getRuleTitles().put(countRules,
 									r.getDescription().getTitle().toString());
@@ -756,114 +758,7 @@ public class AtlasStyler {
 				else if (metaInfoString.startsWith(RulesListType.TEXT_LABEL
 						.toString())) {
 					final TextRuleList textRulesList = getTextRulesList();
-					// textRulesList.setQuite(true);
-
-					boolean enabledAllFilters = true;
-
-					List<Rule> rules = fts.rules();
-					for (int i = 0; i < rules.size(); i++) {
-						final Rule rule = rules.get(i);
-
-						if (rule.getName() != null
-								&& rule.getName().equals("DONTIMPORT")) {
-							LOGGER.debug("Dropping fallBack rule with filter "
-									+ rule.getFilter().toString());
-							continue;
-						}
-
-						final TextSymbolizer textSymb = (TextSymbolizer) rule
-								.getSymbolizers()[0];
-
-						textRulesList.getSymbolizers().add(textSymb);
-						textRulesList.getRuleNames().add(rule.getName());
-						textRulesList.maxScales.add(rule
-								.getMaxScaleDenominator());
-						textRulesList.minScales.add(rule
-								.getMinScaleDenominator());
-
-						final Filter importFilter = rule.getFilter();
-						Filter realFilter = importFilter;
-						if (i == 0) {
-							LOGGER.debug("Importing the Default class filter");
-							textRulesList.getFilterRules().add(null); // TODO
-							// do we
-							// have
-							// to
-							// clone
-							// that?<
-							if (importFilter.toString().equals(
-									"[[ 1 = 2 ] AND [ 1 = 1 ]]"))
-								enabledAllFilters = false;
-							else
-								enabledAllFilters = true;
-						} else {
-							if (importFilter instanceof And) {
-								boolean secondPropExclusionWrapped = false;
-
-								// Two cases: Filter And 1=2 => This TS class is
-								// disabled
-								// or: Not(Or(null,"")) And Filter/And => This
-								// TS class is disabled
-								if (((And) importFilter).getChildren().get(0) instanceof Not) {
-									Not not = ((Not) ((And) importFilter)
-											.getChildren().get(0));
-									if (not.getFilter() instanceof Or) {
-										Or orNUllConditionsForSecond = (Or) not
-												.getFilter();
-										if (orNUllConditionsForSecond
-												.getChildren().get(0) instanceof PropertyIsNull) {
-
-											secondPropExclusionWrapped = true;
-
-										}
-									}
-								}
-
-								if (!secondPropExclusionWrapped) {
-									// Standard case...
-									realFilter = (Filter) ((And) importFilter)
-											.getChildren().get(1);
-									enabledAllFilters &= false; // TODO DISABLE
-									// CLASS
-								} else {
-									Filter testMe = (Filter) ((And) importFilter)
-											.getChildren().get(1);
-									if (testMe instanceof And) {
-										realFilter = (Filter) ((And) testMe)
-												.getChildren().get(1);
-										enabledAllFilters &= false; // TODO
-										// DISABLE
-										// CLASS
-									} else {
-										enabledAllFilters &= true;// NOt disable
-									}
-								}
-
-								textRulesList.getFilterRules().add(realFilter);
-								LOGGER
-										.debug("Imported a real filter that was disabled = "
-												+ realFilter.toString());
-							} else {
-								LOGGER
-										.debug("Imported a real filter that was enabled= "
-												+ realFilter.toString());
-								// This WHOLE TEXT class is enabled
-								textRulesList.getFilterRules()
-										.add(importFilter);
-							}
-						}
-
-					}
-
-					/*******************************************************
-					 * This checks if we have negated the Filer to simulate a
-					 * "diabled" state TODO das ist doch falsch.. hier enablen
-					 * wir alle classes.. aber nur diese eine hier ist
-					 * disabled...
-					 */
-					textRulesList.setEnabled(enabledAllFilters);
-					textRulesList.setSelIdx(0);
-
+					textRulesList.importRules( fts.rules());
 				}
 
 				else {
@@ -1035,8 +930,8 @@ public class AtlasStyler {
 				return style;
 			}
 
-//			LOGGER.info("*** The Style is generated from "
-//					+ lastChangedRuleList.getClass().getSimpleName());
+			// LOGGER.info("*** The Style is generated from "
+			// + lastChangedRuleList.getClass().getSimpleName());
 
 			if (avgNN != null) {
 
@@ -1157,7 +1052,7 @@ public class AtlasStyler {
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,
-							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); //i8n
+							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); // i8n
 			if (res == JOptionPane.YES_OPTION) {
 				final GraduatedColorPointRuleList gradColorRL = (GraduatedColorPointRuleList) lastChangedRuleList;
 				final SingleRuleList<?> template = gradColorRL.getTemplate();
@@ -1501,7 +1396,5 @@ public class AtlasStyler {
 			l.changed(new StyleChangedEvent(backupStyle));
 		}
 	}
-
-	
 
 }

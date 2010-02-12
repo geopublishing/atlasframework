@@ -136,10 +136,10 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private void initialize(
 			FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
-		this.setLayout(new MigLayout("w 100%, wrap 1", "[grow]", "[grow][][]"));
+		this.setLayout(new MigLayout("wrap 1", "[grow]", "[grow][][]"));
 		this.add(getPreviewMapPane(features), "top, growy, gap 0! 0! 0! 0!");
 
-		JPanel jPanelFont = new JPanel(new MigLayout("w 100%", "[grow]"));
+		JPanel jPanelFont = new JPanel(new MigLayout("", "[grow]"));
 		{
 
 			jPanelFont.add(new JLabel(AtlasStyler
@@ -639,7 +639,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private Style createPreviewStyle() {
 		final org.geotools.styling.TextSymbolizer tSymbolizer = rulesList
-				.getSymbolizers().get(rulesList.getSelectedIdx());
+				.getSymbolizer();
 
 		final Style style = StylingUtil.STYLE_BUILDER.createStyle();
 
@@ -783,11 +783,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		return jComboBoxPointPlacementAnchorY;
 	}
 
-	/**
-	 * This method initializes jComboBoX
-	 * 
-	 * @return javaX.swing.JComboBoX
-	 */
 	private JComboBox getJComboBoxAnchorX() {
 		if (jComboBoxPointPlacementAnchorX == null) {
 			jComboBoxPointPlacementAnchorX = new JComboBox();
@@ -812,7 +807,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 						pPlacement.getAnchorPoint().setAnchorPointX(
 								ASUtil.ff2.literal(e.getItem()));
 
-						// firePropertyChange(PROPERTX_UPDATED, null, null);
 						rulesList.fireEvents(new RuleChangedEvent(
 								"placement changed", rulesList));
 					}
@@ -864,7 +858,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private JPanel getJPanelPointPlacement() {
 		JPanel jPanelPlacement = new JPanel(new MigLayout(
-				"w 100%, wrap 3, fillx"), AtlasStyler
+				"wrap 3, fillx"), AtlasStyler
 				.R("TextRulesList.Button.PlacementProperties"));
 
 		// Avoid nulls and fill with default if needed
@@ -925,7 +919,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private JPanel getJPanelLinePlacement() {
 		JPanel jPanelPlacement = new JPanel(new MigLayout(
-				"w 100%, nogrid, fillx"), AtlasStyler
+				"nogrid, fillx"), AtlasStyler
 				.R("TextRulesList.Button.PlacementProperties"));
 		{
 

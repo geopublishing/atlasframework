@@ -64,12 +64,6 @@ public abstract class AbstractRuleList {
 	public void pushQuite() {
 		stackQuites.push(quite);
 		setQuite(true);
-		
-//		AbstractRuleList abstractRuleList = AbstractRuleList.this;
-//		if (abstractRuleList instanceof GraduatedColorPolygonRuleList) {
-//			System.err.println(stackQuites+ "   now true"+" "+abstractRuleList);
-//		}
-
 	}
 
 	/**
@@ -89,11 +83,6 @@ public abstract class AbstractRuleList {
 					+ stackQuites.size() + " 'quites' still on the stack");
 		}
 		
-//		AbstractRuleList abstractRuleList = AbstractRuleList.this;
-//		if (abstractRuleList instanceof GraduatedColorPolygonRuleList) {
-//			System.err.println(stackQuites+ "   now "+isQuite()+" "+abstractRuleList);
-//		}
-
 	}
 
 	public void popQuite(RuleChangedEvent ruleChangedEvent) {
@@ -210,7 +199,11 @@ public abstract class AbstractRuleList {
 					+ rce.toString());
 
 		for (RuleChangeListener l : listeners) {
-			l.changed(rce);
+			try {
+				l.changed(rce);
+			} catch (Exception e) {
+				LOGGER.error("While fireEvents: "+rce,e);
+			}
 		}
 	}
 
