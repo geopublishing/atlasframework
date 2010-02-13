@@ -61,7 +61,7 @@ public class QuantClassificationTest extends TestCase{
 	public void testQuantile() throws IOException, InterruptedException {
 
 		final QuantitiesClassification clfcn = new QuantitiesClassification(
-				new StyledFS(featureSource_polygon), "POP_CNTRY");
+				null,new StyledFS(featureSource_polygon), "POP_CNTRY");
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(METHOD.QUANTILES);
 		clfcn.setNumClasses(10);
@@ -83,7 +83,7 @@ public class QuantClassificationTest extends TestCase{
 			InterruptedException {
 
 		final QuantitiesClassification clfcn = new QuantitiesClassification(
-				new StyledFS(featureSource_polygon), "POP_CNTRY", "SQKM_CNTRY");
+				null,new StyledFS(featureSource_polygon), "POP_CNTRY", "SQKM_CNTRY");
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(METHOD.QUANTILES);
 		clfcn.setNumClasses(5);
@@ -106,7 +106,7 @@ public class QuantClassificationTest extends TestCase{
 		// Filter exclude = ff.less(ff.property("POP_CNTRY"), ff.literal(100));
 
 		final QuantitiesClassification clfcn = new QuantitiesClassification(
-				new StyledFS(featureSource_polygon), "SQKM_CNTRY", null);
+				null,new StyledFS(featureSource_polygon), "SQKM_CNTRY", null);
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(METHOD.QUANTILES);
 		clfcn.setNumClasses(4);
@@ -127,7 +127,7 @@ public class QuantClassificationTest extends TestCase{
 			InterruptedException {
 
 		// Filter exclude = ff.less(ff.property("POP_CNTRY"), ff.literal(100));
-		final QuantitiesClassification clfcn = new QuantitiesClassification(new StyledFS(featureSource_polygon));
+		final QuantitiesClassification clfcn = new QuantitiesClassification(null,new StyledFS(featureSource_polygon));
 
 		clfcn.setRecalcAutomatically(false);
 
@@ -154,7 +154,7 @@ public class QuantClassificationTest extends TestCase{
 	@Test
 	public void testQEqualInterval() throws IOException, InterruptedException {
 
-		QuantitiesClassification clfcn = new QuantitiesClassification(new StyledFS(featureSource_polygon), "POP_CNTRY");
+		QuantitiesClassification clfcn = new QuantitiesClassification(null,new StyledFS(featureSource_polygon), "POP_CNTRY");
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(METHOD.EI);
 		clfcn.setNumClasses(4);
@@ -175,7 +175,7 @@ public class QuantClassificationTest extends TestCase{
 		// Filter exclude = ff.equals(ff.property("LANDLOCKED"),
 		// ff.literal("N"));
 		QuantitiesClassification clfcn = new QuantitiesClassification(
-				new StyledFS(featureSource_polygon), "POP_CNTRY", null);
+				null,new StyledFS(featureSource_polygon), "POP_CNTRY", null);
 		clfcn.setRecalcAutomatically(false);
 
 		clfcn.setMethod(METHOD.EI);
@@ -198,7 +198,7 @@ public class QuantClassificationTest extends TestCase{
 	public void testChangeOfValueFieldNameAndReusingTheObject()
 			throws IOException, InterruptedException {
 
-		final QuantitiesClassification clfcn = new QuantitiesClassification(new StyledFS(featureSource_polygon), "SQMI_CNTRY");
+		final QuantitiesClassification clfcn = new QuantitiesClassification(null,new StyledFS(featureSource_polygon), "SQMI_CNTRY");
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(METHOD.QUANTILES);
 		clfcn.setNumClasses(3);
