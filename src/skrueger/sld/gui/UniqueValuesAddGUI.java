@@ -49,7 +49,7 @@ public class UniqueValuesAddGUI extends JDialog {
 	private static final Logger LOGGER = Logger
 			.getLogger(UniqueValuesAddGUI.class);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private JPanel jContentPane = null;
 

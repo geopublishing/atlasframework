@@ -11,9 +11,7 @@
 package skrueger.sld.gui;
 
 import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -23,10 +21,13 @@ import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
@@ -61,13 +62,9 @@ import skrueger.swing.ThinButton;
 public class TextRuleListGUI extends JPanel {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	private static final long serialVersionUID = 1L;
-
 	private JCheckBox jCheckBoxEnabled = null;
 
 	private JPanel jPanelClass = null;
-
-	private JLabel jLabelClass = null;
 
 	private JComboBox jComboBoxClass = null;
 
@@ -119,15 +116,6 @@ public class TextRuleListGUI extends JPanel {
 		jButtonClassFromSymbols.setEnabled(!(atlasStyler
 				.getLastChangedRuleList() instanceof SingleRuleList));
 
-		jComboBoxClass.addItemListener(new ItemListener() {
-
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
-					rulesList.setSelIdx(jComboBoxClass.getSelectedIndex());
-					updateGUI();
-				}
-			}
-		});
 	}
 
 	protected void updateGUI() {
@@ -220,8 +208,8 @@ public class TextRuleListGUI extends JPanel {
 		/***********************************************************************
 		 * Class management buttons
 		 */
-		jButtonClassDelete.setEnabled(jComboBoxClass.getSelectedIndex() != 0);
-		jButtonClassRename.setEnabled(jComboBoxClass.getSelectedIndex() != 0);
+		jButtonClassDelete.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
+		jButtonClassRename.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
 		
 
 		// Change the state of the class enabled CB
@@ -281,67 +269,22 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JPanel getJPanelClass() {
 		if (jPanelClass == null) {
-			GridBagConstraints gridBagConstraints17 = new GridBagConstraints();
-			gridBagConstraints17.gridx = 3;
-			gridBagConstraints17.weightx = 0.1;
-			gridBagConstraints17.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints17.gridy = 4;
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.gridx = 0;
-			gridBagConstraints16.gridwidth = 3;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints16.gridy = 4;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 0;
-			gridBagConstraints15.weightx = 1.0;
-			gridBagConstraints15.gridwidth = 4;
-			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.insets = new Insets(5, 0, 0, 0);
-			gridBagConstraints15.gridy = 3;
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.gridx = 0;
-			gridBagConstraints12.gridwidth = 4;
-			gridBagConstraints12.weightx = 1.0;
-			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.insets = new Insets(5, 0, 0, 0);
-			gridBagConstraints12.gridy = 2;
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridwidth = 4;
-			gridBagConstraints7.gridy = 1;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 2;
-			gridBagConstraints5.anchor = GridBagConstraints.EAST;
-			gridBagConstraints5.insets = new Insets(5, 10, 5, 0);
-			gridBagConstraints5.gridy = 0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.gridy = 0;
-			gridBagConstraints4.weightx = 1.0;
-			gridBagConstraints4.anchor = GridBagConstraints.WEST;
-			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints4.gridx = 1;
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.gridx = 0;
-			gridBagConstraints3.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints3.gridy = 0;
-			jLabelClass = new JLabel(AtlasStyler.R("TextRulesList.Labelclass"));
-			jPanelClass = new JPanel();
-			jPanelClass.setLayout(new GridBagLayout());
-			// jPanelClass.setBorder(BorderFactory.createTitledBorder(""));
-			jPanelClass.add(jLabelClass, gridBagConstraints3);
-			jPanelClass.add(getJComboBoxClass(), gridBagConstraints4);
-			jPanelClass.add(getJCheckBoxClassEnabled(), gridBagConstraints5);
-			jPanelClass.add(getJPanelClassButtons(), gridBagConstraints7);
-			jPanelClass.add(getJPanelLabelDefinition(), gridBagConstraints12);
+		
+			jPanelClass = new JPanel(new MigLayout("nogrid"));
+			
+			jPanelClass.add(new JLabel(AtlasStyler.R("TextRulesList.Labelclass")+":"));
+			jPanelClass.add(getJComboBoxClass());
+			jPanelClass.add(getJCheckBoxClassEnabled(),"wrap");
+			
+//			jPanelClass.add(getJButtonClassAdd());
 			jPanelClass
-					.add(getJPanelEditTextSymbolizer(), gridBagConstraints15);
-
-			// jPanelClass.add(getJPanel(), gridBagConstraints17);
+			.add(getJButtonClassDelete());
+			jPanelClass.add(getJButtonClassRename());
+			jPanelClass.add(getJButtonClassFromSymbols(),"wrap");
+			
+			jPanelClass.add(getJPanelLabelDefinition(), "wrap");
+			jPanelClass
+					.add(getJPanelEditTextSymbolizer());
 		}
 		return jPanelClass;
 	}
@@ -360,6 +303,41 @@ public class TextRuleListGUI extends JPanel {
 			jComboBoxClass.setSelectedIndex(0);
 
 			ASUtil.addMouseWheelForCombobox(jComboBoxClass, false);
+			
+			jComboBoxClass.setRenderer( new DefaultListCellRenderer() {
+				@Override
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
+						boolean cellHasFocus) {
+					
+					JComponent superT = (JComponent)super.getListCellRendererComponent(list, value, index, isSelected,
+							cellHasFocus);
+
+					if (index >= 0 && index < rulesList.getClassesFilters().size())
+						superT.setToolTipText("<html>"+rulesList.getClassesFilters().get(index).toString()+"</html>");
+					else 
+						superT.setToolTipText(null);
+					
+					return superT;
+				}
+			});
+			
+			jComboBoxClass.addItemListener(new ItemListener() {
+
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						rulesList.setSelIdx(getJComboBoxClass().getSelectedIndex());
+
+						// Update the tool-tip
+						getJComboBoxClass().setToolTipText("<html>"+rulesList.getClassesFilters().get(getJComboBoxClass().getSelectedIndex()).toString()+"</html>");
+						
+						updateGUI();
+					}
+				}
+			});
+			
+			// Update the tool-tip
+			jComboBoxClass.setToolTipText("<html>"+rulesList.getClassesFilters().get(getJComboBoxClass().getSelectedIndex()).toString()+"</html>");
 		}
 		return jComboBoxClass;
 	}
@@ -398,46 +376,6 @@ public class TextRuleListGUI extends JPanel {
 					getJCheckBoxClassEnabled().isSelected() && getJCheckBoxEnabled().isSelected());
 			getJPanelLabelDefinition().setEnabled(
 					getJCheckBoxClassEnabled().isSelected() && getJCheckBoxEnabled().isSelected());
-	}
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanelClassButtons() {
-		if (jPanelClassButtons == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.gridx = 3;
-			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.insets = new Insets(5, 0, 5, 5);
-			gridBagConstraints11.gridy = 0;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 2;
-			gridBagConstraints10.weightx = 1.0;
-			gridBagConstraints10.insets = new Insets(5, 0, 5, 0);
-			gridBagConstraints10.gridy = 0;
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.gridx = 1;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.insets = new Insets(5, 0, 5, 0);
-			gridBagConstraints9.gridy = 0;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.insets = new Insets(5, 5, 5, 0);
-			gridBagConstraints8.gridy = 0;
-			jPanelClassButtons = new JPanel();
-			jPanelClassButtons.setLayout(new GridBagLayout());
-			jPanelClassButtons.add(getJButtonClassAdd(), gridBagConstraints8);
-			jPanelClassButtons
-					.add(getJButtonClassDelete(), gridBagConstraints9);
-			jPanelClassButtons.add(getJButtonClassRename(),
-					gridBagConstraints10);
-			jPanelClassButtons.add(getJButtonClassFromSymbols(),
-					gridBagConstraints11);
-		}
-		return jPanelClassButtons;
 	}
 
 	/**
@@ -482,7 +420,7 @@ public class TextRuleListGUI extends JPanel {
 					rulesList.getSymbolizers().remove(idx);
 					rulesList.getClassesFilters().remove(idx);
 					rulesList.getRuleNames().remove(idx);
-					jComboBoxClass.setModel(new DefaultComboBoxModel(rulesList
+					getJComboBoxClass().setModel(new DefaultComboBoxModel(rulesList
 							.getRuleNames().toArray()));
 					rulesList.removeClassMinScale(idx);
 					rulesList.removeClassMaxScale(idx);
@@ -520,9 +458,9 @@ public class TextRuleListGUI extends JPanel {
 						// wouldn't really matter
 						rulesList.getRuleNames().set(
 								rulesList.getSelIdx(), result);
-						jComboBoxClass.setModel(new DefaultComboBoxModel(
+						getJComboBoxClass().setModel(new DefaultComboBoxModel(
 								rulesList.getRuleNames().toArray()));
-						jComboBoxClass.setSelectedIndex(rulesList
+						getJComboBoxClass().setSelectedIndex(rulesList
 								.getSelIdx());
 					}
 				}
@@ -554,9 +492,9 @@ public class TextRuleListGUI extends JPanel {
 					rulesList.importClassesFromStyle(symbRL,
 							TextRuleListGUI.this);
 
-					jComboBoxClass.setModel(new DefaultComboBoxModel(rulesList
+					getJComboBoxClass().setModel(new DefaultComboBoxModel(rulesList
 							.getRuleNames().toArray()));
-					jComboBoxClass.setSelectedIndex(0);
+					getJComboBoxClass().setSelectedIndex(0);
 				}
 			});
 
@@ -574,7 +512,7 @@ public class TextRuleListGUI extends JPanel {
 
 		if (jPanelLabelDefinition == null) {
 
-			jPanelLabelDefinition = new JPanel(new MigLayout(" wrap 3"),
+			jPanelLabelDefinition = new JPanel(new MigLayout("wrap 2"),
 					AtlasStyler.R("TextRulesList.Labeltext.Title"));
 
 			{
@@ -623,7 +561,21 @@ public class TextRuleListGUI extends JPanel {
 				jPanelLabelDefinition.add(new JLabel(AtlasStyler
 						.R("TextRulesList.LabellingAttribute")));
 				jPanelLabelDefinition.add(jComboBoxLabelField);
+				
+			}
+			
+			{
+				// Second label
+				
+				JLabel comp = new JLabel(AtlasStyler
+						.R("TextRulesList.2ndLabellingAttribute"));
+				comp.setToolTipText( AtlasStyler.R("TextRulesList.2ndLabellingAttribute") );
+				
+				jPanelLabelDefinition.add(comp);
+				
 				jPanelLabelDefinition.add(getJComboBoxLabelField2());
+				
+				getJComboBoxLabelField2().setToolTipText( AtlasStyler.R("TextRulesList.2ndLabellingAttribute") );
 			}
 
 			{

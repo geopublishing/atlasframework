@@ -159,4 +159,8 @@ public abstract class Classification {
 	public boolean isQuite() {
 		return quite;
 	}
+	
+	public void dispose() {
+		listeners.clear();
+	}
 }

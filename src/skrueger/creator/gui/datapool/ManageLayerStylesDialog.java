@@ -92,7 +92,7 @@ public class ManageLayerStylesDialog extends JDialog {
 
 	private static TranslationAskJDialog ask;
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private JPanel jContentPane = null;
 

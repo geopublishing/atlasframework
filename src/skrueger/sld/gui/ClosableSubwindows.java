@@ -14,7 +14,9 @@ import java.awt.Window;
 
 import org.geotools.util.WeakHashSet;
 
-public interface ClosableSubwindows {
+import skrueger.swing.Disposable;
+
+public interface ClosableSubwindows extends Disposable {
 
 	/** All GUIs have to register their open GUIs here.. thereby */
 	public WeakHashSet<Window> openWindows = new WeakHashSet<Window>(Window.class);

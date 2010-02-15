@@ -12,8 +12,9 @@ package skrueger.atlas.gui;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Vector;
+import java.util.WeakHashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -39,6 +40,7 @@ import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.geotools.StyledFeaturesInterface;
+import skrueger.geotools.XMapPane;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModel;
@@ -48,31 +50,44 @@ import skrueger.swing.OkButton;
 import skrueger.swing.SmallButton;
 
 public class AtlasChartJDialog extends AtlasDialog {
+
 	final static Logger LOGGER = Logger.getLogger(AtlasChartJDialog.class);
-
-	private final StyledFeaturesInterface<?> styledLayer;
-
-	// /** A cache that manages maximum one instance of this class per layer **/
-	// protected volatile static HashMap<String, AtlasChartJDialog> dialogCache
-	// = new HashMap<String, AtlasChartJDialog>();
 
 	protected final ChartStyle chartStyle;
 
-	private final SelectableXMapPane mapPane;
-
+	/**
+	 * This {@link AtlasChartJPanel} actually displays the chart.
+	 */
 	protected volatile AtlasChartJPanel chartPanel;
 
+	/**
+	 * A reference to the {@link MapLegend} of the {@link XMapPane} that shows
+	 * the geometries for the data-points.
+	 **/
 	private final MapLegend mapLegend;
 
 	/**
-	 * A private reference to the listeners. When nulled in dispose, the
-	 * WeakHashMap forgets about them
+	 * A reference to the {@link SelectableXMapPane} that shows the geometries
+	 * for the data-points.
+	 **/
+	private SelectableXMapPane mapPane;
+
+	/**
+	 * The {@link StyledFeaturesInterface} this {@link ChartStyle} is based on
+	 **/
+	private final StyledFeaturesInterface<?> styledLayer;
+
+	/**
+	 * Private references to the listeners that have been inserted by this
+	 * class. In {@link #dispose()}, the reverence are nulled and any
+	 * {@link WeakHashMap} forgets about the listeners.
 	 */
-	private Vector<ChartSelectionSynchronizer> insertedListeners = new Vector<ChartSelectionSynchronizer>();
+	private HashSet<ChartSelectionSynchronizer> listenersWeInserted = new HashSet<ChartSelectionSynchronizer>();
 
 	public AtlasChartJDialog(final Component owner,
 			final ChartStyle chartStyle, final MapLegend mapLegend,
 			final StyledFeaturesInterface<?> styledLayer_) {
+
 		super(owner);
 
 		this.chartStyle = chartStyle;
@@ -93,8 +108,9 @@ public class AtlasChartJDialog extends AtlasDialog {
 		// .getFilter() : Filter.INCLUDE;
 
 		initGUI();
-		
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHWEST);
+
+		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
+				SwingUtil.NORTHWEST);
 	}
 
 	/**
@@ -104,14 +120,30 @@ public class AtlasChartJDialog extends AtlasDialog {
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		if (chartPanel == null) {
+			
+			
 
 			JFreeChart chart;
 
 			if (getChartStyle() instanceof FeatureChartStyle) {
 				final FeatureChartStyle fschart = (FeatureChartStyle) getChartStyle();
+				
+				// Check if normalization is enabled, and then configure the
+				// visualization of unit strings accordingly.
+				// If the first attribute is normalized, all are!
+				// This check is also done in updateChart method. 
+				{
+					boolean visible = !fschart.isAttributeNormalized(0);
+					for (int axisIdx = 0; axisIdx < fschart.getAxisCount(); axisIdx++) {
+						fschart.getAxisStyle(axisIdx).setUnitVisible(visible);
+					}
+				}
+
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						AtlasChartJDialog.this, AtlasViewer.R("dialog.title.wait"), AtlasViewer.R("dialog.title.wait")); 
+						AtlasChartJDialog.this, AtlasViewer
+								.R("dialog.title.wait"), AtlasViewer
+								.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
@@ -153,23 +185,21 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 				for (final FeatureDatasetSelectionModel<?, ?, ?> dsm : datasetSelectionModelFor) {
 
-					// Create a ChartSelectionSynchronizer and connect
-					// StyledFeatureLayerSelectionModel <->
-					// FeatureDatasetSelectionModel
-
 					final ChartSelectionSynchronizer synchronizer = new ChartSelectionSynchronizer(
 							selectionModel, dsm);
 
-					insertedListeners.add(synchronizer);
 
+					// Add the synchronizer as a listener 
 					selectionModel
 							.addSelectionListener((StyledLayerSelectionModelSynchronizer) synchronizer);
 					dsm.addSelectionListener(synchronizer);
+					
+					// Keep a reference to the listener, as they may be stored in a WeakHashMap. We remove all listeners in the #dispose() method.  
+					listenersWeInserted.add(synchronizer);
 
 					selectionModel.refreshSelection();
 				}
 			}
-
 
 		}
 		return chartPanel;
@@ -180,25 +210,28 @@ public class AtlasChartJDialog extends AtlasDialog {
 	 */
 	protected void initGUI() {
 		setTitle(getChartStyle().getTitleStyle().getLabel());
-		
+
 		JPanel contentpane = new JPanel(new MigLayout());
 
-		contentpane.add(getChartPanel(getMapLegend(), getStyledLayer()),"top, wrap");
+		contentpane.add(getChartPanel(getMapLegend(), getStyledLayer()),
+				"top, wrap");
 
-		getChartPanel(mapLegend, styledLayer).addZoomToFeatureExtends(mapPane, mapLegend, getStyledLayer(),
+		getChartPanel(mapLegend, styledLayer).addZoomToFeatureExtends(mapPane,
+				mapLegend, getStyledLayer(),
 				getChartPanel(mapLegend, getStyledLayer()));
-		
-		// Adds an ACTION button to zoom to the full extent of the chart		
-		chartPanel.getToolBar().add( createZoomToFullChartExtentButton(chartPanel, chartStyle),0);
-		
-		contentpane.add( getButtonsPanel(),"growx");
+
+		// Adds an ACTION button to zoom to the full extent of the chart
+		chartPanel.getToolBar().add(
+				createZoomToFullChartExtentButton(chartPanel, chartStyle), 0);
+
+		contentpane.add(getButtonsPanel(), "growx");
 
 		setContentPane(contentpane);
 		pack();
 	}
 
 	private JPanel getButtonsPanel() {
-		JPanel buttons = new JPanel(new MigLayout("fillx","[100%]"));
+		JPanel buttons = new JPanel(new MigLayout("fillx", "[100%]"));
 
 		{
 			buttons.add(new OkButton(new AbstractAction() {
@@ -219,9 +252,11 @@ public class AtlasChartJDialog extends AtlasDialog {
 	 * the chart to full extends. has to be done in the
 	 * {@link AtlasChartJDialog}, because {@link AtlasChartJPanel} doesn't know
 	 * about the {@link ChartStyle}.
-	 * @return 
+	 * 
+	 * @return
 	 */
-	public static JButton createZoomToFullChartExtentButton(final AtlasChartJPanel chartPanel, final ChartStyle chartStyle) {
+	public static JButton createZoomToFullChartExtentButton(
+			final AtlasChartJPanel chartPanel, final ChartStyle chartStyle) {
 		/**
 		 * Add an Action to SET the selection.
 		 */
@@ -232,20 +267,19 @@ public class AtlasChartJDialog extends AtlasDialog {
 			public void actionPerformed(ActionEvent e) {
 
 				if (chartStyle.getPlotStyle() != null) {
-					JFreeChartUtil.zoomPlotToFullExtend(chartPanel.getChart().getPlot(),
-							null, chartStyle.getPlotStyle()
-									.isCenterOriginSymetrically());
+					JFreeChartUtil.zoomPlotToFullExtend(chartPanel.getChart()
+							.getPlot(), null, chartStyle.getPlotStyle()
+							.isCenterOriginSymetrically());
 				} else {
-					JFreeChartUtil.zoomPlotToFullExtend(chartPanel.getChart().getPlot(),
-							null, false);
+					JFreeChartUtil.zoomPlotToFullExtend(chartPanel.getChart()
+							.getPlot(), null, false);
 				}
 			}
 
 		}, AtlasViewer.R("AtlasChartJPanel.zoomFullExtent.tt"));
-		
+
 		return resetZoomTool;
 	}
-
 
 	public ChartStyle getChartStyle() {
 		return chartStyle;
@@ -278,19 +312,22 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 	@Override
 	public void dispose() {
-		
-		if (isDisposed) return;
 
-		for (ChartSelectionSynchronizer d : insertedListeners) {
+		if (isDisposed)
+			return;
+
+		// Remove all references to synchronizers we added. This makes the WeakHashMap will forget about them.
+		for (ChartSelectionSynchronizer d : listenersWeInserted) {
 			d.setEnabled(false);
 			d = null;
 		}
-		insertedListeners.clear();
+		listenersWeInserted.clear();
+		
 
 		if (chartPanel != null)
 			chartPanel.dispose();
 		chartPanel = null;
-		
+
 		super.dispose();
 	}
 }

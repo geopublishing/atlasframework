@@ -64,7 +64,7 @@ import skrueger.swing.ColorButton;
 public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private JComboBox jComboBoxSize = null;
 
@@ -570,7 +570,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		rulesList.addListener(ruleChangedUpadteThePreview);
 
 		// mapPane.setMinimumSize(new Dimension(300, 40));
-		mapPane.setMinimumSize(new Dimension(490, 170));
+		mapPane.setMinimumSize(new Dimension(500, 170));
 
 		// A mouse listener to toggel anti-aliasing
 		mapPane.addMouseListener(new MouseAdapter() {

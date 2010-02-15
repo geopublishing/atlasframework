@@ -46,7 +46,7 @@ import com.vividsolutions.jts.geom.Polygon;
 public class GraphicEditGUIinDialog extends JDialog {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private JPanel jContentPane = null;
 

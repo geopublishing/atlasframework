@@ -13,8 +13,6 @@ package skrueger.sld.classification;
 import hep.aida.bin.DynamicBin1D;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.TreeSet;
 import java.util.concurrent.CancellationException;
@@ -26,7 +24,6 @@ import javax.swing.DefaultComboBoxModel;
 import org.apache.log4j.Logger;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
-import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.Attribute;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -55,8 +52,7 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	final static DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
-			new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
+//	static DefaultComboBoxModel nClassesComboBoxModel;
 
 	/**
 	 * This CONSTANT is only used in the JCombobox. NORMALIZER_FIELD String is
@@ -66,6 +62,13 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	@Override
 	public void fireEvent(final ClassificationChangeEvent e) {
+
+		if (isQuite()) {
+			lastOpressedEvent = e;
+			return;
+		} else {
+			lastOpressedEvent = null;
+		}
 
 		if (e.getType() == CHANGETYPES.START_NEW_STAT_CALCULATION
 				&& getMethod() == METHOD.MANUAL)
@@ -222,6 +225,9 @@ public class QuantitiesClassification extends FeatureClassification {
 	 *         Not it always returns a list of numbers.
 	 */
 	public ComboBoxModel getClassificationParameterComboBoxModel() {
+		
+		DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
+					new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
 
 		switch (classificationMethod) {
 		case EI:
@@ -506,6 +512,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * Help the GC to clean up this object.
 	 */
 	public void dispose() {
+		super.dispose();
 		stats = null;
 	}
 
@@ -617,28 +624,6 @@ public class QuantitiesClassification extends FeatureClassification {
 					InterruptedException {
 				return calculateClassLimitsBlocking();
 			}
-			//
-			// @Override
-			// protected void done() {
-			// LOGGER
-			// .debug("DONE with calculateStatisticsWorker\n  new numCLasses = "
-			// + classLimits.size() + " " + numClasses);
-			// try {
-			//
-			// if (!cancelCalculation) {
-			//
-			// LOGGER.debug("newLimits = " + newLimits);
-			//
-			// }
-			// } catch (final Exception e) {
-			// LOGGER
-			// .info(
-			// "calculateStatisticsWorker finished with Exception:",
-			// e);
-			// // ExceptionDialog.show(null, e);
-			// } finally {
-			// }
-			// }
 
 		};
 
@@ -647,12 +632,15 @@ public class QuantitiesClassification extends FeatureClassification {
 		try {
 			newLimits = calculateStatisticsWorker.executeModal();
 			setClassLimits(newLimits);
-		} catch (InterruptedException e) {
-		} catch (CancellationException e) {
-		} catch (ExecutionException exception) {
-			ExceptionMonitor.show(owner, exception);
-		} finally {
 			popQuite();
+		} catch (InterruptedException e) {
+			setQuite(stackQuites.pop());
+		} catch (CancellationException e) {
+			setQuite(stackQuites.pop());
+		} catch (ExecutionException exception) {
+//			ExceptionMonitor.show(owner, exception);
+			setQuite(stackQuites.pop());
+		} finally {
 		}
 
 	}

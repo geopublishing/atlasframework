@@ -92,7 +92,7 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 	final static private Logger LOGGER = ASUtil
 			.createLogger(AtlasStylerGUI3.class);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private StylerMapView stylerMapView = null;
 

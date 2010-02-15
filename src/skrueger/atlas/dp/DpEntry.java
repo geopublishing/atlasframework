@@ -243,12 +243,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (url == null) {
 			String location = ac.getResouceBasename() + getDataDirname() + "/"
 					+ getFilename();
-//			LOGGER.debug("looking for the URL of " + location);
-			// TODO Etwas machen, wenn man offline ist!
+
 			if (JNLPUtil.isAtlasDataFromJWS()) {
-//				System.out
-//						.println(" .. we are in JWS context.. try to load part if it is not cached already");// TODO
-//																												// remove
 				try {
 					JNLPUtil.loadPart(getId(), statusDialog);
 					//TODO was ist wenn man abbricht?!
@@ -259,9 +255,6 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 
 			url = AtlasConfig.getResLoMan().getResourceAsUrl(location);
 			
-//			LOGGER.debug("AtlasConfig.getResLoMan().getResourceAsUrl( "
-//					+ location + "  = " + url);
-
 			// Testing if we really can see it in the resources now...
 			try {
 				InputStream openStream = url.openStream();

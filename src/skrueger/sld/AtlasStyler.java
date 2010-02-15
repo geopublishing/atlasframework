@@ -35,14 +35,8 @@ import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
-import org.geotools.styling.TextSymbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.type.GeometryDescriptor;
-import org.opengis.filter.And;
-import org.opengis.filter.Filter;
-import org.opengis.filter.Not;
-import org.opengis.filter.Or;
-import org.opengis.filter.PropertyIsNull;
 import org.opengis.util.InternationalString;
 
 import schmitzm.geotools.feature.FeatureUtil;
@@ -144,7 +138,7 @@ public class AtlasStyler {
 	private final RuleChangeListener listenerFireStyleChange = new RuleChangeListener() {
 
 		public void changed(final RuleChangedEvent e) {
-			style = null;
+			xxxstyle = null;
 
 			// Only the lastChangedRule will be used to create the Style
 			final AbstractRuleList someRuleList = e.getSourceRL();
@@ -180,7 +174,7 @@ public class AtlasStyler {
 	 * The cache for the {@link Style} that is generated when
 	 * {@link #getStyle()} is called.
 	 */
-	protected Style style = null;
+	protected Style xxxstyle = null;
 
 	/***************************************************************************
 	 * {@link AbstractRuleList}s aka RuleLists that this {@link AtlasStyler}
@@ -294,7 +288,7 @@ public class AtlasStyler {
 	private AbstractRuleList lastChangedRuleList;
 
 	/** If true, no Events will be fired to listeners */
-	private boolean quite = false;
+	private boolean quite = true;
 
 	/**
 	 * Holds optional meta-information about the datasource. If not set, this
@@ -383,7 +377,7 @@ public class AtlasStyler {
 	 */
 	public void reset() {
 
-		style = null;
+		xxxstyle = null;
 
 		lastChangedRuleList = null;
 
@@ -514,36 +508,45 @@ public class AtlasStyler {
 
 					singleRuleList.pushQuite();
 
-					// singleRuleList.setStyleTitle(importStyle.getTitle());
-					// singleRuleList.setStyleAbstract(importStyle.getAbstract());
-
-					singleRuleList.getSymbolizers().clear();
-
-					/** This stuff is the same for all three SINGLE_RULES types */
-					singleRuleList.addSymbolizers(symbs);
-
-					singleRuleList.reverseSymbolizers();
-
-					// We had some stupid AbstractMethodException here...
 					try {
-						final Description description = rule.getDescription();
-						final InternationalString title2 = description
-								.getTitle();
-						singleRuleList.setTitle(title2.toString());
-					} catch (final NullPointerException e) {
-						LOGGER.warn("The title style to import has been null!");
-						singleRuleList.setTitle("");
-					} catch (final Exception e) {
-						LOGGER
-								.error(
-										"The title style to import could not been set!",
-										e);
-						singleRuleList.setTitle("");
+
+						// singleRuleList.setStyleTitle(importStyle.getTitle());
+						// singleRuleList.setStyleAbstract(importStyle.getAbstract());
+
+						singleRuleList.getSymbolizers().clear();
+
+						/**
+						 * This stuff is the same for all three SINGLE_RULES
+						 * types
+						 */
+						singleRuleList.addSymbolizers(symbs);
+
+						singleRuleList.reverseSymbolizers();
+
+						// We had some stupid AbstractMethodException here...
+						try {
+							final Description description = rule
+									.getDescription();
+							final InternationalString title2 = description
+									.getTitle();
+							singleRuleList.setTitle(title2.toString());
+						} catch (final NullPointerException e) {
+							LOGGER
+									.warn("The title style to import has been null!");
+							singleRuleList.setTitle("");
+						} catch (final Exception e) {
+							LOGGER
+									.error(
+											"The title style to import could not been set!",
+											e);
+							singleRuleList.setTitle("");
+						}
+
+						importedThisAbstractRuleList = singleRuleList;
+
+					} finally {
+						singleRuleList.popQuite();
 					}
-
-					importedThisAbstractRuleList = singleRuleList;
-
-					singleRuleList.popQuite();
 				}
 
 				/***************************************************************
@@ -758,7 +761,7 @@ public class AtlasStyler {
 				else if (metaInfoString.startsWith(RulesListType.TEXT_LABEL
 						.toString())) {
 					final TextRuleList textRulesList = getTextRulesList();
-					textRulesList.importRules( fts.rules());
+					textRulesList.importRules(fts.rules());
 				}
 
 				else {
@@ -859,16 +862,20 @@ public class AtlasStyler {
 			return;
 		}
 
-		LOGGER.info(" FIREING EVENT to " + listeners.size());
+//		LOGGER.info(" FIREING EVENT to " + listeners.size());
 
-		// try {
-		style = null;
-		final Style style2 = getStyle();
-		if (style2 == null)
+		xxxstyle = null;
+		xxxstyle = getStyle();
+		if (xxxstyle == null)
 			return;
+		
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
-			l.changed(new StyleChangedEvent(style2));
+			try {
+				l.changed(new StyleChangedEvent(xxxstyle));
+			} catch (Exception e) {
+				LOGGER.error(e);
+			}
 		}
 	}
 
@@ -895,11 +902,11 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	protected boolean isQuite() {
+	public boolean isQuite() {
 		return quite;
 	}
 
-	protected void setQuite(final boolean quite) {
+	public void setQuite(final boolean quite) {
 		this.quite = quite;
 	}
 
@@ -911,23 +918,23 @@ public class AtlasStyler {
 	 *         Kr&uuml;ger</a>
 	 */
 	public Style getStyle() {
-		if (style == null) {
+		if (xxxstyle == null) {
 
 			// Create an empty Style without any FeatureTypeStlyes
-			style = ASUtil.SB.createStyle();
+			xxxstyle = ASUtil.SB.createStyle();
 
-			style.setName("AtlasStyler " + AVUtil.getVersionInfo());
+			xxxstyle.setName("AtlasStyler " + AVUtil.getVersionInfo());
 
 			if (lastChangedRuleList == null) {
 
 				LOGGER
 						.warn("Returning empty style because no lastChangedRuleList==null");
 
-				style
+				xxxstyle
 						.getDescription()
 						.setTitle(
 								"AS:Returning empty style because no lastChangedRuleList==null");
-				return style;
+				return xxxstyle;
 			}
 
 			// LOGGER.info("*** The Style is generated from "
@@ -955,13 +962,13 @@ public class AtlasStyler {
 
 			}
 
-			style.featureTypeStyles().add(getLastChangedRuleList().getFTS());
+			xxxstyle.featureTypeStyles().add(getLastChangedRuleList().getFTS());
 
-			style.featureTypeStyles().add(getTextRulesList().getFTS());
+			xxxstyle.featureTypeStyles().add(getTextRulesList().getFTS());
 			//
 			// // TODO Remove
 			try {
-				StylingUtil.saveStyleToSLD(style, new File(
+				StylingUtil.saveStyleToSLD(xxxstyle, new File(
 						"/home/stefan/Desktop/update.sld"));
 			} catch (final TransformerException e) {
 				LOGGER.error("Transforming to XML failed!", e);
@@ -969,7 +976,7 @@ public class AtlasStyler {
 			}
 
 		}
-		return style;
+		return xxxstyle;
 	}
 
 	public GraduatedColorRuleList getGraduatedColorRuleList(
@@ -1038,7 +1045,14 @@ public class AtlasStyler {
 	public SinglePointSymbolRuleList getSinglePointSymbolRulesList() {
 		if (singlePointSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
+			
 			singlePointSymbolRuleList = new SinglePointSymbolRuleList(title2);
+
+			if (lastChangedRuleList != null) {
+				// We have already imported a Style and we fill this RuleList with a default layer.
+				singlePointSymbolRuleList.addNewDefaultLayer();
+			}
+			
 			singlePointSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singlePointSymbolRuleList);
 		}
@@ -1065,21 +1079,33 @@ public class AtlasStyler {
 		return singlePointSymbolRuleList;
 	}
 
-	public SingleRuleList<? extends Symbolizer> getSingleLineSymbolRulesList() {
+	public SingleLineSymbolRuleList getSingleLineSymbolRulesList() {
 		if (singleLineSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
 			singleLineSymbolRuleList = new SingleLineSymbolRuleList(title2);
+			
+			if (lastChangedRuleList != null) {
+				// We have already imported a Style and we fill this RuleList with a default layer.
+				singleLineSymbolRuleList.addNewDefaultLayer();
+			}
+			
 			singleLineSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singleLineSymbolRuleList);
 		}
 		return singleLineSymbolRuleList;
 	}
-
+	
 	public SinglePolygonSymbolRuleList getSinglePolygonSymbolRulesList() {
 		if (singlePolygonSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
 			singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
 					title2);
+			
+			if (lastChangedRuleList != null) {
+				// We have already imported a Style and we fill this RuleList with a default layer.
+				singlePolygonSymbolRuleList.addNewDefaultLayer();
+			}
+			
 			singlePolygonSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singlePolygonSymbolRuleList);
 		}
@@ -1258,7 +1284,7 @@ public class AtlasStyler {
 	 *         Kr&uuml;ger</a>
 	 */
 	public void dispose() {
-		style = null;
+		xxxstyle = null;
 		listeners.clear();
 	}
 
@@ -1389,7 +1415,7 @@ public class AtlasStyler {
 	 * Mainly used when cancelling any activity
 	 */
 	public void cancel() {
-		style = backupStyle;
+		xxxstyle = backupStyle;
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");

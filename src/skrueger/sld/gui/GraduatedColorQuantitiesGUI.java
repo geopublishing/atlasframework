@@ -74,19 +74,18 @@ import skrueger.sld.classification.ClassificationChangeEvent;
 import skrueger.sld.classification.ClassificationChangedAdapter;
 import skrueger.sld.classification.QuantitiesClassification;
 import skrueger.sld.classification.QuantitiesClassification.METHOD;
+import skrueger.swing.Disposable;
 import skrueger.swing.SmallButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
 
 public class GraduatedColorQuantitiesGUI extends JPanel implements
-		ClosableSubwindows {
+		ClosableSubwindows, Disposable {
 
 	private static final Dimension ICON_SIZE = new Dimension(25, 25);
 
 	final protected static Logger LOGGER = Logger
 			.getLogger(GraduatedColorQuantitiesGUI.class);
-
-	private static final long serialVersionUID = 1L;
 
 	private JPanel jPanel = null;
 
@@ -411,41 +410,45 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				}
 
 				private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
-					// TODO if (quantGUI == null) {
-					AttributeMetadataMap attributeMetaDataMap = rulesList
-							.getStyledFeatures().getAttributeMetaDataMap();
+					if (quantGUI == null) {
+						AttributeMetadataMap attributeMetaDataMap = rulesList
+								.getStyledFeatures().getAttributeMetaDataMap();
 
-					// Title like :
-					String titleVariables = attributeMetaDataMap.get(
-							classifier.getValue_field_name()).getTitle()
-							.toString();
+						// Title like :
+						String titleVariables = attributeMetaDataMap.get(
+								classifier.getValue_field_name()).getTitle()
+								.toString();
 
-					if (classifier.getNormalizer_field_name() != null
-							&& !classifier.getNormalizer_field_name().isEmpty()) {
-						titleVariables += ":"
-								+ attributeMetaDataMap.get(
-										classifier.getNormalizer_field_name())
-										.getTitle().toString();
+						if (classifier.getNormalizer_field_name() != null
+								&& !classifier.getNormalizer_field_name()
+										.isEmpty()) {
+							titleVariables += ":"
+									+ attributeMetaDataMap
+											.get(
+													classifier
+															.getNormalizer_field_name())
+											.getTitle().toString();
+						}
+
+						quantGUI = new QuantitiesClassificationGUI(
+								jToggleButton_Classify, classifier,
+								atlasStyler, AtlasStyler.R(
+										"QuantitiesClassificationGUI.Title",
+										titleVariables));
+						quantGUI.addWindowListener(new WindowAdapter() {
+
+							@Override
+							public void windowClosed(final WindowEvent e) {
+								jToggleButton_Classify.setSelected(false);
+							}
+
+							@Override
+							public void windowClosing(final WindowEvent e) {
+								jToggleButton_Classify.setSelected(false);
+							}
+
+						});
 					}
-
-					quantGUI = new QuantitiesClassificationGUI(
-							jToggleButton_Classify, classifier, atlasStyler,
-							AtlasStyler.R("QuantitiesClassificationGUI.Title",
-									titleVariables));
-					quantGUI.addWindowListener(new WindowAdapter() {
-
-						@Override
-						public void windowClosed(final WindowEvent e) {
-							jToggleButton_Classify.setSelected(false);
-						}
-
-						@Override
-						public void windowClosing(final WindowEvent e) {
-							jToggleButton_Classify.setSelected(false);
-						}
-
-					});
-					// }
 					return quantGUI;
 				}
 
@@ -501,9 +504,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 								// getJComboBoxNormalizationField()
 								// .setSelectedItem(oldNormSelection);
 								// }
-//								getJComboBoxNormalizationField()
-//										.setSelectedItem(
-//												QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
+								// getJComboBoxNormalizationField()
+								// .setSelectedItem(
+								// QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
 
 								LOGGER.debug("Set valuefield to " + valueField);
 								classifier.setValue_field_name(valueField);
@@ -515,7 +518,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						}
 					});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxValueField);
+			ASUtil.addMouseWheelForCombobox(jComboBoxValueField, false);
 		}
 		return jComboBoxValueField;
 	}
@@ -556,7 +559,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							}
 						}
 					});
-			ASUtil.addMouseWheelForCombobox(jComboBoxNormlization);
+			ASUtil.addMouseWheelForCombobox(jComboBoxNormlization, false);
 		}
 		return jComboBoxNormlization;
 	}
@@ -1133,6 +1136,10 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			quantGUI.dispose();
 			quantGUI = null;
 		}
+
+		if (classifier != null)
+			classifier.dispose();
+
 		if (atlasStyler != null) {
 			if (atlasStyler.getMapLayer() != null)
 				atlasStyler.getMapLayer().removeMapLayerListener(

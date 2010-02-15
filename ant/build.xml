@@ -1,5 +1,5 @@
 <!--
-  Copyright (c) 2009 Stefan A. Krüger.
+  Copyright (c) 2010 Stefan A. Krüger (soon Stefan A. Tzeggai)
   
   This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
   http://www.geopublishing.org
@@ -24,14 +24,6 @@
 -->
 <project xmlns:ac="antlib:net.sf.antcontrib" default="jar" basedir=".." name="Atlas-Geopublishing-Framework">
 
-
-	<!-- ant task to create deb packages 
-   	<path id="ant-deb.classpath">
-        <fileset dir="ant-deb-0.0.1.jar" includes="*.jar"/></path>
-	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="ant/ant-deb-0.0.1.jar" />
-	<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpath="ant/ant-deb-0.0.1.jar" />
--->
-
 	<!-- This additional task is nedded to automatically apply pack200 compression -->
 	<taskdef name="p200ant" classname="de.matthiasmann.p200ant.P200AntTask" classpath="ant/p200ant.jar" />
 	<taskdef uri="antlib:net.sf.antcontrib" classpath="ant/ant-contrib-1.0b2.jar" />
@@ -39,7 +31,7 @@
 	<property environment="env" />
 	<property name="GTversion" value="2.6-SNAPSHOT" />
 	<property name="GP.location" value="." />
-	<property name="SM.location" value="/home/stefan/EigeneDateien/code/schmitzm/2.0-RC2" />
+	<property name="SM.location" value="/home/stefan/EigeneDateien/code/schmitzm/trunk" />
 	<property name="dist.dir" value="dist" />
 	<property name="GP.JAVADOC" value="${dist.dir}/javadoc" />
 	<property name="GP.build" value="${GP.location}/bin" />
@@ -62,11 +54,6 @@
 	<property name="target" value="1.6" />
 	<property name="source" value="1.6" />
 
-	<!-- Properties for signing the jar -->
-	<!--	<property name="sign.alias" value="myself" />
-	<property name="sign.password" value="stefan" /> 
-	<property name="sign.file.name" value="${GP.src}/skrueger/creator/export/keystore" />
-	-->
 	<!-- Properties for signing the jar with the IMPETUS certificate -->
 	<property name="sign.alias" value="IMPETUS" />
 	<property name="sign.password" value="wasser" />
@@ -82,7 +69,7 @@
 		<delete dir="${dist.dir}" failonerror="false" />
 	</target>
 
-	<target name="refreshSchmitzm" description="Tries to compile and update schmitzm-2.0-RC2.jar. ">
+	<target name="refreshSchmitzm" description="Tries to compile and update schmitzm-2.0.x.jar. ">
 
 		<echo message="Trying to build schmitzm" />
 		<exec executable="ant" failifexecutionfails="false">
@@ -90,11 +77,11 @@
 		</exec>
 
 		<copy todir="${GP.lib}Unsigned" failonerror="false">
-			<fileset file="${SM.location}/dist/schmitzm-2.0-RC2.jar" />
+			<fileset file="${SM.location}/dist/schmitzm-2.0.x.jar" />
 		</copy>
 
 		<copy todir="${GP.lib}" failonerror="true">
-			<fileset file="${SM.location}/dist/schmitzm-2.0-RC2.jar" />
+			<fileset file="${SM.location}/dist/schmitzm-2.0.x.jar" />
 		</copy>
 
 	</target>
@@ -191,12 +178,10 @@
 	          target: clean_jws_cache - On linux this target deletes the local JavaWebStart cache which fixes a lot a problems              
 	     ================================= -->
 	<target name="clean_jws_cache">
-		<!--
 		<echo message="Empty JWS cache" />
 		<exec executable="/usr/bin/javaws" failifexecutionfails="false">
 			<arg line='-uninstall' />
 		</exec>
-		-->
 	</target>
 
 
@@ -222,8 +207,8 @@
 
 		<echo message="Nachher = ${classpath1}" />
 
-		<property name="classpath" value="lib/schmitzm-2.0-RC2.jar ${classpath1}" />
-		<property name="classpath_mitgp" value="lib/schmitzm-2.0-RC2.jar gp.jar ${classpath1}" />
+		<property name="classpath" value="lib/schmitzm-2.0.x.jar ${classpath1}" />
+		<property name="classpath_mitgp" value="lib/schmitzm-2.0.x.jar gp.jar ${classpath1}" />
 
 		<echo message="Create gp.jar in ${dist.dir}" />
 		<jar destfile="${dist.dir}/gp.jar" level="4" duplicate="preserve" index="false">
@@ -270,7 +255,7 @@
 
 		<!-- Try to update av.jar in IMPETUS SDSS before it is signed 
 		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${dist.dir}/av.jar" />
-		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${GP.lib}Unsigned/schmitzm-2.0-RC2.jar" />
+		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${GP.lib}Unsigned/schmitzm-2.0.x.jar" />
 -->
 
 		<!-- TEMP
@@ -292,7 +277,7 @@
 		<ac:for xmlns:ac="antlib:net.sf.antcontrib" param="file" parallel="true" threadcount="2">
 			<path>
 				<fileset dir="${dist.dir}" includes="gp.jar, as.jar, av.jar" />
-				<fileset dir="${GP.lib}" includes="schmitzm-2.0-RC2.jar" />
+				<fileset dir="${GP.lib}" includes="schmitzm-2.0.x.jar" />
 			</path>
 			<sequential>
 				<p200ant repack="true" segmentLimit="0" srcfile="@{file}" />
@@ -499,11 +484,11 @@
 		<copy file="${dist.dir}/gp.jar" todir="${GP.exportJWS}" />
 		<copy file="${dist.dir}/gp.jar.pack.gz" todir="${GP.exportJWS}" failonerror="false" />
 
-		<!-- Copy packed and sigend schmitzm-2.0-RC2.jar to the lib directory -->
-		<echo message="Copy packed and sigend schmitzm-2.0-RC2.jar to the ${GP.exportJWS}/lib directory" />
+		<!-- Copy packed and sigend schmitzm-2.0.x.jar to the lib directory -->
+		<echo message="Copy packed and sigend schmitzm-2.0.x.jar to the ${GP.exportJWS}/lib directory" />
 		<mkdir dir="${GP.exportJWS}/lib" />
-		<copy file="${GP.lib}/schmitzm-2.0-RC2.jar" todir="${GP.exportJWS}/lib" />
-		<copy file="${GP.lib}/schmitzm-2.0-RC2.jar.pack.gz" todir="${GP.exportJWS}/lib" failonerror="false" />
+		<copy file="${GP.lib}/schmitzm-2.0.x.jar" todir="${GP.exportJWS}/lib" />
+		<copy file="${GP.lib}/schmitzm-2.0.x.jar.pack.gz" todir="${GP.exportJWS}/lib" failonerror="false" />
 		<copy file="${GP.src}/skrueger/creator/export/htaccess" tofile="${GP.exportJWS}/.htaccess" failonerror="true" />
 
 		<!-- Set permissions that allow a web-server to serve these files -->
@@ -515,7 +500,7 @@
 
 
 	<!-- ================================= 
-          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0-RC2.jar WITHOUT libs/* to prodi and empty JWS cache              
+          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.x.jar WITHOUT libs/* to prodi and empty JWS cache              
          ================================= -->
 	<target name="rsync_quick" depends="export_quick">
 
@@ -526,10 +511,13 @@
 
 		<!-- rsync quick usually does NOT update anthing from the lib directory. BUT schmitzm is special, so we update it everytime -->
 		<exec executable="/usr/bin/rsync">
-			<arg line='-mrcv --include="schmitzm-2.0-RC2.jar*" --exclude="*" ${GP.exportJWS}/lib/. prodi:${release_path}/lib' />
+			<arg line='-mrcv --include="schmitzm-2.0.x.jar*" --exclude="*" ${GP.exportJWS}/lib/. prodi:${release_path}/lib' />
 		</exec>
 
+		<!--
+		Since Java 1.6u14 this is not needed any more and the updates usually work
 		<antcall target="clean_jws_cache" />
+		-->
 
 		<echo message="Rsync Standalone-ZIP" />
 		<exec executable="/usr/bin/rsync">
@@ -540,7 +528,7 @@
 	</target>
 
 	<!-- ================================= 
-          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0-RC2.jar WITHOUT libs/* to prodi and empty JWS cache              
+          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.x.jar WITHOUT libs/* to prodi and empty JWS cache              
          ================================= -->
 	<target name="rsync_quick_local" depends="export_quick">
 
@@ -561,10 +549,13 @@
 
 		<!-- rsync quick usually does NOT update anthing from the lib directory. BUT schmitzm is special, so we update it everytime -->
 		<exec executable="/usr/bin/rsync">
-			<arg line='-mrcv --include="schmitzm-2.0-RC2.jar*" --exclude="*" ${GP.exportJWS}/lib/. /var/www/${release_path}/lib' />
+			<arg line='-mrcv --include="schmitzm-2.0.x.jar*" --exclude="*" ${GP.exportJWS}/lib/. /var/www/${release_path}/lib' />
 		</exec>
 
+		<!--
+		Since Java 1.6u14 this is not needed any more and the updates usually work
 		<antcall target="clean_jws_cache" />
+		-->
 
 		<echo message="Rsync Standalone-ZIP" />
 		<exec executable="/usr/bin/rsync">
@@ -591,7 +582,10 @@
 			<arg line='-mrcv ${GP.exportAlone.zip} prodi:${release_path}' />
 		</exec>
 
+		<!--
+		Since Java 1.6u14 this is not needed any more and the updates usually work
 		<antcall target="clean_jws_cache" />
+		-->
 
 		<!-- They might have been deleted with the last rsync command, so we upload them again -->
 		<antcall target="rsync_symbols" />
@@ -624,7 +618,10 @@
 			<arg line='-mrcv ${GP.exportAlone.zip} /var/www/${release_path}' />
 		</exec>
 
+		<!--
+		Since Java 1.6u14 this is not needed any more and the updates usually work
 		<antcall target="clean_jws_cache" />
+		-->
 
 		<!-- They might have been deleted with the last rsync command, so we upload them again -->
 		<antcall target="rsync_symbols" />
@@ -674,7 +671,7 @@
 		<pathelement location="${GP.location}/bin" />
 
 		<!-- schmitzm MUSS vor Geotools im Classpath liegen -->
-		<pathelement path="${GP.lib}/schmitzm-2.0-RC2.jar" />
+		<pathelement path="${GP.lib}/schmitzm-2.0.x.jar" />
 
 		<fileset dir="${GP.lib}">
 			<include name="**/*.jar" />

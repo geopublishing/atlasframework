@@ -54,8 +54,6 @@ public class StylerDialog extends CancellableDialogAdapter {
 	// public final static String PROPERTY_CLOSE_AND_APPLY =
 	// "AtlasStylerDialog_APPLY";
 
-	private static final long serialVersionUID = 1L;
-
 	private JPanel jContentPane = null;
 
 	final private AtlasStyler atlasStyler;

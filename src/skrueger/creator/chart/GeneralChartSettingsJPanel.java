@@ -23,6 +23,7 @@ import javax.swing.JCheckBox;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.jfree.chart.ChartPanel;
 
 import schmitzm.jfree.chart.style.ChartLabelStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -49,13 +50,13 @@ public class GeneralChartSettingsJPanel extends JPanel {
 
 	public GeneralChartSettingsJPanel(ChartStyle chartStyle,
 			AtlasConfigEditable atlasConfigEditable) {
-		super(new MigLayout("wrap 2"));
+		super(new MigLayout("w "+(ChartPanel.DEFAULT_WIDTH-40)+",wrap 2","[grow]"));
 		this.chartStyle = chartStyle;
 		this.atlasConfigEditable = atlasConfigEditable;
 
-		add(getTitleTranslationEditPanel(), "span 2, sgx");
-		add(getDescTranslationEditPanel(), "span 2, sgx");
-		add(getColorsPanel(), "span 2, sgx");
+		add(getTitleTranslationEditPanel(), "span 2, growx");
+		add(getDescTranslationEditPanel(), "span 2, growx");
+		add(getColorsPanel(), "span 2, growx");
 		
 	}
 
@@ -63,8 +64,6 @@ public class GeneralChartSettingsJPanel extends JPanel {
 		JPanel colorsPanel = new JPanel(new MigLayout("wrap 2, align center"));
 		colorsPanel.add(getTitleColorButton());
 		colorsPanel.add(getSubTitleColorButton());
-		// colorsPanel.add(getChartBackgroundColorButton());
-		// colorsPanel.add(getChartBackgroundColorJCheckbox(), "span 3, right");
 
 		colorsPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler.R("colors.border.title"))); 
 		return colorsPanel;

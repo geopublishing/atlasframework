@@ -63,8 +63,7 @@ import skrueger.swing.OkButton;
 
 public class SymbolSelectorGUI extends AtlasDialog {
 	protected Logger LOGGER = ASUtil.createLogger(this);
-
-	private static final long serialVersionUID = 1L;
+	
 
 	public static final String PROPERTY_CANCEL_CHANGES = "CANCEL CHANGES";
 

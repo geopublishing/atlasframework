@@ -113,7 +113,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 		}
 	};
 
-	private static final long serialVersionUID = 1L;
+	
 
 	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://www.geopublishing.org/openmapsymbols/svg";
 

@@ -339,6 +339,10 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					.getAttributeMetaDataMap().get(normalizerLocalName);
 
 			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
+			
+			// As we are dividing by this value, always add the zero also!
+			ors.add(ff2.equals(ff2.property(normalizerLocalName),ff2.literal(0)));
+			
 			if (amd2 != null && amd2.getNodataValues() != null)
 				for (Object ndValue : amd2.getNodataValues()) {
 					ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2

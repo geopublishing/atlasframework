@@ -248,5 +248,9 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 		return copyTo( new SinglePointSymbolRuleList(getTitle()));
 	}
 
+	public static SinglePointSymbolRuleList createDefaultInstance() {
+		return null;
+	}
+
 
 }

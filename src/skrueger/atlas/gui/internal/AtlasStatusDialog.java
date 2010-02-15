@@ -20,7 +20,6 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 
 import javax.swing.BorderFactory;
@@ -35,9 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.Timer;
 
-import org.apache.log4j.Logger;
 import org.geotools.resources.SwingUtilities;
 import org.geotools.resources.i18n.Vocabulary;
 import org.geotools.resources.i18n.VocabularyKeys;
@@ -47,14 +44,12 @@ import org.opengis.util.InternationalString;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AtlasViewer;
-import skrueger.sld.ASUtil;
 import skrueger.swing.OkButton;
 
 public class AtlasStatusDialog {
-	protected Logger LOGGER = ASUtil.createLogger(this);
-
+	
 	static public String CANCEL_PROPERTY = "atlas status dialog cancelled";
-
+	
 	/**
 	 * Initial width for the progress window, in pixels.
 	 */
@@ -325,7 +320,6 @@ public class AtlasStatusDialog {
 	 * the window.
 	 */
 	public void dispose() {
-//		windowVisibleTimer.stop();
 		listeners.clear();
 		call(Caller.DISPOSE);
 	}
@@ -346,14 +340,13 @@ public class AtlasStatusDialog {
 	public void setCanceled(final boolean stop) {
 		if (stop != canceled) {
 			canceled = stop;
-
-			for (ActionListener l : listeners) {
-				l.actionPerformed(new ActionEvent(AtlasStatusDialog.this, 0,
-						CANCEL_PROPERTY));
+			
+			for (ActionListener l : listeners ) {
+				l.actionPerformed(new ActionEvent(AtlasStatusDialog.this, 0, CANCEL_PROPERTY));
 			}
 		}
 	}
-
+	
 	public void addCancelListener(ActionListener l) {
 		listeners.add(l);
 	}
@@ -420,10 +413,11 @@ public class AtlasStatusDialog {
 	}
 
 	/**
-	 * Returns the s// public void warningOccurred(Exception e) { //
-	 * warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e //
-	 * .getLocalizedMessage() : e.getMessage()); // cancel // }tring {@code
-	 * margin} without the parenthesis (if any).
+	 * Returns the s//	public void warningOccurred(Exception e) {
+//		warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e
+//				.getLocalizedMessage() : e.getMessage());
+//		cancel
+//	}tring {@code margin} without the parenthesis (if any).
 	 * 
 	 * @param margin
 	 *            DOCUMENT ME
@@ -444,12 +438,13 @@ public class AtlasStatusDialog {
 	 * Queries one of the components in the progress window. This method doesn't
 	 * need to be invoked from the <cite>Swing</cite> thread.
 	 * 
-	 * @param task
-	 *            // public void warningOccurred(Exception e) { //
-	 *            warningOccurred("asdsad", null, e.getLocalizedMessage() !=
-	 *            null ? e // .getLocalizedMessage() : e.getMessage()); //
-	 *            cancel // } The desired value as one of the
-	 *            {@link Caller#TITLE} or {@link Caller#LABEL} constants.
+	 * @param task//	public void warningOccurred(Exception e) {
+//		warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e
+//				.getLocalizedMessage() : e.getMessage());
+//		cancel
+//	}
+	 *            The desired value as one of the {@link Caller#TITLE} or
+	 *            {@link Caller#LABEL} constants.
 	 * @return The value.
 	 */
 	private Object get(final int task) {
@@ -565,10 +560,10 @@ public class AtlasStatusDialog {
 				model.setRangeProperties(0, 1, 0, 100, false);
 				SwingUtil
 						.setRelativeFramePosition(window, parentWindow, .5, .5);
-
-				// window.setVisible(true);
-				requestVisibility();
-
+				
+				
+				window.setVisible(true);
+				
 				break; // Need further action below.
 			}
 			case COMPLETE: {
@@ -578,11 +573,8 @@ public class AtlasStatusDialog {
 				if (warningArea != null) {
 					ok.setEnabled(true);
 				} else {
-//					windowVisibleTimer.stop();
-//					synchronized (window) {
-						window.setVisible(false);
-						window.dispose();
-//					}
+					window.setVisible(false);
+					window.dispose();
 				}
 				break; // Need further action below.
 			}
@@ -614,7 +606,6 @@ public class AtlasStatusDialog {
 					return;
 				}
 				case DISPOSE: {
-//					windowVisibleTimer.stop();
 					window.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					// if (warningArea == null || !window.isVisible()) {
 					window.dispose();
@@ -642,20 +633,17 @@ public class AtlasStatusDialog {
 							BorderLayout.NORTH);
 					namedArea.add(scroll, BorderLayout.CENTER);
 					content.add(namedArea, BorderLayout.CENTER);
-//					synchronized (window) {
-						// if (window instanceof JDialog) {
-						// final JDialog window = (JDialog)
-						// AtlasStatusDialog.this.window;
-						window.setResizable(true);
-						// } else {
-						// final JInternalFrame window = (JInternalFrame)
-						// AtlasStatusDialog.this.window;
-						// window.setResizable(true);
-						// }
-						window.setSize(WIDTH, HEIGHT + WARNING_HEIGHT);
-						window.setVisible(true); // Seems required in order to
-													// force
-//					}
+					// if (window instanceof JDialog) {
+					// final JDialog window = (JDialog)
+					// AtlasStatusDialog.this.window;
+					window.setResizable(true);
+					// } else {
+					// final JInternalFrame window = (JInternalFrame)
+					// AtlasStatusDialog.this.window;
+					// window.setResizable(true);
+					// }
+					window.setSize(WIDTH, HEIGHT + WARNING_HEIGHT);
+					window.setVisible(true); // Seems required in order to force
 					// relayout.
 				}
 				final JTextArea warningArea = (JTextArea) AtlasStatusDialog.this.warningArea;
@@ -672,33 +660,6 @@ public class AtlasStatusDialog {
 		return new SimpleInternationalString(getDescription());
 	}
 
-//	Timer windowVisibleTimer = new Timer(300, new ActionListener() {
-//
-//		@Override
-//		public void actionPerformed(ActionEvent e) {
-//			if (javax.swing.SwingUtilities.isEventDispatchThread())
-//				synchronized (window) {
-//					window.setVisible(true);
-//				}
-//			else
-//				try {
-//					javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-//
-//						@Override
-//						public void run() {
-//							synchronized (window) {
-//								window.setVisible(true);
-//							}
-//						}
-//					});
-//				} catch (InterruptedException e1) {
-//					LOGGER.error(e1);
-//				} catch (InvocationTargetException e1) {
-//					LOGGER.error(e1);
-//				}
-//		}
-//	});
-
 	public void startModal() {
 		if (javax.swing.SwingUtilities.isEventDispatchThread()) {
 			final BoundedRangeModel model = progressBar.getModel();
@@ -706,24 +667,16 @@ public class AtlasStatusDialog {
 			SwingUtil.setRelativeFramePosition(window, parentWindow, .5, .5);
 			window.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 			window.setModal(true); // CALL zeug?!
-			requestVisibility();
-			// window.setVisible(true);
+			window.setVisible(true);
 		} else {
 			started();
-			// window.setModal(true); // CALL zeug?!
-			requestVisibility();
+			window.setModal(true); // CALL zeug?!
 		}
-	}
-	
-	private void requestVisibility() {
-//		synchronized (window) {
-			window.setVisible(true);
-//		}
-		// windowVisibleTimer.start();
 	}
 
 	public boolean isWarningOccured() {
 		return warningOccured;
 	}
+
 
 }

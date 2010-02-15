@@ -61,6 +61,7 @@ import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
+import skrueger.swing.Disposable;
 import skrueger.swing.SmallButton;
 import skrueger.swing.SmallToggleButton;
 
@@ -71,7 +72,7 @@ import skrueger.swing.SmallToggleButton;
  * to return any an dialog if it exists.
  */
 public class AtlasChartJPanel extends JPanel implements
-		DatasetSelectionListener {
+		DatasetSelectionListener, Disposable {
 	static final Logger LOGGER = Logger.getLogger(AtlasChartJPanel.class);
 
 	/**
@@ -100,6 +101,7 @@ public class AtlasChartJPanel extends JPanel implements
 
 	private MapLegend mapLegend;
 
+	/** A chart panel that **/
 	private SelectableChartPanel selectableChartPanel;
 
 	private StyledLayerSelectionModel<?> selectionModel;
@@ -107,8 +109,6 @@ public class AtlasChartJPanel extends JPanel implements
 	private JToolBar toolBar;
 
 	private BufferedImage mapImageIcon;
-
-	private ChartSelectionSynchronizer synchronizer;
 
 	/** Keeps references to the listener for WeakHashSet **/
 	private Set<DatasetSelectionListener> insertedListeners = new HashSet<DatasetSelectionListener>();
@@ -234,7 +234,7 @@ public class AtlasChartJPanel extends JPanel implements
 				for (FeatureDatasetSelectionModel dsm : datasetSelectionModelFor) {
 
 					// create a synchronizer
-					synchronizer = new ChartSelectionSynchronizer(
+					ChartSelectionSynchronizer synchronizer = new ChartSelectionSynchronizer(
 							featureSelectionModel, dsm);
 
 					featureSelectionModel
@@ -493,11 +493,9 @@ public class AtlasChartJPanel extends JPanel implements
 	}
 
 	/**
-	 *Remove the listeners...
+	 * Remove the listeners...
 	 */
 	public void dispose() {
-		//
-		// get the selectionmodel(s) of the chart
 		List<FeatureDatasetSelectionModel<?, ?, ?>> datasetSelectionModelFor = FeatureChartUtil
 				.getFeatureDatasetSelectionModelFor(getSelectableChartPanel()
 						.getChart());
@@ -506,9 +504,7 @@ public class AtlasChartJPanel extends JPanel implements
 			for (DatasetSelectionListener d : insertedListeners) {
 				selModel.removeSelectionListener(d);
 			}
-
 		}
-
 		insertedListeners.clear();
 	}
 
@@ -584,7 +580,6 @@ public class AtlasChartJPanel extends JPanel implements
 			final JToolBar toolBar = atlasChartPanel.getToolBar();
 			toolBar.add(zoomToSelectionButton, 6);
 
-			LOGGER.debug("Added the zoom2features button");
 
 			{
 				// Add listeners to the selection model, so we know when to

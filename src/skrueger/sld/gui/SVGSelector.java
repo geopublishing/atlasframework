@@ -82,12 +82,13 @@ import skrueger.swing.OkButton;
 
 import com.vividsolutions.jts.geom.Point;
 
+// TODO Convert to AtlasDialog and add a local Database of SVG symbols
 public class SVGSelector extends JDialog {
 	static private final Logger LOGGER = ASUtil.createLogger(SVGSelector.class);
 
 	String SVG_PATH_BASE = "/openmapsymbols/svg/"; 
 
-	final public String GEOPUBLISHINGORG_BASE_URL_FOR_SVG = "http://www.geopublishing.org"
+	final public String GEOPUBLISHINGORG_BASE_URL_FOR_SVG = "http://de.geopublishing.org"
 			+ SVG_PATH_BASE; 
 
 	protected static final Dimension SVGICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
@@ -147,7 +148,7 @@ public class SVGSelector extends JDialog {
 			JOptionPane
 					.showMessageDialog(
 							this,
-							"GT2.4 doesn't fill polygons with external SVG graphics :-(. You will not see much.");
+							"The GeoTools library version 2.6.1 still can fill polygons with external SVG graphics :-(. You will not see much.");
 		}
 
 		try {

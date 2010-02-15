@@ -36,10 +36,10 @@ import skrueger.sld.AtlasStyler;
 import skrueger.sld.GraduatedColorRuleList;
 import skrueger.sld.SingleRuleList;
 import skrueger.sld.UniqueValuesRuleList;
+import skrueger.swing.Disposable;
 
 /**
  * This {@link JTabbedPane} offers to edit symbology or labeling for this Style.
- * Another with GT2.6 settings may follow.
  * 
  */
 public class AtlasStylerTabbedPane extends JTabbedPane {
@@ -53,12 +53,13 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 	public final Icon ICON_SYMBOLOGY = new ImageIcon(
 			AtlasStylerTabbedPane.class.getResource("images/symbology.png"));
 
-	public final Icon ICON_LABELS = new ImageIcon(
-			AtlasStylerTabbedPane.class.getResource("images/labels.png"));
+	public final Icon ICON_LABELS = new ImageIcon(AtlasStylerTabbedPane.class
+			.getResource("images/labels.png"));
 
 	public static final int BUTTON_FONT_STYLE = Font.PLAIN;// TODO replace with
 	// thin button
-	public static final float BUTTON_FONT_SIZE = 11; // TODO replace with thin button
+	public static final float BUTTON_FONT_SIZE = 11; // TODO replace with thin
+														// button
 
 	private final AtlasStyler atlasStyler;
 
@@ -133,7 +134,9 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 		jLabelRuleListeTypeImage.setSize(IMAGE_WIDTH_SYMBOLIZATIONICON,
 				IMAGE_HEIGHT_SYMBOLIZATIONICON);
 
+		atlasStyler.setQuite(true);
 		initialize();
+		atlasStyler.setQuite(false);
 	}
 
 	/**
@@ -212,7 +215,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 			}
 
 			// Unique values are only available if we have any fields other than
-			// geometry	
+			// geometry
 			if (ASUtil.getValueFieldNames(
 					atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
 				cbmodel.addElement(AtlasStyler
@@ -356,13 +359,11 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 		JComponent gui = null;
 
-		if (lastOpenGUI != null)
-			lastOpenGUI.dispose();
+		/** Update the GUI * */
+		if (jPanelRuleListEditor.getComponentCount() > 0) {
+			((Disposable) jPanelRuleListEditor.getComponent(0)).dispose();
+		}
 		
-		if (gui != null)
-
-		LOGGER.debug("Selection Idx = " + selIdx);
-
 		String imageName = null;
 
 		if (selIdx == IDX_SINGLE_SYMBOL) {
@@ -494,8 +495,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 		/***********************************************************************
 		 * Update using the GUI we just created...
 		 */
-		if (gui != null) {
-			/** Update the GUI * */
+
 			jPanelRuleListEditor.removeAll();
 			jPanelRuleListEditor.add(gui, "top, grow");
 
@@ -516,11 +516,10 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 							.pack();
 
 			}
-		}
 	}
 
 	public void dispose() {
-		if (jComboBoxRuleListType != null){
+		if (jComboBoxRuleListType != null) {
 			jComboBoxRuleListType.removeAllItems();
 			jComboBoxRuleListType = null;
 		}

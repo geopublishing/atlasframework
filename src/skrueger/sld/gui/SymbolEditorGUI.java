@@ -73,7 +73,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	protected static final String PROPERTY_SYMBOL_CHANGED = "SYMBOL_CHANGED";
 	protected static final String PROPERTY_LAYERS_CHANGED = "LAYERS_CHANGED";
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private static final String DIALOG_TITLE = AtlasStyler
 			.R("SymbolEditor.Title");

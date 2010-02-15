@@ -108,8 +108,9 @@ public abstract class AbstractRuleList {
 	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
 	 */
 	public FeatureTypeStyle getFTS() {
+		List<Rule> rules = getRules();
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
-				getRules().toArray(new Rule[] {}));
+				rules.toArray(new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
 		return ftstyle;
 	}
@@ -193,10 +194,10 @@ public abstract class AbstractRuleList {
 			lastOpressedEvent = null;
 		}
 
-		if (listeners.size() > 0)
-			LOGGER.debug("Fire RCE event from "
-					+ rce.getSourceRL().getClass().getSimpleName() + " = "
-					+ rce.toString());
+//		if (listeners.size() > 0)
+//			LOGGER.debug("Fire RCE event from "
+//					+ rce.getSourceRL().getClass().getSimpleName() + " = "
+//					+ rce.toString());
 
 		for (RuleChangeListener l : listeners) {
 			try {
@@ -231,4 +232,5 @@ public abstract class AbstractRuleList {
 	 *         Kr&uuml;ger</a>
 	 */
 	public abstract String getAtlasMetaInfoForFTSName();
+		
 }

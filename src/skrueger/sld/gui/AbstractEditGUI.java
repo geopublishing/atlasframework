@@ -161,13 +161,24 @@ public abstract class AbstractEditGUI extends JPanel {
 
 	final public static Float[] SIZE_VALUES;
 	static {
-		SIZE_VALUES = new Float[60];
+		SIZE_VALUES = new Float[100];
 		for (int i = 0; i < 48; i++) {
 			SIZE_VALUES[i] = i + 3f;
 		}
 		for (int i = 48; i < 60; i++) {
-			SIZE_VALUES[i] = 50f + (i - 47) * 10f;
+			SIZE_VALUES[i] = SIZE_VALUES[i-1]+10;
 		}
+		for (int i = 60; i < 70; i++) {
+			SIZE_VALUES[i] = SIZE_VALUES[i-1]+30;
+		}		
+		for (int i = 70; i < 90; i++) {
+			SIZE_VALUES[i] = SIZE_VALUES[i-1]+50;
+		}
+		for (int i = 90; i < 100; i++) {
+			SIZE_VALUES[i] = SIZE_VALUES[i-1]+100;
+		}
+		
+		
 
 	}
 

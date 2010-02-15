@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -77,7 +76,6 @@ import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
@@ -1340,7 +1338,7 @@ public class ASUtil {
 	}
 
 	/**
-	 * Creates a default Style that is compatible with AtlasStyler.
+	 * Creates a default Style that is compatible with {@link AtlasStyler}.
 	 */
 	public static Style createDefaultStyle(StyledLayerInterface<?> styledLayer) {
 		Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);

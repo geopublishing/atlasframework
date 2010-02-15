@@ -16,8 +16,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -89,7 +87,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	protected final static Logger LOGGER = Logger
 			.getLogger(QuantitiesClassificationGUI.class);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private static final BufferedImage ERROR_IMAGE = new BufferedImage(400,
 			200, BufferedImage.TYPE_3BYTE_BGR);

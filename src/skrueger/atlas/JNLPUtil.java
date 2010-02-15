@@ -115,7 +115,7 @@ public class JNLPUtil {
 				LOGGER.info("part " + part + " is NOT cached.. start DL ");
 
 				// load the resource into the JWS Cache
-				ds.loadPart(part, getJNLPDialog()); //use statusDialog
+				ds.loadPart(part, getJNLPDialog()); //TODO use statusDialog
 			}
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);

@@ -476,7 +476,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 	/**
 	 * Returns <code>null</code> or the {@link URL} to an HTML page with info
-	 * about this {@link StyledLayerInterface}
+	 * about this {@link StyledLayerInterface}.
+	 * @deprecated TODO this method is called too often from BasicMapLayerLegendPaneUI. Needs a cache
 	 */
 	public URL getInfoURL() {
 		if (styledLayer != null)

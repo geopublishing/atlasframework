@@ -17,25 +17,17 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.apache.commons.io.filefilter.AndFileFilter;
 import org.apache.log4j.Logger;
 import org.geotools.filter.AndImpl;
-import org.geotools.filter.text.cql2.CQL;
-import org.geotools.filter.text.generated.parsers.CQLParser;
 import org.geotools.styling.Font;
 import org.geotools.styling.LabelPlacement;
 import org.geotools.styling.PointPlacement;
 import org.geotools.styling.Rule;
 import org.geotools.styling.TextSymbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
-import org.geotools.swing.ExceptionMonitor;
-import org.opengis.filter.And;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.Not;
-import org.opengis.filter.Or;
 import org.opengis.filter.PropertyIsEqualTo;
-import org.opengis.filter.PropertyIsNull;
 import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.geotools.feature.FeatureUtil;
@@ -171,7 +163,7 @@ public class TextRuleList extends AbstractRuleList {
 	public TextSymbolizer createDefaultTextSymbolizer() {
 		
 		// If we already have a default symbolizer, we will return a duplication of it.
-		if (getSymbolizers().get(0) != null) {
+		if (getSymbolizers().size()>0 ) {
 			DuplicatingStyleVisitor duplicatingStyleVisitor = new DuplicatingStyleVisitor(
 					StylingUtil.STYLE_FACTORY);
 			duplicatingStyleVisitor.visit(getSymbolizers().get(0));

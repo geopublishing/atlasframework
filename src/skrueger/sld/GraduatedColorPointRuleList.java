@@ -10,8 +10,11 @@
  ******************************************************************************/
 package skrueger.sld;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
+import org.geotools.styling.Rule;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -28,6 +31,12 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 //	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
 //		return ASUtil.getDefaultPointTemplate();
 //	}
+	
+	@Override
+	public List<Rule> getRules() {
+		// TODO Auto-generated method stub
+		return super.getRules();
+	}
 
 	@Override
 	public RulesListType getTypeID() {

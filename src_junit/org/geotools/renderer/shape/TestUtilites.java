@@ -198,7 +198,7 @@ public class TestUtilites {
 
             Panel p = new Panel() {
                     /** <code>serialVersionUID</code> field */
-                    private static final long serialVersionUID = 1L;
+                    
 
                     public void paint(Graphics g) {
                         g.drawImage(image, 0, 0, this);

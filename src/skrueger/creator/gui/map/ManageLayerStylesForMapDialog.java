@@ -72,7 +72,7 @@ import skrueger.swing.TranslationEditJPanel;
 public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	private static final long serialVersionUID = 1L;
+	
 
 	private JPanel jContentPane = null;
 
