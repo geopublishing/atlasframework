@@ -13,20 +13,16 @@ package skrueger.creator.gui.datapool.layer;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
-import org.geotools.data.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import schmitzm.io.IOUtil;
-import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.creator.AtlasConfigEditable;
 
 /**

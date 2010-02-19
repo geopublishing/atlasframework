@@ -98,6 +98,7 @@ public class ChartWizardResultProducer implements
 						+ " is not yet imlpemented.");
 				return null;
 			}
+			
 		}
 
 		ChartRendererStyle rs = new ChartRendererStyle();
@@ -115,8 +116,8 @@ public class ChartWizardResultProducer implements
 			chartStyle.setAttributeName(index, attrName);
 
 			chartStyle.setAttributeName(index, attrName);
-			chartStyle.setAttributeNormalized(index, (Boolean) wizardData
-					.get(ChartWizard.NORMALIZE_ + index));
+//			chartStyle.setAttributeNormalized(index, (Boolean) wizardData
+//					.get(ChartWizard.NORMALIZE_ + index));
 
 			/*
 			 * Ensure we always have a default Translation for the Title of this
@@ -143,7 +144,7 @@ public class ChartWizardResultProducer implements
 						attribMetadata.getDesc().copy(), null));
 				if (index == 1) {
 					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
-							new ChartAxisStyle("", null, 0., 0.));
+							new ChartAxisStyle(attribMetadata.getTitle().copy(), null, 0., 0.));
 					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
 							.setUnitString(attribMetadata.getUnit());
 				}
@@ -167,7 +168,7 @@ public class ChartWizardResultProducer implements
 		Translation desc = (Translation) wizardData.get(ChartWizard.DESC);
 
 		chartStyle.setTitleStyle(new ChartLabelStyle(title, Color.black));
-		chartStyle.setDescStyle(new ChartLabelStyle(desc, Color.green));
+		chartStyle.setDescStyle(new ChartLabelStyle(desc, Color.gray));
 
 		// LOGGER.debug("The just created/edited chart has editChart.getAttributeCount() "+chartStyle.getAttributeCount());
 

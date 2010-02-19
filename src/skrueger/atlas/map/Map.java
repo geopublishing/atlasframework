@@ -317,9 +317,13 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	
 	@Override
 	final public String toString() {
-		if (title != null)
-			return title.toString();
-		return super.toString();
+		String returnStr = "";
+		if (!I8NUtil.isEmpty(title))
+			return returnStr += title.toString()+", ";
+		returnStr+=", ID="+getId();
+		if (!I8NUtil.isEmpty(desc) )
+			returnStr+=", Desc="+getDesc();
+		return returnStr;
 	}
 
 	/*

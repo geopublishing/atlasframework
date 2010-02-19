@@ -11,6 +11,7 @@
 package skrueger.creator.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Image;
@@ -23,6 +24,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +42,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
 
+import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVProps;
@@ -481,6 +485,34 @@ public class GpFrame extends JFrame {
 		});
 		optionsMenu.add(jMenuItemSendLog);
 
+		// ******************************************************************
+		// Send logfiles to author by email
+		// ******************************************************************
+		JMenuItem jMenuItemShowlog = new JMenuItem(new AbstractAction(
+				R("MenuBar.OptionsMenu.OpenLogFile")) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				try {
+					File logFile = new File(IOUtil.getTempDir(),
+							GPBugReportmailer.GEOPUBLISHERLOG).getCanonicalFile();
+					try {
+						
+					Desktop.getDesktop().edit(
+							logFile);
+					} catch (Exception usoe){
+						Desktop.getDesktop().browse(DataUtilities.fileToURL(logFile).toURI());
+					}
+				} catch (Exception ee) {
+					ExceptionDialog.show(GpFrame.this, ee);
+
+				}
+			}
+
+		});
+		optionsMenu.add(jMenuItemShowlog);
+
 		/**
 		 * Allow to switch LookAndFeel
 		 */
@@ -626,10 +658,11 @@ public class GpFrame extends JFrame {
 			atlasJMenu.add(new GpMenuItem(
 					R("MenuBar.AtlasMenu.PrintTranslations"),
 					ActionCmds.exportAtlasTranslations));
-			
-			// Export the data pool as CSV 
-			atlasJMenu.add(new JMenuItem(new GPExportCSVAction(R("MenuBar.AtlasMenu.ExportCSV"), ace, GpFrame.this)));
-			
+
+			// Export the data pool as CSV
+			atlasJMenu.add(new JMenuItem(new GPExportCSVAction(
+					R("MenuBar.AtlasMenu.ExportCSV"), ace, GpFrame.this)));
+
 			/**
 			 * A an item to change the default CRS used in the atlas
 			 */

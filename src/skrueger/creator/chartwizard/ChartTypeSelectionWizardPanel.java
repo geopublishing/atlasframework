@@ -40,7 +40,8 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 			.getLogger(ChartTypeSelectionWizardPanel.class);
 
 	private static final ChartType[] allowedChartTypes = new ChartType[] {
-			ChartType.BAR, ChartType.AREA, ChartType.LINE,
+			ChartType.BAR,  // TODO Need aggregation function
+			/* SK, 18.2.2010, doesn't amke sense at the moment :-( ChartType.AREA, ChartType.LINE, */
 			/* ChartType.PIE, */
 			/* ChartType.POINT, */
 			ChartType.SCATTER };

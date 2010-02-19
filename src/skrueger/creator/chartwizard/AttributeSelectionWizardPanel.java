@@ -131,7 +131,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 			JPanel settingsPanel;
 			if (idx == 0) {
 				settingsPanel = new JPanel(new MigLayout("wrap 1, insets 0"));
-				settingsPanel.add(getNormalizeJCheckboxFor(idx));
+//				settingsPanel.add(getNormalizeJCheckboxFor(idx));
 				
 				// For scatter plots they makes no sense: 
 				if (!(chartType == ChartType.SCATTER)) {
@@ -140,7 +140,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 				}
 			} else {
 				settingsPanel = new JPanel(new MigLayout("wrap 1, insets 0"));
-				settingsPanel.add(getNormalizeJCheckboxFor(idx));
+//				settingsPanel.add(getNormalizeJCheckboxFor(idx));
 			}
 
 			settingsPanels.put(idx, settingsPanel);
@@ -150,48 +150,48 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 	}
 
-	/**
-	 * Returns the normlizeCheckBox for idx
-	 */
-	private JCheckBox getNormalizeJCheckboxFor(int idx) {
-		if (normalizeJCheckboxs.get(idx) == null) {
-			JCheckBox cb = new JCheckBox(AtlasCreator
-					.R("AttributeSelectionPanel.NormalizeCheckbox"));
-			cb.setToolTipText(AtlasCreator
-					.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
-			
-			final ChartType chartType = (ChartType)getWizardData(ChartWizard.CHARTTYPE);
-			if (chartType == ChartType.SCATTER) {
-				cb.setSelected(true);
-			} else {
-				cb.setSelected(false);
-			}
-
-			cb.setName(ChartWizard.NORMALIZE_ + idx);
-			normalizeJCheckboxs.put(idx, cb);
-
-			getAttribJComboBoxFor(0).addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-
-					// LOGGER.debug(normalizeJCheckboxs.get(0));
-					// if (e.getSource() != normalizeJCheckboxs.get(0))
-					// return;
-
-					if (getAttribJComboBoxFor(0).isNumericalAttribSelected()) {
-						/* A numerical attribute */
-						normalizeJCheckboxs.get(0).setEnabled(true);
-					} else {
-						/* A numerical attribute */
-						normalizeJCheckboxs.get(0).setEnabled(false);
-						normalizeJCheckboxs.get(0).setSelected(false);
-					}
-				}
-			});
-		}
-		return normalizeJCheckboxs.get(idx);
-	}
+//	/**
+//	 * Returns the normlizeCheckBox for idx
+//	 */
+//	private JCheckBox getNormalizeJCheckboxFor(int idx) {
+//		if (normalizeJCheckboxs.get(idx) == null) {
+//			JCheckBox cb = new JCheckBox(AtlasCreator
+//					.R("AttributeSelectionPanel.NormalizeCheckbox"));
+//			cb.setToolTipText(AtlasCreator
+//					.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
+//			
+//			final ChartType chartType = (ChartType)getWizardData(ChartWizard.CHARTTYPE);
+//			if (chartType == ChartType.SCATTER) {
+//				cb.setSelected(true);
+//			} else {
+//				cb.setSelected(false);
+//			}
+//
+//			cb.setName(ChartWizard.NORMALIZE_ + idx);
+//			normalizeJCheckboxs.put(idx, cb);
+//
+//			getAttribJComboBoxFor(0).addItemListener(new ItemListener() {
+//
+//				@Override
+//				public void itemStateChanged(ItemEvent e) {
+//
+//					// LOGGER.debug(normalizeJCheckboxs.get(0));
+//					// if (e.getSource() != normalizeJCheckboxs.get(0))
+//					// return;
+//
+//					if (getAttribJComboBoxFor(0).isNumericalAttribSelected()) {
+//						/* A numerical attribute */
+//						normalizeJCheckboxs.get(0).setEnabled(true);
+//					} else {
+//						/* A numerical attribute */
+//						normalizeJCheckboxs.get(0).setEnabled(false);
+//						normalizeJCheckboxs.get(0).setSelected(false);
+//					}
+//				}
+//			});
+//		}
+//		return normalizeJCheckboxs.get(idx);
+//	}
 
 	/**
 	 * This checkbox defines whether the the domain axis will treat numerical
@@ -387,14 +387,14 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 							getAttribJComboBoxFor(idx + 1).setEnabled(true);
 							getLabelFor(idx + 1).setEnabled(true);
-							getNormalizeJCheckboxFor(idx + 1).setEnabled(true);
+//							getNormalizeJCheckboxFor(idx + 1).setEnabled(true);
 
 						} else {
 							// LOGGER
 							// .debug("sel == null. setting it to disabled.");
 							getAttribJComboBoxFor(idx + 1).setEnabled(false);
 							getLabelFor(idx + 1).setEnabled(false);
-							getNormalizeJCheckboxFor(idx + 1).setEnabled(false);
+//							getNormalizeJCheckboxFor(idx + 1).setEnabled(false);
 
 							getAttribJComboBoxFor(idx + 1).setSelectedItem(
 									(Object) null);

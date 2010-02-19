@@ -223,6 +223,10 @@ public class ASUtil {
 	/**
 	 * @return A list of fields that can be used for a quantification (e.g.
 	 *         numerical fields)
+	 * 
+	 * @param empty
+	 *            if <code>true</code>, the last entry of this list will always
+	 *            be a virtual 0/"" value.
 	 */
 	public static Vector<String> getNumericalFieldNames(
 			final SimpleFeatureType schema, boolean empty) {
@@ -573,14 +577,16 @@ public class ASUtil {
 						final JTable table, Object value,
 						final boolean isSelected, final boolean hasFocus,
 						final int row, final int column) {
-					final JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					final JLabel label = (JLabel) super
+							.getTableCellRendererComponent(table, value,
+									isSelected, hasFocus, row, column);
 
 					NumberFormat doubleFormat = DecimalFormat
 							.getNumberInstance();
 					doubleFormat.setMinimumFractionDigits(3);
 					doubleFormat.setMaximumFractionDigits(3);
 					doubleFormat.setMinimumIntegerDigits(1);
-					
+
 					if (value instanceof Double) {
 						final Double val = ((Double) value).doubleValue();
 						final String str = doubleFormat.format(val);
@@ -737,7 +743,9 @@ public class ASUtil {
 		case POLYGON:
 			rl = new SinglePolygonSymbolRuleList("");
 			// A 50% white fill is the default NODATA symbol for polygons
-			rl.addSymbolizer(SB.createPolygonSymbolizer(SB.createStroke(Color.GRAY.LIGHT_GRAY), SB.createFill(Color.WHITE)));
+			rl.addSymbolizer(SB.createPolygonSymbolizer(SB
+					.createStroke(Color.GRAY.LIGHT_GRAY), SB
+					.createFill(Color.WHITE)));
 			break;
 		default:
 		case LINE:
@@ -746,7 +754,7 @@ public class ASUtil {
 			rl.addSymbolizer(SB.createLineSymbolizer(Color.white));
 			break;
 		}
-		
+
 		// Find suitable default labels
 		if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
@@ -754,7 +762,8 @@ public class ASUtil {
 			for (String lang : AtlasStyler.getLanguages()) {
 
 				// Try to find a default for every language
-				String localized = AtlasStyler.R(new Locale(lang), "NoDataLegendEntry.Default");
+				String localized = AtlasStyler.R(new Locale(lang),
+						"NoDataLegendEntry.Default");
 				nodT.put(lang, localized);
 			}
 
@@ -1269,7 +1278,7 @@ public class ASUtil {
 
 		BrewerPalette[] palettes = brewer.getPalettes(paletteTypeGraduation,
 				numClasses);
-		
+
 		try {
 			BrewerPalette arthursPalette = getArthursPalette();
 

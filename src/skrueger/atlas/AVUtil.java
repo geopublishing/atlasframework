@@ -1626,7 +1626,13 @@ public class AVUtil {
 
 			legendTitleTranslation.put(lang, titleValue);
 			legendTooltipTranslation.put(lang, attMeta.getDesc().get(lang));
+			
+			// Try to update the Y-Axis label
+			if (chartStyle.getAxisStyle(seriesIdx+1) != null)
+				chartStyle.getAxisStyle(seriesIdx+1).getLabelTranslation().put(lang, titleValue);
+			
 		}
+		
 	}
 
 	/**

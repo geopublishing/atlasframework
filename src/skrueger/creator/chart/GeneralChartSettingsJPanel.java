@@ -37,6 +37,10 @@ import skrueger.swing.ColorButton;
 import skrueger.swing.TranslationEditJPanel;
 
 public class GeneralChartSettingsJPanel extends JPanel {
+	
+	// Identifies the property change event
+	public static final String PROPERTYNAME_CHART_STYLE = "chartStyle";
+	
 	static final protected Logger LOGGER = Logger
 			.getLogger(GeneralChartSettingsJPanel.class);
 	private final ChartStyle chartStyle;
@@ -61,11 +65,10 @@ public class GeneralChartSettingsJPanel extends JPanel {
 	}
 
 	private JPanel getColorsPanel() {
-		JPanel colorsPanel = new JPanel(new MigLayout("wrap 2, align center"));
+		JPanel colorsPanel = new JPanel(new MigLayout("wrap 2, align center"), AtlasStyler.R("colors.border.title"));
 		colorsPanel.add(getTitleColorButton());
 		colorsPanel.add(getSubTitleColorButton());
 
-		colorsPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler.R("colors.border.title"))); 
 		return colorsPanel;
 	}
 
@@ -94,10 +97,10 @@ public class GeneralChartSettingsJPanel extends JPanel {
 								.getBackground());
 
 						GeneralChartSettingsJPanel.this.firePropertyChange(
-								"chartStyle", null, chartStyle);
+								PROPERTYNAME_CHART_STYLE, null, chartStyle);
 					}
 					GeneralChartSettingsJPanel.this.firePropertyChange(
-							"chartStyle", null, chartStyle);
+							PROPERTYNAME_CHART_STYLE, null, chartStyle);
 				}
 
 			});
@@ -124,9 +127,10 @@ public class GeneralChartSettingsJPanel extends JPanel {
 
 					subTitleColorJButton.setColor(chartStyle.getDescStyle()
 							.getPaint());
+					
 
 					GeneralChartSettingsJPanel.this.firePropertyChange(
-							"chartStyle color", null, chartStyle);
+							PROPERTYNAME_CHART_STYLE, null, chartStyle);
 				}
 
 			});
@@ -134,10 +138,10 @@ public class GeneralChartSettingsJPanel extends JPanel {
 			/*
 			 * Ensure that there are no NULLs
 			 */
-			if (chartStyle.getDescStyle() == null)
+			if (chartStyle.getDescStyle() == null) {
 				chartStyle.setDescStyle(new ChartLabelStyle());
-			if (chartStyle.getDescStyle().getPaint() == null)
-				chartStyle.getDescStyle().setPaint(Color.black);
+				chartStyle.getDescStyle().setPaint(Color.gray);
+			}
 
 			subTitleColorJButton.setColor(chartStyle.getDescStyle().getPaint());
 
@@ -165,7 +169,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 							.getBackground());
 
 					GeneralChartSettingsJPanel.this.firePropertyChange(
-							"chartStyle", null, chartStyle);
+							PROPERTYNAME_CHART_STYLE, null, chartStyle);
 				}
 
 			});
@@ -202,7 +206,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 							.getTitleStyle().getPaint());
 
 					GeneralChartSettingsJPanel.this.firePropertyChange(
-							"chartStyle", null, chartStyle);
+							PROPERTYNAME_CHART_STYLE, null, chartStyle);
 				}
 
 			});
@@ -275,7 +279,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			GeneralChartSettingsJPanel.this.firePropertyChange(
-					"chartStyle", null, chartStyle);
+					PROPERTYNAME_CHART_STYLE, null, chartStyle);
 		}
 	};
 
@@ -290,7 +294,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 					+ chartStyle.getTitleStyle()
 							.getLabelTranslation());
 			GeneralChartSettingsJPanel.this.firePropertyChange(
-					"chartStyle", null, chartStyle);
+					PROPERTYNAME_CHART_STYLE, null, chartStyle);
 		}
 	};
 

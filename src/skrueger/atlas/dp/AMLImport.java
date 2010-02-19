@@ -40,6 +40,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
@@ -1188,18 +1189,22 @@ public class AMLImport {
 					// to Number.
 					AttributeDescriptor attDesc = dplvfs.getSchema()
 							.getDescriptor(nameImpl);
+					
+					Class<?> binding = attDesc.getType()
+							.getBinding();
+					
 					if (attDesc != null
-							&& Number.class.isAssignableFrom(attDesc.getType()
-									.getBinding())) {
-						// Add the NODATA value parsed as a Double
+							&& Number.class.isAssignableFrom(binding)) {
+						// Add the NODATA value parsed accoring to the binding
 						try {
-							attributeMetadata.getNodataValues().add(
-									Double.parseDouble(textValue));
+							
+							Number noDataValue = LangUtil.parseNumberAs(textValue, binding);
+							attributeMetadata.getNodataValues().add(noDataValue);
 
 						} catch (Exception e) {
 							ExceptionDialog.show(new RuntimeException(
 									"NODATA value '" + textValue
-											+ "' can't be parsed as numeric."));
+											+ "' can't be parsed as numeric.",e));
 							attributeMetadata.getNodataValues().add(textValue);
 						}
 					} else {

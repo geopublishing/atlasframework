@@ -636,54 +636,14 @@ public class TextRuleList extends AbstractRuleList {
 				classesMinScales.add(rule.getMinScaleDenominator());
 
 				Filter filter = rule.getFilter();
+				try {
+					
 				filter = removeEnabledDisabledFilters(filter, idx);
+				} catch (Exception e) {
+					System.out.println(e);
+				}
 
-				// // Now we only have to check for that second properties
-				// construction...
-				// if (filter instanceof And) {
-				// boolean secondPropExclusionWrapped = false;
-				//
-				// if (((And) filter).getChildren().get(0) instanceof Not) {
-				// Not not = ((Not) ((And) filter).getChildren().get(0));
-				// if (not.getFilter() instanceof Or) {
-				// Or orNUllConditionsForSecond = (Or) not.getFilter();
-				// if (orNUllConditionsForSecond.getChildren().get(0) instanceof
-				// PropertyIsNull) {
-				//
-				// secondPropExclusionWrapped = true;
-				//
-				// }
-				// }
-				// }
-				//
-				// if (!secondPropExclusionWrapped) {
-				// // Standard case...
-				// realFilter = (Filter) ((And) filter).getChildren().get(
-				// 1);
-				// enabledAllFilters &= false; // TODO
-				// // DISABLE
-				// // CLASS
-				// } else {
-				// Filter testMe = (Filter) ((And) filter).getChildren()
-				// .get(1);
-				// if (testMe instanceof And) {
-				// realFilter = (Filter) ((And) testMe).getChildren()
-				// .get(1);
-				// enabledAllFilters &= false; // TODO
-				// // DISABLE
-				// // CLASS
-				// } else {
-				// enabledAllFilters &= true;// NOt
-				// // disable
-				// }
-				// }
-				//
-				// textRulesList.getClassesFilters().add(realFilter);
-				// LOGGER.debug("Imported a real filter that was disabled = "
-				// + realFilter.toString());
-				// } else {
 				getClassesFilters().add(filter);
-				// }
 				
 				idx++;
 			}

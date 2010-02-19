@@ -33,6 +33,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
@@ -102,7 +103,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 	 * Initialize the GUI
 	 */
 	private void initGui() {
-		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 400"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 490, h 250"));
 
 		JPanel descPane = new JPanel(new MigLayout());
 		descPane.add(new JLabel(AtlasCreator.R(
@@ -110,13 +111,14 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 				BorderLayout.WEST);
 		contentPane.add(descPane);
 
-		contentPane.add(new JScrollPane(getNODATAValuesJTable()));
+		contentPane.add(new JScrollPane(getNODATAValuesJTable()),"grow x");
 
-		contentPane.add(getValueTextField(), "split 3");
+		contentPane.add(new JLabel(AtlasCreator.R("NoDataValues.EditDialog.NewNoDataValueTextField")), "split 6");
+		contentPane.add(getValueTextField());
 		contentPane.add(getAddButton());
 		contentPane.add(getRemoveButton());
 
-		contentPane.add(getOkButton(), "tag ok, split 2");
+		contentPane.add(getOkButton(), "tag ok");
 		contentPane.add(getCancelButton(), "tag cancel");
 
 		setContentPane(contentPane);
@@ -190,8 +192,10 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 					String valueString = getValueTextField().getText();
 					if (Number.class.isAssignableFrom(binding)) {
 						try {
-							attMetaData.getNodataValues().add(
-									Double.parseDouble(valueString));
+							
+							Number noDataValue = LangUtil.parseNumberAs(valueString, binding);
+							attMetaData.getNodataValues().add(noDataValue);
+							
 						} catch (NumberFormatException nex) {
 							AVUtil
 									.showMessageDialog(

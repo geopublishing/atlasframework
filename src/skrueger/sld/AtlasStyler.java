@@ -593,8 +593,9 @@ public class AtlasStyler {
 					uniqueRuleList.setWithDefaultSymbol(false);
 					for (final Rule r : fts.rules()) {
 
-						if (r.getName().toString().startsWith(
-								FeatureRuleList.NODATA_RULE_NAME)) {
+						if (r.getName() != null
+								&& r.getName().toString().startsWith(
+										FeatureRuleList.NODATA_RULE_NAME)) {
 							// This rule defines the NoDataSymbol
 							uniqueRuleList.importNoDataRule(r);
 							continue;
@@ -862,13 +863,13 @@ public class AtlasStyler {
 			return;
 		}
 
-//		LOGGER.info(" FIREING EVENT to " + listeners.size());
+		// LOGGER.info(" FIREING EVENT to " + listeners.size());
 
 		xxxstyle = null;
 		xxxstyle = getStyle();
 		if (xxxstyle == null)
 			return;
-		
+
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			try {
@@ -1045,14 +1046,15 @@ public class AtlasStyler {
 	public SinglePointSymbolRuleList getSinglePointSymbolRulesList() {
 		if (singlePointSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
-			
+
 			singlePointSymbolRuleList = new SinglePointSymbolRuleList(title2);
 
 			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList with a default layer.
+				// We have already imported a Style and we fill this RuleList
+				// with a default layer.
 				singlePointSymbolRuleList.addNewDefaultLayer();
 			}
-			
+
 			singlePointSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singlePointSymbolRuleList);
 		}
@@ -1083,29 +1085,31 @@ public class AtlasStyler {
 		if (singleLineSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
 			singleLineSymbolRuleList = new SingleLineSymbolRuleList(title2);
-			
+
 			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList with a default layer.
+				// We have already imported a Style and we fill this RuleList
+				// with a default layer.
 				singleLineSymbolRuleList.addNewDefaultLayer();
 			}
-			
+
 			singleLineSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singleLineSymbolRuleList);
 		}
 		return singleLineSymbolRuleList;
 	}
-	
+
 	public SinglePolygonSymbolRuleList getSinglePolygonSymbolRulesList() {
 		if (singlePolygonSymbolRuleList == null) {
 			Translation title2 = getRuleTileFor(styledFeatures);
 			singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
 					title2);
-			
+
 			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList with a default layer.
+				// We have already imported a Style and we fill this RuleList
+				// with a default layer.
 				singlePolygonSymbolRuleList.addNewDefaultLayer();
 			}
-			
+
 			singlePolygonSymbolRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(singlePolygonSymbolRuleList);
 		}

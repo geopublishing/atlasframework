@@ -120,8 +120,6 @@ public class AtlasChartJDialog extends AtlasDialog {
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		if (chartPanel == null) {
-			
-			
 
 			JFreeChart chart;
 
@@ -138,7 +136,6 @@ public class AtlasChartJDialog extends AtlasDialog {
 						fschart.getAxisStyle(axisIdx).setUnitVisible(visible);
 					}
 				}
-
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 						AtlasChartJDialog.this, AtlasViewer

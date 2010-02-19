@@ -41,7 +41,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -62,6 +61,7 @@ import org.geotools.styling.Symbolizer;
 
 import schmitzm.geotools.map.event.MapLayerAdapter;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.Translation;
@@ -89,13 +89,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 	private JPanel jPanel = null;
 
-	private JPanel jPanel2 = null;
-
 	private JLabel jLabelClassificationTypeDescription = null;
-
-	private JLabel jLabelParam = null;
-
-	private JToggleButton jToggleButton_Classify = null;
 
 	private JLabel jLabel2 = null;
 
@@ -117,7 +111,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 	private DefaultTableModel tableModel;
 
-	protected QuantitiesClassificationGUI quantGUI;
+	// protected QuantitiesClassificationGUI quantGUI;
 
 	private JComboBox jComboBoxPalettes = null;
 
@@ -314,60 +308,41 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelClassification() {
-		if (jPanel2 == null) {
-			final GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 2;
-			gridBagConstraints4.gridy = 1;
-			final GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints3.gridy = 1;
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.insets = new Insets(0, 0, 0, 10);
-			gridBagConstraints3.gridx = 1;
-			final GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 1;
-			jLabelParam = new JLabel();
-			jLabelParam.setText(AtlasStyler.R("ComboBox.NumberOfClasses"));
-			jLabelParam.setToolTipText(AtlasStyler
-					.R("ComboBox.NumberOfClasses.TT"));
 
-			final GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-			gridBagConstraints1.gridx = 0;
-			gridBagConstraints1.gridwidth = 3;
-			gridBagConstraints1.insets = new Insets(0, 0, 5, 0);
-			gridBagConstraints1.gridy = 0;
-			jLabelClassificationTypeDescription = new JLabel(AtlasStyler.R(
-					"GraduatedColorQuantities.classification.Method",
-					classifier.getMethod().getDesc()));
-			jLabelClassificationTypeDescription.setToolTipText(classifier
-					.getMethod().getToolTip());
+		JLabel jLabelParam = new JLabel(AtlasStyler
+				.R("ComboBox.NumberOfClasses"));
+		jLabelParam
+				.setToolTipText(AtlasStyler.R("ComboBox.NumberOfClasses.TT"));
 
-			classifier.addListener(new ClassificationChangedAdapter() {
+		jLabelClassificationTypeDescription = new JLabel(AtlasStyler.R(
+				"GraduatedColorQuantities.classification.Method", classifier
+						.getMethod().getDesc()));
 
-				@Override
-				public void classifierMethodChanged(
-						final ClassificationChangeEvent e) {
-					jLabelClassificationTypeDescription.setText(AtlasStyler.R(
-							"GraduatedColorQuantities.classification.Method",
-							classifier.getMethod().getDesc()));
-					jLabelClassificationTypeDescription
-							.setToolTipText(classifier.getMethod().getToolTip());
-				}
+		jLabelClassificationTypeDescription.setToolTipText(classifier
+				.getMethod().getToolTip());
 
-			});
+		classifier.addListener(new ClassificationChangedAdapter() {
 
-			jPanel2 = new JPanel();
-			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(AtlasStyler
-					.R("GraduatedColorQuantities.classification.BorderTitle")));
-			jPanel2.add(jLabelClassificationTypeDescription,
-					gridBagConstraints1);
-			jPanel2.add(jLabelParam, gridBagConstraints2);
-			jPanel2.add(getNumClassesJComboBox(), gridBagConstraints3);
-			jPanel2.add(getClassifyJToggleButton(), gridBagConstraints4);
-		}
-		return jPanel2;
+			@Override
+			public void classifierMethodChanged(
+					final ClassificationChangeEvent e) {
+				jLabelClassificationTypeDescription.setText(AtlasStyler.R(
+						"GraduatedColorQuantities.classification.Method",
+						classifier.getMethod().getDesc()));
+				jLabelClassificationTypeDescription.setToolTipText(classifier
+						.getMethod().getToolTip());
+			}
+
+		});
+
+		JPanel jPanelClassification = new JPanel(new MigLayout(), AtlasStyler
+				.R("GraduatedColorQuantities.classification.BorderTitle"));
+		jPanelClassification.add(jLabelClassificationTypeDescription, "wrap");
+		jPanelClassification.add(jLabelParam, "split 3");
+		jPanelClassification.add(getNumClassesJComboBox());
+		jPanelClassification.add(getClassifyJToggleButton());
+
+		return jPanelClassification;
 	}
 
 	private NumClassesJComboBox getNumClassesJComboBox() {
@@ -383,79 +358,72 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return javax.swing.JButton
 	 */
 	private JToggleButton getClassifyJToggleButton() {
-		if (jToggleButton_Classify == null) {
-			jToggleButton_Classify = new JToggleButton();
-			jToggleButton_Classify.setAction(new AbstractAction(AtlasStyler
-					.R("GraduatedColorQuantities.Classify.Button")) {
+		final JToggleButton jToggleButton_Classify = new JToggleButton();
+		jToggleButton_Classify.setAction(new AbstractAction(AtlasStyler
+				.R("GraduatedColorQuantities.Classify.Button")) {
 
-				public void actionPerformed(final ActionEvent e) {
-					if (jToggleButton_Classify.isSelected()) {
+			public void actionPerformed(final ActionEvent e) {
+				if (jToggleButton_Classify.isSelected()) {
 
-						// Test here, if the data is problematic and show the
-						// exception to the user without opening the dialog.
-						try {
-							classifier.getStatistics();
-						} catch (final Exception eee) {
-							jToggleButton_Classify.setSelected(false);
-							ExceptionDialog.show(
-									GraduatedColorQuantitiesGUI.this, eee);
-							return;
-						}
-
-						getQuantitiesClassificationGUI().setVisible(true);
-					} else {
-						getQuantitiesClassificationGUI().setVisible(false);
+					// Test here, if the data is problematic and show the
+					// exception to the user without opening the dialog.
+					try {
+						classifier.getStatistics();
+					} catch (final Exception eee) {
+						jToggleButton_Classify.setSelected(false);
+						ExceptionDialog.show(GraduatedColorQuantitiesGUI.this,
+								eee);
+						return;
 					}
 
+					getQuantitiesClassificationGUI().setVisible(true);
+				} else {
+					getQuantitiesClassificationGUI().setVisible(false);
 				}
 
-				private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
-					if (quantGUI == null) {
-						AttributeMetadataMap attributeMetaDataMap = rulesList
-								.getStyledFeatures().getAttributeMetaDataMap();
+			}
 
-						// Title like :
-						String titleVariables = attributeMetaDataMap.get(
-								classifier.getValue_field_name()).getTitle()
-								.toString();
+			private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
+				// if (quantGUI == null) {
+				AttributeMetadataMap attributeMetaDataMap = rulesList
+						.getStyledFeatures().getAttributeMetaDataMap();
 
-						if (classifier.getNormalizer_field_name() != null
-								&& !classifier.getNormalizer_field_name()
-										.isEmpty()) {
-							titleVariables += ":"
-									+ attributeMetaDataMap
-											.get(
-													classifier
-															.getNormalizer_field_name())
-											.getTitle().toString();
-						}
+				// Title like :
+				String titleVariables = attributeMetaDataMap.get(
+						classifier.getValue_field_name()).getTitle().toString();
 
-						quantGUI = new QuantitiesClassificationGUI(
-								jToggleButton_Classify, classifier,
-								atlasStyler, AtlasStyler.R(
-										"QuantitiesClassificationGUI.Title",
-										titleVariables));
-						quantGUI.addWindowListener(new WindowAdapter() {
+				if (classifier.getNormalizer_field_name() != null
+						&& !classifier.getNormalizer_field_name().isEmpty()) {
+					titleVariables += ":"
+							+ attributeMetaDataMap.get(
+									classifier.getNormalizer_field_name())
+									.getTitle().toString();
+				}
 
-							@Override
-							public void windowClosed(final WindowEvent e) {
-								jToggleButton_Classify.setSelected(false);
-							}
+				QuantitiesClassificationGUI quantGUI = new QuantitiesClassificationGUI(
+						jToggleButton_Classify, classifier, atlasStyler,
+						AtlasStyler.R("QuantitiesClassificationGUI.Title",
+								titleVariables));
+				quantGUI.addWindowListener(new WindowAdapter() {
 
-							@Override
-							public void windowClosing(final WindowEvent e) {
-								jToggleButton_Classify.setSelected(false);
-							}
-
-						});
+					@Override
+					public void windowClosed(final WindowEvent e) {
+						jToggleButton_Classify.setSelected(false);
 					}
-					return quantGUI;
-				}
 
-			});
-			jToggleButton_Classify.setToolTipText(AtlasStyler
-					.R("GraduatedColorQuantities.Classify.Button.TT"));
-		}
+					@Override
+					public void windowClosing(final WindowEvent e) {
+						jToggleButton_Classify.setSelected(false);
+					}
+
+				});
+				// }
+				return quantGUI;
+			}
+
+		});
+		jToggleButton_Classify.setToolTipText(AtlasStyler
+				.R("GraduatedColorQuantities.Classify.Button.TT"));
 		return jToggleButton_Classify;
 	}
 
@@ -479,41 +447,19 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							if (e.getStateChange() == ItemEvent.SELECTED) {
 
 								final String valueField = (String) e.getItem();
-								//
-								// final Object oldNormSelection =
-								// getJComboBoxNormalizationField()
-								// .getSelectedIndex();
-
+							
 								getJComboBoxNormalizationField()
 										.setModel(
 												classifier
 														.createNormalizationFieldsComboBoxModel());
-								// jComboBoxNormlization.repaint();
-								//
-								// /**
-								// * We do not divide A/A ! So when Attribute A
-								// is
-								// * selected as the value field, the normalized
-								// * field may not be A.
-								// */
-								// if (valueField == oldNormSelection) {
-								// getJComboBoxNormalizationField()
-								// .setSelectedItem(
-								// QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
-								// } else {
-								// getJComboBoxNormalizationField()
-								// .setSelectedItem(oldNormSelection);
-								// }
-								// getJComboBoxNormalizationField()
-								// .setSelectedItem(
-								// QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX);
+							
 
 								LOGGER.debug("Set valuefield to " + valueField);
 								classifier.setValue_field_name(valueField);
-
-								// When the valueField has been changed by the
-								// user, throw away the ruleTitles
-								rulesList.getRuleTitles().clear();
+//
+//								// When the valueField has been changed by the
+//								// user, throw away the ruleTitles
+//								rulesList.getRuleTitles().clear();
 							}
 						}
 					});
@@ -551,10 +497,10 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 									classifier
 											.setNormalizer_field_name((String) e
 													.getItem());
-
-								// When the normalizationField has been changed
-								// by the user, throw away the ruleTitles
-								rulesList.getRuleTitles().clear();
+//
+//								// When the normalizationField has been changed
+//								// by the user, throw away the ruleTitles
+//								rulesList.getRuleTitles().clear();
 
 							}
 						}
@@ -1096,24 +1042,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	protected SingleRuleList<? extends Symbolizer> backup;
 
-	// /**
-	// * Listens to real-time modifications of the template icon and updates the
-	// * preview
-	// */
-	// RuleChangeListener listenerUpdatePreviewIconOnTemplateChange = new
-	// RuleChangeListener() {
-	//
-	// public void changed(final RuleChangedEvent e) {
-	//
-	// // LOGGER.debug("reason = " + e.toString());
-	// rulesList.setTemplate(rulesList.getTemplate());
-	//
-	// getJButtonTemplate().setIcon(new ImageIcon(rulesList.getTemplate()
-	// .getImage(ICON_SIZE)));
-	// }
-	//
-	// };
-
 	/**
 	 * This method initializes jButton
 	 * 
@@ -1132,11 +1060,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	}
 
 	public void dispose() {
-		if (quantGUI != null) {
-			quantGUI.dispose();
-			quantGUI = null;
-		}
-
 		if (classifier != null)
 			classifier.dispose();
 

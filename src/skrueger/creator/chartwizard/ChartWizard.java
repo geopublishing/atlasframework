@@ -88,7 +88,7 @@ public class ChartWizard extends WizardBranchController {
 	 * Sometimes the {@link LayoutManager} needs to know the width we are
 	 * working on to make long lines wrap propperly.
 	 */
-	public static final int WIDTH_DEFAULT = 410;
+	public static final int WIDTH_DEFAULT = 580;
 	public static final int HEIGHT_DEFAULT = 350;
 
 	/** Is initialized with <code>true</code> **/
@@ -97,7 +97,7 @@ public class ChartWizard extends WizardBranchController {
 	/** Is initialized with <code>false</code> **/
 	public static final String DOMAIN_FORCE_CATEGORY = "forceCategoryDataEvenIfNumeric_Boolean";
 
-	public static final String NORMALIZE_ = "normlizeSettingForIdx_Boolean";
+//	public static final String NORMALIZE_ = "normlizeSettingForIdx_Boolean";
 
 	public static final String TYPECHANGED = "kklökljö";
 
@@ -232,8 +232,8 @@ public class ChartWizard extends WizardBranchController {
 			for (Integer index = 0; index < editChart.getAttributeCount(); index++) {
 				initialProperties.put(ChartWizard.ATTRIBUTE_ + index, editChart
 						.getAttributeName(index));
-				initialProperties.put(ChartWizard.NORMALIZE_ + index, editChart
-						.isAttributeNormalized(index));
+//				initialProperties.put(ChartWizard.NORMALIZE_ + index, editChart
+//						.isAttributeNormalized(index));
 			}
 
 			/* The title of the chart */

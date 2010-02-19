@@ -14,9 +14,11 @@ import skrueger.atlas.AVUtil;
 import skrueger.atlas.BugReportmailer;
 
 public class GPBugReportmailer extends BugReportmailer {
+	
+	public final static String GEOPUBLISHERLOG = "geopublisher.log"; 
 
 	public GPBugReportmailer() {
-		super("geopublisher.log");
+		super(GEOPUBLISHERLOG);
 	}
 
 	@Override

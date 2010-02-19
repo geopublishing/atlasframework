@@ -398,7 +398,7 @@ public class SVGSelector extends JDialog {
 										.getExternalGraphics();
 							} else {
 
-								// TODO LINE!
+								// TODO Can SVGs be used for lines?
 
 								// if (GTUtil.isPolygon(attType)) {
 								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;

@@ -192,10 +192,20 @@ public class ClickInfoDialog extends JDialog {
 	 */
 	public void setSelectionEvent(
 			final ObjectSelectionEvent<?> objectSelectionEvent) {
+
 		clickInfoPanel.setSelectionEvent(objectSelectionEvent);
 
 		SelectableXMapPane source = objectSelectionEvent.getSource();
-		
+
+		// Set the title of the dialog to the translated title the layer
+		try {
+			setTitle(atlasConfig.getDataPool().get(
+					objectSelectionEvent.getSourceLayer().getTitle())
+					.getTitle().toString());
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
+
 		// If it is a feature, let it blink for a moment
 		if (source instanceof XMapPane
 				&& objectSelectionEvent instanceof FeatureSelectedEvent) {
@@ -204,7 +214,6 @@ public class ClickInfoDialog extends JDialog {
 			mapPane.blink(((FeatureSelectedEvent) objectSelectionEvent)
 					.getSelectionResult());
 		}
-		;
 	}
 
 	/**

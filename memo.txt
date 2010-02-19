@@ -1,3 +1,7 @@
+Env[-198.0 : 198.0, -223.91582845914397 : 217.53942445914396]
+Env[-198.0 : 198.0, -223.91582845914397 : 217.53942445914396]
+
+
 >Beim Löschen aller Layer aus der Marokko-Startkarte bleibt die Karte trotzdem bestehen. Das ganze ist blockiert.
 
 Änderungen in layern bleiben auch bestehen, wenn man andere Karten mit diesen layern neu lädt.

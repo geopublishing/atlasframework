@@ -102,9 +102,8 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 	public ManageChartsForMapDialog(Component owner,
 			DpLayerVectorFeatureSource dplv, AtlasMapLegend mapLegend) {
 
-		super(owner, AtlasCreator.R(
-				"ManageChartsForMapDialog.TitleForDPLayer", dplv.getTitle()
-						.toString()));
+		super(owner, AtlasCreator.R("ManageChartsForMapDialog.TitleForDPLayer",
+				dplv.getTitle().toString()));
 		this.dplv = dplv;
 		this.atlasConfigEditable = (AtlasConfigEditable) dplv.getAc();
 		this.map = mapLegend.getMap();
@@ -123,8 +122,9 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 		initGUI();
 
 		pack();
-		
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHWEST);
+
+		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
+				SwingUtil.NORTHWEST);
 
 		// Directly create a new chart if there exist no charts yet.
 		SwingUtilities.invokeLater(new Runnable() {
@@ -185,18 +185,20 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 		Set<Map> mapsUsingTheDpe = atlasConfigEditable.getMapPool()
 				.getMapsUsing(dplv);
-		mapsUsingTheDpe.remove(map);
 
 		if (newlyCreatedCharts.size() > 0
 				&& mapsUsingTheDpe.size() > 0
 				&& AVUtil
 						.askYesNo(
-								ManageChartsForMapDialog.this, // i8n
-								"Sollen die "
-										+ newlyCreatedCharts.size()
-										+ " neu erstellten Charts in den anderen "
-										+ mapsUsingTheDpe.size()
-										+ " Karten verfügbar sein, in denen das Layer verwendet wird?")) { // i8n
+								ManageChartsForMapDialog.this,
+								AtlasCreator
+										.R(
+												"ManageChartsForMapDialog.addNewChartsToAllMaps.ConfirmationQuestion",
+												newlyCreatedCharts.size(),
+												mapsUsingTheDpe.size() - 1, map
+														.getTitle())))
+			;
+		{
 			for (ChartStyle cs : newlyCreatedCharts) {
 				for (Map m : mapsUsingTheDpe) {
 					ArrayList<String> avilChartForDpe = m
@@ -660,6 +662,5 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 		}
 		return addButton;
 	}
-
 
 }

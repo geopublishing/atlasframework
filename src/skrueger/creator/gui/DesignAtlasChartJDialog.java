@@ -31,12 +31,14 @@ import java.util.WeakHashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
@@ -203,13 +205,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		super(owner);
 		this.chartStyle = chartStyle;
+
 		this.mapLegend = mapLegend;
+
 		this.styledLayer = styledFeatures;
 
 		this.mapPane = mapLegend != null ? (mapLegend.getGeoMapPane() != null ? mapLegend
 				.getGeoMapPane().getMapPane()
 				: null)
 				: null;
+
+		// GPDialogManager.dm_MapComposer.getInstanceFor(mapLegend.getm,
+		// factory)
 
 		this.atlasConfigEditable = atlasConfigEditable;
 
@@ -420,10 +427,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			chartStyle.getPlotStyle().setDomainGridlineVisible(true);
 		if (chartStyle.getPlotStyle().isRangeGridlineVisible() == null)
 			chartStyle.getPlotStyle().setRangeGridlineVisible(true);
-		if (chartStyle.getPlotStyle().isCrosshairVisible() == null)
-			chartStyle.getPlotStyle().setCrosshairVisible(false);
-		if (chartStyle.getPlotStyle().getCrosshairPaint() == null)
-			chartStyle.getPlotStyle().setCrosshairPaint(Color.BLACK);
 
 		JPanel grids = new JPanel(new MigLayout(), AtlasCreator
 				.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.Grid.Border"));
@@ -449,7 +452,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		}
 
 		{
-			// Domain Axis
 			JCheckBox cb = new JCheckBox(
 					AtlasCreator
 							.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.Grid.Range.visible"));
@@ -473,8 +475,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				new MigLayout(),
 				AtlasCreator
 						.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.ZeroAxis.Border"));
-		{
-			// Crosshair linessadsd
+
+		// For BAR charts drawing the cross of axis or choosing its color has no
+		// function
+		if (chartStyle.getType() != ChartType.BAR) {
+
+			// Fill empty values with defaults
+			if (chartStyle.getPlotStyle().isCrosshairVisible() == null)
+				chartStyle.getPlotStyle().setCrosshairVisible(false);
+			if (chartStyle.getPlotStyle().getCrosshairPaint() == null)
+				chartStyle.getPlotStyle().setCrosshairPaint(Color.BLACK);
+
+			// Draw cross of axis / Crosshair line
 			JCheckBox cb = new JCheckBox(
 					AtlasCreator
 							.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.ZeroAxis.visible"));
@@ -488,11 +500,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 			});
 			axisCross.add(cb);
-		}
 
-		{
 			// Color Button for ZeroAxis cross-hair
-
 			final ColorButton colorButton = new ColorButton(chartStyle
 					.getPlotStyle().getCrosshairPaint());
 
@@ -575,10 +584,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	 * domain axis
 	 */
 	private JPanel getAxisPanel(int axisNr) {
-		JPanel axisPane = new JPanel(new MigLayout("w "
+		final JPanel axisPane = new JPanel(new MigLayout("w "
 				+ (ChartPanel.DEFAULT_WIDTH - 40) + ",wrap 2", "[grow]"));
 
-		/** A textfield that shows the unit (untranslatable).**/
+		/** A textfield that shows the unit (untranslatable). **/
 		final JTextField unitTextfield = new JTextField(15);
 		/*
 		 * Ensure that there are no NULLs
@@ -665,13 +674,13 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 					chartStyle.setAttributeName(ChartStyle.DOMAIN_AXIS,
 							attLocalName);
-					
+
 					// attribute Metadata for the new attribute
-					AttributeMetadata atm = styledLayer.getAttributeMetaDataMap().get(
-							attLocalName);
-					
-					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS,
-							atm.getNodataValues());
+					AttributeMetadata atm = styledLayer
+							.getAttributeMetaDataMap().get(attLocalName);
+
+					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS, atm
+							.getNodataValues());
 
 					/**
 					 * Update the legend labeling with the AttributeMetaData
@@ -696,7 +705,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 					// Update the NODATA Panel
 					noDataPanel.setAttribute(attLocalName);
-					
+
 					unitTextfield.setText(atm.getUnit());
 
 					fireChartChangedEvent(true);
@@ -719,7 +728,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		domainLabelTranslation
 				.addTranslationChangeListener(listenToDomainLabelChangesAndUpdateChart);
-
+		
 		axisLabelTranslationJPanel.setBorder(BorderFactory
 				.createTitledBorder(AtlasCreator
 						.R("DesignAtlasChartJDialog.AxisSettings.AxisLabel")));
@@ -760,40 +769,85 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		axisPane.add(unitPanel, "sgy");
 
 		/*
-		 * Now add a ANGLE JTextField
+		 * Now add a ANGLE slider or radio buttons
 		 */
-		JPanel anglePanel = new JPanel();
+		JPanel anglePanel = new JPanel(new MigLayout());
+		
+		anglePanel.add(new JLabel(AtlasCreator
+				.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")),"wrap");
 
-		final JSlider angleSlider = new JSlider(0, 90, axisStyle
-				.getValuesAngle().intValue());
+		boolean isANumberAxis = true;
+		try {
+			isANumberAxis = Number.class.isAssignableFrom(styledLayer.getSchema().getDescriptor(
+					chartStyle.getAttributeName(axisNr)).getType().getBinding()
+					);
+		} catch (Exception e) {
+			LOGGER
+					.warn("Could not determine wherther this is a number axis",
+							e);
+		}
+		
+		if (isANumberAxis) {
+			JRadioButton horiz = new JRadioButton(new AbstractAction(AtlasCreator
+					.R("horizontal")) {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					axisStyle.setValuesAngle(0.);
+					fireChartChangedEvent();
+				}
+			});
+			horiz.setSelected(axisStyle.getValuesAngle() == 0.);
+			
+			JRadioButton vertical = new JRadioButton(new AbstractAction(AtlasCreator
+					.R("vertical")) {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					axisStyle.setValuesAngle(90.);
+					fireChartChangedEvent();
+				}
+			});
+			vertical.setSelected(axisStyle.getValuesAngle() == 90.);
+			
+			ButtonGroup bg = new ButtonGroup();
+			bg.add(horiz);
+			bg.add(vertical);
+			
+			anglePanel.add(horiz, "wrap");
+			anglePanel.add(vertical, "wrap");
+			
+		} else {
 
-		/*
-		 * A numerical axis may only define angle 0 or 90
-		 */
-		Hashtable<Integer, JComponent> labelTable = new Hashtable<Integer, JComponent>();
-		labelTable.put(new Integer(0), new JLabel("0\u00b0"));
-		labelTable.put(new Integer(90), new JLabel("90\u00b0"));
+			final JSlider angleSlider = new JSlider(0, 90, axisStyle
+					.getValuesAngle().intValue());
 
-		angleSlider.setLabelTable(labelTable);
-		angleSlider.setPaintLabels(true);
-		angleSlider.setMajorTickSpacing(15);
-		angleSlider.setPaintTicks(true);
-		angleSlider.addChangeListener(new ChangeListener() {
+			/*
+			 * A numerical axis may only define angle 0 or 90
+			 */
+			Hashtable<Integer, JComponent> labelTable = new Hashtable<Integer, JComponent>();
+			labelTable.put(new Integer(0), new JLabel("0\u00b0"));
+			labelTable.put(new Integer(90), new JLabel("90\u00b0"));
 
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				final Double newAngle = new Double(angleSlider.getValue());
-				axisStyle.setValuesAngle(newAngle);
-				// LOGGER.debug("Setting angle to "+newAngle);
-				fireChartChangedEvent();
-			}
+			angleSlider.setLabelTable(labelTable);
+			angleSlider.setPaintLabels(true);
+			angleSlider.setMajorTickSpacing(15);
+			angleSlider.setPaintTicks(true);
+			angleSlider.addChangeListener(new ChangeListener() {
 
-		});
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					final Double newAngle = new Double(angleSlider.getValue());
+					axisStyle.setValuesAngle(newAngle);
+					// LOGGER.debug("Setting angle to "+newAngle);
+					fireChartChangedEvent();
+				}
 
-		anglePanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
-				.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")));
-		anglePanel.add(angleSlider);
-		axisPane.add(anglePanel, "sgy, growx");
+			});
+
+			anglePanel.add(angleSlider);
+		}
+		axisPane.add(anglePanel, "sgy, growx 2000");
 
 		return axisPane;
 	}
@@ -895,10 +949,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		rendererSettingsPanel
 				.add(getSeriesColorButton(rendererIndex, seriesIdx));
 
+		// The possibility to show/hide shapes is only given for non point
+		// layers. otherwise set true!
 		if (chartStyle.getType() != ChartType.POINT
-				&& chartStyle.getType() != ChartType.SCATTER) {
-			// The possibility to show/hide shapes is only given for non point
-			// layers. otherwise set true!
+				&& chartStyle.getType() != ChartType.SCATTER && chartStyle.getType() != ChartType.BAR) {
 			rendererSettingsPanel.add(getShapesVisibleJCheckBoxFor(
 					rendererIndex, seriesIdx));
 		} else {
@@ -1034,9 +1088,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							chartStyle, rendererIndex, seriesIdx,
 							atlasConfigEditable.getLanguages());
 				}
-
-				noDataPanel.setAttribute(attLocalName);
 				
+				noDataPanel.setAttribute(attLocalName);
+			
 				fireChartChangedEvent(true);
 			}
 
@@ -1271,12 +1325,12 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 									.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle.TT")));
 			legendSettingsJPanel.add(legendTooltipTranslationJPanel, "span 2");
 
-			/*
-			 * Border
-			 */
-			legendSettingsJPanel.setBorder(BorderFactory
-					.createTitledBorder(AtlasCreator
-							.R("DesignAtlasChartJDialog.LegendBorderTitle")));
+//			/*
+//			 * Border
+//			 */
+//			legendSettingsJPanel.setBorder(BorderFactory
+//					.createTitledBorder(AtlasCreator
+//							.R("DesignAtlasChartJDialog.LegendBorderTitle")));
 
 			legendTitleTranslationEditPanels.put(rendererIndex * 1000
 					+ seriesIndex, legendSettingsJPanel);
@@ -1299,7 +1353,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
-							if (evt.getPropertyName().equals("chartStyle")) {
+							if (evt
+									.getPropertyName()
+									.equals(
+											GeneralChartSettingsJPanel.PROPERTYNAME_CHART_STYLE)) {
 								fireChartChangedEvent();
 							}
 						}
@@ -1433,11 +1490,11 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		if (chartPanel == null) {
-			
+
 			// Check if normalization is enabled, and then configure the
 			// visualization of unit strings accordingly.
 			// If the first attribute is normalized, all are!
-			// This check is also done in updateChart method. 
+			// This check is also done in updateChart method.
 			{
 				boolean visible = !chartStyle.isAttributeNormalized(0);
 				for (int axisIdx = 0; axisIdx < chartStyle.getAxisCount(); axisIdx++) {

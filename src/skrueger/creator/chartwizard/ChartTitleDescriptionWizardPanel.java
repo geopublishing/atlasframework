@@ -147,13 +147,18 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 						.get(lang)
 						: domainAttribName;
 				String descTranslated = domainTitle + " ";
+				
+				String firstSeriesTitle  = null;
 				if (seriesTitleTranslations[0] != null) {
-					final String firstSeriesTitle = seriesTitleTranslations[0]
+					firstSeriesTitle = seriesTitleTranslations[0]
 							.get(lang) != null ? seriesTitleTranslations[0]
 							.get(lang)
 							: (String) getWizardData(ChartWizard.ATTRIBUTE_ + 1);
-
-					descTranslated += "vs. " + firstSeriesTitle; // i8n
+							
+					if (chartType ==  ChartType.SCATTER) {
+						descTranslated += "vs. " + firstSeriesTitle; // i8n
+					} // else später
+					
 				}
 				for (int i = 1; i < chartType.getMaxDimensions()
 						|| chartType.getMaxDimensions() < 0; i++) {
@@ -166,6 +171,11 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 									+ (i + 1));
 					descTranslated += ", " + attribTitle;
 				}
+				
+				 if (chartType == ChartType.BAR) {
+					 if (firstSeriesTitle != null)
+						 descTranslated = AtlasCreator.R("ChartWizardPanel.DefaultBarChartSubTitle",firstSeriesTitle,descTranslated);
+				} // scatter früher
 
 				translation.put(lang, descTranslated);
 			}

@@ -105,9 +105,9 @@ public class ClickInfoPanel extends JPanel {
 	private static final Font DEFAULT_FONT = new JLabel().getFont().deriveFont(
 			Font.PLAIN);
 
-	/** the Font for the Title * */
-	private static final Font TITLE_FONT = DEFAULT_FONT.deriveFont(Font.BOLD,
-			DEFAULT_FONT.getSize() + 3);
+//	/** the Font for the Title * */
+//	private static final Font TITLE_FONT = DEFAULT_FONT.deriveFont(Font.BOLD,
+//			DEFAULT_FONT.getSize() + 3);
 
 	/** The {@link MapLayer} that the clicked object comes from * */
 	private MapLayer layer;
@@ -118,7 +118,7 @@ public class ClickInfoPanel extends JPanel {
 
 	private JComponent infopanel;
 
-	private String titleString;
+//	private String titleString;
 
 	private JLabel titleLabel;
 
@@ -276,11 +276,9 @@ public class ClickInfoPanel extends JPanel {
 		}
 
 		// **********************************************************************
-		// ******
 		// Set a Border and store the title
 		// **********************************************************************
-		// ******
-		titleString = layerManager.getTitleFor(layer);
+//		titleString = layerManager.getTitleFor(layer);
 		panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
 				AtlasViewer.R("ClickInfoPanel.titledBorder.bands")));
 
@@ -847,7 +845,7 @@ public class ClickInfoPanel extends JPanel {
 		// Setting a nice Border that tells the Name of the Layer, and store the
 		// title
 		// **********************************************************************
-		titleString = layerManager.getTitleFor(layer);
+//		titleString = layerManager.getTitleFor(layer);
 
 		return panel;
 	}
@@ -911,12 +909,12 @@ public class ClickInfoPanel extends JPanel {
 
 		int countRows = 0;
 
-		titleLabel = new JLabel(titleString);
-		titleLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		titleLabel.setFont(TITLE_FONT);
+//		titleLabel = new JLabel(titleString);
+//		titleLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+//		titleLabel.setFont(TITLE_FONT);
 
-		add(titleLabel);
-		countRows++;
+//		add(titleLabel);
+//		countRows++;
 
 		add(infopanel);
 		countRows++;
