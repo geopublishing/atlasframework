@@ -340,7 +340,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 
 		Double simpleQM = super.getQuality();
 
-		int countLanguages = getAc().getLanguages().size();
+		int countLanguages = getAtlasConfig().getLanguages().size();
 		int existing = countLanguages - getMissingHTMLLanguages().size();
 		double htmlQM = (double) existing / (double) countLanguages;
 
@@ -359,7 +359,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		double lsQM;
 		if (getLayerStyles().size() > 0) {
 			lsQM = 0.;
-			final List<String> languages = getAc().getLanguages();
+			final List<String> languages = getAtlasConfig().getLanguages();
 			for (final LayerStyle ls : getLayerStyles()) {
 				lsQM += (I8NUtil.qmTranslation(languages, ls.getTitle()) * 4. + I8NUtil
 						.qmTranslation(languages, ls.getDesc()) * 2.) / 6.;
@@ -382,7 +382,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 			missingHTMLLanguages = new ArrayList<String>();
 			synchronized (missingHTMLLanguages) {
 
-				for (String l : getAc().getLanguages()) {
+				for (String l : getAtlasConfig().getLanguages()) {
 					if (getInfoURL(l) == null) {
 						missingHTMLLanguages.add(l);
 					}
@@ -468,7 +468,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 
 	public DpLayer<E, CHART_STYLE_IMPL> copyTo(
 			DpLayer<E, CHART_STYLE_IMPL> target) {
-		target.setAc(getAc());
+		target.setAtlasConfig(getAtlasConfig());
 		target.setId(getId());
 		if (getBrokenException() != null)
 			target.setBrokenException(getBrokenException());

@@ -84,7 +84,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
 
-import skrueger.atlas.AtlasConfig;
 import skrueger.creator.AtlasCreator;
 import skrueger.i8n.Translation;
 
@@ -175,13 +174,20 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 
 	private static TextResources readDefaultResources() {
 		try {
-			String propsLoc = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
+//			String propsLoc = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 			// URL defaultPropsURL = ClassLoader.getSystemResource(propsLoc);
+//			in = AtlasConfig.getResLoMan().getResourceAsStream(propsLoc);
+			
+			
 			InputStream in = null;
-			in = AtlasConfig.getResLoMan().getResourceAsStream(propsLoc);
+//			in = new ClassResourceLoader(SHTMLPanelImpl.class).getResourceAsStream("com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
+			in = SHTMLPanelImpl.class.getClassLoader().getResourceAsStream("com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
+//			in = SHTMLPanelImpl.class.getClassLoader().getSystemResourceAsStream("/com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
+			
 			final Properties props = new Properties();
 			props.load(in);
 			in.close();
+			
 			final ResourceBundle resourceBundle = ResourceBundle.getBundle(
 					"com.lightdev.app.shtm.resources.SimplyHTML", Locale
 							.getDefault());

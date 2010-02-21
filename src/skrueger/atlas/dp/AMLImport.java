@@ -10,6 +10,7 @@
  ******************************************************************************/
 package skrueger.atlas.dp;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -33,6 +34,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import rachel.ResourceManager;
+import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.io.GeoImportUtil;
@@ -57,6 +59,7 @@ import skrueger.atlas.dp.media.DpMediaPDF;
 import skrueger.atlas.dp.media.DpMediaVideo;
 import skrueger.atlas.exceptions.AtlasException;
 import skrueger.atlas.exceptions.AtlasFatalException;
+import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.atlas.exceptions.AtlasRecoverableException;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.http.Webserver;
@@ -64,6 +67,7 @@ import skrueger.atlas.internal.AMLUtil;
 import skrueger.atlas.map.Map;
 import skrueger.atlas.map.MapPool;
 import skrueger.atlas.map.MapRef;
+import skrueger.creator.AtlasConfigEditable;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.io.GeoImportUtilURL;
 import skrueger.i8n.Translation;
@@ -75,7 +79,7 @@ public class AMLImport {
 
 	private static final Logger LOGGER = Logger.getLogger(AMLImport.class);
 
-	public static AtlasStatusDialog statusDialog;
+	private static AtlasStatusDialog statusDialog;
 
 	/**
 	 * If set to <code>true</code> by {@link #checkUpgrades(Node)},
@@ -151,15 +155,15 @@ public class AMLImport {
 	 */
 	public final static void parseAtlasConfig(AtlasStatusDialog statusDialog,
 			final AtlasConfig atlasConfig, boolean validate)
-			throws SAXException, IOException, ParserConfigurationException,
-			AtlasException {
+			throws IOException, ParserConfigurationException, AtlasException {
 
 		AMLImport.statusDialog = statusDialog;
 
 		// LOGGER.debug("Start parsing atlas.xml...\n");
 
-		InputStream atlasXmlAsStream = AtlasConfig.getResLoMan()
-				.getResourceAsStream("ad/atlas.xml");
+		InputStream atlasXmlAsStream = atlasConfig
+				.getResourceAsStream(AtlasConfig.ATLASDATA_DIRNAME + "/"
+						+ AtlasConfig.ATLAS_XML_FILENAME);
 		// URL systemResource = ClassLoader.getSystemResource("atlas.xml");
 
 		if (atlasXmlAsStream == null) {
@@ -200,16 +204,62 @@ public class AMLImport {
 
 			builder = getDocumentBuilder(validate);
 			xml = builder.parse(atlasXmlAsStream);
+			parseAtlasConfig(atlasConfig, xml);
+
 		} catch (final SAXException ex) {
 			LOGGER.error("Validation failed with a SAXException..");
 			// TODO Sometimes we start the software when another webserver is
 			// running and providing the Schema. But when we reach here, the
 			// second webserver has been closed and the Schema is not available
 			// anymore. Maybe we should just start a webserver here
-			throw ex;
+			throw new AtlasImportException(ex);
 		}
 
-		parseAtlasConfig(atlasConfig, xml);
+	}
+
+	/**
+	 * Parse the given atlas.gpa into an {@link AtlasConfig}. It will also
+	 * 
+	 * @param atlasConfigEditable
+	 * @param gpaFile
+	 * @throws AtlasException
+	 * @throws IOException
+	 * @throws ParserConfigurationException
+	 */
+	public static AtlasConfigEditable parseAtlasConfig(
+			AtlasStatusDialog statusDialog, final File gpaFile)
+			throws AtlasException, IOException, ParserConfigurationException {
+
+		AMLImport.statusDialog = statusDialog;
+
+		AtlasConfigEditable atlasConfig = new AtlasConfigEditable();
+
+		atlasConfig.getResLoMan().addResourceLoader(
+				new FileResourceLoader(gpaFile.getParentFile()));
+
+		Document xml;
+		DocumentBuilder builder;
+
+		try {
+			builder = getDocumentBuilder(false);
+
+			File atlasXmlFile = new File(gpaFile.getParentFile(),
+					AtlasConfig.ATLASDATA_DIRNAME + "/"
+							+ AtlasConfig.ATLAS_XML_FILENAME);
+
+			xml = builder.parse(atlasXmlFile);
+			parseAtlasConfig(atlasConfig, xml);
+
+			return atlasConfig;
+
+		} catch (final SAXException ex) {
+			LOGGER.error("Validation failed with a SAXException..");
+			// TODO Sometimes we start the software when another webserver is
+			// running and providing the Schema. But when we reach here, the
+			// second webserver has been closed and the Schema is not available
+			// anymore. Maybe we should just start a webserver here
+			throw new AtlasImportException(ex);
+		}
 	}
 
 	/**
@@ -221,7 +271,7 @@ public class AMLImport {
 	public final static void parseAtlasConfig(final AtlasConfig ac,
 			final Document xml) throws AtlasException {
 
-		readDefaultCRS();
+		readDefaultCRS(ac);
 
 		NodeList nodes;
 		// LOGGER.debug("Parsing DOM to AtlasConfig...");
@@ -402,9 +452,9 @@ public class AMLImport {
 	 * it's applied to
 	 * {@link GeoImportUtil#setDefaultCRS(org.opengis.referencing.crs.CoordinateReferenceSystem)}
 	 */
-	public static void readDefaultCRS() {
-		URL defaultCrsUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
-				"ad/" + AtlasConfig.DEFAULTCRS_FILENAME);
+	public static void readDefaultCRS(AtlasConfig atlasConfig) {
+		URL defaultCrsUrl = atlasConfig.getResource("ad/"
+				+ AtlasConfig.DEFAULTCRS_FILENAME);
 
 		if (defaultCrsUrl == null) {
 			LOGGER.debug("No ad/" + AtlasConfig.DEFAULTCRS_FILENAME
@@ -423,7 +473,9 @@ public class AMLImport {
 		try {
 			CoordinateReferenceSystem defaultCRS = GeoImportUtilURL
 					.readProjectionFile(defaultCrsUrl);
-			GeoImportUtil.setDefaultCRS(defaultCRS);
+			GeoImportUtil.setDefaultCRS(defaultCRS); // TODO Default CRS must be
+														// part of
+														// AtlasCOnfig!!!
 		} catch (IOException e) {
 			LOGGER.error(
 					"Error reading " + AtlasConfig.DEFAULTCRS_FILENAME
@@ -653,9 +705,6 @@ public class AMLImport {
 				if (name.equals("name")) {
 					final Translation transname = AMLImport.parseTranslation(ac
 							.getLanguages(), n);
-					// info(AtlasViewer.R("AmlImport.process.parsingRaster")
-					// + transname);
-
 					dpe.setTitle(transname);
 				} else if (name.equals("dataDirname")) {
 					final String value = n.getFirstChild().getNodeValue();
@@ -743,9 +792,6 @@ public class AMLImport {
 				if (name.equals("name")) {
 					final Translation transname = AMLImport.parseTranslation(ac
 							.getLanguages(), n);
-
-					// info(AtlasViewer.R("AmlImport.process.parsingPyramid")
-					// + transname);
 
 					dpe.setTitle(transname);
 				} else if (name.equals("dataDirname")) {
@@ -1017,27 +1063,33 @@ public class AMLImport {
 		// LOGGER.debug("sub "+substring);
 		urlStr = substring + "charts/" + filenameValue;
 		URL chartStyleURL = new URL(urlStr);
-		FeatureChartStyle featureChartStyle = (FeatureChartStyle) ChartStyleUtil.readStyleFromXML(
-				chartStyleURL, FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY);
-		
-		AttributeMetadataMap attributeMetaDataMap = dplvfs.getAttributeMetaDataMap();
-		
-		// Check if the attributes still exist or whether their uppercase/lowercase mode changed
-		if (FeatureChartUtil.correctAttributeNames(featureChartStyle, dplvfs.getSchema())) {
+		FeatureChartStyle featureChartStyle = (FeatureChartStyle) ChartStyleUtil
+				.readStyleFromXML(chartStyleURL,
+						FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY);
+
+		AttributeMetadataMap attributeMetaDataMap = dplvfs
+				.getAttributeMetaDataMap();
+
+		// Check if the attributes still exist or whether their
+		// uppercase/lowercase mode changed
+		if (FeatureChartUtil.correctAttributeNames(featureChartStyle, dplvfs
+				.getSchema())) {
 			// How to handle chartstyles that had attributes removed?
 		}
-		
+
 		// Pass the NODATA values for the attributes to the ChartStyle
-		for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++){
-			
+		for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++) {
+
 			String attributeName = featureChartStyle.getAttributeName(idx);
-			AttributeMetadata attributeMetadata = attributeMetaDataMap.get(attributeName);
-			
+			AttributeMetadata attributeMetadata = attributeMetaDataMap
+					.get(attributeName);
+
 			if (attributeMetadata != null) {
-				featureChartStyle.setNoDataValues(idx, attributeMetadata.getNodataValues());
+				featureChartStyle.setNoDataValues(idx, attributeMetadata
+						.getNodataValues());
 			}
 		}
-		
+
 		return featureChartStyle;
 	}
 
@@ -1153,7 +1205,7 @@ public class AMLImport {
 			unit = node.getAttributes().getNamedItem("unit").getNodeValue();
 		}
 
-		// The NameImpl may not b constructed with a "" as namespace, but a
+		// The NameImpl may not be constructed with a "" as namespace, but a
 		// null!
 		final NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
 				.isEmpty() ? null : nameSpace : null, localname);
@@ -1168,16 +1220,18 @@ public class AMLImport {
 		// Parsing the childres
 
 		final NodeList childNodes = node.getChildNodes();
-//		Translation name = null;
-//		Translation desc = null;
+		// Translation name = null;
+		// Translation desc = null;
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			if (childNodes.item(i).getLocalName() == null)
 				continue;
 
 			if (childNodes.item(i).getLocalName().equals("name")) {
-				attributeMetadata.setTitle(parseTranslation(ac.getLanguages(), childNodes.item(i)));
+				attributeMetadata.setTitle(parseTranslation(ac.getLanguages(),
+						childNodes.item(i)));
 			} else if (childNodes.item(i).getLocalName().equals("desc")) {
-				attributeMetadata.setDesc(parseTranslation(ac.getLanguages(), childNodes.item(i)));
+				attributeMetadata.setDesc(parseTranslation(ac.getLanguages(),
+						childNodes.item(i)));
 			} else if (childNodes.item(i).getLocalName().equals(
 					AMLUtil.TAG_nodataValue)) {
 				// NODATA values
@@ -1189,22 +1243,24 @@ public class AMLImport {
 					// to Number.
 					AttributeDescriptor attDesc = dplvfs.getSchema()
 							.getDescriptor(nameImpl);
-					
-					Class<?> binding = attDesc.getType()
-							.getBinding();
-					
+
+					Class<?> binding = attDesc.getType().getBinding();
+
 					if (attDesc != null
 							&& Number.class.isAssignableFrom(binding)) {
 						// Add the NODATA value parsed accoring to the binding
 						try {
-							
-							Number noDataValue = LangUtil.parseNumberAs(textValue, binding);
-							attributeMetadata.getNodataValues().add(noDataValue);
+
+							Number noDataValue = LangUtil.parseNumberAs(
+									textValue, binding);
+							attributeMetadata.getNodataValues()
+									.add(noDataValue);
 
 						} catch (Exception e) {
 							ExceptionDialog.show(new RuntimeException(
 									"NODATA value '" + textValue
-											+ "' can't be parsed as numeric.",e));
+											+ "' can't be parsed as numeric.",
+									e));
 							attributeMetadata.getNodataValues().add(textValue);
 						}
 					} else {
@@ -1264,7 +1320,7 @@ public class AMLImport {
 		// Which CRS shall be used? If non is defined, use
 		// GeoImportUtil.getDefaultCRS()
 		{
-			URL gridCrsURl = AtlasConfig.getResLoMan().getResourceAsUrl(
+			URL gridCrsURl = ac.getResLoMan().getResourceAsUrl(
 					AtlasConfig.ATLASDATA_DIRNAME + "/"
 							+ AtlasConfig.HTML_DIRNAME + "/" + map.getId()
 							+ "/" + Map.GRIDPANEL_CRS_FILENAME);
@@ -1429,13 +1485,14 @@ public class AMLImport {
 								.getDataPool().get(layerID);
 
 						boolean foundIt = false;
-						for (LayerStyle layerStyle : dpl.getLayerStyles()) {
-							if (layerStyle.getID().equals(styleId)) {
-								styles.add(styleId);
-								foundIt = true;
-								break;
+						if (dpl != null)
+							for (LayerStyle layerStyle : dpl.getLayerStyles()) {
+								if (layerStyle.getID().equals(styleId)) {
+									styles.add(styleId);
+									foundIt = true;
+									break;
+								}
 							}
-						}
 
 						/**
 						 * This warning only makes sense in GP.. in AV these

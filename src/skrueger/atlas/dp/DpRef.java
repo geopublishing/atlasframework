@@ -78,7 +78,7 @@ public class DpRef<T extends DpEntry<? extends ChartStyle>> extends
 	 *            target {@link DpEntry}
 	 */
 	public DpRef(T de) {
-		this.setDataPool(de.getAc().getDataPool());
+		this.setDataPool(de.getAtlasConfig().getDataPool());
 		// i8nerr
 		if (de.getId() == null)
 			throw new IllegalArgumentException(

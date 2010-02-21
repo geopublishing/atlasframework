@@ -74,7 +74,9 @@ public abstract class GPProps {
 		/** Width of the {@link DesignMapViewJDialog} **/
 		mapComposerWidth,
 		/** Height of the {@link DesignMapViewJDialog} **/
-		mapComposerHeight
+		mapComposerHeight, 
+		/** Remember the atlas folder we imported stuff from the last time **/
+		LAST_IMPORTED_GPA
 	}
 
 	/**

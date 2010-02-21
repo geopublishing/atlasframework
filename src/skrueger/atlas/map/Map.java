@@ -171,7 +171,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * 
 	 */
 	public void uncache(final Map newMap) {
-//		LOGGER.debug("Uncaching map " + getId() + " aka " + getTitle());
+		// LOGGER.debug("Uncaching map " + getId() + " aka " + getTitle());
 
 		List<DpRef<DpLayer<?, ? extends ChartStyle>>> newLayers;
 		List<DpRef<DpMedia<? extends ChartStyle>>> newMedia;
@@ -226,14 +226,16 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	public boolean equals(final Object obj) {
 		if (obj instanceof Map) {
 			final Map map = (Map) obj;
-			return map.getId().equals(getId()) && map.getLayers().size() == getLayers().size();
+			return map.getId().equals(getId())
+					&& map.getLayers().size() == getLayers().size();
 		}
 		return super.equals(obj);
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return super.hashCode() * getId().hashCode() * getLayers().size()*52 * getMedia().size()*7;
+		return super.hashCode() * getId().hashCode() * getLayers().size() * 52
+				* getMedia().size() * 7;
 	}
 
 	/**
@@ -244,16 +246,20 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 */
 	@Override
 	public Map copy() {
-//		final Map newMap = (Map) super.clone();
+		// final Map newMap = (Map) super.clone();
 		final Map newMap = new Map(id, getAc());
-//		newMap.setId(id);
-//		newMap.setAtlasConfig(getAc());
+		// newMap.setId(id);
+		// newMap.setAtlasConfig(getAc());
 		copyTo(newMap);
 		return newMap;
 	}
 
-	private void setAtlasConfig(final AtlasConfig ac2) {
-		ac = ac2;
+	/**
+	 * Define the AtlasConfig this {@link Map} belongs to. Primarely written for
+	 * importing maps from other atlases.
+	 */
+	public void setAtlasConfig(final AtlasConfig newAtlasConfig) {
+		ac = newAtlasConfig;
 	}
 
 	/**
@@ -314,15 +320,15 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	final public void setDesc(final Translation desc) {
 		this.desc = desc;
 	}
-	
+
 	@Override
 	final public String toString() {
 		String returnStr = "";
 		if (!I8NUtil.isEmpty(title))
-			return returnStr += title.toString()+", ";
-		returnStr+=", ID="+getId();
-		if (!I8NUtil.isEmpty(desc) )
-			returnStr+=", Desc="+getDesc();
+			return returnStr += title.toString() + ", ";
+		returnStr += ", ID=" + getId();
+		if (!I8NUtil.isEmpty(desc))
+			returnStr += ", Desc=" + getDesc();
 		return returnStr;
 	}
 
@@ -415,7 +421,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		// urlString = Webserver.getDocumentBase() + "/" +
 		// getId() + "/" + "index.html";
 		final String urlString = "http://127.0.0.1:" + Webserver.PORT
-				+ "/ad/html/" + getId() + "/" + "index_"
+				+ "/"+AtlasConfig.ATLASDATA_DIRNAME+"/"+AtlasConfig.HTML_DIRNAME+"/" + getId() + "/" + "index_"
 				+ Translation.getActiveLang() + ".html";
 		// LOGGER.debug("URLstring fuer HTML mapinfo = " + urlString);
 
@@ -474,8 +480,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *         Kr&uuml;ger</a>
 	 */
 	public void setSelectedStyleID(final String layerID, final String styleID) {
-//		LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
-//				+ styleID+" MAP="+this);
+		// LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
+		// + styleID+" MAP="+this);
 		selectedStyleID.put(layerID, styleID);
 	}
 
@@ -548,12 +554,13 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * @throws IOException
 	 *             JWS is used and data is not cached and we can't download it!
 	 */
-	public void downloadMap(final AtlasStatusDialog statusDialog) throws IOException {
+	public void downloadMap(final AtlasStatusDialog statusDialog)
+			throws IOException {
 
 		/**
 		 * Create a list of uncached parts
 		 */
-		final String[] partsToDownload = JNLPUtil.countPartsToDownload(this); 
+		final String[] partsToDownload = JNLPUtil.countPartsToDownload(this);
 
 		if (partsToDownload.length == 0) {
 			// All is cached
@@ -575,8 +582,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 
 		final double qmTitle = I8NUtil.qmTranslation(languages, getTitle());
 		final double qmDesc = I8NUtil.qmTranslation(languages, getDesc());
-		final double qmKeywords = I8NUtil
-				.qmTranslation(languages, getKeywords());
+		final double qmKeywords = I8NUtil.qmTranslation(languages,
+				getKeywords());
 
 		/**
 		 * Count HTML Infos
@@ -606,13 +613,13 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		// if (missingHTMLLanguages == null) {
 		missingHTMLLanguages = new ArrayList<String>();
 
-//		synchronized (missingHTMLLanguages) {
-			for (final String l : getAc().getLanguages()) {
-				if (getInfoURL(l) == null) {
-					missingHTMLLanguages.add(l);
-				}
+		// synchronized (missingHTMLLanguages) {
+		for (final String l : getAc().getLanguages()) {
+			if (getInfoURL(l) == null) {
+				missingHTMLLanguages.add(l);
 			}
-//		}
+		}
+		// }
 		// }
 		return missingHTMLLanguages;
 	}
@@ -826,10 +833,11 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	}
 
 	/**
-	 * Returns an instance of the {@link GridPanelFormatter} that shall be used for the map.
+	 * Returns an instance of the {@link GridPanelFormatter} that shall be used
+	 * for the map.
 	 */
 	public GridPanelFormatter getGridPanelFormatter() {
-		// Usually the gridPanelFormatter is set while loading the atlas 
+		// Usually the gridPanelFormatter is set while loading the atlas
 		if (gridPanelFormatter == null)
 			// this is just a fallback for new maps
 			try {
@@ -922,12 +930,12 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		/*** Copy the available additional Styles ***/
 		for (final DpRef dpRef : getLayers()) {
 			String layerID = dpRef.getTargetId();
-			
+
 			final List<String> availableStyles = getAdditionalStyles().get(
 					layerID);
 			if (availableStyles == null)
 				continue;
-			
+
 			// copy the array
 			final ArrayList<String> newAdditionalStyles = new ArrayList<String>();
 			newAdditionalStyles.addAll(availableStyles);
@@ -935,7 +943,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			// put the array to the newMap
 			newMap.getAdditionalStyles().put(layerID, newAdditionalStyles);
 
-//			LOGGER.debug("newMap.setSelectedStyleID("+layerID+", getSelectedStyleID("+layerID+"));");
+			// LOGGER.debug("newMap.setSelectedStyleID("+layerID+", getSelectedStyleID("+layerID+"));");
 			newMap.setSelectedStyleID(layerID, getSelectedStyleID(layerID));
 		}
 
@@ -949,7 +957,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			final ArrayList<String> newAvailableCharts = new ArrayList<String>();
 			for (final String styleID : availableCharts) {
 				newAvailableCharts.add(styleID);
-//				LOGGER.debug("Copying an available ChartStyle " + styleID);
+				// LOGGER.debug("Copying an available ChartStyle " + styleID);
 			}
 			newMap.getAvailableCharts().put(layerID, newAvailableCharts);
 		}
@@ -957,5 +965,12 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		newMap.resetMissingHTMLinfos();
 
 		return newMap;
+	}
+
+	/**
+	 * Removes all memory-intensive cached objects.
+	 */
+	public void uncache() {
+		uncache(null);
 	}
 }

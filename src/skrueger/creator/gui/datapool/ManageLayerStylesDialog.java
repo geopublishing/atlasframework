@@ -375,11 +375,11 @@ public class ManageLayerStylesDialog extends JDialog {
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
 							AtlasCreator.R("LayerStyle.Edit.Title"), styleName,
-							dpLayer.getAc().getLanguages());
+							dpLayer.getAtlasConfig().getLanguages());
 
 					TranslationEditJPanel transDescLabel = new TranslationEditJPanel(
 							AtlasCreator.R("LayerStyle.Edit.Desc"), styleDesc,
-							dpLayer.getAc().getLanguages());
+							dpLayer.getAtlasConfig().getLanguages());
 
 					ask = new TranslationAskJDialog(
 							ManageLayerStylesDialog.this, transNameLabel,
@@ -473,7 +473,7 @@ public class ManageLayerStylesDialog extends JDialog {
 
 						// Tell the user in which maps this default style is
 						// used
-						Collection<Map> maps = dpLayer.getAc().getMapPool()
+						Collection<Map> maps = dpLayer.getAtlasConfig().getMapPool()
 								.values();
 						for (Map map : maps) {
 							// Check every map what additional styles are
@@ -516,7 +516,7 @@ public class ManageLayerStylesDialog extends JDialog {
 					// user.
 
 					String mapListString = "";
-					for (Map map2 : dpLayer.getAc().getMapPool().values()) {
+					for (Map map2 : dpLayer.getAtlasConfig().getMapPool().values()) {
 						java.util.Map<String, ArrayList<String>> additionalStyles = map2
 								.getAdditionalStyles();
 
@@ -654,13 +654,13 @@ public class ManageLayerStylesDialog extends JDialog {
 	 */
 	public LayerStyle createNewStyle(DpLayer<?, ? extends ChartStyle> dplayer,
 			Style styleUsedRightNow, Component owner) {
-		List<String> langs = dplayer.getAc().getLanguages();
+		List<String> langs = dplayer.getAtlasConfig().getLanguages();
 
 		final Translation name = new Translation();
 		final Translation desc = new Translation();
 
 		TranslationEditJPanel nameTransLabel = new TranslationEditJPanel(
-				AtlasCreator.R("LayerStyle.Edit.Title"), name, dplayer.getAc()
+				AtlasCreator.R("LayerStyle.Edit.Title"), name, dplayer.getAtlasConfig()
 						.getLanguages());
 
 		TranslationEditJPanel descTransLabel = new TranslationEditJPanel(
@@ -687,7 +687,7 @@ public class ManageLayerStylesDialog extends JDialog {
 		int counter = 0;
 
 		try {
-			AtlasConfigEditable ace = (AtlasConfigEditable) dplayer.getAc();
+			AtlasConfigEditable ace = (AtlasConfigEditable) dplayer.getAtlasConfig();
 			while (IOUtil.changeFileExt(
 					new File(new File(ace.getDataDir(), dplayer
 							.getDataDirname()), dplayer.getFilename()),
@@ -876,12 +876,12 @@ public class ManageLayerStylesDialog extends JDialog {
 					LayerStyle style = dpLayer.getLayerStyles().get(idx);
 
 					File srcFile = new File(new File(
-							((AtlasConfigEditable) dpLayer.getAc())
+							((AtlasConfigEditable) dpLayer.getAtlasConfig())
 									.getDataDir(), dpLayer.getDataDirname()),
 							style.getFilename());
 
 					File destFile = IOUtil.changeFileExt(new File(new File(
-							((AtlasConfigEditable) dpLayer.getAc())
+							((AtlasConfigEditable) dpLayer.getAtlasConfig())
 									.getDataDir(), dpLayer.getDataDirname()),
 							dpLayer.getFilename()), ".sld");
 

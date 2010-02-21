@@ -319,7 +319,7 @@ public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
 
 				try {
 					// waitDialog.setVisible(false);
-					exportDir = selectExportDir(owner);
+					exportDir = selectExportDir(owner, getAtlasConfig());
 					// waitDialog.setVisible(true);
 
 					if (exportDir == null) {

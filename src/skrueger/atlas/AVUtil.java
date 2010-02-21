@@ -286,7 +286,7 @@ public class AVUtil {
 	}
 
 	/**
-	 * Copy file or folder recursivly to file or folder. All filenames are
+	 * Copy file or folder recursively to file or folder. All filenames are
 	 * turned to lower case!
 	 * 
 	 * @param source

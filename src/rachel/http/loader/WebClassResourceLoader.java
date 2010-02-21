@@ -30,12 +30,12 @@ import org.apache.log4j.Logger;
 import rachel.http.resource.InputStreamResource;
 import rachel.http.resource.WebResource;
 
-public class ClassResourceLoader implements WebResourceLoader {
-	static Logger LOGGER = Logger.getLogger(ClassResourceLoader.class);
+public class WebClassResourceLoader implements WebResourceLoader {
+	static Logger LOGGER = Logger.getLogger(WebClassResourceLoader.class);
 
 	private ClassLoader _loader;
 
-	public ClassResourceLoader(Class<?> clazz) {
+	public WebClassResourceLoader(Class<?> clazz) {
 		_loader = clazz.getClassLoader();
 	}
 

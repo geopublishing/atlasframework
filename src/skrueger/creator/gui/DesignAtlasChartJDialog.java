@@ -78,6 +78,7 @@ import skrueger.atlas.gui.AtlasChartJDialog;
 import skrueger.atlas.gui.AtlasChartJPanel;
 import skrueger.atlas.gui.MapLegend;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
+import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI;
 import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.creator.AtlasConfigEditable;
@@ -163,7 +164,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	 * A reference to the {@link MapLegend} of the {@link XMapPane} that shows
 	 * the geometries for the data-points.
 	 **/
-	private final MapLegend mapLegend;
+	private final AtlasMapLegend mapLegend;
 
 	/**
 	 * A reference to the {@link SelectableXMapPane} that shows the geometries
@@ -199,7 +200,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	 *            The atlas configuration this chart is being created for.
 	 */
 	public DesignAtlasChartJDialog(final Component owner,
-			final FeatureChartStyle chartStyle, final MapLegend mapLegend,
+			final FeatureChartStyle chartStyle, final AtlasMapLegend mapLegend,
 			final StyledFeaturesInterface<?> styledFeatures,
 			AtlasConfigEditable atlasConfigEditable) {
 
@@ -1486,7 +1487,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	/**
 	 * Lazily creates the {@link AtlasChartJPanel}
 	 */
-	protected AtlasChartJPanel getChartPanel(final MapLegend mapLegend,
+	protected AtlasChartJPanel getChartPanel(final AtlasMapLegend mapLegend,
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		if (chartPanel == null) {

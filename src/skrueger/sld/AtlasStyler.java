@@ -357,7 +357,7 @@ public class AtlasStyler {
 		if (styledFeatures instanceof DpLayer) {
 			setLanguageMode(AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE);
 			final DpLayer<?, ? extends ChartStyle> dpfs = (DpLayer<?, ? extends ChartStyle>) styledFeatures;
-			final AtlasConfig ac = dpfs.getAc();
+			final AtlasConfig ac = dpfs.getAtlasConfig();
 
 			setLanguages(ac.getLanguages());
 

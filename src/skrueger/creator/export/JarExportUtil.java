@@ -58,7 +58,6 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import rachel.loader.ResourceLoaderManager;
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -306,7 +305,7 @@ public class JarExportUtil {
 				info("Creating " + ARJAR_FILENAME); // 1st call to info
 
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + "atlas.xml");
+						+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
 
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
 						+ "/" + ace.getHtmlDir().getName());
@@ -317,8 +316,9 @@ public class JarExportUtil {
 
 				info("Creating " + ARJAR_FILENAME); // 3st call to info
 
-				AVProps.save(new File(ace.getAtlasDir(),
-						AVProps.PROPERTIESFILE_RESOURCE_NAME));
+				ace.getProperties().save(
+						new File(ace.getAtlasDir(),
+								AVProps.PROPERTIESFILE_RESOURCE_NAME));
 				addToJar(targetJar, ace.getAtlasDir(),
 						AVProps.PROPERTIESFILE_RESOURCE_NAME);
 
@@ -326,8 +326,7 @@ public class JarExportUtil {
 				 * Look for a user-defined splashscreen. If it doesn't exist,
 				 * ask the user if he wants to use the default one.
 				 */
-				if (AtlasConfig.getResLoMan().getResourceAsUrl(
-						AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
+				if (ace.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
 					// final int useDefaultSplashConfirmDialog = JOptionPane
 					// .showConfirmDialog(
 					// null,
@@ -338,9 +337,9 @@ public class JarExportUtil {
 					// JOptionPane.YES_OPTION) {
 					FileUtils
 							.copyURLToFile(
-									AtlasConfig
-											.getResLoMan()
-											.getResourceAsUrl(
+									AtlasCreator.class
+											.getClassLoader()
+											.getResource(
 													AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
 									new File(
 											ace.getAtlasDir(),
@@ -370,10 +369,10 @@ public class JarExportUtil {
 				 * default icon to where we expect the user icon and then add it
 				 * to the jar.
 				 */
-				URL iconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
-						AtlasConfig.JWSICON_RESOURCE_NAME);
+				URL iconURL = ace
+						.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
 				if (iconURL == null) {
-					iconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+					iconURL = AtlasCreator.class.getClassLoader().getResource(
 							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 					FileUtils.copyURLToFile(iconURL, new File(
 							ace.getAtlasDir(),
@@ -397,8 +396,7 @@ public class JarExportUtil {
 						AtlasConfig.MAPICON_RESOURCE_NAME);
 			} catch (final Exception e1) {
 				String msg = AtlasCreator.R("Export.NoMapiconExists_NoProblem",
-						ace.getAtlasDir() + "/"
-								+ AtlasConfig.MAPICON_RESOURCE_NAME);
+						ace.getAtlasDir() + AtlasConfig.MAPICON_RESOURCE_NAME);
 				JOptionPane.showMessageDialog(null, msg);
 			}
 
@@ -468,12 +466,11 @@ public class JarExportUtil {
 			 * The icon.gif is needed for DISK and JWS. (DISK will put it into
 			 * the atlas.exe and delete it afterwards)
 			 */
-			URL iconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
-					AtlasConfig.JWSICON_RESOURCE_NAME);
+			URL iconURL = ace.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
 			if (!AVUtil.exists(iconURL)) {
 				// LOGGER
 				// .info("No user-defined icon provided. Using the default one.");
-				iconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+				iconURL = AtlasCreator.class.getClassLoader().getResource(
 						AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 			}
 			FileUtils.copyURLToFile(iconURL, new File(
@@ -601,22 +598,20 @@ public class JarExportUtil {
 		File jsmoothSkelDir = new File(atlasDir, "autodownload-wrapper");
 		jsmoothSkelDir.mkdirs();
 
+		ClassLoader cl = AtlasCreator.class.getClassLoader();
+
 		File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(AtlasConfig.getResLoMan().getResourceAsUrl(
-				AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1), jsmoothExeFile);
+		FileUtils.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1), jsmoothExeFile);
 		File jsmoothSkelFile = new File(jsmoothSkelDir, "autodownload.skel");
-		FileUtils.copyURLToFile(AtlasConfig.getResLoMan().getResourceAsUrl(
-				AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2), jsmoothSkelFile);
-		// File destination3 = new File(skelAutoDL, "customdownload.skel");
-		// FileUtils.copyURLToFile(AtlasConfig.getResLoMan().getResourceAsUrl(
-		// AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE3), destination3);
+		FileUtils.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2), jsmoothSkelFile);
 
 		/**
 		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
 		 */
 		File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
-		FileUtils.copyURLToFile(AtlasConfig.getResLoMan().getResourceAsUrl(
-				AtlasConfig.JSMOOTH_PROJEKT_RESOURCE), destinationProjectFile);
+		FileUtils
+				.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
+						destinationProjectFile);
 		try {
 
 			/**
@@ -937,7 +932,7 @@ public class JarExportUtil {
 						fromURL = new URL(bs.getCodeBase().getProtocol(), bs
 								.getCodeBase().getHost(), bs.getCodeBase()
 								.getPort(), fileAndPath);
-						
+
 						fromURL.openConnection();
 
 						fromLocal = false;
@@ -1055,7 +1050,7 @@ public class JarExportUtil {
 
 					libsFromLocal = false;
 				} catch (javax.jnlp.UnavailableServiceException e) {
-					
+
 					/**
 					 * The exception means, that we have not been started via
 					 * JWS. So we just copy this file from the local lib
@@ -1073,7 +1068,7 @@ public class JarExportUtil {
 						fromURLPackGZ = new File("./lib/" + lib + ".pack.gz")
 								.toURI().toURL();
 					}
-				} 
+				}
 
 				final String msg = AtlasCreator.R(
 						"Export.progressMsg.copy_lib_to_", lib, destination
@@ -1254,7 +1249,7 @@ public class JarExportUtil {
 			}
 
 			languages.remove("");
-			ResourceLoaderManager resLoMan = AtlasConfig.getResLoMan();
+			// ResourceLoaderManager resLoMan = AtlasConfig.getResLoMan();
 			// Removing the pseudo / aka default Language...
 
 			// ******************************************************************
@@ -1267,8 +1262,8 @@ public class JarExportUtil {
 			 * splashscreen exists, we have to copy it to the root folder for
 			 * the JNLP to us it.
 			 */
-			final URL splashscreenURL = resLoMan
-					.getResourceAsUrl(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			final URL splashscreenURL = ace
+					.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 			if (splashscreenURL != null) {
 				FileUtils.copyURLToFile(splashscreenURL, new File(targetJar
 						.getParentFile(), "splashscreen.png"));
@@ -1481,8 +1476,9 @@ public class JarExportUtil {
 
 			final File destLicense = new File(targetJar.getParentFile(),
 					"license.html");
-			FileUtils.copyURLToFile(AtlasConfig.getResLoMan().getResourceAsUrl(
-					AtlasConfig.LICENSEHTML_RESOURCE_NAME), destLicense);
+			FileUtils.copyURLToFile(AtlasCreator.class.getClassLoader()
+					.getResource(AtlasConfig.LICENSEHTML_RESOURCE_NAME),
+					destLicense);
 		} catch (Exception e) {
 			ExceptionDialog
 					.show(

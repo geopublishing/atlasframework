@@ -38,7 +38,7 @@ public class DpeImportUtil {
 		// Edit the Title, Description and Keywords modally. If the user
 		// cancels here, we don't even copy stuff over...
 		// ****************************************************************************
-		final List<String> langs = dpe.getAc().getLanguages();
+		final List<String> langs = dpe.getAtlasConfig().getLanguages();
 		dpe.setTitle(new Translation(langs, dpe.getFilename()));
 		dpe.setDesc(new Translation());
 		dpe.setKeywords(new Translation());
@@ -85,7 +85,7 @@ public class DpeImportUtil {
 					try {
 						targetDir.mkdirs();
 						
-						AVUtil.copyHTMLInfoFiles(statusDialog, DataUtilities.urlToFile(sourceUrl), dpe.getAc(), targetDir, null);
+						AVUtil.copyHTMLInfoFiles(statusDialog, DataUtilities.urlToFile(sourceUrl), dpe.getAtlasConfig(), targetDir, null);
 
 						if (!targetDir.exists())
 							throw new IOException("Couldn't create "

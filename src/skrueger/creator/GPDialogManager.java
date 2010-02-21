@@ -22,7 +22,7 @@ import schmitzm.jfree.feature.style.FeatureChartStyle;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.dp.layer.LayerStyle;
-import skrueger.atlas.gui.MapLegend;
+import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.map.Map;
 import skrueger.creator.gui.DesignAtlasChartJDialog;
 import skrueger.creator.gui.DesignAtlasStylerDialog;
@@ -155,7 +155,7 @@ public class GPDialogManager {
 		public DesignAtlasChartJDialog getInstanceFor(FeatureChartStyle key,
 				final Component owner, final Object... constArgs) {
 
-			final MapLegend mapLegend = (MapLegend) constArgs[1];
+			final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
 
 			final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
 

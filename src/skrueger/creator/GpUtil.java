@@ -119,7 +119,7 @@ public class GpUtil {
 	 */
 	public static void saveCpg(DpLayerVectorFeatureSource dpe) {
 		try {
-			final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAc();
+			final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAtlasConfig();
 
 			final File cpgFile = IOUtil.changeFileExt(ace.getFileFor(dpe),
 					"cpg");

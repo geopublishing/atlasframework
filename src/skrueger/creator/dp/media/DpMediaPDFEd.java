@@ -73,7 +73,7 @@ public class DpMediaPDFEd extends DpMediaPDF implements DpEditableInterface {
 	 * @see skrueger.creator.dp.DatapoolEditableInterface#getAce()
 	 */
 	public AtlasConfigEditable getAce() {
-		return (AtlasConfigEditable) getAc();
+		return (AtlasConfigEditable) getAtlasConfig();
 	}
 
 	@Override

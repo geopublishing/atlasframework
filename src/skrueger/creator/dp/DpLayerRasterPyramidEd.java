@@ -76,7 +76,7 @@ public class DpLayerRasterPyramidEd extends DpLayerRasterPyramid implements
 	 * @see skrueger.creator.dp.DatapoolEditable#getAce()
 	 */
 	public AtlasConfigEditable getAce() {
-		return (AtlasConfigEditable) getAc();
+		return (AtlasConfigEditable) getAtlasConfig();
 	}
 
 	static private final Logger LOGGER = Logger

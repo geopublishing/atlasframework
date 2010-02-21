@@ -367,7 +367,7 @@ public class AtlasMenuBar extends JMenuBar {
 	public JCheckBoxMenuItem getJCheckBoxMenuItemAntiAliasing() {
 		if (jCheckBoxMenuItemAntiAliasing == null) {
 			jCheckBoxMenuItemAntiAliasing = new JCheckBoxMenuItem();
-			jCheckBoxMenuItemAntiAliasing.setSelected(AVProps.get(
+			jCheckBoxMenuItemAntiAliasing.setSelected(atlasViewer.getAtlasConfig().getProperties().get(
 					AVProps.Keys.antialiasingMaps, "1").equals("1"));
 			jCheckBoxMenuItemAntiAliasing.setText(AtlasViewer
 					.R("AtlasViewer.AAMenuItem.SetText.toggle_antialiasing"));

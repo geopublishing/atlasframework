@@ -47,7 +47,9 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geotools.swing.ExceptionMonitor;
 
+import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
+import rachel.loader.ClassResourceLoader;
 import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -96,13 +98,13 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 
 	static {
 
-		AtlasConfig.setupResLoMan();
+		// AtlasConfig.setupResLoMan();
 
 		// Used to find AtlasML.xsd via the local webserver
 		// System.out
 		// .println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
 		WebResourceManager
-				.addResourceLoader(new rachel.http.loader.ClassResourceLoader(
+				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
 						AtlasViewer.class));
 	}
 
@@ -589,9 +591,9 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 					map.uncache(newMap);
 				}
 
-				if (JNLPUtil.isAtlasDataFromJWS()) {
+				if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
 					LOGGER
-							.debug("atlas data comes from JWS, so we downlaod all parts if needed first..");
+							.debug("atlas data comes from JWS, so we download all parts if needed first..");
 					publish(R("AmlViewer.process.downloading_map", newMap
 							.getTitle()));
 					newMap.downloadMap(statusDialog);
@@ -701,8 +703,8 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 						boolean b = AtlasViewer.this.getAtlasMenuBar()
 								.getJCheckBoxMenuItemAntiAliasing()
 								.isSelected();
-						AVProps.set(getJFrame(), AVProps.Keys.antialiasingMaps,
-								b ? "1" : "0");
+						getAtlasConfig().getProperties().set(getJFrame(),
+								AVProps.Keys.antialiasingMaps, b ? "1" : "0");
 						getMapView().getMapPane().setAntiAliasing(b);
 						getMapView().getMapPane().repaint();
 					}
@@ -813,8 +815,12 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		setupResLoMan(args);
 
 		try {
-			final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
-					"av_log4j.xml");
+			// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+			// "av_log4j.xml");
+
+			final URL log4jURL = AtlasViewer.class.getClassLoader()
+					.getResource("av_log4j.xml");
+
 			System.out.println("Configuring log4j from " + log4jURL);
 			DOMConfigurator.configure(log4jURL);
 		} catch (Throwable e) {
@@ -838,7 +844,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 				// Starting the AtlasViewer on another Thread.
 				// **********************************************************************
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(null);// no
-																				// jframe!
+				// jframe!
 				AtlasSwingWorker<AtlasConfig> startupWorker = new AtlasSwingWorker<AtlasConfig>(
 						statusDialog) {
 
@@ -853,7 +859,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 						// Starting the internal WebServer
 						new Webserver(true);
 
-						publish(R("dialog.title.wait")); 
+						publish(R("dialog.title.wait"));
 						AMLImport.parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
 
@@ -892,7 +898,8 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 				// .getBoolean(Keys.showPopupOnStartup, true));
 				// LOGGER.debug("popup URL says = "+getAtlasConfig().getPopupHTMLURL());
 				if (getAtlasConfig().getPopupHTMLURL() != null
-						&& AVProps.getBoolean(Keys.showPopupOnStartup, true)) {
+						&& getAtlasConfig().getProperties().getBoolean(
+								Keys.showPopupOnStartup, true)) {
 					SwingUtilities.invokeLater(new Runnable() {
 
 						@Override
@@ -929,58 +936,85 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	 *            is passed, the directory will be used as the resource base.
 	 */
 	public static void setupResLoMan(String[] args) {
-		if (args == null)
-			return;
+		Boolean resourcesComeFromFielSystem = false;
 
-		String paramPath;
+		try {
 
-		if (args.length >= 1) {
+			if (args == null)
+				return;
 
-			if (args.length == 1) {
-				paramPath = args[0];
-			} else {
-				// we have many arguments
+			String paramPath;
 
-				/**
-				 * * If the pathname passed contains spaces, it might be
-				 * interpreted like many strings... so we connect them to one...
-				 */
-				// This is just a try..
-				paramPath = "";
-				for (String s : args) {
-					paramPath = paramPath + s + " ";
+			if (args.length >= 1) {
+
+				if (args.length == 1) {
+					paramPath = args[0];
+				} else {
+					// we have many arguments
+
+					/**
+					 * * If the pathname passed contains spaces, it might be
+					 * interpreted like many strings... so we connect them to
+					 * one...
+					 */
+					// This is just a try..
+					paramPath = "";
+					for (String s : args) {
+						paramPath = paramPath + s + " ";
+					}
+
+					paramPath = paramPath.trim();
+
+					LOGGER
+							.info("We had more than one argument on the command line... AV tried to concat them to one path with spaces: '"
+									+ paramPath + "'");
 				}
 
-				paramPath = paramPath.trim();
+				if (paramPath.endsWith("/")) {
+					// LOGGER.debug("Removing trailing /");
+					paramPath = paramPath.substring(0, paramPath.length() - 1);
+				}
 
-				LOGGER
-						.info("We had more than one argument on the command line... AV tried to concat them to one path with spaces: '"
-								+ paramPath + "'");
+				File atlasDir = new File(paramPath);
+				if (AtlasConfig.isAtlasDir(atlasDir)) {
+					resourcesComeFromFielSystem = true;
+
+					// Add that folder to the ResLoMan
+					LOGGER.debug("Adding new FileResourceLoader( "
+							+ atlasDir.getAbsolutePath() + " ) to ResLoMan");
+
+					resourcesComeFromFielSystem = true;
+
+					getInstance()
+							.getAtlasConfig()
+							.getResLoMan()
+							.addResourceLoader(new FileResourceLoader(atlasDir));
+
+					LOGGER.debug("Adding new FileWebResourceLoader( "
+							+ atlasDir.getAbsolutePath()
+							+ " ) to WebResourceManager");
+					WebResourceManager
+							.addResourceLoader(new FileWebResourceLoader(
+									atlasDir));
+
+				} else {
+					final String msg = "A non existing directory was passed on command line. Will be ignored!\n"
+							+ atlasDir.getAbsolutePath();
+					LOGGER.warn(msg);
+					JOptionPane.showMessageDialog(null, msg);
+				}
 			}
+		} finally {
+			if (!resourcesComeFromFielSystem) {
+				// If we are started without a path to a working copy as an
+				// argument, we expect all stuff to be on the class-path.
 
-			if (paramPath.endsWith("/")) {
-				// LOGGER.debug("Removing trailing /");
-				paramPath = paramPath.substring(0, paramPath.length() - 1);
-			}
+				getInstance().getAtlasConfig().getResLoMan().addResourceLoader(
+						new ClassResourceLoader(AtlasViewer.class));
 
-			File atlasDir = new File(paramPath);
-			if (!atlasDir.exists()) {
-				final String msg = "A non existing directory was passed on command line. Will be ignored!\n"
-						+ atlasDir.getAbsolutePath();
-				LOGGER.warn(msg);
-				JOptionPane.showMessageDialog(null, msg);
-			} else {
-				// Add that folder to the ResLoMan
-				LOGGER.debug("Adding new FileResourceLoader( "
-						+ atlasDir.getAbsolutePath() + " ) to ResLoMan");
-				AtlasConfig.getResLoMan().addResourceLoader(
-						new FileResourceLoader(atlasDir));
-
-				LOGGER.debug("Adding new FileWebResourceLoader( "
-						+ atlasDir.getAbsolutePath()
-						+ " ) to WebResourceManager");
-				WebResourceManager.addResourceLoader(new FileWebResourceLoader(
-						atlasDir));
+				WebResourceManager
+						.addResourceLoader(new WebClassResourceLoader(
+								AtlasViewer.class));
 			}
 		}
 
@@ -1198,8 +1232,8 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		 * Showing the Spalshscreen for one secong
 		 */
 		try {
-			final URL splashscreenUrl = AtlasConfig.getResLoMan()
-					.getResourceAsUrl(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			final URL splashscreenUrl = atlasConfig
+					.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 			if (splashscreenUrl != null) {
 				JWindow splashWindow = new JWindow(atlasJFrame);
 				JPanel panel = new JPanel(new BorderLayout());

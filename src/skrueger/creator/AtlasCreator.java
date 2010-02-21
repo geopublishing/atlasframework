@@ -53,7 +53,6 @@ import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.atlas.AVDialogManager;
-import skrueger.atlas.AVProps;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
@@ -70,6 +69,7 @@ import skrueger.creator.gui.GpJSplitPane;
 import skrueger.creator.gui.LanguageSelectionDialog;
 import skrueger.creator.gui.SimplyHTMLUtil;
 import skrueger.creator.gui.export.ExportWizard;
+import skrueger.creator.gui.importwizard.ImportWizard;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
@@ -89,7 +89,11 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
 	public enum ActionCmds {
-		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, testAV, exportAtlasCSV
+		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, testAV, exportAtlasCSV, /**
+		 * 
+		 * Import data into the atlas using the {@link ImportWizard}
+		 **/
+		importWizard
 	}
 
 	/** A singleton pattern for the {@link AtlasCreator} instance **/
@@ -108,12 +112,12 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 					"resource.locales.Geopublisher"), Locale.ENGLISH);
 
 	static {
-		AtlasConfig.setupResLoMan();
+//		AtlasConfig.setupResLoMan();
 
 		System.out
 				.println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
 		WebResourceManager
-				.addResourceLoader(new rachel.http.loader.ClassResourceLoader(
+				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
 						AtlasViewer.class));
 
 		// Starting singleton WebServer
@@ -167,28 +171,31 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
-//		try {
-//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//		} catch (ClassNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (InstantiationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (UnsupportedLookAndFeelException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+
+		// try {
+		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		// } catch (ClassNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (InstantiationException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (IllegalAccessException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } catch (UnsupportedLookAndFeelException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
 
 		System.setProperty("file.encoding", "UTF-8");
 
+		
 		// Setting up log4j
-		URL log4jXmlUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
-				"gp_log4j.xml");
+//		URL log4jXmlUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
+//				"gp_log4j.xml");
+		URL log4jXmlUrl = AtlasCreator.class.getClassLoader().getResource("gp_log4j.xml");
+
 		DOMConfigurator.configure(log4jXmlUrl);
 
 		getInstance(Arrays.asList(args));
@@ -427,7 +434,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 							.getString("EditPopupWindow.EditorTitle"));
 
 			// The next time the atlas is viewed, the popup has to reappear!
-			AVProps.set(getJFrame(),
+			ace.getProperties().set(getJFrame(),
 					skrueger.atlas.AVProps.Keys.showPopupOnStartup, "true");
 		}
 
@@ -563,11 +570,19 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 			// BorderFactory.createTitledBorder("icon.ico"));
 			// previewLabel.add(previeAutorunIcon);
 
-			URL urlJWSIconFallback = AtlasConfig.getResLoMan()
-					.getResourceAsUrl(
-							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
-			URL urlJWSIcon = AtlasConfig.getResLoMan().getResourceAsUrl(
-					AtlasConfig.JWSICON_RESOURCE_NAME);
+//			URL urlJWSIconFallback = AtlasConfig.getResLoMan()
+//					.getResourceAsUrl(
+//							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+//			URL urlJWSIcon = AtlasConfig.getResLoMan().getResourceAsUrl(
+//					AtlasConfig.JWSICON_RESOURCE_NAME);
+			
+			ClassLoader cl = AtlasCreator.class.getClassLoader();
+			URL urlJWSIconFallback = cl.getResource(
+						"/"+AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+			
+			URL urlJWSIcon = cl.getResource(
+					"/"+AtlasConfig.JWSICON_RESOURCE_NAME);
+		
 			JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
 					new ImageIcon(AVUtil.exists(urlJWSIcon) ? urlJWSIcon
 							: urlJWSIconFallback), SwingConstants.CENTER);
@@ -576,11 +591,18 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 			previewLabel.add(previewJWSIcon);
 			cp.add(previewLabel, BorderLayout.CENTER);
 
-			URL urlSplashscreenFallback = AtlasConfig.getResLoMan()
-					.getResourceAsUrl(
+//			
+//			URL urlSplashscreenFallback = AtlasConfig.getResLoMan()
+//					.getResourceAsUrl(
+//							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
+//			URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
+//					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			URL urlSplashscreenFallback = cl.getResource("/"+
 							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
-					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			URL urlSplashscreen = cl.getResource(
+					"/"+AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			
+			
 			JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",
 					new ImageIcon(
 							AVUtil.exists(urlSplashscreen) ? urlSplashscreen
@@ -634,9 +656,10 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		} else if (cmd.equals(ActionCmds.exportJarsAtlas.toString())) {
 			// Starts a modal wizard dialog
 			ExportWizard.showWizard(getJFrame(), ace);
-		}
-
-		else if (cmd.equals(ActionCmds.testAV.toString())) {
+		} else if (cmd.equals(ActionCmds.importWizard.toString())) {
+			// Starts a modal wizard dialog
+			ImportWizard.showWizard(getJFrame(), ace);
+		} else if (cmd.equals(ActionCmds.testAV.toString())) {
 
 			/**
 			 * Close any other preview instances
@@ -751,7 +774,8 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		ace.uncache();
 		ace = null;
 
-		AtlasConfigEditable.resetResLoMan();
+//		AtlasConfigEditable.resetResLoMan(); Can just be removed, as the ace is nulled => no ResLoMan available
+		
 		getJFrame().updateAce();
 
 		return true;
@@ -1033,8 +1057,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		final JFileChooser dc = new JFileChooser(new File(lastAtlasDirectory));
 		dc.setSelectedFile(new File(lastAtlasDirectory + "/"
 				+ AtlasConfigEditable.ATLAS_GPA_FILENAME));
-		AtlasXMLFileFilter filter = new AtlasXMLFileFilter();
-		dc.addChoosableFileFilter(filter);
+		dc.addChoosableFileFilter(new AtlasXMLFileFilter());
 		dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		dc.setAcceptAllFileFilterUsed(false);
 
@@ -1042,7 +1065,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		dc.setMultiSelectionEnabled(false);
 		int rc = dc.showOpenDialog(gpJFrame);
 		while (rc == JFileChooser.APPROVE_OPTION
-				&& !AMLImportEd
+				&& !AtlasConfig
 						.isAtlasDir(dc.getSelectedFile().getParentFile())) {
 			AVUtil.showMessageDialog(gpJFrame, AtlasCreator.RESOURCE.getString(
 					"LoadAtlasError.Directory_not_recognized", dc

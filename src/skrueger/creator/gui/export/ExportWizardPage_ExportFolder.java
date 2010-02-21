@@ -108,6 +108,7 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 
 					dc.setDialogTitle(AtlasCreator.R("Export.Dialog.WhereTo"));
 					dc.setMultiSelectionEnabled(false);
+
 					if ((dc.showSaveDialog(ExportWizardPage_ExportFolder.this) != JFileChooser.APPROVE_OPTION)
 							|| dc.getSelectedFile() == null) {
 						return;

@@ -48,17 +48,17 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVProps;
 import skrueger.atlas.AtlasViewer;
-import skrueger.geotools.MapView;
+import skrueger.atlas.gui.map.AtlasMapView;
 
 public class AtlasScreenScreenshotsDialog extends JDialog {
 
 	private static final int MAP_UPSCALE_FAKTOR = 1;
 	private static final int PREVIEW_HEIGHT = 160;
-	private final MapView mapView;
+	private final AtlasMapView mapView;
 	private BufferedImage[] screenshots;
 	private BufferedImage[] previews = new BufferedImage[3];
 
-	public AtlasScreenScreenshotsDialog(final MapView mapView) {
+	public AtlasScreenScreenshotsDialog(final AtlasMapView mapView) {
 		this.mapView = mapView;
 
 		setTitle(AtlasViewer.R("Screenshot.DialogTitle"));
@@ -152,8 +152,9 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 
 				// Opens File save dialog
 
-				final File startWith = new File(AVProps.get(
-						AVProps.Keys.LastExportFolder, "."));
+				final File startWith = new File(mapView.getAtlasConfig()
+						.getProperties()
+						.get(AVProps.Keys.LastExportFolder, "."));
 
 				JFileChooser fc = new JFileChooser(startWith);
 				fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -211,12 +212,11 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 						TYP = "JPEG";
 
 					ImageIO.write(screenshots[idx], TYP, selectedFile);
-					AVProps.set(mapView,
-							AVProps.Keys.LastExportFolder, selectedFile
-									.getParentFile().getAbsolutePath());
+					mapView.getAtlasConfig().getProperties().set(mapView,
+							AVProps.Keys.LastExportFolder,
+							selectedFile.getParentFile().getAbsolutePath());
 				} catch (IOException e1) {
-					ExceptionDialog
-							.show(AtlasScreenScreenshotsDialog.this, e1);
+					ExceptionDialog.show(AtlasScreenScreenshotsDialog.this, e1);
 				}
 
 				dispose();
@@ -292,10 +292,10 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		// **********************************************************
 		final SelectableXMapPane mp = mapView.getGeoMapPane().getMapPane();
 
-		
-		// Removed the following line when removing setState from XMapPane... WHat was it good for? 		
+		// Removed the following line when removing setState from XMapPane...
+		// WHat was it good for?
 		// mp.setState(SelectableXMapPane.SELECT_ONE_FROM_TOP);
-		
+
 		dim = mp.getSize();
 
 		BufferedImage mapImage = new BufferedImage(

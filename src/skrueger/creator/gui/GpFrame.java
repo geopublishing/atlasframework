@@ -49,7 +49,6 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVProps;
 import skrueger.atlas.AVUtil;
-import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.BugReportmailer;
 import skrueger.atlas.dp.DataPool;
@@ -121,6 +120,10 @@ public class GpFrame extends JFrame {
 		}
 
 	};
+	
+	public AtlasConfigEditable getAce() {
+		return gp.getAce();
+	}
 
 	public GpFrame(final AtlasCreator gp) {
 
@@ -157,11 +160,22 @@ public class GpFrame extends JFrame {
 		// Setting the GP icons for this frame
 		try {
 			List<Image> icons = new ArrayList<Image>(2);
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
+			
+//			ResourceLoaderManager resLoMan = getAce().getResLoMan(); // TODO Here a classload is better, isn't it?
+//			icons.add(new ImageIcon(resLoMan.getResource(
+//			"skrueger/creator/resource/gp_icon16.png")).getImage());
+//	icons.add(new ImageIcon(resLoMan.getResource(
+//			"skrueger/creator/resource/gp_icon32.png")).getImage());
+//	icons.add(new ImageIcon(resLoMan.getResource(
+//			"skrueger/creator/resource/gp_icon64.png")).getImage());			
+			
+			ClassLoader classLoader = AtlasCreator.class.getClassLoader();
+			
+			icons.add(new ImageIcon(classLoader.getResource(
 					"skrueger/creator/resource/gp_icon16.png")).getImage());
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
+			icons.add(new ImageIcon(classLoader.getResource(
 					"skrueger/creator/resource/gp_icon32.png")).getImage());
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
+			icons.add(new ImageIcon(classLoader.getResource(
 					"skrueger/creator/resource/gp_icon64.png")).getImage());
 			setIconImages(icons);
 		} catch (Exception e) {
@@ -266,6 +280,15 @@ public class GpFrame extends JFrame {
 			saveAtlasMenuItem.setActionCommand(ActionCmds.saveAtlas.toString());
 			saveAtlasMenuItem.addActionListener(gp);
 			fileMenu.add(saveAtlasMenuItem);
+		}
+		
+		// ******************************************************************
+		// "Import data into the atlas using a wizard
+		// ******************************************************************
+		if (ace != null) {
+			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"), null,
+					ActionCmds.importWizard, null, KeyStroke.getKeyStroke(
+							KeyEvent.VK_I, Event.CTRL_MASK, true)));
 		}
 
 		// ******************************************************************
@@ -641,13 +664,13 @@ public class GpFrame extends JFrame {
 						public void actionPerformed(ActionEvent e) {
 							boolean b = ((JCheckBoxMenuItem) e.getSource())
 									.isSelected();
-							AVProps.set(GpFrame.this,
+							getAce().getProperties().set(GpFrame.this,
 									AVProps.Keys.antialiasingMaps, b ? "1"
 											: "0");
 						}
 
 					});
-			jCheckBoxMenuItemAntiAliasingAV.setSelected(AVProps.getInt(
+			jCheckBoxMenuItemAntiAliasingAV.setSelected(getAce().getProperties().getInt(
 					AVProps.Keys.antialiasingMaps, 1) == 1);
 			atlasJMenu.add(jCheckBoxMenuItemAntiAliasingAV);
 

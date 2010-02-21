@@ -149,7 +149,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			final DpEntry<? extends ChartStyle> dpe) {
 		TranslationsAskJPanel dpeTranslationTab;
 		{
-			final List<String> langs = dpe.getAc().getLanguages();
+			final List<String> langs = dpe.getAtlasConfig().getLanguages();
 			if (dpe.getTitle() == null)
 				dpe.setTitle(new Translation(langs, "untitled"));
 			if (dpe.getDesc() == null)
@@ -179,7 +179,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			/**
 			 * Inform the DataPool about the changes
 			 */
-			dpe.getAc().getDataPool().fireChangeEvents(EventTypes.changeDpe);
+			dpe.getAtlasConfig().getDataPool().fireChangeEvents(EventTypes.changeDpe);
 
 			return true;
 		}

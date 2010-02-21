@@ -169,7 +169,7 @@ public abstract class DpLayerVectorFeatureSource
 				setPrefix("Exporting ");
 
 				try {
-					exportDir = selectExportDir(owner);
+					exportDir = selectExportDir(owner, getAtlasConfig());
 
 					if (exportDir == null) {
 						return false;
@@ -421,7 +421,7 @@ public abstract class DpLayerVectorFeatureSource
 
 		final Double layerQM = super.getQuality();
 
-		result = (layerQM * 4. + attributeMetaDataMap.getQuality(getAc()
+		result = (layerQM * 4. + attributeMetaDataMap.getQuality(getAtlasConfig()
 				.getLanguages()) * 1.) / 5.;
 
 		return result;

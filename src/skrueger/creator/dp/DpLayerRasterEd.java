@@ -54,7 +54,7 @@ public class DpLayerRasterEd extends DpLayerRaster implements
 	 * @see skrueger.creator.dp.DatapoolEditable#getAce()
 	 */
 	public AtlasConfigEditable getAce() {
-		return (AtlasConfigEditable) getAc();
+		return (AtlasConfigEditable) getAtlasConfig();
 	}
 
 	/**

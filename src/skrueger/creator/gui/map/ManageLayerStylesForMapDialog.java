@@ -752,11 +752,11 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
 							AtlasCreator.R("LayerStyle.Edit.Title"), styleName,
-							dpLayer.getAc().getLanguages());
+							dpLayer.getAtlasConfig().getLanguages());
 
 					TranslationEditJPanel transDescLabel = new TranslationEditJPanel(
 							AtlasCreator.R("LayerStyle.Edit.Desc"), styleDesc,
-							dpLayer.getAc().getLanguages());
+							dpLayer.getAtlasConfig().getLanguages());
 
 					ask = new TranslationAskJDialog(
 							ManageLayerStylesForMapDialog.this, transNameLabel,

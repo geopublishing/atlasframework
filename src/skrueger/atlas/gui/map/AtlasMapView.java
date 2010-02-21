@@ -172,7 +172,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 		getGeoMapPane().getMapPane()
 				.setAntiAliasing(
-						AVProps.get(AVProps.Keys.antialiasingMaps, "1").equals(
+						atlasConfig.getProperties().get(AVProps.Keys.antialiasingMaps, "1").equals(
 								"0") ? false : true);
 
 		/**
@@ -203,8 +203,11 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		// If we find a mapIcon we will set it to be always rendered into the
 		// map
 		// **********************************************************************
-		final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+//		final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+//				AtlasConfig.MAPICON_RESOURCE_NAME);
+		final URL mapIconURL = atlasConfig.getResource(
 				AtlasConfig.MAPICON_RESOURCE_NAME);
+		
 		if (mapIconURL != null) {
 			try {
 				BufferedImage mapImageIcon = ImageIO.read(mapIconURL);

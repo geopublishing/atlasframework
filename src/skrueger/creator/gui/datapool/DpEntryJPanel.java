@@ -50,7 +50,7 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 		super(new MigLayout("width 100%, wrap 1", "[grow]"));
 		this.dpe = dpe;
 
-		ace = (AtlasConfigEditable) dpe.getAc();
+		ace = (AtlasConfigEditable) dpe.getAtlasConfig();
 
 		backup();
 
@@ -91,7 +91,7 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 
 				public void actionPerformed(final ActionEvent e) {
 					AVUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
-							.getAc()).getDataDir(), dpe.getDataDirname()));
+							.getAtlasConfig()).getDataDir(), dpe.getDataDirname()));
 				}
 
 			}, R("EditDPEDialog.OpenFolderButton.TT"));

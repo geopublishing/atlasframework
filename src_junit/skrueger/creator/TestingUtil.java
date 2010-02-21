@@ -143,7 +143,7 @@ public class TestingUtil extends TestCase {
 			SAXException, IOException, ParserConfigurationException {
 
 		try {
-			URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+			URL log4jURL = AtlasViewer.class.getClassLoader().getResource("/"+
 					"av_log4j.xml");
 			System.out.println("Configuring log4j from " + log4jURL);
 			if (log4jURL == null) {

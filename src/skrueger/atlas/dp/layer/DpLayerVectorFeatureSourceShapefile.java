@@ -10,7 +10,6 @@
  ******************************************************************************/
 package skrueger.atlas.dp.layer;
 
-import java.awt.Component;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
@@ -39,6 +38,7 @@ import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntryType;
 import skrueger.atlas.exceptions.AtlasException;
+import skrueger.atlas.gui.internal.AtlasStatusDialog;
 
 /**
  * This extension of the {@link DpLayerVectorFeatureSource} is specialized to
@@ -64,7 +64,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject() {
 		// long startT = new Date().getTime();
 
-		URL localUrl = getUrl((Component) null); // TODO
+		URL localUrl = getUrl((AtlasStatusDialog) null); // TODO
 		if (localUrl == null) {
 			final AtlasException atlasException = new AtlasException(
 					"Could not find ID:" + getId() + " / Title:'" + getTitle()
@@ -178,10 +178,10 @@ public class DpLayerVectorFeatureSourceShapefile extends
 			return; // works!
 
 		// not needed any more.. just a double check
-		if (getUrl((Component) null).getProtocol().startsWith("jar"))
+		if (getUrl((AtlasStatusDialog) null).getProtocol().startsWith("jar"))
 			return;
 
-		ShpFiles shpFiles = new ShpFiles(getUrl((Component) null));
+		ShpFiles shpFiles = new ShpFiles(getUrl((AtlasStatusDialog) null));
 		File qixFile;
 		try {
 			qixFile = DataUtilities.urlToFile(new URL(shpFiles

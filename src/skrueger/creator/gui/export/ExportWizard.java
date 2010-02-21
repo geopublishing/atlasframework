@@ -53,7 +53,10 @@ public class ExportWizard extends WizardBranchController {
 
 	final public static String SAVE_AUTOMATICALLY = "saveAtlas";
 	final public static String ACE = "ace";
+	
+	/** Used to identify the JWS check-box in the wizard-data **/
 	final public static String JWS_CHECKBOX = "exportJWS?";
+	/** Used to identify the DISK check-box in the wizard-data **/
 	final public static String DISK_CHECKBOX = "exportDISK?";
 	public static final String COPYJRE = "copyJRE";
 

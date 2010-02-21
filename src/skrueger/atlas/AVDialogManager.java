@@ -144,7 +144,7 @@ public class AVDialogManager {
 		@Override
 		public AtlasChartJDialog getInstanceFor(final ChartStyle key,
 				final Component owner, final Object... constArgs) {
-			final MapLegend mapLegend = (MapLegend) constArgs[1];
+			final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
 
 			final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
 

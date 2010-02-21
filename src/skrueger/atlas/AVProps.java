@@ -18,7 +18,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -40,7 +39,7 @@ import schmitzm.swing.ExceptionDialog;
 public class AVProps {
 	private static final Logger LOGGER = Logger.getLogger(AVProps.class);
 
-	private static final Properties properties = new Properties();
+	private final Properties properties = new Properties();
 
 	/**
 	 * The string, that points to an .properties file in the root atlas folder
@@ -72,42 +71,50 @@ public class AVProps {
 		, showPopupOnStartup
 	}
 
-	private static String propertiesFilename;
+	private String propertiesFilename;
 
-	private static String appDirname;
+	private String appDirname;
 
-	private static File propertiesFile;
+	private File propertiesFile;
 
-	private static FileOutputStream FOS;
+	private FileOutputStream FOS;
 
-	private static boolean haveToCloseFOS;
+	private boolean haveToCloseFOS;
+
+	private final AtlasConfig atlasConfig;
 
 	// ****************************************************************************
 	// 
 	// The .properties file will be opened and parsed
 	//
 	// ****************************************************************************
-	static {
+	// static {
+
+	// try {
+	// final InputStream resourceAsStream = AtlasConfig.getResLoMan()
+	// .getResourceAsStream(PROPERTIESFILE_RESOURCE_NAME);
+	// if (resourceAsStream == null) {
+	// log.warn("No *.properties found at '"
+	// + PROPERTIESFILE_RESOURCE_NAME
+	// + "'! Not parsing properties file...");
+	// System.err.println("No *.properties found at '"
+	// + PROPERTIESFILE_RESOURCE_NAME
+	// + "'! Not parsing properties file...");
+	// } else {
+	// // ResLoMan provided an InputStream to the properties, so lets
+	// // parse it...
+	// properties.load(resourceAsStream);
+	// }
+	// } catch (Exception e) {
+	// log.error("Error reading the properties file '"
+	// + PROPERTIESFILE_RESOURCE_NAME + "'");
+	// }
+	// }
+
+	public AVProps(AtlasConfig atlasConfig) {
+		this.atlasConfig = atlasConfig;
+
 		init("av.properties", ".AtlasViewer");
-		// try {
-		// final InputStream resourceAsStream = AtlasConfig.getResLoMan()
-		// .getResourceAsStream(PROPERTIESFILE_RESOURCE_NAME);
-		// if (resourceAsStream == null) {
-		// log.warn("No *.properties found at '"
-		// + PROPERTIESFILE_RESOURCE_NAME
-		// + "'! Not parsing properties file...");
-		// System.err.println("No *.properties found at '"
-		// + PROPERTIESFILE_RESOURCE_NAME
-		// + "'! Not parsing properties file...");
-		// } else {
-		// // ResLoMan provided an InputStream to the properties, so lets
-		// // parse it...
-		// properties.load(resourceAsStream);
-		// }
-		// } catch (Exception e) {
-		// log.error("Error reading the properties file '"
-		// + PROPERTIESFILE_RESOURCE_NAME + "'");
-		// }
 	}
 
 	/**
@@ -122,19 +129,20 @@ public class AVProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	protected static void init(String propertiesFilename, String appDirname) {
-//		LOGGER.info("Initialising the AV Properties");
+	protected void init(String propertiesFilename, String appDirname) {
+		// LOGGER.info("Initialising the AV Properties");
 
-		String chartsetName = Charset.defaultCharset().name();
-		LOGGER.info("Native JVM Charset is " + chartsetName);
-		
-		String fileEncodingName = System.getProperty("file.encoding");
-		LOGGER.info("Fileencoding is " + fileEncodingName);
-		
-//		if (!chartsetName.equals("UTF-8")) throw new RuntimeException("JVM has to run in UTF-8. Please start JVM with '-Dfile.encoding=UTF-8'.");
+		// String chartsetName = Charset.defaultCharset().name();
+		// LOGGER.info("Native JVM Charset is " + chartsetName);
+		//		
+		// String fileEncodingName = System.getProperty("file.encoding");
+		// LOGGER.info("Fileencoding is " + fileEncodingName);
 
-		AVProps.propertiesFilename = propertiesFilename;
-		AVProps.appDirname = appDirname;
+		// if (!chartsetName.equals("UTF-8")) throw new
+		// RuntimeException("JVM has to run in UTF-8. Please start JVM with '-Dfile.encoding=UTF-8'.");
+
+		this.propertiesFilename = propertiesFilename;
+		this.appDirname = appDirname;
 
 		/**
 		 * It is not a problem if the propertiesFile for the AtlasViewer can't
@@ -148,7 +156,7 @@ public class AVProps {
 		}
 	}
 
-	protected static File getPropertiesFile() {
+	protected File getPropertiesFile() {
 
 		if (propertiesFile == null) {
 			File applicationPropertiesDirectory = new File(new File(System
@@ -176,7 +184,7 @@ public class AVProps {
 	/**
 	 * Save the changes to the .properties file
 	 */
-	public static void store(Component owner) {
+	public void store(Component owner) {
 		LOGGER.debug("STORE AV PROPS");
 		try {
 			FOS = new FileOutputStream(getPropertiesFile());
@@ -209,7 +217,7 @@ public class AVProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	public static void resetProperties(final Component guiOwner) {
+	public void resetProperties(final Component guiOwner) {
 		// final String msg = AtlasViewer.RESOURCE
 		// .getString("avprops.could_not_find_default_properties_in_file");
 
@@ -221,8 +229,7 @@ public class AVProps {
 		// If we don't have a .properties file, we copy the one from the jar
 		URL inJar = null;
 		try {
-			inJar = AtlasConfig.getResLoMan().getResourceAsUrl(
-					PROPERTIESFILE_RESOURCE_NAME);
+			inJar = atlasConfig.getResource("/" + PROPERTIESFILE_RESOURCE_NAME);
 			// LOGGER.debug("inJar = " + inJar);
 
 			if (inJar == null)
@@ -264,14 +271,14 @@ public class AVProps {
 	 * 
 	 * @return never null
 	 */
-	public static final String get(Keys key, String defaultValue) {
+	public final String get(Keys key, String defaultValue) {
 		return properties.getProperty(key.toString(), defaultValue);
 	}
 
 	/**
 	 * Set a Value from the {@link Properties}
 	 */
-	public static final void set(Component owner, Keys key, String value) {
+	public final void set(Component owner, Keys key, String value) {
 		properties.setProperty(key.toString(), value);
 		store(owner);
 	}
@@ -281,7 +288,7 @@ public class AVProps {
 	 * 
 	 * @return null if key is not defined
 	 */
-	public static final String get(Keys key) {
+	public final String get(Keys key) {
 		return properties.getProperty(key.toString());
 	}
 
@@ -289,7 +296,7 @@ public class AVProps {
 	 * Returns the value as an {@link Integer}. If conversion fails, the default
 	 * value is returned
 	 */
-	public static final Integer getInt(Keys key, Integer defaultValue) {
+	public final Integer getInt(Keys key, Integer defaultValue) {
 		try {
 			final String string = get(key);
 			if (string == null)
@@ -312,11 +319,11 @@ public class AVProps {
 	 * @param propertiesFile
 	 * @throws IOException
 	 */
-	public static void save(File propertiesFile) throws IOException {
+	public void save(File propertiesFile) throws IOException {
 		properties.store(new FileWriter(propertiesFile), COMMENTS);
 	}
 
-	public static boolean getBoolean(Keys key, boolean defaultValue) {
+	public boolean getBoolean(Keys key, boolean defaultValue) {
 		try {
 			final String string = get(key);
 			if (string == null)
@@ -331,6 +338,10 @@ public class AVProps {
 									+ defaultValue, e);
 		}
 		return defaultValue;
+	}
+
+	public AtlasConfig getAtlasConfig() {
+		return atlasConfig;
 	}
 
 }

@@ -12,6 +12,7 @@ package skrueger.atlas.dp;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -25,6 +26,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.atlas.dp.layer.DpLayer;
 import skrueger.atlas.map.Map;
 import skrueger.atlas.map.MapPool;
+import skrueger.sld.RuleChangedEvent;
 
 /**
  * Stores {@link DpEntry}s by their IDs. Offers to add
@@ -36,7 +38,7 @@ import skrueger.atlas.map.MapPool;
  */
 public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 
-	static final Logger log = Logger.getLogger(DataPool.class);
+	static final Logger LOGGER = Logger.getLogger(DataPool.class);
 
 	private WeakHashSet<PropertyChangeListener> listeners = new WeakHashSet<PropertyChangeListener>(
 			PropertyChangeListener.class);
@@ -87,7 +89,7 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 	@Override
 	public DpEntry<? extends ChartStyle> remove(Object key) {
 		DpEntry<? extends ChartStyle> result = super.remove(key);
-		
+
 		if (result != null)
 			fireChangeEvents(EventTypes.removeDpe);
 		return result;
@@ -113,9 +115,70 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 		if (listeners.contains(propertyChangeListener)) {
 			listeners.remove(propertyChangeListener);
 		} else {
-			log
+			LOGGER
 					.warn("Removing a PropertyChangeListener that is not registered.");
 		}
+	}
+
+	/**
+	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
+	 * be fired.
+	 */
+	private boolean quite = false;
+
+	EventTypes lastOpressedEvent = null;
+	Stack<Boolean> stackQuites = new Stack<Boolean>();
+
+	/**
+	 * Add a QUITE-State to the event firing state stack
+	 */
+	public void pushQuite() {
+		stackQuites.push(quite);
+		setQuite(true);
+	}
+
+	/**
+	 * Remove a QUITE-State from the event firing state stack
+	 */
+	public void popQuite() {
+		setQuite(stackQuites.pop());
+		if (quite == false) {
+			if (lastOpressedEvent != null)
+				fireChangeEvents(lastOpressedEvent);
+			// Not anymore.. if lastOpressedEvent == null, there is no reason to
+			// send an event now
+			// else
+			// fireEvents(new RuleChangedEvent("Not quite anymore", this));
+		} else {
+			LOGGER.debug("not firing event because there are "
+					+ stackQuites.size() + " 'quites' still on the stack");
+		}
+
+	}
+
+	public void popQuite(EventTypes fireThis) {
+		setQuite(stackQuites.pop());
+		if (quite == false && fireThis != null)
+			fireChangeEvents(fireThis);
+		else {
+			lastOpressedEvent = fireThis;
+			LOGGER.debug("not firing event " + fireThis + " because there are "
+					+ stackQuites.size() + " 'quites' still on the stack");
+		}
+	}
+
+	/**
+	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s.
+	 */
+	private void setQuite(boolean b) {
+		quite = b;
+	}
+
+	/**
+	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s
+	 */
+	public boolean isQuite() {
+		return quite;
 	}
 
 	/**
@@ -124,9 +187,12 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 	 */
 	public void fireChangeEvents(final EventTypes type) {
 
-		/**
-		 * I suppose this is mainly GUI stuff, so we can do it later...
-		 */
+		if (quite) {
+			lastOpressedEvent = type;
+			return;
+		} else {
+			lastOpressedEvent = null;
+		}
 
 		PropertyChangeEvent pce = new PropertyChangeEvent(this,
 				type.toString(), false, true);

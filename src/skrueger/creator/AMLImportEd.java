@@ -17,11 +17,11 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 
 import rachel.http.loader.WebResourceManager;
 import skrueger.atlas.dp.AMLImport;
 import skrueger.atlas.exceptions.AtlasException;
+import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.http.FileWebResourceLoader;
 import skrueger.atlas.http.Webserver;
@@ -45,39 +45,36 @@ public class AMLImportEd extends AMLImport {
 	 *            A {@link SwingWorker} who's publish method is called with some
 	 *            info. May be null.
 	 */
-	public final static AtlasConfigEditable parseAtlasConfig(AtlasStatusDialog statusDialog, File atlasDir) throws AtlasException, SAXException, IOException,
+	public final static AtlasConfigEditable parseAtlasConfig(AtlasStatusDialog statusDialog, File atlasDir) throws AtlasException, 
 			ParserConfigurationException {
-		LOGGER.info("Opening Atlas from Folder " + atlasDir + "...");
+		
+		if (atlasDir.getName().endsWith(".gpa")) atlasDir  = atlasDir.getParentFile();
+		
+		LOGGER.info("Opening Atlas from Folder " + atlasDir );
 
 		// Create virgin AtlasConfigEditable
 		AtlasConfigEditable ace = new AtlasConfigEditable();
 
+		// Add the file resource loaders
 		ace.setAtlasDir(atlasDir);
 
-		parseAtlasConfig(statusDialog,  ace, true);
+		try {
+			parseAtlasConfig(statusDialog,  ace, true);
+		} catch (IOException e) {
+			throw new AtlasImportException(e); 
+		}
 
 		// The AtlasConfig was loaded from a folder in the file system.
 		// Adding the folder as a WebResource for the internal WebServer
 		LOGGER.debug("Adding folder " + ace.getAtlasDir()
 				+ " as a WebServer resource");
 
+		// TODO Not good, when we import from an external atlas! make a flag for that
 		WebResourceManager.addResourceLoader(new FileWebResourceLoader(ace
 				.getAtlasDir()));
+		
 		return ace;
 	}
 
-	/**
-	 * Determines if this is an atlas dir by looking if a ./ad/atlas.xml file
-	 * exists
-	 * 
-	 * @param atlasDir
-	 *            A {@link File} folder to check
-	 * @return true if this looks like an atlasDir
-	 */
-	public static boolean isAtlasDir(File atlasDir) {
-		if (!new File(atlasDir, "ad" + File.separator + "atlas.xml").exists())
-			return false;
-		return true;
-	}
 
 }

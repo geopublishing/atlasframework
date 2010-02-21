@@ -216,6 +216,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * 
 	 */
 	public final URL getUrl(Component comp) {
+		if (comp == null) return getUrl((AtlasStatusDialog)null);
 		return getUrl(new AtlasStatusDialog(comp));
 	}
 	
@@ -244,7 +245,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 			String location = ac.getResouceBasename() + getDataDirname() + "/"
 					+ getFilename();
 
-			if (JNLPUtil.isAtlasDataFromJWS()) {
+			if (JNLPUtil.isAtlasDataFromJWS(ac)) {
 				try {
 					JNLPUtil.loadPart(getId(), statusDialog);
 					//TODO was ist wenn man abbricht?!
@@ -253,7 +254,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 				}
 			}
 
-			url = AtlasConfig.getResLoMan().getResourceAsUrl(location);
+			url = ac.getResource(location);
 			
 			// Testing if we really can see it in the resources now...
 			try {
@@ -385,11 +386,11 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		this.filename = filename;
 	}
 
-	public final AtlasConfig getAc() {
+	public final AtlasConfig getAtlasConfig() {
 		return ac;
 	}
 
-	public final void setAc(AtlasConfig ac) {
+	public final void setAtlasConfig(AtlasConfig ac) {
 		this.ac = ac;
 	}
 
@@ -495,9 +496,9 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	public static File selectExportDir(Component owner) {
+	public static File selectExportDir(Component owner, AtlasConfig atlasConfig) {
 
-		final File startWith = new File(AVProps.get(
+		final File startWith = new File(atlasConfig.getProperties().get(
 				AVProps.Keys.LastExportFolder, "."));
 
 		JFileChooser fc = new JFileChooser(startWith);
@@ -514,7 +515,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (exportDir == null)
 			return null;
 
-		AVProps.set(owner, AVProps.Keys.LastExportFolder, exportDir
+		atlasConfig.getProperties().set(owner, AVProps.Keys.LastExportFolder, exportDir
 				.getAbsolutePath());
 
 		return exportDir;
@@ -577,7 +578,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public Double getQuality() {
 		if (isBroken())
 			return 0.;
-		final List<String> languages = getAc().getLanguages();
+		final List<String> languages = getAtlasConfig().getLanguages();
 
 		final Double result = (I8NUtil.qmTranslation(languages, getTitle())
 				* 4. + I8NUtil.qmTranslation(languages, getDesc()) * 2. + I8NUtil

@@ -254,7 +254,7 @@ public class AttribTranslationJTable extends JTable {
 		setColumnSelectionAllowed(false);
 
 		SwingUtil.setColumnLook(this, COLIDX_QUALITY,
-				new QualityPercentageTableCellRenderer(dplv_.getAc()),
+				new QualityPercentageTableCellRenderer(dplv_.getAtlasConfig()),
 				QualityPercentageTableCellRenderer.MINWIDTH, null,
 				QualityPercentageTableCellRenderer.MAXWIDTH);
 
@@ -269,9 +269,9 @@ public class AttribTranslationJTable extends JTable {
 		// SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
 		// new ButtonCellRenderer(), null, 80, null);
 		SwingUtil.setColumnLook(this, COLIDX_TITLES,
-				new TranslationCellRenderer(dplv_.getAc()), 200, 250, null);
+				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 250, null);
 		SwingUtil.setColumnLook(this, COLIDX_DESCS,
-				new TranslationCellRenderer(dplv_.getAc()), 200, 300, null);
+				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 300, null);
 
 		// passes the clicks to the button if they are visible.
 		addMouseListener(new JTableButtonMouseListener());
@@ -458,7 +458,7 @@ public class AttribTranslationJTable extends JTable {
 				Translation desc) {
 			super(AttribTranslationJTable.this);
 
-			List<String> languages = dplv.getAc().getLanguages();
+			List<String> languages = dplv.getAtlasConfig().getLanguages();
 
 			TranslationEditJPanel transName = new TranslationEditJPanel(
 					AtlasCreator.R("EditDPEDialog.TranslateTitle"), title,

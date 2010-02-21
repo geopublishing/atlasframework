@@ -38,7 +38,7 @@ public class DpMediaVideo extends DpMedia<ChartStyle> implements ActionListener 
 	 */
 	public DpMediaVideo(AtlasConfig ac) {
 		super(ac);
-		setTitle(new Translation(getAc().getLanguages(), getFilename())); 
+		setTitle(new Translation(getAtlasConfig().getLanguages(), getFilename())); 
 		setDesc(new Translation());
 		setType(DpEntryType.VIDEO);
 	}

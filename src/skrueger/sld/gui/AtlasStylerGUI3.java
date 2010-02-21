@@ -66,7 +66,6 @@ import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.atlas.AVUtil;
-import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.JNLPUtil;
 import skrueger.atlas.gui.internal.AtlasTask;
@@ -92,13 +91,12 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 	final static private Logger LOGGER = ASUtil
 			.createLogger(AtlasStylerGUI3.class);
 
-	
-
 	private StylerMapView stylerMapView = null;
 
 	private HashMap<String, StyledFS> stledObjCache = new HashMap<String, StyledFS>();
 
-	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this, getStylerMapView().getMapManager());
+	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
+			getStylerMapView().getMapManager());
 
 	/**
 	 * This is the default constructor
@@ -167,12 +165,15 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 		 */
 		try {
 			List<Image> icons = new ArrayList<Image>(2);
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
-					"skrueger/sld/resources/as_icon16.png")).getImage());
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
-					"skrueger/sld/resources/as_icon32.png")).getImage());
-			icons.add(new ImageIcon(AtlasConfig.getResLoMan().getResourceAsUrl(
-					"skrueger/sld/resources/as_icon64.png")).getImage());
+			
+			// TODO veryfy its working
+			ClassLoader cl = AtlasStyler.class.getClassLoader();
+			icons.add(new ImageIcon(cl.getResource("resources/as_icon16.png"))
+					.getImage());
+			icons.add(new ImageIcon(cl.getResource("resources/as_icon32.png"))
+					.getImage());
+			icons.add(new ImageIcon(cl.getResource("resources/as_icon64.png"))
+					.getImage());
 			setIconImages(icons);
 		} catch (Exception e) {
 			ExceptionDialog.show(this, e);
@@ -421,7 +422,6 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 		return jButtonShowXML;
 	}
 
-
 	/**
 	 * A button to export all layers in form of one SLD XML file (starting a
 	 * StyledLayerDescriptor tag)
@@ -455,13 +455,16 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 					ASProps.set(ASProps.Keys.lastExportDirectory, exportSLDFile
 							.getParentFile().getAbsolutePath());
 
-					// If the file exists, the user will be asked about overwriting it
+					// If the file exists, the user will be asked about
+					// overwriting it
 					if (exportSLDFile.exists()) {
 						if (!AVUtil
 								.askOKCancel(
 										AtlasStylerGUI3.this,
 										AtlasStyler
-												.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion", exportSLDFile.getName())))
+												.R(
+														"AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
+														exportSLDFile.getName())))
 							return;
 					}
 

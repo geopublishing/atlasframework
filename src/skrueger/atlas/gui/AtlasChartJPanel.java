@@ -53,6 +53,7 @@ import schmitzm.swing.ExceptionDialog;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
+import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI;
 import skrueger.atlas.resource.icons.Icons;
 import skrueger.geotools.MapView;
@@ -118,7 +119,7 @@ public class AtlasChartJPanel extends JPanel implements
 	 * mode to WindowSelectionMode.SELECT_SET
 	 */
 	public AtlasChartJPanel(JFreeChart chart,
-			StyledFeaturesInterface<?> styledLayer, MapLegend mapLegend) {
+			StyledFeaturesInterface<?> styledLayer, AtlasMapLegend mapLegend) {
 
 		this.chart = chart;
 		this.styledLayer = styledLayer;
@@ -137,7 +138,7 @@ public class AtlasChartJPanel extends JPanel implements
 		// If we find a mapIcon we will set it to be always rendered into the
 		// map
 		// **********************************************************************
-		final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+		final URL mapIconURL = mapLegend.getMap().getAc().getResLoMan().getResourceAsUrl(
 				AtlasConfig.MAPICON_RESOURCE_NAME);
 		if (mapIconURL != null) {
 			try {

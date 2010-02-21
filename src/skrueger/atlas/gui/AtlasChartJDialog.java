@@ -38,6 +38,7 @@ import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
+import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.XMapPane;
@@ -61,10 +62,10 @@ public class AtlasChartJDialog extends AtlasDialog {
 	protected volatile AtlasChartJPanel chartPanel;
 
 	/**
-	 * A reference to the {@link MapLegend} of the {@link XMapPane} that shows
+	 * A reference to the {@link AtlasMapLegend} of the {@link XMapPane} that shows
 	 * the geometries for the data-points.
 	 **/
-	private final MapLegend mapLegend;
+	private final AtlasMapLegend mapLegend;
 
 	/**
 	 * A reference to the {@link SelectableXMapPane} that shows the geometries
@@ -85,7 +86,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 	private HashSet<ChartSelectionSynchronizer> listenersWeInserted = new HashSet<ChartSelectionSynchronizer>();
 
 	public AtlasChartJDialog(final Component owner,
-			final ChartStyle chartStyle, final MapLegend mapLegend,
+			final ChartStyle chartStyle, final AtlasMapLegend mapLegend,
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		super(owner);
@@ -116,7 +117,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 	/**
 	 * Lazily creates the {@link AtlasChartJPanel}
 	 */
-	protected AtlasChartJPanel getChartPanel(final MapLegend mapLegend,
+	protected AtlasChartJPanel getChartPanel(final AtlasMapLegend mapLegend,
 			final StyledFeaturesInterface<?> styledLayer_) {
 
 		if (chartPanel == null) {
@@ -282,7 +283,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 		return chartStyle;
 	}
 
-	public MapLegend getMapLegend() {
+	public AtlasMapLegend getMapLegend() {
 		return mapLegend;
 	}
 

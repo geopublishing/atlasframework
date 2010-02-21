@@ -115,7 +115,7 @@ public class AMLExporter {
 		this.statusWindow = statusWindow;
 
 		// Prepare the output file
-		final File atlasXml = new File(ace.getAd(), "atlas.xml");
+		final File atlasXml = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME);
 
 		try {
 			// ****************************************************************************
@@ -175,11 +175,11 @@ public class AMLExporter {
 
 			if (atlasXmlhasBeenBackupped)
 				try {
-					LOGGER.warn("copying atlas.xml.bak to atlas.xml");
+					LOGGER.warn("copying "+AtlasConfig.ATLAS_XML_FILENAME+".bak to "+AtlasConfig.ATLAS_XML_FILENAME);
 					AVUtil.copyFile(LOGGER, new File(ace.getAd(),
-							"atlas.xml.bak"), atlasXml, false);
+							AtlasConfig.ATLAS_XML_FILENAME+".bak"), atlasXml, false);
 				} catch (final IOException ioEx) {
-					LOGGER.error("error copying atlas.xml.bak back.", ioEx);
+					LOGGER.error("error copying "+AtlasConfig.ATLAS_XML_FILENAME+".bak back.", ioEx);
 					throw (ioEx);
 					// statusWindow.exceptionOccurred(ioEx);
 				}
@@ -744,7 +744,7 @@ public class AMLExporter {
 	private void exportChartStyleDescriptions(final Document document,
 			final DpLayerVectorFeatureSource dpe, final Element element) {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAc();
+		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAtlasConfig();
 
 		final File chartsFolder = new File(ace.getFileFor(dpe).getParentFile(),
 				"charts");
@@ -1194,7 +1194,7 @@ public class AMLExporter {
 			if (resourceSchema == null) {
 				LOGGER.debug("schemaURL == null, try the new way");
 				final String location = "skrueger/atlas/resource/AtlasML.xsd";
-				resourceSchema = AtlasConfig.getResLoMan().getResourceAsUrl(
+				resourceSchema = ace.getResLoMan().getResourceAsUrl(
 						location);
 				// LOGGER.debug("schemaURL (new) = " + resourceSchema);
 			}
@@ -1217,10 +1217,10 @@ public class AMLExporter {
 	 *             if files can't be created.
 	 */
 	private boolean backupAtlasXML() throws IOException {
-		File atlasXml = new File(ace.getAd(), "atlas.xml");
-		File bak1 = new File(ace.getAd(), "atlas.xml.bak");
-		File bak2 = new File(ace.getAd(), "atlas.xml.bak.bak");
-		File bak3 = new File(ace.getAd(), "atlas.xml.bak.bak.bak");
+		File atlasXml = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME);
+		File bak1 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak");
+		File bak2 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak.bak");
+		File bak3 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak.bak.bak");
 
 		if (bak2.exists())
 			AVUtil.copyFile(LOGGER, bak2, bak3, false);

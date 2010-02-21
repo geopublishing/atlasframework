@@ -77,7 +77,7 @@ public class DataPoolDeleteAction extends AbstractAction {
 			return;
 
 		AtlasConfigEditable.deleteDpEntry(owner, (AtlasConfigEditable) dpe
-				.getAc(), dpe, true);
+				.getAtlasConfig(), dpe, true);
 
 	}
 }

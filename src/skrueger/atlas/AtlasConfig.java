@@ -12,6 +12,7 @@ package skrueger.atlas;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,7 +26,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import rachel.ResourceLoader;
-import rachel.loader.ClassResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.atlas.dp.DataPool;
@@ -120,8 +120,13 @@ public class AtlasConfig {
 	 **/
 	public static final String ATLASDATA_DIRNAME = "ad";
 
+	/**
+	 * atlas.xml
+	 **/
+	public static final String ATLAS_XML_FILENAME = "atlas.xml";
+
 	/** This is THE instance of the {@link ResourceLoaderManager} */
-	protected static ResourceLoaderManager resLoMan = new ResourceLoaderManager();
+	protected ResourceLoaderManager resLoMan = new ResourceLoaderManager();
 
 	/** Name of a file in the ad-folder that stores the atlas default CRS **/
 	public static String DEFAULTCRS_FILENAME = "defaultcrs.prj";
@@ -165,6 +170,8 @@ public class AtlasConfig {
 
 	private String resourceBasename = ATLASDATA_DIRNAME + "/" + DATA_DIRNAME
 			+ "/";
+
+	private AVProps avprops;
 
 	/**
 	 * An readily instantiated DatapoolEntry is added...
@@ -271,7 +278,7 @@ public class AtlasConfig {
 	 * @return the {@link ResourceLoaderManager} that unites the
 	 *         {@link ResourceLoader}s for this application
 	 */
-	public static ResourceLoaderManager getResLoMan() {
+	public ResourceLoaderManager getResLoMan() {
 		return resLoMan;
 	}
 
@@ -361,7 +368,7 @@ public class AtlasConfig {
 
 		String location = "ad/html/" + ABOUT_DIRNAME + "/about_"
 				+ Translation.getActiveLang() + ".html";
-		URL url = AtlasConfig.getResLoMan().getResourceAsUrl(location);
+		URL url = getResLoMan().getResourceAsUrl(location);
 		LOGGER.debug("AboutHTML URL = " + url + " for location = " + location);
 		return url;
 	}
@@ -375,7 +382,7 @@ public class AtlasConfig {
 
 		String location = "ad/html/about/popup_" + Translation.getActiveLang()
 				+ ".html";
-		URL url = AtlasConfig.getResLoMan().getResourceAsUrl(location);
+		URL url = getResLoMan().getResourceAsUrl(location);
 		LOGGER.debug("PopupHTML URL = " + url + " for location = " + location);
 		return url;
 	}
@@ -392,18 +399,71 @@ public class AtlasConfig {
 		return iconURL;
 	}
 
-	/**
-	 * Adds a {@link ClassResourceLoader} of AtlasViewer class to the
-	 * {@link ResourceLoader}. Neede at startup of {@link AtlasViewer} and
-	 * Geopublisher
-	 */
-	public static void setupResLoMan() {
-		// Adding the default ClassResourceLoader
-		System.out
-				.println("Adding new ClassResourceLoader( AtlasViewer.class ) to ResLoMan");
-		getResLoMan().addResourceLoader(
-				new ClassResourceLoader(AtlasViewer.class));
+	//
+	// /**
+	// * Adds a {@link ClassResourceLoader} of AtlasViewer class to the
+	// * {@link ResourceLoader}. Neede at startup of {@link AtlasViewer} and
+	// * Geopublisher
+	// */
+	// public void setupResLoMan() {
+	// // Adding the default ClassResourceLoader
+	// System.out
+	// .println("Adding new ClassResourceLoader( AtlasViewer.class ) to ResLoMan");
+	// getResLoMan().addResourceLoader(
+	// new ClassResourceLoader(AtlasViewer.class));
+	//
+	// }
 
+	public AVProps getProperties() {
+		if (avprops == null) {
+			avprops = new AVProps(this);
+		}
+		return avprops;
 	}
 
+	public URL getResource(String resourceLocation) {
+		return getResLoMan().getResourceAsUrl(resourceLocation);
+	}
+
+	public InputStream getResourceAsStream(String resourceLocation) {
+		return getResLoMan().getResourceAsStream(resourceLocation);
+	}
+
+	/**
+	 * Determines if this is an atlas dir by looking if a ./ad/atlas.xml file
+	 * exists
+	 * 
+	 * @param atlasDir
+	 *            A {@link File} folder to check
+	 * @return true if this looks like an atlasDir
+	 */
+	public static boolean isAtlasDir(File atlasDir) {
+		if (!new File(atlasDir, AtlasConfig.ATLASDATA_DIRNAME + "/"
+				+ AtlasConfig.ATLAS_XML_FILENAME).exists())
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		String str = "";
+		if (getTitle() != null)
+			str += getTitle().toString();
+		if (getDesc() != null)
+			str += ", desc = " + getDesc().toString();
+		return str;
+	}
+
+	public void uncache() {
+		/**
+		 * First uncache all Styles
+		 */
+		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
+			dpe.uncache();
+		}
+
+		for (Map map : getMapPool().values()) {
+			map.uncache(null);
+		}
+	}
 }

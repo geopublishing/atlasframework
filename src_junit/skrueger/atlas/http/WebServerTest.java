@@ -26,7 +26,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import rachel.http.loader.ClassResourceLoader;
+import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.exceptions.AtlasException;
@@ -68,7 +68,7 @@ public class WebServerTest extends TestCase {
 	@Test
 	public void testHTML() throws InterruptedException, IOException, AtlasException, FactoryException, TransformException, SAXException, ParserConfigurationException {
 
-		WebResourceManager.addResourceLoader(new ClassResourceLoader(
+		WebResourceManager.addResourceLoader(new WebClassResourceLoader(
 				AtlasViewer.class));
 
 		Map map = TestingUtil.getAtlasConfigE().getMapPool().get(0);

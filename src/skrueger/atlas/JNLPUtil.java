@@ -97,11 +97,12 @@ public class JNLPUtil {
 		} catch (UnavailableServiceException use) {
 		}
 	}
-	
+
 	/**
 	 * Does not manage any GUI feedback! Please run it from an {@link AtlasTask}
 	 * . Will do nothing if the part is already cached.
-	 * @param statusDialog 
+	 * 
+	 * @param statusDialog
 	 */
 	public static void loadPart(String part, AtlasStatusDialog statusDialog)
 			throws IOException {
@@ -115,7 +116,7 @@ public class JNLPUtil {
 				LOGGER.info("part " + part + " is NOT cached.. start DL ");
 
 				// load the resource into the JWS Cache
-				ds.loadPart(part, getJNLPDialog()); //TODO use statusDialog
+				ds.loadPart(part, getJNLPDialog()); // TODO use statusDialog
 			}
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);
@@ -124,7 +125,7 @@ public class JNLPUtil {
 
 	public static DownloadServiceListener getJNLPDialog()
 			throws UnavailableServiceException {
-//		return getJNLPDownloadService().getDefaultProgressWindow();
+		// return getJNLPDownloadService().getDefaultProgressWindow();
 		return new JnlpStatusDialog2();
 	}
 
@@ -211,30 +212,31 @@ public class JNLPUtil {
 	 * Evaluates where the atlas.xml comes from. There are 3 options:
 	 * <ul>
 	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed</li>
-	 * <li>* jar://htpp://asdasasda/online/av.jar!/atlas.xml => From the Internet,
-	 * JWS download nötig</li>
+	 * <li>* jar://htpp://asdasasda/online/av.jar!/atlas.xml => From the
+	 * Internet, JWS download nötig</li>
 	 * <li>* file://mein/verz/atlas.xml => Aus lokal dir, kein JWS download
 	 * nötig</li>
 	 * </ul>
 	 * The result is cached in {@value #isAtlasDataFromJWS}.
 	 */
-	public static boolean isAtlasDataFromJWS() {
-		
+	public static boolean isAtlasDataFromJWS(AtlasConfig ac) {
+
 		if (isAtlasDataFromJWS == null) {
-			URL atlasXmlRes = AtlasConfig.getResLoMan().getResourceAsUrl(
-					AtlasConfig.ATLASDATA_DIRNAME + "/atlas.xml");
-	
+			URL atlasXmlRes = ac.getResource(
+					AtlasConfig.ATLASDATA_DIRNAME + "/"
+							+ AtlasConfig.ATLAS_XML_FILENAME);
+
 			LOGGER.info("resourceAsUrl " + atlasXmlRes);
-	
+
 			String protocol = atlasXmlRes.getProtocol();
-	
+
 			if (protocol.startsWith("file")) {
 				return isAtlasDataFromJWS = Boolean.FALSE;
 			}
-	
+
 			if (protocol.startsWith("jar")) {
 				LOGGER.info("resourceAsUrl starts with JAR");
-	
+
 				// First check for JWS and eventually download un-cached JARs
 				if (atlasXmlRes.toString().contains("http")) {
 					LOGGER
@@ -242,20 +244,20 @@ public class JNLPUtil {
 					LOGGER
 							.debug("the data comes from JARs/URLs, adding it to resman...");
 					// moved up one block
-					AtlasConfig.getResLoMan().addResourceLoader(
+					ac.getResLoMan().addResourceLoader(
 							AtlasJWSCachedResourceLoader.getInstance());
-	
+
 					return isAtlasDataFromJWS = true;
 				} else
 					return isAtlasDataFromJWS = false;
-	
+
 			} else {
 				throw new AtlasFatalException(
 						"Failed to see data! atlas.xml comes from "
 								+ atlasXmlRes.toString());
 			}
 		}
-		
+
 		return isAtlasDataFromJWS;
 	}
 

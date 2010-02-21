@@ -80,7 +80,7 @@ public class EditDpEntryGUITest extends TestCase {
 			return;
 
 		dplv.getTitle()
-				.put(dplv.getAc().getLanguages().get(0), "sdasdasd{SDSD");
+				.put(dplv.getAtlasConfig().getLanguages().get(0), "sdasdasd{SDSD");
 		EditDpEntryGUI editDpEntryGUI = new EditDpEntryGUI(null, dplv);
 		editDpEntryGUI.setVisible(true);
 		assertFalse(

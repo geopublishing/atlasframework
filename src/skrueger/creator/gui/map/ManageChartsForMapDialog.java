@@ -105,7 +105,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 		super(owner, AtlasCreator.R("ManageChartsForMapDialog.TitleForDPLayer",
 				dplv.getTitle().toString()));
 		this.dplv = dplv;
-		this.atlasConfigEditable = (AtlasConfigEditable) dplv.getAc();
+		this.atlasConfigEditable = (AtlasConfigEditable) dplv.getAtlasConfig();
 		this.map = mapLegend.getMap();
 		this.mapLegend = mapLegend;
 

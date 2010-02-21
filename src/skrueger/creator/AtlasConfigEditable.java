@@ -31,11 +31,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.geotools.styling.Style;
 
-import rachel.ResourceLoader;
 import rachel.ResourceManager;
-import rachel.loader.ClassResourceLoader;
 import rachel.loader.FileResourceLoader;
-import rachel.loader.ResourceLoaderManager;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
@@ -98,7 +95,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 						AtlasConfigEditable.this);
 
 				if (amlExporter.saveAtlasConfigEditable(statusDialog)) {
-					AVProps.save(new File(AtlasConfigEditable.this
+					getProperties().save(new File(AtlasConfigEditable.this
 							.getAtlasDir(),
 							AVProps.PROPERTIESFILE_RESOURCE_NAME));
 
@@ -779,20 +776,19 @@ public class AtlasConfigEditable extends AtlasConfig {
 		}
 	}
 
-	/**
-	 * Resets the {@link ResourceLoader} to only contain
-	 * {@link ClassResourceLoader} of AtlasViewer class. This reset is needed
-	 * whenever the Geopublisher loads a new atlas in the same JVM instance..
-	 */
-	public static void resetResLoMan() {
-
-		LOGGER.info("Resetting the ResLoMan to only contain defaults");
-
-		resLoMan = new ResourceLoaderManager();
-
-		setupResLoMan();
-
-	}
+//	/**
+//	 * Resets the {@link ResourceLoader} to contain. This reset is needed
+//	 * whenever the Geopublisher loads a new atlas in the same JVM instance..
+//	 */
+//	public void resetResLoMan() {
+//
+//		LOGGER.info("Resetting the ResLoMan to only contain defaults");
+//
+//		resLoMan = new ResourceLoaderManager();
+//
+////		setupResLoMan();
+//
+//	}
 
 	/**
 	 * Define the list of languages supported by this atlas. This may trigger a
@@ -985,20 +981,11 @@ public class AtlasConfigEditable extends AtlasConfig {
 	/**
 	 * Uncaches all cached information..
 	 */
+	@Override
 	public void uncache() {
 		rememberFolderSizes.clear();
-
-		/**
-		 * First uncache all Styles
-		 */
-		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
-			dpe.uncache();
-		}
-
-		for (Map map : getMapPool().values()) {
-			map.uncache(null);
-		}
-
+		
+		super.uncache();
 	}
 
 }

@@ -338,7 +338,7 @@ public class DataPoolJTable extends JTable {
 
 					final int visibleAttributesCount = dplv.getAttributeMetaDataMap().sortedValuesVisibleOnly().size();
 					if (dplv.getQuality() < 1. && visibleAttributesCount > 0) {
-						double quality = dplv.getAttributeMetaDataMap().getQuality(dpe.getAc().getLanguages());
+						double quality = dplv.getAttributeMetaDataMap().getQuality(dpe.getAtlasConfig().getLanguages());
 						tooltTipHtml
 								.append("<li>"
 										+ AtlasCreator

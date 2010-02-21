@@ -34,7 +34,7 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 
 		/** Make backup **/
 		{
-			backup = new DpLayerRasterPyramid(pyr.getAc());
+			backup = new DpLayerRasterPyramid(pyr.getAtlasConfig());
 			backup.setInputTransparentColor(pyr.getInputTransparentColor());
 		}
 
