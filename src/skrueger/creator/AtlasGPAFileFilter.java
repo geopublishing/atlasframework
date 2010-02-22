@@ -14,19 +14,22 @@ import java.io.File;
 
 import javax.swing.filechooser.FileFilter;
 
+import skrueger.atlas.AtlasConfig;
+
 /**
  * A {@link FileFilter} that only show valid atlas.gpa files.
  */
-public class AtlasXMLFileFilter extends FileFilter {
+public class AtlasGPAFileFilter extends FileFilter {
 
 	@Override
 	public boolean accept(File f) {
-		return f.isDirectory() || f.getName().toLowerCase().endsWith("gpa");
+		return f.isDirectory()
+				|| (f.getName().toLowerCase().endsWith("gpa") && AtlasConfig
+						.isAtlasDir(f.getParentFile()));
 	}
 
 	@Override
 	public String getDescription() {
 		return AtlasConfigEditable.ATLAS_GPA_FILENAME;
 	}
-
 }

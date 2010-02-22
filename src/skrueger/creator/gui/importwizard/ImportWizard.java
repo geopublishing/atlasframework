@@ -65,6 +65,9 @@ public class ImportWizard extends WizardBranchController {
 
 	public static final Object IMPORT_GPA_ATLASCONFIG = "AtlasConfig object of the external atlas";
 
+	public static final String IMPORT_FILE = "Absolute path to the file the user wants to import";
+
+	public static final Object GUI_OWNER_COMPONENT = "a component that belongs to this wizard";
 
 	/**
 	 * This constructor also defines the default (first) steps of the wizard
@@ -90,6 +93,11 @@ public class ImportWizard extends WizardBranchController {
 		Map<Object, Object> initialProperties = new HashMap<Object, Object>();
 		initialProperties.put(ACE, atlasConfigEditable);
 
+		initialProperties.put(GUI_OWNER_COMPONENT, owner); // TODO This is
+															// actually
+		// wrong but somehow works. i want the
+		// WIzards component
+
 		final Object showWizard = WizardDisplayer.showWizard(wiz, null, null,
 				initialProperties);
 
@@ -107,12 +115,15 @@ public class ImportWizard extends WizardBranchController {
 				.get(ImportWizard.IMPORT_SOURCE_TYPE);
 
 		Class[] path = new Class[] {};
-		
+
 		if (importSourceType != null) {
 
 			switch (importSourceType) {
 			case file:
-				return WizardPage.createWizard(path, new ImportWizardResultProducer_GPA(ace)); // TODO reuse finisher?
+				path = LangUtil.extendArray(path,
+						ImportWizardPage_FILE_Select.class);
+				return WizardPage.createWizard(path,
+						new ImportWizardResultProducer_FILE(ace));
 			case gpa:
 				path = LangUtil.extendArray(path,
 						ImportWizardPage_GPA_SelectFolder.class);
@@ -120,14 +131,15 @@ public class ImportWizard extends WizardBranchController {
 						.extendArray(
 								path,
 								ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import.class);
-				return WizardPage.createWizard(path, new ImportWizardResultProducer_GPA(ace));// TODO reuse finisher?
+				return WizardPage.createWizard(path,
+						new ImportWizardResultProducer_GPA(ace));
 			}
 			// LOGGER.debug("getWizardForStep " + step + " returns " + path);
 		}
 
 		// That path is never followed! Its a hack.
-		return WizardPage.createWizard(
-				new Class[] { ImportWizardPage_ImportSourceType.class });
+		return WizardPage
+				.createWizard(new Class[] { ImportWizardPage_ImportSourceType.class });
 
 	}
 

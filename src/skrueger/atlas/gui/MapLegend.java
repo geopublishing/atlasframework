@@ -40,7 +40,6 @@ import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
-import org.geotools.styling.ColorMap;
 import org.geotools.styling.Style;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.opengis.feature.simple.SimpleFeatureType;

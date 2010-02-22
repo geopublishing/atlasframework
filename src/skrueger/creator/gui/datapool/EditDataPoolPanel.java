@@ -10,20 +10,25 @@
  ******************************************************************************/
 package skrueger.creator.gui.datapool;
 
-import java.awt.BorderLayout;
 import java.awt.dnd.DropTarget;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 
+import schmitzm.swing.JPanel;
 import skrueger.atlas.dp.DataPool;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.dp.ImportToDataPoolDropTargetListener;
+import skrueger.creator.gui.importwizard.ImportWizard;
+import skrueger.swing.SmallButton;
 
 /**
  * This panel allows to manage the {@link DataPool}.
@@ -54,26 +59,36 @@ public class EditDataPoolPanel extends JPanel {
 	 *         Kr&uuml;ger</a>
 	 * 
 	 */
-	public EditDataPoolPanel(AtlasConfigEditable ace) {
-		super(new BorderLayout());
+	public EditDataPoolPanel(final AtlasConfigEditable ace) {
+		super(new MigLayout("wrap 1", "[grow]", "[grow][shrink]"));
 		this.ace = ace;
-		JScrollPane dataPoolTableJScrollPane = new JScrollPane(
+		final JScrollPane scrollDatapoolTable = new JScrollPane(
 				getDatapoolJTable());
-		add(dataPoolTableJScrollPane, BorderLayout.CENTER);
+
+		add(scrollDatapoolTable, "grow 2000");
+
 		add(new JLabel(AtlasCreator.R("EditDataPoolPanel.Explanation")),
-				BorderLayout.SOUTH); 
-		// add(getEditDatapoolButtonsJPanel(), BorderLayout.SOUTH);
+				"shrinky, split 2");
+
+		add(new SmallButton(new AbstractAction(AtlasCreator
+				.R("EditDataPoolPanel.ImportButton")) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ImportWizard.showWizard(EditDataPoolPanel.this, ace);
+			}
+		}));
 
 		// ****************************************************************************
 		// D'n'D stuff
 		// ****************************************************************************
-		// Make the DatapoolJList accept Drops form the filesystem to import...
+		// Make the DatapoolJList accept Drops form the file system to import...
 		final ImportToDataPoolDropTargetListener importByDropTargetListener = new ImportToDataPoolDropTargetListener(
 				ace);
 
 		@SuppressWarnings("unused")
 		// is needed for Drag ('n'Drop)
-		DropTarget dt = new DropTarget(dataPoolTableJScrollPane,
+		DropTarget dt = new DropTarget(scrollDatapoolTable,
 				importByDropTargetListener);
 	}
 

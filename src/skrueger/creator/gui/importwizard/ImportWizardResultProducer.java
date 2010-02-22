@@ -57,11 +57,20 @@ public abstract class ImportWizardResultProducer implements
 		return true;
 	}
 
+	protected  JPanel getErrorPanel(Exception e) {
+		JPanel panel = new JPanel(new MigLayout("wrap 1"));
+
+		panel.add(new JLabel("<html>"+e.getLocalizedMessage()+"</html>"));
+
+		return panel;
+	}
+
+
 	protected Summary getAbortSummary() {
 		JPanel aborted = new JPanel(new MigLayout());
 		aborted
 				.add(new JLabel(
-						"The export has been aborted by the user. The temporary folder have been deleted."));
+						"The import has been aborted by the user.")); //i8n
 
 		return Summary.create(aborted, "abort");
 	}

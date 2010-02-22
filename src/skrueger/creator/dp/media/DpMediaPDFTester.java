@@ -13,9 +13,12 @@ package skrueger.creator.dp.media;
 import java.awt.Component;
 import java.io.File;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.log4j.Logger;
 
 import skrueger.atlas.dp.DpEntry;
+import skrueger.atlas.dp.DpEntryType;
 import skrueger.atlas.dp.media.DpMediaPDF;
 import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.creator.AtlasConfigEditable;
@@ -24,6 +27,19 @@ import skrueger.creator.dp.DpEntryTesterInterface;
 public class DpMediaPDFTester implements DpEntryTesterInterface {
 	static private final Logger LOGGER = Logger
 			.getLogger(DpMediaPDFTester.class);
+	
+	public static final FileFilter FILEFILTER = new FileFilter() {
+
+		@Override
+		public String getDescription() {
+			return DpEntryType.PDF.getDesc();
+		}
+
+		@Override
+		public boolean accept(File f) {
+			return f.isDirectory() || new DpMediaPDFTester().test(null, f);
+		}
+	};
 
 	/*
 	 * (non-Javadoc)

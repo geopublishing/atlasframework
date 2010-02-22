@@ -48,7 +48,7 @@ import skrueger.sld.ASUtil;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {
-
+	
 	static private final Logger LOGGER = Logger
 			.getLogger(DpLayerVectorFeatureSourceShapefileEd.class);
 

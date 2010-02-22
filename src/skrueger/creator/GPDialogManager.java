@@ -60,7 +60,7 @@ public class GPDialogManager {
 						public EditDpEntryGUI create() {
 							return new EditDpEntryGUI(
 									owner,
-									(DpEntry<? extends ChartStyle>) constArgs[0]);
+									key);
 						}
 
 					}));

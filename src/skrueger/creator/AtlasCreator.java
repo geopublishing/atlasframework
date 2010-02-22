@@ -1057,7 +1057,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		final JFileChooser dc = new JFileChooser(new File(lastAtlasDirectory));
 		dc.setSelectedFile(new File(lastAtlasDirectory + "/"
 				+ AtlasConfigEditable.ATLAS_GPA_FILENAME));
-		dc.addChoosableFileFilter(new AtlasXMLFileFilter());
+		dc.addChoosableFileFilter(new AtlasGPAFileFilter());
 		dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		dc.setAcceptAllFileFilterUsed(false);
 

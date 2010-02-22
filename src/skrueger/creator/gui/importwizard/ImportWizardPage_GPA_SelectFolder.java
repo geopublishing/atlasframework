@@ -17,7 +17,7 @@ import org.netbeans.spi.wizard.WizardPage;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.resource.icons.Icons;
 import skrueger.creator.AtlasCreator;
-import skrueger.creator.AtlasXMLFileFilter;
+import skrueger.creator.AtlasGPAFileFilter;
 import skrueger.creator.GPProps;
 import skrueger.creator.GPProps.Keys;
 
@@ -67,7 +67,7 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 			return validationImportSourceTypeFailedMsg_CantRead;
 		}
 
-		if (!new AtlasXMLFileFilter().accept(gpa)
+		if (!new AtlasGPAFileFilter().accept(gpa)
 				|| !AtlasConfig.isAtlasDir(gpa.getParentFile())) {
 			return validationImportSourceTypeFailedMsg_NotGpa;
 		}
@@ -111,7 +111,7 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 					final String pathname = GPProps.get(Keys.LAST_IMPORTED_GPA,
 							"");
 					final JFileChooser dc = new JFileChooser(new File(pathname));
-					dc.addChoosableFileFilter(new AtlasXMLFileFilter());
+					dc.addChoosableFileFilter(new AtlasGPAFileFilter());
 					dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 

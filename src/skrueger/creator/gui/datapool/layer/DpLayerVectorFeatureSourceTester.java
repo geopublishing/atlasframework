@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 
 import org.apache.log4j.Logger;
 import org.geotools.data.DataStore;
@@ -29,6 +30,7 @@ import org.geotools.data.shapefile.ShapefileDataStore;
 
 import schmitzm.swing.ExceptionDialog;
 import skrueger.atlas.dp.DpEntry;
+import skrueger.atlas.dp.DpEntryType;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSourceShapefileEd;
 import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.creator.AtlasConfigEditable;
@@ -38,12 +40,26 @@ import skrueger.creator.dp.DpEntryTesterInterface;
  * This is not a JUNit test case.. its a class determining whether this can be
  * loaded as a DpLayerVectorFeatureSource
  */
-public class DpLayerVectorFeatureSourceTest implements DpEntryTesterInterface {
+public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface {
 	static private final Logger LOGGER = Logger
-			.getLogger(DpLayerVectorFeatureSourceTest.class);
+			.getLogger(DpLayerVectorFeatureSourceTester.class);
 
 	DataStore dataStore = null;
+	
+	public static final FileFilter FILEFILTER = new FileFilter () {
 
+		@Override
+		public boolean accept(File f) {
+			return f.isDirectory() || f.getName().toLowerCase().endsWith(".shp");
+		}
+
+		@Override
+		public String getDescription() {
+			return DpEntryType.VECTOR.getDesc();
+		}
+		
+	};
+	
 	/**
 	 * @param url
 	 * @return true if the url can be imported as a DpLayerVectorFeatureSource

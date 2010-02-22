@@ -60,16 +60,12 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	}
 
 	private void initGui() {
-//		setSize(ImportWizard.DEFAULT_WPANEL_SIZE);
-//		setPreferredSize(ImportWizard.DEFAULT_WPANEL_SIZE);
-
 		setLayout(new MigLayout("wrap 1"));
 		add(explanationJLabel);
 		add(getFileJRadioButton(), "gapy unrelated");
 		add(explanationFileJLabel);
 		add(getGpaJRadioButton(), "gapy unrelated");
 		add(explanationGpaJLabel);
-
 	}
 
 	private JRadioButton getFileJRadioButton() {
@@ -77,8 +73,10 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			fileJRadioButton = new JRadioButton(AtlasCreator
 					.R("ImportWizard.ImportSourceType.File"));
 			buttonGroup.add(fileJRadioButton);
-			// fileJRadioButton.setName(ImportWizard.DISK_CHECKBOX);
-			// fileJRadioButton.setSelected(GPProps.getBoolean(Keys.LastImportDisk));
+
+			fileJRadioButton.setSelected(true); // TODO It's the default now,
+												// but should be replaced with a
+												// property
 		}
 		return fileJRadioButton;
 	}
@@ -88,9 +86,6 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			gpaJRadioButton = new JRadioButton(AtlasCreator
 					.R("ImportWizard.ImportSourceType.Gpa"));
 			buttonGroup.add(gpaJRadioButton);
-			// gpaJRadioButton.setName(ImportWizard.JWS_CHECKBOX);
-			// gpaJRadioButton.setSelected(GPProps.getBoolean(Keys.LastImportJWS));
-
 		}
 		return gpaJRadioButton;
 	}

@@ -28,7 +28,7 @@ import skrueger.creator.AtlasConfigEditable;
  * 
  */
 public interface DpEntryTesterInterface {
-
+	
 	/**
 	 * Tests if this file can be handled by a {@link DpEntry}-subtype. This
 	 * function works on ugly filenames. Correcting ugly filenames is part of

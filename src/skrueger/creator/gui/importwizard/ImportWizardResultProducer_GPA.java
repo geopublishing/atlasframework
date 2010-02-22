@@ -9,7 +9,6 @@ import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -72,6 +71,9 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 			@Override
 			public void start(Map wizardData, ResultProgressHandle progress) {
 				this.progress = progress;
+				
+				try {
+					
 
 				JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
 
@@ -195,30 +197,6 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 						skrueger.atlas.map.MapPool.EventTypes.addMap
 						.toString(), null, null));
 
-				//
-				// jarImportUtil = new JarImportUtil(ace, new File(exportDir),
-				// isDisk, isJws, copyJRE);
-				// try {
-				// jarImportUtil.export(progress);
-				// } catch (AtlasCancelException e) {
-				// LOGGER.info("Import aborted by user:", e);
-				// progress.finished(getAbortSummary());
-				// return;
-				// } catch (Exception e) {
-				// LOGGER.error("Import failed!", e);
-				// progress.failed(e.getMessage(), false);
-				// progress.finished(getErrorPanel(e));
-				// ExceptionDialog.show(null, e);
-				// return;
-				// }
-
-				/*
-				 * Only gets here if the Import was successful
-				 */
-				// Summary summary = Summary.create(getSummaryJPanel(), new
-				// File(
-				// exportDir));
-
 				externalAtlasConfig.uncache();
 
 				summaryPanel.add(new JLabel(AtlasCreator
@@ -228,14 +206,10 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 						"ok");
 
 				progress.finished(summary);
-			}
-
-			private JPanel getErrorPanel(Exception e) {
-				JPanel panel = new JPanel(new MigLayout("wrap 1"));
-
-				panel.add(new JTextArea(e.getLocalizedMessage()));
-
-				return panel;
+				} catch (Exception e) {
+					progress.finished(Summary.create(new JScrollPane(getErrorPanel(e)),
+						"error"));
+				}
 			}
 
 		};

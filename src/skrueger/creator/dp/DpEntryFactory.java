@@ -15,6 +15,8 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.filechooser.FileFilter;
+
 import org.apache.log4j.Logger;
 
 import skrueger.atlas.AtlasConfig;
@@ -23,7 +25,7 @@ import skrueger.atlas.exceptions.AtlasImportException;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.dp.media.DpMediaPDFTester;
 import skrueger.creator.dp.media.DpMediaVideoTest;
-import skrueger.creator.gui.datapool.layer.DpLayerVectorFeatureSourceTest;
+import skrueger.creator.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
 
 /**
  * This class tries to instantiate a subclass of {@link DpEntry} for an
@@ -35,14 +37,30 @@ import skrueger.creator.gui.datapool.layer.DpLayerVectorFeatureSourceTest;
 
 public class DpEntryFactory {
 	static final Logger LOGGER = Logger.getLogger(DpEntryFactory.class);
+	
+	public static final FileFilter FILEFILTER_ALL_DPE_IMPORTABLE = new FileFilter() {
+		
+		@Override
+		public String getDescription() {
+			return "All importable"; //i8n
+		}
+		
+		@Override
+		public boolean accept(File f) {
+			if (DpLayerRasterTester.FILEFILTER.accept(f)) return true;
+			if (DpLayerVectorFeatureSourceTester.FILEFILTER.accept(f)) return true;
+			if (DpMediaPDFTester.FILEFILTER.accept(f)) return true;
+			return false;
+		}
+	};
 
-	static private List<DpEntryTesterInterface> testers = new LinkedList<DpEntryTesterInterface>();
+	public static List<DpEntryTesterInterface> testers = new LinkedList<DpEntryTesterInterface>();
 
 	static {
-		testers.add(new DpLayerVectorFeatureSourceTest());
+		testers.add(new DpLayerVectorFeatureSourceTester());
 		testers.add(new DpMediaVideoTest());
 		testers.add(new DpMediaPDFTester());
-		testers.add(new DpLayerRasterTest());
+		testers.add(new DpLayerRasterTester());
 		testers.add(new DpLayerRasterPyramidTest());
 	}
 
@@ -84,5 +102,17 @@ public class DpEntryFactory {
 		}
 		return null;
 	}
+
+	public static boolean test(File file, Component owner) {
+		for (DpEntryTesterInterface test : testers) {
+			// If the test is successful create the "fitting"
+			// DatapoolEntry. Test test function works on the real
+			// filenames. When create imports the data to the ad/data
+			// folder, names and dbf columns are corrected.
+			if (test.test(owner, file))
+				return true;
+		}
+		return false;
+	};
 
 }
