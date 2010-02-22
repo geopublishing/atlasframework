@@ -1066,7 +1066,9 @@ public class AMLImport {
 		FeatureChartStyle featureChartStyle = (FeatureChartStyle) ChartStyleUtil
 				.readStyleFromXML(chartStyleURL,
 						FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY);
-
+		
+//		System.out.println("after loading\n"+"  "+featureChartStyle);
+		
 		AttributeMetadataMap attributeMetaDataMap = dplvfs
 				.getAttributeMetaDataMap();
 
@@ -1089,7 +1091,7 @@ public class AMLImport {
 						.getNodataValues());
 			}
 		}
-
+//		System.out.println("after correcting\n"+"  "+featureChartStyle);
 		return featureChartStyle;
 	}
 

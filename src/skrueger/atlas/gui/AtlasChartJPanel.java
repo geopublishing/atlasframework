@@ -56,6 +56,7 @@ import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI;
 import skrueger.atlas.resource.icons.Icons;
+import skrueger.geotools.MapPaneToolBar;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
@@ -296,7 +297,7 @@ public class AtlasChartJPanel extends JPanel implements
 						}
 
 					});
-			setSelectionButton.setToolTipText(AtlasViewer
+			setSelectionButton.setToolTipText(MapPaneToolBar
 					.R("MapPaneButtons.Selection.SetSelection.TT"));
 			toolBar.add(setSelectionButton);
 			bg.add(setSelectionButton);
@@ -314,7 +315,7 @@ public class AtlasChartJPanel extends JPanel implements
 						}
 
 					});
-			addSelectionButton.setToolTipText(AtlasViewer
+			addSelectionButton.setToolTipText(MapPaneToolBar
 					.R("MapPaneButtons.Selection.AddSelection.TT"));
 			toolBar.add(addSelectionButton);
 			bg.add(addSelectionButton);
@@ -332,7 +333,7 @@ public class AtlasChartJPanel extends JPanel implements
 						}
 
 					});
-			removeSelectionButton.setToolTipText(AtlasViewer
+			removeSelectionButton.setToolTipText(MapPaneToolBar
 					.R("MapPaneButtons.Selection.RemoveSelection.TT"));
 			toolBar.add(removeSelectionButton);
 			bg.add(removeSelectionButton);
@@ -362,7 +363,7 @@ public class AtlasChartJPanel extends JPanel implements
 
 						}
 
-					}, AtlasViewer
+					}, MapPaneToolBar
 							.R("MapPaneButtons.Selection.ClearSelection.TT"));
 
 			{

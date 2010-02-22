@@ -172,6 +172,8 @@ public class ChartWizardResultProducer implements
 
 		// LOGGER.debug("The just created/edited chart has editChart.getAttributeCount() "+chartStyle.getAttributeCount());
 
+//		System.out.println(chartStyle);
+
 		return chartStyle;
 	}
 

@@ -787,6 +787,9 @@ public class AMLExporter {
 				/*
 				 * Write the Chart to XML
 				 */
+				
+//				System.out.println("when saving\n"+"  "+chartStyle);
+				
 				if (chartStyle instanceof FeatureChartStyle) {
 					FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY
 							.writeStyleToFile((FeatureChartStyle) chartStyle,
