@@ -37,7 +37,7 @@
 	<property name="GP.build" value="${GP.location}/bin" />
 	<property name="GP.src" value="${GP.location}/src" />
 	<property name="GP.lib" value="${GP.location}/lib" />
-	<property name="GT.26x" value="/home/stefan/EigeneDateien/code/geotools/2.6.x" />
+	<property name="GT.26x" value="/home/stefan/EigeneDateien/code.svn/geotools/2.6.x" />
 	<property name="GP.exportJWS" value="dist/export_jws" />
 	<property name="GP.exportAlone" value="dist/export_standalone" />
 	<property name="GP.exportAlone.zip" value="${GP.exportAlone}/Geopublisher_and_AtlasStyler_with_all_dependencies.zip" />
@@ -343,12 +343,12 @@
 
 
 		<exec executable="mvn" failifexecutionfails="true" description="Testing and building new JARs">
-			<arg line='-f ${GT.26x}/pom.xml clean install -Dall' />
+			<arg line='-f ${GT.26x}/pom.xml clean package -Dall' />
 		</exec>
 
 		<!--
 		<exec executable="mvn" failifexecutionfails="true" description="Testing and building new JARs">
-			<arg line='-f ${GT.26x}/modules/unsupported/shapefile-renderer/pom.xml clean install -Dall' />
+			<arg line='-f ${GT.26x}/modules/unsupported/shapefile-renderer/pom.xml clean package -Dall' />
 		</exec>
 		<copy overwrite="yes" file="${GT.26x}/modules/unsupported/shapefile-renderer/target/gt-shapefile-renderer-2.6-SNAPSHOT.jar" tofile="${GT.26x}/target/binaries" />
 -->
