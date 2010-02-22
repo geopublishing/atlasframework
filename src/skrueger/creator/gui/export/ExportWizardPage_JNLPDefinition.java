@@ -31,21 +31,16 @@ import skrueger.creator.GPProps.Keys;
 import skrueger.creator.export.JarExportUtil;
 
 public class ExportWizardPage_JNLPDefinition extends WizardPage {
-	private static final JLabel JnlpURLLabel = new JLabel(AtlasCreator
+	private final JLabel JnlpURLLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.JNLP.JNLPURL.Label"));
-	private static final JLabel AtlasURLLabel = new JLabel(AtlasCreator
+	private final JLabel AtlasURLLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.JNLP.AtlasURL.Label"));
-	private static final JLabel JSCodeLabel = new JLabel(AtlasCreator
+	private final JLabel JSCodeLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.JNLP.JavaScriptCode.Label"));
-	private static final JLabel linkExplanationJLabel = new JLabel(AtlasCreator
+	private final JLabel linkExplanationJLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.JNLP.Link.Explanation"));
 
-	private static final String jsTemplate = GPProps.get(Keys.JWSStartScript);
-	/*
-	 * The short description label that appears on the left side of the wizard
-	 */
-	static String desc = AtlasCreator.R("ExportWizard.JNLP");
-
+	private final String jsTemplate = GPProps.get(Keys.JWSStartScript);
 	JLabel explanation = new JLabel(AtlasCreator.R(
 			"ExportWizard.JNLP.Explanation", JarExportUtil.JNLP_FILENAME));
 
@@ -56,7 +51,7 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 			.R("ExportWizard.JNLP.ValidationError.NoSlash");
 
 	public static String getDescription() {
-		return desc;
+		return  AtlasCreator.R("ExportWizard.JNLP");
 	}
 
 	public ExportWizardPage_JNLPDefinition() {

@@ -32,18 +32,13 @@ import skrueger.creator.AtlasCreator;
 
 public class ExportWizardPage_Save extends WizardPage {
 
-	/*
-	 * The short description label that appears on the left side of the wizard
-	 */
-	static String desc = AtlasCreator.R("ExportWizard.StartPage");
-
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.StartPage.Explanation"));
 	JLabel saveExplJLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.StartPage.Save.Explanation"));
-	private static final String validationFailedMsg_HasToSave = AtlasCreator
+	private final String validationFailedMsg_HasToSave = AtlasCreator
 			.R("ExportWizard.StartPage.ValidationError.Save");
-	private static final String validationFailedMsg_NoMaps = AtlasViewer
+	private final String validationFailedMsg_NoMaps = AtlasViewer
 			.R("AtlasViewer.error.noMapInAtlas");
 	private JCheckBox saveJCheckbox;
 
@@ -53,7 +48,7 @@ public class ExportWizardPage_Save extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ExportWizard.StartPage");
 	}
 
 	@Override

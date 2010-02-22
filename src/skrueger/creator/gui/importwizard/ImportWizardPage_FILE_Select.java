@@ -27,18 +27,16 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static final String desc = AtlasCreator
-			.R("ImportWizard.FILE.FileSelection");
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.FILE.FileSelection.Explanation"));
 
-	private static final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotExists");
 
-	private static final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
 			.R("ImportWizard.FILE.FileSelection.ValidationError.CantRead");
 
-	private static final String validationImportSourceTypeFailedMsg_NotImportable = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotImportable = AtlasCreator
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotImportable");
 
 	private JButton fileChooserJButton;
@@ -47,7 +45,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 			.R("ImportWizard.FILE.FileTextBoxLabel"));
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ImportWizard.FILE.FileSelection");
 	}
 
 	public ImportWizardPage_FILE_Select() {
@@ -112,13 +110,14 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 					final String pathname = GPProps.get(
 							Keys.LAST_IMPORTED_FILE, "");
 					final JFileChooser dc = new JFileChooser(new File(pathname));
-					
-					dc.addChoosableFileFilter(DpLayerVectorFeatureSourceTester.FILEFILTER);
+
+					dc
+							.addChoosableFileFilter(DpLayerVectorFeatureSourceTester.FILEFILTER);
 					dc.addChoosableFileFilter(DpLayerRasterTester.FILEFILTER);
 					dc.addChoosableFileFilter(DpMediaPDFTester.FILEFILTER);
-					dc.addChoosableFileFilter(DpEntryFactory.FILEFILTER_ALL_DPE_IMPORTABLE);
-					
-					
+					dc
+							.addChoosableFileFilter(DpEntryFactory.FILEFILTER_ALL_DPE_IMPORTABLE);
+
 					dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 

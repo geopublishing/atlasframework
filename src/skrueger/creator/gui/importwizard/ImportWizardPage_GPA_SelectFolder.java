@@ -25,27 +25,25 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static final String desc = AtlasCreator
-			.R("ImportWizard.GPA.FolderSelection");
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.GPA.FolderSelection.Explanation"));
 
-	private static final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotExists");
 
-	private static final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.CantRead");
 
-	private static final String validationImportSourceTypeFailedMsg_NotGpa = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotGpa = AtlasCreator
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotGPA");
 
 	private JButton folderChooserJButton;
 	JTextField folderJTextField;
-	final static private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
+	final private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.Folder.FolderTextBoxLabel"));
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ImportWizard.GPA.FolderSelection");
 	}
 
 	public ImportWizardPage_GPA_SelectFolder() {

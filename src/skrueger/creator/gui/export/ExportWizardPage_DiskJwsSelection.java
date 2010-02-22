@@ -24,12 +24,7 @@ import skrueger.creator.GPProps;
 import skrueger.creator.GPProps.Keys;
 
 public class ExportWizardPage_DiskJwsSelection extends WizardPage {
-	/*
-	 * The short description label that appears on the left side of the wizard
-	 */
-	static final String desc = AtlasCreator.R("ExportWizard.JwsOrDisk");
-
-	private static final String validationJwsOrDiskFailedMsg = AtlasCreator
+	private final String validationJwsOrDiskFailedMsg = AtlasCreator
 			.R("ExportWizard.JwsOrDisk.ValidationError");
 
 	JLabel explanationJLabel = new JLabel(AtlasCreator
@@ -42,7 +37,7 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 	JCheckBox jwsJCheckbox;
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ExportWizard.JwsOrDisk");
 	}
 
 	public ExportWizardPage_DiskJwsSelection() {

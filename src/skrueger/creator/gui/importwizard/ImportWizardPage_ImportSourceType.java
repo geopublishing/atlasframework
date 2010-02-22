@@ -16,25 +16,24 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static final String desc = AtlasCreator.R("ImportWizard.ImportSourceType");
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.ImportSourceType.Explanation"));
 
-	private static final String validationImportSourceTypeFailedMsg = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg = AtlasCreator
 			.R("ImportWizard.ImportSourceType.ValidationError");
 
-	JLabel explanationFileJLabel = new JLabel(AtlasCreator
+	private JLabel explanationFileJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.ImportSourceType.Explanation.File"));
-	JRadioButton fileJRadioButton;
+	private JRadioButton fileJRadioButton;
 
-	JLabel explanationGpaJLabel = new JLabel(AtlasCreator
+	private JLabel explanationGpaJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.ImportSourceType.Explanation.GPA"));
-	JRadioButton gpaJRadioButton;
+	private JRadioButton gpaJRadioButton;
 
-	ButtonGroup buttonGroup = new ButtonGroup();
+	private ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ImportWizard.ImportSourceType");
 	}
 
 	public ImportWizardPage_ImportSourceType() {

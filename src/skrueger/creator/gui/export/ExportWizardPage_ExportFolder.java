@@ -33,10 +33,9 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static String desc = AtlasCreator.R("ExportWizard.Folder");
-	private static final String validationFolderFailedMsg_NotExits = AtlasCreator
+	private final String validationFolderFailedMsg_NotExits = AtlasCreator
 			.R("ExportWizard.Folder.ValidationError.NotExists");
-	private static final String validationFolderFailedMsg_NotWritable = AtlasCreator
+	private final String validationFolderFailedMsg_NotWritable = AtlasCreator
 			.R("ExportWizard.Folder.ValidationError.NotWritable");
 
 	JLabel explanationJLabel = new JLabel(AtlasCreator
@@ -44,7 +43,7 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 
 	private JButton folderChooserJButton;
 	JTextField folderJTextField;
-	final static private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
+	final private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.Folder.FolderTextBoxLabel"));
 
 	public ExportWizardPage_ExportFolder() {
@@ -60,7 +59,7 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ExportWizard.Folder");
 	}
 
 	private JTextField getFolderJTextField() {

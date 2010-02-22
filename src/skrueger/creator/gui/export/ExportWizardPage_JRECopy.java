@@ -27,8 +27,6 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static String desc = AtlasCreator.R("ExportWizard.JRE");
-
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ExportWizard.JRE.Explanation"));
 
@@ -77,7 +75,7 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ExportWizard.JRE");
 	}
 
 	public JCheckBox getCopyJRECheckBox() {

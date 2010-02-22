@@ -32,12 +32,10 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static final String desc = AtlasCreator
-			.R("ImportWizard.GPA.AtlasContentSelection");
 	JLabel explanationJLabel = new JLabel(AtlasCreator
 			.R("ImportWizard.GPA.AtlasContentSelection.Explanation"));
 
-	private static final String validationImportSourceTypeFailedMsg_NoneSelected = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NoneSelected = AtlasCreator
 			.R("ImportWizard.GPA.AtlasContentSelection.ValidationError.NoneSelected");
 
 	JTextField folderJTextField;
@@ -52,7 +50,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 	private AtlasConfig externalAtlasConfig = null;
 
 	public static String getDescription() {
-		return desc;
+		return AtlasCreator.R("ImportWizard.GPA.AtlasContentSelection");
 	}
 
 	public ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import() {
@@ -180,7 +178,8 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 				getAtlasTree().getSelectedIds().addAll(
 						externalAtlasConfig.getDataPool().keySet());
 				getAtlasTree().updateModel();
-				getAtlasTree().getCellEditor().stopCellEditing();			}
+				getAtlasTree().getCellEditor().stopCellEditing();
+			}
 		}), "split 4");
 
 		// Button to select all maps
@@ -198,11 +197,12 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 						getAtlasTree().getSelectedIds().add(dpl.getTargetId());
 						getAtlasTree().getSelectedIds().add(mapID);
 					}
-					
+
 				}
-				
+
 				getAtlasTree().updateModel();
-				getAtlasTree().getCellEditor().stopCellEditing();			}
+				getAtlasTree().getCellEditor().stopCellEditing();
+			}
 		}));
 
 		// Button to select all dpes
@@ -214,9 +214,10 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 				getAtlasTree().getSelectedIds().addAll(
 						externalAtlasConfig.getDataPool().keySet());
 				getAtlasTree().updateModel();
-				getAtlasTree().getCellEditor().stopCellEditing();			}
+				getAtlasTree().getCellEditor().stopCellEditing();
+			}
 		}));
-		
+
 		// Button to select all dpes
 		add(new SmallButton(new AbstractAction(AtlasCreator
 				.R("ImportWizard.GPA.AtlasContentSelection.NoneButton")) {
