@@ -315,7 +315,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 								new ImageIcon(
 										MapView.class
 												.getResource("resource/icons/selection_clear.png")),
-								AtlasViewer
+								MapPaneToolBar
 										.R("MapPaneButtons.Selection.ClearSelection.TT")) {
 							@Override
 							public void actionPerformed(ActionEvent e) {

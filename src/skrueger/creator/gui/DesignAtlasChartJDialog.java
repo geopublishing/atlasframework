@@ -879,6 +879,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 
 			});
+			
+			categoryDomainAxisJCheckBox.setSelected(chartStyle.isForceCategories());
 
 		}
 		return categoryDomainAxisJCheckBox;
@@ -902,6 +904,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			}
 
 		});
+		cb.setSelected(chartStyle.isSortDomainAxis());
 		return cb;
 	}
 
