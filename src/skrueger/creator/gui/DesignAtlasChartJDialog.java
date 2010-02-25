@@ -66,6 +66,7 @@ import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
+import schmitzm.jfree.feature.style.FeatureChartStyle.AggregationFunction;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
@@ -729,7 +730,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		domainLabelTranslation
 				.addTranslationChangeListener(listenToDomainLabelChangesAndUpdateChart);
-		
+
 		axisLabelTranslationJPanel.setBorder(BorderFactory
 				.createTitledBorder(AtlasCreator
 						.R("DesignAtlasChartJDialog.AxisSettings.AxisLabel")));
@@ -773,25 +774,27 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Now add a ANGLE slider or radio buttons
 		 */
 		JPanel anglePanel = new JPanel(new MigLayout());
-		
+
 		anglePanel.add(new JLabel(AtlasCreator
-				.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")),"wrap");
+				.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")),
+				"wrap");
 
 		boolean isANumberAxis = true;
 		try {
-			isANumberAxis = Number.class.isAssignableFrom(styledLayer.getSchema().getDescriptor(
-					chartStyle.getAttributeName(axisNr)).getType().getBinding()
-					);
+			isANumberAxis = Number.class.isAssignableFrom(styledLayer
+					.getSchema().getDescriptor(
+							chartStyle.getAttributeName(axisNr)).getType()
+					.getBinding());
 		} catch (Exception e) {
 			LOGGER
 					.warn("Could not determine wherther this is a number axis",
 							e);
 		}
-		
+
 		if (isANumberAxis) {
-			JRadioButton horiz = new JRadioButton(new AbstractAction(AtlasCreator
-					.R("horizontal")) {
-				
+			JRadioButton horiz = new JRadioButton(new AbstractAction(
+					AtlasCreator.R("horizontal")) {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					axisStyle.setValuesAngle(0.);
@@ -799,10 +802,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 			});
 			horiz.setSelected(axisStyle.getValuesAngle() == 0.);
-			
-			JRadioButton vertical = new JRadioButton(new AbstractAction(AtlasCreator
-					.R("vertical")) {
-				
+
+			JRadioButton vertical = new JRadioButton(new AbstractAction(
+					AtlasCreator.R("vertical")) {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					axisStyle.setValuesAngle(90.);
@@ -810,14 +813,14 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 			});
 			vertical.setSelected(axisStyle.getValuesAngle() == 90.);
-			
+
 			ButtonGroup bg = new ButtonGroup();
 			bg.add(horiz);
 			bg.add(vertical);
-			
+
 			anglePanel.add(horiz, "wrap");
 			anglePanel.add(vertical, "wrap");
-			
+
 		} else {
 
 			final JSlider angleSlider = new JSlider(0, 90, axisStyle
@@ -953,7 +956,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		// The possibility to show/hide shapes is only given for non point
 		// layers. otherwise set true!
 		if (chartStyle.getType() != ChartType.POINT
-				&& chartStyle.getType() != ChartType.SCATTER && chartStyle.getType() != ChartType.BAR) {
+				&& chartStyle.getType() != ChartType.SCATTER
+				&& chartStyle.getType() != ChartType.BAR) {
 			rendererSettingsPanel.add(getShapesVisibleJCheckBoxFor(
 					rendererIndex, seriesIdx));
 		} else {
@@ -1037,13 +1041,32 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		attribComboBox.setSelectedItem(chartStyle
 				.getAttributeName(seriesIdx + 1));
 
-		/** build GUI... */
-		final JPanel attPanel = new JPanel(new MigLayout("wrap 1, fillx"));
+		/** build a panel... */
+		final JPanel attPanel = new JPanel(new MigLayout("wrap 1, fillx"),
+				AtlasCreator.R("DesignAtlasChartJDialog.SeriesDataBorderTitle"));
 
-		attPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
-				.R("DesignAtlasChartJDialog.SeriesDataBorderTitle")));
+		attPanel.add(attribComboBox, "split 2");
 
-		attPanel.add(attribComboBox, "growx");
+		if (chartStyle.getType() == ChartType.BAR) { 
+			// bei pie auch, wenn wir das mal haben
+
+			final AggregationFunctionJComboBox aggregationFunctionJComboBox = new AggregationFunctionJComboBox();
+			aggregationFunctionJComboBox.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					int idx = seriesIdx + 1;
+					AggregationFunction aggFunc = (AggregationFunction) aggregationFunctionJComboBox
+					.getSelectedItem();
+					System.out.println(idx+"="+aggFunc);
+					chartStyle.setAttributeAggregation(idx,
+							aggFunc);
+					fireChartChangedEvent(true);
+				}
+			});
+
+			attPanel.add(aggregationFunctionJComboBox);
+		}
 
 		// A Panel that will list all NODATA-Value
 		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
@@ -1089,9 +1112,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							chartStyle, rendererIndex, seriesIdx,
 							atlasConfigEditable.getLanguages());
 				}
-				
+
 				noDataPanel.setAttribute(attLocalName);
-			
+
 				fireChartChangedEvent(true);
 			}
 
@@ -1326,12 +1349,12 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 									.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle.TT")));
 			legendSettingsJPanel.add(legendTooltipTranslationJPanel, "span 2");
 
-//			/*
-//			 * Border
-//			 */
-//			legendSettingsJPanel.setBorder(BorderFactory
-//					.createTitledBorder(AtlasCreator
-//							.R("DesignAtlasChartJDialog.LegendBorderTitle")));
+			// /*
+			// * Border
+			// */
+			// legendSettingsJPanel.setBorder(BorderFactory
+			// .createTitledBorder(AtlasCreator
+			// .R("DesignAtlasChartJDialog.LegendBorderTitle")));
 
 			legendTitleTranslationEditPanels.put(rendererIndex * 1000
 					+ seriesIndex, legendSettingsJPanel);
