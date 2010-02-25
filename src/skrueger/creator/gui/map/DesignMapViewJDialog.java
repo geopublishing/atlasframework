@@ -56,6 +56,7 @@ import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.LineSymbolizer;
+import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
 import org.opengis.feature.simple.SimpleFeature;
@@ -166,6 +167,14 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 					// Apply to the Map
 					map.setMaxExtend(maxExtend);
+					
+					// intersect with any maxMapExtend
+					if (map.getDefaultMapArea() != null) {
+						ReferencedEnvelope newDefArea = new ReferencedEnvelope(map.getMaxExtend().intersection(map.getDefaultMapArea()),startCoord.getCoordinateReferenceSystem());
+						if (newDefArea.isEmpty())
+							newDefArea = null;
+						map.setDefaultMapArea(newDefArea);
+					}
 
 					// Apply to the XMapPane
 					if (maxExtendPreviewCheckBox.isSelected()) {
@@ -242,8 +251,13 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						Point dragStartPos, Point dragLastPos,
 						DirectPosition startCoord, DirectPosition endCoord) {
 
-					final ReferencedEnvelope defaultArea = JTSUtil
+					ReferencedEnvelope defaultArea = JTSUtil
 							.createReferencedEnvelope(startCoord, endCoord);
+					
+					// intersect with any maxMapExtend
+					if (map.getMaxExtend() != null)
+						defaultArea = new ReferencedEnvelope(map.getMaxExtend().intersection(defaultArea),startCoord.getCoordinateReferenceSystem());
+					if (defaultArea.isEmpty()) defaultArea = null;
 
 					// Apply to the Map
 					map.setDefaultMapArea(defaultArea);
@@ -344,7 +358,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			throws HeadlessException {
 		super(owner, AtlasCreator.R("DesignMapViewJDialog.title", map_
 				.getTitle()));
-		
+
 		this.ace = (AtlasConfigEditable) map_.getAc();
 
 		this.map = map_;
@@ -426,7 +440,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			final SimpleFeature maxExtendFeature = SimpleFeatureBuilder.build(
 					specialLinesFeatureType, new Object[] {
 							factory.createLineString(new Coordinate[] { c1, c3,
-									c2, c4, c1 }), DEFAULTMAPAREA_FEATURE_ID },
+									c2, c4, c1 }), MAXMAPENTEND_FEATURE_ID },
 					MAXMAPENTEND_FEATURE_ID);
 
 			fc.add(maxExtendFeature);
@@ -463,62 +477,64 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		// A style
 		final StyleBuilder sb = StylingUtil.STYLE_BUILDER;
-		final Style style = sb.createStyle(ASUtil
-				.createDefaultSymbolizer(specialLinesFeatureType
-						.getGeometryDescriptor()));
-		// final Style style = sb.createStyle();
-		//
-		// {
-		// // A FTStyle for maxMapExntend
-		// final LineSymbolizer dash1 = sb.createLineSymbolizer(sb
-		// .createStroke(Color.red.darker(), 3, new float[] { 1, 2 }));
-		// final LineSymbolizer dash2 = sb.createLineSymbolizer(sb
-		// .createStroke(Color.white, 3, new float[] { 2, 1 }));
-		//
-		// FeatureTypeStyle fts = sb.createFeatureTypeStyle("maxMapExtend",
-		// dash1);
-		// fts.rules().get(0).symbolizers().add(dash2);
-		// // A filter for the max map exented
-		// // HashSet<Identifier> ids = new HashSet<Identifier>();
-		// // ids.add(new FeatureIdImpl(MAXMAPENTEND_FEATURE_ID));
-		// // fts.rules().get(0).setFilter(FilterUtil.FILTER_FAC2.id(ids));
-		// style.featureTypeStyles().add(fts);
-		// }
-		//
-		// {
-		// // A FTStyle for default mapArea
-		// final LineSymbolizer dash1 = sb
-		// .createLineSymbolizer(sb.createStroke(Color.green.darker(),
-		// 3, new float[] { 1, 2 }));
-		// final LineSymbolizer dash2 = sb.createLineSymbolizer(sb
-		// .createStroke(Color.white, 3, new float[] { 2, 1 }));
-		//
-		// FeatureTypeStyle fts = sb.createFeatureTypeStyle("defaultMapArea",
-		// dash1);
-		// fts.rules().get(0).symbolizers().add(dash2);
-		// // A filter for the max map exented
-		// // HashSet<Identifier> ids = new HashSet<Identifier>();
-		// // ids.add(new FeatureIdImpl(DEFAULTMAPAREA_FEATURE_ID));
-		// // fts.rules().get(0).setFilter(FilterUtil.FILTER_FAC2.id(ids));
-		// style.featureTypeStyles().add(fts);
-		// }
+		final Style style = sb.createStyle(null);
+		style.featureTypeStyles().get(0).rules().clear();
+
+//		final Style style = sb.createStyle();
+
+		{
+			// A FTStyle for maxMapExntend
+			final LineSymbolizer dash2 = sb.createLineSymbolizer(sb
+					.createStroke(Color.red, 4, new float[] { 1, 2 }));
+			final LineSymbolizer dash1 = sb.createLineSymbolizer(sb
+					.createStroke(Color.white, 4, new float[] { 2, 1 }));
+
+			Rule rule = sb.createRule(dash1);
+			rule.symbolizers().add(dash2);
+			
+//			 A filter for the max map exented
+			 HashSet<Identifier> ids = new HashSet<Identifier>();
+			 ids.add(new FeatureIdImpl(MAXMAPENTEND_FEATURE_ID));
+			 rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
+			
+			style.featureTypeStyles().get(0).rules().add(rule);
+		}
+
+		{
+			// A FTStyle for default mapArea
+			final LineSymbolizer dash2 = sb
+					.createLineSymbolizer(sb.createStroke(Color.green,
+							4, new float[] { 2, 3 }));
+			final LineSymbolizer dash1 = sb.createLineSymbolizer(sb
+					.createStroke(Color.white, 4, new float[] { 3, 2 }));
+
+			Rule rule = sb.createRule(dash1);
+			rule.symbolizers().add(dash2);
+			
+//			 A filter for the max map exented
+			 HashSet<Identifier> ids = new HashSet<Identifier>();
+			 ids.add(new FeatureIdImpl(DEFAULTMAPAREA_FEATURE_ID));
+			 rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
+			
+			style.featureTypeStyles().get(0).rules().add(rule);
+		}
 
 		// Wenn das layer schon existierte, dann entfernen wir es.
 		if (specialMapLayer != null) {
 			getDesignMapView().getMapPane().getMapContext().removeLayer(
 					specialMapLayer);
 		}
-		
+
 		if (!fc.isEmpty()) {
 			// Layer neu erzeugen
 			specialMapLayer = new AtlasMapLayer(fc, style);
 			System.err.println(style);
 			specialMapLayer.setTitle(SPECIAL_POLYGONS_LAYER_ID);
-			
+
 			getDesignMapView().getMapPane().getMapContext().addLayer(
 					specialMapLayer);
-			getDesignMapView().getMapPane().setMapLayerSelectable(specialMapLayer,
-					false);
+			getDesignMapView().getMapPane().setMapLayerSelectable(
+					specialMapLayer, false);
 		}
 
 	}
@@ -685,9 +701,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			// final JPanel maxExtendPanel = new JPanel(new MigLayout(),
 			// AtlasCreator
 			// .R("DesignMapViewJDialog.mapArea.maxExtend.border"));
-//			final JPanel maxExtendPanel = new JPanel(new MigLayout());
+			// final JPanel maxExtendPanel = new JPanel(new MigLayout());
 
-			add(new JLabel(AtlasCreator
+			mapAreaPanel.add(new JLabel(AtlasCreator
 					.R("DesignMapViewJDialog.mapArea.maxExtend.explanation")),
 					"span 3, wrap");
 
@@ -724,7 +740,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			});
 			maxExtendButton.setToolTipText(AtlasCreator
 					.R("DesignMapView.SetMaxBBoxTool.TT"));
-			add(maxExtendButton);
+			mapAreaPanel.add(maxExtendButton);
 			maxExtendButton.setEnabled(map.getMaxExtend() == null);
 
 			// Add the box to the map
@@ -755,7 +771,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					});
 			maxExtendResetButton.setToolTipText(AtlasCreator
 					.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
-			add(maxExtendResetButton);
+			mapAreaPanel.add(maxExtendResetButton);
 			maxExtendResetButton.setEnabled(map.getMaxExtend() != null);
 
 			maxExtendPreviewCheckBox = new JCheckBox(
@@ -786,20 +802,20 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						}
 					});
 
-
-			// Unset the MaxMapExtend from the XMapPane, as this is the default state of the checkbox
+			// Unset the MaxMapExtend from the XMapPane, as this is the default
+			// state of the checkbox
 			maxExtendPreviewCheckBox.setSelected(false);
 			getDesignMapView().getMapPane().setMaxExtend(null);
-			
-			add(maxExtendPreviewCheckBox, "wrap");
+
+			mapAreaPanel.add(maxExtendPreviewCheckBox, "wrap");
 
 		} // maxExtend stuff
 
 		/**
 		 * A button to store the start area
 		 */
-		setDefaultMapAreaButton = new SmallButton(new AbstractAction(AtlasCreator
-				.R("DesignMapViewJDialog.Button.SaveBBOX.Label")) {
+		setDefaultMapAreaButton = new SmallButton(new AbstractAction(
+				AtlasCreator.R("DesignMapViewJDialog.Button.SaveBBOX.Label")) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -854,7 +870,26 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		resetDefaultMapAreaButton.setToolTipText(AtlasCreator
 				.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
 		mapAreaPanel.add(resetDefaultMapAreaButton);
+		
 		resetDefaultMapAreaButton.setEnabled(map.getDefaultMapArea() != null);
+		
+		// A button to try out the default map area function
+		SmallButton tryStartAreaButton = new SmallButton(new AbstractAction(AtlasCreator.R("DesignMapView.defaultMapArea.try.button")) {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (!maxExtendPreviewCheckBox.isSelected()) {
+					getDesignMapView().getMapPane().setMaxExtend(map.getMaxExtend());
+				}
+				getDesignMapView().getMapPane().setMapArea(map.getDefaultMapArea());
+				if (!maxExtendPreviewCheckBox.isSelected()) {
+					getDesignMapView().getMapPane().setMaxExtend(null);
+				}				
+			}
+		});
+		mapAreaPanel.add(tryStartAreaButton);
+		
+		
 
 		return mapAreaPanel;
 	}
