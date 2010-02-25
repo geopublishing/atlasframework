@@ -348,7 +348,8 @@ public class AtlasMapLegend extends MapLegend {
 		getMapPaneToolBar().addSeparator(SEPERATOR3, new JToolBar.Separator());
 
 		final JButton chartButton = new AtlasMapToolBarChartButton(
-				getMapContext(), getMap(), rememberId2StyledLayer, this);
+				getMapContext(), getMap(), 
+				rememberId2StyledLayer, this);
 		getMapPaneToolBar().addJComponent(chartButton,
 				MapPaneToolBar.ACTION_CHARTS, true);
 		// Look.. this true is important - otherwise

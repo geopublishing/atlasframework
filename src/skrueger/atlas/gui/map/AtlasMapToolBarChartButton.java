@@ -56,14 +56,18 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 
 //		setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-		setAction(new AbstractAction("", Icons.ICON_CHART_BIG) {
+		setAction(new AbstractAction(AtlasViewer
+				.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_SMALL) {
+//			setAction(new AbstractAction(AtlasViewer
+//					.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_BIG) {
+			
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
 				final JPopupMenu popup = new JPopupMenu();
-				popup.add(new JLabel(AtlasViewer
-						.R("AtlasMapToolBarChartButton.PopupMenu.Title")));
+//				popup.add(new JLabel(AtlasViewer
+//						.R("AtlasMapToolBarChartButton.PopupMenu.Title")));
 
 				for (final MapLayer mLayer : mapContext.getLayers()) {
 					final StyledLayerInterface<?> styledLayerInterface = rememberId2StyledLayer

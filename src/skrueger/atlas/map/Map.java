@@ -729,7 +729,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				.get(dpLayerID);
 
 		/**
-		 * Now we double check, that the only IDs are returned, that actually
+		 * Now we double check, that all IDs are returned, that really
 		 * still exist.
 		 */
 		final ArrayList<String> clone = (ArrayList<String>) availChartsForLayer
@@ -740,10 +740,14 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 					dpLayerID);
 			for (ChartStyle cs : dpEntry.getCharts()) {
 				if (cs.getID().equals(id)) {
-					availChartsForLayer.add(id);
+					if (!availChartsForLayer.contains(id))
+						availChartsForLayer.add(id);
+					continue;
 				}
 			}
 		}
+
+//		System.out.println("avail:"+availChartsForLayer.size()+"    "+availChartsForLayer);
 
 		return availChartsForLayer;
 	}
