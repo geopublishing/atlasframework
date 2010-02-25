@@ -10,20 +10,20 @@
  ******************************************************************************/
 package skrueger.atlas.gui.map;
 
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 
 import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
@@ -56,7 +56,6 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 		this.mapLegend = mapLegend;
 
 //		setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
-		SwingUtil.setPreferredHeight(this, 90);
 
 		setAction(new AbstractAction(AtlasViewer
 				.R("AtlasMapToolBarChartButton.Title"), Icons.ICON_CHART_MEDIUM) {
@@ -103,6 +102,7 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 		});
 		setToolTipText(AtlasViewer.R("MapPaneButtons.ChartButton.TT"));
 
+		setBorder(BorderFactory.createCompoundBorder(getBorder(),BorderFactory.createEmptyBorder(0, 0, 0, 3)));
 	}
 
 	/**

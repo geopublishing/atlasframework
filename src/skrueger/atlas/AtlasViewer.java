@@ -784,9 +784,8 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		startGui();
 	}
 
-	/**
-	 * 
-	 */
+
+	// TODO needs doku
 	protected void startGui() {
 
 		/***************************************************************

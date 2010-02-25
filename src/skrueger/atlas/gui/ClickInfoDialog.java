@@ -195,7 +195,7 @@ public class ClickInfoDialog extends JDialog {
 
 		clickInfoPanel.setSelectionEvent(objectSelectionEvent);
 
-		SelectableXMapPane source = objectSelectionEvent.getSource();
+		XMapPane source = objectSelectionEvent.getSource();
 
 		// Set the title of the dialog to the translated title the layer
 		try {

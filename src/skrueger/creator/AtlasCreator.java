@@ -49,6 +49,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
 import rachel.http.loader.WebResourceManager;
+import rachel.loader.FileResourceLoader;
 import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
@@ -89,7 +90,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
 	public enum ActionCmds {
-		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, testAV, exportAtlasCSV, /**
+		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
 		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
@@ -659,7 +660,36 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		} else if (cmd.equals(ActionCmds.importWizard.toString())) {
 			// Starts a modal wizard dialog
 			ImportWizard.showWizard(getJFrame(), ace);
-		} else if (cmd.equals(ActionCmds.testAV.toString())) {
+		} else if (cmd.equals(ActionCmds.previewAtlasLive.toString())) {
+
+			/**
+			 * Close any other preview instances
+			 */
+			if (AtlasViewer.isRunning()) {
+				AtlasViewer.dispose();
+			}
+
+			// If no valid StartMap has been selected, we don't allow to open
+			// the preview.
+			final MapPool mapPool = ace.getMapPool();
+			if (mapPool.getStartMapID() == null
+					|| mapPool.get(mapPool.getStartMapID()) == null) {
+				JOptionPane.showMessageDialog(getJFrame(), AtlasViewer
+						.R("AtlasViewer.error.noMapInAtlas"), AtlasViewer
+						.R("AtlasViewer.error.noMapInAtlas"),
+						JOptionPane.ERROR_MESSAGE);
+				return;
+			}
+
+			// Saving is not needed in live preview
+
+			/**
+			 * Create and configure a new visible Instance
+			 */
+			AtlasViewer av = AtlasViewer.getInstance();
+			av.setExitOnClose(false);
+			av.startGui(getAce());
+		} else if (cmd.equals(ActionCmds.previewAtlas.toString())) {
 
 			/**
 			 * Close any other preview instances
@@ -684,12 +714,12 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 			if (!ace.save(getJFrame(), false))
 				return;
 
-			/**
-			 * Create and configure a new visible Instance
-			 */
+			// Create and configure a new visible Instance
 			AtlasViewer av = AtlasViewer.getInstance();
 			av.setExitOnClose(false);
-			av.startGui(getAce());
+			// Prepare the ResLoMan, so it will parse the AtlasWorkingDir
+			av.getAtlasConfig().getResLoMan().addResourceLoader(new FileResourceLoader(getAce().getAtlasDir()));
+			av.importAcAndStartGui();
 		}
 
 		else if (cmd.equals(ActionCmds.exitGP.toString())) {

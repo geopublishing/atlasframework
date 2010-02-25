@@ -305,10 +305,17 @@ public class GpFrame extends JFrame {
 		// ******************************************************************
 		if (ace != null) {
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.Preview"),
-					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.testAV,
+					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.previewAtlas,
+					new ImageIcon(GPProps.class
+							.getResource("resource/testRun.png")), KeyStroke
+							.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK, true)));
+
+			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.LivePreview"),
+					R("MenuBar.FileMenu.LivePreview.TT"), ActionCmds.previewAtlasLive,
 					new ImageIcon(GPProps.class
 							.getResource("resource/testRun.png")), KeyStroke
 							.getKeyStroke(KeyEvent.VK_F5, 0, true)));
+
 		}
 
 		// ******************************************************************

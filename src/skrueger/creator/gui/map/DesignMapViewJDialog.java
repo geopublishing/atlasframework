@@ -986,7 +986,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				AtlasCreator.getInstance().actionPerformed(
 						new ActionEvent(DesignMapViewJDialog.this, (int) System
 								.currentTimeMillis(),
-								AtlasCreator.ActionCmds.testAV.toString()));
+								AtlasCreator.ActionCmds.previewAtlasLive.toString()));
 			}
 
 		}, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);

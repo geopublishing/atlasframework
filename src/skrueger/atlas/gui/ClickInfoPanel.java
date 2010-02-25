@@ -68,6 +68,7 @@ import skrueger.atlas.map.Map;
 import skrueger.atlas.resource.icons.Icons;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.geotools.XMapPane;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
@@ -288,7 +289,7 @@ public class ClickInfoPanel extends JPanel {
 	private JPanel getPositionInfoPanel(
 			final ObjectSelectionEvent<?> objectSelectionEvent) {
 		layer = objectSelectionEvent.getSourceLayer();
-		final SelectableXMapPane mapPane = objectSelectionEvent.getSource();
+		final XMapPane mapPane = objectSelectionEvent.getSource();
 		final String humanReadableCrsString = mapPane.getMapContext()
 				.getCoordinateReferenceSystem().getName().getCode().replace(
 						'_', ' ');
