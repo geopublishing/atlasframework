@@ -19,6 +19,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.Point2D;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -28,10 +29,19 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
+import org.geotools.coverage.grid.GridCoordinates2D;
+import org.geotools.geometry.DirectPosition2D;
 import org.geotools.map.MapContext;
+import org.geotools.swing.styling.JSimpleStyleDialog.GeomType;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.gui.SelectableXMapPane;
+import com.vividsolutions.jts.geom.Point;
+
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
+import schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AtlasConfig;
@@ -206,13 +216,34 @@ public class ClickInfoDialog extends JDialog {
 			LOGGER.error(e);
 		}
 
+		XMapPane mapPane = (XMapPane) objectSelectionEvent.getSource();
 		// If it is a feature, let it blink for a moment
 		if (source instanceof XMapPane
 				&& objectSelectionEvent instanceof FeatureSelectedEvent) {
 
-			XMapPane mapPane = (XMapPane) objectSelectionEvent.getSource();
 			mapPane.blink(((FeatureSelectedEvent) objectSelectionEvent)
 					.getSelectionResult());
+		} else {
+			// Create a fake Feature and let it blink a moment
+			final GridCoverageValueSelectedEvent gridSelection = (GridCoverageValueSelectedEvent) objectSelectionEvent;
+
+			// TODO Help Martin, warum kann ich kein feake Feature mit correctem CRS erstellen? 
+			Point2D selectionPoint = gridSelection.getSelectionPoint();
+
+			CoordinateReferenceSystem crs = mapPane.getMapContext()
+					.getCoordinateReferenceSystem();
+			
+			SimpleFeatureType fakeFeatureType = FeatureUtil.createFeatureType(
+					Point.class, crs);
+			
+			SimpleFeature fakeFeature = FeatureUtil.createFeature(
+					fakeFeatureType, true, "fake raster selection",
+					new DirectPosition2D(crs, selectionPoint.getX(),
+							selectionPoint.getY()));
+
+			System.out.println("crs = " + fakeFeature.getFeatureType().getCoordinateReferenceSystem());
+
+			mapPane.blink(fakeFeature);
 		}
 	}
 
