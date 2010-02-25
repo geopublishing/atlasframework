@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.log4j.Logger;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.MapContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -439,7 +440,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	/**
 	 * Retunes the default MapArea (which will be shown when the Map starts...)
 	 */
-	public Envelope getDefaultMapArea() {
+	public Envelope  getDefaultMapArea() {
 		return defaultMapArea;
 	}
 

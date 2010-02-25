@@ -24,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
@@ -1365,9 +1366,10 @@ public class AMLImport {
 					cornersV[iii][0] = Double.parseDouble(pair[0]);
 					cornersV[iii][1] = Double.parseDouble(pair[1]);
 				}
-				map.setDefaultMapArea(new Envelope(new Coordinate(
-						cornersV[0][0], cornersV[0][1]), new Coordinate(
-						cornersV[1][0], cornersV[1][1])));
+				// TODO defaultMapArea has to store the crs!?! Map should store it's crs?!
+				map.setDefaultMapArea(new ReferencedEnvelope( 
+						cornersV[0][0], cornersV[0][1],
+						cornersV[1][0], cornersV[1][1],null));
 
 			} else if (tagName.equals("maxExtend")) {
 				final String value = childNode.getFirstChild().getNodeValue();

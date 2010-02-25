@@ -154,6 +154,9 @@ public class Icons {
 	public static final Icon ICON_MAPEXTEND_BBOX_RESET = new ImageIcon(
 			Icons.class.getResource("small/mapExtendToolReset.png"));
 
+	public static final Icon ICON_DEFAULTMAPAREA_BBOX_RESET = new ImageIcon(
+			Icons.class.getResource("small/mapExtendToolReset.png"));
+
 	private static ImageIcon upArrow;
 
 	private static ImageIcon downArrow;

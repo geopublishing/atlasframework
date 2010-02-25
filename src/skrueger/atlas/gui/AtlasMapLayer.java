@@ -29,10 +29,11 @@ public class AtlasMapLayer extends DefaultMapLayer {
 	public AtlasMapLayer(GridCoverage2D geoObject, Style style) throws FactoryRegistryException, TransformException, SchemaException {
 		super(geoObject, style);
 	}
-
+	
 	public AtlasMapLayer(FeatureCollection geoObject, Style style) {
 		super(geoObject, style);
 	}
+	
 
 	public AtlasMapLayer(
 			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
