@@ -35,13 +35,14 @@ import skrueger.atlas.map.Map;
 import skrueger.atlas.map.MapPool;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
+import skrueger.swing.Disposable;
 
 /**
  * The whole Configuration for one Atlas project
  * 
  * @author Stefan Alfons Krüger
  */
-public class AtlasConfig {
+public class AtlasConfig implements Disposable{
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
 
 	{
@@ -465,5 +466,9 @@ public class AtlasConfig {
 		for (Map map : getMapPool().values()) {
 			map.uncache(null);
 		}
+	}
+
+	public void dispose() {
+		uncache();
 	}
 }

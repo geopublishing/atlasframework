@@ -668,7 +668,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 				AtlasViewer.dispose();
 			}
 
-			// If not valid StartMap has been selected, we don't allow to open
+			// If no valid StartMap has been selected, we don't allow to open
 			// the preview.
 			final MapPool mapPool = ace.getMapPool();
 			if (mapPool.getStartMapID() == null
@@ -689,7 +689,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 			 */
 			AtlasViewer av = AtlasViewer.getInstance();
 			av.setExitOnClose(false);
-			av.startGui();
+			av.startGui(getAce());
 		}
 
 		else if (cmd.equals(ActionCmds.exitGP.toString())) {

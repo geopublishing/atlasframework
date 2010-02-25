@@ -128,6 +128,9 @@ public class Icons {
 	public static final Icon ICON_CHART_SMALL = new ImageIcon(Icons.class
 			.getResource("small/chart.png"));
 
+	public static final Icon ICON_CHART_MEDIUM = new ImageIcon(Icons.class
+			.getResource("medium/chart.png"));
+
 	public static final Icon ICON_CHART_BIG = new ImageIcon(Icons.class
 			.getResource("big/chart.png"));
 

@@ -75,6 +75,7 @@ import skrueger.atlas.map.Map;
 import skrueger.atlas.map.MapPool;
 import skrueger.atlas.resource.icons.Icons;
 import skrueger.atlas.swing.AtlasSwingWorker;
+import skrueger.creator.AtlasConfigEditable;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.i8n.I8NUtil;
@@ -174,124 +175,9 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		 */
 		JNLPUtil.registerAsSingleInstance(AtlasViewer.this, true);
 
-		//
-		// //
-		// **********************************************************************
-		// // Starting the AtlasViewer on another Thread.
-		// //
-		// **********************************************************************
-		// AtlasTask<AtlasConfig> startupTask = new AtlasTask<AtlasConfig>(null,
-		// R("AtlasViewer.AtlasTask.AtlasConfig.startupTask")) {
-		//
-		// @Override
-		// protected void done() {
-		//
-		// try {
-		// super.done();
-		//
-		// get();
-		//
-		// /**
-		// * Open the AtlasPopupDialog while the atlas is still
-		// * loading
-		// */
-		// // LOGGER.debug("popup props say: "+AVProps
-		// // .getBoolean(Keys.showPopupOnStartup, true));
-		// //
-		// LOGGER.debug("popup URL says = "+getAtlasConfig().getPopupHTMLURL());
-		// if (getAtlasConfig().getPopupHTMLURL() != null
-		// && AVProps
-		// .getBoolean(Keys.showPopupOnStartup, true)) {
-		// SwingUtilities.invokeLater(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// /**
-		// * Opens a modal about window.
-		// */
-		// JDialog aboutWindow = new AtlasPopupDialog(
-		// getJFrame(), true, getAtlasConfig());
-		// aboutWindow.setVisible(true);
-		// }
-		// });
-		// }
-		//
-		// updateLangMenu();
-		//
-		// // setMap will start another Thread
-		// final MapPool mapPool = getAtlasConfig().getMapPool();
-		//
-		// openFirstMap(progressWindow);
-		//
-		// } catch (Throwable e) {
-		// ExceptionDialog.show(owner, e);
-		// exitAV(-1);
-		// } finally {
-		// super.done();
-		// }
-		//
-		// }
-		//
-		//
-		// @Override
-		// protected AtlasConfig doInBackground() throws Exception {
-		// // waitDialog.setVisible(true);
-		// // waitDialog.setModal(true);
-		//
-		// publish(R("AtlasViewer.process.EPSG_codes_caching")); // i8ndone
-		// AVUtil.cacheEPSG();
-		//
-		// try {
-		//
-		// // Starting the internal WebServer
-		// new Webserver(true);
-		//
-		// AMLImport.pl = new ProgressListener() {
-		// public void info(String msg) {
-		// publish(msg);
-		// }
-		// };
-		//
-		// AMLImport.parseAtlasConfig(getAtlasConfig(), true);
-		//
-		// /***************************************************************
-		// * Match available and installed languages
-		// */
-		// Locale locale = Locale.getDefault();
-		// if (getAtlasConfig().getLanguages().contains(
-		// locale.getLanguage())) {
-		// Translation.setActiveLang(locale.getLanguage());
-		// } else {
-		// // As the owner we do not provide getJFrame() but null!
-		// // We are not on EDT and do not want to initiate the
-		// // JFrame creation.
-		// new SwitchLanguageDialog(null, getAtlasConfig()
-		// .getLanguages());
-		// }
-		// AMLImport.pl = null;
-		//
-		// } catch (Throwable e) {
-		// LOGGER.error("Uncatched Trowable (pretty evil): ", e);
-		// ExceptionDialog.show(owner, e);
-		// exitAV(23);
-		// }
-		//
-		// publish(R("AtlasViewer.process.preparing_gui")); // i8ndone
-		// SwingUtilities.invokeAndWait(new Runnable() {
-		// public void run() {
-		// getJFrame();
-		// }
-		// });
-		//
-		// return getAtlasConfig();
-		// }
-		//
-		// };
-		//
-		// startupTask.execute();
 	}
 
-	private void openFirstMap(AtlasStatusDialog statusDialog) {
+	private void openFirstMap() {
 		MapPool mapPool = getAtlasConfig().getMapPool();
 		// **************************************************************
 		// Which map to start with? We first check it attribute
@@ -621,7 +507,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof CancelException)
 				// tries to load the default map, which should not
-				openFirstMap(statusDialog);
+				openFirstMap();
 			else
 				ExceptionMonitor.show(getJFrame(), e);
 		} catch (InterruptedException e) {
@@ -827,13 +713,15 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			ExceptionDialog.show(null, e);
 		}
 
-		AtlasViewer.getInstance().startGui();
+		AtlasViewer.getInstance().importAcAndStartGui();
 
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6476706
 		// System.exit(0);
 	}
+	
 
-	public void startGui() {
+
+	public void importAcAndStartGui() {
 
 		SwingUtilities.invokeLater(new Runnable() {
 
@@ -875,52 +763,73 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 					LOGGER.error("can't start atlas", e);
 					exitAV(-99);
 				}
-
-				/***************************************************************
-				 * Match available and installed languages
-				 */
-				Locale locale = Locale.getDefault();
-				if (getAtlasConfig().getLanguages().contains(
-						locale.getLanguage())) {
-					Translation.setActiveLang(locale.getLanguage());
-				} else {
-					// As the owner we do not provide getJFrame() but null!
-					// We are not on EDT and do not want to initiate the
-					// JFrame creation.
-					new SwitchLanguageDialog(null, getAtlasConfig()
-							.getLanguages());
-				}
-
-				/**
-				 * Open the AtlasPopupDialog while the atlas is still loading
-				 */
-				// LOGGER.debug("popup props say: "+AVProps
-				// .getBoolean(Keys.showPopupOnStartup, true));
-				// LOGGER.debug("popup URL says = "+getAtlasConfig().getPopupHTMLURL());
-				if (getAtlasConfig().getPopupHTMLURL() != null
-						&& getAtlasConfig().getProperties().getBoolean(
-								Keys.showPopupOnStartup, true)) {
-					SwingUtilities.invokeLater(new Runnable() {
-
-						@Override
-						public void run() {
-							/**
-							 * Opens a modal about window.
-							 */
-							JDialog aboutWindow = new AtlasPopupDialog(
-									getJFrame(), true, getAtlasConfig());
-							aboutWindow.setVisible(true);
-						}
-					});
-				}
-
-				updateLangMenu();
-
-				openFirstMap(statusDialog);
+				
+				startGui();
 
 			}
 		});
 
+	}
+	
+	/**
+	 * Allows to pass a fully configured {@link AtlasConfig} to 
+	 * @param atlasConfig
+	 */
+	public void startGui(AtlasConfig atlasConfig) {
+		if (this.atlasConfig != null && this.atlasConfig != atlasConfig) {
+			this.atlasConfig.dispose();
+		}
+		this.atlasConfig = atlasConfig; 
+		
+		startGui();
+	}
+
+	/**
+	 * 
+	 */
+	protected void startGui() {
+
+		/***************************************************************
+		 * Match available and installed languages
+		 */
+		Locale locale = Locale.getDefault();
+		if (getAtlasConfig().getLanguages().contains(
+				locale.getLanguage())) {
+			Translation.setActiveLang(locale.getLanguage());
+		} else {
+			// As the owner we do not provide getJFrame() but null!
+			// We are not on EDT and do not want to initiate the
+			// JFrame creation.
+			new SwitchLanguageDialog(null, getAtlasConfig()
+					.getLanguages());
+		}
+
+		/**
+		 * Open the AtlasPopupDialog while the atlas is still loading
+		 */
+		// LOGGER.debug("popup props say: "+AVProps
+		// .getBoolean(Keys.showPopupOnStartup, true));
+		// LOGGER.debug("popup URL says = "+getAtlasConfig().getPopupHTMLURL());
+		if (getAtlasConfig().getPopupHTMLURL() != null
+				&& getAtlasConfig().getProperties().getBoolean(
+						Keys.showPopupOnStartup, true)) {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					/**
+					 * Opens a modal about window.
+					 */
+					JDialog aboutWindow = new AtlasPopupDialog(
+							getJFrame(), true, getAtlasConfig());
+					aboutWindow.setVisible(true);
+				}
+			});
+		}
+
+		updateLangMenu();
+
+		openFirstMap();
 	}
 
 	/**
@@ -1270,4 +1179,5 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			getJFrame().toFront();
 		}
 	}
+
 }

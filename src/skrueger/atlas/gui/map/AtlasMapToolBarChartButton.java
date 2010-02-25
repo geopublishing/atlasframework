@@ -23,6 +23,7 @@ import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
@@ -55,9 +56,10 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 		this.mapLegend = mapLegend;
 
 //		setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		SwingUtil.setPreferredHeight(this, 90);
 
 		setAction(new AbstractAction(AtlasViewer
-				.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_SMALL) {
+				.R("AtlasMapToolBarChartButton.Title"), Icons.ICON_CHART_MEDIUM) {
 //			setAction(new AbstractAction(AtlasViewer
 //					.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_BIG) {
 			
