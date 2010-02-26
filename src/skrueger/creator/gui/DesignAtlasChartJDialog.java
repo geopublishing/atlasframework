@@ -879,8 +879,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 
 			});
-			
-			categoryDomainAxisJCheckBox.setSelected(chartStyle.isForceCategories());
+
+			categoryDomainAxisJCheckBox.setSelected(chartStyle
+					.isForceCategories());
 
 		}
 		return categoryDomainAxisJCheckBox;
@@ -1048,9 +1049,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		final JPanel attPanel = new JPanel(new MigLayout("wrap 1, fillx"),
 				AtlasCreator.R("DesignAtlasChartJDialog.SeriesDataBorderTitle"));
 
-		attPanel.add(attribComboBox, "split 2");
+		attPanel.add(attribComboBox, "split 3");
 
-		if (chartStyle.getType() == ChartType.BAR) { 
+		if (chartStyle.getType() == ChartType.BAR) {
 			// bei pie auch, wenn wir das mal haben
 
 			final AggregationFunctionJComboBox aggregationFunctionJComboBox = new AggregationFunctionJComboBox();
@@ -1060,14 +1061,19 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				public void itemStateChanged(ItemEvent e) {
 					int idx = seriesIdx + 1;
 					AggregationFunction aggFunc = (AggregationFunction) aggregationFunctionJComboBox
-					.getSelectedItem();
-					System.out.println(idx+"="+aggFunc);
-					chartStyle.setAttributeAggregation(idx,
-							aggFunc);
+							.getSelectedItem();
+					// System.out.println(idx+"="+aggFunc);
+					chartStyle.setAttributeAggregation(idx, aggFunc);
 					fireChartChangedEvent(true);
 				}
 			});
-
+			
+			aggregationFunctionJComboBox.setSelectedItem(chartStyle
+					.getAttributeAggregation(seriesIdx + 1));
+			aggregationFunctionJComboBox.setToolTipText(AtlasCreator.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
+			
+			attPanel.add(new JLabel(AtlasCreator.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label")),"gap unrel");
+			
 			attPanel.add(aggregationFunctionJComboBox);
 		}
 

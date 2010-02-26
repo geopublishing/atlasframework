@@ -28,7 +28,9 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.style.FeatureBasicChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
+import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
+import schmitzm.jfree.feature.style.FeatureChartStyle.AggregationFunction;
 import skrueger.AttributeMetadata;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GpUtil;
@@ -98,7 +100,7 @@ public class ChartWizardResultProducer implements
 						+ " is not yet imlpemented.");
 				return null;
 			}
-			
+
 		}
 
 		ChartRendererStyle rs = new ChartRendererStyle();
@@ -116,19 +118,22 @@ public class ChartWizardResultProducer implements
 			chartStyle.setAttributeName(index, attrName);
 
 			chartStyle.setAttributeName(index, attrName);
-//			chartStyle.setAttributeNormalized(index, (Boolean) wizardData
-//					.get(ChartWizard.NORMALIZE_ + index));
+			// chartStyle.setAttributeNormalized(index, (Boolean) wizardData
+			// .get(ChartWizard.NORMALIZE_ + index));
 
 			/*
 			 * Ensure we always have a default Translation for the Title of this
 			 * series
 			 */
-//			AttributeMetadata attribMetadata = ASUtil.getAttributeMetadataFor(
-//					amdm, attrName);
+			// AttributeMetadata attribMetadata =
+			// ASUtil.getAttributeMetadataFor(
+			// amdm, attrName);
 			AttributeMetadata attribMetadata = amdm.get(attrName);
-			
+
 			if (I8NUtil.isEmpty(attribMetadata.getTitle())) {
-				attribMetadata.setTitle(new Translation((List<String>) (wizardData.get(ChartWizard.LANGUAGES)), attrName));
+				attribMetadata.setTitle(new Translation(
+						(List<String>) (wizardData.get(ChartWizard.LANGUAGES)),
+						attrName));
 			}
 
 			/*
@@ -144,10 +149,19 @@ public class ChartWizardResultProducer implements
 						attribMetadata.getDesc().copy(), null));
 				if (index == 1) {
 					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
-							new ChartAxisStyle(attribMetadata.getTitle().copy(), null, 0., 0.));
+							new ChartAxisStyle(
+									attribMetadata.getTitle().copy(), null, 0.,
+									0.));
 					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
 							.setUnitString(attribMetadata.getUnit());
 				}
+
+				// For BAR charts mean is the default aggregation function
+				if (chartType == ChartType.BAR) {
+					chartStyle.setAttributeAggregation(index,
+							AggregationFunction.AVG);
+				}
+
 			} else {
 				// This is the DOMAIN AXIS (index = 0)
 				chartStyle.setAxisStyle(index, new ChartAxisStyle(
@@ -169,10 +183,9 @@ public class ChartWizardResultProducer implements
 
 		chartStyle.setTitleStyle(new ChartLabelStyle(title, Color.black));
 		chartStyle.setDescStyle(new ChartLabelStyle(desc, Color.gray));
-
-		// LOGGER.debug("The just created/edited chart has editChart.getAttributeCount() "+chartStyle.getAttributeCount());
-
-//		System.out.println(chartStyle);
+		
+		// Pass NODATA values for the chart attributes
+		FeatureChartUtil.passNoDataValues(amdm, chartStyle);
 
 		return chartStyle;
 	}

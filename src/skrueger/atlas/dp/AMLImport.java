@@ -1080,18 +1080,8 @@ public class AMLImport {
 			// How to handle chartstyles that had attributes removed?
 		}
 
-		// Pass the NODATA values for the attributes to the ChartStyle
-		for (int idx = 0; idx < featureChartStyle.getAttributeCount(); idx++) {
-
-			String attributeName = featureChartStyle.getAttributeName(idx);
-			AttributeMetadata attributeMetadata = attributeMetaDataMap
-					.get(attributeName);
-
-			if (attributeMetadata != null) {
-				featureChartStyle.setNoDataValues(idx, attributeMetadata
-						.getNodataValues());
-			}
-		}
+		FeatureChartUtil.passNoDataValues(attributeMetaDataMap, featureChartStyle);
+		
 //		System.out.println("after correcting\n"+"  "+featureChartStyle);
 		return featureChartStyle;
 	}
