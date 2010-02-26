@@ -147,19 +147,36 @@ public class ChartWizardResultProducer implements
 						attribMetadata.getTitle().copy(), null));
 				rs.setSeriesLegendTooltip(index - 1, new ChartLabelStyle(
 						attribMetadata.getDesc().copy(), null));
-				if (index == 1) {
-					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
-							new ChartAxisStyle(
-									attribMetadata.getTitle().copy(), null, 0.,
-									0.));
-					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
-							.setUnitString(attribMetadata.getUnit());
-				}
 
 				// For BAR charts mean is the default aggregation function
 				if (chartType == ChartType.BAR) {
 					chartStyle.setAttributeAggregation(index,
 							AggregationFunction.AVG);
+				}
+
+				if (index == 1) {
+					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
+							new ChartAxisStyle(
+									attribMetadata.getTitle().copy(), null, 0.,
+									0.));
+
+					String unit = attribMetadata.getUnit();
+					
+					// Raus wenn die chart lib das selber macht
+					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+					AggregationFunction aggr = chartStyle
+							.getAttributeAggregation(ChartStyle.RANGE_AXIS);
+					if (aggr != null) {
+						if (unit != null && !unit.isEmpty())
+							unit += ", ";
+						unit += aggr.getTitle();
+
+					}
+					// bis hier
+
+					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
+							.setUnitString(unit);
+
 				}
 
 			} else {
@@ -183,7 +200,7 @@ public class ChartWizardResultProducer implements
 
 		chartStyle.setTitleStyle(new ChartLabelStyle(title, Color.black));
 		chartStyle.setDescStyle(new ChartLabelStyle(desc, Color.gray));
-		
+
 		// Pass NODATA values for the chart attributes
 		FeatureChartUtil.passNoDataValues(amdm, chartStyle);
 

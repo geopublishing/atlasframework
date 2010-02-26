@@ -56,6 +56,7 @@ import org.geotools.feature.FeatureCollection;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.sld.RangeAxis;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
@@ -581,6 +582,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 	};
 
+	private HashMap<Integer, JTextField> unitTextFields = new HashMap<Integer, JTextField>();
+
 	/**
 	 * A {@link JPanel} which allows the user to configure the appearance of the
 	 * domain axis
@@ -589,8 +592,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		final JPanel axisPane = new JPanel(new MigLayout("w "
 				+ (ChartPanel.DEFAULT_WIDTH - 40) + ",wrap 2", "[grow]"));
 
-		/** A textfield that shows the unit (untranslatable). **/
-		final JTextField unitTextfield = new JTextField(15);
 		/*
 		 * Ensure that there are no NULLs
 		 */
@@ -708,7 +709,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					// Update the NODATA Panel
 					noDataPanel.setAttribute(attLocalName);
 
-					unitTextfield.setText(atm.getUnit());
+					getUnitTextFieldForAxis(ChartStyle.DOMAIN_AXIS).setText(
+							atm.getUnit());
 
 					fireChartChangedEvent(true);
 				}
@@ -741,30 +743,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Now add a box to enter a unit string
 		 */
 		JPanel unitPanel = new JPanel(new MigLayout(), AtlasCreator.R("Unit"));
-		unitTextfield.setText(axisStyle.getUnitString());
-		unitTextfield.getDocument().addDocumentListener(new DocumentListener() {
 
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				react();
-			}
+		/** A textfield that shows the unit (untranslatable). **/
+		final JTextField unitTextfield = getUnitTextFieldForAxis(axisNr);
 
-			void react() {
-				axisStyle.setUnitString(unitTextfield.getText());
-				fireChartChangedEvent();
-			}
-
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				react();
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				react();
-			}
-
-		});
 		unitPanel.add(new JLabel(AtlasCreator
 				.R("DesignChartDialog.Unit.Explanation")), "wrap");
 		unitPanel.add(unitTextfield);
@@ -854,6 +836,44 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		axisPane.add(anglePanel, "sgy, growx 2000");
 
 		return axisPane;
+	}
+
+	private JTextField getUnitTextFieldForAxis(int axisNr) {
+		if (unitTextFields.get(axisNr) == null) {
+			final JTextField unitTextField = new JTextField(15);
+
+			final ChartAxisStyle axisStyle = chartStyle.getAxisStyle(axisNr);
+
+			unitTextField.setText(axisStyle.getUnitString());
+			unitTextField.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							react();
+						}
+
+						void react() {
+							axisStyle.setUnitString(unitTextField.getText());
+							fireChartChangedEvent();
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							react();
+						}
+
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							react();
+						}
+
+					});
+
+			unitTextFields.put(axisNr, unitTextField);
+
+		}
+		return unitTextFields.get(axisNr);
 	}
 
 	/**
@@ -1042,8 +1062,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		final AttributesJComboBox attribComboBox = new AttributesJComboBox(
 				schema, styledLayer.getAttributeMetaDataMap(), ASUtil
 						.getNumericalFieldNames(schema, false));
-		attribComboBox.setSelectedItem(chartStyle
-				.getAttributeName(seriesIdx + 1));
+		final String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
+		attribComboBox.setSelectedItem(attributeName);
 
 		/** build a panel... */
 		final JPanel attPanel = new JPanel(new MigLayout("wrap 1, fillx"),
@@ -1064,23 +1084,52 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							.getSelectedItem();
 					// System.out.println(idx+"="+aggFunc);
 					chartStyle.setAttributeAggregation(idx, aggFunc);
+
+					// AGgregation funktion kann auch auf die axsen UNIT wirken
+
+					if (idx == ChartStyle.RANGE_AXIS) {
+						String unit = styledLayer.getAttributeMetaDataMap()
+								.get(attributeName).getUnit();
+
+						// Raus wenn die chart lib das selber macht
+						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+						AggregationFunction aggr = chartStyle
+								.getAttributeAggregation(ChartStyle.RANGE_AXIS);
+						if (aggr != null) {
+							if (unit != null && !unit.isEmpty())
+								unit += ", ";
+							unit += aggr.getTitle();
+
+						}
+						// bis hier
+
+						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
+								unit);
+					}
+
 					fireChartChangedEvent(true);
 				}
 			});
-			
+
 			aggregationFunctionJComboBox.setSelectedItem(chartStyle
 					.getAttributeAggregation(seriesIdx + 1));
-			aggregationFunctionJComboBox.setToolTipText(AtlasCreator.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
-			
-			attPanel.add(new JLabel(AtlasCreator.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label")),"gap unrel");
-			
+			aggregationFunctionJComboBox.setToolTipText(AtlasCreator
+					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
+
+			attPanel
+					.add(
+							new JLabel(
+									AtlasCreator
+											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label")),
+							"gap unrel");
+
 			attPanel.add(aggregationFunctionJComboBox);
 		}
 
 		// A Panel that will list all NODATA-Value
 		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
-				.getAttributeMetaDataMap(), chartStyle
-				.getAttributeName(seriesIdx + 1), styledLayer.getSchema());
+				.getAttributeMetaDataMap(), attributeName, styledLayer
+				.getSchema());
 		// Update the chart whenever the NODATA values changes
 		noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -1105,9 +1154,11 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				String attLocalName = (String) attribComboBox.getSelectedItem();
 
 				chartStyle.setAttributeName(seriesIdx + 1, attLocalName);
-				chartStyle.setNoDataValues(seriesIdx + 1, styledLayer
-						.getAttributeMetaDataMap().get(attLocalName)
-						.getNodataValues());
+				AttributeMetadata atm = styledLayer.getAttributeMetaDataMap()
+						.get(attLocalName);
+
+				chartStyle
+						.setNoDataValues(seriesIdx + 1, atm.getNodataValues());
 
 				// LOGGER.debug("Setting attribute " + seriesIdx + 1 + " to "
 				// + chartStyle.getAttributeName(seriesIdx + 1));
@@ -1123,6 +1174,24 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				}
 
 				noDataPanel.setAttribute(attLocalName);
+
+				if (seriesIdx == 0) {
+					String unit = atm.getUnit();
+
+					// Raus wenn die chart lib das selber macht
+					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+					AggregationFunction aggr = chartStyle
+							.getAttributeAggregation(1);
+					if (aggr != null) {
+						if (unit != null && !unit.isEmpty())
+							unit += ", ";
+						unit += aggr.getTitle();
+
+					}
+					// bis hier
+
+					getUnitTextFieldForAxis(seriesIdx + 1).setText(unit);
+				}
 
 				fireChartChangedEvent(true);
 			}

@@ -134,20 +134,11 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 	}
 
 	private CheckableAtlasJTree getAtlasTree() {
-
-		// File atlasxmlFile_InWizardData = new File(new File(
-		// ((JTextField) getWizardData(ImportWizard.IMPORT_GPA_FOLDER))
-		// .getText()).getParentFile(),
-		// AtlasConfig.ATLASDATA_DIRNAME + "/"
-		// + AtlasConfig.ATLAS_XML_FILENAME);
-
 		if (atlasTree == null) {
-
 			// atlasxmlFile = atlasxmlFile_InWizardData;
 			atlasTree = new CheckableAtlasJTree();
 
 			atlasTree.setName("asdasdas");
-
 		}
 		return atlasTree;
 	}
@@ -156,10 +147,10 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		// setSize(ImportWizard.DEFAULT_WPANEL_SIZE);
 		// setPreferredSize(ImportWizard.DEFAULT_WPANEL_SIZE);
 
-		setLayout(new MigLayout("wrap 1"));
+		setLayout(new MigLayout("wrap 1","[grow]","[grow]"));
 
 		add(explanationJLabel);
-		add(new JScrollPane(getAtlasTree()), "grow");
+		add(new JScrollPane(getAtlasTree()), "growy 2000");
 
 		/*
 		 * =All ImportWizard.GPA.AtlasContentSelection.AllMapsButton=All maps

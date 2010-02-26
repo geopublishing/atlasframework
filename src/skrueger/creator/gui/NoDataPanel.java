@@ -25,6 +25,7 @@ import schmitzm.swing.JPanel;
 import skrueger.AttributeMetadata;
 import skrueger.creator.AtlasCreator;
 import skrueger.geotools.AttributeMetadataMap;
+import skrueger.swing.SmallButton;
 
 /**
  * This {@link JPanel} displays a short list of NODATA-Values for an attribute
@@ -55,7 +56,7 @@ public class NoDataPanel extends JPanel {
 		this.attributeMetaDataMap = attributeMetaDataMap;
 //		this.schema = schema;
 
-		add(new JButton(new AbstractAction(AtlasCreator.R("NodataValues") + ":") { 
+		add(new SmallButton(new AbstractAction(AtlasCreator.R("NodataValues") + ":") { 
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
