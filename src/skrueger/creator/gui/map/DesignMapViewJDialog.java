@@ -28,7 +28,6 @@ import java.util.HashSet;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -51,10 +50,8 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.map.DefaultMapLayer;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
-import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.LineSymbolizer;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
@@ -90,7 +87,6 @@ import skrueger.creator.GPProps;
 import skrueger.geotools.XMapPane;
 import skrueger.geotools.XMapPaneAction_Zoom;
 import skrueger.geotools.XMapPaneTool;
-import skrueger.sld.ASUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
@@ -113,8 +109,6 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 	public static final String MAXMAPENTEND_FEATURE_ID = "MAXMAPENTEND_FEATURE_ID";
 	public static final String DEFAULTMAPAREA_FEATURE_ID = "DEFAULTMAPAREA_FEATURE_ID";
-
-	public static final String SPECIAL_POLYGONS_LAYER_ID = "SPECIAL_POLYGONS_LAYER_ID";
 
 	/**
 	 * An {@link XMapPaneTool} that allows to select the maximal map extend
@@ -167,10 +161,13 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 					// Apply to the Map
 					map.setMaxExtend(maxExtend);
-					
+
 					// intersect with any maxMapExtend
 					if (map.getDefaultMapArea() != null) {
-						ReferencedEnvelope newDefArea = new ReferencedEnvelope(map.getMaxExtend().intersection(map.getDefaultMapArea()),startCoord.getCoordinateReferenceSystem());
+						ReferencedEnvelope newDefArea = new ReferencedEnvelope(
+								map.getMaxExtend().intersection(
+										map.getDefaultMapArea()), startCoord
+										.getCoordinateReferenceSystem());
 						if (newDefArea.isEmpty())
 							newDefArea = null;
 						map.setDefaultMapArea(newDefArea);
@@ -253,27 +250,32 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 					ReferencedEnvelope defaultArea = JTSUtil
 							.createReferencedEnvelope(startCoord, endCoord);
-					
+
 					// intersect with any maxMapExtend
 					if (map.getMaxExtend() != null)
-						defaultArea = new ReferencedEnvelope(map.getMaxExtend().intersection(defaultArea),startCoord.getCoordinateReferenceSystem());
-					if (defaultArea.isEmpty()) defaultArea = null;
+						defaultArea = new ReferencedEnvelope(map.getMaxExtend()
+								.intersection(defaultArea), startCoord
+								.getCoordinateReferenceSystem());
+					if (defaultArea.isEmpty())
+						defaultArea = null;
 
 					// Apply to the Map
 					map.setDefaultMapArea(defaultArea);
 
-					/**
-					 * Ask the user to store the value for all maps
-					 */
-					if (AVUtil
-							.askYesNo(
-									DesignMapViewJDialog.this,
-									AtlasCreator
-											.R("DesignMapViewJDialog.SaveBBOX.Question.forAllMaps"))) {
-						for (final Map map : ace.getMapPool().values()) {
-							map.setDefaultMapArea(defaultArea);
-						}
-					}
+					// Disabled
+					// /**
+					// * Ask the user to store the value for all maps
+					// */
+					// if (AVUtil
+					// .askYesNo(
+					// DesignMapViewJDialog.this,
+					// AtlasCreator
+					// .R("DesignMapViewJDialog.SaveBBOX.Question.forAllMaps")))
+					// {
+					// for (final Map map : ace.getMapPool().values()) {
+					// map.setDefaultMapArea(defaultArea);
+					// }
+					// }
 
 					finish();
 				}
@@ -480,7 +482,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final Style style = sb.createStyle(null);
 		style.featureTypeStyles().get(0).rules().clear();
 
-//		final Style style = sb.createStyle();
+		// final Style style = sb.createStyle();
 
 		{
 			// A FTStyle for maxMapExntend
@@ -491,31 +493,30 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 			Rule rule = sb.createRule(dash1);
 			rule.symbolizers().add(dash2);
-			
-//			 A filter for the max map exented
-			 HashSet<Identifier> ids = new HashSet<Identifier>();
-			 ids.add(new FeatureIdImpl(MAXMAPENTEND_FEATURE_ID));
-			 rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
-			
+
+			// A filter for the max map exented
+			HashSet<Identifier> ids = new HashSet<Identifier>();
+			ids.add(new FeatureIdImpl(MAXMAPENTEND_FEATURE_ID));
+			rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
+
 			style.featureTypeStyles().get(0).rules().add(rule);
 		}
 
 		{
 			// A FTStyle for default mapArea
-			final LineSymbolizer dash2 = sb
-					.createLineSymbolizer(sb.createStroke(Color.green,
-							4, new float[] { 2, 3 }));
+			final LineSymbolizer dash2 = sb.createLineSymbolizer(sb
+					.createStroke(Color.green, 4, new float[] { 2, 3 }));
 			final LineSymbolizer dash1 = sb.createLineSymbolizer(sb
 					.createStroke(Color.white, 4, new float[] { 3, 2 }));
 
 			Rule rule = sb.createRule(dash1);
 			rule.symbolizers().add(dash2);
-			
-//			 A filter for the max map exented
-			 HashSet<Identifier> ids = new HashSet<Identifier>();
-			 ids.add(new FeatureIdImpl(DEFAULTMAPAREA_FEATURE_ID));
-			 rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
-			
+
+			// A filter for the max map exented
+			HashSet<Identifier> ids = new HashSet<Identifier>();
+			ids.add(new FeatureIdImpl(DEFAULTMAPAREA_FEATURE_ID));
+			rule.setFilter(FilterUtil.FILTER_FAC2.id(ids));
+
 			style.featureTypeStyles().get(0).rules().add(rule);
 		}
 
@@ -529,7 +530,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			// Layer neu erzeugen
 			specialMapLayer = new AtlasMapLayer(fc, style);
 			System.err.println(style);
-			specialMapLayer.setTitle(SPECIAL_POLYGONS_LAYER_ID);
+			specialMapLayer.setTitle(XMapPane.SPECIAL_LINES_LAYER_ID);
 
 			getDesignMapView().getMapPane().getMapContext().addLayer(
 					specialMapLayer);
@@ -570,7 +571,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	private JPanel createLegendePanel() {
 		final JPanel panel = new JPanel(new MigLayout());
 
-		final JButton saveDividerRatioButton = new JButton(
+		final JButton saveDividerRatioButton = new SmallButton(
 				new AbstractAction(AtlasCreator
 						.R("DesignMapViewJDialog.Button.SaveDivider.Label")) {
 
@@ -626,11 +627,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						}
 					}
 
-				});
-		saveDividerRatioButton.setToolTipText(AtlasCreator
-				.R("DesignMapViewJDialog.Button.SaveDivider.TT"));
+				}, AtlasCreator.R("DesignMapViewJDialog.Button.SaveDivider.TT"));
 
-		final JButton saveAutoDividerRatioButton = new JButton(
+		final JButton saveAutoDividerRatioButton = new SmallButton(
 				new AbstractAction(AtlasCreator
 						.R("DesignMapViewJDialog.Button.AutoDivider.Label")) {
 
@@ -679,9 +678,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						map.setLeftRightRatio(0.);
 					}
 
-				});
-		saveAutoDividerRatioButton.setToolTipText(AtlasCreator
-				.R("DesignMapViewJDialog.Button.AutoDivider.TT"));
+				}, AtlasCreator.R("DesignMapViewJDialog.Button.AutoDivider.TT"));
 
 		panel.add(saveAutoDividerRatioButton);
 		panel.add(saveDividerRatioButton);
@@ -811,6 +808,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		} // maxExtend stuff
 
+		mapAreaPanel.add(new JLabel(AtlasCreator
+				.R("DesignMapViewJDialog.mapArea.defaultArea.explanation")),
+				"span 3, wrap");
+
 		/**
 		 * A button to store the start area
 		 */
@@ -870,26 +871,27 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		resetDefaultMapAreaButton.setToolTipText(AtlasCreator
 				.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
 		mapAreaPanel.add(resetDefaultMapAreaButton);
-		
+
 		resetDefaultMapAreaButton.setEnabled(map.getDefaultMapArea() != null);
-		
+
 		// A button to try out the default map area function
-		SmallButton tryStartAreaButton = new SmallButton(new AbstractAction(AtlasCreator.R("DesignMapView.defaultMapArea.try.button")) {
-			
+		SmallButton tryStartAreaButton = new SmallButton(new AbstractAction(
+				AtlasCreator.R("DesignMapView.defaultMapArea.try.button")) {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!maxExtendPreviewCheckBox.isSelected()) {
-					getDesignMapView().getMapPane().setMaxExtend(map.getMaxExtend());
-				}
-				getDesignMapView().getMapPane().setMapArea(map.getDefaultMapArea());
+				// if (!maxExtendPreviewCheckBox.isSelected()) {
+				getDesignMapView().getMapPane()
+						.setMaxExtend(map.getMaxExtend());
+				// }
+				getDesignMapView().getMapPane().setMapArea(
+						map.getDefaultMapArea());
 				if (!maxExtendPreviewCheckBox.isSelected()) {
 					getDesignMapView().getMapPane().setMaxExtend(null);
-				}				
+				}
 			}
 		});
 		mapAreaPanel.add(tryStartAreaButton);
-		
-		
 
 		return mapAreaPanel;
 	}
@@ -1067,21 +1069,22 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		// box.add(gridCrsSelector);
 		// box.add(gridFormatterSelector);
 
-		final JPanel gridPanel = new JPanel(new MigLayout("wrap 1"));
-		gridPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
-				.R("DesignMapViewJDialog.MapMargin.Border")));
+		// final JPanel gridPanel = new JPanel(new MigLayout("wrap 1"));
+		// gridPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
+		// .R("DesignMapViewJDialog.MapMargin.Border")));
 		// DesignMapViewJDialog.MapFrameCRS= Map grid CRS:
 		// DesignMapViewJDialog.MapFrameFormat= Map grid format:
-		gridPanel.add(new JLabel(AtlasCreator
-				.R("DesignMapViewJDialog.MapFrameCRS")), "split 2, right");
-		gridPanel.add(gridCrsSelector, "sgx");
+		panel.add(
+				new JLabel(AtlasCreator.R("DesignMapViewJDialog.MapFrameCRS")),
+				"split 2, right");
+		panel.add(gridCrsSelector);
 
-		gridPanel.add(new JLabel(AtlasCreator
+		panel.add(new JLabel(AtlasCreator
 				.R("DesignMapViewJDialog.MapFrameFormat")), "split 2, right");
-		gridPanel.add(gridFormatterSelector, "sgx");
-		gridPanel.add(gridVisibibleJCheckBox, "split 2");
-		gridPanel.add(scaleVisibibleJCheckBox);
-		panel.add(gridPanel, "growx");
+		panel.add(gridFormatterSelector, "wrap");
+		panel.add(gridVisibibleJCheckBox, "split 2");
+		panel.add(scaleVisibibleJCheckBox);
+		// panel.add(gridPanel, "growx");
 
 		return panel;
 	}

@@ -518,10 +518,6 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 						e);
 				LOGGER.error("Layer not found?", illegalStateException);
 				ExceptionDialog.show(parentGUI, illegalStateException);
-
-				// SK: 24.6.09: Commented out, because it makes sense to try the
-				// other layers
-				// return false;
 			}
 		}
 
