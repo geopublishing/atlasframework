@@ -163,21 +163,19 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 		/**
 		 * Setting a nice AtlasStyler icon
 		 */
-		try {
-			List<Image> icons = new ArrayList<Image>(2);
-			
-			// TODO veryfy its working
-			ClassLoader cl = AtlasStyler.class.getClassLoader();
-			icons.add(new ImageIcon(cl.getResource("resources/as_icon16.png"))
-					.getImage());
-			icons.add(new ImageIcon(cl.getResource("resources/as_icon32.png"))
-					.getImage());
-			icons.add(new ImageIcon(cl.getResource("resources/as_icon64.png"))
-					.getImage());
-			setIconImages(icons);
-		} catch (Exception e) {
-			ExceptionDialog.show(this, e);
-		}
+		List<Image> icons = new ArrayList<Image>(2);
+
+		ClassLoader cl = AtlasStyler.class.getClassLoader();
+		icons.add(new ImageIcon(cl
+				.getResource("skrueger/sld/resources/as_icon16.png"))
+				.getImage());
+		icons.add(new ImageIcon(cl
+				.getResource("skrueger/sld/resources/as_icon32.png"))
+				.getImage());
+		icons.add(new ImageIcon(cl
+				.getResource("skrueger/sld/resources/as_icon64.png"))
+				.getImage());
+		setIconImages(icons);
 	}
 
 	/**
