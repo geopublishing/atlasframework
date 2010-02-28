@@ -483,7 +483,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			jComboBoxNormlization.setSelectedItem(rulesList
 					.getNormalizer_field_name());
 
-			jComboBoxNormlization.addItem(null); // means "no normalization"
+//			jComboBoxNormlization.addItem(null); // means "no normalization" REMOVED, is now already in the model creation
+			
 			jComboBoxNormlization
 					.addItemListener(new java.awt.event.ItemListener() {
 						public void itemStateChanged(
