@@ -54,7 +54,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 */
 	public static final String ALLOTHERS_IDENTIFICATION_VALUE = "ALLOTHERS_RULE_ID";
 
-
 	private String propertyFieldName = null;
 
 	private final ArrayList<String> values1 = new ArrayList<String>();

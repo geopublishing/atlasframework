@@ -24,6 +24,8 @@ import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsBetween;
 
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
@@ -205,7 +207,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
-		Collection<String> numericalFieldNames = ASUtil.getNumericalFieldNames(
+		Collection<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
 				getStyledFeatures().getSchema(), false);
 		if (numericalFieldNames.size() > 0)
 			value_field_name = numericalFieldNames.toArray(new String[] {})[0];
@@ -250,15 +252,15 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return <code>null</code> if it is not a "BetweenFilter"
 	 */
 	public static double[] interpretBetweenFilter(Filter filter) {
-		
+
 		if (filter instanceof AndImpl) {
 			// This is a AND ( NOT ( NODATA ) , BETWEENFILTER) construction
 			// We continue the interpretion with only the last filter
-			Iterator<Filter> fi = ((AndImpl)filter).getFilterIterator();
+			Iterator<Filter> fi = ((AndImpl) filter).getFilterIterator();
 			while (fi.hasNext())
-				filter = fi.next(); 
+				filter = fi.next();
 		}
-			
+
 		if (filter instanceof PropertyIsBetween) {
 			PropertyIsBetween betweenFilter = (PropertyIsBetween) filter;
 			double lower = Double.parseDouble(betweenFilter.getLowerBoundary()
@@ -334,7 +336,10 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 					if (value.equalsIgnoreCase("null"))
 						setNormalizer_field_name(null);
 					else
-						setNormalizer_field_name(value);
+						setNormalizer_field_name(FeatureUtil
+								.findBestMatchingAttribute(
+										getStyledFeatures().getSchema(), value)
+								.getLocalPart());
 				}
 
 				if (kvp[0].equalsIgnoreCase(KVP_VALUE_FIELD.toString())) {
@@ -342,7 +347,10 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 					if (value.equalsIgnoreCase("null"))
 						setValue_field_name(null);
 					else
-						setValue_field_name(kvp[1]);
+						setValue_field_name(FeatureUtil
+								.findBestMatchingAttributeFallBackFirstNumeric(
+										getStyledFeatures().getSchema(), kvp[1])
+								.getLocalPart());
 				}
 			}
 

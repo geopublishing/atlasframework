@@ -42,6 +42,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.PropertyName;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.JPanel;
 import skrueger.sld.ASUtil;
@@ -580,7 +581,7 @@ public class TextRuleListGUI extends JPanel {
 
 			{
 				DefaultComboBoxModel model = new DefaultComboBoxModel(
-						ASUtil
+						FeatureUtil
 								.getNumericalFieldNames(
 										rulesList.getStyledFeatures()
 												.getSchema(), true).toArray());

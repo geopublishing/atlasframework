@@ -32,6 +32,7 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.jfree.chart.style.ChartType;
 import skrueger.creator.AtlasCreator;
 import skrueger.geotools.AttributeMetadataMap;
@@ -240,7 +241,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	// */
 	// private List<String> getNumericaAttribs(FeatureSource featureSource) {
 	// if (numericalAttNames == null)
-	// numericalAttNames = ASUtil.getNumericalFieldNames(featureSource);
+	// numericalAttNames = FeatureUtil.getNumericalFieldNames(featureSource);
 	// return numericalAttNames;
 	// }
 
@@ -319,7 +320,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 			if (idx == 0 && chartType.isCategoryAllowedForDomainAxis()) {
 				dataArray = ASUtil.getValueFieldNames(featureSource, false);
 			} else {
-				dataArray = ASUtil.getNumericalFieldNames(featureSource.getSchema(), false);
+				dataArray = FeatureUtil.getNumericalFieldNames(featureSource.getSchema(), false);
 			}
 
 			/* Add the null as an item to the optional drop down lists only */

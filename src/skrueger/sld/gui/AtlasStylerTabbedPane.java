@@ -27,6 +27,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AVUtil;
@@ -232,7 +233,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 			}
 
-			if (ASUtil.getNumericalFieldNames(
+			if (FeatureUtil.getNumericalFieldNames(
 					atlasStyler.getStyledFeatures().getSchema(), false).size() > 0) {
 				{
 					// Quantities classification are only available if we have

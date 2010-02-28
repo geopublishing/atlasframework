@@ -326,11 +326,14 @@ public class AtlasStyler {
 	 *            may be <code>null</code>
 	 */
 	public AtlasStyler(final StyledFeaturesInterface<?> styledFeatures,
-			final Style loadStyle, final MapLegend mapLegend,
+			Style loadStyle, final MapLegend mapLegend,
 			final MapLayer mapLayer) {
 		this.styledFeatures = styledFeatures;
 		this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
+		
+		// Correct propertynames against the Schema
+		loadStyle = StylingUtil.correctPropertyNames(loadStyle, styledFeatures.getSchema());
 
 		// Calculating the averge distance to the next neightbou. this costs
 		// time!// TODO in another thread

@@ -213,44 +213,6 @@ public class ASUtil {
 	};
 
 	/**
-	 * @return A list of numerical field names (withouth any null or "")
-	 */
-	public static Vector<String> getNumericalFieldNames(
-			final SimpleFeatureType schema) {
-		return getNumericalFieldNames(schema, false);
-	}
-
-	/**
-	 * @return A list of fields that can be used for a quantification (e.g.
-	 *         numerical fields)
-	 * 
-	 * @param empty
-	 *            if <code>true</code>, the last entry of this list will always
-	 *            be a virtual 0/"" value.
-	 */
-	public static Vector<String> getNumericalFieldNames(
-			final SimpleFeatureType schema, boolean empty) {
-		final Vector<String> numericalFieldNames = new Vector<String>();
-
-		final List<AttributeDescriptor> attributeDescs = schema
-				.getAttributeDescriptors();
-
-		for (final AttributeDescriptor pd : attributeDescs) {
-			final Class<?> c = pd.getType().getBinding();
-
-			if (c == Integer.class || c == Double.class || c == Byte.class
-					|| c == Float.class || c == Short.class || c == Long.class) {
-				numericalFieldNames.add(pd.getLocalName());
-			}
-		}
-
-		if (empty)
-			numericalFieldNames.add(0, "");
-
-		return numericalFieldNames;
-	}
-
-	/**
 	 * Returns an list of simple attribute names, ordered by: text attributes
 	 * first
 	 */
@@ -278,7 +240,7 @@ public class ASUtil {
 		if (empty)
 			result.add("");
 
-		final Vector<String> numericalFieldNames = getNumericalFieldNames(
+		final Vector<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
 				schema, false);
 		result.addAll(numericalFieldNames);
 		final Vector<String> valueFieldNames = getValueFieldNames(schema, false);

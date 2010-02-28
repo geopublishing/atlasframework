@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
 import skrueger.geotools.AttributeMetadataMap;
@@ -87,7 +88,7 @@ public class AttributesJComboBox extends JComboBox {
 		 * Caching the list of numerical attributes, so we can quickly determine
 		 * the type of a selected attribute without accessing the schema.
 		 */
-		numericalAttribs = ASUtil.getNumericalFieldNames(schema, false);
+		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false);
 
 		ASUtil.addMouseWheelForCombobox(this);
 

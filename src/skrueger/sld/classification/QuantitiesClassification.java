@@ -29,6 +29,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadata;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
@@ -661,7 +662,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	 */
 	public ComboBoxModel getValueFieldsComboBoxModel() {
 		if (valueAttribsComboBoxModel == null)
-			valueAttribsComboBoxModel = new DefaultComboBoxModel(ASUtil
+			valueAttribsComboBoxModel = new DefaultComboBoxModel(FeatureUtil
 					.getNumericalFieldNames(getStyledFeatures().getSchema(),
 							false).toArray());
 		return valueAttribsComboBoxModel;
@@ -678,7 +679,7 @@ public class QuantitiesClassification extends FeatureClassification {
 				.addElement(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
 		normlizationAttribsComboBoxModel
 				.setSelectedItem(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
-		for (final String fn : ASUtil.getNumericalFieldNames(
+		for (final String fn : FeatureUtil.getNumericalFieldNames(
 				getStyledFeatures().getSchema(), false)) {
 			if (fn != valueAttribsComboBoxModel.getSelectedItem())
 				normlizationAttribsComboBoxModel.addElement(fn);

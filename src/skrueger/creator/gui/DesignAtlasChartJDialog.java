@@ -56,8 +56,8 @@ import org.geotools.feature.FeatureCollection;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.sld.RangeAxis;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
 import schmitzm.jfree.chart.style.ChartAxisStyle;
@@ -624,7 +624,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				fieldNames = ASUtil.getValueFieldNames(styledLayer
 						.getFeatureSource(), false);
 			} else
-				fieldNames = ASUtil.getNumericalFieldNames(schema, false);
+				fieldNames = FeatureUtil.getNumericalFieldNames(schema, false);
 			final AttributesJComboBox attribComboBox = new AttributesJComboBox(
 					schema, styledLayer.getAttributeMetaDataMap(), fieldNames);
 
@@ -1060,7 +1060,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		SimpleFeatureType schema = styledLayer.getFeatureSource().getSchema();
 
 		final AttributesJComboBox attribComboBox = new AttributesJComboBox(
-				schema, styledLayer.getAttributeMetaDataMap(), ASUtil
+				schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
 						.getNumericalFieldNames(schema, false));
 		final String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
 		attribComboBox.setSelectedItem(attributeName);

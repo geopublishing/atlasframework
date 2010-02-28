@@ -33,6 +33,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.JPanel;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasViewer;
@@ -79,7 +80,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 
 		atts = ASUtil.getValueFieldNames(schema, false).size();
 
-		final List<String> numericalFieldNames = ASUtil.getNumericalFieldNames(
+		final List<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
 				schema, false);
 		numAtts = numericalFieldNames.size();
 		visNumAtts = 0;

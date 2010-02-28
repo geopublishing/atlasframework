@@ -23,11 +23,6 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 		super(styledFeatures);
 	}
 
-//	@Override
-//	public SingleRuleList getDefaultTemplate() {
-//		return ASUtil.getDefaultPolygonTemplate();
-//	}
-
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));

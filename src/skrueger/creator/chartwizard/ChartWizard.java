@@ -25,6 +25,7 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import skrueger.AttributeMetadata;
@@ -205,7 +206,7 @@ public class ChartWizard extends WizardBranchController {
 		 */
 		initialProperties.put(NUMBER_OF_ATTRIBS, ASUtil.getValueFieldNames(
 				featureSource, false).size());
-		initialProperties.put(NUMBER_OF_NUMERIC_ATTRIBS, ASUtil
+		initialProperties.put(NUMBER_OF_NUMERIC_ATTRIBS, FeatureUtil
 				.getNumericalFieldNames(featureSource.getSchema(), false).size());
 
 		if (editChart == null) {
