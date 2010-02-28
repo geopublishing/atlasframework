@@ -25,7 +25,9 @@ import org.apache.log4j.Logger;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.Name;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -37,6 +39,7 @@ import org.xml.sax.SAXParseException;
 import rachel.ResourceManager;
 import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -475,8 +478,8 @@ public class AMLImport {
 			CoordinateReferenceSystem defaultCRS = GeoImportUtilURL
 					.readProjectionFile(defaultCrsUrl);
 			GeoImportUtil.setDefaultCRS(defaultCRS); // TODO Default CRS must be
-														// part of
-														// AtlasCOnfig!!!
+			// part of
+			// AtlasCOnfig!!!
 		} catch (IOException e) {
 			LOGGER.error(
 					"Error reading " + AtlasConfig.DEFAULTCRS_FILENAME
@@ -991,11 +994,17 @@ public class AMLImport {
 			} else if (name.equals("keywords")) {
 				dplvfs.setKeywords(parseTranslation(ac.getLanguages(), n));
 			} else if (name.equals(AMLUtil.TAG_attributeMetadata)) {
-				final AttributeMetadata attribute = parseAttributeMetadata(
-						dplvfs, ac, n);
-				if (attribute != null) {
-					dplvfs.getAttributeMetaDataMap().put(attribute.getName(),
-							attribute);
+				try {
+					final AttributeMetadata attribute = parseAttributeMetadata(
+							dplvfs, ac, n);
+					if (attribute != null) {
+						dplvfs.getAttributeMetaDataMap().put(
+								attribute.getName(), attribute);
+					}
+				} catch (AtlasRecoverableException e) {
+					statusDialog.warningOccurred(
+							"Parsing attribute descriptions", "", e
+									.getMessage());
 				}
 			} else if (name.equals("layerStyle")) {
 				dplvfs.addLayerStyle(parseLayerStyle(ac, n, dplvfs));
@@ -1067,9 +1076,9 @@ public class AMLImport {
 		FeatureChartStyle featureChartStyle = (FeatureChartStyle) ChartStyleUtil
 				.readStyleFromXML(chartStyleURL,
 						FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY);
-		
-//		System.out.println("after loading\n"+"  "+featureChartStyle);
-		
+
+		// System.out.println("after loading\n"+"  "+featureChartStyle);
+
 		AttributeMetadataMap attributeMetaDataMap = dplvfs
 				.getAttributeMetaDataMap();
 
@@ -1080,9 +1089,10 @@ public class AMLImport {
 			// How to handle chartstyles that had attributes removed?
 		}
 
-		FeatureChartUtil.passNoDataValues(attributeMetaDataMap, featureChartStyle);
-		
-//		System.out.println("after correcting\n"+"  "+featureChartStyle);
+		FeatureChartUtil.passNoDataValues(attributeMetaDataMap,
+				featureChartStyle);
+
+		// System.out.println("after correcting\n"+"  "+featureChartStyle);
 		return featureChartStyle;
 	}
 
@@ -1200,12 +1210,21 @@ public class AMLImport {
 
 		// The NameImpl may not be constructed with a "" as namespace, but a
 		// null!
-		final NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
-				.isEmpty() ? null : nameSpace : null, localname);
+		// NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
+		// .isEmpty() ? null : nameSpace : null, localname);
+		// TODO we loos the namespace setting now again.
+
+		Name correctedAttName = FeatureUtil.findBestMatchingAttribute(dplvfs
+				.getSchema(), localname);
+		if (correctedAttName == null)
+			throw new AtlasRecoverableException(
+					"Couldn't find any existing attribute that the described attribute '"
+							+ localname
+							+ "' could belong to. Maybe the attribute has been deleted. The meatdata is thrown away.");
 
 		// Creating the object
-		AttributeMetadata attributeMetadata = new AttributeMetadata(nameImpl,
-				visible, unit);
+		AttributeMetadata attributeMetadata = new AttributeMetadata(
+				correctedAttName, visible, unit);
 		attributeMetadata.setWeight(weight);
 		attributeMetadata.setFunctionA(functionA);
 		attributeMetadata.setFunctionX(functionX);
@@ -1235,7 +1254,7 @@ public class AMLImport {
 					// Depending on the schema we have to transform the String
 					// to Number.
 					AttributeDescriptor attDesc = dplvfs.getSchema()
-							.getDescriptor(nameImpl);
+							.getDescriptor(correctedAttName);
 
 					Class<?> binding = attDesc.getType().getBinding();
 
@@ -1356,10 +1375,10 @@ public class AMLImport {
 					cornersV[iii][0] = Double.parseDouble(pair[0]);
 					cornersV[iii][1] = Double.parseDouble(pair[1]);
 				}
-				// TODO defaultMapArea has to store the crs!?! Map should store it's crs?!
-				map.setDefaultMapArea(new ReferencedEnvelope( 
-						cornersV[0][0], cornersV[0][1],
-						cornersV[1][0], cornersV[1][1],null));
+				// TODO defaultMapArea has to store the crs!?! Map should store
+				// it's crs?!
+				map.setDefaultMapArea(new ReferencedEnvelope(cornersV[0][0],
+						cornersV[0][1], cornersV[1][0], cornersV[1][1], null));
 
 			} else if (tagName.equals("maxExtend")) {
 				final String value = childNode.getFirstChild().getNodeValue();
