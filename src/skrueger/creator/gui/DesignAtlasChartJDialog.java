@@ -65,6 +65,7 @@ import schmitzm.jfree.chart.style.ChartPlotStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
+import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle.AggregationFunction;
@@ -596,7 +597,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Ensure that there are no NULLs
 		 */
 		if (chartStyle.getAxisStyle(axisNr) == null) {
-			chartStyle.setAxisStyle(axisNr, new ChartAxisStyle());
+			chartStyle.setAxisStyle(axisNr, new FeatureChartAxisStyle(chartStyle));
 			fireChartChangedEvent();
 		}
 
@@ -1091,17 +1092,17 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						String unit = styledLayer.getAttributeMetaDataMap()
 								.get(attributeName).getUnit();
 
-						// Raus wenn die chart lib das selber macht
-						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-						AggregationFunction aggr = chartStyle
-								.getAttributeAggregation(ChartStyle.RANGE_AXIS);
-						if (aggr != null) {
-							if (unit != null && !unit.isEmpty())
-								unit += ", ";
-							unit += aggr.getTitle();
-
-						}
-						// bis hier
+//						// Raus wenn die chart lib das selber macht
+//						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+//						AggregationFunction aggr = chartStyle
+//								.getAttributeAggregation(ChartStyle.RANGE_AXIS);
+//						if (aggr != null) {
+//							if (unit != null && !unit.isEmpty())
+//								unit += ", ";
+//							unit += aggr.getTitle();
+//
+//						}
+//						// bis hier
 
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
@@ -1178,17 +1179,17 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				if (seriesIdx == 0) {
 					String unit = atm.getUnit();
 
-					// Raus wenn die chart lib das selber macht
-					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-					AggregationFunction aggr = chartStyle
-							.getAttributeAggregation(1);
-					if (aggr != null) {
-						if (unit != null && !unit.isEmpty())
-							unit += ", ";
-						unit += aggr.getTitle();
-
-					}
-					// bis hier
+//					// Raus wenn die chart lib das selber macht
+//					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+//					AggregationFunction aggr = chartStyle
+//							.getAttributeAggregation(1);
+//					if (aggr != null) {
+//						if (unit != null && !unit.isEmpty())
+//							unit += ", ";
+//						unit += aggr.getTitle();
+//
+//					}
+//					// bis hier
 
 					getUnitTextFieldForAxis(seriesIdx + 1).setText(unit);
 				}

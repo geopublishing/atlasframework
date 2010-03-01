@@ -27,6 +27,7 @@ import schmitzm.jfree.chart.style.ChartRendererStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.style.FeatureBasicChartStyle;
+import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
@@ -156,23 +157,23 @@ public class ChartWizardResultProducer implements
 
 				if (index == 1) {
 					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
-							new ChartAxisStyle(
-									attribMetadata.getTitle().copy(), null, 0.,
+							new FeatureChartAxisStyle(
+									chartStyle,attribMetadata.getTitle().copy(), null, 0.,
 									0.));
 
 					String unit = attribMetadata.getUnit();
 					
-					// Raus wenn die chart lib das selber macht
-					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-					AggregationFunction aggr = chartStyle
-							.getAttributeAggregation(ChartStyle.RANGE_AXIS);
-					if (aggr != null) {
-						if (unit != null && !unit.isEmpty())
-							unit += ", ";
-						unit += aggr.getTitle();
-
-					}
-					// bis hier
+//					// Raus wenn die chart lib das selber macht
+//					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+//					AggregationFunction aggr = chartStyle
+//							.getAttributeAggregation(ChartStyle.RANGE_AXIS);
+//					if (aggr != null) {
+//						if (unit != null && !unit.isEmpty())
+//							unit += ", ";
+//						unit += aggr.getTitle();
+//
+//					}
+//					// bis hier
 
 					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
 							.setUnitString(unit);
@@ -181,8 +182,8 @@ public class ChartWizardResultProducer implements
 
 			} else {
 				// This is the DOMAIN AXIS (index = 0)
-				chartStyle.setAxisStyle(index, new ChartAxisStyle(
-						attribMetadata.getTitle().copy(), null, 0., 0.));
+				chartStyle.setAxisStyle(index, new FeatureChartAxisStyle(
+						chartStyle,attribMetadata.getTitle().copy(), null, 0., 0.));
 			}
 		}
 
