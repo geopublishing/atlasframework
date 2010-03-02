@@ -176,7 +176,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * Creates a default Rules Label for that class. It checks and honours the
 	 * {@link LANGUAGE_MODE} setting.
 	 * 
-	 * @param lowber
+	 * @param lower
 	 *            Lower (included) class break
 	 * @param upper
 	 *            Upper (excluded) class break
@@ -184,12 +184,17 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 *            If <code>true</code>, the upper class break is also included.
 	 * @return something like
 	 */
-	public String createDefaultClassLabelFor(Number lowber, Number upper,
+	public String createDefaultClassLabelFor(Number lower, Number upper,
 			boolean isLast) {
 
-		String limitsLabel = "[" + classDigitsFormat.format(lowber) + " - "
+		String limitsLabel = "[" + classDigitsFormat.format(lower) + " - "
 				+ classDigitsFormat.format(upper);
 		limitsLabel += isLast ? "]" : "[";
+
+		String unit = getStyledFeatures().getAttributeMetaDataMap().get(
+				getValue_field_name()).getUnit();
+		if (unit != null && !unit.isEmpty())
+			limitsLabel += " "+ unit;
 
 		String stringTitle;
 		/**
@@ -207,8 +212,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
-		Collection<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
-				getStyledFeatures().getSchema(), false);
+		Collection<String> numericalFieldNames = FeatureUtil
+				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
 		if (numericalFieldNames.size() > 0)
 			value_field_name = numericalFieldNames.toArray(new String[] {})[0];
 	}

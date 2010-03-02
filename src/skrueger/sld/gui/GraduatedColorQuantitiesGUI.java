@@ -178,7 +178,19 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 					@Override
 					public void classifierAvailableNewClasses(
 							final ClassificationChangeEvent e) {
+
 						ruleList.pushQuite();
+
+						boolean noChange = classifier.getValue_field_name()
+								.equals(ruleList.getValue_field_name())
+								&& (classifier.getNormalizer_field_name() == ruleList
+										.getNormalizer_field_name() || classifier
+										.getNormalizer_field_name()
+										.equals(
+												ruleList
+														.getNormalizer_field_name()))
+								&& classifier.getNumClasses() == ruleList
+										.getNumClasses();
 
 						try {
 
@@ -189,7 +201,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							ruleList.setMethod(classifier.getMethod());
 							// rulesList.setNumClasses(classifier.getNumClasses());
 							ruleList.setClassLimits(
-									classifier.getClassLimits(), true); // here
+									classifier.getClassLimits(), !noChange); // here
 
 							if (classifier.getMethod() == METHOD.MANUAL) {
 								getNumClassesJComboBox().setEnabled(false);
@@ -447,19 +459,19 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							if (e.getStateChange() == ItemEvent.SELECTED) {
 
 								final String valueField = (String) e.getItem();
-							
+
 								getJComboBoxNormalizationField()
 										.setModel(
 												classifier
 														.createNormalizationFieldsComboBoxModel());
-							
 
 								LOGGER.debug("Set valuefield to " + valueField);
 								classifier.setValue_field_name(valueField);
-//
-//								// When the valueField has been changed by the
-//								// user, throw away the ruleTitles
-//								rulesList.getRuleTitles().clear();
+								//
+								// // When the valueField has been changed by
+								// the
+								// // user, throw away the ruleTitles
+								// rulesList.getRuleTitles().clear();
 							}
 						}
 					});
@@ -483,8 +495,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			jComboBoxNormlization.setSelectedItem(rulesList
 					.getNormalizer_field_name());
 
-//			jComboBoxNormlization.addItem(null); // means "no normalization" REMOVED, is now already in the model creation
-			
+			// jComboBoxNormlization.addItem(null); // means "no normalization"
+			// REMOVED, is now already in the model creation
+
 			jComboBoxNormlization
 					.addItemListener(new java.awt.event.ItemListener() {
 						public void itemStateChanged(
@@ -498,10 +511,11 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 									classifier
 											.setNormalizer_field_name((String) e
 													.getItem());
-//
-//								// When the normalizationField has been changed
-//								// by the user, throw away the ruleTitles
-//								rulesList.getRuleTitles().clear();
+								//
+								// // When the normalizationField has been
+								// changed
+								// // by the user, throw away the ruleTitles
+								// rulesList.getRuleTitles().clear();
 
 							}
 						}

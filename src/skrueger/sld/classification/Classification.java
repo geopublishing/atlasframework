@@ -116,10 +116,9 @@ public abstract class Classification {
 			lastOpressedEvent = null;
 		}
 		
+		if (evt == null) return;
+		
 		LOGGER.debug("Classification fires event: " + evt.getType());
-
-		// SwingUtilities.invokeLater(new Runnable() {
-		// public void run() {
 
 		for (ClassificationChangedListener l : listeners) {
 			switch (evt.getType()) {
@@ -147,8 +146,6 @@ public abstract class Classification {
 
 			}
 		}
-		// }
-		// });
 
 	}
 

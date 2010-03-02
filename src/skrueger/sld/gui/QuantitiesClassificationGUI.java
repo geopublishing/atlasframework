@@ -87,8 +87,6 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	protected final static Logger LOGGER = Logger
 			.getLogger(QuantitiesClassificationGUI.class);
 
-	
-
 	private static final BufferedImage ERROR_IMAGE = new BufferedImage(400,
 			200, BufferedImage.TYPE_3BYTE_BGR);
 
