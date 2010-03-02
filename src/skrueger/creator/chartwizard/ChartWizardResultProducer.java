@@ -20,7 +20,6 @@ import org.apache.log4j.Logger;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.jfree.chart.style.ChartAxisStyle;
 import schmitzm.jfree.chart.style.ChartLabelStyle;
 import schmitzm.jfree.chart.style.ChartPlotStyle;
 import schmitzm.jfree.chart.style.ChartRendererStyle;
@@ -31,7 +30,6 @@ import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle.AggregationFunction;
 import skrueger.AttributeMetadata;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GpUtil;
@@ -152,7 +150,7 @@ public class ChartWizardResultProducer implements
 				// For BAR charts mean is the default aggregation function
 				if (chartType == ChartType.BAR) {
 					chartStyle.setAttributeAggregation(index,
-							AggregationFunction.AVG);
+							schmitzm.jfree.feature.AggregationFunction.AVG);
 				}
 
 				if (index == 1) {

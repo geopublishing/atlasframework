@@ -68,8 +68,8 @@ public class AtlasStylerTest {
 	public void testGetNumericalFieldNames() {
 		// GraduatedColorRuleList grColors = new GraduatedColorRuleList(
 		// featureSource_polygon);
-//	    Collection<String> numericalFieldNames = ASUtil.getNumericalFieldNames(featureSource_polygon.getSchema(),false);
-        Collection<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(featureSource_polygon.getSchema(),false);
+		Collection<String> numericalFieldNames = FeatureUtil
+				.getNumericalFieldNames(featureSource_polygon.getSchema(),false);
 		System.out.println(numericalFieldNames);
 
 		String[] strings = numericalFieldNames.toArray(new String[] {});

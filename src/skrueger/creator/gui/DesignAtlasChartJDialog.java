@@ -64,11 +64,11 @@ import schmitzm.jfree.chart.style.ChartAxisStyle;
 import schmitzm.jfree.chart.style.ChartPlotStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
+import schmitzm.jfree.feature.AggregationFunction;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
 import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle.AggregationFunction;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
@@ -226,12 +226,15 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		backup();
 
-		initGUI();
-
-		setVisible(true);
-
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
-				SwingUtil.NORTHEAST);
+		try {
+			initGUI();
+			SwingUtil.setRelativeFramePosition(this, owner,
+					SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
+			setVisible(true);
+		} catch (RuntimeException e) {
+			cancel();
+			throw (e);
+		}
 	}
 
 	/**
@@ -597,7 +600,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Ensure that there are no NULLs
 		 */
 		if (chartStyle.getAxisStyle(axisNr) == null) {
-			chartStyle.setAxisStyle(axisNr, new FeatureChartAxisStyle(chartStyle));
+			chartStyle.setAxisStyle(axisNr, new FeatureChartAxisStyle(
+					chartStyle));
 			fireChartChangedEvent();
 		}
 
@@ -1067,10 +1071,28 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		attribComboBox.setSelectedItem(attributeName);
 
 		/** build a panel... */
-		final JPanel attPanel = new JPanel(new MigLayout("wrap 1, fillx"),
+		final JPanel attPanel = new JPanel(new MigLayout("flowy, wrap 2"),
 				AtlasCreator.R("DesignAtlasChartJDialog.SeriesDataBorderTitle"));
 
-		attPanel.add(attribComboBox, "split 3");
+		attPanel.add(attribComboBox);
+
+		// A Panel that will list all NODATA-Value
+		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
+				.getAttributeMetaDataMap(), attributeName, styledLayer
+				.getSchema());
+		// Update the chart whenever the NODATA values changes
+		noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals(
+						NoDataPanel.PROPERTY_NODATAVALUES))
+					fireChartChangedEvent(true);
+			}
+		});
+		attPanel.add(noDataPanel);
+
+		final JPanel panelAggregationWeight = new JPanel(new MigLayout());
 
 		if (chartStyle.getType() == ChartType.BAR) {
 			// bei pie auch, wenn wir das mal haben
@@ -1092,20 +1114,24 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						String unit = styledLayer.getAttributeMetaDataMap()
 								.get(attributeName).getUnit();
 
-//						// Raus wenn die chart lib das selber macht
-//						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-//						AggregationFunction aggr = chartStyle
-//								.getAttributeAggregation(ChartStyle.RANGE_AXIS);
-//						if (aggr != null) {
-//							if (unit != null && !unit.isEmpty())
-//								unit += ", ";
-//							unit += aggr.getTitle();
-//
-//						}
-//						// bis hier
+						// // Raus wenn die chart lib das selber macht
+						// //
+						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+						// AggregationFunction aggr = chartStyle
+						// .getAttributeAggregation(ChartStyle.RANGE_AXIS);
+						// if (aggr != null) {
+						// if (unit != null && !unit.isEmpty())
+						// unit += ", ";
+						// unit += aggr.getTitle();
+						//
+						// }
+						// // bis hier
 
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
+
+						panelAggregationWeight.setEnabled(aggFunc != null
+								&& aggFunc.isWeighted());
 					}
 
 					fireChartChangedEvent(true);
@@ -1117,31 +1143,52 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			aggregationFunctionJComboBox.setToolTipText(AtlasCreator
 					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
 
-			attPanel
+			JPanel panelAggregationMethod = new JPanel(new MigLayout());
+			panelAggregationMethod
 					.add(
 							new JLabel(
 									AtlasCreator
 											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label")),
-							"gap unrel");
+							"gap unrel, w 150");
 
-			attPanel.add(aggregationFunctionJComboBox);
-		}
+			panelAggregationMethod.add(aggregationFunctionJComboBox);
+			attPanel.add(panelAggregationMethod);
 
-		// A Panel that will list all NODATA-Value
-		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
-				.getAttributeMetaDataMap(), attributeName, styledLayer
-				.getSchema());
-		// Update the chart whenever the NODATA values changes
-		noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			panelAggregationWeight
+					.add(
+							new JLabel(
+									AtlasCreator
+											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.WeightLabel")),
+							"gap unrel, w 150");
+			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
+					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
+							.getNumericalFieldNames(schema, false));
 
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				if (evt.getPropertyName().equals(
-						NoDataPanel.PROPERTY_NODATAVALUES))
+			// Initialize weight combobox
+			weightFunctionAttributeComboBox.setSelectedItem(chartStyle
+					.getAttributeAggregationWeightAttributeName(seriesIdx + 1));
+			weightFunctionAttributeComboBox.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					String weightAttName = (String) weightFunctionAttributeComboBox
+							.getSelectedItem();
+					chartStyle.setAttributeAggregationWeightAttributeName(
+							seriesIdx + 1, weightAttName);
+
+					AttributeMetadata atm = styledLayer
+							.getAttributeMetaDataMap().get(weightAttName);
+					chartStyle.setNoDataWeightValues(seriesIdx - 1, atm
+							.getNodataValues());
+
 					fireChartChangedEvent(true);
-			}
-		});
-		attPanel.add(noDataPanel);
+				}
+			});
+
+			panelAggregationWeight.add(weightFunctionAttributeComboBox);
+			attPanel.add(panelAggregationWeight);
+
+		}
 
 		// When the attribute is changed, a lot of things happen:
 		attribComboBox.addItemListener(new ItemListener() {
@@ -1179,17 +1226,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				if (seriesIdx == 0) {
 					String unit = atm.getUnit();
 
-//					// Raus wenn die chart lib das selber macht
-//					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-//					AggregationFunction aggr = chartStyle
-//							.getAttributeAggregation(1);
-//					if (aggr != null) {
-//						if (unit != null && !unit.isEmpty())
-//							unit += ", ";
-//						unit += aggr.getTitle();
-//
-//					}
-//					// bis hier
+					// // Raus wenn die chart lib das selber macht
+					// //
+					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
+					// AggregationFunction aggr = chartStyle
+					// .getAttributeAggregation(1);
+					// if (aggr != null) {
+					// if (unit != null && !unit.isEmpty())
+					// unit += ", ";
+					// unit += aggr.getTitle();
+					//
+					// }
+					// // bis hier
 
 					getUnitTextFieldForAxis(seriesIdx + 1).setText(unit);
 				}
