@@ -47,9 +47,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPaneEvent;
+import schmitzm.geotools.gui.XMapPaneTool;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.MapPaneEvent;
 import schmitzm.swing.JPanel;
 import skrueger.AttributeMetadata;
 import skrueger.RasterLegendData;
@@ -72,7 +73,6 @@ import skrueger.geotools.StyledGridCoverageInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledRasterInterface;
 import skrueger.geotools.StyledRasterPyramidInterface;
-import skrueger.geotools.XMapPaneTool;
 import skrueger.geotools.ZoomRestrictableGridInterface;
 import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.selection.FeatureMapLayerSelectionSynchronizer;
@@ -361,7 +361,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			private MapLayerLegend lastSpecialGroup;
 
-			public void performMapPaneEvent(MapPaneEvent e) {
+			public void performMapPaneEvent(XMapPaneEvent e) {
 
 				if (e instanceof FeatureSelectedEvent) {
 					FeatureSelectedEvent fse = (FeatureSelectedEvent) e;
@@ -387,7 +387,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		// ****************************************************************************
 		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
 
-			public void performMapPaneEvent(MapPaneEvent e) {
+			public void performMapPaneEvent(XMapPaneEvent e) {
 				if (e instanceof FeatureSelectedEvent) {
 					FeatureSelectedEvent fse = (FeatureSelectedEvent) e;
 					if (fse.getSourceObject() instanceof FeatureLayerFilterDialog) {

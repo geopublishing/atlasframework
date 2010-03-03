@@ -19,9 +19,9 @@ import org.geotools.map.MapLayer;
 
 import schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import schmitzm.geotools.gui.GeoMapPane;
+import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.MapPaneEvent;
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.atlas.ExportableLayer;
 import skrueger.atlas.dp.DpEntry;
@@ -85,7 +85,7 @@ public class DesignAtlasMapLegend extends AtlasMapLegend {
 		 **********************************************************************/
 		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
 
-			public void performMapPaneEvent(MapPaneEvent e) {
+			public void performMapPaneEvent(XMapPaneEvent e) {
 				if (e instanceof FeatureSelectedEvent) {
 					FeatureSelectedEvent fse = (FeatureSelectedEvent) e;
 					if (fse.getSourceObject() instanceof FeatureLayerFilterDialog) {

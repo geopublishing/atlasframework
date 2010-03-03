@@ -59,6 +59,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPane;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
 import schmitzm.jfree.chart.style.ChartAxisStyle;
 import schmitzm.jfree.chart.style.ChartPlotStyle;
@@ -89,7 +90,6 @@ import skrueger.creator.AtlasCreator;
 import skrueger.creator.GPDialogManager;
 import skrueger.creator.chart.GeneralChartSettingsJPanel;
 import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.XMapPane;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModel;

@@ -21,8 +21,8 @@ import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.MapPaneEvent;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
 import schmitzm.swing.SwingUtil;
 import skrueger.atlas.gui.ClickInfoDialog;
@@ -73,7 +73,7 @@ public class StylerMapView extends MapView {
 		clickInfoDialog = new ClickInfoDialog(owner, false, layerManager, null);
 		infoClickMapPaneListener = new JMapPaneListener() {
 
-			public void performMapPaneEvent(MapPaneEvent evt) {
+			public void performMapPaneEvent(XMapPaneEvent evt) {
 
 				/**
 				 * This only reacts if the INFO tool has been selected in the

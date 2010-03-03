@@ -40,6 +40,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.vividsolutions.jts.geom.Point;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
@@ -47,7 +48,6 @@ import schmitzm.swing.SwingUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.map.Map;
 import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.XMapPane;
 
 /**
  * This Dialog wraps a {@link ClickInfoPanel} that shows information when the

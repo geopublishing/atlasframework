@@ -51,6 +51,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
@@ -68,7 +69,6 @@ import skrueger.atlas.map.Map;
 import skrueger.atlas.resource.icons.Icons;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.XMapPane;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 

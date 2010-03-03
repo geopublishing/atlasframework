@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.jfree.chart.JFreeChart;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPane;
 import schmitzm.jfree.JFreeChartUtil;
 import schmitzm.jfree.chart.selection.DatasetSelectionModel;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -41,7 +42,6 @@ import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.gui.map.AtlasMapLegend;
 import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.XMapPane;
 import skrueger.geotools.selection.ChartSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModel;
