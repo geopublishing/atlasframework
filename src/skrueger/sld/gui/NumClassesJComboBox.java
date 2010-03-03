@@ -16,7 +16,7 @@ import javax.swing.JComboBox;
 
 import org.apache.log4j.Logger;
 
-import skrueger.sld.ASUtil;
+import schmitzm.swing.SwingUtil;
 import skrueger.sld.classification.ClassificationChangeEvent;
 import skrueger.sld.classification.ClassificationChangedAdapter;
 import skrueger.sld.classification.QuantitiesClassification;
@@ -81,7 +81,7 @@ public class NumClassesJComboBox extends JComboBox {
 		 */
 		setEnabled(classifier.getMethod() != METHOD.MANUAL);
 
-		ASUtil.addMouseWheelForCombobox(this);
+		SwingUtil.addMouseWheelForCombobox(this);
 
 	}
 

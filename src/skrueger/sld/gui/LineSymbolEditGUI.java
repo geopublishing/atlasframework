@@ -78,6 +78,7 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.swing.SwingUtil;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AtlasStyler;
 import skrueger.swing.ColorButton;
@@ -290,7 +291,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
 		}
 		return jComboBoxStrokeWidth;
 	}
@@ -328,7 +329,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
 		}
 		return jComboBoxStrokeOpacity;
 	}
@@ -416,7 +417,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
 
 		}
 		return jComboBoxLinejoin;
@@ -443,7 +444,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			}
 			jComboBoxLinejoin.setSelectedItem(preset);
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxLineCap);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxLineCap);
 		}
 		return jComboBoxLineCap;
 	}
@@ -609,7 +610,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			ASUtil.selectOrInsert(jComboBoxDashOffset, symbolizer.getStroke()
 					.getDashOffset());
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxDashOffset);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxDashOffset);
 		}
 		return jComboBoxDashOffset;
 	}

@@ -425,7 +425,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxSize);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxSize);
 
 		}
 		return jComboBoxSize;
@@ -509,7 +509,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 			singleSymbolRuleList.addListener(rotationComboBoxReactsToStyleChangeListener);
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxRotation);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxRotation);
 
 			jComboBoxRotation.setEnabled(singleSymbolRuleList.hasRotation());
 			jLabelRotation.setEnabled(singleSymbolRuleList.hasRotation());

@@ -18,7 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import skrueger.sld.ASUtil;
+import schmitzm.swing.SwingUtil;
 import skrueger.sld.classification.ClassificationChangeEvent;
 import skrueger.sld.classification.ClassificationChangedAdapter;
 import skrueger.sld.classification.QuantitiesClassification;
@@ -101,7 +101,7 @@ public class ClassificationMethodJComboBox extends JComboBox {
 
 		});
 
-		ASUtil.addMouseWheelForCombobox(this);
+		SwingUtil.addMouseWheelForCombobox(this);
 
 	}
 }

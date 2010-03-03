@@ -359,7 +359,7 @@
 //
 //			});
 //
-//			ASUtil.addMouseWheelForCombobox(jComboBoxMarkType);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxMarkType);
 //		}
 //		return jComboBoxMarkType;
 //	}
@@ -549,7 +549,7 @@
 //				jLabelStrokeWidth.setEnabled(false);
 //			}
 //
-//			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
 //		}
 //		return jComboBoxStrokeWidth;
 //	}
@@ -588,7 +588,7 @@
 //
 //			});
 //
-//			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
 //		}
 //		return jComboBoxStrokeOpacity;
 //	}
@@ -731,7 +731,7 @@
 //
 //			});
 //
-//			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicSize);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicSize);
 //		}
 //		return jComboBoxGraphicSize;
 //	}
@@ -770,7 +770,7 @@
 //
 //				}
 //			});
-//			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicOpacity);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicOpacity);
 //		}
 //		return jComboBoxGraphicOpacity;
 //	}
@@ -911,7 +911,7 @@
 //				}
 //
 //			});
-//			ASUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
 //
 //		}
 //		return jComboBoxFillOpacity;
@@ -942,7 +942,7 @@
 //
 //				}
 //			});
-//			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicRotation);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicRotation);
 //
 //		}
 //		return jComboBoxGraphicRotation;
@@ -1200,7 +1200,7 @@
 //
 //				}
 //			});
-//			ASUtil.addMouseWheelForCombobox(jComboBoxDisplacementX);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementX);
 //		}
 //		return jComboBoxDisplacementX;
 //	}
@@ -1239,7 +1239,7 @@
 //
 //				}
 //			});
-//			ASUtil.addMouseWheelForCombobox(jComboBoxDisplacementY);
+//			SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementY);
 //		}
 //		return jComboBoxDisplacementY;
 //	}

@@ -45,6 +45,7 @@ import org.opengis.filter.expression.PropertyName;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.JPanel;
+import schmitzm.swing.SwingUtil;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AbstractRuleList;
 import skrueger.sld.AtlasStyler;
@@ -303,7 +304,7 @@ public class TextRuleListGUI extends JPanel {
 
 			jComboBoxClass.setSelectedIndex(0);
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxClass, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxClass, false);
 			
 			jComboBoxClass.setRenderer( new DefaultListCellRenderer() {
 				@Override

@@ -407,7 +407,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxMarkType);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxMarkType);
 		}
 		return jComboBoxMarkType;
 	}
@@ -601,7 +601,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 				jLabelStrokeWidth.setEnabled(false);
 			}
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
 		}
 		return jComboBoxStrokeWidth;
 	}
@@ -640,7 +640,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
 		}
 		return jComboBoxStrokeOpacity;
 	}
@@ -721,7 +721,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicSize);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicSize);
 		}
 		return jComboBoxGraphicSize;
 	}
@@ -759,7 +759,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 				}
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicOpacity);
 		}
 		return jComboBoxGraphicOpacity;
 	}
@@ -899,7 +899,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 				}
 
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
 
 		}
 		return jComboBoxFillOpacity;
@@ -930,7 +930,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 				}
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicRotation);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicRotation);
 
 		}
 		return jComboBoxGraphicRotation;
@@ -1160,7 +1160,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 	//
 	// }
 	// });
-	// ASUtil.addMouseWheelForCombobox(jComboBoxDisplacementX);
+	// SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementX);
 	// }
 	// return jComboBoxDisplacementX;
 	// }
@@ -1199,7 +1199,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 	//
 	// }
 	// });
-	// ASUtil.addMouseWheelForCombobox(jComboBoxDisplacementY);
+	// SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementY);
 	// }
 	// return jComboBoxDisplacementY;
 	// }

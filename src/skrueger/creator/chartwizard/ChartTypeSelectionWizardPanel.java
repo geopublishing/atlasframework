@@ -26,9 +26,9 @@ import org.apache.log4j.Logger;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.jfree.chart.style.ChartType;
+import schmitzm.swing.SwingUtil;
 import skrueger.creator.AtlasCreator;
 import skrueger.i8n.I8NUtil;
-import skrueger.sld.ASUtil;
 
 /**
  * This {@link WizardPage} allows to choose the basic type of diagram.
@@ -136,7 +136,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(typeSelectionJComboBox);
+			SwingUtil.addMouseWheelForCombobox(typeSelectionJComboBox);
 
 		}
 		return typeSelectionJComboBox;

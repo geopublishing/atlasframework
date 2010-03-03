@@ -1097,10 +1097,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		if (chartStyle.getType() == ChartType.BAR) {
 			// bei pie auch, wenn wir das mal haben
-			
-			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
-					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
-							.getNumericalFieldNames(schema, false));
 
 			final AggregationFunctionJComboBox aggregationFunctionJComboBox = new AggregationFunctionJComboBox();
 			aggregationFunctionJComboBox.addItemListener(new ItemListener() {
@@ -1135,10 +1131,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
 
+						// Grey-out the weighting attribute if the aggregation method doesn't support it.
 						panelAggregationWeight.setEnabled(aggFunc != null
 								&& aggFunc.isWeighted());
-						
-						weightFunctionAttributeComboBox.setSelectedItem(chartStyle.getAttributeAggregationWeightAttributeName(idx));
 					}
 
 					fireChartChangedEvent(true);
@@ -1167,7 +1162,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 									AtlasCreator
 											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.WeightLabel")),
 							"gap unrel, w 150");
-
+			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
+					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
+							.getNumericalFieldNames(schema, false));
 
 			// Initialize weight combobox
 			weightFunctionAttributeComboBox.setSelectedItem(chartStyle

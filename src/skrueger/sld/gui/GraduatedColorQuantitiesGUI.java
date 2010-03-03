@@ -476,7 +476,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						}
 					});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxValueField, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxValueField, false);
 		}
 		return jComboBoxValueField;
 	}
@@ -520,7 +520,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							}
 						}
 					});
-			ASUtil.addMouseWheelForCombobox(jComboBoxNormlization, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxNormlization, false);
 		}
 		return jComboBoxNormlization;
 	}
@@ -1047,7 +1047,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxPalettes, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPalettes, false);
 		}
 		return jComboBoxPalettes;
 	}

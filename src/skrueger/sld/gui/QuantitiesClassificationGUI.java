@@ -1035,7 +1035,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			});
 
 			// Hier dreht was falsch!
-			ASUtil.addMouseWheelForCombobox(jComboBoxColumns, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxColumns, false);
 		}
 		return jComboBoxColumns;
 	}

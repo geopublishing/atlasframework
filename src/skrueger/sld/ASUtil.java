@@ -21,7 +21,6 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Reader;
@@ -240,8 +239,8 @@ public class ASUtil {
 		if (empty)
 			result.add("");
 
-		final Vector<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
-				schema, false);
+		final Vector<String> numericalFieldNames = FeatureUtil
+				.getNumericalFieldNames(schema, false);
 		result.addAll(numericalFieldNames);
 		final Vector<String> valueFieldNames = getValueFieldNames(schema, false);
 		for (final String vaString : valueFieldNames) {
@@ -251,58 +250,6 @@ public class ASUtil {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Adds a {@link MouseWheelListener} to a {@link JComboBox} => allows to
-	 * scroll through the items with the mouse wheel.
-	 * 
-	 * @param Can
-	 *            be used to reverse the wheel (Down => Up in list). Default is
-	 *            true
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 */
-	public static void addMouseWheelForCombobox(final JComboBox comboBox,
-			final boolean upIsUp) {
-
-		if (comboBox.getMouseWheelListeners().length > 0) {
-			LOGGER
-					.warn("There already exists another MouseWheelListener. I will not add mine!");
-			return;
-		}
-
-		comboBox.addMouseWheelListener(new MouseWheelListener() {
-			public void mouseWheelMoved(final java.awt.event.MouseWheelEvent e) {
-
-				if (!comboBox.isEnabled())
-					return;
-
-				if (e.getWheelRotation() < 0 && upIsUp
-						|| e.getWheelRotation() > 0 && !upIsUp) {
-					if (comboBox.getSelectedIndex() < comboBox.getItemCount() - 1)
-						comboBox
-								.setSelectedIndex(comboBox.getSelectedIndex() + 1);
-				} else {
-					if (comboBox.getSelectedIndex() > 0)
-						comboBox
-								.setSelectedIndex(comboBox.getSelectedIndex() - 1);
-				}
-			}
-		});
-	}
-
-	/**
-	 * Adds a {@link MouseWheelListener} to a {@link JComboBox} => allows to
-	 * scroll through the items with the mouse wheel.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 */
-	public static void addMouseWheelForCombobox(
-			final JComboBox comboBoxRuleListType) {
-		addMouseWheelForCombobox(comboBoxRuleListType, true);
 	}
 
 	/**

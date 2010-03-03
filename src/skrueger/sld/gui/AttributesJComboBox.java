@@ -90,7 +90,7 @@ public class AttributesJComboBox extends JComboBox {
 		 */
 		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false);
 
-		ASUtil.addMouseWheelForCombobox(this);
+		SwingUtil.addMouseWheelForCombobox(this);
 
 		/**
 		 * Use the AttributeMetaData (if available) for label+tooltip

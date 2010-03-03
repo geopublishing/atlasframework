@@ -251,7 +251,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 				}
 
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxFillOpacity);
 
 		}
 		return jComboBoxFillOpacity;
@@ -480,7 +480,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
 		}
 		return jComboBoxStrokeWidth;
 	}
@@ -526,7 +526,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
 		}
 		return jComboBoxStrokeOpacity;
 	}
@@ -736,7 +736,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 				}
 
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxGraphicFillOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxGraphicFillOpacity);
 
 		}
 		return jComboBoxGraphicFillOpacity;

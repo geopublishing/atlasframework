@@ -253,7 +253,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 			jComboBoxRuleListType.setModel(cbmodel);
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxRuleListType, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxRuleListType, false);
 
 			/**
 			 * Set the ComboBox to the RUle that was last changed. If the

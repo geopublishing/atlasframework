@@ -207,7 +207,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 		});
 
-		ASUtil.addMouseWheelForCombobox(jComboBoxValueAttribute);
+		SwingUtil.addMouseWheelForCombobox(jComboBoxValueAttribute);
 
 		return jComboBoxValueAttribute;
 	}
@@ -288,7 +288,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxPalette, false);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPalette, false);
 		}
 		return jComboBoxPalette;
 	}

@@ -52,6 +52,7 @@ import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.JPanel;
+import schmitzm.swing.SwingUtil;
 import skrueger.sld.ASProps;
 import skrueger.sld.ASUtil;
 import skrueger.sld.AbstractRuleList;
@@ -205,7 +206,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxHaloFillOpacity);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxHaloFillOpacity);
 		}
 		return jComboBoxHaloFillOpacity;
 
@@ -308,7 +309,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxHaloRadius);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxHaloRadius);
 		}
 		return jComboBoxHaloRadius;
 	}
@@ -412,7 +413,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxFont);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxFont);
 		}
 		return jComboBoxFont;
 	}
@@ -449,7 +450,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			});
 
-			ASUtil.addMouseWheelForCombobox(jComboBoxSize);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxSize);
 		}
 		return jComboBoxSize;
 	}
@@ -509,7 +510,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				}
 
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxStyle);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStyle);
 		}
 		return jComboBoxStyle;
 	}
@@ -536,7 +537,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				}
 
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxWeight);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxWeight);
 		}
 		return jComboBoxWeight;
 	}
@@ -693,7 +694,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 						}
 					});
-			ASUtil
+			SwingUtil
 					.addMouseWheelForCombobox(jComboBoxPointPlacementDisplacementX);
 		}
 		return jComboBoxPointPlacementDisplacementX;
@@ -737,7 +738,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 						}
 					});
-			ASUtil
+			SwingUtil
 					.addMouseWheelForCombobox(jComboBoxPointPlacementDisplacementY);
 		}
 		return jComboBoxPointPlacementDisplacementY;
@@ -778,7 +779,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				}
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxPointPlacementAnchorY);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPointPlacementAnchorY);
 		}
 		return jComboBoxPointPlacementAnchorY;
 	}
@@ -813,7 +814,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				}
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxPointPlacementAnchorX);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPointPlacementAnchorX);
 		}
 		return jComboBoxPointPlacementAnchorX;
 	}
@@ -848,7 +849,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				}
 			});
-			ASUtil.addMouseWheelForCombobox(jComboBoxLabelRotation);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxLabelRotation);
 		}
 		return jComboBoxLabelRotation;
 	}
@@ -990,7 +991,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					"right, split 2, gap right rel");
 			jPanelPlacement.add(jComboBoxLinePlacementPerpendicularGap,
 					"left, gap right unrel");
-			ASUtil
+			SwingUtil
 					.addMouseWheelForCombobox(jComboBoxLinePlacementPerpendicularGap);
 		}
 		return jPanelPlacement;
