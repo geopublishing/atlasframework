@@ -66,6 +66,7 @@ import schmitzm.jfree.chart.style.ChartPlotStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.AggregationFunction;
+import schmitzm.jfree.feature.AggregationFunctionJComboBox;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
 import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
@@ -1096,6 +1097,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		if (chartStyle.getType() == ChartType.BAR) {
 			// bei pie auch, wenn wir das mal haben
+			
+			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
+					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
+							.getNumericalFieldNames(schema, false));
 
 			final AggregationFunctionJComboBox aggregationFunctionJComboBox = new AggregationFunctionJComboBox();
 			aggregationFunctionJComboBox.addItemListener(new ItemListener() {
@@ -1132,6 +1137,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 						panelAggregationWeight.setEnabled(aggFunc != null
 								&& aggFunc.isWeighted());
+						
+						weightFunctionAttributeComboBox.setSelectedItem(chartStyle.getAttributeAggregationWeightAttributeName(idx));
 					}
 
 					fireChartChangedEvent(true);
@@ -1160,9 +1167,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 									AtlasCreator
 											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.WeightLabel")),
 							"gap unrel, w 150");
-			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
-					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
-							.getNumericalFieldNames(schema, false));
+
 
 			// Initialize weight combobox
 			weightFunctionAttributeComboBox.setSelectedItem(chartStyle
