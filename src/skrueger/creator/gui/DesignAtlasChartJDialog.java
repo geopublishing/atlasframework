@@ -1153,8 +1153,20 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							.getNumericalFieldNames(schema, false));
 
 			// Initialize weight combobox
-			weightFunctionAttributeComboBox.setSelectedItem(chartStyle
-					.getAttributeAggregationWeightAttributeName(seriesIdx + 1));
+			String attributeAggregationWeightAttributeName_InChartStyle = chartStyle
+					.getAttributeAggregationWeightAttributeName(seriesIdx + 1);
+
+			if (attributeAggregationWeightAttributeName_InChartStyle == null) {
+				attributeAggregationWeightAttributeName_InChartStyle = (String) weightFunctionAttributeComboBox
+						.getItemAt(0);
+				chartStyle.setAttributeAggregationWeightAttributeName(
+						seriesIdx + 1,
+						attributeAggregationWeightAttributeName_InChartStyle);
+			}
+
+			weightFunctionAttributeComboBox
+					.setSelectedItem(attributeAggregationWeightAttributeName_InChartStyle);
+
 			weightFunctionAttributeComboBox.addItemListener(new ItemListener() {
 
 				@Override
@@ -1166,8 +1178,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 					AttributeMetadata atm = styledLayer
 							.getAttributeMetaDataMap().get(weightAttName);
-					chartStyle.setWeightAttributeNoDataValues(seriesIdx - 1, atm
-							.getNodataValues());
+					chartStyle.setWeightAttributeNoDataValues(seriesIdx - 1,
+							atm.getNodataValues());
 
 					fireChartChangedEvent(true);
 				}
