@@ -1104,8 +1104,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 
-					System.out.println(e);
-
 					int idx = seriesIdx + 1;
 					AggregationFunction aggFunc = (AggregationFunction) aggregationFunctionJComboBox
 							.getSelectedItem();
@@ -1117,19 +1115,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					if (idx == ChartStyle.RANGE_AXIS) {
 						String unit = styledLayer.getAttributeMetaDataMap()
 								.get(attributeName).getUnit();
-
-						// // Raus wenn die chart lib das selber macht
-						// //
-						// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-						// AggregationFunction aggr = chartStyle
-						// .getAttributeAggregation(ChartStyle.RANGE_AXIS);
-						// if (aggr != null) {
-						// if (unit != null && !unit.isEmpty())
-						// unit += ", ";
-						// unit += aggr.getTitle();
-						//
-						// }
-						// // bis hier
 
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
@@ -1235,19 +1220,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 				if (seriesIdx == 0) {
 					String unit = atm.getUnit();
-
-					// // Raus wenn die chart lib das selber macht
-					// //
-					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-					// AggregationFunction aggr = chartStyle
-					// .getAttributeAggregation(1);
-					// if (aggr != null) {
-					// if (unit != null && !unit.isEmpty())
-					// unit += ", ";
-					// unit += aggr.getTitle();
-					//
-					// }
-					// // bis hier
 
 					getUnitTextFieldForAxis(seriesIdx + 1).setText(unit);
 				}

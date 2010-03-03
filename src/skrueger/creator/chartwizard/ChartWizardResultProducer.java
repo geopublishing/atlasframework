@@ -160,18 +160,6 @@ public class ChartWizardResultProducer implements
 									0.));
 
 					String unit = attribMetadata.getUnit();
-					
-//					// Raus wenn die chart lib das selber macht
-//					// http://wald.intevation.org/tracker/index.php?func=detail&aid=1302&group_id=47&atid=293
-//					AggregationFunction aggr = chartStyle
-//							.getAttributeAggregation(ChartStyle.RANGE_AXIS);
-//					if (aggr != null) {
-//						if (unit != null && !unit.isEmpty())
-//							unit += ", ";
-//						unit += aggr.getTitle();
-//
-//					}
-//					// bis hier
 
 					chartStyle.getAxisStyle(ChartStyle.RANGE_AXIS)
 							.setUnitString(unit);
