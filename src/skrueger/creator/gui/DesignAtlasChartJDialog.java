@@ -1103,6 +1103,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
+
+					System.out.println(e);
+
 					int idx = seriesIdx + 1;
 					AggregationFunction aggFunc = (AggregationFunction) aggregationFunctionJComboBox
 							.getSelectedItem();
@@ -1131,7 +1134,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
 
-						// Grey-out the weighting attribute if the aggregation method doesn't support it.
+						// Grey-out the weighting attribute if the aggregation
+						// method doesn't support it.
 						panelAggregationWeight.setEnabled(aggFunc != null
 								&& aggFunc.isWeighted());
 					}
@@ -1142,16 +1146,13 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 			aggregationFunctionJComboBox.setSelectedItem(chartStyle
 					.getAttributeAggregation(seriesIdx + 1));
-			aggregationFunctionJComboBox.setToolTipText(AtlasCreator
-					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
 
 			JPanel panelAggregationMethod = new JPanel(new MigLayout());
-			panelAggregationMethod
-					.add(
-							new JLabel(
-									AtlasCreator
-											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label")),
-							"gap unrel, w 150");
+			JLabel aggMethodlabel = new JLabel(AtlasCreator
+					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label"));
+			aggMethodlabel.setToolTipText(AtlasCreator
+					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
+			panelAggregationMethod.add(aggMethodlabel, "gap unrel, w 150");
 
 			panelAggregationMethod.add(aggregationFunctionJComboBox);
 			attPanel.add(panelAggregationMethod);
@@ -1180,7 +1181,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 					AttributeMetadata atm = styledLayer
 							.getAttributeMetaDataMap().get(weightAttName);
-					chartStyle.setNoDataWeightValues(seriesIdx - 1, atm
+					chartStyle.setWeightAttributeNoDataValues(seriesIdx - 1, atm
 							.getNodataValues());
 
 					fireChartChangedEvent(true);
@@ -1188,6 +1189,13 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			});
 
 			panelAggregationWeight.add(weightFunctionAttributeComboBox);
+
+			// Initialize the correct enabled/disabled state
+			AggregationFunction aggFunc = chartStyle
+					.getAttributeAggregation(seriesIdx + 1);
+			panelAggregationWeight.setEnabled(aggFunc != null
+					&& aggFunc.isWeighted());
+
 			attPanel.add(panelAggregationWeight);
 
 		}

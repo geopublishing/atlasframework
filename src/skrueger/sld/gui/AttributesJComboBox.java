@@ -11,6 +11,7 @@
 package skrueger.sld.gui;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -36,7 +37,8 @@ import skrueger.sld.AtlasStyler;
 /**
  * This extension of a {@link JComboBox} is specialized on the visualization of
  * a selection of attribute. If {@link AttributeMetadata} is stored in the
- * {@link AtlasStyler}, it's used for lables and tooltips.
+ * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
+ * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored. 
  * 
  * @author Stefan A. Krüger
  */
@@ -70,6 +72,15 @@ public class AttributesJComboBox extends JComboBox {
 		setValues(schema_, attributeMetaDataMap_, comboBoxModel_);
 		SwingUtil.setMaximumWidth(this, 350);
 	}
+	
+	/**
+	 * This {@link JComboBox} is only sending {@link ItemEvent} of thype SELECTED. UNSELETED is omittet. 
+	 */
+	@Override
+	protected void fireItemStateChanged(ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.DESELECTED) return;
+		super.fireItemStateChanged(e);
+	}
 
 	/**
 	 * Should only be called once! Either by the constructor, or when the
@@ -90,7 +101,7 @@ public class AttributesJComboBox extends JComboBox {
 		 */
 		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false);
 
-		SwingUtil.addMouseWheelForCombobox(this);
+		SwingUtil.addMouseWheelForCombobox(this, false);
 
 		/**
 		 * Use the AttributeMetaData (if available) for label+tooltip
