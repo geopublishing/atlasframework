@@ -548,20 +548,20 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 					media.show(getJFrame());
 				} else {
 					try {
-						if (getMapView() == null) {
-							AVUtil.showMessageDialog(getJFrame(), // TODO
-									// Sollte
-									// eigentlich
-									// ja
-									// garnicht
-									// passieren
-									"what to do with that layer?");
-						} else {
+//						if (getMapView() == null) {
+//							AVUtil.showMessageDialog(getJFrame(), // TODO
+//									// Sollte
+//									// eigentlich
+//									// ja
+//									// garnicht
+//									// passieren
+//									"what to do with that layer?");
+//						} else {
 
 							// Calling the mapView to add the Layer
 							getMapView().addStyledLayer(
 									(StyledLayerInterface<?>) dpe);
-						}
+//						}
 					} catch (Throwable e) {
 						ExceptionDialog.show(getJFrame(), e);
 					}

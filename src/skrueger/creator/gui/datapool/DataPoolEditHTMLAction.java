@@ -42,11 +42,7 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 
 	@Override
 	/*
-	 * Delete a {@link DpEntry} from the {@link DataPool} and also remove all
-	 * references to it from the {@link MapPool} or the {@link Group}s
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 * Kr&uuml;ger</a>
+	 * Opens a dialog to edit the HTML for this layer
 	 */
 	public void actionPerformed(ActionEvent e) {
 

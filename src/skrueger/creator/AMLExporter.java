@@ -280,8 +280,8 @@ public class AMLExporter {
 					final Style style = dpl.getStyle();
 					StylingUtil.saveStyleToSLD(style, DataUtilities
 							.urlToFile(DataUtilities.changeUrlExt(dpl
-									.getUrl(statusWindow), "sld"))); // TODO
-																		// TODO
+									.getUrl(statusWindow), "sld"))); 
+																	
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
 					statusWindow.exceptionOccurred(e);
@@ -865,33 +865,33 @@ public class AMLExporter {
 				.getFunctionA()).toString());
 		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib
 				.getFunctionX()).toString());
-
-		try { // TODO backward compatibility. remove in 1.4
-			final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
-			boolean found = false;
-			for (int i = 0; i < schema.getAttributeCount(); i++) {
-				if (schema.getAttributeDescriptors().get(i).getName().equals(
-						attrib.getName())) {
-					element.setAttribute("col", String.valueOf(i));
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				LOGGER.warn("No column for attrib " + attrib.getLocalName()
-						+ " found. Throwing the metadata away...");
-				return null;
-			}
-		} catch (final Exception e) {
-			statusWindow
-					.exceptionOccurred(new AtlasException(
-							"Could not determine the indexes of attribute names '"
-									+ attrib.getLocalName()
-									+ "' of layer '"
-									+ dpe.getTitle()
-									+ "'.\n This is used for backward compatibility with GP 1.2 only.",
-							e));
-		}
+//
+//		try { // was a TO DO: was for backward compatibility. remove in 1.4
+//			final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
+//			boolean found = false;
+//			for (int i = 0; i < schema.getAttributeCount(); i++) {
+//				if (schema.getAttributeDescriptors().get(i).getName().equals(
+//						attrib.getName())) {
+//					element.setAttribute("col", String.valueOf(i));
+//					found = true;
+//					break;
+//				}
+//			}
+//			if (!found) {
+//				LOGGER.warn("No column for attrib " + attrib.getLocalName()
+//						+ " found. Throwing the metadata away...");
+//				return null;
+//			}
+//		} catch (final Exception e) {
+//			statusWindow
+//					.exceptionOccurred(new AtlasException(
+//							"Could not determine the indexes of attribute names '"
+//									+ attrib.getLocalName()
+//									+ "' of layer '"
+//									+ dpe.getTitle()
+//									+ "'.\n This is used for backward compatibility with GP 1.2 only.",
+//							e));
+//		}
 
 		element.setAttribute("visible", String.valueOf(attrib.isVisible()));
 

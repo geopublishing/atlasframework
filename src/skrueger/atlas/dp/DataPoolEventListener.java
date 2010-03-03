@@ -15,6 +15,6 @@ import java.util.EventListener;
 /**
  * a tagging class
  */
-public class DatapoolEventListener implements EventListener {
+public class DataPoolEventListener implements EventListener {
 
 }
