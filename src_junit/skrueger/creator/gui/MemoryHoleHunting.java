@@ -31,6 +31,7 @@ import org.junit.Test;
 import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.geotools.gui.SelectableXMapPane;
+import schmitzm.geotools.gui.XMapPane;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
@@ -43,7 +44,6 @@ import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.GPDialogManager;
 import skrueger.creator.TestingUtil;
 import skrueger.creator.gui.map.DesignMapViewJDialog;
-import skrueger.geotools.XMapPane;
 
 import com.vividsolutions.jts.geom.Envelope;
 

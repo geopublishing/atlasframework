@@ -21,10 +21,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.gui.XMapPane;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.TestingUtil;
-import skrueger.geotools.XMapPane;
 
 public class DpLayerVectorTest extends TestCase {
 
