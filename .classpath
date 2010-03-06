@@ -1,27 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" output="bin" path="src"/>
+	<classpathentry kind="src" output="test-classes" path="src_junit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/gt26-selfmade"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="xulu_libs/jai-1_1_3/lib"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="src_junit"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SCHMITZM"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/colt"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jai_for_gt26-x"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/jFreeChart-1.0.13"/>
-	<classpathentry kind="lib" path="lib/simplyHTML/gnu-regexp-1.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/swingx-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/tools.jar"/>
-	<classpathentry kind="lib" path="lib/wizard-0.998.1.jar"/>
-	<classpathentry kind="lib" path="lib/jnlp.jar"/>
-	<classpathentry kind="lib" path="lib/jsmooth/BrowserLauncher2-10.jar"/>
-	<classpathentry kind="lib" path="lib/jsmooth/dtdparser113.jar"/>
-	<classpathentry kind="lib" path="lib/jsmooth/jox116.jar"/>
-	<classpathentry kind="lib" path="lib/jsmooth/jsmoothgen.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
