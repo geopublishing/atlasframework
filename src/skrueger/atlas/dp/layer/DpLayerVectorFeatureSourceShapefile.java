@@ -62,7 +62,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	 */
 	@Override
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject() {
-		// long startT = new Date().getTime();
 
 		URL localUrl = getUrl((AtlasStatusDialog) null); // TODO
 		if (localUrl == null) {
@@ -162,8 +161,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 		} catch (Exception e) {
 			setBrokenException(e);
 			return null;
-		} finally {
-			// System.out.println( new Date().getTime() - startT+ "ms");
 		}
 	}
 

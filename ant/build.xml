@@ -41,7 +41,7 @@
 	<property name="GP.exportJWS" value="dist/export_jws" />
 	<property name="GP.exportAlone" value="dist/export_standalone" />
 	<property name="GP.exportAlone.zip" value="${GP.exportAlone}/Geopublisher_and_AtlasStyler_with_all_dependencies.zip" />
-	<property name="release_path" value="gp" />
+	<property name="release_path" value="gp_stable_14" />
 
 	<!-- Optionally tell us where the ISDSS Utility project is stored 
 	<property name="IMPETUS.UTILITY" value="../ImpetusUtility" />
