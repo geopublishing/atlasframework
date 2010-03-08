@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry combineaccessrules="false" kind="src" path="/SCHMITZM"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" output="test-classes" path="src_junit"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -141,6 +142,5 @@
 	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis-ext/1.3.04/xml-apis-ext-1.3.04.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/xmlgraphics-commons/1.2/xmlgraphics-commons-1.2.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SCHMITZM"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
