@@ -1,8 +1,8 @@
 =====================================================================
 === GEOPUBLISHING-FRAMEWORK README (2009-05-13, Stefan A. Krüger) ===
-===                                                        		  ===
+===                                                   		  ===
 === http://wald.intevation.org/projects/atlas-framework/          ===
-=== http://www.geopublishing.org				                  ===
+=== http://www.geopublishing.org		                  ===
 =====================================================================
 
 This file contains some informations ...
@@ -69,17 +69,12 @@ exporting an atlas, it exports all the JARs from its own classpath.
 -----------------------------------------------------------
 (3) Building the project
 -----------------------------------------------------------
- cd ant
- ant jar
-
-The "ant" folder contains a build.xml. The target "jar" should work on any OS. It 
-creates av.jar, gp.jar and as.jar. gp.jar and as.jar are both executable JARs with 
-manifests.
-
-To create an installation of Geopublisher or AtlasStyler (like it is running on geopublishing.org), 
-use the tasks "export_full" and "export_quick". This build Geopublisher and configures a 
-JavaWebStart 
-   
+Since version 1.5 this project uses maven and ant.
+You have to add the following jars to your local maven repository:
+mvn install:install-file -DgroupId=javax.jnlp -DartifactId=jnlp -Dversion=1.6 -Dpackaging=pom -Dfile=lib.notinmaven/jnlp/jnlp.pom
+mvn install:install-file -DgroupId=javax.jnlp -DartifactId=jnlp -Dversion=1.6 -Dpackaging=jar -Dfile=lib.notinmaven/jnlp/jnlp.jar
+mvn install:install-file -DgroupId=net.charabia -DartifactId=jsmoothgen -Dversion=0.9.9-7 -Dpackaging=pom -Dfile=lib.notinmaven/jsmooth/jsmoothgen-0.9.9-7.pom
+mvn install:install-file -DgroupId=net.charabia -DartifactId=jsmoothgen -Dversion=0.9.9-7 -Dpackaging=jar -Dfile=lib.notinmaven/jsmooth/jsmoothgen-0.9.9-7.jar
 
 -----------------------------------------------------------
 (4) Localization and i8n
