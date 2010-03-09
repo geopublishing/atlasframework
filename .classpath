@@ -1,146 +1,147 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry combineaccessrules="false" kind="src" path="/SCHMITZM"/>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" output="test-classes" path="src_junit"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1.jar" sourcepath="M2_REPO/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1.jar" sourcepath="M2_REPO/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-anim/1.7/batik-anim-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-awt-util/1.7/batik-awt-util-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-bridge/1.7/batik-bridge-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-css/1.7/batik-css-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-dom/1.7/batik-dom-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-ext/1.7/batik-ext-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-gvt/1.7/batik-gvt-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-parser/1.7/batik-parser-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-script/1.7/batik-script-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-svg-dom/1.7/batik-svg-dom-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-svggen/1.7/batik-svggen-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-transcoder/1.7/batik-transcoder-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-util/1.7/batik-util-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-xml/1.7/batik-xml-1.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/colt/colt/1.2.0/colt-1.2.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar" sourcepath="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/commons-io/commons-io/1.4/commons-io-1.4.jar" sourcepath="M2_REPO/commons-io/commons-io/1.4/commons-io-1.4-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/commons-io/commons-io/1.4/commons-io-1.4-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.3/commons-lang-2.3.jar" sourcepath="M2_REPO/commons-lang/commons-lang/2.3/commons-lang-2.3-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar" sourcepath="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/wutka/dtdparser/1.21/dtdparser-1.21.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/jhlabs/filters/2.0.235/filters-2.0.235.jar" sourcepath="M2_REPO/com/jhlabs/filters/2.0.235/filters-2.0.235-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/fop/0.94/fop-0.94.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/opengis/geoapi/2.3-M1/geoapi-2.3-M1.jar" sourcepath="M2_REPO/org/opengis/geoapi/2.3-M1/geoapi-2.3-M1-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/opengis/geoapi-pending/2.3-M1/geoapi-pending-2.3-M1.jar" sourcepath="M2_REPO/org/opengis/geoapi-pending/2.3-M1/geoapi-pending-2.3-M1-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/gnu-regexp/gnu-regexp/1.1.4/gnu-regexp-1.1.4.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-api/2.6.2/gt-api-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-api/2.6.2/gt-api-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-arcgrid/2.6.2/gt-arcgrid-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-arcgrid/2.6.2/gt-arcgrid-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-brewer/2.6.2/gt-brewer-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-brewer/2.6.2/gt-brewer-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-coverage/2.6.2/gt-coverage-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-coverage/2.6.2/gt-coverage-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-cql/2.6.2/gt-cql-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-cql/2.6.2/gt-cql-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-epsg-hsql/2.6.2/gt-epsg-hsql-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-epsg-hsql/2.6.2/gt-epsg-hsql-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-geotiff/2.6.2/gt-geotiff-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-geotiff/2.6.2/gt-geotiff-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-image/2.6.2/gt-image-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-image/2.6.2/gt-image-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-imageio-ext-gdal/2.6.2/gt-imageio-ext-gdal-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imageio-ext-gdal/2.6.2/gt-imageio-ext-gdal-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-imagemosaic/2.6.2/gt-imagemosaic-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imagemosaic/2.6.2/gt-imagemosaic-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-imagepyramid/2.6.2/gt-imagepyramid-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imagepyramid/2.6.2/gt-imagepyramid-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-jp2k/2.6.2/gt-jp2k-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-jp2k/2.6.2/gt-jp2k-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-legacy/2.6.2/gt-legacy-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-legacy/2.6.2/gt-legacy-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-main/2.6.2/gt-main-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-main/2.6.2/gt-main-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-metadata/2.6.2/gt-metadata-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-metadata/2.6.2/gt-metadata-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-referencing/2.6.2/gt-referencing-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-referencing/2.6.2/gt-referencing-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-render/2.6.2/gt-render-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-render/2.6.2/gt-render-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-shapefile/2.6.2/gt-shapefile-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-shapefile/2.6.2/gt-shapefile-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-shapefile-renderer/2.6.2/gt-shapefile-renderer-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-shapefile-renderer/2.6.2/gt-shapefile-renderer-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-svg/2.6.2/gt-svg-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-svg/2.6.2/gt-svg-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-swing/2.6.2/gt-swing-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-swing/2.6.2/gt-swing-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-wms/2.6.2/gt-wms-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-wms/2.6.2/gt-wms-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/geotools/gt-xml/2.6.2/gt-xml-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-xml/2.6.2/gt-xml-2.6.2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.7/hsqldb-1.8.0.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-arcgrid/1.0.5/imageio-ext-arcgrid-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-arcgrid/1.0.5/imageio-ext-arcgrid-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-customstreams/1.0.5/imageio-ext-customstreams-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-customstreams/1.0.5/imageio-ext-customstreams-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdal-bindings/1.4.5b/imageio-ext-gdal-bindings-1.4.5b.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdaldted/1.0.5/imageio-ext-gdaldted-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdaldted/1.0.5/imageio-ext-gdaldted-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecw/1.0.5/imageio-ext-gdalecw-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecw/1.0.5/imageio-ext-gdalecw-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecwjp2/1.0.5/imageio-ext-gdalecwjp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecwjp2/1.0.5/imageio-ext-gdalecwjp2-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalehdr/1.0.5/imageio-ext-gdalehdr-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalehdr/1.0.5/imageio-ext-gdalehdr-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalerdasimg/1.0.5/imageio-ext-gdalerdasimg-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalerdasimg/1.0.5/imageio-ext-gdalerdasimg-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalframework/1.0.5/imageio-ext-gdalframework-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalframework/1.0.5/imageio-ext-gdalframework-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalkakadujp2/1.0.5/imageio-ext-gdalkakadujp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalkakadujp2/1.0.5/imageio-ext-gdalkakadujp2-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsid/1.0.5/imageio-ext-gdalmrsid-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsid/1.0.5/imageio-ext-gdalmrsid-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsidjp2/1.0.5/imageio-ext-gdalmrsidjp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsidjp2/1.0.5/imageio-ext-gdalmrsidjp2-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalnitf/1.0.5/imageio-ext-gdalnitf-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalnitf/1.0.5/imageio-ext-gdalnitf-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-geocore/1.0.5/imageio-ext-geocore-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-geocore/1.0.5/imageio-ext-geocore-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-imagereadmt/1.0.5/imageio-ext-imagereadmt-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-imagereadmt/1.0.5/imageio-ext-imagereadmt-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadu/1.0.5/imageio-ext-kakadu-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadu/1.0.5/imageio-ext-kakadu-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadujni/5.2.6/imageio-ext-kakadujni-5.2.6.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-tiff/1.0.5/imageio-ext-tiff-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-tiff/1.0.5/imageio-ext-tiff-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-utilities/1.0.5/imageio-ext-utilities-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-utilities/1.0.5/imageio-ext-utilities-1.0.5-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/media/jai_codec/1.1.3/jai_codec-1.1.3.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/javax/media/jai_core/1.1.3/jai_core-1.1.3-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/javax/media/jai_imageio/1.1/jai_imageio-1.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/jfree/jcommon/1.0.13/jcommon-1.0.13.jar"/>
-	<classpathentry kind="var" path="M2_REPO/jdom/jdom/1.0/jdom-1.0.jar" sourcepath="M2_REPO/jdom/jdom/1.0/jdom-1.0-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/jfree/jfreechart/1.0.13/jfreechart-1.0.13.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/jini/jini-ext/2.1/jini-ext-2.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/javax/jnlp/jnlp/1.6/jnlp-1.6.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/wutka/jox/1.16/jox-1.16.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/charabia/jsmoothgen/0.9.9-7/jsmoothgen-0.9.9-7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/java/dev/jsr-275/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2.jar" sourcepath="M2_REPO/net/java/dev/jsr-275/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/vividsolutions/jts/1.10/jts-1.10.jar" sourcepath="M2_REPO/com/vividsolutions/jts/1.10/jts-1.10-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar" sourcepath="M2_REPO/junit/junit/4.8.1/junit-4.8.1-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar" sourcepath="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/miglayout/miglayout/3.7.2/miglayout-3.7.2.jar" sourcepath="M2_REPO/com/miglayout/miglayout/3.7.2/miglayout-3.7.2-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/com/miglayout/miglayout/3.7.2/miglayout-3.7.2-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/com/miglayout/miglayout/3.7/miglayout-3.7-swing.jar"/>
-	<classpathentry kind="var" path="M2_REPO/de/schmitzm/schmitzm-library/2.0.x-SNAPSHOT/schmitzm-library-2.0.x-SNAPSHOT.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/swinglabs/swing-worker/1.1/swing-worker-1.1.jar" sourcepath="M2_REPO/org/swinglabs/swing-worker/1.1/swing-worker-1.1-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/org/swinglabs/swing-worker/1.1/swing-worker-1.1-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="var" path="M2_REPO/org/swinglabs/swingx/1.6/swingx-1.6.jar" sourcepath="M2_REPO/org/swinglabs/swingx/1.6/swingx-1.6-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/home/stefan/.m2/repository/org/swinglabs/swingx/1.6/swingx-1.6-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/usr/lib/jvm/java-6-sun-1.6.0.15/lib/tools.jar"/>
-	<classpathentry kind="var" path="M2_REPO/java3d/vecmath/1.3.2/vecmath-1.3.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/java/wizard/wizard/-0.998.1/wizard--0.998.1.jar"/>
-	<classpathentry kind="var" path="M2_REPO/xalan/xalan/2.6.0/xalan-2.6.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04-sources.jar"/>
-	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis-ext/1.3.04/xml-apis-ext-1.3.04.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/xmlgraphics-commons/1.2/xmlgraphics-commons-1.2.jar"/>
-	<classpathentry kind="output" path="bin"/>
+  <classpathentry kind="src" path="src"/>
+  <classpathentry kind="src" path="src_junit" output="test-classes"/>
+  <classpathentry kind="output" path="bin"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1.jar" sourcepath="M2_REPO/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/org/apache/avalon/framework/avalon-framework-api/4.3.1/avalon-framework-api-4.3.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1.jar" sourcepath="M2_REPO/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/org/apache/avalon/framework/avalon-framework-impl/4.3.1/avalon-framework-impl-4.3.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-anim/1.7/batik-anim-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-awt-util/1.7/batik-awt-util-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-bridge/1.7/batik-bridge-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-css/1.7/batik-css-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-dom/1.7/batik-dom-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-ext/1.7/batik-ext-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-gvt/1.7/batik-gvt-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-parser/1.7/batik-parser-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-script/1.7/batik-script-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-svg-dom/1.7/batik-svg-dom-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-svggen/1.7/batik-svggen-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-transcoder/1.7/batik-transcoder-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-util/1.7/batik-util-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/batik-xml/1.7/batik-xml-1.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/colt/colt/1.2.0/colt-1.2.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar" sourcepath="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/commons-io/commons-io/1.4/commons-io-1.4.jar" sourcepath="M2_REPO/commons-io/commons-io/1.4/commons-io-1.4-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/commons-io/commons-io/1.4/commons-io-1.4-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.3/commons-lang-2.3.jar" sourcepath="M2_REPO/commons-lang/commons-lang/2.3/commons-lang-2.3-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/commons-logging/commons-logging/1.0.3/commons-logging-1.0.3-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3.jar" sourcepath="M2_REPO/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/commons-pool/commons-pool/1.5.3/commons-pool-1.5.3-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar" sourcepath="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/jhlabs/filters/2.0.235/filters-2.0.235.jar" sourcepath="M2_REPO/com/jhlabs/filters/2.0.235/filters-2.0.235-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/fop/0.94/fop-0.94.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/opengis/geoapi/2.3-M1/geoapi-2.3-M1.jar" sourcepath="M2_REPO/org/opengis/geoapi/2.3-M1/geoapi-2.3-M1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/opengis/geoapi-pending/2.3-M1/geoapi-pending-2.3-M1.jar" sourcepath="M2_REPO/org/opengis/geoapi-pending/2.3-M1/geoapi-pending-2.3-M1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/gnu-regexp/gnu-regexp/1.1.4/gnu-regexp-1.1.4.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-api/2.6.2/gt-api-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-api/2.6.2/gt-api-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-arcgrid/2.6.2/gt-arcgrid-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-arcgrid/2.6.2/gt-arcgrid-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-brewer/2.6.2/gt-brewer-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-brewer/2.6.2/gt-brewer-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-coverage/2.6.2/gt-coverage-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-coverage/2.6.2/gt-coverage-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-cql/2.6.2/gt-cql-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-cql/2.6.2/gt-cql-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-epsg-hsql/2.6.2/gt-epsg-hsql-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-epsg-hsql/2.6.2/gt-epsg-hsql-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-geotiff/2.6.2/gt-geotiff-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-geotiff/2.6.2/gt-geotiff-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-image/2.6.2/gt-image-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-image/2.6.2/gt-image-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-imageio-ext-gdal/2.6.2/gt-imageio-ext-gdal-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imageio-ext-gdal/2.6.2/gt-imageio-ext-gdal-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-imagemosaic/2.6.2/gt-imagemosaic-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imagemosaic/2.6.2/gt-imagemosaic-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-imagepyramid/2.6.2/gt-imagepyramid-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-imagepyramid/2.6.2/gt-imagepyramid-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-jp2k/2.6.2/gt-jp2k-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-jp2k/2.6.2/gt-jp2k-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-legacy/2.6.2/gt-legacy-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-legacy/2.6.2/gt-legacy-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-main/2.6.2/gt-main-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-main/2.6.2/gt-main-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-metadata/2.6.2/gt-metadata-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-metadata/2.6.2/gt-metadata-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-referencing/2.6.2/gt-referencing-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-referencing/2.6.2/gt-referencing-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-render/2.6.2/gt-render-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-render/2.6.2/gt-render-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-shapefile/2.6.2/gt-shapefile-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-shapefile/2.6.2/gt-shapefile-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-shapefile-renderer/2.6.2/gt-shapefile-renderer-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-shapefile-renderer/2.6.2/gt-shapefile-renderer-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-svg/2.6.2/gt-svg-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-svg/2.6.2/gt-svg-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-swing/2.6.2/gt-swing-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-swing/2.6.2/gt-swing-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-wms/2.6.2/gt-wms-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-wms/2.6.2/gt-wms-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/geotools/gt-xml/2.6.2/gt-xml-2.6.2.jar" sourcepath="M2_REPO/org/geotools/gt-xml/2.6.2/gt-xml-2.6.2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.7/hsqldb-1.8.0.7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-arcgrid/1.0.5/imageio-ext-arcgrid-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-arcgrid/1.0.5/imageio-ext-arcgrid-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-customstreams/1.0.5/imageio-ext-customstreams-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-customstreams/1.0.5/imageio-ext-customstreams-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdal-bindings/1.4.5b/imageio-ext-gdal-bindings-1.4.5b.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdaldted/1.0.5/imageio-ext-gdaldted-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdaldted/1.0.5/imageio-ext-gdaldted-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecw/1.0.5/imageio-ext-gdalecw-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecw/1.0.5/imageio-ext-gdalecw-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecwjp2/1.0.5/imageio-ext-gdalecwjp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalecwjp2/1.0.5/imageio-ext-gdalecwjp2-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalehdr/1.0.5/imageio-ext-gdalehdr-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalehdr/1.0.5/imageio-ext-gdalehdr-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalerdasimg/1.0.5/imageio-ext-gdalerdasimg-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalerdasimg/1.0.5/imageio-ext-gdalerdasimg-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalframework/1.0.5/imageio-ext-gdalframework-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalframework/1.0.5/imageio-ext-gdalframework-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalkakadujp2/1.0.5/imageio-ext-gdalkakadujp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalkakadujp2/1.0.5/imageio-ext-gdalkakadujp2-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsid/1.0.5/imageio-ext-gdalmrsid-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsid/1.0.5/imageio-ext-gdalmrsid-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsidjp2/1.0.5/imageio-ext-gdalmrsidjp2-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalmrsidjp2/1.0.5/imageio-ext-gdalmrsidjp2-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalnitf/1.0.5/imageio-ext-gdalnitf-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-gdalnitf/1.0.5/imageio-ext-gdalnitf-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-geocore/1.0.5/imageio-ext-geocore-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-geocore/1.0.5/imageio-ext-geocore-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-imagereadmt/1.0.5/imageio-ext-imagereadmt-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-imagereadmt/1.0.5/imageio-ext-imagereadmt-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadu/1.0.5/imageio-ext-kakadu-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadu/1.0.5/imageio-ext-kakadu-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-kakadujni/5.2.6/imageio-ext-kakadujni-5.2.6.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-tiff/1.0.5/imageio-ext-tiff-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-tiff/1.0.5/imageio-ext-tiff-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-utilities/1.0.5/imageio-ext-utilities-1.0.5.jar" sourcepath="M2_REPO/it/geosolutions/imageio-ext/imageio-ext-utilities/1.0.5/imageio-ext-utilities-1.0.5-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/media/jai_codec/1.1.3/jai_codec-1.1.3.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/media/jai_core/1.1.3/jai_core-1.1.3.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/javax/media/jai_core/1.1.3/jai_core-1.1.3-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/javax/media/jai_imageio/1.1/jai_imageio-1.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/jfree/jcommon/1.0.13/jcommon-1.0.13.jar"/>
+  <classpathentry kind="var" path="M2_REPO/jdom/jdom/1.0/jdom-1.0.jar" sourcepath="M2_REPO/jdom/jdom/1.0/jdom-1.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/jdom/jdom/1.1/jdom-1.1.jar" sourcepath="M2_REPO/org/jdom/jdom/1.1/jdom-1.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/org/jdom/jdom/1.1/jdom-1.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/jfree/jfreechart/1.0.13/jfreechart-1.0.13.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/jini/jini-ext/2.1/jini-ext-2.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/javax/jnlp/jnlp/1.6/jnlp-1.6.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/charabia/jsmoothgen/0.9.9-7/jsmoothgen-0.9.9-7.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/java/dev/jsr-275/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2.jar" sourcepath="M2_REPO/net/java/dev/jsr-275/jsr-275/1.0-beta-2/jsr-275-1.0-beta-2-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/vividsolutions/jts/1.10/jts-1.10.jar" sourcepath="M2_REPO/com/vividsolutions/jts/1.10/jts-1.10-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/junit/junit/4.8.1/junit-4.8.1.jar" sourcepath="M2_REPO/junit/junit/4.8.1/junit-4.8.1-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar" sourcepath="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/com/miglayout/miglayout/3.7.2/miglayout-3.7.2.jar" sourcepath="M2_REPO/com/miglayout/miglayout/3.7.2/miglayout-3.7.2-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/com/miglayout/miglayout/3.7.2/miglayout-3.7.2-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/com/miglayout/miglayout/3.7/miglayout-3.7-swing.jar"/>
+  <classpathentry kind="var" path="M2_REPO/de/schmitzm/schmitzm-library/2.0.x-SNAPSHOT/schmitzm-library-2.0.x-SNAPSHOT.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/swinglabs/swing-worker/1.1/swing-worker-1.1.jar" sourcepath="M2_REPO/org/swinglabs/swing-worker/1.1/swing-worker-1.1-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/org/swinglabs/swing-worker/1.1/swing-worker-1.1-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="var" path="M2_REPO/org/swinglabs/swingx/1.6/swingx-1.6.jar" sourcepath="M2_REPO/org/swinglabs/swingx/1.6/swingx-1.6-sources.jar">
+    <attributes>
+      <attribute value="jar:file:/home/stefan/.m2/repository/org/swinglabs/swingx/1.6/swingx-1.6-javadoc.jar!/" name="javadoc_location"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/usr/lib/jvm/java-6-sun-1.6.0.16/lib/tools.jar"/>
+  <classpathentry kind="var" path="M2_REPO/java3d/vecmath/1.3.2/vecmath-1.3.2.jar"/>
+  <classpathentry kind="var" path="M2_REPO/net/java/wizard/wizard/-0.998.1/wizard--0.998.1.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xalan/xalan/2.6.0/xalan-2.6.0.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar" sourcepath="M2_REPO/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis-ext/1.3.04/xml-apis-ext-1.3.04.jar"/>
+  <classpathentry kind="var" path="M2_REPO/org/apache/xmlgraphics/xmlgraphics-commons/1.2/xmlgraphics-commons-1.2.jar"/>
 </classpath>

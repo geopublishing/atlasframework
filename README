@@ -73,9 +73,11 @@ Since version 1.5 this project uses maven and ant.
 You have to add the following jars to your local maven repository:
 mvn install:install-file -DgroupId=javax.jnlp -DartifactId=jnlp -Dversion=1.6 -Dpackaging=pom -Dfile=lib.notinmaven/jnlp/jnlp.pom
 mvn install:install-file -DgroupId=javax.jnlp -DartifactId=jnlp -Dversion=1.6 -Dpackaging=jar -Dfile=lib.notinmaven/jnlp/jnlp.jar
+
 mvn install:install-file -DgroupId=net.charabia -DartifactId=jsmoothgen -Dversion=0.9.9-7 -Dpackaging=pom -Dfile=lib.notinmaven/jsmooth/jsmoothgen-0.9.9-7.pom
 mvn install:install-file -DgroupId=net.charabia -DartifactId=jsmoothgen -Dversion=0.9.9-7 -Dpackaging=jar -Dfile=lib.notinmaven/jsmooth/jsmoothgen-0.9.9-7.jar
 
+mvn install:install-file -DgroupId=net.java.wizard -DartifactId=wizard -Dversion=-0.998.1 -Dpackaging=jar -Dfile=lib.notinmaven/wizard-0.998.1.jar
 -----------------------------------------------------------
 (4) Localization and i8n
 -----------------------------------------------------------
