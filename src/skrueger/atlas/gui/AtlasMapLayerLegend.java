@@ -157,6 +157,8 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		LayerStyle selectedLayerStyle = dpLayer.getLayerStyleByID(map
 				.getSelectedStyleID(dpLayer.getId()));
 		
+
+
 		if (selectedLayerStyle == null) {
 			// The selected layer has probably been removed completely.
 			// Select the first one instead
@@ -164,7 +166,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 			selectedLayerStyle = dpLayer.getLayerStyleByID(map
 					.getSelectedStyleID(dpLayer.getId()));
 		}
-		
+
 		StyledLayerUtil.updateMapLayerStyleIfChangedAndKeepSelection(mapLayer,
 				selectedLayerStyle.getStyle());
 	}
