@@ -156,6 +156,15 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		LayerStyle selectedLayerStyle = dpLayer.getLayerStyleByID(map
 				.getSelectedStyleID(dpLayer.getId()));
+		
+		if (selectedLayerStyle == null) {
+			// The selected layer has probably been removed completely.
+			// Select the first one instead
+			map.setSelectedStyleID(dpLayer.getId(), availableStyles.get(0));
+			selectedLayerStyle = dpLayer.getLayerStyleByID(map
+					.getSelectedStyleID(dpLayer.getId()));
+		}
+		
 		StyledLayerUtil.updateMapLayerStyleIfChangedAndKeepSelection(mapLayer,
 				selectedLayerStyle.getStyle());
 	}
