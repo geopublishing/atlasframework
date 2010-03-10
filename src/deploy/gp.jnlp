@@ -28,7 +28,7 @@
     <property name="file.encoding" value="UTF-8"/>
     
 	<jar  href="gp.jar"  part="main" main="true"/>
-	<jar  href="lib/schmitzm-2.0.x.jar"  part="main" />
+	<jar  href="lib/schmitzm-2.0.GP14.jar"  part="main" />
 	
 	<nativelib  href="lib/natives.jar" part="main"   />
 	

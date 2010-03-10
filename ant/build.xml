@@ -31,7 +31,7 @@
 	<property environment="env" />
 	<property name="GTversion" value="2.6-SNAPSHOT" />
 	<property name="GP.location" value="." />
-	<property name="SM.location" value="/home/stefan/EigeneDateien/code/schmitzm/trunk" />
+	<property name="SM.location" value="/home/stefan/EigeneDateien/code/schmitzm/2.0-GP14" />
 	<property name="dist.dir" value="dist" />
 	<property name="GP.JAVADOC" value="${dist.dir}/javadoc" />
 	<property name="GP.build" value="${GP.location}/bin" />
@@ -69,19 +69,15 @@
 		<delete dir="${dist.dir}" failonerror="false" />
 	</target>
 
-	<target name="refreshSchmitzm" description="Tries to compile and update schmitzm-2.0.x.jar. ">
+	<target name="refreshSchmitzm" description="Tries to compile and update schmitzm-2.0.GP14.jar. ">
 
 		<echo message="Trying to build schmitzm" />
-		<exec executable="ant" failifexecutionfails="false">
-			<arg line='-f ${SM.location}/build.xml jar' />
+		<exec executable="mvn" failifexecutionfails="false">
+			<arg line='-f ${SM.location}/pom.xml jar' />
 		</exec>
 
-		<copy todir="${GP.lib}Unsigned" failonerror="false">
-			<fileset file="${SM.location}/dist/schmitzm-2.0.x.jar" />
-		</copy>
-
 		<copy todir="${GP.lib}" failonerror="true">
-			<fileset file="${SM.location}/dist/schmitzm-2.0.x.jar" />
+			<fileset file="${SM.location}/dist/schmitzm-2.0.GP14.jar" />
 		</copy>
 
 	</target>
@@ -207,8 +203,8 @@
 
 		<echo message="Nachher = ${classpath1}" />
 
-		<property name="classpath" value="lib/schmitzm-2.0.x.jar ${classpath1}" />
-		<property name="classpath_mitgp" value="lib/schmitzm-2.0.x.jar gp.jar ${classpath1}" />
+		<property name="classpath" value="lib/schmitzm-2.0.GP14.jar ${classpath1}" />
+		<property name="classpath_mitgp" value="lib/schmitzm-2.0.GP14.jar gp.jar ${classpath1}" />
 
 		<echo message="Create gp.jar in ${dist.dir}" />
 		<jar destfile="${dist.dir}/gp.jar" level="4" duplicate="preserve" index="false">
@@ -255,7 +251,7 @@
 
 		<!-- Try to update av.jar in IMPETUS SDSS before it is signed 
 		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${dist.dir}/av.jar" />
-		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${GP.lib}Unsigned/schmitzm-2.0.x.jar" />
+		<copy failonerror="false" todir="${IMPETUS.UTILITY}/lib" file="${GP.lib}Unsigned/schmitzm-2.0.GP14.jar" />
 -->
 
 		<!-- TEMP
@@ -277,7 +273,7 @@
 		<ac:for xmlns:ac="antlib:net.sf.antcontrib" param="file" parallel="true" threadcount="2">
 			<path>
 				<fileset dir="${dist.dir}" includes="gp.jar, as.jar, av.jar" />
-				<fileset dir="${GP.lib}" includes="schmitzm-2.0.x.jar" />
+				<fileset dir="${GP.lib}" includes="schmitzm-2.0.GP14.jar" />
 			</path>
 			<sequential>
 				<p200ant repack="true" segmentLimit="0" srcfile="@{file}" />
@@ -484,11 +480,11 @@
 		<copy file="${dist.dir}/gp.jar" todir="${GP.exportJWS}" />
 		<copy file="${dist.dir}/gp.jar.pack.gz" todir="${GP.exportJWS}" failonerror="false" />
 
-		<!-- Copy packed and sigend schmitzm-2.0.x.jar to the lib directory -->
-		<echo message="Copy packed and sigend schmitzm-2.0.x.jar to the ${GP.exportJWS}/lib directory" />
+		<!-- Copy packed and sigend schmitzm-2.0.GP14.jar to the lib directory -->
+		<echo message="Copy packed and sigend schmitzm-2.0.GP14.jar to the ${GP.exportJWS}/lib directory" />
 		<mkdir dir="${GP.exportJWS}/lib" />
-		<copy file="${GP.lib}/schmitzm-2.0.x.jar" todir="${GP.exportJWS}/lib" />
-		<copy file="${GP.lib}/schmitzm-2.0.x.jar.pack.gz" todir="${GP.exportJWS}/lib" failonerror="false" />
+		<copy file="${GP.lib}/schmitzm-2.0.GP14.jar" todir="${GP.exportJWS}/lib" />
+		<copy file="${GP.lib}/schmitzm-2.0.GP14.jar.pack.gz" todir="${GP.exportJWS}/lib" failonerror="false" />
 		<copy file="${GP.src}/skrueger/creator/export/htaccess" tofile="${GP.exportJWS}/.htaccess" failonerror="true" />
 
 		<!-- Set permissions that allow a web-server to serve these files -->
@@ -500,7 +496,7 @@
 
 
 	<!-- ================================= 
-          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.x.jar WITHOUT libs/* to prodi and empty JWS cache              
+          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.GP14.jar WITHOUT libs/* to prodi and empty JWS cache              
          ================================= -->
 	<target name="rsync_quick" depends="export_quick">
 
@@ -511,7 +507,7 @@
 
 		<!-- rsync quick usually does NOT update anthing from the lib directory. BUT schmitzm is special, so we update it everytime -->
 		<exec executable="/usr/bin/rsync">
-			<arg line='-mrcv --include="schmitzm-2.0.x.jar*" --exclude="*" ${GP.exportJWS}/lib/. prodi:${release_path}/lib' />
+			<arg line='-mrcv --include="schmitzm-2.0.GP14.jar*" --exclude="*" ${GP.exportJWS}/lib/. prodi:${release_path}/lib' />
 		</exec>
 
 		<!--
@@ -528,7 +524,7 @@
 	</target>
 
 	<!-- ================================= 
-          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.x.jar WITHOUT libs/* to prodi and empty JWS cache              
+          target: rsync_quick : Rsync atlas-framework + lib/schmitzm-2.0.GP14.jar WITHOUT libs/* to prodi and empty JWS cache              
          ================================= -->
 	<target name="rsync_quick_local" depends="export_quick">
 
@@ -549,7 +545,7 @@
 
 		<!-- rsync quick usually does NOT update anthing from the lib directory. BUT schmitzm is special, so we update it everytime -->
 		<exec executable="/usr/bin/rsync">
-			<arg line='-mrcv --include="schmitzm-2.0.x.jar*" --exclude="*" ${GP.exportJWS}/lib/. /var/www/${release_path}/lib' />
+			<arg line='-mrcv --include="schmitzm-2.0.GP14.jar*" --exclude="*" ${GP.exportJWS}/lib/. /var/www/${release_path}/lib' />
 		</exec>
 
 		<!--
@@ -671,7 +667,7 @@
 		<pathelement location="${GP.location}/bin" />
 
 		<!-- schmitzm MUSS vor Geotools im Classpath liegen -->
-		<pathelement path="${GP.lib}/schmitzm-2.0.x.jar" />
+		<pathelement path="${GP.lib}/schmitzm-2.0.GP14.jar" />
 
 		<fileset dir="${GP.lib}">
 			<include name="**/*.jar" />
