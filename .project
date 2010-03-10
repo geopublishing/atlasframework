@@ -1,19 +1,19 @@
 <projectDescription>
-  <name>gp-atlas-framwork</name>
+	<name>Atlas-Framework</name>
   <comment>Geopublisher (including AtlasStyler) applications.</comment>
-  <projects/>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.jdt.core.javabuilder</name>
-    </buildCommand>
-    <buildCommand>
-      <name>org.maven.ide.eclipse.maven2Builder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.maven.ide.eclipse.maven2Nature</nature>
-    <nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-    <nature>org.eclipse.jdt.core.javanature</nature>
-    <nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
-  </natures>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.jem.beaninfo.BeanInfoNature</nature>
+	</natures>
 </projectDescription>
+
