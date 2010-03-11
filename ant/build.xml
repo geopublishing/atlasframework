@@ -73,7 +73,7 @@
 
 		<echo message="Trying to build schmitzm" />
 		<exec executable="mvn" failifexecutionfails="false">
-			<arg line='-f ${SM.location}/pom.xml jar' />
+			<arg line='-f ${SM.location}/pom.xml package' />
 		</exec>
 
 		<copy todir="${GP.lib}" failonerror="true">
