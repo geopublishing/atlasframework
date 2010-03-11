@@ -35,7 +35,6 @@ import org.apache.log4j.Logger;
 import org.geotools.data.DataUtilities;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.styling.Style;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -46,6 +45,7 @@ import org.w3c.dom.Node;
 import schmitzm.geotools.io.GeoExportUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
@@ -87,10 +87,17 @@ public class AMLExporter {
 	private final String CHARTSTYLE_FILEENDING = ".chart";
 	final private Logger LOGGER = Logger.getLogger(AMLExporter.class);
 
+	/**
+	 * If <code>true</code>, only layers that are acessible in the exported
+	 * atlas will be described in the atlas.xml
+	 **/
+	private boolean exportMode = false;
+
 	private AtlasStatusDialog statusWindow = null;
 
 	private final AtlasConfigEditable ace;
 	private boolean atlasXmlhasBeenBackupped = false;
+	private File atlasXml = null;
 
 	void info(final String msg) {
 		statusWindow.setDescription(msg);
@@ -105,17 +112,24 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml
+	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever
+	 * has been defined via {@link #setAtlasXml(File)}
 	 * 
 	 * @return true if no exceptions where thrown.
-	 * @throws Exception
+	 */
+	public boolean saveAtlasConfigEditable() throws Exception {
+		return saveAtlasConfigEditable(null);
+	}
+
+	/**
+	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever
+	 * has been defined via {@link #setAtlasXml(File)}
+	 * 
+	 * @return true if no exceptions where thrown.
 	 */
 	public boolean saveAtlasConfigEditable(final AtlasStatusDialog statusWindow)
 			throws Exception {
 		this.statusWindow = statusWindow;
-
-		// Prepare the output file
-		final File atlasXml = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME);
 
 		try {
 			// ****************************************************************************
@@ -132,17 +146,12 @@ public class AMLExporter {
 			GeoExportUtil.writeProjectionFilePrefereEPSG(GeoImportUtil
 					.getDefaultCRS(), new File(ace.getAd(),
 					AtlasConfig.DEFAULTCRS_FILENAME));
-			//
-			// final String msg = "Saving Atlas " + ace.getTitle().toString()
-			// + " to " + ace.getAd().getAbsolutePath() + "/atlas.xml.";
-			// info(msg);
 
 			// Prepare the DOM document for writing
 			final Source source = new DOMSource(exportAtlasConfig());
 
-			if (!atlasXml.exists() && atlasXmlhasBeenBackupped) {
-				// LOGGER.info("atlas.xml is freshly created");
-				atlasXml.createNewFile();
+			if (!getAtlasXml().exists() && atlasXmlhasBeenBackupped) {
+				getAtlasXml().createNewFile();
 			}
 
 			copyAtlasMLSchemaFile();
@@ -151,7 +160,7 @@ public class AMLExporter {
 			// Create the XML
 			// ****************************************************************************
 			final Result result = new StreamResult(new OutputStreamWriter(
-					new FileOutputStream(atlasXml), "utf-8"));
+					new FileOutputStream(getAtlasXml()), "utf-8"));
 
 			// with indenting to make it human-readable
 			final TransformerFactory tf = TransformerFactory.newInstance();
@@ -175,13 +184,16 @@ public class AMLExporter {
 
 			if (atlasXmlhasBeenBackupped)
 				try {
-					LOGGER.warn("copying "+AtlasConfig.ATLAS_XML_FILENAME+".bak to "+AtlasConfig.ATLAS_XML_FILENAME);
+					LOGGER.warn("copying " + AtlasConfig.ATLAS_XML_FILENAME
+							+ ".bak to " + AtlasConfig.ATLAS_XML_FILENAME);
 					AVUtil.copyFile(LOGGER, new File(ace.getAd(),
-							AtlasConfig.ATLAS_XML_FILENAME+".bak"), atlasXml, false);
+							AtlasConfig.ATLAS_XML_FILENAME + ".bak"),
+							getAtlasXml(), false);
 				} catch (final IOException ioEx) {
-					LOGGER.error("error copying "+AtlasConfig.ATLAS_XML_FILENAME+".bak back.", ioEx);
+					LOGGER.error("error copying "
+							+ AtlasConfig.ATLAS_XML_FILENAME + ".bak back.",
+							ioEx);
 					throw (ioEx);
-					// statusWindow.exceptionOccurred(ioEx);
 				}
 
 			if (e instanceof AtlasCancelException)
@@ -266,8 +278,14 @@ public class AMLExporter {
 		}
 		atlas.appendChild(supportedLanguages);
 
+		List<DpEntry<? extends ChartStyle>> unusedDpes = ace.listNotReferencedInGroupTreeNorInAnyMap();
+		
 		// Loop over all data pool entries and add them to the AML Document
 		for (final DpEntry de : ace.getDataPool().values()) {
+
+			if (exportMode && unusedDpes.contains(de))
+				continue;
+			
 			Node exDpe = null;
 
 			checkCancel();
@@ -280,8 +298,8 @@ public class AMLExporter {
 					final Style style = dpl.getStyle();
 					StylingUtil.saveStyleToSLD(style, DataUtilities
 							.urlToFile(DataUtilities.changeUrlExt(dpl
-									.getUrl(statusWindow), "sld"))); 
-																	
+									.getUrl(statusWindow), "sld")));
+
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
 					statusWindow.exceptionOccurred(e);
@@ -322,7 +340,7 @@ public class AMLExporter {
 	}
 
 	private void checkCancel() throws AtlasCancelException {
-		if (statusWindow.isCanceled())
+		if (statusWindow != null && statusWindow.isCanceled())
 			throw new AtlasCancelException();
 	}
 
@@ -374,6 +392,7 @@ public class AMLExporter {
 	 */
 	private Node exportMapPool(final Document document) throws DOMException,
 			AtlasExportException, AtlasCancelException {
+		
 		final MapPool mapPool = ace.getMapPool();
 
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
@@ -386,9 +405,15 @@ public class AMLExporter {
 
 		// maps MUST contain at least one map
 		final Collection<Map> maps = mapPool.values();
-
+		List<String> notReferencedDpeIDs = ace.listNotReferencedInGroupTree();
 		for (final Map map : maps) {
 			checkCancel();
+			
+			if (exportMode  && notReferencedDpeIDs.contains(map.getId())) {
+				// Only export maps that are referenced in the group tree
+				continue;
+			}
+			
 			element.appendChild(exportMap(document, map));
 		}
 		return element;
@@ -521,7 +546,7 @@ public class AMLExporter {
 				// The corresponing DPE has been deleted?!
 				continue;
 			}
-				
+
 			final List<String> chartIDs = map.getAvailableChartIDsFor(layerID);
 
 			if (chartIDs.size() == 0)
@@ -744,7 +769,8 @@ public class AMLExporter {
 	private void exportChartStyleDescriptions(final Document document,
 			final DpLayerVectorFeatureSource dpe, final Element element) {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAtlasConfig();
+		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
+				.getAtlasConfig();
 
 		final File chartsFolder = new File(ace.getFileFor(dpe).getParentFile(),
 				"charts");
@@ -787,9 +813,9 @@ public class AMLExporter {
 				/*
 				 * Write the Chart to XML
 				 */
-				
-//				System.out.println("when saving\n"+"  "+chartStyle);
-				
+
+				// System.out.println("when saving\n"+"  "+chartStyle);
+
 				if (chartStyle instanceof FeatureChartStyle) {
 					FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY
 							.writeStyleToFile((FeatureChartStyle) chartStyle,
@@ -865,33 +891,33 @@ public class AMLExporter {
 				.getFunctionA()).toString());
 		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib
 				.getFunctionX()).toString());
-//
-//		try { // was a TO DO: was for backward compatibility. remove in 1.4
-//			final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
-//			boolean found = false;
-//			for (int i = 0; i < schema.getAttributeCount(); i++) {
-//				if (schema.getAttributeDescriptors().get(i).getName().equals(
-//						attrib.getName())) {
-//					element.setAttribute("col", String.valueOf(i));
-//					found = true;
-//					break;
-//				}
-//			}
-//			if (!found) {
-//				LOGGER.warn("No column for attrib " + attrib.getLocalName()
-//						+ " found. Throwing the metadata away...");
-//				return null;
-//			}
-//		} catch (final Exception e) {
-//			statusWindow
-//					.exceptionOccurred(new AtlasException(
-//							"Could not determine the indexes of attribute names '"
-//									+ attrib.getLocalName()
-//									+ "' of layer '"
-//									+ dpe.getTitle()
-//									+ "'.\n This is used for backward compatibility with GP 1.2 only.",
-//							e));
-//		}
+		//
+		// try { // was a TO DO: was for backward compatibility. remove in 1.4
+		// final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
+		// boolean found = false;
+		// for (int i = 0; i < schema.getAttributeCount(); i++) {
+		// if (schema.getAttributeDescriptors().get(i).getName().equals(
+		// attrib.getName())) {
+		// element.setAttribute("col", String.valueOf(i));
+		// found = true;
+		// break;
+		// }
+		// }
+		// if (!found) {
+		// LOGGER.warn("No column for attrib " + attrib.getLocalName()
+		// + " found. Throwing the metadata away...");
+		// return null;
+		// }
+		// } catch (final Exception e) {
+		// statusWindow
+		// .exceptionOccurred(new AtlasException(
+		// "Could not determine the indexes of attribute names '"
+		// + attrib.getLocalName()
+		// + "' of layer '"
+		// + dpe.getTitle()
+		// + "'.\n This is used for backward compatibility with GP 1.2 only.",
+		// e));
+		// }
 
 		element.setAttribute("visible", String.valueOf(attrib.isVisible()));
 
@@ -1197,14 +1223,13 @@ public class AMLExporter {
 			if (resourceSchema == null) {
 				LOGGER.debug("schemaURL == null, try the new way");
 				final String location = "skrueger/atlas/resource/AtlasML.xsd";
-				resourceSchema = ace.getResLoMan().getResourceAsUrl(
-						location);
+				resourceSchema = ace.getResLoMan().getResourceAsUrl(location);
 				// LOGGER.debug("schemaURL (new) = " + resourceSchema);
 			}
 
 			// File schemaFile = new File(resourceSchema.toURI());
 			org.apache.commons.io.FileUtils.copyURLToFile(resourceSchema,
-					new File(ace.getAd(), "AtlasML.xsd"));
+					new File(getAtlasXml().getParentFile(), "AtlasML.xsd"));
 		} catch (final Exception e) {
 			LOGGER.debug(" Error while copying AtlasML.xsd... ignoring");
 			// statusWindow.exceptionOccurred(new AtlasException(e));
@@ -1220,10 +1245,17 @@ public class AMLExporter {
 	 *             if files can't be created.
 	 */
 	private boolean backupAtlasXML() throws IOException {
-		File atlasXml = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME);
-		File bak1 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak");
-		File bak2 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak.bak");
-		File bak3 = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME+".bak.bak.bak");
+
+		if (isExportMode())
+			return false;
+
+		File atlasXml = getAtlasXml();
+		File bak1 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak");
+		File bak2 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak.bak");
+		File bak3 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak.bak.bak");
 
 		if (bak2.exists())
 			AVUtil.copyFile(LOGGER, bak2, bak3, false);
@@ -1234,6 +1266,34 @@ public class AMLExporter {
 			return true;
 		}
 		return false;
+	}
+
+	public void setExportMode(boolean exportMode) {
+		this.exportMode = exportMode;
+	}
+
+	public boolean isExportMode() {
+		return exportMode;
+	}
+
+	/**
+	 * The {@link File} to write the {@link AtlasConfig} to. Defaults to
+	 * ad/atlas.xml in the {@link AtlasConfig}'s dir.
+	 */
+	public void setAtlasXml(File atlasXml) {
+		this.atlasXml = atlasXml;
+	}
+
+	/**
+	 * @return The {@link File} the {@link AtlasConfig} will be written to in
+	 *         AtlasML. Defaults to ad/atlas.xml in the {@link AtlasConfig}'s
+	 *         dir.
+	 */
+	public File getAtlasXml() {
+		if (atlasXml == null) {
+			atlasXml = new File(ace.getAd(), AtlasConfig.ATLAS_XML_FILENAME);
+		}
+		return atlasXml;
 	}
 
 }

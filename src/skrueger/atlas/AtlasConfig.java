@@ -367,7 +367,7 @@ public class AtlasConfig implements Disposable{
 
 		// TODO dangerouse redundant paths here.. see ACE.getAboutDir()
 
-		String location = "ad/html/" + ABOUT_DIRNAME + "/about_"
+		String location = ATLASDATA_DIRNAME+"/"+HTML_DIRNAME+"/" + ABOUT_DIRNAME + "/about_"
 				+ Translation.getActiveLang() + ".html";
 		URL url = getResLoMan().getResourceAsUrl(location);
 		LOGGER.debug("AboutHTML URL = " + url + " for location = " + location);

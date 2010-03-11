@@ -74,6 +74,7 @@ import skrueger.atlas.dp.DpRef;
 import skrueger.atlas.exceptions.AtlasException;
 import skrueger.atlas.exceptions.AtlasFatalException;
 import skrueger.atlas.map.Map;
+import skrueger.creator.AMLExporter;
 import skrueger.creator.AtlasConfigEditable;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GPProps;
@@ -93,6 +94,7 @@ import sun.tools.jar.Main;
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  */
 public class JarExportUtil {
+
 	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	/**
@@ -305,16 +307,14 @@ public class JarExportUtil {
 				info("Creating " + ARJAR_FILENAME); // 1st call to info
 
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
-
-				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + ace.getHtmlDir().getName());
-				info("Creating " + ARJAR_FILENAME); // 2st call to info
+						+ "/" + AtlasConfig.HTML_DIRNAME );
+				
+//				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
+//						+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
+				addAtlasXMLToJar(targetJar, ace);
 
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
 						+ "/" + ace.getImagesDir().getName());
-
-				info("Creating " + ARJAR_FILENAME); // 3st call to info
 
 				ace.getProperties().save(
 						new File(ace.getAtlasDir(),
@@ -601,17 +601,21 @@ public class JarExportUtil {
 		ClassLoader cl = AtlasCreator.class.getClassLoader();
 
 		File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1), jsmoothExeFile);
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
+				jsmoothExeFile);
 		File jsmoothSkelFile = new File(jsmoothSkelDir, "autodownload.skel");
-		FileUtils.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2), jsmoothSkelFile);
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2),
+				jsmoothSkelFile);
 
 		/**
 		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
 		 */
 		File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
-		FileUtils
-				.copyURLToFile(cl.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
-						destinationProjectFile);
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
+				destinationProjectFile);
 		try {
 
 			/**
@@ -1553,6 +1557,25 @@ public class JarExportUtil {
 
 	}
 
+	private void addAtlasXMLToJar(File targetJar, AtlasConfigEditable ace)
+			throws Exception {
+
+		// Prepare a temporary atlas.xml
+		File adDir = new File(IOUtil.getTempDir(), "ad");
+		File exportAtlasXml = new File(adDir, AtlasConfig.ATLAS_XML_FILENAME);
+		exportAtlasXml.delete();
+
+		// Configure the AML exporter
+		AMLExporter amlExporter = new AMLExporter(ace);
+		amlExporter.setExportMode(true);
+		amlExporter.setAtlasXml(exportAtlasXml);
+
+		amlExporter.saveAtlasConfigEditable();
+
+		addToJar(targetJar, IOUtil.getTempDir(), "ad/"
+				+ AtlasConfig.ATLAS_XML_FILENAME);
+	}
+
 	/**
 	 * Adds the what-String recursively to the target JAR Any manifest inside
 	 * the target is deleted.. Call
@@ -1562,7 +1585,7 @@ public class JarExportUtil {
 	 * @param targetJar
 	 *            Existing JAR to extend
 	 * 
-	 * @param atlasDir
+	 * @param relDir
 	 *            Directory with "ad" folder of the AtlasWorkingCopy
 	 * 
 	 * @param what
@@ -1577,25 +1600,9 @@ public class JarExportUtil {
 	 * 
 	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
 	 */
-	public void addToJar(final File targetJar, final File atlasDir,
+	public void addToJar(final File targetJar, final File relDir,
 			final String what) throws AtlasExportException, IOException {
 
-		// if (progressWindow != null && progressWindow.isCanceled())
-		// throw new AtlasExportCancelledException();
-
-		/**
-		 * If it doesn't exist
-		 */
-		// && targetJar.getName().equals(ARJAR_FILENAME)
-		// if (!targetJar.exists()) {
-		// BufferedOutputStream bo = new BufferedOutputStream(
-		// new FileOutputStream(targetJar.getAbsolutePath()));
-		// JarOutputStream jo = new JarOutputStream(bo, getManifest());
-		// jo.close();
-		// bo.close();
-		//			
-		// } else {
-		// }
 		String jarName = targetJar.getAbsolutePath();
 
 		/**
@@ -1606,10 +1613,8 @@ public class JarExportUtil {
 		if (!targetJar.exists()) {
 			String manifestName = getManifestFile(true).getAbsolutePath();
 			LOGGER.debug("creating new (with manifest:)" + jarName);
-			// boolean run = jartool.run(new String[] { "cfM", jarName,
-			// "-C", atlasDir.getAbsolutePath(), what });
 			boolean run = jartool.run(new String[] { "cfm", jarName,
-					manifestName, "-C", atlasDir.getAbsolutePath(), what });
+					manifestName, "-C", relDir.getAbsolutePath(), what });
 			if (!run)
 				throw new AtlasExportException("unable to create jar "
 						+ targetJar + " with " + what);
@@ -1617,133 +1622,12 @@ public class JarExportUtil {
 			LOGGER.debug("updating " + jarName + ", adding " + what);
 
 			boolean run = jartool.run(new String[] { "uf", jarName, "-C",
-					atlasDir.getAbsolutePath(), what });
+					relDir.getAbsolutePath(), what });
 			if (!run)
 				throw new AtlasExportException("unable to update jar "
 						+ targetJar + " with " + what);
 		}
 
-		//		
-		// Create file descriptors for the jar and a temp jar.
-		//
-		// File jarFile = targetJar;
-		// File tempJarFile = new File(jarName + ".tmp");
-		//
-		// // Open the jar file.
-		//
-		// JarFile jar = new JarFile(jarFile);
-		// // System.out.println(jarName + " opened.");
-		//
-		// // Initialize a flag that will indicate that the jar was updated.
-		//
-		// boolean jarUpdated = false;
-		//
-		// try {
-		// // Create a temp jar file with no manifest. (The manifest will
-		// // be copied when the entries are copied.)
-		//
-		// // Manifest jarManifest = jar.getManifest();
-		// JarOutputStream tempJar = new JarOutputStream(new FileOutputStream(
-		// tempJarFile));
-		//
-		// // Allocate a buffer for reading entry data.
-		//
-		// byte[] buffer = new byte[1024];
-		// int bytesRead;
-		//
-		// try {
-		// // Open the given file.
-		// Collection<File> listFiles = new ArrayList<File>();
-		//
-		// File directoryOrFile = new File(fileName);
-		//
-		// if (directoryOrFile.isDirectory()) {
-		// listFiles = (Collection<File>) FileUtils.listFiles(
-		// directoryOrFile, null, true);
-		// } else {
-		// listFiles.add(directoryOrFile);
-		// }
-		//
-		// for (File f : listFiles) {
-		//
-		// FileInputStream file = new FileInputStream(f);
-		//
-		// try {
-		// // Create a jar entry and add it to the temp jar.
-		//
-		// String whatIterating = f.getAbsolutePath()
-		// .substring(
-		// ace.getAtlasDir().getAbsolutePath()
-		// .length() + 1);
-		//
-		// whatIterating = whatIterating.replace("\\", "/");
-		//
-		// JarEntry entry = new JarEntry(whatIterating);
-		// tempJar.putNextEntry(entry);
-		//
-		// // Read the file and write it to the jar.
-		//
-		// while ((bytesRead = file.read(buffer)) != -1) {
-		// tempJar.write(buffer, 0, bytesRead);
-		// }
-		//
-		// Log.debug(entry.getName() + " added.");
-		// } finally {
-		// file.close();
-		// }
-		// }
-		//
-		// // Loop through the jar entries and add them to the temp jar,
-		// // skipping the entry that was added to the temp jar already.
-		//
-		// for (Enumeration<JarEntry> entries = jar.entries(); entries
-		// .hasMoreElements();) {
-		// // Get the next entry.
-		//
-		// JarEntry entry = (JarEntry) entries.nextElement();
-		//
-		// // If the entry has not been added already, add it.
-		//
-		// if (!entry.getName().equals(what)) {
-		// // Get an input stream for the entry.
-		//
-		// // System.out.println("cipoy "+entry.getName());
-		//
-		// InputStream entryStream = jar.getInputStream(entry);
-		//
-		// // Read the entry and write it to the temp jar.
-		//
-		// tempJar.putNextEntry(entry);
-		//
-		// while ((bytesRead = entryStream.read(buffer)) != -1) {
-		// tempJar.write(buffer, 0, bytesRead);
-		// }
-		// }
-		// }
-		//
-		// jarUpdated = true;
-		// } finally {
-		// tempJar.close();
-		// }
-		// } finally {
-		// jar.close();
-		// Log.debug(jarName + " closed.");
-		//
-		// // If the jar was not updated, delete the temp jar file.
-		// if (!jarUpdated) {
-		// tempJarFile.delete();
-		// }
-		// }
-		//
-		// // If the jar was updated, delete the original jar file and rename
-		// the
-		// // temp jar file to the original name.
-		//
-		// if (jarUpdated) {
-		// jarFile.delete();
-		// tempJarFile.renameTo(jarFile);
-		// Log.debug(jarName + " updated.");
-		// }
 	}
 
 	/**

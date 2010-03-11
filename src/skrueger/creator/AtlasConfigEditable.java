@@ -500,6 +500,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 *         the atlas is use as the startup map.
 	 */
 	public List<DpEntry<? extends ChartStyle>> listNotReferencedInGroupTreeNorInAnyMap() {
+		
 		List<DpEntry<? extends ChartStyle>> unrefed = new LinkedList<DpEntry<? extends ChartStyle>>();
 
 		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
@@ -515,12 +516,6 @@ public class AtlasConfigEditable extends AtlasConfig {
 			/**
 			 * Now look at all the maps that are actually part of the atlas.
 			 */
-
-			// LOGGER.debug("Checking " + dpe.getId() + " / " + dpe.getTitle());
-			// if (dpe.getId().equals("pyr_satbild01940922212")) {
-			// LOGGER.debug("\n\n" + dpe.getId() + " / " + dpe.getTitle());
-			// }
-			//			
 			boolean referencedFromAMap = false;
 
 			for (Map m : getMapPool().values()) {
@@ -528,7 +523,6 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 				// Check, if this map is directly reachable from the group tree.
 				LinkedList<AtlasRefInterface<?>> refs2map = new LinkedList<AtlasRefInterface<?>>();
-
 				Group.findReferencesTo(this, m, refs2map, false);
 
 				if (refs2map.size() == 0) {
@@ -553,23 +547,10 @@ public class AtlasConfigEditable extends AtlasConfig {
 				if (!thisMapIsInteresting)
 					continue;
 
-				//				
-				// if (dpe.getId().equals("pyr_satbild01940922212")) {
-				// LOGGER.debug(" Map : "+m.getId() + " / " +
-				// m.getTitle()+" is referenced from the Grouptree");
-				// }
-				//
-
 				/**
 				 * OK... If we find a reference to our DPE in this map, the
 				 * DpEntry can be reached from the atlas
 				 */
-				// for (DpRef dpr : m.getLayers()) {
-				// referencedFromAMap = true;
-				// break;
-				// if (dpr.getTarget().equals(dpe)) {
-				// }
-				// }
 				if (m.containsDpe(dpe.getId())) {
 					referencedFromAMap = true;
 					break;
