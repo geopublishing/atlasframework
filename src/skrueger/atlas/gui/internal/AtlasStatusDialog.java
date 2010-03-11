@@ -363,9 +363,11 @@ public class AtlasStatusDialog {
 	 *            DOCUMENT ME
 	 */
 	public synchronized void warningOccurred(final String source,
-			String margin, final String warning) {
+			String margin, String warning) {
 
 		warningOccured = true;
+		
+		if (warning == null) warning = "";
 
 		final StringBuffer buffer = new StringBuffer(warning.length() + 16);
 		if (!source.equals(lastSource)) {

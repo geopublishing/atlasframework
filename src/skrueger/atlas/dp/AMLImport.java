@@ -51,6 +51,7 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
 import skrueger.RasterLegendData;
+import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayer;
@@ -1001,10 +1002,17 @@ public class AMLImport {
 						dplvfs.getAttributeMetaDataMap().put(
 								attribute.getName(), attribute);
 					}
+
 				} catch (AtlasRecoverableException e) {
 					statusDialog.warningOccurred(
 							"Parsing attribute descriptions", "", e
 									.getMessage());
+				} catch (RuntimeException e) {
+					if (AtlasViewer.isRunning()) {
+						// statusDialog.warningOccurred("layer nich verfügbar aber das ist nicht schlimm",
+						// "", e.getMessage());
+					} else
+						throw e;
 				}
 			} else if (name.equals("layerStyle")) {
 				dplvfs.addLayerStyle(parseLayerStyle(ac, n, dplvfs));
