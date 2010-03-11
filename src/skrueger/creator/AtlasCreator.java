@@ -449,8 +449,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 					"translations.html");
 			JFileChooser dc = new JFileChooser(startWithDir);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
-			dc.setDialogTitle(AtlasCreator.RESOURCE
-					.getString("PrintTranslations.SaveHTMLDialog.Title"));
+			dc.setDialogTitle(AtlasCreator.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(startWithDir);
 
 			if ((dc.showSaveDialog(getJFrame()) != JFileChooser.APPROVE_OPTION)
