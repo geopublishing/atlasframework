@@ -1,9 +1,0 @@
-#!/bin/bash
-
-GEOPUBLISHER_HOME=/usr/share/geopublishing
-
-mkdir -p ~/.Geopublisher/log
-cd ~/.Geopublisher/log
-
-/usr/lib/jvm/java-6-sun/jre/bin/java -Xmx380M  -Dfile.encoding=UTF8  -Djava.library.path=$GEOPUBLISHER_HOME/lib/native -jar $GEOPUBLISHER_HOME/gp.jar
-
