@@ -178,7 +178,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 						// Ask the user what to do, unless we run in
 						// automatic
 						// mode
-//						int importAsDefaultCRS;
+						// int importAsDefaultCRS;
 
 						if (status != null) {
 							// We have a modal atlas status dialog open. Just
@@ -188,43 +188,42 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 											"DpVector.Import.NoCRS.WarningMsg",
 											GeoImportUtil.getDefaultCRS()
 													.getName()));
-//							importAsDefaultCRS = JOptionPane.YES_OPTION;
+							// importAsDefaultCRS = JOptionPane.YES_OPTION;
 						}
-//						else if (owner != null && status == null) {
-//
-//							importAsDefaultCRS = JOptionPane
-//									.showConfirmDialog(
-//											owner,
-//											AtlasCreator
-//													.R(
-//															"DpVector.Import.NoCRS.QuestionUseDefaultOrCancel",
-//															GeoImportUtil
-//																	.getDefaultCRS()
-//																	.getName()),
-//											AtlasCreator
-//													.R("DpVector.Import.NoCRS.Title"),
-//											JOptionPane.YES_NO_OPTION);
-//						} else
-//							importAsDefaultCRS = JOptionPane.YES_OPTION;
-//
-//						if (importAsDefaultCRS == JOptionPane.YES_OPTION) {
-							// Force CRS (which creates a .prj and copy it
-//							shapefileDS.forceSchemaCRS(GeoImportUtil
-//									.getDefaultCRS());
-//							prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
+						// else if (owner != null && status == null) {
+						//
+						// importAsDefaultCRS = JOptionPane
+						// .showConfirmDialog(
+						// owner,
+						// AtlasCreator
+						// .R(
+						// "DpVector.Import.NoCRS.QuestionUseDefaultOrCancel",
+						// GeoImportUtil
+						// .getDefaultCRS()
+						// .getName()),
+						// AtlasCreator
+						// .R("DpVector.Import.NoCRS.Title"),
+						// JOptionPane.YES_NO_OPTION);
+						// } else
+						// importAsDefaultCRS = JOptionPane.YES_OPTION;
+						//
+						// if (importAsDefaultCRS == JOptionPane.YES_OPTION) {
+						// Force CRS (which creates a .prj and copy it
+						// shapefileDS.forceSchemaCRS(GeoImportUtil
+						// .getDefaultCRS());
+						// prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
 
-//							AVUtil.copyUrl(prjURL, targetDir, true);
+						// AVUtil.copyUrl(prjURL, targetDir, true);
 
-							/*
-							 * Force Schema created a .prj file in the source
-							 * folder. If shall be deleted after copy. TODO
-							 * There will be a problem if the source is
-							 * read-only
-							 */
-//							IOUtil.urlToFile(prjURL).delete();
-//						} else
-//							throw (new AtlasException(AtlasCreator
-//									.R("DpVector.Import.NoCRS.CanceledMsg")));
+						/*
+						 * Force Schema created a .prj file in the source
+						 * folder. If shall be deleted after copy. TODO There
+						 * will be a problem if the source is read-only
+						 */
+						// IOUtil.urlToFile(prjURL).delete();
+						// } else
+						// throw (new AtlasException(AtlasCreator
+						// .R("DpVector.Import.NoCRS.CanceledMsg")));
 					}
 
 				}
