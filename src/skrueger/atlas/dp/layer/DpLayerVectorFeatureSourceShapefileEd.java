@@ -33,6 +33,7 @@ import org.opengis.feature.type.GeometryDescriptor;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.swing.StatusDialog;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.exceptions.AtlasException;
@@ -48,7 +49,7 @@ import skrueger.sld.ASUtil;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {
-	
+
 	static private final Logger LOGGER = Logger
 			.getLogger(DpLayerVectorFeatureSourceShapefileEd.class);
 
@@ -159,7 +160,8 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				try {
 					AVUtil.copyUrl(prjURL, targetDir, true);
 				} catch (FileNotFoundException e) {
-					LOGGER.debug(prjURL + " not found, trying with capital '.PRJ'");
+					LOGGER.debug(prjURL
+							+ " not found, trying with capital '.PRJ'");
 
 					try {
 						prjURL = IOUtil.changeUrlExt(fromUrl, "PRJ");
@@ -171,35 +173,47 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 								+ ".prj"), true);
 					} catch (FileNotFoundException e2) {
 						LOGGER
-								.debug("No .prj or .PRJ file for Shapefile found. Asking the user how to proceed:");
+								.debug("No .prj or .PRJ file for Shapefile found.");
 
 						// Ask the user what to do, unless we run in
 						// automatic
 						// mode
-						int importAsDefaultCRS;
-						if (owner != null)
-							importAsDefaultCRS = JOptionPane
-									.showConfirmDialog(
-											owner,
-											AtlasCreator
-													.R(
-															"DpVector.Import.NoCRS.QuestionUseDefaultOrCancel",
-															GeoImportUtil
-																	.getDefaultCRS()
-																	.getName()),
-											AtlasCreator
-													.R("DpVector.Import.NoCRS.Title"),
-											JOptionPane.YES_NO_OPTION);
-						else
-							importAsDefaultCRS = JOptionPane.YES_OPTION;
+//						int importAsDefaultCRS;
 
-						if (importAsDefaultCRS == JOptionPane.YES_OPTION) {
+						if (status != null) {
+							// We have a modal atlas status dialog open. Just
+							// write a warning to the status dialog.
+							status.warningOccurred(getFilename(), "",
+									AtlasCreator.R(
+											"DpVector.Import.NoCRS.WarningMsg",
+											GeoImportUtil.getDefaultCRS()
+													.getName()));
+//							importAsDefaultCRS = JOptionPane.YES_OPTION;
+						}
+//						else if (owner != null && status == null) {
+//
+//							importAsDefaultCRS = JOptionPane
+//									.showConfirmDialog(
+//											owner,
+//											AtlasCreator
+//													.R(
+//															"DpVector.Import.NoCRS.QuestionUseDefaultOrCancel",
+//															GeoImportUtil
+//																	.getDefaultCRS()
+//																	.getName()),
+//											AtlasCreator
+//													.R("DpVector.Import.NoCRS.Title"),
+//											JOptionPane.YES_NO_OPTION);
+//						} else
+//							importAsDefaultCRS = JOptionPane.YES_OPTION;
+//
+//						if (importAsDefaultCRS == JOptionPane.YES_OPTION) {
 							// Force CRS (which creates a .prj and copy it
-							shapefileDS.forceSchemaCRS(GeoImportUtil
-									.getDefaultCRS());
-							prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
+//							shapefileDS.forceSchemaCRS(GeoImportUtil
+//									.getDefaultCRS());
+//							prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
 
-							AVUtil.copyUrl(prjURL, targetDir, true);
+//							AVUtil.copyUrl(prjURL, targetDir, true);
 
 							/*
 							 * Force Schema created a .prj file in the source
@@ -207,10 +221,10 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 							 * There will be a problem if the source is
 							 * read-only
 							 */
-							IOUtil.urlToFile(prjURL).delete();
-						} else
-							throw (new AtlasException(AtlasCreator
-									.R("DpVector.Import.NoCRS.CanceledMsg")));
+//							IOUtil.urlToFile(prjURL).delete();
+//						} else
+//							throw (new AtlasException(AtlasCreator
+//									.R("DpVector.Import.NoCRS.CanceledMsg")));
 					}
 
 				}
@@ -272,15 +286,17 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
 
 				}
-//
-////				// TODO is that a good idea? What if we do not have a .prj
-////				// file?mmm
-////				// then the froced CRS should be returned..
-//				crs = shapefileDS.getFeatureSource().getSchema()
-//						.getGeometryDescriptor().getCoordinateReferenceSystem();
-				
-				// Add the empty string as a default NODATA-Value to all textual layers
-				StyledLayerUtil.addEmptyStringToAllTextualAttributes(getAttributeMetaDataMap(), getSchema());
+				//
+				// // // TODO is that a good idea? What if we do not have a .prj
+				// // // file?mmm
+				// // // then the froced CRS should be returned..
+				// crs = shapefileDS.getFeatureSource().getSchema()
+				// .getGeometryDescriptor().getCoordinateReferenceSystem();
+
+				// Add the empty string as a default NODATA-Value to all textual
+				// layers
+				StyledLayerUtil.addEmptyStringToAllTextualAttributes(
+						getAttributeMetaDataMap(), getSchema());
 
 			} else {
 				throw new AtlasImportException(

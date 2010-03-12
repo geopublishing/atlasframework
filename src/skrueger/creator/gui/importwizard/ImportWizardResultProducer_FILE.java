@@ -16,6 +16,7 @@ import net.miginfocom.swing.MigLayout;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
+import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
@@ -59,7 +60,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 					progress.setBusy(importFile.getName());
 					final DpEntry created = DpEntryFactory.create(
-							atlasConfigEditable, importFile, owner); // Null
+							atlasConfigEditable, importFile, owner); 
 
 					if (created == null)
 						abort();
@@ -74,8 +75,8 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 							.R("ImportWizard.ImportWasSuccessfull")));
 
 					summaryPanel.add(new JLabel(
-							"Sie können die Ebene nun bearbeiten:"),
-							"gapy unrel, split 2");
+							AtlasCreator.R("ImportWizard.ImportWasSuccessfull.EditLayerProperites")),
+							"gapy unrel");
 					summaryPanel.add(new JButton(new AbstractAction(
 							AtlasCreator
 									.R("DataPoolWindow_Action_EditDPE_label")) {
@@ -89,7 +90,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					}));
 
 					Summary summary = Summary.create(new JScrollPane(
-							summaryPanel), "ok"); // i8n
+							summaryPanel), "ok"); 
 
 					atlasConfigEditable.getDataPool().popQuite();
 					progress.finished(summary);
