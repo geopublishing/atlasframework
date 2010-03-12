@@ -1,0 +1,4 @@
+Fixed a NPE when a selected addition style is deleted.
+-- Diese und die folgenden Zeilen werden ignoriert --
+
+M    AtlasMapLayerLegend.java
