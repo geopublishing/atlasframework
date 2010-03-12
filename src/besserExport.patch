@@ -1,0 +1,52 @@
+Index: skrueger/creator/AMLExporter.java
+===================================================================
+--- skrueger/creator/AMLExporter.java	(Revision 1141)
++++ skrueger/creator/AMLExporter.java	(Arbeitskopie)
+@@ -405,7 +405,7 @@
+ 
+ 		// maps MUST contain at least one map
+ 		final Collection<Map> maps = mapPool.values();
+-		List<String> notReferencedDpeIDs = ace.listNotReferencedInGroupTree();
++		List<String> notReferencedDpeIDs = ace.listIDsNotReferencedInGroupTree();
+ 		for (final Map map : maps) {
+ 			checkCancel();
+ 			
+Index: skrueger/creator/AtlasConfigEditable.java
+===================================================================
+--- skrueger/creator/AtlasConfigEditable.java	(Revision 1141)
++++ skrueger/creator/AtlasConfigEditable.java	(Arbeitskopie)
+@@ -492,8 +492,34 @@
+ 
+ 		return unrefed;
+ 	}
++	
+ 
+ 	/**
++	 * @return A {@link List} of ID strings representing
++	 *         {@link DpEntry}s and/or {@link Map}s which are not referenced
++	 *         from the grouptree.
++	 */
++	public List<String> listIDsNotReferencedInGroupTree() {
++		List<String> unrefed = new LinkedList<String>();
++
++		for (Map map : getMapPool().values()) {
++			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
++			Group.findReferencesTo(this, map, refs, false);
++			if (refs.size() == 0)
++				unrefed.add(map.getId()); 
++		}
++
++		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
++			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
++			Group.findReferencesTo(this, dpe, refs, false);
++			if (refs.size() == 0)
++				unrefed.add(dpe.getId()); 
++		}
++
++		return unrefed;
++	}
++
++	/**
+ 	 * @return A {@link List} of {@link DpEntry}s which are not used in the
+ 	 *         atlas. If no {@link Map} is linked from the {@link Group}-Tree
+ 	 *         and no default map is selected, the first map (if any exists) of
