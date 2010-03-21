@@ -13,7 +13,7 @@ package skrueger.creator;
 import javax.swing.tree.TreeNode;
 
 import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.dp.Group;

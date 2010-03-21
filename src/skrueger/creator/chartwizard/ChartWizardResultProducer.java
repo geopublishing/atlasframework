@@ -30,7 +30,7 @@ import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.GpUtil;
 import skrueger.geotools.AttributeMetadataMap;
@@ -127,7 +127,7 @@ public class ChartWizardResultProducer implements
 			// AttributeMetadata attribMetadata =
 			// ASUtil.getAttributeMetadataFor(
 			// amdm, attrName);
-			AttributeMetadata attribMetadata = amdm.get(attrName);
+			AttributeMetadataInterface attribMetadata = amdm.get(attrName);
 
 			if (I8NUtil.isEmpty(attribMetadata.getTitle())) {
 				attribMetadata.setTitle(new Translation(

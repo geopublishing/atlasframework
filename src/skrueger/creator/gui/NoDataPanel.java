@@ -21,7 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.swing.JPanel;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.creator.AtlasCreator;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.swing.SmallButton;
@@ -41,7 +41,7 @@ public class NoDataPanel extends JPanel {
 
 	private JTextField noDataTextField;
 	private final AttributeMetadataMap attributeMetaDataMap;
-	private AttributeMetadata atm;
+	private AttributeMetadataInterface atm;
 //	private final SimpleFeatureType schema;
 
 	/**

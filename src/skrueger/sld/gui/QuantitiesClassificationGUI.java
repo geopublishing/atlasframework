@@ -60,7 +60,7 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.gui.AtlasFeatureLayerFilterDialog;
 import skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI;
@@ -558,7 +558,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 		 */
 		String label_xachsis;
 		{
-			AttributeMetadata amdValue = atlasStyler.getAttributeMetaDataMap()
+			AttributeMetadataInterface amdValue = atlasStyler.getAttributeMetaDataMap()
 					.get(classifier.getValue_field_name());
 
 			// AttributeMetadata amdValue = ASUtil.getAttributeMetadataFor(
@@ -572,7 +572,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			if (classifier.getNormalizer_field_name() != null) {
 				// AttributeMetadata amdNorm = ASUtil.getAttributeMetadataFor(
 				// atlasStyler, classifier.getNormalizer_field_name());
-				AttributeMetadata amdNorm = atlasStyler
+				AttributeMetadataInterface amdNorm = atlasStyler
 						.getAttributeMetaDataMap().get(
 								classifier.getNormalizer_field_name());
 				if (amdNorm != null

@@ -39,7 +39,7 @@ import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetaDataAttributeTypeFilter;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AtlasViewer;
 import skrueger.geotools.AttributeMetadataMap;
@@ -182,7 +182,7 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 							// featureType.getAttributeDescriptors()
 							// .indexOf(lookingForAD);
 
-							AttributeMetadata metaData = attrMetaDataMap
+							AttributeMetadataInterface metaData = attrMetaDataMap
 									.get(lookingForAD.getName());
 							if (col == getColumnCount() - 3
 									&& attrMetaDataMap != null) {

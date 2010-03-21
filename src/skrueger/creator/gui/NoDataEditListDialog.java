@@ -36,7 +36,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AVUtil;
 import skrueger.creator.AtlasCreator;
@@ -48,7 +48,7 @@ import skrueger.swing.CancellableDialogAdapter;
  */
 public class NoDataEditListDialog extends CancellableDialogAdapter {
 
-	private final AttributeMetadata attMetaData;
+	private final AttributeMetadataInterface attMetaData;
 	private HashSet<Object> backupNodata;
 
 	// Contains a list of Unique values. The runtime classes equal the Attribute
@@ -64,7 +64,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 	 * This dialog is automaticall visible and modal when constructed
 	 */
 	public NoDataEditListDialog(Component owner, SimpleFeatureType schema,
-			AttributeMetadata attMetaData) {
+			AttributeMetadataInterface attMetaData) {
 
 		this(owner, schema.getDescriptor(attMetaData.getName()).getType()
 				.getBinding(), attMetaData);
@@ -74,7 +74,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 	 * This dialog is automaticall visible and modal when constructed
 	 */
 	public NoDataEditListDialog(Component owner, Class<?> attType,
-			AttributeMetadata attMetaData) {
+			AttributeMetadataInterface attMetaData) {
 
 		super(owner, AtlasCreator.R("NoDataValues.EditDialog.Title",
 				attMetaData.getTitle()));

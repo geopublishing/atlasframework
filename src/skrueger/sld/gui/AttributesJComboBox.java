@@ -27,7 +27,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.I8NUtil;
@@ -125,7 +125,7 @@ public class AttributesJComboBox extends JComboBox {
 					return prototype;
 				}
 
-				AttributeMetadata attributeMetadataFor = attributeMetaDataMap != null ? attributeMetaDataMap
+				AttributeMetadataInterface attributeMetadataFor = attributeMetaDataMap != null ? attributeMetaDataMap
 						.get(prototype.getText())
 						: null;
 

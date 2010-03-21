@@ -38,7 +38,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
 
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.gui.internal.TranslationCellRenderer;
@@ -79,7 +79,7 @@ public class AttribTranslationJTable extends JTable {
 
 	private final DpLayerVectorFeatureSource dplv;
 
-	private final AttributeMetadataMap<? extends AttributeMetadata> attMetadataMap;
+	private final AttributeMetadataMap<? extends AttributeMetadataInterface> attMetadataMap;
 
 	public AttribTranslationJTable(final DpLayerVectorFeatureSource dplv_) {
 
@@ -116,7 +116,7 @@ public class AttribTranslationJTable extends JTable {
 
 			@Override
 			public Object getValueAt(final int row, final int column) {
-				AttributeMetadata attMetadata = getAttMetaData(row);
+				AttributeMetadataInterface attMetadata = getAttMetaData(row);
 
 				if (column == COLIDX_QUALITY) {
 					return attMetadata;
@@ -149,7 +149,7 @@ public class AttribTranslationJTable extends JTable {
 			@Override
 			public void setValueAt(final Object value, final int row,
 					final int column) {
-				AttributeMetadata attMetadata = getAttMetaData(row);
+				AttributeMetadataInterface attMetadata = getAttMetaData(row);
 
 				if (column == COLIDX_WEIGHT) {
 					Integer newWeight = (Integer) value;
@@ -157,7 +157,7 @@ public class AttribTranslationJTable extends JTable {
 					// We don't want doubles in the list, when entered by the
 					// editor
 					boolean doubleWeight = false;
-					for (AttributeMetadata a : attMetadataMap.values()) {
+					for (AttributeMetadataInterface a : attMetadataMap.values()) {
 						if (a.getWeight() == newWeight) {
 							doubleWeight = true;
 							break;
@@ -168,7 +168,7 @@ public class AttribTranslationJTable extends JTable {
 						// We don't want doubles in the list, when entered by
 						// the
 						// editor
-						for (AttributeMetadata a : attMetadataMap.values()) {
+						for (AttributeMetadataInterface a : attMetadataMap.values()) {
 							if (a.getWeight() >= newWeight)
 								a.setWeight(a.getWeight() + 1);
 						}
@@ -324,7 +324,7 @@ public class AttribTranslationJTable extends JTable {
 	 *            in view coordinates!
 	 * @return
 	 */
-	private AttributeMetadata getAttMetaDataView(int viewRow) {
+	private AttributeMetadataInterface getAttMetaDataView(int viewRow) {
 		return getAttMetaData(convertRowIndexToModel(viewRow));
 	}
 
@@ -333,11 +333,11 @@ public class AttribTranslationJTable extends JTable {
 	 *            in model coordinates!
 	 * @return
 	 */
-	private AttributeMetadata getAttMetaData(final int row) {
-		ArrayList<AttributeMetadata> listValues = new ArrayList<AttributeMetadata>(
+	private AttributeMetadataInterface getAttMetaData(final int row) {
+		ArrayList<AttributeMetadataInterface> listValues = new ArrayList<AttributeMetadataInterface>(
 				attMetadataMap.values());
 		Collections.sort(listValues);
-		AttributeMetadata attMetadata = listValues.get(row);
+		AttributeMetadataInterface attMetadata = listValues.get(row);
 		return attMetadata;
 	}
 
@@ -419,7 +419,7 @@ public class AttribTranslationJTable extends JTable {
 			int row = rowAtPoint(e.getPoint());
 
 			if (convertColumnIndexToModel(column) == COLIDX_NODATA) {
-				AttributeMetadata attMetaData = getAttMetaDataView(row);
+				AttributeMetadataInterface attMetaData = getAttMetaDataView(row);
 
 				// This is modal
 				NoDataEditListDialog ad = new NoDataEditListDialog(
@@ -434,7 +434,7 @@ public class AttribTranslationJTable extends JTable {
 
 			if (convertColumnIndexToModel(column) == COLIDX_TITLES
 					|| convertColumnIndexToModel(column) == COLIDX_DESCS) {
-				AttributeMetadata attMetaData = getAttMetaDataView(row);
+				AttributeMetadataInterface attMetaData = getAttMetaDataView(row);
 
 				if (!attMetaData.isVisible())
 					return;

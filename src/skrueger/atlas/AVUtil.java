@@ -71,7 +71,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataInterface;
 import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.gui.HTMLBrowserWindow;
@@ -1656,7 +1656,7 @@ public class AVUtil {
 		/* First series = DOMAIN */
 		String attName = chartStyle.getAttributeName(attribIdx);
 
-		AttributeMetadata attMeta = styledLayer.getAttributeMetaDataMap().get(
+		AttributeMetadataInterface attMeta = styledLayer.getAttributeMetaDataMap().get(
 				attName);
 
 		/*
