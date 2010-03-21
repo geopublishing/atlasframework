@@ -25,9 +25,7 @@ import org.apache.log4j.Logger;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.feature.type.Name;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -51,7 +49,6 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
-import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.layer.DpLayer;
@@ -1222,7 +1219,7 @@ public class AMLImport {
 		// .isEmpty() ? null : nameSpace : null, localname);
 		// TODO we loos the namespace setting now again.
 
-		Name correctedAttName = FeatureUtil.findBestMatchingAttribute(dplvfs
+		NameImpl correctedAttName = FeatureUtil.findBestMatchingAttribute(dplvfs
 				.getSchema(), localname);
 		if (correctedAttName == null)
 			throw new AtlasRecoverableException(
