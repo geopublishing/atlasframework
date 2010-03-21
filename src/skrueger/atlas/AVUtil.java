@@ -72,6 +72,7 @@ import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.gui.HTMLBrowserWindow;
 import skrueger.atlas.gui.internal.AtlasExportTask;
@@ -1584,7 +1585,7 @@ public class AVUtil {
 
 	/**
 	 * Convenience method to update the series legend {@link ChartStyle} title
-	 * and tooltip from given {@link AttributeMetadata}.
+	 * and tooltip from given {@link AttributeMetadataImpl}.
 	 * 
 	 * @param styledLayer
 	 * @param chartStyle
@@ -1611,7 +1612,7 @@ public class AVUtil {
 		// AttributeMetadata attMeta =
 		// ASUtil.getAttributeMetadataFor(styledLayer,
 		// attName);
-		AttributeMetadata attMeta = styledLayer.getAttributeMetaDataMap().get(
+		AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap().get(
 				attName);
 
 		/*
@@ -1637,7 +1638,7 @@ public class AVUtil {
 
 	/**
 	 * Convenience method to update the series legend {@link ChartStyle} title
-	 * and tooltip from given {@link AttributeMetadata}.
+	 * and tooltip from given {@link AttributeMetadataImpl}.
 	 * 
 	 * @param styledLayer
 	 * @param chartStyle

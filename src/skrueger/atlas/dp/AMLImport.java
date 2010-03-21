@@ -49,7 +49,7 @@ import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
@@ -996,7 +996,7 @@ public class AMLImport {
 				dplvfs.setKeywords(parseTranslation(ac.getLanguages(), n));
 			} else if (name.equals(AMLUtil.TAG_attributeMetadata)) {
 				try {
-					final AttributeMetadata attribute = parseAttributeMetadata(
+					final AttributeMetadataImpl attribute = parseAttributeMetadata(
 							dplvfs, ac, n);
 					if (attribute != null) {
 						dplvfs.getAttributeMetaDataMap().put(
@@ -1137,16 +1137,16 @@ public class AMLImport {
 
 	/**
 	 * Parses a node that is of type < aml : dataAttribute > to a
-	 * {@link AttributeMetadata}
+	 * {@link AttributeMetadataImpl}
 	 * 
 	 * @param dplvfs
 	 *            only used to map old colIdx => new attribute Names
 	 * 
-	 * @return {@link AttributeMetadata} or <code>null</code>, if the attribute
+	 * @return {@link AttributeMetadataImpl} or <code>null</code>, if the attribute
 	 *         doesn't exist anymore.
 	 * @throws AtlasRecoverableException
 	 */
-	public static AttributeMetadata parseAttributeMetadata(
+	public static AttributeMetadataImpl parseAttributeMetadata(
 			DpLayerVectorFeatureSource dplvfs, AtlasConfig ac, final Node node)
 			throws AtlasRecoverableException {
 
@@ -1231,7 +1231,7 @@ public class AMLImport {
 							+ "' could belong to. Maybe the attribute has been deleted. The meatdata is thrown away.");
 
 		// Creating the object
-		AttributeMetadata attributeMetadata = new AttributeMetadata(
+		AttributeMetadataImpl attributeMetadata = new AttributeMetadataImpl(
 				correctedAttName, visible, unit);
 		attributeMetadata.setWeight(weight);
 		attributeMetadata.setFunctionA(functionA);

@@ -49,7 +49,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasCancelException;
@@ -724,7 +724,7 @@ public class AMLExporter {
 		filename.appendChild(document.createTextNode(dpe.getFilename()));
 		element.appendChild(filename);
 
-		for (final AttributeMetadata attrib : dpe.getAttributeMetaDataMap()
+		for (final AttributeMetadataImpl attrib : dpe.getAttributeMetaDataMap()
 				.values()) {
 			final Element att = exportAttributeMetadata(dpe, document, attrib);
 			if (att != null)
@@ -863,7 +863,7 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Exports one single {@link AttributeMetadata} to an aml:dataAttribute tag.
+	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute tag.
 	 * 
 	 * @return {@link org.w3c.dom.Element} that represent the XML tag
 	 * 
@@ -875,7 +875,7 @@ public class AMLExporter {
 	 */
 	private Element exportAttributeMetadata(
 			final DpLayerVectorFeatureSource dpe, final Document document,
-			final AttributeMetadata attrib) {
+			final AttributeMetadataImpl attrib) {
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
 				AMLUtil.TAG_attributeMetadata);
@@ -886,7 +886,7 @@ public class AMLExporter {
 				.getLocalPart());
 
 		element.setAttribute(AMLUtil.ATT_weight,
-				new Integer(attrib.getWeight()).toString());
+				new Integer(new Double(attrib.getWeight()).intValue()).toString() );
 		element.setAttribute(AMLUtil.ATT_functionA, new Double(attrib
 				.getFunctionA()).toString());
 		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib

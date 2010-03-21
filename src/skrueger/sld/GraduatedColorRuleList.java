@@ -24,7 +24,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.sld.classification.QuantitiesClassification;
 import skrueger.sld.classification.QuantitiesClassification.METHOD;
@@ -321,7 +321,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		// Checking the value attribute for NODATA values
 		String attributeLocalName = getValue_field_name();
-		AttributeMetadata amd1 = getStyledFeatures().getAttributeMetaDataMap()
+		AttributeMetadataImpl amd1 = getStyledFeatures().getAttributeMetaDataMap()
 				.get(attributeLocalName);
 
 		List<Filter> ors = new ArrayList<Filter>();
@@ -335,7 +335,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		// Checking the normalization attribute for NODATA values
 		String normalizerLocalName = getNormalizer_field_name();
 		if (normalizerLocalName != null) {
-			AttributeMetadata amd2 = getStyledFeatures()
+			AttributeMetadataImpl amd2 = getStyledFeatures()
 					.getAttributeMetaDataMap().get(normalizerLocalName);
 
 			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));

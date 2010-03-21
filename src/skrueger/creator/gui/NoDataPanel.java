@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;

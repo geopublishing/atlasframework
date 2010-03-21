@@ -49,6 +49,7 @@ import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.dp.layer.DpLayer;
 import skrueger.atlas.gui.MapLegend;
+import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
@@ -295,7 +296,7 @@ public class AtlasStyler {
 	 * empty Map is used. Otherwise meta like column name description will be
 	 * looked up here.
 	 **/
-	private AttributeMetadataMap attributeMetaDataMap = new AttributeMetadataMap();
+	private AttributeMetadataMap attributeMetaDataMap = new AttributeMetadataImplMap();
 
 	private Translation title;
 

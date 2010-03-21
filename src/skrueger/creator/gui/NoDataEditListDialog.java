@@ -37,6 +37,7 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AVUtil;
 import skrueger.creator.AtlasCreator;
 import skrueger.creator.EditAttributesJDialog;

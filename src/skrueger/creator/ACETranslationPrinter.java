@@ -14,6 +14,7 @@ import javax.swing.tree.TreeNode;
 
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.DpEntry;
 import skrueger.atlas.dp.Group;
 import skrueger.atlas.dp.layer.DpLayerVector;
@@ -95,9 +96,9 @@ public class ACETranslationPrinter {
 				 * List visible attributes
 				 */
 				DpLayerVectorFeatureSource dplv = (DpLayerVectorFeatureSource) dpe;
-				AttributeMetadataMap attributeMetaDataMap = dplv
+				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = dplv
 						.getAttributeMetaDataMap();
-				for (AttributeMetadata attributeMetaData : attributeMetaDataMap.sortedValues()) {
+				for (AttributeMetadataImpl attributeMetaData : attributeMetaDataMap.sortedValues()) {
 					if (attributeMetaData.isVisible()) {
 						try {
 							printWayH3(

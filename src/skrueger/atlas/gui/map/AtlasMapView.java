@@ -41,7 +41,7 @@ import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AVProps;
@@ -608,7 +608,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		return layerManager.getStyledObjects();
 	}
 
-	public List<AttributeMetadata> getVisibleAttribsFor(MapLayer layer) {
+	public List<AttributeMetadataImpl> getVisibleAttribsFor(MapLayer layer) {
 		return layerManager.getVisibleAttribsFor(layer);
 	}
 

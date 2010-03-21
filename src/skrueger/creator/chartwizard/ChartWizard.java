@@ -28,14 +28,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.Translation;
 import skrueger.sld.ASUtil;
 
 /**
  * Static class that creates a chart-definition-wizard for a given
- * {@link FeatureSource} and (optional) a Map of {@link AttributeMetadata}. The
+ * {@link FeatureSource} and (optional) a Map of {@link AttributeMetadataImpl}. The
  * static method {@link #showWizard(FeatureSource, Map)} returns
  * <code>null</code> or an instance of {@link FeatureChartStyle}
  * 
@@ -109,7 +109,7 @@ public class ChartWizard extends WizardBranchController {
 	 * @param featureSource
 	 *            Where the data comes from
 	 * @param attributeMetaDataMap
-	 *            Map of {@link AttributeMetadata}
+	 *            Map of {@link AttributeMetadataImpl}
 	 * @param languages
 	 *            Number of languages that are supported by the atlas
 	 * @return Changed {@link FeatureChartStyle}
@@ -130,7 +130,7 @@ public class ChartWizard extends WizardBranchController {
 	 * @param featureSource
 	 *            Where the data comes from
 	 * @param attributeMetaDataMap
-	 *            Map of {@link AttributeMetadata}
+	 *            Map of {@link AttributeMetadataImpl}
 	 * @param languages
 	 *            Number of languages that are supported by the atlas
 	 * @return <code>null</code> or a newly created {@link FeatureChartStyle}
@@ -150,7 +150,7 @@ public class ChartWizard extends WizardBranchController {
 	 * @param featureSource
 	 *            Where the data comes from
 	 * @param attributeMetaDataMap
-	 *            Map of {@link AttributeMetadata}
+	 *            Map of {@link AttributeMetadataImpl}
 	 * @return <code>null</code> or a newly created {@link FeatureChartStyle}
 	 */
 	public static FeatureChartStyle showWizard(
@@ -170,7 +170,7 @@ public class ChartWizard extends WizardBranchController {
 	 * @param featureSource
 	 *            Where the data comes from
 	 * @param attributeMetaDataMap
-	 *            Map of {@link AttributeMetadata}
+	 *            Map of {@link AttributeMetadataImpl}
 	 * @return <code>null</code> or a newly created {@link FeatureChartStyle}
 	 */
 	public static FeatureChartStyle showWizard(

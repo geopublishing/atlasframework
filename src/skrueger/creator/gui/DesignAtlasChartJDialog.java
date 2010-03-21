@@ -74,7 +74,7 @@ import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AVUtil;
 import skrueger.atlas.AtlasViewer;
@@ -685,7 +685,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							attLocalName);
 
 					// attribute Metadata for the new attribute
-					AttributeMetadata atm = styledLayer
+					AttributeMetadataImpl atm = styledLayer
 							.getAttributeMetaDataMap().get(attLocalName);
 
 					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS, atm
@@ -1176,7 +1176,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					chartStyle.setAttributeAggregationWeightAttributeName(
 							seriesIdx + 1, weightAttName);
 
-					AttributeMetadata atm = styledLayer
+					AttributeMetadataImpl atm = styledLayer
 							.getAttributeMetaDataMap().get(weightAttName);
 					chartStyle.setWeightAttributeNoDataValues(seriesIdx - 1,
 							atm.getNodataValues());
@@ -1209,7 +1209,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				String attLocalName = (String) attribComboBox.getSelectedItem();
 
 				chartStyle.setAttributeName(seriesIdx + 1, attLocalName);
-				AttributeMetadata atm = styledLayer.getAttributeMetaDataMap()
+				AttributeMetadataImpl atm = styledLayer.getAttributeMetaDataMap()
 						.get(attLocalName);
 
 				chartStyle

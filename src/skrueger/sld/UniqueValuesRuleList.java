@@ -41,7 +41,7 @@ import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public abstract class UniqueValuesRuleList extends FeatureRuleList {
@@ -674,7 +674,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	@Override
 	public Filter getNoDataFilter() {
 		String attributeLocalName = getPropertyFieldName();
-		AttributeMetadata amd = getStyledFeatures().getAttributeMetaDataMap()
+		AttributeMetadataImpl amd = getStyledFeatures().getAttributeMetaDataMap()
 				.get(attributeLocalName);
 
 		List<Filter> ors = new ArrayList<Filter>();

@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AtlasConfig;
 
 /**
@@ -48,8 +48,8 @@ public class QualityPercentageTableCellRenderer extends
 		
 		boolean validQualValue = true;
 		
-		if (value instanceof AttributeMetadata) {
-			AttributeMetadata atm = (AttributeMetadata)value;
+		if (value instanceof AttributeMetadataImpl) {
+			AttributeMetadataImpl atm = (AttributeMetadataImpl)value;
 			validQualValue = atm.isVisible();
 			value = atm.getQuality(atlasConfig.getLanguages());
 		}

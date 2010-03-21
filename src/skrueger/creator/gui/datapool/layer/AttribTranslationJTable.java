@@ -39,6 +39,7 @@ import org.opengis.feature.type.Name;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.atlas.gui.internal.TranslationCellRenderer;
 import skrueger.creator.AtlasCreator;
@@ -46,6 +47,7 @@ import skrueger.creator.gui.NoDataEditListDialog;
 import skrueger.creator.gui.QualityPercentageTableCellRenderer;
 import skrueger.creator.gui.TableRowHeightAdjustment;
 import skrueger.geotools.AttributeMetadataMap;
+import skrueger.geotools.StyledLayerUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
@@ -77,7 +79,7 @@ public class AttribTranslationJTable extends JTable {
 
 	private final DpLayerVectorFeatureSource dplv;
 
-	private final AttributeMetadataMap attMetadataMap;
+	private final AttributeMetadataMap<? extends AttributeMetadata> attMetadataMap;
 
 	public AttribTranslationJTable(final DpLayerVectorFeatureSource dplv_) {
 
@@ -194,7 +196,7 @@ public class AttribTranslationJTable extends JTable {
 			@Override
 			public Class<?> getColumnClass(final int columnIndex) {
 				if (columnIndex == COLIDX_QUALITY)
-					return AttributeMetadata.class;
+					return AttributeMetadataImpl.class;
 				if (columnIndex == COLIDX_NAME)
 					return Name.class;
 				if (columnIndex == COLIDX_UNIT)
@@ -269,9 +271,11 @@ public class AttribTranslationJTable extends JTable {
 		// SwingUtil.setColumnLook(this, COLIDX_TRANSLATE,
 		// new ButtonCellRenderer(), null, 80, null);
 		SwingUtil.setColumnLook(this, COLIDX_TITLES,
-				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 250, null);
+				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 250,
+				null);
 		SwingUtil.setColumnLook(this, COLIDX_DESCS,
-				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 300, null);
+				new TranslationCellRenderer(dplv_.getAtlasConfig()), 200, 300,
+				null);
 
 		// passes the clicks to the button if they are visible.
 		addMouseListener(new JTableButtonMouseListener());
@@ -288,11 +292,11 @@ public class AttribTranslationJTable extends JTable {
 					// Sorting the QM column is tricky, because it is of class
 					// AttributeMetaData and would usually be sorted by the
 					// weight.
-					return new Comparator<AttributeMetadata>() {
+					return new Comparator<AttributeMetadataImpl>() {
 
 						@Override
-						public int compare(AttributeMetadata o1,
-								AttributeMetadata o2) {
+						public int compare(AttributeMetadataImpl o1,
+								AttributeMetadataImpl o2) {
 							return new Double(o1.isVisible() ? o1
 									.getQuality(attMetadataMap.getLanguages())
 									: -1.).compareTo(o2.isVisible() ? o2
@@ -348,7 +352,7 @@ public class AttribTranslationJTable extends JTable {
 				final Object value, final boolean isSelected,
 				final boolean hasFocus, final int rowIndex, final int vColIndex) {
 
-			final AttributeMetadata atm = (AttributeMetadata) value;
+			final AttributeMetadataImpl atm = (AttributeMetadataImpl) value;
 			if (!atm.isVisible())
 				return super.getTableCellRendererComponent(table, "",
 						isSelected, hasFocus, rowIndex, vColIndex);
@@ -391,7 +395,7 @@ public class AttribTranslationJTable extends JTable {
 				final boolean hasFocus, final int rowIndex, final int vColIndex) {
 
 			JLabel tableCellRendererComponent = (JLabel) super
-					.getTableCellRendererComponent(table, AttributeMetadata
+					.getTableCellRendererComponent(table, StyledLayerUtil
 							.formatNoDataValues((Set<Object>) value),
 							isSelected, hasFocus, rowIndex, vColIndex);
 
@@ -419,7 +423,8 @@ public class AttribTranslationJTable extends JTable {
 
 				// This is modal
 				NoDataEditListDialog ad = new NoDataEditListDialog(
-						AttribTranslationJTable.this, dplv.getSchema(), attMetaData);
+						AttribTranslationJTable.this, dplv.getSchema(),
+						attMetaData);
 				ad.setVisible(true);
 
 				// if (!ad.isCancelled()) {

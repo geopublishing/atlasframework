@@ -52,7 +52,7 @@ import schmitzm.geotools.gui.XMapPaneTool;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.swing.JPanel;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AVUtil;
@@ -1155,7 +1155,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * .geotools.map.MapLayer)
 	 */
 	@Override
-	public List<AttributeMetadata> getVisibleAttribsFor(MapLayer layer) {
+	public List<AttributeMetadataImpl> getVisibleAttribsFor(MapLayer layer) {
 		final StyledFeatureSourceInterface styledFC = (StyledFeatureSourceInterface) rememberId2StyledLayer
 				.get(layer.getTitle());
 
@@ -1163,7 +1163,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 			// Some MapLayers, like the one showing the maxExtendBBOX in
 			// Geopublisher, are not DPLayers or StyledLayers.. So if it's null
 			// here, thats ok and we can return an emtpy list.
-			return new ArrayList<AttributeMetadata>();
+			return new ArrayList<AttributeMetadataImpl>();
 		}
 
 		final AttributeMetadataMap attributeMetaDataMap = styledFC

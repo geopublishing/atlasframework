@@ -23,7 +23,7 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.dp.layer.DpLayerVectorFeatureSource;
 import skrueger.creator.gui.datapool.layer.AttribTranslationJTable;
@@ -114,7 +114,7 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 
 	@Override
 	public boolean checkValidInputs() {
-		for (AttributeMetadata amd : dplv.getAttributeMetaDataMap().values()) {
+		for (AttributeMetadataImpl amd : dplv.getAttributeMetaDataMap().values()) {
 
 			if (!Translation.checkValid(amd.getTitle())) {
 				JOptionPane

@@ -31,7 +31,7 @@ import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.gui.internal.AtlasStatusDialog;
 import skrueger.atlas.swing.AtlasSwingWorker;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -385,9 +385,9 @@ public class QuantitiesClassification extends FeatureClassification {
 
 			// get the AttributeMetaData for the given attribute to filter
 			// NODATA values
-			final AttributeMetadata amd = getStyledFeatures()
+			final AttributeMetadataImpl amd = getStyledFeatures()
 					.getAttributeMetaDataMap().get(value_field_name);
-			final AttributeMetadata amdNorm = getStyledFeatures()
+			final AttributeMetadataImpl amdNorm = getStyledFeatures()
 					.getAttributeMetaDataMap().get(normalizer_field_name);
 
 			// // Simulate a slow calculation

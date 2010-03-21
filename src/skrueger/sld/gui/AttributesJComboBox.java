@@ -28,6 +28,7 @@ import org.opengis.feature.type.AttributeDescriptor;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -36,7 +37,7 @@ import skrueger.sld.AtlasStyler;
 
 /**
  * This extension of a {@link JComboBox} is specialized on the visualization of
- * a selection of attribute. If {@link AttributeMetadata} is stored in the
+ * a selection of attribute. If {@link AttributeMetadataImpl} is stored in the
  * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
  * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored. 
  * 

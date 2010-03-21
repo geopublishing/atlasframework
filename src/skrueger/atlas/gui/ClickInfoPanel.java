@@ -58,7 +58,7 @@ import schmitzm.geotools.map.event.ObjectSelectionEvent;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.SpringUtilities;
 import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
@@ -379,15 +379,15 @@ public class ClickInfoPanel extends JPanel {
 		JComponent valueComponent = new JLabel();
 
 		// LOGGER.debug("LayerManager = " + layerManager);
-		final List<AttributeMetadata> visibleAttribs = layerManager
+		final List<AttributeMetadataImpl> visibleAttribs = layerManager
 				.getVisibleAttribsFor(layer);
 
 		// Sort by weight!
-		ArrayList<AttributeMetadata> sortedVisibleAtts = new ArrayList<AttributeMetadata>(
+		ArrayList<AttributeMetadataImpl> sortedVisibleAtts = new ArrayList<AttributeMetadataImpl>(
 				visibleAttribs);
 		Collections.sort(sortedVisibleAtts);
 
-		for (final AttributeMetadata col : sortedVisibleAtts) {
+		for (final AttributeMetadataImpl col : sortedVisibleAtts) {
 
 			try {
 				/**

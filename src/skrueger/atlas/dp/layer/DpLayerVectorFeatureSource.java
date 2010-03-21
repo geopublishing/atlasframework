@@ -35,13 +35,14 @@ import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.io.GeoImportUtil.SHP_POSTFIXES;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
-import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AVDialogManager;
 import skrueger.atlas.AtlasConfig;
 import skrueger.atlas.AtlasViewer;
 import skrueger.atlas.dp.AMLImport;
 import skrueger.atlas.gui.MapLegend;
 import skrueger.atlas.gui.internal.AtlasExportTask;
+import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFeatureSourceInterface;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -99,7 +100,7 @@ public abstract class DpLayerVectorFeatureSource
 	 */
 	public DpLayerVectorFeatureSource(AtlasConfig ac) {
 		super(ac);
-		attributeMetaDataMap = new AttributeMetadataMap(ac.getLanguages());
+		attributeMetaDataMap = new AttributeMetadataImplMap(ac.getLanguages());
 	}
 
 	/**
@@ -428,15 +429,15 @@ public abstract class DpLayerVectorFeatureSource
 	}
 
 	/**
-	 * A {@link Map} that holds the {@link AttributeMetadata}, e.g.
+	 * A {@link Map} that holds the {@link AttributeMetadataImpl}, e.g.
 	 * {@link Translation}s and unit
 	 */
 	final AttributeMetadataMap attributeMetaDataMap;
 
 	/**
-	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadata}. 
+	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadataImpl}. 
 	 */
-	public AttributeMetadataMap getAttributeMetaDataMap() {
+	public AttributeMetadataMap<AttributeMetadataImpl> getAttributeMetaDataMap() {
 		if (!attribMetadataChecked && !AtlasViewer.isRunning()) {
 			/**
 			 * checkAttribMetaData requires all Geoobjects to be available.

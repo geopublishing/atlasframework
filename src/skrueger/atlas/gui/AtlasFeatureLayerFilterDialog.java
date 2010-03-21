@@ -40,6 +40,7 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetaDataAttributeTypeFilter;
 import skrueger.AttributeMetadata;
+import skrueger.AttributeMetadataImpl;
 import skrueger.atlas.AtlasViewer;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -47,10 +48,10 @@ import skrueger.i8n.I8NUtil;
 
 /**
  * This dialog extends the {@link FeatureLayerFilterDialog} by special features
- * provided by the {@link AttributeMetadata}:
+ * provided by the {@link AttributeMetadataImpl}:
  * <ul>
  * <li>The attribute table also shows the attribute description from the
- * {@link AttributeMetadata}-map.</li>
+ * {@link AttributeMetadataImpl}-map.</li>
  * <li>In the attribute table and the filter preview table only the attributes
  * are shown which are declared as visible in the meta data.</li>
  * </ul>
