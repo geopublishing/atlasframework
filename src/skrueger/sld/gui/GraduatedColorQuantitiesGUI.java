@@ -181,16 +181,22 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 						ruleList.pushQuite();
 
-						boolean noChange = classifier.getValue_field_name()
-								.equals(ruleList.getValue_field_name())
-								&& (classifier.getNormalizer_field_name() == ruleList
-										.getNormalizer_field_name() || classifier
+						// Checking if anything has really changed
+						boolean equalsValue = classifier.getValue_field_name()
+								.equals(ruleList.getValue_field_name());
+
+						boolean equalsNormalizer = classifier
+								.getNormalizer_field_name() == ruleList
+								.getNormalizer_field_name()
+								|| (classifier.getNormalizer_field_name() != null && classifier
 										.getNormalizer_field_name()
 										.equals(
 												ruleList
-														.getNormalizer_field_name()))
-								&& classifier.getNumClasses() == ruleList
-										.getNumClasses();
+														.getNormalizer_field_name()));
+						boolean equalsNumClasses = classifier.getNumClasses() == ruleList
+								.getNumClasses();
+						boolean noChange = equalsValue && equalsNormalizer
+								&& equalsNumClasses;
 
 						try {
 
@@ -199,7 +205,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							ruleList.setNormalizer_field_name(classifier
 									.getNormalizer_field_name());
 							ruleList.setMethod(classifier.getMethod());
-							// rulesList.setNumClasses(classifier.getNumClasses());
 							ruleList.setClassLimits(
 									classifier.getClassLimits(), !noChange); // here
 
@@ -214,23 +219,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							ruleList.popQuite();
 						}
 
-						// TODO removed the message because it also appears when
-						// t
-						// calc
-						// thread has been cancelled because another thread
-						// staretd
-
-						// // Show a warning if the classification didn't create
-						// the
-						// expected number of classes
-						// if (classifier.getMethod() != METHOD.MANUAL &&
-						// getNumClassesJComboBox().getSelectedItem() != null &&
-						// !((Number)getNumClassesJComboBox().getSelectedItem()).equals(ruleList.getNumClasses()))
-						// {
-						// AVUtil.showMessageDialog(GraduatedColorQuantitiesGUI.this,
-						// AtlasStyler.R("ClassificationFaildMsg.BadData",
-						// getNumClassesJComboBox().getSelectedItem()));
-						// }
 					}
 				});
 
