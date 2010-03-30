@@ -23,18 +23,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -68,7 +71,6 @@ import org.geotools.styling.Stroke;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
 import org.geotools.styling.Symbolizer;
-import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -101,19 +103,6 @@ public class ASUtil {
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
 
 	public static final FilterFactory ff = FeatureUtil.FILTER_FACTORY;
-
-	/**
-	 * We use a single JColorChooser in the whole application to share the list
-	 * of "last used colors"
-	 */
-	private static JColorChooser jcolorchooser = null;
-	/**
-	 * We use a single JColorChooser in the whole application to share the list
-	 * of "last used colors". This flag manages a cancel on the dialog.
-	 */
-	private static boolean jcolorchooserHasBeenCanceled = false;
-
-	private static JDialog colorDialog;
 
 	public final static SLDTransformer sldTransformer = new SLDTransformer();
 
@@ -148,6 +137,159 @@ public class ASUtil {
 		if (object instanceof Class)
 			return Logger.getLogger(((Class<?>) object).getName());
 		return Logger.getLogger(object.getClass().getName());
+	}
+	
+	/**
+	 * @return The major.minor version, build number and build date
+	 */
+	public static String getVersionInfo() {
+		/**
+		 * Release properties einlesen
+		 */
+		try {
+			return "v" + getVersionMaj() + "." + getVersionMin() + ", b"
+					+ getVersionBuild() + " (" + getVersionBuildDate() + ")";
+		} catch (final Exception e) {
+			LOGGER.warn("Trying to read version information failed", e);
+			return "unknown version";
+		}
+	}
+
+	/**
+	 * Return the major part of the software version of GP/AV/AS.
+	 * 
+	 * @throws Exception
+	 *             if release.properties not found
+	 */
+	public static int getVersionMin() {
+		try {
+
+			final URL releasePropsURL = ASUtil.class
+					.getResource("/release.properties");
+
+			final Properties releaseProps = new Properties();
+			final InputStream openStream = releasePropsURL.openStream();
+			releaseProps.load(openStream);
+			openStream.close();
+			final String str = releaseProps.getProperty("min.version", "0");
+
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"/release.properties could not be read!", e);
+		}
+
+	}
+
+	/**
+	 * Return the major part of the software version of GP/AV/AS.
+	 * 
+	 * @throws Exception
+	 *             if release.properties not found
+	 */
+	public static int getVersionMaj() {
+		try {
+			final URL releasePropsURL = ASUtil.class
+					.getResource("/release.properties");
+
+			final Properties releaseProps = new Properties();
+			final InputStream openStream = releasePropsURL.openStream();
+			releaseProps.load(openStream);
+			openStream.close();
+			final String str = releaseProps.getProperty("maj.version", "0");
+
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"/release.properties could not be read!", e);
+		}
+	}
+
+	/**
+	 * Return the major part of the software version of GP/AV/AS.
+	 * 
+	 * @throws Exception
+	 *             if release.properties not found
+	 */
+	public static int getVersionBuild() {
+		try {
+			final URL releasePropsURL = ASUtil.class
+					.getResource("/release.properties");
+
+			final Properties releaseProps = new Properties();
+			final InputStream openStream = releasePropsURL.openStream();
+			releaseProps.load(openStream);
+			openStream.close();
+			final String str = releaseProps.getProperty("build", "0");
+
+			return Integer.parseInt(str);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"/release.properties could not be read!", e);
+		}
+
+	}
+
+	/**
+	 * Return the major part of the software version of GP/AV/AS.
+	 * 
+	 * @throws Exception
+	 *             if release.properties not found
+	 */
+	public static Date getVersionBuildDate() {
+		try {
+			final URL releasePropsURL = ASUtil.class
+					.getResource("/release.properties");
+			if (releasePropsURL == null)
+				throw new RuntimeException("/release.properties not found!");
+
+			final Properties releaseProps = new Properties();
+			final InputStream openStream = releasePropsURL.openStream();
+			releaseProps.load(openStream);
+			openStream.close();
+			final String str = releaseProps.getProperty("datetime", "0");
+
+			return new Date(Date.parse(str));
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"/release.properties could not be read!", e);
+		}
+
+	}
+
+	/**
+	 * @return The major.minor version + build number - no build date
+	 * @see #getVersionInfo()
+	 */
+	public static String getVersionInfoShort() {
+		/**
+		 * Release properties einlesen
+		 */
+		try {
+			return "v" + getVersionMaj() + "." + getVersionMin() + " b"
+					+ getVersionBuild();
+		} catch (final Exception e) {
+			LOGGER.warn("Trying to read version information failed", e);
+			return "unknown version";
+		}
+	}
+
+	/**
+	 * Print the LGPL disclaimer to the given {@link Logger} as on INFO level.
+	 */
+	public static void logLGPLCopyright(Logger logger) {
+
+		logger
+				.info("\nThis program is free software: you can redistribute it and/or modify\n"
+						+ "it under the terms of the GNU Lesser General Public License as published by\n"
+						+ "the Free Software Foundation, either version 3 of the License, or\n"
+						+ "(at your option) any later version.\n"
+						+ "\n"
+						+ "This program is distributed in the hope that it will be useful,\n"
+						+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+						+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+						+ "GNU Lesser General Public License for more details.\n");
+
 	}
 
 	/**
@@ -931,48 +1073,6 @@ public class ASUtil {
 
 	}
 
-	/**
-	 * Using this method the JColorChooser remembers the colors selected
-	 * earlier. A big help!
-	 * 
-	 * @param component
-	 * 
-	 * @param title
-	 *            Title {@link String} to use for this {@link JDialog}
-	 * 
-	 * @param initialColor
-	 *            {@link Color} to start with
-	 * 
-	 * @return The sleceted {@link Color} or <code>null</code> if canceled.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 */
-	public static Color showColorChooser(final Component component,
-			final String title, final Color initialColor) {
-		getJcolorChooser().setColor(initialColor);
-		if (colorDialog == null) {
-			colorDialog = JColorChooser.createDialog(component, title, true,
-					getJcolorChooser(), null, new ActionListener() {
-
-						@Override
-						public void actionPerformed(final ActionEvent e) {
-							jcolorchooserHasBeenCanceled = true;
-						}
-
-					});
-		}
-
-		jcolorchooserHasBeenCanceled = false;
-		colorDialog.setTitle(title);
-		colorDialog.setVisible(true);
-
-		if (jcolorchooserHasBeenCanceled)
-			return initialColor;
-		else
-			return getJcolorChooser().getColor();
-	}
-
 	static String askForStringResult;
 
 	/**
@@ -1158,13 +1258,6 @@ public class ASUtil {
 		return null;
 	}
 
-	public static JColorChooser getJcolorChooser() {
-		if (jcolorchooser == null) {
-			jcolorchooser = new JColorChooser();
-			jcolorchooser.addChooserPanel(new EyeDropperColorChooserPanel());
-		}
-		return jcolorchooser;
-	}
 
 	/**
 	 * Returns a list of {@link BrewerPalette} suitable for the given number of

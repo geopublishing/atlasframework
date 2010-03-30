@@ -26,7 +26,6 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsBetween;
 
 import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;

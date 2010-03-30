@@ -43,13 +43,8 @@ import org.opengis.util.InternationalString;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
-import skrueger.atlas.AVUtil;
-import skrueger.atlas.AtlasConfig;
-import skrueger.atlas.dp.layer.DpLayer;
-import skrueger.atlas.gui.MapLegend;
 import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -302,7 +297,7 @@ public class AtlasStyler {
 
 	private final StyledFeaturesInterface<?> styledFeatures;
 
-	private final MapLegend mapLegend;
+//	private final MapLegend mapLegend;
 	private final MapLayer mapLayer;
 
 	private Double avgNN = null;
@@ -327,11 +322,13 @@ public class AtlasStyler {
 	 *            may be <code>null</code>
 	 */
 	public AtlasStyler(final StyledFeaturesInterface<?> styledFeatures,
-			Style loadStyle, final MapLegend mapLegend,
-			final MapLayer mapLayer) {
+			Style loadStyle, 
+//			final MapLegend mapLegend,
+			final MapLayer mapLayer, List<String> languages) {
 		this.styledFeatures = styledFeatures;
-		this.mapLegend = mapLegend;
+//		this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
+		this.languages = languages;
 		
 		// Correct propertynames against the Schema
 		loadStyle = StylingUtil.correctPropertyNames(loadStyle, styledFeatures.getSchema());
@@ -358,21 +355,19 @@ public class AtlasStyler {
 		/***********************************************************************
 		 * Configuring the AtlasStyler translation settings.
 		 */
-		if (styledFeatures instanceof DpLayer) {
-			setLanguageMode(AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE);
-			final DpLayer<?, ? extends ChartStyle> dpfs = (DpLayer<?, ? extends ChartStyle>) styledFeatures;
-			final AtlasConfig ac = dpfs.getAtlasConfig();
-
-			setLanguages(ac.getLanguages());
-
-		} else {
+		if (languages == null || languages.size() == 0) {
 			setLanguageMode(AtlasStyler.LANGUAGE_MODE.OGC_SINGLELANGUAGE);
+		} else {
+			setLanguageMode(AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE);
+			setLanguages(languages);
 		}
 
 	}
 
 	public AtlasStyler(StyledFeaturesInterface<?> styledFeatures) {
-		this(styledFeatures, null, null, null);
+		this(styledFeatures, null, 
+//				null, 
+				null, null);
 	}
 
 	/**
@@ -928,7 +923,7 @@ public class AtlasStyler {
 			// Create an empty Style without any FeatureTypeStlyes
 			xxxstyle = ASUtil.SB.createStyle();
 
-			xxxstyle.setName("AtlasStyler " + AVUtil.getVersionInfo());
+			xxxstyle.setName("AtlasStyler " + ASUtil.getVersionInfo());
 
 			if (lastChangedRuleList == null) {
 
@@ -1410,13 +1405,13 @@ public class AtlasStyler {
 		return styledFeatures;
 	}
 
-	/**
-	 * May return <code>null</code>, if no {@link MapLegend} is connected to the
-	 * {@link AtlasStyler}.
-	 */
-	public MapLegend getMapLegend() {
-		return mapLegend;
-	}
+//	/**
+//	 * May return <code>null</code>, if no {@link MapLegend} is connected to the
+//	 * {@link AtlasStyler}.
+//	 */
+//	public MapLegend getMapLegend() {
+//		return mapLegend;
+//	}
 
 	/**
 	 * Fires a {@link StyleChangedEvent} with the backup style to all listeners.
