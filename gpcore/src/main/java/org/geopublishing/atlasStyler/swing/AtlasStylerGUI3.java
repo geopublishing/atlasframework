@@ -325,22 +325,7 @@ public class AtlasStylerGUI3 extends JFrame implements SingleInstanceListener {
 
 		new AtlasStylerSaveLayerToSLDAction(this, styledFS)
 				.actionPerformed(null);
-		//
-		// try {
-		// StylingUtil.saveStyleToSLD(style, sldFile);
-		// } catch (TransformerException e1) {
-		// LOGGER.error(e1);
-		// ExceptionDialog.show(this, e1);
-		// JOptionPane
-		// .showMessageDialog(AtlasStylerGUI3.this,
-		// "Error converting Style to SLD. That might be a bug. Sorry.");
-		// } catch (IOException e1) {
-		// ExceptionDialog.show(this, e1);
-		// LOGGER.error(e1);
-		// JOptionPane.showMessageDialog(AtlasStylerGUI3.this,
-		// "Error writing to file " + sldFile + ".");
-		// }
-
+	
 	}
 
 	/**

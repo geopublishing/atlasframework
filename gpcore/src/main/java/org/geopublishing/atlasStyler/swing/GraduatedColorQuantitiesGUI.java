@@ -112,8 +112,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 	private DefaultTableModel tableModel;
 
-	// protected QuantitiesClassificationGUI quantGUI;
-
 	private JComboBox jComboBoxPalettes = null;
 
 	private JLabel jLabelTemplate = null;
