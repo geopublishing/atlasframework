@@ -328,11 +328,8 @@ public class AtlasStyler {
 		this.styledFeatures = styledFeatures;
 //		this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
-		this.languages = languages;
+		AtlasStyler.languages = languages;
 		
-		// Correct propertynames against the Schema
-		loadStyle = StylingUtil.correctPropertyNames(loadStyle, styledFeatures.getSchema());
-
 		// Calculating the averge distance to the next neightbou. this costs
 		// time!// TODO in another thread
 		// with GUI!// TODO in another thread
@@ -341,6 +338,8 @@ public class AtlasStyler {
 
 		setTitle(styledFeatures.getTitle());
 		if (loadStyle != null) {
+			// Correct propertynames against the Schema
+			loadStyle = StylingUtil.correctPropertyNames(loadStyle, styledFeatures.getSchema());
 			importStyle(loadStyle);
 		} else {
 			if (styledFeatures.getStyle() != null) {
