@@ -138,7 +138,7 @@ public class ASUtil {
 			return Logger.getLogger(((Class<?>) object).getName());
 		return Logger.getLogger(object.getClass().getName());
 	}
-	
+
 	/**
 	 * @return The major.minor version, build number and build date
 	 */
@@ -624,6 +624,7 @@ public class ASUtil {
 		if (doubleTableCellRenderer == null)
 			doubleTableCellRenderer = new DefaultTableCellRenderer() {
 
+				@Override
 				public Component getTableCellRendererComponent(
 						final JTable table, Object value,
 						final boolean isSelected, final boolean hasFocus,
@@ -632,7 +633,7 @@ public class ASUtil {
 							.getTableCellRendererComponent(table, value,
 									isSelected, hasFocus, row, column);
 
-					NumberFormat doubleFormat = DecimalFormat
+					NumberFormat doubleFormat = NumberFormat
 							.getNumberInstance();
 					doubleFormat.setMinimumFractionDigits(3);
 					doubleFormat.setMaximumFractionDigits(3);
@@ -795,7 +796,7 @@ public class ASUtil {
 			rl = new SinglePolygonSymbolRuleList("");
 			// A 50% white fill is the default NODATA symbol for polygons
 			rl.addSymbolizer(SB.createPolygonSymbolizer(SB
-					.createStroke(Color.GRAY.LIGHT_GRAY), SB
+					.createStroke(Color.LIGHT_GRAY), SB
 					.createFill(Color.WHITE)));
 			break;
 		default:
@@ -1257,7 +1258,6 @@ public class ASUtil {
 		}
 		return null;
 	}
-
 
 	/**
 	 * Returns a list of {@link BrewerPalette} suitable for the given number of

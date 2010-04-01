@@ -285,7 +285,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		to.pushQuite();
 
 		to.getSymbolizers().clear();
-		
+
 		to.setVisibleInLegend(isVisibleInLegend());
 
 		// Wrong: This did't make a deep copy!
@@ -610,7 +610,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * Changing this property will automatically fire a {@link RuleChangedEvent}
+	 * /** This boolean defines whether the entry shall be shown the legend.
+	 * <b>This is only interpreted in GP/Atlas context.</b> Changing this
+	 * property will automatically fire a {@link RuleChangedEvent}
 	 */
 	public void setVisibleInLegend(boolean visibleInLegend) {
 		if (visibleInLegend != this.visibleInLegend) {
@@ -620,6 +622,10 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		}
 	}
 
+	/**
+	 * This boolean defines whether the entry shall be shown the legend. <b>This
+	 * is only interpreted in GP/Atlas context.</b>
+	 */
 	public boolean isVisibleInLegend() {
 		return visibleInLegend;
 	}

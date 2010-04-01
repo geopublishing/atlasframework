@@ -43,7 +43,6 @@ import org.opengis.util.InternationalString;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
@@ -75,9 +74,11 @@ public class AtlasStyler {
 	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
 	 */
-	private final static ResourceProvider RESOURCE = new ResourceProvider(
-			LangUtil.extendPackagePath(AtlasStyler.class,
-					"resources.locales.AtlasStylerTranslation"), Locale.ENGLISH);
+	private final static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasStylerTranslation",
+					 Locale.ENGLISH);
+//	private final static ResourceProvider RESOURCE = new ResourceProvider(
+//			LangUtil.extendPackagePath(AtlasStyler.class,
+//					"locales.AtlasStylerTranslation"), Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link AtlasStyler}s translation
