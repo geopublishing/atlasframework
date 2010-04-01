@@ -28,8 +28,8 @@ public class OpenDataFileChooser extends JFileChooser {
 		super(currentDirectory);
 
 		addChoosableFileFilter(new FileNameExtensionFilter("GML", "gml"));
-		addChoosableFileFilter(new FileNameExtensionFilter("Shape", "shp"));
-		setDialogTitle("Open a file"); // i8nAC
+		addChoosableFileFilter(new FileNameExtensionFilter("Shape", "shp", "SHP", "zip", "ZIP")); // TODO Let them click on any part of a shapefile
+		setDialogTitle("Open a file"); // i8n i8nAS
 		setDialogType(OPEN_DIALOG);
 	}
 

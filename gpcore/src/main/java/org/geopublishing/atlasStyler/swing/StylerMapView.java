@@ -55,7 +55,7 @@ public class StylerMapView extends MapView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see skrueger.atlas.gui.MapView#initialize()
+	 * @see org.geopublishing.atlasViewer.swing.MapView#initialize()
 	 */
 	@Override
 	public void initialize() {

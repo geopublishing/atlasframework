@@ -106,21 +106,25 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	private static final String SWINGX_MAP_LAYER_LEGEND_PANE_U_I = "swingx/MapLayerLegendPaneUI";
 
 	static {
+		
+		final String plafPackageName = MapLayerLegend.class.getPackage().getName()+".plaf";
+		
 		LookAndFeelAddons.contribute(new TaskPaneAddon() {
 			@Override
 			protected void addBasicDefaults(LookAndFeelAddons addon,
 					DefaultsList defaults) {
 				super.addBasicDefaults(addon, defaults);
 				defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-						"skrueger.atlas.gui.plaf.BasicMapLayerLegendPaneUI");
+						plafPackageName+".BasicMapLayerLegendPaneUI");
 			}
 
 			@Override
 			protected void addMetalDefaults(LookAndFeelAddons addon,
 					DefaultsList defaults) {
+				
 				super.addMetalDefaults(addon, defaults);
 				defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-						"skrueger.atlas.gui.plaf.MetalMapLayerLegendPaneUI");
+						plafPackageName+".MetalMapLayerLegendPaneUI");
 			}
 
 			@Override
@@ -130,11 +134,11 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				if (addon instanceof WindowsLookAndFeelAddons)
 					defaults
 							.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-									"skrueger.atlas.gui.plaf.WindowsMapLayerLegendPaneUI");
+									plafPackageName+".WindowsMapLayerLegendPaneUI");
 				if (addon instanceof WindowsClassicLookAndFeelAddons) {
 					defaults
 							.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-									"skrueger.atlas.gui.plaf.WindowsClassicMapLayerLegendPaneUI");
+									plafPackageName+".WindowsClassicMapLayerLegendPaneUI");
 				}
 			}
 		});
@@ -197,7 +201,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 		if (getLegendTooltip() != null)
 			setToolTipText("<html>" + getLegendTooltip() + "</html>");
-		else setToolTipText(null);
+		else
+			setToolTipText(null);
 
 		// ****************************************************************************
 		// D'n'D stuff
@@ -212,7 +217,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 		dropTarget = new DropTarget(this, this);
 
-		updateUI(); // TODO TODO what is it good for?
+		// The next line starts the system dependent look of the MapLayerLegend
+		// (thanks to swingx).
+		updateUI();
 
 		setScrollOnExpand(false);
 		setAnimated(false);
@@ -475,7 +482,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	/**
 	 * Returns <code>null</code> or the {@link URL} to an HTML page with info
 	 * about this {@link StyledLayerInterface}.
-	 * @deprecated TODO this method is called too often from BasicMapLayerLegendPaneUI. Needs a cache
+	 * 
+	 * @deprecated TODO this method is called too often from
+	 *             BasicMapLayerLegendPaneUI. Needs a cache
 	 */
 	public URL getInfoURL() {
 		if (styledLayer != null)
@@ -503,7 +512,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		final JPopupMenu toolPopup = new JPopupMenu();
 
 		// ****************************************************************************
-		// AtlasStyler related  button to save the LayerStyler as .SLD
+		// AtlasStyler related button to save the LayerStyler as .SLD
 		// ****************************************************************************
 		if (styledLayer instanceof StyledFS) {
 
@@ -881,10 +890,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	@Override
 	public void updateUI() {
 
-		// TODO TODO what was it good for???
-
 		if (mapLegend == null || mapLegend.getGeoMapPane() == null)
 			return;
+
 		setUI((BasicMapLayerLegendPaneUI) LookAndFeelAddons.getUI(this,
 				MapLayerLegend.class));
 

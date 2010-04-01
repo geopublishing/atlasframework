@@ -400,9 +400,9 @@ public class ClickInfoPanel extends JPanel {
 				 * java.lang.ArrayIndexOutOfBoundsException: 60 at
 				 * org.geotools.feature
 				 * .DefaultFeature.getAttribute(DefaultFeature.java:207) at
-				 * skrueger.atlas.gui.ClickInfoPanel.getOneFeatureInfoPanel(
+				 * org.geopublishing.atlasViewer.swing.ClickInfoPanel.getOneFeatureInfoPanel(
 				 * ClickInfoPanel.java:388) at
-				 * skrueger.atlas.gui.ClickInfoPanel.
+				 * org.geopublishing.atlasViewer.swing.ClickInfoPanel.
 				 * setSelectionEvent(ClickInfoPanel.java:631) *
 				 */
 
