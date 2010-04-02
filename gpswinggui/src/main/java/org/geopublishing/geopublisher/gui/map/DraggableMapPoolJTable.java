@@ -25,7 +25,7 @@ import java.awt.dnd.DragSourceListener;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.dnd.RJLTransferable;
+import org.geopublishing.atlasViewer.swing.RJLTransferable;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 

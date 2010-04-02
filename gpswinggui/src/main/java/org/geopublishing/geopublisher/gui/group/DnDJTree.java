@@ -47,7 +47,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.dnd.RJLTransferable;
+import org.geopublishing.atlasViewer.swing.RJLTransferable;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 

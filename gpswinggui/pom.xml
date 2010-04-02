@@ -8,30 +8,12 @@
 	<name>gpswinggui</name>
 	<url>http://maven.apache.org</url>
 
-	<properties>
-		<geotools.version>2.6.2</geotools.version>
-	</properties>
-
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<parent>
+		<groupId>org.geopublishing</groupId>
+		<artifactId>gp-atlas-framwork</artifactId>
+		<version>1.5-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
 
 	<dependencies>
 		<dependency>
@@ -80,7 +62,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagepyramid</artifactId>
@@ -88,15 +70,15 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagemosaic</artifactId>
 			<version>${geotools.version}</version>
 			<type>jar</type>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>net.java.wizard</groupId>

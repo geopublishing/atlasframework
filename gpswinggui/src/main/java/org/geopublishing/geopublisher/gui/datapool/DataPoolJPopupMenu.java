@@ -26,7 +26,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasCreator;
 
 import schmitzm.jfree.chart.style.ChartStyle;

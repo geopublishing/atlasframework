@@ -41,7 +41,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapLegend;
+import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasCreator;
 import org.geopublishing.geopublisher.chartwizard.ChartWizard;

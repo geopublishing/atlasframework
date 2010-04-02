@@ -24,7 +24,6 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapLegend;
 import org.jfree.chart.JFreeChart;
 
 import schmitzm.geotools.gui.SelectableXMapPane;

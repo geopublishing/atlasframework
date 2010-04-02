@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasCreator;
 
 import skrueger.creator.GPDialogManager;

@@ -22,7 +22,6 @@ import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapLegend;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 

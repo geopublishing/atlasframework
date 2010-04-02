@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.swing.internal;
+package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Component;
 import java.net.URL;
@@ -16,7 +16,6 @@ import java.net.URL;
 import javax.jnlp.DownloadServiceListener;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
 
 import schmitzm.swing.StatusDialog;
 

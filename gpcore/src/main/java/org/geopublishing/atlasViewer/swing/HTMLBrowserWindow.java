@@ -24,7 +24,6 @@ import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.swing.map.HTMLInfoJPane;
 
 import schmitzm.swing.SwingUtil;
 

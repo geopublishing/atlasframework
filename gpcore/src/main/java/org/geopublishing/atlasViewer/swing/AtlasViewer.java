@@ -62,7 +62,6 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapView;
 import org.geotools.swing.ExceptionMonitor;
 
 import rachel.http.loader.WebClassResourceLoader;

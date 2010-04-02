@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.swing.internal;
+package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -28,7 +28,6 @@ import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geotools.map.MapLayer;
 
 import skrueger.i8n.I8NUtil;

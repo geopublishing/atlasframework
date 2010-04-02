@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.internal;
+package org.geopublishing.atlasViewer;
 
 /**
  * This interface is used to inform about progress

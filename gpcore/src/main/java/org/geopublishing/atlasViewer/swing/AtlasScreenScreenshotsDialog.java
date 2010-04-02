@@ -44,7 +44,6 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapView;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.swing.ExceptionDialog;

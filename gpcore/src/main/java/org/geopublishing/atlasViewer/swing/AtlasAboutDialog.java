@@ -29,7 +29,6 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.swing.map.HTMLInfoJPane;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;

@@ -43,7 +43,6 @@ import javax.swing.KeyStroke;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.swing.map.HTMLInfoJPane;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.OkButton;

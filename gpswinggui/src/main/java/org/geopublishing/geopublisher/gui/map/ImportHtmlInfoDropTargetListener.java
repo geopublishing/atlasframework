@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.map.HTMLInfoJPane;
+import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.AtlasDropTargetListener;
 

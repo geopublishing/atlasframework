@@ -19,7 +19,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.swing.map.AtlasMapLegend;
+import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;

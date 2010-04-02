@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.swing.internal;
+package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Font;
 

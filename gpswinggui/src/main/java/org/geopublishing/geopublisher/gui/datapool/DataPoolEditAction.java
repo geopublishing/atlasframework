@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasCreator;
 
 import schmitzm.jfree.chart.style.ChartStyle;

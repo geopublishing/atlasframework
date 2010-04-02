@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.internal;
+package org.geopublishing.atlasViewer;
 
 import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQLException;

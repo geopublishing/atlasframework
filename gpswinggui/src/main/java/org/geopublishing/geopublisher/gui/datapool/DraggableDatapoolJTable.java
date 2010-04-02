@@ -28,7 +28,7 @@ import javax.swing.JList;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
-import org.geopublishing.atlasViewer.swing.dnd.RJLTransferable;
+import org.geopublishing.atlasViewer.swing.RJLTransferable;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 

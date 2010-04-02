@@ -8,13 +8,13 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.swing.internal;
+package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Component;
 import java.io.File;
 
 import org.geopublishing.atlasViewer.AVUtil;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
 public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 
