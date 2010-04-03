@@ -81,13 +81,13 @@ import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
 
 /**
- * The mighty mighty {@link AtlasCreator} is a tool that generates runnable
+ * The mighty mighty {@link GeopublisherGUI} is a tool that generates runnable
  * {@link AtlasViewer} compilations.
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  * 
  */
-public class AtlasCreator implements ActionListener, SingleInstanceListener {
+public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
@@ -100,10 +100,10 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		importWizard
 	}
 
-	/** A singleton pattern for the {@link AtlasCreator} instance **/
-	private static AtlasCreator instance = null;
+	/** A singleton pattern for the {@link GeopublisherGUI} instance **/
+	private static GeopublisherGUI instance = null;
 
-	private static final Logger LOGGER = Logger.getLogger(AtlasCreator.class);
+	private static final Logger LOGGER = Logger.getLogger(GeopublisherGUI.class);
 
 	static {
 		// AtlasConfig.setupResLoMan();
@@ -132,13 +132,13 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	/**
 	 * Creates or returns the single instance of GeoPublisher
 	 */
-	public static AtlasCreator getInstance() {
+	public static GeopublisherGUI getInstance() {
 		if (instance == null) {
 			LOGGER
 					.error(
 							"Geopublisher instance is requested without arguments and it doesn't exists yet!",
 							new RuntimeException());
-			instance = new AtlasCreator(new ArrayList<String>());
+			instance = new GeopublisherGUI(new ArrayList<String>());
 		}
 		return instance;
 	}
@@ -147,7 +147,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 * Creates and returns a single instance of GeoPublisher, evaluating any
 	 * arguments passed on the command line.
 	 */
-	public static AtlasCreator getInstance(List<String> args) {
+	public static GeopublisherGUI getInstance(List<String> args) {
 		if (instance != null) {
 			LOGGER
 					.error(
@@ -155,12 +155,12 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 							new RuntimeException());
 			instance = null;
 		}
-		instance = new AtlasCreator(args);
+		instance = new GeopublisherGUI(args);
 		return instance;
 	}
 
 	/**
-	 * Start routine for the {@link AtlasCreator}
+	 * Start routine for the {@link GeopublisherGUI}
 	 * 
 	 * @param args
 	 */
@@ -187,7 +187,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		// Setting up log4j
 		// URL log4jXmlUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
 		// "gp_log4j.xml");
-		URL log4jXmlUrl = AtlasCreator.class.getClassLoader().getResource(
+		URL log4jXmlUrl = GeopublisherGUI.class.getClassLoader().getResource(
 				"gp_log4j.xml");
 
 		DOMConfigurator.configure(log4jXmlUrl);
@@ -196,7 +196,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Convenience method to access the {@link AtlasCreator}s translation
+	 * Convenience method to access the {@link GeopublisherGUI}s translation
 	 * resources.
 	 * 
 	 * @param key
@@ -217,12 +217,12 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	private GpFrame gpJFrame = null;
 
 	/**
-	 * Main constructor of {@link AtlasCreator}.
+	 * Main constructor of {@link GeopublisherGUI}.
 	 * 
 	 * @param args
 	 *            command line arguments
 	 * **/
-	public AtlasCreator(List<String> args) {
+	public GeopublisherGUI(List<String> args) {
 
 		LOGGER.info("This is GeoPublisher " + AVUtil.getVersionInfo());
 
@@ -235,7 +235,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 		 * Register as a SingleInstance for JNLP. Starting another instance of
 		 * AtlasCreator via JavaWebStart will fall back to this instance
 		 */
-		JNLPUtil.registerAsSingleInstance(AtlasCreator.this, true);
+		JNLPUtil.registerAsSingleInstance(GeopublisherGUI.this, true);
 
 		/**
 		 * Add an ExceptionHandler for all uncaught exceptions:
@@ -392,7 +392,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 					"translations.html");
 			JFileChooser dc = new JFileChooser(startWithDir);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
-			dc.setDialogTitle(AtlasCreator.R("PrintTranslations.SaveHTMLDialog.Title"));
+			dc.setDialogTitle(GeopublisherGUI.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(startWithDir);
 
 			if ((dc.showSaveDialog(getJFrame()) != JFileChooser.APPROVE_OPTION)
@@ -501,7 +501,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 
 			Box previewLabel = Box.createVerticalBox();
 
-			ClassLoader cl = AtlasCreator.class.getClassLoader();
+			ClassLoader cl = GeopublisherGUI.class.getClassLoader();
 			URL urlJWSIconFallback = cl.getResource("/"
 					+ AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 
@@ -621,7 +621,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 			}
 
 			// If we can't save the atlas cancel.
-			if (!AVSwingUtil.askYesNo(getJFrame(), AtlasCreator
+			if (!AVSwingUtil.askYesNo(getJFrame(), GeopublisherGUI
 					.R("PreviewAtlas.AskToSave")))
 				return;
 			
@@ -889,7 +889,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 	 */
 	public void exitGP(int exitCode) {
 
-		JNLPUtil.registerAsSingleInstance(AtlasCreator.this, false);
+		JNLPUtil.registerAsSingleInstance(GeopublisherGUI.this, false);
 
 		if (ace != null) {
 			if (closeAtlas() == false)
@@ -1053,7 +1053,7 @@ public class AtlasCreator implements ActionListener, SingleInstanceListener {
 				.getAbsolutePath());
 
 		AtlasStatusDialog statusWindow = new AtlasStatusDialog(getJFrame(),
-				null, AtlasCreator.R("AtlasLoader.processinfo.loading",
+				null, GeopublisherGUI.R("AtlasLoader.processinfo.loading",
 						atlasDir.getAbsolutePath()));
 		AtlasSwingWorker<AtlasConfigEditable> aceLoader = new AtlasSwingWorker<AtlasConfigEditable>(
 				statusWindow) {
