@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jnlp codebase="http://www.geopublishing.org/@PATH@/" href="http://www.geopublishing.org/@PATH@/as.jnlp" spec="1.0+">
   <information>
-    <title>AtlasStyler SLD Editor @VERSION@</title>
+    <title>$project.Name</title>
     <description>A graphical editor to create OGC SLD files</description>
-    <homepage href="http://www.geopublishing.org/AtlasStyler"/>    
-    <vendor>www.geopublishing.org - Stefan A. Krüger</vendor>
+    <homepage href="$project.Url"/>    
+    <vendor>$project.Organization.Name</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
     <icon kind="splash" href="startAS.gif"/>    
     
@@ -25,104 +25,7 @@
 
     <property name="jnlp.packEnabled" value="true"/>
 	<property name="file.encoding" value="UTF-8"/>
-	
-	<jar  href="as.jar"  part="main" main="true"/>
-	<jar  href="lib/schmitzm-2.0.GP14.jar"  part="main" />
-	
-	<!-- New MigLayout -->
-	<jar  href="lib/gt/miglayout-3.7-swing.jar"  part="main" />
-	
-	<jar  href="lib/colt.jar"  part="main"/>
-    <jar  href="lib/gt/jdom-1.0.jar" part="main"/>	
-	<jar  href="lib/gt/commons-io-1.4.jar"  part="main"/>    
-	    
-	<jar  href="lib/gt/jcommon-1.0.13.jar" />    
-	<jar  href="lib/jfreechart-1.0.13.jar" />        
-	<jar  href="lib/jnlp.jar"  part="main"/>
-	<jar  href="lib/swingx-1.0.jar"  part="main"/>
-	<jar  href="lib/swingx-beaninfo-1.0.jar"  part="main"/>
-	
-	<jar  href="lib/gt/gt-arcgrid-@GT_VER@.jar"  part="main"/>
-	<!-- JARs pulled for ImageIO -->
-	<jar  href="lib/gt/jai_codec-1.1.3.jar"  part="main"/>
-	<jar  href="lib/gt/jai_imageio-1.1.jar"  part="main"/>
-	<jar  href="lib/jai_core.jar"  part="main"/>
-	<jar  href="lib/mlibwrapper_jai.jar"  part="main"/>
-	<jar  href="lib/clibwrapper_jiio.jar"  part="main"/>
-	
-	<!-- GeoTools-->
-	<jar  href="lib/gt/geoapi-2.3-M1.jar"  part="main"/>
-	<jar  href="lib/gt/geoapi-pending-2.3-M1.jar"  part="main"/>
-
-	<jar  href="lib/gt/commons-beanutils-1.7.0.jar"  part="main"/>
-	<jar  href="lib/gt/gt-render-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/commons-logging-1.1.1.jar" />
-	<jar  href="lib/gt/gt-api-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-brewer-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-coverage-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-epsg-hsql-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-geotiff-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-image-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-imagemosaic-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-imagepyramid-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-main-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-metadata-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-referencing-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-shapefile-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-shapefile-renderer-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-svg-@GT_VER@.jar"  part="main"/>
-	
-	
-	<jar  href="lib/gt/hsqldb-1.8.0.7.jar"  part="main"/>
-	<jar  href="lib/gt/jsr-275-1.0-beta-2.jar"  part="main"/>
-	<jar  href="lib/gt/jts-1.10.jar"  part="main"/>
-	<jar  href="lib/gt/log4j-1.2.12.jar"  part="main"/>
-	<jar  href="lib/gt/vecmath-1.3.2.jar"  part="main"/>
-	<jar  href="lib/gt/xercesImpl-2.7.1.jar"  part="main"/>
-
-	<jar  href="lib/gt/gt-swing-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-cql-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/commons-pool-1.5.3.jar"  part="main"/>
-
-    <!-- Playing with a WFS import -->
-	<jar  href="lib/gt/gt-xml-@GT_VER@.jar"  part="main"/>
-	<jar  href="lib/gt/gt-wfs-@GT_VER@.jar"  part="main"/>
-
-	<jar  href="lib/gt/gt-legacy-@GT_VER@.jar"  part="main"/>
-	
-	<!-- imageio stuff -->
-    <jar  href="lib/gt/gt-imageio-ext-gdal-@GT_VER@.jar"  part="main"/>  
-	<jar  href="lib/gt/imageio-ext-arcgrid-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-gdal-bindings-1.4.5b.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-customstreams-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-gdalframework-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-geocore-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-imagereadmt-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-tiff-1.0.5.jar"  part="main"/>
-	<jar  href="lib/gt/imageio-ext-utilities-1.0.5.jar"  part="main"/>
-	
-	<jar  href="lib/gt/xml-apis-1.3.04.jar"  part="main"/>
-	<jar  href="lib/gt/xml-apis-ext-1.3.04.jar"  part="main"/>
-	<jar  href="lib/gt/fop-0.94.jar"  part="main"/>
-	<jar  href="lib/gt/xmlgraphics-commons-1.2.jar"  part="main"/>
-	<jar  href="lib/gt/xalan-2.6.0.jar"  part="main"/>
-
-	<!-- GeoTools Batik-->
-	<jar  href="lib/gt/batik-svggen-1.7.jar" part="main"/>
-	<jar  href="lib/gt/batik-anim-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-awt-util-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-bridge-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-css-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-dom-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-ext-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-gvt-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-parser-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-script-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-svg-dom-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-transcoder-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-util-1.7.jar"  part="main"/>
-	<jar  href="lib/gt/batik-xml-1.7.jar"  part="main"/>
-	
+	$dependencies
   </resources>
-  <application-desc main-class="skrueger.sld.gui.AtlasStylerGUI3"/>
+  <application-desc main-class="$mainClass"/>
 </jnlp>
