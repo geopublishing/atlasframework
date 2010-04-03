@@ -15,7 +15,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.dp.DpEntryFactory;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
 import org.netbeans.spi.wizard.DeferredWizardResult;
@@ -71,14 +71,14 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					// cool!
 
 					JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
-					summaryPanel.add(new JLabel(AtlasCreator
+					summaryPanel.add(new JLabel(GeopublisherGUI
 							.R("ImportWizard.ImportWasSuccessfull")));
 
 					summaryPanel.add(new JLabel(
-							AtlasCreator.R("ImportWizard.ImportWasSuccessfull.EditLayerProperites")),
+							GeopublisherGUI.R("ImportWizard.ImportWasSuccessfull.EditLayerProperites")),
 							"gapy unrel");
 					summaryPanel.add(new JButton(new AbstractAction(
-							AtlasCreator
+							GeopublisherGUI
 									.R("DataPoolWindow_Action_EditDPE_label")) {
 
 						@Override

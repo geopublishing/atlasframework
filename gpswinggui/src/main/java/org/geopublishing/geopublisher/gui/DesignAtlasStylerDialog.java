@@ -21,7 +21,7 @@ import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.map.DesignAtlasMapLegend;
 import org.geotools.map.MapLayer;
 
@@ -56,7 +56,7 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 			return super.okClose();
 		}
 
-		if (!AVSwingUtil.askYesNo(DesignAtlasStylerDialog.this, AtlasCreator
+		if (!AVSwingUtil.askYesNo(DesignAtlasStylerDialog.this, GeopublisherGUI
 				.R("DesignMapLayerLegend.SaveStyleForLayer", layerStyle
 						.getTitle()))) {
 			// // The user canceled his changes

@@ -36,7 +36,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -291,7 +291,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 	}
 
 	protected String R(final String string, final Object... obj) {
-		return AtlasCreator.R(string, obj);
+		return GeopublisherGUI.R(string, obj);
 	}
 
 }

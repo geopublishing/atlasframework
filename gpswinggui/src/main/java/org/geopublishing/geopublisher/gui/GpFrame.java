@@ -50,10 +50,10 @@ import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.atlasViewer.swing.BugReportmailer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GPBugReportmailer;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
-import org.geopublishing.geopublisher.AtlasCreator.ActionCmds;
+import org.geopublishing.geopublisher.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
@@ -73,7 +73,7 @@ public class GpFrame extends JFrame {
 	private static final Logger LOGGER = Logger.getLogger(GpFrame.class);
 
 	/** A reference to the existing GeoPublisher **/
-	private final AtlasCreator gp;
+	private final GeopublisherGUI gp;
 
 	/**
 	 * The heap bar starts a timer that updates it automatically. Hence we just
@@ -91,7 +91,7 @@ public class GpFrame extends JFrame {
 	 * Just a convenience method to access GeoPublisher translation
 	 */
 	private String R(String key, Object... values) {
-		return AtlasCreator.R(key, values);
+		return GeopublisherGUI.R(key, values);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class GpFrame extends JFrame {
 		return gp.getAce();
 	}
 
-	public GpFrame(final AtlasCreator gp) {
+	public GpFrame(final GeopublisherGUI gp) {
 
 		this.gp = gp;
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -169,7 +169,7 @@ public class GpFrame extends JFrame {
 //	icons.add(new ImageIcon(resLoMan.getResource(
 //			"skrueger/creator/resource/gp_icon64.png")).getImage());			
 			
-			ClassLoader classLoader = AtlasCreator.class.getClassLoader();
+			ClassLoader classLoader = GeopublisherGUI.class.getClassLoader();
 			
 			icons.add(new ImageIcon(classLoader.getResource(
 					"skrueger/creator/resource/gp_icon16.png")).getImage());
@@ -583,7 +583,7 @@ public class GpFrame extends JFrame {
 	 *         Kr&uuml;ger</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewer} and
-	 *         {@link AtlasCreator}
+	 *         {@link GeopublisherGUI}
 	 */
 	private JMenu getChangeLangJMenu() {
 		AVUtil.checkThatWeAreOnEDT();
@@ -718,7 +718,7 @@ public class GpFrame extends JFrame {
 
 	/**
 	 * Extension of {@link JMenuItem} that automatically set's the
-	 * {@link AtlasCreator} instance as the {@link ActionListener}
+	 * {@link GeopublisherGUI} instance as the {@link ActionListener}
 	 */
 	class GpMenuItem extends JMenuItem {
 

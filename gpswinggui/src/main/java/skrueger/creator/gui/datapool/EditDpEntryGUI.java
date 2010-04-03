@@ -25,7 +25,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.DpEntryJPanel;
 import org.geopublishing.geopublisher.gui.datapool.DpLayerRasterPyramidJPanel;
 import org.geopublishing.geopublisher.gui.datapool.DpLayerVectorAttributesJPanel;
@@ -71,12 +71,12 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			JTabbedPane tabbedPane = getTabbedPane();
 
 			/** A tab for name, desc and keywords... **/
-			tabbedPane.insertTab(AtlasCreator.R("EditDpEntryGUI.labels.tab"),
+			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.labels.tab"),
 					null, createTranslationsTab(dpe), null, tabbedPane
 							.getTabCount());
 
 			/** A tab with general settings **/
-			tabbedPane.insertTab(AtlasCreator.R("EditDpEntryGUI.general.tab"),
+			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.general.tab"),
 					null, new DpEntryJPanel(dpe), null, tabbedPane
 							.getTabCount());
 
@@ -97,7 +97,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 
 			/** A tab with Table related settings **/
 			if (dpe instanceof DpLayerVectorFeatureSource) {
-				tabbedPane.insertTab(AtlasCreator
+				tabbedPane.insertTab(GeopublisherGUI
 						.R("EditDpEntryGUI.attributes.tab"), null,
 						new DpLayerVectorAttributesJPanel(
 								(DpLayerVectorFeatureSource) dpe), null,
@@ -126,10 +126,10 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 
 			JPanel noDataValuesPanel = new JPanel(new MigLayout("width 100%"));
 			noDataValuesPanel.setBorder(BorderFactory
-					.createTitledBorder(AtlasCreator
+					.createTitledBorder(GeopublisherGUI
 							.R("EditDpEntryGUI.raster.nodata.border")));
 
-			noDataValuesPanel.add(new JLabel(AtlasCreator
+			noDataValuesPanel.add(new JLabel(GeopublisherGUI
 					.R("EditDpEntryGUI.raster.nodata.explanation")), "span 2");
 
 			final JPanel noDataValuePanel = new JPanel(new MigLayout());
@@ -137,7 +137,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			final double[] noDataValues = geoObject.getSampleDimension(0)
 					.getNoDataValues();
 
-			noDataValuePanel.add(new JLabel(AtlasCreator
+			noDataValuePanel.add(new JLabel(GeopublisherGUI
 					.R("EditDpEntryGUI.raster.nodata.label")
 					+ noDataValues));
 			rasterTab.add(noDataValuePanel, "growx");
@@ -160,13 +160,13 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 				dpe.setKeywords(new Translation());
 
 			final TranslationEditJPanel a = new TranslationEditJPanel(
-					AtlasCreator.R("EditDPEDialog.TranslateTitle"), dpe
+					GeopublisherGUI.R("EditDPEDialog.TranslateTitle"), dpe
 							.getTitle(), langs);
 			final TranslationEditJPanel b = new TranslationEditJPanel(
-					AtlasCreator.R("EditDPEDialog.TranslateDescription"), dpe
+					GeopublisherGUI.R("EditDPEDialog.TranslateDescription"), dpe
 							.getDesc(), langs);
 			final TranslationEditJPanel c = new TranslationEditJPanel(
-					AtlasCreator.R("EditDPEDialog.TranslateKeywords"), dpe
+					GeopublisherGUI.R("EditDPEDialog.TranslateKeywords"), dpe
 							.getKeywords(), langs);
 
 			dpeTranslationTab = new TranslationsAskJPanel(a, b, c);

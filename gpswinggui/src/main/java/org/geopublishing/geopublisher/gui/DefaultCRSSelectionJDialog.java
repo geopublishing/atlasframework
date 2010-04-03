@@ -25,7 +25,7 @@ import javax.swing.event.DocumentListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geotools.referencing.CRS;
 import org.opengis.metadata.Identifier;
@@ -42,7 +42,7 @@ import skrueger.swing.OkButton;
  * A {@link JPanel} that allows to enter/input the default CRS for the Atlas.
  * The default CRS is used for all Geodata that has no .PRJ or where the CRS
  * metadata can not be read. This dialog stes the static setton on
- * {@link GeoImportUtil}. Multiple instances of {@link AtlasCreator} will hence
+ * {@link GeoImportUtil}. Multiple instances of {@link GeopublisherGUI} will hence
  * always use the same default CRS - a future problem if this will ever happen.
  * 
  * @author Stefan A. Krueger
@@ -51,14 +51,14 @@ import skrueger.swing.OkButton;
  */
 public class DefaultCRSSelectionJDialog extends JDialog {
 	private static final String UNKNOWNEPSG = "EPSG: - ";
-	private static final Component explanationJLabel = new JLabel(AtlasCreator
+	private static final Component explanationJLabel = new JLabel(GeopublisherGUI
 			.R("DefaultCRSSelectionJPanel.explanation"));
 	private final Component parentGUI;
 	private JTextArea crsDefinitionJTextArea;
 	private JLabel crsResultJLabel;
 	private OkButton okButton;
 	private CancelButton cancelButton;
-	private String crsNotRecognizedText = AtlasCreator
+	private String crsNotRecognizedText = GeopublisherGUI
 			.R("DefaultCRSSelectionJPanel.NotRecognized");
 	private final AtlasConfigEditable atlasConfigEditable;
 
@@ -169,7 +169,7 @@ public class DefaultCRSSelectionJDialog extends JDialog {
 			String authorityCodeTextString = ", " + getEPSGString(crs);
 
 			getCRSResultJLabel().setText(
-					AtlasCreator.R(
+					GeopublisherGUI.R(
 							"DefaultCRSSelectionJPanel.NewCRSRecognized",
 							humanReadable1, authorityCodeTextString));
 		} else {

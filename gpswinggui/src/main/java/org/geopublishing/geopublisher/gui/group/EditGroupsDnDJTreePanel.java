@@ -42,7 +42,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.creator.GPDialogManager;
@@ -112,8 +112,8 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 		/**
 		 * Setting tool-tips so the users know how to handle this Panel
 		 */
-		setToolTipText(AtlasCreator.R("EditGroupsDnDJTreePanel.TT"));
-		getJTree().setToolTipText(AtlasCreator.R("EditGroupsDnDJTreePanel.TT"));
+		setToolTipText(GeopublisherGUI.R("EditGroupsDnDJTreePanel.TT"));
+		getJTree().setToolTipText(GeopublisherGUI.R("EditGroupsDnDJTreePanel.TT"));
 
 	}
 
@@ -175,7 +175,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 									.getTarget();
 
 							// Select the Entry in the table
-							AtlasCreator.getInstance().getJFrame()
+							GeopublisherGUI.getInstance().getJFrame()
 									.getMappoolJTable().select(
 											targetMap.getId());
 
@@ -183,7 +183,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 							final DpEntry<? extends ChartStyle> targetDpe = ((DpRef<DpEntry<? extends ChartStyle>>) clickedNode)
 									.getTarget();
 							// Select the Entry in the table
-							AtlasCreator.getInstance().getJFrame()
+							GeopublisherGUI.getInstance().getJFrame()
 									.getDatapoolJTable().select(
 											targetDpe.getId());
 						}

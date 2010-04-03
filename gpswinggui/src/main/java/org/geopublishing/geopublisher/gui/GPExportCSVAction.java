@@ -21,7 +21,7 @@ import javax.swing.JFileChooser;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -75,7 +75,7 @@ public class GPExportCSVAction extends AbstractAction {
 				"datapool.csv");
 		JFileChooser dc = new JFileChooser(startWithDir);
 		dc.setDialogType(JFileChooser.SAVE_DIALOG);
-		dc.setDialogTitle(AtlasCreator.R("ExportCSV.SaveCSVDialog.Title"));
+		dc.setDialogTitle(GeopublisherGUI.R("ExportCSV.SaveCSVDialog.Title"));
 		dc.setSelectedFile(startWithDir);
 
 		if ((dc.showSaveDialog(owner) != JFileChooser.APPROVE_OPTION)

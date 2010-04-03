@@ -20,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.swing.JPanel;
 import skrueger.swing.Cancellable;
@@ -53,14 +53,14 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 		/**
 		 * One button to select a color
 		 */
-		transparentColorButton.setAction(new AbstractAction(AtlasCreator
+		transparentColorButton.setAction(new AbstractAction(GeopublisherGUI
 				.R("DesignAtlasChartJDialog.TransparentColor.ChooseButton")) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				pyr.setInputTransparentColor(AVSwingUtil.showColorChooser(
 						DpLayerRasterPyramidJPanel.this,
-						AtlasCreator.R("DesignAtlasChartJDialog.TransparentColor.ChooseColorTitle"), pyr 
+						GeopublisherGUI.R("DesignAtlasChartJDialog.TransparentColor.ChooseColorTitle"), pyr 
 								.getInputTransparentColor()));
 				transparentColorButton.setColor(pyr.getInputTransparentColor());
 
@@ -78,7 +78,7 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 		/**
 		 * Second button to reset the color
 		 */
-		resetTransparentColorButton.setAction(new AbstractAction(AtlasCreator
+		resetTransparentColorButton.setAction(new AbstractAction(GeopublisherGUI
 				.R("DesignAtlasChartJDialog.TransparentColor.Reset")) {
 
 			@Override
@@ -93,7 +93,7 @@ public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 			}
 
 		});
-		resetTransparentColorButton.setToolTipText(AtlasCreator
+		resetTransparentColorButton.setToolTipText(GeopublisherGUI
 				.R("DesignAtlasChartJDialog.TransparentColor.Reset.TT"));
 		transparentColorButton.setColor(pyr.getInputTransparentColor());
 

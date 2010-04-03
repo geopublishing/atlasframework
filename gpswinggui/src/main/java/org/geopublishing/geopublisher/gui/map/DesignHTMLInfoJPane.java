@@ -23,7 +23,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -66,7 +66,7 @@ public class DesignHTMLInfoJPane extends HTMLInfoJPane {
 			setEditable(false);
 			setContentType("text/html");
 			
-			setText(AtlasCreator.R("DesignHTMLPanel.NoHTML.Message", I8NUtil
+			setText(GeopublisherGUI.R("DesignHTMLPanel.NoHTML.Message", I8NUtil
 					.getLocaleFor(Translation.getActiveLang())
 					.getDisplayLanguage()));
 		} else

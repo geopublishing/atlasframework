@@ -19,7 +19,7 @@ import javax.swing.Action;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.creator.GPDialogManager;
 
@@ -35,7 +35,7 @@ public class MapPoolPrefsAction extends AbstractAction {
 	private MapPoolJTable mapPoolJTable;
 
 	public MapPoolPrefsAction(Component owner, Map map, MapPool mapPool) {
-		super(AtlasCreator.R("MapPoolWindow.Button_EditMap_label"),
+		super(GeopublisherGUI.R("MapPoolWindow.Button_EditMap_label"),
 				BasicMapLayerLegendPaneUI.ICON_TOOL);
 		this.owner = owner;
 		this.map = map;
@@ -44,7 +44,7 @@ public class MapPoolPrefsAction extends AbstractAction {
 	}
 
 	public MapPoolPrefsAction(MapPoolJTable mapPoolJTable) {
-		super(AtlasCreator.R("MapPoolWindow.Button_EditMap_label"),
+		super(GeopublisherGUI.R("MapPoolWindow.Button_EditMap_label"),
 				BasicMapLayerLegendPaneUI.ICON_TOOL);
 		this.mapPoolJTable = mapPoolJTable;
 		this.mapPool = mapPoolJTable.getMapPool();

@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -32,27 +32,27 @@ import skrueger.creator.GPProps.Keys;
 
 
 public class ExportWizardPage_JNLPDefinition extends WizardPage {
-	private final JLabel JnlpURLLabel = new JLabel(AtlasCreator
+	private final JLabel JnlpURLLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JNLP.JNLPURL.Label"));
-	private final JLabel AtlasURLLabel = new JLabel(AtlasCreator
+	private final JLabel AtlasURLLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JNLP.AtlasURL.Label"));
-	private final JLabel JSCodeLabel = new JLabel(AtlasCreator
+	private final JLabel JSCodeLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JNLP.JavaScriptCode.Label"));
-	private final JLabel linkExplanationJLabel = new JLabel(AtlasCreator
+	private final JLabel linkExplanationJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JNLP.Link.Explanation"));
 
 	private final String jsTemplate = GPProps.get(Keys.JWSStartScript);
-	JLabel explanation = new JLabel(AtlasCreator.R(
+	JLabel explanation = new JLabel(GeopublisherGUI.R(
 			"ExportWizard.JNLP.Explanation", JarExportUtil.JNLP_FILENAME));
 
 	private JTextField jnlpCodebaseJTextField;
 	private JTextArea linkJavaScriptJTextArea;
 	private JTextField atlasURLJTextField;
-	private String validationErrorNoSlash = AtlasCreator
+	private String validationErrorNoSlash = GeopublisherGUI
 			.R("ExportWizard.JNLP.ValidationError.NoSlash");
 
 	public static String getDescription() {
-		return  AtlasCreator.R("ExportWizard.JNLP");
+		return  GeopublisherGUI.R("ExportWizard.JNLP");
 	}
 
 	public ExportWizardPage_JNLPDefinition() {
@@ -140,7 +140,7 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 		try {
 			URL testUrl = new URL(getJnlpCodebaseJTextField().getText());
 		} catch (MalformedURLException e) {
-			return AtlasCreator.R("ExportWizard.JNLP.ValidationError.Invalid",
+			return GeopublisherGUI.R("ExportWizard.JNLP.ValidationError.Invalid",
 					e.getLocalizedMessage());
 		}
 

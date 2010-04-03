@@ -62,7 +62,7 @@ import javax.swing.text.html.HTMLDocument;
 
 import org.apache.commons.io.FileUtils;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import schmitzm.swing.ExceptionDialog;
@@ -512,7 +512,7 @@ class ImageDialog extends DialogShell implements ActionListener,
 						if (!AVSwingUtil
 								.askYesNo(
 										ImageDialog.this,
-										AtlasCreator
+										GeopublisherGUI
 												.R("SHTML.ImageDialog.ImportImagesFileExistsAndWillBeReplaced"))) {
 							continue;
 						} else {

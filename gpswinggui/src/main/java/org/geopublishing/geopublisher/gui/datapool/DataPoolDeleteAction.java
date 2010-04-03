@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import skrueger.creator.GPDialogManager;
@@ -43,7 +43,7 @@ public class DataPoolDeleteAction extends AbstractAction {
 	private final DataPoolJTable dpTable;
 
 	public DataPoolDeleteAction(DataPoolJTable dpTable, Component owner) {
-		super(AtlasCreator.R("DataPoolWindow_Action_DeleteDPE_label"),
+		super(GeopublisherGUI.R("DataPoolWindow_Action_DeleteDPE_label"),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE);
 
 		this.dpTable = dpTable;
@@ -68,7 +68,7 @@ public class DataPoolDeleteAction extends AbstractAction {
 				.getSelectedRow());
 		DpEntry dpe = dataPool.get(modelIndex);
 
-		if (AVSwingUtil.askYesNo(owner, AtlasCreator.R(
+		if (AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
 				"Action_DeleteDPE_reallyDeleteQuestion", dpe.getTitle()
 						.toString(), dpe.getFilename())) == false)
 			return;

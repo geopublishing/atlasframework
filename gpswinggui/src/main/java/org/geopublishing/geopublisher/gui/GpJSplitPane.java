@@ -17,7 +17,7 @@ import javax.swing.JSplitPane;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.EditDataPoolPanel;
@@ -61,7 +61,7 @@ public class GpJSplitPane extends JSplitPane {
 		this.ace = ace;
 
 		if (ace == null)
-			add(new JLabel(AtlasCreator.R("NoAtlasPanelText")));
+			add(new JLabel(GeopublisherGUI.R("NoAtlasPanelText")));
 		else
 			initialize();
 
@@ -83,7 +83,7 @@ public class GpJSplitPane extends JSplitPane {
 		// ****************************************************************************
 		editDatapoolPanel = new EditDataPoolPanel(ace);
 		editDatapoolPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("DataPoolJTable.Border.Title")));
 		setLeftComponent(editDatapoolPanel);
 
@@ -95,12 +95,12 @@ public class GpJSplitPane extends JSplitPane {
 
 		editMapPoolPanel = new EditMapPoolPanel(ace);
 		editMapPoolPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("MapPoolJTable.Border.Title")));
 		rightSide.setTopComponent(editMapPoolPanel);
 
 		editGroups = new EditGroupsDnDJTreePanel(ace.getFirstGroup());
-		editGroups.setBorder(BorderFactory.createTitledBorder(AtlasCreator
+		editGroups.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
 				.R("EditGroupsDnDJTreePanel.Border.Title")));
 		rightSide.setBottomComponent(editGroups);
 

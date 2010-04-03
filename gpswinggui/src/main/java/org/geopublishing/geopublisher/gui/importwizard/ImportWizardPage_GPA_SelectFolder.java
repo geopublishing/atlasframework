@@ -14,7 +14,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -26,25 +26,25 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotExists = GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotExists");
 
-	private final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_CantRead = GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.CantRead");
 
-	private final String validationImportSourceTypeFailedMsg_NotGpa = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotGpa = GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotGPA");
 
 	private JButton folderChooserJButton;
 	JTextField folderJTextField;
-	final private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
+	final private JLabel folderTextFieldJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.Folder.FolderTextBoxLabel"));
 
 	public static String getDescription() {
-		return AtlasCreator.R("ImportWizard.GPA.FolderSelection");
+		return GeopublisherGUI.R("ImportWizard.GPA.FolderSelection");
 	}
 
 	public ImportWizardPage_GPA_SelectFolder() {
@@ -114,7 +114,7 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 					dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 
-					dc.setDialogTitle(AtlasCreator
+					dc.setDialogTitle(GeopublisherGUI
 							.R("ImportWizard.GPA.WhereFrom.DialogTitle"));
 					dc.setMultiSelectionEnabled(false);
 

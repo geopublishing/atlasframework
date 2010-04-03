@@ -16,7 +16,7 @@ import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
@@ -40,13 +40,13 @@ public class EditGroupJDialog extends TranslationAskJDialog {
 	public EditGroupJDialog(Component owner, Group group) {
 		super(owner);
 
-		TranslationEditJPanel a = new TranslationEditJPanel(AtlasCreator
+		TranslationEditJPanel a = new TranslationEditJPanel(GeopublisherGUI
 				.R("GroupTree.Edit.TranslateTitle"), group.getTitle(), group
 				.getAc().getLanguages());
-		TranslationEditJPanel b = new TranslationEditJPanel(AtlasCreator
+		TranslationEditJPanel b = new TranslationEditJPanel(GeopublisherGUI
 				.R("GroupTree.Edit.TranslateDescription"), group.getDesc(),
 				group.getAc().getLanguages());
-		TranslationEditJPanel c = new TranslationEditJPanel(AtlasCreator
+		TranslationEditJPanel c = new TranslationEditJPanel(GeopublisherGUI
 				.R("GroupTree.Edit.TranslateKeywords"), group.getKeywords(),
 				group.getAc().getLanguages());
 

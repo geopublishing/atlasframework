@@ -36,7 +36,7 @@ import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.internal.TranslationCellRenderer;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.NoDataEditListDialog;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableRowHeightAdjustment;
@@ -228,25 +228,25 @@ public class AttribTranslationJTable extends JTable {
 			public String getColumnName(int column) {
 				switch (column) {
 				case COLIDX_QUALITY:
-					return AtlasCreator.R("MapPoolJTable.ColumnName.Quality");
+					return GeopublisherGUI.R("MapPoolJTable.ColumnName.Quality");
 				case COLIDX_WEIGHT:
-					return AtlasCreator.R("Attributes.Edit.Weight");
+					return GeopublisherGUI.R("Attributes.Edit.Weight");
 				case COLIDX_VIS:
-					return AtlasCreator.R("Attributes.Edit.Visibility");
+					return GeopublisherGUI.R("Attributes.Edit.Visibility");
 				case COLIDX_NAME:
-					return AtlasCreator.R("Attributes.Edit.Name");
+					return GeopublisherGUI.R("Attributes.Edit.Name");
 				case COLIDX_TYPE:
-					return AtlasCreator.R("Attributes.Edit.Type");
+					return GeopublisherGUI.R("Attributes.Edit.Type");
 				case COLIDX_UNIT:
-					return AtlasCreator.R("Unit");
+					return GeopublisherGUI.R("Unit");
 				case COLIDX_NODATA:
-					return AtlasCreator.R("NodataValues");
+					return GeopublisherGUI.R("NodataValues");
 					// case COLIDX_TRANSLATE:
 					// return AtlasCreator.R("Attributes.Edit.TitleDesc");
 				case COLIDX_TITLES:
-					return AtlasCreator.R("Attributes.Edit.Title");
+					return GeopublisherGUI.R("Attributes.Edit.Title");
 				case COLIDX_DESCS:
-					return AtlasCreator.R("Attributes.Edit.Desc");
+					return GeopublisherGUI.R("Attributes.Edit.Desc");
 				}
 				return super.getColumnName(column);
 			}
@@ -466,10 +466,10 @@ public class AttribTranslationJTable extends JTable {
 			List<String> languages = dplv.getAtlasConfig().getLanguages();
 
 			TranslationEditJPanel transName = new TranslationEditJPanel(
-					AtlasCreator.R("EditDPEDialog.TranslateTitle"), title,
+					GeopublisherGUI.R("EditDPEDialog.TranslateTitle"), title,
 					languages);
 			TranslationEditJPanel transDesc = new TranslationEditJPanel(
-					AtlasCreator.R("EditDPEDialog.TranslateDescription"), desc,
+					GeopublisherGUI.R("EditDPEDialog.TranslateDescription"), desc,
 					languages);
 
 			setComponents(transName, transDesc);

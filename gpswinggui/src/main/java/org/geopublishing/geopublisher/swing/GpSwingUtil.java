@@ -39,7 +39,7 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -307,7 +307,7 @@ public class GpSwingUtil extends GpUtil{
 		try {
 			Boolean saved = swingWorker.executeModal();
 			if (saved && confirm) {
-				JOptionPane.showMessageDialog(parentGUI, AtlasCreator
+				JOptionPane.showMessageDialog(parentGUI, GeopublisherGUI
 						.R("SaveAtlas.Success.Message"));
 			}
 			return saved;
@@ -364,7 +364,7 @@ public class GpSwingUtil extends GpUtil{
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(AtlasCreator.getInstance().getJFrame(), e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
 			}
 		}
 		return htmlFiles;
@@ -416,7 +416,7 @@ public class GpSwingUtil extends GpUtil{
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(AtlasCreator.getInstance().getJFrame(), e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
 			}
 		}
 		return htmlFiles;

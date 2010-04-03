@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -32,7 +32,7 @@ public class MapPoolDeleteAction extends AbstractAction {
 	private MapPool mapPool;
 
 	public MapPoolDeleteAction(MapPoolJTable mapPoolJTable) {
-		super(AtlasCreator.R("MapPool.Action.DeleteMap"),
+		super(GeopublisherGUI.R("MapPool.Action.DeleteMap"),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE);
 
 		this.mapPoolJTable = mapPoolJTable;
@@ -45,7 +45,7 @@ public class MapPoolDeleteAction extends AbstractAction {
 		final Map map2delete = mapPool.get(mapPoolJTable
 				.convertRowIndexToModel(idx));
 
-		if (!AVSwingUtil.askYesNo(mapPoolJTable, AtlasCreator.R(
+		if (!AVSwingUtil.askYesNo(mapPoolJTable, GeopublisherGUI.R(
 				"MapPool.Action.DeleteMap.Question", map2delete.getTitle()))) {
 			return;
 		}

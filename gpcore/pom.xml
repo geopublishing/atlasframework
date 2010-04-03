@@ -15,6 +15,62 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<build>
+
+
+		<plugin>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>webstart-maven-plugin</artifactId>
+
+			<executions>
+				<execution>
+					<phase>package</phase>
+					<goals>
+						<goal>jnlp</goal>
+					</goals>
+				</execution>
+			</executions>
+
+			<configuration>
+
+				<jnlp>
+					<resources>
+						${project.basedir}/src/deploy/resources
+					</resources>
+
+					<inputTemplateResourcePath>
+						${project.basedir}/src/deploy/resources
+					</inputTemplateResourcePath>
+
+					<inputTemplate>template.jnlp</inputTemplate>
+					<outputFile>as.jnlp</outputFile>
+					<mainClass>org.geopublishing.geopublisher.GeopublisherGUI</mainClass>
+				</jnlp>
+				<!-- SIGNING -->
+
+				<!--
+					defining this will automatically sign the jar and its dependencies
+				-->
+
+				<sign>
+					<!--			-->
+					<!--
+						<keystore>${project.build.outputDirectory}/skrueger/creator/export/keystore</keystore>
+					-->
+					<!--			-->
+					<keypass>wasser</keypass>
+					<storepass>wasser</storepass>
+					<alias>IMPETUS</alias>
+				</sign>
+				<verbose>true</verbose>
+			</configuration>
+		</plugin>
+
+
+	</plugins>
+	</build>
+
+
 	<dependencies>
 		<dependency>
 			<groupId>org.swinglabs</groupId>
@@ -70,23 +126,23 @@
 			<type>jar</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagepyramid</artifactId>
 			<version>2.6.2</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagemosaic</artifactId>
 			<version>2.6.2</version>
 			<type>jar</type>
 		</dependency>
-		
-
 	</dependencies>
+
+
 
 	<repositories>
 		<repository>

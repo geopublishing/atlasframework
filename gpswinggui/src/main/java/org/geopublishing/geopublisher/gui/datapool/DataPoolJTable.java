@@ -50,7 +50,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.DpEntryTypeTableCellRenderer;
 import org.geopublishing.geopublisher.gui.MegaByteTableCellRenderer;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
@@ -129,21 +129,21 @@ public class DataPoolJTable extends JTable {
 			 * sizeOnFilesystemWithoutSVN=Size (MB)
 			 */
 			if (column == 0) {
-				return AtlasCreator.R("DataPoolJTable.ColumnName.Quality");
+				return GeopublisherGUI.R("DataPoolJTable.ColumnName.Quality");
 			} else if (column == 1) {
-				return AtlasCreator.R("DataPoolJTable.ColumnName.Type");
+				return GeopublisherGUI.R("DataPoolJTable.ColumnName.Type");
 			} else if (column == 2) {
-				return AtlasCreator.R("DataPoolJTable.ColumnName.TitleLang",
+				return GeopublisherGUI.R("DataPoolJTable.ColumnName.TitleLang",
 						Translation.getActiveLang());
 			} else if (column == 3) {
-				return AtlasCreator.R("DataPoolJTable.ColumnName.ViewsLang",
+				return GeopublisherGUI.R("DataPoolJTable.ColumnName.ViewsLang",
 						Translation.getActiveLang());
 			} else if (column == 4) {
-				return AtlasCreator.R("DataPoolJTable.ColumnName.Filename");
+				return GeopublisherGUI.R("DataPoolJTable.ColumnName.Filename");
 			} else if (column == 5) {
-				return AtlasCreator.R("CRS");
+				return GeopublisherGUI.R("CRS");
 			} else if (column == 6) {
-				return AtlasCreator.R("sizeOnFilesystemWithoutSVN");
+				return GeopublisherGUI.R("sizeOnFilesystemWithoutSVN");
 			}
 			return super.getColumnName(column);
 		}
@@ -226,7 +226,7 @@ public class DataPoolJTable extends JTable {
 				boolean somethingMissing = false;
 				final StringBuffer tooltTipHtml = new StringBuffer(
 						"<html><b>"
-								+ AtlasCreator
+								+ GeopublisherGUI
 										.R(
 												"MapPoolJTable.ColumnName.Quality.Tooltip",
 												NumberFormat
@@ -255,7 +255,7 @@ public class DataPoolJTable extends JTable {
 				if (missing.size() > 0) {
 					somethingMissing = true;
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Title"));
+							+ GeopublisherGUI.R("DataPool_Title"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -270,7 +270,7 @@ public class DataPoolJTable extends JTable {
 					somethingMissing = true;
 
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Description"));
+							+ GeopublisherGUI.R("DataPool_Description"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -286,7 +286,7 @@ public class DataPoolJTable extends JTable {
 					somethingMissing = true;
 
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Keywords"));
+							+ GeopublisherGUI.R("DataPool_Keywords"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -303,7 +303,7 @@ public class DataPoolJTable extends JTable {
 						somethingMissing = true;
 
 						tooltTipHtml.append("<li>"
-								+ AtlasCreator.R("DataPool_HTML"));
+								+ GeopublisherGUI.R("DataPool_HTML"));
 						if (langs.size() > 1) {
 							tooltTipHtml.append(": " + missing.toString());
 						}
@@ -318,7 +318,7 @@ public class DataPoolJTable extends JTable {
 						somethingMissing = true;
 
 						tooltTipHtml.append("<li>"
-								+ AtlasCreator.R("DataPool_LayerStylesQM", dpl
+								+ GeopublisherGUI.R("DataPool_LayerStylesQM", dpl
 										.getLayerStyles().size(), NumberFormat
 										.getPercentInstance().format(lsQM)));
 						tooltTipHtml.append("</li>");
@@ -341,7 +341,7 @@ public class DataPoolJTable extends JTable {
 						double quality = dplv.getAttributeMetaDataMap().getQuality(dpe.getAtlasConfig().getLanguages());
 						tooltTipHtml
 								.append("<li>"
-										+ AtlasCreator
+										+ GeopublisherGUI
 												.R(
 														"DataPool_ColumQM",
 														visibleAttributesCount,

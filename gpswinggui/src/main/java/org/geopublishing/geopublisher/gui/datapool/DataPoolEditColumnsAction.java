@@ -20,7 +20,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 
 import skrueger.creator.GPDialogManager;
@@ -36,7 +36,7 @@ public class DataPoolEditColumnsAction extends AbstractAction {
 
 	public DataPoolEditColumnsAction(DataPoolJTable dpTable, Component owner) {
 
-		super(AtlasCreator.R("DataPoolWindow_Action_EditColumns_label"));
+		super(GeopublisherGUI.R("DataPoolWindow_Action_EditColumns_label"));
 
 		this.dpTable = dpTable;
 		this.owner = owner;

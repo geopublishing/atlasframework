@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.netbeans.spi.wizard.DeferredWizardResult;
@@ -63,7 +63,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
 				.get(ExportWizard.ACE);
-		if (!GpSwingUtil.save(ace, AtlasCreator.getInstance().getJFrame(), false))
+		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
 			return null; // TODO what should be return here?
 
 		final Boolean isJws = (Boolean) wizardData
@@ -160,11 +160,11 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 							.replace("\\", "\\\\");
 				}
 
-				panel.add(new JLabel(AtlasCreator.R(
+				panel.add(new JLabel(GeopublisherGUI.R(
 						"Export.Dialog.Finished.Msg",
 						exportJWSandDISKdirRepresentation)));
 
-				final JButton openFolderButton = new JButton(AtlasCreator
+				final JButton openFolderButton = new JButton(GeopublisherGUI
 						.R("ExportWizard.Result.OpenFolderButton.Label"));
 				openFolderButton.addActionListener(new ActionListener() {
 

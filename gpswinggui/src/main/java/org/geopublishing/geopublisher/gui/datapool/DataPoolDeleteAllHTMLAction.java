@@ -24,7 +24,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 
@@ -40,7 +40,7 @@ public class DataPoolDeleteAllHTMLAction extends AbstractAction {
 
 	public DataPoolDeleteAllHTMLAction(DataPoolJTable dpTable, Component owner,
 			int countExistingFiles) {
-		super(AtlasCreator.R("DataPoolWindow_Action_DeleteAllDPEHTML_label",
+		super(GeopublisherGUI.R("DataPoolWindow_Action_DeleteAllDPEHTML_label",
 				countExistingFiles), BasicMapLayerLegendPaneUI.ICON_REMOVE);
 
 		this.dpTable = dpTable;
@@ -64,7 +64,7 @@ public class DataPoolDeleteAllHTMLAction extends AbstractAction {
 		if (!(dpe instanceof DpLayer))
 			return;
 
-		AVSwingUtil.askYesNo(owner, AtlasCreator.R(
+		AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
 				"DataPoolWindow_Action_DeleteAllDPEHTML_Question",
 				countExistingFiles));
 

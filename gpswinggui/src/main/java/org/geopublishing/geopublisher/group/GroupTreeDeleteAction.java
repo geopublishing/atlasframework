@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 
 
@@ -65,7 +65,7 @@ public class GroupTreeDeleteAction extends AbstractAction {
 	 */
 	public GroupTreeDeleteAction(EditGroupsDnDJTreePanel editGroupsPanel,
 			TreeNode treeNode) {
-		super(AtlasCreator.R("GroupTree.Action.Delete"),
+		super(GeopublisherGUI.R("GroupTree.Action.Delete"),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE);
 		this.owner = editGroupsPanel;
 		this.node = treeNode;
@@ -140,7 +140,7 @@ public class GroupTreeDeleteAction extends AbstractAction {
 		} else {
 			questionKey = "GroupTree.Action.DeleteDpRef.Question";
 		}
-		if (!AVSwingUtil.askYesNo(owner, AtlasCreator.R(questionKey, deleteNode
+		if (!AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(questionKey, deleteNode
 				.toString())))
 			return false;
 

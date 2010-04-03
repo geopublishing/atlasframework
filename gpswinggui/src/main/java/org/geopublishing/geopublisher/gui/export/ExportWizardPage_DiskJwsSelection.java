@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import skrueger.creator.GPProps;
@@ -25,20 +25,20 @@ import skrueger.creator.GPProps.Keys;
 
 
 public class ExportWizardPage_DiskJwsSelection extends WizardPage {
-	private final String validationJwsOrDiskFailedMsg = AtlasCreator
+	private final String validationJwsOrDiskFailedMsg = GeopublisherGUI
 			.R("ExportWizard.JwsOrDisk.ValidationError");
 
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JwsOrDisk.Explanation"));
-	JLabel explanationJwsJLabel = new JLabel(AtlasCreator
+	JLabel explanationJwsJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JwsOrDisk.Explanation.Jws"));
-	JLabel explanationDiskJLabel = new JLabel(AtlasCreator
+	JLabel explanationDiskJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JwsOrDisk.Explanation.Disk"));
 	JCheckBox diskJCheckbox;
 	JCheckBox jwsJCheckbox;
 
 	public static String getDescription() {
-		return AtlasCreator.R("ExportWizard.JwsOrDisk");
+		return GeopublisherGUI.R("ExportWizard.JwsOrDisk");
 	}
 
 	public ExportWizardPage_DiskJwsSelection() {
@@ -68,7 +68,7 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 
 	private JCheckBox getJwsJCheckbox() {
 		if (jwsJCheckbox == null) {
-			jwsJCheckbox = new JCheckBox(AtlasCreator
+			jwsJCheckbox = new JCheckBox(GeopublisherGUI
 					.R("ExportWizard.JwsOrDisk.JwsCheckbox"));
 			jwsJCheckbox.setName(ExportWizard.JWS_CHECKBOX);
 			jwsJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportJWS));
@@ -79,7 +79,7 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 
 	private JCheckBox getDiskJCheckbox() {
 		if (diskJCheckbox == null) {
-			diskJCheckbox = new JCheckBox(AtlasCreator
+			diskJCheckbox = new JCheckBox(GeopublisherGUI
 					.R("ExportWizard.JwsOrDisk.DiskCheckbox"));
 			diskJCheckbox.setName(ExportWizard.DISK_CHECKBOX);
 			diskJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportDisk));

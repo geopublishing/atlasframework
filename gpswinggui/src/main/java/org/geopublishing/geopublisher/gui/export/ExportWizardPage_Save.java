@@ -25,18 +25,18 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 
 public class ExportWizardPage_Save extends WizardPage {
 
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.StartPage.Explanation"));
-	JLabel saveExplJLabel = new JLabel(AtlasCreator
+	JLabel saveExplJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.StartPage.Save.Explanation"));
-	private final String validationFailedMsg_HasToSave = AtlasCreator
+	private final String validationFailedMsg_HasToSave = GeopublisherGUI
 			.R("ExportWizard.StartPage.ValidationError.Save");
 	private final String validationFailedMsg_NoMaps = AtlasViewer
 			.R("AtlasViewer.error.noMapInAtlas");
@@ -48,7 +48,7 @@ public class ExportWizardPage_Save extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return AtlasCreator.R("ExportWizard.StartPage");
+		return GeopublisherGUI.R("ExportWizard.StartPage");
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ExportWizardPage_Save extends WizardPage {
 		if (!notInGroupNorMap.isEmpty()) {
 			add(
 					new JLabel(
-							AtlasCreator
+							GeopublisherGUI
 									.R("InconsistancyWarning.DPEsNotReferencedFromGroupTreeOrMap")),
 					"gapy unrelated");
 
@@ -105,7 +105,7 @@ public class ExportWizardPage_Save extends WizardPage {
 
 	public JCheckBox getSaveJCheckbox() {
 		if (saveJCheckbox == null) {
-			saveJCheckbox = new JCheckBox(AtlasCreator
+			saveJCheckbox = new JCheckBox(GeopublisherGUI
 					.R("ExportWizard.StartPage.Save.CheckBoxLabel"));
 			saveJCheckbox.setName(ExportWizard.SAVE_AUTOMATICALLY);
 			saveJCheckbox.setSelected(true);

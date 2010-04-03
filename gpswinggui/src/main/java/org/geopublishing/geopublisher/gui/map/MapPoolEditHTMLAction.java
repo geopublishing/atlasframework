@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -37,13 +37,13 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 	private Map map;
 
 	public MapPoolEditHTMLAction(MapPoolJTable mpTable) {
-		super(AtlasCreator.R("MapPoolWindow_Action_EditMapHTML_label"));
+		super(GeopublisherGUI.R("MapPoolWindow_Action_EditMapHTML_label"));
 
 		this.mpTable = mpTable;
 	}
 
 	public MapPoolEditHTMLAction(Map map) {
-		super(AtlasCreator.R("MapPoolWindow_Action_EditMapHTML_label"));
+		super(GeopublisherGUI.R("MapPoolWindow_Action_EditMapHTML_label"));
 		this.map = map;
 	}
 
@@ -66,12 +66,12 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 
 		ArrayList<String> tabTitles = new ArrayList<String>();
 		for (String l : ace.getLanguages()) {
-			tabTitles.add(AtlasCreator.R("Map.HTMLInfo.LanguageTabTitle",
+			tabTitles.add(GeopublisherGUI.R("Map.HTMLInfo.LanguageTabTitle",
 					I8NUtil.getLocaleFor(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,
-				AtlasCreator.R("Map.HTMLInfo.EditDialog.Title", map.getTitle()
+				GeopublisherGUI.R("Map.HTMLInfo.EditDialog.Title", map.getTitle()
 						.toString()));
 
 		map.resetMissingHTMLinfos();

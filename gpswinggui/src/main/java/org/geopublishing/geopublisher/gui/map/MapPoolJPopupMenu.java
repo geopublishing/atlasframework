@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.creator.GPDialogManager;
 
@@ -44,7 +44,7 @@ public class MapPoolJPopupMenu extends JPopupMenu {
 		/**
 		 * A menuitem to open the MapComposer
 		 */
-		AbstractAction openMapComposer = new AbstractAction("<html><b>"+AtlasCreator.R("MapPoolWindow.Action.OpenInMapComposer")+"</b></html>", Icons.ICON_MAP_SMALL) {
+		AbstractAction openMapComposer = new AbstractAction("<html><b>"+GeopublisherGUI.R("MapPoolWindow.Action.OpenInMapComposer")+"</b></html>", Icons.ICON_MAP_SMALL) {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -63,7 +63,7 @@ public class MapPoolJPopupMenu extends JPopupMenu {
 		 * The Make Default Action!
 		 */
 		JMenuItem menuItemMakeDefault = new JMenuItem(new AbstractAction(
-				AtlasCreator.R("MapPool.Action.MakeStartMap")) {
+				GeopublisherGUI.R("MapPool.Action.MakeStartMap")) {
 
 			public void actionPerformed(ActionEvent e) {
 				/**
@@ -77,7 +77,7 @@ public class MapPoolJPopupMenu extends JPopupMenu {
 			}
 
 		});
-		menuItemMakeDefault.setToolTipText(AtlasCreator
+		menuItemMakeDefault.setToolTipText(GeopublisherGUI
 				.R("MapPool.Action.MakeStartMap.TT"));
 		add(menuItemMakeDefault);
 

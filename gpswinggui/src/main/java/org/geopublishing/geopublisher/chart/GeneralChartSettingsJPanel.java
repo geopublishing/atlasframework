@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.jfree.chart.ChartPanel;
 
 import schmitzm.jfree.chart.style.ChartLabelStyle;
@@ -238,7 +238,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 					getLanguages());
 		}
 		titleTranslationEditPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("ManageChartsForMapDialog.ColumnName.2")));
 		titleTranslationEditPanel.getTranslation()
 				.addTranslationChangeListener(actionListenerTitle);
@@ -262,7 +262,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 					getLanguages());
 		}
 		descTranslationEditPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("ManageChartsForMapDialog.ColumnName.3")));
 
 		descTranslationEditPanel.getTranslation().addTranslationChangeListener(

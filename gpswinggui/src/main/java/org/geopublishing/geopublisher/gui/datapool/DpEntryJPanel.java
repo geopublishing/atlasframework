@@ -28,7 +28,7 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -199,7 +199,7 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 	}
 
 	protected String R(String string, Object... obj) {
-		return AtlasCreator.R(string, obj);
+		return GeopublisherGUI.R(string, obj);
 	}
 
 	boolean backupExportable = false;

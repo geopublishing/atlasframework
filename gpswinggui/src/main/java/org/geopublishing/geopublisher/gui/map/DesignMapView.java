@@ -28,7 +28,7 @@ import org.geopublishing.atlasViewer.swing.AtlasMapView;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geotools.map.MapContext;
 
 import skrueger.creator.GPProps;
@@ -36,7 +36,7 @@ import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
 
 /**
- * This is the {@link MapView} used in the {@link AtlasCreator} to preview the
+ * This is the {@link MapView} used in the {@link GeopublisherGUI} to preview the
  * {@link Map}s.<br>
  * It allows the HTML folder to be changed and can be edited.<br>
  */

@@ -40,7 +40,7 @@ import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.atlasViewer.swing.MapLayerLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.DesignAtlasStylerDialog;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
@@ -65,7 +65,7 @@ import skrueger.i8n.I8NUtil;
 
 /**
  * This extension of the basic {@link MapLayerLegend} introduces menu items and
- * behaviour which are only available in the {@link AtlasCreator} context.
+ * behaviour which are only available in the {@link GeopublisherGUI} context.
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  */
@@ -99,25 +99,25 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 		if (!hasVisibleAttributes() && MapLayerUtils.isGridLayer(getMapLayer())) {
 			newtt += "<b>&lowast;</b> <b>"
-					+ AtlasCreator
+					+ GeopublisherGUI
 							.R("DesignAtlasMapLayer.TT.layerHasNoVisibleAttribute")
 					+ "</b><br/>";
 		}
 
 		if (isHiddenInLegend()) {
 			newtt += "<b>&lowast;</b> "
-					+ AtlasCreator
+					+ GeopublisherGUI
 							.R("DesignAtlasMapLayer.TT.layerWillbeHiddenInAtlasLegend")
 					+ "<br/>";
 		}
 
 		if (map.isSelectableFor(dpLayer.getId())) {
 			newtt += "<font color='green'><b>&lowast;</b> "
-					+ AtlasCreator.R("DesignAtlasMapLayer.TT.layerSelectable")
+					+ GeopublisherGUI.R("DesignAtlasMapLayer.TT.layerSelectable")
 					+ "</font><br/>";
 		} else {
 			newtt += "<font color='red'><b>&lowast;</b> "
-					+ AtlasCreator
+					+ GeopublisherGUI
 							.R("DesignAtlasMapLayer.TT.layerNotSelectable")
 					+ "</font><br/>";
 		}
@@ -159,7 +159,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			final DataPoolJTable dpJTable = AtlasCreator.getInstance()
+			final DataPoolJTable dpJTable = GeopublisherGUI.getInstance()
 					.getJFrame().getDatapoolJTable();
 
 			dpJTable.select(getMapLayer().getTitle());
@@ -237,7 +237,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		/**
 		 * Edit DPE
 		 */
-		menu.add(new AbstractAction(AtlasCreator
+		menu.add(new AbstractAction(GeopublisherGUI
 				.R("DataPoolWindow_Action_EditDPE_label"),
 				BasicMapLayerLegendPaneUI.ICON_TOOL) {
 
@@ -252,7 +252,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		/*
 		 * Edit HTML ..
 		 */
-		menu.add(new AbstractAction(AtlasCreator
+		menu.add(new AbstractAction(GeopublisherGUI
 				.R("DataPoolWindow_Action_EditDPEHTML_label")) {
 
 			@Override
@@ -266,12 +266,12 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				ArrayList<String> tabTitles = new ArrayList<String>();
 
 				for (String l : ace.getLanguages()) {
-					tabTitles.add(AtlasCreator.R("EditLayerHTML.Tabs.Titles",
+					tabTitles.add(GeopublisherGUI.R("EditLayerHTML.Tabs.Titles",
 							I8NUtil.getLocaleFor(l).getDisplayLanguage()));
 				}
 
 				SimplyHTMLUtil.openHTMLEditors(owner, ace, infoFiles,
-						tabTitles, AtlasCreator.R("EditLayerHTML.Dialog.Title",
+						tabTitles, GeopublisherGUI.R("EditLayerHTML.Dialog.Title",
 								dpLayer.getTitle().toString()));
 
 				/**
@@ -289,7 +289,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		final int countExisting = map.getAc().getLanguages().size()
 				- dpLayer.getMissingHTMLLanguages().size();
 		if (countExisting > 0) {
-			menu.add(new AbstractAction(AtlasCreator.R(
+			menu.add(new AbstractAction(GeopublisherGUI.R(
 					"DataPoolWindow_Action_DeleteAllDPEHTML_label",
 					countExisting), BasicMapLayerLegendPaneUI.ICON_REMOVE) {
 
@@ -298,7 +298,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 					Window owner = SwingUtil
 							.getParentWindow(DesignAtlasMapLayerLegend.this);
 
-					AVSwingUtil.askYesNo(owner, AtlasCreator.R(
+					AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
 							"DataPoolWindow_Action_DeleteAllDPEHTML_Question",
 							countExisting));
 
@@ -332,9 +332,9 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 			 * Menuitem: Manage Available Styles for this layer in this map
 			 */
 			JMenuItem itemManageViews = new JMenuItem();
-			itemManageViews.setText(AtlasCreator
+			itemManageViews.setText(GeopublisherGUI
 					.R("DataPoolWindow_Action_ManageLayerStyles_label"));
-			itemManageViews.setToolTipText(AtlasCreator
+			itemManageViews.setToolTipText(GeopublisherGUI
 					.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
 			itemManageViews.addActionListener(new ActionListener() {
 
@@ -363,9 +363,9 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 			 * Menu item: Manage available Charts for this layer in this map
 			 */
 			JMenuItem itemManageCharts = new JMenuItem(Icons.ICON_CHART_SMALL);
-			itemManageCharts.setText(AtlasCreator
+			itemManageCharts.setText(GeopublisherGUI
 					.R("DataPoolWindow_Action_ManageCharts_label"));
-			itemManageCharts.setToolTipText(AtlasCreator
+			itemManageCharts.setToolTipText(GeopublisherGUI
 					.R("DataPoolWindow_Action_ManageCharts_tt"));
 			itemManageCharts.addActionListener(new ActionListener() {
 
@@ -391,7 +391,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "hideInLegend" on/off
 		 */
 		JCheckBoxMenuItem hideOnOff = new JCheckBoxMenuItem(new AbstractAction(
-				AtlasCreator.R("LayerToolMenu.hideInLegend")) {
+				GeopublisherGUI.R("LayerToolMenu.hideInLegend")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -413,7 +413,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showTableInLegend" on/off
 		 */
 		JCheckBoxMenuItem showTableInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("LayerToolMenu.showTableInLegend")) {
 
 					@Override
@@ -433,7 +433,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showFilterInLegend" on/off
 		 */
 		JCheckBoxMenuItem showFilterInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("LayerToolMenu.showFilterInLegend")) {
 
 					@Override
@@ -454,7 +454,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showStylerInLegend" on/off
 		 */
 		JCheckBoxMenuItem showStylerInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("LayerToolMenu.showStylerInLegend")) {
 
 					@Override
@@ -474,7 +474,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "anklickbar" on/off
 		 */
 		JCheckBoxMenuItem layerSelectable = new JCheckBoxMenuItem(
-				new AbstractAction(AtlasCreator.R("LayerToolMenu.selectable")) {
+				new AbstractAction(GeopublisherGUI.R("LayerToolMenu.selectable")) {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -493,7 +493,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				});
 		layerSelectable.setIcon(new ImageIcon(MapView.class
 				.getResource("resource/icons/info.png")));
-		layerSelectable.setToolTipText(AtlasCreator
+		layerSelectable.setToolTipText(GeopublisherGUI
 				.R("LayerToolMenu.selectable.TT"));
 
 		layerSelectable.setSelected(map.isSelectableFor(styledLayer.getId()));

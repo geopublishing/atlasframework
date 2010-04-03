@@ -24,12 +24,12 @@ public class GPBugReportmailer extends BugReportmailer {
 
 	@Override
 	protected String getBody() {
-		return AtlasCreator.R("SendLogToAuthor.Email.Body", logFileLocation);
+		return GeopublisherGUI.R("SendLogToAuthor.Email.Body", logFileLocation);
 	}
 
 	@Override
 	protected String getSubject() {
-		return AtlasCreator.R("SendLogToAuthor.Email.Subject", AVUtil
+		return GeopublisherGUI.R("SendLogToAuthor.Email.Subject", AVUtil
 				.getVersionInfo());
 	}
 

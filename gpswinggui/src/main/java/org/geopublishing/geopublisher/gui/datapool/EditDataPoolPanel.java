@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.dp.ImportToDataPoolDropTargetListener;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 
@@ -67,10 +67,10 @@ public class EditDataPoolPanel extends JPanel {
 
 		add(scrollDatapoolTable, "grow 2000");
 
-		add(new JLabel(AtlasCreator.R("EditDataPoolPanel.Explanation")),
+		add(new JLabel(GeopublisherGUI.R("EditDataPoolPanel.Explanation")),
 				"shrinky, split 2");
 
-		add(new SmallButton(new AbstractAction(AtlasCreator
+		add(new SmallButton(new AbstractAction(GeopublisherGUI
 				.R("EditDataPoolPanel.ImportButton")) {
 
 			@Override

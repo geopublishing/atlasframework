@@ -52,7 +52,7 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayer;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -358,7 +358,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	 */
 	public DesignMapViewJDialog(final Component owner, final Map map_)
 			throws HeadlessException {
-		super(owner, AtlasCreator.R("DesignMapViewJDialog.title", map_
+		super(owner, GeopublisherGUI.R("DesignMapViewJDialog.title", map_
 				.getTitle()));
 
 		this.ace = (AtlasConfigEditable) map_.getAc();
@@ -572,7 +572,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final JPanel panel = new JPanel(new MigLayout());
 
 		final JButton saveDividerRatioButton = new SmallButton(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("DesignMapViewJDialog.Button.SaveDivider.Label")) {
 
 					@Override
@@ -598,7 +598,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						if (!AVSwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
-										AtlasCreator
+										GeopublisherGUI
 												.R(
 														"DesignMapViewJDialog.SaveDivider.Question.forMap",
 														NumberFormat
@@ -614,7 +614,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						if (!AVSwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
-										AtlasCreator
+										GeopublisherGUI
 												.R(
 														"DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
 														NumberFormat
@@ -627,10 +627,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						}
 					}
 
-				}, AtlasCreator.R("DesignMapViewJDialog.Button.SaveDivider.TT"));
+				}, GeopublisherGUI.R("DesignMapViewJDialog.Button.SaveDivider.TT"));
 
 		final JButton saveAutoDividerRatioButton = new SmallButton(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("DesignMapViewJDialog.Button.AutoDivider.Label")) {
 
 					@Override
@@ -647,7 +647,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						if (!AVSwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
-										AtlasCreator
+										GeopublisherGUI
 												.R(
 														"DesignMapViewJDialog.SaveDivider.Question.forMap",
 														NumberFormat
@@ -663,7 +663,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						if (!AVSwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
-										AtlasCreator
+										GeopublisherGUI
 												.R(
 														"DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
 														NumberFormat
@@ -678,7 +678,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						map.setLeftRightRatio(0.);
 					}
 
-				}, AtlasCreator.R("DesignMapViewJDialog.Button.AutoDivider.TT"));
+				}, GeopublisherGUI.R("DesignMapViewJDialog.Button.AutoDivider.TT"));
 
 		panel.add(saveAutoDividerRatioButton);
 		panel.add(saveDividerRatioButton);
@@ -700,14 +700,14 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			// .R("DesignMapViewJDialog.mapArea.maxExtend.border"));
 			// final JPanel maxExtendPanel = new JPanel(new MigLayout());
 
-			mapAreaPanel.add(new JLabel(AtlasCreator
+			mapAreaPanel.add(new JLabel(GeopublisherGUI
 					.R("DesignMapViewJDialog.mapArea.maxExtend.explanation")),
 					"span 3, wrap");
 
 			/*
 			 * Adding the Button to select a max. zoom extend
 			 */
-			maxExtendButton = new SmallButton(new AbstractAction(AtlasCreator
+			maxExtendButton = new SmallButton(new AbstractAction(GeopublisherGUI
 					.R("DesignMapView.SetMaxBBoxTool"),
 					Icons.ICON_MAPEXTEND_BBOX) {
 
@@ -725,9 +725,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					JOptionPane
 							.showMessageDialog(
 									DesignMapViewJDialog.this,
-									AtlasCreator
+									GeopublisherGUI
 											.R("DesignMapView.SetMaxBBoxTool.pleaseSelectBBOX.msg"),
-									AtlasCreator
+									GeopublisherGUI
 											.R("DesignMapView.SetMaxBBoxTool"),
 									JOptionPane.INFORMATION_MESSAGE);
 
@@ -735,7 +735,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					maxExtendButton.setEnabled(false);
 				}
 			});
-			maxExtendButton.setToolTipText(AtlasCreator
+			maxExtendButton.setToolTipText(GeopublisherGUI
 					.R("DesignMapView.SetMaxBBoxTool.TT"));
 			mapAreaPanel.add(maxExtendButton);
 			maxExtendButton.setEnabled(map.getMaxExtend() == null);
@@ -747,7 +747,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			 * Adding the Button to reset the min. zoom extend
 			 */
 			maxExtendResetButton = new SmallButton(
-					new AbstractAction(AtlasCreator
+					new AbstractAction(GeopublisherGUI
 							.R("DesignMapView.SetMaxBBoxTool.RemoveButton"),
 							Icons.ICON_MAPEXTEND_BBOX_RESET) {
 
@@ -766,14 +766,14 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						}
 
 					});
-			maxExtendResetButton.setToolTipText(AtlasCreator
+			maxExtendResetButton.setToolTipText(GeopublisherGUI
 					.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
 			mapAreaPanel.add(maxExtendResetButton);
 			maxExtendResetButton.setEnabled(map.getMaxExtend() != null);
 
 			maxExtendPreviewCheckBox = new JCheckBox(
 					new AbstractAction(
-							AtlasCreator
+							GeopublisherGUI
 									.R("DesignMapViewJDialog.mapArea.maxExtend.hardPreviewoption")) {
 
 						@Override
@@ -808,7 +808,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		} // maxExtend stuff
 
-		mapAreaPanel.add(new JLabel(AtlasCreator
+		mapAreaPanel.add(new JLabel(GeopublisherGUI
 				.R("DesignMapViewJDialog.mapArea.defaultArea.explanation")),
 				"span 3, wrap");
 
@@ -816,7 +816,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		 * A button to store the start area
 		 */
 		setDefaultMapAreaButton = new SmallButton(new AbstractAction(
-				AtlasCreator.R("DesignMapViewJDialog.Button.SaveBBOX.Label")) {
+				GeopublisherGUI.R("DesignMapViewJDialog.Button.SaveBBOX.Label")) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -832,9 +832,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				JOptionPane
 						.showMessageDialog(
 								DesignMapViewJDialog.this,
-								AtlasCreator
+								GeopublisherGUI
 										.R("DesignMapView.SetDefaultBBoxTool.pleaseSelectBBOX.msg"),
-								AtlasCreator
+								GeopublisherGUI
 										.R("DesignMapViewJDialog.Button.SaveBBOX.Label"),
 								JOptionPane.INFORMATION_MESSAGE);
 
@@ -851,7 +851,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		 * Adding the Button to reset the min. zoom extend
 		 */
 		resetDefaultMapAreaButton = new SmallButton(new AbstractAction(
-				AtlasCreator.R("DesignMapView.defaultMapArea.RemoveButton"),
+				GeopublisherGUI.R("DesignMapView.defaultMapArea.RemoveButton"),
 				Icons.ICON_DEFAULTMAPAREA_BBOX_RESET) {
 
 			@Override
@@ -868,7 +868,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			}
 
 		});
-		resetDefaultMapAreaButton.setToolTipText(AtlasCreator
+		resetDefaultMapAreaButton.setToolTipText(GeopublisherGUI
 				.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
 		mapAreaPanel.add(resetDefaultMapAreaButton);
 
@@ -876,7 +876,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		// A button to try out the default map area function
 		SmallButton tryStartAreaButton = new SmallButton(new AbstractAction(
-				AtlasCreator.R("DesignMapView.defaultMapArea.try.button")) {
+				GeopublisherGUI.R("DesignMapView.defaultMapArea.try.button")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -969,7 +969,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			}
 		});
 
-		gridCrsSelector.setToolTipText(AtlasCreator
+		gridCrsSelector.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapFrameCRS.TT"));
 		gridCrsSelector.addActionListener(new ActionListener() {
 
@@ -992,7 +992,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		});
 
-		gridFormatterSelector.setToolTipText(AtlasCreator
+		gridFormatterSelector.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapFrameFormat.TT"));
 		gridFormatterSelector.addActionListener(new ActionListener() {
 
@@ -1026,7 +1026,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		});
 
 		final JCheckBox gridVisibibleJCheckBox = new JCheckBox(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("DesignMapViewJDialog.MapFrameVisible")) {
 
 					@Override
@@ -1040,11 +1040,11 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					}
 
 				});
-		gridVisibibleJCheckBox.setToolTipText(AtlasCreator
+		gridVisibibleJCheckBox.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapFrameVisible.TT"));
 
 		final JCheckBox scaleVisibibleJCheckBox = new JCheckBox(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("DesignMapViewJDialog.MapScaleVisible")) {
 
 					@Override
@@ -1056,7 +1056,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					}
 
 				});
-		scaleVisibibleJCheckBox.setToolTipText(AtlasCreator
+		scaleVisibibleJCheckBox.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapScaleVisible.TT"));
 
 		// Setting the initial values
@@ -1075,11 +1075,11 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		// DesignMapViewJDialog.MapFrameCRS= Map grid CRS:
 		// DesignMapViewJDialog.MapFrameFormat= Map grid format:
 		panel.add(
-				new JLabel(AtlasCreator.R("DesignMapViewJDialog.MapFrameCRS")),
+				new JLabel(GeopublisherGUI.R("DesignMapViewJDialog.MapFrameCRS")),
 				"split 2, right");
 		panel.add(gridCrsSelector);
 
-		panel.add(new JLabel(AtlasCreator
+		panel.add(new JLabel(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapFrameFormat")), "split 2, right");
 		panel.add(gridFormatterSelector, "wrap");
 		panel.add(gridVisibibleJCheckBox, "split 2");
@@ -1092,17 +1092,17 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	private JTabbedPane createTabs() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 
-		tabbedPane.insertTab(AtlasCreator.R("DesignMapViewJDialog.legend.tab"),
-				null, createLegendePanel(), AtlasCreator
+		tabbedPane.insertTab(GeopublisherGUI.R("DesignMapViewJDialog.legend.tab"),
+				null, createLegendePanel(), GeopublisherGUI
 						.R("DesignMapViewJDialog.legend.tab.tt"), tabbedPane
 						.getTabCount());
-		tabbedPane.insertTab(AtlasCreator.R("DesignMapViewJDialog.margin.tab"),
-				null, createMapMarginPanel(), AtlasCreator
+		tabbedPane.insertTab(GeopublisherGUI.R("DesignMapViewJDialog.margin.tab"),
+				null, createMapMarginPanel(), GeopublisherGUI
 						.R("DesignMapViewJDialog.margin.tab.tt"), tabbedPane
 						.getTabCount());
 		tabbedPane.insertTab(
-				AtlasCreator.R("DesignMapViewJDialog.mapArea.tab"), null,
-				createMapAreaPanel(), AtlasCreator
+				GeopublisherGUI.R("DesignMapViewJDialog.mapArea.tab"), null,
+				createMapAreaPanel(), GeopublisherGUI
 						.R("DesignMapViewJDialog.mapArea.tab.tt"), tabbedPane
 						.getTabCount());
 
@@ -1249,10 +1249,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		rootPane.registerKeyboardAction(new ActionListener() {
 
 			public void actionPerformed(final ActionEvent e) {
-				AtlasCreator.getInstance().actionPerformed(
+				GeopublisherGUI.getInstance().actionPerformed(
 						new ActionEvent(DesignMapViewJDialog.this, (int) System
 								.currentTimeMillis(),
-								AtlasCreator.ActionCmds.previewAtlasLive
+								GeopublisherGUI.ActionCmds.previewAtlasLive
 										.toString()));
 			}
 

@@ -18,7 +18,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
@@ -207,9 +207,9 @@ public class CheckableAtlasJTree extends JTree {
 							.getId())));
 		}
 
-		Vector mapVector = new NamedVector(AtlasCreator
+		Vector mapVector = new NamedVector(GeopublisherGUI
 				.R("MapPoolJTable.Border.Title"), mapOptions);
-		Vector dpeVector = new NamedVector(AtlasCreator
+		Vector dpeVector = new NamedVector(GeopublisherGUI
 				.R("DataPoolJTable.Border.Title"), dpeOptions);
 		Object rootNodes[] = { mapVector, dpeVector };
 		Vector rootVector = new NamedVector(atlasConfig.getTitle().toString(),

@@ -23,7 +23,7 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
@@ -43,7 +43,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 	final private AtlasConfigEditable ace;
 
 	public MapPoolDeleteAllHTMLAction(final MapPoolJTable mpTable) {
-		super(AtlasCreator.R("MapPoolWindow_Action_DeleteAllMapHTML_label",
+		super(GeopublisherGUI.R("MapPoolWindow_Action_DeleteAllMapHTML_label",
 				mpTable.getAce().getLanguages().size()
 						- mpTable.getMapPool().get(
 								mpTable.convertRowIndexToModel(mpTable
@@ -61,7 +61,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 	}
 
 	public MapPoolDeleteAllHTMLAction(final Component owner_, final Map map_) {
-		super(AtlasCreator.R("MapPoolWindow_Action_DeleteAllMapHTML_label",
+		super(GeopublisherGUI.R("MapPoolWindow_Action_DeleteAllMapHTML_label",
 				map_.getAc().getLanguages().size()
 						- map_.getMissingHTMLLanguages().size()),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE);
@@ -79,7 +79,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 
-		if (!AVSwingUtil.askYesNo(owner, AtlasCreator.R(
+		if (!AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
 				"MapPoolWindow_Action_DeleteAllMapHTML_Question", ace
 						.getLanguages().size()
 						- map.getMissingHTMLLanguages().size())))

@@ -20,7 +20,7 @@ import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.AMLImportEd;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.internal.CheckableAtlasJTree;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -32,10 +32,10 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.GPA.AtlasContentSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_NoneSelected = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NoneSelected = GeopublisherGUI
 			.R("ImportWizard.GPA.AtlasContentSelection.ValidationError.NoneSelected");
 
 	JTextField folderJTextField;
@@ -50,7 +50,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 	private AtlasConfig externalAtlasConfig = null;
 
 	public static String getDescription() {
-		return AtlasCreator.R("ImportWizard.GPA.AtlasContentSelection");
+		return GeopublisherGUI.R("ImportWizard.GPA.AtlasContentSelection");
 	}
 
 	public ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import() {
@@ -159,7 +159,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		 */
 
 		// Button to select all
-		add(new SmallButton(new AbstractAction(AtlasCreator
+		add(new SmallButton(new AbstractAction(GeopublisherGUI
 				.R("ImportWizard.GPA.AtlasContentSelection.AllButton")) {
 
 			@Override
@@ -174,7 +174,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		}), "split 4");
 
 		// Button to select all maps
-		add(new SmallButton(new AbstractAction(AtlasCreator
+		add(new SmallButton(new AbstractAction(GeopublisherGUI
 				.R("ImportWizard.GPA.AtlasContentSelection.AllMapsButton")) {
 
 			@Override
@@ -197,7 +197,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		}));
 
 		// Button to select all dpes
-		add(new SmallButton(new AbstractAction(AtlasCreator
+		add(new SmallButton(new AbstractAction(GeopublisherGUI
 				.R("ImportWizard.GPA.AtlasContentSelection.AllDpeButton")) {
 
 			@Override
@@ -210,7 +210,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		}));
 
 		// Button to select all dpes
-		add(new SmallButton(new AbstractAction(AtlasCreator
+		add(new SmallButton(new AbstractAction(GeopublisherGUI
 				.R("ImportWizard.GPA.AtlasContentSelection.NoneButton")) {
 
 			@Override

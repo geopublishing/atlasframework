@@ -57,7 +57,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.MegaByteTableCellRenderer;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
@@ -134,14 +134,14 @@ public class MapPoolJTable extends JTable {
 		 */
 		public String getColumnName(int column) {
 			if (column == 0) {
-				return AtlasCreator.R("MapPoolJTable.ColumnName.Quality");
+				return GeopublisherGUI.R("MapPoolJTable.ColumnName.Quality");
 			} else if (column == 1) {
-				return AtlasCreator.R("MapPoolJTable.ColumnName.NameLang",
+				return GeopublisherGUI.R("MapPoolJTable.ColumnName.NameLang",
 						Translation.getActiveLang());
 			} else if (column == CRSCOL) {
-				return AtlasCreator.R("CRS");
+				return GeopublisherGUI.R("CRS");
 			} else if (column == 3) {
-				return AtlasCreator.R("sizeOnFilesystemWithoutSVN");
+				return GeopublisherGUI.R("sizeOnFilesystemWithoutSVN");
 			}
 			return super.getColumnName(column);
 		}
@@ -241,7 +241,7 @@ public class MapPoolJTable extends JTable {
 				final List<String> langs = getAce().getLanguages();
 				final StringBuffer tooltTipHtml = new StringBuffer(
 						"<html><b>"
-								+ AtlasCreator
+								+ GeopublisherGUI
 										.R(
 												"MapPoolJTable.ColumnName.Quality.Tooltip",
 												NumberFormat
@@ -258,11 +258,11 @@ public class MapPoolJTable extends JTable {
 							.getPercentInstance().format(
 									map.getAverageLayerQuality());
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("MapPool_AverageLayerQM",
+							+ GeopublisherGUI.R("MapPool_AverageLayerQM",
 									averageQMformatted + "</li>"));
 				} else {
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("MapPool_AverageLayerQM.NoLayers")
+							+ GeopublisherGUI.R("MapPool_AverageLayerQM.NoLayers")
 							+ "</li>");
 				}
 
@@ -273,7 +273,7 @@ public class MapPoolJTable extends JTable {
 						.getTitle());
 				if (missing.size() > 0) {
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Title"));
+							+ GeopublisherGUI.R("DataPool_Title"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -287,7 +287,7 @@ public class MapPoolJTable extends JTable {
 				if (missing.size() > 0) {
 
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Description"));
+							+ GeopublisherGUI.R("DataPool_Description"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -302,7 +302,7 @@ public class MapPoolJTable extends JTable {
 				if (missing.size() > 0) {
 
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_Keywords"));
+							+ GeopublisherGUI.R("DataPool_Keywords"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -316,7 +316,7 @@ public class MapPoolJTable extends JTable {
 				if (missing.size() > 0) {
 
 					tooltTipHtml.append("<li>"
-							+ AtlasCreator.R("DataPool_HTML"));
+							+ GeopublisherGUI.R("DataPool_HTML"));
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
@@ -328,7 +328,7 @@ public class MapPoolJTable extends JTable {
 			} else if (columnIndex == CRSCOL) {
 				List valueAt = (List) getValueAt(rowIndex, columnIndex);
 				if (valueAt != null && valueAt.size() > 1) {
-					return AtlasCreator.R("MapCRS.tooManyWarning");
+					return GeopublisherGUI.R("MapCRS.tooManyWarning");
 				} else
 					return null;
 			}

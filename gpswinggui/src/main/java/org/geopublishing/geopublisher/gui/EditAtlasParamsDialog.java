@@ -29,7 +29,7 @@ import java.awt.Component;
 import javax.swing.JDialog;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
@@ -45,16 +45,16 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 		super(owner);
 
 		TranslationEditJPanel transName = new TranslationEditJPanel(
-				AtlasCreator.R("AtlasParamsTranslationDialog.Title"), ace
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Title"), ace
 						.getTitle(), ace.getLanguages());
 		TranslationEditJPanel transDesc = new TranslationEditJPanel(
-				AtlasCreator.R("AtlasParamsTranslationDialog.Description"), ace
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Description"), ace
 						.getDesc(), ace.getLanguages());
 		TranslationEditJPanel transCreator = new TranslationEditJPanel(
-				AtlasCreator.R("AtlasParamsTranslationDialog.Creator"), ace
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Creator"), ace
 						.getCreator(), ace.getLanguages());
 		TranslationEditJPanel transCopyright = new TranslationEditJPanel(
-				AtlasCreator.R("AtlasParamsTranslationDialog.Copyright"), ace
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Copyright"), ace
 						.getCopyright(), ace.getLanguages());
 
 		setComponents(transName, transDesc, transCreator, transCopyright);

@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
@@ -36,7 +36,7 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 	private final DataPoolJTable dpTable;
 
 	public DataPoolEditHTMLAction(DataPoolJTable dpTable) {
-		super(AtlasCreator.R("DataPoolWindow_Action_EditDPEHTML_label"));
+		super(GeopublisherGUI.R("DataPoolWindow_Action_EditDPEHTML_label"));
 
 		this.dpTable = dpTable;
 	}
@@ -63,12 +63,12 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 		java.util.List<String> tabTitles = new ArrayList<String>();
 		AtlasConfigEditable ace = dpTable.getAce();
 		for (String l : ace.getLanguages()) {
-			tabTitles.add(AtlasCreator.R("DPLayer.HTMLInfo.LanguageTabTitle",
+			tabTitles.add(GeopublisherGUI.R("DPLayer.HTMLInfo.LanguageTabTitle",
 					I8NUtil.getLocaleFor(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(dpTable, ace, infoFiles, tabTitles,
-				AtlasCreator.R("EditLayerHTML.Dialog.Title", dpl.getTitle()
+				GeopublisherGUI.R("EditLayerHTML.Dialog.Title", dpl.getTitle()
 						.toString()));
 
 		/**

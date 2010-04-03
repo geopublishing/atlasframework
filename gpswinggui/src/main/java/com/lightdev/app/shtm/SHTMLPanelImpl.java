@@ -84,7 +84,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
 
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.i8n.Translation;
 
@@ -194,7 +194,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 							.getDefault());
 			return new DefaultTextResources(resourceBundle, props);
 		} catch (Exception ex) {
-			Util.errMsg(AtlasCreator.getInstance().getJFrame(),
+			Util.errMsg(GeopublisherGUI.getInstance().getJFrame(),
 					"resources not found", ex);
 			return null;
 		}

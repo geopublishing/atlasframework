@@ -208,7 +208,7 @@ public class ACETranslationPrinter {
 	}
 
 	public String R(String key, Object... values) {
-		return AtlasCreator.R(key, values);
+		return GeopublisherGUI.R(key, values);
 	}
 
 	private void printWay(String... steps) {

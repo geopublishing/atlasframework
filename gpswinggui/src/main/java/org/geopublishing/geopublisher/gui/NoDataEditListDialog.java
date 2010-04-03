@@ -32,7 +32,7 @@ import javax.swing.table.DefaultTableModel;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -75,7 +75,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 	public NoDataEditListDialog(Component owner, Class<?> attType,
 			AttributeMetadataInterface attMetaData) {
 
-		super(owner, AtlasCreator.R("NoDataValues.EditDialog.Title",
+		super(owner, GeopublisherGUI.R("NoDataValues.EditDialog.Title",
 				attMetaData.getTitle()));
 		this.binding = attType;
 		this.attMetaData = attMetaData;
@@ -106,14 +106,14 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 490, h 250"));
 
 		JPanel descPane = new JPanel(new MigLayout());
-		descPane.add(new JLabel(AtlasCreator.R(
+		descPane.add(new JLabel(GeopublisherGUI.R(
 				"NoDataValues.EditDialog.Explain", attMetaData.getTitle())),
 				BorderLayout.WEST);
 		contentPane.add(descPane);
 
 		contentPane.add(new JScrollPane(getNODATAValuesJTable()),"grow x");
 
-		contentPane.add(new JLabel(AtlasCreator.R("NoDataValues.EditDialog.NewNoDataValueTextField")), "split 6");
+		contentPane.add(new JLabel(GeopublisherGUI.R("NoDataValues.EditDialog.NewNoDataValueTextField")), "split 6");
 		contentPane.add(getValueTextField());
 		contentPane.add(getAddButton());
 		contentPane.add(getRemoveButton());
@@ -200,7 +200,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 							AVSwingUtil
 									.showMessageDialog(
 											NoDataEditListDialog.this,
-											AtlasCreator
+											GeopublisherGUI
 													.R(
 															"NoDataValues.EditDialog.NumberParseError",
 															valueString,
@@ -265,7 +265,7 @@ public class NoDataEditListDialog extends CancellableDialogAdapter {
 
 		@Override
 		public String getColumnName(int column) {
-			return AtlasCreator.R("NodataValues");
+			return GeopublisherGUI.R("NodataValues");
 		};
 
 		@Override

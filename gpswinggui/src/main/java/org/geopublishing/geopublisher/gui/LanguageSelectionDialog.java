@@ -38,7 +38,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
@@ -61,7 +61,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 
 	public LanguageSelectionDialog(Window owner, List<String> orig) {
 
-		super(owner, AtlasCreator.R("LanguageSelectionDialog.Title"));
+		super(owner, GeopublisherGUI.R("LanguageSelectionDialog.Title"));
 
 		this.orig = orig;
 		aceLanguages.addAll(orig);
@@ -104,7 +104,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 		Box cp = new Box(BoxLayout.Y_AXIS);
 
 		JPanel installed = new JPanel(new BorderLayout());
-		installed.setBorder(BorderFactory.createTitledBorder(AtlasCreator
+		installed.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
 				.R("LanguageSelectionDialog.ConfiguredLanguages")));
 
 		final JTable installedTable = new JTable();
@@ -138,7 +138,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 		installed.add(tableScroll, BorderLayout.CENTER);
 		JPanel removeInstalled = new JPanel(new BorderLayout());
 		final JButton removeInstalledButton = new JButton(new AbstractAction(
-				AtlasCreator.R("LanguageSelectionDialog.Button.Remove")) {
+				GeopublisherGUI.R("LanguageSelectionDialog.Button.Remove")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -168,7 +168,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 				});
 		removeInstalledButton.setEnabled(false);
 		JPanel available = new JPanel(new BorderLayout());
-		available.setBorder(BorderFactory.createTitledBorder(AtlasCreator
+		available.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
 				.R("LanguageSelectionDialog.AvailableLanguages")));
 		JPanel languageComboBox = new JPanel(new FlowLayout());
 
@@ -177,7 +177,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 
 		languageComboBox.add(languageCombo);
 		final JButton addLangButton = new JButton(new AbstractAction(
-				AtlasCreator.R("LanguageSelectionDialog.Button.Add")) {
+				GeopublisherGUI.R("LanguageSelectionDialog.Button.Add")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -225,7 +225,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 					AVSwingUtil
 							.showMessageDialog(
 									LanguageSelectionDialog.this,
-									AtlasCreator
+									GeopublisherGUI
 											.R("LanguageSelectionDialog.ErrorMsg.YouNeedMinimumOneLanguage"));
 					cancelClose();
 				} else {

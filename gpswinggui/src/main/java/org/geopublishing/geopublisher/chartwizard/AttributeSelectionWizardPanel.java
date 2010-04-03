@@ -29,7 +29,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geotools.data.FeatureSource;
 import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
@@ -59,7 +59,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static String desc = AtlasCreator.R("AttributeSelectionWizardPanel.Title");
+	static String desc = GeopublisherGUI.R("AttributeSelectionWizardPanel.Title");
 
 	@Override
 	protected String validateContents(Component component, Object event) {
@@ -68,7 +68,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 		for (int idx = 0; idx < chartType.getMinDimensions(); idx++) {
 			if (getAttribJComboBoxFor(idx).getSelectedIndex() == -1)
-				return AtlasCreator
+				return GeopublisherGUI
 						.R(
 								"AttributeSelectionWizardPanel.ValidationFailed.NeedAtLeastXAttributes",
 								chartType.getMinDimensions());
@@ -113,7 +113,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 	private JLabel getLabelFor(Integer index) {
 		if (lables.get(index) == null) {
-			JLabel label = new JLabel(AtlasCreator.R(
+			JLabel label = new JLabel(GeopublisherGUI.R(
 					"AttributeSelectionWizardPanel.NthAttribute", index + 1));
 			lables.put(index, label);
 		}
@@ -199,9 +199,9 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	 * data as category data
 	 */
 	private Component getCategoryJCheckbox() {
-		final JCheckBox cb = new JCheckBox(AtlasCreator
+		final JCheckBox cb = new JCheckBox(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
-		cb.setToolTipText(AtlasCreator
+		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
 
 		cb.setName(ChartWizard.DOMAIN_FORCE_CATEGORY);
@@ -246,9 +246,9 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	// }
 
 	private JCheckBox getDomainSortedJCheckbox() {
-		JCheckBox cb = new JCheckBox(AtlasCreator
+		JCheckBox cb = new JCheckBox(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainSortCheckbox"));
-		cb.setToolTipText(AtlasCreator
+		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainSortCheckbox.TT"));
 
 		cb.setName(ChartWizard.SORT_DOMAIN_AXIS);
@@ -262,7 +262,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	public JLabel getDescriptionPanel() {
 		if (descriptionPanel == null) {
 			ChartType chartType = (ChartType) getWizardData(ChartWizard.CHARTTYPE);
-			descriptionPanel = new JLabel(AtlasCreator
+			descriptionPanel = new JLabel(GeopublisherGUI
 					.R("AttributeSelectionPanel.Explanation", chartType
 							.getTitle()));
 

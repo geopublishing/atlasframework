@@ -43,7 +43,7 @@ import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.chartwizard.ChartWizard;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;
 
@@ -103,7 +103,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 	public ManageChartsForMapDialog(Component owner,
 			DpLayerVectorFeatureSource dplv, AtlasMapLegend mapLegend) {
 
-		super(owner, AtlasCreator.R("ManageChartsForMapDialog.TitleForDPLayer",
+		super(owner, GeopublisherGUI.R("ManageChartsForMapDialog.TitleForDPLayer",
 				dplv.getTitle().toString()));
 		this.dplv = dplv;
 		this.atlasConfigEditable = (AtlasConfigEditable) dplv.getAtlasConfig();
@@ -166,7 +166,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 	private void initGUI() {
 		JPanel contentPane = new JPanel(new MigLayout("wrap 1, fillx"));
 
-		contentPane.add(new JLabel(AtlasCreator.R(
+		contentPane.add(new JLabel(GeopublisherGUI.R(
 				"ManageChartsForMapDialog.Explanation", dplv.getTitle()
 						.toString())));
 		contentPane.add(new JScrollPane(getChartsJTable()), "grow");
@@ -194,7 +194,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 				&& AVSwingUtil
 						.askYesNo(
 								ManageChartsForMapDialog.this,
-								AtlasCreator
+								GeopublisherGUI
 										.R(
 												"ManageChartsForMapDialog.addNewChartsToAllMaps.ConfirmationQuestion",
 												newlyCreatedCharts.size(),
@@ -291,7 +291,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 			@Override
 			public String getColumnName(int column) {
-				return AtlasCreator.R("ManageChartsForMapDialog.ColumnName."
+				return GeopublisherGUI.R("ManageChartsForMapDialog.ColumnName."
 						+ (column + 1));
 			}
 
@@ -514,7 +514,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getDelButton() {
 		if (delButton == null) {
-			delButton = new JButton(new AbstractAction(AtlasCreator
+			delButton = new JButton(new AbstractAction(GeopublisherGUI
 					.R("ManageChartsForMapDialog.DeleteChart")) {
 
 				/**
@@ -577,7 +577,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getEditButton() {
 		if (editButton == null) {
-			editButton = new JButton(new AbstractAction(AtlasCreator
+			editButton = new JButton(new AbstractAction(GeopublisherGUI
 					.R("ManageChartsForMapDialog.EditChart")) {
 
 				/**
@@ -618,7 +618,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getAddButton() {
 		if (addButton == null) {
-			addButton = new JButton(new AbstractAction(AtlasCreator
+			addButton = new JButton(new AbstractAction(GeopublisherGUI
 					.R("ManageChartsForMapDialog.AddChart")) {
 
 				@Override
@@ -652,7 +652,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 				}
 
 			});
-			addButton.setToolTipText(AtlasCreator
+			addButton.setToolTipText(GeopublisherGUI
 					.R("LayerToolMenu.chartWizard"));
 			// resources
 		}

@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.dp.DpEntryFactory;
 import org.geopublishing.geopublisher.dp.DpLayerRasterTester;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
@@ -28,25 +28,25 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.FILE.FileSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_NotExists = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotExists = GeopublisherGUI
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotExists");
 
-	private final String validationImportSourceTypeFailedMsg_CantRead = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_CantRead = GeopublisherGUI
 			.R("ImportWizard.FILE.FileSelection.ValidationError.CantRead");
 
-	private final String validationImportSourceTypeFailedMsg_NotImportable = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg_NotImportable = GeopublisherGUI
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotImportable");
 
 	private JButton fileChooserJButton;
 	JTextField fileJTextField;
-	final static private JLabel fileTextFieldJLabel = new JLabel(AtlasCreator
+	final static private JLabel fileTextFieldJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.FILE.FileTextBoxLabel"));
 
 	public static String getDescription() {
-		return AtlasCreator.R("ImportWizard.FILE.FileSelection");
+		return GeopublisherGUI.R("ImportWizard.FILE.FileSelection");
 	}
 
 	public ImportWizardPage_FILE_Select() {
@@ -122,7 +122,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 					dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 
-					dc.setDialogTitle(AtlasCreator
+					dc.setDialogTitle(GeopublisherGUI
 							.R("ImportWizard.FILE.WhereFrom.DialogTitle"));
 					dc.setMultiSelectionEnabled(false);
 

@@ -18,7 +18,7 @@ import javax.swing.AbstractAction;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 
 
@@ -28,7 +28,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 	private MapPool mapPool;
 
 	public MapPoolDuplicateAction(MapPoolJTable mapPoolJTable) {
-		super(AtlasCreator.R("MapPool.Action.Duplicate"),
+		super(GeopublisherGUI.R("MapPool.Action.Duplicate"),
 				Icons.ICON_DUPLICATE_SMALL);
 
 		this.mapPoolJTable = mapPoolJTable;
@@ -49,7 +49,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 		for (String s : languages) {
 
 			// Title
-			String newS = AtlasCreator.R(
+			String newS = GeopublisherGUI.R(
 					"MapPool.Action.Duplicate.NewTranslation", newMap
 							.getTitle().get(s));
 			newMap.getTitle().put(s, newS);

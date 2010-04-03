@@ -19,7 +19,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 
@@ -27,19 +27,19 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JRE.Explanation"));
 
-	JLabel javaVersionLabel = new JLabel(AtlasCreator
+	JLabel javaVersionLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JRE.JavaVersionLabel"));
 	private JLabel javaVersionJLabel;
 
-	JLabel osLabel = new JLabel(AtlasCreator.R("ExportWizard.JRE.OS"));
+	JLabel osLabel = new JLabel(GeopublisherGUI.R("ExportWizard.JRE.OS"));
 	private JLabel osJLabel;
 
 	private JCheckBox copyJRECheckBox;
 
-	private final String validationFailedMsg_notWindows = AtlasCreator
+	private final String validationFailedMsg_notWindows = GeopublisherGUI
 			.R("ExportWizard.JRE.ValidationError.NotWindows");
 
 	public ExportWizardPage_JRECopy() {
@@ -75,12 +75,12 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return AtlasCreator.R("ExportWizard.JRE");
+		return GeopublisherGUI.R("ExportWizard.JRE");
 	}
 
 	public JCheckBox getCopyJRECheckBox() {
 		if (copyJRECheckBox == null) {
-			copyJRECheckBox = new JCheckBox(AtlasCreator
+			copyJRECheckBox = new JCheckBox(GeopublisherGUI
 					.R("ExportWizard.JRE.Checkbox"));
 			copyJRECheckBox.setName(ExportWizard.COPYJRE);
 			copyJRECheckBox

@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.creator.GPDialogManager;
 import skrueger.swing.SmallButton;
@@ -90,9 +90,9 @@ public class EditMapPoolPanel extends JPanel {
 	private JPanel getBottomPanel() {
 		JPanel bottom = new JPanel(new MigLayout());
 		
-		bottom.add(new JLabel(AtlasCreator.R("EditMappoolPanel.Explanation")),"growx 200");
+		bottom.add(new JLabel(GeopublisherGUI.R("EditMappoolPanel.Explanation")),"growx 200");
 		
-		JButton addButton = new SmallButton(new MapPoolAddAction(getMapPoolJTable()), AtlasCreator
+		JButton addButton = new SmallButton(new MapPoolAddAction(getMapPoolJTable()), GeopublisherGUI
 				.R("MapPoolWindow.Button_AddMap_tt"));
 		
 		bottom.add(addButton,"top, right");

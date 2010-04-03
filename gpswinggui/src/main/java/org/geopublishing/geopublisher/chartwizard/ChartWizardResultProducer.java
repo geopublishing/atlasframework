@@ -17,7 +17,7 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
@@ -196,7 +196,7 @@ public class ChartWizardResultProducer implements
 
 	public boolean cancel(Map settings) {
 		boolean dialogShouldClose = JOptionPane.showConfirmDialog(null,
-				AtlasCreator.R("ChartWizard.CancelWizardQuestion")) == JOptionPane.OK_OPTION; // i8n
+				GeopublisherGUI.R("ChartWizard.CancelWizardQuestion")) == JOptionPane.OK_OPTION; // i8n
 		return dialogShouldClose;
 	}
 

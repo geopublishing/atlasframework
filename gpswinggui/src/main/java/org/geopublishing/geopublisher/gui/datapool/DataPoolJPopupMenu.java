@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 
@@ -123,9 +123,9 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				 * Edit additional Styles menu
 				 */
 				JMenuItem editAdditionalStyles = new JMenuItem();
-				editAdditionalStyles.setText(AtlasCreator
+				editAdditionalStyles.setText(GeopublisherGUI
 						.R("DataPoolWindow_Action_ManageLayerStyles_label"));
-				editAdditionalStyles.setToolTipText(AtlasCreator
+				editAdditionalStyles.setToolTipText(GeopublisherGUI
 						.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
 
 				editAdditionalStyles.addActionListener(new ActionListener() {
@@ -142,7 +142,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				 * Add a new MenuItem, to switch "showFilterInLegend" on/off
 				 */
 				JCheckBoxMenuItem showFilterInLegendOnOff = new JCheckBoxMenuItem(
-						new AbstractAction(AtlasCreator
+						new AbstractAction(GeopublisherGUI
 								.R("LayerToolMenu.showFilterInLegend")) {
 
 							@Override
@@ -161,7 +161,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				 * Add a new MenuItem, to switch "showStylerInLegend" on/off
 				 */
 				JCheckBoxMenuItem showStylerInLegendOnOff = new JCheckBoxMenuItem(
-						new AbstractAction(AtlasCreator
+						new AbstractAction(GeopublisherGUI
 								.R("LayerToolMenu.showStylerInLegend")) {
 
 							@Override

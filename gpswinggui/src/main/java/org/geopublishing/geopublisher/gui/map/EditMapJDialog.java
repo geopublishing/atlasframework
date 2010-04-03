@@ -35,7 +35,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
@@ -68,12 +68,12 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 
 		/** A tab for name, desc and keywords... **/
 		getTabbedPane().insertTab(
-				AtlasCreator.R("EditMapEntryGUI.labels.tab"), 
+				GeopublisherGUI.R("EditMapEntryGUI.labels.tab"), 
 				null, createTranslationsTab(), null,
 				getTabbedPane().getTabCount());
 
 		/** A tab for name, desc and keywords... **/
-		getTabbedPane().insertTab(AtlasCreator.R("EditMapEntryGUI.html.tab"), 
+		getTabbedPane().insertTab(GeopublisherGUI.R("EditMapEntryGUI.html.tab"), 
 				null, createGeneralTab(), null, getTabbedPane().getTabCount());
 
 		pack();
@@ -130,7 +130,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 		 * This buttons allows to open the folder with the map's HTML files
 		 */
 		JButton openContainingFolderButton = new JButton(
-				new AbstractAction(AtlasCreator
+				new AbstractAction(GeopublisherGUI
 						.R("MapPreferences_ButtonOpenHTMLDirectory_label")) {
 
 					@Override
@@ -143,7 +143,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 					}
 
 				});
-		openContainingFolderButton.setToolTipText(AtlasCreator
+		openContainingFolderButton.setToolTipText(GeopublisherGUI
 				.R("MapPreferences_ButtonOpenHTMLDirectory_tt"));
 		openContainingFolderButton
 				.setBorder(BorderFactory.createEtchedBorder());
@@ -156,7 +156,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 		linktoPanel
 				.setBorder(BorderFactory.createTitledBorder("Link this map")); // i8n
 
-		linktoPanel.add(new JLabel(AtlasCreator
+		linktoPanel.add(new JLabel(GeopublisherGUI
 				.R("MapPreferences.LinkToThisMap.Label")));
 
 		Box box = Box.createVerticalBox();
@@ -169,7 +169,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 			linkToMeTextfield.setEditable(false);
 			JPanel oneLine = new JPanel(new BorderLayout());
 			oneLine.add(linkToMeTextfield, BorderLayout.CENTER);
-			JButton copyButton = new JButton(new AbstractAction(AtlasCreator
+			JButton copyButton = new JButton(new AbstractAction(GeopublisherGUI
 					.R("MapPreferences.LinkToThisMap.CopyButton.Label")) {
 
 				@Override
@@ -178,7 +178,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 				}
 
 			});
-			copyButton.setToolTipText(AtlasCreator
+			copyButton.setToolTipText(GeopublisherGUI
 					.R("MapPreferences.LinkToThisMap.CopyButton.TT"));
 
 			copyButton.setBorder(BorderFactory.createEtchedBorder());
@@ -208,14 +208,14 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 			List<String> languages = map.getAc().getLanguages();
 
 			final TranslationEditJPanel namePanel = new TranslationEditJPanel(
-					AtlasCreator.R("MapPreferences_translateTheMapsName"), map
+					GeopublisherGUI.R("MapPreferences_translateTheMapsName"), map
 							.getTitle(), languages);
 			final TranslationEditJPanel descPanel = new TranslationEditJPanel(
-					AtlasCreator
+					GeopublisherGUI
 							.R("MapPreferences_translateTheMapsDescription"),
 					map.getDesc(), languages);
 			final TranslationEditJPanel keywordsPanel = new TranslationEditJPanel(
-					AtlasCreator.R("MapPreferences_translateTheMapsKeywords"),
+					GeopublisherGUI.R("MapPreferences_translateTheMapsKeywords"),
 					map.getKeywords(), languages);
 
 			dpeTranslationTab = new TranslationsAskJPanel(namePanel, descPanel,

@@ -20,7 +20,7 @@ import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.data.DataUtilities;
 import org.netbeans.spi.wizard.DeferredWizardResult;
@@ -82,7 +82,7 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 					if (!atlasConfigEditable.getLanguages().contains(langID)) {
 						atlasConfigEditable.getLanguages().add(langID);
 						Locale locale = new Locale(langID);
-						summaryPanel.add(new JLabel(AtlasCreator.R(
+						summaryPanel.add(new JLabel(GeopublisherGUI.R(
 								"ImportWizard.GPA.Summary", locale
 										.getDisplayLanguage(), locale
 										.getDisplayLanguage(locale))));
@@ -199,7 +199,7 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 
 				externalAtlasConfig.uncache();
 
-				summaryPanel.add(new JLabel(AtlasCreator
+				summaryPanel.add(new JLabel(GeopublisherGUI
 						.R("ImportWizard.ImportWasSuccessfull")));
 
 				Summary summary = Summary.create(new JScrollPane(summaryPanel),

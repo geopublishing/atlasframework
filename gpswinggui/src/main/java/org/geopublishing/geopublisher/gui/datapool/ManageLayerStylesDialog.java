@@ -58,7 +58,7 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.map.ManageLayerStylesForMapDialog;
 import org.geotools.styling.Style;
 
@@ -375,11 +375,11 @@ public class ManageLayerStylesDialog extends JDialog {
 					final Translation styleDescBackup = styleDesc.clone();
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
-							AtlasCreator.R("LayerStyle.Edit.Title"), styleName,
+							GeopublisherGUI.R("LayerStyle.Edit.Title"), styleName,
 							dpLayer.getAtlasConfig().getLanguages());
 
 					TranslationEditJPanel transDescLabel = new TranslationEditJPanel(
-							AtlasCreator.R("LayerStyle.Edit.Desc"), styleDesc,
+							GeopublisherGUI.R("LayerStyle.Edit.Desc"), styleDesc,
 							dpLayer.getAtlasConfig().getLanguages());
 
 					ask = new TranslationAskJDialog(
@@ -439,13 +439,13 @@ public class ManageLayerStylesDialog extends JDialog {
 			@Override
 			public String getColumnName(int columnIndex) {
 				if (columnIndex == 0)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.Title.Label");
 				if (columnIndex == 1)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.Desc.Label");
 				if (columnIndex == 2)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.ActiveInMaps.Label");
 				return null;
 			}
@@ -617,8 +617,8 @@ public class ManageLayerStylesDialog extends JDialog {
 	protected JButton getJButtonAdd() {
 		if (jButtonAdd == null) {
 			jButtonAdd = new JButton();
-			jButtonAdd.setText(AtlasCreator.R("LayerStyle.New.Button.Label"));
-			jButtonAdd.setToolTipText(AtlasCreator
+			jButtonAdd.setText(GeopublisherGUI.R("LayerStyle.New.Button.Label"));
+			jButtonAdd.setToolTipText(GeopublisherGUI
 					.R("LayerStyle.New.Button.TT"));
 
 			jButtonAdd.addActionListener(new ActionListener() {
@@ -661,11 +661,11 @@ public class ManageLayerStylesDialog extends JDialog {
 		final Translation desc = new Translation();
 
 		TranslationEditJPanel nameTransLabel = new TranslationEditJPanel(
-				AtlasCreator.R("LayerStyle.Edit.Title"), name, dplayer.getAtlasConfig()
+				GeopublisherGUI.R("LayerStyle.Edit.Title"), name, dplayer.getAtlasConfig()
 						.getLanguages());
 
 		TranslationEditJPanel descTransLabel = new TranslationEditJPanel(
-				AtlasCreator.R("LayerStyle.Edit.Desc"), desc, langs);
+				GeopublisherGUI.R("LayerStyle.Edit.Desc"), desc, langs);
 
 		ask = new TranslationAskJDialog(owner, nameTransLabel, descTransLabel);
 
@@ -747,10 +747,10 @@ public class ManageLayerStylesDialog extends JDialog {
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
 			jButtonRemove = new JButton();
-			jButtonRemove.setText(AtlasCreator
+			jButtonRemove.setText(GeopublisherGUI
 					.R("LayerStyle.Remove.Button.Label"));
 			jButtonRemove.setEnabled(false);
-			jButtonRemove.setToolTipText(AtlasCreator
+			jButtonRemove.setToolTipText(GeopublisherGUI
 					.R("LayerStyle.Remove.Button.TT"));
 			jButtonRemove.addActionListener(new ActionListener() {
 
@@ -765,7 +765,7 @@ public class ManageLayerStylesDialog extends JDialog {
 					}
 
 					if (!AVSwingUtil.askYesNo(ManageLayerStylesDialog.this,
-							AtlasCreator.R("LayerStyle.Remove.Action.Question",
+							GeopublisherGUI.R("LayerStyle.Remove.Action.Question",
 									lsRemove.getTitle()))) {
 						return;
 					}

@@ -33,7 +33,7 @@ public class UncacheAtlasAction extends AbstractAction {
 	private final AtlasConfigEditable ace;
 
 	public UncacheAtlasAction(Component parentGUI, AtlasConfigEditable ace) {
-		super(AtlasCreator.R("MenuBar.OptionsMenu.ClearCaches"), new ImageIcon(GPProps.class
+		super(GeopublisherGUI.R("MenuBar.OptionsMenu.ClearCaches"), new ImageIcon(GPProps.class
 				.getResource("resource/uncache.png")));
 		this.parentGUI = parentGUI;
 		this.ace = ace;
@@ -46,7 +46,7 @@ public class UncacheAtlasAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		final AtlasTask<Object> uncacheTask = new AtlasTask<Object>(parentGUI,
-				AtlasCreator.R("ClearCaches.process.WaitMsg")) {
+				GeopublisherGUI.R("ClearCaches.process.WaitMsg")) {
 
 			@Override
 			protected void done() {

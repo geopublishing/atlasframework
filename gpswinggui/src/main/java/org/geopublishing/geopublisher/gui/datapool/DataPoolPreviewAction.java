@@ -18,7 +18,7 @@ import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 
 public class DataPoolPreviewAction extends AbstractAction {
@@ -29,7 +29,7 @@ public class DataPoolPreviewAction extends AbstractAction {
 	private final DataPoolJTable dpTable;
 
 	public DataPoolPreviewAction(DataPoolJTable dpTable, Component owner) {
-		super(AtlasCreator.R("DataPoolWindow_Action_ShowDPM_label"));
+		super(GeopublisherGUI.R("DataPoolWindow_Action_ShowDPM_label"));
 
 		this.dpTable = dpTable;
 		this.owner = owner;

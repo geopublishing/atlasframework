@@ -23,7 +23,7 @@ import javax.swing.JList;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.jfree.chart.style.ChartType;
@@ -52,7 +52,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 	/**
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static String desc = AtlasCreator.R("ChartWizardPanel.chartType");
+	static String desc = GeopublisherGUI.R("ChartWizardPanel.chartType");
 
 	@Override
 	protected void renderingPage() {
@@ -77,7 +77,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 		final Integer IST = (Integer) (getWizardData(ChartWizard.NUMBER_OF_ATTRIBS));
 		final Integer SOLL = ct.getMinDimensions();
 		if (SOLL != null && SOLL > IST) {
-			return AtlasCreator
+			return GeopublisherGUI
 					.R(
 							"ChartWizard.ChartTypeSelection.ValidationError.TooFewAttribs",
 							IST, SOLL, ct.getTitle());
@@ -89,7 +89,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 				- (ct.isCategoryAllowedForDomainAxis() ? 1 : 0);
 		// LOGGER.debug("\nISTN/SOLLN " + ISTN + " "+ SOLLN);
 		if (SOLLN != null && SOLLN > ISTN) {
-			return AtlasCreator
+			return GeopublisherGUI
 					.R(
 							"ChartWizard.ChartTypeSelection.ValidationError.TooFewNumericAttribs",
 							ISTN, SOLLN, ct.getTitle());
@@ -144,7 +144,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 
 	public JLabel getDescriptionLabel() {
 		if (descriptionLabel == null) {
-			descriptionLabel = new JLabel(AtlasCreator
+			descriptionLabel = new JLabel(GeopublisherGUI
 					.R("ChartTypeSelectionPanel.Explanation."
 							+ getTypeSelectionJComboBox().getSelectedItem()
 									.toString()));
@@ -154,7 +154,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 
-					descriptionLabel.setText(AtlasCreator
+					descriptionLabel.setText(GeopublisherGUI
 							.R("ChartTypeSelectionPanel.Explanation."
 									+ getTypeSelectionJComboBox()
 											.getSelectedItem().toString()));

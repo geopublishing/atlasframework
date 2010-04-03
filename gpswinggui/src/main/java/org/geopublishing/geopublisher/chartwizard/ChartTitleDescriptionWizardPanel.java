@@ -22,7 +22,7 @@ import javax.swing.JDialog;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geotools.data.FeatureSource;
 import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
@@ -43,13 +43,13 @@ import skrueger.swing.TranslationEditJPanel;
  */
 
 public class ChartTitleDescriptionWizardPanel extends WizardPage {
-	private static final String validationTitleFailedMsg = AtlasCreator
+	private static final String validationTitleFailedMsg = GeopublisherGUI
 			.R("ChartWizardPanel.titleAndDescription.ValidationError.Title");
 	final static Logger LOGGER = Logger
 			.getLogger(ChartTitleDescriptionWizardPanel.class);
 
 	/* The short description label that appears on the left side of the wizard */
-	static String desc = AtlasCreator.R("ChartWizardPanel.titleAndDescription");
+	static String desc = GeopublisherGUI.R("ChartWizardPanel.titleAndDescription");
 
 	TranslationEditJPanel titleTranslationEditPanel;
 
@@ -91,7 +91,7 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 			titleTranslationEditPanel.setName(ChartWizard.TITLE);
 		}
 		titleTranslationEditPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("ManageChartsForMapDialog.ColumnName.2")));
 		return titleTranslationEditPanel;
 	}
@@ -174,7 +174,7 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 				
 				 if (chartType == ChartType.BAR) {
 					 if (firstSeriesTitle != null)
-						 descTranslated = AtlasCreator.R("ChartWizardPanel.DefaultBarChartSubTitle",firstSeriesTitle,descTranslated);
+						 descTranslated = GeopublisherGUI.R("ChartWizardPanel.DefaultBarChartSubTitle",firstSeriesTitle,descTranslated);
 				} // scatter früher
 
 				translation.put(lang, descTranslated);
@@ -186,7 +186,7 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 		descTranslationEditPanel.setName(ChartWizard.DESC);
 		// }
 		descTranslationEditPanel.setBorder(BorderFactory
-				.createTitledBorder(AtlasCreator
+				.createTitledBorder(GeopublisherGUI
 						.R("ManageChartsForMapDialog.ColumnName.3")));
 		return descTranslationEditPanel;
 	}

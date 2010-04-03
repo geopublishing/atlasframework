@@ -24,7 +24,7 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.group.GroupTreeCreateSubmenuAction;
 import org.geopublishing.geopublisher.group.GroupTreeDeleteAction;
 import org.geopublishing.geopublisher.group.GroupTreeEditAction;
@@ -68,7 +68,7 @@ public class GroupJPopupMenu extends JPopupMenu {
 			 * menu
 			 */
 			JCheckBoxMenuItem isFileMenuMenuItem = new JCheckBoxMenuItem(
-					new AbstractAction(AtlasCreator
+					new AbstractAction(GeopublisherGUI
 							.R("MenuTree.PopupmenuItem.ThisIsTheFileMenu")) {
 
 						@Override
@@ -111,7 +111,7 @@ public class GroupJPopupMenu extends JPopupMenu {
 			 * menu
 			 */
 			JCheckBoxMenuItem isHelpMenuMenuItem = new JCheckBoxMenuItem(
-					new AbstractAction(AtlasCreator
+					new AbstractAction(GeopublisherGUI
 							.R("MenuTree.PopupmenuItem.ThisIsTheHelpMenu")) {
 
 						@Override

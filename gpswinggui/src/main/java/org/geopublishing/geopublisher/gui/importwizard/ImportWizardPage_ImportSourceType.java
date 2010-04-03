@@ -8,7 +8,7 @@ import javax.swing.JRadioButton;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 
@@ -16,24 +16,24 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.ImportSourceType.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg = AtlasCreator
+	private final String validationImportSourceTypeFailedMsg = GeopublisherGUI
 			.R("ImportWizard.ImportSourceType.ValidationError");
 
-	private JLabel explanationFileJLabel = new JLabel(AtlasCreator
+	private JLabel explanationFileJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.ImportSourceType.Explanation.File"));
 	private JRadioButton fileJRadioButton;
 
-	private JLabel explanationGpaJLabel = new JLabel(AtlasCreator
+	private JLabel explanationGpaJLabel = new JLabel(GeopublisherGUI
 			.R("ImportWizard.ImportSourceType.Explanation.GPA"));
 	private JRadioButton gpaJRadioButton;
 
 	private ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static String getDescription() {
-		return AtlasCreator.R("ImportWizard.ImportSourceType");
+		return GeopublisherGUI.R("ImportWizard.ImportSourceType");
 	}
 
 	public ImportWizardPage_ImportSourceType() {
@@ -69,7 +69,7 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 
 	private JRadioButton getFileJRadioButton() {
 		if (fileJRadioButton == null) {
-			fileJRadioButton = new JRadioButton(AtlasCreator
+			fileJRadioButton = new JRadioButton(GeopublisherGUI
 					.R("ImportWizard.ImportSourceType.File"));
 			buttonGroup.add(fileJRadioButton);
 
@@ -82,7 +82,7 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 
 	private JRadioButton getGpaJRadioButton() {
 		if (gpaJRadioButton == null) {
-			gpaJRadioButton = new JRadioButton(AtlasCreator
+			gpaJRadioButton = new JRadioButton(GeopublisherGUI
 					.R("ImportWizard.ImportSourceType.Gpa"));
 			buttonGroup.add(gpaJRadioButton);
 		}

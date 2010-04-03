@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
 
 import skrueger.creator.GPDialogManager;
@@ -29,7 +29,7 @@ public class MapPoolAddAction extends AbstractAction {
 	private MapPool mapPool;
 
 	public MapPoolAddAction(MapPoolJTable mapPoolJTable) {
-		super(AtlasCreator.R("MapPoolWindow.Button_AddMap_label"),
+		super(GeopublisherGUI.R("MapPoolWindow.Button_AddMap_label"),
 				Icons.ICON_ADD_SMALL);
 
 		this.mapPoolJTable = mapPoolJTable;

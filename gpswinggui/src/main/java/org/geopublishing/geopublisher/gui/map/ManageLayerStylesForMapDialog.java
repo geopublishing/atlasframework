@@ -49,7 +49,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.ManageLayerStylesDialog;
 import org.geotools.map.MapContext;
 import org.geotools.styling.Style;
@@ -156,7 +156,7 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 		this.setSize(440, 240);
 		this.setContentPane(getJContentPane());
 
-		String dialogTitle = AtlasCreator.R(
+		String dialogTitle = GeopublisherGUI.R(
 				"ManageLayerStylesForMapDialog.dialogTitle", dpLayer.getTitle()
 						.toString(), map.getTitle().toString());
 		this.setTitle(dialogTitle);
@@ -190,7 +190,7 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 			gridBagConstraints1.weightx = 1.0;
 			gridBagConstraints1.gridy = 0;
 			jLabelExplanation = new JLabel();
-			jLabelExplanation.setText(AtlasCreator
+			jLabelExplanation.setText(GeopublisherGUI
 					.R("ManageLayerStylesForMapDialog.explanationLabel.text"));
 			GridBagConstraints gridBagConstraints = new GridBagConstraints();
 			gridBagConstraints.gridx = 0;
@@ -269,7 +269,7 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 		if (jButtonAdd == null) {
 			jButtonAdd = new JButton();
 			jButtonAdd.setText("+");
-			jButtonAdd.setToolTipText(AtlasCreator
+			jButtonAdd.setToolTipText(GeopublisherGUI
 					.R("ManageLayerStylesForMapDialog.buttonAddStyle.ToolTip"));
 
 			jButtonAdd.addActionListener(new ActionListener() {
@@ -429,13 +429,13 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 			@Override
 			public String getColumnName(int columnIndex) {
 				if (columnIndex == 0)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.Title.Label");
 				if (columnIndex == 1)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.Desc.Label");
 				if (columnIndex == 2)
-					return AtlasCreator
+					return GeopublisherGUI
 							.R("ManageLayerStylesDialog.Columns.AvailableInThisMap.Label");
 				return null;
 			}
@@ -751,11 +751,11 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 					final Translation styleDescBackup = styleDesc.copy();
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
-							AtlasCreator.R("LayerStyle.Edit.Title"), styleName,
+							GeopublisherGUI.R("LayerStyle.Edit.Title"), styleName,
 							dpLayer.getAtlasConfig().getLanguages());
 
 					TranslationEditJPanel transDescLabel = new TranslationEditJPanel(
-							AtlasCreator.R("LayerStyle.Edit.Desc"), styleDesc,
+							GeopublisherGUI.R("LayerStyle.Edit.Desc"), styleDesc,
 							dpLayer.getAtlasConfig().getLanguages());
 
 					ask = new TranslationAskJDialog(

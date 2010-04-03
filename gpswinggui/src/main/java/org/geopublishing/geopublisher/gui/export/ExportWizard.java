@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.netbeans.api.wizard.WizardDisplayer;
 import org.netbeans.spi.wizard.Wizard;
@@ -88,7 +88,7 @@ public class ExportWizard extends WizardBranchController {
 					|| ace.getDesc().get(lang).equals("")
 					|| ace.getCreator().get(lang) == null
 					|| ace.getCreator().get(lang).equals("")) {
-				AVSwingUtil.showMessageDialog(owner, AtlasCreator
+				AVSwingUtil.showMessageDialog(owner, GeopublisherGUI
 						.R("Export.Error.MissingMetaData"));
 				return false;
 			}

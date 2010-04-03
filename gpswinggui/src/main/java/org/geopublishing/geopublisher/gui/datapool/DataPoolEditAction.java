@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.creator.GPDialogManager;
@@ -33,7 +33,7 @@ public class DataPoolEditAction extends AbstractAction {
 	DataPoolJTable dpTable;
 
 	public DataPoolEditAction(DataPoolJTable dpTable, Component owner) {
-		super(AtlasCreator.R("DataPoolWindow_Action_EditDPE_label"),
+		super(GeopublisherGUI.R("DataPoolWindow_Action_EditDPE_label"),
 				BasicMapLayerLegendPaneUI.ICON_TOOL);
 		this.dpTable = dpTable;
 		this.owner = owner;
@@ -41,7 +41,7 @@ public class DataPoolEditAction extends AbstractAction {
 	}
 
 	public DataPoolEditAction(Component owner, DpEntry<? extends ChartStyle> dpe) {
-		super(AtlasCreator.R("DataPoolWindow_Action_EditDPE_label"),
+		super(GeopublisherGUI.R("DataPoolWindow_Action_EditDPE_label"),
 				BasicMapLayerLegendPaneUI.ICON_TOOL);
 		this.owner = owner;
 		this.dpe = dpe;

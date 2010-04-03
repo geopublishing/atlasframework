@@ -50,7 +50,7 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 
 	public EditAttributesJDialog(Component owner,
 			DpLayerVectorFeatureSource dpLayerVectorFeatureSource) {
-		super(SwingUtil.getParentWindow(owner), AtlasCreator.R(
+		super(SwingUtil.getParentWindow(owner), GeopublisherGUI.R(
 				"Attributes.Edit.Dialog.Title", dpLayerVectorFeatureSource
 						.getTitle()));
 		dplv = dpLayerVectorFeatureSource;
@@ -83,7 +83,7 @@ public class EditAttributesJDialog extends CancellableDialogAdapter implements
 		buttons.add( cancelB, "tag cancel");
 		cp.add(buttons, BorderLayout.SOUTH);
 		
-		cp.add(new JLabel(AtlasCreator.R("EditAttributesDialog.explanation.html")), BorderLayout.NORTH);
+		cp.add(new JLabel(GeopublisherGUI.R("EditAttributesDialog.explanation.html")), BorderLayout.NORTH);
 
 		setContentPane(cp);
 

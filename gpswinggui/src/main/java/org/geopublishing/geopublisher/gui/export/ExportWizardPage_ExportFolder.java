@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import skrueger.creator.GPProps;
@@ -34,17 +34,17 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	private final String validationFolderFailedMsg_NotExits = AtlasCreator
+	private final String validationFolderFailedMsg_NotExits = GeopublisherGUI
 			.R("ExportWizard.Folder.ValidationError.NotExists");
-	private final String validationFolderFailedMsg_NotWritable = AtlasCreator
+	private final String validationFolderFailedMsg_NotWritable = GeopublisherGUI
 			.R("ExportWizard.Folder.ValidationError.NotWritable");
 
-	JLabel explanationJLabel = new JLabel(AtlasCreator
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.Folder.Explanation"));
 
 	private JButton folderChooserJButton;
 	JTextField folderJTextField;
-	final private JLabel folderTextFieldJLabel = new JLabel(AtlasCreator
+	final private JLabel folderTextFieldJLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.Folder.FolderTextBoxLabel"));
 
 	public ExportWizardPage_ExportFolder() {
@@ -60,7 +60,7 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 	}
 
 	public static String getDescription() {
-		return AtlasCreator.R("ExportWizard.Folder");
+		return GeopublisherGUI.R("ExportWizard.Folder");
 	}
 
 	private JTextField getFolderJTextField() {
@@ -106,7 +106,7 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 					dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 
-					dc.setDialogTitle(AtlasCreator.R("Export.Dialog.WhereTo"));
+					dc.setDialogTitle(GeopublisherGUI.R("Export.Dialog.WhereTo"));
 					dc.setMultiSelectionEnabled(false);
 
 					if ((dc.showSaveDialog(ExportWizardPage_ExportFolder.this) != JFileChooser.APPROVE_OPTION)

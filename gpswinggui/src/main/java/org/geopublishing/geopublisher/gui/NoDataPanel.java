@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.AtlasCreator;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.swing.JPanel;
@@ -55,7 +55,7 @@ public class NoDataPanel extends JPanel {
 		this.attributeMetaDataMap = attributeMetaDataMap;
 //		this.schema = schema;
 
-		add(new SmallButton(new AbstractAction(AtlasCreator.R("NodataValues") + ":") { 
+		add(new SmallButton(new AbstractAction(GeopublisherGUI.R("NodataValues") + ":") { 
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
