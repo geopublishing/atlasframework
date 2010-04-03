@@ -1,5 +1,0 @@
-
-
-Use the following command to download all openmapsymbols for AtlasStyler to your local directory:
-
-wget --cut-dirs=1 -nH -q -c -r http://en.geopublishing.org/openmapsymbols/ -A "*.sld" --exclude-directories="openmapsymbols/svg" -P ~/.AtlasStyler/templates
