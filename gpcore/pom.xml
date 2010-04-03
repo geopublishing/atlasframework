@@ -17,57 +17,62 @@
 
 	<build>
 
-
-		<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>webstart-maven-plugin</artifactId>
-
-			<executions>
-				<execution>
-					<phase>package</phase>
-					<goals>
-						<goal>jnlp</goal>
-					</goals>
-				</execution>
-			</executions>
-
-			<configuration>
-
-				<jnlp>
-					<resources>
-						${project.basedir}/src/deploy/resources
-					</resources>
-
-					<inputTemplateResourcePath>
-						${project.basedir}/src/deploy/resources
-					</inputTemplateResourcePath>
-
-					<inputTemplate>template.jnlp</inputTemplate>
-					<outputFile>as.jnlp</outputFile>
-					<mainClass>org.geopublishing.geopublisher.GeopublisherGUI</mainClass>
-				</jnlp>
-				<!-- SIGNING -->
-
-				<!--
-					defining this will automatically sign the jar and its dependencies
-				-->
-
-				<sign>
-					<!--			-->
-					<!--
-						<keystore>${project.build.outputDirectory}/skrueger/creator/export/keystore</keystore>
-					-->
-					<!--			-->
-					<keypass>wasser</keypass>
-					<storepass>wasser</storepass>
-					<alias>IMPETUS</alias>
-				</sign>
-				<verbose>true</verbose>
-			</configuration>
-		</plugin>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+						<manifestEntries>
+							<mode>development</mode>
+							<url>${pom.url}</url>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 
 
-	</plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<libPath>lib</libPath>
+					
+					           <resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
+
+					<jnlp>
+						<inputTemplateResourcePath>${project.basedir}/src/main/jnlp/templates</inputTemplateResourcePath>
+						<inputTemplate>as_template.vm</inputTemplate>
+						<outputFile>as.jnlp</outputFile>
+						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+					</jnlp>
+					<sign>
+						<keypass>wasser</keypass>
+						<storepass>wasser</storepass>
+						<alias>IMPETUS</alias>
+					</sign>
+					<verbose>true</verbose>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+
 	</build>
 
 
