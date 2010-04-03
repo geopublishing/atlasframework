@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing</groupId>
-	<artifactId>gp-atlas-framwork</artifactId>
+	<artifactId>gp-atlas-framework</artifactId>
 	<name>Geopublisher and AtlasStyler</name>
 	<version>1.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -152,16 +152,16 @@
 	</repositories>
 
 	<distributionManagement>
-		<repository>
-			<id>artifactory-releases</id>
-			<name>CPA Internal Repository</name>
-			<url>http://10.1.1.101:8088/artifactory/libs-releases-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>artifactory</id>
-			<name>CPA Internal Snapshot Repository</name>
-			<url>http://10.1.1.101:8088/artifactory/libs-snapshots-local</url>
-		</snapshotRepository>
+    <snapshotRepository>
+        <id>artifactory.wikisquare.de</id>
+        <name>artifactory.wikisquare.de-snapshots</name>
+        <url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local</url>
+    </snapshotRepository>
+    <repository>
+        <id>artifactory.wikisquare.de</id>
+        <name>artifactory.wikisquare.de-releases</name>
+        <url>http://www.wikisquare.de:8080/artifactory/libs-releases-local</url>
+    </repository>
 	</distributionManagement>
 
 </project>
