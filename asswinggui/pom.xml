@@ -39,10 +39,6 @@
 							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 						</manifest>
 					</archive>
-					
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
 				</configuration>
 			</plugin>
 
