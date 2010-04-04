@@ -31,62 +31,17 @@
 				</configuration>
 			</plugin>
 
-
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
-
-				<executions>
-					<!--					<execution>-->
-					<!--						<phase>package</phase>-->
-					<!--						<goals>-->
-					<!--							<goal>jnlp</goal>-->
-					<!--						</goals>-->
-					<!--					</execution>-->
-
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>jnlp-download-servlet</goal>
-						</goals>
-					</execution>
-
-				</executions>
-
-				<configuration>
-					<libPath>lib</libPath>
-					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources/</resourcesDirectory>
-
-					<jnlp>
-						<inputTemplate>as_template.jnlp</inputTemplate>
-						<outputFile>as.jnlp</outputFile>
-						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-					</jnlp>
-					<sign>
-						<keypass>wasser</keypass>
-						<storepass>wasser</storepass>
-						<alias>IMPETUS</alias>
-					</sign>
-					<verbose>false</verbose>
-					<!--					-->
-					<excludeTransitive>false</excludeTransitive>
-<!---->
-				</configuration>
+				<version>1.0-alpha-2</version>
 			</plugin>
-
 		</plugins>
 
 
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.codehaus.mojo.webstart</groupId>
-			<!--groupId>com.sun.java.jnlp</groupId-->
-			<artifactId>webstart-jnlp-servlet</artifactId>
-			<version>1.0-6.0-02_ea_b02-SNAPSHOT</version>
-			<scope>runtime</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>org.swinglabs</groupId>
@@ -165,5 +120,14 @@
 			<version>2.6.2</version>
 			<type>jar</type>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.codehaus.mojo.webstart</groupId>
+			<artifactId>webstart-jnlp-servlet</artifactId>
+			<version>1.0-6.0-02_ea_b02</version>
+			<type>jar</type>
+			<scope>runtime</scope>
+		</dependency>
+		
 	</dependencies>
 </project>
