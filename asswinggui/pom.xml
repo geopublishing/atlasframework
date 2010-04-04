@@ -18,9 +18,8 @@
 	<build>
 
 		<plugins>
-		
+
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
@@ -33,54 +32,51 @@
 			</plugin>
 
 			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+						</manifest>
+					</archive>
+					
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
 				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<version>1.0-alpha-2</version>
 
 				<executions>
-
-					<!--					<execution>-->
-					<!--						<phase>package</phase>-->
-					<!--						<goals>-->
-					<!--							<goal>jnlp</goal>-->
-					<!--						</goals>-->
-					<!--					</execution>-->
-
 					<execution>
-<!--						<phase>process-resources</phase>-->
-						<phase>package</phase>
+						<phase>deploy</phase>
 						<goals>
-							<goal>jnlp-download-servlet</goal>
+							<goal>jnlp</goal>
 						</goals>
 					</execution>
-
 				</executions>
 
 				<configuration>
-					<libPath>lib</libPath>
-					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources/</resourcesDirectory>
+					<!--					<libPath>lib</libPath> check again in alpha 3-->
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/
+					</resourcesDirectory>
 
-					<jnlpFiles>
-						<jnlpFile>
-							<templateFilename>as_template.jnlp</templateFilename>
-							<outputFilename>as.jnlp</outputFilename>
-							<jarResources>
-								<jarResource>
-									<groupId>org.geopublishing.atlasStyler</groupId>
-									<artifactId>asswinggui</artifactId>
-									<version>${project.version}</version>
-									<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-								</jarResource>
-
-							</jarResources>
-						</jnlpFile>
-					</jnlpFiles>
+					<jnlp>
+						<inputTemplate>as_template.jnlp</inputTemplate>
+						<outputFile>as.jnlp</outputFile>
+						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+					</jnlp>
 					<sign>
 						<keypass>wasser</keypass>
 						<storepass>wasser</storepass>
 						<alias>IMPETUS</alias>
 					</sign>
-					<verbose>false</verbose>
+					<verbose>true</verbose>
 					<excludeTransitive>false</excludeTransitive>
 				</configuration>
 			</plugin>
@@ -168,14 +164,6 @@
 			<artifactId>gt-imagemosaic</artifactId>
 			<version>2.6.2</version>
 			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.codehaus.mojo.webstart</groupId>
-			<artifactId>webstart-jnlp-servlet</artifactId>
-			<version>1.0-6.0-02_ea_b02</version>
-			<type>jar</type>
-			<scope>runtime</scope>
 		</dependency>
 
 	</dependencies>
