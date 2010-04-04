@@ -23,7 +23,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 
 import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.swing.formatter.MbDecimalFormatter;
