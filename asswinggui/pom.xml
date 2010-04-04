@@ -50,7 +50,7 @@
 					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
 
 					<jnlp>
-						<inputTemplate>src/main/jnlp/templates/as_template.vm</inputTemplate>
+						<inputTemplate>as_template.jnlp</inputTemplate>
 						<outputFile>as.jnlp</outputFile>
 						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 					</jnlp>
