@@ -97,9 +97,7 @@ public class AVUtil {
 	 * properties-Datein unter {@code skrueger.swing.resource.locales}
 	 * hinterlegt.
 	 */
-	private static ResourceProvider RESOURCE = new ResourceProvider(LangUtil
-			.extendPackagePath(AVUtil.class,
-					"resource.locales.AtlasViewerTranslation"), Locale.ENGLISH);
+	private static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasViewerTranslation", Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link AtlasViewer}s translation
