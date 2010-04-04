@@ -272,7 +272,7 @@ public class AtlasChartJPanel extends JPanel implements
 									WindowSelectionMode.ZOOM_IN_CHART);
 						}
 
-					}, AtlasViewer.R("AtlasChartJPanel.zoom.tt"));
+					}, AtlasViewerGUI.R("AtlasChartJPanel.zoom.tt"));
 			toolBar.add(zoomToolButton);
 			bg.add(zoomToolButton);
 
@@ -410,7 +410,7 @@ public class AtlasChartJPanel extends JPanel implements
 				}
 
 			});
-			printChartButton.setToolTipText(AtlasViewer
+			printChartButton.setToolTipText(AtlasViewerGUI
 					.R("AtlasChartJPanel.PrintChartButton.TT"));
 			toolBar.add(printChartButton);
 
@@ -433,7 +433,7 @@ public class AtlasChartJPanel extends JPanel implements
 				}
 
 			});
-			saveChartAction.setToolTipText(AtlasViewer
+			saveChartAction.setToolTipText(AtlasViewerGUI
 					.R("AtlasChartJPanel.SaveChartButton.TT"));
 			toolBar.add(saveChartAction);
 
@@ -442,7 +442,7 @@ public class AtlasChartJPanel extends JPanel implements
 			//
 			{
 				final JButton openTable = new JButton();
-				openTable.setAction(new AbstractAction(AtlasViewer
+				openTable.setAction(new AbstractAction(AtlasViewerGUI
 						.R("LayerToolMenu.table"),
 						BasicMapLayerLegendPaneUI.ICON_TABLE) {
 

@@ -63,7 +63,7 @@ import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import com.vividsolutions.jts.geom.Envelope;
 
 /**
- * This {@link AtlasMapView} is used in {@link AtlasViewer} to show a
+ * This {@link AtlasMapView} is used in {@link AtlasViewerGUI} to show a
  * {@link GeoMapPane} on the right, and a {@link JTabbedPane} on the left with
  * the legend and optionally other info.<br/>
  * 
@@ -146,7 +146,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					"",
 					new ImageIcon(MapView.class
 							.getResource("resource/icons/zoom_full_extend.png")),
-					AtlasViewer.R("MapPaneButtons.DefaultZoom.TT")) {
+					AtlasViewerGUI.R("MapPaneButtons.DefaultZoom.TT")) {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (map.getDefaultMapArea() != null )
@@ -321,16 +321,16 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 				tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 
-				tabbedPane.addTab(AtlasViewer
+				tabbedPane.addTab(AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.LayersTab_label"),
 						scrollPaneOfLayerPane);
-				tabbedPane.setToolTipTextAt(0, AtlasViewer
+				tabbedPane.setToolTipTextAt(0, AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.LayersTab_tt"));
 				HTMLInfoJPane infoPanel = new HTMLInfoJPane(map);
-				tabbedPane.addTab(AtlasViewer
+				tabbedPane.addTab(AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.InfoTab_label"),
 						new JScrollPane(infoPanel));
-				tabbedPane.setToolTipTextAt(1, AtlasViewer
+				tabbedPane.setToolTipTextAt(1, AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 				tabbedPane.setSelectedIndex(1);

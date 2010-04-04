@@ -60,17 +60,17 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 	public AtlasScreenScreenshotsDialog(final AtlasMapView mapView) {
 		this.mapView = mapView;
 
-		setTitle(AtlasViewer.R("Screenshot.DialogTitle"));
+		setTitle(AtlasViewerGUI.R("Screenshot.DialogTitle"));
 
 		screenshots = makeScreenshots();
 
 		final JRadioButton[] radioButtons = new JRadioButton[3];
-		radioButtons[0] = new JRadioButton(AtlasViewer
+		radioButtons[0] = new JRadioButton(AtlasViewerGUI
 				.R("Screenshot.Version.WithLegend"));
 		radioButtons[0].setSelected(true);
-		radioButtons[1] = new JRadioButton(AtlasViewer
+		radioButtons[1] = new JRadioButton(AtlasViewerGUI
 				.R("Screenshot.Version.WithGrid"));
-		radioButtons[2] = new JRadioButton(AtlasViewer
+		radioButtons[2] = new JRadioButton(AtlasViewerGUI
 				.R("Screenshot.Version.MapOnly"));
 
 		/**
@@ -125,7 +125,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		}
 
 		cp.setLayout(new BorderLayout());
-		JLabel topLIne = new JLabel(AtlasViewer
+		JLabel topLIne = new JLabel(AtlasViewerGUI
 				.R("Screenshot.PleaseChooseAnImageText"));
 		topLIne.setBorder(BorderFactory.createEmptyBorder(5, 6, 0, 5));
 		cp.add(topLIne, BorderLayout.NORTH);
@@ -134,7 +134,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		JPanel buttonsPanel = new JPanel(new FlowLayout());
 		buttonsPanel.setAlignmentX(FlowLayout.RIGHT);
 
-		JButton saveButton = new JButton(new AbstractAction(AtlasViewer
+		JButton saveButton = new JButton(new AbstractAction(AtlasViewerGUI
 				.R("Screenshot.SaveImageButton")) {
 
 			@Override
@@ -170,12 +170,12 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 
 					@Override
 					public String getDescription() {
-						return AtlasViewer.R("ImageFileChooser.description");
+						return AtlasViewerGUI.R("ImageFileChooser.description");
 					}
 
 				};
 				fc.setFileFilter(imageFilesFilter);
-				fc.setDialogTitle(AtlasViewer
+				fc.setDialogTitle(AtlasViewerGUI
 						.R("Screenshot.ChooseImagenameDialogTitle"));
 
 				int showSaveDialog = fc
@@ -196,7 +196,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 
 				if (selectedFile.exists()) {
 					int showConfirmDialog = JOptionPane.showConfirmDialog(
-							AtlasScreenScreenshotsDialog.this, AtlasViewer
+							AtlasScreenScreenshotsDialog.this, AtlasViewerGUI
 									.R("Screenshot.OverwriteFileQuestion"));
 					if (showConfirmDialog != JOptionPane.OK_OPTION)
 						return;

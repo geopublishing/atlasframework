@@ -49,14 +49,14 @@ public class AtlasMenuBar extends JMenuBar {
 
 	public static Logger LOGGER = Logger.getLogger(AtlasMenuBar.class);
 
-	private final AtlasViewer atlasViewer;
+	private final AtlasViewerGUI atlasViewer;
 
 	private JCheckBoxMenuItem jCheckBoxMenuItemAntiAliasing;
 
 	boolean hasFileMenu = false;
 	boolean hasHelpMenu = false;
 
-	public AtlasMenuBar(AtlasViewer atlasViewer) {
+	public AtlasMenuBar(AtlasViewerGUI atlasViewer) {
 		this.atlasViewer = atlasViewer;
 
 		Group firstGroup = atlasViewer.getAtlasConfig().getFirstGroup();
@@ -67,7 +67,7 @@ public class AtlasMenuBar extends JMenuBar {
 		if (!hasFileMenu) {
 			// Create a new default help menu with standard labels!
 
-			AtlasJMenu fileMenu = new AtlasJMenu(AtlasViewer
+			AtlasJMenu fileMenu = new AtlasJMenu(AtlasViewerGUI
 					.R("AtlasViewer.FileMenu"));
 
 			addFileMenuItems(fileMenu);
@@ -75,7 +75,7 @@ public class AtlasMenuBar extends JMenuBar {
 		}
 
 		if (!hasHelpMenu) {
-			AtlasJMenu helpMenu = new AtlasJMenu(AtlasViewer
+			AtlasJMenu helpMenu = new AtlasJMenu(AtlasViewerGUI
 					.R("AtlasViewer.HelpMenu"));
 
 			addHelpMenuItems(helpMenu);
@@ -109,7 +109,7 @@ public class AtlasMenuBar extends JMenuBar {
 			Object child = children.nextElement();
 			countHere++;
 			if (countHere > maxItems) {
-				JMenu weiterMenu = new JMenu(AtlasViewer
+				JMenu weiterMenu = new JMenu(AtlasViewerGUI
 						.R("AtlasViewer.MenuToLongForScreen.Next"));
 				parent.add(weiterMenu);
 				parent = weiterMenu;
@@ -158,7 +158,7 @@ public class AtlasMenuBar extends JMenuBar {
 		 */
 		JMenuItem screenshotMenuItem = new AtlasMenuItem(
 				new AbstractAction(
-						AtlasViewer
+						AtlasViewerGUI
 								.R("AtlasViewer.FileMenu.JMenuItem.save_smart_screenshots"),
 						Icons.ICON_SCREENSHOT_SMALL) {
 
@@ -178,7 +178,7 @@ public class AtlasMenuBar extends JMenuBar {
 					}
 
 				},
-				AtlasViewer
+				AtlasViewerGUI
 						.R("AtlasViewer.FileMenu.JMenuItem.ToolTip.save_smart_screenshots"));
 		screenshotMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_PRINTSCREEN, 0, true));
@@ -219,7 +219,7 @@ public class AtlasMenuBar extends JMenuBar {
 			throws UnavailableServiceException {
 
 		JMenuItem jwsDownloadAllMenuItem = new AtlasMenuItem(
-				new AbstractAction(AtlasViewer
+				new AbstractAction(AtlasViewerGUI
 						.R("AtlasViewer.FileMenu.downloadAllRessources")) {
 
 					@Override
@@ -243,7 +243,7 @@ public class AtlasMenuBar extends JMenuBar {
 								AVSwingUtil
 										.showMessageDialog(
 												atlasViewer.getJFrame(),
-												AtlasViewer
+												AtlasViewerGUI
 														.R("AtlasViewer.FileMenu.downloadAllRessources.AlreadyDownloaded"));
 
 								return;
@@ -276,7 +276,7 @@ public class AtlasMenuBar extends JMenuBar {
 								AVSwingUtil
 										.showMessageDialog(
 												atlasViewer.getJFrame(),
-												AtlasViewer
+												AtlasViewerGUI
 														.R("AtlasViewer.FileMenu.downloadAllRessources.Success"));
 							}
 						} catch (UnavailableServiceException e1) {
@@ -289,7 +289,7 @@ public class AtlasMenuBar extends JMenuBar {
 					}
 
 				},
-				AtlasViewer
+				AtlasViewerGUI
 						.R("AtlasViewer.FileMenu.downloadAllRessources.tooltip"));
 
 		ArrayList<String> haveToDownload = JNLPUtil
@@ -326,9 +326,9 @@ public class AtlasMenuBar extends JMenuBar {
 		// ******************************************************************
 		if (atlasViewer.getAtlasConfig().getAboutHTMLURL() != null) {
 			JMenuItem aboutMenuItem = new AtlasMenuItem(); 
-			aboutMenuItem.setText(AtlasViewer.R("AtlasViewer.HelpMenu.About",
+			aboutMenuItem.setText(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About",
 					atlasViewer.getAtlasConfig().getTitle().toString()));
-			aboutMenuItem.setToolTipText(AtlasViewer.R(
+			aboutMenuItem.setToolTipText(AtlasViewerGUI.R(
 					"AtlasViewer.HelpMenu.About.tooltip", atlasViewer
 							.getAtlasConfig().getTitle().toString()));
 
@@ -345,7 +345,7 @@ public class AtlasMenuBar extends JMenuBar {
 	 */
 	private JMenuItem getExitMenuItem() {
 		JMenuItem exitMenuItem = new AtlasMenuItem();
-		exitMenuItem.setText(AtlasViewer
+		exitMenuItem.setText(AtlasViewerGUI
 				.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"));
 		exitMenuItem.setIcon(Icons.ICON_EXIT_SMALL);
 		exitMenuItem.addActionListener(atlasViewer);
@@ -365,7 +365,7 @@ public class AtlasMenuBar extends JMenuBar {
 			jCheckBoxMenuItemAntiAliasing = new JCheckBoxMenuItem();
 			jCheckBoxMenuItemAntiAliasing.setSelected(atlasViewer.getAtlasConfig().getProperties().get(
 					AVProps.Keys.antialiasingMaps, "1").equals("1"));
-			jCheckBoxMenuItemAntiAliasing.setText(AtlasViewer
+			jCheckBoxMenuItemAntiAliasing.setText(AtlasViewerGUI
 					.R("AtlasViewer.AAMenuItem.SetText.toggle_antialiasing"));
 			jCheckBoxMenuItemAntiAliasing.setActionCommand("antiAliasing");
 			jCheckBoxMenuItemAntiAliasing.addActionListener(atlasViewer);

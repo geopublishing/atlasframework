@@ -135,8 +135,8 @@ public class AtlasChartJDialog extends AtlasDialog {
 				}
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						AtlasChartJDialog.this, AtlasViewer
-								.R("dialog.title.wait"), AtlasViewer
+						AtlasChartJDialog.this, AtlasViewerGUI
+								.R("dialog.title.wait"), AtlasViewerGUI
 								.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
@@ -270,7 +270,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 				}
 			}
 
-		}, AtlasViewer.R("AtlasChartJPanel.zoomFullExtent.tt"));
+		}, AtlasViewerGUI.R("AtlasChartJPanel.zoomFullExtent.tt"));
 
 		return resetZoomTool;
 	}

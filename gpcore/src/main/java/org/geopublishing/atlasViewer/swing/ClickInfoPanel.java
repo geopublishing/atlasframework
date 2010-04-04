@@ -84,11 +84,11 @@ public class ClickInfoPanel extends JPanel {
 
 	static private final Logger LOGGER = Logger.getLogger(ClickInfoPanel.class);
 
-	private static final JLabel CRS_LABEL = new JLabel(AtlasViewer
+	private static final JLabel CRS_LABEL = new JLabel(AtlasViewerGUI
 			.R("ClickInfoPanel.CRS.label")
 			+ ":", SwingConstants.TRAILING);
 
-	final static String CRSValueToolTip = AtlasViewer
+	final static String CRSValueToolTip = AtlasViewerGUI
 			.R("ClickInfoPanel.CRS.tooltip");
 
 	private static final JLabel X_LABEL = new JLabel("X" + ":",
@@ -123,7 +123,7 @@ public class ClickInfoPanel extends JPanel {
 
 	// private JPanel positionPanel;
 
-	final static String cordinatesMsg = AtlasViewer
+	final static String cordinatesMsg = AtlasViewerGUI
 			.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.cordinates");
 
 	protected int countVisibleAttribsWithContent = 0;
@@ -197,7 +197,7 @@ public class ClickInfoPanel extends JPanel {
 					for (final double value : gcValue) {
 						i++;
 
-						final JLabel key = new JLabel(AtlasViewer.R(
+						final JLabel key = new JLabel(AtlasViewerGUI.R(
 								"ClickInfoPanel.label_for_band", i));
 						key.setFont(DEFAULT_FONT);
 						panel.add(key);
@@ -252,7 +252,7 @@ public class ClickInfoPanel extends JPanel {
 						valueLabel.setText(doubleFomatted);
 					}
 
-					final JLabel key = new JLabel(AtlasViewer
+					final JLabel key = new JLabel(AtlasViewerGUI
 							.R("ClickInfoPanel.label_for_raster_value"));
 					key.setFont(DEFAULT_FONT);
 					key.setLabelFor(valueLabel);
@@ -279,7 +279,7 @@ public class ClickInfoPanel extends JPanel {
 		// **********************************************************************
 //		titleString = layerManager.getTitleFor(layer);
 		panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
-				AtlasViewer.R("ClickInfoPanel.titledBorder.bands")));
+				AtlasViewerGUI.R("ClickInfoPanel.titledBorder.bands")));
 
 		return panel;
 	}
@@ -368,7 +368,7 @@ public class ClickInfoPanel extends JPanel {
 			if (iterator.hasNext()) {
 				feature = iterator.next();
 			} else {
-				return new JLabel(AtlasViewer.R("ClickInfoPanel.no_feature"));
+				return new JLabel(AtlasViewerGUI.R("ClickInfoPanel.no_feature"));
 			}
 		} finally {
 			fc.close(iterator);
@@ -477,7 +477,7 @@ public class ClickInfoPanel extends JPanel {
 									// If we are running from the GP, show an
 									// error. If we are running without GP, just
 									// hide the line!
-									if (AtlasViewer.isRunning()) {
+									if (AtlasViewerGUI.isRunning()) {
 										valueComponent = null;
 									} else {
 										valueComponent = new JLabel("<html>"
@@ -540,7 +540,7 @@ public class ClickInfoPanel extends JPanel {
 								Map map = atlasConfig.getMapPool().get(mapId);
 
 								if (map == null) {
-									if (AtlasViewer.isRunning())
+									if (AtlasViewerGUI.isRunning())
 										valueComponent = null;
 									else
 										valueComponent = new JLabel(
@@ -630,7 +630,7 @@ public class ClickInfoPanel extends JPanel {
 												};
 											});
 									valueComponent
-											.setToolTipText(AtlasViewer
+											.setToolTipText(AtlasViewerGUI
 													.R(
 															"ClickInfoPanel.OpenHTMLButton.TT",
 															title));
@@ -697,7 +697,7 @@ public class ClickInfoPanel extends JPanel {
 											};
 										});
 								valueComponent
-										.setToolTipText(AtlasViewer
+										.setToolTipText(AtlasViewerGUI
 												.R(
 														"ClickInfoPanel.OpenHTMLinBrowserButton.TT",
 														documentTitle));
@@ -779,7 +779,7 @@ public class ClickInfoPanel extends JPanel {
 							// If we are running from the GP, show an
 							// error. If we are running without GP, just
 							// hide the line!
-							if (AtlasViewer.isRunning()) {
+							if (AtlasViewerGUI.isRunning()) {
 								valueComponent = null;
 							} else {
 								valueComponent = new JLabel("<html>"
@@ -828,7 +828,7 @@ public class ClickInfoPanel extends JPanel {
 					5, 0, // initX, initY
 					5, getYPad()); // xPad, yPad
 
-			final String msg = AtlasViewer
+			final String msg = AtlasViewerGUI
 					.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.attributes");
 			panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER, msg)); // i8ndone
 		}

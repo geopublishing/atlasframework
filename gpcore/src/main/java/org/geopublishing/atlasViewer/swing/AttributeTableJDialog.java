@@ -81,7 +81,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 	public AttributeTableJDialog(Component owner,
 			final StyledFeaturesInterface<?> styledObj,
 			final MapLegend mapLegend) {
-		super(owner, AtlasViewer.R("AttributeTable.dialog.title", styledObj
+		super(owner, AtlasViewerGUI.R("AttributeTable.dialog.title", styledObj
 				.getTitle()));
 		this.owner = owner;
 		this.styledObj = styledObj;
@@ -96,7 +96,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 				* styledObj.getAttributeMetaDataMap().sortedValuesVisibleOnly()
 						.size();
 		if (numCells > WARN_CELLS) {
-			if (AVSwingUtil.askYesNo(owner, AtlasViewer.R(
+			if (AVSwingUtil.askYesNo(owner, AtlasViewerGUI.R(
 					"AttributeTable.dialog.warnToManyCells", numCells)) == false){
 				dispose();
 				return;

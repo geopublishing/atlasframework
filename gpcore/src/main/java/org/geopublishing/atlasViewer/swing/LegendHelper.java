@@ -285,7 +285,7 @@ public class LegendHelper {
 					legendPanel.setSelectedComponent(oneStyleLegend);
 				}
 
-				legendPanel.setToolTipTextAt(count, AtlasViewer.R(
+				legendPanel.setToolTipTextAt(count, AtlasViewerGUI.R(
 						"Legend.Views.TabbedPane.ToolTip", ls.getTitle()
 								.toString()));
 

@@ -78,13 +78,13 @@ import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 
 /**
- * {@link AtlasViewer} main class
+ * {@link AtlasViewerGUI} main class
  * 
  * @author Stefan Alfons Krüger
  */
 
-public class AtlasViewer implements ActionListener, SingleInstanceListener {
-	public static Logger LOGGER = Logger.getLogger(AtlasViewer.class);
+public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
+	public static Logger LOGGER = Logger.getLogger(AtlasViewerGUI.class);
 
 	/**
 	 * Determines, whether to do a System.exit() when the Application is closed.
@@ -101,11 +101,11 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		// .println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
 		WebResourceManager
 				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
-						AtlasViewer.class));
+						AtlasViewerGUI.class));
 	}
 
 	/**
-	 * Convenience method to access the {@link AtlasViewer}s translation
+	 * Convenience method to access the {@link AtlasViewerGUI}s translation
 	 * resources.
 	 * 
 	 * @param key
@@ -126,7 +126,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	private AtlasConfig atlasConfig = new AtlasConfig();
 
 	/** The singleton instance of this AtlasViewer */
-	private static AtlasViewer instance;
+	private static AtlasViewerGUI instance;
 
 	/** The main {@link Map} that the user is watching */
 	private Map map;
@@ -148,7 +148,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	private AtlasViewer() {
+	private AtlasViewerGUI() {
 
 		// Atlas Viewer is starting
 		LOGGER.info("Starting AtlasViewer.. " + AVSwingUtil.getVersionInfo());
@@ -158,7 +158,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 		/*
 		 * Register this as single instance
 		 */
-		JNLPUtil.registerAsSingleInstance(AtlasViewer.this, true);
+		JNLPUtil.registerAsSingleInstance(AtlasViewerGUI.this, true);
 
 	}
 
@@ -191,15 +191,15 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	/**
 	 * Calling this the first time, initiates parsing the atlas.xml
 	 */
-	public static AtlasViewer getInstance() {
+	public static AtlasViewerGUI getInstance() {
 		if (instance == null) {
-			instance = new AtlasViewer();
+			instance = new AtlasViewerGUI();
 		}
 		return instance;
 	}
 
 	/**
-	 * @return <code>true</code> if an instance of {@link AtlasViewer} exists in
+	 * @return <code>true</code> if an instance of {@link AtlasViewerGUI} exists in
 	 *         the JVM. This can be used by components to determine whether they
 	 *         are running from within Geopublisher or AtlasViewer without
 	 *         having any dependency to the Geopublisher classes.
@@ -209,7 +209,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	};
 
 	/**
-	 * This method initializes the main {@link AtlasViewer} {@link JFrame}. If
+	 * This method initializes the main {@link AtlasViewerGUI} {@link JFrame}. If
 	 * an icon ({@link AtlasConfig.JWSICON_RESOURCE_NAME}) has been defined for
 	 * this atlas it will be set as the {@link JFrame} icon.
 	 */
@@ -267,13 +267,13 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 
 	/**
 	 * Loads a new {@link Map} into the mainPanel / contentPane of the
-	 * {@link AtlasViewer}. The previous {@link Map}'s {@link DpEntry}s will be
+	 * {@link AtlasViewerGUI}. The previous {@link Map}'s {@link DpEntry}s will be
 	 * removed from cache if they are not used by the new {@link Map}. This
 	 * convenience method delegates to a {@link #setMap(Map, boolean)} with
 	 * force == <code>false</code>.
 	 * 
 	 * @param newMap
-	 *            new {@link Map} to show in the {@link AtlasViewer}
+	 *            new {@link Map} to show in the {@link AtlasViewerGUI}
 	 */
 	public void setMap(final Map newMap) {
 		setMap(newMap, false);
@@ -288,11 +288,11 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 
 	/**
 	 * Loads a new {@link Map} into the mainPanel / contentPane of the
-	 * {@link AtlasViewer}. The previous {@link Map}'s {@link DpEntry}s will be
+	 * {@link AtlasViewerGUI}. The previous {@link Map}'s {@link DpEntry}s will be
 	 * removed from cache if they are not used by the new {@link Map}.
 	 * 
 	 * @param newMap
-	 *            new {@link Map} to show in the {@link AtlasViewer}
+	 *            new {@link Map} to show in the {@link AtlasViewerGUI}
 	 * 
 	 * @param force
 	 *            If force == <code>false</code>, the map is only changed if the
@@ -459,7 +459,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 				SwingUtilities.invokeLater(new Runnable() {
 
 					public void run() {
-						boolean b = AtlasViewer.this.getAtlasMenuBar()
+						boolean b = AtlasViewerGUI.this.getAtlasMenuBar()
 								.getJCheckBoxMenuItemAntiAliasing()
 								.isSelected();
 						getAtlasConfig().getProperties().set(getJFrame(),
@@ -502,7 +502,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			 * Only remove the SingleInstanceService if we have NOT been started
 			 * as a preview
 			 */
-			JNLPUtil.registerAsSingleInstance(AtlasViewer.this, false);
+			JNLPUtil.registerAsSingleInstance(AtlasViewerGUI.this, false);
 
 			LOGGER.info("Returning exit code = " + errorCode
 					+ " and System.exit()");
@@ -559,7 +559,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Main method to start the {@link AtlasViewer}.
+	 * Main method to start the {@link AtlasViewerGUI}.
 	 * 
 	 * @param args
 	 *            The first argument may point to a directory that contains the
@@ -577,7 +577,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// "av_log4j.xml");
 
-			final URL log4jURL = AtlasViewer.class.getClassLoader()
+			final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
 					.getResource("av_log4j.xml");
 
 			System.out.println("Configuring log4j from " + log4jURL);
@@ -586,7 +586,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			ExceptionDialog.show(null, e);
 		}
 
-		AtlasViewer.getInstance().importAcAndStartGui();
+		AtlasViewerGUI.getInstance().importAcAndStartGui();
 
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6476706
 		// System.exit(0);
@@ -791,11 +791,11 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 				// argument, we expect all stuff to be on the class-path.
 
 				getInstance().getAtlasConfig().getResLoMan().addResourceLoader(
-						new ClassResourceLoader(AtlasViewer.class));
+						new ClassResourceLoader(AtlasViewerGUI.class));
 
 				WebResourceManager
 						.addResourceLoader(new WebClassResourceLoader(
-								AtlasViewer.class));
+								AtlasViewerGUI.class));
 			}
 		}
 
@@ -870,11 +870,11 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * If set to <code>false</code>, this instance of the {@link AtlasViewer} is
+	 * If set to <code>false</code>, this instance of the {@link AtlasViewerGUI} is
 	 * also removed from the {@link SingleInstanceService}
 	 * 
 	 * @param exitOnClose
-	 *            Do a System.exit() when exiting the {@link AtlasViewer} ?
+	 *            Do a System.exit() when exiting the {@link AtlasViewerGUI} ?
 	 */
 	public void setExitOnClose(boolean exitOnClose) {
 		this.exitOnClose = exitOnClose;
@@ -882,7 +882,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 			/*
 			 * Un-register this as single instance
 			 */
-			JNLPUtil.registerAsSingleInstance(AtlasViewer.this, false);
+			JNLPUtil.registerAsSingleInstance(AtlasViewerGUI.this, false);
 		}
 	}
 
@@ -891,7 +891,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Returns the map that is visible in the {@link AtlasViewer}.
+	 * Returns the map that is visible in the {@link AtlasViewerGUI}.
 	 * 
 	 * @return <code>null</code> if no map is shown.
 	 */
@@ -909,7 +909,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 * 
-	 *         Note: This method is double in {@link AtlasViewer} and
+	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         AtlasCreator
 	 */
 	private void updateLangMenu() {
@@ -923,13 +923,13 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 
 		if (languageSubMenu == null) {
 
-			languageSubMenu = new JMenu(AtlasViewer
+			languageSubMenu = new JMenu(AtlasViewerGUI
 					.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
 
 			languageSubMenu.setFont(AtlasMenuItem.BIGFONT);
 
 			languageSubMenu
-					.setToolTipText(AtlasViewer
+					.setToolTipText(AtlasViewerGUI
 							.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_tt"));
 			languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
 		} else {
@@ -963,7 +963,7 @@ public class AtlasViewer implements ActionListener, SingleInstanceListener {
 
 			JMenuItem langMenuItem = new AtlasMenuItem(
 					new AbstractAction(
-							AtlasViewer
+							AtlasViewerGUI
 									.R(
 											"AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
 											locale.getDisplayLanguage(locale),

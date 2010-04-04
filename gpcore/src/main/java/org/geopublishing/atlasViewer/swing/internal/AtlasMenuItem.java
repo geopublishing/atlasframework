@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.map.MapLayer;
 
@@ -39,7 +39,7 @@ public class AtlasMenuItem extends JMenuItem {
 	public static final String ACTIONCMD_DATAPOOL_PREFIX = "datapool";
 	public static final String ACTIONCMD_MAPPOOL_PREFIX = "mappool";
 
-	private AtlasViewer atlasViewer;
+	private AtlasViewerGUI atlasViewer;
 
 	static final Color normalColor = new JMenuItem().getForeground();
 
@@ -59,7 +59,7 @@ public class AtlasMenuItem extends JMenuItem {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 */
-	public AtlasMenuItem(Object child, AtlasViewer atlasViewer) {
+	public AtlasMenuItem(Object child, AtlasViewerGUI atlasViewer) {
 
 		this.atlasViewer = atlasViewer;
 		addActionListener(atlasViewer);

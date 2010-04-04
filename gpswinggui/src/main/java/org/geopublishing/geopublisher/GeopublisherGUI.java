@@ -57,7 +57,7 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
@@ -82,7 +82,7 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
 
 /**
  * The mighty mighty {@link GeopublisherGUI} is a tool that generates runnable
- * {@link AtlasViewer} compilations.
+ * {@link AtlasViewerGUI} compilations.
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  * 
@@ -112,7 +112,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				.println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
 		WebResourceManager
 				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
-						AtlasViewer.class));
+						AtlasViewerGUI.class));
 
 		// Starting singleton WebServer
 		try {
@@ -187,8 +187,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// Setting up log4j
 		// URL log4jXmlUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
 		// "gp_log4j.xml");
-		URL log4jXmlUrl = GeopublisherGUI.class.getClassLoader().getResource(
-				"gp_log4j.xml");
+		URL log4jXmlUrl = GeopublisherGUI.class.getResource(
+				"/gp_log4j.xml");
 
 		DOMConfigurator.configure(log4jXmlUrl);
 
@@ -588,8 +588,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			/**
 			 * Close any other preview instances
 			 */
-			if (AtlasViewer.isRunning()) {
-				AtlasViewer.dispose();
+			if (AtlasViewerGUI.isRunning()) {
+				AtlasViewerGUI.dispose();
 			}
 
 			// If no valid StartMap has been selected, we don't allow to open
@@ -597,8 +597,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final MapPool mapPool = ace.getMapPool();
 			if (mapPool.getStartMapID() == null
 					|| mapPool.get(mapPool.getStartMapID()) == null) {
-				JOptionPane.showMessageDialog(getJFrame(), AtlasViewer
-						.R("AtlasViewer.error.noMapInAtlas"), AtlasViewer
+				JOptionPane.showMessageDialog(getJFrame(), AtlasViewerGUI
+						.R("AtlasViewer.error.noMapInAtlas"), AtlasViewerGUI
 						.R("AtlasViewer.error.noMapInAtlas"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
@@ -609,15 +609,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			/**
 			 * Create and configure a new visible Instance
 			 */
-			AtlasViewer av = AtlasViewer.getInstance();
+			AtlasViewerGUI av = AtlasViewerGUI.getInstance();
 			av.setExitOnClose(false);
 			av.startGui(getAce());
 		} else if (cmd.equals(ActionCmds.previewAtlas.toString())) {
 			/**
 			 * Close any other preview instances
 			 */
-			if (AtlasViewer.isRunning()) {
-				AtlasViewer.dispose();
+			if (AtlasViewerGUI.isRunning()) {
+				AtlasViewerGUI.dispose();
 			}
 
 			// If we can't save the atlas cancel.
@@ -633,15 +633,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final MapPool mapPool = ace.getMapPool();
 			if (mapPool.getStartMapID() == null
 					|| mapPool.get(mapPool.getStartMapID()) == null) {
-				JOptionPane.showMessageDialog(getJFrame(), AtlasViewer
-						.R("AtlasViewer.error.noMapInAtlas"), AtlasViewer
+				JOptionPane.showMessageDialog(getJFrame(), AtlasViewerGUI
+						.R("AtlasViewer.error.noMapInAtlas"), AtlasViewerGUI
 						.R("AtlasViewer.error.noMapInAtlas"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
 			// Create and configure a new visible Instance
-			AtlasViewer av = AtlasViewer.getInstance();
+			AtlasViewerGUI av = AtlasViewerGUI.getInstance();
 			av.setExitOnClose(false);
 			// Prepare the ResLoMan, so it will parse the AtlasWorkingDir
 			av.getAtlasConfig().getResLoMan().addResourceLoader(
@@ -720,8 +720,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return false;
 		}
 
-		if (AtlasViewer.isRunning())
-			AtlasViewer.dispose();
+		if (AtlasViewerGUI.isRunning())
+			AtlasViewerGUI.dispose();
 
 		ace.getMapPool().removeChangeListener(
 				listenToMapPoolChangesAndClosePreviewAtlas);
@@ -899,7 +899,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 		ace = null;
 
-		AtlasViewer.dispose();
+		AtlasViewerGUI.dispose();
 
 		if (gpJFrame != null)
 			gpJFrame.dispose();
@@ -956,11 +956,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(
 					MapPool.EventTypes.removeMap.toString())) {
-				if (AtlasViewer.isRunning()) {
+				if (AtlasViewerGUI.isRunning()) {
 					LOGGER
 							.debug("Closing an open AtlasViewer because a Map has been removed from the MapPool");
 					// Kill any other open instance
-					AtlasViewer.dispose();
+					AtlasViewerGUI.dispose();
 				}
 
 			}
@@ -979,11 +979,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			if (evt.getPropertyName().equals(
 					DataPool.EventTypes.removeDpe.toString())) {
-				if (AtlasViewer.isRunning()) {
+				if (AtlasViewerGUI.isRunning()) {
 					LOGGER
 							.debug("Closing an open AtlasViewer because a Dpe has been removed from the MapPool");
 					// Kill any other open instance
-					AtlasViewer.dispose();
+					AtlasViewerGUI.dispose();
 				}
 
 			}

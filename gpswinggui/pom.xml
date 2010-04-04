@@ -15,6 +15,28 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+	
 	<dependencies>
 
 		<dependency>

@@ -520,7 +520,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		MapLayer[] layers = getGeoMapPane().getMapContext().getLayers();
 		for (MapLayer ml : layers) {
 			if (ml.getTitle().equals(styledObj.getId())) {
-				AVSwingUtil.showMessageDialog(this, AtlasViewer.R(
+				AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
 						"MapLegend.InsertLayer.LayerAlreadyInContext",
 						styledObj.getTitle()));
 				return false;

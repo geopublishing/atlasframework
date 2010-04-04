@@ -42,7 +42,7 @@ import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
@@ -246,7 +246,7 @@ public class AMLImport {
 		try {
 			builder = getDocumentBuilder(false);
 
-			File atlasXmlFile = new File(gpaFile.getParentFile(),
+			File atlasXmlFile = new File(gpaFile,
 					AtlasConfig.ATLASDATA_DIRNAME + "/"
 							+ AtlasConfig.ATLAS_XML_FILENAME);
 
@@ -1006,7 +1006,7 @@ public class AMLImport {
 							"Parsing attribute descriptions", "", e
 									.getMessage());
 				} catch (RuntimeException e) {
-					if (AtlasViewer.isRunning()) {
+					if (AtlasViewerGUI.isRunning()) {
 						// statusDialog.warningOccurred("layer nich verfügbar aber das ist nicht schlimm",
 						// "", e.getMessage());
 					} else
@@ -1518,7 +1518,7 @@ public class AMLImport {
 						 * layers might simple not have been exported.
 						 */
 
-						if (!AtlasViewer.isRunning() && !foundIt) {
+						if (!AtlasViewerGUI.isRunning() && !foundIt) {
 							String msg = "Map '"
 									+ map.getTitle()
 									+ "' defines an additional style with ID='"
@@ -1571,7 +1571,7 @@ public class AMLImport {
 							}
 						}
 
-						if (!AtlasViewer.isRunning() && !foundIt) {
+						if (!AtlasViewerGUI.isRunning() && !foundIt) {
 							String msg = "Map '"
 									+ map.getTitle()
 									+ "' defines an available chart with ID='"

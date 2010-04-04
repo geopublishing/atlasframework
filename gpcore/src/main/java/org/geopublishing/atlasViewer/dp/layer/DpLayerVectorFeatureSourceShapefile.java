@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
@@ -170,7 +170,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	 * files then, and also does GeoTools create a temporary index itself.
 	 */
 	private void checkIndex() {
-		if (AtlasViewer.isRunning())
+		if (AtlasViewerGUI.isRunning())
 			return; // works!
 
 		// not needed any more.. just a double check

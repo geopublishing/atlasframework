@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 import org.geotools.data.DataAccess;
@@ -381,7 +381,7 @@ public abstract class DpLayerVectorFeatureSource
 	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadataImpl}. 
 	 */
 	public AttributeMetadataMap<AttributeMetadataImpl> getAttributeMetaDataMap() {
-		if (!attribMetadataChecked && !AtlasViewer.isRunning()) {
+		if (!attribMetadataChecked && !AtlasViewerGUI.isRunning()) {
 			/**
 			 * checkAttribMetaData requires all Geoobjects to be available.
 			 * Exported atlases have more information in the atlas.xml than they

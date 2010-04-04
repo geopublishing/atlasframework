@@ -40,7 +40,7 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GeopublisherGUI;
 
@@ -276,12 +276,12 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 							 */
 							if (group2.isFileMenu()) {
 								setText(getText() + " (<-"
-										+ AtlasViewer.R("AtlasViewer.FileMenu")
+										+ AtlasViewerGUI.R("AtlasViewer.FileMenu")
 										+ ")");
 							}
 							if (group2.isHelpMenu()) {
 								setText(getText() + " (<-"
-										+ AtlasViewer.R("AtlasViewer.HelpMenu")
+										+ AtlasViewerGUI.R("AtlasViewer.HelpMenu")
 										+ ")");
 							}
 

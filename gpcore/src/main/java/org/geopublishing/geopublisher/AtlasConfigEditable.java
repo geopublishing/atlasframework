@@ -36,7 +36,7 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.styling.Style;
 
 import rachel.ResourceManager;
@@ -49,7 +49,7 @@ import skrueger.i8n.Translation;
 
 /**
  * An extension of the AtlasConfig for use within AtlasCreator. One purpose is,
- * to keep {@link File} related references out of {@link AtlasViewer}
+ * to keep {@link File} related references out of {@link AtlasViewerGUI}
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  * 

@@ -46,7 +46,7 @@ import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.BugReportmailer;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -313,7 +313,7 @@ public class GpFrame extends JFrame {
 		// ******************************************************************
 		// "Exit" Menu Item - exitMenuItem
 		// ******************************************************************
-		menuItem = new GpMenuItem(AtlasViewer
+		menuItem = new GpMenuItem(AtlasViewerGUI
 				.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"), null,
 				ActionCmds.exitGP, Icons.ICON_EXIT_SMALL);
 		fileMenu.add(menuItem);
@@ -575,7 +575,7 @@ public class GpFrame extends JFrame {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
 	 * 
-	 *         Note: This method is double in {@link AtlasViewer} and
+	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         {@link GeopublisherGUI}
 	 */
 	private JMenu getChangeLangJMenu() {
@@ -585,9 +585,9 @@ public class GpFrame extends JFrame {
 
 		AtlasConfigEditable ace = gp.getAce();
 
-		JMenu languageSubMenu = new JMenu(AtlasViewer
+		JMenu languageSubMenu = new JMenu(AtlasViewerGUI
 				.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
-		languageSubMenu.setToolTipText(AtlasViewer
+		languageSubMenu.setToolTipText(AtlasViewerGUI
 				.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_tt"));
 		languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
 
@@ -605,7 +605,7 @@ public class GpFrame extends JFrame {
 
 			JMenuItem langMenuItem = new JMenuItem(
 					new AbstractAction(
-							AtlasViewer
+							AtlasViewerGUI
 									.R(
 											"AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
 											locale.getDisplayLanguage(locale),

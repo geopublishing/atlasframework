@@ -52,7 +52,7 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 
 //		setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-		setAction(new AbstractAction(AtlasViewer
+		setAction(new AbstractAction(AtlasViewerGUI
 				.R("AtlasMapToolBarChartButton.Title"), Icons.ICON_CHART_MEDIUM) {
 //			setAction(new AbstractAction(AtlasViewer
 //					.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_BIG) {
@@ -95,7 +95,7 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 			}
 
 		});
-		setToolTipText(AtlasViewer.R("MapPaneButtons.ChartButton.TT"));
+		setToolTipText(AtlasViewerGUI.R("MapPaneButtons.ChartButton.TT"));
 
 		setBorder(BorderFactory.createCompoundBorder(getBorder(),BorderFactory.createEmptyBorder(0, 0, 0, 3)));
 	}

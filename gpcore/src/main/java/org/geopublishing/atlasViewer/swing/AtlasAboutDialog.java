@@ -54,8 +54,8 @@ public class AtlasAboutDialog extends javax.swing.JDialog {
 			jLabel3.setText("<html><h1>" + atlasConfig.getTitle()
 					+ "</h1><br/><font size='-2' color='gray'>AtlasViewer "
 					+ AVSwingUtil.getVersionInfoShort() + "</font></html>");
-			jButton1.setText(AtlasViewer.R("HtmlBrowserWindow.button.close"));
-			setTitle(AtlasViewer.R("AtlasViewer.HelpMenu.About", atlasConfig
+			jButton1.setText(AtlasViewerGUI.R("HtmlBrowserWindow.button.close"));
+			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About", atlasConfig
 					.getTitle()));
 			html.setContentType("text/html");
 			html.setPreferredSize(new Dimension(450, 300));

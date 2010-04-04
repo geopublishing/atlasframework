@@ -366,7 +366,7 @@ public class AtlasMapLegend extends MapLegend {
 		 * Adds the search button to the MapPaneToolBar
 		 */
 		MapPaneToolBarAction searchAction = new MapPaneToolBarAction(
-				AtlasMapView.ACTION_SEARCH, getMapPaneToolBar(), AtlasViewer
+				AtlasMapView.ACTION_SEARCH, getMapPaneToolBar(), AtlasViewerGUI
 						.R("AtlasMapView.SearchButton.Label"),
 				Icons.ICON_SEARCH) {
 
@@ -383,9 +383,9 @@ public class AtlasMapLegend extends MapLegend {
 								.show(
 										AtlasMapLegend.this,
 										null,
-										AtlasViewer
+										AtlasViewerGUI
 												.R("AtlasMapView.errmess.Title"),
-										AtlasViewer
+										AtlasViewerGUI
 												.R("AtlasMapView.errmess.FunctionNotAvailable"));
 						return;
 					}
@@ -401,7 +401,7 @@ public class AtlasMapLegend extends MapLegend {
 				}
 			}
 		};
-		searchAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewer
+		searchAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewerGUI
 				.R("AtlasMapView.SearchButton.tt"));
 		getMapPaneToolBar().addAction(searchAction, true);
 		// Look.. this true is important - otherwise

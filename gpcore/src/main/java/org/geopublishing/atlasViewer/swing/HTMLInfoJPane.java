@@ -140,7 +140,7 @@ public class HTMLInfoJPane extends JEditorPane {
 	/**
 	 * This message is shows when no data can be found.
 	 */
-	final String NODATA_MSG = AtlasViewer
+	final String NODATA_MSG = AtlasViewerGUI
 			.R("HTMLInfoPane.NODATA.MSG.sorry_no_info_available");
 
 	private final AtlasConfig atlasConfig;
@@ -184,9 +184,9 @@ public class HTMLInfoJPane extends JEditorPane {
 	 * <li>map://</li>
 	 * </ul>
 	 * 
-	 * @see AtlasViewer.PROTOCOL_MAP
-	 * @see AtlasViewer.PROTOCOL_PDF
-	 * @see AtlasViewer.PROTOCOL_BROWSER
+	 * @see AtlasViewerGUI.PROTOCOL_MAP
+	 * @see AtlasViewerGUI.PROTOCOL_PDF
+	 * @see AtlasViewerGUI.PROTOCOL_BROWSER
 	 */
 	private void addListener() {
 

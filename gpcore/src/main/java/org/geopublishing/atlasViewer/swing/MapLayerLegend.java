@@ -450,7 +450,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		try {
 			exportable.exportWithGUI(owner);
 		} catch (final IOException e) {
-			final String msg = AtlasViewer
+			final String msg = AtlasViewerGUI
 					.R("LayerPaneGroup.JOptionPane.ShowMessageDialog.export_failed");
 			JOptionPane.showMessageDialog(owner, msg); // i8ndone
 		}
@@ -461,7 +461,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * passed properly
 	 */
 	protected HTMLBrowserWindow getHTMLBrowserWindow() {
-		final String titleText = AtlasViewer.R(
+		final String titleText = AtlasViewerGUI.R(
 				"LayerPaneGroup.ClickedInfoButton.information_about",
 				getTitle());
 
@@ -494,7 +494,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * not start/end with a <code>html</code> tag.
 	 */
 	public String getLegendTooltip() {
-		return AtlasViewer.R("LayerBar.default.tooltip");
+		return AtlasViewerGUI.R("LayerBar.default.tooltip");
 
 	}
 
@@ -524,7 +524,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// ****************************************************************************
 		if (isFilterable()) {
 
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewer
+			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.filter"),
 					BasicMapLayerLegendPaneUI.ICON_FILTER) {
 
@@ -535,7 +535,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			}));
 
 			final JMenuItem removeFilterMenuItem = new JMenuItem();
-			removeFilterMenuItem.setAction(new AbstractAction(AtlasViewer
+			removeFilterMenuItem.setAction(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.remove_filter"),
 					BasicMapLayerLegendPaneUI.ICON_REMOVE_FILTER) {
 
@@ -557,7 +557,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		if (isStyleEditable()
 				&& !(styledLayer instanceof StyledRasterInterface)) {
 
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewer
+			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.style"),
 					BasicMapLayerLegendPaneUI.ICON_STYLE) {
 
@@ -575,7 +575,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		if (isTableViewable()) {
 
 			final AbstractAction showTableAction = new AbstractAction(
-					AtlasViewer.R("LayerToolMenu.table"),
+					AtlasViewerGUI.R("LayerToolMenu.table"),
 					BasicMapLayerLegendPaneUI.ICON_TABLE) {
 
 				public void actionPerformed(ActionEvent e) {
@@ -588,7 +588,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 				}
 			};
-			showTableAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewer
+			showTableAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewerGUI
 					.R("LayerToolMenu.table.tt"));
 			toolPopup.add(new JMenuItem(showTableAction));
 		}
@@ -619,14 +619,14 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		/**
 		 * Button to remove the layer from the MapContext
 		 */
-		toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewer
+		toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 				.R("LayerToolMenu.remove"),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE) {
 
 			public void actionPerformed(ActionEvent e) {
-				final String msg1 = AtlasViewer
+				final String msg1 = AtlasViewerGUI
 						.R("LayerPaneGroup.GetParentWindow.This.realy_want_to_remove_layer");
-				final String msg2 = AtlasViewer
+				final String msg2 = AtlasViewerGUI
 						.R("LayerPaneGroup.GetParentWindow.JOptionPane.YesNoOption.remove");
 				// i8ndone
 				if (JOptionPane.showConfirmDialog(SwingUtil
@@ -647,7 +647,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 * Button to export the layer to a local folder
 		 */
 		if (isExportable()) {
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewer
+			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.export"),
 					BasicMapLayerLegendPaneUI.ICON_EXPORT) {
 

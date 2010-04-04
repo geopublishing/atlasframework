@@ -157,17 +157,17 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 						public String[] createColumnNames() {
 							String[] superColNames = super.createColumnNames();
 
-							superColNames[0] = AtlasViewer
+							superColNames[0] = AtlasViewerGUI
 									.R("AtlasFeatureLayerFilterDialog.AttributeTableHeader.VariableName");
 
 							String[] extendedArray = LangUtil
 									.extendArray(
 											superColNames,
-											AtlasViewer
+											AtlasViewerGUI
 													.R("AtlasFeatureLayerFilterDialog.AttributeTableHeader.Name"),
-											AtlasViewer
+											AtlasViewerGUI
 													.R("AtlasFeatureLayerFilterDialog.AttributeTableHeader.Description"),
-											AtlasViewer
+											AtlasViewerGUI
 													.R("AtlasFeatureLayerFilterDialog.AttributeTableHeader.Unit"));
 							return extendedArray;
 						}
@@ -275,7 +275,7 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 		// new AttributeMetaDataAttributeTypeFilter(attrMetaDataMap));
 
 		if (layerNameTranslated != null) {
-			String windowTitle = AtlasViewer.R(
+			String windowTitle = AtlasViewerGUI.R(
 					"AtlasFeatureLayerFilterDialog.WindowTitle",
 					layerNameTranslated);
 			setTitle(windowTitle);

@@ -25,7 +25,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapView;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GeopublisherGUI;
@@ -85,19 +85,19 @@ public class DesignMapView extends AtlasMapView {
 			
 			layerManager = designLayerPanel;
 			JScrollPane scrollPane = new JScrollPane(designLayerPanel);
-			tabbedPane.addTab(AtlasViewer
+			tabbedPane.addTab(AtlasViewerGUI
 					.R("AtlasMapView.tabbedPane.LayersTab_label"),
 					scrollPane);
 			
-			tabbedPane.setToolTipTextAt(0, AtlasViewer
+			tabbedPane.setToolTipTextAt(0, AtlasViewerGUI
 					.R("AtlasMapView.tabbedPane.LayersTab_tt"));
 
 			JScrollPane scrollpane2 = new JScrollPane(getDesignInfoPanel());
-			tabbedPane.addTab(AtlasViewer
+			tabbedPane.addTab(AtlasViewerGUI
 					.R("AtlasMapView.tabbedPane.InfoTab_label"),
 					scrollpane2);
 			
-			tabbedPane.setToolTipTextAt(1, AtlasViewer
+			tabbedPane.setToolTipTextAt(1, AtlasViewerGUI
 					.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 			add(tabbedPane, BorderLayout.CENTER);

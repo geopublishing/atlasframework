@@ -69,7 +69,7 @@ public class HTMLBrowserWindow extends JDialog {
 		cp.add(new JScrollPane(new HTMLInfoJPane(infoURL, atlasConfig)),
 				BorderLayout.CENTER);
 
-		final String msg = AtlasViewer.R("HtmlBrowserWindow.button.close");
+		final String msg = AtlasViewerGUI.R("HtmlBrowserWindow.button.close");
 		cp.add(new JButton(new AbstractAction(msg) {
 
 			public void actionPerformed(ActionEvent e) {

@@ -23,7 +23,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasAboutDialog;
 import org.geopublishing.atlasViewer.swing.AtlasPopupDialog;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.HTMLBrowserWindow;
 
@@ -153,14 +153,14 @@ public enum AtlasProtocol {
 		 * If no atlas viewer is open ATM, we just post a message about what
 		 * would happen.
 		 */
-		if (!AtlasViewer.isRunning()) {
+		if (!AtlasViewerGUI.isRunning()) {
 			AVSwingUtil.showMessageDialog(owner, AVUtil.R(
 					"AtlasMapLink.NotOpeningBecauseNoAtlasViewerOpen", map
 							.getTitle()));
 			return;
 		}
 
-		AtlasViewer.getInstance().setMap(map);
+		AtlasViewerGUI.getInstance().setMap(map);
 
 		// Determine if we should close the dialog.
 		Window parentWindow = SwingUtil.getParentWindow(owner);

@@ -62,7 +62,7 @@ import org.geopublishing.atlasViewer.swing.AtlasChartJDialog;
 import org.geopublishing.atlasViewer.swing.AtlasChartJPanel;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
@@ -294,7 +294,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		buttons.add(getUpdateChartJButton());
 
 		JButton attributes = new JButton(
-				new AbstractAction(AtlasViewer.R("LayerToolMenu.table"),
+				new AbstractAction(AtlasViewerGUI.R("LayerToolMenu.table"),
 						BasicMapLayerLegendPaneUI.ICON_TABLE) {
 
 					@Override
@@ -1550,8 +1550,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				reapplyChartStyleToFeatureCollection = false;
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						DesignAtlasChartJDialog.this, AtlasViewer
-								.R("dialog.title.wait"), AtlasViewer
+						DesignAtlasChartJDialog.this, AtlasViewerGUI
+								.R("dialog.title.wait"), AtlasViewerGUI
 								.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {

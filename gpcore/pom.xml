@@ -25,7 +25,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+							<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
@@ -35,7 +35,7 @@
 		</plugins>
 
 	</build>
-
+	
 	<dependencies>
 
 		<dependency>

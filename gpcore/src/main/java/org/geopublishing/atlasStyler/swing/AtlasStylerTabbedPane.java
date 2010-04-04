@@ -380,14 +380,14 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 				 * We have Points!
 				 */
 				ruleList = atlasStyler.getSinglePointSymbolRulesList();
-				imageName = "images/single_point_symbol.png";
+				imageName = "/images/single_point_symbol.png";
 
 			} else if (atlasStyler.isLineString()) {
 				/**
 				 * We have Lines!
 				 */
 				ruleList = atlasStyler.getSingleLineSymbolRulesList();
-				imageName = "images/single_line_symbol.png";
+				imageName = "/images/single_line_symbol.png";
 
 			} else if (atlasStyler.isPolygon()) {
 				/**
@@ -395,7 +395,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 				 * for the polygonsymbilzers, one for the pointsymbolizers
 				 */
 				ruleList = atlasStyler.getSinglePolygonSymbolRulesList();
-				imageName = "images/single_polygon_symbol.png";
+				imageName = "/images/single_polygon_symbol.png";
 			}
 
 			atlasStyler.setLastChangedRuleList(ruleList);
@@ -407,7 +407,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 			// Only happens with polygons
 			SingleRuleList<?> ruleList = atlasStyler
 					.getSinglePointSymbolRulesList();
-			imageName = "images/single_point_symbol.png";
+			imageName = "/images/single_point_symbol.png";
 			gui = new SingleSymbolGUI(ruleList);
 		} else
 
@@ -417,13 +417,13 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 			if (atlasStyler.isPoint()) {
 				catRuleList = atlasStyler.getUniqueValuesPointRulesList();
-				imageName = "images/point_unique_values.png";
+				imageName = "/images/point_unique_values.png";
 			} else if (atlasStyler.isLineString()) {
 				catRuleList = atlasStyler.getUniqueValuesLineRulesList();
-				imageName = "images/line_unique_values.png";
+				imageName = "/images/line_unique_values.png";
 			} else if (atlasStyler.isPolygon()) {
 				catRuleList = atlasStyler.getUniqueValuesPolygonRuleList();
-				imageName = "images/polygon_unique_values.png";
+				imageName = "/images/polygon_unique_values.png";
 			}
 			atlasStyler.setLastChangedRuleList(catRuleList);
 			gui = new UniqueValuesGUI(catRuleList, atlasStyler);
@@ -434,7 +434,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 			UniqueValuesRuleList catRuleList = null;
 			catRuleList = atlasStyler.getUniqueValuesPointRulesList();
-			imageName = "images/point_unique_values.png";
+			imageName = "/images/point_unique_values.png";
 			atlasStyler.setLastChangedRuleList(catRuleList);
 			gui = new UniqueValuesGUI(catRuleList, atlasStyler);
 
@@ -451,7 +451,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 			gui = new GraduatedColorQuantitiesGUI(graduatedColorRuleList,
 					atlasStyler);
 
-			imageName = "images/point_graduated_colors.png";
+			imageName = "/images/point_graduated_colors.png";
 		} else
 
 		if (selIdx == IDX_COLORED_QUANTITIES) {
@@ -465,11 +465,11 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 					atlasStyler);
 
 			if (atlasStyler.isPoint()) {
-				imageName = "images/point_graduated_colors.png";
+				imageName = "/images/point_graduated_colors.png";
 			} else if (atlasStyler.isLineString()) {
-				imageName = "images/line_graduated_colors.png";
+				imageName = "/images/line_graduated_colors.png";
 			} else if (atlasStyler.isPolygon()) {
-				imageName = "images/polygon_graduated_colors.png";
+				imageName = "/images/polygon_graduated_colors.png";
 			}
 		}
 

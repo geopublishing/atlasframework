@@ -531,7 +531,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				if (insideClick(e, controlEyeX, controlEyeY, controlEyeWidth,
 						controlEyeWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewer
+					mapLayerLegend.setToolTipText(AtlasViewerGUI
 							.R("LayerBar.Icons.eye.tooltip"));
 
 					mapLayerLegend.repaint(controlEyeX, controlEyeY,
@@ -540,7 +540,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				} else if (insideClick(e, controlToolX, controlToolY,
 						controlToolWidth, controlToolWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewer
+					mapLayerLegend.setToolTipText(AtlasViewerGUI
 							.R("LayerBar.Icons.tool.tooltip"));
 
 					mapLayerLegend.repaint(controlToolX, controlToolY,
@@ -550,7 +550,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 						&& insideClick(e, controlInfoX, controlInfoY,
 								controlInfoWidth, controlInfoWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewer
+					mapLayerLegend.setToolTipText(AtlasViewerGUI
 							.R("LayerBar.Icons.info.tooltip"));
 
 					mapLayerLegend.repaint(controlInfoX, controlInfoY,

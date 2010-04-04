@@ -176,7 +176,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		if (styledLayer instanceof StyledRasterInterface<?>
 				&& isStyleEditable()) {
 
-			menu.add(new JMenuItem(new AbstractAction(AtlasViewer
+			menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.style"),
 					BasicMapLayerLegendPaneUI.ICON_STYLE) {
 
@@ -275,7 +275,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 */
 	@Override
 	protected HTMLBrowserWindow getHTMLBrowserWindow() {
-		final String titleText = AtlasViewer.R(
+		final String titleText = AtlasViewerGUI.R(
 				"LayerPaneGroup.ClickedInfoButton.information_about",
 				getTitle());
 

@@ -36,7 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.resources.SwingUtilities;
 import org.geotools.resources.i18n.Vocabulary;
 import org.geotools.resources.i18n.VocabularyKeys;
@@ -219,9 +219,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		content.add(panel, BorderLayout.NORTH);
 		content.add(cancelBox, BorderLayout.SOUTH);
 
-		setTitle(AtlasViewer.R("dialog.title.wait"));
+		setTitle(AtlasViewerGUI.R("dialog.title.wait"));
 
-		setDescription(AtlasViewer.R("dialog.title.wait"));
+		setDescription(AtlasViewerGUI.R("dialog.title.wait"));
 	}
 
 	public AtlasStatusDialog(Component owner, String title, String startText) {

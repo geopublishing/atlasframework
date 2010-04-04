@@ -24,12 +24,12 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
 import schmitzm.swing.ExceptionDialog;
 
 /**
- * Singleton and delegation pattern to the {@link AtlasViewer}'s properties
+ * Singleton and delegation pattern to the {@link AtlasViewerGUI}'s properties
  * 
  * Saving is not implemented
  * 

@@ -42,7 +42,7 @@ public class JnlpStatusDialog extends StatusDialog implements
 	}
 
 	public JnlpStatusDialog(Component owner) {
-		this(owner, AtlasViewer.R("JNLPStatus.Downloading"), AtlasViewer.R("JNLPStatus.Downloading"));
+		this(owner, AtlasViewerGUI.R("JNLPStatus.Downloading"), AtlasViewerGUI.R("JNLPStatus.Downloading"));
 	}
 
 	@Override

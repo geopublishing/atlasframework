@@ -51,7 +51,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -99,7 +99,7 @@ public class AVUtil {
 	private static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasViewerTranslation", Locale.ENGLISH);
 
 	/**
-	 * Convenience method to access the {@link AtlasViewer}s translation
+	 * Convenience method to access the {@link AtlasViewerGUI}s translation
 	 * resources.
 	 * 
 	 * @param key
