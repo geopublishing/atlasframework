@@ -35,7 +35,46 @@
 				<groupId>org.codehaus.mojo.webstart</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<version>1.0-alpha-2</version>
+
+				<executions>
+
+					<!--					<execution>-->
+					<!--						<phase>package</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>jnlp</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>jnlp-download-servlet</goal>
+						</goals>
+					</execution>
+
+				</executions>
+
+				<configuration>
+					<libPath>lib</libPath>
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources/</resourcesDirectory>
+
+					<jnlpFiles>
+						<jnlpFile>
+							<templateFilename>as_template.jnlp</templateFilename>
+							<outputFilename>as.jnlp</outputFilename>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+						</jnlpFile>
+					</jnlpFiles>
+					<sign>
+						<keypass>wasser</keypass>
+						<storepass>wasser</storepass>
+						<alias>IMPETUS</alias>
+					</sign>
+					<verbose>false</verbose>
+					<excludeTransitive>false</excludeTransitive>
+				</configuration>
 			</plugin>
+
 		</plugins>
 
 
@@ -120,7 +159,7 @@
 			<version>2.6.2</version>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.codehaus.mojo.webstart</groupId>
 			<artifactId>webstart-jnlp-servlet</artifactId>
@@ -128,6 +167,6 @@
 			<type>jar</type>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 	</dependencies>
 </project>
