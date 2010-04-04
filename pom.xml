@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-atlas-framework</artifactId>
@@ -15,8 +15,9 @@
 	<modules>
 		<module>ascore</module>
 		<module>gpcore</module>
+		<module>asswinggui</module>
 		<module>gpswinggui</module>
-	</modules>
+  </modules>
 
 	<licenses>
 		<license>
@@ -90,7 +91,7 @@
 			<!--			<plugin>-->
 			<!--				<groupId>org.codehaus.mojo</groupId>-->
 			<!--				<artifactId>webstart-maven-plugin</artifactId>-->
-<!---->
+
 			<!--				<executions>-->
 			<!--					<execution>-->
 			<!--						<phase>package</phase>-->
@@ -99,7 +100,7 @@
 			<!--						</goals>-->
 			<!--					</execution>-->
 			<!--				</executions>-->
-<!---->
+
 			<!--				<configuration>-->
 			<!--				-->
 			<!--				<jnlp>-->
@@ -143,7 +144,7 @@
           <url>http://www.wikisquare.de:8080/artifactory/libs-releases</url>
         </repository>
         <repository>
-          <snapshots />
+          <snapshots/>
           <id>snapshots</id>
           <name>libs-snapshots</name>
           <url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
