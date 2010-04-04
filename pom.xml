@@ -34,7 +34,13 @@
 	<properties>
 		<geotools.version>2.6.2</geotools.version>
 	</properties>
-	
+
+	<organization>
+		<name>geopublishing.org</name>
+		<url>http://www.geopublishing.org</url>
+	</organization>
+
+
 	<developers>
 		<developer>
 			<id>alfonx</id>
@@ -60,14 +66,11 @@
 			</roles>
 		</developer>
 	</developers>
-	
+
 	<scm>
 		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
 	</scm>
-	<organization>
-		<url>http://en.geopublishing.org</url>
-	</organization>
 
 	<build>
 
