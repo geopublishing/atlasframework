@@ -38,16 +38,24 @@
 
 				<executions>
 					<execution>
-					<phase>package</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>jnlp</goal>
 						</goals>
 					</execution>
+
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>jnlp-download-servlet</goal>
+						</goals>
+					</execution>
+
 				</executions>
 
 				<configuration>
 					<libPath>lib</libPath>
-					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources/</resourcesDirectory>
 
 					<jnlp>
 						<inputTemplate>as_template.jnlp</inputTemplate>
@@ -104,7 +112,7 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>

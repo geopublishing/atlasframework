@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jnlp codebase="http://www.geopublishing.org/@PATH@/" href="http://www.geopublishing.org/@PATH@/as.jnlp" spec="1.0+">
   <information>
-    <title>$project.name</title>
-    <description>A graphical editor to create OGC SLD files</description>
-    <homepage href="$project.url"/>    
-    <vendor>$project.organization.name</vendor>
+    <title>AtlasStyler SLD Editor</title>
+    <description>A graphical editor to create OGC SLD/SE files</description>
+    <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
+    <vendor>geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
     <icon kind="splash" href="startAS.gif"/>    
     
