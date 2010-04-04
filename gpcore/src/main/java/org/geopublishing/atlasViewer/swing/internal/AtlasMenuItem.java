@@ -27,8 +27,8 @@ import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.map.MapLayer;
 
 import skrueger.i8n.I8NUtil;

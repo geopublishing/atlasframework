@@ -40,8 +40,8 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;

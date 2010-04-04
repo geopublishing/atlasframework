@@ -55,7 +55,7 @@ import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;

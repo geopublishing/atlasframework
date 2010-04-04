@@ -73,9 +73,7 @@ public class GpUtil {
 	 * properties-Datein unter {@code skrueger.swing.resource.locales}
 	 * hinterlegt.
 	 */
-	protected final static ResourceProvider RESOURCE = new ResourceProvider(
-			LangUtil.extendPackagePath(GpUtil.class,
-					"resource.locales.Geopublisher"), Locale.ENGLISH);
+	protected final static ResourceProvider RESOURCE = new ResourceProvider("locales/Geopublisher", Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link AtlasCreator}s translation

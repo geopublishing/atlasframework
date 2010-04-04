@@ -13,7 +13,7 @@ package org.geopublishing.atlasViewer.dp;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
+import org.geopublishing.atlasViewer.swing.Icons;
 
 
 /**

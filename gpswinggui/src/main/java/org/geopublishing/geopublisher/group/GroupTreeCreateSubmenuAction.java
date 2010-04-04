@@ -19,7 +19,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.group.EditGroupJDialog;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;

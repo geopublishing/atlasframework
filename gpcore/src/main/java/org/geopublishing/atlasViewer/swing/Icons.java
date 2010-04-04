@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.resource.icons;
+package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -21,141 +21,141 @@ import javax.swing.ImageIcon;
 public class Icons {
 
 	public static final ImageIcon ICON_ADD_SMALL = new ImageIcon(Icons.class
-			.getResource("small/add.png"));
+			.getResource("/icons/small/add.png"));
 
 	public static final ImageIcon ICON_DUPLICATE_SMALL = new ImageIcon(
-			Icons.class.getResource("small/duplicate.png"));
+			Icons.class.getResource("/icons/small/duplicate.png"));
 
 	public static final ImageIcon ICON_DIR_UP_BIG = new ImageIcon(Icons.class
-			.getResource("big/back2.gif"));
+			.getResource("/icons/big/back2.gif"));
 
 	public static final ImageIcon ICON_DIR_UP_SMALL = new ImageIcon(Icons.class
-			.getResource("small/back.png"));
+			.getResource("/icons/small/back.png"));
 
 	public static final ImageIcon ICON_MAP_BIG = new ImageIcon(Icons.class
-			.getResource("big/map.png"));
+			.getResource("/icons/big/map.png"));
 
 	public static final ImageIcon ICON_MAP_SMALL = new ImageIcon(Icons.class
-			.getResource("small/map.png"));
+			.getResource("/icons/small/map.png"));
 
 	public static final ImageIcon ICON_PDF_BIG = new ImageIcon(Icons.class
-			.getResource("big/pdf.png"));
+			.getResource("/icons/big/pdf.png"));
 
 	public static final ImageIcon ICON_PDF_SMALL = new ImageIcon(Icons.class
-			.getResource("small/pdf.png"));
+			.getResource("/icons/small/pdf.png"));
 
 	public static final ImageIcon ICON_HTML_BIG = new ImageIcon(Icons.class
-			.getResource("big/html.png"));
+			.getResource("/icons/big/html.png"));
 
 	public static final ImageIcon ICON_HTML_SMALL = new ImageIcon(Icons.class
-			.getResource("small/html.png"));
+			.getResource("/icons/small/html.png"));
 
 	public static final ImageIcon ICON_VIDEO_BIG = new ImageIcon(Icons.class
-			.getResource("big/video.png"));
+			.getResource("/icons/big/video.png"));
 
 	public static final ImageIcon ICON_VIDEO_SMALL = new ImageIcon(Icons.class
-			.getResource("small/video.png"));
+			.getResource("/icons/small/video.png"));
 
 	public static final ImageIcon ICON_RASTER_BIG = new ImageIcon(Icons.class
-			.getResource("big/raster.png"));
+			.getResource("/icons/big/raster.png"));
 
 	public static final ImageIcon ICON_RASTER_SMALL = new ImageIcon(Icons.class
-			.getResource("small/raster.png"));
+			.getResource("/icons/small/raster.png"));
 
 	public static final ImageIcon ICON_TASKRUNNING_BIG = new ImageIcon(
-			Icons.class.getResource("big/taskrunning.png"));
+			Icons.class.getResource("/icons/big/taskrunning.png"));
 
 	public static final ImageIcon ICON_TASKDONE_BIG = new ImageIcon(Icons.class
-			.getResource("big/taskdone.png"));
+			.getResource("/icons/big/taskdone.png"));
 
 	public static final ImageIcon ICON_OK_SMALL = new ImageIcon(Icons.class
-			.getResource("small/ok.png"));
+			.getResource("/icons/small/ok.png"));
 
 	public static final ImageIcon ICON_CANCEL_SMALL = new ImageIcon(Icons.class
-			.getResource("small/cancel.png"));
+			.getResource("/icons/small/cancel.png"));
 
 	public static final ImageIcon ICON_EXIT_SMALL = new ImageIcon(Icons.class
-			.getResource("small/exit.png"));
+			.getResource("/icons/small/exit.png"));
 
 	public static final ImageIcon ICON_SCREENSHOT_SMALL = new ImageIcon(
-			Icons.class.getResource("small/screenshot.png"));
+			Icons.class.getResource("/icons/small/screenshot.png"));
 
 	public static final ImageIcon ICON_VECTOR_BIG = new ImageIcon(Icons.class
-			.getResource("big/vector.png"));
+			.getResource("/icons/big/vector.png"));
 
 	public static final ImageIcon ICON_VECTOR_SMALL = new ImageIcon(Icons.class
-			.getResource("small/vector.png"));
+			.getResource("/icons/small/vector.png"));
 
 	public static final ImageIcon ICON_VECTOR_SMALL_POINT = new ImageIcon(
-			Icons.class.getResource("small/vector_point.png"));
+			Icons.class.getResource("/icons/small/vector_point.png"));
 
 	public static final ImageIcon ICON_VECTOR_BIG_POINT = new ImageIcon(
-			Icons.class.getResource("big/vector_point.png"));
+			Icons.class.getResource("/icons/big/vector_point.png"));
 
 	public static final ImageIcon ICON_VECTOR_SMALL_LINE = new ImageIcon(
-			Icons.class.getResource("small/vector_line.png"));
+			Icons.class.getResource("/icons/small/vector_line.png"));
 
 	public static final ImageIcon ICON_VECTOR_BIG_LINE = new ImageIcon(
-			Icons.class.getResource("big/vector_line.png"));
+			Icons.class.getResource("/icons/big/vector_line.png"));
 
 	public static final ImageIcon ICON_VECTOR_BIG_POLY = new ImageIcon(
-			Icons.class.getResource("big/vector_poly.png"));
+			Icons.class.getResource("/icons/big/vector_poly.png"));
 
 	public static final ImageIcon ICON_VECTOR_SMALL_POLY = new ImageIcon(
-			Icons.class.getResource("small/vector_poly.png"));
+			Icons.class.getResource("/icons/small/vector_poly.png"));
 
 	public static final ImageIcon ICON_SELECTED = new ImageIcon(Icons.class
-			.getResource("selected.png"));
+			.getResource("/icons/selected.png"));
 
 	public static final ImageIcon ICON_FLAGS_SMALL = new ImageIcon(Icons.class
-			.getResource("small/flags.png"));
+			.getResource("/icons/small/flags.png"));
 
 	public static final ImageIcon ICON_UNKOWN_BIG = new ImageIcon(Icons.class
-			.getResource("big/error.png"));
+			.getResource("/icons/big/error.png"));
 
 	public static final ImageIcon ICON_UNKOWN_SMALL = new ImageIcon(Icons.class
-			.getResource("small/error.png"));
+			.getResource("/icons/small/error.png"));
 
 	public static final ImageIcon ICON_SEARCH = new ImageIcon(Icons.class
-			.getResource("small/search.png"));
+			.getResource("/icons/small/search.png"));
 
 	public static final ImageIcon ICON_LOCAL = new ImageIcon(Icons.class
-			.getResource("small/local.png"));
+			.getResource("/icons/small/local.png"));
 
 	public static final ImageIcon ICON_ONLINE = new ImageIcon(Icons.class
-			.getResource("small/online.png"));
+			.getResource("/icons/small/online.png"));
 
 	public static final Icon ICON_CHART_SMALL = new ImageIcon(Icons.class
-			.getResource("small/chart.png"));
+			.getResource("/icons/small/chart.png"));
 
 	public static final Icon ICON_CHART_MEDIUM = new ImageIcon(Icons.class
-			.getResource("medium/chart.png"));
+			.getResource("/icons/medium/chart.png"));
 
 	public static final Icon ICON_CHART_BIG = new ImageIcon(Icons.class
-			.getResource("big/chart.png"));
+			.getResource("/icons/big/chart.png"));
 
 	public static final Icon ICON_PRINT_24 = new ImageIcon(Icons.class
-			.getResource("small/printer1_20.png"));
+			.getResource("/icons/small/printer1_20.png"));
 
 	public static final Icon ICON_PRINT_SMALL = new ImageIcon(Icons.class
-			.getResource("small/printer1.png"));
+			.getResource("/icons/small/printer1.png"));
 
 	public static final Icon ICON_SAVEAS_24 = new ImageIcon(Icons.class
-			.getResource("small/save_20.png"));
+			.getResource("/icons/small/save_20.png"));
 
 	public static final Icon ICON_SAVEAS_SMALL = new ImageIcon(Icons.class
-			.getResource("small/save.png"));
+			.getResource("/icons/small/save.png"));
 
 	// TODO Wrong icon
 	public static final Icon ICON_MAPEXTEND_BBOX = new ImageIcon(Icons.class
-			.getResource("small/mapExtendTool.png"));
+			.getResource("/icons/small/mapExtendTool.png"));
 
 	// TODO Wrong icon
 	public static final Icon ICON_MAPEXTEND_BBOX_RESET = new ImageIcon(
-			Icons.class.getResource("small/mapExtendToolReset.png"));
+			Icons.class.getResource("/icons/small/mapExtendToolReset.png"));
 
 	public static final Icon ICON_DEFAULTMAPAREA_BBOX_RESET = new ImageIcon(
-			Icons.class.getResource("small/mapExtendToolReset.png"));
+			Icons.class.getResource("/icons/small/mapExtendToolReset.png"));
 
 	private static ImageIcon upArrow;
 

@@ -46,12 +46,12 @@ import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
 import org.geopublishing.atlasViewer.swing.BugReportmailer;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GPBugReportmailer;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
@@ -120,7 +120,7 @@ public class GpFrame extends JFrame {
 		}
 
 	};
-	
+
 	public AtlasConfigEditable getAce() {
 		return gp.getAce();
 	}
@@ -159,24 +159,13 @@ public class GpFrame extends JFrame {
 
 		// Setting the GP icons for this frame
 		try {
-			List<Image> icons = new ArrayList<Image>(2);
-			
-//			ResourceLoaderManager resLoMan = getAce().getResLoMan(); // TODO Here a classload is better, isn't it?
-//			icons.add(new ImageIcon(resLoMan.getResource(
-//			"skrueger/creator/resource/gp_icon16.png")).getImage());
-//	icons.add(new ImageIcon(resLoMan.getResource(
-//			"skrueger/creator/resource/gp_icon32.png")).getImage());
-//	icons.add(new ImageIcon(resLoMan.getResource(
-//			"skrueger/creator/resource/gp_icon64.png")).getImage());			
-			
-			ClassLoader classLoader = GeopublisherGUI.class.getClassLoader();
-			
-			icons.add(new ImageIcon(classLoader.getResource(
-					"skrueger/creator/resource/gp_icon16.png")).getImage());
-			icons.add(new ImageIcon(classLoader.getResource(
-					"skrueger/creator/resource/gp_icon32.png")).getImage());
-			icons.add(new ImageIcon(classLoader.getResource(
-					"skrueger/creator/resource/gp_icon64.png")).getImage());
+			final List<Image> icons = new ArrayList<Image>(3);
+			icons.add(new ImageIcon(Icons.class
+					.getResource("/icons/gp_icon16.png")).getImage());
+			icons.add(new ImageIcon(Icons.class
+					.getResource("/icons/gp_icon32.png")).getImage());
+			icons.add(new ImageIcon(Icons.class
+					.getResource("/icons/gp_icon64.png")).getImage());
 			setIconImages(icons);
 		} catch (Exception e) {
 			ExceptionDialog.show(this, e);
@@ -281,14 +270,16 @@ public class GpFrame extends JFrame {
 			saveAtlasMenuItem.addActionListener(gp);
 			fileMenu.add(saveAtlasMenuItem);
 		}
-		
+
 		// ******************************************************************
 		// "Import data into the atlas using a wizard
 		// ******************************************************************
 		if (ace != null) {
-			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"), null,
-					ActionCmds.importWizard, null, KeyStroke.getKeyStroke(
-							KeyEvent.VK_I, Event.CTRL_MASK, true)));
+			fileMenu
+					.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"),
+							null, ActionCmds.importWizard, null, KeyStroke
+									.getKeyStroke(KeyEvent.VK_I,
+											Event.CTRL_MASK, true)));
 		}
 
 		// ******************************************************************
@@ -308,11 +299,12 @@ public class GpFrame extends JFrame {
 					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.previewAtlas,
 					new ImageIcon(GPProps.class
 							.getResource("resource/testRun.png")), KeyStroke
-							.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK, true)));
+							.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK,
+									true)));
 
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.LivePreview"),
-					R("MenuBar.FileMenu.LivePreview.TT"), ActionCmds.previewAtlasLive,
-					new ImageIcon(GPProps.class
+					R("MenuBar.FileMenu.LivePreview.TT"),
+					ActionCmds.previewAtlasLive, new ImageIcon(GPProps.class
 							.getResource("resource/testRun.png")), KeyStroke
 							.getKeyStroke(KeyEvent.VK_F5, 0, true)));
 
@@ -526,13 +518,14 @@ public class GpFrame extends JFrame {
 
 				try {
 					File logFile = new File(IOUtil.getTempDir(),
-							GPBugReportmailer.GEOPUBLISHERLOG).getCanonicalFile();
+							GPBugReportmailer.GEOPUBLISHERLOG)
+							.getCanonicalFile();
 					try {
-						
-					Desktop.getDesktop().edit(
-							logFile);
-					} catch (Exception usoe){
-						Desktop.getDesktop().browse(DataUtilities.fileToURL(logFile).toURI());
+
+						Desktop.getDesktop().edit(logFile);
+					} catch (Exception usoe) {
+						Desktop.getDesktop().browse(
+								DataUtilities.fileToURL(logFile).toURI());
 					}
 				} catch (Exception ee) {
 					ExceptionDialog.show(GpFrame.this, ee);
@@ -672,13 +665,14 @@ public class GpFrame extends JFrame {
 							boolean b = ((JCheckBoxMenuItem) e.getSource())
 									.isSelected();
 							getAce().getProperties().set(GpFrame.this,
-									AVProps.Keys.antialiasingMaps, b ? "1"
-											: "0");
+									AVProps.Keys.antialiasingMaps,
+									b ? "1" : "0");
 						}
 
 					});
-			jCheckBoxMenuItemAntiAliasingAV.setSelected(getAce().getProperties().getInt(
-					AVProps.Keys.antialiasingMaps, 1) == 1);
+			jCheckBoxMenuItemAntiAliasingAV
+					.setSelected(getAce().getProperties().getInt(
+							AVProps.Keys.antialiasingMaps, 1) == 1);
 			atlasJMenu.add(jCheckBoxMenuItemAntiAliasingAV);
 
 			atlasJMenu.add(new GpMenuItem(

@@ -64,7 +64,7 @@ import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Mark;
 import org.geotools.styling.PointSymbolizer;

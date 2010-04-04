@@ -52,6 +52,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewer;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.geotools.resources.CRSUtilities;

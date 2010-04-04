@@ -39,7 +39,7 @@ import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.feature.GeometryAttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
 

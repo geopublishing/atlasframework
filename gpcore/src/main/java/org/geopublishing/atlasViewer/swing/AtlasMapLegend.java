@@ -31,7 +31,6 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.AtlasLabelSearch;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;

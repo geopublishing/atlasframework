@@ -20,8 +20,8 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 
 import skrueger.creator.GPDialogManager;
 

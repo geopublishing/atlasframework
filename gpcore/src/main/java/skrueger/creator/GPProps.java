@@ -292,7 +292,7 @@ public abstract class GPProps {
 	public static void upgrade() {
 		LOGGER.debug("upgrade from geopublisher.properties");
 
-		URL inJar = GpUtil.class.getResource(propertiesFilename);
+		URL inJar = GpUtil.class.getResource("/"+propertiesFilename);
 		Properties virginProps = new Properties();
 		try {
 			virginProps.load(inJar.openStream());

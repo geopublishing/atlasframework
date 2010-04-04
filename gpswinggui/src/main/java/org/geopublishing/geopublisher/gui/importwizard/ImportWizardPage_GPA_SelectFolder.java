@@ -13,9 +13,9 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.resource.icons.Icons;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
+import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import skrueger.creator.GPProps;
