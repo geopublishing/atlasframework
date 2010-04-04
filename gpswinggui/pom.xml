@@ -5,8 +5,8 @@
 	<artifactId>gpswinggui</artifactId>
 	<packaging>jar</packaging>
 	<version>1.5-SNAPSHOT</version>
-	<name>gpswinggui</name>
-	<url>http://maven.apache.org</url>
+	<name>Geopublisher Swing GUI</name>
+	<url>http://en.geopublishing.org/Geopublisher</url>
 
 	<parent>
 		<groupId>org.geopublishing</groupId>
@@ -16,13 +16,6 @@
 	</parent>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.swinglabs</groupId>
-			<artifactId>swingx</artifactId>
-			<version>[1.6,1.7)</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>
@@ -196,5 +189,13 @@
 			<version>1.4</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swingx</artifactId>
+			<version>1.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
+	
 </project>
