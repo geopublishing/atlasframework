@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-atlas-framework</artifactId>
@@ -17,7 +18,7 @@
 		<module>gpcore</module>
 		<module>asswinggui</module>
 		<module>gpswinggui</module>
-  </modules>
+	</modules>
 
 	<licenses>
 		<license>
@@ -33,13 +34,14 @@
 	<properties>
 		<geotools.version>2.6.2</geotools.version>
 	</properties>
+	
 	<developers>
 		<developer>
 			<id>alfonx</id>
 			<name>Stefan A. Tzeggai</name>
 			<email>tzeggai@wikisquare.de</email>
 			<url>http://www.wikisquare.de</url>
-			<organization>Wikisquare.de</organization>
+			<organization>wikisquare.de</organization>
 			<organizationUrl>http://www.wikisquare.de</organizationUrl>
 			<timezone>GMT+1</timezone>
 			<roles>
@@ -51,13 +53,14 @@
 			<id>mschmitz</id>
 			<name>Martin Schmitz</name>
 			<timezone>GMT+1</timezone>
-			<organization>Wikisquare.de</organization>
+			<organization>wikisquare.de</organization>
 			<organizationUrl>http://www.wikisquare.de</organizationUrl>
 			<roles>
 				<role>Developer</role>
 			</roles>
 		</developer>
 	</developers>
+	
 	<scm>
 		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
@@ -83,7 +86,7 @@
 				<version>2.5</version>
 				<configuration>
 					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
+					<downloadJavadocs>false</downloadJavadocs>
 				</configuration>
 			</plugin>
 
@@ -134,34 +137,34 @@
 	</build>
 
 
-	   <repositories>
-        <repository>
-          <snapshots>
-            <enabled>false</enabled>
-          </snapshots>
-          <id>central</id>
-          <name>libs-releases</name>
-          <url>http://www.wikisquare.de:8080/artifactory/libs-releases</url>
-        </repository>
-        <repository>
-          <snapshots/>
-          <id>snapshots</id>
-          <name>libs-snapshots</name>
-          <url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
-        </repository>
-      </repositories>
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>libs-releases</name>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-releases</url>
+		</repository>
+		<repository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>libs-snapshots</name>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
+		</repository>
+	</repositories>
 
 	<distributionManagement>
-    <snapshotRepository>
-        <id>artifactory.wikisquare.de</id>
-        <name>artifactory.wikisquare.de-snapshots</name>
-        <url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local</url>
-    </snapshotRepository>
-    <repository>
-        <id>artifactory.wikisquare.de</id>
-        <name>artifactory.wikisquare.de-releases</name>
-        <url>http://www.wikisquare.de:8080/artifactory/libs-releases-local</url>
-    </repository>
+		<snapshotRepository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-snapshots</name>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local</url>
+		</snapshotRepository>
+		<repository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-releases</name>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-releases-local</url>
+		</repository>
 	</distributionManagement>
 
 </project>
