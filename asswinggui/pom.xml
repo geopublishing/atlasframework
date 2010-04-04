@@ -1,0 +1,154 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.geopublishing.atlasStyler</groupId>
+	<artifactId>asswinggui</artifactId>
+	<packaging>jar</packaging>
+	<version>1.5-SNAPSHOT</version>
+	<name>AtlasStyler Swing GUI</name>
+	<url>http://en.geopublishing.org/AtlasStyler</url>
+
+	<parent>
+		<groupId>org.geopublishing</groupId>
+		<artifactId>gp-atlas-framework</artifactId>
+		<version>1.5-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<build>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+
+				<executions>
+					<execution>
+					<phase>package</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<libPath>lib</libPath>
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
+
+					<jnlp>
+						<inputTemplate>${project.basedir}/src/main/jnlp/templates/as_template.vm</inputTemplate>
+						<outputFile>as.jnlp</outputFile>
+						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+					</jnlp>
+					<sign>
+						<keypass>wasser</keypass>
+						<storepass>wasser</storepass>
+						<alias>IMPETUS</alias>
+					</sign>
+					<verbose>true</verbose>
+					<!--					-->
+					<excludeTransitive>false</excludeTransitive>
+<!---->
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swingx</artifactId>
+			<version>[1.6,1.7)</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-main</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.jnlp</groupId>
+			<artifactId>jnlp</artifactId>
+			<version>1.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>ascore</artifactId>
+			<version>1.5-SNAPSHOT</version>
+			<scope>compile</scope>
+			<type>jar</type>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.geopublishing.geopublisher</groupId>
+			<artifactId>gpcore</artifactId>
+			<version>1.5-SNAPSHOT</version>
+			<scope>compile</scope>
+			<type>jar</type>
+		</dependency>
+		
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-library</artifactId>
+			<version>2.0.x-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagepyramid</artifactId>
+			<version>2.6.2</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagemosaic</artifactId>
+			<version>2.6.2</version>
+			<type>jar</type>
+		</dependency>
+	</dependencies>
+</project>
