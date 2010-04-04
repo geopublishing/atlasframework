@@ -112,7 +112,6 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
-		
 
 		<dependency>
 			<groupId>de.schmitzm</groupId>
@@ -121,6 +120,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
