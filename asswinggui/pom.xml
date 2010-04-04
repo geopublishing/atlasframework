@@ -50,7 +50,7 @@
 					<resourcesDirectory>${project.basedir}/src/main/jnlp/resources</resourcesDirectory>
 
 					<jnlp>
-						<inputTemplate>${project.basedir}/src/main/jnlp/templates/as_template.vm</inputTemplate>
+						<inputTemplate>src/main/jnlp/templates/as_template.vm</inputTemplate>
 						<outputFile>as.jnlp</outputFile>
 						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 					</jnlp>
@@ -59,7 +59,7 @@
 						<storepass>wasser</storepass>
 						<alias>IMPETUS</alias>
 					</sign>
-					<verbose>true</verbose>
+					<verbose>false</verbose>
 					<!--					-->
 					<excludeTransitive>false</excludeTransitive>
 <!---->
