@@ -18,6 +18,7 @@
 	<build>
 
 		<plugins>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -46,7 +47,8 @@
 					<!--					</execution>-->
 
 					<execution>
-						<phase>process-resources</phase>
+<!--						<phase>process-resources</phase>-->
+						<phase>package</phase>
 						<goals>
 							<goal>jnlp-download-servlet</goal>
 						</goals>
@@ -62,7 +64,15 @@
 						<jnlpFile>
 							<templateFilename>as_template.jnlp</templateFilename>
 							<outputFilename>as.jnlp</outputFilename>
-							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							<jarResources>
+								<jarResource>
+									<groupId>org.geopublishing.atlasStyler</groupId>
+									<artifactId>asswinggui</artifactId>
+									<version>${project.version}</version>
+									<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+								</jarResource>
+
+							</jarResources>
 						</jnlpFile>
 					</jnlpFiles>
 					<sign>
