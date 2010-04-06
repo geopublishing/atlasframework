@@ -89,14 +89,14 @@ public class AVUtil {
 	 **************************************************************************/
 	public static final String ATLAS_TEMP_FILE_ID = "AtlasTempFile_";
 
-
 	/**
 	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
 	 * Package {@code skrueger.swing} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.swing.resource.locales}
 	 * hinterlegt.
 	 */
-	private static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasViewerTranslation", Locale.ENGLISH);
+	private static ResourceProvider RESOURCE = new ResourceProvider(
+			"locales/AtlasViewerTranslation", Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link AtlasViewerGUI}s translation
@@ -111,7 +111,6 @@ public class AVUtil {
 		return RESOURCE.getString(key, values);
 	}
 
-	
 	static final Logger LOGGER = Logger.getLogger(AVUtil.class);
 
 	/**
@@ -147,7 +146,6 @@ public class AVUtil {
 	 * Creates a random number generator mainly used for IDs
 	 */
 	public final static Random RANDOM = new Random();
-
 
 	public static void setTabs(final JTextPane textPane,
 			final int charactersPerTab) {
@@ -471,7 +469,6 @@ public class AVUtil {
 
 	}
 
-
 	/**
 	 * Tries to open a file or folder with a system dependent program
 	 * 
@@ -794,8 +791,7 @@ public class AVUtil {
 		 * Release properties einlesen
 		 */
 		try {
-			return "v" + getVersionMaj() + "." + getVersionMin() + ", b"
-					+ getVersionBuild() + " (" + getVersionBuildDate() + ")";
+			return "v" + getVersion() + "-r" + getVersionBuild();
 		} catch (final Exception e) {
 			LOGGER.warn("Trying to read version information failed", e);
 			return "unknown version";
@@ -808,7 +804,7 @@ public class AVUtil {
 	 * @throws Exception
 	 *             if release.properties not found
 	 */
-	public static int getVersionMin() {
+	public static String getVersion() {
 		try {
 
 			final URL releasePropsURL = AVUtil.class
@@ -818,38 +814,14 @@ public class AVUtil {
 			final InputStream openStream = releasePropsURL.openStream();
 			releaseProps.load(openStream);
 			openStream.close();
-			final String str = releaseProps.getProperty("min.version", "0");
+			final String str = releaseProps.getProperty("version", "0.0");
 
-			return Integer.parseInt(str);
+			return str;
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"/release.properties could not be read!", e);
 		}
 
-	}
-
-	/**
-	 * Return the major part of the software version of GP/AV/AS.
-	 * 
-	 * @throws Exception
-	 *             if release.properties not found
-	 */
-	public static int getVersionMaj() {
-		try {
-			final URL releasePropsURL = AVUtil.class
-					.getResource("/release.properties");
-
-			final Properties releaseProps = new Properties();
-			final InputStream openStream = releasePropsURL.openStream();
-			releaseProps.load(openStream);
-			openStream.close();
-			final String str = releaseProps.getProperty("maj.version", "0");
-
-			return Integer.parseInt(str);
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"/release.properties could not be read!", e);
-		}
 	}
 
 	/**
@@ -877,49 +849,32 @@ public class AVUtil {
 
 	}
 
-	/**
-	 * Return the major part of the software version of GP/AV/AS.
-	 * 
-	 * @throws Exception
-	 *             if release.properties not found
-	 */
-	public static Date getVersionBuildDate() {
-		try {
-			final URL releasePropsURL = AVUtil.class
-					.getResource("/release.properties");
-			if (releasePropsURL == null)
-				throw new RuntimeException("/release.properties not found!");
-
-			final Properties releaseProps = new Properties();
-			final InputStream openStream = releasePropsURL.openStream();
-			releaseProps.load(openStream);
-			openStream.close();
-			final String str = releaseProps.getProperty("datetime", "0");
-
-			return new Date(Date.parse(str));
-		} catch (Exception e) {
-			throw new RuntimeException(
-					"/release.properties could not be read!", e);
-		}
-
-	}
-
-	/**
-	 * @return The major.minor version + build number - no build date
-	 * @see #getVersionInfo()
-	 */
-	public static String getVersionInfoShort() {
-		/**
-		 * Release properties einlesen
-		 */
-		try {
-			return "v" + getVersionMaj() + "." + getVersionMin() + " b"
-					+ getVersionBuild();
-		} catch (final Exception e) {
-			LOGGER.warn("Trying to read version information failed", e);
-			return "unknown version";
-		}
-	}
+	// /**
+	// * Return the major part of the software version of GP/AV/AS.
+	// *
+	// * @throws Exception
+	// * if release.properties not found
+	// */
+	// public static Date getVersionBuildDate() {
+	// try {
+	// final URL releasePropsURL = AVUtil.class
+	// .getResource("/release.properties");
+	// if (releasePropsURL == null)
+	// throw new RuntimeException("/release.properties not found!");
+	//
+	// final Properties releaseProps = new Properties();
+	// final InputStream openStream = releasePropsURL.openStream();
+	// releaseProps.load(openStream);
+	// openStream.close();
+	// final String str = releaseProps.getProperty("datetime", "0");
+	//
+	// return new Date(Date.parse(str));
+	// } catch (Exception e) {
+	// throw new RuntimeException(
+	// "/release.properties could not be read!", e);
+	// }
+	//
+	// }
 
 	/**
 	 * Print the GPL disclaimer to the given {@link Logger} as on INFO level.
@@ -985,8 +940,8 @@ public class AVUtil {
 		// AttributeMetadata attMeta =
 		// ASUtil.getAttributeMetadataFor(styledLayer,
 		// attName);
-		AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap().get(
-				attName);
+		AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap()
+				.get(attName);
 
 		/*
 		 * This should trigger all listeners
@@ -1000,13 +955,14 @@ public class AVUtil {
 
 			legendTitleTranslation.put(lang, titleValue);
 			legendTooltipTranslation.put(lang, attMeta.getDesc().get(lang));
-			
+
 			// Try to update the Y-Axis label
-			if (chartStyle.getAxisStyle(seriesIdx+1) != null)
-				chartStyle.getAxisStyle(seriesIdx+1).getLabelTranslation().put(lang, titleValue);
-			
+			if (chartStyle.getAxisStyle(seriesIdx + 1) != null)
+				chartStyle.getAxisStyle(seriesIdx + 1).getLabelTranslation()
+						.put(lang, titleValue);
+
 		}
-		
+
 	}
 
 	/**
@@ -1029,8 +985,8 @@ public class AVUtil {
 		/* First series = DOMAIN */
 		String attName = chartStyle.getAttributeName(attribIdx);
 
-		AttributeMetadataInterface attMeta = styledLayer.getAttributeMetaDataMap().get(
-				attName);
+		AttributeMetadataInterface attMeta = styledLayer
+				.getAttributeMetaDataMap().get(attName);
 
 		/*
 		 * This should trigger all listeners
@@ -1080,6 +1036,23 @@ public class AVUtil {
 		waitFrame.setVisible(true);
 
 		return waitFrame;
+	}
+
+	public static int getVersionMaj() {
+		try {
+			return Integer.parseInt(getVersion().split("\\.")[0]);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public static int getVersionMin() {
+		try {
+			return Integer.parseInt(getVersion().split("\\.")[1]);
+		} catch (Exception e) {
+			return 0;
+		}
+
 	}
 
 }

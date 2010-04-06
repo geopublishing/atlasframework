@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
-import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.net.URL;

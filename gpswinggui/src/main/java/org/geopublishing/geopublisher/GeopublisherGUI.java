@@ -302,7 +302,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (!editAtlasDialog.isCancelled()) {
 				getJFrame().setTitle(
 						R("ApplicationMainWindowTitle_with_open_atlas", AVUtil
-								.getVersionInfoShort(), ace.getTitle()
+								.getVersionInfo(), ace.getTitle()
 								.toString()));
 			}
 
@@ -1117,7 +1117,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info(message);
 		if (!GraphicsEnvironment.isHeadless()) {
 			JOptionPane.showMessageDialog(null, message, R(
-					"CommandLineHelp.title", AVUtil.getVersionInfoShort()),
+					"CommandLineHelp.title", AVUtil.getVersionInfo()),
 					JOptionPane.INFORMATION_MESSAGE);
 			System.exit(-1);
 		} else

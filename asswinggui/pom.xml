@@ -51,7 +51,6 @@
 					<archive>
 						<manifest>
 							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
 				</configuration>
@@ -84,9 +83,7 @@
 				</executions>
 
 				<configuration>
-					<!--					<libPath>lib</libPath> check again in alpha 3-->
-					<resourcesDirectory>${project.basedir}/src/main/jnlp/
-					</resourcesDirectory>
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
 					<jnlp>
 						<inputTemplate>as_template.jnlp</inputTemplate>
@@ -100,6 +97,8 @@
 					</sign>
 					<verbose>true</verbose>
 					<excludeTransitive>false</excludeTransitive>
+					<pack200>true</pack200>
+					<gzip>true</gzip>
 				</configuration>
 			</plugin>
 

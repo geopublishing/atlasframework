@@ -189,7 +189,7 @@ public class GpFrame extends JFrame {
 			setTitle(R("ApplicationMainWindowTitle", AVUtil.getVersionInfo()));
 		} else {
 			setTitle(R("ApplicationMainWindowTitle_with_open_atlas", AVUtil
-					.getVersionInfoShort(), ace.getTitle().toString()));
+					.getVersionInfo(), ace.getTitle().toString()));
 		}
 
 		JMenuBar jMenuBar = new JMenuBar();
