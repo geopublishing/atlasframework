@@ -1,0 +1,27 @@
+<assembly>
+	<id>package-fullZip</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		<fileSet>
+			<filtered>true</filtered>
+			<directory>src/main/assembly/</directory>
+			<outputDirectory>/AtlasStyler</outputDirectory>
+			<includes>
+				<include>README_standalone.txt</include>
+				<include>start_AtlasStyler.bat</include>
+				<include>start_AtlasStyler.sh</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/AtlasStyler</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+
+</assembly>
