@@ -1,1 +1,1 @@
-@MAJOR@.@MINOR@b@BUILD@ @DATE@
+Version ${project.version}-b${buildNumber}
