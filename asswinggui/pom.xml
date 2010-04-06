@@ -43,18 +43,18 @@
 								<outputFile>as.jnlp</outputFile>
 								<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 							</jnlp>
-							
+
 							<sign>
 								<keypass>wasser</keypass>
 								<storepass>wasser</storepass>
 								<alias>IMPETUS</alias>
 							</sign>
-							
+
 							<verbose>true</verbose>
 							<excludeTransitive>false</excludeTransitive>
-							
-<!--						<pack200>true</pack200>-->
-<!--						<gzip>true</gzip>-->
+
+							<!--						<pack200>true</pack200>-->
+							<!--						<gzip>true</gzip>-->
 
 						</configuration>
 					</plugin>
@@ -69,9 +69,9 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<ant target="publishJWS" inheritRefs="true" >
-										<property name="ant.buildNumber" value="${buildNumber}"/>
-										<property name="ant.project.version" value="${project.version}"/>
+										<ant target="publishJWS" inheritRefs="true">
+											<property name="ant.buildNumber" value="${buildNumber}" />
+											<property name="ant.project.version" value="${project.version}" />
 										</ant>
 									</tasks>
 								</configuration>
@@ -102,12 +102,19 @@
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-						</manifest>
-					</archive>
+					<descriptors>
+						<descriptor>src/main/assembly/fullZip.xml</descriptor>
+					</descriptors>
 				</configuration>
+				<executions>
+					<execution>
+						<id>package-fullZip</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>

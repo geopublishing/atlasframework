@@ -10,5 +10,5 @@ rem  Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit d
 
 echo Starting AtlasStyler. You need to have at least Java Runtime Environment (JRE) Version 6 installed.
 
-javaw -Xmx160m -Dfile.encoding=UTF-8 -Djava.library.path=lib/native -jar as.jar
+javaw -Xmx160m -Dfile.encoding=UTF-8 -Djava.library.path=native -jar asswinggui-${project.version}-r${buildNumber}.jar
 
