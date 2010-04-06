@@ -478,12 +478,9 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JButton getJButtonClassFromSymbols() {
 		if (jButtonClassFromSymbols == null) {
-			jButtonClassFromSymbols = new JButton(
+			jButtonClassFromSymbols = new ThinButton(
 					AtlasStyler
 							.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols"));
-			jButtonClassFromSymbols.setFont(jButtonClassFromSymbols.getFont()
-					.deriveFont(AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-							AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
 
 			jButtonClassFromSymbols.addActionListener(new ActionListener() {
 

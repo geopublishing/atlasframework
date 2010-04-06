@@ -23,7 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;

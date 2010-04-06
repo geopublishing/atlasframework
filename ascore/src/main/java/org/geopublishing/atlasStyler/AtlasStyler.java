@@ -69,53 +69,6 @@ public class AtlasStyler {
 	public static final Dimension DEFAULT_SYMBOL_PREVIEW_SIZE = new Dimension(
 			30, 30);
 
-	/**
-	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
-	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
-	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
-	 */
-	private final static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasStylerTranslation",
-					 Locale.ENGLISH);
-//	private final static ResourceProvider RESOURCE = new ResourceProvider(
-//			LangUtil.extendPackagePath(AtlasStyler.class,
-//					"locales.AtlasStylerTranslation"), Locale.ENGLISH);
-
-	/**
-	 * Convenience method to access the {@link AtlasStyler}s translation
-	 * resources.
-	 * 
-	 * @param key
-	 *            the key for the AtlasStylerTranslation.properties file
-	 * @param values
-	 *            optional values
-	 */
-	public static String R(final String key, final Object... values) {
-		String string = RESOURCE.getString(key, values);
-		if (string.equals("???")) {
-			string = "???" + key;
-			LOGGER.error("missing key in AS: '" + key + "'");
-		}
-		return string;
-	}
-
-	/**
-	 * Convenience method to access the {@link AtlasStyler}s translation
-	 * resources for a specific {@link Locale}.
-	 * 
-	 * @param key
-	 *            the key for the AtlasStylerTranslation.properties file
-	 * @param values
-	 *            optional values
-	 */
-	public static String R(Locale locale, String key, final Object... values) {
-		String string = RESOURCE.getString(key, locale, values);
-		if (string.equals("???")) {
-			string = "???" + key;
-			LOGGER.error("missing key in AS: '" + key + "'");
-		}
-		return string;
-
-	}
 
 	/**
 	 * If false, the {@link AtlasStyler} only fires {@link StyleChangedEvent}s
@@ -1424,6 +1377,13 @@ public class AtlasStyler {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			l.changed(new StyleChangedEvent(backupStyle));
 		}
+	}
+
+	/**
+	 * @Deprecated use AsUtil.R
+	 */
+	public static String R(String key, final Object... values) {
+		return ASUtil.R(key, values);
 	}
 
 }

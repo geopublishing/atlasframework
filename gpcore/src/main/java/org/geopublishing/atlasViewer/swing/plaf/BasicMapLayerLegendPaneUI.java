@@ -9,7 +9,7 @@
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 /*
- * $Id: BasicMapLayerLegendPaneUI.java 1128 2010-03-12 10:41:55Z alfonx $
+ * $Id: BasicMapLayerLegendPaneUI.java 1133 2010-03-12 11:57:36Z alfonx $
  *
  * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
  * Santa Clara, California 95054, U.S.A. All rights reserved.
@@ -28,7 +28,7 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-package org.geopublishing.atlasViewer.swing;
+package org.geopublishing.atlasViewer.swing.plaf;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -69,13 +69,14 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
+import org.geopublishing.atlasViewer.swing.MapLayerLegend;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.icon.EmptyIcon;
 import org.jdesktop.swingx.plaf.TaskPaneUI;
-
-import schmitzm.swing.SwingUtil;
 
 /**
  * Base implementation of the <code>JXTaskPane</code> UI.
@@ -89,65 +90,50 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	static final Logger LOGGER = Logger
 			.getLogger(BasicMapLayerLegendPaneUI.class);
 
-	public static final ImageIcon ICON_EXPORT = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"export.png", null);
+	public static final ImageIcon ICON_EXPORT = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/export.png"));
 
-	public static final ImageIcon ICON_VISIBLE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"visible.png", null);
+	public static final ImageIcon ICON_VISIBLE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/visible.png"));
 
-	public static final ImageIcon ICON_HALFVISIBLE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"visible_half.png", null);
+	public static final ImageIcon ICON_HALFVISIBLE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/visible_half.png"));
 
-	public static final ImageIcon ICON_NOTVISIBLE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"not_visible.png", null);
+	public static final ImageIcon ICON_NOTVISIBLE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/not_visible.png"));
 
-	public static final ImageIcon ICON_REMOVE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"remove.png", "");
+	public static final ImageIcon ICON_REMOVE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/remove.png"));
 
-	private static final ImageIcon ICON_INFO = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"info.png", "");
+	private static final ImageIcon ICON_INFO = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/info.png"));
 
-	public static final ImageIcon ICON_TOOL = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"tool.png", "");
+	public static final ImageIcon ICON_TOOL = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/tool.png"));
 
-	public static final ImageIcon ICON_UPARROW = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"up_arrow.png", "");
+	public static final ImageIcon ICON_UPARROW = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/up_arrow.png"));
 
-	public static final ImageIcon ICON_DOWNARROW = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"down_arrow.png", "");
+	public static final ImageIcon ICON_DOWNARROW = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/down_arrow.png"));
 
-	public static final ImageIcon ICON_RASTER = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"raster.png", "");
+	public static final ImageIcon ICON_RASTER = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/raster.png"));
 
-	public static final ImageIcon ICON_VECTOR = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"vector.png", "");
+	public static final ImageIcon ICON_VECTOR = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/vector.png"));
 
-	public static final ImageIcon ICON_FILTER = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"filter.png", "");
+	public static final ImageIcon ICON_FILTER = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/filter.png"));
 
-	public static final ImageIcon ICON_REMOVE_FILTER = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"filter_remove.png", "");
+	public static final ImageIcon ICON_REMOVE_FILTER = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/filter_remove.png"));
 
-	public static final ImageIcon ICON_STYLE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"style.png", "");
+	public static final ImageIcon ICON_STYLE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/style.png"));
 
-	public static final ImageIcon ICON_TABLE = SwingUtil
-			.createImageIconFromResourcePath(BasicMapLayerLegendPaneUI.class,
-					"table.png", "");
+	public static final ImageIcon ICON_TABLE = new ImageIcon(
+			BasicMapLayerLegendPaneUI.class.getResource("/icons/table.png"));
 
 	// TODO REDUCE STUPID CODE!
 	public int controlEyeWidth;
@@ -531,7 +517,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				if (insideClick(e, controlEyeX, controlEyeY, controlEyeWidth,
 						controlEyeWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewerGUI
+					mapLayerLegend.setToolTipText(AVUtil
 							.R("LayerBar.Icons.eye.tooltip"));
 
 					mapLayerLegend.repaint(controlEyeX, controlEyeY,
@@ -540,7 +526,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				} else if (insideClick(e, controlToolX, controlToolY,
 						controlToolWidth, controlToolWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewerGUI
+					mapLayerLegend.setToolTipText(AVUtil
 							.R("LayerBar.Icons.tool.tooltip"));
 
 					mapLayerLegend.repaint(controlToolX, controlToolY,
@@ -550,7 +536,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 						&& insideClick(e, controlInfoX, controlInfoY,
 								controlInfoWidth, controlInfoWidth)) {
 
-					mapLayerLegend.setToolTipText(AtlasViewerGUI
+					mapLayerLegend.setToolTipText(AVUtil
 							.R("LayerBar.Icons.info.tooltip"));
 
 					mapLayerLegend.repaint(controlInfoX, controlInfoY,

@@ -300,9 +300,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonApplyPalette() {
 		if (jButtonApplyPalette == null) {
-			jButtonApplyPalette = new JButton();
-
-			jButtonApplyPalette.setAction(new AbstractAction() {
+			jButtonApplyPalette = new ThinButton(new AbstractAction() {
 
 				public void actionPerformed(ActionEvent e) {
 
@@ -314,10 +312,6 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					.R("UniqueValues.applyPaletteButton.title"));
 			jButtonApplyPalette.setToolTipText(AtlasStyler
 					.R("UniqueValues.applyPaletteButton.toolTip"));
-
-			jButtonApplyPalette.setFont(jButtonApplyPalette.getFont()
-					.deriveFont(AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-							AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
 
 		}
 		return jButtonApplyPalette;
@@ -408,9 +402,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonApplyTemplate() {
 		if (jButtonApplyTemplate == null) {
-			jButtonApplyTemplate = new JButton();
-
-			jButtonApplyTemplate.setAction(new AbstractAction() {
+			jButtonApplyTemplate = new ThinButton(new AbstractAction() {
 
 				public void actionPerformed(ActionEvent e) {
 					rulesList.applyTemplate();
@@ -420,9 +412,6 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					.R("UniqueValues.applyTemplateButton.title"));
 			jButtonApplyTemplate.setToolTipText(AtlasStyler
 					.R("UniqueValues.applyTemplateButton.tooltip"));
-			jButtonApplyTemplate.setFont(jButtonApplyTemplate.getFont()
-					.deriveFont(AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-							AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
 		}
 		return jButtonApplyTemplate;
 	}

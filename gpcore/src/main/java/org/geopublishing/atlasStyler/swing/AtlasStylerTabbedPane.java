@@ -52,28 +52,16 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 	public final static float HEADING_FONT_SIZE = 14;
 
 	public final Icon ICON_SYMBOLOGY = new ImageIcon(
-			AtlasStylerTabbedPane.class.getResource("images/symbology.png"));
+			AtlasStylerTabbedPane.class.getResource("/images/symbology.png"));
 
 	public final Icon ICON_LABELS = new ImageIcon(AtlasStylerTabbedPane.class
-			.getResource("images/labels.png"));
-
-	public static final int BUTTON_FONT_STYLE = Font.PLAIN;// TODO replace with
-	// thin button
-	public static final float BUTTON_FONT_SIZE = 11; // TODO replace with thin
-														// button
+			.getResource("/images/labels.png"));
 
 	private final AtlasStyler atlasStyler;
 
 	final private JLabel jLabelRuleListeTypeImage = new JLabel();
 
 	private JComboBox jComboBoxRuleListType = null;
-
-	// /**
-	// * Default SIZE for the Sytler TABS. Very important for fucking GUI
-	// */
-	// public static int TAB_WIDTH = 610; // erhoeht von 425 // von 430
-	//
-	// public static int TAB_HEIGHT = 460; // von 450
 
 	/**
 	 * height and size of the little Images explaining the classification

@@ -57,7 +57,7 @@ import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CH
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasFeatureLayerFilterDialog;
-import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;

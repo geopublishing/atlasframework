@@ -54,6 +54,10 @@ import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
+import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.MetalMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.WindowsClassicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.WindowsMapLayerLegendPaneUI;
 import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.map.MapContext;
@@ -103,25 +107,23 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	private static final String SWINGX_MAP_LAYER_LEGEND_PANE_U_I = "swingx/MapLayerLegendPaneUI";
 
 	static {
-		
-		final String plafPackageName = MapLayerLegend.class.getPackage().getName()+".plaf";
-		
+
 		LookAndFeelAddons.contribute(new TaskPaneAddon() {
 			@Override
 			protected void addBasicDefaults(LookAndFeelAddons addon,
 					DefaultsList defaults) {
 				super.addBasicDefaults(addon, defaults);
 				defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-						plafPackageName+".BasicMapLayerLegendPaneUI");
+						BasicMapLayerLegendPaneUI.class.getName());
 			}
 
 			@Override
 			protected void addMetalDefaults(LookAndFeelAddons addon,
 					DefaultsList defaults) {
-				
+
 				super.addMetalDefaults(addon, defaults);
 				defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-						plafPackageName+".MetalMapLayerLegendPaneUI");
+						MetalMapLayerLegendPaneUI.class.getName());
 			}
 
 			@Override
@@ -129,13 +131,11 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 					DefaultsList defaults) {
 				super.addWindowsDefaults(addon, defaults);
 				if (addon instanceof WindowsLookAndFeelAddons)
-					defaults
-							.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-									plafPackageName+".WindowsMapLayerLegendPaneUI");
+					defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
+							WindowsMapLayerLegendPaneUI.class.getName());
 				if (addon instanceof WindowsClassicLookAndFeelAddons) {
-					defaults
-							.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
-									plafPackageName+".WindowsClassicMapLayerLegendPaneUI");
+					defaults.add(SWINGX_MAP_LAYER_LEGEND_PANE_U_I,
+							WindowsClassicMapLayerLegendPaneUI.class.getName());
 				}
 			}
 		});

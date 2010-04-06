@@ -85,6 +85,7 @@ import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
+import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.LegendIconFeatureRenderer;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -110,6 +111,52 @@ public class ASUtil {
 
 	public static final Filter allwaysTrueFilter = ff2.equals(ff2.literal("1"),
 			ff2.literal("1"));
+	
+
+	/**
+	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
+	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
+	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
+	 */
+	private final static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasStylerTranslation",
+					 Locale.ENGLISH);
+
+	/**
+	 * Convenience method to access the {@link AtlasStyler}s translation
+	 * resources.
+	 * 
+	 * @param key
+	 *            the key for the AtlasStylerTranslation.properties file
+	 * @param values
+	 *            optional values
+	 */
+	public static String R(final String key, final Object... values) {
+		String string = RESOURCE.getString(key, values);
+		if (string.equals("???")) {
+			string = "???" + key;
+			LOGGER.error("missing key in AS: '" + key + "'");
+		}
+		return string;
+	}
+
+	/**
+	 * Convenience method to access the {@link AtlasStyler}s translation
+	 * resources for a specific {@link Locale}.
+	 * 
+	 * @param key
+	 *            the key for the AtlasStylerTranslation.properties file
+	 * @param values
+	 *            optional values
+	 */
+	public static String R(Locale locale, String key, final Object... values) {
+		String string = RESOURCE.getString(key, locale, values);
+		if (string.equals("???")) {
+			string = "???" + key;
+			LOGGER.error("missing key in AS: '" + key + "'");
+		}
+		return string;
+
+	}
 
 	// /**
 	// * This filter is allways <code>false</code>
@@ -814,14 +861,14 @@ public class ASUtil {
 			for (String lang : AtlasStyler.getLanguages()) {
 
 				// Try to find a default for every language
-				String localized = AtlasStyler.R(new Locale(lang),
+				String localized = R(new Locale(lang),
 						"NoDataLegendEntry.Default");
 				nodT.put(lang, localized);
 			}
 
 			rl.setTitle(nodT);
 		} else
-			rl.setTitle(AtlasStyler.R("NoDataLegendEntry.Default"));
+			rl.setTitle(R("NoDataLegendEntry.Default"));
 		return rl;
 	}
 

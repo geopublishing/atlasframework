@@ -35,6 +35,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
@@ -44,6 +45,7 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
+import skrueger.swing.ThinButton;
 
 public class UniqueValuesAddGUI extends JDialog {
 	private static final Logger LOGGER = Logger
@@ -63,7 +65,7 @@ public class UniqueValuesAddGUI extends JDialog {
 
 	private JTextField jTextField = null;
 
-	private JButton jButtonAddToList = null;
+	private ThinButton jButtonAddToList = null;
 
 	private JButton jButtonOk = null;
 
@@ -288,9 +290,7 @@ public class UniqueValuesAddGUI extends JDialog {
 	 */
 	private JButton getJButtonAddToList() {
 		if (jButtonAddToList == null) {
-			jButtonAddToList = new JButton();
-
-			jButtonAddToList.setAction(new AbstractAction(AtlasStyler
+			jButtonAddToList = new ThinButton(new AbstractAction(AtlasStyler
 					.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
 
 				public void actionPerformed(ActionEvent e) {
@@ -314,9 +314,6 @@ public class UniqueValuesAddGUI extends JDialog {
 				}
 
 			});
-			jButtonAddToList.setFont(jButtonAddToList.getFont().deriveFont(
-					AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-					AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
 		}
 		return jButtonAddToList;
 	}
