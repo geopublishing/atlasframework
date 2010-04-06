@@ -163,7 +163,6 @@
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
 			<version>1.5-SNAPSHOT</version>
-			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
