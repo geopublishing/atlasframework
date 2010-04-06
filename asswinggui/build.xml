@@ -32,8 +32,8 @@
 
 		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/version.txt">
-			<replacefilter token="@VERSION@" value="${maj.versionNEW}" />
-			<replacefilter token="@BUILD@" value="${build.number}" />
+			<replacefilter token="@VERSION@" value="${project.version}" />
+			<replacefilter token="@BUILD@" value="${buildNumber}" />
 			<replacefilter token="@DATE@" value="${datetime}" />
 		</replace>
 
