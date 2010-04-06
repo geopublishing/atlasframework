@@ -20,6 +20,41 @@
 			<id>prodi</id>
 			<build>
 				<plugins>
+
+					<plugin>
+						<groupId>org.codehaus.mojo.webstart</groupId>
+						<artifactId>webstart-maven-plugin</artifactId>
+						<version>1.0-alpha-2</version>
+
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>jnlp</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
+
+							<jnlp>
+								<inputTemplate>as_template.jnlp</inputTemplate>
+								<outputFile>as.jnlp</outputFile>
+								<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							</jnlp>
+							<sign>
+								<keypass>wasser</keypass>
+								<storepass>wasser</storepass>
+								<alias>IMPETUS</alias>
+							</sign>
+							<verbose>true</verbose>
+							<excludeTransitive>false</excludeTransitive>
+							<pack200>true</pack200>
+							<gzip>true</gzip>
+						</configuration>
+					</plugin>
+
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<executions>
@@ -36,6 +71,7 @@
 							</execution>
 						</executions>
 					</plugin>
+
 				</plugins>
 			</build>
 		</profile>
@@ -64,41 +100,6 @@
 							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 						</manifest>
 					</archive>
-				</configuration>
-			</plugin>
-
-
-			<plugin>
-				<groupId>org.codehaus.mojo.webstart</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
-
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>jnlp</goal>
-						</goals>
-					</execution>
-				</executions>
-
-				<configuration>
-					<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
-
-					<jnlp>
-						<inputTemplate>as_template.jnlp</inputTemplate>
-						<outputFile>as.jnlp</outputFile>
-						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-					</jnlp>
-					<sign>
-						<keypass>wasser</keypass>
-						<storepass>wasser</storepass>
-						<alias>IMPETUS</alias>
-					</sign>
-					<verbose>true</verbose>
-					<excludeTransitive>false</excludeTransitive>
-					<pack200>true</pack200>
-					<gzip>true</gzip>
 				</configuration>
 			</plugin>
 

@@ -7,7 +7,8 @@
 	<name>Geopublisher and AtlasStyler</name>
 	<version>1.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>Geopublisher (including AtlasStyler) applications.</description>
+	<description>Geopublisher (including AtlasStyler) applications.
+	</description>
 	<issueManagement>
 		<system>gforge</system>
 		<url>http://wald.intevation.org/tracker/?group_id=37</url>
@@ -40,7 +41,6 @@
 		<url>http://www.geopublishing.org</url>
 	</organization>
 
-
 	<developers>
 		<developer>
 			<id>alfonx</id>
@@ -68,11 +68,21 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework</connection>
+		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}</developerConnection>
 	</scm>
 
 	<build>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		
+		<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
 
 		<plugins>
 			<plugin>
@@ -93,48 +103,39 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-3</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+				</configuration>
+			</plugin>
 
-			<!--			<plugin>-->
-			<!--				<groupId>org.codehaus.mojo</groupId>-->
-			<!--				<artifactId>webstart-maven-plugin</artifactId>-->
-
-			<!--				<executions>-->
-			<!--					<execution>-->
-			<!--						<phase>package</phase>-->
-			<!--						<goals>-->
-			<!--							<goal>jnlp</goal>-->
-			<!--						</goals>-->
-			<!--					</execution>-->
-			<!--				</executions>-->
-
-			<!--				<configuration>-->
-			<!--				-->
-			<!--				<jnlp>-->
-			<!--
-				inputTemplateResourcePath>${project.basedir}/src/</inputTemplateResourcePath>
-				<inputTemplate>jnlp/template.vm</inputTemplate
-			-->
-			<!--						<outputFile>gp.jnlp</outputFile>-->
-			<!--						<mainClass>skrueger.creator.AtlasCreator</mainClass>-->
-			<!--					</jnlp>-->
-			<!-- SIGNING -->
-
-			<!--
-				defining this will automatically sign the jar and its dependencies
-			-->
-
-			<!--					<sign>-->
-			<!--
-				<keystore>${project.build.outputDirectory}/skrueger/creator/export/keystore</keystore>
-			-->
-			<!--						<keypass>wasser</keypass>-->
-			<!--						<storepass>wasser</storepass>-->
-			<!--						<alias>IMPETUS</alias>-->
-			<!--					</sign>-->
-			<!--					<verbose>true</verbose>-->
-			<!--				</configuration>-->
-			<!--			</plugin>-->
-
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<!-- children modules only define their mainClass here  -->
+						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>
@@ -148,7 +149,8 @@
 				<enabled>false</enabled>
 			</snapshots>
 			<id>releases.artifactory.wikisquare.de</id>
-			<name>Releases for geopublishing.org - powered by wikisquare.de</name>
+			<name>Releases for geopublishing.org - powered by wikisquare.de
+			</name>
 			<url>http://www.wikisquare.de:8080/artifactory/libs-releases</url>
 		</repository>
 
@@ -156,7 +158,8 @@
 			<!-- Snapshot releases for geopublishing.org powered by wikisquare.de-->
 			<snapshots />
 			<id>snapshots.artifactory.wikisquare.de</id>
-			<name>Snapshots for geopublishing.org - powered by wikisquare.de</name>
+			<name>Snapshots for geopublishing.org - powered by wikisquare.de
+			</name>
 			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
 		</repository>
 
@@ -166,12 +169,14 @@
 		<snapshotRepository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-snapshots</name>
-			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local</url>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local
+			</url>
 		</snapshotRepository>
 		<repository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-releases</name>
-			<url>http://www.wikisquare.de:8080/artifactory/libs-releases-local</url>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-releases-local
+			</url>
 		</repository>
 	</distributionManagement>
 
