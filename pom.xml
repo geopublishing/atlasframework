@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-atlas-framework</artifactId>
-	<name>Geopublisher and AtlasStyler</name>
+	<name>Geopublishing Atlas Framework</name>
 	<version>1.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Geopublisher (including AtlasStyler) applications.

@@ -35,7 +35,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
