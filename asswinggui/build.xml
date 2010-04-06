@@ -30,13 +30,20 @@
 
 	<target name="publishJWS" description="Copies the output of target/jnlp to geopublishing.org">
 
-		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true">
+		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
+		<replace file="${basedir}/target/jnlp/version.txt">
+			<replacefilter token="@VERSION@" value="${maj.versionNEW}" />
+			<replacefilter token="@BUILD@" value="${build.number}" />
+			<replacefilter token="@DATE@" value="${datetime}" />
+		</replace>
+
+		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
-				<include name="**/*"/>
+				<include name="**/*" />
 			</fileset>
 		</copy>
-		
-		
+
+
 	</target>
 </project>
 

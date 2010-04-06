@@ -24,7 +24,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo.webstart</groupId>
 						<artifactId>webstart-maven-plugin</artifactId>
-						<version>1.0-alpha-2</version>
+						<version>[1.0-alpha-2,1.1)</version>
 
 						<executions>
 							<execution>
@@ -43,15 +43,19 @@
 								<outputFile>as.jnlp</outputFile>
 								<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 							</jnlp>
+							
 							<sign>
 								<keypass>wasser</keypass>
 								<storepass>wasser</storepass>
 								<alias>IMPETUS</alias>
 							</sign>
+							
 							<verbose>true</verbose>
 							<excludeTransitive>false</excludeTransitive>
-							<pack200>true</pack200>
-							<gzip>true</gzip>
+							
+<!--						<pack200>true</pack200>-->
+<!--						<gzip>true</gzip>-->
+
 						</configuration>
 					</plugin>
 

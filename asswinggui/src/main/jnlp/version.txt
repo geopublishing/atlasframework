@@ -1,1 +1,1 @@
-Version ${project.version}-b${buildNumber}
+@VERSION@-b@BUILD@
