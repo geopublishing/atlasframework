@@ -20,29 +20,24 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
   or try this link: http://www.gnu.org/licenses/gpl.html
-  
 -->
-<project name="Atlas-Geopublishing-Framework">
 
-	<!-- This additional task is nedded to automatically apply pack200 compression -->
-	<!--  <taskdef name="p200ant" classname="de.matthiasmann.p200ant.P200AntTask" classpath="ant/p200ant.jar" /> -->
-	<!-- <taskdef uri="antlib:net.sf.antcontrib" classpath="ant/ant-contrib-1.0b2.jar" /> -->
+<project name="AtlasStyler Swing GUI">
 
 	<target name="publishJWS" description="Copies the output of target/jnlp to geopublishing.org">
 
 		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/version.txt">
-			<replacefilter token="@VERSION@" value="${project.version}" />
-			<replacefilter token="@BUILD@" value="${buildNumber}" />
-			<replacefilter token="@DATE@" value="${datetime}" />
+			<replacefilter token="@VERSION@" value="${ant.project.version}" />
+			<replacefilter token="@BUILD@" value="${ant.buildNumber}" />
 		</replace>
 
+		<!-- Hier wird auch eine .htaccess Datei kopiert -->
 		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
 				<include name="**/*" />
 			</fileset>
 		</copy>
-
 
 	</target>
 </project>

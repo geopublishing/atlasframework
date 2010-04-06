@@ -70,8 +70,8 @@
 								<configuration>
 									<tasks>
 										<ant target="publishJWS" inheritRefs="true" >
-										<property name="buildNumber" value="${buildNumber}"/>
-										<property name="project.version" value="${project.version}"/>
+										<property name="ant.buildNumber" value="${buildNumber}"/>
+										<property name="ant.project.version" value="${project.version}"/>
 										</ant>
 									</tasks>
 								</configuration>

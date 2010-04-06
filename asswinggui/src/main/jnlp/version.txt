@@ -1,1 +1,1 @@
-@VERSION@-b@BUILD@
+@VERSION@-r@BUILD@
