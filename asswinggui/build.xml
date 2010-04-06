@@ -1,0 +1,42 @@
+<!--
+  Copyright (c) 2010 Stefan A. Tzeggai
+  
+  This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
+  http://www.geopublishing.org
+  
+  Geopublisher is part of the Geopublishing Framework hosted at:
+  http://wald.intevation.org/projects/atlas-framework/
+  
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License (license.txt)
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  or try this link: http://www.gnu.org/licenses/gpl.html
+  
+-->
+<project name="Atlas-Geopublishing-Framework">
+
+	<!-- This additional task is nedded to automatically apply pack200 compression -->
+	<!--  <taskdef name="p200ant" classname="de.matthiasmann.p200ant.P200AntTask" classpath="ant/p200ant.jar" /> -->
+	<!-- <taskdef uri="antlib:net.sf.antcontrib" classpath="ant/ant-contrib-1.0b2.jar" /> -->
+
+	<target name="publishJWS" description="Copies the output of target/jnlp to geopublishing.org">
+
+		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true">
+			<fileset dir="${basedir}/target/jnlp">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		
+		
+	</target>
+</project>
+
