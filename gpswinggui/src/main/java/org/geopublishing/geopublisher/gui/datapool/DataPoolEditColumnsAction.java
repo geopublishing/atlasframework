@@ -21,9 +21,9 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.creator.GPDialogManager;
 
 
 public class DataPoolEditColumnsAction extends AbstractAction {

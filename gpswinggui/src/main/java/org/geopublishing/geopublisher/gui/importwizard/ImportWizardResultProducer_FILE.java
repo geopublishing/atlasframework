@@ -17,6 +17,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.dp.DpEntryFactory;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -24,7 +25,6 @@ import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
-import skrueger.creator.GPDialogManager;
 
 
 public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer

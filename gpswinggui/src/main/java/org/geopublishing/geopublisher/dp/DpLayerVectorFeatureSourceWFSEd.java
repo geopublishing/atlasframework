@@ -21,11 +21,11 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceWFS;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geotools.data.FeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import skrueger.creator.GPDialogManager;
 
 public class DpLayerVectorFeatureSourceWFSEd extends
 		DpLayerVectorFeatureSourceWFS implements DpEditableInterface {

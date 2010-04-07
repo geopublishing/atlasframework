@@ -39,7 +39,6 @@ import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.styling.Style;
 
-import rachel.ResourceManager;
 import rachel.loader.FileResourceLoader;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -55,6 +54,16 @@ import skrueger.i8n.Translation;
  * 
  */
 public class AtlasConfigEditable extends AtlasConfig {
+
+	public AtlasConfigEditable(File atlasDir) {
+		if (!atlasDir.exists() || !atlasDir.isDirectory())
+			throw new IllegalArgumentException(
+					atlasDir
+							+ " is not a directory. An editable atlas (ACE) can only be created/openend from a directory.");
+
+		this.atlasDir = atlasDir;
+		getResLoMan().addResourceLoader(new FileResourceLoader(atlasDir));
+	}
 
 	/** The name of the marker file for a AtlasWorkingCopy folder **/
 	public static final String ATLAS_GPA_FILENAME = "atlas.gpa";
@@ -121,7 +130,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 * Directory where the Atlas was created in, or loaded from, or saved to.
 	 * AtlasDir has <code>ad</code> sub-directory!
 	 */
-	private File atlasDir;
+	private final File atlasDir;
 
 	/** A cache to remember the sizes of the {@link DpEntry} folders **/
 	private final java.util.Map<String, Long> rememberFolderSizes = new HashMap<String, Long>();
@@ -180,26 +189,28 @@ public class AtlasConfigEditable extends AtlasConfig {
 		return aboutDir;
 	}
 
-	/**
-	 * Set the atlasDir as {@link File}. Also registers the folder with the
-	 * {@link ResourceManager} as a {@link FileResourceLoader}.
-	 * AtlasConfigEditable.resetResLoMan() should be called before calling this
-	 * method.
-	 * 
-	 * @param atlasDir_
-	 *            directory where the Atlas was loaded, or where it was created.
-	 */
-	public void setAtlasDir(File atlasDir_) {
-		this.atlasDir = atlasDir_;
-
-		LOGGER.debug("AtlasDir of AtlasConfigEditable set to "
-				+ atlasDir.getAbsolutePath());
-
-		// Initialize ResMan to see the working directory
-		LOGGER.debug("Registering " + atlasDir_
-				+ " directory as FileResourceLoader with ResMan");
-		getResLoMan().addResourceLoader(new FileResourceLoader(atlasDir));
-	}
+	//
+	// /**
+	// * Set the atlasDir as {@link File}. Also registers the folder with the
+	// * {@link ResourceManager} as a {@link FileResourceLoader}.
+	// * AtlasConfigEditable.resetResLoMan() should be called before calling
+	// this
+	// * method.
+	// *
+	// * @param atlasDir_
+	// * directory where the Atlas was loaded, or where it was created.
+	// */
+	// public void setAtlasDir(File atlasDir_) {
+	// this.atlasDir = atlasDir_;
+	//
+	// LOGGER.debug("AtlasDir of AtlasConfigEditable set to "
+	// + atlasDir.getAbsolutePath());
+	//
+	// // Initialize ResMan to see the working directory
+	// LOGGER.debug("Registering " + atlasDir_
+	// + " directory as FileResourceLoader with ResMan");
+	// getResLoMan().addResourceLoader(new FileResourceLoader(atlasDir));
+	// }
 
 	/**
 	 * @return workDir directory where the atlas was loaded from or created in.
@@ -247,7 +258,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 *         the atlas is use as the startup map.
 	 */
 	public List<DpEntry<? extends ChartStyle>> listNotReferencedInGroupTreeNorInAnyMap() {
-		
+
 		List<DpEntry<? extends ChartStyle>> unrefed = new LinkedList<DpEntry<? extends ChartStyle>>();
 
 		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
@@ -342,7 +353,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 					FileWriter fw = new FileWriter(aboutHTMLfile);
 					fw
 							.write("<html> <body> <p> "
-									+ GpUtil.R(
+									+ GpUtil
+											.R(
 													"EditAboutWindow.TabName",
 													(getTitle().get(lang) != null && getTitle()
 															.get(lang).equals(
@@ -391,7 +403,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 					FileWriter fw = new FileWriter(popupHTMLfile);
 					fw
 							.write("<html> <body> <p> "
-									+ GpUtil.R(
+									+ GpUtil
+											.R(
 													"EditPopupWindow.TabName",
 													(getTitle().get(lang) != null && getTitle()
 															.get(lang).equals(
@@ -502,19 +515,19 @@ public class AtlasConfigEditable extends AtlasConfig {
 		}
 	}
 
-//	/**
-//	 * Resets the {@link ResourceLoader} to contain. This reset is needed
-//	 * whenever the Geopublisher loads a new atlas in the same JVM instance..
-//	 */
-//	public void resetResLoMan() {
-//
-//		LOGGER.info("Resetting the ResLoMan to only contain defaults");
-//
-//		resLoMan = new ResourceLoaderManager();
-//
-////		setupResLoMan();
-//
-//	}
+	// /**
+	// * Resets the {@link ResourceLoader} to contain. This reset is needed
+	// * whenever the Geopublisher loads a new atlas in the same JVM instance..
+	// */
+	// public void resetResLoMan() {
+	//
+	// LOGGER.info("Resetting the ResLoMan to only contain defaults");
+	//
+	// resLoMan = new ResourceLoaderManager();
+	//
+	// // setupResLoMan();
+	//
+	// }
 
 	/**
 	 * Define the list of languages supported by this atlas. This may trigger a
@@ -541,7 +554,6 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		super.setLanguages(langs);
 	}
-
 
 	/**
 	 * Uncaches all cached information and will result in the GP to continue
@@ -579,22 +591,22 @@ public class AtlasConfigEditable extends AtlasConfig {
 			dpl.getMissingHTMLLanguages();
 			dpl.getGeoObject();
 			dpl.getCrs();
-			
 
 			// Correcting any wrongly upper/lowercased attribute names
 			if (dpe instanceof DpLayerVectorFeatureSource) {
 				Style style = ((DpLayerVectorFeatureSource) dpe).getStyle();
-				
-				style  = StylingUtil.correctPropertyNames(style,
+
+				style = StylingUtil.correctPropertyNames(style,
 						((DpLayerVectorFeatureSource) dpe).getSchema());
-				
+
 				((DpLayer) dpe).setStyle(style);
 			}
 		}
 		getFolderSize(dpe);
-		
-		// Even though we didn't throw away the Style, we have to check the attributes again
-		
+
+		// Even though we didn't throw away the Style, we have to check the
+		// attributes again
+
 	}
 
 	/**
@@ -612,7 +624,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	@Override
 	public void uncache() {
 		rememberFolderSizes.clear();
-		
+
 		super.uncache();
 	}
 

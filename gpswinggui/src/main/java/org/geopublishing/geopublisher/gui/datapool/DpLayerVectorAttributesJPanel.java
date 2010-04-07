@@ -37,12 +37,12 @@ import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.JPanel;
-import skrueger.creator.GPDialogManager;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.swing.Cancellable;
 import skrueger.swing.SmallButton;

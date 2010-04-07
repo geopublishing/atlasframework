@@ -65,7 +65,9 @@ import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -77,8 +79,6 @@ import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.creator.GPProps;
-import skrueger.creator.GPProps.Keys;
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
 

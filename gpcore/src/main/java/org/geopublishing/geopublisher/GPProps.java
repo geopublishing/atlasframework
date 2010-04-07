@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package skrueger.creator;
+package org.geopublishing.geopublisher;
 
 import java.awt.Component;
 import java.io.File;
@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.GpUtil;
 
 import schmitzm.swing.ExceptionDialog;
 

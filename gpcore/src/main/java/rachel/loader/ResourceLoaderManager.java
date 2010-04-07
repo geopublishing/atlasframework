@@ -54,11 +54,12 @@ public class ResourceLoaderManager implements ResourceLoader {
 		}
 		return null;
 	}
+	
 
-	/**
-	 * The same listener may be added 
-	 * @param loader
-	 */
+	public boolean removeResourceLoader(ResourceLoader loader) {
+		return _loaders.remove(loader);
+	}
+
 	public void addResourceLoader(ResourceLoader loader) {
 		_loaders.add(loader);
 	}

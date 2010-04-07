@@ -42,10 +42,10 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.creator.GPDialogManager;
 
 /**
  * This JPanel shows the {@link Group}s tree. New children can be added by

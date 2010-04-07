@@ -23,10 +23,10 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import skrueger.creator.GPDialogManager;
 
 /**
  * Delete a {@link DpEntry} from the {@link DataPool} and also remove all

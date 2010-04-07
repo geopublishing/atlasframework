@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package skrueger.creator;
+package org.geopublishing.geopublisher.gui.internal;
 
 import java.awt.Component;
 import java.awt.Cursor;
@@ -24,6 +24,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;
 import org.geopublishing.geopublisher.gui.DesignAtlasStylerDialog;
+import org.geopublishing.geopublisher.gui.datapool.EditDpEntryGUI;
 import org.geopublishing.geopublisher.gui.map.DesignAtlasMapLegend;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.EditMapJDialog;
@@ -32,7 +33,6 @@ import org.geotools.map.MapLayer;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
-import skrueger.creator.gui.datapool.EditDpEntryGUI;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancellableDialogManager;

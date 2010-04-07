@@ -18,9 +18,9 @@ import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.creator.GPDialogManager;
 
 
 public class MapPoolJPopupMenu extends JPopupMenu {

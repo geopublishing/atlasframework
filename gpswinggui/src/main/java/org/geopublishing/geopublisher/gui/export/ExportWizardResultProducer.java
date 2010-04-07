@@ -27,6 +27,8 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -37,8 +39,6 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
 import schmitzm.swing.ExceptionDialog;
-import skrueger.creator.GPProps;
-import skrueger.creator.GPProps.Keys;
 
 /**
  * This class is using the values collected during the {@link ExportWizard} to

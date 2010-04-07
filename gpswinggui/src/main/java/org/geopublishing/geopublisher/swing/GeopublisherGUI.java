@@ -63,6 +63,7 @@ import org.geopublishing.geopublisher.ACETranslationPrinter;
 import org.geopublishing.geopublisher.AMLImportEd;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
@@ -71,12 +72,11 @@ import org.geopublishing.geopublisher.gui.LanguageSelectionDialog;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.export.ExportWizard;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.creator.GPDialogManager;
-import skrueger.creator.GPProps;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
@@ -793,8 +793,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		} catch (final IOException e) {
 		}
 
-		ace = new AtlasConfigEditable();
-		ace.setAtlasDir(atlasDir);
+		ace = new AtlasConfigEditable(atlasDir);
+//		ace.setAtlasDir(atlasDir);
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder, atlasDir
 				.getAbsolutePath());
 

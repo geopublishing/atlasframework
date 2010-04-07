@@ -33,6 +33,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -40,7 +41,6 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataInterface;
-import skrueger.creator.GPDialogManager;
 import skrueger.swing.CancellableDialogAdapter;
 
 /**

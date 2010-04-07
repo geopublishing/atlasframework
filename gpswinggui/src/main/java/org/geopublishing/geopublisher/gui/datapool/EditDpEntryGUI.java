@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package skrueger.creator.gui.datapool;
+package org.geopublishing.geopublisher.gui.datapool;
 
 import java.awt.Component;
 import java.awt.Image;
@@ -25,9 +25,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
-import org.geopublishing.geopublisher.gui.datapool.DpEntryJPanel;
-import org.geopublishing.geopublisher.gui.datapool.DpLayerRasterPyramidJPanel;
-import org.geopublishing.geopublisher.gui.datapool.DpLayerVectorAttributesJPanel;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.coverage.grid.GridCoverage2D;
 

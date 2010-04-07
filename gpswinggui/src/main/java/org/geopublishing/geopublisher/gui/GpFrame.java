@@ -51,9 +51,11 @@ import org.geopublishing.atlasViewer.swing.BugReportmailer;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPBugReportmailer;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -63,8 +65,6 @@ import org.geotools.data.DataUtilities;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import skrueger.creator.GPDialogManager;
-import skrueger.creator.GPProps;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.HeapBar;
@@ -295,17 +295,17 @@ public class GpFrame extends JFrame {
 		// "Test atlas without creating JARs" Menu Item - testAVMenuItem
 		// ******************************************************************
 		if (ace != null) {
+			ImageIcon previewIcon = new ImageIcon(GPProps.class
+					.getResource("/icons/testRun.png"));
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.Preview"),
 					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.previewAtlas,
-					new ImageIcon(GPProps.class
-							.getResource("resource/testRun.png")), KeyStroke
+					previewIcon, KeyStroke
 							.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK,
 									true)));
 
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.LivePreview"),
 					R("MenuBar.FileMenu.LivePreview.TT"),
-					ActionCmds.previewAtlasLive, new ImageIcon(GPProps.class
-							.getResource("resource/testRun.png")), KeyStroke
+					ActionCmds.previewAtlasLive, previewIcon, KeyStroke
 							.getKeyStroke(KeyEvent.VK_F5, 0, true)));
 
 		}

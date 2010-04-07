@@ -40,10 +40,10 @@ import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.creator.GPDialogManager;
 import skrueger.i8n.I8NUtil;
 
 public class GpSwingUtil extends GpUtil{
@@ -244,9 +244,6 @@ public class GpSwingUtil extends GpUtil{
 		// iterating through.
 		// ****************************************************************************
 		for (final DpEntry<?> dpe : errorEntries) {
-			// progressListener.info(AtlasCreator.R(
-			// "AtlasLoader.processinfo.validating_datapool_entries", dpe
-			// .getTitle()));
 
 			final String msg1 = GpUtil.R(
 					"AtlasLoader.Validation.dpe.invalid.msg", dpe.getTitle(),

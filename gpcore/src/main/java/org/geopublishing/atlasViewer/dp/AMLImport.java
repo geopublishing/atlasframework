@@ -156,26 +156,23 @@ public class AMLImport {
 	 * 
 	 * 
 	 */
-	public final static void parseAtlasConfig(AtlasStatusDialogInterface statusDialog,
+	public final static void parseAtlasConfig(
+			AtlasStatusDialogInterface statusDialog,
 			final AtlasConfig atlasConfig, boolean validate)
 			throws IOException, ParserConfigurationException, AtlasException {
 
 		AMLImport.statusDialog = statusDialog;
 
-		// LOGGER.debug("Start parsing atlas.xml...\n");
-
-		InputStream atlasXmlAsStream = atlasConfig
+		final InputStream atlasXmlAsStream = atlasConfig
 				.getResourceAsStream(AtlasConfig.ATLASDATA_DIRNAME + "/"
 						+ AtlasConfig.ATLAS_XML_FILENAME);
-		// URL systemResource = ClassLoader.getSystemResource("atlas.xml");
 
 		if (atlasXmlAsStream == null) {
 			throw new AtlasFatalException(AVUtil
 					.R("AmlImport.error.cant_find_atlas.xml"));
 		}
 
-		Document xml;
-		DocumentBuilder builder;
+		
 
 		/**
 		 * If validation is requested, we first check for the reachability of
@@ -188,25 +185,25 @@ public class AMLImport {
 		 */
 
 		try {
-			// if (validate)
-			// info(AtlasViewer.R("info.validating_atlas.xml"));
-			URL testSchemaUrl = new URL(
-					"http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd");
-			try {
-				testSchemaUrl.openStream().close();
-			} catch (Exception e) {
-				LOGGER
-						.warn("Validation disabled because 'http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd' can't be found. My Webserver is running on "
-								+ Webserver.PORT);
-				validate = false;
-			}
+//			// if (validate)
+//			// info(AtlasViewer.R("info.validating_atlas.xml"));
+//			URL testSchemaUrl = new URL(
+//					"http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd");
+//			try {
+//				testSchemaUrl.openStream().close();
+//			} catch (Exception e) {
+//				LOGGER
+//						.warn("Validation disabled because 'http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd' can't be found. My Webserver is running on "
+//								+ Webserver.PORT);
+//				validate = false;
+//			}
 
 			LOGGER
 					.info("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
 			validate = false;
 
-			builder = getDocumentBuilder(validate);
-			xml = builder.parse(atlasXmlAsStream);
+			DocumentBuilder builder = getDocumentBuilder(validate);
+			Document xml = builder.parse(atlasXmlAsStream);
 			parseAtlasConfig(atlasConfig, xml);
 
 		} catch (final SAXException ex) {
@@ -224,29 +221,31 @@ public class AMLImport {
 	 * Parse the given atlas.gpa into an {@link AtlasConfig}. It will also
 	 * 
 	 * @param atlasConfigEditable
-	 * @param gpaFile
-	 * @throws AtlasException
-	 * @throws IOException
-	 * @throws ParserConfigurationException
+	 * @param atlasDir
+	 *            a {@link File} pointing to either <code>atlas.gpa</code> or
+	 *            the folder containing an <code>atlas.gpa</code>
 	 */
 	public static AtlasConfigEditable parseAtlasConfig(
-			AtlasStatusDialogInterface statusDialog, final File gpaFile)
-			throws AtlasException, IOException, ParserConfigurationException {
+			AtlasStatusDialogInterface statusDialog, File atlasDir)
+			throws AtlasException {
+
+		if (!atlasDir.isDirectory())
+			atlasDir = atlasDir.getParentFile();
 
 		AMLImport.statusDialog = statusDialog;
 
-		AtlasConfigEditable atlasConfig = new AtlasConfigEditable();
+		AtlasConfigEditable atlasConfig = new AtlasConfigEditable(atlasDir);
+//		atlasConfig.setAtlasDir(atlasDir);
 
-		atlasConfig.getResLoMan().addResourceLoader(
-				new FileResourceLoader(gpaFile.getParentFile()));
-
-		Document xml;
-		DocumentBuilder builder;
-
+//		FileResourceLoader folderLoader = new FileResourceLoader(atlasDir);
 		try {
+//			atlasConfig.getResLoMan().addResourceLoader(folderLoader);
+
+			Document xml;
+			DocumentBuilder builder;
 			builder = getDocumentBuilder(false);
 
-			File atlasXmlFile = new File(gpaFile,
+			File atlasXmlFile = new File(atlasDir,
 					AtlasConfig.ATLASDATA_DIRNAME + "/"
 							+ AtlasConfig.ATLAS_XML_FILENAME);
 
@@ -255,12 +254,10 @@ public class AMLImport {
 
 			return atlasConfig;
 
-		} catch (final SAXException ex) {
-			LOGGER.error("Validation failed with a SAXException..");
-			// TODO Sometimes we start the software when another webserver is
-			// running and providing the Schema. But when we reach here, the
-			// second webserver has been closed and the Schema is not available
-			// anymore. Maybe we should just start a webserver here
+		} catch (final Exception ex) {
+//			 If we had a problem, we remove the FileResourceLoader again
+//			atlasConfig.getResLoMan().removeResourceLoader(folderLoader);
+
 			throw new AtlasImportException(ex);
 		}
 	}
@@ -456,17 +453,16 @@ public class AMLImport {
 	 * {@link GeoImportUtil#setDefaultCRS(org.opengis.referencing.crs.CoordinateReferenceSystem)}
 	 */
 	public static void readDefaultCRS(AtlasConfig atlasConfig) {
-		URL defaultCrsUrl = atlasConfig.getResource("ad/"
-				+ AtlasConfig.DEFAULTCRS_FILENAME);
+		String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME + "/"
+				+ AtlasConfig.DEFAULTCRS_FILENAME;
+		URL defaultCrsUrl = atlasConfig.getResource(resourceLocation);
 
 		if (defaultCrsUrl == null) {
-			LOGGER.debug("No ad/" + AtlasConfig.DEFAULTCRS_FILENAME
+			String warnMessage = resourceLocation
 					+ " not found. Using standard "
-					+ GeoImportUtil.getDefaultCRS().getName());
-			statusDialog.warningOccurred("default crs", null, "No ad/"
-					+ AtlasConfig.DEFAULTCRS_FILENAME
-					+ " not found. Using standard "
-					+ GeoImportUtil.getDefaultCRS().getName());
+					+ GeoImportUtil.getDefaultCRS().getName();
+			LOGGER.debug(warnMessage);
+			statusDialog.warningOccurred("default crs", null, warnMessage);
 			return;
 		}
 
@@ -1043,8 +1039,7 @@ public class AMLImport {
 					dplvfs.setFilterRule(filterString);
 				}
 
-			} else if (name.equals("chart")
-					&& dplvfs.getUrl() != null) {
+			} else if (name.equals("chart") && dplvfs.getUrl() != null) {
 				try {
 					dplvfs.getCharts().add(
 							parseFeatureChartStyle(ac, n, dplvfs));
@@ -1140,8 +1135,8 @@ public class AMLImport {
 	 * @param dplvfs
 	 *            only used to map old colIdx => new attribute Names
 	 * 
-	 * @return {@link AttributeMetadataImpl} or <code>null</code>, if the attribute
-	 *         doesn't exist anymore.
+	 * @return {@link AttributeMetadataImpl} or <code>null</code>, if the
+	 *         attribute doesn't exist anymore.
 	 * @throws AtlasRecoverableException
 	 */
 	public static AttributeMetadataImpl parseAttributeMetadata(
@@ -1220,8 +1215,8 @@ public class AMLImport {
 		// .isEmpty() ? null : nameSpace : null, localname);
 		// TODO we loos the namespace setting now again.
 
-		NameImpl correctedAttName = FeatureUtil.findBestMatchingAttribute(dplvfs
-				.getSchema(), localname);
+		NameImpl correctedAttName = FeatureUtil.findBestMatchingAttribute(
+				dplvfs.getSchema(), localname);
 		if (correctedAttName == null)
 			throw new AtlasRecoverableException(
 					"Couldn't find any existing attribute that the described attribute '"

@@ -20,7 +20,6 @@ import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.creator.GPProps;
 
 
 /**
@@ -35,7 +34,7 @@ public class UncacheAtlasAction extends AbstractAction {
 
 	public UncacheAtlasAction(Component parentGUI, AtlasConfigEditable ace) {
 		super(GeopublisherGUI.R("MenuBar.OptionsMenu.ClearCaches"), new ImageIcon(GPProps.class
-				.getResource("resource/uncache.png")));
+				.getResource("/icons/uncache.png")));
 		this.parentGUI = parentGUI;
 		this.ace = ace;
 	}

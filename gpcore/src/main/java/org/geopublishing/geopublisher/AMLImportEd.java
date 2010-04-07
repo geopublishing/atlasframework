@@ -53,10 +53,10 @@ public class AMLImportEd extends AMLImport {
 		LOGGER.info("Opening Atlas from Folder " + atlasDir );
 
 		// Create virgin AtlasConfigEditable
-		AtlasConfigEditable ace = new AtlasConfigEditable();
+		AtlasConfigEditable ace = new AtlasConfigEditable(atlasDir);
 
-		// Add the file resource loaders
-		ace.setAtlasDir(atlasDir);
+//		// Add the file resource loaders
+//		ace.setAtlasDir(atlasDir);
 
 		try {
 			parseAtlasConfig(statusDialog,  ace, true);

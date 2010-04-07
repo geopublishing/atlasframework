@@ -28,13 +28,13 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.JPanel;
-import skrueger.creator.GPProps;
 import skrueger.swing.Cancellable;
 import skrueger.swing.SmallButton;
 

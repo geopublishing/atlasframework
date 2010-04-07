@@ -19,10 +19,10 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 
 import schmitzm.io.IOUtil;
-import skrueger.creator.GPProps;
 
 /**
  * This class handles the preparation and sending of bug reports by mail. Its

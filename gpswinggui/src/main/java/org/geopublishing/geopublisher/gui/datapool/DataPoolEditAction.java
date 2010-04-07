@@ -18,10 +18,10 @@ import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.creator.GPDialogManager;
 
 /**
  * An {@link Action} that will open a dialog the configure DpEntry specific settings. 

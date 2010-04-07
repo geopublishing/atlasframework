@@ -23,11 +23,11 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import skrueger.creator.GPProps;
-import skrueger.creator.GPProps.Keys;
 
 
 public class ExportWizardPage_ExportFolder extends WizardPage {

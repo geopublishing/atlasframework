@@ -17,11 +17,11 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import skrueger.creator.GPProps;
-import skrueger.creator.GPProps.Keys;
 
 
 public class ExportWizardPage_DiskJwsSelection extends WizardPage {

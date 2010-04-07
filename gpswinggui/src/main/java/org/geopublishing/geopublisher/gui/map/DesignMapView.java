@@ -28,10 +28,10 @@ import org.geopublishing.atlasViewer.swing.AtlasMapView;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 
-import skrueger.creator.GPProps;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
 
@@ -158,7 +158,7 @@ public class DesignMapView extends AtlasMapView {
 	protected int calcAbsoluteWidthForDivider(Double ratio) {
 		int width = getWidth();
 		if (width <= 0) {
-			width = GPProps.getInt(skrueger.creator.GPProps.Keys.mapComposerWidth, 800);
+			width = GPProps.getInt(GPProps.Keys.mapComposerWidth, 800);
 		}
 		return (int) (width * ratio);
 	}
