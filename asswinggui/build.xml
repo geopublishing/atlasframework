@@ -40,8 +40,8 @@
 		</copy>
 
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
-		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler_unstable.zip"/>
-		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.tar.gz" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler_unstable.tar.gz"/>
+		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-full.zip"/>
+		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.tar.gz" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-full.tar.gz"/>
 
 	</target>
 
