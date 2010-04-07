@@ -86,6 +86,7 @@ import javax.swing.undo.UndoManager;
 
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.Translation;
 
 import com.lightdev.app.shtm.SHTMLEditorKitActions.SetStyleAction;
@@ -174,6 +175,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 	}
 
 	private static TextResources readDefaultResources() {
+		String resLocationName = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 		try {
 //			String propsLoc = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 			// URL defaultPropsURL = ClassLoader.getSystemResource(propsLoc);
@@ -182,7 +184,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 			
 			InputStream in = null;
 //			in = new ClassResourceLoader(SHTMLPanelImpl.class).getResourceAsStream("com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
-			in = SHTMLPanelImpl.class.getClassLoader().getResourceAsStream("com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
+			in = SHTMLPanelImpl.class.getResourceAsStream(resLocationName);
 //			in = SHTMLPanelImpl.class.getClassLoader().getSystemResourceAsStream("/com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
 			
 			final Properties props = new Properties();
@@ -194,9 +196,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 							.getDefault());
 			return new DefaultTextResources(resourceBundle, props);
 		} catch (Exception ex) {
-			Util.errMsg(GeopublisherGUI.getInstance().getJFrame(),
-					"resources not found", ex);
-			return null;
+			throw new RuntimeException("can load resoucre '"+resLocationName+"'", ex);
 		}
 	}
 
