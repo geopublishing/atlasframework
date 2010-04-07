@@ -68,9 +68,11 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk</connection>
+		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk
+		</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
-		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}</developerConnection>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}
+		</developerConnection>
 	</scm>
 
 	<build>
@@ -81,8 +83,6 @@
 				<directory>src/main/resources</directory>
 			</resource>
 		</resources>
-		
-		<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
 
 		<plugins>
 			<plugin>
@@ -109,11 +109,20 @@
 				<version>1.0-beta-3</version>
 				<executions>
 					<execution>
-						<phase>validate</phase>
+						<id>moeglichst immer machen</id>
+						<phase>initialize</phase>
 						<goals>
 							<goal>create</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>vorm packen auch nochmal</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+
 				</executions>
 				<configuration>
 					<doCheck>false</doCheck>
@@ -130,7 +139,8 @@
 							<!-- children modules only define their mainClass here  -->
 						</manifest>
 						<manifestEntries>
-							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Version>${project.version}
+							</Implementation-Version>
 							<Implementation-Build>${buildNumber}</Implementation-Build>
 						</manifestEntries>
 					</archive>
@@ -138,6 +148,8 @@
 			</plugin>
 
 		</plugins>
+
+		<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
 	</build>
 
 
@@ -162,7 +174,8 @@
 			</name>
 			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
 		</repository>
-		
+
+
 	</repositories>
 
 	<distributionManagement>
@@ -179,5 +192,46 @@
 			</url>
 		</repository>
 	</distributionManagement>
+
+	<pluginRepositories>
+
+		<pluginRepository>
+			<id>central</id>
+			<name>Maven Central repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<id>insight.release.repo</id>
+			<name>Insight Release Repository</name>
+			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<id>insight.snapshot.repo</id>
+			<name>Insight Snapshot Repository</name>
+			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url>
+		</pluginRepository>
+
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<id>plugins-snapshots.artifactory.wikisquare.de</id>
+			<url>http://www.wikisquare.de:8080/artifactory/plugins-snapshots-local</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>plugins-releases.artifactory.wikisquare.de</id>
+			<url>http://www.wikisquare.de:8080/artifactory/plugins-releases-local</url>
+		</pluginRepository>
+
+	</pluginRepositories>
 
 </project>

@@ -69,7 +69,7 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<ant target="publishJWS" inheritRefs="true">
+										<ant target="publishSnapshot" inheritRefs="true">
 											<property name="ant.buildNumber" value="${buildNumber}" />
 											<property name="ant.project.version" value="${project.version}" />
 										</ant>
@@ -102,7 +102,7 @@
 			<plugin>
 				<groupId>com.mindtree.techworks.insight.releng</groupId>
 				<artifactId>maven-jsmooth-plugin</artifactId>
-				<version>0.1.0</version>
+				<version>0.1.0-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -113,10 +113,12 @@
 				</executions>
 				<configuration>
 					<jsmoothFile>src/assembly/atlasStyler.jsmooth</jsmoothFile>
-					<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
-					<setExeName>true</setExeName>
+					<!--
+						<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
+					-->
+					<setExeName>false</setExeName>
 					<includeDependencies>true</includeDependencies>
-					<dependencyBaseDir>lib</dependencyBaseDir>
+					<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
 				</configuration>
 			</plugin>
 
@@ -135,7 +137,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>package-fullZip</id>
+						<id>full</id>
 						<phase>package</phase>
 						<goals>
 							<goal>attached</goal>

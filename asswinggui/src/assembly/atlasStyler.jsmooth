@@ -10,7 +10,6 @@
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>atlasStyler.exe</executableName>
-<iconLocation>icon.gif</iconLocation>
 <initialMemoryHeap>115343360</initialMemoryHeap>
 <javaProperties>
 <name>file.encoding</name>
