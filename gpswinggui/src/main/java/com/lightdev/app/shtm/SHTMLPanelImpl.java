@@ -175,7 +175,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 	}
 
 	private static TextResources readDefaultResources() {
-		String resLocationName = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
+		String resLocationName = "/com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 		try {
 //			String propsLoc = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 			// URL defaultPropsURL = ClassLoader.getSystemResource(propsLoc);

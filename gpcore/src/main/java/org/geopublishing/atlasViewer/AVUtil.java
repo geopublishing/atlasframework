@@ -811,11 +811,13 @@ public class AVUtil {
 
 			final Properties releaseProps = new Properties();
 			final InputStream openStream = releasePropsURL.openStream();
-			releaseProps.load(openStream);
-			openStream.close();
-			final String str = releaseProps.getProperty("version", "0.0");
+			try {
+				releaseProps.load(openStream);
+			} finally {
+				openStream.close();
+			}
 
-			return str;
+			return releaseProps.getProperty("version", "development");
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"/release.properties could not be read!", e);
@@ -836,9 +838,18 @@ public class AVUtil {
 
 			final Properties releaseProps = new Properties();
 			final InputStream openStream = releasePropsURL.openStream();
-			releaseProps.load(openStream);
-			openStream.close();
+			try {
+				releaseProps.load(openStream);
+			} finally {
+				openStream.close();
+			}
 			final String str = releaseProps.getProperty("build", "0");
+
+			if (str.equals("${buildNumber}")) {
+				// We are in development or Maven didn't filter the properties
+				// while building.
+				return -1;
+			}
 
 			return Integer.parseInt(str);
 		} catch (Exception e) {
