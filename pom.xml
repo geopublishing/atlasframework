@@ -162,7 +162,7 @@
 			</name>
 			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots</url>
 		</repository>
-
+		
 	</repositories>
 
 	<distributionManagement>

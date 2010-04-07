@@ -100,10 +100,37 @@
 			</plugin>
 
 			<plugin>
+				<groupId>com.mindtree.techworks.insight.releng</groupId>
+				<artifactId>maven-jsmooth-plugin</artifactId>
+				<version>0.1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>jsmoothcompile</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<jsmoothFile>src/assembly/atlasStyler.jsmooth</jsmoothFile>
+					<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
+					<setExeName>true</setExeName>
+					<includeDependencies>true</includeDependencies>
+					<dependencyBaseDir>lib</dependencyBaseDir>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
+					<filters>
+						<!--
+							<filter>${project.basedir}/src/assembly/filter.properties</filter>
+						-->
+					</filters>
 					<descriptors>
-						<descriptor>${project.basedir}/src/main/assembly/fullZip.xml</descriptor>
+						<descriptor>${project.basedir}/src/assembly/full.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>

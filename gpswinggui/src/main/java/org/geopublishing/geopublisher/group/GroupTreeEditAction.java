@@ -20,7 +20,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.atlasViewer.swing.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.group.EditGroupJDialog;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
