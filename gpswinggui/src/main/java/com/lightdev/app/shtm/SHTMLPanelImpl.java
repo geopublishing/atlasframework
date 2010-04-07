@@ -84,9 +84,6 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
 
-import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-
-import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.Translation;
 
 import com.lightdev.app.shtm.SHTMLEditorKitActions.SetStyleAction;

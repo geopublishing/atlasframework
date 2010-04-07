@@ -37,7 +37,6 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.exceptions.AtlasRecoverableException;
-import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
@@ -57,7 +56,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import rachel.ResourceManager;
-import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
