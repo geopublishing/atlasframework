@@ -19,7 +19,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 

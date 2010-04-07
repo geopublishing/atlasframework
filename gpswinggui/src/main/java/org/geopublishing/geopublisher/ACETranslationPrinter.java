@@ -17,6 +17,7 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;

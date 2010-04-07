@@ -43,9 +43,9 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.chartwizard.ChartWizard;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;

@@ -13,11 +13,11 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.dp.DpEntryFactory;
 import org.geopublishing.geopublisher.dp.DpLayerRasterTester;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
 import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import skrueger.creator.GPProps;

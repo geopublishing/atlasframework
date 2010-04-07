@@ -23,9 +23,9 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.dp.ImportToDataPoolDropTargetListener;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.JPanel;
 import skrueger.swing.SmallButton;

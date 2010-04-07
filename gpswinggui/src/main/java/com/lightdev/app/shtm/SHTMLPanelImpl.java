@@ -84,7 +84,7 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
 
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import skrueger.i8n.Translation;
 

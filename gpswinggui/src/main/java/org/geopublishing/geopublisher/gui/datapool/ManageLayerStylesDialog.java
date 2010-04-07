@@ -58,8 +58,8 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.map.ManageLayerStylesForMapDialog;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.styling.Style;
 
 import schmitzm.geotools.styling.StylingUtil;

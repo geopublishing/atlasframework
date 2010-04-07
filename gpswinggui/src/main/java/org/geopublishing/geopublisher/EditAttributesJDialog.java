@@ -25,6 +25,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.geopublisher.gui.datapool.layer.AttribTranslationJTable;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;

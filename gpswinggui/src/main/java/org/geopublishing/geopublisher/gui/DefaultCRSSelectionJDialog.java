@@ -25,8 +25,8 @@ import javax.swing.event.DocumentListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.referencing.CRS;
 import org.opengis.metadata.Identifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;

@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.jfree.chart.ChartPanel;
 
 import schmitzm.jfree.chart.style.ChartLabelStyle;

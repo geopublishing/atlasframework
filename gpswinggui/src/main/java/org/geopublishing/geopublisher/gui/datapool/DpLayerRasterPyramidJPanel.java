@@ -20,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.JPanel;
 import skrueger.swing.Cancellable;

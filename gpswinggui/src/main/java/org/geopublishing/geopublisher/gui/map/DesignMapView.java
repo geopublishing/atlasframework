@@ -28,7 +28,7 @@ import org.geopublishing.atlasViewer.swing.AtlasMapView;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 
 import skrueger.creator.GPProps;

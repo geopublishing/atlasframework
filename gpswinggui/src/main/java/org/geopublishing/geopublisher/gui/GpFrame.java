@@ -51,13 +51,13 @@ import org.geopublishing.atlasViewer.swing.BugReportmailer;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPBugReportmailer;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
-import org.geopublishing.geopublisher.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geotools.data.DataUtilities;
 
 import schmitzm.io.IOUtil;

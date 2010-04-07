@@ -21,8 +21,8 @@ import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.map.DesignAtlasMapLegend;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapLayer;
 
 import schmitzm.geotools.styling.StylingUtil;

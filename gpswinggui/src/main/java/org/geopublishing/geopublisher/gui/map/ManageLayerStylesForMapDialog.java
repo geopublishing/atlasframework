@@ -49,8 +49,8 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.ManageLayerStylesDialog;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 import org.geotools.styling.Style;
 

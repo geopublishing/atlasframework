@@ -17,13 +17,13 @@ import javax.swing.JSplitPane;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.EditDataPoolPanel;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.gui.map.EditMapPoolPanel;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.creator.GPProps;

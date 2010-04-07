@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 
 import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import skrueger.creator.GPProps;
 

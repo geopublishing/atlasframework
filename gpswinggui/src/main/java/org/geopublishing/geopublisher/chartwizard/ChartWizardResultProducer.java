@@ -17,8 +17,8 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
 

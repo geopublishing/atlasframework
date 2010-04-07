@@ -52,7 +52,7 @@ import org.geopublishing.atlasViewer.swing.AtlasMapLayer;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;

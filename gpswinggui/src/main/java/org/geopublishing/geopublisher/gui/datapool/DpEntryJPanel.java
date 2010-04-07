@@ -28,8 +28,8 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.jfree.chart.style.ChartStyle;

@@ -62,7 +62,7 @@ import javax.swing.text.html.HTMLDocument;
 
 import org.apache.commons.io.FileUtils;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import schmitzm.swing.ExceptionDialog;

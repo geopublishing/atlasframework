@@ -23,8 +23,8 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.export.JarExportUtil;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import skrueger.creator.GPProps;

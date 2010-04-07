@@ -36,10 +36,10 @@ import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.internal.TranslationCellRenderer;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.NoDataEditListDialog;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableRowHeightAdjustment;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
 

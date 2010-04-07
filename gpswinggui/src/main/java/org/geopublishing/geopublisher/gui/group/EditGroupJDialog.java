@@ -16,7 +16,7 @@ import javax.swing.JDialog;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;

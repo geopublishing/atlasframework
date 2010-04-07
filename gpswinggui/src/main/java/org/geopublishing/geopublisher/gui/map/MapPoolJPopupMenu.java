@@ -18,7 +18,7 @@ import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import skrueger.creator.GPDialogManager;
 

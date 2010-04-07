@@ -50,13 +50,13 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.DpEntryTypeTableCellRenderer;
 import org.geopublishing.geopublisher.gui.MegaByteTableCellRenderer;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 import org.geopublishing.geopublisher.gui.TableRowHeightAdjustment;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.SwingUtil;

@@ -23,7 +23,7 @@ import javax.swing.JList;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.jfree.chart.style.ChartType;

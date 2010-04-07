@@ -18,7 +18,7 @@ import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 
 public class DataPoolPreviewAction extends AbstractAction {

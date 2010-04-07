@@ -18,8 +18,8 @@ import javax.swing.AbstractAction;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 
 public class MapPoolDuplicateAction extends AbstractAction {

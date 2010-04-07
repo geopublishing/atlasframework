@@ -35,7 +35,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;

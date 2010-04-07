@@ -25,10 +25,10 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.datapool.DpEntryJPanel;
 import org.geopublishing.geopublisher.gui.datapool.DpLayerRasterPyramidJPanel;
 import org.geopublishing.geopublisher.gui.datapool.DpLayerVectorAttributesJPanel;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.coverage.grid.GridCoverage2D;
 
 import schmitzm.jfree.chart.style.ChartStyle;

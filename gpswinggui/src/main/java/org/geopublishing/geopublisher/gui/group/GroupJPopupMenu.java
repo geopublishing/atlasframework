@@ -24,12 +24,12 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.group.GroupTreeCreateSubmenuAction;
 import org.geopublishing.geopublisher.group.GroupTreeDeleteAction;
 import org.geopublishing.geopublisher.group.GroupTreeEditAction;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolEditAction;
 import org.geopublishing.geopublisher.gui.map.MapPoolPrefsAction;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 

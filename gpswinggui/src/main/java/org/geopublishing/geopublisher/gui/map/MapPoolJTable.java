@@ -57,11 +57,11 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GeopublisherGUI;
 import org.geopublishing.geopublisher.gui.MegaByteTableCellRenderer;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
