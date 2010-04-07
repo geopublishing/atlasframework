@@ -28,6 +28,8 @@
 	
 		$dependencies
 		
+		<!--	<nativelib  href="lib/natives.jar" part="main"   /> -->
+		
   </resources>
   <application-desc main-class="$mainClass"/>
 </jnlp>
