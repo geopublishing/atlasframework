@@ -1,0 +1,53 @@
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+	<id>full</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+
+		<fileSet>
+			<filtered>true</filtered>
+			<directory>src/assembly/resources/</directory>
+			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
+			<includes>
+				<include>README_standalone.txt</include>
+				<include>start_Geopublisher.bat</include>
+			</includes>
+		</fileSet>
+
+		<fileSet>
+			<!-- Make the linux start_Geopublisher.sh executable -->
+			<filtered>true</filtered>
+			<directory>src/assembly/resources/</directory>
+			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
+			<includes>
+				<include>start_Geopublisher.sh</include>
+			</includes>
+			<fileMode>0755</fileMode>
+		</fileSet>
+
+		<fileSet>
+			<filtered>false</filtered>
+			<directory>target</directory>
+			<includes>
+				<include>Geopublisher.exe</include>
+			</includes>
+			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
+		</fileSet>
+
+	</fileSets>
+
+	<dependencySets>
+	<!-- Add all the .jar dependencies to the .zip -->
+		<dependencySet>
+			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+
+</assembly>
