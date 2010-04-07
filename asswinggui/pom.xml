@@ -103,7 +103,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<descriptors>
-						<descriptor>src/main/assembly/fullZip.xml</descriptor>
+						<descriptor>${project.basedir}/src/main/assembly/fullZip.xml</descriptor>
 					</descriptors>
 				</configuration>
 				<executions>
