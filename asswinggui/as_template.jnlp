@@ -10,7 +10,7 @@
     
 	<shortcut online="true">
 	  <desktop/>
-	  <menu submenu="AtlasStyler"/>
+	  <menu submenu="Geopublishing"/>
 	</shortcut>    
     
   </information>

@@ -15,7 +15,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-
 	<build>
 
 		<plugins>
@@ -36,7 +35,133 @@
 		</plugins>
 
 	</build>
-	
+
+
+	<profiles>
+		<profile>
+			<!--
+				If run on the special "prodi" profile, the application is released
+				to the geopublishing.org webpage
+			-->
+			<id>prodi</id>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.codehaus.mojo.webstart</groupId>
+						<artifactId>webstart-maven-plugin</artifactId>
+						<version>1.0-alpha-2</version>
+
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>jnlp</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
+
+							<jnlp>
+								<inputTemplate>gp_template.jnlp</inputTemplate>
+								<outputFile>gp.jnlp</outputFile>
+								<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+							</jnlp>
+
+							<sign>
+								<keypass>wasser</keypass>
+								<storepass>wasser</storepass>
+								<alias>IMPETUS</alias>
+							</sign>
+
+							<verbose>false</verbose>
+							<excludeTransitive>false</excludeTransitive>
+
+							<pack200>false</pack200> <!-- still buggy sadly -->
+							<gzip>false</gzip> <!-- still buggy sadly -->
+
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<ant target="publishSnapshot" inheritRefs="true">
+											<property name="ant.buildNumber" value="${buildNumber}" />
+											<property name="ant.project.version" value="${project.version}" />
+										</ant>
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<plugin>
+						<groupId>com.mindtree.techworks.insight.releng</groupId>
+						<artifactId>maven-jsmooth-plugin</artifactId>
+						<version>0.1.0-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jsmoothcompile</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<jsmoothFile>src/assembly/Geopublisher.jsmooth</jsmoothFile>
+							<!--
+								<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
+							-->
+							<setExeName>false</setExeName>
+							<setJarName>true</setJarName>
+							<includeDependencies>true</includeDependencies>
+							<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
+						</configuration>
+					</plugin>
+
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2-beta-5</version>
+
+						<configuration>
+							<filters />
+							<descriptors>
+								<descriptor>${project.basedir}/src/assembly/full.xml</descriptor>
+							</descriptors>
+						</configuration>
+						<executions>
+							<execution>
+								<id>full</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attached</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+
+			</build>
+
+		</profile>
+	</profiles>
+
+
+
 	<dependencies>
 
 		<dependency>
@@ -226,7 +351,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 </project>

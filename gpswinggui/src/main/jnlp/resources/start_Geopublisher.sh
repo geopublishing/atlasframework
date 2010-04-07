@@ -10,4 +10,4 @@
 
 echo "Starting Geopublisher. You need to have at least Java Runtime Environment (JRE) Version 1.6.0.14 installed." 
 
-java -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=lib/native -jar gp.jar
+java -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=native -jar gpswinggui-${project.version}.jar
