@@ -39,7 +39,7 @@ import skrueger.swing.CancellableDialogManager;
 import skrueger.swing.DialogManager;
 
 /**
- * This class manages all {@link DialogManager}s used in GeoPublisher. It hold
+ * This class manages all {@link DialogManager}s used in Geopublisher. It hold
  * simple static public references to them.
  * 
  * TODO This would be a great place to

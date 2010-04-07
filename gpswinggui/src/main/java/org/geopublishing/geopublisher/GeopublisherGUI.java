@@ -106,10 +106,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	private static final Logger LOGGER = Logger.getLogger(GeopublisherGUI.class);
 
 	static {
-		// AtlasConfig.setupResLoMan();
-
 		System.out
-				.println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
+				.println("Adding new ClassResourceLoader( "+AtlasViewerGUI.class.getSimpleName()+" ) to WebResourceManager");
 		WebResourceManager
 				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
 						AtlasViewerGUI.class));
@@ -117,26 +115,26 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// Starting singleton WebServer
 		try {
 			new Webserver(true);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ExceptionDialog.show(null, e);
 			System.exit(-3);
 		}
 
 		/**
-		 * Doing dome initializations
+		 * Doing some initializations
 		 */
 		AVUtil.fixBug4847375();
 		SHTMLPanelImpl.setTextResources(null);
 	}
 
 	/**
-	 * Creates or returns the single instance of GeoPublisher
+	 * Creates or returns the single instance of Geopublisher
 	 */
 	public static GeopublisherGUI getInstance() {
 		if (instance == null) {
 			LOGGER
 					.error(
-							"Geopublisher instance is requested without arguments and it doesn't exists yet!",
+							"GeopublisherGUI instance is requested without arguments and it doesn't exists yet!",
 							new RuntimeException());
 			instance = new GeopublisherGUI(new ArrayList<String>());
 		}
@@ -144,10 +142,10 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Creates and returns a single instance of GeoPublisher, evaluating any
+	 * Creates and returns a single instance of Geopublisher, evaluating any
 	 * arguments passed on the command line.
 	 */
-	public static GeopublisherGUI getInstance(List<String> args) {
+	public static GeopublisherGUI getInstance(final List<String> args) {
 		if (instance != null) {
 			LOGGER
 					.error(
@@ -161,36 +159,20 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 	/**
 	 * Start routine for the {@link GeopublisherGUI}
-	 * 
-	 * @param args
 	 */
-	public static void main(String[] args) {
-
+	public static void main(final String[] args) {
+		
 		// try {
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// } catch (ClassNotFoundException e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// } catch (InstantiationException e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// } catch (IllegalAccessException e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// } catch (UnsupportedLookAndFeelException e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
-
-		System.setProperty("file.encoding", "UTF-8");
-
-		// Setting up log4j
-		// URL log4jXmlUrl = AtlasConfig.getResLoMan().getResourceAsUrl(
-		// "gp_log4j.xml");
-		URL log4jXmlUrl = GeopublisherGUI.class.getResource(
-				"/gp_log4j.xml");
-
-		DOMConfigurator.configure(log4jXmlUrl);
 
 		getInstance(Arrays.asList(args));
 	}
@@ -204,7 +186,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @param values
 	 *            optional values
 	 */
-	public static String R(String key, Object... values) {
+	public static String R(final String key, final Object... values) {
 		return GpUtil.R(key, values);
 	}
 
@@ -212,7 +194,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	private AtlasConfigEditable ace;
 
 	/**
-	 * Keeps an instance of the {@link GpFrame}, the main window of GeoPublisher
+	 * Keeps an instance of the {@link GpFrame}, the main window of Geopublisher
 	 **/
 	private GpFrame gpJFrame = null;
 
@@ -222,14 +204,18 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @param args
 	 *            command line arguments
 	 * **/
-	public GeopublisherGUI(List<String> args) {
+	public GeopublisherGUI(final List<String> args) {
+		LOGGER.info("Starting "+GeopublisherGUI.class.getSimpleName()+"... " + AVUtil.getVersionInfo());
 
-		LOGGER.info("This is GeoPublisher " + AVUtil.getVersionInfo());
-
-		evaluateArgs(args);
+		// Setting up the logger from a XML configuration file
+		DOMConfigurator.configure(GeopublisherGUI.class.getResource("/gp_log4j.xml"));
 
 		/** Output information about the GPL license **/
 		AVUtil.logGPLCopyright(LOGGER);
+		
+		System.setProperty("file.encoding", "UTF-8");
+
+		evaluateArgs(args);
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of
@@ -243,7 +229,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		Thread
 				.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-					public void uncaughtException(Thread t, Throwable e) {
+					public void uncaughtException(final Thread t, final Throwable e) {
 
 						LOGGER
 								.error(
@@ -251,7 +237,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 												+ t, e); // i8n
 
 						if (e instanceof java.lang.ArrayIndexOutOfBoundsException) {
-							StackTraceElement stackTraceElement = e
+							final StackTraceElement stackTraceElement = e
 									.getStackTrace()[2];
 							if (stackTraceElement.getClassName().equals(
 									"org.jdesktop.swingx.VerticalLayout")) {
@@ -277,7 +263,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					if (!GPProps.get(GPProps.Keys.LastOpenAtlasFolder, ".")
 							.equals("."))
 						loadAtlas();
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					ExceptionDialog.show(getJFrame(), e);
 				}
 			}
@@ -296,7 +282,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (ace == null)
 				return;
 
-			EditAtlasParamsDialog editAtlasDialog = new EditAtlasParamsDialog(
+			final EditAtlasParamsDialog editAtlasDialog = new EditAtlasParamsDialog(
 					getJFrame(), ace);
 			editAtlasDialog.setVisible(true);
 			if (!editAtlasDialog.isCancelled()) {
@@ -309,7 +295,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		else if (cmd.equals(ActionCmds.editAtlasLanguages.toString())) {
-			LanguageSelectionDialog languageSelectionDialog = new LanguageSelectionDialog(
+			final LanguageSelectionDialog languageSelectionDialog = new LanguageSelectionDialog(
 					getJFrame(), ace.getLanguages());
 			languageSelectionDialog.setVisible(true);
 			if (!languageSelectionDialog.isCancel()) {
@@ -318,27 +304,27 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		else if (cmd.startsWith(ActionCmds.changeLnF.toString())) {
-			String lnfClassname = cmd.substring(ActionCmds.changeLnF.toString()
+			final String lnfClassname = cmd.substring(ActionCmds.changeLnF.toString()
 					.length());
 			try {
 				UIManager.setLookAndFeel(lnfClassname);
 				SwingUtilities.updateComponentTreeUI(getJFrame());
 				getJFrame().updateMenu();
 
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				LOGGER.error(
 						"Trying to add a useless JMenu for LookAndFeel stiff",
 						ex);
 			}
 		} else if (cmd.equals(ActionCmds.editAboutInfo.toString())) {
 
-			List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
+			final List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
 					.size());
 
 			for (int i = 0; i < ace.getLanguages().size(); i++) {
-				String titleTranslated = ace.getTitle().get(
+				final String titleTranslated = ace.getTitle().get(
 						ace.getLanguages().get(i));
-				String title = R(
+				final String title = R(
 						"EditAboutWindow.TabName",
 						titleTranslated == null || titleTranslated.equals("") ? "..."
 								: titleTranslated, new Locale(ace
@@ -356,13 +342,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		} else if (cmd.equals(ActionCmds.editPopupInfo.toString())) {
 
-			List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
+			final List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
 					.size());
 
 			for (int i = 0; i < ace.getLanguages().size(); i++) {
-				String titleTranslated = ace.getTitle().get(
+				final String titleTranslated = ace.getTitle().get(
 						ace.getLanguages().get(i));
-				String title = R(
+				final String title = R(
 						"EditPopupWindow.TabName",
 						titleTranslated == null || titleTranslated.equals("") ? "..."
 								: titleTranslated, new Locale(ace
@@ -388,9 +374,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			 * Ask the user to select a save position
 			 */
 
-			File startWithDir = new File(System.getProperty("user.home"),
+			final File startWithDir = new File(System.getProperty("user.home"),
 					"translations.html");
-			JFileChooser dc = new JFileChooser(startWithDir);
+			final JFileChooser dc = new JFileChooser(startWithDir);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
 			dc.setDialogTitle(GeopublisherGUI.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(startWithDir);
@@ -399,22 +385,22 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					|| (dc.getSelectedFile() == null))
 				return;
 
-			File exportFile = dc.getSelectedFile();
+			final File exportFile = dc.getSelectedFile();
 
 			exportFile.delete();
 
 			/**
 			 * Create HTML output
 			 */
-			ACETranslationPrinter translationPrinter = new ACETranslationPrinter(
+			final ACETranslationPrinter translationPrinter = new ACETranslationPrinter(
 					ace);
-			String allTrans = translationPrinter.printAllTranslations();
+			final String allTrans = translationPrinter.printAllTranslations();
 
 			try {
 				/**
 				 * Save it to file, dirty
 				 */
-				BufferedWriter out = new BufferedWriter(new FileWriter(
+				final BufferedWriter out = new BufferedWriter(new FileWriter(
 						exportFile));
 				out.write(allTrans);
 				out.close();
@@ -433,7 +419,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				AVSwingUtil.lauchHTMLviewer(getJFrame(), exportFile.toURI());
 
 				JOptionPane.showMessageDialog(getJFrame(), R("PrintTranslations.OKWillOpenMsg"));
-			} catch (Exception eee) {
+			} catch (final Exception eee) {
 				ExceptionDialog.show(getJFrame(), eee);
 			}
 
@@ -444,7 +430,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final JDialog d = new JDialog(getJFrame(), GpUtil
 					.R("PersonalizeImages_MenuEntryLabel"));
 
-			StringBuffer msg = new StringBuffer();
+			final StringBuffer msg = new StringBuffer();
 			msg.append("<html>");
 			msg.append("<h2>"
 					+ GpUtil
@@ -494,21 +480,21 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			msg.append("</ul>");
 			msg.append("</html>");
-			JLabel infoLabel = new JLabel(msg.toString());
+			final JLabel infoLabel = new JLabel(msg.toString());
 
-			JPanel cp = new JPanel(new BorderLayout());
+			final JPanel cp = new JPanel(new BorderLayout());
 			cp.add(infoLabel, BorderLayout.NORTH);
 
-			Box previewLabel = Box.createVerticalBox();
+			final Box previewLabel = Box.createVerticalBox();
 
-			ClassLoader cl = GeopublisherGUI.class.getClassLoader();
-			URL urlJWSIconFallback = cl.getResource("/"
+			final ClassLoader cl = GeopublisherGUI.class.getClassLoader();
+			final URL urlJWSIconFallback = cl.getResource("/"
 					+ AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 
-			URL urlJWSIcon = cl.getResource("/"
+			final URL urlJWSIcon = cl.getResource("/"
 					+ AtlasConfig.JWSICON_RESOURCE_NAME);
 
-			JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
+			final JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
 					new ImageIcon(AVUtil.exists(urlJWSIcon) ? urlJWSIcon
 							: urlJWSIconFallback), SwingConstants.CENTER);
 			previewJWSIcon.setBorder(BorderFactory
@@ -522,12 +508,12 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
 			// URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-			URL urlSplashscreenFallback = cl.getResource("/"
+			final URL urlSplashscreenFallback = cl.getResource("/"
 					+ AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			URL urlSplashscreen = cl.getResource("/"
+			final URL urlSplashscreen = cl.getResource("/"
 					+ AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
-			JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",
+			final JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",
 					new ImageIcon(
 							AVUtil.exists(urlSplashscreen) ? urlSplashscreen
 									: urlSplashscreenFallback),
@@ -537,7 +523,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			previewLabel.add(previewSplashscreen);
 			cp.add(previewLabel, BorderLayout.CENTER);
 
-			JPanel buttonsPanel = new JPanel(new FlowLayout());
+			final JPanel buttonsPanel = new JPanel(new FlowLayout());
 
 			/**
 			 * A Button to open the ad-foder
@@ -549,7 +535,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 											.R("PersonalizeImages_OpenADFolderButton_label")) {
 
 								@Override
-								public void actionPerformed(ActionEvent e) {
+								public void actionPerformed(final ActionEvent e) {
 									AVUtil.openOSFolder(ace.getAd());
 								}
 
@@ -561,7 +547,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			buttonsPanel.add(new CancelButton(new AbstractAction() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					d.dispose();
 				}
 
@@ -609,7 +595,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			/**
 			 * Create and configure a new visible Instance
 			 */
-			AtlasViewerGUI av = AtlasViewerGUI.getInstance();
+			final AtlasViewerGUI av = AtlasViewerGUI.getInstance();
 			av.setExitOnClose(false);
 			av.startGui(getAce());
 		} else if (cmd.equals(ActionCmds.previewAtlas.toString())) {
@@ -641,7 +627,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			}
 
 			// Create and configure a new visible Instance
-			AtlasViewerGUI av = AtlasViewerGUI.getInstance();
+			final AtlasViewerGUI av = AtlasViewerGUI.getInstance();
 			av.setExitOnClose(false);
 			// Prepare the ResLoMan, so it will parse the AtlasWorkingDir
 			av.getAtlasConfig().getResLoMan().addResourceLoader(
@@ -685,7 +671,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		AVUtil.checkThatWeAreOnEDT();
 
-		int res = JOptionPane.showConfirmDialog(getJFrame(),
+		final int res = JOptionPane.showConfirmDialog(getJFrame(),
 				GpUtil
 						.R("CloseAtlasDialog.SaveAtlas.msg"),
 				GpUtil
@@ -758,7 +744,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 */
 		AVUtil.fixBug4847375();
 
-		JFileChooser dc = new JFileChooser(new File(GPProps.get(
+		final JFileChooser dc = new JFileChooser(new File(GPProps.get(
 				GPProps.Keys.LastOpenAtlasFolder, "")).getParent());
 		dc.setDialogTitle(GpUtil.R("CreateAtlas.Dialog.Title"));
 		dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -772,7 +758,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				|| (dc.getSelectedFile() == null))
 			return;
 
-		File atlasDir = dc.getSelectedFile();
+		final File atlasDir = dc.getSelectedFile();
 
 		// Wenn der Name einer nicht existierenden Datei angegeben wurde, dann
 		// fragen ob wir das als Ordner estellen sollen
@@ -800,7 +786,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		try {
 			FileUtils.deleteDirectory(atlasDir);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 
 		ace = new AtlasConfigEditable();
@@ -808,7 +794,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder, atlasDir
 				.getAbsolutePath());
 
-		String activeLang = Translation.getActiveLang();
+		final String activeLang = Translation.getActiveLang();
 		if (!activeLang.equals("en")) {
 			ace.setLanguages(activeLang, "en");
 		} else {
@@ -854,10 +840,10 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * Evaluates the command line arguments. May react with GUI or commandline
 	 * messages.
 	 */
-	private void evaluateArgs(List<String> args) {
+	private void evaluateArgs(final List<String> args) {
 		boolean printHelpAndExit = false;
 
-		for (String arg : args) {
+		for (final String arg : args) {
 			boolean understood = false;
 
 			// Was help requested?
@@ -882,12 +868,12 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Exists GeoPublisher. Asks to save and may be canceled by the user.
+	 * Exists Geopublisher. Asks to save and may be canceled by the user.
 	 * 
 	 * @param exitCode
 	 *            0 mean all ok.
 	 */
-	public void exitGP(int exitCode) {
+	public void exitGP(final int exitCode) {
 
 		JNLPUtil.registerAsSingleInstance(GeopublisherGUI.this, false);
 
@@ -953,7 +939,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	PropertyChangeListener listenToMapPoolChangesAndClosePreviewAtlas = new PropertyChangeListener() {
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
+		public void propertyChange(final PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(
 					MapPool.EventTypes.removeMap.toString())) {
 				if (AtlasViewerGUI.isRunning()) {
@@ -975,7 +961,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	PropertyChangeListener listenToDataPoolChangesAndCloseAtlasViewerPreview = new PropertyChangeListener() {
 
 		@Override
-		public void propertyChange(PropertyChangeEvent evt) {
+		public void propertyChange(final PropertyChangeEvent evt) {
 
 			if (evt.getPropertyName().equals(
 					DataPool.EventTypes.removeDpe.toString())) {
@@ -994,9 +980,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * Asks the user to select a directory and tries to open an atlas from
 	 * there...
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
 	 */
 	public void loadAtlas() {
 
@@ -1009,7 +992,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// Ask the user to select a directory and tries to open an atlas from
 		// there...
 		// **********************************************************************
-		File atlasDir;
 		final String lastAtlasDirectory = GPProps.get(
 				GPProps.Keys.LastOpenAtlasFolder, ".");
 		final JFileChooser dc = new JFileChooser(new File(lastAtlasDirectory));
@@ -1036,9 +1018,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return;
 		}
 
-		atlasDir = dc.getSelectedFile().getParentFile();
-
-		loadAtlasFromDir(atlasDir);
+		loadAtlasFromDir(dc.getSelectedFile().getParentFile());
 
 	}
 
@@ -1052,15 +1032,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder, atlasDir
 				.getAbsolutePath());
 
-		AtlasStatusDialog statusWindow = new AtlasStatusDialog(getJFrame(),
+		final AtlasStatusDialog statusWindow = new AtlasStatusDialog(getJFrame(),
 				null, GeopublisherGUI.R("AtlasLoader.processinfo.loading",
-						atlasDir.getAbsolutePath()));
-		AtlasSwingWorker<AtlasConfigEditable> aceLoader = new AtlasSwingWorker<AtlasConfigEditable>(
+						atlasDir.getName()));
+		final AtlasSwingWorker<AtlasConfigEditable> aceLoader = new AtlasSwingWorker<AtlasConfigEditable>(
 				statusWindow) {
 
 			@Override
 			protected AtlasConfigEditable doInBackground() throws Exception {
-				AtlasConfigEditable ace = AMLImportEd.parseAtlasConfig(
+				final AtlasConfigEditable ace = AMLImportEd.parseAtlasConfig(
 						statusDialog, atlasDir);
 
 				System.gc(); // Try to throw away as much memory as possible
@@ -1075,7 +1055,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			/*******************************************************
 			 * Matching available and installed languages
 			 */
-			Locale locale = Locale.getDefault();
+			final Locale locale = Locale.getDefault();
 			if (ace.getLanguages().contains(locale.getLanguage())) {
 				Translation.setActiveLang(locale.getLanguage());
 			} else {
@@ -1099,7 +1079,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	}
 
 	@Override
-	public void newActivation(String[] arg0) {
+	public void newActivation(final String[] arg0) {
 		LOGGER
 				.info("A second instance of AtlasCreator has been started.. The single instance if requesting focus now...");
 		if (gpJFrame != null) {

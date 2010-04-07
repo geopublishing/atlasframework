@@ -32,7 +32,7 @@ import skrueger.swing.AtlasDialog;
 import skrueger.swing.DialogManager;
 
 /**
- * This class manages all {@link DialogManager}s used in GeoPublisher. It hold
+ * This class manages all {@link DialogManager}s used in Geopublisher. It hold
  * simple static public references to them.
  */
 @SuppressWarnings("unchecked")

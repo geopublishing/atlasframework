@@ -109,41 +109,40 @@
 				<version>1.0-beta-3</version>
 				<executions>
 					<execution>
-						<id>moeglichst immer machen</id>
+						<id>buildnumber in phase initialize</id>
 						<phase>initialize</phase>
 						<goals>
 							<goal>create</goal>
 						</goals>
 					</execution>
-					<execution>
-						<id>vorm packen auch nochmal</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>und beim deploy</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>und beim installieren</id>
-						<phase>install</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-						<execution>
-						<id>und beim assmenblien</id>
-						<phase>assembly</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-					
+<!--					<execution>-->
+<!--						<id>vorm packen auch nochmal</id>-->
+<!--						<phase>prepare-package</phase>-->
+<!--						<goals>-->
+<!--							<goal>create</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>und beim deploy</id>-->
+<!--						<phase>deploy</phase>-->
+<!--						<goals>-->
+<!--							<goal>create</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>und beim installieren</id>-->
+<!--						<phase>install</phase>-->
+<!--						<goals>-->
+<!--							<goal>create</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--						<execution>-->
+<!--						<id>und beim assmenblien</id>-->
+<!--						<phase>assembly</phase>-->
+<!--						<goals>-->
+<!--							<goal>create</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
 
 				</executions>
 				<configuration>

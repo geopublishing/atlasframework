@@ -49,11 +49,11 @@ import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.ASProps.Keys;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
@@ -88,12 +88,14 @@ import skrueger.geotools.StyledLayerInterface;
  * 
  */
 public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
+	private static final long serialVersionUID = 1231321321258008431L;
+
 	final static private Logger LOGGER = ASUtil
 			.createLogger(AtlasStylerGUI.class);
 
 	private StylerMapView stylerMapView = null;
 
-	private HashMap<String, StyledFS> stledObjCache = new HashMap<String, StyledFS>();
+	final private HashMap<String, StyledFS> stledObjCache = new HashMap<String, StyledFS>();
 
 	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
 			getStylerMapView().getMapManager());
@@ -102,43 +104,19 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * This is the default constructor
 	 */
 	public AtlasStylerGUI() {
+		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
+				+ AVUtil.getVersionInfo());
+
 		// Setting up the logger from a XML configuration file
-		URL log4jXmlUrl = ClassLoader.getSystemResource("as_log4j.xml");
-		if (log4jXmlUrl == null) {
-			log4jXmlUrl = AtlasStylerGUI.class.getResource("as_log4j.xml");
-		}
-		if (log4jXmlUrl != null) {
-			DOMConfigurator.configure(log4jXmlUrl);
-		} else {
-			System.err.println("as_log4j.xml not found... No logging :-(");
-		}
+		DOMConfigurator.configure(AtlasStylerGUI.class
+				.getResource("/as_log4j.xml"));
 
-		// Atlas Viewer is starting
-		LOGGER.info("Starting AtlasStyler.. " + AVSwingUtil.getVersionInfo());
+		// Output information about the LGPL license
+		AVSwingUtil.logLGPLCopyright(LOGGER);
 
-		AtlasTask<Object> startupTask = new AtlasTask<Object>(null, AtlasStyler
-				.R("AtlasStylerGUI.processMsg.starting_atlas_stlyer")) {
+		System.setProperty("file.encoding", "UTF-8");
 
-			@Override
-			protected Object doInBackground() throws Exception {
-				AVSwingUtil.logLGPLCopyright(LOGGER);
-				/*
-				 * Register as a JNLP SingleInstance
-				 */
-				JNLPUtil.registerAsSingleInstance(AtlasStylerGUI.this, true);
-
-				// AVSwingUtil.cacheEPSG(null);
-
-				return null;
-			}
-
-			@Override
-			protected void done() {
-				super.done();
-			}
-
-		};
-		startupTask.execute();
+		JNLPUtil.registerAsSingleInstance(AtlasStylerGUI.this, true);
 
 		initialize();
 
@@ -148,18 +126,13 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			public void windowClosed(WindowEvent e) {
 				exitAS(0);
 			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				exitAS(0);
-			}
+			
 		});
 
 		/**
-		 * Setting a nice AtlasStyler icon
+		 * Setting a nice AtlasStylerGUI icons
 		 */
 		List<Image> icons = new ArrayList<Image>(2);
-
 		ClassLoader cl = ASUtil.class.getClassLoader();
 		final String imagePackageName = "icons/";
 		icons.add(new ImageIcon(cl.getResource(imagePackageName
@@ -171,13 +144,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		setIconImages(icons);
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
-
 		this.setSize(800, 600);
 		this.setContentPane(getJContentPane());
 		String AtlasStyler_MainWindowTitle = "AtlasStyler "
@@ -566,7 +533,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 				ASProps.set(ASProps.Keys.lastImportDirectory, selectedFile
 						.getAbsolutePath());
-				
+
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 						AtlasStylerGUI.this);
 
@@ -590,7 +557,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				} catch (ExecutionException e1) {
 					e1.printStackTrace();
 				}
-
 
 			}
 		});

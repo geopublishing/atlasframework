@@ -72,7 +72,7 @@ import skrueger.swing.HeapBar;
 public class GpFrame extends JFrame {
 	private static final Logger LOGGER = Logger.getLogger(GpFrame.class);
 
-	/** A reference to the existing GeoPublisher **/
+	/** A reference to the existing Geopublisher **/
 	private final GeopublisherGUI gp;
 
 	/**
@@ -88,7 +88,7 @@ public class GpFrame extends JFrame {
 	private GpStatusBar statusBar;
 
 	/**
-	 * Just a convenience method to access GeoPublisher translation
+	 * Just a convenience method to access Geopublisher translation
 	 */
 	private String R(String key, Object... values) {
 		return GeopublisherGUI.R(key, values);
@@ -462,7 +462,7 @@ public class GpFrame extends JFrame {
 		// rendererSwitchCheckBox.setSelected(true);
 
 		// ******************************************************************
-		// Switch GeoPublisher language
+		// Switch Geopublisher language
 		// ******************************************************************
 		if (ace != null && ace.getLanguages().size() > 1)
 			optionsMenu.add(getChangeLangJMenu());

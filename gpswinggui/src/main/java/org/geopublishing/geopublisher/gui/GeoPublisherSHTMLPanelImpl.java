@@ -144,7 +144,7 @@ package org.geopublishing.geopublisher.gui;
 // *
 // */
 //
-//public class GeoPublisherSHTMLPanelImpl extends SHTMLPanel implements CaretListener{
+//public class GeopublisherSHTMLPanelImpl extends SHTMLPanel implements CaretListener{
 //
 //  //private int renderMode = SHTMLEditorKit.RENDER_MODE_JAVA;
 //
@@ -173,7 +173,7 @@ package org.geopublishing.geopublisher.gui;
 //  
 //  public static void setTextResources(TextResources textResources){
 //      if (SHTMLPanelImpl.textResources != null) return;
-//      GeoPublisherSHTMLPanelImpl.textResources = textResources != null ? 
+//      GeopublisherSHTMLPanelImpl.textResources = textResources != null ? 
 //         textResources :
 //         readDefaultResources();
 //  }
@@ -300,19 +300,19 @@ package org.geopublishing.geopublisher.gui;
 //  public static final String findReplaceAction = "findReplace";
 //  public static  final String setStyleAction = "setStyle";
 //  
-//  public static GeoPublisherSHTMLPanelImpl getOwnerSHTMLPanel(Component c){
+//  public static GeopublisherSHTMLPanelImpl getOwnerSHTMLPanel(Component c){
 //      for(;;){
 //          if(c == null){
 //              return null;
 //          }
-//          if(c instanceof GeoPublisherSHTMLPanelImpl){
-//              return (GeoPublisherSHTMLPanelImpl)c;
+//          if(c instanceof GeopublisherSHTMLPanelImpl){
+//              return (GeopublisherSHTMLPanelImpl)c;
 //          }
 //          c = c.getParent();
 //      }
 //  }
 //  /** construct a new main application frame */
-//  public GeoPublisherGeoPublisherSHTMLPanelImpl() {
+//  public GeopublisherGeopublisherSHTMLPanelImpl() {
 //	  super();
 //    enableEvents(AWTEvent.WINDOW_EVENT_MASK);
 //    initActions();
@@ -481,7 +481,7 @@ package org.geopublishing.geopublisher.gui;
 //    JMenu pMenu = dynRes.getMenu(pluginMenuId);
 //    JMenu hMenu;
 //    if(pMenu != null) {
-//      Container contentPane = GeoPublisherGeoPublisherSHTMLPanelImpl.this;
+//      Container contentPane = GeopublisherGeopublisherSHTMLPanelImpl.this;
 //      pluginManager.loadPlugins();
 //      Enumeration plugins = pluginManager.plugins();
 //      SHTMLPlugin pi;
@@ -1248,9 +1248,9 @@ package org.geopublishing.geopublisher.gui;
 //
 //    public void propertyChange(PropertyChangeEvent e) {
 //      String propertyName = e.getPropertyName();
-//      if (e.getPropertyName().equals(GeoPublisherSHTMLPanelImpl.ACTION_SELECTED_KEY)) {
+//      if (e.getPropertyName().equals(GeopublisherSHTMLPanelImpl.ACTION_SELECTED_KEY)) {
 //        //System.out.println("propertyName=" + propertyName + " newValue=" + e.getNewValue());
-//        if(e.getNewValue().toString().equals(GeoPublisherSHTMLPanelImpl.ACTION_SELECTED)) {
+//        if(e.getNewValue().toString().equals(GeopublisherSHTMLPanelImpl.ACTION_SELECTED)) {
 //          button.setSelected(true);
 //        }
 //        else {
@@ -1264,7 +1264,7 @@ package org.geopublishing.geopublisher.gui;
 //  public AttributeSet getMaxAttributes(final int caretPosition) {
 //    final Element paragraphElement = getSHTMLDocument().getParagraphElement(caretPosition);
 //      final StyleSheet styleSheet = getSHTMLDocument().getStyleSheet();
-//      return GeoPublisherSHTMLPanelImpl.getMaxAttributes(paragraphElement, styleSheet);
+//      return GeopublisherSHTMLPanelImpl.getMaxAttributes(paragraphElement, styleSheet);
 //}
 //
 //  /**
@@ -1294,7 +1294,7 @@ package org.geopublishing.geopublisher.gui;
 //  }
 //
 //  Frame getMainFrame() {
-//    return JOptionPane.getFrameForComponent(GeoPublisherSHTMLPanelImpl.this);
+//    return JOptionPane.getFrameForComponent(GeopublisherSHTMLPanelImpl.this);
 //}
 //
 //static public AttributeSet getMaxAttributes(Element e, StyleSheet s) {
