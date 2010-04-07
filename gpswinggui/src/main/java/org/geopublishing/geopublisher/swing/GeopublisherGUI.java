@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.geopublisher;
+package org.geopublishing.geopublisher.swing;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
