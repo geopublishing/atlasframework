@@ -15,6 +15,27 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+			
+
+		</plugins>
+
+	</build>
+
 	<profiles>
 		<profile>
 			<!--
@@ -25,43 +46,44 @@
 			<build>
 				<plugins>
 
-					<plugin>
-						<groupId>org.codehaus.mojo.webstart</groupId>
-						<artifactId>webstart-maven-plugin</artifactId>
-						<version>1.0-alpha-2</version>
 
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<goals>
-									<goal>jnlp</goal>
-								</goals>
-							</execution>
-						</executions>
+			<plugin>
+				<groupId>org.codehaus.mojo.webstart</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<version>1.0-alpha-2</version>
 
-						<configuration>
-							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
+				<executions>
+					<execution>
+						<phase>deploy</phase>
+						<goals>
+							<goal>jnlp</goal>
+						</goals>
+					</execution>
+				</executions>
 
-							<jnlp>
-								<inputTemplate>as_template.jnlp</inputTemplate>
-								<outputFile>as.jnlp</outputFile>
-								<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-							</jnlp>
+				<configuration>
+					<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
-							<sign>
-								<keypass>wasser</keypass>
-								<storepass>wasser</storepass>
-								<alias>IMPETUS</alias>
-							</sign>
+					<jnlp>
+						<inputTemplate>as_template.jnlp</inputTemplate>
+						<outputFile>as.jnlp</outputFile>
+						<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+					</jnlp>
 
-							<verbose>false</verbose>
-							<excludeTransitive>false</excludeTransitive>
+					<sign>
+						<keypass>wasser</keypass>
+						<storepass>wasser</storepass>
+						<alias>IMPETUS</alias>
+					</sign>
 
-							<pack200>false</pack200> <!-- still buggy sadly -->
-							<gzip>false</gzip> <!-- still buggy sadly -->
+					<verbose>false</verbose>
+					<excludeTransitive>false</excludeTransitive>
 
-						</configuration>
-					</plugin>
+					<pack200>false</pack200> <!-- still buggy sadly -->
+					<gzip>false</gzip> <!-- still buggy sadly -->
+
+				</configuration>
+			</plugin>
 
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -139,24 +161,6 @@
 	</profiles>
 
 
-	<build>
-
-		<plugins>
-
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-						</manifest>
-					</archive>
-				</configuration>
-			</plugin>
-
-		</plugins>
-
-	</build>
 
 	<dependencies>
 
