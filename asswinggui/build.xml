@@ -41,10 +41,13 @@
 
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
 		<!-- Besser wenn hier auf die Daten in einem Linux unstable repository verwiesen würde -->
-		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-r${ant.buildNumber}-full.zip"/>
-		<symlink linkfilename="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-SNAPSHOT-full.zip" link="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-r${ant.buildNumber}-full.zip"></symlink>
-<!--		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.tar.gz" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-r${ant.buildNumber}-full.tar.gz"/> -->
+		<copy file="${basedir}/target/asswinggui-${ant.project.version}-r${ant.buildNumber}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-r${ant.buildNumber}-full.zip" />
+		
+		<delete file="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-full.zip" failonerror="false" description="delete any pre-existing symlink" />
 
+		<exec executable="/bin/ln" failifexecutionfails="true" description="create a new symlink so that drupal can determine the size">
+			<arg line="-s /var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-r${ant.buildNumber}-full.zip /var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-full.zip" />
+		</exec>
 	</target>
 
 </project>
