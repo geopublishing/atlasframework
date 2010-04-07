@@ -19,6 +19,18 @@
 
 		<plugins>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
 
 		</plugins>
 
@@ -34,19 +46,6 @@
 			<id>prodi</id>
 			<build>
 				<plugins>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-jar-plugin</artifactId>
-						<configuration>
-							<archive>
-								<manifest>
-									<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
-									<addClasspath>true</addClasspath>
-								</manifest>
-							</archive>
-						</configuration>
-					</plugin>
 
 					<plugin>
 						<groupId>org.codehaus.mojo.webstart</groupId>
@@ -86,9 +85,9 @@
 						</configuration>
 					</plugin>
 
-
 					<plugin>
 						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.3</version>
 						<executions>
 							<execution>
 								<phase>deploy</phase>
