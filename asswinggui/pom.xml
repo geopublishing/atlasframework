@@ -53,8 +53,8 @@
 							<verbose>true</verbose>
 							<excludeTransitive>false</excludeTransitive>
 
-							<!--						<pack200>true</pack200>-->
-							<!--						<gzip>true</gzip>-->
+							<pack200>false</pack200>
+							<gzip>false</gzip>
 
 						</configuration>
 					</plugin>
@@ -117,7 +117,7 @@
 						<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
 					-->
 					<setExeName>false</setExeName>
-					<setJarName>false</setJarName>
+					<setJarName>true</setJarName>
 					<includeDependencies>true</includeDependencies>
 					<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
 				</configuration>
