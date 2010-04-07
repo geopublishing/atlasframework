@@ -15,7 +15,7 @@
 <name>file.encoding</name>
 <value>UTF-8</value>
 <name>java.library.path</name>
-<value>lib/native</value>
+<value>native</value>
 </javaProperties>
 <mainClassName>skrueger.atlas.AtlasViewer</mainClassName>
 <maximumMemoryHeap>241172480</maximumMemoryHeap>

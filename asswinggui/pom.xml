@@ -117,6 +117,7 @@
 						<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
 					-->
 					<setExeName>false</setExeName>
+					<setJarName>false</setJarName>
 					<includeDependencies>true</includeDependencies>
 					<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
 				</configuration>
