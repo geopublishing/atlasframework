@@ -8,11 +8,11 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
-	
+
 		<fileSet>
 			<filtered>true</filtered>
 			<directory>src/assembly/resources/</directory>
-			<outputDirectory>/AtlasStyler</outputDirectory>
+			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 			<includes>
 				<include>README_standalone.txt</include>
 				<include>start_AtlasStyler.bat</include>
@@ -23,7 +23,7 @@
 			<!-- Make the linux start_AtlasStyler.sh executable -->
 			<filtered>true</filtered>
 			<directory>src/assembly/resources/</directory>
-			<outputDirectory>/AtlasStyler</outputDirectory>
+			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 			<includes>
 				<include>start_AtlasStyler.sh</include>
 			</includes>
@@ -32,13 +32,19 @@
 
 		<fileSet>
 			<filtered>false</filtered>
-			<directory>target/AtlasStyler.exe</directory>
-			
+			<directory>target</directory>
+			<includes>
+				<include>AtlasStyler.exe</include>
+			</includes>
+			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 		</fileSet>
+
 	</fileSets>
+
 	<dependencySets>
+	<!-- Add all the .jar dependencies to the .zip -->
 		<dependencySet>
-			<outputDirectory>/AtlasStyler</outputDirectory>
+			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
 		</dependencySet>

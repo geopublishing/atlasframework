@@ -9,7 +9,7 @@
 <bundledJVMPath>jre</bundledJVMPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
-<executableName>atlasStyler.exe</executableName>
+<executableName>AtlasStyler.exe</executableName>
 <initialMemoryHeap>115343360</initialMemoryHeap>
 <javaProperties>
 <name>file.encoding</name>
