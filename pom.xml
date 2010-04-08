@@ -21,6 +21,23 @@
 		<module>gpswinggui</module>
 	</modules>
 
+	<profiles>
+		<profile>
+			<id>w2buero</id>
+			<modules>
+				<module>../../schmitzm/trunk</module>
+			</modules>
+		</profile>
+
+		<profile>
+			<id>ms_kallisto</id>
+			<modules>
+				<module>../../schmitzm/trunk</module>
+			</modules>
+		</profile>
+
+	</profiles>
+
 	<licenses>
 		<license>
 			<name>Lesser General Public License (LGPL)</name>
