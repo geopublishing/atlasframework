@@ -106,7 +106,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-3</version>
+				<version>1.0-beta-4</version>
 				<executions>
 					<execution>
 						<id>buildnumber in phase initialize</id>
@@ -115,39 +115,42 @@
 							<goal>create</goal>
 						</goals>
 					</execution>
-<!--					<execution>-->
-<!--						<id>vorm packen auch nochmal</id>-->
-<!--						<phase>prepare-package</phase>-->
-<!--						<goals>-->
-<!--							<goal>create</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--					<execution>-->
-<!--						<id>und beim deploy</id>-->
-<!--						<phase>deploy</phase>-->
-<!--						<goals>-->
-<!--							<goal>create</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--					<execution>-->
-<!--						<id>und beim installieren</id>-->
-<!--						<phase>install</phase>-->
-<!--						<goals>-->
-<!--							<goal>create</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--						<execution>-->
-<!--						<id>und beim assmenblien</id>-->
-<!--						<phase>assembly</phase>-->
-<!--						<goals>-->
-<!--							<goal>create</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>vorm packen auch nochmal</id>-->
+					<!--						<phase>prepare-package</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>create</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>und beim deploy</id>-->
+					<!--						<phase>deploy</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>create</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+					<!--					<execution>-->
+					<!--						<id>und beim installieren</id>-->
+					<!--						<phase>install</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>create</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
+					<!--						<execution>-->
+					<!--						<id>und beim assmenblien</id>-->
+					<!--						<phase>assembly</phase>-->
+					<!--						<goals>-->
+					<!--							<goal>create</goal>-->
+					<!--						</goals>-->
+					<!--					</execution>-->
 
 				</executions>
 				<configuration>
 					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
 				</configuration>
 			</plugin>
 
@@ -170,7 +173,9 @@
 
 		</plugins>
 
-<!--		<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>-->
+		<!--
+			<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
+		-->
 	</build>
 
 
@@ -216,23 +221,27 @@
 
 	<pluginRepositories>
 
-<!--		<pluginRepository>-->
-<!--			<id>central</id>-->
-<!--			<name>Maven Central repository</name>-->
-<!--			<url>http://repo1.maven.org/maven2</url>-->
-<!--		</pluginRepository>-->
+		<!--		<pluginRepository>-->
+		<!--			<id>central</id>-->
+		<!--			<name>Maven Central repository</name>-->
+		<!--			<url>http://repo1.maven.org/maven2</url>-->
+		<!--		</pluginRepository>-->
 <!---->
-<!--		<pluginRepository>-->
-<!--			<id>insight.release.repo</id>-->
-<!--			<name>Insight Release Repository</name>-->
-<!--			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url>-->
-<!--		</pluginRepository>-->
+		<!--		<pluginRepository>-->
+		<!--			<id>insight.release.repo</id>-->
+		<!--			<name>Insight Release Repository</name>-->
+		<!--
+			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url>
+		-->
+		<!--		</pluginRepository>-->
 <!---->
-<!--		<pluginRepository>-->
-<!--			<id>insight.snapshot.repo</id>-->
-<!--			<name>Insight Snapshot Repository</name>-->
-<!--			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url>-->
-<!--		</pluginRepository>-->
+		<!--		<pluginRepository>-->
+		<!--			<id>insight.snapshot.repo</id>-->
+		<!--			<name>Insight Snapshot Repository</name>-->
+		<!--
+			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url>
+		-->
+		<!--		</pluginRepository>-->
 
 
 		<pluginRepository>
