@@ -850,7 +850,7 @@ public class AVUtil {
 			if (str.equals("${buildNumber}")) {
 				// We are in development or Maven didn't filter the properties
 				// while building.
-				return -1;
+				return 0;
 			}
 
 			return Integer.parseInt(str);
