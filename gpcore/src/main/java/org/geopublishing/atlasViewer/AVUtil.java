@@ -817,7 +817,9 @@ public class AVUtil {
 				openStream.close();
 			}
 
-			return releaseProps.getProperty("version", "development");
+			String versionProperty = releaseProps.getProperty("version", "development");
+			if (versionProperty.equals("${project.version}")) return "development";
+			return versionProperty;
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"/release.properties could not be read!", e);
