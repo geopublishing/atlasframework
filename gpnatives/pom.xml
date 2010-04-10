@@ -16,6 +16,8 @@
 	</parent>
 
 	<build>
+
+
 		<resources>
 
 			<resource>
@@ -28,6 +30,23 @@
 
 
 		</resources>
+		<plugins>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<index>
+							false
+						</index>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<!-- children modules only define their mainClass here  -->
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 </project>

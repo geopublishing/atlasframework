@@ -106,7 +106,7 @@ public class AVUtil {
 	 * @param values
 	 *            optinal values
 	 */
-	public static String R(String key, Object... values) {
+	public static String R(final String key, final Object... values) {
 		return RESOURCE.getString(key, values);
 	}
 
@@ -817,10 +817,11 @@ public class AVUtil {
 				openStream.close();
 			}
 
-			String versionProperty = releaseProps.getProperty("version", "development");
-			if (versionProperty.equals("${project.version}")) return "development";
+			final String defaultVer = "DEV";
+			final String versionProperty = releaseProps.getProperty("version", defaultVer);
+			if (versionProperty.equals("${project.version}")) return defaultVer;
 			return versionProperty;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(
 					"/release.properties could not be read!", e);
 		}
@@ -854,7 +855,7 @@ public class AVUtil {
 			}
 
 			return Integer.parseInt(str);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new RuntimeException(
 					"/release.properties could not be read!", e);
 		}
@@ -891,7 +892,7 @@ public class AVUtil {
 	/**
 	 * Print the GPL disclaimer to the given {@link Logger} as on INFO level.
 	 */
-	public static void logGPLCopyright(Logger logger) {
+	public static void logGPLCopyright(final Logger logger) {
 
 		logger
 				.info("\nThis program is free software: you can redistribute it and/or modify\n"
@@ -908,7 +909,7 @@ public class AVUtil {
 	/**
 	 * Print the LGPL disclaimer to the given {@link Logger} as on INFO level.
 	 */
-	public static void logLGPLCopyright(Logger logger) {
+	public static void logLGPLCopyright(final Logger logger) {
 
 		logger
 				.info("\nThis program is free software: you can redistribute it and/or modify\n"
@@ -934,31 +935,31 @@ public class AVUtil {
 	 * @param languages
 	 */
 	public static void applyDefaultTitleAndTranslationToLegend(
-			StyledFeaturesInterface<?> styledLayer,
-			FeatureChartStyle chartStyle, int rendererIndex, int seriesIdx,
-			List<String> languages) {
+			final StyledFeaturesInterface<?> styledLayer,
+			final FeatureChartStyle chartStyle, final int rendererIndex, final int seriesIdx,
+			final List<String> languages) {
 
-		Translation legendTooltipTranslation = chartStyle.getRendererStyle(
+		final Translation legendTooltipTranslation = chartStyle.getRendererStyle(
 				rendererIndex).getSeriesLegendTooltip(seriesIdx)
 				.getLabelTranslation();
 
-		Translation legendTitleTranslation = chartStyle.getRendererStyle(
+		final Translation legendTitleTranslation = chartStyle.getRendererStyle(
 				rendererIndex).getSeriesLegendLabel(seriesIdx)
 				.getLabelTranslation();
 
 		/* First series = DOMAIN */
-		String attName = chartStyle.getAttributeName(seriesIdx + 1);
+		final String attName = chartStyle.getAttributeName(seriesIdx + 1);
 
 		// AttributeMetadata attMeta =
 		// ASUtil.getAttributeMetadataFor(styledLayer,
 		// attName);
-		AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap()
+		final AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap()
 				.get(attName);
 
 		/*
 		 * This should trigger all listeners
 		 */
-		for (String lang : languages) {
+		for (final String lang : languages) {
 			String titleValue = attMeta.getTitle().get(lang);
 
 			/* Instead on an empty title, we use the raw attribute name */
@@ -988,22 +989,22 @@ public class AVUtil {
 	 * @param languages
 	 */
 	public static void applyDefaultTitleAndTranslationToAxis(
-			StyledFeaturesInterface styledLayer, FeatureChartStyle chartStyle,
-			int axis, int attribIdx, List<String> languages) {
+			final StyledFeaturesInterface styledLayer, final FeatureChartStyle chartStyle,
+			final int axis, final int attribIdx, final List<String> languages) {
 
-		Translation legendTitleTranslation = chartStyle.getAxisStyle(axis)
+		final Translation legendTitleTranslation = chartStyle.getAxisStyle(axis)
 				.getLabelTranslation();
 
 		/* First series = DOMAIN */
-		String attName = chartStyle.getAttributeName(attribIdx);
+		final String attName = chartStyle.getAttributeName(attribIdx);
 
-		AttributeMetadataInterface attMeta = styledLayer
+		final AttributeMetadataInterface attMeta = styledLayer
 				.getAttributeMetaDataMap().get(attName);
 
 		/*
 		 * This should trigger all listeners
 		 */
-		for (String lang : languages) {
+		for (final String lang : languages) {
 			String titleValue = attMeta.getTitle().get(lang);
 
 			/* Instead on an empty title, we use the raw attribute name */
@@ -1018,12 +1019,12 @@ public class AVUtil {
 	 * @param crs
 	 * @param value
 	 */
-	public static String formatCoord(CoordinateReferenceSystem crs, double value) {
+	public static String formatCoord(final CoordinateReferenceSystem crs, final double value) {
 
-		StringBuffer sb = new StringBuffer(DecimalFormat.getNumberInstance()
+		final StringBuffer sb = new StringBuffer(DecimalFormat.getNumberInstance()
 				.format(value));
 
-		Unit<?> unit = CRSUtilities.getUnit(crs.getCoordinateSystem());
+		final Unit<?> unit = CRSUtilities.getUnit(crs.getCoordinateSystem());
 		if (unit != null) {
 			sb.append(unit.toString());
 		}
@@ -1031,12 +1032,12 @@ public class AVUtil {
 		return sb.toString();
 	}
 
-	public static JDialog getWaitDialog(Component owner, String msg) {
+	public static JDialog getWaitDialog(final Component owner, final String msg) {
 		final JDialog waitFrame = new JDialog(SwingUtil.getParentWindow(owner));
 
 		waitFrame.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 
-		JPanel cp = new JPanel(new MigLayout());
+		final JPanel cp = new JPanel(new MigLayout());
 		final JLabel label = new JLabel(msg, Icons.ICON_TASKRUNNING_BIG,
 				JLabel.LEADING);
 		cp.add(label);
@@ -1053,7 +1054,7 @@ public class AVUtil {
 	public static int getVersionMaj() {
 		try {
 			return Integer.parseInt(getVersion().split("\\.")[0]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return 0;
 		}
 	}
@@ -1061,7 +1062,7 @@ public class AVUtil {
 	public static int getVersionMin() {
 		try {
 			return Integer.parseInt(getVersion().split("\\.")[1]);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			return 0;
 		}
 

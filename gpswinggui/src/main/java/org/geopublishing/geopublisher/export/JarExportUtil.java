@@ -24,7 +24,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
@@ -50,6 +53,7 @@ import net.charabia.jsmoothgen.skeleton.SkeletonBean;
 import net.charabia.jsmoothgen.skeleton.SkeletonList;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Logger;
@@ -63,12 +67,14 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.map.Map;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
+import org.geotools.data.DataUtilities;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
@@ -89,711 +95,47 @@ import sun.tools.jar.Main;
  * <code>start.sh</code> to launch the atlas if autostart is disabled.<br>
  * The folder may also be served by a webserver. Linking to the
  * <code>.jnlp</code> file will start the atlas using JavaWebStart
- * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
  */
 public class JarExportUtil {
 
-	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
-
 	/**
-	 * The name of the JAR fiel which contains general atlas resources like
-	 * HTML-pages, atlas.xml, etc...
+	 * The name of the JAR file which contains general atlas resources like
+	 * HTML-pages, atlas.xml, etc…
 	 */
 	private final static String ARJAR_FILENAME = "atlas_resources.jar";
 
 	/**
-	 * The filename of the JNLP file which can be used to start the atlas from
-	 * the internet
-	 */
-	public static final String JNLP_FILENAME = "atlasViewer.jnlp";
-
-	private final AtlasConfigEditable ace;
-
-	private File targetDirJWS, targetDirDISK;
-
-	private File tempDir;
-
-	private List<DpEntry<? extends ChartStyle>> unusedDpes;
-
-	// private final File targetDir;
-
-	private ResultProgressHandle progress;
-
-	private int currSteps = 0;
-
-	private int totalSteps = 1;
-
-	private final Boolean toDisk;
-
-	private final Boolean toJws;
-
-	private final Boolean copyJRE;
-
-	private volatile boolean aborted = false;
-
-	/**
 	 * Files next to atlas.gpa will be copied to the folders without putting
-	 * them in a JAR. This can be usefull for exmaple for PDF files that should
+	 * them in a JAR. This can be useful for example for PDF files that should
 	 * be referencable from within the atlas, but also reside uncompressed on
 	 * the CD root directory.
 	 */
 	private static final FilenameFilter filterForRootLevelFiles = new FilenameFilter() {
 
 		@Override
-		public boolean accept(File dir, String name) {
+		public boolean accept(final File dir, final String name) {
 
 			// This is a list of files expected in ad that shall not be copied
 			if (name.equalsIgnoreCase(AtlasConfigEditable.ATLAS_GPA_FILENAME))
 				return false;
 			if (name.equalsIgnoreCase(AVProps.PROPERTIESFILE_RESOURCE_NAME))
 				return false;
-			if (name.equalsIgnoreCase(AtlasConfigEditable.ATLASDATA_DIRNAME))
+			if (name.equalsIgnoreCase(AtlasConfig.ATLASDATA_DIRNAME))
 				return false;
 
 			return true;
 		}
 	};
 
-	protected void info(String msg) {
-		if (progress != null) {
-
-			if (currSteps < totalSteps)
-				currSteps++;
-			else {
-				currSteps++;
-				totalSteps = currSteps + 3;
-				LOGGER.warn("overcounting " + currSteps + " to " + totalSteps);
-			}
-			progress.setProgress(msg, currSteps, totalSteps);
-		} else
-			LOGGER.info(msg);
-	}
-
 	/**
-	 * Initializes an {@link JarExportUtil} object to do the real work.
-	 * 
-	 * @param ace
-	 *            Instance of {@link AtlasConfigEditable} to export.
-	 * @param exportDirectory
-	 *            A {@link File} denoting the main export folder where DISK and
-	 *            JWS will be created.
-	 * @param toDisk
-	 *            export the DISK version?
-	 * @param toJws
-	 *            export the JWS version?
-	 * @param copyJRE
-	 *            If {@link #toDisk} is <code>true</code>, this controls whether
-	 *            the locally installed JRE should be copied to DISK/jre. May be
-	 *            <code>null</code>.
+	 * The filename of the JNLP file which can be used to start the atlas from
+	 * the Internet.
 	 */
-	public JarExportUtil(AtlasConfigEditable ace_, File exportDirectory,
-			Boolean toDisk, Boolean toJws, Boolean copyJRE) {
-		this.ace = ace_;
-		this.toDisk = toDisk;
-		this.toJws = toJws;
-		this.copyJRE = copyJRE;
+	public static final String JNLP_FILENAME = "atlasViewer.jnlp";
 
-		if (toDisk) {
-			targetDirDISK = new File(exportDirectory, "DISK");
-			targetDirDISK.mkdirs();
-		}
+	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
-		if (toJws) {
-			targetDirJWS = new File(exportDirectory, "JWS");
-			targetDirJWS.mkdirs();
-		}
-
-	}
-
-	/**
-	 * This approach could be problematic if there are more than one exports
-	 * running.
-	 */
-	public void deleteOldTempExportDirs() {
-
-		// Create a temporary directory to put stuff into before we split it
-		// into two directories
-
-		/**
-		 * Delete any old/parallel export directories
-		 */
-		IOFileFilter oldDirs = FileFilterUtils
-				.makeDirectoryOnly(FileFilterUtils
-						.prefixFileFilter(AVUtil.ATLAS_TEMP_FILE_ID + "export"));
-		String[] list = IOUtil.getTempDir().list(oldDirs);
-		for (String deleteOldTempDirName : list) {
-			try {
-				FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
-						deleteOldTempDirName));
-			} catch (Exception e) {
-				ExceptionDialog.show(null, e);
-			}
-		}
-	}
-
-	/**
-	 * Exports the given {@link AtlasConfig} to two folders: One for
-	 * CD/USB-STick, one to be run via JavaWebStart
-	 * 
-	 * @throws Exception
-	 * 
-	 */
-	public void export(ResultProgressHandle progress) throws Exception {
-
-		this.progress = progress;
-
-		totalSteps = 10;
-
-		/** One for every root-level file **/
-		totalSteps += ace.getAtlasDir().listFiles(filterForRootLevelFiles).length;
-
-		/**
-		 * One for ever DPEntry
-		 */
-		totalSteps += ace.getDataPool().size() - getUnusedDpes().size();
-
-		/**
-		 * One for every Library and every Native libs
-		 */
-		totalSteps += getLibraries().length;
-
-		if (toDisk) {
-			/** JSmooth */
-			totalSteps++;
-			totalSteps += getNatives().length;
-		}
-
-		if (toJws) {
-			/** JNLP creation */
-			totalSteps++;
-		}
-
-		info("Removing old files...");
-		if (toDisk)
-			FileUtils.deleteDirectory(targetDirDISK);
-		if (toJws)
-			FileUtils.deleteDirectory(targetDirJWS);
-
-		deleteOldTempExportDirs();
-
-		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
-
-		tempDir = new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
-				+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);
-		tempDir.mkdirs();
-
-		// Try catch to always delete the temp folder
-		try {
-
-			final File targetJar = new File(tempDir, ARJAR_FILENAME);
-			LOGGER.debug("Export of " + ace.getTitle() + " to " + targetJar);
-
-			// **********************************************************************
-			// Adding important stuff to the av_resources.jar
-			// atlas.xml
-			// html folder
-			// av.properties
-			// splashscreen.png
-			//
-			// NOT AtlasML.xsd - it's provided from av.jar via the internal
-			// webserver
-			//
-			// NOT av_log4j.xml - it's provided from av.jar via the internal
-			// webserver
-			// **********************************************************************
-			try {
-				info("Creating " + ARJAR_FILENAME); // 1st call to info
-
-				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + AtlasConfig.HTML_DIRNAME );
-				
-//				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-//						+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
-				addAtlasXMLToJar(targetJar, ace);
-
-				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + ace.getImagesDir().getName());
-
-				ace.getProperties().save(
-						new File(ace.getAtlasDir(),
-								AVProps.PROPERTIESFILE_RESOURCE_NAME));
-				addToJar(targetJar, ace.getAtlasDir(),
-						AVProps.PROPERTIESFILE_RESOURCE_NAME);
-
-				/**
-				 * Look for a user-defined splashscreen. If it doesn't exist,
-				 * ask the user if he wants to use the default one.
-				 */
-				if (ace.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
-					// final int useDefaultSplashConfirmDialog = JOptionPane
-					// .showConfirmDialog(
-					// null,
-					// AtlasCreator
-					// .R("Export.NoSplashscreenExists_DoYouWantToUseTheDefault"),
-					// null, JOptionPane.YES_NO_OPTION);
-					// if (useDefaultSplashConfirmDialog ==
-					// JOptionPane.YES_OPTION) {
-					FileUtils
-							.copyURLToFile(
-									GpUtil.class
-											.getClassLoader()
-											.getResource(
-													AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
-									new File(
-											ace.getAtlasDir(),
-											AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
-					// JOptionPane
-					// .showMessageDialog(
-					// null,
-					// AtlasCreator
-					// .R(
-					// "Export.NoSplashscreenExists_TheDefaultHasBeenCopied",
-					// new File(
-					// ace.getAtlasDir(),
-					// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)
-					// .getAbsolutePath()));
-					addToJar(targetJar, ace.getAtlasDir(),
-							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-					// }
-				} else {
-					addToJar(targetJar, ace.getAtlasDir(),
-							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-				}
-
-				info("Creating " + ARJAR_FILENAME); // 4th call to info
-
-				/**
-				 * Look for a user-defined icon.gif. If not available, copy the
-				 * default icon to where we expect the user icon and then add it
-				 * to the jar.
-				 */
-				URL iconURL = ace
-						.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
-				if (iconURL == null) {
-					iconURL = GpUtil.class.getClassLoader().getResource(
-							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
-					FileUtils.copyURLToFile(iconURL, new File(
-							ace.getAtlasDir(),
-							AtlasConfig.JWSICON_RESOURCE_NAME));
-				}
-				addToJar(targetJar, ace.getAtlasDir(),
-						AtlasConfig.JWSICON_RESOURCE_NAME);
-
-			} catch (final IOException e) {
-				throw new AtlasExportException("can't add basic data to "
-						+ targetJar.getAbsolutePath(), e);
-			}
-
-			// **********************************************************************
-			// Adding optional stuff to the av_resource.jar
-			// map_logo.png
-			// **********************************************************************
-			try {
-				LOGGER.debug("Adding optional stuff to " + targetJar.getName());
-				addToJar(targetJar, ace.getAtlasDir(),
-						AtlasConfig.MAPICON_RESOURCE_NAME);
-			} catch (final Exception e1) {
-				String msg = GpUtil.R("Export.NoMapiconExists_NoProblem",
-						ace.getAtlasDir() + AtlasConfig.MAPICON_RESOURCE_NAME);
-				JOptionPane.showMessageDialog(null, msg);
-			}
-
-			/*
-			 * Exporting the defaultcrs.prj if it exists
-			 */
-			final File defaultCrsFile = new File(ace.getAd(),
-					AtlasConfig.DEFAULTCRS_FILENAME);
-			if (defaultCrsFile.exists() && defaultCrsFile.length() > 2) {
-				addToJar(targetJar, ace.getAtlasDir(), "ad/"
-						+ AtlasConfig.DEFAULTCRS_FILENAME);
-			} else {
-				LOGGER
-						.info("No exporting defaultcrs.prj beacuse it doesn't exist or is too small");
-			}
-
-			copyAndSignLibs(targetJar, ace);
-
-			String[] listOfDataJarNames = new String[] {};
-			// Creating a JAR for every DpEntry
-			LOGGER.debug("Creating a JAR for every DpEntry used");
-			for (final DpEntry dpe : ace.getDataPool().values()) {
-				if (getUnusedDpes().contains(dpe))
-					continue;
-				File newJar = createJarFromDpe(dpe);
-				listOfDataJarNames = LangUtil.extendArray(listOfDataJarNames,
-						newJar.getAbsolutePath());
-			}
-
-			checkAbort();
-
-			//
-			// /**
-			// * Before the atlas_resources.jar is signed,
-			// * <ul>
-			// * <li>create an index</li>
-			// * <li>add classpath elemnt to manifest</li>
-			// */
-			//
-			// /**
-			// * now we create the index
-			// */
-			//
-			// Main jartool = new Main(System.out, System.err, "jar");
-			// String[] args = new String[] { "i", targetJar.getAbsolutePath()
-			// };
-			// args = LangUtil.extendArray(args, listOfDataJarNames);
-			// LOGGER.debug("Calling jartool with " + args);
-			// if (!jartool.run(args))
-			// throw new AtlasExportException("unable to add index to "
-			// + targetJar);
-			// /**
-			// * now we add the correct manifest
-			// */
-			// jartool = new Main(System.out, System.err, "jar");
-			// args = new String[] { "ufm", targetJar.getAbsolutePath(),
-			// getManifestFile(true).getAbsolutePath() };
-			// LOGGER.debug("Calling jartool with " + args);
-			// if (!jartool.run(args))
-			// throw new AtlasExportException(
-			// "unable to add correct manifest to " + targetJar);
-
-			LOGGER.debug("Finally signing the ataslResouce JAR...");
-			jarSign(targetJar);
-
-			/**
-			 * The icon.gif is needed for DISK and JWS. (DISK will put it into
-			 * the atlas.exe and delete it afterwards)
-			 */
-			URL iconURL = ace.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
-			if (!AVUtil.exists(iconURL)) {
-				// LOGGER
-				// .info("No user-defined icon provided. Using the default one.");
-				iconURL = GpUtil.class.getClassLoader().getResource(
-						AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
-			}
-			FileUtils.copyURLToFile(iconURL, new File(
-					targetJar.getParentFile(), "icon.gif"));
-
-			/*
-			 * Creating the JNLP...
-			 */
-			if (toJws) {
-				LOGGER.debug("Creating JNLP...");
-				createJNLP(ace, targetJar, GPProps.get(GPProps.Keys.jnlpURL,
-						"http://localhost/atlas"));
-
-				createIndexHTML(ace, targetJar);
-			}
-
-			/*
-			 * Creating start scripts etc...
-			 */
-			if (toDisk) {
-				createAuxiliaryDISKFiles(ace, targetJar);
-			}
-
-			createReadmeTXT(ace, targetJar);
-			copyLicenseHtml(ace, targetJar);
-
-			splitTempDir();
-
-			if (toDisk)
-				createJSmooth(targetDirDISK);
-
-			if (toDisk && copyJRE)
-				copyJRE(targetDirDISK);
-
-			// Files next to atlas.gpa will be copied to the folders without
-			// putting them in a JAR. This can be usefull for exmaple for PDF
-			// files that should be referencable from within the atlas, but also
-			// reside uncompressed on the CD root directory.
-			copyUncompressFiles();
-
-		} catch (AtlasCancelException cancel) {
-			// // In that case we delete the target directory.
-			info(GpUtil.R("Export.Cancelled.Msg"));
-			if (toDisk)
-				FileUtils.deleteDirectory(targetDirDISK);
-			if (toJws)
-				FileUtils.deleteDirectory(targetDirJWS);
-			throw cancel;
-		} finally {
-			// Whatever happened, we have to delete the temp dir
-
-			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
-
-			deleteOldTempExportDirs();
-		}
-	}
-
-	/**
-	 * Files next to atlas.gpa will be copied to the folders without putting
-	 * them in a JAR. This can be usefull for exmaple for PDF files that should
-	 * be referencable from within the atlas, but also reside uncompressed on
-	 * the CD root directory.
-	 * 
-	 * @throws IOException
-	 */
-	private void copyUncompressFiles() throws IOException {
-
-		File[] filesToCopy = ace.getAtlasDir().listFiles(
-				filterForRootLevelFiles);
-
-		for (File f : filesToCopy) {
-			if (f.isDirectory())
-				continue;
-			info("copy root-level file " + f.getName());
-			if (toDisk)
-				FileUtils.copyFileToDirectory(f, targetDirDISK);
-			if (toJws)
-				FileUtils.copyFileToDirectory(f, targetDirJWS);
-		}
-
-	}
-
-	/**
-	 * Monitors the isRunning method of {@link #progress}. If it has been
-	 * canceled throws an {@link AtlasExportCancelledException}.
-	 * 
-	 * @throws AtlasExportCancelledException
-	 */
-	private void checkAbort() throws AtlasCancelException {
-		// if (progress != null && !progress.isRunning())
-		if (aborted)
-			throw new AtlasCancelException();
-	}
-
-	/**
-	 * Copies the JRE we are running on into the DISK/jre folder. On Linux this
-	 * will be skipped and a message will be shown instead.
-	 * 
-	 * @param diskDir
-	 *            The DISK export folder.
-	 * @throws IOException
-	 */
-	private void copyJRE(File diskDir) throws IOException {
-		if (AVUtil.getOSType() == OSfamiliy.windows) {
-			info("Copying JRE"); // i8n
-			FileUtils.copyDirectory(new File(System.getProperty("java.home")),
-					new File(targetDirDISK, "jre"));
-		}
-	}
-
-	/**
-	 * Call JSmooth to create an .exe file
-	 * 
-	 * @param targetDirDISK2
-	 *            The folder where the exported disk version of the atlas
-	 *            exists.
-	 * @throws Exception
-	 */
-	public void createJSmooth(File atlasDir) throws Exception {
-		info("Creating JSmooth atlas.exe"); // i8n
-
-		/**
-		 * Copy JSmooth skeleton stull to DISK/autodownload-wrapper/*
-		 */
-		File jsmoothSkelDir = new File(atlasDir, "autodownload-wrapper");
-		jsmoothSkelDir.mkdirs();
-
-		ClassLoader cl = GpUtil.class.getClassLoader();
-
-		File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(cl
-				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
-				jsmoothExeFile);
-		File jsmoothSkelFile = new File(jsmoothSkelDir, "autodownload.skel");
-		FileUtils.copyURLToFile(cl
-				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2),
-				jsmoothSkelFile);
-
-		/**
-		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
-		 */
-		File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
-		FileUtils.copyURLToFile(cl
-				.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
-				destinationProjectFile);
-		try {
-
-			/**
-			 * Start the creation of .EXE
-			 */
-
-			JSmoothModelBean model = JSmoothModelPersistency
-					.load(destinationProjectFile);
-			File basedir = destinationProjectFile.getParentFile();
-			File skelbase = basedir;
-
-			SkeletonList skelList = new SkeletonList(skelbase);
-
-			File out = new File(basedir, model.getExecutableName());
-
-			SkeletonBean skel = skelList.getSkeleton(model.getSkeletonName());
-			File skelroot = skelList.getDirectory(skel);
-
-			ExeCompiler compiler = new ExeCompiler();
-			compiler.compile(skelroot, skel, basedir, model, out);
-
-		} finally {
-
-			System.gc();
-			try {
-				/**
-				 * Cleanup JSmooth stuff. We saw some strange "can't delete file"
-				 * exceptions on WINDOWS, so we use the canonical name and retry
-				 * if it fails.
-				 * http://jira.codehaus.org/secure/attachment/27455/
-				 * MCLEAN-file-management.patch
-				 */
-				if (!jsmoothExeFile.getCanonicalFile().delete())
-					jsmoothExeFile.getCanonicalFile().delete();
-				if (!jsmoothSkelFile.getCanonicalFile().delete())
-					jsmoothSkelFile.getCanonicalFile().delete();
-				if (!jsmoothSkelDir.getCanonicalFile().delete())
-					jsmoothSkelDir.getCanonicalFile().delete();
-				new File(atlasDir, "icon.gif").getCanonicalFile().delete();
-				destinationProjectFile.delete();
-			} catch (IOException e) {
-				LOGGER
-						.warn(
-								"Error during cleanup. Some unused files might be left in you DISK directory.",
-								e);
-				throw new AtlasExportException(
-						// i8n
-						"Error during cleanup. Some unused files might be left in you DISK directory.",
-						e);
-			}
-		}
-
-	}
-
-	/**
-	 * The export first exports everything into one temp folder. Now we have to
-	 * split it into two folders: ONe for JWS, one for DISK
-	 * 
-	 * @throws IOException
-	 */
-	private void splitTempDir() throws IOException {
-		info("Moving files"); // i8n
-
-		if (toDisk) {
-
-			/**
-			 * Exclusively for DISK
-			 */
-			FileUtils.moveFileToDirectory(new File(tempDir, "start.bat"),
-					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "start.sh"),
-					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "autorun.inf"),
-					targetDirDISK, true);
-			// Icon.gif is used (and deleted afterwards) by JSmooth
-			FileUtils.copyFileToDirectory(new File(tempDir, "icon.gif"),
-					targetDirDISK, true);
-
-			/**
-			 * Creates an empty jre directory.
-			 */
-			new File(targetDirDISK, "jre").mkdir();
-		}
-
-		if (toJws) {
-
-			/**
-			 * Exclusively for JWS
-			 */
-			FileUtils.moveFileToDirectory(new File(tempDir, "index.html"),
-					targetDirJWS, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, JNLP_FILENAME),
-					targetDirJWS, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "icon.gif"),
-					targetDirJWS, true);
-			FileUtils.moveFileToDirectory(
-					new File(tempDir, "splashscreen.png"), targetDirJWS, true);
-		}
-
-		/**
-		 * For both
-		 */
-		Collection<File> jars = FileUtils.listFiles(tempDir, new String[] {
-				"jar", "jar.pack.gz", "so", "dll" }, true);
-		for (File jar : jars) {
-
-			String diffDir = jar.getAbsolutePath().substring(
-					tempDir.getAbsolutePath().length() + 1);
-
-			/**
-			 * Copy files to DISK
-			 */
-			if (toDisk && (!jar.getName().endsWith("pack.gz"))) {
-				File targetSubDirDISK = new File(targetDirDISK, diffDir)
-						.getParentFile();
-				targetSubDirDISK.mkdirs();
-				FileUtils.copyFileToDirectory(jar, targetSubDirDISK);
-			}
-
-			/**
-			 * Copy files to JWS
-			 */
-			if (toJws) {
-				File targetSubDirJWS = new File(targetDirJWS, diffDir)
-						.getParentFile();
-				targetSubDirJWS.mkdirs();
-				FileUtils.moveFileToDirectory(jar, targetSubDirJWS, true);
-			}
-		}
-
-		if (toJws) {
-			FileUtils.copyFileToDirectory(new File(tempDir, "README.TXT"),
-					targetDirJWS);
-			FileUtils.copyFileToDirectory(new File(tempDir, "license.html"),
-					targetDirJWS);
-
-			/**
-			 * Copy the .htaccess from the deploy directory into the target
-			 * directory
-			 */
-			{
-				// command.add(ACProps.get(Keys.signingKeystore));
-				final URL htaccessURL = JarExportUtil.class.getClassLoader()
-						.getResource("skrueger/creator/export/htaccess");
-				FileUtils.copyURLToFile(htaccessURL, new File(targetDirJWS,
-						".htaccess"));
-			}
-		}
-
-		if (toDisk) {
-			FileUtils.moveFileToDirectory(new File(tempDir, "license.html"),
-					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "README.TXT"),
-					targetDirDISK, true);
-		}
-
-	}
-
-	protected static void createReadmeTXT(AtlasConfigEditable ace,
-			File targetJar) throws IOException {
-
-		// ******************************************************************
-		// README.TXT
-		// ******************************************************************
-		final FileWriter fileWriter = new FileWriter(new File(targetJar
-				.getParentFile(), "README.TXT"));
-		fileWriter.write("JAVA "
-				+ GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14")
-				+ " is required to run the atlas\n");
-		fileWriter
-				.write("For help and information go to http://www.geopublishing.org\n");
-		fileWriter
-				.write("The logfile is atlas.log in your user's folder for temporary files.\n");
-		fileWriter
-				.write("Something like: C:\\Dokumente und Einstellungen\\YourUsernamE\\Lokale Einstellungen\\Temp\n");
-
-		fileWriter.close();
-
-	}
+	private static final String LIBDIR = "."; // "lib";
 
 	/**
 	 * Create the files needed to enable autorun features for as many OSs as
@@ -803,11 +145,12 @@ public class JarExportUtil {
 	 * @param targetJar
 	 * @throws AtlasExportException
 	 */
-	private static void createAuxiliaryDISKFiles(AtlasConfigEditable ace,
-			File targetJar) throws AtlasExportException {
+	private static void createAuxiliaryDISKFiles(final AtlasConfigEditable ace,
+			final File targetJar) throws AtlasExportException {
 		try {
 
-			File startSHFile = new File(targetJar.getParentFile(), "start.sh");
+			final File startSHFile = new File(targetJar.getParentFile(),
+					"start.sh");
 			// ******************************************************************
 			// start.sh for Linux (the
 			// ******************************************************************
@@ -821,11 +164,9 @@ public class JarExportUtil {
 					.write("# This will start the Atlas with a maximum of "
 							+ xmx
 							+ "Mb of memory. Increase this number if have more memory to spend.\n");
-			fileWriter
-					.write("java -Xmx"
-							+ xmx
-							+ "m -Dfile.encoding=UTF-8 -Djava.library.path=lib/native -jar "
-							+ targetJar.getName() + "\n");
+			fileWriter.write("java -Xmx" + xmx
+					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIBDIR
+					+ "/native -jar " + targetJar.getName() + "\n");
 			fileWriter.close();
 			startSHFile.setExecutable(true, false);
 
@@ -854,10 +195,279 @@ public class JarExportUtil {
 			fileWriter.write("open=atlas.exe\n");
 			fileWriter.close();
 
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new AtlasExportException(
 					"Error creating the autorun.inf file", e);
 		}
+	}
+
+	/**
+	 * Creates an index.html that allows to start the Atlas
+	 * 
+	 * @param targetJar
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Kr&uuml;ger</a>
+	 * @param ace
+	 * @throws AtlasExportException
+	 */
+	private static void createIndexHTML(final AtlasConfigEditable ace,
+			final File targetJar) throws AtlasExportException {
+		// **********************************************************************
+		// 
+		// Creating the index.html
+		//
+		// **********************************************************************
+
+		try {
+			final File indexFile = new File(targetJar.getParent(), "index.html");
+			final FileWriter fileWriter = new FileWriter(indexFile);
+			fileWriter
+					.write("<?xml version='1.0' encoding='UTF-8'?><html><body>\n");
+			final Date date = new Date();
+			fileWriter.write("<h2>atlas build time: " + date.toString()
+					+ "</h2>\n");
+
+			/**
+			 * Start des JNLP über das deplayJava.js
+			 * https://jdk6.dev.java.net/deployment_advice
+			 * .html#Deploying_Java_Web_Start_Applica
+			 */
+			String jnlpLocation = GPProps.get(GPProps.Keys.jnlpURL,
+					"http://localhost/atlas");
+			if (!jnlpLocation.endsWith("/")) {
+				jnlpLocation += "/";
+			}
+
+			fileWriter
+					.write("<h2>"
+							+ ace.getTitle()
+							+ "</h2>"
+							+ "Created with <a href=\"http://www.geopublishing.org/Geopublisher\">Geopublisher</a>!"
+							+ "<br>Us can use the following button to start the atlas:<center>");
+
+			String jsScript = GPProps.get(Keys.JWSStartScript).replaceAll(
+					"__JNLPURL__", jnlpLocation + JNLP_FILENAME);
+			jsScript = jsScript.replace("__MINJAVAVERSION__", GPProps.get(
+					Keys.MinimumJavaVersion, "1.6.0_14"));
+			fileWriter.write(jsScript);
+
+			fileWriter.write("</center></html></body>\n");
+			fileWriter.close();
+		} catch (final FileNotFoundException e) {
+			throw new AtlasExportException("Creating index.html failed", e);
+		} catch (final IOException e) {
+			throw new AtlasExportException("Creating index.html failed", e);
+		}
+
+	}
+
+	protected static void createReadmeTXT(final AtlasConfigEditable ace,
+			final File targetJar) throws IOException {
+
+		// ******************************************************************
+		// README.TXT
+		// ******************************************************************
+		final FileWriter fileWriter = new FileWriter(new File(targetJar
+				.getParentFile(), "README.TXT"));
+		fileWriter.write("JAVA "
+				+ GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14")
+				+ " is required to run the atlas\n");
+		fileWriter
+				.write("For help and information go to http://www.geopublishing.org\n");
+		fileWriter
+				.write("The logfile is atlas.log in your user's folder for temporary files.\n");
+		fileWriter
+				.write("Something like: C:\\Dokumente und Einstellungen\\YourUsernamE\\Lokale Einstellungen\\Temp\n");
+
+		fileWriter.close();
+
+	}
+
+	private volatile boolean aborted = false;
+
+	private final AtlasConfigEditable ace;
+
+	/** Shall the local JRE be copied to the DISK folder? **/
+	private final Boolean copyJRE;
+
+	/** Internal counting for the percentage bar **/
+	private int currSteps = 0;
+
+	private ResultProgressHandle progress;
+
+	private File targetDirJWS, targetDirDISK;
+
+	private File tempDir;
+
+	/** Is export to DISK requested? **/
+	private final Boolean toDisk;
+	/** Is export to JWS requested? **/
+	private final Boolean toJws;
+
+	/** Internal counting for the percentage bar **/
+	private int totalSteps = 1;
+
+	private List<DpEntry<? extends ChartStyle>> unusedDpes;
+
+	/**
+	 * Initialized lazilly and caches where the JARs from the classpath come
+	 * from
+	 **/
+	private HashMap<String, URL> jarUrlsFromClassPath = null;
+
+	/**
+	 * Initializes an {@link JarExportUtil} object to do the real work.
+	 * 
+	 * @param ace
+	 *            Instance of {@link AtlasConfigEditable} to export.
+	 * @param exportDirectory
+	 *            A {@link File} denoting the main export folder where DISK and
+	 *            JWS will be created.
+	 * @param toDisk
+	 *            export the DISK version?
+	 * @param toJws
+	 *            export the JWS version?
+	 * @param copyJRE
+	 *            If {@link #toDisk} is <code>true</code>, this controls whether
+	 *            the locally installed JRE should be copied to DISK/jre. May be
+	 *            <code>null</code>.
+	 */
+	public JarExportUtil(final AtlasConfigEditable ace_,
+			final File exportDirectory, final Boolean toDisk,
+			final Boolean toJws, final Boolean copyJRE) {
+		ace = ace_;
+		this.toDisk = toDisk;
+		this.toJws = toJws;
+		this.copyJRE = copyJRE;
+
+		if (toDisk) {
+			targetDirDISK = new File(exportDirectory, "DISK");
+			targetDirDISK.mkdirs();
+		}
+
+		if (toJws) {
+			targetDirJWS = new File(exportDirectory, "JWS");
+			targetDirJWS.mkdirs();
+		}
+
+	}
+
+	/**
+	 * Can be called from external to abort the export process
+	 */
+	public void abort() {
+		aborted = true;
+	}
+
+	private void addAtlasXMLToJar(final File targetJar,
+			final AtlasConfigEditable ace) throws Exception {
+
+		// Prepare a temporary atlas.xml
+		final File adDir = new File(IOUtil.getTempDir(), "ad");
+		FileUtils.deleteDirectory(adDir);
+		adDir.mkdirs();
+		final File exportAtlasXml = new File(adDir,
+				AtlasConfig.ATLAS_XML_FILENAME);
+
+		// Configure the AML exporter
+		final AMLExporter amlExporter = new AMLExporter(ace);
+		amlExporter.setExportMode(true);
+		amlExporter.setAtlasXml(exportAtlasXml);
+
+		amlExporter.saveAtlasConfigEditable();
+
+		addToJar(targetJar, IOUtil.getTempDir(), "ad/"
+				+ AtlasConfig.ATLAS_XML_FILENAME);
+	}
+
+	/**
+	 * Adds/Updates an METAINF/INDEX.LIST entry to the given file.
+	 * 
+	 * @throws AtlasExportException
+	 * @throws IOException
+	 */
+	public void addJarIndex(final File jarFile) throws AtlasExportException,
+			IOException {
+
+		LOGGER.debug("adding index to " + jarFile.getAbsolutePath());
+		/**
+		 * Adding an index
+		 */
+		final Main jartool = new Main(System.out, System.err, "jar");
+		final boolean run = jartool.run(new String[] { "i",
+				jarFile.getAbsolutePath() });
+		if (!run) {
+			LOGGER.warn("unable to create index for jar " + jarFile);
+			// throw new AtlasExportException("unable to create index for jar "
+			// + jarFile);
+		}
+	}
+
+	/**
+	 * Adds the what-String recursively to the target JAR Any manifest inside
+	 * the target is deleted.. Call
+	 * {@link #addManifest(File, AtlasConfigEditable)} after you are done with
+	 * the jar If the jar doesn't exist, we create it.
+	 * 
+	 * @param targetJar
+	 *            Existing JAR to extend
+	 * 
+	 * @param relDir
+	 *            Directory with "ad" folder of the AtlasWorkingCopy
+	 * 
+	 * @param what
+	 *            command line argument of what to put into the jar. All
+	 *            '/'-chars will be replaces with the systemdependent
+	 *            File.seperator
+	 * @throws IOException
+	 * @throws AtlasExportException
+	 * @throws IOException
+	 * @throws Exception
+	 *             So many things can fail ;-)
+	 * 
+	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
+	 */
+	public void addToJar(final File targetJar, final File relDir,
+			final String what) throws AtlasExportException, IOException {
+
+		final String jarName = targetJar.getAbsolutePath();
+
+		/**
+		 * Creating a JAR
+		 */
+		final Main jartool = new Main(System.out, System.err, "jar");
+
+		if (!targetJar.exists()) {
+			final String manifestName = getManifestFile(true).getAbsolutePath();
+			LOGGER.debug("creating new (with manifest:)" + jarName);
+			final boolean run = jartool.run(new String[] { "cfm", jarName,
+					manifestName, "-C", relDir.getAbsolutePath(), what });
+			if (!run)
+				throw new AtlasExportException("unable to create jar "
+						+ targetJar + " with " + what);
+		} else {
+			LOGGER.debug("updating " + jarName + ", adding " + what);
+
+			final boolean run = jartool.run(new String[] { "uf", jarName, "-C",
+					relDir.getAbsolutePath(), what });
+			if (!run)
+				throw new AtlasExportException("unable to update jar "
+						+ targetJar + " with " + what);
+		}
+
+	}
+
+	/**
+	 * Monitors the isRunning method of {@link #progress}. If it has been
+	 * canceled throws an {@link AtlasExportCancelledException}.
+	 * 
+	 * @throws AtlasExportCancelledException
+	 */
+	private void checkAbort() throws AtlasCancelException {
+		// if (progress != null && !progress.isRunning())
+		if (aborted)
+			throw new AtlasCancelException();
 	}
 
 	/**
@@ -883,17 +493,17 @@ public class JarExportUtil {
 		 */
 
 		// The folder to copy to might not exist yet
-		final File targetNativeDir = new File(targetJar.getParentFile(),
-				"lib/native");
+		final File targetNativeDir = new File(targetJar.getParentFile(), ""
+				+ LIBDIR + "/native");
 		targetNativeDir.mkdirs();
 
 		/**
 		 * We do not export all files found in a directory, but rather we only
-		 * copy libraries mentioned in the .properties files of GP
+		 * copy libraries mentioned in the geopublisher.properties files of GP
 		 */
 
 		// TODO i would guess, that we only copy them as .so and .ddl files, if
-		// we export to DISK. FOr JWS we have a natives.jar !?
+		// we export to DISK. FOr JWS we have a gp-natives.jar !?
 		if (toDisk) {
 
 			for (final String nat : getNatives()) {
@@ -903,11 +513,12 @@ public class JarExportUtil {
 				// if (progressWindow != null && progressWindow.isCanceled())
 				// throw new AtlasExportCancelledException();
 
-				if (nat.trim().equals(""))
+				if (nat.trim().equals("")) {
 					continue;
+				}
 
 				try {
-					File destination = new File(targetNativeDir, nat);
+					final File destination = new File(targetNativeDir, nat);
 					destination.getParentFile().mkdirs();
 
 					URL fromURL = null;
@@ -918,19 +529,20 @@ public class JarExportUtil {
 					// a local directory.
 					boolean fromLocal;
 					try {
-						BasicService bs = (BasicService) ServiceManager
+						final BasicService bs = (BasicService) ServiceManager
 								.lookup("javax.jnlp.BasicService");
 
 						String path = bs.getCodeBase().getFile();
-						if (!path.endsWith("/"))
+						if (!path.endsWith("/")) {
 							path = path + "/";
+						}
 
 						/**
-						 * Normaly the natives are found in the "lib/native"
-						 * directory.
+						 * Normaly the natives are found in the
+						 * ""+LIBDIR+"/native" directory.
 						 */
 						String fileAndPath;
-						fileAndPath = path + "lib/native/" + nat;
+						fileAndPath = path + LIBDIR + "/native/" + nat;
 
 						fromURL = new URL(bs.getCodeBase().getProtocol(), bs
 								.getCodeBase().getHost(), bs.getCodeBase()
@@ -939,14 +551,14 @@ public class JarExportUtil {
 						fromURL.openConnection();
 
 						fromLocal = false;
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						/**
 						 * The exception means, that we have not been started
 						 * via JWS. So we just copy this file from the local lib
 						 * directory.
 						 */
 						fromLocal = true;
-						fromURL = new File("./lib/native/" + nat).toURI()
+						fromURL = new File(LIBDIR + "/native/" + nat).toURI()
 								.toURL();
 					}
 
@@ -958,7 +570,7 @@ public class JarExportUtil {
 
 					try {
 						FileUtils.copyURLToFile(fromURL, destination);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						final String errorMsg = GpUtil.R(
 								"Export.errorMsg.error_copy_lib_to_",
 								fromLocal, nat, fromURL, destination);
@@ -966,16 +578,7 @@ public class JarExportUtil {
 						throw new AtlasExportException(errorMsg, e);
 					}
 
-					// Since 2009-03-26 all JARs in lib/ are allready signed by
-					// me.
-					// if (libsFromLocal) {
-					// // The JARs in the local lib directory are not signed. so
-					// we
-					// // have to sign them.
-					// jarSign(destination);
-					// }
-
-				} catch (MalformedURLException e) {
+				} catch (final MalformedURLException e) {
 					final String errorMsg = "MalformedURLException during export of "
 							+ nat;
 					LOGGER.warn(errorMsg, e);
@@ -988,12 +591,12 @@ public class JarExportUtil {
 		/************
 		 * Exporting the .jar files now!
 		 */
-		final File targetLibDir = new File(targetJar.getParentFile(), "lib");
+		final File targetLibDir = new File(targetJar.getParentFile(), LIBDIR);
 
 		/**
 		 * We do not export all libs found in a directory, but rather we only
 		 * copy libraries mentioned in the .properties files of GP. The
-		 * natives.jar we add automatically.
+		 * gp-natives.jar we add automatically.
 		 */
 
 		boolean packNotExistingErrorAlreadyShown = false;
@@ -1005,8 +608,9 @@ public class JarExportUtil {
 			// if (progressWindow != null && progressWindow.isCanceled())
 			// throw new AtlasExportCancelledException();
 
-			if (lib.trim().equals(""))
+			if (lib.trim().equals("")) {
 				continue;
+			}
 
 			try {
 				File destination = new File(targetLibDir, lib);
@@ -1022,26 +626,27 @@ public class JarExportUtil {
 				// a local directory.
 				boolean libsFromLocal;
 				try {
-					BasicService bs = (BasicService) ServiceManager
+					final BasicService bs = (BasicService) ServiceManager
 							.lookup("javax.jnlp.BasicService");
 
 					String path = bs.getCodeBase().getFile();
-					if (!path.endsWith("/"))
+					if (!path.endsWith("/")) {
 						path = path + "/";
+					}
 
 					/**
-					 * Normally the libs are found in the "lib/" directory. The
-					 * "../av.jar" is different!
+					 * Normally the libs are found in the LIBDIR directory. The
+					 * "../gpcore.jar" is different!
 					 */
 					String fileAndPath;
-					if (lib.equals("../av.jar")) {
-						fileAndPath = path + "av.jar";
+					if (lib.equals("../gpcore.jar")) {
+						fileAndPath = path + "gpcore.jar";
 						destination = new File(targetLibDir.getParentFile(),
-								"av.jar");
+								"gpcore.jar");
 						destinationPackGz = new File(targetLibDir
-								.getParentFile(), "av.jar.pack.gz");
+								.getParentFile(), "gpcore.jar.pack.gz");
 					} else {
-						fileAndPath = path + "lib/" + lib;
+						fileAndPath = path + LIBDIR + "/" + lib;
 					}
 
 					fromURL = new URL(bs.getCodeBase().getProtocol(), bs
@@ -1052,7 +657,7 @@ public class JarExportUtil {
 							.getPort(), fileAndPath + ".pack.gz");
 
 					libsFromLocal = false;
-				} catch (javax.jnlp.UnavailableServiceException e) {
+				} catch (final javax.jnlp.UnavailableServiceException e) {
 
 					/**
 					 * The exception means, that we have not been started via
@@ -1060,22 +665,29 @@ public class JarExportUtil {
 					 * directory.
 					 */
 					libsFromLocal = true;
-					if (lib.equals("../av.jar")) {
-						fromURL = new File("./av.jar").toURI().toURL();
-						fromURLPackGZ = new File("./av.jar.pack.gz").toURI()
-								.toURL();
-						destinationPackGz = new File(targetLibDir
-								.getParentFile(), "av.jar.pack.gz");
-					} else {
-						fromURL = new File("./lib/" + lib).toURI().toURL();
-						fromURLPackGZ = new File("./lib/" + lib + ".pack.gz")
+					if (lib.equals("../gpcore.jar")) {
+						fromURL = DataUtilities.fileToURL(new File(
+								"./gpcore.jar"));
+						fromURLPackGZ = new File("./gpcore.jar.pack.gz")
 								.toURI().toURL();
+						destinationPackGz = new File(targetLibDir
+								.getParentFile(), "gpcore.jar.pack.gz");
+					} else {
+
+						fromURL = getJarUrl(lib);
+						fromURLPackGZ = DataUtilities.changeUrlExt(fromURL,
+								"jar.pack.gz");
+
+						// fromURL = DataUtilities.fileToURL(new File(LIBDIR +
+						// "/" + lib));
+						// fromURLPackGZ = DataUtilities.fileToURL(new
+						// File(LIBDIR + "/" + lib
+						// + ".pack.gz"));
 					}
 				}
 
-				final String msg = GpUtil.R(
-						"Export.progressMsg.copy_lib_to_", lib, destination
-								.toString());
+				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
+						lib, destination.toString());
 				LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
 				info(msg);
 
@@ -1084,25 +696,24 @@ public class JarExportUtil {
 
 					/*
 					 * Copy the .pack.gz files only if we export to JWS. Do not
-					 * export .pack.gz for natives.jar, because the extra
+					 * export .pack.gz for gp-natives.jar, because the extra
 					 * compression doesn't work for that kind of file.
 					 */
-					if (toJws && !lib.equals("natives.jar")) {
+					if (toJws && !lib.equals("gp-natives.jar")) {
 						try {
 							FileUtils.copyURLToFile(fromURLPackGZ,
 									destinationPackGz);
-						} catch (Exception e) {
+						} catch (final Exception e) {
 							if (packNotExistingErrorAlreadyShown == false) {
 								ExceptionDialog.show(null, new AtlasException(
-										GpUtil.R("Export.Error.Pack200"),
-										e));
+										GpUtil.R("Export.Error.Pack200"), e));
 							}
 							// Do not show this warning again next time.
 							packNotExistingErrorAlreadyShown = true;
 						}
 					} // toJws only
 
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					final String errorMsg = GpUtil.R(
 							"Export.errorMsg.error_copy_lib_to_",
 							libsFromLocal, lib, fromURL, destination);
@@ -1110,14 +721,7 @@ public class JarExportUtil {
 					throw new AtlasExportException(errorMsg, e);
 				}
 
-				// Since 2009-03-26 all JARs in lib/ are allready signed by me.
-				// if (libsFromLocal) {
-				// // The JARs in the local lib directory are not signed. so we
-				// // have to sign them.
-				// jarSign(destination);
-				// }
-
-			} catch (MalformedURLException e) {
+			} catch (final MalformedURLException e) {
 				final String errorMsg = "MalformedURLException during export of "
 						+ lib;
 				LOGGER.warn(errorMsg, e);
@@ -1128,21 +732,193 @@ public class JarExportUtil {
 
 	}
 
-	private String[] getNatives() {
-		final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
-		LOGGER
-				.debug("These native dependencies have been set in the .properties file: "
-						+ nativeLibsLine);
-		return nativeLibsLine.split(" ");
+	/**
+	 */
+	private URL getJarUrl(String jarName) {
+		if (jarUrlsFromClassPath == null) {
+			jarUrlsFromClassPath = new HashMap<String, URL>();
+			String[] st = System.getProperty("java.class.path").split(":");
+			for (String t : st) {
+				if (!t.endsWith("jar") && !t.endsWith("pack.gz")
+						&& !t.endsWith("zip")) {
+					LOGGER.warn(t + " was not a valid entry on the classpath.");
+					continue;
+				}
+
+				File file = new File(t);
+				if (!file.exists()) {
+					LOGGER.warn(t + " was not a valid entry on the classpath.");
+					continue;
+				}
+				jarUrlsFromClassPath.put(file.getName(), DataUtilities
+						.fileToURL(file));
+			}
+
+		}
+		
+		// Clean any path or ./ stuff
+		jarName = new File(jarName).getName();
+		
+		URL jarUrl = jarUrlsFromClassPath.get(jarName);
+		return jarUrl;
 	}
 
-	private String[] getLibraries() {
-		final String libsLine = "natives.jar "
-				+ GPProps.get(Keys.ClassPathLibs);
-		LOGGER
-				.debug("These dependencies have been set in the .properties file (natives.jar has been added automatically): "
-						+ libsLine);
-		return libsLine.split(" ");
+	/**
+	 * Copies the JRE we are running on into the DISK/jre folder. On Linux this
+	 * will be skipped and a message will be shown instead.
+	 * 
+	 * @param diskDir
+	 *            The DISK export folder.
+	 * @throws IOException
+	 */
+	private void copyJRE(final File diskDir) throws IOException {
+		if (AVUtil.getOSType() == OSfamiliy.windows) {
+			info("Copying JRE"); // i8n
+			FileUtils.copyDirectory(new File(System.getProperty("java.home")),
+					new File(targetDirDISK, "jre"));
+		}
+	}
+
+	private void copyLicenseHtml(final AtlasConfigEditable ace,
+			final File targetJar) {
+		// Copy the license.html to the main directory
+		try {
+
+			final File destLicense = new File(targetJar.getParentFile(),
+					"license.html");
+			FileUtils.copyURLToFile(GpUtil.class.getClassLoader().getResource(
+					AtlasConfig.LICENSEHTML_RESOURCE_NAME), destLicense);
+		} catch (final Exception e) {
+			ExceptionDialog
+					.show(
+							null,
+							new AtlasException(
+									"Non-fatal error while copying the licence.txt:"
+											+ e.getMessage()
+											+ "\n   "
+											+ GpUtil.class
+													.getResource(AtlasConfig.LICENSEHTML_RESOURCE_NAME),
+									e));
+		}
+	}
+
+	/**
+	 * Files next to atlas.gpa will be copied to the folders without putting
+	 * them in a JAR. This can be usefull for exmaple for PDF files that should
+	 * be referencable from within the atlas, but also reside uncompressed on
+	 * the CD root directory.
+	 * 
+	 * @throws IOException
+	 */
+	private void copyUncompressFiles() throws IOException {
+
+		final File[] filesToCopy = ace.getAtlasDir().listFiles(
+				filterForRootLevelFiles);
+
+		for (final File f : filesToCopy) {
+			if (f.isDirectory()) {
+				continue;
+			}
+			info("copy root-level file " + f.getName());
+			if (toDisk) {
+				FileUtils.copyFileToDirectory(f, targetDirDISK);
+			}
+			if (toJws) {
+				FileUtils.copyFileToDirectory(f, targetDirJWS);
+			}
+		}
+
+	}
+
+	/**
+	 * Creates a JAR-file that contains all files of one {@link DpEntry}. The
+	 * JAR will be automatically signed if {@link #signJARs} is
+	 * <code>true</code>. The JARs are not indexed, as indexing doesn't make
+	 * sense for a single jar.
+	 * <p>
+	 * Exception: The info HTML pages attached to {@link Map}s are stored in the
+	 * <ode>AVJAR_FILENAME</code> JAR.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Kr&uuml;ger</a>
+	 * 
+	 * @param dpe
+	 *            The {@link DpEntry} to export.
+	 * 
+	 * @throws AtlasExportException
+	 * @throws IOException
+	 * @throws AtlasCancelException
+	 */
+	public File createJarFromDpe(final DpEntry dpe)
+			throws AtlasExportException, IOException, AtlasCancelException {
+
+		checkAbort();
+
+		info(dpe.getType().getLine1() + ": " + dpe.getTitle().toString());
+		//
+		// final File newJar = new File(tempDir, dpe.getId() + ".jar");
+		// String jarName = newJar.getAbsolutePath();
+		// String absolutePath = ace.getAtlasDir().getAbsolutePath();
+		// String relpath = "ad" + File.separator + "data" + File.separator
+		// + dpe.getDataDirname();
+		// // String fileName = new File(absolutePath,
+		// relpath).getAbsolutePath();
+		// /**
+		// * Creating a JAR
+		// */
+		// Main jartool = new Main(System.out, System.err, "jar");
+		// boolean run = jartool.run(new String[] { "cMvf", jarName, "-C",
+		// absolutePath, relpath });
+		// if (!run)
+		// throw new AtlasExportException("Unable to create jar for dpe");
+
+		/**
+		 * Setting up a new JAR file
+		 */
+		// Setting up da JAR File for this DatapoolEntry
+		final File newJar = new File(tempDir, dpe.getId() + ".jar");
+		LOGGER.debug("Exportig to JAR " + newJar.getName() + "    in "
+				+ tempDir.toString());
+		final BufferedOutputStream bo = new BufferedOutputStream(
+				new FileOutputStream(newJar.getAbsolutePath()));
+		final JarOutputStream jo = new JarOutputStream(bo);
+
+		/**
+		 * Adding all the files as JarEntrys
+		 */
+		final String absolutePath = ace.getAtlasDir().getAbsolutePath();
+		final String relpath = "ad" + File.separator + "data" + File.separator
+				+ dpe.getDataDirname();
+
+		final Collection<File> listFiles = FileUtils.listFiles(new File(
+				absolutePath, relpath), GpUtil.BlacklistesFilesFilter,
+				GpUtil.BlacklistedFoldersFilter);
+		for (final File intoJarSource : listFiles) {
+
+			String act = intoJarSource.getPath();
+			final BufferedInputStream bi = new BufferedInputStream(
+					new FileInputStream(act));
+			// act is now an absolute pathname. We need a relative pathname
+			// starting with ad/....
+			act = act.substring(absolutePath.length() + 1);
+			act = act.replace("\\", "/");
+			final JarEntry je = new JarEntry(act);
+			jo.putNextEntry(je);
+
+			// Copy the data byte by byte...
+			final byte[] buf = new byte[1024];
+			int anz;
+			while ((anz = bi.read(buf)) != -1) {
+				jo.write(buf, 0, anz);
+			}
+			bi.close();
+		}
+		jo.close();
+		bo.close();
+
+		jarSign(newJar);
+
+		return newJar;
 	}
 
 	/**
@@ -1169,8 +945,9 @@ public class JarExportUtil {
 
 			final Element jnlp = document.createElement("jnlp");
 
-			if (!codebase.endsWith("/"))
+			if (!codebase.endsWith("/")) {
 				codebase += "/";
+			}
 			jnlp.setAttribute("codebase", codebase);
 
 			jnlp.setAttribute("href", codebase + JNLP_FILENAME);
@@ -1184,9 +961,9 @@ public class JarExportUtil {
 
 				// should result in locale="de", or in no locale attribute, when
 				// the "" langID is in the loop
-				if (!langID.equals(""))
+				if (!langID.equals("")) {
 					info.setAttribute("locale", langID.toLowerCase());
-				else {
+				} else {
 					// Creating the default infromation tag.
 					// If english exists, we use it as default
 					// otherwise we use the first language
@@ -1299,7 +1076,8 @@ public class JarExportUtil {
 			// <property name="jnlp.packEnabled" value="true"/>
 			// ******************************************************************
 
-			Element propertyPack200Element = document.createElement("property");
+			final Element propertyPack200Element = document
+					.createElement("property");
 			propertyPack200Element.setAttribute("name", "jnlp.packEnabled");
 			propertyPack200Element.setAttribute("value", "true");
 			resources.appendChild(propertyPack200Element);
@@ -1330,16 +1108,17 @@ public class JarExportUtil {
 			resources.appendChild(aResource);
 
 			for (final String libName : getLibraries()) {
-				if (libName.trim().equals(""))
+				if (libName.trim().equals("")) {
 					continue;
+				}
 				aResource = document.createElement("jar");
 
 				String libNameChecked;
-				if (libName.equals("../av.jar")) {
-					libNameChecked = "av.jar";
+				if (libName.equals("../gpcore.jar")) {
+					libNameChecked = "gpcore.jar";
 					aResource.setAttribute("main", "true");
 				} else {
-					libNameChecked = "lib/" + libName;
+					libNameChecked = LIBDIR + "/" + libName;
 				}
 
 				aResource.setAttribute("href", libNameChecked);
@@ -1370,7 +1149,7 @@ public class JarExportUtil {
 			 * Normally all resources are downloaded lazy, BUT if they are part
 			 * of the default/startUp map they will be downloaded directly
 			 */
-			String startMapID = ace.getMapPool().getStartMapID();
+			final String startMapID = ace.getMapPool().getStartMapID();
 			if (ace.getMapPool().size() == 0)
 				throw new IllegalArgumentException(
 						"This atlas contains no map!");
@@ -1387,8 +1166,9 @@ public class JarExportUtil {
 			}
 
 			for (final DpEntry dpe : ace.getDataPool().values()) {
-				if (getUnusedDpes().contains(dpe))
+				if (getUnusedDpes().contains(dpe)) {
 					continue;
+				}
 
 				resources.appendChild(document.createComment("Datapoolentry "
 						+ dpe.getTitle().toString()));
@@ -1413,8 +1193,8 @@ public class JarExportUtil {
 				boolean partIsPartOfFirstMap = false;
 
 				if (startUpMap != null && startUpMap.getLayers().size() > 0) {
-					for (DpRef ref : startUpMap.getLayers()) {
-						String targetId = ref.getTargetId();
+					for (final DpRef ref : startUpMap.getLayers()) {
+						final String targetId = ref.getTargetId();
 						if (dpe.getId().equals(targetId)) {
 							// if (targetId != null &&
 							// targetId.equals(dpe.getId())) {
@@ -1444,7 +1224,7 @@ public class JarExportUtil {
 			jnlpFile.delete();
 			jnlpFile.createNewFile();
 
-			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+			final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
 					new FileOutputStream(jnlpFile), "utf-8");
 			try {
 				final Result result = new StreamResult(outputStreamWriter);
@@ -1473,194 +1253,489 @@ public class JarExportUtil {
 
 	}
 
-	private void copyLicenseHtml(AtlasConfigEditable ace, final File targetJar) {
-		// Copy the license.html to the main directory
-		try {
-
-			final File destLicense = new File(targetJar.getParentFile(),
-					"license.html");
-			FileUtils.copyURLToFile(GpUtil.class.getClassLoader()
-					.getResource(AtlasConfig.LICENSEHTML_RESOURCE_NAME),
-					destLicense);
-		} catch (Exception e) {
-			ExceptionDialog
-					.show(
-							null,
-							new AtlasException(
-									"Non-fatal error while copying the licence.txt:"
-											+ e.getMessage()
-											+ "\n   "
-											+ GpUtil.class
-													.getResource(AtlasConfig.LICENSEHTML_RESOURCE_NAME),
-									e));
-		}
-	}
-
 	/**
-	 * Creates an index.html that allows to start the Atlas
+	 * Call JSmooth to create an .exe file
 	 * 
-	 * @param targetJar
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 * @param ace
-	 * @throws AtlasExportException
-	 */
-	private static void createIndexHTML(AtlasConfigEditable ace, File targetJar)
-			throws AtlasExportException {
-		// **********************************************************************
-		// 
-		// Creating the index.html
-		//
-		// **********************************************************************
-
-		try {
-			final File indexFile = new File(targetJar.getParent(), "index.html");
-			final FileWriter fileWriter = new FileWriter(indexFile);
-			fileWriter
-					.write("<?xml version='1.0' encoding='UTF-8'?><html><body>\n");
-			final Date date = new Date();
-			fileWriter.write("<h2>atlas build time: " + date.toString()
-					+ "</h2>\n");
-
-			/**
-			 * Start des JNLP über das deplayJava.js
-			 * https://jdk6.dev.java.net/deployment_advice
-			 * .html#Deploying_Java_Web_Start_Applica
-			 */
-			String jnlpLocation = GPProps.get(GPProps.Keys.jnlpURL,
-					"http://localhost/atlas");
-			if (!jnlpLocation.endsWith("/"))
-				jnlpLocation += "/";
-
-			fileWriter
-					.write("<h2>"
-							+ ace.getTitle()
-							+ "</h2>"
-							+ "Created with <a href=\"http://www.geopublishing.org/Geopublisher\">Geopublisher</a>!"
-							+ "<br>Us can use the following button to start the atlas:<center>");
-
-			String jsScript = GPProps.get(Keys.JWSStartScript).replaceAll(
-					"__JNLPURL__", jnlpLocation + JNLP_FILENAME);
-			jsScript = jsScript.replace("__MINJAVAVERSION__", GPProps.get(
-					Keys.MinimumJavaVersion, "1.6.0_14"));
-			fileWriter.write(jsScript);
-
-			fileWriter.write("</center></html></body>\n");
-			fileWriter.close();
-		} catch (final FileNotFoundException e) {
-			throw new AtlasExportException("Creating index.html failed", e);
-		} catch (final IOException e) {
-			throw new AtlasExportException("Creating index.html failed", e);
-		}
-
-	}
-
-	private void addAtlasXMLToJar(File targetJar, AtlasConfigEditable ace)
-			throws Exception {
-
-		// Prepare a temporary atlas.xml
-		File adDir = new File(IOUtil.getTempDir(), "ad");
-		File exportAtlasXml = new File(adDir, AtlasConfig.ATLAS_XML_FILENAME);
-		exportAtlasXml.delete();
-
-		// Configure the AML exporter
-		AMLExporter amlExporter = new AMLExporter(ace);
-		amlExporter.setExportMode(true);
-		amlExporter.setAtlasXml(exportAtlasXml);
-
-		amlExporter.saveAtlasConfigEditable();
-
-		addToJar(targetJar, IOUtil.getTempDir(), "ad/"
-				+ AtlasConfig.ATLAS_XML_FILENAME);
-	}
-
-	/**
-	 * Adds the what-String recursively to the target JAR Any manifest inside
-	 * the target is deleted.. Call
-	 * {@link #addManifest(File, AtlasConfigEditable)} after you are done with
-	 * the jar If the jar doesn't exist, we create it.
-	 * 
-	 * @param targetJar
-	 *            Existing JAR to extend
-	 * 
-	 * @param relDir
-	 *            Directory with "ad" folder of the AtlasWorkingCopy
-	 * 
-	 * @param what
-	 *            command line argument of what to put into the jar. All
-	 *            '/'-chars will be replaces with the systemdependent
-	 *            File.seperator
-	 * @throws IOException
-	 * @throws AtlasExportException
-	 * @throws IOException
+	 * @param targetDirDISK2
+	 *            The folder where the exported disk version of the atlas
+	 *            exists.
 	 * @throws Exception
-	 *             So many things can fail ;-)
-	 * 
-	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
 	 */
-	public void addToJar(final File targetJar, final File relDir,
-			final String what) throws AtlasExportException, IOException {
-
-		String jarName = targetJar.getAbsolutePath();
+	public void createJSmooth(final File atlasDir) throws Exception {
+		info("Creating JSmooth atlas.exe"); // i8n
 
 		/**
-		 * Creating a JAR
+		 * Copy JSmooth skeleton stull to DISK/autodownload-wrapper/*
 		 */
-		Main jartool = new Main(System.out, System.err, "jar");
+		final File jsmoothSkelDir = new File(atlasDir, "autodownload-wrapper");
+		jsmoothSkelDir.mkdirs();
 
-		if (!targetJar.exists()) {
-			String manifestName = getManifestFile(true).getAbsolutePath();
-			LOGGER.debug("creating new (with manifest:)" + jarName);
-			boolean run = jartool.run(new String[] { "cfm", jarName,
-					manifestName, "-C", relDir.getAbsolutePath(), what });
-			if (!run)
-				throw new AtlasExportException("unable to create jar "
-						+ targetJar + " with " + what);
-		} else {
-			LOGGER.debug("updating " + jarName + ", adding " + what);
+		final ClassLoader cl = GpUtil.class.getClassLoader();
 
-			boolean run = jartool.run(new String[] { "uf", jarName, "-C",
-					relDir.getAbsolutePath(), what });
-			if (!run)
-				throw new AtlasExportException("unable to update jar "
-						+ targetJar + " with " + what);
+		final File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
+				jsmoothExeFile);
+		final File jsmoothSkelFile = new File(jsmoothSkelDir,
+				"autodownload.skel");
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2),
+				jsmoothSkelFile);
+
+		/**
+		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
+		 */
+		final File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
+		FileUtils.copyURLToFile(cl
+				.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
+				destinationProjectFile);
+		try {
+
+			/**
+			 * Start the creation of .EXE
+			 */
+
+			final JSmoothModelBean model = JSmoothModelPersistency
+					.load(destinationProjectFile);
+			final File basedir = destinationProjectFile.getParentFile();
+			final File skelbase = basedir;
+
+			final SkeletonList skelList = new SkeletonList(skelbase);
+
+			final File out = new File(basedir, model.getExecutableName());
+
+			final SkeletonBean skel = skelList.getSkeleton(model
+					.getSkeletonName());
+			final File skelroot = skelList.getDirectory(skel);
+
+			final ExeCompiler compiler = new ExeCompiler();
+			compiler.compile(skelroot, skel, basedir, model, out);
+
+		} finally {
+
+			System.gc();
+			try {
+				/**
+				 * Cleanup JSmooth stuff. We saw some strange
+				 * "can't delete file" exceptions on WINDOWS, so we use the
+				 * canonical name and retry if it fails.
+				 * http://jira.codehaus.org/secure/attachment/27455/
+				 * MCLEAN-file-management.patch
+				 */
+				if (!jsmoothExeFile.getCanonicalFile().delete()) {
+					jsmoothExeFile.getCanonicalFile().delete();
+				}
+				if (!jsmoothSkelFile.getCanonicalFile().delete()) {
+					jsmoothSkelFile.getCanonicalFile().delete();
+				}
+				if (!jsmoothSkelDir.getCanonicalFile().delete()) {
+					jsmoothSkelDir.getCanonicalFile().delete();
+				}
+				new File(atlasDir, "icon.gif").getCanonicalFile().delete();
+				destinationProjectFile.delete();
+			} catch (final IOException e) {
+				LOGGER
+						.warn(
+								"Error during cleanup. Some unused files might be left in you DISK directory.",
+								e);
+				throw new AtlasExportException(
+						// i8n
+						"Error during cleanup. Some unused files might be left in you DISK directory.",
+						e);
+			}
 		}
 
 	}
 
 	/**
-	 * 
-	 * @return A {@link Manifest} for the av_resources.jar in form of a temporry
-	 *         {@link File}.
+	 * This approach could be problematic if there are more than one exports
+	 * running.
 	 */
-	private File getManifestFile(boolean withCP) throws IOException,
-			FileNotFoundException {
-		final File manifestTempFile = File.createTempFile(
-				AVUtil.ATLAS_TEMP_FILE_ID, ".manifest");
-		getManifest(withCP).write(new FileOutputStream(manifestTempFile));
-		return manifestTempFile;
+	public void deleteOldTempExportDirs() {
+
+		// Create a temporary directory to put stuff into before we split it
+		// into two directories
+
+		/**
+		 * Delete any old/parallel export directories
+		 */
+		final IOFileFilter oldDirs = FileFilterUtils
+				.makeDirectoryOnly(FileFilterUtils
+						.prefixFileFilter(AVUtil.ATLAS_TEMP_FILE_ID + "export"));
+		final String[] list = IOUtil.getTempDir().list(oldDirs);
+		for (final String deleteOldTempDirName : list) {
+			try {
+				FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
+						deleteOldTempDirName));
+			} catch (final Exception e) {
+				ExceptionDialog.show(null, e);
+			}
+		}
+	}
+
+	/**
+	 * Exports the given {@link AtlasConfig} to two folders: One for
+	 * CD/USB-STick, one to be run via JavaWebStart
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	public void export(final ResultProgressHandle progress) throws Exception {
+
+		this.progress = progress;
+
+		totalSteps = 10;
+
+		/** One for every root-level file **/
+		totalSteps += ace.getAtlasDir().listFiles(filterForRootLevelFiles).length;
+
+		/**
+		 * One for ever DPEntry
+		 */
+		totalSteps += ace.getDataPool().size() - getUnusedDpes().size();
+
+		/**
+		 * One for every Library and every Native libs
+		 */
+		totalSteps += getLibraries().length;
+
+		if (toDisk) {
+			/** JSmooth */
+			totalSteps++;
+			totalSteps += getNatives().length;
+		}
+
+		if (toJws) {
+			/** JNLP creation */
+			totalSteps++;
+		}
+
+		info("Removing old files...");
+		if (toDisk) {
+			FileUtils.deleteDirectory(targetDirDISK);
+		}
+		if (toJws) {
+			FileUtils.deleteDirectory(targetDirJWS);
+		}
+
+		deleteOldTempExportDirs();
+
+		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
+
+		tempDir = new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
+				+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);
+		tempDir.mkdirs();
+
+		// Try catch to always delete the temp folder
+		try {
+
+			final File targetJar = new File(tempDir, ARJAR_FILENAME);
+			LOGGER.debug("Export of " + ace.getTitle() + " to " + targetJar);
+
+			// **********************************************************************
+			// Adding important stuff to the av_resources.jar
+			// atlas.xml
+			// html folder
+			// av.properties
+			// splashscreen.png
+			//
+			// NOT AtlasML.xsd - it's provided from gpcore.jar via the internal
+			// webserver
+			//
+			// NOT av_log4j.xml - it's provided from gpcore.jar via the internal
+			// webserver
+			// **********************************************************************
+			try {
+				info("Creating " + ARJAR_FILENAME); // 1st call to info
+
+				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
+						+ "/" + AtlasConfig.HTML_DIRNAME);
+
+				// addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
+				// + "/" + AtlasConfig.ATLAS_XML_FILENAME);
+				addAtlasXMLToJar(targetJar, ace);
+
+				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
+						+ "/" + ace.getImagesDir().getName());
+
+				ace.getProperties().save(
+						new File(ace.getAtlasDir(),
+								AVProps.PROPERTIESFILE_RESOURCE_NAME));
+				addToJar(targetJar, ace.getAtlasDir(),
+						AVProps.PROPERTIESFILE_RESOURCE_NAME);
+
+				/**
+				 * Look for a user-defined splashscreen. If it doesn't exist,
+				 * ask the user if he wants to use the default one.
+				 */
+				if (ace.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
+					// final int useDefaultSplashConfirmDialog = JOptionPane
+					// .showConfirmDialog(
+					// null,
+					// AtlasCreator
+					// .R("Export.NoSplashscreenExists_DoYouWantToUseTheDefault"),
+					// null, JOptionPane.YES_NO_OPTION);
+					// if (useDefaultSplashConfirmDialog ==
+					// JOptionPane.YES_OPTION) {
+					FileUtils
+							.copyURLToFile(
+									GpUtil.class
+											.getClassLoader()
+											.getResource(
+													AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
+									new File(
+											ace.getAtlasDir(),
+											AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
+					// JOptionPane
+					// .showMessageDialog(
+					// null,
+					// AtlasCreator
+					// .R(
+					// "Export.NoSplashscreenExists_TheDefaultHasBeenCopied",
+					// new File(
+					// ace.getAtlasDir(),
+					// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)
+					// .getAbsolutePath()));
+					addToJar(targetJar, ace.getAtlasDir(),
+							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+					// }
+				} else {
+					addToJar(targetJar, ace.getAtlasDir(),
+							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+				}
+
+				info("Creating " + ARJAR_FILENAME); // 4th call to info
+
+				/**
+				 * Look for a user-defined icon.gif. If not available, copy the
+				 * default icon to where we expect the user icon and then add it
+				 * to the jar.
+				 */
+				URL iconURL = ace
+						.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
+				if (iconURL == null) {
+					iconURL = GpUtil.class.getClassLoader().getResource(
+							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+					FileUtils.copyURLToFile(iconURL, new File(
+							ace.getAtlasDir(),
+							AtlasConfig.JWSICON_RESOURCE_NAME));
+				}
+				addToJar(targetJar, ace.getAtlasDir(),
+						AtlasConfig.JWSICON_RESOURCE_NAME);
+
+			} catch (final IOException e) {
+				throw new AtlasExportException("can't add basic data to "
+						+ targetJar.getAbsolutePath(), e);
+			}
+
+			// **********************************************************************
+			// Adding optional stuff to the av_resource.jar
+			// map_logo.png
+			// **********************************************************************
+			try {
+				LOGGER.debug("Adding optional stuff to " + targetJar.getName());
+				addToJar(targetJar, ace.getAtlasDir(),
+						AtlasConfig.MAPICON_RESOURCE_NAME);
+			} catch (final Exception e1) {
+				final String msg = GpUtil.R("Export.NoMapiconExists_NoProblem",
+						ace.getAtlasDir() + AtlasConfig.MAPICON_RESOURCE_NAME);
+				JOptionPane.showMessageDialog(null, msg);
+			}
+
+			/*
+			 * Exporting the defaultcrs.prj if it exists
+			 */
+			final File defaultCrsFile = new File(ace.getAd(),
+					AtlasConfig.DEFAULTCRS_FILENAME);
+			if (defaultCrsFile.exists() && defaultCrsFile.length() > 2) {
+				addToJar(targetJar, ace.getAtlasDir(), "ad/"
+						+ AtlasConfig.DEFAULTCRS_FILENAME);
+			} else {
+				LOGGER
+						.info("No exporting defaultcrs.prj beacuse it doesn't exist or is too small");
+			}
+
+			copyAndSignLibs(targetJar, ace);
+
+			String[] listOfDataJarNames = new String[] {};
+			// Creating a JAR for every DpEntry
+			LOGGER.debug("Creating a JAR for every DpEntry used");
+			for (final DpEntry dpe : ace.getDataPool().values()) {
+				if (getUnusedDpes().contains(dpe)) {
+					continue;
+				}
+				final File newJar = createJarFromDpe(dpe);
+				listOfDataJarNames = LangUtil.extendArray(listOfDataJarNames,
+						newJar.getAbsolutePath());
+			}
+
+			checkAbort();
+
+			//
+			// /**
+			// * Before the atlas_resources.jar is signed,
+			// * <ul>
+			// * <li>create an index</li>
+			// * <li>add classpath elemnt to manifest</li>
+			// */
+			//
+			// /**
+			// * now we create the index
+			// */
+			//
+			// Main jartool = new Main(System.out, System.err, "jar");
+			// String[] args = new String[] { "i", targetJar.getAbsolutePath()
+			// };
+			// args = LangUtil.extendArray(args, listOfDataJarNames);
+			// LOGGER.debug("Calling jartool with " + args);
+			// if (!jartool.run(args))
+			// throw new AtlasExportException("unable to add index to "
+			// + targetJar);
+			// /**
+			// * now we add the correct manifest
+			// */
+			// jartool = new Main(System.out, System.err, "jar");
+			// args = new String[] { "ufm", targetJar.getAbsolutePath(),
+			// getManifestFile(true).getAbsolutePath() };
+			// LOGGER.debug("Calling jartool with " + args);
+			// if (!jartool.run(args))
+			// throw new AtlasExportException(
+			// "unable to add correct manifest to " + targetJar);
+
+			LOGGER.debug("Finally signing the ataslResouce JAR...");
+			jarSign(targetJar);
+
+			/**
+			 * The icon.gif is needed for DISK and JWS. (DISK will put it into
+			 * the atlas.exe and delete it afterwards)
+			 */
+			URL iconURL = ace.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
+			if (!AVUtil.exists(iconURL)) {
+				// LOGGER
+				// .info("No user-defined icon provided. Using the default one.");
+				iconURL = GpUtil.class.getClassLoader().getResource(
+						AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+			}
+			FileUtils.copyURLToFile(iconURL, new File(
+					targetJar.getParentFile(), "icon.gif"));
+
+			/*
+			 * Creating the JNLP...
+			 */
+			if (toJws) {
+				LOGGER.debug("Creating JNLP...");
+				createJNLP(ace, targetJar, GPProps.get(GPProps.Keys.jnlpURL,
+						"http://localhost/atlas"));
+
+				createIndexHTML(ace, targetJar);
+			}
+
+			/*
+			 * Creating start scripts etc...
+			 */
+			if (toDisk) {
+				createAuxiliaryDISKFiles(ace, targetJar);
+			}
+
+			createReadmeTXT(ace, targetJar);
+			copyLicenseHtml(ace, targetJar);
+
+			splitTempDir();
+
+			if (toDisk) {
+				createJSmooth(targetDirDISK);
+			}
+
+			if (toDisk && copyJRE) {
+				copyJRE(targetDirDISK);
+			}
+
+			// Files next to atlas.gpa will be copied to the folders without
+			// putting them in a JAR. This can be usefull for exmaple for PDF
+			// files that should be referencable from within the atlas, but also
+			// reside uncompressed on the CD root directory.
+			copyUncompressFiles();
+
+		} catch (final AtlasCancelException cancel) {
+			// // In that case we delete the target directory.
+			info(GpUtil.R("Export.Cancelled.Msg"));
+			if (toDisk) {
+				FileUtils.deleteDirectory(targetDirDISK);
+			}
+			if (toJws) {
+				FileUtils.deleteDirectory(targetDirJWS);
+			}
+			throw cancel;
+		} finally {
+			// Whatever happened, we have to delete the temp dir
+
+			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
+
+			deleteOldTempExportDirs();
+		}
+	}
+
+	private String[] getLibraries() {
+		// final String libsLine = "gp-natives.jar "
+		// + GPProps.get(Keys.ClassPathLibs);
+		// LOGGER
+		// .debug("These dependencies have been set in the .properties file (gp-natives.jar has been added automatically): "
+		// + libsLine);
+		// return libsLine.split(" ");
+
+		// String pathToManifest =
+		// AtlasViewerGUI.class.getPackage().toString().replace(".", "/") +
+		// "/META-INF/MANIFEST.MF";
+		// try {
+		//			
+		// Manifest manifest = new Manifest(new
+		// URL(pathToManifest).openStream());
+		// System.out.println(manifest);
+		// Attributes attributes = manifest.getAttributes("Classpath");
+		// String[] libs = attributes.toString().split(" ");
+		// return libs;
+		// } catch (MalformedURLException e) {
+		// e.printStackTrace();
+		// } catch (IOException e) {
+		// e.printStackTrace();
+		// }
+		// return new String[] {};
+
+		Properties p = new Properties();
+		String proeprtiesName = "/atlasdependencies.properties";
+		try {
+			p.load(GpUtil.class.getResource(proeprtiesName).openStream());
+			String atlasDependecies = p.getProperty("classpath");
+
+			// remove maven made :.classes entries
+			atlasDependecies.replaceAll(":.classes", "");
+
+			return atlasDependecies.split(":");
+		} catch (IOException e) {
+			throw new AtlasExportException(proeprtiesName + " not found!", e);
+		}
 	}
 
 	/**
 	 * @return A {@link Manifest} for the av_resources.jar.
 	 * 
 	 */
-	private Manifest getManifest(boolean withCP) {
-		Manifest manifest = new Manifest();
-		Attributes mainAtts = manifest.getMainAttributes();
+	private Manifest getManifest(final boolean withCP) {
+		final Manifest manifest = new Manifest();
+		final Attributes mainAtts = manifest.getMainAttributes();
 
 		mainAtts.put(Attributes.Name.MANIFEST_VERSION, "1.0");
 
 		if (withCP) {
-			String classpathString = "av.jar ";
+			String classpathString = "gpcore.jar ";
 
 			// ******************************************************************
 			// Adding the DatapoolEntries
 			// ******************************************************************
 			for (final DpEntry dpe : ace.getDataPool().values()) {
-				if (getUnusedDpes().contains(dpe))
+				if (getUnusedDpes().contains(dpe)) {
 					continue;
+				}
 				classpathString += dpe.getId() + ".jar ";
 			}
 			mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
@@ -1676,6 +1751,19 @@ public class JarExportUtil {
 				AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
 		return manifest;
+	}
+
+	/**
+	 * 
+	 * @return A {@link Manifest} for the av_resources.jar in form of a temporry
+	 *         {@link File}.
+	 */
+	private File getManifestFile(final boolean withCP) throws IOException,
+			FileNotFoundException {
+		final File manifestTempFile = File.createTempFile(
+				AVUtil.ATLAS_TEMP_FILE_ID, ".manifest");
+		getManifest(withCP).write(new FileOutputStream(manifestTempFile));
+		return manifestTempFile;
 	}
 
 	//
@@ -1706,6 +1794,41 @@ public class JarExportUtil {
 	// return indexTempFile;
 	// }
 
+	private String[] getNatives() {
+		final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
+		LOGGER
+				.debug("These native dependencies have been set in the .properties file: "
+						+ nativeLibsLine);
+		return nativeLibsLine.split(" ");
+	}
+
+	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
+		if (unusedDpes == null) {
+			unusedDpes = ace.listNotReferencedInGroupTreeNorInAnyMap();
+
+		}
+		return unusedDpes;
+	}
+
+	/**
+	 * Promote export progress to GUI.
+	 */
+	protected void info(final String msg) {
+		if (progress != null) {
+
+			if (currSteps < totalSteps) {
+				currSteps++;
+			} else {
+				currSteps++;
+				totalSteps = currSteps + 3;
+				LOGGER.warn("overcounting " + currSteps + " to " + totalSteps);
+			}
+			progress.setProgress(msg, currSteps, totalSteps);
+		} else {
+			LOGGER.info(msg);
+		}
+	}
+
 	/**
 	 * Signs the Jar. keys and everything else is defined in the properties
 	 * files
@@ -1729,7 +1852,7 @@ public class JarExportUtil {
 
 		// info("Signing JAR " + targetJar.getName());
 
-		List<String> command = new ArrayList<String>();
+		final List<String> command = new ArrayList<String>();
 
 		command.add("-keystore");
 		final String keyStoreName = "skrueger/creator/export/keystore";
@@ -1743,11 +1866,10 @@ public class JarExportUtil {
 		final URL keyStoreURL = JarExportUtil.class.getClassLoader()
 				.getResource(keyStoreName);
 
-		if (keyStoreURL == null) {
+		if (keyStoreURL == null)
 			throw new AtlasExportException(
 					"The keystore for signing couldn't be found at "
 							+ keyStoreName); // i8n
-		}
 
 		command.add(keyStoreURL.toString());
 		command.add("-storepass");
@@ -1755,17 +1877,18 @@ public class JarExportUtil {
 		command.add(jarFile.getAbsolutePath());
 		command.add(GPProps.get(Keys.signingAlias));
 
-		String[] args = command.toArray(new String[command.size()]);
+		final String[] args = command.toArray(new String[command.size()]);
 
 		// For debugging, we convert command to a string
 		String signCmdLine = "";
-		for (String s : command)
+		for (final String s : command) {
 			signCmdLine += " " + s;
+		}
 
 		try {
 			JarSigner.main(args);
 			Log.debug("Signing " + jarFile + " OK.\n");
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error(e);
 			throw new AtlasExportException("Exception while signing\n "
 					+ jarFile + " with\n '" + signCmdLine + "'", e);
@@ -1773,132 +1896,107 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * Adds/Updates an METAINF/INDEX.LIST entry to the given file.
+	 * The export first exports everything into one temp folder. Now we have to
+	 * split it into two folders: ONe for JWS, one for DISK
 	 * 
-	 * @throws AtlasExportException
 	 * @throws IOException
 	 */
-	public void addJarIndex(File jarFile) throws AtlasExportException,
-			IOException {
+	private void splitTempDir() throws IOException {
+		info("Moving files"); // i8n
 
-		LOGGER.debug("adding index to " + jarFile.getAbsolutePath());
-		/**
-		 * Adding an index
-		 */
-		Main jartool = new Main(System.out, System.err, "jar");
-		boolean run = jartool
-				.run(new String[] { "i", jarFile.getAbsolutePath() });
-		if (!run) {
-			LOGGER.warn("unable to create index for jar " + jarFile);
-			// throw new AtlasExportException("unable to create index for jar "
-			// + jarFile);
+		if (toDisk) {
+
+			/**
+			 * Exclusively for DISK
+			 */
+			FileUtils.moveFileToDirectory(new File(tempDir, "start.bat"),
+					targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(tempDir, "start.sh"),
+					targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(tempDir, "autorun.inf"),
+					targetDirDISK, true);
+			// Icon.gif is used (and deleted afterwards) by JSmooth
+			FileUtils.copyFileToDirectory(new File(tempDir, "icon.gif"),
+					targetDirDISK, true);
+
+			/**
+			 * Creates an empty jre directory.
+			 */
+			new File(targetDirDISK, "jre").mkdir();
 		}
-	}
 
-	/**
-	 * Creates a JAR-file that contains all files of one {@link DpEntry}. The
-	 * JAR will be automatically signed if {@link #signJARs} is
-	 * <code>true</code>. The JARs are not indexed, as indexing doesn't make
-	 * sense for a single jar.
-	 * <p>
-	 * Exception: The info HTML pages attached to {@link Map}s are stored in the
-	 * <ode>AVJAR_FILENAME</code> JAR.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 * 
-	 * @param dpe
-	 *            The {@link DpEntry} to export.
-	 * 
-	 * @throws AtlasExportException
-	 * @throws IOException
-	 * @throws AtlasCancelException
-	 */
-	public File createJarFromDpe(final DpEntry dpe)
-			throws AtlasExportException, IOException, AtlasCancelException {
+		if (toJws) {
 
-		checkAbort();
-
-		info(dpe.getType().getLine1() + ": " + dpe.getTitle().toString());
-		//
-		// final File newJar = new File(tempDir, dpe.getId() + ".jar");
-		// String jarName = newJar.getAbsolutePath();
-		// String absolutePath = ace.getAtlasDir().getAbsolutePath();
-		// String relpath = "ad" + File.separator + "data" + File.separator
-		// + dpe.getDataDirname();
-		// // String fileName = new File(absolutePath,
-		// relpath).getAbsolutePath();
-		// /**
-		// * Creating a JAR
-		// */
-		// Main jartool = new Main(System.out, System.err, "jar");
-		// boolean run = jartool.run(new String[] { "cMvf", jarName, "-C",
-		// absolutePath, relpath });
-		// if (!run)
-		// throw new AtlasExportException("Unable to create jar for dpe");
+			/**
+			 * Exclusively for JWS
+			 */
+			FileUtils.moveFileToDirectory(new File(tempDir, "index.html"),
+					targetDirJWS, true);
+			FileUtils.moveFileToDirectory(new File(tempDir, JNLP_FILENAME),
+					targetDirJWS, true);
+			FileUtils.moveFileToDirectory(new File(tempDir, "icon.gif"),
+					targetDirJWS, true);
+			FileUtils.moveFileToDirectory(
+					new File(tempDir, "splashscreen.png"), targetDirJWS, true);
+		}
 
 		/**
-		 * Setting up a new JAR file
+		 * For both
 		 */
-		// Setting up da JAR File for this DatapoolEntry
-		final File newJar = new File(tempDir, dpe.getId() + ".jar");
-		LOGGER.debug("Exportig to JAR " + newJar.getName() + "    in "
-				+ tempDir.toString());
-		BufferedOutputStream bo = new BufferedOutputStream(
-				new FileOutputStream(newJar.getAbsolutePath()));
-		JarOutputStream jo = new JarOutputStream(bo);
+		final Collection<File> jars = FileUtils.listFiles(tempDir,
+				new String[] { "jar", "jar.pack.gz", "so", "dll" }, true);
+		for (final File jar : jars) {
 
-		/**
-		 * Adding all the files as JarEntrys
-		 */
-		String absolutePath = ace.getAtlasDir().getAbsolutePath();
-		String relpath = "ad" + File.separator + "data" + File.separator
-				+ dpe.getDataDirname();
+			final String diffDir = jar.getAbsolutePath().substring(
+					tempDir.getAbsolutePath().length() + 1);
 
-		Collection<File> listFiles = FileUtils.listFiles(new File(absolutePath,
-				relpath), GpUtil.BlacklistesFilesFilter,
-				GpUtil.BlacklistedFoldersFilter);
-		for (File intoJarSource : listFiles) {
-
-			String act = intoJarSource.getPath();
-			BufferedInputStream bi = new BufferedInputStream(
-					new FileInputStream(act));
-			// act is now an absolute pathname. We need a relative pathname
-			// starting with ad/....
-			act = act.substring(absolutePath.length() + 1);
-			act = act.replace("\\", "/");
-			JarEntry je = new JarEntry(act);
-			jo.putNextEntry(je);
-
-			// Copy the data byte by byte...
-			byte[] buf = new byte[1024];
-			int anz;
-			while ((anz = bi.read(buf)) != -1) {
-				jo.write(buf, 0, anz);
+			/**
+			 * Copy files to DISK
+			 */
+			if (toDisk && !jar.getName().endsWith("pack.gz")) {
+				final File targetSubDirDISK = new File(targetDirDISK, diffDir)
+						.getParentFile();
+				targetSubDirDISK.mkdirs();
+				FileUtils.copyFileToDirectory(jar, targetSubDirDISK);
 			}
-			bi.close();
+
+			/**
+			 * Copy files to JWS
+			 */
+			if (toJws) {
+				final File targetSubDirJWS = new File(targetDirJWS, diffDir)
+						.getParentFile();
+				targetSubDirJWS.mkdirs();
+				FileUtils.moveFileToDirectory(jar, targetSubDirJWS, true);
+			}
 		}
-		jo.close();
-		bo.close();
 
-		jarSign(newJar);
+		if (toJws) {
+			FileUtils.copyFileToDirectory(new File(tempDir, "README.TXT"),
+					targetDirJWS);
+			FileUtils.copyFileToDirectory(new File(tempDir, "license.html"),
+					targetDirJWS);
 
-		return newJar;
-	}
-
-	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
-		if (unusedDpes == null) {
-			unusedDpes = ace.listNotReferencedInGroupTreeNorInAnyMap();
-
+			/**
+			 * Copy the .htaccess from the deploy directory into the target
+			 * directory
+			 */
+			{
+				// command.add(ACProps.get(Keys.signingKeystore));
+				final URL htaccessURL = JarExportUtil.class.getClassLoader()
+						.getResource("skrueger/creator/export/htaccess");
+				FileUtils.copyURLToFile(htaccessURL, new File(targetDirJWS,
+						".htaccess"));
+			}
 		}
-		return unusedDpes;
-	}
 
-	/**
-	 * Can be called from external to abort the export process
-	 */
-	public void abort() {
-		aborted = true;
+		if (toDisk) {
+			FileUtils.moveFileToDirectory(new File(tempDir, "license.html"),
+					targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(tempDir, "README.TXT"),
+					targetDirDISK, true);
+		}
+
 	}
 
 }

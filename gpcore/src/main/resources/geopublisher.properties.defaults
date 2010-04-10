@@ -1,0 +1,26 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2010 Stefan A. Kr\u00c3\u0152ger (soon changing to Stefan A. Tzeggai).
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the GNU Public License v2.0
+# which accompanies this distribution, and is available at
+# http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+#
+#This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
+#http://www.geopublishing.org
+#
+#Geopublisher is part of the Geopublishing Framework hosted at:
+#http://wald.intevation.org/projects/atlas-framework/
+##########
+startJVMWithXmx=256
+jnlpURL=http\://www.geopublishing.org/your_atlas/
+windowMaximized=0
+# multiplayer.jar mediaplayer.jar jmf.jar  
+NativeLibs=libmlib_jai.so mlib_jai_mmx.dll mlib_jai_util.dll mlib_jai.dll libgdal.so
+compressJARs=1
+#signingkeystorePassword=stefan
+#signingAlias=myself
+signingkeystorePassword=wasser
+signingAlias=IMPETUS
+bugReportEmail=skpublic@wikisquare.de
+MinimumJavaVersion=1.6.0_14
+JWSStartScript=<script src\="http\://java.com/js/deployJava.js"></script>\n<script>\n var url \= "__JNLPURL__";\n deployJava.createWebStartLaunchButton(url, "__MINJAVAVERSION__");\n</script>

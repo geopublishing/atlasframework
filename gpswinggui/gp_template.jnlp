@@ -28,7 +28,7 @@
 	
 		$dependencies
 		
-		<!--	<nativelib  href="lib/natives.jar" part="main"   /> -->
+		<nativelib  href="gp-natives.jar" part="main" />
 		
   </resources>
   <application-desc main-class="$mainClass"/>

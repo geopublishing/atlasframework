@@ -155,7 +155,7 @@ public class AMLExporter {
 				getAtlasXml().createNewFile();
 			}
 
-			copyAtlasMLSchemaFile();
+//			copyAtlasMLSchemaFile();
 
 			// ****************************************************************************
 			// Create the XML
@@ -1213,6 +1213,9 @@ public class AMLExporter {
 		return datapoolRef;
 	}
 
+	/**
+	 * not in use since 2009
+	 */
 	private void copyAtlasMLSchemaFile() {
 		try {
 			// Copy Schema AtlasML.xsd to projectDir

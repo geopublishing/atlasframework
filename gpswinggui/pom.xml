@@ -31,9 +31,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-
 		</plugins>
-
 	</build>
 
 
@@ -184,10 +182,10 @@
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
-			<version>1.5-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
-
+	
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-coverage</artifactId>
@@ -288,7 +286,7 @@
 		<dependency>
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
-			<version>1.5-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>

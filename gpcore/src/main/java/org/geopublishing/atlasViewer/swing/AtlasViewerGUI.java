@@ -717,7 +717,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 *            is passed, the directory will be used as the resource base.
 	 */
 	public static void setupResLoMan(String[] args) {
-		Boolean resourcesComeFromFielSystem = false;
+		Boolean resourcesComeFromFilesystem = false;
 
 		try {
 
@@ -758,13 +758,13 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 				File atlasDir = new File(paramPath);
 				if (AtlasConfig.isAtlasDir(atlasDir)) {
-					resourcesComeFromFielSystem = true;
+					resourcesComeFromFilesystem = true;
 
 					// Add that folder to the ResLoMan
 					LOGGER.debug("Adding new FileResourceLoader( "
 							+ atlasDir.getAbsolutePath() + " ) to ResLoMan");
 
-					resourcesComeFromFielSystem = true;
+					resourcesComeFromFilesystem = true;
 
 					getInstance()
 							.getAtlasConfig()
@@ -786,7 +786,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				}
 			}
 		} finally {
-			if (!resourcesComeFromFielSystem) {
+			if (!resourcesComeFromFilesystem) {
 				// If we are started without a path to a working copy as an
 				// argument, we expect all stuff to be on the class-path.
 

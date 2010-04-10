@@ -25,17 +25,63 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClass>
+							<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI
+							</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
 
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>Create atlasdependencies.properties</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<inherited>false</inherited>
+						<configuration>
+							<includeScope>compile</includeScope>
+							<outputFile>src/main/resources/atlasdependencies.properties</outputFile>
+							<outputFilterFile>true</outputFilterFile>
+							<prefix>.</prefix>
+							<regenerateFile>false</regenerateFile>
+						</configuration>
+					</execution>
+					<execution>
+						<id>unpack native libs</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.geopublishing</groupId>
+									<artifactId>gpnatives</artifactId>
+									<version>${project.version}</version>
+									<!--								<classifier>${build.type}</classifier>-->
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/natives</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
+
 	</build>
-	
+
 	<dependencies>
 
 		<dependency>
@@ -54,6 +100,7 @@
 			<scope>compile</scope>
 		</dependency>
 
+
 		<dependency>
 			<groupId>javax.jnlp</groupId>
 			<artifactId>jnlp</artifactId>
@@ -63,9 +110,17 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.geopublishing</groupId>
+			<artifactId>gpnatives</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
-			<version>1.5-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
@@ -97,14 +152,14 @@
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagepyramid</artifactId>
-			<version>2.6.2</version>
+			<version>${geotools.version}</version>
 			<type>jar</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-imagemosaic</artifactId>
-			<version>2.6.2</version>
+			<version>${geotools.version}</version>
 			<type>jar</type>
 		</dependency>
 

@@ -11,7 +11,7 @@
 package org.geopublishing.geopublisher;
 
 import org.geopublishing.atlasViewer.AVUtil;
-import org.geopublishing.atlasViewer.swing.BugReportmailer;
+import org.geopublishing.geopublisher.swing.BugReportmailer;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 

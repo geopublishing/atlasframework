@@ -138,7 +138,9 @@
 						<version>2.2-beta-5</version>
 
 						<configuration>
-							<filters />
+							<filters>
+								<!-- an empty filters tag is needed -->
+							</filters>
 							<descriptors>
 								<descriptor>${project.basedir}/src/assembly/full.xml</descriptor>
 							</descriptors>

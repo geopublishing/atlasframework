@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasViewer.swing;
+package org.geopublishing.geopublisher.swing;
 
 import java.awt.Component;
 import java.awt.Desktop;
@@ -19,6 +19,7 @@ import java.net.URI;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 
