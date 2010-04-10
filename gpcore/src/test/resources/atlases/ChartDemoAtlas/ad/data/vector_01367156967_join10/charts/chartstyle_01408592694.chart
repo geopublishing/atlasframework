@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chartStyle id="chartstyle_01408592694" type="SCATTER" legend="true" tooltips="true" urls="true" orientation="vertical" margin="0.0" regrLineVisible="true">
+  <border visible="false" />
+  <title paint="#000000">en{scatterplot}</title>
+  <desc paint="#808080">en{Active Troops (Size of Armed Forces) vs. Score (Freedom of Press)}</desc>
+  <domainAxis visible="true">
+    <title angle="0.0">en{Active Troops (Size of Armed Forces)}</title>
+    <valueLabels valueAngle="0.0" />
+  </domainAxis>
+  <rangeAxis visible="true" unit="">
+    <title angle="0.0">en{Score (Freedom of Press)}</title>
+    <valueLabels valueAngle="0.0" />
+  </rangeAxis>
+  <renderer>
+    <series legendVisible="true" legendLabel="en{Score (Freedom of Press)}" legendTooltip="en{Reporters Without Borders: Worldwide Ranks by Country, World, 2006}" />
+  </renderer>
+  <plot centerAxisOrigin="true">
+    <foreground alpha="1.0" />
+    <background alpha="1.0" />
+    <crosshairLines visible="true" />
+  </plot>
+  <featureAttributes>
+    <domainAttr name="Active Tro" normalize="false" sort="true" forceCategories="false" />
+    <rangeAttr name="Score0" normalize="false" />
+  </featureAttributes>
+</chartStyle>
+
