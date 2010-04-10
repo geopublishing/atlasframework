@@ -163,7 +163,7 @@ public class JarExportUtil {
 							+ "Mb of memory. Increase this number if have more memory to spend.\n");
 			fileWriter.write("java -Xmx" + xmx
 					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIBDIR
-					+ "/native -jar " + targetJar.getName() + "\n");
+					+ "/natives -jar " + targetJar.getName() + "\n");
 			fileWriter.close();
 			startSHFile.setExecutable(true, false);
 
@@ -295,7 +295,8 @@ public class JarExportUtil {
 
 	private File targetDirJWS, targetDirDISK;
 
-	private File tempDir;
+	private File tempDir = new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
+			+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);
 
 	/** Is export to DISK requested? **/
 	private final Boolean toDisk;
@@ -329,15 +330,30 @@ public class JarExportUtil {
 	 *            If {@link #toDisk} is <code>true</code>, this controls whether
 	 *            the locally installed JRE should be copied to DISK/jre. May be
 	 *            <code>null</code>.
+	 * @throws IOException 
 	 */
 	public JarExportUtil(final AtlasConfigEditable ace_,
 			final File exportDirectory, final Boolean toDisk,
-			final Boolean toJws, final Boolean copyJRE) {
+			final Boolean toJws, final Boolean copyJRE) throws IOException {
 		ace = ace_;
 		this.toDisk = toDisk;
 		this.toJws = toJws;
 		this.copyJRE = copyJRE;
+		
+		// Create temporary export forlder
+		info("Removing old files...");
+		if (toDisk) {
+			FileUtils.deleteDirectory(targetDirDISK);
+		}
+		if (toJws) {
+			FileUtils.deleteDirectory(targetDirJWS);
+		}
 
+		deleteOldTempExportDirs();
+		tempDir.mkdirs();
+		
+		
+		// Create final export folders
 		if (toDisk) {
 			targetDirDISK = new File(exportDirectory, "DISK");
 			targetDirDISK.mkdirs();
@@ -491,7 +507,7 @@ public class JarExportUtil {
 
 		// The folder to copy to might not exist yet
 		final File targetNativeDir = new File(targetJar.getParentFile(), ""
-				+ LIBDIR + "/native");
+				+ LIBDIR + "/natives");
 		targetNativeDir.mkdirs();
 
 		/**
@@ -514,70 +530,72 @@ public class JarExportUtil {
 					continue;
 				}
 
+				final File destination = new File(targetNativeDir, nat);
+				destination.getParentFile().mkdirs();
+
+				URL fromURL = null;
+
+				// This boolean tells us, if we download the JARs from the
+				// webserver (GP started via JWS) or if we are copying them
+				// from
+				// a local directory.
+				boolean fromLocal;
 				try {
-					final File destination = new File(targetNativeDir, nat);
-					destination.getParentFile().mkdirs();
 
-					URL fromURL = null;
+					// TODO check if it also works in JWS: fromURL =
+					// getNativeLibraryURL(nat);
 
-					// This boolean tells us, if we download the JARs from the
-					// webserver (GP started via JWS) or if we are copying them
-					// from
-					// a local directory.
-					boolean fromLocal;
-					try {
-						final BasicService bs = (BasicService) ServiceManager
-								.lookup("javax.jnlp.BasicService");
+					final BasicService bs = (BasicService) ServiceManager
+							.lookup("javax.jnlp.BasicService");
 
-						String path = bs.getCodeBase().getFile();
-						if (!path.endsWith("/")) {
-							path = path + "/";
-						}
-
-						/**
-						 * Normaly the natives are found in the
-						 * ""+LIBDIR+"/native" directory.
-						 */
-						String fileAndPath;
-						fileAndPath = path + LIBDIR + "/native/" + nat;
-
-						fromURL = new URL(bs.getCodeBase().getProtocol(), bs
-								.getCodeBase().getHost(), bs.getCodeBase()
-								.getPort(), fileAndPath);
-
-						fromURL.openConnection();
-
-						fromLocal = false;
-					} catch (final Exception e) {
-						/**
-						 * The exception means, that we have not been started
-						 * via JWS. So we just copy this file from the local lib
-						 * directory.
-						 */
-						fromLocal = true;
-						fromURL = new File(LIBDIR + "/native/" + nat).toURI()
-								.toURL();
+					String path = bs.getCodeBase().getFile();
+					if (!path.endsWith("/")) {
+						path = path + "/";
 					}
 
-					final String msg = GpUtil.R(
-							"Export.progressMsg.copy_lib_to_", nat, destination
-									.toString());
-					LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
-					info(msg);
+					/**
+					 * Normaly the natives are found in the ""+LIBDIR+"/natives"
+					 * directory.
+					 */
+					String fileAndPath;
+					fileAndPath = path + LIBDIR + "/natives/" + nat;
 
-					try {
-						FileUtils.copyURLToFile(fromURL, destination);
-					} catch (final Exception e) {
-						final String errorMsg = GpUtil.R(
-								"Export.errorMsg.error_copy_lib_to_",
-								fromLocal, nat, fromURL, destination);
-						LOGGER.warn(errorMsg, e);
-						throw new AtlasExportException(errorMsg, e);
-					}
+					fromURL = new URL(bs.getCodeBase().getProtocol(), bs
+							.getCodeBase().getHost(), bs.getCodeBase()
+							.getPort(), fileAndPath);
 
-				} catch (final MalformedURLException e) {
-					final String errorMsg = "MalformedURLException during export of "
-							+ nat;
+					fromURL.openConnection();
+
+					fromLocal = false;
+				} catch (final Exception e) {
+					/**
+					 * The exception means, that we have not been started via
+					 * JWS. So we just copy this file from the local lib
+					 * directory.
+					 */
+					fromLocal = true;
+					// fromURL = new File(LIBDIR + "/natives/" + nat).toURI()
+					// .toURL();
+
+					fromURL = getNativeLibraryURL(nat);
+					
+				}
+				if (fromURL == null) {
+					System.err.println(nat+" not found in "+System.getProperty("java.library.path"));
+					continue;
+				}
+
+				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
+						nat, destination.toString());
+				LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
+				info(msg);
+
+				try {
+					FileUtils.copyURLToFile(fromURL, destination);
+				} catch (final Exception e) {
+					final String errorMsg = GpUtil.R(
+							"Export.errorMsg.error_copy_lib_to_", fromLocal,
+							nat, fromURL, destination);
 					LOGGER.warn(errorMsg, e);
 					throw new AtlasExportException(errorMsg, e);
 				}
@@ -672,8 +690,10 @@ public class JarExportUtil {
 					} else {
 
 						fromURL = getJarUrl(lib);
-						fromURLPackGZ = DataUtilities.changeUrlExt(fromURL,
-								"jar.pack.gz");
+						if (fromURL == null)
+							System.out.println("null");
+						fromURLPackGZ = fromURL != null ? DataUtilities
+								.changeUrlExt(fromURL, "jar.pack.gz") : null;
 
 						// fromURL = DataUtilities.fileToURL(new File(LIBDIR +
 						// "/" + lib));
@@ -682,9 +702,14 @@ public class JarExportUtil {
 						// + ".pack.gz"));
 					}
 				}
+				if (fromURL == null) {
+					System.err.println(lib+" not found in "+System.getProperty("java.class.path"));
+					continue;
+				}
 
 				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
 						lib, destination.toString());
+
 				LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
 				info(msg);
 
@@ -702,8 +727,8 @@ public class JarExportUtil {
 									destinationPackGz);
 						} catch (final Exception e) {
 							if (packNotExistingErrorAlreadyShown == false) {
-								ExceptionDialog.show(null, new AtlasException(
-										GpUtil.R("Export.Error.Pack200"), e));
+//								ExceptionDialog.show(null, new AtlasException(
+//										GpUtil.R("Export.Error.Pack200"), e));
 							}
 							// Do not show this warning again next time.
 							packNotExistingErrorAlreadyShown = true;
@@ -729,6 +754,22 @@ public class JarExportUtil {
 
 	}
 
+	private URL getNativeLibraryURL(String nativeName) {
+		// Clean any path or ./ stuff
+		nativeName = new File(nativeName).getName();
+
+		String[] st = System.getProperty("java.library.path").split(":");
+		for (String t : st) {
+			System.err.println("looking in " + t + " for " + nativeName);
+			File file = new File(t + "/" + nativeName);
+			if (file.exists()) {
+				return DataUtilities.fileToURL(file);
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 */
 	private URL getJarUrl(String jarName) {
@@ -752,12 +793,11 @@ public class JarExportUtil {
 			}
 
 		}
-		
+
 		// Clean any path or ./ stuff
 		jarName = new File(jarName).getName();
-		
-		URL jarUrl = jarUrlsFromClassPath.get(jarName);
-		return jarUrl;
+
+		return jarUrlsFromClassPath.get(jarName);
 	}
 
 	/**
@@ -783,7 +823,7 @@ public class JarExportUtil {
 
 			final File destLicense = new File(targetJar.getParentFile(),
 					"license.html");
-			FileUtils.copyURLToFile(GpUtil.class.getClassLoader().getResource(
+			FileUtils.copyURLToFile(GpUtil.class.getResource(
 					AtlasConfig.LICENSEHTML_RESOURCE_NAME), destLicense);
 		} catch (final Exception e) {
 			ExceptionDialog
@@ -852,30 +892,14 @@ public class JarExportUtil {
 		checkAbort();
 
 		info(dpe.getType().getLine1() + ": " + dpe.getTitle().toString());
-		//
-		// final File newJar = new File(tempDir, dpe.getId() + ".jar");
-		// String jarName = newJar.getAbsolutePath();
-		// String absolutePath = ace.getAtlasDir().getAbsolutePath();
-		// String relpath = "ad" + File.separator + "data" + File.separator
-		// + dpe.getDataDirname();
-		// // String fileName = new File(absolutePath,
-		// relpath).getAbsolutePath();
-		// /**
-		// * Creating a JAR
-		// */
-		// Main jartool = new Main(System.out, System.err, "jar");
-		// boolean run = jartool.run(new String[] { "cMvf", jarName, "-C",
-		// absolutePath, relpath });
-		// if (!run)
-		// throw new AtlasExportException("Unable to create jar for dpe");
-
+	
 		/**
 		 * Setting up a new JAR file
 		 */
 		// Setting up da JAR File for this DatapoolEntry
 		final File newJar = new File(tempDir, dpe.getId() + ".jar");
 		LOGGER.debug("Exportig to JAR " + newJar.getName() + "    in "
-				+ tempDir.toString());
+				+ tempDir);
 		final BufferedOutputStream bo = new BufferedOutputStream(
 				new FileOutputStream(newJar.getAbsolutePath()));
 		final JarOutputStream jo = new JarOutputStream(bo);
@@ -1066,7 +1090,7 @@ public class JarExportUtil {
 			final Element resources = document.createElement("resources");
 
 			// ******************************************************************
-			// Set the property to allow pack2000 compression for the .jar files
+			// Set the property to allow pack200 compression for the .jar files
 			// See
 			// http://java.sun.com/javase/downloads/ea/6u10/
 			// newJavaSystemProperties.jsp
@@ -1267,15 +1291,12 @@ public class JarExportUtil {
 		final File jsmoothSkelDir = new File(atlasDir, "autodownload-wrapper");
 		jsmoothSkelDir.mkdirs();
 
-		final ClassLoader cl = GpUtil.class.getClassLoader();
-
 		final File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(cl
-				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
+		FileUtils.copyURLToFile(GpUtil.class.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
 				jsmoothExeFile);
 		final File jsmoothSkelFile = new File(jsmoothSkelDir,
 				"autodownload.skel");
-		FileUtils.copyURLToFile(cl
+		FileUtils.copyURLToFile(GpUtil.class
 				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE2),
 				jsmoothSkelFile);
 
@@ -1283,7 +1304,7 @@ public class JarExportUtil {
 		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
 		 */
 		final File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
-		FileUtils.copyURLToFile(cl
+		FileUtils.copyURLToFile(GpUtil.class
 				.getResource(AtlasConfig.JSMOOTH_PROJEKT_RESOURCE),
 				destinationProjectFile);
 		try {
@@ -1407,21 +1428,10 @@ public class JarExportUtil {
 			totalSteps++;
 		}
 
-		info("Removing old files...");
-		if (toDisk) {
-			FileUtils.deleteDirectory(targetDirDISK);
-		}
-		if (toJws) {
-			FileUtils.deleteDirectory(targetDirJWS);
-		}
 
-		deleteOldTempExportDirs();
 
 		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
 
-		tempDir = new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
-				+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);
-		tempDir.mkdirs();
 
 		// Try catch to always delete the temp folder
 		try {
@@ -1705,7 +1715,8 @@ public class JarExportUtil {
 			String atlasDependecies = p.getProperty("classpath");
 
 			// remove maven made :.classes entries
-			atlasDependecies.replaceAll(":.classes", "");
+			atlasDependecies = atlasDependecies.replaceAll("\\./classes", "")
+					.replaceAll("::", ":");
 
 			return atlasDependecies.split(":");
 		} catch (IOException e) {
@@ -1852,21 +1863,13 @@ public class JarExportUtil {
 		final List<String> command = new ArrayList<String>();
 
 		command.add("-keystore");
-		final String keyStoreName = "skrueger/creator/export/keystore";
-		// TODO
-		// This
-		// is a
-		// relative
-		// path?! good? bad?
-
-		// command.add(ACProps.get(Keys.signingKeystore));
-		final URL keyStoreURL = JarExportUtil.class.getClassLoader()
-				.getResource(keyStoreName);
+		final String keyStoreName = "/export/export.keystore";
+		final URL keyStoreURL = JarExportUtil.class.getResource(keyStoreName);
 
 		if (keyStoreURL == null)
 			throw new AtlasExportException(
 					"The keystore for signing couldn't be found at "
-							+ keyStoreName); // i8n
+							+ keyStoreName); 
 
 		command.add(keyStoreURL.toString());
 		command.add("-storepass");
@@ -1885,7 +1888,7 @@ public class JarExportUtil {
 		try {
 			JarSigner.main(args);
 			Log.debug("Signing " + jarFile + " OK.\n");
-		} catch (final Exception e) {
+		} catch (final Throwable e) {
 			LOGGER.error(e);
 			throw new AtlasExportException("Exception while signing\n "
 					+ jarFile + " with\n '" + signCmdLine + "'", e);
@@ -1980,8 +1983,7 @@ public class JarExportUtil {
 			 */
 			{
 				// command.add(ACProps.get(Keys.signingKeystore));
-				final URL htaccessURL = JarExportUtil.class.getClassLoader()
-						.getResource("skrueger/creator/export/htaccess");
+				final URL htaccessURL = JarExportUtil.class.getResource("/export/htaccess");
 				FileUtils.copyURLToFile(htaccessURL, new File(targetDirJWS,
 						".htaccess"));
 			}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chartStyle id="chartstyle_01714953069" type="SCATTER" legend="true" tooltips="true" urls="true" orientation="vertical" margin="0.0" regrLineVisible="true">
+  <border visible="false" />
+  <title paint="#000000">en{Size of Armed Forces and Democracy Status}</title>
+  <desc paint="#808080">en{Size of Armed Forces (Rank) vs. Democracy Status (Index)}</desc>
+  <domainAxis visible="true">
+    <title paint="#000000" angle="0.0">en{Rank (Size of Armed Forces)}</title>
+    <valueLabels valueAngle="0.0" />
+  </domainAxis>
+  <rangeAxis visible="true" unit="points">
+    <title paint="#000000" angle="0.0">en{Democracy Status (Democracy Status)}</title>
+    <valueLabels valueAngle="0.0" />
+  </rangeAxis>
+  <renderer>
+    <series paint="#6600ff" shapesVisible="true" legendVisible="true" legendLabel="en{Democracy Status (Democracy Status)}" legendTooltip="en{2006}" />
+  </renderer>
+  <plot centerAxisOrigin="true">
+    <foreground alpha="1.0" />
+    <background alpha="1.0" />
+    <domainGridline visible="true" />
+    <rangeGridline visible="true" />
+    <crosshairLines visible="true" paint="#000000" />
+  </plot>
+  <featureAttributes>
+    <domainAttr name="RankArmed" normalize="false" sort="true" forceCategories="false" />
+    <rangeAttr name="demstat" normalize="false" />
+  </featureAttributes>
+</chartStyle>
+

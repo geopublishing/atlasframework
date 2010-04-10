@@ -59,40 +59,10 @@ public class EditAttributesJDialogTest extends TestCase {
 		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
 				.getInstanceFor(dplv, null, dplv);
 		
-		dialog.setModal(true);
-		while (dialog.isVisible()) {
-			Thread.sleep(100);
-		}
+		dialog.setModal(GPTestingUtil.INTERACTIVE);
+		dialog.setVisible(true);
 		
-//		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de", "bbb");
-//		dplv.getAttributeMetaDataMap().get(aname).setVisible(!backupVisibility);
-//
-//		assertEquals(backupSize, dplv.getAttributeMetaDataMap().size());
-//
-//		String expected = dplv.getAttributeMetaDataMap().get(aname).getTitle().get("de");
-//		
-//		assertEquals(
-//				"Cancel doesn't work, because the Translation has not been reset",
-//				expected,
-//				"aaa");
-//		assertEquals(
-//				"Cancel doesn't work, because the visibility has not been reset",
-//				dplv.getAttributeMetaDataMap().get(aname).isVisible(),
-//				backupVisibility);
+		dialog.dispose();
 	}
-
-//	public void testOkClose() {
-//		if (!TestingUtil.INTERACTIVE)
-//			return;
-//		
-//		Name aname = dplv.getSchema().getAttributeDescriptors().get(1).getName();
-//
-//		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
-//				.getInstanceFor(dplv, null, dplv);
-//		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de",
-//				"sadasd{asdas");
-//		assertFalse("okClose didn't work because it didn't see the {", dialog
-//				.okClose());
-//	}
 
 }

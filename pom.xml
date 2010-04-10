@@ -98,8 +98,21 @@
 
 		<resources>
 			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>export/export.keystore</include>
+					<include>export/jsmooth/autodownload-wrapper/*</include>
+				</includes>
+			</resource>
+
+			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>export/export.keystore</exclude>
+					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
+				</excludes>
 			</resource>
 		</resources>
 
@@ -207,7 +220,8 @@
 							<!-- children modules only define their mainClass here  -->
 						</manifest>
 						<manifestEntries>
-							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Version>${project.version}
+							</Implementation-Version>
 							<Implementation-Build>${buildNumber}</Implementation-Build>
 						</manifestEntries>
 					</archive>
@@ -293,7 +307,8 @@
 				<enabled>true</enabled>
 			</snapshots>
 			<id>plugins-snapshots.artifactory.wikisquare.de</id>
-			<url>http://www.wikisquare.de:8080/artifactory/plugins-snapshots-local</url>
+			<url>http://www.wikisquare.de:8080/artifactory/plugins-snapshots-local
+			</url>
 		</pluginRepository>
 
 		<pluginRepository>
@@ -302,7 +317,8 @@
 				<enabled>false</enabled>
 			</snapshots>
 			<id>plugins-releases.artifactory.wikisquare.de</id>
-			<url>http://www.wikisquare.de:8080/artifactory/plugins-releases-local</url>
+			<url>http://www.wikisquare.de:8080/artifactory/plugins-releases-local
+			</url>
 		</pluginRepository>
 
 	</pluginRepositories>

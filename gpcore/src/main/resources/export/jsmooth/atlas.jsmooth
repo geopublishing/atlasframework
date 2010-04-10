@@ -8,7 +8,7 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
 <classPath>atlas_resources.jar</classPath>
-<classPath>av.jar</classPath>
+<classPath>gpcore-1.5-SNAPSHOT.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>atlas.exe</executableName>
@@ -18,7 +18,7 @@
 <name>file.encoding</name>
 <value>UTF-8</value>
 <name>java.library.path</name>
-<value>lib/native</value>
+<value>natives</value>
 </javaProperties>
 <mainClassName>skrueger.atlas.AtlasViewer</mainClassName>
 <maximumMemoryHeap>241172480</maximumMemoryHeap>

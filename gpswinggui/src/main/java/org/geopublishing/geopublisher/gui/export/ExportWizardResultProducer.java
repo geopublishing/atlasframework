@@ -63,7 +63,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
 				.get(ExportWizard.ACE);
-		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
+		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
+				false))
 			return null; // TODO what should be return here?
 
 		final Boolean isJws = (Boolean) wizardData
@@ -113,9 +114,9 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			public void start(Map wizardData, ResultProgressHandle progress) {
 				this.progress = progress;
 
-				jarExportUtil = new JarExportUtil(ace, new File(exportDir),
-						isDisk, isJws, copyJRE);
 				try {
+					jarExportUtil = new JarExportUtil(ace, new File(exportDir),
+							isDisk, isJws, copyJRE);
 					jarExportUtil.export(progress);
 				} catch (AtlasCancelException e) {
 					LOGGER.info("Export aborted by user:", e);

@@ -39,8 +39,6 @@ public class ACETranslationPrinterTest extends TestCase {
 		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE();
 		assertNotNull(ace);
 
-		JFrame owner = null;
-
 		/**
 		 * Ask the user to select a save position
 		 */
@@ -54,7 +52,7 @@ public class ACETranslationPrinterTest extends TestCase {
 		dc.setSelectedFile(startWithDir);
 
 		if (GPTestingUtil.INTERACTIVE) {
-			if ((dc.showOpenDialog(owner) != JFileChooser.APPROVE_OPTION)
+			if ((dc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
 					|| (dc.getSelectedFile() == null))
 				return;
 		}
