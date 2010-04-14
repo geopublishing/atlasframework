@@ -78,6 +78,7 @@ import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
 import skrueger.geotools.StyledFeatureSourceInterface;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.versionnumber.ReleaseUtil;
 
 /**
  * This is the main GUI for the AtlasStyler standalone. It looks like a
@@ -105,14 +106,14 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
-				+ AVUtil.getVersionInfo());
+				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(AtlasStylerGUI.class
 				.getResource("/as_log4j.xml"));
 
 		// Output information about the LGPL license
-		AVSwingUtil.logLGPLCopyright(LOGGER);
+		ReleaseUtil.logLGPLCopyright(LOGGER);
 
 		System.setProperty("file.encoding", "UTF-8");
 
@@ -148,7 +149,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		this.setSize(800, 600);
 		this.setContentPane(getJContentPane());
 		String AtlasStyler_MainWindowTitle = "AtlasStyler "
-				+ AVSwingUtil.getVersionInfo();
+				+ ReleaseUtil.getVersionInfo(AVUtil.class);
 		this.setTitle(AtlasStyler_MainWindowTitle);
 
 	}

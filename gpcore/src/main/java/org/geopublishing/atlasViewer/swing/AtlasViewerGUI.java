@@ -76,6 +76,7 @@ import skrueger.geotools.StyledLayerInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
+import skrueger.versionnumber.ReleaseUtil;
 
 /**
  * {@link AtlasViewerGUI} main class
@@ -151,9 +152,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	private AtlasViewerGUI() {
 
 		// Atlas Viewer is starting
-		LOGGER.info("Starting AtlasViewer.. " + AVSwingUtil.getVersionInfo());
+		LOGGER.info("Starting AtlasViewer.. " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		AVUtil.logLGPLCopyright(LOGGER);
+		ReleaseUtil.logLGPLCopyright(LOGGER);
 
 		/*
 		 * Register this as single instance

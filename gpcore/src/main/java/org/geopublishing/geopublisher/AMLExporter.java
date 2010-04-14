@@ -75,6 +75,7 @@ import schmitzm.jfree.feature.style.FeatureChartUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.i8n.Translation;
+import skrueger.versionnumber.ReleaseUtil;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -245,12 +246,12 @@ public class AMLExporter {
 
 		// Storing the version this atlas.xml is being created with inside the
 		// atlas.xml
-		atlas.setAttribute(AMLUtil.ATT_majVersion, String.valueOf(AVUtil
-				.getVersionMaj()));
-		atlas.setAttribute(AMLUtil.ATT_minVersion, String.valueOf(AVUtil
-				.getVersionMin()));
-		atlas.setAttribute(AMLUtil.ATT_buildVersion, String.valueOf(AVUtil
-				.getVersionBuild()));
+		atlas.setAttribute(AMLUtil.ATT_majVersion, String.valueOf(ReleaseUtil
+				.getVersionMaj(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_minVersion, String.valueOf(ReleaseUtil
+				.getVersionMin(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_buildVersion, String.valueOf(ReleaseUtil
+				.getVersionBuild(AVUtil.class)));
 
 		// <aml:name, desc, creator, copyright
 		atlas.appendChild(exportTranslation(document, "name", ace.getTitle()));

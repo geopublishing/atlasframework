@@ -80,6 +80,7 @@ import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
+import skrueger.versionnumber.ReleaseUtil;
 
 import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
@@ -209,13 +210,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 *            command line arguments
 	 * **/
 	public GeopublisherGUI(final List<String> args) {
-		LOGGER.info("Starting "+GeopublisherGUI.class.getSimpleName()+"... " + AVUtil.getVersionInfo());
+		LOGGER.info("Starting "+GeopublisherGUI.class.getSimpleName()+"... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(GeopublisherGUI.class.getResource("/gp_log4j.xml"));
 
 		/** Output information about the GPL license **/
-		AVUtil.logGPLCopyright(LOGGER);
+		ReleaseUtil.logGPLCopyright(LOGGER);
 		
 		System.setProperty("file.encoding", "UTF-8");
 
@@ -291,8 +292,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			editAtlasDialog.setVisible(true);
 			if (!editAtlasDialog.isCancelled()) {
 				getJFrame().setTitle(
-						R("ApplicationMainWindowTitle_with_open_atlas", AVUtil
-								.getVersionInfo(), ace.getTitle()
+						R("ApplicationMainWindowTitle_with_open_atlas", ReleaseUtil
+								.getVersionInfo(AVUtil.class), ace.getTitle()
 								.toString()));
 			}
 
@@ -894,7 +895,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		if (gpJFrame != null)
 			gpJFrame.dispose();
 
-		LOGGER.info("AtlasCreator " + AVUtil.getVersionInfo()
+		LOGGER.info("AtlasCreator " + ReleaseUtil.getVersionInfo(AVUtil.class)
 				+ " terminated normally.");
 
 		System.exit(exitCode);
@@ -1101,7 +1102,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info(message);
 		if (!GraphicsEnvironment.isHeadless()) {
 			JOptionPane.showMessageDialog(null, message, R(
-					"CommandLineHelp.title", AVUtil.getVersionInfo()),
+					"CommandLineHelp.title", ReleaseUtil.getVersionInfo(AVUtil.class)),
 					JOptionPane.INFORMATION_MESSAGE);
 			System.exit(-1);
 		} else

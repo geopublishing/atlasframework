@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.Random;
 
 import javax.measure.unit.Unit;
@@ -782,147 +781,6 @@ public class AVUtil {
 		return filename;
 	}
 
-	/**
-	 * @return The major.minor version, build number and build date
-	 */
-	public static String getVersionInfo() {
-		/**
-		 * Release properties einlesen
-		 */
-		try {
-			return "v" + getVersion() + "-r" + getVersionBuild();
-		} catch (final Exception e) {
-			LOGGER.warn("Trying to read version information failed", e);
-			return "unknown version";
-		}
-	}
-
-	/**
-	 * Return the major part of the software version of GP/AV/AS.
-	 * 
-	 * @throws Exception
-	 *             if release.properties not found
-	 */
-	public static String getVersion() {
-		try {
-
-			final URL releasePropsURL = AVUtil.class
-					.getResource("/release.properties");
-
-			final Properties releaseProps = new Properties();
-			final InputStream openStream = releasePropsURL.openStream();
-			try {
-				releaseProps.load(openStream);
-			} finally {
-				openStream.close();
-			}
-
-			final String defaultVer = "DEV";
-			final String versionProperty = releaseProps.getProperty("version", defaultVer);
-			if (versionProperty.equals("${project.version}")) return defaultVer;
-			return versionProperty;
-		} catch (final Exception e) {
-			throw new RuntimeException(
-					"/release.properties could not be read!", e);
-		}
-
-	}
-
-	/**
-	 * Return the major part of the software version of GP/AV/AS.
-	 * 
-	 * @throws Exception
-	 *             if release.properties not found
-	 */
-	public static int getVersionBuild() {
-		try {
-			final URL releasePropsURL = AVUtil.class
-					.getResource("/release.properties");
-
-			final Properties releaseProps = new Properties();
-			final InputStream openStream = releasePropsURL.openStream();
-			try {
-				releaseProps.load(openStream);
-			} finally {
-				openStream.close();
-			}
-			final String str = releaseProps.getProperty("build", "0");
-
-			if (str.equals("${buildNumber}")) {
-				// We are in development or Maven didn't filter the properties
-				// while building.
-				return 0;
-			}
-
-			return Integer.parseInt(str);
-		} catch (final Exception e) {
-			throw new RuntimeException(
-					"/release.properties could not be read!", e);
-		}
-
-	}
-
-	// /**
-	// * Return the major part of the software version of GP/AV/AS.
-	// *
-	// * @throws Exception
-	// * if release.properties not found
-	// */
-	// public static Date getVersionBuildDate() {
-	// try {
-	// final URL releasePropsURL = AVUtil.class
-	// .getResource("/release.properties");
-	// if (releasePropsURL == null)
-	// throw new RuntimeException("/release.properties not found!");
-	//
-	// final Properties releaseProps = new Properties();
-	// final InputStream openStream = releasePropsURL.openStream();
-	// releaseProps.load(openStream);
-	// openStream.close();
-	// final String str = releaseProps.getProperty("datetime", "0");
-	//
-	// return new Date(Date.parse(str));
-	// } catch (Exception e) {
-	// throw new RuntimeException(
-	// "/release.properties could not be read!", e);
-	// }
-	//
-	// }
-
-	/**
-	 * Print the GPL disclaimer to the given {@link Logger} as on INFO level.
-	 */
-	public static void logGPLCopyright(final Logger logger) {
-
-		logger
-				.info("\nThis program is free software: you can redistribute it and/or modify\n"
-						+ "it under the terms of the GNU General Public License as published by\n"
-						+ "the Free Software Foundation, either version 3 of the License, or\n"
-						+ "(at your option) any later version.\n"
-						+ "\n"
-						+ "This program is distributed in the hope that it will be useful,\n"
-						+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-						+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-						+ "GNU General Public License for more details.\n");
-	}
-
-	/**
-	 * Print the LGPL disclaimer to the given {@link Logger} as on INFO level.
-	 */
-	public static void logLGPLCopyright(final Logger logger) {
-
-		logger
-				.info("\nThis program is free software: you can redistribute it and/or modify\n"
-						+ "it under the terms of the GNU Lesser General Public License as published by\n"
-						+ "the Free Software Foundation, either version 3 of the License, or\n"
-						+ "(at your option) any later version.\n"
-						+ "\n"
-						+ "This program is distributed in the hope that it will be useful,\n"
-						+ "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-						+ "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
-						+ "GNU Lesser General Public License for more details.\n");
-
-	}
 
 	/**
 	 * Convenience method to update the series legend {@link ChartStyle} title
@@ -1051,21 +909,5 @@ public class AVUtil {
 		return waitFrame;
 	}
 
-	public static int getVersionMaj() {
-		try {
-			return Integer.parseInt(getVersion().split("\\.")[0]);
-		} catch (final Exception e) {
-			return 0;
-		}
-	}
-
-	public static int getVersionMin() {
-		try {
-			return Integer.parseInt(getVersion().split("\\.")[1]);
-		} catch (final Exception e) {
-			return 0;
-		}
-
-	}
 
 }

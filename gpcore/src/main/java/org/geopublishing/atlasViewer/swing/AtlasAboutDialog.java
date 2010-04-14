@@ -28,10 +28,12 @@ import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.versionnumber.ReleaseUtil;
 
 /**
  * 
@@ -53,7 +55,7 @@ public class AtlasAboutDialog extends javax.swing.JDialog {
 			jLabel2.setText(null);
 			jLabel3.setText("<html><h1>" + atlasConfig.getTitle()
 					+ "</h1><br/><font size='-2' color='gray'>AtlasViewer "
-					+ AVSwingUtil.getVersionInfo() + "</font></html>");
+					+ ReleaseUtil.getVersionInfo(AVUtil.class) + "</font></html>");
 			jButton1.setText(AtlasViewerGUI.R("HtmlBrowserWindow.button.close"));
 			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About", atlasConfig
 					.getTitle()));

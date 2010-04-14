@@ -51,6 +51,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPBugReportmailer;
 import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
@@ -68,6 +69,7 @@ import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.HeapBar;
+import skrueger.versionnumber.ReleaseUtil;
 
 public class GpFrame extends JFrame {
 	private static final Logger LOGGER = Logger.getLogger(GpFrame.class);
@@ -142,7 +144,7 @@ public class GpFrame extends JFrame {
 		// React to changes of the locale
 		Translation.addLocaleChangeListener(localeChangeListener);
 
-		setTitle(R("ApplicationMainWindowTitle", AVUtil.getVersionInfo()));
+		setTitle(R("ApplicationMainWindowTitle", ReleaseUtil.getVersionInfo(GpUtil.class)));
 
 		setSize(new Dimension(GPProps.getInt(GPProps.Keys.gpWindowWidth, 750),
 				GPProps.getInt(GPProps.Keys.gpWindowHeight, 600)));
@@ -186,10 +188,10 @@ public class GpFrame extends JFrame {
 	protected JMenuBar createMenuBar() {
 		AtlasConfigEditable ace = gp.getAce();
 		if (ace == null) {
-			setTitle(R("ApplicationMainWindowTitle", AVUtil.getVersionInfo()));
+			setTitle(R("ApplicationMainWindowTitle", ReleaseUtil.getVersionInfo(GpUtil.class)));
 		} else {
-			setTitle(R("ApplicationMainWindowTitle_with_open_atlas", AVUtil
-					.getVersionInfo(), ace.getTitle().toString()));
+			setTitle(R("ApplicationMainWindowTitle_with_open_atlas", ReleaseUtil
+					.getVersionInfo(GpUtil.class), ace.getTitle().toString()));
 		}
 
 		JMenuBar jMenuBar = new JMenuBar();

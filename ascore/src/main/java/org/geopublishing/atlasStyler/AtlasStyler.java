@@ -47,6 +47,7 @@ import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
+import skrueger.versionnumber.ReleaseUtil;
 
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Polygon;
@@ -874,7 +875,7 @@ public class AtlasStyler {
 			// Create an empty Style without any FeatureTypeStlyes
 			xxxstyle = ASUtil.SB.createStyle();
 
-			xxxstyle.setName("AtlasStyler " + ASUtil.getVersionInfo());
+			xxxstyle.setName("AtlasStyler " + ReleaseUtil.getVersionInfo(ASUtil.class));
 
 			if (lastChangedRuleList == null) {
 

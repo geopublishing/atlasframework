@@ -16,7 +16,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.xml.parsers.ParserConfigurationException;
 
 import junit.framework.TestCase;

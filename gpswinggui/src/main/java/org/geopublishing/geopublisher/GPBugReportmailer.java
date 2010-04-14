@@ -10,9 +10,10 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.geopublisher.swing.BugReportmailer;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+
+import skrueger.versionnumber.ReleaseUtil;
 
 
 public class GPBugReportmailer extends BugReportmailer {
@@ -30,8 +31,8 @@ public class GPBugReportmailer extends BugReportmailer {
 
 	@Override
 	protected String getSubject() {
-		return GeopublisherGUI.R("SendLogToAuthor.Email.Subject", AVUtil
-				.getVersionInfo());
+		return GeopublisherGUI.R("SendLogToAuthor.Email.Subject", ReleaseUtil
+				.getVersionInfo(GpUtil.class));
 	}
 
 }
