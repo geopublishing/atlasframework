@@ -55,8 +55,6 @@
 					</archive>
 				</configuration>
 			</plugin>
-		</plugins>
-
 		<plugin>
 			<!-- no -sources.jar for these natives  -->
 			<groupId>org.apache.maven.plugins</groupId>
@@ -70,6 +68,8 @@
 				</execution>
 			</executions>
 		</plugin>
+		</plugins>
+
 
 	</build>
 
