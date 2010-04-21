@@ -26,16 +26,16 @@
 			<resource>
 				<directory>src/main/natives/windows/64</directory>
 			</resource>
-			
+
 
 			<resource>
 				<directory>src/main/natives/linux/64</directory>
 			</resource>
-			
+
 			<resource>
 				<directory>src/main/natives/linux/32</directory>
 			</resource>
-			
+
 
 
 		</resources>
@@ -56,6 +56,21 @@
 				</configuration>
 			</plugin>
 		</plugins>
+
+		<plugin>
+			<!-- no -sources.jar for these natives  -->
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-source-plugin</artifactId>
+			<executions>
+				<execution>
+					<id>attach-sources</id>
+					<goals>
+						<!--							<goal>jar</goal>-->
+					</goals>
+				</execution>
+			</executions>
+		</plugin>
+
 	</build>
 
 </project>
