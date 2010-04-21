@@ -128,7 +128,7 @@
 		<dependency>
 			<groupId>de.schmitzm</groupId>
 			<artifactId>schmitzm-library</artifactId>
-			<version>2.0.x-SNAPSHOT</version>
+			<version>${schmitzm.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>

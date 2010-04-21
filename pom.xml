@@ -53,6 +53,7 @@
 	<properties>
 		<geotools.version>2.6.2</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<schmitzm.version>2.2-SNAPSHOT</schmitzm.version>
 	</properties>
 
 	<organization>
@@ -87,11 +88,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk
-		</connection>
+		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
-		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}
-		</developerConnection>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}</developerConnection>
 	</scm>
 
 	<build>
@@ -138,18 +137,18 @@
 				</executions>
 			</plugin>
 
-			 <plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-source-plugin</artifactId>
-			    <executions>
-				<execution>
-				    <id>attach-sources</id>
-				    <goals>
-					<goal>jar</goal>
-				    </goals>
-				 </execution>
-			     </executions>
-			 </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -249,7 +248,10 @@
 
 		<repository>
 			<!-- Snapshot releases for geopublishing.org powered by wikisquare.de-->
-			<snapshots />
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
 			<id>snapshots.artifactory.wikisquare.de</id>
 			<name>Snapshots for geopublishing.org - powered by wikisquare.de
 			</name>
