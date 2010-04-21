@@ -295,8 +295,13 @@ public class JarExportUtil {
 
 	private File targetDirJWS, targetDirDISK;
 
-	private File tempDir = new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
-			+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);
+	/**
+	 * The temp directory where jars are assembled. it is a random folder in the
+	 * system temp directory.
+	 */
+	private final File tempDir = new File(IOUtil.getTempDir(),
+			AVUtil.ATLAS_TEMP_FILE_ID + "export" + AVUtil.RANDOM.nextInt(19999)
+					+ 10000);
 
 	/** Is export to DISK requested? **/
 	private final Boolean toDisk;
@@ -330,7 +335,7 @@ public class JarExportUtil {
 	 *            If {@link #toDisk} is <code>true</code>, this controls whether
 	 *            the locally installed JRE should be copied to DISK/jre. May be
 	 *            <code>null</code>.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public JarExportUtil(final AtlasConfigEditable ace_,
 			final File exportDirectory, final Boolean toDisk,
@@ -339,20 +344,18 @@ public class JarExportUtil {
 		this.toDisk = toDisk;
 		this.toJws = toJws;
 		this.copyJRE = copyJRE;
-		
-		// Create temporary export forlder
-		info("Removing old files...");
-		if (toDisk) {
+
+		// Create temporary export folder
+		LOGGER.debug("Deleting old files..."); //i8n
+		if (toDisk && targetDirDISK != null)
 			FileUtils.deleteDirectory(targetDirDISK);
-		}
-		if (toJws) {
+		if (toJws && targetDirJWS != null) {
 			FileUtils.deleteDirectory(targetDirJWS);
 		}
 
 		deleteOldTempExportDirs();
-		tempDir.mkdirs();
-		
-		
+		getTempDir().mkdirs();
+
 		// Create final export folders
 		if (toDisk) {
 			targetDirDISK = new File(exportDirectory, "DISK");
@@ -578,10 +581,11 @@ public class JarExportUtil {
 					// .toURL();
 
 					fromURL = getNativeLibraryURL(nat);
-					
+
 				}
 				if (fromURL == null) {
-					System.err.println(nat+" not found in "+System.getProperty("java.library.path"));
+					System.err.println(nat + " not found in "
+							+ System.getProperty("java.library.path"));
 					continue;
 				}
 
@@ -703,7 +707,8 @@ public class JarExportUtil {
 					}
 				}
 				if (fromURL == null) {
-					System.err.println(lib+" not found in "+System.getProperty("java.class.path"));
+					System.err.println(lib + " not found in "
+							+ System.getProperty("java.class.path"));
 					continue;
 				}
 
@@ -727,8 +732,9 @@ public class JarExportUtil {
 									destinationPackGz);
 						} catch (final Exception e) {
 							if (packNotExistingErrorAlreadyShown == false) {
-//								ExceptionDialog.show(null, new AtlasException(
-//										GpUtil.R("Export.Error.Pack200"), e));
+								// ExceptionDialog.show(null, new
+								// AtlasException(
+								// GpUtil.R("Export.Error.Pack200"), e));
 							}
 							// Do not show this warning again next time.
 							packNotExistingErrorAlreadyShown = true;
@@ -823,8 +829,9 @@ public class JarExportUtil {
 
 			final File destLicense = new File(targetJar.getParentFile(),
 					"license.html");
-			FileUtils.copyURLToFile(GpUtil.class.getResource(
-					AtlasConfig.LICENSEHTML_RESOURCE_NAME), destLicense);
+			FileUtils.copyURLToFile(GpUtil.class
+					.getResource(AtlasConfig.LICENSEHTML_RESOURCE_NAME),
+					destLicense);
 		} catch (final Exception e) {
 			ExceptionDialog
 					.show(
@@ -892,14 +899,14 @@ public class JarExportUtil {
 		checkAbort();
 
 		info(dpe.getType().getLine1() + ": " + dpe.getTitle().toString());
-	
+
 		/**
 		 * Setting up a new JAR file
 		 */
 		// Setting up da JAR File for this DatapoolEntry
-		final File newJar = new File(tempDir, dpe.getId() + ".jar");
+		final File newJar = new File(getTempDir(), dpe.getId() + ".jar");
 		LOGGER.debug("Exportig to JAR " + newJar.getName() + "    in "
-				+ tempDir);
+				+ getTempDir());
 		final BufferedOutputStream bo = new BufferedOutputStream(
 				new FileOutputStream(newJar.getAbsolutePath()));
 		final JarOutputStream jo = new JarOutputStream(bo);
@@ -1292,7 +1299,8 @@ public class JarExportUtil {
 		jsmoothSkelDir.mkdirs();
 
 		final File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(GpUtil.class.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
+		FileUtils.copyURLToFile(GpUtil.class
+				.getResource(AtlasConfig.JSMOOTH_SKEL_AD_RESOURCE1),
 				jsmoothExeFile);
 		final File jsmoothSkelFile = new File(jsmoothSkelDir,
 				"autodownload.skel");
@@ -1367,12 +1375,9 @@ public class JarExportUtil {
 
 	/**
 	 * This approach could be problematic if there are more than one exports
-	 * running.
+	 * running at a time.
 	 */
 	public void deleteOldTempExportDirs() {
-
-		// Create a temporary directory to put stuff into before we split it
-		// into two directories
 
 		/**
 		 * Delete any old/parallel export directories
@@ -1428,15 +1433,12 @@ public class JarExportUtil {
 			totalSteps++;
 		}
 
-
-
 		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
-
 
 		// Try catch to always delete the temp folder
 		try {
 
-			final File targetJar = new File(tempDir, ARJAR_FILENAME);
+			final File targetJar = new File(getTempDir(), ARJAR_FILENAME);
 			LOGGER.debug("Export of " + ace.getTitle() + " to " + targetJar);
 
 			// **********************************************************************
@@ -1869,7 +1871,7 @@ public class JarExportUtil {
 		if (keyStoreURL == null)
 			throw new AtlasExportException(
 					"The keystore for signing couldn't be found at "
-							+ keyStoreName); 
+							+ keyStoreName);
 
 		command.add(keyStoreURL.toString());
 		command.add("-storepass");
@@ -1909,14 +1911,14 @@ public class JarExportUtil {
 			/**
 			 * Exclusively for DISK
 			 */
-			FileUtils.moveFileToDirectory(new File(tempDir, "start.bat"),
+			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.bat"),
 					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "start.sh"),
+			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "autorun.inf"),
-					targetDirDISK, true);
+			FileUtils.moveFileToDirectory(
+					new File(getTempDir(), "autorun.inf"), targetDirDISK, true);
 			// Icon.gif is used (and deleted afterwards) by JSmooth
-			FileUtils.copyFileToDirectory(new File(tempDir, "icon.gif"),
+			FileUtils.copyFileToDirectory(new File(getTempDir(), "icon.gif"),
 					targetDirDISK, true);
 
 			/**
@@ -1930,25 +1932,25 @@ public class JarExportUtil {
 			/**
 			 * Exclusively for JWS
 			 */
-			FileUtils.moveFileToDirectory(new File(tempDir, "index.html"),
-					targetDirJWS, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, JNLP_FILENAME),
-					targetDirJWS, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "icon.gif"),
+			FileUtils.moveFileToDirectory(new File(getTempDir(), "index.html"),
 					targetDirJWS, true);
 			FileUtils.moveFileToDirectory(
-					new File(tempDir, "splashscreen.png"), targetDirJWS, true);
+					new File(getTempDir(), JNLP_FILENAME), targetDirJWS, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(), "icon.gif"),
+					targetDirJWS, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(),
+					"splashscreen.png"), targetDirJWS, true);
 		}
 
 		/**
 		 * For both
 		 */
-		final Collection<File> jars = FileUtils.listFiles(tempDir,
+		final Collection<File> jars = FileUtils.listFiles(getTempDir(),
 				new String[] { "jar", "jar.pack.gz", "so", "dll" }, true);
 		for (final File jar : jars) {
 
 			final String diffDir = jar.getAbsolutePath().substring(
-					tempDir.getAbsolutePath().length() + 1);
+					getTempDir().getAbsolutePath().length() + 1);
 
 			/**
 			 * Copy files to DISK
@@ -1972,10 +1974,10 @@ public class JarExportUtil {
 		}
 
 		if (toJws) {
-			FileUtils.copyFileToDirectory(new File(tempDir, "README.TXT"),
+			FileUtils.copyFileToDirectory(new File(getTempDir(), "README.TXT"),
 					targetDirJWS);
-			FileUtils.copyFileToDirectory(new File(tempDir, "license.html"),
-					targetDirJWS);
+			FileUtils.copyFileToDirectory(
+					new File(getTempDir(), "license.html"), targetDirJWS);
 
 			/**
 			 * Copy the .htaccess from the deploy directory into the target
@@ -1983,19 +1985,32 @@ public class JarExportUtil {
 			 */
 			{
 				// command.add(ACProps.get(Keys.signingKeystore));
-				final URL htaccessURL = JarExportUtil.class.getResource("/export/htaccess");
+				final URL htaccessURL = JarExportUtil.class
+						.getResource("/export/htaccess");
 				FileUtils.copyURLToFile(htaccessURL, new File(targetDirJWS,
 						".htaccess"));
 			}
 		}
 
 		if (toDisk) {
-			FileUtils.moveFileToDirectory(new File(tempDir, "license.html"),
-					targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(tempDir, "README.TXT"),
+			FileUtils
+					.moveFileToDirectory(
+							new File(getTempDir(), "license.html"),
+							targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(), "README.TXT"),
 					targetDirDISK, true);
 		}
 
+	}
+
+	/**
+	 * @return the temp directory where jars are assembled. it is a random
+	 *         folder in the system temp directory: <br/>
+	 *         <code>new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
+			+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);</code>
+	 */
+	public File getTempDir() {
+		return tempDir;
 	}
 
 }

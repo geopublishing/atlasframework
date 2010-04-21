@@ -10,23 +10,21 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
-import junit.framework.TestCase;
-
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.opengis.feature.type.Name;
 
+public class EditAttributesJDialogTest  {
 
-public class EditAttributesJDialogTest extends TestCase {
+	static DpLayerRasterPyramid pyr;
+	private static DpLayerVectorFeatureSource dplv;
 
-	DpLayerRasterPyramid pyr;
-	private DpLayerVectorFeatureSource dplv;
-
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@BeforeClass
+	public static void setUp() throws Exception {
 
 		AtlasConfigEditable atlasConfigE = GPTestingUtil.getAtlasConfigE();
 		for (DpEntry dpe : atlasConfigE.getDataPool().values()) {
@@ -45,15 +43,11 @@ public class EditAttributesJDialogTest extends TestCase {
 					"no dplv with more at least 1 attrib found in atlas");
 	}
 
-	public void testCancel() throws InterruptedException {
+	@Test
+	public void testConstruct() throws InterruptedException {
 
-		int backupSize = dplv.getAttributeMetaDataMap().size();
-		
 		Name aname = dplv.getSchema().getAttributeDescriptors().get(1).getName();
 		
-		boolean backupVisibility = dplv.getAttributeMetaDataMap().get(aname)
-				.isVisible();
-
 		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de", "aaa");
 
 		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute

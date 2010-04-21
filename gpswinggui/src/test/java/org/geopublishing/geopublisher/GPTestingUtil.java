@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +19,6 @@ import java.net.URL;
 
 import javax.swing.JDialog;
 import javax.xml.parsers.ParserConfigurationException;
-
-import junit.framework.TestCase;
 
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
@@ -40,13 +40,13 @@ import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.MapPaneToolBar;
 
-public class GPTestingUtil extends TestCase {
+public class GPTestingUtil {
 
 	/**
 	 * Set to <code>true</code> to also run the interactive tests that will not
 	 * finish without your GUI input
 	 **/
-	public static final boolean INTERACTIVE = false;
+	public static final boolean INTERACTIVE = false; // TODO mavenize
 
 	/** An enumeration of available test-atlases **/
 	public enum Atlas {
@@ -96,9 +96,9 @@ public class GPTestingUtil extends TestCase {
 
 		AMLImport.parseAtlasConfig(null, atlasConfig, false);
 
-		assertNotNull(atlasConfig);
-		assertNotNull(atlasConfig.getMapPool());
-		assertNotNull(atlasConfig.getDataPool());
+		assertNotNull("AtlasConfig is null after parseAtlasConfig!", atlasConfig);
+		assertNotNull("MapPool is null after parseAtlasConfig!",atlasConfig.getMapPool());
+		assertNotNull("DataPool is null after parseAtlasConfig!",atlasConfig.getDataPool());
 
 		return atlasConfig;
 	}
@@ -156,7 +156,7 @@ public class GPTestingUtil extends TestCase {
 			ExceptionDialog.show(null, e);
 		}
 
-		System.out.println("Start loading test atlas config ...");
+//		System.out.println("Start loading test atlas config ...");
 		switch (type) {
 		case small:
 			String atlasChartDemoAtlasURL = "/atlases/ChartDemoAtlas/atlas.gpa";

@@ -145,7 +145,7 @@ public class ACETranslationPrinter {
 			printTranslation(map.getDesc(),
 					"MapPreferences_translateTheMapsDescription");
 			printTranslation(map.getKeywords(),
-					"EditMapPreferences_translateTheMapsKeywords");
+					"MapPreferences_translateTheMapsKeywords");
 		}
 
 		/**

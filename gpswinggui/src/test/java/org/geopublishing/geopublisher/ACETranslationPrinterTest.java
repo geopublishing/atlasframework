@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -17,8 +20,6 @@ import java.io.IOException;
 
 import javax.swing.JFileChooser;
 import javax.xml.parsers.ParserConfigurationException;
-
-import junit.framework.TestCase;
 
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -31,7 +32,7 @@ import org.xml.sax.SAXException;
 import com.lightdev.app.shtm.DocNameMissingException;
 import com.lightdev.app.shtm.DocumentPane;
 
-public class ACETranslationPrinterTest extends TestCase {
+public class ACETranslationPrinterTest  {
 
 	@Test
 	public void testPrint() throws DocNameMissingException, IOException, AtlasException, FactoryException, TransformException, SAXException, ParserConfigurationException {
@@ -42,21 +43,20 @@ public class ACETranslationPrinterTest extends TestCase {
 		 * Ask the user to select a save position
 		 */
 
-		File startWithDir = new File(System.getProperty("user.home"),
-				"translations.html");
-		JFileChooser dc = new JFileChooser(startWithDir);
-		dc.setDialogType(JFileChooser.SAVE_DIALOG);
-		dc.setDialogTitle(GpUtil
-				.R("PrintTranslations.SaveHTMLDialog.Title"));
-		dc.setSelectedFile(startWithDir);
-
+		File exportFile = new File(System.getProperty("java.io.tmp"),
+			"translations.html");
 		if (GPTestingUtil.INTERACTIVE) {
+			JFileChooser dc = new JFileChooser(exportFile);
+			dc.setDialogType(JFileChooser.SAVE_DIALOG);
+			dc.setDialogTitle(GpUtil
+					.R("PrintTranslations.SaveHTMLDialog.Title"));
+			dc.setSelectedFile(exportFile);
 			if ((dc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
 					|| (dc.getSelectedFile() == null))
 				return;
+			exportFile = dc.getSelectedFile();
 		}
 
-		File exportFile = dc.getSelectedFile();
 
 		exportFile.delete();
 

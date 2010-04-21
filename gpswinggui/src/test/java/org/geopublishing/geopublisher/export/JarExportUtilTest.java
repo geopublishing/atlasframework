@@ -10,11 +10,15 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-
-import junit.framework.TestCase;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -24,19 +28,19 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
-import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class JarExportUtilTest extends TestCase {
+public class JarExportUtilTest{
 	static private final Logger LOGGER = Logger
 			.getLogger(JarExportUtilTest.class);
 
 	final File atlasExportTesttDir = GPTestingUtil.getAtlasExportTesttDir();
 
-	private AtlasConfigEditable atlasConfig;
+	private static AtlasConfigEditable atlasConfig;
 
-	@Override
-	protected void setUp() throws Exception {
+	@BeforeClass
+	public  static void setUp() throws Exception {
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
 	}
 	
@@ -48,28 +52,26 @@ public class JarExportUtilTest extends TestCase {
 		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
 				atlasExportTesttDir, true, true, false);
 
-		File dpeJarFile = new File(atlasExportTesttDir,
-				"vector_landesgrenze_Benin01420640780.jar");
+		// Expected first entry in the datapool 
+		String expected = "pdf_02034337607_geopublisher_1.4_chart_creation_tutorial";
+		
+		File expoectedDpeJarFileLoaction = new File(jarExportUtil.getTempDir(),
+				expected);
 
-		dpeJarFile.delete();
-
-		assertFalse(dpeJarFile.exists());
+		expoectedDpeJarFileLoaction.delete();
 
 		DpEntry dpEntry = (DpEntry) atlasConfig.getDataPool().values()
 				.toArray()[0];
 		assertNotNull(dpEntry);
 
-		assertEquals(
-				"pdf_02034337607_geopublisher_1.4_chart_creation_tutorial",
+		assertEquals("Der Test ist nicht korrekt, der erste eintrag im Datenpool is falsch", 
+				expected,
 				dpEntry.getId());
 
-		jarExportUtil.createJarFromDpe(dpEntry);
+		File createJarFromDpe = jarExportUtil.createJarFromDpe(dpEntry);
+		assertTrue("createJarFromDpe failed: After export the expected file "+expected+" doesn't exist!", createJarFromDpe.exists());
 
-		assertTrue(dpeJarFile.exists());
-		long length = dpeJarFile.length();
-		System.out.println(length);
-
-		dpeJarFile.delete();
+		expoectedDpeJarFileLoaction.delete();
 	}
 
 	@Test
@@ -149,11 +151,11 @@ public class JarExportUtilTest extends TestCase {
 		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
 				atlasExportTesttDir, false, true, false);
 
-		File dpeJarFile = new File(atlasExportTesttDir,
-				"vector_landesgrenze_Benin01420640780.jar");
+		File dpeJarFileExpected = new File(jarExportUtil.getTempDir(),
+				"pdf_02034337607_geopublisher_1.4_chart_creation_tutorial.jar");
 
-		dpeJarFile.delete();
-		assertFalse(dpeJarFile.exists());
+		dpeJarFileExpected.delete();
+		assertFalse(dpeJarFileExpected.exists());
 
 		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
 		assertNotNull(passwort);
@@ -162,34 +164,14 @@ public class JarExportUtilTest extends TestCase {
 				.toArray()[0];
 		assertNotNull(dpEntry);
 
-		assertEquals(
-				"pdf_02034337607_geopublisher_1.4_chart_creation_tutorial",
-				dpEntry.getId());
+		File createdJar = jarExportUtil.createJarFromDpe(dpEntry);
+		
 
-		jarExportUtil.createJarFromDpe(dpEntry);
-
-		assertTrue(dpeJarFile.exists());
-		dpeJarFile.delete();
+		assertTrue("createJarFromDpe didn't create an existing file?", createdJar.exists());
+		assertEquals("Created JAR isn't where expected?", dpeJarFileExpected.getAbsolutePath(), createdJar.getAbsolutePath());
+		dpeJarFileExpected.delete();
 	}
 
-	@Test
-	public void testExportAtlasNoLibsNoSignNoGUI() throws Exception {
-		assertNotNull(atlasExportTesttDir);
-
-		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
-				false, false, false);
-
-		LOGGER.debug("atlasExportTesttDir="
-				+ atlasExportTesttDir.getAbsolutePath());
-
-		FileUtils.deleteDirectory(atlasExportTesttDir);
-		assertTrue(atlasExportTesttDir.mkdir());
-
-		jeu.export(null);
-
-		String[] files = atlasExportTesttDir.list();
-		assertEquals(files[1], "JWS");
-	}
 
 	@Test
 	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
@@ -201,7 +183,7 @@ public class JarExportUtilTest extends TestCase {
 		assertTrue(atlasExportTesttDir.mkdir());
 
 		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
-				true, false, false);
+				true, true, false);
 
 		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
 //		LOGGER.info("Signer Passwort = " + passwort);
@@ -214,11 +196,6 @@ public class JarExportUtilTest extends TestCase {
 		
 		assertTrue("Datei autorun.inf may not exist in JWS folder",!Arrays.asList(new File(atlasExportTesttDir, "JWS").list())
 				.contains("autorun.inf"));
-	}
-
-	@After
-	public void cleanAtlasConfig() {
-		atlasConfig = null;
 	}
 
 }

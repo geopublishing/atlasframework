@@ -213,6 +213,8 @@
 			<scope>compile</scope>
 		</dependency>
 
+
+
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
@@ -273,6 +275,15 @@
 			<groupId>net.charabia</groupId>
 			<artifactId>jsmoothgen</artifactId>
 			<version>0.9.9-7</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Smooth runtime dependency -->
+			<groupId>com.wutka</groupId>
+			<artifactId>jox</artifactId>
+			<version>1.16</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
