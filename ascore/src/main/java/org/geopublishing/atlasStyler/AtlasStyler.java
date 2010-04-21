@@ -389,8 +389,7 @@ public class AtlasStyler {
 		int countImportedFeatureTypeStyles = 0;
 		try {
 			setQuite(true); // Quite the AtlasStyler!
-			//
-			// // TODO Remove
+			// TODO Just for debugging at steve's PC. May be removed anytime.
 			try {
 				StylingUtil.saveStyleToSLD(importStyle, new File(
 						"/home/stefan/Desktop/goingToImport.sld"));
@@ -409,7 +408,7 @@ public class AtlasStyler {
 
 				if ((metaInfoString == null)) {
 					LOGGER
-							.warn("This FeatureTypeStyle can't be imported! It has not been created with AtlasStyler");
+							.warn("This FeatureTypeStyle can't be proppery imported! It has not been created with AtlasStyler");
 					continue;
 				}
 
@@ -718,9 +717,9 @@ public class AtlasStyler {
 
 				else {
 					LOGGER
-							.warn("Importing a FTS failed because the Name field was not recognized. Name='"
+							.info("Importing a FTS failed because the Name field was not recognized. Name='"
 									+ metaInfoString
-									+ "'\n An empty AtlasStyler will start if no other FTS are defined.");
+									+ ". An empty AtlasStyler will start if no other FTS are defined.");
 
 					/**
 					 * Adding default layers to all SingleRules
@@ -753,7 +752,7 @@ public class AtlasStyler {
 		final int ist = countImportedFeatureTypeStyles;
 		final int soll = importStyle.featureTypeStyles().size();
 		if (ist < soll) {
-			LOGGER.warn("Onyl " + ist + " of " + soll
+			LOGGER.debug("Only " + ist + " of all " + soll
 					+ " Rulelists have been recognized fully...");
 		}
 
