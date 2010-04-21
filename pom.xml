@@ -51,7 +51,7 @@
 	</licenses>
 
 	<properties>
-		<geotools.version>2.6.2</geotools.version>
+		<geotools.version>2.6.3</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<schmitzm.version>2.2-SNAPSHOT</schmitzm.version>
 	</properties>
