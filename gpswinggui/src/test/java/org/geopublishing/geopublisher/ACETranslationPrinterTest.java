@@ -29,6 +29,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.io.IOUtil;
+
 import com.lightdev.app.shtm.DocNameMissingException;
 import com.lightdev.app.shtm.DocumentPane;
 
@@ -43,7 +45,7 @@ public class ACETranslationPrinterTest  {
 		 * Ask the user to select a save position
 		 */
 
-		File exportFile = new File(System.getProperty("java.io.tmp"),
+		File exportFile = new File(IOUtil.getTempDir(),
 			"translations.html");
 		if (GPTestingUtil.INTERACTIVE) {
 			JFileChooser dc = new JFileChooser(exportFile);
