@@ -170,8 +170,6 @@ public class AMLImport {
 					.R("AmlImport.error.cant_find_atlas.xml"));
 		}
 
-		
-
 		/**
 		 * If validation is requested, we first check for the reachability of
 		 * the AtlasML.xsd. The atlas.xml defines
@@ -183,21 +181,22 @@ public class AMLImport {
 		 */
 
 		try {
-//			// if (validate)
-//			// info(AtlasViewer.R("info.validating_atlas.xml"));
-//			URL testSchemaUrl = new URL(
-//					"http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd");
-//			try {
-//				testSchemaUrl.openStream().close();
-//			} catch (Exception e) {
-//				LOGGER
-//						.warn("Validation disabled because 'http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd' can't be found. My Webserver is running on "
-//								+ Webserver.PORT);
-//				validate = false;
-//			}
+			// // if (validate)
+			// // info(AtlasViewer.R("info.validating_atlas.xml"));
+			// URL testSchemaUrl = new URL(
+			// "http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd");
+			// try {
+			// testSchemaUrl.openStream().close();
+			// } catch (Exception e) {
+			// LOGGER
+			// .warn("Validation disabled because 'http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd' can't be found. My Webserver is running on "
+			// + Webserver.PORT);
+			// validate = false;
+			// }
 
-			LOGGER
-					.info("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
+			if (validate)
+				LOGGER
+						.debug("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
 			validate = false;
 
 			DocumentBuilder builder = getDocumentBuilder(validate);
@@ -233,11 +232,11 @@ public class AMLImport {
 		AMLImport.statusDialog = statusDialog;
 
 		AtlasConfigEditable atlasConfig = new AtlasConfigEditable(atlasDir);
-//		atlasConfig.setAtlasDir(atlasDir);
+		// atlasConfig.setAtlasDir(atlasDir);
 
-//		FileResourceLoader folderLoader = new FileResourceLoader(atlasDir);
+		// FileResourceLoader folderLoader = new FileResourceLoader(atlasDir);
 		try {
-//			atlasConfig.getResLoMan().addResourceLoader(folderLoader);
+			// atlasConfig.getResLoMan().addResourceLoader(folderLoader);
 
 			Document xml;
 			DocumentBuilder builder;
@@ -253,8 +252,8 @@ public class AMLImport {
 			return atlasConfig;
 
 		} catch (final Exception ex) {
-//			 If we had a problem, we remove the FileResourceLoader again
-//			atlasConfig.getResLoMan().removeResourceLoader(folderLoader);
+			// If we had a problem, we remove the FileResourceLoader again
+			// atlasConfig.getResLoMan().removeResourceLoader(folderLoader);
 
 			throw new AtlasImportException(ex);
 		}
