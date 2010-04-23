@@ -13,6 +13,8 @@ package org.geopublishing.atlasStyler.classification;
 import hep.aida.bin.DynamicBin1D;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.CancellationException;
 
@@ -23,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
+import org.geotools.data.DefaultQuery;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.opengis.feature.Attribute;
@@ -48,8 +51,6 @@ import skrueger.geotools.StyledFeaturesInterface;
 public class QuantitiesClassification extends FeatureClassification {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
-
-//	static DefaultComboBoxModel nClassesComboBoxModel;
 
 	/**
 	 * This CONSTANT is only used in the JCombobox. NORMALIZER_FIELD String is
@@ -253,9 +254,10 @@ public class QuantitiesClassification extends FeatureClassification {
 		breaks = new TreeSet<Double>();
 		final Double step = 100. / numClasses;
 		final double max = stats.max();
+		final double min = stats.min();
 		for (double i = 0; i < 100;) {
 			final double percent = (i) * 0.01;
-			final double equal = percent * max;
+			final double equal = min + (percent * (max - min));
 			breaks.add(equal);
 			i = i + step;
 		}
@@ -340,9 +342,10 @@ public class QuantitiesClassification extends FeatureClassification {
 	/**
 	 * This is where the magic happens. Here the attributes of the features are
 	 * summarized in a {@link DynamicBin1D} class.
+	 * @throws IOException 
 	 */
 	synchronized public DynamicBin1D getStatistics()
-			throws InterruptedException {
+			throws InterruptedException, IOException {
 
 		cancelCalculation = false;
 
@@ -353,22 +356,18 @@ public class QuantitiesClassification extends FeatureClassification {
 					"value field and the normalizer field may not be equal.");
 
 		if (stats == null) {
-			//
-			// /**
-			// * Fires a START_CALCULATIONS event to inform listening JTables
-			// etc.
-			// * about the change *
-			// */
-			// SwingUtilities.invokeLater(new Runnable() {
-			// public void run() {
-			// // System.out.println("Fire STart Calculations");
-			// fireEvent(new ClassificationChangeEvent(
-			// CHANGETYPES.START_NEW_STAT_CALCULATION));
-			// }
-			// });
-
-			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
-					.getFeatureCollectionFiltered();
+// Old style.. asking for ALL attributes 			
+//			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
+//					.getFeatureCollectionFiltered();
+			
+			Filter filter = getStyledFeatures().getFilter();
+			DefaultQuery query = new DefaultQuery(getStyledFeatures().getSchema().getTypeName(), filter);
+			List<String> propNames = new ArrayList<String>();
+			propNames.add(value_field_name);
+			if (normalizer_field_name != null)
+				propNames.add(normalizer_field_name);
+			query.setPropertyNames(propNames);
+			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures().getFeatureSource().getFeatures(query);
 			
 			// Forget about the count of NODATA values
 			resetNoDataCount();
@@ -430,7 +429,7 @@ public class QuantitiesClassification extends FeatureClassification {
 
 						valueNormDivider = ((Number) filteredNorm)
 								.doubleValue();
-						if (valueNormDivider == 0) {
+						if (valueNormDivider == 0. || valueNormDivider.isInfinite() || valueNormDivider.isNaN()) {
 							// Even if it is not defined as a NODATA value,
 							// division by null is not definied.
 							increaseNoDataValue();
