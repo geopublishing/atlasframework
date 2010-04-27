@@ -163,6 +163,13 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					noDataRule
 							.setName(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND);
 
+				// Use the min/max scale denominators from the template alsofor
+				// the nodata values.. no matter what it's template has
+				noDataRule.setMinScaleDenominator(getTemplate()
+						.getMinScaleDenominator());
+				noDataRule.setMaxScaleDenominator(getTemplate()
+						.getMaxScaleDenominator());
+
 				noDataRule.setFilter(getNoDataFilter());
 				rules.add(noDataRule);
 			}
@@ -321,8 +328,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		// Checking the value attribute for NODATA values
 		String attributeLocalName = getValue_field_name();
-		AttributeMetadataImpl amd1 = getStyledFeatures().getAttributeMetaDataMap()
-				.get(attributeLocalName);
+		AttributeMetadataImpl amd1 = getStyledFeatures()
+				.getAttributeMetaDataMap().get(attributeLocalName);
 
 		List<Filter> ors = new ArrayList<Filter>();
 		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
@@ -339,10 +346,11 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					.getAttributeMetaDataMap().get(normalizerLocalName);
 
 			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
-			
+
 			// As we are dividing by this value, always add the zero also!
-			ors.add(ff2.equals(ff2.property(normalizerLocalName),ff2.literal(0)));
-			
+			ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2
+					.literal(0)));
+
 			if (amd2 != null && amd2.getNodataValues() != null)
 				for (Object ndValue : amd2.getNodataValues()) {
 					ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2

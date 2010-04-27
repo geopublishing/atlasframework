@@ -1,4 +1,4 @@
-<!------------------------------------------------------------------------------
+<!--
   Copyright (c) 2009 Stefan A. Krüger.
   
   This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
@@ -23,8 +23,7 @@
   
   Contributors:
       Stefan A. Krüger - initial API and implementation
-------------------------------------------------------------------------------->
-<?xml version="1.0" encoding="UTF-8"?>
+-->
 <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	targetNamespace="http://www.wikisquare.de/AtlasML" xmlns:aml="http://www.wikisquare.de/AtlasML"
 	elementFormDefault="qualified">
