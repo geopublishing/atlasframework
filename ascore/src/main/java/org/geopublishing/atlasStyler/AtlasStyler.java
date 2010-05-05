@@ -1278,17 +1278,6 @@ public class AtlasStyler {
 				.getFeatureSource()) == GeometryForm.LINE;
 	}
 
-	//
-	// /**
-	// * @return the {@link FeatureSource} which the {@link AtlasStyler} is
-	// using.
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Kr&uuml;ger</a>
-	// */
-	// public FeatureSource<SimpleFeatureType, SimpleFeature> getFeatureSource()
-	// {
-	// return getStyledFeaturesObj().getFeatureSource();
-	// }
 
 	public void setLastChangedRuleList(
 			final AbstractRuleList lastChangedRuleList) {
