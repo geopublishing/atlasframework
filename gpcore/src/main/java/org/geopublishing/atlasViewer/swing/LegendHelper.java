@@ -91,11 +91,11 @@ public class LegendHelper {
 
 		JPanel oneStyleLegendBox;
 		if (styledLayer instanceof StyledFeaturesInterface) {
-			oneStyleLegendBox = StyledLayerUtil.createLegendPanel(style,
+			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(style,
 					((StyledFeaturesInterface) styledLayer).getSchema(),
 					ICONWIDTH, ICONHEIGHT);
 		} else if (styledLayer instanceof StyledRasterInterface<?>) {
-			oneStyleLegendBox = StyledLayerUtil.createLegendPanel(
+			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(
 					(StyledRasterInterface<?>) styledLayer, style, ICONWIDTH,
 					ICONHEIGHT);
 		} else {
