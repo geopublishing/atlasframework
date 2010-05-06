@@ -916,135 +916,148 @@ public class AMLImport {
 		final DpLayerVectorFeatureSource dplvfs = new DpLayerVectorFeatureSourceShapefile(
 				ac);
 
-		dplvfs.setId(node.getAttributes().getNamedItem("id").getNodeValue());
-		// LOGGER.info("ID = "+dplvfs.getId());
-
-		/***********************************************************************
-		 * The "showStylerInLegend" attribute is optional and defaults to true
-		 ***********************************************************************/
 		try {
-			dplvfs.setStylerInLegend(Boolean.valueOf(node.getAttributes()
-					.getNamedItem("showStylerInLegend").getNodeValue()));
-		} catch (Exception e) {
-			dplvfs.setStylerInLegend(true);
-		}
+			dplvfs
+					.setId(node.getAttributes().getNamedItem("id")
+							.getNodeValue());
+			// LOGGER.info("ID = "+dplvfs.getId());
 
-		/***********************************************************************
-		 * The "showTableInLegend" attribute is optional and defaults to true
-		 ***********************************************************************/
-		try {
-			dplvfs.setTableInLegend(Boolean.valueOf(node.getAttributes()
-					.getNamedItem("showTableInLegend").getNodeValue()));
-		} catch (Exception e) {
-			dplvfs.setTableInLegend(true);
-		}
+			/***********************************************************************
+			 * The "showStylerInLegend" attribute is optional and defaults to
+			 * true
+			 ***********************************************************************/
+			try {
+				dplvfs.setStylerInLegend(Boolean.valueOf(node.getAttributes()
+						.getNamedItem("showStylerInLegend").getNodeValue()));
+			} catch (Exception e) {
+				dplvfs.setStylerInLegend(true);
+			}
 
-		/***********************************************************************
-		 * The "showFilterInLegend" attribute is optional and defaults to false
-		 ***********************************************************************/
-		try {
-			dplvfs.setFilterInLegend(Boolean.valueOf(node.getAttributes()
-					.getNamedItem("showFilterInLegend").getNodeValue()));
-		} catch (Exception e) {
-			dplvfs.setFilterInLegend(true);
-		}
+			/***********************************************************************
+			 * The "showTableInLegend" attribute is optional and defaults to
+			 * true
+			 ***********************************************************************/
+			try {
+				dplvfs.setTableInLegend(Boolean.valueOf(node.getAttributes()
+						.getNamedItem("showTableInLegend").getNodeValue()));
+			} catch (Exception e) {
+				dplvfs.setTableInLegend(true);
+			}
 
-		/***********************************************************************
-		 * The "exportable" attribute is optional and defaults to false
-		 ***********************************************************************/
-		try {
-			dplvfs.setExportable(Boolean.valueOf(node.getAttributes()
-					.getNamedItem("exportable").getNodeValue()));
-		} catch (Exception e) {
-			dplvfs.setExportable(false);
-		}
+			/***********************************************************************
+			 * The "showFilterInLegend" attribute is optional and defaults to
+			 * false
+			 ***********************************************************************/
+			try {
+				dplvfs.setFilterInLegend(Boolean.valueOf(node.getAttributes()
+						.getNamedItem("showFilterInLegend").getNodeValue()));
+			} catch (Exception e) {
+				dplvfs.setFilterInLegend(true);
+			}
 
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			final Node n = childNodes.item(i);
-			// Cancel if it's an attribute
-			// if (!n.hasChildNodes())
-			// continue;
+			/***********************************************************************
+			 * The "exportable" attribute is optional and defaults to false
+			 ***********************************************************************/
+			try {
+				dplvfs.setExportable(Boolean.valueOf(node.getAttributes()
+						.getNamedItem("exportable").getNodeValue()));
+			} catch (Exception e) {
+				dplvfs.setExportable(false);
+			}
 
-			final String name = n.getLocalName();
-			if (name == null)
-				continue;
+			final NodeList childNodes = node.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); i++) {
+				final Node n = childNodes.item(i);
+				// Cancel if it's an attribute
+				// if (!n.hasChildNodes())
+				// continue;
 
-			if (name.equals("filename")) {
-				final String value = n.getFirstChild().getNodeValue();
-				dplvfs.setFilename(value);
-			} else if (name.equals("name")) {
-				final Translation transname = parseTranslation(ac
-						.getLanguages(), n);
-				// info("parsing vector " + transname);
-				dplvfs.setTitle(transname);
-			} else if (name.equals("dataDirname")) {
-				final String value = n.getFirstChild().getNodeValue();
-				dplvfs.setDataDirname(value);
-			} else if (name.equals("desc")) {
-				dplvfs.setDesc(parseTranslation(ac.getLanguages(), n));
-			} else if (name.equals("keywords")) {
-				dplvfs.setKeywords(parseTranslation(ac.getLanguages(), n));
-			} else if (name.equals(AMLUtil.TAG_attributeMetadata)) {
-				try {
-					final AttributeMetadataImpl attribute = parseAttributeMetadata(
-							dplvfs, ac, n);
-					if (attribute != null) {
-						dplvfs.getAttributeMetaDataMap().put(
-								attribute.getName(), attribute);
-					}
+				final String name = n.getLocalName();
+				if (name == null)
+					continue;
 
-				} catch (AtlasRecoverableException e) {
-					statusDialog.warningOccurred(
-							"Parsing attribute descriptions", "", e
-									.getMessage());
-				} catch (RuntimeException e) {
-					if (AtlasViewerGUI.isRunning()) {
-						// statusDialog.warningOccurred("layer nich verfügbar aber das ist nicht schlimm",
-						// "", e.getMessage());
-					} else
-						throw e;
-				}
-			} else if (name.equals("layerStyle")) {
-				dplvfs.addLayerStyle(parseLayerStyle(ac, n, dplvfs));
-			} else if (name.equals("filterRule")) {
-				String filterString = n.getFirstChild().getNodeValue();
-
-				if (upgradeFiltersToCQL && filterString != null
-						&& !filterString.isEmpty()) {
+				if (name.equals("filename")) {
+					final String value = n.getFirstChild().getNodeValue();
+					dplvfs.setFilename(value);
+				} else if (name.equals("name")) {
+					final Translation transname = parseTranslation(ac
+							.getLanguages(), n);
+					// info("parsing vector " + transname);
+					dplvfs.setTitle(transname);
+				} else if (name.equals("dataDirname")) {
+					final String value = n.getFirstChild().getNodeValue();
+					dplvfs.setDataDirname(value);
+				} else if (name.equals("desc")) {
+					dplvfs.setDesc(parseTranslation(ac.getLanguages(), n));
+				} else if (name.equals("keywords")) {
+					dplvfs.setKeywords(parseTranslation(ac.getLanguages(), n));
+				} else if (name.equals(AMLUtil.TAG_attributeMetadata)) {
 					try {
-						String convertedFilterString = AMLUtil
-								.upgradeMartinFilter2ECQL(filterString);
-						dplvfs.setFilterRule(convertedFilterString);
-					} catch (CQLException filterParserEx) {
-						LOGGER
-								.error(
-										"Converting filter "
-												+ filterString
-												+ " to CQL failed! Setting filter to no-filter",
-										filterParserEx);
-						statusDialog
-								.warningOccurred(
-										dplvfs.getTitle().toString(),
-										null,
-										"Failed to convert old filter\n  "
-												+ filterString
-												+ "\n to the new ECQL filter language. This setting is lost.");
-						dplvfs.setFilterRule("");
-					}
-				} else {
-					dplvfs.setFilterRule(filterString);
-				}
+						final AttributeMetadataImpl attribute = parseAttributeMetadata(
+								dplvfs, ac, n);
+						if (attribute != null) {
+							dplvfs.getAttributeMetaDataMap().put(
+									attribute.getName(), attribute);
+						}
 
-			} else if (name.equals("chart") && dplvfs.getUrl() != null) {
-				try {
-					dplvfs.getCharts().add(
-							parseFeatureChartStyle(ac, n, dplvfs));
-				} catch (Exception e) {
-					// Broken URL or file doesn't exist
-					LOGGER.warn("Could not load chartStyle: " + e);
+					} catch (AtlasRecoverableException e) {
+						statusDialog.warningOccurred(
+								"Parsing attribute descriptions", "", e
+										.getMessage());
+					} catch (RuntimeException e) {
+						if (AtlasViewerGUI.isRunning()) {
+							// statusDialog.warningOccurred("layer nich verfügbar aber das ist nicht schlimm",
+							// "", e.getMessage());
+						} else
+							throw e;
+					}
+				} else if (name.equals("layerStyle")) {
+					dplvfs.addLayerStyle(parseLayerStyle(ac, n, dplvfs));
+				} else if (name.equals("filterRule")) {
+					String filterString = n.getFirstChild().getNodeValue();
+
+					if (upgradeFiltersToCQL && filterString != null
+							&& !filterString.isEmpty()) {
+						try {
+							String convertedFilterString = AMLUtil
+									.upgradeMartinFilter2ECQL(filterString);
+							dplvfs.setFilterRule(convertedFilterString);
+						} catch (CQLException filterParserEx) {
+							LOGGER
+									.error(
+											"Converting filter "
+													+ filterString
+													+ " to CQL failed! Setting filter to no-filter",
+											filterParserEx);
+							statusDialog
+									.warningOccurred(
+											dplvfs.getTitle().toString(),
+											null,
+											"Failed to convert old filter\n  "
+													+ filterString
+													+ "\n to the new ECQL filter language. This setting is lost.");
+							dplvfs.setFilterRule("");
+						}
+					} else {
+						dplvfs.setFilterRule(filterString);
+					}
+
+				} else if (name.equals("chart") && dplvfs.getUrl() != null) {
+					try {
+						dplvfs.getCharts().add(
+								parseFeatureChartStyle(ac, n, dplvfs));
+					} catch (Exception e) {
+						// Broken URL or file doesn't exist
+						LOGGER.warn("Could not load chartStyle: " + e);
+					}
 				}
 			}
+
+		} catch (Exception e) {
+			statusDialog.warningOccurred(
+					"A layer has been ignored due to errors:", "", e
+							.getMessage());
+			return null;
 		}
 
 		return dplvfs;

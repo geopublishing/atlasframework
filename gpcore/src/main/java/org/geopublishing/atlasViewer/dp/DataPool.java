@@ -23,6 +23,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.WeakHashSet;
+import org.jfree.util.Log;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;
@@ -53,6 +54,10 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 	 * @param entry
 	 */
 	public void add(DpEntry<? extends ChartStyle> entry) {
+		if (entry == null) {
+			LOGGER.warn("A null has been added to the datapool!");
+			return;
+		}
 		put(entry.getId(), entry);
 		fireChangeEvents(EventTypes.addDpe);
 	}
