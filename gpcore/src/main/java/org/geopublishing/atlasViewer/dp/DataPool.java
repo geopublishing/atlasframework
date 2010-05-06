@@ -23,7 +23,6 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.WeakHashSet;
-import org.jfree.util.Log;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;

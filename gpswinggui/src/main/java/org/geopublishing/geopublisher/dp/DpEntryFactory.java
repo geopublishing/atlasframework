@@ -23,7 +23,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
-import org.geopublishing.geopublisher.dp.media.DpMediaVideoTest;
 import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
 
 
@@ -58,7 +57,7 @@ public class DpEntryFactory {
 
 	static {
 		testers.add(new DpLayerVectorFeatureSourceTester());
-		testers.add(new DpMediaVideoTest());
+//		testers.add(new DpMediaVideoTest());
 		testers.add(new DpMediaPDFTester());
 		testers.add(new DpLayerRasterTester());
 		testers.add(new DpLayerRasterPyramidTest());

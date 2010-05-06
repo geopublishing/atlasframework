@@ -11,9 +11,12 @@
 package org.geopublishing.geopublisher.dp;
 
 import java.awt.Component;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -36,14 +39,19 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.feature.NameImpl;
 import org.geotools.styling.Style;
 import org.opengis.feature.type.GeometryDescriptor;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledLayerUtil;
+import skrueger.i8n.Translation;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {
@@ -69,12 +77,16 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 		File dataDir = null;
 
 		try {
+			if (url.getFile().toLowerCase().endsWith("zip")) {
+				// Falls es sich um eine .ZIP datei handelt, wird sie entpackt.
+				url = GeoImportUtil.uncompressShapeZip(url);
+			}
 
 			// The file that has been selected for import will be the
 			// "filename".. IF the user accepts any changes to clean the name!
 			// Otherwise an AtlasImportException is thrown
-			final String name = GpSwingUtil.cleanFilenameWithUI(owner, new File(url
-					.toURI()).getName());
+			final String name = GpSwingUtil.cleanFilenameWithUI(owner,
+					new File(url.toURI()).getName());
 
 			setFilename(name);
 
@@ -129,14 +141,15 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 	@Override
 	public void copyFiles(URL urlToShape, Component owner, File targetDir,
-			AtlasStatusDialogInterface status) throws URISyntaxException, IOException,
-			TransformerException {
+			AtlasStatusDialogInterface status) throws URISyntaxException,
+			IOException, TransformerException {
+		//
+		// if (urlToShape.getFile().toLowerCase().endsWith("zip")) {
+		// // Falls es sich um eine .ZIP datei handelt, wird sie entpackt.
+		// urlToShape = GeoImportUtil.uncompressShapeZip(urlToShape
+		// .openStream());
+		// }
 
-		if (urlToShape.getFile().toLowerCase().endsWith("zip")) {
-			// Falls es sich um eine .ZIP datei handelt, wird sie entpackt. 
-			urlToShape = GeoImportUtil.uncompressShapeZip(urlToShape.openStream());
-		} 
-		
 		/**
 		 * Getting a DataStore for the VectorLayer
 		 */
@@ -147,7 +160,8 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 		try {
 
 			if (dataStore instanceof ShapefileDataStore) {
-//				ShapefileDataStore shapefileDS = (ShapefileDataStore) dataStore;
+				// ShapefileDataStore shapefileDS = (ShapefileDataStore)
+				// dataStore;
 
 				/*******************************************************************
 				 * Now copy all the files that belong to ESRI Shapefile
@@ -186,49 +200,12 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 						if (status != null) {
 							// We have a modal atlas status dialog open. Just
 							// write a warning to the status dialog.
-							status.warningOccurred(getFilename(), "",
-									GpUtil.R(
-											"DpVector.Import.NoCRS.WarningMsg",
-											GeoImportUtil.getDefaultCRS()
-													.getName()));
+							status.warningOccurred(getFilename(), "", GpUtil.R(
+									"DpVector.Import.NoCRS.WarningMsg",
+									GeoImportUtil.getDefaultCRS().getName()));
 							// importAsDefaultCRS = JOptionPane.YES_OPTION;
 						}
-						// else if (owner != null && status == null) {
-						//
-						// importAsDefaultCRS = JOptionPane
-						// .showConfirmDialog(
-						// owner,
-						// AtlasCreator
-						// .R(
-						// "DpVector.Import.NoCRS.QuestionUseDefaultOrCancel",
-						// GeoImportUtil
-						// .getDefaultCRS()
-						// .getName()),
-						// AtlasCreator
-						// .R("DpVector.Import.NoCRS.Title"),
-						// JOptionPane.YES_NO_OPTION);
-						// } else
-						// importAsDefaultCRS = JOptionPane.YES_OPTION;
-						//
-						// if (importAsDefaultCRS == JOptionPane.YES_OPTION) {
-						// Force CRS (which creates a .prj and copy it
-						// shapefileDS.forceSchemaCRS(GeoImportUtil
-						// .getDefaultCRS());
-						// prjURL = IOUtil.changeUrlExt(fromUrl, "prj");
-
-						// AVUtil.copyUrl(prjURL, targetDir, true);
-
-						/*
-						 * Force Schema created a .prj file in the source
-						 * folder. If shall be deleted after copy. TODO There
-						 * will be a problem if the source is read-only
-						 */
-						// IOUtil.urlToFile(prjURL).delete();
-						// } else
-						// throw (new AtlasException(AtlasCreator
-						// .R("DpVector.Import.NoCRS.CanceledMsg")));
 					}
-
 				}
 
 				/**
@@ -288,17 +265,20 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
 
 				}
-				//
-				// // // TODO is that a good idea? What if we do not have a .prj
-				// // // file?mmm
-				// // // then the froced CRS should be returned..
-				// crs = shapefileDS.getFeatureSource().getSchema()
-				// .getGeometryDescriptor().getCoordinateReferenceSystem();
 
 				// Add the empty string as a default NODATA-Value to all textual
 				// layers
 				StyledLayerUtil.addEmptyStringToAllTextualAttributes(
 						getAttributeMetaDataMap(), getSchema());
+
+				/**
+				 * If we find a README is found next to the Shape, try to parse
+				 * it as a GeoCommons README that contains attribute
+				 * descriptions
+				 */
+				final URL geocommonsReadmeURL = DataUtilities.extendURL(
+						DataUtilities.getParentUrl(urlToShape), "README");
+				parseGeocommonsReadme(geocommonsReadmeURL);
 
 			} else {
 				throw new AtlasImportException(
@@ -309,6 +289,144 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			if (dataStore != null)
 				dataStore.dispose();
 		}
+	}
+
+	/**
+	 * Tries to find and parse a README at the given {@link URL}. The README is
+	 * expected to be in the un-offical GeoCommons README format.<br/>
+	 * <br/>
+	 * <code>
+FEC, Individual donations to Obama campaign by county, USA, Oct 2008
+
+The poly shapefile shows individual campaign donations geocoded and then aggregated to county level. There were more than 236 thousand individual donation records that were geocoded based on the monthly Campaign Finance report submitted to Federal Election Commission (FEC) by Obama campaign on 20th Oct, 2008.  
+
+Attributes:
+NAME: County name - County Name
+Sum_NSofar: Total so far (Jan to Sept 2008) in the county  - Total so far (Jan to Sept 2008) in the county for the same set of donors who donated in Sert 08.
+Big caveat: these totals reflect summation of only records from the month of Sept 08. For eg., if someone in county x donated in Aug 08. 
+Sum_NQtr: Total donations for Sept, 2008 - Total of individual donation by county during the month of Sept, 2008
+Count_: Count of individual donation records - Total number of individual donation records by county
+FIPS: FIPS - FIPS code
+
+exported on Tue Nov 10 19:54:53 -0500 2009
+</code> or <code>
+
+satxu's places
+
+
+
+A Map by Satxu
+
+
+
+
+Attributes:
+name0: name - 
+descripti0: description - 
+
+exported on Wed Apr 28 23:51:34 -0400 2010
+</code>
+	 */
+	private void parseGeocommonsReadme(URL geocommonsReadmeURL) {
+		try {
+			InputStream openStream = geocommonsReadmeURL.openStream();
+			try {
+				InputStreamReader inStream = new InputStreamReader(openStream);
+				try {
+					BufferedReader inReader = new BufferedReader(inStream);
+					try {
+
+						String title = "";
+						while (title.trim().isEmpty()) {
+							title = inReader.readLine();
+						}
+						setTitle(new Translation(title));
+
+						String desc = "";
+						String oneLine = "";
+						while (!oneLine.startsWith("Attributes:")) {
+							oneLine = inReader.readLine();
+							if (oneLine != null)
+								oneLine = oneLine.trim();
+							if (!oneLine.isEmpty()
+									&& !oneLine.startsWith("Attributes:"))
+								desc += oneLine + " ";
+						}
+						setDesc(new Translation(desc));
+
+						String attLine = "";
+						while (attLine != null) {
+							attLine = inReader.readLine();
+							attLine = attLine.trim();
+
+							if (attLine.contains(":")) {
+								String[] split = attLine.split(":");
+								String attName = split[0].trim();
+								String attDesc = split[1].trim();
+
+								// Sometimes the attdesc contains the same
+								// information twice... filter that
+								try {
+									if (attDesc.contains(" - ")) {
+										String[] split2 = attDesc.split(" - ");
+										if (split2[0].trim().equals(
+												split2[1].trim()))
+											attDesc = split2[0].trim();
+									}
+								} catch (Exception e) {
+									LOGGER.warn("While parsing GeoCommons README",e);
+								}
+
+								NameImpl findBestMatchingAttribute = FeatureUtil
+										.findBestMatchingAttribute(getSchema(),
+												attName);
+								if (findBestMatchingAttribute == null)
+									continue;
+								AttributeMetadataImpl amd = getAttributeMetaDataMap()
+										.get(findBestMatchingAttribute);
+								if (amd != null) {
+									amd.setTitle(new Translation(attDesc));
+								}
+
+							}
+
+						}
+
+					} finally {
+						inReader.close();
+					}
+				} finally {
+					inStream.close();
+				}
+			} finally {
+				openStream.close();
+			}
+		} catch (Exception e) {
+			LOGGER
+					.warn(
+							"Parsing GeoComons README failed, maybe not in GeoCommons format?!",
+							e);
+		}
+		//
+		// String readme = IOUtil.readURLasString(geocommonsReadmeURL);
+		// if (readme == null)
+		// return;
+
+		// Pattern patt =
+		// Pattern.compile("\\w*^(.*?)^^(.*?)^^Attributes:.*^(.*)^^exported.*");
+		// Pattern patt = Pattern.compile(".*^Attributes:.*(.*)exported.*",
+		// Pattern.MULTILINE + Pattern.UNIX_LINES);
+		// Matcher matcher = patt.matcher(readme);
+		// boolean found = matcher.find();
+		//		
+		// if (found) {
+		// String title = matcher.group(1);
+		// String desc = matcher.group(2);
+		// String atts = matcher.group(3);
+		// System.out.println(title);
+		// System.out.println(desc);
+		// System.out.println(atts);
+		// }
 	}
 
 	/*

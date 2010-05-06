@@ -13,7 +13,6 @@ package org.geopublishing.geopublisher.gui.datapool.layer;
 import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,8 +31,11 @@ import org.geopublishing.geopublisher.dp.DpLayerVectorFeatureSourceShapefileEd;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
 
+import schmitzm.geotools.io.GeoImportUtil;
+import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 
 /**
@@ -73,9 +75,15 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 					.getAvailableDataStores();
 			while (availableDataStores.hasNext()) {
 				final DataStoreFactorySpi nextDS = availableDataStores.next();
-				LOGGER.debug("Available DataStores : "
-						+ nextDS.getClass().toString());
+//				LOGGER.debug("Available DataStores : "
+//						+ nextDS.getClass().toString());
 			}
+			
+			if (url.getFile().toLowerCase().endsWith("zip")) {
+				// Falls es sich um eine .ZIP datei handelt, wird sie entpackt.
+				url = GeoImportUtil.uncompressShapeZip(url);
+			}
+
 
 			Map<Object, Object> params = new HashMap<Object, Object>();
 			params.put("url", url);
@@ -92,7 +100,7 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 			 */
 			if (dataStore.getTypeNames().length != 1) {
 				JOptionPane.showMessageDialog(owner,
-						"Error while importing. Maybe no .prj file attached?");
+						"Error while importing. File contains no layers.");
 				dataStore.dispose();
 				return false;
 			}
@@ -104,7 +112,7 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 			}
 
 		} catch (IOException e1) {
-			// datastore not disposed?!
+			ExceptionDialog.show(owner, e1);
 		} catch (Exception e) {
 			ExceptionDialog.show(owner, e);
 		}
@@ -117,8 +125,8 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 	@Override
 	public boolean test(Component owner, File file) {
 		try {
-			return test(owner, file.toURI().toURL());
-		} catch (MalformedURLException e2) {
+			return test(owner, DataUtilities.fileToURL(file));
+		} catch (Exception e2) {
 			ExceptionDialog.show(owner, e2);
 			return false;
 		}
@@ -132,11 +140,10 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 	 * , java.io.File)
 	 */
 	@Override
-	public DpEntry create(AtlasConfigEditable ace, File file, Component owner) throws AtlasImportException {
+	public DpEntry<FeatureChartStyle> create(AtlasConfigEditable ace, File file, Component owner) throws AtlasImportException {
 		try {
-			return new DpLayerVectorFeatureSourceShapefileEd(ace, file.toURI()
-					.toURL(), owner);
-		} catch (MalformedURLException e) {
+			return new DpLayerVectorFeatureSourceShapefileEd(ace, DataUtilities.fileToURL(file), owner);
+		} catch (Exception e) {
 			throw new AtlasImportException(e);
 		}
 	}

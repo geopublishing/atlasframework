@@ -28,9 +28,9 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -99,8 +99,8 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 			
 			// A button to open the containing directory
 			final JButton uncacheJButton = new SmallButton(new AbstractAction(
-					R("EditDPEDialog.uncacheDpeButton"), new ImageIcon(GPProps.class
-							.getResource("resource/uncache.png")) ) {
+					R("EditDPEDialog.uncacheDpeButton"), new ImageIcon(GpSwingUtil.class
+							.getResource("/icons/uncache.png")) ) {
 				
 				public void actionPerformed(final ActionEvent e) {
 					ace.uncacheAndReread(dpe);
