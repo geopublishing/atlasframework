@@ -1376,7 +1376,7 @@ public class AMLImport {
 				// TODO defaultMapArea has to store the crs!?! Map should store
 				// it's crs?!
 				map.setDefaultMapArea(new ReferencedEnvelope(cornersV[0][0],
-						cornersV[0][1], cornersV[1][0], cornersV[1][1], null));
+						cornersV[1][0], cornersV[0][1], cornersV[1][1], null));
 
 			} else if (tagName.equals("maxExtend")) {
 				final String value = childNode.getFirstChild().getNodeValue();
