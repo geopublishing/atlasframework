@@ -76,12 +76,12 @@ public class AtlasConfig implements Disposable{
 	 * Resource name of the icon that will be used for JavaWebStart if the
 	 * user-defined one can't be found.
 	 */
-	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "/export/icon.gif";
+	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "export/jws/icon.gif";
 
-	public static final String JSMOOTH_PROJEKT_RESOURCE = "/export/jsmooth/atlas.jsmooth";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE1 = "/export/jsmooth/autodownload-wrapper/autodownload.exe";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE2 = "/export/jsmooth/autodownload-wrapper/autodownload.skel";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE3 = "/export/jsmooth/autodownload-wrapper/customdownload.skel";
+	public static final String JSMOOTH_PROJEKT_RESOURCE = "export/jsmooth/atlas.jsmooth";
+	public static final String JSMOOTH_SKEL_AD_RESOURCE1 = "export/jsmooth/autodownload-wrapper/autodownload.exe";
+	public static final String JSMOOTH_SKEL_AD_RESOURCE2 = "export/jsmooth/autodownload-wrapper/autodownload.skel";
+	public static final String JSMOOTH_SKEL_AD_RESOURCE3 = "export/jsmooth/autodownload-wrapper/customdownload.skel";
 
 	/**
 	 * Resource name of the splashscreen image that will be used for
@@ -93,9 +93,9 @@ public class AtlasConfig implements Disposable{
 	 * Resource name of the splashscreen image that will be used for
 	 * JavaWebStart and start.bat IF if user defined one can't be found.
 	 */
-	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/splashscreen.png";
+	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "splashscreen.png";
 
-	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
+	public static final String LICENSEHTML_RESOURCE_NAME = "export/license.html";
 
 	/** The name of the directory containing the "About"- HTML pages **/
 	public static final String ABOUT_DIRNAME = "about";

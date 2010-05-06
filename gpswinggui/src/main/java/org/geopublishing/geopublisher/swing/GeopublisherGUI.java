@@ -493,11 +493,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final Box previewLabel = Box.createVerticalBox();
 
 			final ClassLoader cl = GeopublisherGUI.class.getClassLoader();
-			final URL urlJWSIconFallback = cl.getResource("/"
-					+ AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+			final URL urlJWSIconFallback = cl.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 
-			final URL urlJWSIcon = cl.getResource("/"
-					+ AtlasConfig.JWSICON_RESOURCE_NAME);
+			final URL urlJWSIcon = cl.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
 
 			final JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
 					new ImageIcon(AVUtil.exists(urlJWSIcon) ? urlJWSIcon
@@ -513,10 +511,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
 			// URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-			final URL urlSplashscreenFallback = cl.getResource("/"
-					+ AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			final URL urlSplashscreen = cl.getResource("/"
-					+ AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			final URL urlSplashscreenFallback = cl.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
+			final URL urlSplashscreen = cl.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
 			final JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",
 					new ImageIcon(
