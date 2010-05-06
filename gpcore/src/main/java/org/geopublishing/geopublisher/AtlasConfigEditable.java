@@ -286,12 +286,10 @@ public class AtlasConfigEditable extends AtlasConfig {
 				if (refs2map.size() == 0) {
 					// This map is not interesting, EXCEPT it is the default map
 
-					if (getMapPool().getStartMapID() != null
-							&& getMapPool().getStartMapID().equals(m.getId())) {
+					if (m.getId().equals(getMapPool().getStartMapID())) {
 						// Startupmap has been defined and this is it.
 						thisMapIsInteresting = true;
-					}
-
+					} 
 					if ((getMapPool().getStartMapID() == null && getMapPool()
 							.get(0).equals(m))) {
 						// NO startup map has been defined, but this is map

@@ -36,6 +36,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
@@ -242,8 +243,13 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 							// MapRef mapRef = (MapRef)unknown;
 							setIcon(Icons.ICON_MAP_SMALL);
 						} else if (node instanceof DpRef<?>) {
-							final DpRef<?> dpr = (DpRef<?>) node;
-							setIcon(dpr.getTarget().getType().getIconSmall());
+							final DpRef<? extends DpEntry<? extends ChartStyle>> dpr = (DpRef<?>) node;
+							DpEntry<? extends ChartStyle> target = dpr
+									.getTarget();
+							if (target == null)
+								setIcon(DpEntryType.UNKNOWN.getIconSmall());
+							else
+								setIcon(target.getType().getIconSmall());
 						}
 					} else {
 						if (node instanceof Group) {

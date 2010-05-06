@@ -331,7 +331,12 @@ public abstract class DpLayerVectorFeatureSource
 	@Override
 	public SimpleFeatureType getSchema() {
 		if (schema == null && !isBroken()) {
-			schema = getFeatureSource().getSchema();
+			try {
+				schema = getFeatureSource().getSchema();
+			} catch (Exception e) {
+				setBrokenException(e);
+				return null;
+			}
 		}
 		return schema;
 	}

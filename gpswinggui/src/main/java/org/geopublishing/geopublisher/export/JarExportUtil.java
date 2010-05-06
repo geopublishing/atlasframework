@@ -346,7 +346,7 @@ public class JarExportUtil {
 		this.copyJRE = copyJRE;
 
 		// Create temporary export folder
-		LOGGER.debug("Deleting old files..."); //i8n
+		LOGGER.debug("Deleting old files..."); // i8n
 		if (toDisk && targetDirDISK != null)
 			FileUtils.deleteDirectory(targetDirDISK);
 		if (toJws && targetDirJWS != null) {
@@ -1915,6 +1915,7 @@ public class JarExportUtil {
 					targetDirDISK, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
+			new File(targetDirDISK, "start.sh").setExecutable(true);
 			FileUtils.moveFileToDirectory(
 					new File(getTempDir(), "autorun.inf"), targetDirDISK, true);
 			// Icon.gif is used (and deleted afterwards) by JSmooth

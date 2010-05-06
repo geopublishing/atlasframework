@@ -411,7 +411,8 @@ public class AMLExporter {
 		for (final Map map : maps) {
 			checkCancel();
 			
-			if (exportMode  && notReferencedDpeIDs.contains(map.getId())) {
+			if (exportMode && notReferencedDpeIDs.contains(map.getId())
+					&& !map.getId().equals(mapPool.getStartMapID())) {
 				// Only export maps that are referenced in the group tree
 				continue;
 			}
