@@ -44,18 +44,21 @@ public class DpeImportUtil {
 		// cancels here, we don't even copy stuff over...
 		// ****************************************************************************
 		final List<String> langs = dpe.getAtlasConfig().getLanguages();
-		dpe.setTitle(new Translation(langs, dpe.getFilename()));
-		dpe.setDesc(new Translation());
-		dpe.setKeywords(new Translation());
+		if (dpe.getTitle().isEmpty())
+			dpe.setTitle(new Translation(langs, dpe.getFilename()));
+//		if (dpe.getDesc().isEmpty())
+//			dpe.setDesc(new Translation());
+//		if (dpe.getKeywords().isEmpty())
+//			dpe.setKeywords(new Translation());
 
 		TranslationAskJDialog translationAskJDialog = new TranslationAskJDialog(
 				owner, new TranslationEditJPanel(GpUtil
 						.R("EditDPEDialog.TranslateTitle"), dpe.getTitle(),
 						langs), new TranslationEditJPanel(GpUtil
 						.R("EditDPEDialog.TranslateDescription"),
-						dpe.getDesc(), langs), new TranslationEditJPanel(
-						GpUtil.R("EditDPEDialog.TranslateKeywords"), dpe
-								.getKeywords(), langs));
+						dpe.getDesc(), langs), new TranslationEditJPanel(GpUtil
+						.R("EditDPEDialog.TranslateKeywords"), dpe
+						.getKeywords(), langs));
 
 		translationAskJDialog.setModal(true);
 		translationAskJDialog.setVisible(true);
@@ -78,9 +81,9 @@ public class DpeImportUtil {
 			DpeImportUtil.askTranslationsBeforeCopy(dpe, owner);
 
 			final AtlasStatusDialog atlasStatusDialog = new AtlasStatusDialog(
-					owner, GpUtil.R("dialog.title.wait"),
-					GpUtil.R("ImportingDPE.StatusMessage", dpe.getTitle()
-							.toString()));
+					owner, GpUtil.R("dialog.title.wait"), GpUtil.R(
+							"ImportingDPE.StatusMessage", dpe.getTitle()
+									.toString()));
 
 			AtlasSwingWorker<Exception> copyWorker = new AtlasSwingWorker<Exception>(
 					atlasStatusDialog) {
@@ -89,14 +92,16 @@ public class DpeImportUtil {
 				protected Exception doInBackground() throws Exception {
 					try {
 						targetDir.mkdirs();
-						
-						AVSwingUtil.copyHTMLInfoFiles(statusDialog, DataUtilities.urlToFile(sourceUrl), dpe.getAtlasConfig(), targetDir, null);
+
+						AVSwingUtil.copyHTMLInfoFiles(statusDialog,
+								DataUtilities.urlToFile(sourceUrl), dpe
+										.getAtlasConfig(), targetDir, null);
 
 						if (!targetDir.exists())
 							throw new IOException("Couldn't create "
 									+ targetDir.getAbsolutePath());
-						
-					 	dped.copyFiles(sourceUrl, owner, targetDir,
+
+						dped.copyFiles(sourceUrl, owner, targetDir,
 								atlasStatusDialog);
 					} catch (Exception e) {
 						return e;
@@ -137,7 +142,6 @@ public class DpeImportUtil {
 		copyFilesWithOrWithoutGUI(dped, DataUtilities.fileToURL(sourceFile),
 				owner, targetDir);
 	}
-	
 
 	/**
 	 * Copies the source file to a temp-file and replaces all comata with
@@ -161,7 +165,8 @@ public class DpeImportUtil {
 	 *         registered fo deletion when the JRE stops.
 	 */
 	public static File copyFileReplaceCommata(URL source) throws IOException {
-		return copyFileReplaceCommata(source.openStream(), new File (source.getFile()).getName() );
+		return copyFileReplaceCommata(source.openStream(), new File(source
+				.getFile()).getName());
 	}
 
 	/**

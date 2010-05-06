@@ -43,6 +43,8 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.feature.NameImpl;
 import org.geotools.styling.Style;
+import org.geotools.swing.ExceptionMonitor;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
@@ -115,6 +117,9 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			if (!dataDir.exists())
 				throw new IOException("Couldn't create "
 						+ dataDir.getAbsolutePath());
+
+			parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
+					.getParentUrl(url), "README"),1);
 
 			DpeImportUtil.copyFilesWithOrWithoutGUI(this, url, owner, dataDir);
 
@@ -265,20 +270,14 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
 
 				}
+				
+				parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
+						.getParentUrl(urlToShape), "README"),2);				
 
 				// Add the empty string as a default NODATA-Value to all textual
 				// layers
 				StyledLayerUtil.addEmptyStringToAllTextualAttributes(
 						getAttributeMetaDataMap(), getSchema());
-
-				/**
-				 * If we find a README is found next to the Shape, try to parse
-				 * it as a GeoCommons README that contains attribute
-				 * descriptions
-				 */
-				final URL geocommonsReadmeURL = DataUtilities.extendURL(
-						DataUtilities.getParentUrl(urlToShape), "README");
-				parseGeocommonsReadme(geocommonsReadmeURL);
 
 			} else {
 				throw new AtlasImportException(
@@ -326,8 +325,11 @@ descripti0: description -
 
 exported on Wed Apr 28 23:51:34 -0400 2010
 </code>
+	 * 
+	 * @param schema
+	 * @param phase 1 or 2. 1 is before the shapefiel has been copied into the internal folder, 2 is after.
 	 */
-	private void parseGeocommonsReadme(URL geocommonsReadmeURL) {
+	private void parseGeocommonsReadme(URL geocommonsReadmeURL, int phase) {
 		try {
 			InputStream openStream = geocommonsReadmeURL.openStream();
 			try {
@@ -340,7 +342,7 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 						while (title.trim().isEmpty()) {
 							title = inReader.readLine();
 						}
-						setTitle(new Translation(title));
+						if (phase == 1) setTitle(new Translation(title));
 
 						String desc = "";
 						String oneLine = "";
@@ -352,8 +354,9 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 									&& !oneLine.startsWith("Attributes:"))
 								desc += oneLine + " ";
 						}
-						setDesc(new Translation(desc));
+						if (phase == 1) setDesc(new Translation(desc));
 
+						if (phase != 2) return; 
 						String attLine = "";
 						while (attLine != null) {
 							attLine = inReader.readLine();
@@ -374,7 +377,9 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 											attDesc = split2[0].trim();
 									}
 								} catch (Exception e) {
-									LOGGER.warn("While parsing GeoCommons README",e);
+									LOGGER.warn(
+											"While parsing GeoCommons README",
+											e);
 								}
 
 								NameImpl findBestMatchingAttribute = FeatureUtil
@@ -407,26 +412,6 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 							"Parsing GeoComons README failed, maybe not in GeoCommons format?!",
 							e);
 		}
-		//
-		// String readme = IOUtil.readURLasString(geocommonsReadmeURL);
-		// if (readme == null)
-		// return;
-
-		// Pattern patt =
-		// Pattern.compile("\\w*^(.*?)^^(.*?)^^Attributes:.*^(.*)^^exported.*");
-		// Pattern patt = Pattern.compile(".*^Attributes:.*(.*)exported.*",
-		// Pattern.MULTILINE + Pattern.UNIX_LINES);
-		// Matcher matcher = patt.matcher(readme);
-		// boolean found = matcher.find();
-		//		
-		// if (found) {
-		// String title = matcher.group(1);
-		// String desc = matcher.group(2);
-		// String atts = matcher.group(3);
-		// System.out.println(title);
-		// System.out.println(desc);
-		// System.out.println(atts);
-		// }
 	}
 
 	/*
