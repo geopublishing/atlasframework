@@ -28,6 +28,7 @@ import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.DataUtilities;
 
 import schmitzm.geotools.io.GeoImportUtil;
+import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
 import schmitzm.io.IOUtil;
 
@@ -78,11 +79,6 @@ public class DpLayerRasterEd extends DpLayerRaster implements
 		String dirname = getId() + "_"
 				+ getFilename().substring(0, getFilename().lastIndexOf('.'));
 
-		// setTitle(new Translation(getAc().getLanguages(), getFilename()));
-		// setDesc(new Translation(getAc().getLanguages(), ""));
-		// setTitle(new Translation());
-		// setDesc(new Translation());
-
 		File dataDir = new File(getAce().getDataDir(), dirname);
 		setDataDirname(dirname);
 
@@ -94,11 +90,37 @@ public class DpLayerRasterEd extends DpLayerRaster implements
 	public void copyFiles(URL sourceUrl, Component owner, File targetDir,
 			AtlasStatusDialogInterface atlasStatusDialog) throws Exception {
 
+		// The URL of any .asc or .txt may change if it has to be copied to tmp
+		// first for corrections.
+		URL sourceUrlSpecial = sourceUrl;
+
+		// Extra check, if this was a broken ArcASCII file where the commata
+		// have to be removed. Check if the ending suggests an Arc/Info ASCII
+		// Grid
+		for (ARCASCII_POSTFIXES ending : GeoImportUtil.ARCASCII_POSTFIXES
+				.values()) {
+			if (sourceUrl.getFile().endsWith(ending.toString())) {
+				try {
+					GeoImportUtil.readGridFromArcInfoASCII(sourceUrl);
+				} catch (IOException e) {
+					if (e.getMessage().equals("Expected new line, not null")) {
+						// Yes, it's a broken ArcASCII. We fix it and use the
+						// corrected copy
+						File tempFile1 = DpeImportUtil
+								.copyFileReplaceCommata(sourceUrl);
+
+						sourceUrlSpecial = DataUtilities.fileToURL(tempFile1);
+						break;
+					}
+				}
+			}
+		}
+
 		// ****************************************************************************
 		// Copy the files into the atlas folder tree, clean the filenames on the
 		// way.
 		// ****************************************************************************
-		AVUtil.copyUrl(sourceUrl, targetDir, true);
+		AVUtil.copyUrl(sourceUrlSpecial, targetDir, true);
 
 		// Try to copy pending world files...
 		for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES.values()) {

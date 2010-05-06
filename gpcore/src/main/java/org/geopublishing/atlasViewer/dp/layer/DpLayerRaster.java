@@ -232,7 +232,7 @@ public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
 				for (ARCASCII_POSTFIXES ending : GeoImportUtil.ARCASCII_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-						gc = GeoImportUtil.readGridFromArcInfoASCII(url, null);
+						gc = GeoImportUtil.readGridFromArcInfoASCII(url);
 						setType(DpEntryType.RASTER_ARCASCII);
 					}
 				}

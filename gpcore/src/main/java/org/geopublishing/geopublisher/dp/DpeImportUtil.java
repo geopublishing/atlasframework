@@ -12,7 +12,11 @@ package org.geopublishing.geopublisher.dp;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
@@ -26,6 +30,7 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
 import org.geotools.data.DataUtilities;
 
+import schmitzm.io.IOUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
@@ -131,6 +136,74 @@ public class DpeImportUtil {
 			File sourceFile, Component owner, File targetDir) {
 		copyFilesWithOrWithoutGUI(dped, DataUtilities.fileToURL(sourceFile),
 				owner, targetDir);
+	}
+	
+
+	/**
+	 * Copies the source file to a temp-file and replaces all comata with
+	 * periods while doing it. This is useful for ArcASCII files that have been
+	 * exported by German ArcGIS.
+	 * 
+	 * @return a reference to a temp file without any comata. The file is
+	 *         registered fo deletion when the JRE stops.
+	 */
+	public static File copyFileReplaceCommata(File source) throws IOException {
+		return copyFileReplaceCommata(new FileInputStream(source), source
+				.getName());
+	}
+
+	/**
+	 * Copies the source file to a temp-file and replaces all comata with
+	 * periods while doing it. This is useful for ArcASCII files that have been
+	 * exported by German ArcGIS.
+	 * 
+	 * @return a reference to a temp file without any comata. The file is
+	 *         registered fo deletion when the JRE stops.
+	 */
+	public static File copyFileReplaceCommata(URL source) throws IOException {
+		return copyFileReplaceCommata(source.openStream(), new File (source.getFile()).getName() );
+	}
+
+	/**
+	 * Copies the source file to a temp-file and replaces all comata with
+	 * periods while doing it. This is useful for ArcASCII files that have been
+	 * exported by German ArcGIS.
+	 * 
+	 * @return a reference to a temp file without any comata. The file is
+	 *         registered fo deletion when the JRE stops.
+	 */
+	public static File copyFileReplaceCommata(InputStream source,
+			String fileName) throws IOException {
+		File tempFile = new File(IOUtil.getTempDir(), fileName);
+
+		if (tempFile.exists())
+			tempFile.delete();
+
+		try {
+			OutputStream out = new FileOutputStream(tempFile);
+			try {
+				// Transfer bytes from in to out
+				byte[] buf = new byte[2048];
+				int len;
+				while ((len = source.read(buf)) > 0) {
+
+					for (int i = 0; i < 2048; i++) {
+						if ((char) buf[i] == ',') {
+							buf[i] = '.';
+						}
+					}
+					out.write(buf, 0, len);
+				}
+			} finally {
+				out.close();
+			}
+		} finally {
+			source.close();
+		}
+
+		tempFile.deleteOnExit();
+
+		return tempFile;
 	}
 
 }

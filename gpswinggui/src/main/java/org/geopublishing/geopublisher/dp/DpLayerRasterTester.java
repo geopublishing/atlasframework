@@ -12,6 +12,7 @@ package org.geopublishing.geopublisher.dp;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.filechooser.FileFilter;
 
@@ -20,6 +21,7 @@ import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geotools.data.DataUtilities;
 
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
@@ -82,7 +84,9 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 
 		@Override
 		public String getDescription() {
-//			return "Raster files (GeoTIFF, ARC ASCII, imagefile + worldfile)"; // i8n
+			// return
+			// "Raster files (GeoTIFF, ARC ASCII, imagefile + worldfile)"; //
+			// i8n
 			return DpEntryType.RASTER.getDesc();
 		}
 
@@ -105,6 +109,38 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 				try {
 					GeoImportUtil.readGridFromGeoTiff(file);
 					return true;
+				} catch (IOException e) {
+
+					try {
+						if (e.getMessage()
+								.equals("Expected new line, not null")) {
+
+							// Here we test, whether the header of the file
+							// contains the
+							// comma "," char. This happens if ArcGIS exported
+							// the
+							// ArcASCII file on a German computer and is not
+							// compatible
+							// with GT ArcASCII importer! GP will create a
+							// corrected copy of the file in /tmp and import it
+							// from there.
+							// Copies src file to dst file. // If the dst file
+							// does not exist, it is created
+							File tempFile = DpeImportUtil
+									.copyFileReplaceCommata(file);
+
+							// Try again
+							GeoImportUtil
+									.readGridFromArcInfoASCII(DataUtilities
+											.fileToURL(tempFile));
+							return true;
+						}
+
+					} catch (Exception ee) {
+						ExceptionDialog.show(owner, ee);
+						return false;
+					}
+
 				} catch (Exception e) {
 					ExceptionDialog.show(owner, e);
 					return false;
@@ -119,9 +155,40 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 				.values()) {
 			if (filename.endsWith(ending.toString())) {
 				try {
-					GeoImportUtil.readGridFromArcInfoASCII(
-							file.toURI().toURL(), null);
+					GeoImportUtil.readGridFromArcInfoASCII(DataUtilities
+							.fileToURL(file));
 					return true;
+				} catch (IOException e) {
+
+					try {
+						if (e.getMessage()
+								.equals("Expected new line, not null")) {
+
+							// Here we test, whether the header of the file
+							// contains the
+							// comma "," char. This happens if ArcGIS exported
+							// the
+							// ArcASCII file on a German computer and is not
+							// compatible
+							// with GT ArcASCII importer! GP will create a
+							// corrected copy of the file in /tmp and import it
+							// from there.
+							// Copies src file to dst file. // If the dst file
+							// does not exist, it is created
+							File tempFile = DpeImportUtil
+									.copyFileReplaceCommata(file);
+
+							// Try again
+							GeoImportUtil
+									.readGridFromArcInfoASCII(DataUtilities
+											.fileToURL(tempFile));
+							return true;
+						}
+
+					} catch (Exception ee) {
+						ExceptionDialog.show(owner, ee);
+						return false;
+					}
 				} catch (Exception e) {
 					ExceptionDialog.show(owner, e);
 					return false;
@@ -135,7 +202,8 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 		for (IMAGE_POSTFIXES ending : GeoImportUtil.IMAGE_POSTFIXES.values()) {
 			if (filename.endsWith(ending.toString())) {
 				try {
-					GeoImportUtilURL.readGridFromImage(file.toURI().toURL());
+					GeoImportUtilURL.readGridFromImage(DataUtilities
+							.fileToURL(file));
 					return true;
 				} catch (Exception e) {
 					ExceptionDialog.show(owner, e);
