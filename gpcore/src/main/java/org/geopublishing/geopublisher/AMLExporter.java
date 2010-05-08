@@ -483,9 +483,12 @@ public class AMLExporter {
 			element.appendChild(maxExtend);
 		}
 
-		// Are the vert. and hor. GridPanels visible in this map?
-		element.setAttribute("scaleVisible", Boolean.valueOf(
+		// Is the ScalePanel visible in this map? 
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE, Boolean.valueOf(
 				map.isScaleVisible()).toString());
+		
+		// The units used in the ScalePanel? 
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits().toString());
 
 		// Are the vert. and hor. GridPanels visible in this map?
 		element.setAttribute("gridPanelVisible", Boolean.valueOf(

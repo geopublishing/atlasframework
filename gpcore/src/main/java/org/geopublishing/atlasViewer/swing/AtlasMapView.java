@@ -165,6 +165,8 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 		this.atlasConfig = atlasConfig;
 		getGeoMapPane().getScalePane().getScaleLabel().setVisible(false);
+		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
+
 
 		getGeoMapPane().getMapPane()
 				.setAntiAliasing(
@@ -422,7 +424,9 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		getGeoMapPane().getMapPane().setMaxExtend(map.getMaxExtend());
 
 		/** Configuring the map margin **/
+		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
 		getGeoMapPane().getScalePane().setVisible(map.isScaleVisible());
+		
 		getGeoMapPane().getVertGrid().setVisible(map.isGridPanelVisible());
 		getGeoMapPane().getHorGrid().setVisible(map.isGridPanelVisible());
 		map.getGridPanelFormatter().setCRS(map.getGridPanelCRS());

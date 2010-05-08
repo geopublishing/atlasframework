@@ -46,6 +46,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.jfree.util.Log;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
@@ -59,6 +60,7 @@ import rachel.ResourceManager;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
+import schmitzm.geotools.gui.ScalePane.UNITS;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
@@ -92,6 +94,20 @@ public class AMLImport {
 	static void info(String msg) {
 		if (statusDialog != null)
 			statusDialog.setDescription(msg);
+	}
+
+	/**
+	 * Report a warning to the GUI status dialog, if a status dialog is
+	 * available. Otherwise logs the warning.
+	 * 
+	 * @param topic
+	 * @param msg
+	 */
+	static void warn(String topic, String msg) {
+		if (statusDialog != null)
+			statusDialog.warningOccurred(topic, null, msg);
+		else
+			Log.warn(topic + ":" + msg);
 	}
 
 	/**
@@ -459,7 +475,8 @@ public class AMLImport {
 					+ " not found. Using standard "
 					+ GeoImportUtil.getDefaultCRS().getName();
 			LOGGER.debug(warnMessage);
-			statusDialog.warningOccurred("default crs", null, warnMessage);
+
+			warn("default crs", warnMessage);
 			return;
 		}
 
@@ -477,7 +494,7 @@ public class AMLImport {
 					"Error reading " + AtlasConfig.DEFAULTCRS_FILENAME
 							+ ". Fallback to"
 							+ GeoImportUtil.getDefaultCRS().getName(), e);
-			statusDialog.warningOccurred("Default CRS", null, "Error reading "
+			warn("Default CRS", "Error reading "
 					+ AtlasConfig.DEFAULTCRS_FILENAME);
 			// ExceptionDialog.show(owner, e, null,"Error reading "
 			// + AtlasConfig.DEFAULTCRS_FILENAME);
@@ -865,7 +882,7 @@ public class AMLImport {
 						.getNodeValue();
 				final DpEntry testDpe = ac.getDataPool().get(id);
 				if (testDpe == null) {
-					statusDialog.warningOccurred("menu structure", null,
+					warn("menu structure", 
 							"<datapoolRef> traget id can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 
@@ -881,7 +898,7 @@ public class AMLImport {
 						.getNodeValue();
 				final Map testMap = ac.getMapPool().get(id);
 				if (testMap == null) {
-					statusDialog.warningOccurred("menu structure", null,
+					warn("menu structure", 
 							"<mapRef> traget id can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 				} else {
@@ -1001,13 +1018,13 @@ public class AMLImport {
 						}
 
 					} catch (AtlasRecoverableException e) {
-						statusDialog.warningOccurred(
-								"Parsing attribute descriptions", "", e
+						warn(
+								"Parsing attribute descriptions", e
 										.getMessage());
 					} catch (RuntimeException e) {
 						if (AtlasViewerGUI.isRunning()) {
-							// statusDialog.warningOccurred("layer nich verfügbar aber das ist nicht schlimm",
-							// "", e.getMessage());
+							// warn("layer nich verfügbar aber das ist nicht schlimm",
+							// e.getMessage());
 						} else
 							throw e;
 					}
@@ -1029,10 +1046,8 @@ public class AMLImport {
 													+ filterString
 													+ " to CQL failed! Setting filter to no-filter",
 											filterParserEx);
-							statusDialog
-									.warningOccurred(
+							warn(
 											dplvfs.getTitle().toString(),
-											null,
 											"Failed to convert old filter\n  "
 													+ filterString
 													+ "\n to the new ECQL filter language. This setting is lost.");
@@ -1054,8 +1069,8 @@ public class AMLImport {
 			}
 
 		} catch (Exception e) {
-			statusDialog.warningOccurred(
-					"A layer has been ignored due to errors:", "", e
+			warn(
+					"A layer has been ignored due to errors:", e
 							.getMessage());
 			return null;
 		}
@@ -1199,10 +1214,8 @@ public class AMLImport {
 				LOGGER
 						.warn(dplvfs.getId()
 								+ " is broken. Can not import old colIdx-based attributeMetadata");
-				statusDialog
-						.warningOccurred(
+				warn(
 								dplvfs.getTitle().toString(),
-								null,
 								dplvfs.getId()
 										+ " is broken. Can not import old colIdx-based attributeMetadata");
 				return null;
@@ -1322,9 +1335,15 @@ public class AMLImport {
 		}
 
 		// Shall the map scale be shown?
-		if (node.getAttributes().getNamedItem("scaleVisible") != null) {
+		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE) != null) {
 			map.setScaleVisible(Boolean.valueOf(node.getAttributes()
-					.getNamedItem("scaleVisible").getNodeValue()));
+					.getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE).getNodeValue()));
+		}
+		
+		// Shall the map scale be shown? 
+		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS) != null) {
+			map.setScaleUnits(UNITS.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS).getNodeValue()));
 		}
 
 		// Shall the map show horizontal and vertical gridPanels?
@@ -1412,8 +1431,8 @@ public class AMLImport {
 				final DpEntry<? extends ChartStyle> testDpe = ac.getDataPool()
 						.get(id);
 				if (testDpe == null) {
-					statusDialog.warningOccurred("map:"
-							+ map.getTitle().toString(), null,
+					warn("map:"
+							+ map.getTitle().toString(), 
 							"<datapoolRef> attribute id can't be found in the Datapool. id="
 									+ id);
 				} else {
@@ -1532,8 +1551,8 @@ public class AMLImport {
 									+ layerID
 									+ "', but it's not known to the layer. It's ignored.";
 							LOGGER.warn(msg);
-							statusDialog.warningOccurred("map:"
-									+ map.getTitle().toString(), null, msg);
+							warn("map:"
+									+ map.getTitle().toString(), msg);
 						}
 					}
 				}
@@ -1585,8 +1604,8 @@ public class AMLImport {
 									+ layerID
 									+ "', but it's not known to the layer. It's ignored.";
 							LOGGER.error(msg);
-							statusDialog.warningOccurred("map:"
-									+ map.getTitle().toString(), null, msg);
+							warn("map:"
+									+ map.getTitle().toString(), msg);
 						}
 
 					}

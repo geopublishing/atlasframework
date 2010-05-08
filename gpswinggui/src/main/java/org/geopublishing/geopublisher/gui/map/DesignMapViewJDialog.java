@@ -1058,6 +1058,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				});
 		scaleVisibibleJCheckBox.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapScaleVisible.TT"));
+		
+		// TODO Combobox für scaleunits
 
 		// Setting the initial values
 		gridCrsSelector.setSelectedItem(map.getGridPanelCRS());
@@ -1066,14 +1068,6 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		gridVisibibleJCheckBox.setSelected(map.isGridPanelVisible());
 		scaleVisibibleJCheckBox.setSelected(map.isScaleVisible());
 
-		// box.add(gridCrsSelector);
-		// box.add(gridFormatterSelector);
-
-		// final JPanel gridPanel = new JPanel(new MigLayout("wrap 1"));
-		// gridPanel.setBorder(BorderFactory.createTitledBorder(AtlasCreator
-		// .R("DesignMapViewJDialog.MapMargin.Border")));
-		// DesignMapViewJDialog.MapFrameCRS= Map grid CRS:
-		// DesignMapViewJDialog.MapFrameFormat= Map grid format:
 		panel.add(
 				new JLabel(GeopublisherGUI.R("DesignMapViewJDialog.MapFrameCRS")),
 				"split 2, right");
@@ -1084,7 +1078,6 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		panel.add(gridFormatterSelector, "wrap");
 		panel.add(gridVisibibleJCheckBox, "split 2");
 		panel.add(scaleVisibibleJCheckBox);
-		// panel.add(gridPanel, "growx");
 
 		return panel;
 	}

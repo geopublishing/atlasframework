@@ -15,6 +15,8 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.CQLFilterParser;
+import schmitzm.geotools.gui.ScalePane;
+import schmitzm.geotools.gui.ScalePanel;
 
 /**
  * A utility class with constants for parsing and storing AML.
@@ -32,17 +34,17 @@ public class AMLUtil {
 	public static final String OGCURI = "http://www.opengis.net/ogc";
 
 	public static final String GMLURI = "http://www.opengis.net/gml";
-	
+
 	/** Tag used in AMLURI name-space **/
 	public static final String TAG_nodataValue = "nodataValue";
-	/** Tag used in AMLURI name-space **/	
+	/** Tag used in AMLURI name-space **/
 	public static final String TAG_attributeMetadata = "dataAttribute";
 
 	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_majVersion = "majVersion";
-	/** Attribute used in AMLURI name-space **/	
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_minVersion = "minVersion";
-	/** Attribute used in AMLURI name-space **/	
+	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_buildVersion = "buildVersion";
 	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_localname = "localname";
@@ -55,31 +57,44 @@ public class AMLUtil {
 	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_functionA = "functionA";
 
+	/**
+	 * Attribute used in AML map description to describe the units that shall be
+	 * used in the {@link ScalePanel}
+	 **/
+	public static final String ATT_MAP_SCALE_UNITS = "scaleUnits";
+
+	/**
+	 * Attribute used in AML map description to describe whether the
+	 * {@link ScalePane} shall be shown in the map
+	 **/
+	public static final String ATT_MAP_SCALE_VISIBLE = "scaleVisible";
 
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
-	 * @throws CQLException when the filter can not be
-	 *             successfully converted.
+	 * 
+	 * @throws CQLException
+	 *             when the filter can not be successfully converted.
 	 */
-	public static String upgradeMartinFilter2ECQL(String filterString) throws CQLException {
-		
+	public static String upgradeMartinFilter2ECQL(String filterString)
+			throws CQLException {
+
 		String old = filterString;
-		
+
 		if (filterString.trim().equals(""))
 			return Filter.INCLUDE.toString();
-		
+
 		filterString = filterString.replace("( \" \" )", "' '");
 		filterString = filterString.replace("\"", "'");
 		filterString = filterString.replace("$", "");
 		filterString = filterString.replace("|", " OR ");
 		filterString = filterString.replace("&", " AND ");
 		filterString = filterString.replace("!=", " <> ");
-		
-		LOGGER.debug("old = \n"+old+" converted to \n"+filterString);
-		
+
+		LOGGER.debug("old = \n" + old + " converted to \n" + filterString);
+
 		Filter filter = new CQLFilterParser().parseFilter(filterString);
-//		Filter cqlFilter = CQL.toFilter(filterString);
-//		cqlFilter.evaluate(null);
+		// Filter cqlFilter = CQL.toFilter(filterString);
+		// cqlFilter.evaluate(null);
 
 		return filterString;
 	}

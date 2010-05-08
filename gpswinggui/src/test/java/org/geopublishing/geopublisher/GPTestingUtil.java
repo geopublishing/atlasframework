@@ -11,6 +11,7 @@
 package org.geopublishing.geopublisher;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -20,8 +21,10 @@ import java.net.URL;
 import javax.swing.JDialog;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -202,6 +205,25 @@ public class GPTestingUtil {
 		}
 
 		dialog.dispose();
+	}
+
+	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace) throws Exception {
+		File tempDir = new File(IOUtil.getTempDir(),"testAtlasImportExport/"+AtlasConfig.ATLASDATA_DIRNAME );
+		tempDir.mkdirs();
+		
+		File atlasXmlFile = new File(tempDir, AtlasConfigEditable.ATLAS_XML_FILENAME);
+		
+		AMLExporter amlExporter = new AMLExporter(ace);
+		amlExporter.setAtlasXml(atlasXmlFile);
+		boolean saved = amlExporter.saveAtlasConfigEditable();
+		
+		assertTrue(saved);
+		
+		AtlasConfigEditable ace2 = AMLImport.parseAtlasConfig(null, atlasXmlFile.getParentFile().getParentFile());
+		
+		FileUtils.deleteDirectory(tempDir);
+		
+		return ace2;
 	}
 
 }

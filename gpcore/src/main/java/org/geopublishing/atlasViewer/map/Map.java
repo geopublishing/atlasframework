@@ -35,6 +35,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.gui.GridPanel;
 import schmitzm.geotools.gui.GridPanelFormatter;
+import schmitzm.geotools.gui.ScalePane;
+import schmitzm.geotools.gui.ScalePane.UNITS;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.geotools.Copyable;
@@ -146,6 +148,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * may zoom out as much as he wants.
 	 **/
 	private Envelope maxExtend = null;
+
+	/** The units to show the scale in **/
+	private UNITS scaleUnits = UNITS.metersKilometers;
 
 	/**
 	 * Resets the cache that remembers for which languages the HTML info pages
@@ -421,8 +426,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		// That was too slow String:
 		// urlString = Webserver.getDocumentBase() + "/" +
 		// getId() + "/" + "index.html";
-		final String urlString = "http://127.0.0.1:" + Webserver.PORT
-				+ "/"+AtlasConfig.ATLASDATA_DIRNAME+"/"+AtlasConfig.HTML_DIRNAME+"/" + getId() + "/" + "index_"
+		final String urlString = "http://127.0.0.1:" + Webserver.PORT + "/"
+				+ AtlasConfig.ATLASDATA_DIRNAME + "/"
+				+ AtlasConfig.HTML_DIRNAME + "/" + getId() + "/" + "index_"
 				+ Translation.getActiveLang() + ".html";
 		// LOGGER.debug("URLstring fuer HTML mapinfo = " + urlString);
 
@@ -440,7 +446,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	/**
 	 * Retunes the default MapArea (which will be shown when the Map starts...)
 	 */
-	public Envelope  getDefaultMapArea() {
+	public Envelope getDefaultMapArea() {
 		return defaultMapArea;
 	}
 
@@ -730,8 +736,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				.get(dpLayerID);
 
 		/**
-		 * Now we double check, that all IDs are returned, that really
-		 * still exist.
+		 * Now we double check, that all IDs are returned, that really still
+		 * exist.
 		 */
 		final ArrayList<String> clone = (ArrayList<String>) availChartsForLayer
 				.clone();
@@ -748,7 +754,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			}
 		}
 
-//		System.out.println("avail:"+availChartsForLayer.size()+"    "+availChartsForLayer);
+		// System.out.println("avail:"+availChartsForLayer.size()+"    "+availChartsForLayer);
 
 		return availChartsForLayer;
 	}
@@ -854,10 +860,16 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		return gridPanelFormatter;
 	}
 
+	/**
+	 * Shall a scale be shown in the map window?
+	 */
 	public void setScaleVisible(boolean scaleVisible) {
 		this.scaleVisible = scaleVisible;
 	}
 
+	/**
+	 * Shall a scale be shown in the map window?
+	 */
 	public boolean isScaleVisible() {
 		return scaleVisible;
 	}
@@ -977,5 +989,19 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 */
 	public void uncache() {
 		uncache(null);
+	}
+
+	/**
+	 * @return The units the {@link ScalePane} is shown in.
+	 */
+	public UNITS getScaleUnits() {
+		return scaleUnits;
+	}
+
+	/**
+	 * The units the {@link ScalePane} is shown in.
+	 */
+	public void setScaleUnits(UNITS scaleUnits) {
+		this.scaleUnits = scaleUnits;
 	}
 }

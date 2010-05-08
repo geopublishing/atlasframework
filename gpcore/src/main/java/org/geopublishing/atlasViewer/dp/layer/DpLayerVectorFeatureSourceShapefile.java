@@ -219,7 +219,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 				String charsetName = IOUtil.readURLasString(cpgUrl);
 
-				if (charsetName == "")
+				if (charsetName.equals(""))
 					return super.getCharset();
 				//
 				// LOGGER.info("Trying to interprete '" + charsetName

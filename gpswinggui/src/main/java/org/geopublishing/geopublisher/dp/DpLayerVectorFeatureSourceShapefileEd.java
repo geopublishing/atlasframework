@@ -43,8 +43,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.feature.NameImpl;
 import org.geotools.styling.Style;
-import org.geotools.swing.ExceptionMonitor;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
