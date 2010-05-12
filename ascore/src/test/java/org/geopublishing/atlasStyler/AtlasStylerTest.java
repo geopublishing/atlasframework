@@ -44,7 +44,7 @@ public class AtlasStylerTest {
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
 	@BeforeClass
-	public void setup() throws IOException {
+	public static void setup() throws IOException {
 		URL shpURL = AtlasStylerTest.class.getResource(COUNTRY_SHP_RESNAME);
 		assertNotNull(COUNTRY_SHP_RESNAME+" not found!",shpURL);
 		Map<Object, Object> params = new HashMap<Object, Object>();
@@ -55,12 +55,12 @@ public class AtlasStylerTest {
 	}
 
 	@AfterClass
-	public void after() {
+	public static void after() {
 		featureSource_polygon.getDataStore().dispose();
 	}
 
 	@Test
-	@Ignore 
+	@Ignore
 	public void testAvgNN() throws IOException {
 		double calcAvgNN = FeatureUtil.calcAvgNN(new StyledFS(featureSource_polygon) );
 		assertTrue ("Der average NN Wert sollte größer 0 sein", calcAvgNN > 0);

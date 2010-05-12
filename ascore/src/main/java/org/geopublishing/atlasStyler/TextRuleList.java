@@ -123,22 +123,7 @@ public class TextRuleList extends AbstractRuleList {
 			LOGGER.debug("Not adding a default because we are not empty!");
 			return;
 		}
-//
-//		TextSymbolizer defaultTextSymbolizer = StylingUtil.STYLE_BUILDER
-//				.createTextSymbolizer();
-//
-//		// For TextLabels for Polygons we set the PointPlacement option X to 50%
-//		// by default
-//		if (FeatureUtil.getGeometryForm(getStyledFeatures().getSchema()) == GeometryForm.POLYGON) {
-//			LabelPlacement labelPlacement = defaultTextSymbolizer
-//					.getLabelPlacement();
-//			if (labelPlacement instanceof PointPlacement) {
-//				PointPlacement pointPlacement = (PointPlacement) labelPlacement;
-//				pointPlacement.getAnchorPoint().setAnchorPointX(
-//						FeatureUtil.FILTER_FACTORY2.literal(".5"));
-//			}
-//		}
-		
+
 		TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
 		
 		getSymbolizers().add(defaultTextSymbolizer);
@@ -160,7 +145,7 @@ public class TextRuleList extends AbstractRuleList {
 				"a text symbolizer class enablement has been set to " + b, this));
 	}
 
-	public TextSymbolizer createDefaultTextSymbolizer() {
+	private TextSymbolizer createDefaultTextSymbolizer() {
 		
 		// If we already have a default symbolizer, we will return a duplication of it.
 		if (getSymbolizers().size()>0 ) {

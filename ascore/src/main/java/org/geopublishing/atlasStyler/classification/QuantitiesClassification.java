@@ -155,7 +155,6 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	private boolean recalcAutomatically = true;
 
-
 	/**
 	 * @param featureSource
 	 *            The featuresource to use for the statistics
@@ -168,8 +167,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * @param normalizer_field_name
 	 *            If null, no normalization will be used
 	 */
-	public QuantitiesClassification(
-			StyledFeaturesInterface<?> styledFeatures,
+	public QuantitiesClassification(StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name, final String normalizer_field_name) {
 		super(styledFeatures);
 		this.value_field_name = value_field_name;
@@ -219,9 +217,9 @@ public class QuantitiesClassification extends FeatureClassification {
 	 *         Not it always returns a list of numbers.
 	 */
 	public ComboBoxModel getClassificationParameterComboBoxModel() {
-		
+
 		DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
-					new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
+				new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
 
 		switch (classificationMethod) {
 		case EI:
@@ -342,7 +340,8 @@ public class QuantitiesClassification extends FeatureClassification {
 	/**
 	 * This is where the magic happens. Here the attributes of the features are
 	 * summarized in a {@link DynamicBin1D} class.
-	 * @throws IOException 
+	 * 
+	 * @throws IOException
 	 */
 	synchronized public DynamicBin1D getStatistics()
 			throws InterruptedException, IOException {
@@ -356,19 +355,22 @@ public class QuantitiesClassification extends FeatureClassification {
 					"value field and the normalizer field may not be equal.");
 
 		if (stats == null) {
-// Old style.. asking for ALL attributes 			
-//			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
-//					.getFeatureCollectionFiltered();
-			
+			// Old style.. asking for ALL attributes
+			// FeatureCollection<SimpleFeatureType, SimpleFeature> features =
+			// getStyledFeatures()
+			// .getFeatureCollectionFiltered();
+
 			Filter filter = getStyledFeatures().getFilter();
-			DefaultQuery query = new DefaultQuery(getStyledFeatures().getSchema().getTypeName(), filter);
+			DefaultQuery query = new DefaultQuery(getStyledFeatures()
+					.getSchema().getTypeName(), filter);
 			List<String> propNames = new ArrayList<String>();
 			propNames.add(value_field_name);
 			if (normalizer_field_name != null)
 				propNames.add(normalizer_field_name);
 			query.setPropertyNames(propNames);
-			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures().getFeatureSource().getFeatures(query);
-			
+			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
+					.getFeatureSource().getFeatures(query);
+
 			// Forget about the count of NODATA values
 			resetNoDataCount();
 
@@ -429,7 +431,9 @@ public class QuantitiesClassification extends FeatureClassification {
 
 						valueNormDivider = ((Number) filteredNorm)
 								.doubleValue();
-						if (valueNormDivider == 0. || valueNormDivider.isInfinite() || valueNormDivider.isNaN()) {
+						if (valueNormDivider == 0.
+								|| valueNormDivider.isInfinite()
+								|| valueNormDivider.isNaN()) {
 							// Even if it is not defined as a NODATA value,
 							// division by null is not definied.
 							increaseNoDataValue();
@@ -520,6 +524,8 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * @param digits
 	 *            positive values means round to digits AFTER comma, negative
 	 *            values means round to digits BEFORE comma
+	 *            
+	 * TODO abgleichen mit QuantitiesRuleListe#setClassDigits           
 	 */
 	public void setLimitsDigits(final Integer digits) {
 		this.limitsDigits = digits;
@@ -597,32 +603,6 @@ public class QuantitiesClassification extends FeatureClassification {
 		 */
 		if (value_field_name == null)
 			return;
-		
-		// TODO Das ist nicht mehr mit Worker! 
-
-//		/**
-//		 * If there is another thread running, cancel it first. But remember,
-//		 * that swing-workers may not be reused!
-//		 */
-//		if (calculateStatisticsWorker != null
-//				&& !calculateStatisticsWorker.isDone()) {
-//			LOGGER.debug("Cancelling calculation on another thread");
-//			setCancelCalculation(true);
-//			calculateStatisticsWorker.cancel(true);
-//		}
-//
-//		AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
-//
-//		calculateStatisticsWorker = new AtlasSwingWorker<TreeSet<Double>>(
-//				statusDialog) {
-//
-//			@Override
-//			protected TreeSet<Double> doInBackground() throws IOException,
-//					InterruptedException {
-//				return calculateClassLimitsBlocking();
-//			}
-//
-//		};
 
 		pushQuite();
 		TreeSet<Double> newLimits;
@@ -737,6 +717,31 @@ public class QuantitiesClassification extends FeatureClassification {
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
 		} else
 			calculateClassLimitsWithWorker();
+	}
+
+	/**
+	 * Rplaces all values in the classification limits that can make problems when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf, Na
+	 *  
+	 * @param replacement
+	 *            A number that will replace Inf+ as abs(replacement), and Inf-
+	 *            as -abs(replacement)
+	 */
+	public static TreeSet<Double> removeNanAndInf(
+			QuantitiesClassification classifier, Double replacement) {
+
+		// Filter class limits against -Inf and +Inf. GS doesn't like them
+		TreeSet<Double> newClassLimits = new TreeSet<Double>();
+		for (Double l : classifier.getClassLimits()) {
+			if (l == Double.NEGATIVE_INFINITY)
+				l = -1. * Math.abs(replacement);
+			if (l == Double.POSITIVE_INFINITY)
+				l = Math.abs(replacement);
+			if (l == Double.NaN)
+				l = 0.;
+			newClassLimits.add(l);
+		}
+		classifier.setClassLimits(newClassLimits);
+		return newClassLimits;
 	}
 
 }

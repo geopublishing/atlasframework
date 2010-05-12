@@ -15,9 +15,9 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
@@ -34,7 +34,6 @@ import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.Copyable;
 import skrueger.geotools.LegendIconFeatureRenderer;
 import skrueger.i8n.Translation;
@@ -117,8 +116,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param symbolizer
 	 *            The symbolizers to add.
 	 */
-	public boolean addSymbolizers(List symbolizers) {
-		boolean add = layers.addAll(symbolizers);
+	public boolean addSymbolizers(List<? extends Symbolizer> symbolizers) {
+		boolean add = layers.addAll((Collection<? extends SymbolizerType>) symbolizers);
 		if (add)
 			fireEvents(new RuleChangedEvent("Added " + symbolizers.size()
 					+ " symbolizers", this));
@@ -216,33 +215,13 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	public boolean loadURL(URL url) {
 		pushQuite();
 		try {
-			String urlString;
-			try {
-				// urlString = new File( url.toURI() ).getName();
-				urlString = url.toURI().getPath();
-			} catch (URISyntaxException e) {
-				LOGGER.error(e);
-
-				urlString = url.toString();
-			}
-			// LOGGER.info("url to load = " + urlString);
 			Style[] styles = StylingUtil.loadSLD(url);
-			//
-			// LOGGER.debug("URL " + styles.length);
 			// LOGGER.debug("Anzahl Styles in URL " + styles.length);
 
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
-			String fileNameWithoutSLD;
-			try {
-				fileNameWithoutSLD = urlString.substring(urlString
-						.lastIndexOf("/") + 1, urlString.length() - 4);
-				// LOGGER.debug("urlstr=" + urlString);
-			} catch (Exception e) {
-				ExceptionDialog.show(null, e);
-				fileNameWithoutSLD = "ILLEGALFILENAME";
-			}
+			String fileNameWithoutSLD = url.toExternalForm().substring(0, url.toExternalForm().lastIndexOf('.'));
 			setStyleName(fileNameWithoutSLD);
 
 			try {
