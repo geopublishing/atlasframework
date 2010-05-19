@@ -63,6 +63,7 @@ import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasStyler.swing.classification.QuantitiesClassification;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.map.event.MapLayerEvent;
@@ -942,9 +943,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return
 	 */
 	private JButton getInvertColorsButton() {
-		final JButton button = new JButton(new AbstractAction("",
-				new ImageIcon(getClass().getResource(
-						"images/reverseColorOrder.gif"))) {
+		final JButton button = new JButton(new AbstractAction("",Icons.AS_REVERSE_COLORORDER) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {

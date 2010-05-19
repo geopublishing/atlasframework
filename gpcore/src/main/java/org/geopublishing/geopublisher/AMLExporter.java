@@ -394,29 +394,34 @@ public class AMLExporter {
 	 */
 	private Node exportMapPool(final Document document) throws DOMException,
 			AtlasExportException, AtlasCancelException {
-		
 		final MapPool mapPool = ace.getMapPool();
 
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
 				"mapPool");
 
+		// Test whether a start map exists. When no start-map is defined, the
+		// user may not export.
 		if (mapPool.getStartMapID() != null
 				&& mapPool.get(mapPool.getStartMapID()) != null) {
 			element.setAttribute("startMap", mapPool.getStartMapID());
+		} else {
+			if (exportMode)
+				throw new AtlasExportException(GpUtil.R("ExportAtlas.NeedAtLeastOneMap")); 
 		}
 
 		// maps MUST contain at least one map
 		final Collection<Map> maps = mapPool.values();
-		List<String> notReferencedDpeIDs = ace.listNotReferencedInGroupTree();
+		List<String> notReferencedDpeIDs = ace
+				.listNotReferencedInGroupTree();
 		for (final Map map : maps) {
 			checkCancel();
-			
+
 			if (exportMode && notReferencedDpeIDs.contains(map.getId())
 					&& !map.getId().equals(mapPool.getStartMapID())) {
 				// Only export maps that are referenced in the group tree
 				continue;
 			}
-			
+
 			element.appendChild(exportMap(document, map));
 		}
 		return element;
