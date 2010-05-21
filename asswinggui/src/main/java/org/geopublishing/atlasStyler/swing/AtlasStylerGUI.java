@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -54,17 +55,20 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
+import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
 import org.geotools.styling.NamedLayer;
 import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
+import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -101,6 +105,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
 			getStylerMapView().getMapManager());
 
+	private Vector<DataStore> openDatastores = new Vector<DataStore>();
+
 	/**
 	 * This is the default constructor
 	 */
@@ -109,8 +115,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		// Setting up the logger from a XML configuration file
-		DOMConfigurator.configure(AtlasStylerGUI.class
-				.getResource("/as_log4j.xml"));
+		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
 		// Output information about the LGPL license
 		ReleaseUtil.logLGPLCopyright(LOGGER);
@@ -127,7 +132,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			public void windowClosed(WindowEvent e) {
 				exitAS(0);
 			}
-			
+
 		});
 
 		/**
@@ -191,6 +196,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		}
 		dispose();
+
+		for (DataStore ds : openDatastores) {
+			if (ds != null)
+				ds.dispose();
+		}
 
 		/*
 		 * Unregister from JNLP SingleInstanceService
@@ -298,6 +308,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	private JToolBar getJToolBar() {
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(getJButtonAddLayer());
+		jToolBar.add(getJButtonAddPostGIS());
 		jToolBar.add(getJButtonAntiAliasing());
 		jToolBar.add(getJTButtonShowXML());
 		jToolBar.add(getJTButtonExportAsSLD());
@@ -313,6 +324,91 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		jToolBar.add(optionsButton);
 		return jToolBar;
+	}
+
+	/**
+	 * Auf die administrativen Einheiten kann auch per geotools zugegriffen
+	 * werden. Der dafür notwendige Datastore wird hier erstellt.<br/>
+	 * Hinweis: nach {@link #createDatastore()} sollte mit
+	 * <code>try{...}finally{ds.dispose();}</code> das {@link DataStore
+	 * DataStores#dispose()} garantiert werden.
+	 * 
+	 * @param host
+	 * @param port
+	 * 
+	 * @throws IOException
+	 */
+	private DataStore createDatastore(String host, String port,
+			String database, String username, String password) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("dbtype", "postgis");
+		params.put("dbtype", "postgis");
+		params.put("host", host); // the name or ip
+		params.put("port", port); // the port that
+
+		params.put("database", database); // the
+
+		// name
+		params.put("user", username); // the user to
+		params.put("passwd", password); // the
+		// password
+
+		params.put(JDBCDataStoreFactory.EXPOSE_PK.key, true);
+
+		try {
+			DataStore ds = DataStoreFinder.getDataStore(params);
+			openDatastores.add(ds);
+			return ds;
+		} catch (IOException e) {
+			throw new RuntimeException(
+					"GT Datastore konnte nicht erstellt werden.");
+		}
+	}
+
+	private JButton getJButtonAddPostGIS() {
+		JButton jButtonAddPostgis = new JButton(AtlasStyler
+				.R("AtlasStylerGUI.toolbarButton.open_postgis"));
+
+		jButtonAddPostgis.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				String host = "localhost";
+				String port = "5432";
+				String database = "keck";
+				String username = "postgres";
+				String password = "secretIRI69.";
+				String layer = "bundeslaender_2008";
+
+				DataStore ds = createDatastore(host, port, database, username,
+						password);
+				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
+				try {
+					featureSource = ds.getFeatureSource(layer);
+					StyledFS styledFS = new StyledFS(featureSource);
+
+					styledFS.setSldFile(new File(System
+							.getProperty("user.home")
+							+ "/"
+							+ host
+							+ "."
+							+ database
+							+ "."
+							+ layer
+							+ ".sld"));
+					
+					LOGGER.info("Pg layer has CRS = "+
+							styledFS.getCrs());
+
+					addLayer(styledFS);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					ExceptionMonitor.show(AtlasStylerGUI.this, e1);
+				}
+			}
+		});
+		return jButtonAddPostgis;
+
 	}
 
 	private JToggleButton getJButtonAntiAliasing() {
@@ -641,18 +737,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			}
 
 			styledFS = new StyledFS(featureSourceTry, sldFile);
-
 			// styledFS.getCrs();
-
-			if (styledFS.getStyle() == null) {
-				// Einen default Style erstellen
-				{
-					AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
-							"AtlasStylerGUI.importVectorLayerNoSLD", styledFS
-									.getSldFile()));
-					styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
-				}
-			}
 
 			addLayer(styledFS);
 
@@ -664,13 +749,17 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	}
 
 	public void addLayer(StyledFS styledFS) {
-		/**
-		 * If the Style is null, we have to create some style
-		 */
+
 		if (styledFS.getStyle() == null) {
-			final Style createStyle = ASUtil.SB.createStyle();
-			styledFS.setStyle(createStyle);
+			// Einen default Style erstellen
+			{
+				AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
+						"AtlasStylerGUI.importVectorLayerNoSLD", styledFS
+								.getSldFile()));
+				styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
+			}
 		}
+
 		stledObjCache.put(styledFS.getId(), styledFS);
 		getMapManager().addStyledLayer(styledFS);
 	}

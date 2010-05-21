@@ -18,7 +18,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.type.Name;
 
-public class EditAttributesJDialogTest  {
+public class EditAttributesJDialogTest {
 
 	static DpLayerRasterPyramid pyr;
 	private static DpLayerVectorFeatureSource dplv;
@@ -40,23 +40,24 @@ public class EditAttributesJDialogTest  {
 
 		if (dplv == null)
 			throw new RuntimeException(
-					"no dplv with more at least 1 attrib found in atlas");
+					"no dplv with more than at least 1 attrib found in atlas");
 	}
 
 	@Test
 	public void testConstruct() throws InterruptedException {
 
-		Name aname = dplv.getSchema().getAttributeDescriptors().get(1).getName();
-		
+		Name aname = dplv.getSchema().getAttributeDescriptors().get(1)
+				.getName();
+
 		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de", "aaa");
 
-		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
-				.getInstanceFor(dplv, null, dplv);
-		
-		dialog.setModal(GPTestingUtil.INTERACTIVE);
-		dialog.setVisible(true);
-		
-		dialog.dispose();
+		if (GPTestingUtil.INTERACTIVE) {
+			EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
+					.getInstanceFor(dplv, null, dplv);
+			dialog.setModal(true);
+			dialog.setVisible(true);
+			dialog.dispose();
+		}
 	}
 
 }

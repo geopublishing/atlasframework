@@ -53,7 +53,7 @@ public class ACETranslationPrinterTest  {
 			dc.setDialogTitle(GpUtil
 					.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(exportFile);
-			if ((dc.showOpenDialog(null) != JFileChooser.APPROVE_OPTION)
+			if ((dc.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
 					|| (dc.getSelectedFile() == null))
 				return;
 			exportFile = dc.getSelectedFile();
@@ -76,12 +76,14 @@ public class ACETranslationPrinterTest  {
 		out.write(allTrans);
 		out.close();
 
-		DocumentPane documentPane = new DocumentPane(
-				DataUtilities.fileToURL(exportFile), 0);
-		documentPane.saveDocument();
-		documentPane = null;
-		
-		assertTrue(exportFile.exists());
+		if (GPTestingUtil.INTERACTIVE) {
+			DocumentPane documentPane = new DocumentPane(
+					DataUtilities.fileToURL(exportFile), 0);
+			documentPane.saveDocument();
+			documentPane = null;
+			
+			assertTrue(exportFile.exists());
+		}
 
 		if (GPTestingUtil.INTERACTIVE)
 			AVSwingUtil.lauchHTMLviewer(null, exportFile.toURI());

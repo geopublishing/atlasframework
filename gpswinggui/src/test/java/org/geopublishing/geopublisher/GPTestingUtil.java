@@ -14,6 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -47,9 +48,9 @@ public class GPTestingUtil {
 
 	/**
 	 * Set to <code>true</code> to also run the interactive tests that will not
-	 * finish without your GUI input
+	 * finish without your GUI input.
 	 **/
-	public static final boolean INTERACTIVE = false; // TODO mavenize
+	public static final boolean INTERACTIVE = !GraphicsEnvironment.isHeadless();
 
 	/** An enumeration of available test-atlases **/
 	public enum Atlas {
