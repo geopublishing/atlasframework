@@ -938,6 +938,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		newMap.setKeywords(keywords.copyTo(new Translation()));
 
 		newMap.setScaleVisible(scaleVisible);
+		newMap.setScaleUnits(scaleUnits);
 
 		/*** Copy stuff related to the hor. and vert. GridPanel ***/
 		newMap.setGridPanelFormatter(gridPanelFormatter);
