@@ -1054,14 +1054,14 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final JComboBox scaleUnitComboBox = new JComboBox(
 				new ScalePanel.ScaleUnits[] { ScalePanel.ScaleUnits.METRIC,
 						ScalePanel.ScaleUnits.US });
+		scaleUnitComboBox.setSelectedItem(map.getScaleUnits());
 		scaleUnitComboBox.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				ScalePanel.ScaleUnits selectedUnit = (ScalePanel.ScaleUnits) scaleUnitComboBox.getSelectedItem();
-				System.out.println(selectedUnit);
 				map.setScaleUnits(selectedUnit);
-				designMapView.getGeoMapPane().getScalePane().repaint();
+				designMapView.getGeoMapPane().getScalePane().setUnits(selectedUnit);
 			}
 		});
 		scaleUnitComboBox.setEnabled(map.isScaleVisible());
