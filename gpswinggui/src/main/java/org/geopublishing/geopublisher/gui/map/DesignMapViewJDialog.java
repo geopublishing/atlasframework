@@ -1050,7 +1050,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				.R("DesignMapViewJDialog.MapFrameVisible.TT"));
 
 
-		// Select the unit for the scalebar
+		// Select the scale units for the scale-bar: meter or miles
 		final JComboBox scaleUnitComboBox = new JComboBox(
 				new ScalePanel.ScaleUnits[] { ScalePanel.ScaleUnits.METRIC,
 						ScalePanel.ScaleUnits.US });
@@ -1058,7 +1058,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				map.setScaleUnits((ScalePanel.ScaleUnits) scaleUnitComboBox.getSelectedItem());
+				ScalePanel.ScaleUnits selectedUnit = (ScalePanel.ScaleUnits) scaleUnitComboBox.getSelectedItem();
+				System.out.println(selectedUnit);
+				map.setScaleUnits(selectedUnit);
 				designMapView.getGeoMapPane().getScalePane().repaint();
 			}
 		});
