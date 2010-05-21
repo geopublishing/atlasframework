@@ -1110,21 +1110,22 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							.getSelectedItem();
 					// System.out.println(idx+"="+aggFunc);
 					chartStyle.setAttributeAggregation(idx, aggFunc);
-
-					// AGgregation funktion kann auch auf die axsen UNIT wirken
-
-					if (idx == ChartStyle.RANGE_AXIS) {
-						String unit = styledLayer.getAttributeMetaDataMap()
-								.get(attributeName).getUnit();
-
-						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
-								unit);
-
+					
+					if (idx != ChartStyle.DOMAIN_AXIS) {
 						// Grey-out the weighting attribute if the aggregation
 						// method doesn't support it.
 						panelAggregationWeight.setEnabled(aggFunc != null
 								&& aggFunc.isWeighted());
 					}
+
+					// AGgregation funktion kann auch auf die axsen UNIT wirken
+					if (idx == ChartStyle.RANGE_AXIS) {
+						String unit = styledLayer.getAttributeMetaDataMap()
+								.get(attributeName).getUnit();
+						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
+								unit);
+					}
+
 
 					fireChartChangedEvent(true);
 				}
