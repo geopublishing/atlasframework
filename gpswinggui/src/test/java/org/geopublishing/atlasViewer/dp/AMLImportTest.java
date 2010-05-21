@@ -8,7 +8,7 @@ import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.junit.Test;
 
-import schmitzm.geotools.gui.ScalePane.UNITS;
+import schmitzm.geotools.gui.ScalePanel;
 
 public class AMLImportTest {
 
@@ -21,7 +21,7 @@ public class AMLImportTest {
 
 		Map map1_0 = ace.getMapPool().get(0);
 
-		map1_0.setScaleUnits(UNITS.feetMiles);
+		map1_0.setScaleUnits(ScalePanel.ScaleUnits.US);
 		map1_0.setScaleVisible(false);
 
 		AtlasConfigEditable ace2 = GPTestingUtil.saveAndLoad(ace);

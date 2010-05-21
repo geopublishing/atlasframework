@@ -165,8 +165,6 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 		this.atlasConfig = atlasConfig;
 		getGeoMapPane().getScalePane().getScaleLabel().setVisible(false);
-		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
-
 
 		getGeoMapPane().getMapPane()
 				.setAntiAliasing(
@@ -434,6 +432,8 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				map.getGridPanelFormatter());
 		getGeoMapPane().getVertGrid().setGridFormatter(
 				map.getGridPanelFormatter());
+		
+		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
 	}
 
 	/**

@@ -162,10 +162,5 @@ public class DesignMapView extends AtlasMapView {
 		}
 		return (int) (width * ratio);
 	}
-//
-//	@Override
-//	public void initialize() {
-//		super.initialize(); // important!
-//	}
 
 }

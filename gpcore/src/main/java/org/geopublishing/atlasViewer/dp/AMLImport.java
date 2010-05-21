@@ -60,7 +60,7 @@ import rachel.ResourceManager;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
-import schmitzm.geotools.gui.ScalePane.UNITS;
+import schmitzm.geotools.gui.ScalePanel.ScaleUnits;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
@@ -1342,7 +1342,7 @@ public class AMLImport {
 		
 		// Shall the map scale be shown? 
 		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS) != null) {
-			map.setScaleUnits(UNITS.valueOf(node.getAttributes()
+			map.setScaleUnits(ScaleUnits.valueOf(node.getAttributes()
 					.getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS).getNodeValue()));
 		}
 

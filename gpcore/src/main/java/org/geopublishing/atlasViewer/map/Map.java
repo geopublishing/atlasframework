@@ -36,7 +36,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import schmitzm.geotools.gui.GridPanel;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.gui.ScalePane;
-import schmitzm.geotools.gui.ScalePane.UNITS;
+import schmitzm.geotools.gui.ScalePanel.ScaleUnits;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.geotools.Copyable;
@@ -150,7 +150,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	private Envelope maxExtend = null;
 
 	/** The units to show the scale in **/
-	private UNITS scaleUnits = UNITS.metersKilometers;
+	private ScaleUnits scaleUnits = ScaleUnits.METRIC;
 
 	/**
 	 * Resets the cache that remembers for which languages the HTML info pages
@@ -994,14 +994,14 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	/**
 	 * @return The units the {@link ScalePane} is shown in.
 	 */
-	public UNITS getScaleUnits() {
+	public ScaleUnits getScaleUnits() {
 		return scaleUnits;
 	}
 
 	/**
 	 * The units the {@link ScalePane} is shown in.
 	 */
-	public void setScaleUnits(UNITS scaleUnits) {
+	public void setScaleUnits(ScaleUnits scaleUnits) {
 		this.scaleUnits = scaleUnits;
 	}
 }
