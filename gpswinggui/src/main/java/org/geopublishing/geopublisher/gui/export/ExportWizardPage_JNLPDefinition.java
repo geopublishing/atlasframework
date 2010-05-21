@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -28,8 +30,6 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
-
-
 
 public class ExportWizardPage_JNLPDefinition extends WizardPage {
 	private final JLabel JnlpURLLabel = new JLabel(GeopublisherGUI
@@ -52,7 +52,7 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 			.R("ExportWizard.JNLP.ValidationError.NoSlash");
 
 	public static String getDescription() {
-		return  GeopublisherGUI.R("ExportWizard.JNLP");
+		return GeopublisherGUI.R("ExportWizard.JNLP");
 	}
 
 	public ExportWizardPage_JNLPDefinition() {
@@ -93,23 +93,27 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 					+ "/" + JarExportUtil.JNLP_FILENAME);
 			atlasURLJTextField.setEditable(false);
 
-			getJnlpCodebaseJTextField().addKeyListener(new KeyListener() {
+			getJnlpCodebaseJTextField().getDocument().addDocumentListener(
+					new DocumentListener() {
 
-				@Override
-				public void keyPressed(KeyEvent e) {
-				}
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							changedUpdate(e);
+						}
 
-				@Override
-				public void keyReleased(KeyEvent e) {
-				}
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							changedUpdate(e);
+						}
 
-				@Override
-				public void keyTyped(KeyEvent e) {
-					atlasURLJTextField.setText(getJnlpCodebaseJTextField()
-							.getText()
-							+ "/" + JarExportUtil.JNLP_FILENAME);
-				}
-			});
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							atlasURLJTextField
+									.setText(getJnlpCodebaseJTextField()
+											.getText()
+											+ JarExportUtil.JNLP_FILENAME);
+						}
+					});
 		}
 
 		return atlasURLJTextField;
@@ -117,8 +121,8 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 
 	public JTextField getJnlpCodebaseJTextField() {
 		if (jnlpCodebaseJTextField == null) {
-			jnlpCodebaseJTextField = new JTextField(GPProps.get(
-					Keys.jnlpURL, "http://www.domain.com/atlas"));
+			jnlpCodebaseJTextField = new JTextField(GPProps.get(Keys.jnlpURL,
+					"http://www.domain.com/atlas"));
 			jnlpCodebaseJTextField.setName(ExportWizard.JNLPURL);
 		}
 
@@ -140,8 +144,9 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 		try {
 			URL testUrl = new URL(getJnlpCodebaseJTextField().getText());
 		} catch (MalformedURLException e) {
-			return GeopublisherGUI.R("ExportWizard.JNLP.ValidationError.Invalid",
-					e.getLocalizedMessage());
+			return GeopublisherGUI.R(
+					"ExportWizard.JNLP.ValidationError.Invalid", e
+							.getLocalizedMessage());
 		}
 
 		return null;
@@ -154,32 +159,38 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 			linkJavaScriptJTextArea.setLineWrap(true);
 			linkJavaScriptJTextArea.setWrapStyleWord(true);
 			linkJavaScriptJTextArea.setEditable(false);
-			getJnlpCodebaseJTextField().addKeyListener(new KeyListener() {
+			getJnlpCodebaseJTextField().getDocument().addDocumentListener(
+					new DocumentListener() {
 
-				@Override
-				public void keyPressed(KeyEvent e) {
-				}
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							changedUpdate(e);
+						}
 
-				@Override
-				public void keyReleased(KeyEvent e) {
-				}
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							changedUpdate(e);
+						}
 
-				@Override
-				public void keyTyped(KeyEvent e) {
-					updateJavaScriptCodeTextArea();
-				}
-
-			});
-
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							updateJavaScriptCodeTextArea();
+						}
+					});
 			updateJavaScriptCodeTextArea();
 		}
 
 		return linkJavaScriptJTextArea;
 	}
 
+	/**
+	 * @param lastChar
+	 *            A hack to get the char that is entered as the source for this
+	 *            {@link KeyEvent}
+	 */
 	private void updateJavaScriptCodeTextArea() {
 		String javaScriptCode = jsTemplate.replace("__JNLPURL__",
-				getJnlpCodebaseJTextField().getText() + "/"
+				getJnlpCodebaseJTextField().getText()
 						+ JarExportUtil.JNLP_FILENAME);
 		javaScriptCode = javaScriptCode.replace("__MINJAVAVERSION__", GPProps
 				.get(Keys.MinimumJavaVersion));
