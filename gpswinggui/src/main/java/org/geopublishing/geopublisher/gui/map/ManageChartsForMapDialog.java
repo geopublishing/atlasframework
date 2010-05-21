@@ -190,7 +190,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 				.getMapsUsing(dplv);
 
 		if (newlyCreatedCharts.size() > 0
-				&& mapsUsingTheDpe.size() > 0
+				&& mapsUsingTheDpe.size() > 1
 				&& AVSwingUtil
 						.askYesNo(
 								ManageChartsForMapDialog.this,
