@@ -650,7 +650,7 @@ public class JarExportUtil {
 				if (toJws) {
 					try {
 						URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
-								".pack.gz");
+								libName+".pack.gz");
 
 						final File destinationPackGz = new File(targetLibDir,
 								libName + ".pack.gz");
