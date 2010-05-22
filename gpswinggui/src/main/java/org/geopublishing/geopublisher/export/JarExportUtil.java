@@ -616,13 +616,15 @@ public class JarExportUtil {
 
 			// Source URLs
 			URL fromURL = findJarUrl(libName);
-			
-			if (fromURL == null ) {
+
+			if (fromURL == null) {
 				if (libName.endsWith("jar")) {
-					throw new AtlasExportException("Library not found " + libName);
-				}else {
+					throw new AtlasExportException("Library not found "
+							+ libName);
+				} else {
 					// the native libs are not so important so far
-					LOGGER.warn("Native lib not found: "+libName+". Not fatal... ");
+					LOGGER.warn("Native lib not found: " + libName
+							+ ". Not fatal... ");
 					continue;
 				}
 			}
@@ -650,7 +652,7 @@ public class JarExportUtil {
 				if (toJws && libName.endsWith(".jar")) {
 					try {
 						URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
-								libName+".pack.gz");
+								libName + ".pack.gz");
 
 						final File destinationPackGz = new File(targetLibDir,
 								libName + ".pack.gz");
@@ -777,7 +779,7 @@ public class JarExportUtil {
 	 * @param libName
 	 *            e.g. gpcore-1.5-SNAPSHOT.jar
 	 * 
-//	 * @throw {@link AtlasExportException} if jar can't be found
+	 *            // * @throw {@link AtlasExportException} if jar can't be found
 	 */
 	public URL findJarUrl(String libName) {
 
@@ -804,7 +806,7 @@ public class JarExportUtil {
 		url = getJarUrlFromMavenRepository(libName);
 		if (url != null)
 			return url;
-		
+
 		return null;
 	}
 
@@ -991,21 +993,21 @@ public class JarExportUtil {
 		return fromURL;
 	}
 
-//	private URL getNativeLibraryURL(String nativeName) {
-//		// Clean any path or ./ stuff
-//		nativeName = new File(nativeName).getName();
-//
-//		String[] st = System.getProperty("java.library.path").split(":");
-//		for (String t : st) {
-//			LOGGER.debug("looking in " + t + " for " + nativeName);
-//			File file = new File(t + "/" + nativeName);
-//			if (file.exists()) {
-//				return DataUtilities.fileToURL(file);
-//			}
-//		}
-//
-//		return null;
-//	}
+	// private URL getNativeLibraryURL(String nativeName) {
+	// // Clean any path or ./ stuff
+	// nativeName = new File(nativeName).getName();
+	//
+	// String[] st = System.getProperty("java.library.path").split(":");
+	// for (String t : st) {
+	// LOGGER.debug("looking in " + t + " for " + nativeName);
+	// File file = new File(t + "/" + nativeName);
+	// if (file.exists()) {
+	// return DataUtilities.fileToURL(file);
+	// }
+	// }
+	//
+	// return null;
+	// }
 
 	/**
 	 */
@@ -1142,7 +1144,7 @@ public class JarExportUtil {
 	 * @throws IOException
 	 * @throws AtlasCancelException
 	 */
-	public File createJarFromDpe(final DpEntry dpe)
+	public File createJarFromDpe(final DpEntry<?> dpe)
 			throws AtlasExportException, IOException, AtlasCancelException {
 
 		checkAbort();
@@ -1445,7 +1447,7 @@ public class JarExportUtil {
 				startUpMap = ace.getMapPool().get(startMapID);
 			}
 
-			for (final DpEntry dpe : ace.getUsedDpes()) {
+			for (final DpEntry<?> dpe : ace.getUsedDpes()) {
 
 				resources.appendChild(document.createComment("Datapoolentry "
 						+ dpe.getTitle().toString()));
@@ -1470,7 +1472,7 @@ public class JarExportUtil {
 				boolean partIsPartOfFirstMap = false;
 
 				if (startUpMap != null && startUpMap.getLayers().size() > 0) {
-					for (final DpRef ref : startUpMap.getLayers()) {
+					for (final DpRef<?> ref : startUpMap.getLayers()) {
 						final String targetId = ref.getTargetId();
 						if (dpe.getId().equals(targetId)) {
 							// if (targetId != null &&
@@ -1967,25 +1969,6 @@ public class JarExportUtil {
 		}
 
 		return libs;
-
-		// Alternative way via manifest
-		// String pathToManifest =
-		// AtlasViewerGUI.class.getPackage().toString().replace(".", "/") +
-		// "/META-INF/MANIFEST.MF";
-		// try {
-		//			
-		// Manifest manifest = new Manifest(new
-		// URL(pathToManifest).openStream());
-		// System.out.println(manifest);
-		// Attributes attributes = manifest.getAttributes("Classpath");
-		// String[] libs = attributes.toString().split(" ");
-		// return libs;
-		// } catch (MalformedURLException e) {
-		// e.printStackTrace();
-		// } catch (IOException e) {
-		// e.printStackTrace();
-		// }
-		// return new String[] {};
 	}
 
 	/**
@@ -2003,7 +1986,7 @@ public class JarExportUtil {
 		// ******************************************************************
 		// Adding the DatapoolEntries
 		// ******************************************************************
-		for (final DpEntry dpe : ace.getUsedDpes()) {
+		for (final DpEntry<?> dpe : ace.getUsedDpes()) {
 			classpathString += dpe.getId() + ".jar ";
 		}
 
@@ -2116,12 +2099,10 @@ public class JarExportUtil {
 	 *             /keytool.html
 	 */
 	private void jarSign(final File jarFile) throws AtlasExportException {
-		// if (progressWindow != null && progressWindow.isCanceled())
-		// throw new AtlasExportCancelledException();
 
-		AVUtil.checkThatWeAreNotOnEDT();
+		AVUtil.checkThatWeAreNotOnEDT(); //i8n
 
-		// info("Signing JAR " + targetJar.getName());
+		info("Signing JAR " + jarFile.getName());
 
 		final List<String> command = new ArrayList<String>();
 
