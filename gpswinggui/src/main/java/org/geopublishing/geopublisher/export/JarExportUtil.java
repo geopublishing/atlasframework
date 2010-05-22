@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.Attributes;
@@ -251,7 +252,6 @@ public class JarExportUtil {
 					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIB_DIR
 					+ " -jar " + targetJar.getName() + "\n");
 			fileWriter.close();
-			startSHFile.setExecutable(true, false);
 
 			// ******************************************************************
 			// start.bat for Windows
@@ -1927,13 +1927,35 @@ public class JarExportUtil {
 	}
 
 	private void adjustRights() {
-		if (!SystemUtils.IS_OS_LINUX && !SystemUtils.IS_OS_UNIX )
-			
-		// TODO more?! 
-			
-		new File(targetDirDISK, "start.sh").setExecutable(true);
 		
-		targetDirJWS.setExecutable(true);
+		if (! SystemUtils.IS_OS_LINUX ) return;
+
+		// In JWS set to execute, read and NOTwrite
+		targetDirJWS.setWritable(false, false);
+		targetDirJWS.setExecutable(true, false);
+		targetDirJWS.setReadable(true, false);
+
+		Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
+		while (iterateFiles.hasNext()) {
+			File next = iterateFiles.next();
+			next.setWritable(false, false);
+			next.setExecutable(true, false);
+			next.setReadable(true, false);
+		}
+
+		// In DISK set to read and NOTwrite
+		
+		targetDirDISK.setWritable(false, false);
+		targetDirDISK.setExecutable(true, false);
+		targetDirDISK.setReadable(true, false);
+
+		iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
+		while (iterateFiles.hasNext()) {
+			File next = iterateFiles.next();
+			next.setWritable(false, false);
+			next.setReadable(true, false);
+		}
+		new File(targetDirDISK, "start.sh").setExecutable(true, false);
 	}
 
 	/**
