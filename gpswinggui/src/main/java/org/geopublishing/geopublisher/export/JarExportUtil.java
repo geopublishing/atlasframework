@@ -636,7 +636,7 @@ public class JarExportUtil {
 			try {
 				FileUtils.copyURLToFile(fromURL, destination);
 
-				if (toJws && libsFromLocal) {
+				if (toJws && libsFromLocal && libName.endsWith(".jar")) {
 					// if they come from local, we might have to
 					// sign them.
 					jarSign(destination);
