@@ -54,7 +54,6 @@ import net.charabia.jsmoothgen.skeleton.SkeletonBean;
 import net.charabia.jsmoothgen.skeleton.SkeletonList;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.SystemUtils;
@@ -84,7 +83,6 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import schmitzm.data.ObjectStructureUtil;
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
