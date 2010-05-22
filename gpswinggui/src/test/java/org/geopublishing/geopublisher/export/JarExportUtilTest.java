@@ -20,6 +20,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.Arrays;
 
 import org.apache.commons.io.FileUtils;
@@ -36,6 +37,8 @@ import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import schmitzm.io.IOUtil;
+
 public class JarExportUtilTest {
 	static private final Logger LOGGER = Logger
 			.getLogger(JarExportUtilTest.class);
@@ -50,17 +53,26 @@ public class JarExportUtilTest {
 	}
 
 	@Test
-	public void testResourceLocationsCorrect() {
+	public void testFindNativeDllURL() throws IOException {
+		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig, IOUtil.getTempDir(), true, true, false);
+		URL soDllUrl = jarExportUtil.findJarUrl("gdal14.dll");
 		
+		assertNotNull(soDllUrl);
+	}	
+	
+	
+	@Test
+	public void testResourceLocationsCorrect() {
+
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.HTACCESS_RES_LOCATION));
 
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.LICENSEHTML_RESOURCE_NAME));
-		
+
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK));
-		
+
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE1));
 
@@ -72,8 +84,9 @@ public class JarExportUtilTest {
 
 		assertNotNull(GpUtil.class
 				.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
-		
+
 	}
+
 	@Test
 	public void testCreateJarFromDpeUnsigned() throws AtlasExportException,
 			IOException, InterruptedException, AtlasCancelException {
@@ -214,8 +227,8 @@ public class JarExportUtilTest {
 			}
 			input.close();
 
-			assertEquals("Test atlas didn't start or didn't exit normally.", 0, p
-					.waitFor());
+			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
+					p.waitFor());
 		}
 	}
 

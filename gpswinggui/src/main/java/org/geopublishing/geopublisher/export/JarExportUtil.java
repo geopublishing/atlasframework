@@ -106,6 +106,13 @@ public class JarExportUtil {
 	public static final String JSMOOTH_SKEL_AD_RESOURCE3 = "/export/jsmooth/autodownload-wrapper/customdownload.skel";
 
 	/**
+	 * This boolean tells us, whether we download the JARs from the webserver
+	 * (GP started via JWS) or if we are copying them from a local directory
+	 * (Started from ZIP).
+	 */
+	boolean libsFromLocal = true;
+
+	/**
 	 * Resource name of the splashscreen image that will be used for
 	 * JavaWebStart and start.bat IF if user defined one can't be found.
 	 */
@@ -150,7 +157,8 @@ public class JarExportUtil {
 
 	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
-	private static final String LIBDIR = "."; // "lib";
+	private static final String LIB_DIR = ".";
+	// private static final String NATIVES_DIR = ".";
 
 	private static final String version = ReleaseUtil
 			.getVersionMaj(AVUtil.class)
@@ -167,6 +175,12 @@ public class JarExportUtil {
 			+ postfixJar;
 
 	/**
+	 * Filename of the gpnatives jar
+	 */
+	public static final String GPNATIVES_JARNAME = "gpnatives-" + version
+			+ snapshot + postfixJar;
+
+	/**
 	 * Filename of the ascore jar
 	 */
 	public static final String ASCORE_JARNAME = "ascore-" + version + snapshot
@@ -179,16 +193,23 @@ public class JarExportUtil {
 			+ snapshot + postfixJar;
 
 	/**
-	 * Filename of the schmitzm jar
+	 * Filename of the schmitzm jar. TODO Very fucking ugly
 	 */
 	public static final String SCHMITZM_JARNAME = "schmitzm-library-2.2-SNAPSHOT.jar";
 
+	/**
+	 * List of JARs that are all created from the one geopublihing.org POM file
+	 * and therefore are not part of the dependencies.
+	 */
 	final static List<String> BASEJARS = new ArrayList<String>(Arrays
 			.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
-					ASSWINGGUI_JARNAME, GPCORE_JARNAME }));
+					ASSWINGGUI_JARNAME, GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
-	/** Name of the Jar **/
-	public static final String MAIN_CLASS = AtlasViewerGUI.class.getName(); // "org.geopublishing.atlasViewer.swing.AtlasViewerGUI";
+	/**
+	 * Mainclass for the exprted atlas.
+	 * "org.geopublishing.atlasViewer.swing.AtlasViewerGUI"
+	 **/
+	public static final String MAIN_CLASS = AtlasViewerGUI.class.getName();
 
 	/**
 	 * Resource location of the .htaccess file that is exported as part of every
@@ -224,8 +245,8 @@ public class JarExportUtil {
 							+ xmx
 							+ "Mb of memory. Increase this number if have more memory to spend.\n");
 			fileWriter.write("java -Xmx" + xmx
-					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIBDIR
-					+ "/natives -jar " + targetJar.getName() + "\n");
+					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIB_DIR
+					+ " -jar " + targetJar.getName() + "\n");
 			fileWriter.close();
 			startSHFile.setExecutable(true, false);
 
@@ -572,115 +593,12 @@ public class JarExportUtil {
 			final AtlasConfigEditable ace) throws AtlasExportException,
 			AtlasCancelException {
 
-		// if (progressWindow != null && progressWindow.isCanceled())
-		// throw new AtlasExportCancelledException();
-
-		/**
-		 * Now we have to copy some native .dll and .so file as well:
-		 */
-		// The folder to copy to might not exist yet
-		final File targetNativeDir = new File(targetJar.getParentFile(), ""
-				+ LIBDIR + "/natives");
-		targetNativeDir.mkdirs();
-
-		/**
-		 * We do not export all files found in a directory, but rather we only
-		 * copy libraries mentioned in the geopublisher.properties files of GP
-		 */
-
-		// TODO i would guess, that we only copy them as .so and .ddl files, if
-		// we export to DISK. FOr JWS we have a gp-natives.jar !?
-		if (toDisk) {
-
-			for (final String nat : getNatives()) {
-
-				checkAbort();
-
-				// if (progressWindow != null && progressWindow.isCanceled())
-				// throw new AtlasExportCancelledException();
-
-//				if (nat.trim().equals("")) {
-//					continue;
-//				}
-
-				final File destination = new File(targetNativeDir, nat);
-				destination.getParentFile().mkdirs();
-
-				URL fromURL = null;
-
-				// This boolean tells us, if we download the JARs from the
-				// webserver (GP started via JWS) or if we are copying them
-				// from
-				// a local directory.
-				boolean fromLocal;
-				try {
-
-					// TODO check if it also works in JWS: fromURL =
-					// getNativeLibraryURL(nat);
-
-					final BasicService bs = (BasicService) ServiceManager
-							.lookup("javax.jnlp.BasicService");
-
-					String path = bs.getCodeBase().getFile();
-					if (!path.endsWith("/")) {
-						path = path + "/";
-					}
-
-					/**
-					 * Normaly the natives are found in the ""+LIBDIR+"/natives"
-					 * directory.
-					 */
-					String fileAndPath;
-					fileAndPath = path + LIBDIR + "/natives/" + nat;
-
-					fromURL = new URL(bs.getCodeBase().getProtocol(), bs
-							.getCodeBase().getHost(), bs.getCodeBase()
-							.getPort(), fileAndPath);
-
-					fromURL.openConnection();
-
-					fromLocal = false;
-				} catch (final Exception e) {
-					/**
-					 * The exception means, that we have not been started via
-					 * JWS. So we just copy this file from the local lib
-					 * directory.
-					 */
-					fromLocal = true;
-					// fromURL = new File(LIBDIR + "/natives/" + nat).toURI()
-					// .toURL();
-
-					fromURL = getNativeLibraryURL(nat);
-
-				}
-				if (fromURL == null) {
-					LOGGER.error(nat + " not found in "
-							+ System.getProperty("java.library.path"));
-					continue;
-				}
-
-				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
-						nat, destination.toString());
-				LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
-				info(msg);
-
-				try {
-					FileUtils.copyURLToFile(fromURL, destination);
-				} catch (final Exception e) {
-					final String errorMsg = GpUtil.R(
-							"Export.errorMsg.error_copy_lib_to_", fromLocal,
-							nat, fromURL, destination);
-					LOGGER.warn(errorMsg, e);
-//					throw new AtlasExportException(errorMsg, e);
-				}
-
-			}
-		} // toDisk only
+		// copyNativesIfDisk(targetJar);
 
 		/************
 		 * Copying the .jar files now!
 		 */
-		final File targetLibDir = new File(targetJar.getParentFile(), LIBDIR);
+		final File targetLibDir = new File(targetJar.getParentFile(), LIB_DIR);
 
 		/**
 		 * We do not export all libs found in a directory, but rather we only
@@ -689,235 +607,407 @@ public class JarExportUtil {
 		 */
 		boolean packNotExistingErrorAlreadyShown = false;
 
-		for (final String lib : getLibraries()) {
+		for (final String libName : getLibraries()) {
 
 			checkAbort();
 
+			File destination = new File(targetLibDir, libName);
+			destination.getParentFile().mkdirs();
+
+			// Source URLs
+			URL fromURL = findJarUrl(libName);
+			
+			if (fromURL == null ) {
+				if (libName.endsWith("jar")) {
+					throw new AtlasExportException("Library not found " + libName);
+				}else {
+					// the native libs are not so important so far
+					LOGGER.warn("Native lib not found: "+libName+". Not fatal... ");
+					continue;
+				}
+			}
+
+			final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
+					libName, destination.toString());
+
+			LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
+			info(msg);
+
 			try {
-				File destination = new File(targetLibDir, lib);
-				destination.getParentFile().mkdirs();
-				File destinationPackGz = new File(targetLibDir, lib
-						+ ".pack.gz");
+				FileUtils.copyURLToFile(fromURL, destination);
 
-				// Source URLs
-				URL fromURL = null;
-				URL fromURLPackGZ = null;
-
-				// This boolean tells us, whether we download the JARs from the
-				// webserver (GP started via JWS) or if we are copying them from
-				// a local directory (Started from ZIP).
-				boolean libsFromLocal;
-
-				// If true, at least some JARs where copied from the local maven
-				// repository (we are debugging) and we have to sign them
-				boolean libsFromLocalMaven = false;
-				try {
-					final BasicService bs = (BasicService) ServiceManager
-							.lookup("javax.jnlp.BasicService");
-
-					String path = bs.getCodeBase().getFile();
-					if (!path.endsWith("/")) {
-						path = path + "/";
-					}
-
-					/**
-					 * Normally the libs are found in the LIBDIR directory. The
-					 * gp-jars are different!
-					 */
-					String fileAndPath;
-					if (BASEJARS.contains(lib)) {
-						fileAndPath = path + lib;
-						destination = new File(targetLibDir.getParentFile(),
-								lib);
-						destinationPackGz = new File(targetLibDir
-								.getParentFile(), lib + ".pack.gz");
-					} else {
-						fileAndPath = path + LIBDIR + "/" + lib;
-					}
-
-					fromURL = new URL(bs.getCodeBase().getProtocol(), bs
-							.getCodeBase().getHost(), bs.getCodeBase()
-							.getPort(), fileAndPath);
-					fromURLPackGZ = new URL(bs.getCodeBase().getProtocol(), bs
-							.getCodeBase().getHost(), bs.getCodeBase()
-							.getPort(), fileAndPath + ".pack.gz");
-
-					libsFromLocal = false;
-
-				} catch (final javax.jnlp.UnavailableServiceException e) {
-					/**
-					 * The exception means, that we have not been started via
-					 * JWS. So we just copy this file from the local lib
-					 * directory.
-					 */
-					libsFromLocal = true;
-					fromURL = getJarUrlFileSystem(lib);
-
-					if (fromURL == null) {
-						LOGGER
-								.warn(lib
-										+ " could not be found in expected dir. Look in class path");
-						fromURL = getJarUrlFromClasspath(lib);
-					}
-
-					if (fromURL == null) {
-						LOGGER
-								.warn(lib
-										+ " could not be found in the classpath. Maybe we are debugging? Look in ~/.m2/repository...");
-						fromURL = getJarUrlFromMavenRepository(lib);
-						// fromURL = getJarUrlFromMavenRepository(lib);
-						libsFromLocalMaven = true;
-					}
-					if (fromURL == null) {
-						throw new AtlasExportException("Can't find library: "
-								+ lib + ". Please report this to the authors.");
-					}
-					fromURLPackGZ = fromURL != null ? DataUtilities
-							.changeUrlExt(fromURL, "jar.pack.gz") : null;
+				if (toJws && libsFromLocal) {
+					// if they come from local, we might have to
+					// sign them.
+					jarSign(destination);
 				}
 
-				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
-						lib, destination.toString());
+				/*
+				 * Copy the .pack.gz files only if we export to JWS. Do not
+				 * export .pack.gz for gp-natives.jar, because the extra
+				 * compression doesn't work for that kind of file.
+				 */
+				if (toJws) {
+					try {
+						URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
+								".pack.gz");
 
-				LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
-				info(msg);
+						final File destinationPackGz = new File(targetLibDir,
+								libName + ".pack.gz");
 
-				try {
-					FileUtils.copyURLToFile(fromURL, destination);
+						FileUtils.copyURLToFile(fromURLPackGZ,
+								destinationPackGz);
 
-					if (toJws && libsFromLocal) {
-						// if they come from local maven repository, we have to
-						// sign them.
-						jarSign(destination);
-					}
+					} catch (final Exception e) {
 
-					/*
-					 * Copy the .pack.gz files only if we export to JWS. Do not
-					 * export .pack.gz for gp-natives.jar, because the extra
-					 * compression doesn't work for that kind of file.
-					 */
-					if (toJws && !lib.contains("gpnatives")) {
-						try {
-							FileUtils.copyURLToFile(fromURLPackGZ,
-									destinationPackGz);
+						// TODO Bei natives ist die meldung ganz normal
 
-							// if (libsFromLocalMaven) {
-							// JARs coming from the web are always signed. But
-							// if they come from local, we might have to sign
-							// them. Especially if the come from maven
-							// repository.
-							// jarSign(destinationPackGz);
-							// }
+						if (packNotExistingErrorAlreadyShown == false) {
+							LOGGER.warn(GpUtil.R("Export.Error.Pack200"), e);
+							// ExceptionDialog.show(null, new
+							// AtlasException(
+							// GpUtil.R("Export.Error.Pack200"), e));
 
-						} catch (final Exception e) {
-							if (packNotExistingErrorAlreadyShown == false) {
-								// ExceptionDialog.show(null, new
-								// AtlasException(
-								// GpUtil.R("Export.Error.Pack200"), e));
-							}
-							// Do not show this warning again next time.
-							packNotExistingErrorAlreadyShown = true;
 						}
-					} // toJws only
+						// Do not show this warning again next time.
+						packNotExistingErrorAlreadyShown = true;
+					}
+				} // toJws only
 
-				} catch (final Exception e) {
-					final String errorMsg = GpUtil.R(
-							"Export.errorMsg.error_copy_lib_to_",
-							libsFromLocal, lib, fromURL, destination);
-					LOGGER.warn(errorMsg, e);
-					throw new AtlasExportException(errorMsg, e);
-				}
-
-			} catch (final MalformedURLException e) {
-				final String errorMsg = "MalformedURLException during export of "
-						+ lib;
+			} catch (final Exception e) {
+				final String errorMsg = GpUtil.R(
+						"Export.errorMsg.error_copy_lib_to_", libsFromLocal,
+						libName, fromURL, destination);
 				LOGGER.warn(errorMsg, e);
 				throw new AtlasExportException(errorMsg, e);
 			}
-
 		}
-
 	}
 
-	private URL getJarUrlFileSystem(String lib) {
-		
-		URL url = GeopublisherGUI.class.getResource(GeopublisherGUI.class.getSimpleName()+".class");  
-		LOGGER.debug("getResource(Geopublisher "+url);  
+	//
+	// /**
+	// * Copy some native .dll and .so files in LIBDIR/natives
+	// */
+	// private void copyNativesIfDisk(File targetJar) throws
+	// AtlasCancelException {
+	//
+	// if (!toDisk)
+	// return;
+	//
+	// // The folder to copy to might not exist yet
+	// final File targetNativeDir = new File(targetJar.getParentFile(),
+	// NATIVES_DIR);
+	// targetNativeDir.mkdirs();
+	//
+	// for (final String libName : getNatives()) {
+	//
+	// checkAbort();
+	//
+	// final File destination = new File(targetNativeDir, libName);
+	// destination.getParentFile().mkdirs();
+	//
+	// URL fromURL = null;
+	//
+	// // This boolean tells us, if we download the JARs from the
+	// // webserver (GP started via JWS) or if we are copying them
+	// // from
+	// // a local directory.
+	// try {
+	//
+	// // TODO check if it also works in JWS: fromURL =
+	// // getNativeLibraryURL(nat);
+	//
+	// final BasicService bs = (BasicService) ServiceManager
+	// .lookup("javax.jnlp.BasicService");
+	//
+	// String path = bs.getCodeBase().getFile();
+	// if (!path.endsWith("/")) {
+	// path = path + "/";
+	// }
+	//
+	// /**
+	// * Normaly the natives are found in the ""+LIBDIR+"/natives"
+	// * directory.
+	// */
+	// String fileAndPath;
+	// fileAndPath = path + LIB_DIR + libName;
+	//
+	// fromURL = new URL(bs.getCodeBase().getProtocol(), bs
+	// .getCodeBase().getHost(), bs.getCodeBase().getPort(),
+	// fileAndPath);
+	//
+	// fromURL.openConnection();
+	//
+	// } catch (final Exception e) {
+	// /**
+	// * The exception means, that we have not been started via JWS.
+	// * So we just copy this file from the local lib directory.
+	// */
+	// // fromURL = new File(LIBDIR + "/natives/" + nat).toURI()
+	// // .toURL();
+	//
+	// fromURL = getNativeLibraryURL(libName);
+	//
+	// }
+	// if (fromURL == null) {
+	// LOGGER.error(libName + " not found in "
+	// + System.getProperty("java.library.path"));
+	// continue;
+	// }
+	//
+	// final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
+	// libName, destination.toString());
+	// LOGGER.debug(msg + " (URL:" + fromURL.toString() + ")");
+	// info(msg);
+	//
+	// try {
+	// FileUtils.copyURLToFile(fromURL, destination);
+	// } catch (final Exception e) {
+	// final String errorMsg = GpUtil.R(
+	// "Export.errorMsg.error_copy_lib_to_", null, libName,
+	// fromURL, destination);
+	// LOGGER.warn(errorMsg, e);
+	// // throw new AtlasExportException(errorMsg, e);
+	// }
+	//
+	// }
+	// }
 
-		if (url != null) {
-			String stringUrl = url.toString();
-			LOGGER.debug(stringUrl);
-			if (stringUrl.startsWith("jar:file:")) {
-				stringUrl = stringUrl.substring(9, stringUrl.lastIndexOf("!"));
-				LOGGER.debug(stringUrl);
-				File file2 = new File(stringUrl);
-				LOGGER.debug(file2);
-				if (file2.exists()) return DataUtilities.fileToURL(file2); 
-			}
-		}
-		
-		File file = new File(lib);
-		LOGGER.debug("Looking for "+lib+" in "+file.getAbsolutePath());
-		if (file.exists())
-			return DataUtilities.fileToURL(file);
-		
+	/**
+	 * Find an {@link URL} to the requested JAR.
+	 * 
+	 * @param libName
+	 *            e.g. gpcore-1.5-SNAPSHOT.jar
+	 * 
+//	 * @throw {@link AtlasExportException} if jar can't be found
+	 */
+	public URL findJarUrl(String libName) {
+
+		URL url = getJarUrlFromJWS(libName);
+		if (url != null)
+			return url;
+
+		url = getJarUrlInsideGpNatives(libName);
+		if (url != null)
+			return url;
+
+		url = getJarUrlFileSystem(libName);
+		if (url != null)
+			return url;
+
+		url = getJarUrlViaClassLoaderDirectly(libName);
+		if (url != null)
+			return url;
+
+		url = getJarUrlFromClasspath(libName);
+		if (url != null)
+			return url;
+
+		url = getJarUrlFromMavenRepository(libName);
+		if (url != null)
+			return url;
 		
 		return null;
 	}
 
-	private URL getJarUrlFromMavenRepository(final String lib) {
+	private URL getJarUrlViaClassLoaderDirectly(String libName) {
+		URL url = GeopublisherGUI.class.getResource(libName);
+		return url;
+	}
+
+	private URL getJarUrlInsideGpNatives(String libName) {
+		if (GPNATIVES_JARNAME.equals(libName))
+			return null;
+		URL findNativesJar = findJarUrl(GPNATIVES_JARNAME);
+		URL url;
+		try {
+			url = new URL("jar:" + findNativesJar.toString() + "!/" + libName);
+			url.openStream().close();
+		} catch (Exception e) {
+			LOGGER.error(e);
+			return null;
+		}
+		return url;
+	}
+
+	/**
+	 * 
+	 * @param libName
+	 * @return
+	 */
+	private URL getJarUrlFromJWS(String libName) {
+
+		try {
+			// Will throw exception if not running under JWS
+			final BasicService bs = (BasicService) ServiceManager
+					.lookup("javax.jnlp.BasicService");
+
+			String path = bs.getCodeBase().getFile();
+			if (!path.endsWith("/"))
+				path = path + "/";
+
+			/**
+			 * Normally the libs are found in the LIBDIR directory. The gp-jars
+			 * are different!
+			 */
+			String fileAndPath;
+			if (BASEJARS.contains(libName)) {
+				fileAndPath = path + libName;
+				// destination = new File(targetLibDir.getParentFile(),
+				// libName);
+				// destinationPackGz = new File(targetLibDir.getParentFile(),
+				// libName + ".pack.gz");
+			} else {
+				fileAndPath = path + LIB_DIR + "/" + libName;
+			}
+
+			URL testURL = new URL(bs.getCodeBase().getProtocol(), bs
+					.getCodeBase().getHost(), bs.getCodeBase().getPort(),
+					fileAndPath);
+
+			testURL.openStream().close();
+
+			libsFromLocal = false;
+
+			return testURL;
+
+			// fromURLPackGZ = new URL(bs.getCodeBase().getProtocol(), bs
+			// .getCodeBase().getHost(), bs.getCodeBase().getPort(),
+			// fileAndPath + ".pack.gz");
+
+			// libsFromLocal = false;
+
+		} catch (final javax.jnlp.UnavailableServiceException e) {
+			/**
+			 * The exception is harmless and means, that we have not been
+			 * started via JWS.
+			 */
+			return null;
+		} catch (MalformedURLException e) {
+			LOGGER.error("While looking for " + libName + " in JWS mode: ", e);
+			return null;
+
+		} catch (IOException e) {
+			LOGGER.error("While looking for " + libName + " in JWS mode: ", e);
+			return null;
+
+		}
+	}
+
+	/**
+	 * Returns {@link URL} to the requested jar file. Searches for the file
+	 * releative to the "gpcore...jar" file. Returns <code>null</code> if the
+	 * file could not be found.
+	 */
+	private URL getJarUrlFileSystem(String jarName) {
+
+		String classFileName = GeopublisherGUI.class.getSimpleName() + ".class";
+		URL url = GeopublisherGUI.class.getResource(classFileName);
+
+		LOGGER.debug(classFileName + " found in " + url);
+
+		if (url != null) {
+			String stringUrl = url.toString();
+			// LOGGER.debug(stringUrl);
+			if (stringUrl.startsWith("jar:file:")) {
+				stringUrl = stringUrl.substring(9, stringUrl.lastIndexOf("!"));
+				LOGGER.debug(stringUrl);
+				File gpCoreJarFile = new File(stringUrl);
+				LOGGER.debug(gpCoreJarFile);
+				if (gpCoreJarFile.exists()) {
+
+					File try2 = new File(gpCoreJarFile.getParentFile(), LIB_DIR
+							+ "/" + jarName);
+					if (try2.exists())
+						return DataUtilities.fileToURL(try2);
+
+					File try1 = new File(gpCoreJarFile.getParentFile(), jarName);
+					if (try1.exists())
+						return DataUtilities.fileToURL(try1);
+
+				}
+			}
+		}
+
+		// Last try is to look in the working directory
+		File file = new File(jarName);
+		LOGGER.debug(classFileName
+				+ " didn't help! Fallback to working directory, "
+				+ file.getAbsolutePath());
+
+		if (file.exists())
+			return DataUtilities.fileToURL(file);
+
+		return null;
+	}
+
+	/**
+	 * Returns {@link URL} to JAR in maven repository. Only used as a fall back,
+	 * when exporting from within Eclipse IDE, where the needed jars do not
+	 * exist. One has to execute "mvn install" in GP trunk before using this
+	 * mehtod.<br/>
+	 * <code>null</code> if not found in m2repo
+	 * 
+	 * 
+	 * 
+	 * @param jarName
+	 *            name of searched jar, e.g. "colt-1.2.jar"
+	 */
+	private URL getJarUrlFromMavenRepository(final String jarName) {
 		URL fromURL;
 
-		File home = new File(System.getProperty("user.home"));
+		// Actually the m2 repo can be at another location
+		File m2repo = new File(System.getProperty("user.home")
+				+ "/.m2/repository/");
 
 		String path = null;
-		if (lib.contains(GPCORE_JARNAME)) {
+		if (jarName.contains(GPCORE_JARNAME)) {
 			path = "org/geopublishing/geopublisher/gpcore/" + version
 					+ snapshot;
 		}
 
-		if (lib.contains(ASCORE_JARNAME)) {
+		if (jarName.contains(ASCORE_JARNAME)) {
 			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
 		}
 
-		if (lib.contains(ASSWINGGUI_JARNAME)) {
+		if (jarName.contains(ASSWINGGUI_JARNAME)) {
 			path = "org/geopublishing/atlasStyler/asswinggui/" + version
 					+ snapshot;
 		}
 
-		if (lib.contains(SCHMITZM_JARNAME)) {
+		if (jarName.contains(SCHMITZM_JARNAME)) {
 			path = "de/schmitzm/schmitzm-library/2.2-SNAPSHOT";
 		}
 
 		if (path == null)
-			throw new AtlasExportException(
-					"Can only find GP base jars in maven, not: " + lib);
+			return null;
 
-		File file = new File(home, ".m2/repository/" + path + "/" + lib);
+		File file = new File(m2repo, path + "/" + jarName);
 
 		if (!file.exists()) {
-			throw new AtlasExportException("Can't find library: " + lib
+			throw new AtlasExportException("Can't find library: " + jarName
 					+ ". Please report this to the authors.");
 		}
 		fromURL = DataUtilities.fileToURL(file);
+
 		return fromURL;
 	}
 
-	private URL getNativeLibraryURL(String nativeName) {
-		// Clean any path or ./ stuff
-		nativeName = new File(nativeName).getName();
-
-		String[] st = System.getProperty("java.library.path").split(":");
-		for (String t : st) {
-			LOGGER.debug("looking in " + t + " for " + nativeName);
-			File file = new File(t + "/" + nativeName);
-			if (file.exists()) {
-				return DataUtilities.fileToURL(file);
-			}
-		}
-
-		return null;
-	}
+//	private URL getNativeLibraryURL(String nativeName) {
+//		// Clean any path or ./ stuff
+//		nativeName = new File(nativeName).getName();
+//
+//		String[] st = System.getProperty("java.library.path").split(":");
+//		for (String t : st) {
+//			LOGGER.debug("looking in " + t + " for " + nativeName);
+//			File file = new File(t + "/" + nativeName);
+//			if (file.exists()) {
+//				return DataUtilities.fileToURL(file);
+//			}
+//		}
+//
+//		return null;
+//	}
 
 	/**
 	 */
@@ -947,21 +1037,24 @@ public class JarExportUtil {
 		jarName = new File(jarName).getName();
 
 		URL url = jarUrlsFromClassPath.get(jarName);
-		
+
 		if (url == null) {
-			// The requested jar was not found in the classpath. mmm... 
+			// The requested jar was not found in the classpath. mmm...
 			String curDir = System.getProperty("user.dir");
-//			File baseFile = DataUtilities.urlToFile(jarUrlsFromClassPath.get(JarExportUtil.GPCORE_JARNAME));
-			
-			File try1 = new File(curDir,jarName);
-			LOGGER.debug("try1 = "+try1);
-			if (try1.exists()) return DataUtilities.fileToURL(try1);
-			
-			File try2 = new File(curDir,LIBDIR+"/"+jarName);
-			LOGGER.debug("try2 = "+try2);
-			if (try2.exists()) return DataUtilities.fileToURL(try2);
+			// File baseFile =
+			// DataUtilities.urlToFile(jarUrlsFromClassPath.get(JarExportUtil.GPCORE_JARNAME));
+
+			File try1 = new File(curDir, jarName);
+			LOGGER.debug("try1 = " + try1);
+			if (try1.exists())
+				return DataUtilities.fileToURL(try1);
+
+			File try2 = new File(curDir, LIB_DIR + "/" + jarName);
+			LOGGER.debug("try2 = " + try2);
+			if (try2.exists())
+				return DataUtilities.fileToURL(try2);
 		}
-		
+
 		return url;
 	}
 
@@ -1307,7 +1400,7 @@ public class JarExportUtil {
 					libNameChecked = "gpcore.jar";
 					aResource.setAttribute("main", "true");
 				} else {
-					libNameChecked = LIBDIR + "/" + libName;
+					libNameChecked = LIB_DIR + "/" + libName;
 				}
 
 				aResource.setAttribute("href", libNameChecked);
@@ -1576,17 +1669,6 @@ public class JarExportUtil {
 		 * One for every Library and every Native libs
 		 */
 		totalSteps += getLibraries().length;
-
-		if (toDisk) {
-			/** JSmooth */
-			totalSteps++;
-			totalSteps += getNatives().length;
-		}
-
-		if (toJws) {
-			/** JNLP creation */
-			totalSteps++;
-		}
 
 		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
 
@@ -1876,6 +1958,16 @@ public class JarExportUtil {
 					libs = LangUtil.extendArray(libs, BASEJARS.get(i));
 		}
 
+		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
+		// für DISK exportiert wird.
+		if (toDisk) {
+			final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
+			// LOGGER
+			// .debug("These native dependencies have been set in the .properties file: "
+			// + nativeLibsLine);
+			libs = LangUtil.extendArray(libs, nativeLibsLine.split(" "));
+		}
+
 		return libs;
 
 		// Alternative way via manifest
@@ -1983,14 +2075,6 @@ public class JarExportUtil {
 	//
 	// return indexTempFile;
 	// }
-
-	private String[] getNatives() {
-		final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
-		LOGGER
-				.debug("These native dependencies have been set in the .properties file: "
-						+ nativeLibsLine);
-		return nativeLibsLine.split(" ");
-	}
 
 	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
 		if (unusedDpes == null) {

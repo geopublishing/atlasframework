@@ -30,7 +30,7 @@
 		<replace file="${basedir}/target/jnlp/version.txt">
 			<replacefilter token="@VERSION@" value="${ant.project.version}" />
 			<replacefilter token="@BUILD@" value="${ant.buildNumber}" />
-			<replacefilter token="@TIMESTAMP@" value="${maven.build.timestamp}"/>
+			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}"/>
 		</replace>
 
 		<delete description="Delete directory before copying the new release">
