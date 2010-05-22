@@ -783,29 +783,36 @@ public class JarExportUtil {
 	 */
 	public URL findJarUrl(String libName) {
 
-		URL url = getJarUrlFromJWS(libName);
-		if (url != null)
-			return url;
-
-		url = getJarUrlInsideGpNatives(libName);
-		if (url != null)
-			return url;
-
+		URL url ;
+		
+		// Try to find the file locally via getResource of gpcore.jar 
 		url = getJarUrlFileSystem(libName);
 		if (url != null)
 			return url;
 
-		url = getJarUrlViaClassLoaderDirectly(libName);
+		// Try to find the file online, where GP was started from (JWS only) 
+		url = getJarUrlFromJWS(libName);
 		if (url != null)
 			return url;
 
+		// Maybe the file is a .dll inside gpnative.jar
+		url = getJarUrlInsideGpNatives(libName);
+		if (url != null)
+			return url;
+
+		// Fallback, last hope!
 		url = getJarUrlFromClasspath(libName);
 		if (url != null)
 			return url;
 
+		// Fallback, last hope when in Eclipse!
 		url = getJarUrlFromMavenRepository(libName);
 		if (url != null)
 			return url;
+		
+//		url = getJarUrlViaClassLoaderDirectly(libName);
+//		if (url != null)
+//			return url;
 
 		return null;
 	}
@@ -1016,7 +1023,7 @@ public class JarExportUtil {
 			jarUrlsFromClassPath = new HashMap<String, URL>();
 			String[] st = System.getProperty("java.class.path").split(":");
 			for (String t : st) {
-				if (!t.endsWith("jar") && !t.endsWith("pack.gz")
+				if (!t.endsWith("jar") && !t.endsWith("jar.pack.gz")
 						&& !t.endsWith("zip")) {
 					LOGGER.warn(t + " was not a valid entry on the classpath.");
 					continue;
