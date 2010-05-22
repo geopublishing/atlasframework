@@ -438,14 +438,22 @@ public class JarExportUtil {
 		if (toDisk) {
 			targetDirDISK = new File(exportDirectory, "DISK");
 			// LOGGER.debug("Deleting old files...");
-			FileUtils.deleteDirectory(targetDirDISK);
+			try {
+				FileUtils.deleteDirectory(targetDirDISK);
+			} catch (IOException e) {
+				throw new AtlasExportException("The export "+targetDirDISK+" directory is write protected. Please choose another folder."); //i8n
+			}
 			targetDirDISK.mkdirs();
 		}
 
 		if (toJws) {
 			targetDirJWS = new File(exportDirectory, "JWS");
 			// LOGGER.debug("Deleting old files...");
-			FileUtils.deleteDirectory(targetDirJWS);
+			try {
+				FileUtils.deleteDirectory(targetDirJWS);
+			} catch (IOException e) {
+				throw new AtlasExportException("The export "+targetDirJWS+" directory is write protected. Please choose another folder."); //i8n
+			}
 			targetDirJWS.mkdirs();
 		}
 
@@ -1931,28 +1939,28 @@ public class JarExportUtil {
 		if (! SystemUtils.IS_OS_LINUX ) return;
 
 		// In JWS set to execute, read and NOTwrite
-		targetDirJWS.setWritable(false, false);
+//		targetDirJWS.setWritable(false, false);
 		targetDirJWS.setExecutable(true, false);
 		targetDirJWS.setReadable(true, false);
 
 		Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
 		while (iterateFiles.hasNext()) {
 			File next = iterateFiles.next();
-			next.setWritable(false, false);
+//			next.setWritable(false, false);
 			next.setExecutable(true, false);
 			next.setReadable(true, false);
 		}
 
 		// In DISK set to read and NOTwrite
 		
-		targetDirDISK.setWritable(false, false);
+//		targetDirDISK.setWritable(false, false);
 		targetDirDISK.setExecutable(true, false);
 		targetDirDISK.setReadable(true, false);
 
 		iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
 		while (iterateFiles.hasNext()) {
 			File next = iterateFiles.next();
-			next.setWritable(false, false);
+//			next.setWritable(false, false);
 			next.setReadable(true, false);
 		}
 		new File(targetDirDISK, "start.sh").setExecutable(true, false);

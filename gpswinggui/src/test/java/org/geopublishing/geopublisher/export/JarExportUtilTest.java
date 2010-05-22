@@ -14,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,13 +53,13 @@ public class JarExportUtilTest {
 
 	@Test
 	public void testFindNativeDllURL() throws IOException {
-		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig, IOUtil.getTempDir(), true, true, false);
+		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig, IOUtil
+				.getTempDir(), true, true, false);
 		URL soDllUrl = jarExportUtil.findJarUrl("gdal14.dll");
-		
+
 		assertNotNull(soDllUrl);
-	}	
-	
-	
+	}
+
 	@Test
 	public void testResourceLocationsCorrect() {
 
@@ -233,13 +232,9 @@ public class JarExportUtilTest {
 	}
 
 	@Test
-	public void testJarExecutables() {
-		try {
-			JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
-					atlasExportTesttDir, true, true, false);
-		} catch (Exception e) {
-			fail();
-		}
+	public void testJarExecutables() throws IOException {
+		new JarExportUtil(atlasConfig,
+				atlasExportTesttDir, true, true, false);
 	}
 
 	@Test
