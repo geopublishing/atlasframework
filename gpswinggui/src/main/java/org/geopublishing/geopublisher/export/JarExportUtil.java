@@ -647,7 +647,7 @@ public class JarExportUtil {
 				 * export .pack.gz for gp-natives.jar, because the extra
 				 * compression doesn't work for that kind of file.
 				 */
-				if (toJws) {
+				if (toJws && libName.endsWith(".jar")) {
 					try {
 						URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
 								libName+".pack.gz");
@@ -659,8 +659,6 @@ public class JarExportUtil {
 								destinationPackGz);
 
 					} catch (final Exception e) {
-
-						// TODO Bei natives ist die meldung ganz normal
 
 						if (packNotExistingErrorAlreadyShown == false) {
 							LOGGER.warn(GpUtil.R("Export.Error.Pack200"), e);
