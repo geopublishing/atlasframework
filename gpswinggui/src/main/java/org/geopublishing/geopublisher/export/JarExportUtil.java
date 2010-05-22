@@ -75,7 +75,6 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
-import org.hsqldb.lib.StringUtil;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
@@ -593,8 +592,6 @@ public class JarExportUtil {
 			final AtlasConfigEditable ace) throws AtlasExportException,
 			AtlasCancelException {
 
-		// copyNativesIfDisk(targetJar);
-
 		/************
 		 * Copying the .jar files now!
 		 */
@@ -938,9 +935,9 @@ public class JarExportUtil {
 
 		// Last try is to look in the working directory
 		File file = new File(jarName);
-		LOGGER.debug(classFileName
-				+ " didn't help! Fallback to working directory, "
-				+ file.getAbsolutePath());
+//		LOGGER.debug(classFileName
+//				+ " didn't help! Fallback to working directory, "
+//				+ file.getAbsolutePath());
 
 		if (file.exists())
 			return DataUtilities.fileToURL(file);
@@ -1800,7 +1797,7 @@ public class JarExportUtil {
 						+ AtlasConfig.DEFAULTCRS_FILENAME);
 			} else {
 				LOGGER
-						.info("No exporting defaultcrs.prj beacuse it doesn't exist or is too small");
+						.info("Not exporting defaultcrs.prj beacuse it doesn't exist or is too small");
 			}
 
 			copyAndSignLibs(targetJar, ace);
