@@ -65,6 +65,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
 import org.geopublishing.geopublisher.gui.GpJSplitPane;
@@ -516,7 +517,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
 			// URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-			final URL urlSplashscreenFallback = cl.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
+			final URL urlSplashscreenFallback = cl.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
 			final URL urlSplashscreen = cl.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
 			final JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",

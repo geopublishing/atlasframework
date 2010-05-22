@@ -251,13 +251,31 @@ public class AtlasConfigEditable extends AtlasConfig {
 		return unrefed;
 	}
 
+
+
+	/**
+	 * @return a subset of {@link #values()}, containing only the {@link DpEntry}s that are actually referenced in the atlas
+	 */
+	public List<DpEntry<? extends ChartStyle>> getUsedDpes() {
+		List<DpEntry<? extends ChartStyle>> notUsed = getUnusedDpes();
+		List<DpEntry<? extends ChartStyle>> used = new ArrayList<DpEntry<? extends ChartStyle>>();
+		
+		// TODO faster or cache
+		for (DpEntry dpe : getDataPool().values()) {
+			if (notUsed.contains(dpe)) continue;
+			used.add(dpe);
+		}
+		
+		return used;
+	}
+
 	/**
 	 * @return A {@link List} of {@link DpEntry}s which are not used in the
 	 *         atlas. If no {@link Map} is linked from the {@link Group}-Tree
 	 *         and no default map is selected, the first map (if any exists) of
 	 *         the atlas is use as the startup map.
 	 */
-	public List<DpEntry<? extends ChartStyle>> listNotReferencedInGroupTreeNorInAnyMap() {
+	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
 
 		List<DpEntry<? extends ChartStyle>> unrefed = new LinkedList<DpEntry<? extends ChartStyle>>();
 

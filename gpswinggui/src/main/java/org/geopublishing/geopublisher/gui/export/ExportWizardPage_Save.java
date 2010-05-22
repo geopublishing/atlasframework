@@ -69,7 +69,7 @@ public class ExportWizardPage_Save extends WizardPage {
 
 		AtlasConfigEditable ace = (AtlasConfigEditable) getWizardData(ExportWizard.ACE);
 		final List<DpEntry<? extends ChartStyle>> notInGroupNorMap = ace
-				.listNotReferencedInGroupTreeNorInAnyMap();
+				.getUnusedDpes();
 
 		add(saveExplJLabel, "gapy unrelated");
 		add(getSaveJCheckbox());

@@ -514,10 +514,11 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 			} catch (final Exception e) {
 
 				IllegalStateException illegalStateException = new IllegalStateException(
-						"Layer " + ref.getTarget().getTitle() + " is missing!",
+						"Layer " + ref.getTarget().getTitle() + " is missing! Will exit now.",
 						e);
 				LOGGER.error("Layer not found?", illegalStateException);
 				ExceptionDialog.show(parentGUI, illegalStateException);
+				System.exit(-99);
 			}
 		}
 

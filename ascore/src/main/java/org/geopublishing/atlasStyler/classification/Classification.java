@@ -13,7 +13,6 @@ package org.geopublishing.atlasStyler.classification;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;

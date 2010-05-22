@@ -95,8 +95,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 	static {
 
-		// AtlasConfig.setupResLoMan();
-
 		// Used to find AtlasML.xsd via the local webserver
 		// System.out
 		// .println("Adding new ClassResourceLoader( AtlasViewer.class ) to WebResourceManager");
@@ -568,12 +566,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * 
 	 */
 	public static void main(String[] args) {
-		
-		System.out.println("Classpath entries:");
-		String[] st = System.getProperty("java.class.path").split(":");
-		for (String t : st) {
-			System.out.println(t);
-		}
 
 		DpEntry.cleanupTemp();
 
@@ -593,6 +585,15 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			ExceptionDialog.show(null, e);
 		}
 
+		
+		System.out.println("Classpath entries2:");
+		String[] st = System.getProperty("java.class.path").split(":");
+		for (String t : st) {
+			System.out.println(t);
+			LOGGER.debug(t);
+		}
+		
+		
 		AtlasViewerGUI.getInstance().importAcAndStartGui();
 
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6476706

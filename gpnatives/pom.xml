@@ -45,9 +45,6 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
-						<index>
-							false
-						</index>
 						<manifest>
 							<addClasspath>false</addClasspath>
 							<!-- children modules only define their mainClass here  -->

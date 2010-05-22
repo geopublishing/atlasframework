@@ -20,17 +20,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasCancelException;
+import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPTestingUtil;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -48,6 +49,31 @@ public class JarExportUtilTest {
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
 	}
 
+	@Test
+	public void testResourceLocationsCorrect() {
+		
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.HTACCESS_RES_LOCATION));
+
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.LICENSEHTML_RESOURCE_NAME));
+		
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK));
+		
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE1));
+
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE2));
+
+		assertNotNull(GpUtil.class
+				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE3));
+
+		assertNotNull(GpUtil.class
+				.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
+		
+	}
 	@Test
 	public void testCreateJarFromDpeUnsigned() throws AtlasExportException,
 			IOException, InterruptedException, AtlasCancelException {
@@ -172,8 +198,7 @@ public class JarExportUtilTest {
 				+ JarExportUtil.SCHMITZM_JARNAME).exists());
 
 		// Test start atlas..
-		if (GPTestingUtil.INTERACTIVE) {
-			final List<String> command = new ArrayList<String>();
+		if (GPTestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
 			String[] cmd = { "/usr/bin/java", "-jar",
 					fileArDiskJar.getAbsolutePath() };
 

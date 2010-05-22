@@ -24,6 +24,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
 					<archive>
+<!--						<index>false</index> Indexing the gpcore jar makes problems !?! -->
 						<manifest>
 							<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI
 							</mainClass>

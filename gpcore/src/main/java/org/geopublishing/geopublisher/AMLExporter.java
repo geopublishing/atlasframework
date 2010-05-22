@@ -280,7 +280,7 @@ public class AMLExporter {
 		}
 		atlas.appendChild(supportedLanguages);
 
-		List<DpEntry<? extends ChartStyle>> unusedDpes = ace.listNotReferencedInGroupTreeNorInAnyMap();
+		List<DpEntry<? extends ChartStyle>> unusedDpes = ace.getUnusedDpes();
 		
 		// Loop over all data pool entries and add them to the AML Document
 		for (final DpEntry de : ace.getDataPool().values()) {

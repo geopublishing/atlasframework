@@ -42,7 +42,7 @@ import skrueger.swing.Disposable;
  * 
  * @author Stefan Alfons Tzeggai
  */
-public class AtlasConfig implements Disposable{
+public class AtlasConfig implements Disposable {
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
 
 	{
@@ -53,6 +53,12 @@ public class AtlasConfig implements Disposable{
 						"released ENTER", "released", "SPACE", "pressed",
 						"released SPACE", "released" }));
 	}
+
+	/**
+	 * Resource name of the icon that will be used for JavaWebStart if the
+	 * user-defined one can't be found.
+	 */
+	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "/export/jws/icon.gif";
 
 	// /**
 	// * If true, then the AtlasViewer classes will try to not cache files that
@@ -73,29 +79,10 @@ public class AtlasConfig implements Disposable{
 	public static final String JWSICON_RESOURCE_NAME = "ad/icon.gif";
 
 	/**
-	 * Resource name of the icon that will be used for JavaWebStart if the
-	 * user-defined one can't be found.
-	 */
-	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "/export/jws/icon.gif";
-
-	public static final String JSMOOTH_PROJEKT_RESOURCE = "/export/jsmooth/atlas.jsmooth";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE1 = "/export/jsmooth/autodownload-wrapper/autodownload.exe";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE2 = "/export/jsmooth/autodownload-wrapper/autodownload.skel";
-	public static final String JSMOOTH_SKEL_AD_RESOURCE3 = "/export/jsmooth/autodownload-wrapper/customdownload.skel";
-
-	/**
 	 * Resource name of the splashscreen image that will be used for
-	 * JavaWebStart and start.bat. It must be stores 
+	 * JavaWebStart and start.bat. It must be stores
 	 */
 	public static final String SPLASHSCREEN_RESOURCE_NAME = "ad/splashscreen.png";
-
-	/**
-	 * Resource name of the splashscreen image that will be used for
-	 * JavaWebStart and start.bat IF if user defined one can't be found.
-	 */
-	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
-
-	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
 
 	/** The name of the directory containing the "About"- HTML pages **/
 	public static final String ABOUT_DIRNAME = "about";
@@ -222,7 +209,7 @@ public class AtlasConfig implements Disposable{
 	public DataPool getDataPool() {
 		return datapool;
 	}
-
+	
 	/**
 	 * Reset the {@link List} of supported Languages to the passed
 	 * {@link String}
@@ -367,8 +354,9 @@ public class AtlasConfig implements Disposable{
 
 		// TODO dangerouse redundant paths here.. see ACE.getAboutDir()
 
-		String location = ATLASDATA_DIRNAME+"/"+HTML_DIRNAME+"/" + ABOUT_DIRNAME + "/about_"
-				+ Translation.getActiveLang() + ".html";
+		String location = ATLASDATA_DIRNAME + "/" + HTML_DIRNAME + "/"
+				+ ABOUT_DIRNAME + "/about_" + Translation.getActiveLang()
+				+ ".html";
 		URL url = getResLoMan().getResourceAsUrl(location);
 		LOGGER.debug("AboutHTML URL = " + url + " for location = " + location);
 		return url;
@@ -387,6 +375,7 @@ public class AtlasConfig implements Disposable{
 		LOGGER.debug("PopupHTML URL = " + url + " for location = " + location);
 		return url;
 	}
+
 
 	/**
 	 * @return <code>null</code> if no icon found. Otherwise an {@link URL} to a
