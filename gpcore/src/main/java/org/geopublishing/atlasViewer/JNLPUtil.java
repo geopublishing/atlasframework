@@ -29,7 +29,6 @@ import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.jnlp.JnlpStatusDialog2;
 import org.geopublishing.atlasViewer.map.Map;
 
-
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart
  * related stuff.
@@ -64,6 +63,18 @@ public class JNLPUtil {
 	}
 
 	/**
+	 * <code>true</code>, if the application has been started by Java Web Start (JWS)
+	 */
+	public static boolean isJnlpServiceAvailable() {
+		try {
+			getJNLPDownloadService();
+			return true;
+		} catch (UnavailableServiceException e) {
+			return false;
+		}
+	}
+
+	/**
 	 * Registers the given instance to the {@link SingleInstanceService} - if we
 	 * are running in JavaWebStart context.
 	 * 
@@ -94,7 +105,6 @@ public class JNLPUtil {
 		} catch (UnavailableServiceException use) {
 		}
 	}
-
 
 	/**
 	 * Checks which parts of the JNLP resources have not yet been cached.
@@ -175,9 +185,8 @@ public class JNLPUtil {
 	public static boolean isAtlasDataFromJWS(AtlasConfig ac) {
 
 		if (isAtlasDataFromJWS == null) {
-			URL atlasXmlRes = ac.getResource(
-					AtlasConfig.ATLASDATA_DIRNAME + "/"
-							+ AtlasConfig.ATLAS_XML_FILENAME);
+			URL atlasXmlRes = ac.getResource(AtlasConfig.ATLASDATA_DIRNAME
+					+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
 
 			LOGGER.info("resourceAsUrl " + atlasXmlRes);
 
@@ -225,12 +234,13 @@ public class JNLPUtil {
 				LOGGER.info("part " + part + " is NOT cached.. start DL ");
 
 				// load the resource into the JWS Cache
-				ds.loadPart(part, new JnlpStatusDialog2()); // TODO use statusDialog
+				ds.loadPart(part, new JnlpStatusDialog2()); // TODO use
+															// statusDialog
 			}
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);
 		}
-		
+
 	}
 
 }
