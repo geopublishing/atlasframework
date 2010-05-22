@@ -30,7 +30,12 @@
 		<replace file="${basedir}/target/jnlp/version.txt">
 			<replacefilter token="@VERSION@" value="${ant.project.version}" />
 			<replacefilter token="@BUILD@" value="${ant.buildNumber}" />
+			<replacefilter token="@TIMESTAMP@" value="${maven.build.timestamp}"/>
 		</replace>
+
+		<delete description="Delete directory before copying the new release">
+			<fileset dir="/var/www/www.geopublishing.org/htdocs/gp" />
+		</delete>
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
 		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
@@ -42,7 +47,7 @@
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
 		<!-- Besser wenn hier auf die Daten in einem Linux unstable repository verwiesen würde -->
 		<copy file="${basedir}/target/gpswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/Geopublisher-${ant.project.version}-full.zip" />
-		
+
 	</target>
 
 </project>
