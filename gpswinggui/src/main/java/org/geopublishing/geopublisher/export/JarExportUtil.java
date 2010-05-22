@@ -521,14 +521,15 @@ public class JarExportUtil {
 		final Main jartool = new Main(System.out, System.err, "jar");
 
 		if (!targetJar.exists()) {
-//			final String manifestName = getManifestFile().getAbsolutePath();
-//			LOGGER.debug("creating new (with manifest:)" + jarName);
-//			final boolean run = jartool.run(new String[] { "cfm", jarName,
-//					manifestName, "-C", relDir.getAbsolutePath(), what });
-//			
+			// final String manifestName = getManifestFile().getAbsolutePath();
+			// LOGGER.debug("creating new (with manifest:)" + jarName);
+			// final boolean run = jartool.run(new String[] { "cfm", jarName,
+			// manifestName, "-C", relDir.getAbsolutePath(), what });
+			//			
 			LOGGER.debug("creating new (without manifest:)" + jarName);
-			final boolean run = jartool.run(new String[] { "cf", jarName, "-C", relDir.getAbsolutePath(), what });
-			
+			final boolean run = jartool.run(new String[] { "cf", jarName, "-C",
+					relDir.getAbsolutePath(), what });
+
 			if (!run)
 				throw new AtlasExportException("unable to create jar "
 						+ targetJar + " with " + what);
@@ -596,9 +597,9 @@ public class JarExportUtil {
 				// if (progressWindow != null && progressWindow.isCanceled())
 				// throw new AtlasExportCancelledException();
 
-				if (nat.trim().equals("")) {
-					continue;
-				}
+//				if (nat.trim().equals("")) {
+//					continue;
+//				}
 
 				final File destination = new File(targetNativeDir, nat);
 				destination.getParentFile().mkdirs();
@@ -668,7 +669,7 @@ public class JarExportUtil {
 							"Export.errorMsg.error_copy_lib_to_", fromLocal,
 							nat, fromURL, destination);
 					LOGGER.warn(errorMsg, e);
-					throw new AtlasExportException(errorMsg, e);
+//					throw new AtlasExportException(errorMsg, e);
 				}
 
 			}
@@ -691,7 +692,6 @@ public class JarExportUtil {
 			checkAbort();
 
 			try {
-
 				File destination = new File(targetLibDir, lib);
 				destination.getParentFile().mkdirs();
 				File destinationPackGz = new File(targetLibDir, lib
@@ -749,7 +749,15 @@ public class JarExportUtil {
 					 * directory.
 					 */
 					libsFromLocal = true;
-					fromURL = getJarUrlFromClasspath(lib);
+					fromURL = getJarUrlFileSystem(lib);
+
+					if (fromURL == null) {
+						LOGGER
+								.warn(lib
+										+ " could not be found in expected dir. Look in class path");
+						fromURL = getJarUrlFromClasspath(lib);
+					}
+
 					if (fromURL == null) {
 						LOGGER
 								.warn(lib
@@ -829,6 +837,14 @@ public class JarExportUtil {
 
 	}
 
+	private URL getJarUrlFileSystem(String lib) {
+		File file = new File(lib);
+		LOGGER.debug("Looking for "+lib+" in "+file.getAbsolutePath());
+		if (file.exists())
+			return DataUtilities.fileToURL(file);
+		return null;
+	}
+
 	private URL getJarUrlFromMavenRepository(final String lib) {
 		URL fromURL;
 
@@ -873,7 +889,7 @@ public class JarExportUtil {
 
 		String[] st = System.getProperty("java.library.path").split(":");
 		for (String t : st) {
-			System.err.println("looking in " + t + " for " + nativeName);
+			LOGGER.debug("looking in " + t + " for " + nativeName);
 			File file = new File(t + "/" + nativeName);
 			if (file.exists()) {
 				return DataUtilities.fileToURL(file);
@@ -1704,7 +1720,8 @@ public class JarExportUtil {
 			Main jartool = new Main(System.out, System.err, "jar");
 			String[] args = new String[] { "ufm", targetJar.getAbsolutePath(),
 					getManifestFile().getAbsolutePath() };
-			LOGGER.debug("Calling jartool with " + LangUtil.stringConcatWithSep(" " , args));
+			LOGGER.debug("Calling jartool with "
+					+ LangUtil.stringConcatWithSep(" ", args));
 			if (!jartool.run(args))
 				throw new AtlasExportException(
 						"unable to add correct manifest to " + targetJar);
@@ -1864,11 +1881,11 @@ public class JarExportUtil {
 		for (final DpEntry dpe : ace.getUsedDpes()) {
 			classpathString += dpe.getId() + ".jar ";
 		}
-		
+
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
-		+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
-		+ ASSWINGGUI_JARNAME + " " + SCHMITZM_JARNAME;
-		
+				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
+				+ ASSWINGGUI_JARNAME + " " + SCHMITZM_JARNAME;
+
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 
 		mainAtts.put(Attributes.Name.MAIN_CLASS, MAIN_CLASS);
@@ -1896,41 +1913,41 @@ public class JarExportUtil {
 		return manifestTempFile;
 	}
 
-//	private File getIndexListFile() throws IOException {
-//
-//		// final File indexTempFile = File.createTempFile(
-//		// AVUtil.ATLAS_TEMP_FILE_ID, "META_INF/INDEX.LST");
-//
-//		File miFolder = new File(IOUtil.getTempDir(), "META-INF");
-//		try {
-//			FileUtils.deleteDirectory(miFolder);
-//		} catch (Exception e) {
-//		}
-//		miFolder.mkdirs();
-//		File indexTempFile = new File(miFolder, "INDEX.LIST");
-//
-//		FileWriter indexwriter = new FileWriter(indexTempFile);
-//
-//		indexwriter.write("JarIndex-Version: 1.0\n\n");
-//
-//		// ******************************************************************
-//		// Adding the DatapoolEntries
-//		// ******************************************************************
-//		for (final DpEntry dpe : ace.getDataPool().values()) {
-//			if (unusedDpes.contains(dpe))
-//				continue;
-//
-//			// name of the JAR:
-//			indexwriter.write(dpe.getId() + ".jar\n");
-//
-//			// The main packacge/folder contained:
-//			indexwriter.write(ace.getAd().getName() + "/"
-//					+ ace.getDataDir().getName() + "/" + dpe.getId() + "\n");
-//			indexwriter.write("\n");
-//		}
-//
-//		return indexTempFile;
-//	}
+	// private File getIndexListFile() throws IOException {
+	//
+	// // final File indexTempFile = File.createTempFile(
+	// // AVUtil.ATLAS_TEMP_FILE_ID, "META_INF/INDEX.LST");
+	//
+	// File miFolder = new File(IOUtil.getTempDir(), "META-INF");
+	// try {
+	// FileUtils.deleteDirectory(miFolder);
+	// } catch (Exception e) {
+	// }
+	// miFolder.mkdirs();
+	// File indexTempFile = new File(miFolder, "INDEX.LIST");
+	//
+	// FileWriter indexwriter = new FileWriter(indexTempFile);
+	//
+	// indexwriter.write("JarIndex-Version: 1.0\n\n");
+	//
+	// // ******************************************************************
+	// // Adding the DatapoolEntries
+	// // ******************************************************************
+	// for (final DpEntry dpe : ace.getDataPool().values()) {
+	// if (unusedDpes.contains(dpe))
+	// continue;
+	//
+	// // name of the JAR:
+	// indexwriter.write(dpe.getId() + ".jar\n");
+	//
+	// // The main packacge/folder contained:
+	// indexwriter.write(ace.getAd().getName() + "/"
+	// + ace.getDataDir().getName() + "/" + dpe.getId() + "\n");
+	// indexwriter.write("\n");
+	// }
+	//
+	// return indexTempFile;
+	// }
 
 	private String[] getNatives() {
 		final String nativeLibsLine = GPProps.get(Keys.NativeLibs);

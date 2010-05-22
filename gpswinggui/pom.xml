@@ -25,7 +25,8 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI
+							</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
@@ -53,7 +54,8 @@
 									<!--								<classifier>${build.type}</classifier>-->
 									<type>jar</type>
 									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/natives</outputDirectory>
+									<outputDirectory>${project.build.directory}/natives
+									</outputDirectory>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
@@ -94,12 +96,14 @@
 						</executions>
 
 						<configuration>
-							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
+							<resourcesDirectory>${project.basedir}/src/main/jnlp/
+							</resourcesDirectory>
 
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
-								<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+								<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI
+								</mainClass>
 							</jnlp>
 
 							<sign>
@@ -172,7 +176,8 @@
 						<configuration>
 							<filters />
 							<descriptors>
-								<descriptor>${project.basedir}/src/assembly/full.xml</descriptor>
+								<descriptor>${project.basedir}/src/assembly/full.xml
+								</descriptor>
 							</descriptors>
 						</configuration>
 						<executions>
@@ -392,6 +397,22 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>tools</artifactId>
+			<version>1.6.0.20</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<!--			<dependency>-->
+		<!--				<groupId>com.sun</groupId>-->
+		<!--				<artifactId>tools</artifactId>-->
+		<!--				<version>1.2.1</version>-->
+		<!--				<scope>system</scope>-->
+		<!--				<systemPath>${java.home}/../lib/tools.jar</systemPath>-->
+		<!--			</dependency>-->
 
 	</dependencies>
 

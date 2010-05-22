@@ -180,10 +180,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// e.printStackTrace();
 		// }
 		
-//		String[] st = System.getProperty("java.class.path").split(":");
-//		for (String t : st) {
-//			System.out.println(t);
-//		}
+		String[] st = System.getProperty("java.class.path").split(":");
+		LOGGER.debug("Classpath:");
+		System.out.println("Classpth:");
+		for (String t : st) {
+			System.out.println(t);
+			LOGGER.debug(t);
+		}
 
 		getInstance(Arrays.asList(args));
 	}
