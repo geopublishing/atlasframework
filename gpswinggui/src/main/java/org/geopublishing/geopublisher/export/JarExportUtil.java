@@ -73,7 +73,9 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
+import org.hsqldb.lib.StringUtil;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
@@ -783,7 +785,7 @@ public class JarExportUtil {
 				try {
 					FileUtils.copyURLToFile(fromURL, destination);
 
-					if (libsFromLocalMaven && toJws) {
+					if (toJws && libsFromLocal) {
 						// if they come from local maven repository, we have to
 						// sign them.
 						jarSign(destination);
@@ -838,10 +840,28 @@ public class JarExportUtil {
 	}
 
 	private URL getJarUrlFileSystem(String lib) {
+		
+		URL url = GeopublisherGUI.class.getResource(GeopublisherGUI.class.getSimpleName()+".class");  
+		LOGGER.debug("getResource(Geopublisher "+url);  
+
+		if (url != null) {
+			String stringUrl = url.toString();
+			LOGGER.debug(stringUrl);
+			if (stringUrl.startsWith("jar:file:")) {
+				stringUrl = stringUrl.substring(9, stringUrl.lastIndexOf("!"));
+				LOGGER.debug(stringUrl);
+				File file2 = new File(stringUrl);
+				LOGGER.debug(file2);
+				if (file2.exists()) return DataUtilities.fileToURL(file2); 
+			}
+		}
+		
 		File file = new File(lib);
 		LOGGER.debug("Looking for "+lib+" in "+file.getAbsolutePath());
 		if (file.exists())
 			return DataUtilities.fileToURL(file);
+		
+		
 		return null;
 	}
 
@@ -919,7 +939,6 @@ public class JarExportUtil {
 				}
 				jarUrlsFromClassPath.put(file.getName(), DataUtilities
 						.fileToURL(file));
-				System.out.println(file);
 			}
 
 		}
@@ -927,7 +946,23 @@ public class JarExportUtil {
 		// Clean any path or ./ stuff
 		jarName = new File(jarName).getName();
 
-		return jarUrlsFromClassPath.get(jarName);
+		URL url = jarUrlsFromClassPath.get(jarName);
+		
+		if (url == null) {
+			// The requested jar was not found in the classpath. mmm... 
+			String curDir = System.getProperty("user.dir");
+//			File baseFile = DataUtilities.urlToFile(jarUrlsFromClassPath.get(JarExportUtil.GPCORE_JARNAME));
+			
+			File try1 = new File(curDir,jarName);
+			LOGGER.debug("try1 = "+try1);
+			if (try1.exists()) return DataUtilities.fileToURL(try1);
+			
+			File try2 = new File(curDir,LIBDIR+"/"+jarName);
+			LOGGER.debug("try2 = "+try2);
+			if (try2.exists()) return DataUtilities.fileToURL(try2);
+		}
+		
+		return url;
 	}
 
 	/**
