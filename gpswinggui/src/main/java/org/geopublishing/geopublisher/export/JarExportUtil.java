@@ -604,7 +604,7 @@ public class JarExportUtil {
 		 */
 		boolean packNotExistingErrorAlreadyShown = false;
 
-		for (final String libName : getLibraries()) {
+		for (final String libName : getJarAndNativeLibNames()) {
 
 			checkAbort();
 
@@ -780,14 +780,14 @@ public class JarExportUtil {
 	 */
 	public URL findJarUrl(String libName) {
 
-		URL url ;
-		
-		// Try to find the file locally via getResource of gpcore.jar 
+		URL url;
+
+		// Try to find the file locally via getResource of gpcore.jar
 		url = getJarUrlFileSystem(libName);
 		if (url != null)
 			return url;
 
-		// Try to find the file online, where GP was started from (JWS only) 
+		// Try to find the file online, where GP was started from (JWS only)
 		url = getJarUrlFromJWS(libName);
 		if (url != null)
 			return url;
@@ -806,10 +806,10 @@ public class JarExportUtil {
 		url = getJarUrlFromMavenRepository(libName);
 		if (url != null)
 			return url;
-		
-//		url = getJarUrlViaClassLoaderDirectly(libName);
-//		if (url != null)
-//			return url;
+
+		// url = getJarUrlViaClassLoaderDirectly(libName);
+		// if (url != null)
+		// return url;
 
 		return null;
 	}
@@ -935,9 +935,9 @@ public class JarExportUtil {
 
 		// Last try is to look in the working directory
 		File file = new File(jarName);
-//		LOGGER.debug(classFileName
-//				+ " didn't help! Fallback to working directory, "
-//				+ file.getAbsolutePath());
+		// LOGGER.debug(classFileName
+		// + " didn't help! Fallback to working directory, "
+		// + file.getAbsolutePath());
 
 		if (file.exists())
 			return DataUtilities.fileToURL(file);
@@ -1393,7 +1393,7 @@ public class JarExportUtil {
 
 			resources.appendChild(aResource);
 
-			for (final String libName : getLibraries()) {
+			for (final String libName : getJarLibNames()) {
 				if (libName.trim().equals("")) {
 					continue;
 				}
@@ -1672,7 +1672,7 @@ public class JarExportUtil {
 		/**
 		 * One for every Library and every Native libs
 		 */
-		totalSteps += getLibraries().length;
+		totalSteps += getJarAndNativeLibNames().length;
 
 		info(GpUtil.R("ExportDialog.processWindowTitle.Exporting"));
 
@@ -1921,12 +1921,26 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * @return A list of JAR-names of atlasViewer software dependencies
+	 * @return A list of JAR-names and native lib name (.so etc) that {@link AtlasViewerGUI} dependes on.
 	 */
-	private String[] getLibraries() {
+	private String[] getJarAndNativeLibNames() {
 
+		String[] libs = getJarLibNames();
+
+		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
+		// für DISK exportiert wird.
+		if (toDisk) {
+			libs = LangUtil.extendArray(libs, getNativeLibNames());
+		}
+
+		return libs;
+	}
+
+	/**
+	 * @return List of JAR dependencies.
+	 */
+	private String[] getJarLibNames() {
 		String[] libs;
-
 		// Read maven2 generated list of dependencies
 		Properties p = new Properties();
 		String proeprtiesName = "/atlasdependencies.properties";
@@ -1961,18 +1975,17 @@ public class JarExportUtil {
 				if (!baseJarsDefined[i])
 					libs = LangUtil.extendArray(libs, BASEJARS.get(i));
 		}
-
-		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
-		// für DISK exportiert wird.
-		if (toDisk) {
-			final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
-			// LOGGER
-			// .debug("These native dependencies have been set in the .properties file: "
-			// + nativeLibsLine);
-			libs = LangUtil.extendArray(libs, nativeLibsLine.split(" "));
-		}
-
 		return libs;
+	}
+
+	private String[] getNativeLibNames() {
+		final String nativeLibsLine = GPProps.get(Keys.NativeLibs);
+
+		// LOGGER
+		// .debug("These native dependencies have been set in the .properties file: "
+		// + nativeLibsLine);
+
+		return nativeLibsLine.split(" ");
 	}
 
 	/**
@@ -2104,7 +2117,7 @@ public class JarExportUtil {
 	 */
 	private void jarSign(final File jarFile) throws AtlasExportException {
 
-		AVUtil.checkThatWeAreNotOnEDT(); //i8n
+		AVUtil.checkThatWeAreNotOnEDT(); // i8n
 
 		info("Signing JAR " + jarFile.getName());
 
