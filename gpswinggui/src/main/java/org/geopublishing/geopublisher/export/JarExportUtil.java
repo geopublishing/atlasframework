@@ -53,13 +53,16 @@ import net.charabia.jsmoothgen.skeleton.SkeletonBean;
 import net.charabia.jsmoothgen.skeleton.SkeletonList;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -80,6 +83,7 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import schmitzm.data.ObjectStructureUtil;
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -635,7 +639,7 @@ public class JarExportUtil {
 			try {
 				FileUtils.copyURLToFile(fromURL, destination);
 
-				if (toJws && libsFromLocal && libName.endsWith(".jar")) {
+				if (toJws && libName.endsWith(".jar") && JNLPUtil.isJnlpServiceAvailable()) {
 					// if they come from local, we might have to
 					// sign them.
 					jarSign(destination);
@@ -1895,11 +1899,13 @@ public class JarExportUtil {
 				copyJRE(targetDirDISK);
 			}
 
-			// Files next to atlas.gpa will be copied to the folders without
-			// putting them in a JAR. This can be usefull for exmaple for PDF
+			// All files "next to" atlas.gpa will be copied to the folders without
+			// putting them in a JAR. This can be usefull for example for PDF
 			// files that should be referencable from within the atlas, but also
 			// reside uncompressed on the CD root directory.
 			copyUncompressFiles();
+			
+			if (SystemUtils.IS_OS_LINUX) adjustRights();
 
 		} catch (final AtlasCancelException cancel) {
 			// // In that case we delete the target directory.
@@ -1918,6 +1924,16 @@ public class JarExportUtil {
 
 			deleteOldTempExportDirs();
 		}
+	}
+
+	private void adjustRights() {
+		if (!SystemUtils.IS_OS_LINUX && !SystemUtils.IS_OS_UNIX )
+			
+		// TODO more?! 
+			
+		new File(targetDirDISK, "start.sh").setExecutable(true);
+		
+		targetDirJWS.setExecutable(true);
 	}
 
 	/**
@@ -2174,7 +2190,7 @@ public class JarExportUtil {
 					targetDirDISK, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
-			new File(targetDirDISK, "start.sh").setExecutable(true);
+			
 			FileUtils.moveFileToDirectory(
 					new File(getTempDir(), "autorun.inf"), targetDirDISK, true);
 			// Icon.gif is used (and deleted afterwards) by JSmooth
