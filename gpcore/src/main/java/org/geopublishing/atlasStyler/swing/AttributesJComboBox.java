@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Krüger (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
@@ -41,7 +41,7 @@ import skrueger.i8n.Translation;
  * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
  * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored. 
  * 
- * @author Stefan A. Krüger
+ * @author Stefan A. Tzeggai
  */
 public class AttributesJComboBox extends JComboBox {
 	static final private Logger LOGGER = ASUtil.createLogger(AttributesJComboBox.class);

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Krüger (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 package org.geopublishing.atlasViewer.map;
 
@@ -32,7 +32,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
  * their ID The Map are sorted/ordered by putting them in the {@link Group}s and
  * subgroups
  * 
- * @author Stefan Alfons Krüger
+ * @author Stefan Alfons Tzeggai
  * 
  */
 public class MapPool extends TreeMap<String, Map> {

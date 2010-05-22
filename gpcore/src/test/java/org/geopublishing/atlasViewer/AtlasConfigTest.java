@@ -1,8 +1,9 @@
 package org.geopublishing.atlasViewer;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.geopublishing.geopublisher.GpUtil;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 public class AtlasConfigTest {
 

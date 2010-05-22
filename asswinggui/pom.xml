@@ -176,19 +176,25 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-main</artifactId>
+			<groupId>org.geotools.jdbc</groupId>
+			<artifactId>gt-jdbc-postgis</artifactId>
 			<version>${geotools.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		
 		<dependency>
-			<groupId>org.geotools.jdbc</groupId>
-			<artifactId>gt-jdbc-postgis</artifactId>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagepyramid</artifactId>
 			<version>${geotools.version}</version>
 			<type>jar</type>
-			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagemosaic</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
 		</dependency>
 		
 		<dependency>
@@ -239,19 +245,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagepyramid</artifactId>
-			<version>2.6.2</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagemosaic</artifactId>
-			<version>2.6.2</version>
-			<type>jar</type>
-		</dependency>
 
 	</dependencies>
 </project>

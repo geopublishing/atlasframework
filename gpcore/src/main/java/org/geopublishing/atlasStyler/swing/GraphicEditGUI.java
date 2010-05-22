@@ -1,16 +1,16 @@
 package org.geopublishing.atlasStyler.swing;
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Krüger (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 ///*******************************************************************************
-// * Copyright (c) 2009 Stefan A. Krüger.
+// * Copyright (c) 2009 Stefan A. Tzeggai.
 // * 
 // * This file is part of the AtlasStyler SLD/SE Editor application - A Java Swing-based GUI to create OGC Styled Layer Descriptor (SLD 1.0) / OGC Symbology Encoding 1.1 (SE) XML files.
 // * http://www.geopublishing.org
@@ -34,7 +34,7 @@ package org.geopublishing.atlasStyler.swing;
 // * or try this link: http://www.gnu.org/licenses/lgpl.html
 // * 
 // * Contributors:
-// *     Stefan A. Krüger - initial API and implementation
+// *     Stefan A. Tzeggai - initial API and implementation
 // ******************************************************************************/
 //package skrueger.sld.gui;
 //

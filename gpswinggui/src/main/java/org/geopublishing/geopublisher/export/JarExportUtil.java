@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Krüger (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,6 +66,7 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.map.Map;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
@@ -82,6 +84,7 @@ import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
+import skrueger.versionnumber.ReleaseUtil;
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
 
@@ -97,9 +100,9 @@ public class JarExportUtil {
 
 	/**
 	 * The name of the JAR file which contains general atlas resources like
-	 * HTML-pages, atlas.xml, etc…
+	 * atlas.xml, HTML-pages, etc…
 	 */
-	private final static String ARJAR_FILENAME = "atlas_resources.jar";
+	public final static String ARJAR_FILENAME = "atlas_resources.jar";
 
 	/**
 	 * Files next to atlas.gpa will be copied to the folders without putting
@@ -133,6 +136,28 @@ public class JarExportUtil {
 	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	private static final String LIBDIR = "."; // "lib";
+
+	private static final String version = ReleaseUtil
+			.getVersionMaj(AVUtil.class)
+			+ "." + ReleaseUtil.getVersionMin(AVUtil.class);
+	private static final String snapshot = "-SNAPSHOT";
+	private static final String postfix = ".jar";
+
+	public static final String GPCORE_JARNAME = "gpcore-" + version + snapshot
+			+ postfix;
+	public static final String ASCORE_JARNAME = "ascore-" + version + snapshot
+			+ postfix;
+	public static final String ASSWINGGUI_JARNAME = "asswinggui-" + version
+			+ snapshot + postfix;
+
+	public static final String SCHMITZM_JARNAME = "schmitzm-library-2.2-SNAPSHOT.jar";
+
+	final static List<String> BASEJARS = new ArrayList<String>(Arrays
+			.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
+					ASSWINGGUI_JARNAME, GPCORE_JARNAME }));
+
+	/** Name of the Jar **/
+	public static final String MAIN_CLASS = AtlasViewerGUI.class.getName(); // "org.geopublishing.atlasViewer.swing.AtlasViewerGUI";
 
 	/**
 	 * Create the files needed to enable autorun features for as many OSs as
@@ -346,24 +371,21 @@ public class JarExportUtil {
 		this.copyJRE = copyJRE;
 
 		// Create temporary export folder
-		LOGGER.debug("Deleting old files..."); // i8n
-		if (toDisk && targetDirDISK != null)
-			FileUtils.deleteDirectory(targetDirDISK);
-		if (toJws && targetDirJWS != null) {
-			FileUtils.deleteDirectory(targetDirJWS);
-		}
-
 		deleteOldTempExportDirs();
 		getTempDir().mkdirs();
 
 		// Create final export folders
 		if (toDisk) {
 			targetDirDISK = new File(exportDirectory, "DISK");
+			// LOGGER.debug("Deleting old files...");
+			FileUtils.deleteDirectory(targetDirDISK);
 			targetDirDISK.mkdirs();
 		}
 
 		if (toJws) {
 			targetDirJWS = new File(exportDirectory, "JWS");
+			// LOGGER.debug("Deleting old files...");
+			FileUtils.deleteDirectory(targetDirJWS);
 			targetDirJWS.mkdirs();
 		}
 
@@ -655,11 +677,11 @@ public class JarExportUtil {
 
 					/**
 					 * Normally the libs are found in the LIBDIR directory. The
-					 * "../gpcore.jar" is different!
+					 * gp-jars are different!
 					 */
 					String fileAndPath;
-					if (lib.equals("../gpcore.jar")) {
-						fileAndPath = path + "gpcore.jar";
+					if (BASEJARS.contains(lib)) {
+						fileAndPath = path + lib;
 						destination = new File(targetLibDir.getParentFile(),
 								"gpcore.jar");
 						destinationPackGz = new File(targetLibDir
@@ -684,32 +706,26 @@ public class JarExportUtil {
 					 * directory.
 					 */
 					libsFromLocal = true;
-					if (lib.equals("../gpcore.jar")) {
-						fromURL = DataUtilities.fileToURL(new File(
-								"./gpcore.jar"));
-						fromURLPackGZ = new File("./gpcore.jar.pack.gz")
-								.toURI().toURL();
-						destinationPackGz = new File(targetLibDir
-								.getParentFile(), "gpcore.jar.pack.gz");
-					} else {
-
-						fromURL = getJarUrl(lib);
-						if (fromURL == null)
-							System.out.println("null");
-						fromURLPackGZ = fromURL != null ? DataUtilities
-								.changeUrlExt(fromURL, "jar.pack.gz") : null;
-
-						// fromURL = DataUtilities.fileToURL(new File(LIBDIR +
-						// "/" + lib));
-						// fromURLPackGZ = DataUtilities.fileToURL(new
-						// File(LIBDIR + "/" + lib
-						// + ".pack.gz"));
+					fromURL = getJarUrlFromClasspath(lib);
+					if (fromURL == null) {
+						LOGGER
+								.warn(lib
+										+ " could not be found in the classpath. Maybe we are debugging? Look in ~/.m2/repository...");
+						fromURL = getJarUrlFromMavenRepository(lib);
 					}
-				}
-				if (fromURL == null) {
-					System.err.println(lib + " not found in "
-							+ System.getProperty("java.class.path"));
-					continue;
+					if (fromURL == null) {
+						throw new AtlasExportException("Can't find library: "
+								+ lib + ". Please report this to the authors.");
+					}
+					fromURLPackGZ = fromURL != null ? DataUtilities
+							.changeUrlExt(fromURL, "jar.pack.gz") : null;
+
+					// fromURL = DataUtilities.fileToURL(new File(LIBDIR +
+					// "/" + lib));
+					// fromURLPackGZ = DataUtilities.fileToURL(new
+					// File(LIBDIR + "/" + lib
+					// + ".pack.gz"));
+					// }
 				}
 
 				final String msg = GpUtil.R("Export.progressMsg.copy_lib_to_",
@@ -760,6 +776,44 @@ public class JarExportUtil {
 
 	}
 
+	private URL getJarUrlFromMavenRepository(final String lib) {
+		URL fromURL;
+
+		File home = new File(System.getProperty("user.home"));
+
+		String path = null;
+		if (lib.equals(GPCORE_JARNAME)) {
+			path = "org/geopublishing/geopublisher/gpcore/" + version
+					+ snapshot;
+		}
+
+		if (lib.equals(ASCORE_JARNAME)) {
+			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
+		}
+
+		if (lib.equals(ASSWINGGUI_JARNAME)) {
+			path = "org/geopublishing/atlasStyler/asswinggui/" + version
+					+ snapshot;
+		}
+
+		if (lib.equals(SCHMITZM_JARNAME)) {
+			path = "de/schmitzm/schmitzm-library/2.2-SNAPSHOT";
+		}
+
+		if (path == null)
+			throw new AtlasExportException(
+					"Can only find GP base jars in maven, not: " + lib);
+
+		File file = new File(home, ".m2/repository/" + path + "/" + lib);
+
+		if (!file.exists()) {
+			throw new AtlasExportException("Can't find library: " + lib
+					+ ". Please report this to the authors.");
+		}
+		fromURL = DataUtilities.fileToURL(file);
+		return fromURL;
+	}
+
 	private URL getNativeLibraryURL(String nativeName) {
 		// Clean any path or ./ stuff
 		nativeName = new File(nativeName).getName();
@@ -778,7 +832,7 @@ public class JarExportUtil {
 
 	/**
 	 */
-	private URL getJarUrl(String jarName) {
+	private URL getJarUrlFromClasspath(String jarName) {
 		if (jarUrlsFromClassPath == null) {
 			jarUrlsFromClassPath = new HashMap<String, URL>();
 			String[] st = System.getProperty("java.class.path").split(":");
@@ -796,6 +850,7 @@ public class JarExportUtil {
 				}
 				jarUrlsFromClassPath.put(file.getName(), DataUtilities
 						.fileToURL(file));
+				System.out.println(file);
 			}
 
 		}
@@ -881,7 +936,7 @@ public class JarExportUtil {
 	 * sense for a single jar.
 	 * <p>
 	 * Exception: The info HTML pages attached to {@link Map}s are stored in the
-	 * <ode>AVJAR_FILENAME</code> JAR.
+	 * <ode>ARJAR_FILENAME</code> JAR.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Kr&uuml;ger</a>
@@ -1611,7 +1666,7 @@ public class JarExportUtil {
 			// throw new AtlasExportException(
 			// "unable to add correct manifest to " + targetJar);
 
-			LOGGER.debug("Finally signing the ataslResouce JAR...");
+			LOGGER.debug("Signing "+ARJAR_FILENAME+"...");
 			jarSign(targetJar);
 
 			/**
@@ -1685,13 +1740,35 @@ public class JarExportUtil {
 	}
 
 	private String[] getLibraries() {
-		// final String libsLine = "gp-natives.jar "
-		// + GPProps.get(Keys.ClassPathLibs);
-		// LOGGER
-		// .debug("These dependencies have been set in the .properties file (gp-natives.jar has been added automatically): "
-		// + libsLine);
-		// return libsLine.split(" ");
+		String[] libs = BASEJARS.toArray(new String[] {});
+		// Add jar names of jars that are part of geopublisher project and hence
+		// not included in the .properties file
 
+		// Read maven2 generated list of dependencies
+		Properties p = new Properties();
+		String proeprtiesName = "/atlasdependencies.properties";
+		try {
+			p.load(GpUtil.class.getResource(proeprtiesName).openStream());
+			String atlasDependecies = p.getProperty("classpath");
+
+			// TODO HACK until .properties is written correctly! GEO TOOLS
+			// VERSION
+//			atlasDependecies = atlasDependecies
+//					.replaceAll("2\\.6\\.3", "2.6.4");
+
+			// remove any maven-made :./classes entries
+			atlasDependecies = atlasDependecies.replaceAll("\\./classes", "")
+					.replaceAll("::", ":");
+
+			// Add the new libs to the existing list
+			libs = LangUtil.extendArray(libs, atlasDependecies.split(":"));
+		} catch (IOException e) {
+			throw new AtlasExportException(proeprtiesName + " not found!", e);
+		}
+
+		return libs;
+
+		// Alternative way via manifest
 		// String pathToManifest =
 		// AtlasViewerGUI.class.getPackage().toString().replace(".", "/") +
 		// "/META-INF/MANIFEST.MF";
@@ -1709,21 +1786,6 @@ public class JarExportUtil {
 		// e.printStackTrace();
 		// }
 		// return new String[] {};
-
-		Properties p = new Properties();
-		String proeprtiesName = "/atlasdependencies.properties";
-		try {
-			p.load(GpUtil.class.getResource(proeprtiesName).openStream());
-			String atlasDependecies = p.getProperty("classpath");
-
-			// remove maven made :.classes entries
-			atlasDependecies = atlasDependecies.replaceAll("\\./classes", "")
-					.replaceAll("::", ":");
-
-			return atlasDependecies.split(":");
-		} catch (IOException e) {
-			throw new AtlasExportException(proeprtiesName + " not found!", e);
-		}
 	}
 
 	/**
@@ -1737,7 +1799,8 @@ public class JarExportUtil {
 		mainAtts.put(Attributes.Name.MANIFEST_VERSION, "1.0");
 
 		if (withCP) {
-			String classpathString = "gpcore.jar ";
+			String classpathString = "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " " + GPCORE_JARNAME + " " + ASCORE_JARNAME
+					+ " " + ASSWINGGUI_JARNAME + " " + SCHMITZM_JARNAME + " ";
 
 			// ******************************************************************
 			// Adding the DatapoolEntries
@@ -1751,10 +1814,11 @@ public class JarExportUtil {
 			mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 		}
 
-		mainAtts.put(Attributes.Name.MAIN_CLASS, "skrueger.atlas.AtlasViewer");
-		mainAtts.put(Attributes.Name.SPECIFICATION_TITLE, "Atlas Viewer");
+		mainAtts.put(Attributes.Name.MAIN_CLASS, MAIN_CLASS);
+		mainAtts.put(Attributes.Name.SPECIFICATION_TITLE, "Atlas Viewer "
+				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 		mainAtts.put(Attributes.Name.SPECIFICATION_VENDOR,
-				"Stefan Alfons Krüger - www.wikisquare.de");
+				"Stefan Alfons Tzeggai - www.wikisquare.de");
 		mainAtts.put(Attributes.Name.IMPLEMENTATION_TITLE, ace.getTitle()
 				.toString());
 		mainAtts.put(new Name("SplashScreen-Image"),

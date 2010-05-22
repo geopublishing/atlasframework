@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Krüger (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Krüger (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
@@ -81,7 +81,7 @@ import skrueger.versionnumber.ReleaseUtil;
 /**
  * {@link AtlasViewerGUI} main class
  * 
- * @author Stefan Alfons Krüger
+ * @author Stefan Alfons Tzeggai
  */
 
 public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
@@ -568,6 +568,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * 
 	 */
 	public static void main(String[] args) {
+		
+		System.out.println("Classpath entries:");
+		String[] st = System.getProperty("java.class.path").split(":");
+		for (String t : st) {
+			System.out.println(t);
+		}
 
 		DpEntry.cleanupTemp();
 
