@@ -439,7 +439,10 @@ public class JarExportUtil {
 			try {
 				FileUtils.deleteDirectory(targetDirDISK);
 			} catch (IOException e) {
-				throw new AtlasExportException("The export "+targetDirDISK+" directory is write protected. Please choose another folder."); //i8n
+				throw new AtlasExportException(
+						"The export "
+								+ targetDirDISK
+								+ " directory is write protected. Please choose another folder."); // i8n
 			}
 			targetDirDISK.mkdirs();
 		}
@@ -450,7 +453,10 @@ public class JarExportUtil {
 			try {
 				FileUtils.deleteDirectory(targetDirJWS);
 			} catch (IOException e) {
-				throw new AtlasExportException("The export "+targetDirJWS+" directory is write protected. Please choose another folder."); //i8n
+				throw new AtlasExportException(
+						"The export "
+								+ targetDirJWS
+								+ " directory is write protected. Please choose another folder."); // i8n
 			}
 			targetDirJWS.mkdirs();
 		}
@@ -645,7 +651,8 @@ public class JarExportUtil {
 			try {
 				FileUtils.copyURLToFile(fromURL, destination);
 
-				if (toJws && libName.endsWith(".jar") && JNLPUtil.isJnlpServiceAvailable()) {
+				if (toJws && libName.endsWith(".jar")
+						&& JNLPUtil.isJnlpServiceAvailable()) {
 					// if they come from local, we might have to
 					// sign them.
 					jarSign(destination);
@@ -807,11 +814,17 @@ public class JarExportUtil {
 		if (url != null)
 			return url;
 
+		// Maybe the file is a .dll inside java.library.path variable
+		url = getNativeLibraryURL(libName);
+		if (url != null)
+			return url;
+		
 		// Fallback, last hope!
 		url = getJarUrlFromClasspath(libName);
 		if (url != null)
 			return url;
 
+		
 		// Fallback, last hope when in Eclipse!
 		url = getJarUrlFromMavenRepository(libName);
 		if (url != null)
@@ -1007,21 +1020,21 @@ public class JarExportUtil {
 		return fromURL;
 	}
 
-	// private URL getNativeLibraryURL(String nativeName) {
-	// // Clean any path or ./ stuff
-	// nativeName = new File(nativeName).getName();
-	//
-	// String[] st = System.getProperty("java.library.path").split(":");
-	// for (String t : st) {
-	// LOGGER.debug("looking in " + t + " for " + nativeName);
-	// File file = new File(t + "/" + nativeName);
-	// if (file.exists()) {
-	// return DataUtilities.fileToURL(file);
-	// }
-	// }
-	//
-	// return null;
-	// }
+	private URL getNativeLibraryURL(String nativeName) {
+		// Clean any path or ./ stuff
+		nativeName = new File(nativeName).getName();
+
+		String[] st = System.getProperty("java.library.path").split(":");
+		for (String t : st) {
+			LOGGER.debug("looking in " + t + " for " + nativeName);
+			File file = new File(t + "/" + nativeName);
+			if (file.exists()) {
+				return DataUtilities.fileToURL(file);
+			}
+		}
+
+		return null;
+	}
 
 	/**
 	 */
@@ -1059,12 +1072,12 @@ public class JarExportUtil {
 			// DataUtilities.urlToFile(jarUrlsFromClassPath.get(JarExportUtil.GPCORE_JARNAME));
 
 			File try1 = new File(curDir, jarName);
-			LOGGER.debug("try1 = " + try1);
+			// LOGGER.debug("try1 = " + try1);
 			if (try1.exists())
 				return DataUtilities.fileToURL(try1);
 
 			File try2 = new File(curDir, LIB_DIR + "/" + jarName);
-			LOGGER.debug("try2 = " + try2);
+			// LOGGER.debug("try2 = " + try2);
 			if (try2.exists())
 				return DataUtilities.fileToURL(try2);
 		}
@@ -1212,7 +1225,8 @@ public class JarExportUtil {
 		// Add a single index entry, that only contains its own contents
 		// addJarIndex(newJar);
 
-		jarSign(newJar);
+		if (toJws)
+			jarSign(newJar);
 
 		return newJar;
 	}
@@ -1857,8 +1871,10 @@ public class JarExportUtil {
 				throw new AtlasExportException(
 						"unable to add correct manifest to " + targetJar);
 
-			LOGGER.debug("Signing " + ARJAR_FILENAME + "...");
-			jarSign(targetJar);
+			if (toJws) {
+				LOGGER.debug("Signing " + ARJAR_FILENAME + "...");
+				jarSign(targetJar);
+			}
 
 			/**
 			 * The icon.gif is needed for DISK and JWS. (DISK will put it into
@@ -1905,13 +1921,15 @@ public class JarExportUtil {
 				copyJRE(targetDirDISK);
 			}
 
-			// All files "next to" atlas.gpa will be copied to the folders without
+			// All files "next to" atlas.gpa will be copied to the folders
+			// without
 			// putting them in a JAR. This can be usefull for example for PDF
 			// files that should be referencable from within the atlas, but also
 			// reside uncompressed on the CD root directory.
 			copyUncompressFiles();
-			
-			if (SystemUtils.IS_OS_LINUX) adjustRights();
+
+			if (SystemUtils.IS_OS_LINUX)
+				adjustRights();
 
 		} catch (final AtlasCancelException cancel) {
 			// // In that case we delete the target directory.
@@ -1933,39 +1951,43 @@ public class JarExportUtil {
 	}
 
 	private void adjustRights() {
-		
-		if (! SystemUtils.IS_OS_LINUX ) return;
+
+		if (!SystemUtils.IS_OS_LINUX)
+			return;
 
 		// In JWS set to execute, read and NOTwrite
-//		targetDirJWS.setWritable(false, false);
+		// targetDirJWS.setWritable(false, false);
 		targetDirJWS.setExecutable(true, false);
 		targetDirJWS.setReadable(true, false);
 
-		Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
+		Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
+				new String[] { "*" }, true);
 		while (iterateFiles.hasNext()) {
 			File next = iterateFiles.next();
-//			next.setWritable(false, false);
+			// next.setWritable(false, false);
 			next.setExecutable(true, false);
 			next.setReadable(true, false);
 		}
 
 		// In DISK set to read and NOTwrite
-		
-//		targetDirDISK.setWritable(false, false);
+
+		// targetDirDISK.setWritable(false, false);
 		targetDirDISK.setExecutable(true, false);
 		targetDirDISK.setReadable(true, false);
 
-		iterateFiles = FileUtils.iterateFiles(targetDirJWS, new String[] {"*"}, true);
+		iterateFiles = FileUtils.iterateFiles(targetDirJWS,
+				new String[] { "*" }, true);
 		while (iterateFiles.hasNext()) {
 			File next = iterateFiles.next();
-//			next.setWritable(false, false);
+			// next.setWritable(false, false);
 			next.setReadable(true, false);
 		}
 		new File(targetDirDISK, "start.sh").setExecutable(true, false);
 	}
 
 	/**
-	 * @return A list of JAR-names and native lib name (.so etc) that {@link AtlasViewerGUI} dependes on.
+	 * @return A list of JAR-names and native lib name (.so etc) that
+	 *         {@link AtlasViewerGUI} dependes on.
 	 */
 	private String[] getJarAndNativeLibNames() {
 
@@ -2218,7 +2240,7 @@ public class JarExportUtil {
 					targetDirDISK, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
-			
+
 			FileUtils.moveFileToDirectory(
 					new File(getTempDir(), "autorun.inf"), targetDirDISK, true);
 			// Icon.gif is used (and deleted afterwards) by JSmooth
