@@ -33,9 +33,11 @@
 			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}"/>
 		</replace>
 
+		<!-- THis is not working, as the asswinggui deploy process copied it's fieldes there before and may not delete them
 		<delete description="Delete directory before copying the new release">
 			<fileset dir="/var/www/www.geopublishing.org/htdocs/gp" />
 		</delete>
+		-->
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
 		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
