@@ -6,20 +6,15 @@
 <JVMSearchPath>jdkpath</JVMSearchPath>
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
+<arguments></arguments>
 <bundledJVMPath>jre</bundledJVMPath>
 <classPath>asswinggui-1.5-SNAPSHOT.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>AtlasStyler.exe</executableName>
-<initialMemoryHeap>115343360</initialMemoryHeap>
-<javaProperties>
-<name>file.encoding</name>
-<value>UTF-8</value>
-<name>java.library.path</name>
-<value>native</value>
-</javaProperties>
-<mainClassName>org.geopublishing.atlasStyler.swing.AtlasViewerGUI</mainClassName>
-<maximumMemoryHeap>241172480</maximumMemoryHeap>
+<initialMemoryHeap>52428800</initialMemoryHeap>
+<mainClassName>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClassName>
+<maximumMemoryHeap>281172480</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
 <skeletonName>Autodownload Wrapper</skeletonName>
@@ -41,10 +36,10 @@
 </skeletonProperties>
 <skeletonProperties>
 <key>JniSmooth</key>
-<value>0</value>
+<value>1</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>Debug</key>
-<value>0</value>
+<value>1</value>
 </skeletonProperties>
 </jsmoothproject>
