@@ -16,7 +16,7 @@
 	</parent>
 
 	<build>
-
+	
 		<plugins>
 
 			<plugin>
@@ -121,7 +121,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<jsmoothFile>src/assembly/atlasStyler.jsmooth</jsmoothFile>
+							<jsmoothFile>target/classes/atlasStyler.jsmooth</jsmoothFile>
 							<!--
 								<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
 							-->

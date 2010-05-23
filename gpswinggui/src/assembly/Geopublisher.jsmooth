@@ -7,7 +7,7 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>gpswinggui-1.5-</classPath>
+<classPath>${project.build.finalName}</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>Geopublisher.exe</executableName>
@@ -16,7 +16,7 @@
 <name>java.library.path</name>
 <value>native</value>
 </javaProperties>
-<mainClassName>skrueger.atlas.AtlasViewer</mainClassName>
+<mainClassName>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClassName>
 <maximumMemoryHeap>291172480</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>

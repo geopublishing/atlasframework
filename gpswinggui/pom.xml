@@ -157,7 +157,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<jsmoothFile>src/assembly/Geopublisher.jsmooth</jsmoothFile>
+							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile>
 							<!--
 								<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
 							-->

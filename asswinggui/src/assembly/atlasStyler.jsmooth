@@ -8,7 +8,7 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <arguments></arguments>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>asswinggui-1.5-SNAPSHOT.jar</classPath>
+<classPath>${project.build.finalName}</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>AtlasStyler.exe</executableName>
