@@ -95,6 +95,9 @@
 
 	<build>
 
+		<!-- Explicitly setting the final name! Do not remove -->
+		<finalName>${artifactId}-${version}</finalName>
+
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -113,8 +116,17 @@
 					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
 				</excludes>
 			</resource>
-		</resources>
-
+			
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/assembly</directory>
+				<includes>
+					<include>*.jsmooth</include>
+				</includes>
+			</resource>
+			
+		</resources>	
+			
 		<testResources>
 			<testResource>
 				<!--				<filtering>true</filtering>-->
@@ -241,7 +253,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-epsg-hsql</artifactId>
@@ -282,14 +294,14 @@
 		<snapshotRepository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-snapshots</name>
-			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local
-			</url>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-snapshots-local</url>
+			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 		<repository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-releases</name>
-			<url>http://www.wikisquare.de:8080/artifactory/libs-releases-local
-			</url>
+			<url>http://www.wikisquare.de:8080/artifactory/libs-releases-local</url>
+			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
 
