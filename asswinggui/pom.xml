@@ -99,6 +99,7 @@
 										<ant target="publishSnapshot" inheritRefs="true">
 											<property name="ant.buildNumber" value="${buildNumber}" />
 											<property name="ant.project.version" value="${project.version}" />
+											<property name="ant.buildTime" value="${maven.build.timestamp}" />
 										</ant>
 									</tasks>
 								</configuration>
