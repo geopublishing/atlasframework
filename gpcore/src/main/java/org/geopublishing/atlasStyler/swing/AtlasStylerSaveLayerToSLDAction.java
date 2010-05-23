@@ -60,9 +60,9 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 			AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
 					"StyledLayerSLDNotWritable.Msg", styledShp.getSldFile().getAbsolutePath()));
 
-			File startWithDir = new File(System.getProperty("user.home"),
+			File startWithFile = new File(System.getProperty("user.home"),
 					styledShp.getSldFile().getName());
-			JFileChooser dc = new JFileChooser(startWithDir);
+			JFileChooser dc = new JFileChooser(startWithFile);
 			dc.addChoosableFileFilter(new FileNameExtensionFilter("SLD",
 					new String[] { "sld", "xml" }));
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -70,7 +70,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 			dc.setDialogTitle(AtlasStyler
 					.R("StyledLayerSLDNotWritable.ChooseNewDialog.Title"));
 			
-			dc.setSelectedFile(startWithDir);
+			dc.setSelectedFile(startWithFile);
 
 			if ((dc.showSaveDialog(owner) != JFileChooser.APPROVE_OPTION)
 					|| (dc.getSelectedFile() == null))

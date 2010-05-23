@@ -373,12 +373,19 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			public void actionPerformed(ActionEvent e) {
 
-				String host = "localhost";
-				String port = "5432";
-				String database = "keck";
-				String username = "postgres";
-				String password = "secretIRI69.";
-				String layer = "bundeslaender_2008";
+				SelectPostgisLayerJDialog pgD = new SelectPostgisLayerJDialog(
+						AtlasStylerGUI.this);
+				pgD.setVisible(true);
+
+				if (pgD.isCancelled())
+					return;
+
+				String host = pgD.getHost();
+				String port = pgD.getPort();
+				String database = pgD.getDb();
+				String username = pgD.getUsername();
+				String password = pgD.getPassword();
+				String layer = pgD.getLayer();
 
 				DataStore ds = createDatastore(host, port, database, username,
 						password);
@@ -396,13 +403,17 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							+ "."
 							+ layer
 							+ ".sld"));
-					
-					LOGGER.info("Pg layer has CRS = "+
-							styledFS.getCrs());
 
+					LOGGER.info("Pg layer has CRS = " + styledFS.getCrs());
+					
+					File sldFile = new File(System.getProperty("user.home"),
+							styledFS.getSldFile().getName());
+					styledFS.setSldFile(sldFile);
+					
+					styledFS.loadStyle();
+					
 					addLayer(styledFS);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+				} catch (Exception e1) {
 					ExceptionMonitor.show(AtlasStylerGUI.this, e1);
 				}
 			}
@@ -732,7 +743,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
 				AVSwingUtil
 						.showMessageDialog(this,
-								"Hey you #&%\"§* windows noob. Change the file ending to .sld and try again!");
+								"Hey you #&%\"§* windows noob! Change the file ending to .sld and try again!"); //i8n
 				return;
 			}
 
@@ -748,6 +759,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		}
 	}
 
+	/**
+	 * Adds a layer to the map context to style it.
+	 */
 	public void addLayer(StyledFS styledFS) {
 
 		if (styledFS.getStyle() == null) {
@@ -768,6 +782,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		return getStylerMapView().getMapManager();
 	}
 
+	/**
+	 * AtlasStylerGUI main method.
+	 * 
+	 * @param args 
+	 */
 	public static void main(final String[] args) throws IOException {
 
 		try {
@@ -794,7 +813,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							param = param.substring(1, param.length() - 1);
 						}
 
-						System.out.println("Opening as File " + param);
+						LOGGER.info("Opening command line argument " + param
+								+ " as file.");
 						asg.addShapeLayer(new File(param));
 					}
 

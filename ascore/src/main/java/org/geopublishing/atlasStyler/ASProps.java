@@ -86,7 +86,18 @@ public abstract class ASProps {
 		 * java2d AntiAliasing, Quality and TextAntiALiasing Hints turned on or
 		 * off*
 		 */
-		antialiasingMaps, automaticPreview, language
+		antialiasingMaps, automaticPreview, language,
+		/** Last postgis hostname used **/
+		lastPgPort,
+		/** Last postgis hostname used **/
+		lastPgHost,
+		/** Last postgis database used **/
+		lastPgDatabase,
+		/** Last postgis table used **/
+		lastPgTable,
+		/** Last postgis username used **/
+		lastPgUsername
+		
 	}
 
 	@Override
