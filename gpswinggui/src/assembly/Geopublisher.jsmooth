@@ -7,10 +7,11 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
+<classPath>${project.build.finalName}</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>Geopublisher.exe</executableName>
-<initialMemoryHeap>185343360</initialMemoryHeap>
+<initialMemoryHeap>105343360</initialMemoryHeap>
 <javaProperties>
 <name>file.encoding</name>
 <value>UTF-8</value>

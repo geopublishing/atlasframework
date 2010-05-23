@@ -8,7 +8,6 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
 <classPath>atlas_resources.jar</classPath>
-<classPath>gpcore-1.5-SNAPSHOT.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>atlas.exe</executableName>
