@@ -13,8 +13,6 @@
 <executableName>Geopublisher.exe</executableName>
 <initialMemoryHeap>105343360</initialMemoryHeap>
 <javaProperties>
-<name>file.encoding</name>
-<value>UTF-8</value>
 <name>java.library.path</name>
 <value>native</value>
 </javaProperties>

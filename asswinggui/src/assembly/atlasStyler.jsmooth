@@ -7,7 +7,7 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>${project.build.finalName}</classPath>
+<classPath>asswinggui-1.5-SNAPSHOT.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>AtlasStyler.exe</executableName>
@@ -18,7 +18,7 @@
 <name>java.library.path</name>
 <value>native</value>
 </javaProperties>
-<mainClassName>skrueger.atlas.AtlasViewer</mainClassName>
+<mainClassName>org.geopublishing.atlasStyler.swing.AtlasViewerGUI</mainClassName>
 <maximumMemoryHeap>241172480</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
