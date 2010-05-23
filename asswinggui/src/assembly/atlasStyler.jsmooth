@@ -8,7 +8,7 @@
 <JVMSearchPath>jview</JVMSearchPath>
 <arguments></arguments>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>${project.build.finalName}</classPath>
+<classPath>${project.build.finalName}.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>AtlasStyler.exe</executableName>
