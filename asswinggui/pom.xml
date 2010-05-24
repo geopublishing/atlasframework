@@ -15,9 +15,29 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<properties>
+		<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+	</properties>
+	
 	<build>
 	
 		<plugins>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>${mainClass}</mainClass>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -26,7 +46,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							<mainClass>${mainClass}</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -67,7 +87,7 @@
 							<jnlp>
 								<inputTemplate>as_template.jnlp</inputTemplate>
 								<outputFile>as.jnlp</outputFile>
-								<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+								<mainClass>${mainClass}</mainClass>
 							</jnlp>
 
 							<sign>
@@ -172,14 +192,6 @@
 			<groupId>org.swinglabs</groupId>
 			<artifactId>swingx</artifactId>
 			<version>[1.6,1.7)</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.geotools.jdbc</groupId>
-			<artifactId>gt-jdbc-postgis</artifactId>
-			<version>${geotools.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
