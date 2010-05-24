@@ -7,7 +7,7 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>atlas_resources.jar</classPath>
+<classPath>atlasdata/atlas_resources.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>atlas.exe</executableName>
@@ -17,9 +17,9 @@
 <name>file.encoding</name>
 <value>UTF-8</value>
 <name>java.library.path</name>
-<value>natives</value>
+<value>atlasdata</value>
 </javaProperties>
-<mainClassName>skrueger.atlas.AtlasViewer</mainClassName>
+<mainClassName>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClassName>
 <maximumMemoryHeap>241172480</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
@@ -30,7 +30,7 @@
 </skeletonProperties>
 <skeletonProperties>
 <key>DownloadURL</key>
-<value>http://java.sun.com/update/1.6.0/jinstall-6-windows-i586.cab</value>
+<value>http://java.sun.com/update/1.6.0/jinstall-6-fcs-windows-i586.cab</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>SingleProcess</key>
@@ -42,10 +42,10 @@
 </skeletonProperties>
 <skeletonProperties>
 <key>JniSmooth</key>
-<value>0</value>
+<value>1</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>Debug</key>
-<value>0</value>
+<value>1</value>
 </skeletonProperties>
 </jsmoothproject>

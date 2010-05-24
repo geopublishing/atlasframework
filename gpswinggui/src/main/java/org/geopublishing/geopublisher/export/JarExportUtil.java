@@ -93,33 +93,43 @@ import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
 
 /**
- * This class exports an {@link AtlasConfigEditable} to a folder. This folder
- * can be burned to CDROM and will autostart the Atlas under windows. <br>
- * The export directory also contains a <code>start.bat</code> and a
- * <code>start.sh</code> to launch the atlas if autostart is disabled.<br>
- * The folder may also be served by a webserver. Linking to the
- * <code>.jnlp</code> file will start the atlas using JavaWebStart
+ * This class exports an {@link AtlasConfigEditable} into a DISK and/or JWS
+ * folder. The DISK folder can be burned to CDROM and will autostart the Atlas
+ * under windows. <br>
+ * The exported DISK directory also contains a <code>start.bat</code> and a
+ * <code>atlas.exe</code> to launch the atlas if autostart is disabled.<br>
+ * The JWS folder may be served by any www. Linking to the <code>.jnlp</code>
+ * file will start the atlas using JavaWebStart
  */
 public class JarExportUtil {
 
+	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
 	public static final String JSMOOTH_PROJEKT_RESOURCE = "/export/jsmooth/atlas.jsmooth";
+	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
 	public static final String JSMOOTH_SKEL_AD_RESOURCE1 = "/export/jsmooth/autodownload-wrapper/autodownload.exe";
+	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
 	public static final String JSMOOTH_SKEL_AD_RESOURCE2 = "/export/jsmooth/autodownload-wrapper/autodownload.skel";
+	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
 	public static final String JSMOOTH_SKEL_AD_RESOURCE3 = "/export/jsmooth/autodownload-wrapper/customdownload.skel";
 
 	/**
 	 * This boolean tells us, whether we download the JARs from the webserver
-	 * (GP started via JWS) or if we are copying them from a local directory
-	 * (Started from ZIP).
+	 * (GP started via JWS) or if we are copying them from any local directory
+	 * (Started from ZIP or using the JWS cache).
 	 */
 	boolean libsFromLocal = true;
 
 	/**
-	 * Resource name of the splashscreen image that will be used for
-	 * JavaWebStart and start.bat IF if user defined one can't be found.
+	 * Resource location of the splashscreen image that will be used for
+	 * JavaWebStart and <code>start.bat</code>, <code>atlas.exe</code> if the
+	 * didn't define one or the user-defined one can't be found.
 	 */
 	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
 
+	/**
+	 * Resource location of the <code>license.html</code> with the license of
+	 * AtlasViewer.</code>
+	 */
 	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
 
 	/**
@@ -160,13 +170,26 @@ public class JarExportUtil {
 	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	private static final String LIB_DIR = ".";
-	// private static final String NATIVES_DIR = ".";
+
+	/**
+	 * When exporting in DISK mode, the while application is put into a
+	 * DISK_SUB_DIR and only austart.inf, start.sh and atlas.exe reside in the
+	 * main directory.<br/>
+	 * Attention: This folder-name is also hard-coded into
+	 * <code>atlas.jsmooth</code>!
+	 **/
+	public static final String DISK_SUB_DIR = "atlasdata/";
 
 	private static final String version = ReleaseUtil
 			.getVersionMaj(AVUtil.class)
 			+ "." + ReleaseUtil.getVersionMin(AVUtil.class);
 
-	private static final String snapshot = "-SNAPSHOT";
+	/**
+	 * Are we exporting froma SNAPSHOT relases, then the exported atlas need
+	 * -SNAPSHOT jars also
+	 **/
+	private static final String snapshot = ReleaseUtil.getVersionInfo(
+			GpUtil.class).contains("SNAPSHOT") ? "-SNAPSHOT" : "";
 
 	private static final String postfixJar = ".jar";
 
@@ -243,22 +266,25 @@ public class JarExportUtil {
 					+ GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14+")
 					+ " or higher is required! \n");
 			fileWriter
-					.write("# This will start the Atlas with a maximum of "
+					.write("# This will start the atlas with a maximum of "
 							+ xmx
-							+ "Mb of memory. Increase this number if have more memory to spend.\n");
+							+ "Mb of memory. Increase this number if have lots of memory.\n");
 			fileWriter.write("java -Xmx" + xmx
-					+ "m -Dfile.encoding=UTF-8 -Djava.library.path=" + LIB_DIR
-					+ " -jar " + targetJar.getName() + "\n");
+					+ "m -Dfile.encoding=UTF-8 -Djava.library.path="
+					+ DISK_SUB_DIR  + LIB_DIR + " -jar " + DISK_SUB_DIR
+					+ "/" + targetJar.getName() + "\n");
 			fileWriter.close();
 
+			// //
 			// ******************************************************************
-			// start.bat for Windows
+			// // start.bat for Windows
+			// //
 			// ******************************************************************
-			fileWriter = new FileWriter(new File(targetJar.getParentFile(),
-					"start.bat"));
-			fileWriter.write("@echo off\r\n");
-			fileWriter.write("atlas.exe\r\n");
-			fileWriter.close();
+			// fileWriter = new FileWriter(new File(targetJar.getParentFile(),
+			// "start.bat"));
+			// fileWriter.write("@echo off\r\n");
+			// fileWriter.write("atlas.exe\r\n");
+			// fileWriter.close();
 
 			/******************************************************************
 			 * // autorun.inf for windows [autorun] OPEN=SETUP.EXE /AUTORUN
@@ -818,13 +844,12 @@ public class JarExportUtil {
 		url = getNativeLibraryURL(libName);
 		if (url != null)
 			return url;
-		
+
 		// Fallback, last hope!
 		url = getJarUrlFromClasspath(libName);
 		if (url != null)
 			return url;
 
-		
 		// Fallback, last hope when in Eclipse!
 		url = getJarUrlFromMavenRepository(libName);
 		if (url != null)
@@ -1232,13 +1257,14 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * Creates an <code>atlasViewer.jnlp</code> file in the same folder, as the
-	 * targetJar.
+	 * Creates an <code>{@link #JNLP_FILENAME}</code> file in the same folder,
+	 * as the targetJar.
 	 * 
 	 * @param owner
 	 *            GUI Owner
 	 * 
 	 * @param targetJar
+	 *            Location of the {@link #ARJAR_FILENAME}
 	 * @param Codebase
 	 *            where the JWS will be running
 	 * 
@@ -2234,10 +2260,10 @@ public class JarExportUtil {
 		if (toDisk) {
 
 			/**
-			 * Exclusively for DISK
+			 * Exclusively for DISK to real main folder 
 			 */
-			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.bat"),
-					targetDirDISK, true);
+//			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.bat"),
+//					targetDirDISK, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
 
@@ -2275,16 +2301,20 @@ public class JarExportUtil {
 				new String[] { "jar", "jar.pack.gz", "so", "dll" }, true);
 		for (final File jar : jars) {
 
+			/** When a JAR comes from .../diffDir/a.jar, we have to copy it to folder "diffDir" **/
 			final String diffDir = jar.getAbsolutePath().substring(
 					getTempDir().getAbsolutePath().length() + 1);
 
 			/**
-			 * Copy files to DISK
+			 * Copy files to DISK/#DISK_SUB_DIR
 			 */
 			if (toDisk && !jar.getName().endsWith("pack.gz")) {
-				final File targetSubDirDISK = new File(targetDirDISK, diffDir)
+				
+				final File targetSubDirDISK = new File(targetDirDISK, DISK_SUB_DIR+diffDir)
 						.getParentFile();
+				
 				targetSubDirDISK.mkdirs();
+				
 				FileUtils.copyFileToDirectory(jar, targetSubDirDISK);
 			}
 

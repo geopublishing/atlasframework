@@ -13,6 +13,10 @@
 <embeddedJar>false</embeddedJar>
 <executableName>AtlasStyler.exe</executableName>
 <initialMemoryHeap>52428800</initialMemoryHeap>
+<javaProperties>
+<name>java.library.path</name>
+<value>.</value>
+</javaProperties>
 <mainClassName>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClassName>
 <maximumMemoryHeap>281172480</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
@@ -24,7 +28,7 @@
 </skeletonProperties>
 <skeletonProperties>
 <key>DownloadURL</key>
-<value>http://java.sun.com/update/1.6.0/jinstall-6-windows-i586.cab</value>
+<value>http://java.sun.com/update/1.6.0/jinstall-6-fcs-windows-i586.cab</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>SingleProcess</key>

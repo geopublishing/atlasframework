@@ -14,7 +14,7 @@
 <initialMemoryHeap>105343360</initialMemoryHeap>
 <javaProperties>
 <name>java.library.path</name>
-<value>native</value>
+<value>.</value>
 </javaProperties>
 <mainClassName>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClassName>
 <maximumMemoryHeap>291172480</maximumMemoryHeap>
@@ -27,7 +27,7 @@
 </skeletonProperties>
 <skeletonProperties>
 <key>DownloadURL</key>
-<value>http://java.sun.com/update/1.6.0/jinstall-6-windows-i586.cab</value>
+<value>http://java.sun.com/update/1.6.0/jinstall-6-fcs-windows-i586.cab</value>
 </skeletonProperties>
 <skeletonProperties>
 <key>SingleProcess</key>

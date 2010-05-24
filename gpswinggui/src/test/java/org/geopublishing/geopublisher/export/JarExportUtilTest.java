@@ -183,7 +183,7 @@ public class JarExportUtilTest {
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.JNLP_FILENAME).exists());
 
-		File fileArDiskJar = new File(atlasExportTesttDir, "DISK/"
+		File fileArDiskJar = new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
 				+ JarExportUtil.ARJAR_FILENAME);
 		assertTrue(fileArDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
@@ -193,18 +193,19 @@ public class JarExportUtilTest {
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ARJAR_FILENAME).exists());
 
-		File fileGpCoreDiskJar = new File(atlasExportTesttDir, "DISK/"
+		File fileGpCoreDiskJar = new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
 				+ JarExportUtil.GPCORE_JARNAME);
 		assertTrue(fileGpCoreDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.GPCORE_JARNAME).exists());
 
-		assertTrue(new File(atlasExportTesttDir, "DISK/"
+		assertTrue(new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
 				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
+		
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
 
-		assertTrue(new File(atlasExportTesttDir, "DISK/"
+		assertTrue(new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
 				+ JarExportUtil.SCHMITZM_JARNAME).exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.SCHMITZM_JARNAME).exists());
@@ -222,7 +223,7 @@ public class JarExportUtilTest {
 					.getErrorStream()));
 			String line;
 			while ((line = input.readLine()) != null) {
-				System.out.println(line);
+				System.err.println(line);
 			}
 			input.close();
 
