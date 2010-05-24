@@ -170,6 +170,11 @@ public class JarExportUtilTest {
 				new File(atlasExportTesttDir, "DISK").list()).contains(
 				"autorun.inf"));
 
+		assertTrue("Datei start.sh exists in DISK exists ", new File(
+				atlasExportTesttDir, "DISK/start.sh").exists());
+		assertTrue("Datei start.sh exists in DISK is executable", new File(
+				atlasExportTesttDir, "DISK/start.sh").canExecute());
+
 		assertTrue("Datei autorun.inf exists in DISK folder", Arrays.asList(
 				new File(atlasExportTesttDir, "DISK").list()).contains(
 				"atlas.exe"));
@@ -178,13 +183,11 @@ public class JarExportUtilTest {
 				.asList(new File(atlasExportTesttDir, "JWS").list()).contains(
 						"autorun.inf"));
 
-		// TODO test executability
-
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.JNLP_FILENAME).exists());
 
-		File fileArDiskJar = new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
-				+ JarExportUtil.ARJAR_FILENAME);
+		File fileArDiskJar = new File(atlasExportTesttDir, "DISK/"
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ARJAR_FILENAME);
 		assertTrue(fileArDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ARJAR_FILENAME).exists());
@@ -193,20 +196,22 @@ public class JarExportUtilTest {
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ARJAR_FILENAME).exists());
 
-		File fileGpCoreDiskJar = new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
-				+ JarExportUtil.GPCORE_JARNAME);
+		File fileGpCoreDiskJar = new File(atlasExportTesttDir, "DISK/"
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.GPCORE_JARNAME);
 		assertTrue(fileGpCoreDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.GPCORE_JARNAME).exists());
 
-		assertTrue(new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
-				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
-		
+		assertTrue(new File(atlasExportTesttDir, "DISK/"
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
+				.exists());
+
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
 
-		assertTrue(new File(atlasExportTesttDir, "DISK/"+JarExportUtil.DISK_SUB_DIR
-				+ JarExportUtil.SCHMITZM_JARNAME).exists());
+		assertTrue(new File(atlasExportTesttDir, "DISK/"
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME)
+				.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.SCHMITZM_JARNAME).exists());
 
@@ -234,8 +239,7 @@ public class JarExportUtilTest {
 
 	@Test
 	public void testJarExecutables() throws IOException {
-		new JarExportUtil(atlasConfig,
-				atlasExportTesttDir, true, true, false);
+		new JarExportUtil(atlasConfig, atlasExportTesttDir, true, true, false);
 	}
 
 	@Test
