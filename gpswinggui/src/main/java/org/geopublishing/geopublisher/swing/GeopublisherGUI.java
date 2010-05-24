@@ -102,6 +102,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 * 
 		 * 
 		 * 
+		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
 		importWizard
@@ -792,12 +793,14 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				return;
 		}
 
-		if (atlasDir.list().length > 0)
+		// Delete the folder and recreate it.
+		if (atlasDir.list().length > 0){
 			try {
 				FileUtils.deleteDirectory(atlasDir);
 				atlasDir.mkdirs();
 			} catch (final IOException e) {
 			}
+		}
 
 		ace = new AtlasConfigEditable(atlasDir);
 		// ace.setAtlasDir(atlasDir);
@@ -812,7 +815,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				ace.setLanguages(activeLang, "de");
 			}
 		}
-
 		/**
 		 * Ask the use to enter the languages supported by the atlas. Uses the
 		 * Locale language + English as defaults.
