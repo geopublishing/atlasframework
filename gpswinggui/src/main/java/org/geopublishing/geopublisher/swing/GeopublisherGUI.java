@@ -101,6 +101,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
 		 * 
 		 * 
+		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
 		importWizard
@@ -109,11 +110,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/** A singleton pattern for the {@link GeopublisherGUI} instance **/
 	private static GeopublisherGUI instance = null;
 
-	private static final Logger LOGGER = Logger.getLogger(GeopublisherGUI.class);
+	private static final Logger LOGGER = Logger
+			.getLogger(GeopublisherGUI.class);
 
 	static {
-		System.out
-				.println("Adding new ClassResourceLoader( "+AtlasViewerGUI.class.getSimpleName()+" ) to WebResourceManager");
+		System.out.println("Adding new ClassResourceLoader( "
+				+ AtlasViewerGUI.class.getSimpleName()
+				+ " ) to WebResourceManager");
 		WebResourceManager
 				.addResourceLoader(new rachel.http.loader.WebClassResourceLoader(
 						AtlasViewerGUI.class));
@@ -167,7 +170,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * Start routine for the {@link GeopublisherGUI}
 	 */
 	public static void main(final String[] args) {
-		
+
 		// try {
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// } catch (ClassNotFoundException e) {
@@ -179,7 +182,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// } catch (UnsupportedLookAndFeelException e) {
 		// e.printStackTrace();
 		// }
-		
+
 		String[] st = System.getProperty("java.class.path").split(":");
 		LOGGER.debug("Classpath:");
 		System.out.println("Classpth:");
@@ -219,14 +222,16 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 *            command line arguments
 	 * **/
 	public GeopublisherGUI(final List<String> args) {
-		LOGGER.info("Starting "+GeopublisherGUI.class.getSimpleName()+"... " + ReleaseUtil.getVersionInfo(AVUtil.class));
+		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
+				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		// Setting up the logger from a XML configuration file
-		DOMConfigurator.configure(GeopublisherGUI.class.getResource("/gp_log4j.xml"));
+		DOMConfigurator.configure(GeopublisherGUI.class
+				.getResource("/gp_log4j.xml"));
 
 		/** Output information about the GPL license **/
 		ReleaseUtil.logGPLCopyright(LOGGER);
-		
+
 		System.setProperty("file.encoding", "UTF-8");
 
 		evaluateArgs(args);
@@ -243,7 +248,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		Thread
 				.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-					public void uncaughtException(final Thread t, final Throwable e) {
+					public void uncaughtException(final Thread t,
+							final Throwable e) {
 
 						LOGGER
 								.error(
@@ -301,9 +307,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			editAtlasDialog.setVisible(true);
 			if (!editAtlasDialog.isCancelled()) {
 				getJFrame().setTitle(
-						R("ApplicationMainWindowTitle_with_open_atlas", ReleaseUtil
-								.getVersionInfo(AVUtil.class), ace.getTitle()
-								.toString()));
+						R("ApplicationMainWindowTitle_with_open_atlas",
+								ReleaseUtil.getVersionInfo(AVUtil.class), ace
+										.getTitle().toString()));
 			}
 
 		}
@@ -318,8 +324,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		else if (cmd.startsWith(ActionCmds.changeLnF.toString())) {
-			final String lnfClassname = cmd.substring(ActionCmds.changeLnF.toString()
-					.length());
+			final String lnfClassname = cmd.substring(ActionCmds.changeLnF
+					.toString().length());
 			try {
 				UIManager.setLookAndFeel(lnfClassname);
 				SwingUtilities.updateComponentTreeUI(getJFrame());
@@ -332,8 +338,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			}
 		} else if (cmd.equals(ActionCmds.editAboutInfo.toString())) {
 
-			final List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
-					.size());
+			final List<String> tabTitles = new ArrayList<String>(ace
+					.getLanguages().size());
 
 			for (int i = 0; i < ace.getLanguages().size(); i++) {
 				final String titleTranslated = ace.getTitle().get(
@@ -350,14 +356,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			}
 
 			SimplyHTMLUtil.openHTMLEditors(getJFrame(), ace, ace
-					.getAboutHtMLFiles(getJFrame()), tabTitles,
-					GpUtil
-							.R("EditAboutWindow.EditorTitle"));
+					.getAboutHtMLFiles(getJFrame()), tabTitles, GpUtil
+					.R("EditAboutWindow.EditorTitle"));
 
 		} else if (cmd.equals(ActionCmds.editPopupInfo.toString())) {
 
-			final List<String> tabTitles = new ArrayList<String>(ace.getLanguages()
-					.size());
+			final List<String> tabTitles = new ArrayList<String>(ace
+					.getLanguages().size());
 
 			for (int i = 0; i < ace.getLanguages().size(); i++) {
 				final String titleTranslated = ace.getTitle().get(
@@ -374,13 +379,16 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			}
 
 			SimplyHTMLUtil.openHTMLEditors(getJFrame(), ace, ace
-					.getPopupHtMLFiles(getJFrame()), tabTitles,
-					GpUtil
-							.R("EditPopupWindow.EditorTitle"));
+					.getPopupHtMLFiles(getJFrame()), tabTitles, GpUtil
+					.R("EditPopupWindow.EditorTitle"));
 
 			// The next time the atlas is viewed, the popup has to reappear!
-			ace.getProperties().set(getJFrame(),
-					org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup, "true");
+			ace
+					.getProperties()
+					.set(
+							getJFrame(),
+							org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup,
+							"true");
 		}
 
 		else if (cmd.equals(ActionCmds.exportAtlasTranslations.toString())) {
@@ -392,7 +400,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					"translations.html");
 			final JFileChooser dc = new JFileChooser(startWithDir);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
-			dc.setDialogTitle(GeopublisherGUI.R("PrintTranslations.SaveHTMLDialog.Title"));
+			dc.setDialogTitle(GeopublisherGUI
+					.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(startWithDir);
 
 			if ((dc.showSaveDialog(getJFrame()) != JFileChooser.APPROVE_OPTION)
@@ -432,7 +441,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				 */
 				AVSwingUtil.lauchHTMLviewer(getJFrame(), exportFile.toURI());
 
-				JOptionPane.showMessageDialog(getJFrame(), R("PrintTranslations.OKWillOpenMsg"));
+				JOptionPane.showMessageDialog(getJFrame(),
+						R("PrintTranslations.OKWillOpenMsg"));
 			} catch (final Exception eee) {
 				ExceptionDialog.show(getJFrame(), eee);
 			}
@@ -446,48 +456,38 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			final StringBuffer msg = new StringBuffer();
 			msg.append("<html>");
-			msg.append("<h2>"
-					+ GpUtil
-							.R("PersonalizeImagesExplanationText")
+			msg.append("<h2>" + GpUtil.R("PersonalizeImagesExplanationText")
 					+ "</h2>");
 			msg.append("<ul>");
 
 			// Where to find the autorun.inf icon image
-			msg
-					.append("<li>"
-							+ GpUtil
-									.R("PersonalizeImagesExplanationText_AutorunIcon")
-							+ "<br><i>");
+			msg.append("<li>"
+					+ GpUtil.R("PersonalizeImagesExplanationText_AutorunIcon")
+					+ "<br><i>");
 			// msg.append(new File(ace.getAtlasDir(),
 			// AtlasConfig.AUTORUNICON_RESOURCE_NAME).toString()
 			// + "</i>");
 
 			// Where to find the JWS icon image
-			msg
-					.append("<li>"
-							+ GpUtil
-									.R("PersonalizeImagesExplanationText_JWSIcon")
-							+ "<br><i>");
+			msg.append("<li>"
+					+ GpUtil.R("PersonalizeImagesExplanationText_JWSIcon")
+					+ "<br><i>");
 			msg.append(new File(ace.getAtlasDir(),
 					AtlasConfig.JWSICON_RESOURCE_NAME).toString()
 					+ "</i>");
 
 			// Where to find the splashscreen image
-			msg
-					.append("<li>"
-							+ GpUtil
-									.R("PersonalizeImagesExplanationText_Splashscreen")
-							+ "<br><i>");
+			msg.append("<li>"
+					+ GpUtil.R("PersonalizeImagesExplanationText_Splashscreen")
+					+ "<br><i>");
 			msg.append(new File(ace.getAtlasDir(),
 					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME).toString()
 					+ "</i>");
 
 			// Where to find the flying logo image
-			msg
-					.append("<li>"
-							+ GpUtil
-									.R("PersonalizeImagesExplanationText_FlyingLogo")
-							+ "<br><i>");
+			msg.append("<li>"
+					+ GpUtil.R("PersonalizeImagesExplanationText_FlyingLogo")
+					+ "<br><i>");
 			msg.append(new File(ace.getAtlasDir(),
 					AtlasConfig.MAPICON_RESOURCE_NAME).toString()
 					+ "</i>");
@@ -502,9 +502,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final Box previewLabel = Box.createVerticalBox();
 
 			final ClassLoader cl = GeopublisherGUI.class.getClassLoader();
-			final URL urlJWSIconFallback = cl.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
+			final URL urlJWSIconFallback = cl
+					.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 
-			final URL urlJWSIcon = cl.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
+			final URL urlJWSIcon = cl
+					.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
 
 			final JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
 					new ImageIcon(AVUtil.exists(urlJWSIcon) ? urlJWSIcon
@@ -520,14 +522,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
 			// URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-			final URL urlSplashscreenFallback = cl.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			final URL urlSplashscreen = cl.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
+			final URL urlSplashscreenFallback = cl
+					.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
+			final URL urlSplashscreen = cl
+					.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
-			final JLabel previewSplashscreen = new JLabel("JWS: splashscreen.png",
-					new ImageIcon(
-							AVUtil.exists(urlSplashscreen) ? urlSplashscreen
-									: urlSplashscreenFallback),
-					SwingConstants.CENTER);
+			final JLabel previewSplashscreen = new JLabel(
+					"JWS: splashscreen.png", new ImageIcon(AVUtil
+							.exists(urlSplashscreen) ? urlSplashscreen
+							: urlSplashscreenFallback), SwingConstants.CENTER);
 			previewSplashscreen.setBorder(BorderFactory
 					.createTitledBorder("Java Web Start splashscreen"));
 			previewLabel.add(previewSplashscreen);
@@ -538,18 +541,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			/**
 			 * A Button to open the ad-foder
 			 */
-			buttonsPanel
-					.add(new JButton(
-							new AbstractAction(
-									GpUtil
-											.R("PersonalizeImages_OpenADFolderButton_label")) {
+			buttonsPanel.add(new JButton(new AbstractAction(GpUtil
+					.R("PersonalizeImages_OpenADFolderButton_label")) {
 
-								@Override
-								public void actionPerformed(final ActionEvent e) {
-									AVUtil.openOSFolder(ace.getAd());
-								}
+				@Override
+				public void actionPerformed(final ActionEvent e) {
+					AVUtil.openOSFolder(ace.getAd());
+				}
 
-							}));
+			}));
 
 			/**
 			 * A Button to close the window
@@ -620,8 +620,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (!AVSwingUtil.askYesNo(getJFrame(), GeopublisherGUI
 					.R("PreviewAtlas.AskToSave")))
 				return;
-			
-			if (! GpSwingUtil.save(ace, getJFrame(), false))
+
+			if (!GpSwingUtil.save(ace, getJFrame(), false))
 				return;
 
 			// If no valid StartMap has been selected, we don't allow to open
@@ -681,11 +681,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		AVUtil.checkThatWeAreOnEDT();
 
-		final int res = JOptionPane.showConfirmDialog(getJFrame(),
-				GpUtil
-						.R("CloseAtlasDialog.SaveAtlas.msg"),
-				GpUtil
-						.R("CloseAtlasDialog.SaveAtlas.title"),
+		final int res = JOptionPane.showConfirmDialog(getJFrame(), GpUtil
+				.R("CloseAtlasDialog.SaveAtlas.msg"), GpUtil
+				.R("CloseAtlasDialog.SaveAtlas.title"),
 				JOptionPane.YES_NO_CANCEL_OPTION);
 
 		if (res == JOptionPane.YES_OPTION) {
@@ -702,7 +700,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			// null to we get no confirmation
 			// if saving failed do not exit
-			if (! GpSwingUtil.save(ace, getJFrame(), false))
+			if (!GpSwingUtil.save(ace, getJFrame(), false))
 				return false;
 		} else if (res == JOptionPane.NO_OPTION) {
 			/**
@@ -794,13 +792,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				return;
 		}
 
-		try {
-			FileUtils.deleteDirectory(atlasDir);
-		} catch (final IOException e) {
-		}
+		if (atlasDir.list().length > 0)
+			try {
+				FileUtils.deleteDirectory(atlasDir);
+				atlasDir.mkdirs();
+			} catch (final IOException e) {
+			}
 
 		ace = new AtlasConfigEditable(atlasDir);
-//		ace.setAtlasDir(atlasDir);
+		// ace.setAtlasDir(atlasDir);
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder, atlasDir
 				.getAbsolutePath());
 
@@ -1042,9 +1042,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder, atlasDir
 				.getAbsolutePath());
 
-		final AtlasStatusDialog statusWindow = new AtlasStatusDialog(getJFrame(),
-				null, GeopublisherGUI.R("AtlasLoader.processinfo.loading",
-						atlasDir.getName()));
+		final AtlasStatusDialog statusWindow = new AtlasStatusDialog(
+				getJFrame(), null, GeopublisherGUI.R(
+						"AtlasLoader.processinfo.loading", atlasDir.getName()));
 		final AtlasSwingWorker<AtlasConfigEditable> aceLoader = new AtlasSwingWorker<AtlasConfigEditable>(
 				statusWindow) {
 
@@ -1107,7 +1107,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info(message);
 		if (!GraphicsEnvironment.isHeadless()) {
 			JOptionPane.showMessageDialog(null, message, R(
-					"CommandLineHelp.title", ReleaseUtil.getVersionInfo(AVUtil.class)),
+					"CommandLineHelp.title", ReleaseUtil
+							.getVersionInfo(AVUtil.class)),
 					JOptionPane.INFORMATION_MESSAGE);
 			System.exit(-1);
 		} else
