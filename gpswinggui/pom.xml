@@ -15,9 +15,33 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+
+	<properties>
+		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+	</properties>
+
 	<build>
 
 		<plugins>
+
+			<plugin>
+			<!-- Starting the application via mvn ecex:java -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1.1</version>
+				
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<mainClass>${mainClass}</mainClass>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -25,8 +49,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI
-							</mainClass>
+							<mainClass>${mainClass}</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
 					</archive>
@@ -96,14 +119,12 @@
 						</executions>
 
 						<configuration>
-							<resourcesDirectory>${project.basedir}/src/main/jnlp/
-							</resourcesDirectory>
+							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
-								<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI
-								</mainClass>
+								<mainClass>${mainClass}</mainClass>
 							</jnlp>
 
 							<sign>
@@ -391,14 +412,17 @@
 			<scope>compile</scope>
 		</dependency>
 
-<!--Disabled, because we need the tools.jar for signing in GP, even in OpenJDK-->
-<!--		<dependency>-->
-<!--			<groupId>com.sun</groupId>-->
-<!--			<artifactId>tools</artifactId>-->
-<!--			<version>1.6.0</version>-->
-<!--			<scope>system</scope>-->
-<!--			<systemPath>${java.home}/../lib/tools.jar</systemPath>-->
-<!--		</dependency>-->
+		<!--
+			Disabled, because we need the tools.jar for signing in GP, even in
+			OpenJDK
+		-->
+		<!--		<dependency>-->
+		<!--			<groupId>com.sun</groupId>-->
+		<!--			<artifactId>tools</artifactId>-->
+		<!--			<version>1.6.0</version>-->
+		<!--			<scope>system</scope>-->
+		<!--			<systemPath>${java.home}/../lib/tools.jar</systemPath>-->
+		<!--		</dependency>-->
 
 		<dependency>
 			<groupId>com.sun</groupId>
