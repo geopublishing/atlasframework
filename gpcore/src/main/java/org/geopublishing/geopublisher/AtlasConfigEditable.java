@@ -189,29 +189,6 @@ public class AtlasConfigEditable extends AtlasConfig {
 		return aboutDir;
 	}
 
-	//
-	// /**
-	// * Set the atlasDir as {@link File}. Also registers the folder with the
-	// * {@link ResourceManager} as a {@link FileResourceLoader}.
-	// * AtlasConfigEditable.resetResLoMan() should be called before calling
-	// this
-	// * method.
-	// *
-	// * @param atlasDir_
-	// * directory where the Atlas was loaded, or where it was created.
-	// */
-	// public void setAtlasDir(File atlasDir_) {
-	// this.atlasDir = atlasDir_;
-	//
-	// LOGGER.debug("AtlasDir of AtlasConfigEditable set to "
-	// + atlasDir.getAbsolutePath());
-	//
-	// // Initialize ResMan to see the working directory
-	// LOGGER.debug("Registering " + atlasDir_
-	// + " directory as FileResourceLoader with ResMan");
-	// getResLoMan().addResourceLoader(new FileResourceLoader(atlasDir));
-	// }
-
 	/**
 	 * @return workDir directory where the atlas was loaded from or created in.
 	 *         This method also creates all sub-folders automatically .
@@ -226,7 +203,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	}
 
 	/**
-	 * @return A {@link List} of human-readable strings representing
+	 * @return A {@link List} of <b>human-readable</b> strings representing
 	 *         {@link DpEntry}s and/or {@link Map}s which are not referenced
 	 *         from the grouptree.
 	 */
@@ -251,21 +228,45 @@ public class AtlasConfigEditable extends AtlasConfig {
 		return unrefed;
 	}
 
+	/**
+	 * @return A {@link List} of <b>ID</b> strings representing {@link DpEntry}s
+	 *         and/or {@link Map}s which are not referenced from the grouptree.
+	 */
+	public List<String> lisIdsNotReferencedInGroupTree() {
+		List<String> unrefed = new LinkedList<String>();
 
+		for (Map map : getMapPool().values()) {
+			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
+			Group.findReferencesTo(this, map, refs, false);
+			if (refs.size() == 0)
+				unrefed.add(map.getId());
+		}
+
+		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
+			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
+			Group.findReferencesTo(this, dpe, refs, false);
+			if (refs.size() == 0)
+				unrefed.add(dpe.getId());
+		}
+
+		return unrefed;
+	}
 
 	/**
-	 * @return a subset of {@link #values()}, containing only the {@link DpEntry}s that are actually referenced in the atlas
+	 * @return a subset of {@link #values()}, containing only the
+	 *         {@link DpEntry}s that are actually referenced in the atlas
 	 */
 	public List<DpEntry<? extends ChartStyle>> getUsedDpes() {
 		List<DpEntry<? extends ChartStyle>> notUsed = getUnusedDpes();
 		List<DpEntry<? extends ChartStyle>> used = new ArrayList<DpEntry<? extends ChartStyle>>();
-		
+
 		// TODO faster or cache
 		for (DpEntry dpe : getDataPool().values()) {
-			if (notUsed.contains(dpe)) continue;
+			if (notUsed.contains(dpe))
+				continue;
 			used.add(dpe);
 		}
-		
+
 		return used;
 	}
 
@@ -307,7 +308,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 					if (m.getId().equals(getMapPool().getStartMapID())) {
 						// Startupmap has been defined and this is it.
 						thisMapIsInteresting = true;
-					} 
+					}
 					if ((getMapPool().getStartMapID() == null && getMapPool()
 							.get(0).equals(m))) {
 						// NO startup map has been defined, but this is map

@@ -1969,13 +1969,14 @@ public class JarExportUtil {
 			throw cancel;
 		} finally {
 			// Whatever happened, we have to delete the temp dir
-
 			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
-
 			deleteOldTempExportDirs();
 		}
 	}
 
+	/**
+	 * Adjusts the right sof the DISK and JWS folder. They have some strange defaults since OpenJDK in Lucid?!
+	 */
 	private void adjustRights() {
 
 		if (!SystemUtils.IS_OS_LINUX)
@@ -1987,8 +1988,9 @@ public class JarExportUtil {
 			targetDirJWS.setExecutable(true, false);
 			targetDirJWS.setReadable(true, false);
 
-//			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-//					new String[] { "*" }, true);
+			// Iterator<File> iterateFiles =
+			// FileUtils.iterateFiles(targetDirJWS,
+			// new String[] { "*" }, true);
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
 					GpUtil.BlacklistedFoldersFilter,
 					GpUtil.BlacklistesFilesFilter);
@@ -2007,8 +2009,9 @@ public class JarExportUtil {
 			targetDirDISK.setExecutable(true, false);
 			targetDirDISK.setReadable(true, false);
 
-//			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-//			new String[] { "*" }, true);
+			// Iterator<File> iterateFiles =
+			// FileUtils.iterateFiles(targetDirJWS,
+			// new String[] { "*" }, true);
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirDISK,
 					GpUtil.BlacklistedFoldersFilter,
 					GpUtil.BlacklistesFilesFilter);

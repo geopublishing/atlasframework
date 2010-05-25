@@ -129,8 +129,8 @@ public class AMLExporter {
 	 * 
 	 * @return true if no exceptions where thrown.
 	 */
-	public boolean saveAtlasConfigEditable(final AtlasStatusDialogInterface statusWindow)
-			throws Exception {
+	public boolean saveAtlasConfigEditable(
+			final AtlasStatusDialogInterface statusWindow) throws Exception {
 		this.statusWindow = statusWindow;
 
 		try {
@@ -156,7 +156,7 @@ public class AMLExporter {
 				getAtlasXml().createNewFile();
 			}
 
-//			copyAtlasMLSchemaFile();
+			// copyAtlasMLSchemaFile();
 
 			// ****************************************************************************
 			// Create the XML
@@ -281,13 +281,13 @@ public class AMLExporter {
 		atlas.appendChild(supportedLanguages);
 
 		List<DpEntry<? extends ChartStyle>> unusedDpes = ace.getUnusedDpes();
-		
+
 		// Loop over all data pool entries and add them to the AML Document
 		for (final DpEntry de : ace.getDataPool().values()) {
 
 			if (exportMode && unusedDpes.contains(de))
 				continue;
-			
+
 			Node exDpe = null;
 
 			checkCancel();
@@ -400,25 +400,25 @@ public class AMLExporter {
 				"mapPool");
 
 		// Test whether a start map exists. When no start-map is defined, the
-		// user may not export.
+		// user can not export.
 		if (mapPool.getStartMapID() != null
 				&& mapPool.get(mapPool.getStartMapID()) != null) {
 			element.setAttribute("startMap", mapPool.getStartMapID());
 		} else {
 			if (exportMode)
-				throw new AtlasExportException(GpUtil.R("ExportAtlas.NeedAtLeastOneMap")); 
+				throw new AtlasExportException(GpUtil
+						.R("ExportAtlas.NeedAtLeastOneMap"));
 		}
 
 		// maps MUST contain at least one map
 		final Collection<Map> maps = mapPool.values();
-		List<String> notReferencedDpeIDs = ace
-				.listNotReferencedInGroupTree();
+		List<String> notReferencedDpeIDs = ace.lisIdsNotReferencedInGroupTree();
 		for (final Map map : maps) {
 			checkCancel();
 
 			if (exportMode && notReferencedDpeIDs.contains(map.getId())
 					&& !map.getId().equals(mapPool.getStartMapID())) {
-				// Only export maps that are referenced in the group tree
+				// Only export maps that are referenced in the group tree or are marked as the start map
 				continue;
 			}
 
@@ -488,12 +488,13 @@ public class AMLExporter {
 			element.appendChild(maxExtend);
 		}
 
-		// Is the ScalePanel visible in this map? 
+		// Is the ScalePanel visible in this map?
 		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE, Boolean.valueOf(
 				map.isScaleVisible()).toString());
-		
-		// The units used in the ScalePanel? 
-		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits().toString());
+
+		// The units used in the ScalePanel?
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits()
+				.toString());
 
 		// Are the vert. and hor. GridPanels visible in this map?
 		element.setAttribute("gridPanelVisible", Boolean.valueOf(
@@ -874,7 +875,8 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute tag.
+	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute
+	 * tag.
 	 * 
 	 * @return {@link org.w3c.dom.Element} that represent the XML tag
 	 * 
@@ -896,8 +898,8 @@ public class AMLExporter {
 		element.setAttribute(AMLUtil.ATT_localname, attrib.getName()
 				.getLocalPart());
 
-		element.setAttribute(AMLUtil.ATT_weight,
-				new Integer(new Double(attrib.getWeight()).intValue()).toString() );
+		element.setAttribute(AMLUtil.ATT_weight, new Integer(new Double(attrib
+				.getWeight()).intValue()).toString());
 		element.setAttribute(AMLUtil.ATT_functionA, new Double(attrib
 				.getFunctionA()).toString());
 		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib
@@ -1282,9 +1284,22 @@ public class AMLExporter {
 		return false;
 	}
 
+	/**
+	 * If set to <code>true</code>, the created atlas.xml only describes maps
+	 * and layers that are actually used/referenced in the atlas. To save the
+	 * atlas as an 'atlas working copy' with all the information in it, it has
+	 * to be set to <code>false</code>.
+	 */
 	public void setExportMode(boolean exportMode) {
 		this.exportMode = exportMode;
 	}
+
+	/**
+	 * If set to <code>true</code>, the created atlas.xml only describes maps
+	 * and layers that are actually used/referenced in the atlas. To save the
+	 * atlas as an 'atlas working copy' with all the information in it, it has
+	 * to be set to <code>false</code>.
+	 */
 
 	public boolean isExportMode() {
 		return exportMode;

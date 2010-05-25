@@ -233,7 +233,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		if (obj instanceof Map) {
 			final Map map = (Map) obj;
 			return map.getId().equals(getId())
-					&& map.getLayers().size() == getLayers().size();
+					&& map.getLayers().size() == getLayers().size()
+					&& map.getMedia().size() == getMedia().size();
 		}
 		return super.equals(obj);
 	}

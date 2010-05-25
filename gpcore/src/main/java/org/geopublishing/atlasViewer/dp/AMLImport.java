@@ -882,7 +882,7 @@ public class AMLImport {
 						.getNodeValue();
 				final DpEntry testDpe = ac.getDataPool().get(id);
 				if (testDpe == null) {
-					warn("menu structure", 
+					warn("menu structure",
 							"<datapoolRef> traget id can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 
@@ -898,7 +898,7 @@ public class AMLImport {
 						.getNodeValue();
 				final Map testMap = ac.getMapPool().get(id);
 				if (testMap == null) {
-					warn("menu structure", 
+					warn("menu structure",
 							"<mapRef> traget id can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 				} else {
@@ -1018,9 +1018,7 @@ public class AMLImport {
 						}
 
 					} catch (AtlasRecoverableException e) {
-						warn(
-								"Parsing attribute descriptions", e
-										.getMessage());
+						warn("Parsing attribute descriptions", e.getMessage());
 					} catch (RuntimeException e) {
 						if (AtlasViewerGUI.isRunning()) {
 							// warn("layer nich verfügbar aber das ist nicht schlimm",
@@ -1047,10 +1045,10 @@ public class AMLImport {
 													+ " to CQL failed! Setting filter to no-filter",
 											filterParserEx);
 							warn(
-											dplvfs.getTitle().toString(),
-											"Failed to convert old filter\n  "
-													+ filterString
-													+ "\n to the new ECQL filter language. This setting is lost.");
+									dplvfs.getTitle().toString(),
+									"Failed to convert old filter\n  "
+											+ filterString
+											+ "\n to the new ECQL filter language. This setting is lost.");
 							dplvfs.setFilterRule("");
 						}
 					} else {
@@ -1069,9 +1067,7 @@ public class AMLImport {
 			}
 
 		} catch (Exception e) {
-			warn(
-					"A layer has been ignored due to errors:", e
-							.getMessage());
+			warn("A layer has been ignored due to errors:", e.getMessage());
 			return null;
 		}
 
@@ -1215,9 +1211,9 @@ public class AMLImport {
 						.warn(dplvfs.getId()
 								+ " is broken. Can not import old colIdx-based attributeMetadata");
 				warn(
-								dplvfs.getTitle().toString(),
-								dplvfs.getId()
-										+ " is broken. Can not import old colIdx-based attributeMetadata");
+						dplvfs.getTitle().toString(),
+						dplvfs.getId()
+								+ " is broken. Can not import old colIdx-based attributeMetadata");
 				return null;
 			}
 		}
@@ -1236,15 +1232,16 @@ public class AMLImport {
 		// null!
 		// NameImpl nameImpl = new NameImpl(nameSpace != null ? nameSpace
 		// .isEmpty() ? null : nameSpace : null, localname);
-		// TODO we loos the namespace setting now again.
 
 		NameImpl correctedAttName = FeatureUtil.findBestMatchingAttribute(
 				dplvfs.getSchema(), localname);
 		if (correctedAttName == null)
 			throw new AtlasRecoverableException(
-					"Couldn't find any existing attribute that the described attribute '"
+					"Couldn't find any existing attribute in "
+							+ dplvfs.getFilename()
+							+ " that the described attribute '"
 							+ localname
-							+ "' could belong to. Maybe the attribute has been deleted. The meatdata is thrown away.");
+							+ "' could belong to. Maybe the attribute has been deleted? The meatdata is thrown away.");
 
 		// Creating the object
 		AttributeMetadataImpl attributeMetadata = new AttributeMetadataImpl(
@@ -1336,11 +1333,12 @@ public class AMLImport {
 
 		// Shall the map scale be shown?
 		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE) != null) {
-			map.setScaleVisible(Boolean.valueOf(node.getAttributes()
-					.getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE).getNodeValue()));
+			map.setScaleVisible(Boolean
+					.valueOf(node.getAttributes().getNamedItem(
+							AMLUtil.ATT_MAP_SCALE_VISIBLE).getNodeValue()));
 		}
-		
-		// Shall the map scale be shown? 
+
+		// Shall the map scale be shown?
 		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS) != null) {
 			map.setScaleUnits(ScaleUnits.valueOf(node.getAttributes()
 					.getNamedItem(AMLUtil.ATT_MAP_SCALE_UNITS).getNodeValue()));
@@ -1431,8 +1429,7 @@ public class AMLImport {
 				final DpEntry<? extends ChartStyle> testDpe = ac.getDataPool()
 						.get(id);
 				if (testDpe == null) {
-					warn("map:"
-							+ map.getTitle().toString(), 
+					warn("map:" + map.getTitle().toString(),
 							"<datapoolRef> attribute id can't be found in the Datapool. id="
 									+ id);
 				} else {
@@ -1551,8 +1548,7 @@ public class AMLImport {
 									+ layerID
 									+ "', but it's not known to the layer. It's ignored.";
 							LOGGER.warn(msg);
-							warn("map:"
-									+ map.getTitle().toString(), msg);
+							warn("map:" + map.getTitle().toString(), msg);
 						}
 					}
 				}
@@ -1604,8 +1600,7 @@ public class AMLImport {
 									+ layerID
 									+ "', but it's not known to the layer. It's ignored.";
 							LOGGER.error(msg);
-							warn("map:"
-									+ map.getTitle().toString(), msg);
+							warn("map:" + map.getTitle().toString(), msg);
 						}
 
 					}
