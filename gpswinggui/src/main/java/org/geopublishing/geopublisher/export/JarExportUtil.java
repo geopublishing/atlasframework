@@ -210,12 +210,12 @@ public class JarExportUtil {
 	 */
 	public static final String ASCORE_JARNAME = "ascore-" + version + snapshot
 			+ postfixJar;
-
-	/**
-	 * Filename of the asswinggui jar
-	 */
-	public static final String ASSWINGGUI_JARNAME = "asswinggui-" + version
-			+ snapshot + postfixJar;
+//
+//	/**
+//	 * Filename of the asswinggui jar
+//	 */
+//	public static final String ASSWINGGUI_JARNAME = "asswinggui-" + version
+//			+ snapshot + postfixJar;
 
 	/**
 	 * Filename of the schmitzm jar. TODO Very fucking ugly
@@ -228,7 +228,8 @@ public class JarExportUtil {
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(Arrays
 			.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
-					ASSWINGGUI_JARNAME, GPCORE_JARNAME, GPNATIVES_JARNAME }));
+//					ASSWINGGUI_JARNAME,
+					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
 	 * Mainclass for the exprted atlas.
@@ -1021,11 +1022,11 @@ public class JarExportUtil {
 		if (jarName.contains(ASCORE_JARNAME)) {
 			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
 		}
-
-		if (jarName.contains(ASSWINGGUI_JARNAME)) {
-			path = "org/geopublishing/atlasStyler/asswinggui/" + version
-					+ snapshot;
-		}
+//
+//		if (jarName.contains(ASSWINGGUI_JARNAME)) {
+//			path = "org/geopublishing/atlasStyler/asswinggui/" + version
+//					+ snapshot;
+//		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
 			path = "de/schmitzm/schmitzm-library/2.2-SNAPSHOT";
@@ -2115,7 +2116,7 @@ public class JarExportUtil {
 
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
 				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
-				+ ASSWINGGUI_JARNAME + " " + SCHMITZM_JARNAME;
+				+ SCHMITZM_JARNAME;
 
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 

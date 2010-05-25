@@ -201,13 +201,14 @@ public class JarExportUtilTest {
 		assertTrue(fileGpCoreDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.GPCORE_JARNAME).exists());
-
-		assertTrue(new File(atlasExportTesttDir, "DISK/"
-				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
-				.exists());
-
-		assertTrue(new File(atlasExportTesttDir, "JWS/"
-				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
+		
+// asswinggui is not needed for exported atlases
+//		assertTrue(new File(atlasExportTesttDir, "DISK/"
+//				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
+//				.exists());
+//
+//		assertTrue(new File(atlasExportTesttDir, "JWS/"
+//				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
 
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME)
