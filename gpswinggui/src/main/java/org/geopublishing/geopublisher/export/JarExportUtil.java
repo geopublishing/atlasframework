@@ -271,8 +271,8 @@ public class JarExportUtil {
 							+ "Mb of memory. Increase this number if have lots of memory.\n");
 			fileWriter.write("java -Xmx" + xmx
 					+ "m -Dfile.encoding=UTF-8 -Djava.library.path="
-					+ DISK_SUB_DIR  + LIB_DIR + " -jar " + DISK_SUB_DIR
-					+ "/" + targetJar.getName() + "\n");
+					+ DISK_SUB_DIR + LIB_DIR + " -jar " + DISK_SUB_DIR + "/"
+					+ targetJar.getName() + "\n");
 			fileWriter.close();
 
 			// //
@@ -1983,32 +1983,43 @@ public class JarExportUtil {
 
 		// In JWS set to execute, read and NOTwrite
 		// targetDirJWS.setWritable(false, false);
-		targetDirJWS.setExecutable(true, false);
-		targetDirJWS.setReadable(true, false);
+		if (toJws) {
+			targetDirJWS.setExecutable(true, false);
+			targetDirJWS.setReadable(true, false);
 
-		Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-				new String[] { "*" }, true);
-		while (iterateFiles.hasNext()) {
-			File next = iterateFiles.next();
-			// next.setWritable(false, false);
-			next.setExecutable(true, false);
-			next.setReadable(true, false);
+//			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
+//					new String[] { "*" }, true);
+			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
+					GpUtil.BlacklistedFoldersFilter,
+					GpUtil.BlacklistesFilesFilter);
+			while (iterateFiles.hasNext()) {
+				File next = iterateFiles.next();
+				// next.setWritable(false, false);
+				next.setExecutable(true, false);
+				next.setReadable(true, false);
+			}
 		}
 
 		// In DISK set to read and NOTwrite
 
-		// targetDirDISK.setWritable(false, false);
-		targetDirDISK.setExecutable(true, false);
-		targetDirDISK.setReadable(true, false);
+		if (toDisk) {
+			// targetDirDISK.setWritable(false, false);
+			targetDirDISK.setExecutable(true, false);
+			targetDirDISK.setReadable(true, false);
 
-		iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-				new String[] { "*" }, true);
-		while (iterateFiles.hasNext()) {
-			File next = iterateFiles.next();
-			// next.setWritable(false, false);
-			next.setReadable(true, false);
+//			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
+//			new String[] { "*" }, true);
+			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirDISK,
+					GpUtil.BlacklistedFoldersFilter,
+					GpUtil.BlacklistesFilesFilter);
+			while (iterateFiles.hasNext()) {
+				File next = iterateFiles.next();
+				// next.setWritable(false, false);
+				next.setReadable(true, false);
+			}
+			new File(targetDirDISK, "start.sh").setExecutable(true, false);
+
 		}
-		new File(targetDirDISK, "start.sh").setExecutable(true, false);
 	}
 
 	/**
@@ -2260,10 +2271,11 @@ public class JarExportUtil {
 		if (toDisk) {
 
 			/**
-			 * Exclusively for DISK to real main folder 
+			 * Exclusively for DISK to real main folder
 			 */
-//			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.bat"),
-//					targetDirDISK, true);
+			// FileUtils.moveFileToDirectory(new File(getTempDir(),
+			// "start.bat"),
+			// targetDirDISK, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
 					targetDirDISK, true);
 
@@ -2301,7 +2313,10 @@ public class JarExportUtil {
 				new String[] { "jar", "jar.pack.gz", "so", "dll" }, true);
 		for (final File jar : jars) {
 
-			/** When a JAR comes from .../diffDir/a.jar, we have to copy it to folder "diffDir" **/
+			/**
+			 * When a JAR comes from .../diffDir/a.jar, we have to copy it to
+			 * folder "diffDir"
+			 **/
 			final String diffDir = jar.getAbsolutePath().substring(
 					getTempDir().getAbsolutePath().length() + 1);
 
@@ -2309,12 +2324,12 @@ public class JarExportUtil {
 			 * Copy files to DISK/#DISK_SUB_DIR
 			 */
 			if (toDisk && !jar.getName().endsWith("pack.gz")) {
-				
-				final File targetSubDirDISK = new File(targetDirDISK, DISK_SUB_DIR+diffDir)
-						.getParentFile();
-				
+
+				final File targetSubDirDISK = new File(targetDirDISK,
+						DISK_SUB_DIR + diffDir).getParentFile();
+
 				targetSubDirDISK.mkdirs();
-				
+
 				FileUtils.copyFileToDirectory(jar, targetSubDirDISK);
 			}
 
