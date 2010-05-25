@@ -61,7 +61,6 @@ import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.identity.FeatureIdImpl;
-import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
@@ -78,6 +77,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.JTSUtil;
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.gui.ScalePanel;
 import schmitzm.geotools.gui.SelectableXMapPane;
@@ -417,8 +417,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final SimpleFeatureType specialLinesFeatureType = builder
 				.buildFeatureType();
 
-		final GeometryFactory factory = JTSFactoryFinder
-				.getGeometryFactory(null);
+		final GeometryFactory factory = FeatureUtil.GEOMETRY_FACTORY;
 
 		final MemoryFeatureCollection fc = new MemoryFeatureCollection(
 				specialLinesFeatureType);
