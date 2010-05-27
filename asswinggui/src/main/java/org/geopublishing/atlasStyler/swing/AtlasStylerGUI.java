@@ -126,12 +126,20 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		initialize();
 
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 
 			@Override
 			public void windowClosed(WindowEvent e) {
 				exitAS(0);
 			}
+			
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exitAS(0);
+			}
+
 
 		});
 
@@ -167,11 +175,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	protected void exitAS(int exitCode) {
 
-		/*
-		 * What is that?
-		 */
-		if (getMapManager() == null)
-			return;
+//		/*
+//		 * What is that?
+//		 */
+//		if (getMapManager() == null)
+//			return;
 
 		/*
 		 * Ask the use to save the changed SLDs
@@ -201,6 +209,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			if (ds != null)
 				ds.dispose();
 		}
+		openDatastores.clear();
 
 		/*
 		 * Unregister from JNLP SingleInstanceService
@@ -217,8 +226,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
-		JPanel jContentPane = new JPanel();
-		jContentPane.setLayout(new BorderLayout());
+		JPanel jContentPane = new JPanel(new BorderLayout());
 		jContentPane.add(getStylerMapView(), BorderLayout.CENTER);
 		jContentPane.add(getJToolBar(), BorderLayout.NORTH);
 		return jContentPane;

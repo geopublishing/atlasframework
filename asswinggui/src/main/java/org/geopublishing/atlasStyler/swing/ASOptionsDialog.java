@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 
@@ -32,8 +33,11 @@ import skrueger.swing.OkButton;
 
 public class ASOptionsDialog extends CancellableDialogAdapter {
 	final JCheckBox overideLocaleCB = new JCheckBox();
-	final JComboBox langComboBox = new JComboBox(new String[] { "en", "fr",
-			"de" });
+	
+//	final JComboBox langComboBox = new JComboBox(new String[] { "en", "fr",
+//			"de" });
+	
+	final JComboBox langComboBox = new JComboBox(ASUtil.getSupportedLanguages());
 
 	public ASOptionsDialog(final Component parentWindow) {
 		super(parentWindow);

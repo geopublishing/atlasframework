@@ -26,13 +26,16 @@ import java.io.IOException;
 import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -116,6 +119,19 @@ public class ASUtil {
 	 */
 	private final static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasStylerTranslation",
 					 Locale.ENGLISH);
+	
+	/**
+	 * Liefert eine Liste aller Sprachen, in die die {@link AtlasStylerGUI} übersetzt ist. 
+	 */
+	public static String[] getSupportedLanguages() {
+		Set<Locale> availableLocales = ResourceProvider.getAvailableLocales(RESOURCE, true);
+		ArrayList<String> list = new ArrayList<String>(availableLocales.size());
+		for (Locale l :  availableLocales) {
+			list.add(l.getLanguage());
+		}
+		return list.toArray(new String[0]);
+	}
+
 
 	/**
 	 * Convenience method to access the {@link AtlasStyler}s translation
@@ -1250,5 +1266,6 @@ public class ASUtil {
 		return new AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
 				loadStyle, null, null).getStyle();
 	}
+
 
 }
