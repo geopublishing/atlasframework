@@ -68,24 +68,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * Default is 3
 	 */
 	private int classDigits = 3;
-	private final DecimalFormat classDigitsFormat = new DecimalFormat(getNumberFormatPattern(classDigits));
-	
-	/**
-	 * Erstellt das Pattern fuer ein {@link NumberFormat}.
-	 * 
-	 * @param digits
-	 *            Anzahl der dargestellten Nachkomma-Stellen
-	 */
-	public static String getNumberFormatPattern(int digits) {
-		String format = "0";
-		for (int i = 0; i < digits; i++) {
-			if (i == 0)
-				format += ".";
-			format += "0";
-		}
-		return format;
-	}
-
+	private final DecimalFormat classDigitsFormat = new DecimalFormat(SwingUtil.getNumberFormatPattern(classDigits));
 
 	/**
 	 * Returns the number of digits shown in the rule description.
