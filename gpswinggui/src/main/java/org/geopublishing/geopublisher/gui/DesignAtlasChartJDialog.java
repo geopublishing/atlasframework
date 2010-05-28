@@ -83,12 +83,12 @@ import schmitzm.jfree.chart.style.ChartAxisStyle;
 import schmitzm.jfree.chart.style.ChartPlotStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
-import schmitzm.jfree.feature.AggregationFunction;
-import schmitzm.jfree.feature.AggregationFunctionJComboBox;
 import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
-import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
+import schmitzm.jfree.feature.style.TableChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
+import schmitzm.jfree.table.AggregationFunction;
+import schmitzm.jfree.table.AggregationFunctionJComboBox;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
@@ -602,7 +602,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Ensure that there are no NULLs
 		 */
 		if (chartStyle.getAxisStyle(axisNr) == null) {
-			chartStyle.setAxisStyle(axisNr, new FeatureChartAxisStyle(
+			chartStyle.setAxisStyle(axisNr, new TableChartAxisStyle(
 					chartStyle));
 			fireChartChangedEvent();
 		}

@@ -28,7 +28,7 @@ import schmitzm.jfree.chart.style.ChartRendererStyle;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartType;
 import schmitzm.jfree.feature.style.FeatureBasicChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartAxisStyle;
+import schmitzm.jfree.feature.style.TableChartAxisStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
@@ -150,12 +150,12 @@ public class ChartWizardResultProducer implements
 				// For BAR charts mean is the default aggregation function
 				if (chartType == ChartType.BAR) {
 					chartStyle.setAttributeAggregation(index,
-							schmitzm.jfree.feature.AggregationFunction.AVG);
+							schmitzm.jfree.table.AggregationFunction.AVG);
 				}
 
 				if (index == 1) {
 					chartStyle.setAxisStyle(ChartStyle.RANGE_AXIS,
-							new FeatureChartAxisStyle(
+							new TableChartAxisStyle(
 									chartStyle,attribMetadata.getTitle().copy(), null, 0.,
 									0.));
 
@@ -168,7 +168,7 @@ public class ChartWizardResultProducer implements
 
 			} else {
 				// This is the DOMAIN AXIS (index = 0)
-				chartStyle.setAxisStyle(index, new FeatureChartAxisStyle(
+				chartStyle.setAxisStyle(index, new TableChartAxisStyle(
 						chartStyle,attribMetadata.getTitle().copy(), null, 0., 0.));
 			}
 		}
