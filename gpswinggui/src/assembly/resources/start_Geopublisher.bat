@@ -10,4 +10,4 @@ rem  Sie sollten eine Kopie der GNU Lesser General Public License zusammen mit d
 
 echo Starting Geopublisher. You need to have at least Java Runtime Environment (JRE) Version 1.6.0.14 installed. 
 
-javaw -Xmx340m -Dfile.encoding=UTF-8 -Djava.library.path=. -cp %HOMEPATH%\.Geopublishing -jar gpswinggui-${project.version}.jar
+javaw -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp %HOMEPATH%\.Geopublishing:gpswinggui-${project.version}.jar org.geopublishing.geopublisher.swing.GeopublisherGUI

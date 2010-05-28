@@ -10,4 +10,4 @@
 
 echo "Starting AtlasStyler. You need to have at least Java Runtime Environment (JRE) Version 6 installed."
 
-java -Xmx160m -Dfile.encoding=UTF8 -Djava.library.path=. -cp ~/.Geopublishing -jar asswinggui-${project.version}.jar
+java -Xmx160m -Dfile.encoding=UTF8 -Djava.library.path=. -cp ~/.Geopublishing:asswinggui-${project.version}.jar org.geopublishing.atlasStyler.swing.AtlasStylerGUI

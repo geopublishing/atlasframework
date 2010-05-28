@@ -798,9 +798,10 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * @param args
 	 */
 	public static void main(final String[] args) throws IOException {
+//		System.out.println("Classpath: "+System.getProperty("java.class.path"));
 
+		// Set the locale for running the application
 		try {
-
 			if (!ASProps.get(Keys.language, "system")
 					.equalsIgnoreCase("system")) {
 				Locale.setDefault(new Locale(ASProps.get(Keys.language, "en")));
@@ -809,9 +810,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			LOGGER.error("Could not set locale to "
 					+ ASProps.get(Keys.language), e);
 		}
-
-		// Locale.setDefault(new Locale("en"));
-
+		
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				AtlasStylerGUI asg = new AtlasStylerGUI();
