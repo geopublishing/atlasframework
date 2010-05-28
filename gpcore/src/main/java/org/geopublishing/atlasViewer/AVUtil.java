@@ -94,7 +94,7 @@ public class AVUtil {
 	 * hinterlegt.
 	 */
 	private static ResourceProvider RESOURCE = new ResourceProvider(
-			"locales/AtlasViewerTranslation", Locale.ENGLISH);
+			"locales.AtlasViewerTranslation", Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link AtlasViewerGUI}s translation

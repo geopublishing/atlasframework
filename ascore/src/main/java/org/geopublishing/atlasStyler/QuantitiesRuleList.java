@@ -12,7 +12,6 @@ package org.geopublishing.atlasStyler;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

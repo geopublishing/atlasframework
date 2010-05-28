@@ -77,6 +77,7 @@ import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
@@ -114,6 +115,16 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
+		// Adding language ....
+		for (ResourceProvider rp : ResourceProvider.RESOURCE_BUNDLES) {
+			String filename = rp.getBundleName();
+			if (filename.contains("."))
+				filename = filename.substring(filename.lastIndexOf('.')+1);
+			if (filename.contains("/"))
+				filename = filename.substring(filename.lastIndexOf('/')+1);			
+			rp.resetResourceBundle(filename);
+		}
+
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
@@ -133,13 +144,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			public void windowClosed(WindowEvent e) {
 				exitAS(0);
 			}
-			
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				exitAS(0);
 			}
-
 
 		});
 
@@ -175,11 +184,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	protected void exitAS(int exitCode) {
 
-//		/*
-//		 * What is that?
-//		 */
-//		if (getMapManager() == null)
-//			return;
+		// /*
+		// * What is that?
+		// */
+		// if (getMapManager() == null)
+		// return;
 
 		/*
 		 * Ask the use to save the changed SLDs
@@ -413,13 +422,13 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							+ ".sld"));
 
 					LOGGER.info("Pg layer has CRS = " + styledFS.getCrs());
-					
+
 					File sldFile = new File(System.getProperty("user.home"),
 							styledFS.getSldFile().getName());
 					styledFS.setSldFile(sldFile);
-					
+
 					styledFS.loadStyle();
-					
+
 					addLayer(styledFS);
 				} catch (Exception e1) {
 					ExceptionMonitor.show(AtlasStylerGUI.this, e1);
@@ -751,7 +760,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
 				AVSwingUtil
 						.showMessageDialog(this,
-								"Hey you #&%\"§* windows noob! Change the file ending to .sld and try again!"); //i8n
+								"Hey you #&%\"§* windows noob! Change the file ending to .sld and try again!"); // i8n
 				return;
 			}
 
@@ -793,7 +802,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	/**
 	 * AtlasStylerGUI main method.
 	 * 
-	 * @param args 
+	 * @param args
 	 */
 	public static void main(final String[] args) throws IOException {
 
@@ -830,6 +839,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				asg.setVisible(true);
 			}
 		});
+
 	}
 
 	/**

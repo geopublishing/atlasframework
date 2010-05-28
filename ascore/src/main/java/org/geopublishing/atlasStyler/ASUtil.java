@@ -30,12 +30,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -94,6 +92,7 @@ import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 
 public class ASUtil {
+
 	static Logger LOGGER = Logger.getLogger(ASUtil.class);
 
 	public static DecimalFormat df = new DecimalFormat("##0.000");
@@ -111,13 +110,12 @@ public class ASUtil {
 	public static final Filter allwaysTrueFilter = ff2.equals(ff2.literal("1"),
 			ff2.literal("1"));
 	
-
 	/**
 	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
 	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
 	 */
-	private final static ResourceProvider RESOURCE = new ResourceProvider("locales/AtlasStylerTranslation",
+	private final static ResourceProvider RESOURCE = new ResourceProvider("locales.AtlasStylerTranslation",
 					 Locale.ENGLISH);
 	
 	/**
