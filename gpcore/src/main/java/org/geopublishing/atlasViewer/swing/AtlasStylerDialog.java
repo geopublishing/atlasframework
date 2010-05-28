@@ -22,6 +22,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
+import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.SwingUtil;
 
 public class AtlasStylerDialog extends StylerDialog {
@@ -103,6 +104,9 @@ public class AtlasStylerDialog extends StylerDialog {
 		 * Position left outside of the actual parent frame
 		 */
 		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.WEST);
+		
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		ResourceProvider.resetAllRegisteredResourceBundles();
 	}
 
 	@Override

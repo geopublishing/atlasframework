@@ -69,6 +69,7 @@ import rachel.loader.ClassResourceLoader;
 import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapView;
@@ -151,6 +152,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 		// Atlas Viewer is starting
 		LOGGER.info("Starting AtlasViewer.. " + ReleaseUtil.getVersionInfo(AVUtil.class));
+		
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		ResourceProvider.resetAllRegisteredResourceBundles();
 
 		ReleaseUtil.logLGPLCopyright(LOGGER);
 

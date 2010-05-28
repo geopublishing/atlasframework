@@ -115,15 +115,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		// Adding language ....
-		for (ResourceProvider rp : ResourceProvider.RESOURCE_BUNDLES) {
-			String filename = rp.getBundleName();
-			if (filename.contains("."))
-				filename = filename.substring(filename.lastIndexOf('.')+1);
-			if (filename.contains("/"))
-				filename = filename.substring(filename.lastIndexOf('/')+1);			
-			rp.resetResourceBundle(filename);
-		}
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		ResourceProvider.resetAllRegisteredResourceBundles();
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));

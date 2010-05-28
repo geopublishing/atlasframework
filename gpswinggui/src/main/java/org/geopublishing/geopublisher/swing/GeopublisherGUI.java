@@ -77,6 +77,7 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
+import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
@@ -225,6 +226,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	public GeopublisherGUI(final List<String> args) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
+		
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		ResourceProvider.resetAllRegisteredResourceBundles();
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(GeopublisherGUI.class
