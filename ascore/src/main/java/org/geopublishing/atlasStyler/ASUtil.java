@@ -115,7 +115,7 @@ public class ASUtil {
 	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
 	 */
-	private final static ResourceProvider RESOURCE = new ResourceProvider("locales.AtlasStylerTranslation",
+	private final static ResourceProvider RESOURCE = ResourceProvider.newInstance("locales.AtlasStylerTranslation",
 					 Locale.ENGLISH);
 	
 	/**

@@ -93,7 +93,7 @@ public class AVUtil {
 	 * properties-Datein unter {@code skrueger.swing.resource.locales}
 	 * hinterlegt.
 	 */
-	private static ResourceProvider RESOURCE = new ResourceProvider(
+	private static ResourceProvider RESOURCE = ResourceProvider.newInstance(
 			"locales.AtlasViewerTranslation", Locale.ENGLISH);
 
 	/**
