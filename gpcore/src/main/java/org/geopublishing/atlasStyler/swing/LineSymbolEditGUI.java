@@ -52,6 +52,7 @@ package org.geopublishing.atlasStyler.swing;
  */
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -66,11 +67,14 @@ import java.awt.event.KeyListener;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
@@ -250,8 +254,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			});
 
 			if (symbolizer.getStroke().getColor() != null) {
-				jButtonStrokeColor.setColor( symbolizer
-						.getStroke().getColor());
+				jButtonStrokeColor.setColor(symbolizer.getStroke().getColor());
 			} else {
 				jButtonStrokeColor.setEnabled(false);
 				jLabelStrokeColor.setEnabled(false);
@@ -390,10 +393,8 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	 */
 	private JComboBox getJComboBoxLineJoin() {
 		if (jComboBoxLinejoin == null) {
-			jComboBoxLinejoin = new JComboBox();
-			jComboBoxLinejoin
-					.setModel(new DefaultComboBoxModel(LINEJOIN_VALUES));
-
+			jComboBoxLinejoin = new JComboBox(LINEJOIN_VALUES);
+			
 			/** Preset when started * */
 			String preset;
 			try {
@@ -403,20 +404,36 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				preset = LINEJOIN_VALUES[0];
 				symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(preset));
 			}
+			
+			// The combobox conatins the original Strings as used inside SLD, but the renderer puts nicer expressions there
+			jComboBoxLinejoin.setRenderer(new DefaultListCellRenderer() {
+				
+				@Override
+				public Component getListCellRendererComponent(JList list, Object value,
+						int index, boolean isSelected, boolean cellHasFocus) {
+					Component p = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+					if (p instanceof JLabel)
+						((JLabel)p).setText(ASUtil.R("AtlasStyler.LineJoin.Values."+value));
+					return p;
+				}
+			});
+
 			jComboBoxLinejoin.setSelectedItem(preset);
 			jComboBoxLinejoin.addItemListener(new ItemListener() {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						symbolizer.getStroke().setLineCap(
-								ASUtil.ff2.literal(e.getItem()));
+						Object itemStringValue = e.getItem();
+						symbolizer.getStroke().setLineJoin(
+								ASUtil.ff2.literal(itemStringValue));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}
 				}
 
 			});
+		
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
 
@@ -431,8 +448,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	 */
 	private JComboBox getJComboBoxLineCap() {
 		if (jComboBoxLineCap == null) {
-			jComboBoxLineCap = new JComboBox();
-			jComboBoxLineCap.setModel(new DefaultComboBoxModel(LINECAP_VALUES));
+			jComboBoxLineCap = new JComboBox(LINECAP_VALUES);
 
 			/** Preset when started * */
 			String preset;
@@ -443,8 +459,38 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				preset = LINECAP_VALUES[0];
 				symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(preset));
 			}
-			jComboBoxLinejoin.setSelectedItem(preset);
+			jComboBoxLineCap.setSelectedItem(preset);
+			
+			
+			// The combobox conatins the original Strings as used inside SLD, but the renderer puts nicer expressions there
+			jComboBoxLineCap.setRenderer(new DefaultListCellRenderer() {
+				
+				@Override
+				public Component getListCellRendererComponent(JList list, Object value,
+						int index, boolean isSelected, boolean cellHasFocus) {
+					Component p = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+					if (p instanceof JLabel)
+						((JLabel)p).setText(ASUtil.R("AtlasStyler.LineCap.Values."+value));
+					return p;
+				}
+			});
 
+			jComboBoxLineCap.setSelectedItem(preset);
+			jComboBoxLineCap.addItemListener(new ItemListener() {
+
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+
+						Object itemStringValue = e.getItem();
+						symbolizer.getStroke().setLineCap(
+								ASUtil.ff2.literal(itemStringValue));
+
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+					}
+				}
+
+			});
+		
 			SwingUtil.addMouseWheelForCombobox(jComboBoxLineCap);
 		}
 		return jComboBoxLineCap;

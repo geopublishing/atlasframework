@@ -66,8 +66,6 @@ import skrueger.swing.ColorButton;
 public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	
-
 	private JComboBox jComboBoxSize = null;
 
 	private JComboBox jComboBoxStyle = null;
@@ -161,11 +159,14 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					.R("TextRulesList.Textstyle.FontWeight")));
 			jPanelFont.add(getJComboBoxWeight(), "wrap");
 
-			jPanelFont.add(new JLabel("halo radius:"));
+			jPanelFont.add(new JLabel(ASUtil
+					.R("TextRulesList.Textstyle.Halo.Radius.label")));
 			jPanelFont.add(getJComboBoxHaloRadius());
-			jPanelFont.add(new JLabel("halo color:"));
+			jPanelFont.add(new JLabel(ASUtil
+					.R("TextRulesList.Textstyle.Halo.Color.label")));
 			jPanelFont.add(getJButtonColorHalo());
-			jPanelFont.add(new JLabel("halo opacity:"));
+			jPanelFont.add(new JLabel(ASUtil
+					.R("TextRulesList.Textstyle.Halo.Opacity.label")));
 			jPanelFont.add(getJComboBoxHaloOpacity());
 
 		}
@@ -189,7 +190,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			jComboBoxHaloFillOpacity = new JComboBox();
 			jComboBoxHaloFillOpacity.setModel(new DefaultComboBoxModel(
 					OPACITY_VALUES));
-			
+
 			jComboBoxHaloFillOpacity.addItemListener(new ItemListener() {
 
 				public void itemStateChanged(ItemEvent e) {
@@ -246,9 +247,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 	JComboBox getJComboBoxHaloRadius() {
 		if (jComboBoxHaloRadius == null) {
-			jComboBoxHaloRadius = new JComboBox();
-			jComboBoxHaloRadius.setModel(new DefaultComboBoxModel(
-					HALO_RADIUS_VALUES));
+			jComboBoxHaloRadius = new JComboBox(HALO_RADIUS_VALUES);
 
 			jComboBoxHaloRadius.setRenderer(HALO_RADIUS_VALUES_RENDERER);
 
@@ -544,8 +543,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	}
 
 	/**
-	 * Creates a {@link SelectableXMapPane} that will preview the TextSymbolizer with real
-	 * data.
+	 * Creates a {@link SelectableXMapPane} that will preview the TextSymbolizer
+	 * with real data.
 	 * 
 	 * @param features
 	 */
@@ -556,14 +555,16 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		context.addLayer(features, createPreviewStyle());
 		mapPane.setLocalContext(context);
 		final MapLayer layer = context.getLayer(0);
-		ReferencedEnvelope bounds ;
+		ReferencedEnvelope bounds;
 		try {
 			bounds = layer.getBounds();
 		} catch (Exception e) {
-			LOGGER.error("Calculating BOUNDs for the PreviewMapPane failed:",e);
-			
+			LOGGER
+					.error("Calculating BOUNDs for the PreviewMapPane failed:",
+							e);
+
 			bounds = features.getBounds();
-			
+
 		}
 		bounds.expandBy(bounds.getSpan(0) * 1.5, bounds.getSpan(1));
 		mapPane.setMaxExtend(bounds);
@@ -582,7 +583,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					// not left button
 					JPopupMenu popup = new JPopupMenu();
 					final JCheckBoxMenuItem menuItemAntiAliased = new JCheckBoxMenuItem(
-							new AbstractAction("toggle anti-aliasing") { // i8n
+							new AbstractAction(
+									ASUtil
+											.R("TextSymbolizerEditGUI.Preview.ToggleAntiAliasing.label")) {
 
 								@Override
 								public void actionPerformed(ActionEvent e) {
@@ -612,16 +615,17 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			// There is always only one layer in the preview
 			final MapLayer mapLayer = mapPane.getMapContext().getLayer(0);
-			
+
 			// This is un-nice but needed to reflect all changes automatically
 			mapPane.getLocalRenderer().setContext(mapPane.getMapContext());
-			
-			// We **have to** make a copy of the Style, otherwise the changes to the font are only reflected after zooming 
+
+			// We **have to** make a copy of the Style, otherwise the changes to
+			// the font are only reflected after zooming
 			DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
 			dsv.visit(style);
-			mapLayer.setStyle((Style)dsv.getCopy());
-			
-//			mapPane.refresh();
+			mapLayer.setStyle((Style) dsv.getCopy());
+
+			// mapPane.refresh();
 		}
 
 	};
@@ -859,9 +863,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define point placement settings
 	 */
 	private JPanel getJPanelPointPlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout(
-				"wrap 3, fillx"), AtlasStyler
-				.R("TextRulesList.Button.PlacementProperties"));
+		JPanel jPanelPlacement = new JPanel(new MigLayout("wrap 3, fillx"),
+				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 
 		// Avoid nulls and fill with default if needed
 		{
@@ -920,9 +923,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define Line placement settings
 	 */
 	private JPanel getJPanelLinePlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout(
-				"nogrid, fillx"), AtlasStyler
-				.R("TextRulesList.Button.PlacementProperties"));
+		JPanel jPanelPlacement = new JPanel(new MigLayout("nogrid, fillx"),
+				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 		{
 
 			if (rulesList.getSymbolizer().getLabelPlacement() == null

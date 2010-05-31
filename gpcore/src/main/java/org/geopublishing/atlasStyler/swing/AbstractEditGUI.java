@@ -17,6 +17,8 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import org.geopublishing.atlasStyler.ASUtil;
+
 import schmitzm.swing.JPanel;
 
 public abstract class AbstractEditGUI extends JPanel {
@@ -27,6 +29,7 @@ public abstract class AbstractEditGUI extends JPanel {
 	/** Values used for JCOmboBoxes offering a Halo setting **/
 	final public static Float[] HALO_RADIUS_VALUES = new Float[] { 0.f, .5f,
 			1f, 1.5f, 2.f, 2.5f, 3.f, 4f, 5f };
+	
 	/** A renderer designed to visualize the Halo Radius values properly **/
 	final public static DefaultListCellRenderer HALO_RADIUS_VALUES_RENDERER = new DefaultListCellRenderer() {
 
@@ -38,16 +41,16 @@ public abstract class AbstractEditGUI extends JPanel {
 							isSelected, cellHasFocus);
 			if (value.equals(0f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(fastest)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Fastest")+")</font></i></html>"); 
 			} else if (value.equals(1f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(faster)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Faster")+")</font></i></html>"); 
 			} else if (value.equals(2f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(fast)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Fast")+")</font></i></html>"); 
 			} else if (value.equals(3f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(fast)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Fast")+")</font></i></html>"); 
 			}
 			return prototype;
 		}
@@ -199,10 +202,10 @@ public abstract class AbstractEditGUI extends JPanel {
 							isSelected, cellHasFocus);
 			if (value.equals(1f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(fastest)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Fastest")+")</font></i></html>"); 
 			} else if (value.equals(2f) || value.equals(3f) || value.equals(4f)) {
 				prototype.setText("<html>" + prototype.getText()
-						+ " <i><font size='-2'>(fast)</font></i></html>"); // i8n
+						+ " <i><font size='-2'>("+ASUtil.R("AtlasStyler.DropDownSelection.Option.Fast")+")</font></i></html>"); 
 			}
 			return prototype;
 

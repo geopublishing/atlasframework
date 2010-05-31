@@ -11,12 +11,17 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 
 import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 
+/**
+ * This dloag asks the user for all paramters needed to add a PostGIS layer to
+ * the map.
+ */
 public class SelectPostgisLayerJDialog extends AtlasDialog {
 
 	private JTextField hostInput;
@@ -27,7 +32,8 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 	private JTextField portInput;
 
 	public SelectPostgisLayerJDialog(Component parentWindowComponent) {
-		super(parentWindowComponent, "Add layer from PostGIS server"); // i8n
+		super(parentWindowComponent, ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.title"));
 
 		initGUI();
 	}
@@ -38,9 +44,9 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		setModal(true);
 
 		setLayout(new MigLayout("wrap 2", "grow"));
-		JLabel explanation = new JLabel(
-				"<html>PostGIS layer support is very basic in version 1.5. This dialog will become much nicer<br/> in AtlasStyler version 1.6. Note: The tables you want to import have to be descibed in <i>geometry_columns<i>!<br/>The .sld is stored at "
-						+ System.getProperty("user.home") + "</html>"); // i8n
+		JLabel explanation = new JLabel(ASUtil.R(
+				"AtlasStyler.SelectPostgisLayerDialog.explanation.html", System
+						.getProperty("user.home")));
 		add(explanation, "span 2");
 
 		/*
@@ -49,27 +55,29 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		 * "secretIRI69."; String layer = "bundeslaender_2008";
 		 */
 
-		add(new JLabel("Host (e.g. 'localhost')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.host.label")));
 		add(getHostInputField());
 
-		add(new JLabel("Database (e.g. 'spatial')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.database.label")));
 		add(getDatabaseInputField());
 
-		add(new JLabel("Port (e.g. '5432')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.port.label")));
 		add(getPortInputField());
 
-		add(new JLabel("Username (e.g. 'joe')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.username.label")));
 		add(getUsernameInputField());
 
-		add(new JLabel("Password (e.g. 'secret')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.password.label")));
 		add(getPasswordInputField());
 
-		add(new JLabel("Layer/table name (e.g. 'borders')"));
+		add(new JLabel(ASUtil
+				.R("AtlasStyler.SelectPostgisLayerDialog.table.label")));
 		add(getLayerInputField());
-
-		// add(new
-		// JLabel("The resulting postgis connection URL looks like:"),"span 2");
-		// add(getPreviewUrlLabel());
 
 		OkButton okButton = new OkButton();
 		okButton.addActionListener(new ActionListener() {
@@ -93,28 +101,29 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 			}
 		});
 		add(cancelButton, "tag cancel");
-		
+
 		loadFromProps();
 
 		pack();
 	}
-	
+
 	/**
 	 * Set initial values from the {@link ASProps}
 	 */
 	private void loadFromProps() {
-		getDatabaseInputField().setText(ASProps.get(Keys.lastPgDatabase, "spatial"));
-		
-		getUsernameInputField().setText(ASProps.get(Keys.lastPgUsername, "postgres"));
-		
+		getDatabaseInputField().setText(
+				ASProps.get(Keys.lastPgDatabase, "spatial"));
+
+		getUsernameInputField().setText(
+				ASProps.get(Keys.lastPgUsername, "postgres"));
+
 		getPortInputField().setText(ASProps.get(Keys.lastPgPort, "5432"));
-		
+
 		getLayerInputField().setText(ASProps.get(Keys.lastPgTable, ""));
-		
+
 		getHostInputField().setText(ASProps.get(Keys.lastPgHost, "localhost"));
 	}
 
-	
 	/**
 	 * Stores the values entered in the properties file
 	 */
@@ -207,12 +216,12 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		return getUsernameInputField().getText();
 	}
 
-	public String getPassword() {
-		return getPasswordInputField().getText();
-	}
-
 	public String getLayer() {
 		return getLayerInputField().getText();
+	}
+
+	public String getPassword() {
+		return getPasswordInputField().getPassword().toString();
 	}
 
 }

@@ -127,7 +127,7 @@ public class TextRuleList extends AbstractRuleList {
 		TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
 		
 		getSymbolizers().add(defaultTextSymbolizer);
-		getRuleNames().add("Default/all others"); //i8n
+		getRuleNames().add(ASUtil.R("AtlasStyler.Labelling.DefaultRules.Title")); 
 		getClassesFilters().add(FILTER_DEFAULT_ALL_OTHERS_ID);
 		setClassEnabled(0, true);
 		classesMaxScales.add(Double.MAX_VALUE);

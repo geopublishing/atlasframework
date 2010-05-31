@@ -132,13 +132,13 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 	 */
 	private void initialize() {
 
-		addTab(AtlasStyler.R("AtlasStyler.TabbedPane.Symbology"),
+		addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Symbology"),
 				ICON_SYMBOLOGY, getSymbologyTab(), null);
 
 		// Only allow labeling, if there is at least one attribute field
 		if (ASUtil.getValueFieldNames(
 				atlasStyler.getStyledFeatures().getSchema(), false).size() > 0) {
-			addTab(AtlasStyler.R("AtlasStyler.TabbedPane.Labels"), ICON_LABELS,
+			addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Labels"), ICON_LABELS,
 					new TextRuleListGUI(atlasStyler.getTextRulesList(),
 							atlasStyler), null);
 		} else {

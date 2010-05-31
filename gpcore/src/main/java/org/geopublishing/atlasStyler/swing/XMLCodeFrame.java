@@ -70,7 +70,7 @@ public class XMLCodeFrame extends AtlasDialog {
 
 						getTabbedPane().add(layername, textScrollPane);
 
-						LOGGER.debug("Adding Layname  = " + layername);
+//						LOGGER.debug("Adding Layname  = " + layername);
 
 						names2xml.put(layername, textScrollPane);
 
@@ -105,8 +105,8 @@ public class XMLCodeFrame extends AtlasDialog {
 						String layername = arg0.getLayer().getFeatureSource()
 								.getName().getLocalPart();
 
-						LOGGER.debug("Removing Tab " + layername
-								+ " from JTabbedPane");
+//						LOGGER.debug("Removing Tab " + layername
+//								+ " from JTabbedPane");
 
 						names2xml.remove(layername);
 
@@ -179,7 +179,7 @@ public class XMLCodeFrame extends AtlasDialog {
 			textPane.setText(stackTrace.toString());
 		}
 
-		LOGGER.info("Updated XML Pane");
+//		LOGGER.info("Updated XML Pane");
 
 	}
 
@@ -191,7 +191,7 @@ public class XMLCodeFrame extends AtlasDialog {
 	}
 
 	public void initialize() {
-		setTitle(AtlasStyler.R("XMLCodeFrame.title"));
+		setTitle(ASUtil.R("XMLCodeFrame.title"));
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		setSize(screenSize.width / 3, screenSize.height);
 		setLocation(screenSize.width / 3 * 2, 0);

@@ -72,8 +72,6 @@ public class TextRuleListGUI extends JPanel {
 
 	private JCheckBox jCheckBoxClassEnabled = null;
 
-	private JPanel jPanelClassButtons = null;
-
 	private JButton jButtonClassAdd = null;
 
 	private JButton jButtonClassDelete = null;
@@ -83,7 +81,9 @@ public class TextRuleListGUI extends JPanel {
 	private JButton jButtonClassFromSymbols = null;
 
 	private AttributesJComboBox jComboBoxLabelField = null;
+	
 	private AttributesJComboBox jComboBoxLabelField2 = null;
+	
 	private AttributesJComboBox jComboBoxPriorityField;
 
 	private TextSymbolizerEditGUI jPanelEditTextSymbolizer = null;
