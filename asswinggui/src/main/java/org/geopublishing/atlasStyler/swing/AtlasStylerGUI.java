@@ -537,8 +537,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						exportSLDFile = new File(exportSLDFile.getParentFile(),
 								filenamelc + ".sld");
 						JOptionPane.showMessageDialog(AtlasStylerGUI.this,
-								"Filename changed to "
-										+ exportSLDFile.getName()); // i8n
+								ASUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",exportSLDFile.getName())); 
 					}
 
 					// // Export
@@ -753,7 +752,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
 				AVSwingUtil
 						.showMessageDialog(this,
-								"Hey you #&%\"§* windows noob! Change the file ending to .sld and try again!"); // i8n
+								"Change the file ending to .sld and try again!"); // i8n
 				return;
 			}
 
@@ -779,7 +778,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			{
 				AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
 						"AtlasStylerGUI.importVectorLayerNoSLD", styledFS
-								.getSldFile()));
+								.getSldFile().getName() ));
 				styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
 			}
 		}

@@ -74,7 +74,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;

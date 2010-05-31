@@ -28,7 +28,6 @@ import javax.xml.transform.TransformerException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.data.FeatureSource;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
