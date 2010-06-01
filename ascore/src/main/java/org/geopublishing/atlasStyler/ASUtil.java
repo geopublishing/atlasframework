@@ -168,14 +168,6 @@ public class ASUtil {
 
 	}
 
-	// /**
-	// * This filter is allways <code>false</code>
-	// */
-	// public static final Filter alwaysFalseFilter = Utilities.ff2.equals(
-	// Utilities.ff2.literal("1"), Utilities.ff2.literal("0"));
-
-	// Not good! Marks are cached! public static final SLDStyleFactory sldsf
-
 	/**
 	 * Erzeugt einen Log4j-Logger fuer ein Objekt. Als Identifier fuer den
 	 * Logger wird der Klassenname des Objekts verwendet.

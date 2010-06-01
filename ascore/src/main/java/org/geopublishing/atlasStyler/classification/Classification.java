@@ -15,12 +15,12 @@ import java.util.Set;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 
 
 public abstract class Classification {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+//	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = Logger.getLogger(Classification.class);
 
 	private Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
 	
