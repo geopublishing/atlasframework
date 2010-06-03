@@ -94,6 +94,12 @@ import skrueger.versionnumber.ReleaseUtil;
  * 
  */
 public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
+	
+	static {
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
+	}
+	
 	private static final long serialVersionUID = 1231321321258008431L;
 
 	final static private Logger LOGGER = ASUtil
@@ -114,9 +120,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
-
-		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));

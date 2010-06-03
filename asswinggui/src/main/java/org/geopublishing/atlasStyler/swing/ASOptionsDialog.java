@@ -132,9 +132,9 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 		langSelectionLabel.setEnabled(!defaultInUse);
 		langComboBox.setEnabled(!defaultInUse);
 
-		if (defaultInUse) {
+//		if (defaultInUse) {
 			langComboBox.setSelectedItem(ASProps.get(Keys.language, "en"));
-		}
+//		}
 		
 	}
 

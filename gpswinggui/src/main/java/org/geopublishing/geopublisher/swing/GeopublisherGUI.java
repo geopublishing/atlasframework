@@ -96,6 +96,12 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
  * 
  */
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
+	
+	static {
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
+	}
+	
 	/**
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
@@ -226,9 +232,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 		
-		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
-
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(GeopublisherGUI.class
 				.getResource("/gp_log4j.xml"));

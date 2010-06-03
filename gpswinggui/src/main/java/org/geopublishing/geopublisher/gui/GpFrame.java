@@ -486,11 +486,16 @@ public class GpFrame extends JFrame {
 				String resPath = System.getProperty("user.home")
 						+ File.separator + ".Geopublishing";
 				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
-						GpFrame.this,
-						true, GpSwingUtil.R("TranslateSoftwareDialog.Explanation.Html", resPath, SystemUtils.IS_OS_WINDOWS ? "bat" : "sh")
-						);
+						GpFrame.this, true, GpSwingUtil.R(
+								"TranslateSoftwareDialog.Explanation.Html",
+								R("MenuBar.AtlasMenu"),
+								R("MenuBar.AtlasMenu.ChangeLanguages"),
+								resPath, SystemUtils.IS_OS_WINDOWS ? "bat"
+										: "sh"));
 				manLanguagesFrame.setRootPath(new File(resPath));
-				manLanguagesFrame.setTitle(GpSwingUtil.R("TranslateSoftwareDialog.Title")); 
+				manLanguagesFrame.setTitle(GpSwingUtil
+						.R("TranslateSoftwareDialog.Title"));
+				manLanguagesFrame.setPreferredSize(new Dimension(780, 450));
 				manLanguagesFrame.setVisible(true);
 			}
 		});
@@ -603,8 +608,7 @@ public class GpFrame extends JFrame {
 	 * displayed language Attention, not to replace the object in the
 	 * {@link JMenu} structure Call this after changes to atlasConfig.languages.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         {@link GeopublisherGUI}

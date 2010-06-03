@@ -87,6 +87,11 @@ import skrueger.versionnumber.ReleaseUtil;
 
 public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	public static Logger LOGGER = Logger.getLogger(AtlasViewerGUI.class);
+	
+	static {
+		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
+	}
 
 	/**
 	 * Determines, whether to do a System.exit() when the Application is closed.
@@ -153,9 +158,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		// Atlas Viewer is starting
 		LOGGER.info("Starting AtlasViewer.. " + ReleaseUtil.getVersionInfo(AVUtil.class));
 		
-		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
-
 		ReleaseUtil.logLGPLCopyright(LOGGER);
 		/*
 		 * Register this as single instance
