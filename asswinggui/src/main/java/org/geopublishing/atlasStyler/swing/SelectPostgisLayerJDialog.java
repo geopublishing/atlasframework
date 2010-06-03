@@ -137,20 +137,6 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 
 	private boolean cancelled = false;
 
-	// private JLabel getPreviewUrlLabel() {
-	// if (previewLabel == null) {
-	// previewLabel = new JLabel();
-	// updatePreviewUrl();
-	// }
-	// return previewLabel;
-	// }
-	//
-	// private void updatePreviewUrl() {
-	// String url =
-	// "postgresql://"+getDatabaseInputField().getText()+":"+getPortInputField().getText()+"/"+getDatabaseInputField()
-	// getPreviewUrlLabel().setText(url);
-	// }
-
 	private JTextField getLayerInputField() {
 		if (layerInput == null) {
 			layerInput = new JTextField(25);
@@ -221,7 +207,7 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 	}
 
 	public String getPassword() {
-		return getPasswordInputField().getPassword().toString();
+		return new String(getPasswordInputField().getPassword());
 	}
 
 }
