@@ -41,6 +41,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
@@ -60,11 +61,13 @@ import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.BugReportmailer;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geotools.data.DataUtilities;
 
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.ResourceProviderManagerFrame;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -144,7 +147,8 @@ public class GpFrame extends JFrame {
 		// React to changes of the locale
 		Translation.addLocaleChangeListener(localeChangeListener);
 
-		setTitle(R("ApplicationMainWindowTitle", ReleaseUtil.getVersionInfo(GpUtil.class)));
+		setTitle(R("ApplicationMainWindowTitle", ReleaseUtil
+				.getVersionInfo(GpUtil.class)));
 
 		setSize(new Dimension(GPProps.getInt(GPProps.Keys.gpWindowWidth, 750),
 				GPProps.getInt(GPProps.Keys.gpWindowHeight, 600)));
@@ -188,10 +192,12 @@ public class GpFrame extends JFrame {
 	protected JMenuBar createMenuBar() {
 		AtlasConfigEditable ace = gp.getAce();
 		if (ace == null) {
-			setTitle(R("ApplicationMainWindowTitle", ReleaseUtil.getVersionInfo(GpUtil.class)));
+			setTitle(R("ApplicationMainWindowTitle", ReleaseUtil
+					.getVersionInfo(GpUtil.class)));
 		} else {
-			setTitle(R("ApplicationMainWindowTitle_with_open_atlas", ReleaseUtil
-					.getVersionInfo(GpUtil.class), ace.getTitle().toString()));
+			setTitle(R("ApplicationMainWindowTitle_with_open_atlas",
+					ReleaseUtil.getVersionInfo(GpUtil.class), ace.getTitle()
+							.toString()));
 		}
 
 		JMenuBar jMenuBar = new JMenuBar();
@@ -301,9 +307,8 @@ public class GpFrame extends JFrame {
 					.getResource("/icons/testRun.png"));
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.Preview"),
 					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.previewAtlas,
-					previewIcon, KeyStroke
-							.getKeyStroke(KeyEvent.VK_F5, KeyEvent.SHIFT_MASK,
-									true)));
+					previewIcon, KeyStroke.getKeyStroke(KeyEvent.VK_F5,
+							KeyEvent.SHIFT_MASK, true)));
 
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.LivePreview"),
 					R("MenuBar.FileMenu.LivePreview.TT"),
@@ -468,6 +473,29 @@ public class GpFrame extends JFrame {
 		// ******************************************************************
 		if (ace != null && ace.getLanguages().size() > 1)
 			optionsMenu.add(getChangeLangJMenu());
+
+		/**
+		 * The MenuItem Language to create a new language
+		 */
+		JMenuItem manageLanguageJMenuitem = new JMenuItem(new AbstractAction(
+				GpSwingUtil.R("MenuBar.OptionsMenu.TranslateSoftware"),
+				Icons.ICON_FLAGS_SMALL) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String resPath = System.getProperty("user.home")
+						+ File.separator + ".Geopublishing";
+				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
+						GpFrame.this,
+						true, GpSwingUtil.R("TranslateSoftwareDialog.Explanation.Html", resPath, SystemUtils.IS_OS_WINDOWS ? "bat" : "sh")
+						);
+				manLanguagesFrame.setTitle(GpSwingUtil.R("TranslateSoftwareDialog.Title")); 
+				manLanguagesFrame.setVisible(true);
+			}
+		});
+		manageLanguageJMenuitem.setToolTipText(GpSwingUtil
+				.R("MenuBar.OptionsMenu.TranslateSoftware.TT"));
+		optionsMenu.add(manageLanguageJMenuitem);
 
 		// TODO Switch startup language
 

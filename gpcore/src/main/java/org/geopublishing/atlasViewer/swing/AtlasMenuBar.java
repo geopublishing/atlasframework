@@ -15,7 +15,6 @@ import java.awt.MenuBar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -38,7 +37,6 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.ResourceProviderManagerFrame;
 
 /**
  * This extension of a {@link JMenuBar} holds all the logic of an atlas

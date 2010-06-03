@@ -1184,7 +1184,7 @@ public class ASUtil {
 			if (maxColors >= numClasses)
 				palettes = LangUtil.extendArray(palettes, arthursPalette);
 		} catch (IOException e1) {
-			LOGGER.error("Creating Arthurs pecial palette failed:", e1);
+			LOGGER.error("Creating Arthurs special palette failed:", e1);
 		}
 
 		return palettes;

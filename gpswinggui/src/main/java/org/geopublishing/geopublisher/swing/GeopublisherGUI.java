@@ -102,8 +102,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
 		 * 
 		 * 
-		 * 
-		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
 		importWizard

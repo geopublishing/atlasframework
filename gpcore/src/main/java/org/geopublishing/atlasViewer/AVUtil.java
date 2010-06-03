@@ -112,7 +112,7 @@ public class AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVUtil.class);
 
 	/**
-	 * {@link Enum} of all recognizable Operating Systems
+	 * {@link Enum} of all recognizable Operating Systems. TODO replace with systemutil.iS...
 	 */
 	public static enum OSfamiliy {
 		linux, mac, windows, unknown
