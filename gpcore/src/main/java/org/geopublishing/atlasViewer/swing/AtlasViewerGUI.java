@@ -154,10 +154,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info("Starting AtlasViewer.. " + ReleaseUtil.getVersionInfo(AVUtil.class));
 		
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-		ResourceProvider.resetAllRegisteredResourceBundles();
+		ResourceProvider.resetAllRegisteredResourceBundles("Translation");
 
 		ReleaseUtil.logLGPLCopyright(LOGGER);
-
 		/*
 		 * Register this as single instance
 		 */

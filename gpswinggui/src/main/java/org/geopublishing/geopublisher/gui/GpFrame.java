@@ -489,6 +489,7 @@ public class GpFrame extends JFrame {
 						GpFrame.this,
 						true, GpSwingUtil.R("TranslateSoftwareDialog.Explanation.Html", resPath, SystemUtils.IS_OS_WINDOWS ? "bat" : "sh")
 						);
+				manLanguagesFrame.setRootPath(new File(resPath));
 				manLanguagesFrame.setTitle(GpSwingUtil.R("TranslateSoftwareDialog.Title")); 
 				manLanguagesFrame.setVisible(true);
 			}
