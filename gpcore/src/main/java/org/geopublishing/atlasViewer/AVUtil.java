@@ -119,6 +119,7 @@ public class AVUtil {
 	}
 
 	/**
+	 * TODO replace with SystemUtil.IS_WINDOWS ... 
 	 * @return the {@link OSfamiliy} the client is running on
 	 */
 	public static OSfamiliy getOSType() {

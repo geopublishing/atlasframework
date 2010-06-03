@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2010 Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai).
+ * Copyright (c) 2010 Stefan A. Tzeggai 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser Public License v2.1
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * 
  * Contributors:
- *     Stefan A. Tzeggai (soon changing to Stefan A. Tzeggai) - initial API and implementation
+ *     Stefan A. Tzeggai- initial API and implementation
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
@@ -15,6 +15,7 @@ import java.awt.MenuBar;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.security.acl.Owner;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -37,6 +38,7 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.ResourceProviderManagerFrame;
 
 /**
  * This extension of a {@link JMenuBar} holds all the logic of an atlas
@@ -198,7 +200,7 @@ public class AtlasMenuBar extends JMenuBar {
 		 * The MenuItem Language to change the language of the application
 		 */
 		fileMenu.add(atlasViewer.getLanguageSubMenu());
-
+		
 		/**
 		 * The MenuItem EXIT to end the application
 		 */
