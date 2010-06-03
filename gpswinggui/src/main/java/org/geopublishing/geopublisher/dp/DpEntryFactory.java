@@ -30,7 +30,7 @@ import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSou
  * This class tries to instantiate a subclass of {@link DpEntry} for an
  * arbitrary imported file.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 

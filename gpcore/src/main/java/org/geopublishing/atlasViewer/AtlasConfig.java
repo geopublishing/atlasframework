@@ -167,7 +167,7 @@ public class AtlasConfig implements Disposable {
 	 * @param entry
 	 *            {@link DpEntry}-subclass. Must not be <code>null</code>
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void add(DpEntry<? extends ChartStyle> entry) {
 		datapool.add(entry);

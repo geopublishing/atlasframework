@@ -315,7 +315,7 @@ public class JarExportUtil {
 	 * @param targetJar
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @param ace
 	 * @throws AtlasExportException
 	 */
@@ -1188,7 +1188,7 @@ public class JarExportUtil {
 	 * <ode>ARJAR_FILENAME</code> JAR.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @param dpe
 	 *            The {@link DpEntry} to export.

@@ -146,7 +146,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * stored in a local path
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private AtlasViewerGUI() {
 
@@ -722,7 +722,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * GP.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @param args
 	 *            optional command line String[] args. If an existing directory
 	 *            is passed, the directory will be used as the resource base.
@@ -818,7 +818,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * . Variable Instance is set to <code>null</code>.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void dispose() {
 
@@ -918,7 +918,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * {@link JMenu} structure Call this after changes to atlasConfig.langages.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         AtlasCreator

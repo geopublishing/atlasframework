@@ -42,7 +42,7 @@ import skrueger.swing.OkButton;
 /**
  * This {@link JDialog} can be used to edit a {@link Style}.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class StylerDialog extends CancellableDialogAdapter {
@@ -205,7 +205,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * Property Change Event and disposes the Dialog.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void cancel() {
 		atlasStyler.cancel();

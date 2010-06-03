@@ -576,7 +576,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	 * @return inside?
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private boolean insideClick(MouseEvent evt, int x, int y, int w, int h) {
 
@@ -1090,7 +1090,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 
 		/**
 		 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-		 *         Kr&uuml;ger</a>
+		 *         Tzeggai</a>
 		 */
 		public void paintToolControls(JXTaskPane group, Graphics g, int x,
 				int y, int width, int height) {
@@ -1102,7 +1102,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 		 * transparent, not visible
 		 * 
 		 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-		 *         Kr&uuml;ger</a>
+		 *         Tzeggai</a>
 		 */
 		public void paintEyeControls(MapLayerLegend mapLayerLegend, Graphics g,
 				int x, int y, int width, int height) {

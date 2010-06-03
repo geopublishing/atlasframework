@@ -25,7 +25,7 @@ import org.apache.log4j.Logger;
 /**
  * TODO Das ist zu speuiell. das muss in unique... umbeannt werden
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class SingleRuleListCellRenderer extends DefaultTableCellRenderer {

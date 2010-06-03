@@ -141,7 +141,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 *            if true, than all references will be deleted
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void findReferencesTo(AtlasConfig ac, Object dpeOrMap,
 			LinkedList<AtlasRefInterface<?>> references, boolean delete) {

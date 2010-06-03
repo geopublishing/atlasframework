@@ -37,7 +37,7 @@ import schmitzm.swing.ExceptionDialog;
  * A panel that displays HTML Info about a given {@link Map} The HTML will be
  * antialiased if set by AVProps.Keys.antialiasingHTML
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class HTMLInfoJPane extends JEditorPane {
 

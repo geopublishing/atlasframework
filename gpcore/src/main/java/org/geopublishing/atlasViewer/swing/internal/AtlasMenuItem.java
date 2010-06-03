@@ -57,7 +57,7 @@ public class AtlasMenuItem extends JMenuItem {
 	 * @param child
 	 *            Object present as {@link JMenuItem}
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public AtlasMenuItem(Object child, AtlasViewerGUI atlasViewer) {
 

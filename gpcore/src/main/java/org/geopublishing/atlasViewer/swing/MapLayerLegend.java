@@ -89,7 +89,7 @@ import skrueger.geotools.StyledRasterInterface;
  * 
  * This component is draggable by the mouse.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
@@ -249,7 +249,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * The small INFO Icon has been clicked
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void clickedInfoButton() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -502,7 +502,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * @return a {@link JPopupMenu} with valid MenuItems for this Layer.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public JPopupMenu getToolMenu() {
 
@@ -819,7 +819,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * wird) wird. Dann werden wird der Hintergrund auf WEISS gesetzt.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void print(Graphics g) {
@@ -867,7 +867,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 *            New {@link Style} to apply to the {@link MapLayer}.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void updateStyle(final Style style) {
 

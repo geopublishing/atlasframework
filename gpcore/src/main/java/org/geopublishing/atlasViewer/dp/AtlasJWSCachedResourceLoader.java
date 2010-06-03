@@ -23,7 +23,7 @@ import rachel.ResourceLoader;
  * <p>
  * It runs as a singleton pattern
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class AtlasJWSCachedResourceLoader implements ResourceLoader {

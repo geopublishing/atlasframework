@@ -20,7 +20,7 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 /**
  * This interface guarantees that you can edit and save the {@link AtlasConfig}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public interface DpEditableInterface {
 

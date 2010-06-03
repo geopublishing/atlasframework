@@ -317,7 +317,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 *         found.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public LayerStyle getLayerStyleByID(String styleID) {
 		for (LayerStyle ls : getLayerStyles()) {

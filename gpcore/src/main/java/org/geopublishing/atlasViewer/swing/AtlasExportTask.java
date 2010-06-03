@@ -16,6 +16,8 @@ import java.io.File;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
+import schmitzm.swing.SwingUtil;
+
 public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 
 	protected File exportDir;
@@ -53,7 +55,7 @@ public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 				 */
 				progressWindow.setDescription(openExportFolderMsg);
 				try {
-					AVSwingUtil.openOSFolder(exportDir);
+					SwingUtil.openOSFolder(exportDir);
 					Thread.sleep(1000);
 				} catch (InterruptedException e1) {
 					progressWindow.exceptionOccurred(e1);

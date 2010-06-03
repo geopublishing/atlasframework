@@ -35,7 +35,7 @@ import schmitzm.swing.ExceptionDialog;
  * 
  * All the keys are members of enum {@link Keys}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class AVProps {
 	private static final Logger LOGGER = Logger.getLogger(AVProps.class);
@@ -55,7 +55,7 @@ public class AVProps {
 	 * toString to Strings which equals their variable Name
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
@@ -128,7 +128,7 @@ public class AVProps {
 	 *            Dirname in the User Home directory, e.g. ".shh"
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected void init(String propertiesFilename, String appDirname) {
 		// LOGGER.info("Initialising the AV Properties");
@@ -216,7 +216,7 @@ public class AVProps {
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void resetProperties(final Component guiOwner) {
 		// final String msg = AtlasViewer.RESOURCE

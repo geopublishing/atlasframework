@@ -33,7 +33,7 @@ import schmitzm.swing.SwingUtil;
  * the main panel of Geopublisher. If automatically sets values of its size and
  * state from {@link GPProps} properties.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class GpJSplitPane extends JSplitPane {
 	private Logger LOGGER = Logger.getLogger(GpJSplitPane.class);
@@ -73,7 +73,7 @@ public class GpJSplitPane extends JSplitPane {
 	 * sensitive.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private void initialize() {
 		setOneTouchExpandable(true);

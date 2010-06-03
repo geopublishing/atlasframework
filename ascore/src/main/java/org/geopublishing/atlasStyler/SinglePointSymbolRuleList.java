@@ -42,7 +42,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	 *            If <code>true</code> the listeners are copied also.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public SinglePointSymbolRuleList clone(boolean copyListeners) {
@@ -70,7 +70,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	 * the biggest size found in all layers.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Float getSizeBiggest() {
@@ -89,7 +89,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	 * size.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void setSizeBiggest(Float newMax) {
@@ -115,7 +115,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	/**
 	 * @return The rotation of the first layer
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Double getRotation() {
@@ -131,7 +131,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	/**
 	 * @return The rotation of the first layer
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void setRotation(Double rot) {
@@ -152,7 +152,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	 * be replaced.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void setColor(Color newColor) {
@@ -172,7 +172,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	 *         <code>null</code>
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Color getColor() {

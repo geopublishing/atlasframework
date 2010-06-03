@@ -67,7 +67,7 @@ public class LayerStyle {
 	 * The {@link #getFilename()} is used as an ID
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public String getID() {
 		return filename;
@@ -85,7 +85,7 @@ public class LayerStyle {
 	 * Force a reload of the style
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void uncache() {
 		style = null;

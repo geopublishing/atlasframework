@@ -31,7 +31,7 @@ import skrueger.i8n.Translation;
 /**
  * Extends an {@link HTMLInfoJPane} allows Drag'n'Drop to insert HTML Infomation
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class DesignHTMLInfoJPane extends HTMLInfoJPane {

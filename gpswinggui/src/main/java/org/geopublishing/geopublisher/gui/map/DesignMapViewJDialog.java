@@ -103,7 +103,7 @@ import com.vividsolutions.jts.geom.LineString;
  * Puts a {@link DesignMapView} into a {@link JDialog}. The static {@link Map}
  * openInstances ensures, that only one Dialog per Map is open.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class DesignMapViewJDialog extends CancellableDialogAdapter {

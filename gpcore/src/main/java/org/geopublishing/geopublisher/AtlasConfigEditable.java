@@ -50,7 +50,7 @@ import skrueger.i8n.Translation;
  * An extension of the AtlasConfig for use within AtlasCreator. One purpose is,
  * to keep {@link File} related references out of {@link AtlasViewerGUI}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class AtlasConfigEditable extends AtlasConfig {

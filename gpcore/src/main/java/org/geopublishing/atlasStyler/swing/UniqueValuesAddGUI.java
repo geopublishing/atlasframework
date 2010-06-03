@@ -410,7 +410,7 @@ public class UniqueValuesAddGUI extends JDialog {
 	// /**
 	// * @param args
 	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Kr&uuml;ger</a>
+	// * Tzeggai</a>
 	// * @throws IOException
 	// */
 	// public static void main(String[] args) throws IOException {

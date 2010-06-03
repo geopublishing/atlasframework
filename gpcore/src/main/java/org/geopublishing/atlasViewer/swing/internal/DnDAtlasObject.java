@@ -17,7 +17,7 @@ public class DnDAtlasObject {
 	 * drop event.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 */
 	public enum AtlasDragSources {

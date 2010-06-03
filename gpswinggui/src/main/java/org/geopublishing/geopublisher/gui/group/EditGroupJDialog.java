@@ -25,7 +25,7 @@ import skrueger.swing.TranslationEditJPanel;
  * Modal {@link JDialog} that allows to edit the internationalized Title and
  * Description and Keywords of a {@link Group}.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class EditGroupJDialog extends TranslationAskJDialog {
 	Logger log = Logger.getLogger(EditGroupJDialog.class);
@@ -35,7 +35,7 @@ public class EditGroupJDialog extends TranslationAskJDialog {
 	 * Description and Keywords of a {@link Group}.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public EditGroupJDialog(Component owner, Group group) {
 		super(owner);

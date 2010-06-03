@@ -79,6 +79,7 @@ import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
@@ -91,7 +92,7 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
  * The mighty mighty {@link GeopublisherGUI} is a tool that generates runnable
  * {@link AtlasViewerGUI} compilations.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
@@ -549,7 +550,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					AVUtil.openOSFolder(ace.getAd());
+					SwingUtil.openOSFolder(ace.getAd());
 				}
 
 			}));
@@ -673,7 +674,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 *         closed
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean closeAtlas() {
 
@@ -740,7 +741,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * Creates a new empty Atlas from user input.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private void createNewAtlas() {
 

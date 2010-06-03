@@ -36,7 +36,7 @@ import schmitzm.swing.ExceptionDialog;
  * This {@link AtlasDropTargetListener} manages the import of new HTML pages
  * beeing dropped into a {@link HTMLInfoJPane}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  * @deprecated We now use the internal SimplyHTML editor...
  */

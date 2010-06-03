@@ -30,7 +30,7 @@ import org.geopublishing.geopublisher.GpUtil;
  * newly imported Video. It is bound to a {@link File} obejct, not only to a
  * {@link URL}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class DpMediaVideoEd extends DpMediaVideo implements DpEditableInterface {

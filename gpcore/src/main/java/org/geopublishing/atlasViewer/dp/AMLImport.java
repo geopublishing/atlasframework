@@ -565,7 +565,7 @@ public class AMLImport {
 	 * @throws AtlasRecoverableException
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @author <a href="mailto:schmitzm@bonn.edu">Martin Schmitz</a> (University
 	 *         of Bonn/Germany)
 	 */
@@ -743,7 +743,7 @@ public class AMLImport {
 	 * @return {@link RasterLegendData}, maybe without entries, but never null.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws AtlasRecoverableException
 	 */
 	private static RasterLegendData parseRasterLegendData(AtlasConfig ac,
@@ -1122,7 +1122,7 @@ public class AMLImport {
 	 * Parses a <layerStyle> tag
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private static LayerStyle parseLayerStyle(AtlasConfig ac, Node node,
 			DpLayer<?, ? extends ChartStyle> dpLayer)

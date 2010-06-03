@@ -48,7 +48,7 @@ public class SinglePolygonSymbolRuleList extends
 	 *            If <code>true</code> the listeners are copied also.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public SinglePolygonSymbolRuleList clone(boolean copyListeners) {
@@ -78,7 +78,7 @@ public class SinglePolygonSymbolRuleList extends
 	 * be replaced.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void setColor(Color color) {
@@ -95,7 +95,7 @@ public class SinglePolygonSymbolRuleList extends
 	 *         first {@link Fill} then {@link Stroke}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Color getColor() {
@@ -130,7 +130,7 @@ public class SinglePolygonSymbolRuleList extends
 	 *         inspected.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public boolean hasRotation() {

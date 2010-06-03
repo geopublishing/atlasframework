@@ -45,7 +45,7 @@ import skrueger.i8n.Translation;
  * http://javadoc.geotools.fr
  * /2.3/org/geotools/gce/imagepyramid/ImagePyramidReader.html
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class DpLayerRasterPyramid
 		extends

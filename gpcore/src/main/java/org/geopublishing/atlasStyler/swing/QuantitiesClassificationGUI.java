@@ -504,7 +504,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 *         updated when new classes are available
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private JLabel getHistogram() {
 		if (jFreeChartJLabel == null) {

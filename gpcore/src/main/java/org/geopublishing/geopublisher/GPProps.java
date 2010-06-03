@@ -29,7 +29,7 @@ import schmitzm.swing.ExceptionDialog;
  * Only the methods working on the enumeration {@link Keys} are public
  * Interanally the {@link Keys} are saved as {@link String}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public abstract class GPProps {
 
@@ -41,7 +41,7 @@ public abstract class GPProps {
 	 * List of all legal keys in the
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
@@ -184,7 +184,7 @@ public abstract class GPProps {
 	 *            ".AtlasSTyler"
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected static void init(final String propertiesFilename,
 			final String appDirname) {
@@ -218,7 +218,7 @@ public abstract class GPProps {
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void resetProperties(final Component guiOwner) {
 		final String msg = GpUtil
@@ -323,7 +323,7 @@ public abstract class GPProps {
 	 * file...
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void upgrade() {
 		LOGGER.debug("upgrade from geopublisher.properties");

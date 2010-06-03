@@ -35,6 +35,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.JPanel;
+import schmitzm.swing.SwingUtil;
 import skrueger.swing.Cancellable;
 import skrueger.swing.SmallButton;
 
@@ -90,7 +91,7 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 					R("EditDPEDialog.OpenFolderButton") ) {
 
 				public void actionPerformed(final ActionEvent e) {
-					AVUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
+					SwingUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
 							.getAtlasConfig()).getDataDir(), dpe.getDataDirname()));
 				}
 

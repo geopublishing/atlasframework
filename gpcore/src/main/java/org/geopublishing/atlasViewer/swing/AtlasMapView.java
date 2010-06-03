@@ -67,7 +67,7 @@ import com.vividsolutions.jts.geom.Envelope;
  * {@link GeoMapPane} on the right, and a {@link JTabbedPane} on the left with
  * the legend and optionally other info.<br/>
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class AtlasMapView extends MapView implements MapContextManagerInterface {
 
@@ -130,7 +130,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 *            The AtlasConfig where the {@link Map} is defined
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public AtlasMapView(Component owner, AtlasConfig atlasConfig) {
 		super(owner);

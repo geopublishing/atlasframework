@@ -93,7 +93,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	/**
 	 * @return the classLimits as an {@link ArrayList}.
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public ArrayList<NUMBERTYPE> getClassLimitsAsArrayList() {
 		return new ArrayList<NUMBERTYPE>(classLimits);
@@ -108,7 +108,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 *            Classlimits or the Classes to set.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits) {
 		setClassLimits(classLimits, false);
@@ -126,7 +126,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 *            if <code>true</code> the rule titles will be reset to default
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits,
 			boolean resetRuleTitles) {
@@ -250,7 +250,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @param filter
 	 *            A {@link Filter}
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @return <code>null</code> if it is not a "BetweenFilter"
 	 */
@@ -297,7 +297,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return an expanded {@link String} with more KVPs
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected String extendMetaInfoString(String metaInfoString) {
 		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_VALUE_FIELD
@@ -319,7 +319,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return an expanded {@link String} with more KVPs
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected void parseMetaInfoString(String metaInfoString) {
 

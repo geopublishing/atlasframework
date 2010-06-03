@@ -36,7 +36,7 @@ import skrueger.swing.SmallButton;
  * <li>New Items can be imported by D'n'D from the host system. Actions on the
  * data-pool entries can be performed via the right-mouse menu.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class EditDataPoolPanel extends JPanel {
@@ -56,7 +56,7 @@ public class EditDataPoolPanel extends JPanel {
 	 * <li>edit colormaps for rasters <li>edit legend for raster
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 */
 	public EditDataPoolPanel(final AtlasConfigEditable ace) {

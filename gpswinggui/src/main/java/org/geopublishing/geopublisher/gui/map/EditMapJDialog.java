@@ -31,7 +31,6 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -139,7 +138,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 								.getAc()).getHtmlDir(), map.getId());
 						if (!htmlDir.exists())
 							htmlDir.mkdirs();
-						AVUtil.openOSFolder(htmlDir);
+						SwingUtil.openOSFolder(htmlDir);
 					}
 
 				});

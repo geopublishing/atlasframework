@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 /**
  * This event communicated the change of some {@link AbstractRuleList}.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class RuleChangedEvent {

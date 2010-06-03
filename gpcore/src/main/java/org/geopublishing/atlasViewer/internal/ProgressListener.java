@@ -13,7 +13,7 @@ package org.geopublishing.atlasViewer.internal;
 /**
  * This interface is used to inform about progress
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public interface ProgressListener {
 

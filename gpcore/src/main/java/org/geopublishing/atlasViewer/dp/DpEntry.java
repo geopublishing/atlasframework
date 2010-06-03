@@ -198,7 +198,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 //	 * generated using {@link IOUtil}.changeUrlExt
 //	 * 
 //	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Kr&uuml;ger</a>
+//	 *         Tzeggai</a>
 //	 * 
 //	 * @throws IOException
 //	 * @throws AtlasFatalException
@@ -223,7 +223,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 //	 * generated using {@link IOUtil}.changeUrlExt
 //	 * 
 //	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Kr&uuml;ger</a>
+//	 *         Tzeggai</a>
 //	 * 
 //	 * @throws IOException
 //	 * @throws AtlasFatalException
@@ -326,7 +326,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 *         set so far.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public final Translation getTitle() {
 		return title;
@@ -338,7 +338,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 *            {@link CopyOfDpEntry}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public final void setTitle(Translation title) {
 		this.title = title;

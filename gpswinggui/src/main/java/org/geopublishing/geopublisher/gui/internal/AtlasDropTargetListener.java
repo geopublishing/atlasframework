@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
  * An Adapter that implements some of the abstract {@link DropTargetListener}
  * methods
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public abstract class AtlasDropTargetListener implements DropTargetListener {
 	static private final Logger log = Logger

@@ -33,7 +33,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
  * {@link PropertyChangeListener}s that listen to changes in the
  * {@link DataPool}.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {

@@ -22,7 +22,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
  * This abstract class is the parent of all {@link DpEntry}s that contain no
  * layer but media
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public abstract class DpMedia<CHART_STYLE_IMPL extends ChartStyle> extends
 		DpEntry<CHART_STYLE_IMPL> {

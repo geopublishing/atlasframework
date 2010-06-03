@@ -53,7 +53,7 @@ package org.geopublishing.geopublisher.gui.datapool;
 ///**
 // * Shows a little GUI with settings and translations for the atlas in general
 // * 
-// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 // */
 //public class EditAtlasConfigJDialog extends JDialog {
 //	private static Logger LOGGER = Logger

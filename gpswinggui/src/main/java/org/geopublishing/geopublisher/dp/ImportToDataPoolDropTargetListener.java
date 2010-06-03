@@ -40,7 +40,7 @@ import schmitzm.swing.ExceptionDialog;
  * A {@link DropTargetListener} that listens for anything that can be imported
  * into the {@link DataPool}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener {

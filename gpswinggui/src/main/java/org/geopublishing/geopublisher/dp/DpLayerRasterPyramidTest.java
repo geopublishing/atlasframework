@@ -26,7 +26,7 @@ import org.geotools.gce.imagepyramid.ImagePyramidFormat;
  * Tests if a given directory can be imported as an image pyramid to create a
  * {@link GridCoverage2D}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class DpLayerRasterPyramidTest implements DpEntryTesterInterface {

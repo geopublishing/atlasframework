@@ -49,7 +49,7 @@ import skrueger.geotools.StyledRasterInterface;
  * reference to a {@link Map}. {@link DpLayer}. The class also extends the
  * {@link JPopupMenu} with Atlas specific {@link JMenuItem}s.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class AtlasMapLayerLegend extends MapLayerLegend {
 
@@ -92,7 +92,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 * {@link DpLayer}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>e
+	 *         Tzeggai</a>e
 	 * 
 	 * @param mapLayer
 	 *            {@link MapLayer}
@@ -222,7 +222,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 * (Additional-)Style of the layer.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public StylerDialog openStylerDialog() {

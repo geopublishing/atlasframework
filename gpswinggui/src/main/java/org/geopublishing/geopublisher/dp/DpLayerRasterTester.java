@@ -34,7 +34,7 @@ import skrueger.geotools.io.GeoImportUtilURL;
  * A tester class that can determine, if a file is importable as a
  * {@link DpLayerRaster}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class DpLayerRasterTester implements DpEntryTesterInterface {
 	Logger log = Logger.getLogger(DpLayerRasterTester.class);

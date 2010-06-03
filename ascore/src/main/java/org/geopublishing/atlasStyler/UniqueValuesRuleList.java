@@ -272,7 +272,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 *            Give the name directly as a {@link PropertyName}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void setPropertyFieldName(final String newName,
 			final boolean removeOldClasses) {
@@ -320,7 +320,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	// * we wait for the user to apply the template to some rules.
 	// *
 	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Kr&uuml;ger</a>
+	// * Tzeggai</a>
 	// */
 	// @Override
 	// public void setTemplate(final SingleRuleList template) {
@@ -389,7 +389,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * Adds all missing unique values to the list of rules...
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws IOException
 	 */
 	public void addAllValues(final Component parentGUI) throws IOException {
@@ -466,7 +466,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * @return <code>false</code> is the value already exists
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean addUniqueValue(final String uniqueString)
 			throws IllegalArgumentException {
@@ -489,7 +489,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	/**
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public ArrayList<String> getLabels() {
 		return labels;
@@ -499,7 +499,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * Applies the template to the given ist of categories.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @param values
 	 *            List of {@link String} values that shall be affected by this.
@@ -527,7 +527,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * Applies the Template to ALL values
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void applyTemplate() {
 		applyTemplate(getValues());
@@ -541,7 +541,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * 
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void applyPalette(final JComponent componentForGui) {
 		pushQuite();
@@ -579,7 +579,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * Remove the given list of {@link String} values.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void removeValues(final List<String> values) {
 		pushQuite();
@@ -600,7 +600,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 *            Removes this value
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private void removeValue(final String strVal) {
 
@@ -632,7 +632,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 *            {@link Filter} to interpret
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @return String[] with propertyName, uniqueValue
 	 */

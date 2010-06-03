@@ -23,7 +23,7 @@ import schmitzm.swing.ExceptionDialog;
 /**
  * Allows to serve HTML directly from the filesystem
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class FileWebResourceLoader extends FileResourceLoader implements

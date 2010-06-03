@@ -105,7 +105,7 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	 * 
 	 * @param template
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void setTemplate(SingleRuleList<? extends Symbolizer> template) {
 		this.template = template;

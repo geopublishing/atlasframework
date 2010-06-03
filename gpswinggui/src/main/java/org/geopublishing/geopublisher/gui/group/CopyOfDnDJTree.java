@@ -55,7 +55,7 @@ import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSour
 /**
  * A {@link JTree} that is reorderable by D'n'D
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class CopyOfDnDJTree extends JTree implements DragSourceListener,
 		DropTargetListener, DragGestureListener {

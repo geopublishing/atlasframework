@@ -23,7 +23,7 @@ import skrueger.geotools.StyledLayerInterface;
  * This {@link DpEntry} represents a vector layer. Type <code>E</code>
  * represents the return type of {@link #getGeoObject()}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * @param <E>
  * 
  * TODO can be removed!

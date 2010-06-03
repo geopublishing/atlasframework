@@ -66,7 +66,7 @@ package org.geopublishing.geopublisher.gui;
 // * This Panel allows editing of {@link RasterLegendData} and provides a preview
 // * of the legend.
 // * 
-// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 // */
 //public class EditRasterLegendDataJPanel extends JPanel {
 //	static private final Logger LOGGER = Logger

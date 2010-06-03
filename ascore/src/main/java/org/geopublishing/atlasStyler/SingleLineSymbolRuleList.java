@@ -42,7 +42,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	 *            If <code>true</code> the listeners are copied also.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public SingleRuleList clone(boolean copyListeners) {
@@ -116,7 +116,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	 * be replaced.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public void setColor(Color newColor) {

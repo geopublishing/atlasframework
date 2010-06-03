@@ -106,7 +106,7 @@ import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
  * </ul>
  * * This class also manages the availability of the selection buttons.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class MapLegend extends JXTaskPaneContainer implements
 		MapContextManagerInterface, DropTargetListener {
@@ -503,7 +503,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 *            layer topmost.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public boolean insertStyledLayer(StyledLayerInterface<?> styledObj, int idx) {

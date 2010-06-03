@@ -192,7 +192,7 @@ public class ASUtil {
 	 * Creates a default {@link SimpleFeatureType} for a given class type
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static SimpleFeatureType createFeatureType(
 			final GeometryDescriptor defaultGeometry) {
@@ -207,7 +207,7 @@ public class ASUtil {
 	 * @param featureSource
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Vector<String> getValueFieldNames(
 			final FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
@@ -223,7 +223,7 @@ public class ASUtil {
 	 * @param featureSource
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Vector<String> getValueFieldNames(
 			SimpleFeatureType featureType, boolean empty) {
@@ -294,7 +294,7 @@ public class ASUtil {
 	 * @return a default {@link Mark} with a <code>circle</code>
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static final Mark createDefaultMark() {
 		return SB.createMark("circle");
@@ -372,7 +372,7 @@ public class ASUtil {
 	 * Replaces the "main" color in a given {@link PolygonSymbolizer} element
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void replacePolygonSymbolizerSize(final PolygonSymbolizer ps,
 			final Float factor) {
@@ -565,7 +565,7 @@ public class ASUtil {
 	// * @param string
 	// *
 	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Kr&uuml;ger</a>
+	// * Tzeggai</a>
 	// */
 	// public static void setClipboardContents(final String string) {
 	// final StringSelection selection = new StringSelection(string);
@@ -580,7 +580,7 @@ public class ASUtil {
 	 * @param requestor
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static boolean isClipboardContainingText(final Object requestor) {
 		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -597,7 +597,7 @@ public class ASUtil {
 	 * @param requestor
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static String getClipboardContents(final Object requestor) {
 		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -989,7 +989,7 @@ public class ASUtil {
 	 * @return <code>null</code> is canceled. Otherwise the new {@link String}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static String askForString(final Component owner,
 			final String preset, final String question) {
@@ -1091,7 +1091,7 @@ public class ASUtil {
 	 *            The number to express as a {@link Literal}
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Literal getLiteralForField(final AttributeDescriptor at,
 			final Number number) {

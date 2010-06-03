@@ -485,7 +485,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            default.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void setSelectedStyleID(final String layerID, final String styleID) {
 		// LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
@@ -505,7 +505,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            default.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public String getSelectedStyleID(final String layerID) {
 		// LOGGER.debug("getSelectedStyleID for layerID " + layerID + " ="
@@ -524,7 +524,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            default.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public LayerStyle getSelectedStyle(final String layerID) {
 		final String lsID = getSelectedStyleID(layerID);
@@ -557,7 +557,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            GUI element to refer to
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 *             JWS is used and data is not cached and we can't download it!
@@ -884,7 +884,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            copy destination {@link Map}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Map copyTo(final Map newMap) {

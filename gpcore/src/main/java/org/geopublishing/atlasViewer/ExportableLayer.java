@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.swing.MapLegend;
  * @see LayerPaneGroupUI
  * @see MapLegend
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public interface ExportableLayer {

@@ -25,7 +25,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
  * Interface to test is a file can be opened by an extension of the
  * {@link DpEntry} class
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public interface DpEntryTesterInterface {
@@ -40,7 +40,7 @@ public interface DpEntryTesterInterface {
 	 * @return true if a {@link DpEntry} can be created from this file
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean test(Component owner, File file);
 
@@ -58,7 +58,7 @@ public interface DpEntryTesterInterface {
 	 * @throws IOException
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws URISyntaxException
 	 * @throws Exception
 	 */

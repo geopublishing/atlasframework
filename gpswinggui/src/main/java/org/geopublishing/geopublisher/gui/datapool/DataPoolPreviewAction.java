@@ -41,7 +41,7 @@ public class DataPoolPreviewAction extends AbstractAction {
 	 * references to it from the {@link MapPool} or the {@link Group}s
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 * Kr&uuml;ger</a>
+	 * Tzeggai</a>
 	 */
 	public void actionPerformed(ActionEvent e) {
 

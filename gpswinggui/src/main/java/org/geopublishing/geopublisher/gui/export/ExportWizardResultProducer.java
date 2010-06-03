@@ -39,6 +39,7 @@ import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 
 /**
  * This class is using the values collected during the {@link ExportWizard} to
@@ -171,7 +172,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						AVUtil.openOSFolder(new File(exportDir));
+						SwingUtil.openOSFolder(new File(exportDir));
 						openFolderButton.setEnabled(false);
 
 						// TODO Here it would be nice to close the Wizard... but

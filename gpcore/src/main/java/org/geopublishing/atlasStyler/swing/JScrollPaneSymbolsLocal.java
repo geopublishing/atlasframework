@@ -52,7 +52,7 @@ import schmitzm.geotools.feature.FeatureUtil;
  * A special {@link JScrollPane} that does threaded filling of the GUI with SLD
  * Symbol buttons.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
@@ -69,7 +69,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 *            be scanned for SLD fragments.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public JScrollPaneSymbolsLocal(GeometryDescriptor attType) {
 		this.attType = attType;
@@ -222,7 +222,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 * @return A {@link SwingWorker} used in {@link #rescan(boolean)}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private SwingWorker<List<SingleRuleList<?>>, Object> getWorker(
 			final ProgressWindow pw) {
@@ -398,7 +398,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 *            cleard first.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public synchronized void rescan(boolean reset) {
 		if (reset)

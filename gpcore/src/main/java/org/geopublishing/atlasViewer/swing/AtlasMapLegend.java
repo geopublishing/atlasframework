@@ -112,7 +112,7 @@ public class AtlasMapLegend extends MapLegend {
 	 *         objects.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	protected MapLayerLegend createMapLayerLegend(MapLayer mapLayer,
@@ -152,7 +152,7 @@ public class AtlasMapLegend extends MapLegend {
 //	 * 
 //	 * @param styledObj
 //	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Kr&uuml;ger</a>
+//	 *         Tzeggai</a>
 //	 */
 //	@Override
 //	public void updateLegendIcon(StyledLayerInterface<?> styledObj) {

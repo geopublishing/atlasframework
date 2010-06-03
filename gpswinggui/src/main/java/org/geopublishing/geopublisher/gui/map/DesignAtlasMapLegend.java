@@ -153,7 +153,7 @@ public class DesignAtlasMapLegend extends AtlasMapLegend {
 	 *         objects.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	protected MapLayerLegend createMapLayerLegend(MapLayer mapLayer,

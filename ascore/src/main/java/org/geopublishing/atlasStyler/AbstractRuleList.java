@@ -38,7 +38,7 @@ public abstract class AbstractRuleList {
 	 * .tostring().equals(...)
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public enum RulesListType {
 		SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POLYGON, SINGLE_SYMBOL_LINE, QUANTITIES_COLORIZED_POINT, QUANTITIES_COLORIZED_LINE, QUANTITIES_COLORIZED_POLYGON, QUANTITIES_SIZED_POINT, QUANTITIES_SIZED_LINE, UNIQUE_VALUE_POINT, UNIQUE_VALUE_LINE, UNIQUE_VALUE_POLYGON, UNIQUE_VALUE_COMBINATIONS_POINT, UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POLYGONE, TEXT_LABEL
@@ -123,7 +123,7 @@ public abstract class AbstractRuleList {
 	 * 
 	 * @param listener
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void addListener(RuleChangeListener listener) {
 		listeners.add(listener);
@@ -138,7 +138,7 @@ public abstract class AbstractRuleList {
 	 * @return <code>false</code> if {@link RuleChangeListener} not found
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean removeListener(RuleChangeListener listener) {
 		return listeners.remove(listener);
@@ -148,7 +148,7 @@ public abstract class AbstractRuleList {
 	 * Clears all {@link RuleChangeListener}s
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void clearListeners() {
 		listeners.clear();
@@ -172,7 +172,7 @@ public abstract class AbstractRuleList {
 	 * Returns direct access to the {@link RuleChangeListener}s {@link HashSet}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public Set<RuleChangeListener> getListeners() {
 		return listeners;
@@ -183,7 +183,7 @@ public abstract class AbstractRuleList {
 	 * by this {@link AbstractRuleList} implementation have changed.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void fireEvents(RuleChangedEvent rce) {
 
@@ -217,7 +217,7 @@ public abstract class AbstractRuleList {
 	 * @return An identifier string for that RuleList type.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public abstract RulesListType getTypeID();
 
@@ -229,7 +229,7 @@ public abstract class AbstractRuleList {
 	 *         particular RuleList
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public abstract String getAtlasMetaInfoForFTSName();
 		

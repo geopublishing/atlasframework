@@ -50,7 +50,7 @@ import skrueger.i8n.Translation;
  * 
  * @see DpLayerRasterPyramid
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
 		implements StyledGridCoverageInterface, ZoomRestrictableGridInterface{
@@ -282,7 +282,7 @@ public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
 	 * <code>.sld</code>. If it doesn't exist, returns a default RasterStyle.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	@Override
 	public Style getStyle() {

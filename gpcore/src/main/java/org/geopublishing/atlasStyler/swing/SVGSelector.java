@@ -586,7 +586,7 @@ public class SVGSelector extends JDialog {
 	/**
 	 * @param args
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws MalformedURLException
 	 */
 	public static void main(String[] args) throws MalformedURLException {
@@ -607,7 +607,7 @@ public class SVGSelector extends JDialog {
 	 * @return A SwingWorker that adds the Online-Symbols in a background task.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private SwingWorker<Object, Object> getWorker(final ProgressWindow pw) {
 		SwingWorker<Object, Object> swingWorker = new SwingWorker<Object, Object>() {

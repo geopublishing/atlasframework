@@ -67,7 +67,7 @@ import skrueger.i8n.I8NUtil;
  * This extension of the basic {@link MapLayerLegend} introduces menu items and
  * behaviour which are only available in the {@link GeopublisherGUI} context.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
@@ -130,7 +130,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	 * and behavior which are only available in Geopublisher.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @param map
 	 *            Map that this
 	 */

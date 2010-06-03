@@ -362,7 +362,7 @@ public class AtlasStyler {
 	 *            {@link Style} to import.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void importStyle(Style importStyle) {
 
@@ -770,7 +770,7 @@ public class AtlasStyler {
 	 * called whenever the {@link Style} has changed.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void addListener(final StyleChangeListener listener) {
 		listeners.add(listener);
@@ -783,7 +783,7 @@ public class AtlasStyler {
 	 * Use this for {@link TextRuleList}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void fireStyleChangedEvents() {
 		fireStyleChangedEvents(false);
@@ -799,7 +799,7 @@ public class AtlasStyler {
 	 *            Can be used to override isAutomaticPreview()
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void fireStyleChangedEvents(final boolean forced) {
 		if (isQuite() && !forced) {
@@ -837,7 +837,7 @@ public class AtlasStyler {
 	 * Sets the parameter ruleList as the lastChangedSymbolizerRuleList
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private void fireStyleChangedEvents(final AbstractRuleList ruleList) {
 		if (!(ruleList instanceof TextRuleList)) {
@@ -851,7 +851,7 @@ public class AtlasStyler {
 	 * 
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean isQuite() {
 		return quite;
@@ -866,7 +866,7 @@ public class AtlasStyler {
 	 *         been changed.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public Style getStyle() {
 		if (xxxstyle == null) {
@@ -1134,7 +1134,7 @@ public class AtlasStyler {
 	 *            {@link GeometryAttributeType} that defines
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 
 	/**
@@ -1154,7 +1154,7 @@ public class AtlasStyler {
 	 *         POINT symbol library is saved.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static File getPointSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_POINT);
@@ -1167,7 +1167,7 @@ public class AtlasStyler {
 	 *         LINE symbol library is saved.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static File getLineSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_LINE);
@@ -1189,7 +1189,7 @@ public class AtlasStyler {
 	 *         POLYGON symbol library is saved.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static File getPolygonSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_POLYGON);
@@ -1235,7 +1235,7 @@ public class AtlasStyler {
 	 * dependencies.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void dispose() {
 		xxxstyle = null;
@@ -1247,7 +1247,7 @@ public class AtlasStyler {
 	 * Polygon.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean isPolygon() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
@@ -1259,7 +1259,7 @@ public class AtlasStyler {
 	 * {@link Polygon}.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean isPoint() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
@@ -1271,7 +1271,7 @@ public class AtlasStyler {
 	 * {@link LineString}.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public boolean isLineString() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()

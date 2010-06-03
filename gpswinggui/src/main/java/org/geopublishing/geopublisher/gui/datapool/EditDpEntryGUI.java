@@ -40,7 +40,7 @@ import skrueger.swing.TranslationsAskJPanel;
  * Allows to edit all {@link Translation}s of this {@link DpEntry} and some more
  * depending on the parameters depending on the type of {@link DpEntry}.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {

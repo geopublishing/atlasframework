@@ -72,7 +72,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 *            be scanned for SLD fragments.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public JScrollPaneSymbolsOnline(GeometryDescriptor attType) {
 		this.attType = attType;
@@ -103,7 +103,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 *            Shall the {@link JList} be cleared before rescan
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public void rescan(boolean reset) {
 
@@ -118,7 +118,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 * @return A SwingWorker that adds the Online-Symbols in a background task.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private SwingWorker<Object, Object> getWorker() {
 		SwingWorker<Object, Object> swingWorker = new SwingWorker<Object, Object>() {

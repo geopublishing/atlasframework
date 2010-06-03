@@ -74,7 +74,7 @@ import skrueger.i8n.Translation;
  * This {@link JPanel} shows information about a mouse-click into the
  * {@link SelectableXMapPane}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class ClickInfoPanel extends JPanel {

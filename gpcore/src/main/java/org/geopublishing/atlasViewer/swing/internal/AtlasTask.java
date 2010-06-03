@@ -26,7 +26,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
  * The {@link #isCancelled()} should be checking during
  * {@link #doInBackground()}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  * @param <K>
  *            The result type for this task. Returned by {@link #get()}

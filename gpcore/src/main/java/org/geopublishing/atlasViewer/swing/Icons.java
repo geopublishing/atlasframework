@@ -167,7 +167,7 @@ public class Icons {
 	/**
 	 * @return A self-rendered Up-Arrow Icon at 10x10 pixel
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Icon getUpArrowIcon() {
 		if (upArrow == null) {
@@ -188,7 +188,7 @@ public class Icons {
 	/**
 	 * @return A self-rendered Down-Arrow Icon at 10x10 pixel
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Icon getDownArrowIcon() {
 		if (downArrow == null) {

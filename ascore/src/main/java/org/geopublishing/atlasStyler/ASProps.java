@@ -31,7 +31,7 @@ import schmitzm.swing.ExceptionDialog;
  * Only the methods working on the enumeration {@link Keys} are public
  * Interanally the {@link Keys} are saved as {@link String}
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public abstract class ASProps {
 	private static final Logger LOGGER = Logger.getLogger(ASProps.class);
@@ -68,7 +68,7 @@ public abstract class ASProps {
 	 * List of all legal keys in the
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
@@ -120,7 +120,7 @@ public abstract class ASProps {
 	 *            Dirname in the User Home directory, e.g. ".shh"
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected static void init(String propertiesFilename, String appDirname) {
 		LOGGER.info("Initialising the AS Properties");
@@ -216,7 +216,7 @@ public abstract class ASProps {
 	 * Get a value from the underlying {@link Properties}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private static final String get(String key) {
 		return properties.getProperty(key);
@@ -284,7 +284,7 @@ public abstract class ASProps {
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static void resetProperties() {
 

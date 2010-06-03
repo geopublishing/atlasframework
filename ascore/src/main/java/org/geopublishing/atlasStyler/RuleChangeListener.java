@@ -19,7 +19,7 @@ public interface RuleChangeListener {
 	 *            {@link RuleChangedEvent} containing the RuleList
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 
 	public void changed(RuleChangedEvent e);

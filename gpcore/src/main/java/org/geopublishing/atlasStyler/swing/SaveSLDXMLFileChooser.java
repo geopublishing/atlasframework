@@ -22,7 +22,7 @@ import org.geopublishing.atlasStyler.AtlasStyler;
  * This extension to a {@link JFileChooser} is ment to be used to save SLD/SE
  * files.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class SaveSLDXMLFileChooser extends JFileChooser {

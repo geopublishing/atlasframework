@@ -604,7 +604,7 @@ public class GpFrame extends JFrame {
 	 * {@link JMenu} structure Call this after changes to atlasConfig.languages.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         {@link GeopublisherGUI}

@@ -30,7 +30,7 @@ import rachel.util.NetUtils;
  * A Wrapper that starts the rachel WebServer to provide http access to html
  * pages which are stored in JARs.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class Webserver {
 	static private final Logger log = Logger.getLogger(Webserver.class);

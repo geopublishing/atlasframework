@@ -82,7 +82,7 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * This class can export the Atlas-objects to AtlasMarkupLanguage (AtlasML)
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class AMLExporter {
@@ -661,7 +661,7 @@ public class AMLExporter {
 	 * Exports the DatapoolEntry to an AtlasML (XML) document branch
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws IOException
 	 *             Thrown if e.g. saving the .cpg fails
 	 */
@@ -856,7 +856,7 @@ public class AMLExporter {
 	 * @param ls
 	 *            {@link LayerStyle} to export
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private Element exportLayerStyle(final Document document,
 			final LayerStyle ls) {
@@ -881,7 +881,7 @@ public class AMLExporter {
 	 * @return {@link org.w3c.dom.Element} that represent the XML tag
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @param dpe
 	 *            For backward compatibility we also write the <code>col</code>
 	 *            attribute. The 'col' attribute has been abandoned since >= 1.3
@@ -960,7 +960,7 @@ public class AMLExporter {
 	 * Exports the {@link DpLayerRaster} to a AtlasML (XML) Document branch
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private final Element exportDatapoolLayerRaster(final Document document,
 			final DpLayerRaster dpe) {
@@ -1011,7 +1011,7 @@ public class AMLExporter {
 	 * @return
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	private Node exportRasterLegendData(final Document document,
 			final RasterLegendData legendMetaData) {

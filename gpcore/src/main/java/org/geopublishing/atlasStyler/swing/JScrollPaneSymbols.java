@@ -206,21 +206,21 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 	 * @return An {@link Icon} representing this {@link JScrollPaneSymbols}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected abstract Icon getIcon();
 
 	/**
 	 * @return a tooltipto display in the {@link JTabbedPane}
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected abstract String getToolTip();
 
 	/**
 	 * @return A description for this collection of symbols
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	protected abstract String getDesc();
 

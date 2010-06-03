@@ -212,7 +212,7 @@ public class AtlasMenuBar extends JMenuBar {
 	 *         not in a JavaWebStart environment.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws UnavailableServiceException
 	 */
 	public JMenuItem getJWSDownloadAllMenuItem()

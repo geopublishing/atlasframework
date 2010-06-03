@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * This extension of a {@link JFileChooser} is ment to be used to open one of
  * the Supported Geodata filestypes
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class OpenDataFileChooser extends JFileChooser {

@@ -51,7 +51,7 @@ import com.vividsolutions.jts.geom.Point;
  * This Dialog wraps a {@link ClickInfoPanel} that shows information when the
  * mouse clicked inside the {@link Map} and has hit a visible features.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
 public class ClickInfoDialog extends JDialog {

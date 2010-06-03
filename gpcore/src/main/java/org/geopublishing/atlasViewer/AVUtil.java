@@ -75,7 +75,7 @@ import com.vividsolutions.jts.geom.Envelope;
 /**
  * Collection of Atlas related static methods.
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class AVUtil {
 	/***************************************************************************
@@ -109,7 +109,7 @@ public class AVUtil {
 		return RESOURCE.getString(key, values);
 	}
 
-	static final Logger LOGGER = Logger.getLogger(AVUtil.class);
+	public static final Logger LOGGER = Logger.getLogger(AVUtil.class);
 
 	/**
 	 * {@link Enum} of all recognizable Operating Systems. TODO replace with systemutil.iS...
@@ -224,7 +224,7 @@ public class AVUtil {
 	 * @param tree
 	 * @param droppedNode
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public final static void expandToNode(final JTree tree,
 			final MutableTreeNode droppedNode) {
@@ -256,7 +256,7 @@ public class AVUtil {
 	 *            Convert target filenames to lowercase
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @param cleanFilenames
 	 */
 	public final static void copyURLNoException(final URL source,
@@ -277,7 +277,7 @@ public class AVUtil {
 	 *            Directory or filename...
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public final static void copyFileNoException(final Logger log,
 			final File source, final File destination,
@@ -301,7 +301,7 @@ public class AVUtil {
 	 *            Convert target filenames to clean, lowercase filenames
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @throws URISyntaxException
 	 * @throws IOException
@@ -335,7 +335,7 @@ public class AVUtil {
 	 *            Directory or filename...
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 * 
@@ -357,7 +357,7 @@ public class AVUtil {
 	 *            Directory or filename...
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @deprecated Use cleanFilenames !
 	 * 
@@ -381,7 +381,7 @@ public class AVUtil {
 	 *            characters by calling {@link #cleanFilename(String)}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 */
@@ -469,87 +469,6 @@ public class AVUtil {
 	}
 
 	/**
-	 * Tries to open a file or folder with a system dependent program
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
-	 */
-	public static void openOSFolder(final File exportDir) {
-
-		String cmd;
-
-		String dir = exportDir.getAbsolutePath();
-		// LOGGER.info("opening folder " + exportDir.getAbsolutePath() + "
-		// ...");
-		try {
-
-			if (getOSType() == OSfamiliy.windows) {
-				// ****************************************************************************
-				// Trying to open a folder on Windows
-				// ****************************************************************************
-				dir = dir.replace('/', '\\');
-				final String[] cmdList = { "cmd.exe", "/c explorer " + dir }; // TODO
-				// wie
-				// gehts
-				// mit
-				// luecken
-				// im
-				// string?
-				Runtime.getRuntime().exec(cmdList);
-			}
-
-			else if (getOSType() == OSfamiliy.linux) {
-				// ****************************************************************************
-				// Trying to open a folder on Linux
-				// ****************************************************************************
-
-				try {
-					final List<String> command = new ArrayList<String>();
-					command.add("nautilus");
-					command.add(dir);
-					// LOGGER.info("running " + cmd + dir);
-					// Runtime.getRuntime().exec(cmd + dir);
-					final ProcessBuilder builder = new ProcessBuilder(command);
-					builder.start();
-
-				} catch (final Exception e) {
-					try {
-						final List<String> command = new ArrayList<String>();
-						command.add("dolphin");
-						command.add(dir);
-						// LOGGER.info("running " + cmd + dir);
-						// Runtime.getRuntime().exec(cmd + dir);
-						final ProcessBuilder builder = new ProcessBuilder(
-								command);
-						builder.start();
-					} catch (final Exception ee) {
-						final List<String> command = new ArrayList<String>();
-						command.add("konqueror");
-						command.add(dir);
-						// LOGGER.info("running " + cmd + dir);
-						// Runtime.getRuntime().exec(cmd + dir);
-						final ProcessBuilder builder = new ProcessBuilder(
-								command);
-						builder.start();
-					}
-				}
-			}
-
-			else if (getOSType() == OSfamiliy.mac) {
-				// ****************************************************************************
-				// Trying to open a folder on Mac
-				// ****************************************************************************
-				cmd = "open ";
-				LOGGER.info("running  " + cmd + dir);
-				Runtime.getRuntime().exec(cmd + dir);
-			}
-
-		} catch (final IOException e) {
-			LOGGER.info("failed", e);
-		}
-	}
-
-	/**
 	 * Makes GeoTools cache the EPSG database (we assume that we use epsg-hsql).
 	 * This may take a few moments and pauses the thread.<br/>
 	 * The method also checks for a broken, cached HSAL database in
@@ -599,7 +518,7 @@ public class AVUtil {
 	// *
 	// * @param progressWindow_
 	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Kr&uuml;ger</a>
+	// * Tzeggai</a>
 	// */
 	// public static void cacheEPSG() {
 	// // if (progressWindow_ != null)
@@ -629,7 +548,7 @@ public class AVUtil {
 	 * 
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static boolean exists(final URL url) {
 		try {

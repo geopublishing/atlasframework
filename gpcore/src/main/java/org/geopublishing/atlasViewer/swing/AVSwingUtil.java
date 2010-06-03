@@ -96,7 +96,7 @@ public class AVSwingUtil extends AVUtil {
 	 * @return The sleceted {@link Color} or <code>null</code> if canceled.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static Color showColorChooser(final Component component,
 			final String title, final Color initialColor) {
@@ -758,7 +758,7 @@ public class AVSwingUtil extends AVUtil {
 	 * generated using {@link IOUtil}.changeUrlExt
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 * @throws AtlasFatalException
@@ -779,7 +779,7 @@ public class AVSwingUtil extends AVUtil {
 	 * generated using {@link IOUtil}.changeUrlExt
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 * @throws AtlasFatalException
@@ -834,7 +834,7 @@ public class AVSwingUtil extends AVUtil {
 	 * @return The selected directory or null if canceled.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Kr&uuml;ger</a>
+	 *         Tzeggai</a>
 	 */
 	public static File selectExportDir(Component owner, AtlasConfig atlasConfig) {
 

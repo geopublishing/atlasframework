@@ -94,7 +94,7 @@ package org.geopublishing.geopublisher.gui.export;
 // * This GUI allows the user to define some export parameters
 // * 
 // * 
-// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Kr&uuml;ger</a>
+// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 // * 
 // */
 //public class JarExportDialog {
@@ -115,7 +115,7 @@ package org.geopublishing.geopublisher.gui.export;
 //	 *            {@link AtlasConfigEditable} to export
 //	 * 
 //	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Kr&uuml;ger</a>
+//	 *         Tzeggai</a>
 //	 */
 //
 //	public static void export(Component owner, final AtlasConfigEditable ace) {
