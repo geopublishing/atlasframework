@@ -116,7 +116,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-		ResourceProvider.resetAllRegisteredResourceBundles("Translation");
+		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));

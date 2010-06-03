@@ -227,7 +227,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 		
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-		ResourceProvider.resetAllRegisteredResourceBundles("Translation");
+        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(GeopublisherGUI.class
