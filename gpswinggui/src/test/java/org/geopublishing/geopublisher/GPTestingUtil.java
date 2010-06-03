@@ -23,10 +23,10 @@ import javax.swing.JDialog;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
@@ -170,7 +170,7 @@ public class GPTestingUtil {
 					resourceURL);
 			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL).getParent());
 		case iida2:
-			if (AVUtil.getOSType() == OSfamiliy.linux) {
+			if (SystemUtils.IS_OS_LINUX) {
 				// For Stefan:
 				return getAtlasConfigE("/home/stefan/Desktop/GP/Atlanten/IIDA2/IIDA2 Arbeitskopie");
 			} else {

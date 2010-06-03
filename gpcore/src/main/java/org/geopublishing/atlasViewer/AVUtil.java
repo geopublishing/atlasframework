@@ -47,6 +47,7 @@ import javax.swing.tree.TreePath;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -110,36 +111,6 @@ public class AVUtil {
 	}
 
 	public static final Logger LOGGER = Logger.getLogger(AVUtil.class);
-
-	/**
-	 * {@link Enum} of all recognizable Operating Systems. TODO replace with systemutil.iS...
-	 */
-	public static enum OSfamiliy {
-		linux, mac, windows, unknown
-	}
-
-	/**
-	 * TODO replace with SystemUtil.IS_WINDOWS ... 
-	 * @return the {@link OSfamiliy} the client is running on
-	 */
-	public static OSfamiliy getOSType() {
-		final String osname = System.getProperty("os.name").toLowerCase();
-		// LOGGER.debug("OS Name: " + osname);
-
-		// log.debug("OS Architecture: " + System.getProperty("os.arch"));
-		// log.debug("OS Version: " + System.getProperty("os.version"));
-
-		if (osname.contains("win"))
-			return OSfamiliy.windows;
-
-		if (osname.contains("mac"))
-			return OSfamiliy.mac;
-
-		if (osname.contains("linux"))
-			return OSfamiliy.linux;
-
-		return OSfamiliy.unknown;
-	}
 
 	/**
 	 * Creates a random number generator mainly used for IDs
@@ -592,7 +563,7 @@ public class AVUtil {
 	public static void fixBug4847375() {
 
 		try {
-			if (getOSType() == OSfamiliy.windows) {
+			if (SystemUtils.IS_OS_WINDOWS) {
 				final String myDocumentsDirectoryName = javax.swing.filechooser.FileSystemView
 						.getFileSystemView().getDefaultDirectory().getName();
 				Runtime.getRuntime().exec(

@@ -63,7 +63,6 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
-import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
@@ -1120,7 +1119,7 @@ public class JarExportUtil {
 	 * @throws IOException
 	 */
 	private void copyJRE(final File diskDir) throws IOException {
-		if (AVUtil.getOSType() == OSfamiliy.windows) {
+		if (SystemUtils.IS_OS_WINDOWS) {
 			info("Copying JRE"); // i8n
 			FileUtils.copyDirectory(new File(System.getProperty("java.home")),
 					new File(targetDirDISK, "jre"));

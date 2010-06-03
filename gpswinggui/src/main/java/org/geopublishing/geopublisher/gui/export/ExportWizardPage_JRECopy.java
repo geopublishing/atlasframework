@@ -17,8 +17,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasViewer.AVUtil;
-import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
+import org.apache.commons.lang.SystemUtils;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -84,7 +83,7 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 					.R("ExportWizard.JRE.Checkbox"));
 			copyJRECheckBox.setName(ExportWizard.COPYJRE);
 			copyJRECheckBox
-					.setSelected(AVUtil.getOSType() == OSfamiliy.windows);
+					.setSelected(SystemUtils.IS_OS_WINDOWS);
 		}
 
 		return copyJRECheckBox;
@@ -94,7 +93,7 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 	protected String validateContents(final Component component,
 			final Object event) {
 
-		if ((AVUtil.getOSType() != OSfamiliy.windows)
+		if ((!SystemUtils.IS_OS_WINDOWS)
 				&& (getCopyJRECheckBox().isSelected())) {
 			return validationFailedMsg_notWindows;
 		}

@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
@@ -46,8 +47,8 @@ import schmitzm.swing.ExceptionDialog;
 
 public class AVSwingUtil extends AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
-	
-	static HashMap<URL,File> cachedLocalCopiedFiles = new HashMap<URL, File>();
+
+	static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
 
 	/**
 	 * Convenience method to ask a simple Yes/No question.
@@ -95,8 +96,7 @@ public class AVSwingUtil extends AVUtil {
 	 * 
 	 * @return The sleceted {@link Color} or <code>null</code> if canceled.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static Color showColorChooser(final Component component,
 			final String title, final Color initialColor) {
@@ -163,7 +163,7 @@ public class AVSwingUtil extends AVUtil {
 	}
 
 	static Integer resultAskOkCancel;
-	
+
 	/**
 	 * Convenience method to ask a simple OK/Cancel question. If this is not
 	 * executed on the EDT, it will be exectued on EDT via invokeAndWait
@@ -171,7 +171,7 @@ public class AVSwingUtil extends AVUtil {
 	 */
 	public static boolean askOKCancel(final Component owner,
 			final String question) {
-		
+
 		if (SwingUtilities.isEventDispatchThread()) {
 			final int result = JOptionPane.showConfirmDialog(owner, question,
 					AVUtil.R("GeneralQuestionDialogTitle"),
@@ -179,29 +179,30 @@ public class AVSwingUtil extends AVUtil {
 					null);
 			return result == JOptionPane.OK_OPTION;
 		} else {
-			
-			
+
 			try {
 				SwingUtilities.invokeAndWait(new Runnable() {
-					
+
 					@Override
 					public void run() {
-						resultAskOkCancel = JOptionPane.showConfirmDialog(owner, question,
-								AVUtil.R("GeneralQuestionDialogTitle"),
-								JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
-								null);
-						
+						resultAskOkCancel = JOptionPane.showConfirmDialog(
+								owner, question, AVUtil
+										.R("GeneralQuestionDialogTitle"),
+								JOptionPane.OK_CANCEL_OPTION,
+								JOptionPane.QUESTION_MESSAGE, null);
+
 					}
 				});
 			} catch (Exception e) {
 				LOGGER.error(e);
 			}
-			
+
 			return resultAskOkCancel == JOptionPane.OK_OPTION;
-			
+
 		}
 
 	}
+
 	/**
 	 * Copies the given {@link URL} to the local temp directory.
 	 * 
@@ -274,7 +275,6 @@ public class AVSwingUtil extends AVUtil {
 		return localTempFile.getCanonicalFile();
 	}
 
-
 	/**
 	 * Tries to copy any existing language-specific .HTML files. e.g.
 	 * soils_de.html. If they don't exist don't bother.
@@ -292,9 +292,9 @@ public class AVSwingUtil extends AVUtil {
 	 * @throws IOException
 	 *             If something goes wrong.
 	 */
-	public static void copyHTMLInfoFiles(final AtlasStatusDialogInterface statusDialog,
-			final File file, final AtlasConfig ac, final File targetDir,
-			final Logger log) {
+	public static void copyHTMLInfoFiles(
+			final AtlasStatusDialogInterface statusDialog, final File file,
+			final AtlasConfig ac, final File targetDir, final Logger log) {
 
 		// ****************************************************************************
 		// Trying to copy HTML info files if they exist.
@@ -418,7 +418,7 @@ public class AVSwingUtil extends AVUtil {
 
 				String pdfPath = pdfFile.getAbsolutePath();
 
-				if (AVSwingUtil.getOSType() == AVSwingUtil.OSfamiliy.windows) {
+				if (SystemUtils.IS_OS_WINDOWS) {
 					// ****************************************************************************
 					// We are running on Windows, yeah!
 					// ****************************************************************************
@@ -450,7 +450,7 @@ public class AVSwingUtil extends AVUtil {
 						ExceptionDialog.show(owner, e);
 					}
 
-				} else if (AVSwingUtil.getOSType() == AVSwingUtil.OSfamiliy.mac) {
+				} else if (SystemUtils.IS_OS_MAC) {
 					// ****************************************************************************
 					// We are running on a Mac, yeah!
 					// ****************************************************************************
@@ -478,7 +478,7 @@ public class AVSwingUtil extends AVUtil {
 					}
 				}
 
-				else if (AVSwingUtil.getOSType() == AVSwingUtil.OSfamiliy.linux) {
+				else if (SystemUtils.IS_OS_LINUX) {
 					// ****************************************************************************
 					// We are running on Linux, yeah!
 					// ****************************************************************************
@@ -664,21 +664,21 @@ public class AVSwingUtil extends AVUtil {
 			 * 2. Try to use more traditional ways to start a browser
 			 */
 			try {
-				switch (getOSType()) {
-				case mac:
+				if (SystemUtils.IS_OS_MAC) {
+
 					final Class fileMgr = Class
 							.forName("com.apple.eio.FileManager");
 					final java.lang.reflect.Method openURL = fileMgr
 							.getDeclaredMethod("openURL",
 									new Class[] { String.class });
 					openURL.invoke(null, new Object[] { uri.toASCIIString() });
-					break;
-				case windows:
+				} else if (SystemUtils.IS_OS_WINDOWS) {
+
 					Runtime.getRuntime().exec(
 							"rundll32 url.dll,FileProtocolHandler "
 									+ uri.toASCIIString());
-					break;
-				case linux:
+				} else if (SystemUtils.IS_OS_LINUX) {
+
 					final String[] browsers = { "firefox", "opera",
 							"konqueror", "epiphany", "mozilla", "netscape" };
 					String browser = null;
@@ -696,7 +696,6 @@ public class AVSwingUtil extends AVUtil {
 
 						success = true;
 					}
-					break;
 				}
 			} catch (final Exception e) {
 				LOGGER.warn("Failed to open the URL = " + uri
@@ -724,8 +723,107 @@ public class AVSwingUtil extends AVUtil {
 			}
 		}
 	}
-	
-	
+
+	//
+	// /**
+	// * Tries many different ways to open a HTML {@link URI}.
+	// *
+	// * @param URI
+	// * An URI describing the HTML to open in a browser.
+	// * @param owner
+	// * the parent GUI component. May be <code>null</code>. Only used
+	// * when fallback to {@link HTMLBrowserWindow} is used.
+	// */
+	// public static void lauchHTMLviewer(final Component owner, final URI uri)
+	// {
+	// boolean success = false;
+	//
+	// /**
+	// * 1. We try to use the Java Desktop feature Before more Desktop API is
+	// * used, first check whether the API is supported by this particular
+	// * virtual machine (VM) on this particular host.
+	// */
+	// if (Desktop.isDesktopSupported()
+	// && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+	// final Desktop desktop = Desktop.getDesktop();
+	//
+	// try {
+	// desktop.browse(uri);
+	// success = true;
+	// } catch (final Exception e) {
+	// LOGGER.error("Failed to open URL = " + uri
+	// + " with the Java Desktop extension", e);
+	// }
+	//
+	// }
+	//
+	// if (!success)
+	// /**
+	// * 2. Try to use more traditional ways to start a browser
+	// */
+	// try {
+	// switch (getOSType()) {
+	// case mac:
+	// final Class fileMgr = Class
+	// .forName("com.apple.eio.FileManager");
+	// final java.lang.reflect.Method openURL = fileMgr
+	// .getDeclaredMethod("openURL",
+	// new Class[] { String.class });
+	// openURL.invoke(null, new Object[] { uri.toASCIIString() });
+	// break;
+	// case windows:
+	// Runtime.getRuntime().exec(
+	// "rundll32 url.dll,FileProtocolHandler "
+	// + uri.toASCIIString());
+	// break;
+	// case linux:
+	// final String[] browsers = { "firefox", "opera",
+	// "konqueror", "epiphany", "mozilla", "netscape" };
+	// String browser = null;
+	// for (int count = 0; count < browsers.length
+	// && browser == null; count++)
+	// if (Runtime.getRuntime().exec(
+	// new String[] { "which", browsers[count] })
+	// .waitFor() == 0)
+	// browser = browsers[count];
+	// if (browser != null) {
+	// final Process exec = Runtime.getRuntime().exec(
+	// new String[] { browser, uri.toASCIIString() });
+	//
+	// // TODO ???? final Process exec
+	//
+	// success = true;
+	// }
+	// break;
+	// }
+	// } catch (final Exception e) {
+	// LOGGER.warn("Failed to open the URL = " + uri
+	// + " using the second approach", e);
+	// success = false;
+	// }
+	//
+	// if (!success) {
+	// /**
+	// * 3. Fallback is to use the internal Java HTML BrowserPane
+	// */
+	// // TODO Suboptimal..
+	// // .HTMLBrowserWindow should
+	// // become a Facory/singleton
+	// // pattern
+	// // (getInstanceFor(URL))
+	// HTMLBrowserWindow htmlWindow;
+	// try {
+	// htmlWindow = new HTMLBrowserWindow(owner, uri.toURL(),
+	// new File(uri.getPath()).getName(), null);
+	// htmlWindow.setVisible(true);
+	// } catch (final MalformedURLException mue) {
+	// throw new RuntimeException(
+	// "Could not open internal HTMLBrowserWindow.", mue);
+	// }
+	// }
+	// }
+	//	
+	//	
 
 	/**
 	 * Copies ONLY the {@link #getFilename()} to a {@link File} in the
@@ -736,20 +834,20 @@ public class AVSwingUtil extends AVUtil {
 	 * @return {@link File} in temp
 	 * @throws IOException
 	 */
-	public static File getLocalCopy(DpEntry<? extends ChartStyle> dpe, Component owner) throws IOException {
+	public static File getLocalCopy(DpEntry<? extends ChartStyle> dpe,
+			Component owner) throws IOException {
 
 		if (dpe.getLocalTempFile() == null || !dpe.getLocalTempFile().exists()) {
 
 			String postFix = IOUtil.getFileExt(new File(dpe.getFilename()));
 
-			dpe.setLocalTempFile ( createLocalCopyFromURL(owner, getUrl(dpe, owner),
-					dpe.getTitle().toString(), postFix.equals("") ? null : postFix) );
+			dpe.setLocalTempFile(createLocalCopyFromURL(owner, getUrl(dpe,
+					owner), dpe.getTitle().toString(),
+					postFix.equals("") ? null : postFix));
 
 		}
 		return dpe.getLocalTempFile();
 	}
-
-	
 
 	/**
 	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"
@@ -757,8 +855,7 @@ public class AVSwingUtil extends AVUtil {
 	 * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
 	 * generated using {@link IOUtil}.changeUrlExt
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 * @throws AtlasFatalException
@@ -767,10 +864,10 @@ public class AVSwingUtil extends AVUtil {
 	 * 
 	 */
 	public static final URL getUrl(DpEntry<?> dpe, Component comp) {
-		if (comp == null) return getUrl(dpe, (AtlasStatusDialog)null);
+		if (comp == null)
+			return getUrl(dpe, (AtlasStatusDialog) null);
 		return getUrl(dpe, new AtlasStatusDialog(comp));
 	}
-
 
 	/**
 	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"
@@ -778,8 +875,7 @@ public class AVSwingUtil extends AVUtil {
 	 * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
 	 * generated using {@link IOUtil}.changeUrlExt
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 * @throws AtlasFatalException
@@ -787,24 +883,24 @@ public class AVSwingUtil extends AVUtil {
 	 *         pointing to a .tif or .gif (or WMS or shp or GML etc)
 	 * 
 	 */
-	public static final URL getUrl(DpEntry dpe, AtlasStatusDialogInterface statusDialog) {
+	public static final URL getUrl(DpEntry dpe,
+			AtlasStatusDialogInterface statusDialog) {
 		if (dpe.url == null) {
 
 			if (JNLPSwingUtil.isAtlasDataFromJWS(dpe.getAtlasConfig())) {
 				try {
 					JNLPSwingUtil.loadPart(dpe.getId(), statusDialog);
-					//TODO was ist wenn man abbricht?!
+					// TODO was ist wenn man abbricht?!
 				} catch (IOException e) {
 					LOGGER.error("loading part failed", e);
 				}
 			}
-			
+
 			// Yes, we call the deplrecated one here!
 			dpe.getUrl();
 		}
 		return dpe.url;
 	}
-	
 
 	/**
 	 * Exports only the {@link #getFilename()} file to a Directory Overwrite
@@ -813,17 +909,18 @@ public class AVSwingUtil extends AVUtil {
 	 * @throws IOException
 	 * @throws AtlasFatalException
 	 */
-	public static void exportTo(DpEntry<? extends ChartStyle> dpe, File targetDir, Component owner) throws IOException,
+	public static void exportTo(DpEntry<? extends ChartStyle> dpe,
+			File targetDir, Component owner) throws IOException,
 			AtlasFatalException {
 
-		String ending = dpe.getFilename().substring(dpe.getFilename().lastIndexOf('.'));
-		File targetFile = new File(targetDir, dpe.getTitle().toString().replace(
-				' ', '_')
+		String ending = dpe.getFilename().substring(
+				dpe.getFilename().lastIndexOf('.'));
+		File targetFile = new File(targetDir, dpe.getTitle().toString()
+				.replace(' ', '_')
 				+ ending);
 
 		FileUtils.copyURLToFile(getUrl(dpe, owner), targetFile);
 	}
-	
 
 	/**
 	 * Asks the user to select a Directory for export of this layer.
@@ -833,8 +930,7 @@ public class AVSwingUtil extends AVUtil {
 	 *            GUI {@link Frame}
 	 * @return The selected directory or null if canceled.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static File selectExportDir(Component owner, AtlasConfig atlasConfig) {
 
@@ -855,12 +951,10 @@ public class AVSwingUtil extends AVUtil {
 		if (exportDir == null)
 			return null;
 
-		atlasConfig.getProperties().set(owner, AVProps.Keys.LastExportFolder, exportDir
-				.getAbsolutePath());
+		atlasConfig.getProperties().set(owner, AVProps.Keys.LastExportFolder,
+				exportDir.getAbsolutePath());
 
 		return exportDir;
 	}
-
-	
 
 }

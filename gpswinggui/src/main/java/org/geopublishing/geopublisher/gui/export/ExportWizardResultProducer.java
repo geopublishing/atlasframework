@@ -22,10 +22,9 @@ import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
-import org.geopublishing.atlasViewer.AVUtil.OSfamiliy;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
@@ -156,7 +155,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				JPanel panel = new JPanel(new MigLayout("wrap 1"));
 
 				String exportJWSandDISKdirRepresentation = exportDir;
-				if (AVUtil.getOSType() == OSfamiliy.windows) {
+				if (SystemUtils.IS_OS_WINDOWS) {
 					// Otherwise all Windows paths are missing the slashes
 					exportJWSandDISKdirRepresentation = exportJWSandDISKdirRepresentation
 							.replace("\\", "\\\\");
