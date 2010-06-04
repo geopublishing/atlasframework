@@ -17,6 +17,7 @@ import javax.swing.SwingWorker;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
@@ -45,8 +46,10 @@ public class AMLImportEd extends AMLImport {
 	 *            A {@link SwingWorker} who's publish method is called with some
 	 *            info. May be null.
 	 */
-	public final static AtlasConfigEditable parseAtlasConfig(AtlasStatusDialog statusDialog, File atlasDir) throws AtlasException, 
-			ParserConfigurationException {
+	@Override
+	public AtlasConfigEditable parseAtlasConfig(
+			AtlasStatusDialogInterface statusDialog, File atlasDir) throws AtlasException 
+			{
 		
 		if (atlasDir.getName().endsWith(".gpa")) atlasDir  = atlasDir.getParentFile();
 		

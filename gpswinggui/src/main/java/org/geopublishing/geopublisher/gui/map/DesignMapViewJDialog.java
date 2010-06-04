@@ -1105,6 +1105,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		return panel;
 	}
 
+	/**
+	 * Creates the tabs at the bottom of the page
+	 */
 	private JTabbedPane createTabs() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 

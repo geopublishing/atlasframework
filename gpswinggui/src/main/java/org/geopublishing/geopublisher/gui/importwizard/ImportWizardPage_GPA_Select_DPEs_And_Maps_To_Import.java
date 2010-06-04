@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
@@ -112,7 +113,7 @@ public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 					protected AtlasConfigEditable doInBackground()
 							throws Exception {
 
-						return AMLImportEd.parseAtlasConfig(statusDialog,
+						return new AMLImport().parseAtlasConfig(statusDialog,
 								gpaFile);
 					}
 				};

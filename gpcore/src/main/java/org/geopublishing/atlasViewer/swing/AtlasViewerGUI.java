@@ -635,7 +635,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 						new Webserver(true);
 
 						publish(R("dialog.title.wait"));
-						AMLImport.parseAtlasConfig(statusDialog,
+						new AMLImport().parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
 
 						return getAtlasConfig();

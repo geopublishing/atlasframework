@@ -503,15 +503,16 @@ public class AMLExporter {
 		element.setAttribute("gridPanelFormatter", map.getGridPanelFormatter()
 				.getId());
 
-		final File outputFile = new File(
-				new File(ace.getHtmlDir(), map.getId()),
+		// That .prj file store the CRS used in the map grid panel (de.: Kartenrand)
+		final File outputMapGridPanelPrjFile = new File(
+				ace.getHtmlDirFor(map),
 				Map.GRIDPANEL_CRS_FILENAME);
 		try {
 			GeoExportUtil.writeProjectionFilePrefereEPSG(map.getGridPanelCRS(),
-					outputFile);
+					outputMapGridPanelPrjFile);
 		} catch (final IOException e1) {
 			throw new AtlasExportException("Failed to save CRS: "
-					+ map.getGridPanelCRS() + " to " + outputFile, e1);
+					+ map.getGridPanelCRS() + " to " + outputMapGridPanelPrjFile, e1);
 		}
 
 		// Creating aml:datapoolRef tags for the layers and media of this map

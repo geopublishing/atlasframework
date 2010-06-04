@@ -50,6 +50,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
+import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.exceptions.AtlasRecoverableException;
 import org.geopublishing.atlasViewer.http.Webserver;
@@ -121,7 +122,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			.getLogger(GeopublisherGUI.class);
 
 	static {
-		System.out.println("Adding new ClassResourceLoader( "
+		LOGGER.debug("Adding new WebClassResourceLoader( "
 				+ AtlasViewerGUI.class.getSimpleName()
 				+ " ) to WebResourceManager");
 		WebResourceManager
@@ -1058,7 +1059,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			@Override
 			protected AtlasConfigEditable doInBackground() throws Exception {
-				final AtlasConfigEditable ace = AMLImportEd.parseAtlasConfig(
+				final AtlasConfigEditable ace = new AMLImportEd().parseAtlasConfig(
 						statusDialog, atlasDir);
 
 				System.gc(); // Try to throw away as much memory as possible

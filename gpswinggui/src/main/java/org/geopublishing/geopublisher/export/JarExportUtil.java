@@ -647,7 +647,7 @@ public class JarExportUtil {
 		boolean packNotExistingErrorAlreadyShown = false;
 
 		for (final String libName : getJarAndNativeLibNames()) {
-
+			
 			checkAbort();
 
 			File destination = new File(targetLibDir, libName);
@@ -675,6 +675,7 @@ public class JarExportUtil {
 			info(msg);
 
 			try {
+				System.out.println(destination);
 				FileUtils.copyURLToFile(fromURL, destination);
 
 				if (toJws && libName.endsWith(".jar")
@@ -1022,10 +1023,10 @@ public class JarExportUtil {
 			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
 		}
 //
-//		if (jarName.contains(ASSWINGGUI_JARNAME)) {
-//			path = "org/geopublishing/atlasStyler/asswinggui/" + version
-//					+ snapshot;
-//		}
+		if (jarName.contains(GPNATIVES_JARNAME)) {
+			path = "org/geopublishing/gpnatives/" + version
+					+ snapshot;
+		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
 			path = "de/schmitzm/schmitzm-library/2.2-SNAPSHOT";
@@ -1051,7 +1052,7 @@ public class JarExportUtil {
 
 		String[] st = System.getProperty("java.library.path").split(":");
 		for (String t : st) {
-			LOGGER.debug("looking in " + t + " for " + nativeName);
+//			LOGGER.debug("looking in " + t + " for " + nativeName);
 			File file = new File(t + "/" + nativeName);
 			if (file.exists()) {
 				return DataUtilities.fileToURL(file);
@@ -2081,7 +2082,16 @@ public class JarExportUtil {
 				if (!baseJarsDefined[i])
 					libs = LangUtil.extendArray(libs, BASEJARS.get(i));
 		}
-		return libs;
+		
+		// Von Leerstrings bereinigen
+		String[] libs2 = new String[0];
+		for (String s : libs){
+			s = s.trim();
+			if (s.isEmpty()) continue;
+			libs2 =  LangUtil.extendArray(libs2, s);
+		}
+
+		return libs2;
 	}
 
 	private String[] getNativeLibNames() {
@@ -2091,7 +2101,16 @@ public class JarExportUtil {
 		// .debug("These native dependencies have been set in the .properties file: "
 		// + nativeLibsLine);
 
-		return nativeLibsLine.split(" ");
+		String[] libs = nativeLibsLine.split(" ");
+		
+		// Von Leerstrings bereinigen
+		String[] libs2 = new String[0];
+		for (String s : libs){
+			s = s.trim();
+			if (s.isEmpty()) continue;
+			libs2 =  LangUtil.extendArray(libs2, s);
+		}
+		return libs2;
 	}
 
 	/**

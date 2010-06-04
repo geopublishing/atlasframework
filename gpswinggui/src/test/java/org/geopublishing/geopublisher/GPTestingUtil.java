@@ -98,7 +98,7 @@ public class GPTestingUtil {
 
 		Webserver webserver = new Webserver(false);
 
-		AMLImport.parseAtlasConfig(null, atlasConfig, false);
+		new AMLImportEd().parseAtlasConfig(null, atlasConfig, false);
 
 		assertNotNull("AtlasConfig is null after parseAtlasConfig!", atlasConfig);
 		assertNotNull("MapPool is null after parseAtlasConfig!",atlasConfig.getMapPool());
@@ -220,7 +220,7 @@ public class GPTestingUtil {
 		
 		assertTrue(saved);
 		
-		AtlasConfigEditable ace2 = AMLImport.parseAtlasConfig(null, atlasXmlFile.getParentFile().getParentFile());
+		AtlasConfigEditable ace2 = new AMLImportEd().parseAtlasConfig(null, atlasXmlFile.getParentFile().getParentFile());
 		
 		FileUtils.deleteDirectory(tempDir);
 		

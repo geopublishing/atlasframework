@@ -114,7 +114,7 @@ public class AMLImport {
 	 * Parses Atlas XML file and returns a DOM document. If validating is true,
 	 * the contents is validated against the XSD specified in the file.
 	 */
-	public final static DocumentBuilder getDocumentBuilder(
+	public DocumentBuilder getDocumentBuilder(
 			final boolean validating) throws SAXException, IOException,
 			ParserConfigurationException {
 		// Create a builder factory
@@ -170,10 +170,10 @@ public class AMLImport {
 	 * 
 	 * 
 	 */
-	public final static void parseAtlasConfig(
+	public void parseAtlasConfig(
 			AtlasStatusDialogInterface statusDialog,
 			final AtlasConfig atlasConfig, boolean validate)
-			throws IOException, ParserConfigurationException, AtlasException {
+			throws IOException, AtlasException {
 
 		AMLImport.statusDialog = statusDialog;
 
@@ -226,6 +226,10 @@ public class AMLImport {
 			// second webserver has been closed and the Schema is not available
 			// anymore. Maybe we should just start a webserver here
 			throw new AtlasImportException(ex);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new AtlasImportException(e);
 		}
 
 	}
@@ -238,7 +242,7 @@ public class AMLImport {
 	 *            a {@link File} pointing to either <code>atlas.gpa</code> or
 	 *            the folder containing an <code>atlas.gpa</code>
 	 */
-	public static AtlasConfigEditable parseAtlasConfig(
+	public AtlasConfigEditable parseAtlasConfig(
 			AtlasStatusDialogInterface statusDialog, File atlasDir)
 			throws AtlasException {
 
@@ -1639,6 +1643,10 @@ public class AMLImport {
 			}
 		}
 		return mapPool;
+	}
+
+	public AMLImport() {
+		// TODO Auto-generated constructor stub
 	}
 
 }

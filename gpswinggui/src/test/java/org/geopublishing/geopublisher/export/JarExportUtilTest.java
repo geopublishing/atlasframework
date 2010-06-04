@@ -298,4 +298,8 @@ public class JarExportUtilTest {
 						"autorun.inf"));
 	}
 
+	public void testGetJarLibNames() {
+	
+	}
+
 }

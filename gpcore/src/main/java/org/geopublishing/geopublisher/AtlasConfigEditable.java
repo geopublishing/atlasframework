@@ -158,13 +158,34 @@ public class AtlasConfigEditable extends AtlasConfig {
 	}
 
 	/**
-	 * Convenience method for file system operations in the AC
+	 * Convenience method for file system operations in the AC. The returned
+	 * folder contains subdirectories for every map. @see {@link #getHtmlDirFor}
 	 */
 	public File getHtmlDir() {
 		File htmlDir = new File(getAd(), HTML_DIRNAME);
 		if (!htmlDir.exists())
 			htmlDir.mkdirs();
 		return htmlDir;
+	}
+
+	/**
+	 * Convenience method for file system operations in the
+	 * {@link AtlasConfigEditable}. The returned folder contains the HTML files
+	 * for the requested {@link Map}. The directory is automatically created if it doesn't exist.
+	 */
+	public File getHtmlDirFor(Map map) {
+		return getHtmlDirFor(map.getId());
+	}
+
+	/**
+	 * Convenience method for file system operations in the
+	 * {@link AtlasConfigEditable}. The returned folder contains the HTML files
+	 * for the requested {@link Map} ID. The directory is automatically created if it doesn't exist.
+	 */
+	private File getHtmlDirFor(String mapId) {
+		File mapHtmlFolder = new File(getHtmlDir(), mapId);
+		mapHtmlFolder.mkdirs();
+		return mapHtmlFolder;
 	}
 
 	/**
