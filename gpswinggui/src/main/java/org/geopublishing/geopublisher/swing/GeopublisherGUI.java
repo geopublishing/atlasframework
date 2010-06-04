@@ -283,7 +283,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			@Override
 			public void run() {
 				try {
-					AVSwingUtil.cacheEPSG(getJFrame());
+					AVSwingUtil.initEPSG(getJFrame());
 
 					// Only open the load atlas dialog if we have already
 					// opened an atlas before

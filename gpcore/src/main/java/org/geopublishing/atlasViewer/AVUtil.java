@@ -52,13 +52,8 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geotools.geometry.jts.JTS;
-import org.geotools.referencing.CRS;
 import org.geotools.resources.CRSUtilities;
-import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
-import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
 
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -71,7 +66,6 @@ import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
-import com.vividsolutions.jts.geom.Envelope;
 
 /**
  * Collection of Atlas related static methods.
@@ -194,8 +188,7 @@ public class AVUtil {
 	 * 
 	 * @param tree
 	 * @param droppedNode
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public final static void expandToNode(final JTree tree,
 			final MutableTreeNode droppedNode) {
@@ -226,8 +219,7 @@ public class AVUtil {
 	 * @param cleanFilenames
 	 *            Convert target filenames to lowercase
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @param cleanFilenames
 	 */
 	public final static void copyURLNoException(final URL source,
@@ -247,8 +239,7 @@ public class AVUtil {
 	 * @param destination
 	 *            Directory or filename...
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public final static void copyFileNoException(final Logger log,
 			final File source, final File destination,
@@ -271,8 +262,7 @@ public class AVUtil {
 	 * @param cleanFilenames
 	 *            Convert target filenames to clean, lowercase filenames
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @throws URISyntaxException
 	 * @throws IOException
@@ -305,8 +295,7 @@ public class AVUtil {
 	 * @param destination
 	 *            Directory or filename...
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 * 
@@ -327,8 +316,7 @@ public class AVUtil {
 	 * @param destination
 	 *            Directory or filename...
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @deprecated Use cleanFilenames !
 	 * 
@@ -351,8 +339,7 @@ public class AVUtil {
 	 *            Converts filenames to lower-case and removes special
 	 *            characters by calling {@link #cleanFilename(String)}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 */
@@ -440,32 +427,6 @@ public class AVUtil {
 	}
 
 	/**
-	 * Makes GeoTools cache the EPSG database (we assume that we use epsg-hsql).
-	 * This may take a few moments and pauses the thread.<br/>
-	 * The method also checks for a broken, cached HSAL database in
-	 * C:\temp\Getools.... Broken HSQL databases caused ugly bugs on multiple
-	 * windows computers.
-	 * 
-	 * @throws FactoryException
-	 * @throws TransformException
-	 */
-	public static void cacheEPSG() throws FactoryException, TransformException {
-
-		checkThatWeAreNotOnEDT();
-
-		final CoordinateReferenceSystem sourceCRS = CRS.decode("EPSG:4326");
-		final CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:32631");
-
-		final Envelope envelope = new Envelope(0, 10, 0, 10);
-		final MathTransform transform = CRS.findMathTransform(sourceCRS,
-				targetCRS, true);
-
-		@SuppressWarnings("unused")
-		final Envelope result = JTS.transform(envelope, transform);
-
-	}
-
-	/**
 	 * Throws a {@link RuntimeException} if this method is called on the EDT.
 	 */
 	public static void checkThatWeAreNotOnEDT() {
@@ -518,8 +479,7 @@ public class AVUtil {
 	 * Checks if the URL points to an existsing file.
 	 * 
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static boolean exists(final URL url) {
 		try {
@@ -672,7 +632,6 @@ public class AVUtil {
 		return filename;
 	}
 
-
 	/**
 	 * Convenience method to update the series legend {@link ChartStyle} title
 	 * and tooltip from given {@link AttributeMetadataImpl}.
@@ -685,12 +644,12 @@ public class AVUtil {
 	 */
 	public static void applyDefaultTitleAndTranslationToLegend(
 			final StyledFeaturesInterface<?> styledLayer,
-			final FeatureChartStyle chartStyle, final int rendererIndex, final int seriesIdx,
-			final List<String> languages) {
+			final FeatureChartStyle chartStyle, final int rendererIndex,
+			final int seriesIdx, final List<String> languages) {
 
-		final Translation legendTooltipTranslation = chartStyle.getRendererStyle(
-				rendererIndex).getSeriesLegendTooltip(seriesIdx)
-				.getLabelTranslation();
+		final Translation legendTooltipTranslation = chartStyle
+				.getRendererStyle(rendererIndex).getSeriesLegendTooltip(
+						seriesIdx).getLabelTranslation();
 
 		final Translation legendTitleTranslation = chartStyle.getRendererStyle(
 				rendererIndex).getSeriesLegendLabel(seriesIdx)
@@ -702,8 +661,8 @@ public class AVUtil {
 		// AttributeMetadata attMeta =
 		// ASUtil.getAttributeMetadataFor(styledLayer,
 		// attName);
-		final AttributeMetadataImpl attMeta = styledLayer.getAttributeMetaDataMap()
-				.get(attName);
+		final AttributeMetadataImpl attMeta = styledLayer
+				.getAttributeMetaDataMap().get(attName);
 
 		/*
 		 * This should trigger all listeners
@@ -738,11 +697,12 @@ public class AVUtil {
 	 * @param languages
 	 */
 	public static void applyDefaultTitleAndTranslationToAxis(
-			final StyledFeaturesInterface styledLayer, final FeatureChartStyle chartStyle,
-			final int axis, final int attribIdx, final List<String> languages) {
+			final StyledFeaturesInterface styledLayer,
+			final FeatureChartStyle chartStyle, final int axis,
+			final int attribIdx, final List<String> languages) {
 
-		final Translation legendTitleTranslation = chartStyle.getAxisStyle(axis)
-				.getLabelTranslation();
+		final Translation legendTitleTranslation = chartStyle
+				.getAxisStyle(axis).getLabelTranslation();
 
 		/* First series = DOMAIN */
 		final String attName = chartStyle.getAttributeName(attribIdx);
@@ -768,10 +728,11 @@ public class AVUtil {
 	 * @param crs
 	 * @param value
 	 */
-	public static String formatCoord(final CoordinateReferenceSystem crs, final double value) {
+	public static String formatCoord(final CoordinateReferenceSystem crs,
+			final double value) {
 
-		final StringBuffer sb = new StringBuffer(DecimalFormat.getNumberInstance()
-				.format(value));
+		final StringBuffer sb = new StringBuffer(DecimalFormat
+				.getNumberInstance().format(value));
 
 		final Unit<?> unit = CRSUtilities.getUnit(crs.getCoordinateSystem());
 		if (unit != null) {
@@ -799,6 +760,5 @@ public class AVUtil {
 
 		return waitFrame;
 	}
-
 
 }

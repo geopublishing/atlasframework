@@ -25,7 +25,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -39,6 +38,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
@@ -94,7 +94,7 @@ public class GPTestingUtil {
 		AtlasConfigEditable atlasConfig = new AtlasConfigEditable(new File(
 				atlasDir));
 
-		AVUtil.cacheEPSG();
+		GTUtil.initEPSG();
 
 		Webserver webserver = new Webserver(false);
 

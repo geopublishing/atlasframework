@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JColorChooser;
@@ -41,6 +42,7 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataUtilities;
 import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;
 
+import schmitzm.geotools.GTUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
@@ -589,9 +591,12 @@ public class AVSwingUtil extends AVUtil {
 		return null;
 	}
 
-	public static void cacheEPSG(Component parent) throws InterruptedException,
-			ExecutionException {
-		// checkThatWeAreOnEDT();
+	/**
+	 * Shows a waiting dialog while the EPSG data is cached and extended on
+	 * another thread.
+	 */
+	public static void initEPSG(Component parent) {
+		checkThatWeAreOnEDT();
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(parent, null,
 				AVUtil.R("AtlasViewer.process.EPSG_codes_caching"));
@@ -600,13 +605,22 @@ public class AVSwingUtil extends AVUtil {
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				cacheEPSG();
+				GTUtil.initEPSG();
 				return null;
 			}
 
 		};
 
-		swingWorker.executeModal();
+		try {
+			swingWorker.executeModal();
+		} catch (CancellationException e) {
+		} catch (ExecutionException e) {
+			throw new RuntimeException(AVUtil
+					.R("AtlasViewer.process.EPSG_codes_caching"), e);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(AVUtil
+					.R("AtlasViewer.process.EPSG_codes_caching"), e);
+		}
 	}
 
 	/**

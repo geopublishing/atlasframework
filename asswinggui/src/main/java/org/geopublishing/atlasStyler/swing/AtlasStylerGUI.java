@@ -13,6 +13,7 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.MenuItem;
+import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -161,6 +163,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		icons.add(new ImageIcon(cl.getResource(imagePackageName
 				+ "as_icon64.png")).getImage());
 		setIconImages(icons);
+		
+		AVSwingUtil.initEPSG(AtlasStylerGUI.this);
 	}
 
 	private void initialize() {
@@ -405,6 +409,10 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
 				try {
 					featureSource = ds.getFeatureSource(layer);
+//					Set<Key> supportedHints = featureSource.getSupportedHints();
+//					for (Key k : supportedHints) {
+//						System.out.println(k);
+//					}
 					StyledFS styledFS = new StyledFS(featureSource);
 
 					styledFS.setSldFile(new File(System

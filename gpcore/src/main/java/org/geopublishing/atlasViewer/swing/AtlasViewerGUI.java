@@ -68,6 +68,7 @@ import rachel.http.loader.WebResourceManager;
 import rachel.loader.ClassResourceLoader;
 import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
+import schmitzm.geotools.GTUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
@@ -628,7 +629,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 						// waitDialog.setModal(true);
 
 						publish(R("AtlasViewer.process.EPSG_codes_caching"));
-						AVSwingUtil.cacheEPSG();
+						GTUtil.initEPSG();
 
 						// Starting the internal WebServer
 						new Webserver(true);
