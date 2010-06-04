@@ -197,7 +197,7 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 						org.geopublishing.atlasViewer.map.MapPool.EventTypes.addMap
 						.toString(), null, null));
 
-				externalAtlasConfig.uncache();
+				externalAtlasConfig.dispose();
 
 				summaryPanel.add(new JLabel(GeopublisherGUI
 						.R("ImportWizard.ImportWasSuccessfull")));

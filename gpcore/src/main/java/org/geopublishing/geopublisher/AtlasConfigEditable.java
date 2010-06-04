@@ -33,12 +33,14 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
+import org.geopublishing.atlasViewer.http.FileWebResourceLoader;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.styling.Style;
 
+import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -55,6 +57,12 @@ import skrueger.i8n.Translation;
  */
 public class AtlasConfigEditable extends AtlasConfig {
 
+	private FileResourceLoader fileResLoader;
+
+	private FileWebResourceLoader fileWebResLoader;
+
+	private boolean isDisposed = false;
+
 	public AtlasConfigEditable(File atlasDir) {
 		if (!atlasDir.exists() || !atlasDir.isDirectory())
 			throw new IllegalArgumentException(
@@ -62,7 +70,39 @@ public class AtlasConfigEditable extends AtlasConfig {
 							+ " is not a directory. An editable atlas (ACE) can only be created/openend from a directory.");
 
 		this.atlasDir = atlasDir;
-		getResLoMan().addResourceLoader(new FileResourceLoader(atlasDir));
+		fileResLoader = new FileResourceLoader(atlasDir);
+		getResLoMan().addResourceLoader(fileResLoader);
+
+		fileWebResLoader = new FileWebResourceLoader(atlasDir);
+		WebResourceManager.addResourceLoader(fileWebResLoader);
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		if (!isDisposed ){
+			LOGGER.error("An AtlasConfigEditable instance "+this+" has not beed disposed!");
+			dispose();
+		}
+	};
+
+	@Override
+	public void dispose() {
+		isDisposed = true;
+
+		super.dispose();
+		
+		try {
+			getResLoMan().removeResourceLoader(fileResLoader);
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
+
+		try {
+			WebResourceManager.removeResourceLoader(fileWebResLoader);
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
+
 	}
 
 	/** The name of the marker file for a AtlasWorkingCopy folder **/
@@ -171,7 +211,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 	/**
 	 * Convenience method for file system operations in the
 	 * {@link AtlasConfigEditable}. The returned folder contains the HTML files
-	 * for the requested {@link Map}. The directory is automatically created if it doesn't exist.
+	 * for the requested {@link Map}. The directory is automatically created if
+	 * it doesn't exist.
 	 */
 	public File getHtmlDirFor(Map map) {
 		return getHtmlDirFor(map.getId());
@@ -180,7 +221,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 	/**
 	 * Convenience method for file system operations in the
 	 * {@link AtlasConfigEditable}. The returned folder contains the HTML files
-	 * for the requested {@link Map} ID. The directory is automatically created if it doesn't exist.
+	 * for the requested {@link Map} ID. The directory is automatically created
+	 * if it doesn't exist.
 	 */
 	private File getHtmlDirFor(String mapId) {
 		File mapHtmlFolder = new File(getHtmlDir(), mapId);

@@ -14,18 +14,13 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.SwingWorker;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
-import org.geopublishing.atlasViewer.http.FileWebResourceLoader;
 import org.geopublishing.atlasViewer.http.Webserver;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-
-import rachel.http.loader.WebResourceManager;
 
 public class AMLImportEd extends AMLImport {
 	final static private Logger LOGGER = Logger.getLogger(AMLImportEd.class);
@@ -66,15 +61,6 @@ public class AMLImportEd extends AMLImport {
 		} catch (IOException e) {
 			throw new AtlasImportException(e); 
 		}
-
-		// The AtlasConfig was loaded from a folder in the file system.
-		// Adding the folder as a WebResource for the internal WebServer
-		LOGGER.debug("Adding folder " + ace.getAtlasDir()
-				+ " as a WebServer resource");
-
-		// TODO Not good, when we import from an external atlas! make a flag for that
-		WebResourceManager.addResourceLoader(new FileWebResourceLoader(ace
-				.getAtlasDir()));
 		
 		return ace;
 	}

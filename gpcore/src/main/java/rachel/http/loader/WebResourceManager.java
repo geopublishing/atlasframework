@@ -73,5 +73,14 @@ public class WebResourceManager implements WebResourceLoader {
 	private void addResourceLoaderImpl(WebResourceLoader loader) {
 		_resourceLoaders.add(loader);
 	}
+	
+	public static void removeResourceLoader(WebResourceLoader loader) {
+		getInstance().removeResourceLoaderImpl(loader);
+	}
+
+	private void removeResourceLoaderImpl(WebResourceLoader loader) {
+		_resourceLoaders.remove(loader);
+	}
+
 
 }

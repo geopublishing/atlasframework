@@ -730,11 +730,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		ace.getDataPool().removeChangeListener(
 				listenToDataPoolChangesAndCloseAtlasViewerPreview);
 
-		ace.uncache();
+		ace.dispose();
 		ace = null;
-
-		// AtlasConfigEditable.resetResLoMan(); Can just be removed, as the ace
-		// is nulled => no ResLoMan available
 
 		getJFrame().updateAce();
 
