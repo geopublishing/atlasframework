@@ -82,7 +82,7 @@ public class JarExportUtilTest {
 				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE3));
 
 		assertNotNull(GpUtil.class
-				.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
+				.getResource("/"+AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
 
 	}
 
