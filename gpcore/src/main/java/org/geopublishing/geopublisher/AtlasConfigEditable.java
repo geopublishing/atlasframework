@@ -80,7 +80,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	@Override
 	protected void finalize() throws Throwable {
 		if (!isDisposed ){
-			LOGGER.error("An AtlasConfigEditable instance "+this+" has not beed disposed!");
+			LOGGER.info("An AtlasConfigEditable instance "+this+" has not beed disposed! We dispose it now...");
 			dispose();
 		}
 	};

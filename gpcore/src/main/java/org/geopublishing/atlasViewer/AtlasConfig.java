@@ -58,7 +58,7 @@ public class AtlasConfig implements Disposable {
 	 * Resource name of the icon that will be used for JavaWebStart if the
 	 * user-defined one can't be found.
 	 */
-	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "/export/jws/icon.gif";
+	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "export/jws/icon.gif";
 
 	// /**
 	// * If true, then the AtlasViewer classes will try to not cache files that
@@ -388,21 +388,6 @@ public class AtlasConfig implements Disposable {
 					JWSICON_RESOURCE_NAME_FALLBACK);
 		return iconURL;
 	}
-
-	//
-	// /**
-	// * Adds a {@link ClassResourceLoader} of AtlasViewer class to the
-	// * {@link ResourceLoader}. Neede at startup of {@link AtlasViewer} and
-	// * Geopublisher
-	// */
-	// public void setupResLoMan() {
-	// // Adding the default ClassResourceLoader
-	// System.out
-	// .println("Adding new ClassResourceLoader( AtlasViewer.class ) to ResLoMan");
-	// getResLoMan().addResourceLoader(
-	// new ClassResourceLoader(AtlasViewer.class));
-	//
-	// }
 
 	public AVProps getProperties() {
 		if (avprops == null) {
