@@ -56,7 +56,7 @@
 		<exec executable="/bin/ln">
 			<arg value="-s" />
 			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-${ant.project.version}-full.zip" />
-			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-full.zip" />
+			<arg value="AtlasStyler-full.zip" />
 		</exec>
 
 	</target>

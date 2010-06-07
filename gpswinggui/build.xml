@@ -57,7 +57,7 @@
 		<exec executable="/bin/ln">
 			<arg value="-s" />
 			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-${ant.project.version}-full.zip" />
-			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-full.zip" />
+			<arg value="Geopublisher-full.zip" />
 		</exec>
 
 	</target>
