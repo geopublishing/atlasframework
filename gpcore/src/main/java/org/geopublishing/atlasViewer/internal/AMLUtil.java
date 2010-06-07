@@ -70,6 +70,21 @@ public class AMLUtil {
 	public static final String ATT_MAP_SCALE_VISIBLE = "scaleVisible";
 
 	/**
+	 * Tag used to list font filenames that are part of an atlas
+	 */
+	public static final String TAG_FONTS = "fonts";
+	
+	/**
+	 * Tag to describe one font inside the TAG_FONTS tag
+	 */
+	public static final String TAG_FONT = "font";
+
+	/**
+	 * Atribute to describe the font filename 
+	 */
+	public static final String ATT_FONT_FILENAME = "filename";
+
+	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 
 	 * @throws CQLException

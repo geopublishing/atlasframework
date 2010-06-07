@@ -13,6 +13,7 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -323,7 +324,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		if (jComboBoxFont == null) {
 
 			jComboBoxFont = new JComboBox();
-
+			
+			// TODO 
+			
 			final ArrayList<Literal>[] fontFamilies = new ArrayList[6];
 
 			/**
@@ -360,6 +363,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			fontFamilies[5] = new ArrayList<Literal>();
 			fontFamilies[5].add(FilterUtil.FILTER_FAC.literal("Comic Sans MS"));
 			fontFamilies[5].add(FilterUtil.FILTER_FAC.literal("cursive"));
+			
+			// 
 
 			/**
 			 * This renderer present the items of type Collection<Literal>

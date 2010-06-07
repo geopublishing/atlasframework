@@ -31,6 +31,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
@@ -97,8 +98,14 @@ public class AMLExporter {
 
 	private AtlasStatusDialogInterface statusWindow = null;
 
+	/**
+	 * The {@link AtlasConfigEditable} that is being exported by this
+	 * {@link AMLExporter} instance
+	 **/
 	private final AtlasConfigEditable ace;
+
 	private boolean atlasXmlhasBeenBackupped = false;
+
 	private File atlasXml = null;
 
 	void info(final String msg) {
@@ -215,22 +222,11 @@ public class AMLExporter {
 	 */
 	private final Document exportAtlasConfig() throws Exception {
 
-		// String msg = "Converting Atlas '" + ace.getTitle() +
-		// "' to AtlasML...";
-		// info(msg);
-
 		// Create a DOM builder and parse the fragment
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
 				.newInstance();
 		Document document = null;
-		// try {
 		document = factory.newDocumentBuilder().newDocument();
-		// } catch (final ParserConfigurationException e) {
-
-		// msg = "Saving to AtlasML failed!";
-		// info(msg);
-		// throw new AtlasFatalException(msg, e);
-		// }
 
 		// XML root element
 		final Element atlas = document.createElementNS(AMLUtil.AMLURI, "atlas");
@@ -336,9 +332,34 @@ public class AMLExporter {
 		// The <aml:group> tag
 		atlas.appendChild(exportGroup(document, ace.getFirstGroup()));
 
+		// The <aml:fonts> tag
+		atlas.appendChild(exportFonts(document));
+
 		document.appendChild(atlas);
 		// LOGGER.debug("AtlasConfig converted to JDOM Document");
 		return document;
+	}
+
+	/**
+	 * Creates an aml:fonts tag that lists the names of all the fonts files in
+	 * ad/font folder. The list of fonts is determined while
+	 */
+	protected Node exportFonts(Document document) {
+		final Element fontsElement = document.createElementNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_FONTS);
+		
+		File fontsDir = ace.getFontsDir();
+		
+		Collection<File> listFiles = FileUtils.listFiles(fontsDir, GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
+		for (File f : listFiles) {
+			final Element fontElement = document.createElementNS(AMLUtil.AMLURI,
+					AMLUtil.TAG_FONT);
+			String relPath = f.getAbsolutePath().substring(fontsDir.getAbsolutePath().length()+1);
+			fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath );
+			fontsElement.appendChild(fontElement);
+		}
+		
+		return fontsElement;
 	}
 
 	private void checkCancel() throws AtlasCancelException {
@@ -418,7 +439,8 @@ public class AMLExporter {
 
 			if (exportMode && notReferencedDpeIDs.contains(map.getId())
 					&& !map.getId().equals(mapPool.getStartMapID())) {
-				// Only export maps that are referenced in the group tree or are marked as the start map
+				// Only export maps that are referenced in the group tree or are
+				// marked as the start map
 				continue;
 			}
 
@@ -503,16 +525,17 @@ public class AMLExporter {
 		element.setAttribute("gridPanelFormatter", map.getGridPanelFormatter()
 				.getId());
 
-		// That .prj file store the CRS used in the map grid panel (de.: Kartenrand)
-		final File outputMapGridPanelPrjFile = new File(
-				ace.getHtmlDirFor(map),
+		// That .prj file store the CRS used in the map grid panel (de.:
+		// Kartenrand)
+		final File outputMapGridPanelPrjFile = new File(ace.getHtmlDirFor(map),
 				Map.GRIDPANEL_CRS_FILENAME);
 		try {
 			GeoExportUtil.writeProjectionFilePrefereEPSG(map.getGridPanelCRS(),
 					outputMapGridPanelPrjFile);
 		} catch (final IOException e1) {
 			throw new AtlasExportException("Failed to save CRS: "
-					+ map.getGridPanelCRS() + " to " + outputMapGridPanelPrjFile, e1);
+					+ map.getGridPanelCRS() + " to "
+					+ outputMapGridPanelPrjFile, e1);
 		}
 
 		// Creating aml:datapoolRef tags for the layers and media of this map
@@ -661,8 +684,7 @@ public class AMLExporter {
 	/**
 	 * Exports the DatapoolEntry to an AtlasML (XML) document branch
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @throws IOException
 	 *             Thrown if e.g. saving the .cpg fails
 	 */
@@ -856,8 +878,7 @@ public class AMLExporter {
 	 * @param document
 	 * @param ls
 	 *            {@link LayerStyle} to export
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private Element exportLayerStyle(final Document document,
 			final LayerStyle ls) {
@@ -881,8 +902,7 @@ public class AMLExporter {
 	 * 
 	 * @return {@link org.w3c.dom.Element} that represent the XML tag
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @param dpe
 	 *            For backward compatibility we also write the <code>col</code>
 	 *            attribute. The 'col' attribute has been abandoned since >= 1.3
@@ -960,8 +980,7 @@ public class AMLExporter {
 	/**
 	 * Exports the {@link DpLayerRaster} to a AtlasML (XML) Document branch
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private final Element exportDatapoolLayerRaster(final Document document,
 			final DpLayerRaster dpe) {
@@ -1011,8 +1030,7 @@ public class AMLExporter {
 	 * @param legendMetaData
 	 * @return
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private Node exportRasterLegendData(final Document document,
 			final RasterLegendData legendMetaData) {

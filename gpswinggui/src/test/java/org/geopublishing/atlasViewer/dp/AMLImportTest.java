@@ -27,7 +27,6 @@ public class AMLImportTest {
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
 		assertEquals(map1_0.isScaleVisible(), map2_0.isScaleVisible());
 		
-		
 		map1_0 = ace.getMapPool().get(0);
 		map1_0.setScaleUnits(ScalePanel.ScaleUnits.US);
 		map1_0.setScaleVisible(true);
@@ -36,5 +35,7 @@ public class AMLImportTest {
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
 		assertEquals(map1_0.isScaleVisible(), map2_0.isScaleVisible());
 
+		ace.dispose();
+		ace2.dispose();
 	}
 }

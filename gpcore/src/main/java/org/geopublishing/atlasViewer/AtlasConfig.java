@@ -107,6 +107,11 @@ public class AtlasConfig implements Disposable {
 	 * data. Usually 'ad'
 	 **/
 	public static final String ATLASDATA_DIRNAME = "ad";
+	
+	/**
+	 * The name of the directory relative to the #ATLASDATA_DIRNAME which contains extra fonts
+	 **/
+	public static final String FONTS_DIRNAME = "fonts";
 
 	/**
 	 * atlas.xml

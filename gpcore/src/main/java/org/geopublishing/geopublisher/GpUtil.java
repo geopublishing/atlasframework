@@ -62,6 +62,24 @@ public class GpUtil {
 	 */
 	public static final IOFileFilter BlacklistedFoldersFilter = FileFilterUtils
 			.makeCVSAware(FileFilterUtils.makeSVNAware(null));
+	
+	/**
+	 * This {@link IOFileFilter} only return .ttf files
+	 */
+	public static final IOFileFilter FontsFilesFilter = new IOFileFilter() {
+		
+		@Override
+		public boolean accept(File file) {
+			if (file.getName().toLowerCase().endsWith(".ttf")) return true;
+			return false;
+		}
+		
+		@Override
+		public boolean accept(File dir, String name) {
+			return accept(new File(dir, name));
+		}
+
+	};
 
 	public static final MbDecimalFormatter MbDecimalFormatter = new MbDecimalFormatter();
 

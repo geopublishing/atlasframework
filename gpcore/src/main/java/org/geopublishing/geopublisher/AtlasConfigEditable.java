@@ -79,8 +79,9 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 	@Override
 	protected void finalize() throws Throwable {
-		if (!isDisposed ){
-			LOGGER.info("An AtlasConfigEditable instance "+this+" has not beed disposed! We dispose it now...");
+		if (!isDisposed) {
+			LOGGER.info("An AtlasConfigEditable instance " + this
+					+ " has not beed disposed! We dispose it now...");
 			dispose();
 		}
 	};
@@ -90,7 +91,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		isDisposed = true;
 
 		super.dispose();
-		
+
 		try {
 			getResLoMan().removeResourceLoader(fileResLoader);
 		} catch (Exception e) {
@@ -206,6 +207,18 @@ public class AtlasConfigEditable extends AtlasConfig {
 		if (!htmlDir.exists())
 			htmlDir.mkdirs();
 		return htmlDir;
+	}
+
+	/**
+	 * The returned folder {@link File} object contains optional additional
+	 * files.
+	 */
+	public File getFontsDir() {
+		File fontsDir = new File(getAd(), FONTS_DIRNAME);
+		if (!fontsDir.exists()) {
+			fontsDir.mkdirs();
+		}
+		return fontsDir;
 	}
 
 	/**

@@ -10,6 +10,9 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.dp;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,9 +117,8 @@ public class AMLImport {
 	 * Parses Atlas XML file and returns a DOM document. If validating is true,
 	 * the contents is validated against the XSD specified in the file.
 	 */
-	public DocumentBuilder getDocumentBuilder(
-			final boolean validating) throws SAXException, IOException,
-			ParserConfigurationException {
+	public DocumentBuilder getDocumentBuilder(final boolean validating)
+			throws SAXException, IOException, ParserConfigurationException {
 		// Create a builder factory
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
 				.newInstance();
@@ -167,11 +169,8 @@ public class AMLImport {
 	 * @param atlasConfig
 	 *            needs be have a {@link ResourceLoaderManager} set up, so that
 	 *            atlas.xml can be found!
-	 * 
-	 * 
 	 */
-	public void parseAtlasConfig(
-			AtlasStatusDialogInterface statusDialog,
+	public void parseAtlasConfig(AtlasStatusDialogInterface statusDialog,
 			final AtlasConfig atlasConfig, boolean validate)
 			throws IOException, AtlasException {
 
@@ -252,12 +251,8 @@ public class AMLImport {
 		AMLImport.statusDialog = statusDialog;
 
 		AtlasConfigEditable atlasConfig = new AtlasConfigEditable(atlasDir);
-		// atlasConfig.setAtlasDir(atlasDir);
 
-		// FileResourceLoader folderLoader = new FileResourceLoader(atlasDir);
 		try {
-			// atlasConfig.getResLoMan().addResourceLoader(folderLoader);
-
 			Document xml;
 			DocumentBuilder builder;
 			builder = getDocumentBuilder(false);
@@ -272,24 +267,22 @@ public class AMLImport {
 			return atlasConfig;
 
 		} catch (final Exception ex) {
-			// If we had a problem, we remove the FileResourceLoader again
-			// atlasConfig.getResLoMan().removeResourceLoader(folderLoader);
-
 			throw new AtlasImportException(ex);
 		}
 	}
 
 	/**
-	 * Parse {@link AtlasConfig} from {@link org.w3c.dom.Document}. This method
-	 * does also look for a file with a default CRS definition.
+	 * Parse/fill the given {@link AtlasConfig} instance from
+	 * {@link org.w3c.dom.Document}. This method does also look for a file with
+	 * a default CRS definition and extra fonts.
 	 * 
 	 * @throws AtlasException
 	 */
-	public final static void parseAtlasConfig(final AtlasConfig ac,
+	public final void parseAtlasConfig(final AtlasConfig ac,
 			final Document xml) throws AtlasException {
 
 		readDefaultCRS(ac);
-
+		
 		NodeList nodes;
 		// LOGGER.debug("Parsing DOM to AtlasConfig...");
 
@@ -422,8 +415,37 @@ public class AMLImport {
 		} else
 			LOGGER
 					.info("No <aml:group> defined in the atlas.xml, but group is optional");
+		
+		// Check if any extra fonts are defined
+		final Node rootFontsNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI, AMLUtil.TAG_FONTS).item(0);
+		if (rootFontsNode != null) {
+			parseAndLoadFonts(ac,rootFontsNode);
+		}
 
 		// LOGGER.debug("Parsing atlas.xml ... successful\n\n");
+	}
+
+	protected void parseAndLoadFonts(AtlasConfig ac, Node rootFontsNode) {
+		final NodeList childNodes = rootFontsNode.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node childNode = childNodes.item(i);
+			if (!AMLUtil.TAG_FONT.equals(childNode.getLocalName())) continue;
+			
+			String relFontPath = childNode.getAttributes().getNamedItem(AMLUtil.ATT_FONT_FILENAME).getTextContent();
+			
+			String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME+"/"+AtlasConfig.FONTS_DIRNAME+"/"+relFontPath;
+			InputStream is = ac.getResourceAsStream(resourceLocation);
+			if (is == null){
+				warn("Fonts","The font "+relFontPath+" could not be found in "+resourceLocation);
+			}
+			else try {
+				Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+				GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+				LOGGER.debug("Registered a new TTF font: "+font.getName());
+			} catch (Exception e) {
+				Log.error("Couldn't load or register font "+relFontPath,e);
+			}
+		}
 	}
 
 	/**
@@ -568,8 +590,7 @@ public class AMLImport {
 	 * 
 	 * @throws AtlasRecoverableException
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @author <a href="mailto:schmitzm@bonn.edu">Martin Schmitz</a> (University
 	 *         of Bonn/Germany)
 	 */
@@ -746,8 +767,7 @@ public class AMLImport {
 	 *            Node that is called "rasterLagendData"
 	 * @return {@link RasterLegendData}, maybe without entries, but never null.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @throws AtlasRecoverableException
 	 */
 	private static RasterLegendData parseRasterLegendData(AtlasConfig ac,
@@ -1125,8 +1145,7 @@ public class AMLImport {
 	/**
 	 * Parses a <layerStyle> tag
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private static LayerStyle parseLayerStyle(AtlasConfig ac, Node node,
 			DpLayer<?, ? extends ChartStyle> dpLayer)
