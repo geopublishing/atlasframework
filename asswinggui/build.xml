@@ -24,13 +24,13 @@
 
 <project name="AtlasStyler Swing GUI">
 
-	<target name="publishSnapshot" description="Copies the output of target/jnlp to geopublishing.org">
+	<target name="publish" description="Copies the output of target/jnlp to geopublishing.org">
 
 		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/version.txt">
 			<replacefilter token="@VERSION@" value="${ant.project.version}" />
 			<replacefilter token="@BUILD@" value="${ant.buildNumber}" />
-			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}"/>
+			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}" />
 		</replace>
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
@@ -42,8 +42,18 @@
 
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
 		<!-- Besser wenn hier auf die Daten in einem Linux unstable repository verwiesen würde -->
-		<copy file="${basedir}/target/asswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/AtlasStyler-${ant.project.version}-full.zip" />
-		
+		<copy file="${basedir}/target/asswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-${ant.project.version}-full.zip" />
+
+		<!-- Delete any old symlink -->
+		<delete failonerror="false" file="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-full.zip" />
+
+		<!-- Create newsymlink -->
+		<exec executable="/bin/ln">
+			<arg value="-s" />
+			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-${ant.project.version}-full.zip" />
+			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-full.zip" />
+		</exec>
+
 	</target>
 
 </project>

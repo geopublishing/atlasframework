@@ -24,7 +24,7 @@
 
 <project name="Geopublisher Swing GUI">
 
-	<target name="publishSnapshot" description="Copies the output of target/jnlp to geopublishing.org">
+	<target name="publish" description="Copies the output of target/jnlp to geopublishing.org">
 
 		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/version.txt">
@@ -33,14 +33,8 @@
 			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}"/>
 		</replace>
 
-		<!-- THis is not working, as the asswinggui deploy process copied it's fieldes there before and may not delete them
-		<delete description="Delete directory before copying the new release">
-			<fileset dir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" />
-		</delete>
-		-->
-
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
-		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
+		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
 				<include name="**/*" />
 			</fileset>
@@ -48,7 +42,18 @@
 
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
 		<!-- Besser wenn hier auf die Daten in einem Linux unstable repository verwiesen würde -->
-		<copy file="${basedir}/target/gpswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp/Geopublisher-${ant.project.version}-full.zip" />
+		<copy file="${basedir}/target/gpswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-${ant.project.version}-full.zip" />
+
+
+		<!-- Delete any old symlink -->
+		<delete failonerror="false" file="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-full.zip" />
+
+		<!-- Create newsymlink -->
+		<exec executable="/bin/ln">
+			<arg value="-s" />
+			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-${ant.project.version}-full.zip" />
+			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-full.zip" />
+		</exec>
 
 	</target>
 
