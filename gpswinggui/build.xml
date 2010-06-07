@@ -35,7 +35,7 @@
 
 		<!-- THis is not working, as the asswinggui deploy process copied it's fieldes there before and may not delete them
 		<delete description="Delete directory before copying the new release">
-			<fileset dir="/var/www/www.geopublishing.org/htdocs/gp" />
+			<fileset dir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" />
 		</delete>
 		-->
 

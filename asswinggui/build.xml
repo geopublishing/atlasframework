@@ -34,7 +34,7 @@
 		</replace>
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
-		<copy todir="/var/www/www.geopublishing.org/htdocs/gp" failonerror="true" description="Copy the JNLP files to the webserver folder">
+		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
 				<include name="**/*" />
 			</fileset>
