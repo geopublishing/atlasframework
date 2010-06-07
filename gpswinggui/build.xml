@@ -33,6 +33,11 @@
 			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}"/>
 		</replace>
 
+		<!-- Diese Datei wird dann von Drupal gelesen um eine kurze Versionsangane im CMS zu erstellen -->
+		<replace file="${basedir}/target/jnlp/short.txt">
+			<replacefilter token="@VERSION@" value="${ant.project.version}" />
+		</replace>
+
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
 		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
