@@ -135,7 +135,7 @@
 		</testResources>
 
 		<plugins>
-
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -261,7 +261,24 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+		<!-- For i8n correction -->
+			<groupId>ant</groupId>
+			<artifactId>ant-nodeps</artifactId>
+			<version>1.6.5</version>
+			<scope>provided</scope>
+		</dependency>
 
+		<dependency>
+		<!-- For i8n correction -->
+			<groupId>ant-contrib</groupId>
+			<artifactId>ant-contrib</artifactId>
+			<version>1.0b3</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<repositories>
