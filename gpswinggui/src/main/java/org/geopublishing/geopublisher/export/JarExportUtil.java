@@ -77,10 +77,13 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
+import org.geotools.swing.ExceptionMonitor;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import com.vividsolutions.jts.util.Debug;
 
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
@@ -500,7 +503,8 @@ public class JarExportUtil {
 			final AtlasConfigEditable ace) throws Exception {
 
 		// Prepare a temporary atlas.xml
-		final File adDir = new File(IOUtil.getTempDir(), "ad");
+		File randomTempDir = new File(IOUtil.getTempDir(),"GPtempExport"+System.currentTimeMillis());
+		final File adDir = new File(randomTempDir, AtlasConfig.ATLASDATA_DIRNAME);
 		FileUtils.deleteDirectory(adDir);
 		adDir.mkdirs();
 		final File exportAtlasXml = new File(adDir,
@@ -513,8 +517,13 @@ public class JarExportUtil {
 
 		amlExporter.saveAtlasConfigEditable();
 
-		addToJar(targetJar, IOUtil.getTempDir(), "ad/"
+		addToJar(targetJar, randomTempDir, AtlasConfig.ATLASDATA_DIRNAME + "/"
 				+ AtlasConfig.ATLAS_XML_FILENAME);
+		
+		// Remove the created temporary atlas.xml, it has been copied into the jar
+		if (!exportAtlasXml.delete()) {
+			LOGGER.warn("could not delete temporary atlas.xml file at "+adDir);
+		}
 	}
 
 	//

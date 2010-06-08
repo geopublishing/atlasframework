@@ -26,6 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
@@ -944,6 +945,7 @@ public class AMLImport {
 	 * @throws AtlasRecoverableException
 	 * 
 	 *             TODO TODO TODO Hier muss eine URL hin!
+	 * @throws AtlasCancelException 
 	 */
 	public final static DpLayerVectorFeatureSource parseDatapoolLayerVector(
 			final Node node, final AtlasConfig ac)
@@ -956,7 +958,7 @@ public class AMLImport {
 		// TODO ATM we only expect Shapefiles here!
 		final DpLayerVectorFeatureSource dplvfs = new DpLayerVectorFeatureSourceShapefile(
 				ac);
-
+		
 		try {
 			dplvfs
 					.setId(node.getAttributes().getNamedItem("id")
@@ -1171,6 +1173,13 @@ public class AMLImport {
 		return new LayerStyle(filename, name, desc, dpLayer);
 
 	}
+	
+	// TODO
+//	private static void checkCancel() throws AtlasCancelException {
+//		if (statusDialog != null && statusDialog.isCanceled())
+//			throw new AtlasCancelException();
+//	}
+
 
 	/**
 	 * Parses a node that is of type < aml : dataAttribute > to a
@@ -1182,11 +1191,12 @@ public class AMLImport {
 	 * @return {@link AttributeMetadataImpl} or <code>null</code>, if the
 	 *         attribute doesn't exist anymore.
 	 * @throws AtlasRecoverableException
+	 * @throws AtlasCancelException 
 	 */
 	public static AttributeMetadataImpl parseAttributeMetadata(
 			DpLayerVectorFeatureSource dplvfs, AtlasConfig ac, final Node node)
-			throws AtlasRecoverableException {
-
+			throws AtlasRecoverableException, AtlasCancelException {
+		
 		String localname;
 		String nameSpace;
 		Integer weight = 0;

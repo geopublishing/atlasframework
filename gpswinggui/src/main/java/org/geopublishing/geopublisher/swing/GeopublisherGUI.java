@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CancellationException;
 
 import javax.jnlp.SingleInstanceListener;
 import javax.swing.AbstractAction;
@@ -97,17 +98,18 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
  * 
  */
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
-	
+
 	static {
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
-        ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
+		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 	}
-	
+
 	/**
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
 	public enum ActionCmds {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
+		 * 
 		 * 
 		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
@@ -232,7 +234,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	public GeopublisherGUI(final List<String> args) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
-		
+
 		// Setting up the logger from a XML configuration file
 		DOMConfigurator.configure(GeopublisherGUI.class
 				.getResource("/gp_log4j.xml"));
@@ -677,8 +679,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @return false only if the Cancel button was pressed and the atlas was not
 	 *         closed
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean closeAtlas() {
 
@@ -741,8 +742,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * Creates a new empty Atlas from user input.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private void createNewAtlas() {
 
@@ -798,7 +798,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		// Delete the folder and recreate it.
-		if (atlasDir.list().length > 0){
+		if (atlasDir.list().length > 0) {
 			try {
 				FileUtils.deleteDirectory(atlasDir);
 				atlasDir.mkdirs();
@@ -1056,8 +1056,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			@Override
 			protected AtlasConfigEditable doInBackground() throws Exception {
-				final AtlasConfigEditable ace = new AMLImportEd().parseAtlasConfig(
-						statusDialog, atlasDir);
+				final AtlasConfigEditable ace = new AMLImportEd()
+						.parseAtlasConfig(statusDialog, atlasDir);
 
 				System.gc(); // Try to throw away as much memory as possible
 
@@ -1086,6 +1086,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			ace.getDataPool().addChangeListener(
 					listenToDataPoolChangesAndCloseAtlasViewerPreview);
 
+		} catch (final CancellationException ex) {
+			ace = null;
 		} catch (final Exception ex) {
 			ExceptionDialog.show(getJFrame(), ex);
 			ace = null;

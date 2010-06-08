@@ -16,6 +16,7 @@ import java.io.IOException;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
@@ -40,6 +41,7 @@ public class AMLImportEd extends AMLImport {
 	 * @param aceLoader
 	 *            A {@link SwingWorker} who's publish method is called with some
 	 *            info. May be null.
+	 * @throws AtlasCancelException 
 	 */
 	@Override
 	public AtlasConfigEditable parseAtlasConfig(
@@ -52,13 +54,13 @@ public class AMLImportEd extends AMLImport {
 
 		// Create virgin AtlasConfigEditable
 		AtlasConfigEditable ace = new AtlasConfigEditable(atlasDir);
-
 //		// Add the file resource loaders
 //		ace.setAtlasDir(atlasDir);
 
 		try {
 			parseAtlasConfig(statusDialog,  ace, true);
 		} catch (IOException e) {
+			ace = null;
 			throw new AtlasImportException(e); 
 		}
 		

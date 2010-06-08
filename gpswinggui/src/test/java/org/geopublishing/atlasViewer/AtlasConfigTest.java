@@ -29,7 +29,7 @@ public class AtlasConfigTest {
 	
 	@After
 	public void dispose() {
-		ace.dispose();
+		if (ace != null) ace.dispose();
 	}
 	
 

@@ -10,7 +10,10 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -23,6 +26,7 @@ public class GpStatusBar extends JPanel {
 		super(new MigLayout("nogrid, w 100%"));
 		
 		add(gpjFrame.getHeapBar(),"east");
+		add(new JLabel(GpSwingUtil.R("GpStatusBar.HeapBar.label")),"east");
 	}
 
 }

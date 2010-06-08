@@ -163,29 +163,45 @@ public class AMLExporter {
 				getAtlasXml().createNewFile();
 			}
 
-			// copyAtlasMLSchemaFile();
+			FileOutputStream fileOutputStream = new FileOutputStream(
+					getAtlasXml());
+			
+			try { // fileOutputStream.close();
 
-			// ****************************************************************************
-			// Create the XML
-			// ****************************************************************************
-			final Result result = new StreamResult(new OutputStreamWriter(
-					new FileOutputStream(getAtlasXml()), "utf-8"));
+				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+						fileOutputStream, "utf-8");
+				try { // close outputStreamWriter.close();
 
-			// with indenting to make it human-readable
-			final TransformerFactory tf = TransformerFactory.newInstance();
+					// ****************************************************************************
+					// Create the XML
+					// ****************************************************************************
+					final Result result = new StreamResult(outputStreamWriter);
 
-			// TODO Ging mit xerces, geht nicht mehr mit xalan
-			// tf.setAttribute("indent-number", new Integer(2));
+					// with indenting to make it human-readable
+					final TransformerFactory tf = TransformerFactory
+							.newInstance();
 
-			final Transformer xformer = tf.newTransformer();
-			xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			xformer.setOutputProperty(
-					"{http://www.wikisquare.de/AtlasML.xsd}indent-amount", "4");
-			xformer.setOutputProperty(
-					"{http://xml.apache.org/xalan}indent-amount", "2");
+					// TODO Ging mit xerces, geht nicht mehr mit xalan
+					// tf.setAttribute("indent-number", new Integer(2));
 
-			// Write the DOM document to the file
-			xformer.transform(source, result);
+					final Transformer xformer = tf.newTransformer();
+					xformer.setOutputProperty(OutputKeys.INDENT, "yes");
+					xformer
+							.setOutputProperty(
+									"{http://www.wikisquare.de/AtlasML.xsd}indent-amount",
+									"4");
+					xformer.setOutputProperty(
+							"{http://xml.apache.org/xalan}indent-amount", "2");
+
+					// Write the DOM document to the file
+					xformer.transform(source, result);
+
+				} finally {
+					outputStreamWriter.close();
+				}
+			} finally {
+				fileOutputStream.close();
+			}
 
 			// LOGGER.debug(" saving AtlasConfig... finished.");
 			return true;
@@ -347,18 +363,20 @@ public class AMLExporter {
 	protected Node exportFonts(Document document) {
 		final Element fontsElement = document.createElementNS(AMLUtil.AMLURI,
 				AMLUtil.TAG_FONTS);
-		
+
 		File fontsDir = ace.getFontsDir();
-		
-		Collection<File> listFiles = FileUtils.listFiles(fontsDir, GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
+
+		Collection<File> listFiles = FileUtils.listFiles(fontsDir,
+				GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
 		for (File f : listFiles) {
-			final Element fontElement = document.createElementNS(AMLUtil.AMLURI,
-					AMLUtil.TAG_FONT);
-			String relPath = f.getAbsolutePath().substring(fontsDir.getAbsolutePath().length()+1);
-			fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath );
+			final Element fontElement = document.createElementNS(
+					AMLUtil.AMLURI, AMLUtil.TAG_FONT);
+			String relPath = f.getAbsolutePath().substring(
+					fontsDir.getAbsolutePath().length() + 1);
+			fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath);
 			fontsElement.appendChild(fontElement);
 		}
-		
+
 		return fontsElement;
 	}
 
