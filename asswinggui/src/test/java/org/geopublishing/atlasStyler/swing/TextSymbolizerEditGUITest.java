@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,10 @@ import org.geopublishing.atlasStyler.TextRuleList;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
+import org.geotools.data.memory.MemoryFeatureCollection;
+import org.geotools.feature.FeatureType;
+import org.geotools.feature.FeatureTypeBuilder;
+import org.geotools.feature.FeatureTypeFactory;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,7 +40,7 @@ public class TextSymbolizerEditGUITest {
 
 	@BeforeClass
 	public static void setup() throws IOException {
-		URL shpURL = AtlasStyler.class.getResource(COUNTRY_SHP_RESNAME);
+		URL shpURL = AtlasStyler.class.getResource("/data/smallshape/country.shp");
 		assertNotNull(COUNTRY_SHP_RESNAME + " not found!", shpURL);
 		Map<Object, Object> params = new HashMap<Object, Object>();
 		params.put("url", shpURL);
