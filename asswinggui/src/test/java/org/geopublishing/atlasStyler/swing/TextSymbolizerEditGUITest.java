@@ -15,7 +15,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.AtlasStylerTest;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -36,7 +35,7 @@ public class TextSymbolizerEditGUITest {
 
 	@BeforeClass
 	public static void setup() throws IOException {
-		URL shpURL = AtlasStylerTest.class.getResource(COUNTRY_SHP_RESNAME);
+		URL shpURL = AtlasStyler.class.getResource(COUNTRY_SHP_RESNAME);
 		assertNotNull(COUNTRY_SHP_RESNAME + " not found!", shpURL);
 		Map<Object, Object> params = new HashMap<Object, Object>();
 		params.put("url", shpURL);
