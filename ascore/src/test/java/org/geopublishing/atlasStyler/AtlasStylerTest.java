@@ -52,6 +52,12 @@ public class AtlasStylerTest {
 	public static void after() {
 		featureSource_polygon.getDataStore().dispose();
 	}
+	
+	public void testConstructors(){
+		AtlasStyler as1 = new AtlasStyler(featureSource_polygon);
+		AtlasStyler as2 = new AtlasStyler(new StyledFS(featureSource_polygon));
+		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon), null, null, null);
+	}
 
 	@Test
 	@Ignore

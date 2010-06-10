@@ -21,6 +21,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -34,6 +35,7 @@ import javax.swing.JPopupMenu;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.taskdefs.Tstamp;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;
@@ -50,9 +52,11 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.LinePlacement;
 import org.geotools.styling.PointPlacement;
 import org.geotools.styling.Style;
+import org.geotools.styling.TextSymbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.FilterUtil;
@@ -60,10 +64,17 @@ import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ColorButton;
 
+/**
+ * TODO The preView features are not beeing closed/disposed securely
+ * 
+ * @author stefan
+ * 
+ */
 public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
@@ -118,14 +129,14 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * it will allow to edit, and an {@link AtlasStyler} so the preview can use
 	 * the other Style.
 	 * 
-	 * @param features
+	 * @param preViewFeatures
 	 */
 	public TextSymbolizerEditGUI(TextRuleList rulesList,
 			AtlasStyler atlasStyler,
-			FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
+			FeatureCollection<SimpleFeatureType, SimpleFeature> preViewFeatures) {
 		this.rulesList = rulesList;
 		this.atlasStyler = atlasStyler;
-		initialize(features);
+		initialize(preViewFeatures);
 	}
 
 	/**
@@ -320,51 +331,26 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
+	@SuppressWarnings("unchecked")
 	public JComboBox getJComboBoxFont() {
 		if (jComboBoxFont == null) {
 
 			jComboBoxFont = new JComboBox();
-			
-			// TODO 
-			
-			final ArrayList<Literal>[] fontFamilies = new ArrayList[6];
+
+			List<Literal>[] fontFamilies = AtlasStyler.getDefaultFontFamilies();
 
 			/**
-			 * Every group represents the aliases of similar fonts on different
-			 * systems. @see
-			 * http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html
+			 * Add user defined Fonts. One Family for every extra font.
 			 */
-			fontFamilies[0] = new ArrayList<Literal>();
-			fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Arial"));
-			fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Helvetica"));
-			fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
+			List<Font> extraFonts = atlasStyler.getFonts();
 
-			fontFamilies[1] = new ArrayList<Literal>();
-			fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Arial Black"));
-			fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Gadget"));
-			fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
-
-			fontFamilies[2] = new ArrayList<Literal>();
-			fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier New"));
-			fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier"));
-			fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("monospace"));
-
-			fontFamilies[3] = new ArrayList<Literal>();
-			fontFamilies[3].add(FilterUtil.FILTER_FAC
-					.literal("Times New Roman"));
-			fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("Times"));
-			fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("serif"));
-
-			fontFamilies[4] = new ArrayList<Literal>();
-			fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Impact"));
-			fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Charcoal"));
-			fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
-
-			fontFamilies[5] = new ArrayList<Literal>();
-			fontFamilies[5].add(FilterUtil.FILTER_FAC.literal("Comic Sans MS"));
-			fontFamilies[5].add(FilterUtil.FILTER_FAC.literal("cursive"));
-			
-			// 
+			int i = 6;
+			for (Font f : extraFonts) {
+				fontFamilies = LangUtil.extendArray(fontFamilies,
+						new ArrayList<Literal>());
+				fontFamilies[i].add(FilterUtil.FILTER_FAC.literal(f.getName()));
+				i++;
+			}
 
 			/**
 			 * This renderer present the items of type Collection<Literal>
@@ -417,6 +403,23 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				}
 
 			});
+
+			// Determine where the selected font is and select the combobox
+			{
+				Expression selectedFontFamily = rulesList.getSymbolizer()
+						.getFont().getFamily().get(0);
+
+				int idx = 0;
+				for (List<Literal> ffs : fontFamilies) {
+					for (Literal l : ffs) {
+						if (l.equals(selectedFontFamily)) {
+							jComboBoxFont.setSelectedIndex(idx);
+						}
+
+					}
+					idx++;
+				}
+			}
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxFont);
 		}
@@ -649,8 +652,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * Creating a Style that for the preview. Depends on the selected class
 	 */
 	private Style createPreviewStyle() {
-		final org.geotools.styling.TextSymbolizer tSymbolizer = rulesList
-				.getSymbolizer();
+		final TextSymbolizer tSymbolizer = rulesList.getSymbolizer();
 
 		final Style style = StylingUtil.STYLE_BUILDER.createStyle();
 

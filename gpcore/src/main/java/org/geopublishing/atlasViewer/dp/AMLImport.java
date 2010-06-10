@@ -420,13 +420,13 @@ public class AMLImport {
 		// Check if any extra fonts are defined
 		final Node rootFontsNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI, AMLUtil.TAG_FONTS).item(0);
 		if (rootFontsNode != null) {
-			parseAndLoadFonts(ac,rootFontsNode);
+			parseFonts(ac,rootFontsNode);
 		}
-
-		// LOGGER.debug("Parsing atlas.xml ... successful\n\n");
+		
+		ac.registerFonts();
 	}
 
-	protected void parseAndLoadFonts(AtlasConfig ac, Node rootFontsNode) {
+	protected void parseFonts(AtlasConfig ac, Node rootFontsNode) {
 		final NodeList childNodes = rootFontsNode.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node childNode = childNodes.item(i);
@@ -437,11 +437,11 @@ public class AMLImport {
 			String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME+"/"+AtlasConfig.FONTS_DIRNAME+"/"+relFontPath;
 			InputStream is = ac.getResourceAsStream(resourceLocation);
 			if (is == null){
-				warn("Fonts","The font "+relFontPath+" could not be found in "+resourceLocation);
+				warn("Fonts","The font "+relFontPath+" could not be found at "+resourceLocation);
 			}
 			else try {
 				Font font = Font.createFont(Font.TRUETYPE_FONT, is);
-				GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(font);
+				ac.getFonts().add(font);
 				LOGGER.debug("Registered a new TTF font: "+font.getName());
 			} catch (Exception e) {
 				Log.error("Couldn't load or register font "+relFontPath,e);

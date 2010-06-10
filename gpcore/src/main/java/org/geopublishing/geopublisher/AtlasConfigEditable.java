@@ -275,6 +275,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		getImagesDir();
 		getDataDir();
 		getAboutDir();
+		getFontsDir();
 		return this.atlasDir;
 	}
 
@@ -720,5 +721,6 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		super.uncache();
 	}
+
 
 }

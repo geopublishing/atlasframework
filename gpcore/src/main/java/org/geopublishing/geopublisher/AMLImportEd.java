@@ -54,8 +54,6 @@ public class AMLImportEd extends AMLImport {
 
 		// Create virgin AtlasConfigEditable
 		AtlasConfigEditable ace = new AtlasConfigEditable(atlasDir);
-//		// Add the file resource loaders
-//		ace.setAtlasDir(atlasDir);
 
 		try {
 			parseAtlasConfig(statusDialog,  ace, true);

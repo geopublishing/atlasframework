@@ -11,6 +11,7 @@
 package org.geopublishing.geopublisher;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
@@ -165,7 +166,7 @@ public class AMLExporter {
 
 			FileOutputStream fileOutputStream = new FileOutputStream(
 					getAtlasXml());
-			
+
 			try { // fileOutputStream.close();
 
 				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
@@ -369,12 +370,21 @@ public class AMLExporter {
 		Collection<File> listFiles = FileUtils.listFiles(fontsDir,
 				GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
 		for (File f : listFiles) {
-			final Element fontElement = document.createElementNS(
-					AMLUtil.AMLURI, AMLUtil.TAG_FONT);
+
+			// Test whether the font is readable
 			String relPath = f.getAbsolutePath().substring(
 					fontsDir.getAbsolutePath().length() + 1);
-			fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath);
-			fontsElement.appendChild(fontElement);
+			try {
+				Font.createFont(Font.TRUETYPE_FONT, f);
+				final Element fontElement = document.createElementNS(
+						AMLUtil.AMLURI, AMLUtil.TAG_FONT);
+				fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath);
+				fontsElement.appendChild(fontElement);
+			} catch (Exception e) {
+				LOGGER.info("Not exporting a reference to broken font "
+						+ relPath + " in " + fontsDir, e);
+			}
+
 		}
 
 		return fontsElement;

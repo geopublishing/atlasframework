@@ -53,12 +53,18 @@ import skrueger.swing.OkButton;
 public class LanguageSelectionDialog extends CancellableDialogAdapter {
 
 	Vector<String> availLangs = new Vector<String>();
+
 	private final List<String> orig;
 	private final List<String> aceLanguages = new ArrayList<String>();
 	private JComboBox languageCombo;
 
 	private boolean cancel = false;
 
+	/**
+	 * @param orig
+	 *            The original list of supported iso language codes. This object
+	 *            will be modified if the dialog is closed with approval.
+	 */
 	public LanguageSelectionDialog(Window owner, List<String> orig) {
 
 		super(owner, GeopublisherGUI.R("LanguageSelectionDialog.Title"));
@@ -259,20 +265,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 		orig.addAll(aceLanguages);
 
 		// Switch the GP GUI to the first language supported by the GP gui
-		for (String lang : orig) {
-			if (lang.equalsIgnoreCase("de")) {
-				Translation.setActiveLang("de");
-				break;
-			} else if (lang.equalsIgnoreCase("en")) {
-				Translation.setActiveLang("en");
-				break;
-			} else if (lang.equalsIgnoreCase("fr")) {
-				Translation.setActiveLang("fr");
-				break;
-			}
-		}
-
-		 Translation.fireLocaleChangeEvents();
+		Translation.setFirstmatchingLanguage(orig, true);
 
 		return super.okClose();
 	}

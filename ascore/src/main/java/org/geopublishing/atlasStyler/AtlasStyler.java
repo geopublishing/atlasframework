@@ -12,10 +12,13 @@ package org.geopublishing.atlasStyler;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,14 +39,19 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
+import org.opengis.filter.expression.Literal;
 import org.opengis.util.InternationalString;
 
+import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
+import skrueger.geotools.StyledFS;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -67,7 +75,6 @@ public class AtlasStyler {
 	 */
 	public static final Dimension DEFAULT_SYMBOL_PREVIEW_SIZE = new Dimension(
 			30, 30);
-
 
 	/**
 	 * If false, the {@link AtlasStyler} only fires {@link StyleChangedEvent}s
@@ -250,7 +257,7 @@ public class AtlasStyler {
 
 	private final StyledFeaturesInterface<?> styledFeatures;
 
-//	private final MapLegend mapLegend;
+	// private final MapLegend mapLegend;
 	private final MapLayer mapLayer;
 
 	private Double avgNN = null;
@@ -260,6 +267,23 @@ public class AtlasStyler {
 	 * Used when {@link #cancel()} is called.
 	 */
 	private Style backupStyle;
+
+	/**
+	 * A list of fonts that will be available for styling.
+	 */
+	private List<Font> fonts = new ArrayList<Font>();
+
+	/**
+	 * Key for a parameter of type List<String> that contains the languages the
+	 * SLD is created for (not SLD standard, only used if AS is run within GP)
+	 */
+	public final static String PARAM_LANGUAGES_LIST_STRING = "PARAM_LANGUAGES_LIST_STRING";
+
+	/**
+	 * Key for a parameter of type List<Font> of additional Fonts that are
+	 * available
+	 */
+	public final static String PARAM_FONTS_LIST_FONT = "PARAM_FONTS_LIST_FONT";
 
 	/***************************************************************************
 	 * Constructor that starts styling a {@link StyledFeaturesInterface}. Loads
@@ -275,14 +299,18 @@ public class AtlasStyler {
 	 *            may be <code>null</code>
 	 */
 	public AtlasStyler(final StyledFeaturesInterface<?> styledFeatures,
-			Style loadStyle, 
-//			final MapLegend mapLegend,
-			final MapLayer mapLayer, List<String> languages) {
+			Style loadStyle, final MapLayer mapLayer,
+			HashMap<String, Object> params) {
 		this.styledFeatures = styledFeatures;
-//		this.mapLegend = mapLegend;
+		// this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
-		AtlasStyler.languages = languages;
-		
+
+		// If no params were passed, use an empty List, so we don't have to check against null
+		if (params == null)
+			params = new HashMap<String, Object>();
+
+		setFonts((List<Font>) params.get(PARAM_FONTS_LIST_FONT));
+
 		// Calculating the averge distance to the next neightbou. this costs
 		// time!// TODO in another thread
 		// with GUI!// TODO in another thread
@@ -292,7 +320,8 @@ public class AtlasStyler {
 		setTitle(styledFeatures.getTitle());
 		if (loadStyle != null) {
 			// Correct propertynames against the Schema
-			loadStyle = StylingUtil.correctPropertyNames(loadStyle, styledFeatures.getSchema());
+			loadStyle = StylingUtil.correctPropertyNames(loadStyle,
+					styledFeatures.getSchema());
 			importStyle(loadStyle);
 		} else {
 			if (styledFeatures.getStyle() != null) {
@@ -306,7 +335,11 @@ public class AtlasStyler {
 
 		/***********************************************************************
 		 * Configuring the AtlasStyler translation settings.
+		 * 
 		 */
+		AtlasStyler.languages = (List<String>) params
+				.get(PARAM_LANGUAGES_LIST_STRING);
+
 		if (languages == null || languages.size() == 0) {
 			setLanguageMode(AtlasStyler.LANGUAGE_MODE.OGC_SINGLELANGUAGE);
 		} else {
@@ -316,10 +349,20 @@ public class AtlasStyler {
 
 	}
 
+	/**
+	 * Create an {@link AtlasStyler} object for any
+	 * {@link StyledFeaturesInterface}
+	 */
 	public AtlasStyler(StyledFeaturesInterface<?> styledFeatures) {
-		this(styledFeatures, null, 
-//				null, 
-				null, null);
+		this(styledFeatures, null, null, null);
+	}
+
+	/**
+	 * Create an AtlasStyler object for any {@link FeatureSource}
+	 */
+	public AtlasStyler(
+			FeatureSource<SimpleFeatureType, SimpleFeature> featureSourcePolygon) {
+		this(new StyledFS(featureSourcePolygon));
 	}
 
 	/**
@@ -361,8 +404,7 @@ public class AtlasStyler {
 	 * @param importStyle
 	 *            {@link Style} to import.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void importStyle(Style importStyle) {
 
@@ -769,8 +811,7 @@ public class AtlasStyler {
 	 * Adds a {@link StyleChangeListener} to the {@link AtlasStyler} which gets
 	 * called whenever the {@link Style} has changed.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void addListener(final StyleChangeListener listener) {
 		listeners.add(listener);
@@ -782,8 +823,7 @@ public class AtlasStyler {
 	 * 
 	 * Use this for {@link TextRuleList}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void fireStyleChangedEvents() {
 		fireStyleChangedEvents(false);
@@ -798,8 +838,7 @@ public class AtlasStyler {
 	 * @param forced
 	 *            Can be used to override isAutomaticPreview()
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void fireStyleChangedEvents(final boolean forced) {
 		if (isQuite() && !forced) {
@@ -836,8 +875,7 @@ public class AtlasStyler {
 	 * 
 	 * Sets the parameter ruleList as the lastChangedSymbolizerRuleList
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private void fireStyleChangedEvents(final AbstractRuleList ruleList) {
 		if (!(ruleList instanceof TextRuleList)) {
@@ -850,8 +888,7 @@ public class AtlasStyler {
 	/**
 	 * 
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean isQuite() {
 		return quite;
@@ -865,8 +902,7 @@ public class AtlasStyler {
 	 * @return A full {@link Style} that represents the last RuleList that has
 	 *         been changed.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public Style getStyle() {
 		if (xxxstyle == null) {
@@ -874,7 +910,8 @@ public class AtlasStyler {
 			// Create an empty Style without any FeatureTypeStlyes
 			xxxstyle = ASUtil.SB.createStyle();
 
-			xxxstyle.setName("AtlasStyler " + ReleaseUtil.getVersionInfo(ASUtil.class));
+			xxxstyle.setName("AtlasStyler "
+					+ ReleaseUtil.getVersionInfo(ASUtil.class));
 
 			if (lastChangedRuleList == null) {
 
@@ -1133,8 +1170,7 @@ public class AtlasStyler {
 	 * @param geometryAttributeType
 	 *            {@link GeometryAttributeType} that defines
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 
 	/**
@@ -1153,8 +1189,7 @@ public class AtlasStyler {
 	 * @return A {@link File} object pointing to the directory where the local
 	 *         POINT symbol library is saved.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static File getPointSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_POINT);
@@ -1166,8 +1201,7 @@ public class AtlasStyler {
 	 * @return A {@link File} object pointing to the directory where the local
 	 *         LINE symbol library is saved.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static File getLineSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_LINE);
@@ -1188,8 +1222,7 @@ public class AtlasStyler {
 	 * @return A {@link File} object pointing to the directory where the local
 	 *         POLYGON symbol library is saved.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static File getPolygonSymbolsDir() {
 		final File dir = new File(getBaseSymbolsDir(), DIRNAME_POLYGON);
@@ -1234,8 +1267,7 @@ public class AtlasStyler {
 	 * Disposes the {@link AtlasStyler}. Tries to help the Java GC by removing
 	 * dependencies.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void dispose() {
 		xxxstyle = null;
@@ -1246,8 +1278,7 @@ public class AtlasStyler {
 	 * Convenience method to indicate if the {@link FeatureSource} is of type
 	 * Polygon.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean isPolygon() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
@@ -1258,8 +1289,7 @@ public class AtlasStyler {
 	 * Convenience method to indicate if the {@link FeatureSource} is of type
 	 * {@link Polygon}.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean isPoint() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
@@ -1270,14 +1300,12 @@ public class AtlasStyler {
 	 * Convenience method to indicate if the {@link FeatureSource} is of type
 	 * {@link LineString}.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean isLineString() {
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
 				.getFeatureSource()) == GeometryForm.LINE;
 	}
-
 
 	public void setLastChangedRuleList(
 			final AbstractRuleList lastChangedRuleList) {
@@ -1345,13 +1373,14 @@ public class AtlasStyler {
 		return styledFeatures;
 	}
 
-//	/**
-//	 * May return <code>null</code>, if no {@link MapLegend} is connected to the
-//	 * {@link AtlasStyler}.
-//	 */
-//	public MapLegend getMapLegend() {
-//		return mapLegend;
-//	}
+	// /**
+	// * May return <code>null</code>, if no {@link MapLegend} is connected to
+	// the
+	// * {@link AtlasStyler}.
+	// */
+	// public MapLegend getMapLegend() {
+	// return mapLegend;
+	// }
 
 	/**
 	 * Fires a {@link StyleChangedEvent} with the backup style to all listeners.
@@ -1371,6 +1400,66 @@ public class AtlasStyler {
 	 */
 	public static String R(String key, final Object... values) {
 		return ASUtil.R(key, values);
+	}
+
+	/**
+	 * A list of fonts that will be available for styling.
+	 */
+	public List<Font> getFonts() {
+		return fonts;
+	}
+
+	/**
+	 * A list of fonts that will be available for styling. If set to
+	 * <code>null</code>, {@link #getFonts()} will return a new and empty
+	 * ArayList<Font>
+	 */
+	public void setFonts(List<Font> fonts) {
+		if (fonts == null)
+			fonts = new ArrayList<Font>();
+		else
+			this.fonts = fonts;
+	}
+
+	/**
+	 * Returns the list of default font families that are expected to work on
+	 * any system. The returned {@link List} contains alternative names for all
+	 * the font-families.
+	 */
+	public static List<Literal>[] getDefaultFontFamilies() {
+		
+		ArrayList<Literal>[] fontFamilies = new ArrayList[5];
+	
+		/**
+		 * Every group represents the aliases of similar fonts on different
+		 * systems. @see http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html
+		 */
+		fontFamilies[0] = new ArrayList<Literal>();
+		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Arial"));
+		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Helvetica"));
+		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
+	
+		fontFamilies[1] = new ArrayList<Literal>();
+		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Arial Black"));
+		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Gadget"));
+		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
+	
+		fontFamilies[2] = new ArrayList<Literal>();
+		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier New"));
+		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier"));
+		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("monospace"));
+	
+		fontFamilies[3] = new ArrayList<Literal>();
+		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("Times New Roman"));
+		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("Times"));
+		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("serif"));
+	
+		fontFamilies[4] = new ArrayList<Literal>();
+		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Impact"));
+		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Charcoal"));
+		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
+	
+		return fontFamilies;
 	}
 
 }

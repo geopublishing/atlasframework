@@ -10,10 +10,13 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer;
 
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,6 +58,11 @@ public class AtlasConfig implements Disposable {
 	}
 
 	/**
+	 * A list of fonts added manually to the atlas by the user
+	 */
+	private final List<Font> fonts = new ArrayList<Font>();
+
+	/**
 	 * Resource name of the icon that will be used for JavaWebStart if the
 	 * user-defined one can't be found.
 	 */
@@ -80,7 +88,8 @@ public class AtlasConfig implements Disposable {
 
 	/**
 	 * Resource name of the splashscreen image that will be used for
-	 * JavaWebStart and start.bat. It must be stores
+	 * JavaWebStart and start.bat. It must be stores. It's the atlases
+	 * spashscreen. If it doesn't exist, the fallback is used.
 	 */
 	public static final String SPLASHSCREEN_RESOURCE_NAME = "ad/splashscreen.png";
 
@@ -107,9 +116,10 @@ public class AtlasConfig implements Disposable {
 	 * data. Usually 'ad'
 	 **/
 	public static final String ATLASDATA_DIRNAME = "ad";
-	
+
 	/**
-	 * The name of the directory relative to the #ATLASDATA_DIRNAME which contains extra fonts
+	 * The name of the directory relative to the #ATLASDATA_DIRNAME which
+	 * contains extra fonts
 	 **/
 	public static final String FONTS_DIRNAME = "fonts";
 
@@ -171,8 +181,7 @@ public class AtlasConfig implements Disposable {
 	 * 
 	 * @param entry
 	 *            {@link DpEntry}-subclass. Must not be <code>null</code>
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void add(DpEntry<? extends ChartStyle> entry) {
 		datapool.add(entry);
@@ -214,7 +223,7 @@ public class AtlasConfig implements Disposable {
 	public DataPool getDataPool() {
 		return datapool;
 	}
-	
+
 	/**
 	 * Reset the {@link List} of supported Languages to the passed
 	 * {@link String}
@@ -381,7 +390,6 @@ public class AtlasConfig implements Disposable {
 		return url;
 	}
 
-
 	/**
 	 * @return <code>null</code> if no icon found. Otherwise an {@link URL} to a
 	 *         user-defined- or default icon.
@@ -450,4 +458,29 @@ public class AtlasConfig implements Disposable {
 	public void dispose() {
 		uncache();
 	}
+
+	/**
+	 * A {@link List} of fonts added manually to the atlas by the user. When you
+	 * change it call {@link #registerFonts()}
+	 */
+	public List<Font> getFonts() {
+		return fonts;
+	}
+
+	/**
+	 * Registers the Fonts in {@link #getFonts()} to the system, if they are not
+	 * registered yet.
+	 */
+	public void registerFonts() {
+		for (Font f : getFonts()) {
+			// if (Font.decode(f.getName()) == null) {
+			LOGGER.debug("Registering user font " + f);
+			GraphicsEnvironment.getLocalGraphicsEnvironment().registerFont(f);
+			org.geotools.renderer.style.FontCache fc = org.geotools.renderer.style.FontCache
+					.getDefaultInstance();
+			fc.registerFont(f);
+			// }
+		}
+	}
+
 }

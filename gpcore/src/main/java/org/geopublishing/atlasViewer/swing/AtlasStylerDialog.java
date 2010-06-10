@@ -11,6 +11,7 @@
 package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Component;
+import java.util.HashMap;
 
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.StyleChangeListener;
@@ -41,7 +42,7 @@ public class AtlasStylerDialog extends StylerDialog {
 		super(owner, new AtlasStyler(dpLayer, layerStyle != null ? layerStyle
 				.getStyle() : dpLayer.getStyle(), 
 //				atlasMapLegend,
-				mapLayer, dpLayer.getAtlasConfig().getLanguages()));
+				mapLayer, getParamMap(dpLayer)));
 		this.dpLayer = dpLayer;
 
 		this.layerStyle = layerStyle;
@@ -104,6 +105,13 @@ public class AtlasStylerDialog extends StylerDialog {
 		 */
 		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.WEST);
 		
+	}
+
+	private static HashMap<String, Object> getParamMap(DpLayerVectorFeatureSource dpLayer_) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put(AtlasStyler.PARAM_LANGUAGES_LIST_STRING, dpLayer_.getAtlasConfig().getLanguages());
+		params.put(AtlasStyler.PARAM_FONTS_LIST_FONT, dpLayer_.getAtlasConfig().getFonts());
+		return params;
 	}
 
 	@Override

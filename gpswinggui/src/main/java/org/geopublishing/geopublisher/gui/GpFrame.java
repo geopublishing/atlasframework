@@ -739,7 +739,9 @@ public class GpFrame extends JFrame {
 
 			});
 			atlasJMenu.add(jMenuItemDefaultCRS);
-
+			
+			atlasJMenu.add(new JMenuItem(new GpConfigureAtlasFontsAction(
+					R("MenuBar.AtlasMenu.ManageFonts"), ace, GpFrame.this)));
 		}
 
 		return atlasJMenu;

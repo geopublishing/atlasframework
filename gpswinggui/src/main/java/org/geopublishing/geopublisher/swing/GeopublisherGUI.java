@@ -109,9 +109,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public enum ActionCmds {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
-		 * 
-		 * 
-		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
 		importWizard
@@ -328,9 +325,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			final LanguageSelectionDialog languageSelectionDialog = new LanguageSelectionDialog(
 					getJFrame(), ace.getLanguages());
 			languageSelectionDialog.setVisible(true);
-			if (!languageSelectionDialog.isCancel()) {
-
-			}
+			// if (!languageSelectionDialog.isCancel()) {
+			// }
 		}
 
 		else if (cmd.startsWith(ActionCmds.changeLnF.toString())) {

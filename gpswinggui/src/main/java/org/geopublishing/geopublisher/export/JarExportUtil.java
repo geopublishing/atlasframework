@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
+import java.awt.Font;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -77,13 +78,10 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
-import org.geotools.swing.ExceptionMonitor;
 import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import com.vividsolutions.jts.util.Debug;
 
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
@@ -212,12 +210,12 @@ public class JarExportUtil {
 	 */
 	public static final String ASCORE_JARNAME = "ascore-" + version + snapshot
 			+ postfixJar;
-//
-//	/**
-//	 * Filename of the asswinggui jar
-//	 */
-//	public static final String ASSWINGGUI_JARNAME = "asswinggui-" + version
-//			+ snapshot + postfixJar;
+	//
+	// /**
+	// * Filename of the asswinggui jar
+	// */
+	// public static final String ASSWINGGUI_JARNAME = "asswinggui-" + version
+	// + snapshot + postfixJar;
 
 	/**
 	 * Filename of the schmitzm jar. TODO Very fucking ugly
@@ -230,7 +228,7 @@ public class JarExportUtil {
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(Arrays
 			.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
-//					ASSWINGGUI_JARNAME,
+			// ASSWINGGUI_JARNAME,
 					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
@@ -316,8 +314,7 @@ public class JarExportUtil {
 	 * 
 	 * @param targetJar
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @param ace
 	 * @throws AtlasExportException
 	 */
@@ -503,8 +500,10 @@ public class JarExportUtil {
 			final AtlasConfigEditable ace) throws Exception {
 
 		// Prepare a temporary atlas.xml
-		File randomTempDir = new File(IOUtil.getTempDir(),"GPtempExport"+System.currentTimeMillis());
-		final File adDir = new File(randomTempDir, AtlasConfig.ATLASDATA_DIRNAME);
+		File randomTempDir = new File(IOUtil.getTempDir(), "GPtempExport"
+				+ System.currentTimeMillis());
+		final File adDir = new File(randomTempDir,
+				AtlasConfig.ATLASDATA_DIRNAME);
 		FileUtils.deleteDirectory(adDir);
 		adDir.mkdirs();
 		final File exportAtlasXml = new File(adDir,
@@ -519,10 +518,13 @@ public class JarExportUtil {
 
 		addToJar(targetJar, randomTempDir, AtlasConfig.ATLASDATA_DIRNAME + "/"
 				+ AtlasConfig.ATLAS_XML_FILENAME);
-		
-		// Remove the created temporary atlas.xml, it has been copied into the jar
+
+		// Remove the created temporary atlas.xml, it has been copied into the
+		// jar
 		if (!exportAtlasXml.delete()) {
-			LOGGER.warn("could not delete temporary atlas.xml file at "+adDir);
+			LOGGER
+					.warn("could not delete temporary atlas.xml file at "
+							+ adDir);
 		}
 	}
 
@@ -583,7 +585,59 @@ public class JarExportUtil {
 	 * 
 	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
 	 */
-	public void addToJar(final File targetJar, final File relDir,
+	// public void addToJar(final File targetJar, final File relDir,
+	// final String what) throws AtlasExportException, IOException {
+	//
+	// final String jarName = targetJar.getAbsolutePath();
+	//
+	// /**
+	// * Creating a JAR
+	// */
+	// final Main jartool = new Main(System.out, System.err, "jar");
+	//
+	// if (!targetJar.exists()) {
+	// LOGGER.debug("creating new (without manifest:)" + jarName);
+	// final boolean run = jartool.run(new String[] { "cf", jarName, "-C",
+	// relDir.getAbsolutePath(), what });
+	//
+	// if (!run)
+	// throw new AtlasExportException("unable to create jar "
+	// + targetJar + " with " + what);
+	// } else {
+	// LOGGER.debug("updating " + jarName + ", adding " + what);
+	//
+	// final boolean run = jartool.run(new String[] { "uf", jarName, "-C",
+	// relDir.getAbsolutePath(), what });
+	// if (!run)
+	// throw new AtlasExportException("unable to update jar "
+	// + targetJar + " with " + what);
+	// }
+	//
+	// }
+
+	/**
+	 * Adds the what-String recursively to the target JAR Any manifest inside
+	 * the target is deleted.. Call
+	 * {@link #addManifest(File, AtlasConfigEditable)} after you are done with
+	 * the jar If the jar doesn't exist, we create it. If the what resolves to a
+	 * directory, we filter out any .svn or .cvs directories.
+	 * 
+	 * @param targetJar
+	 *            Existing JAR to extend
+	 * 
+	 * @param baseDir
+	 *            Directory with "ad" folder of the AtlasWorkingCopy
+	 * 
+	 * @param what
+	 *            command line argument of what to put into the jar. All
+	 *            '/'-chars will be replaces with the systemdependent
+	 *            File.seperator
+	 * @throws Exception
+	 *             So many things can fail ;-)
+	 * 
+	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
+	 */
+	public void addToJar(final File targetJar, final File baseDir,
 			final String what) throws AtlasExportException, IOException {
 
 		final String jarName = targetJar.getAbsolutePath();
@@ -591,29 +645,45 @@ public class JarExportUtil {
 		/**
 		 * Creating a JAR
 		 */
-		final Main jartool = new Main(System.out, System.err, "jar");
+		File testWhat = new File(baseDir, what);
+		Collection<String> listRelFileNames = new ArrayList<String>();
+		if (testWhat.isDirectory()) {
+			final Collection<File> listFiles = FileUtils.listFiles(testWhat,
+					GpUtil.BlacklistesFilesFilter,
+					GpUtil.BlacklistedFoldersFilter);
+			for (File f : listFiles) {
+				String relFileName = f.getAbsolutePath().substring(
+						baseDir.getAbsolutePath().length() + 1);
+				listRelFileNames.add(relFileName);
+			}
+		} else
+			listRelFileNames.add(what);
 
-		if (!targetJar.exists()) {
-			// final String manifestName = getManifestFile().getAbsolutePath();
-			// LOGGER.debug("creating new (with manifest:)" + jarName);
-			// final boolean run = jartool.run(new String[] { "cfm", jarName,
-			// manifestName, "-C", relDir.getAbsolutePath(), what });
-			//			
-			LOGGER.debug("creating new (without manifest:)" + jarName);
-			final boolean run = jartool.run(new String[] { "cf", jarName, "-C",
-					relDir.getAbsolutePath(), what });
+		for (String what2 : listRelFileNames) {
 
-			if (!run)
-				throw new AtlasExportException("unable to create jar "
-						+ targetJar + " with " + what);
-		} else {
-			LOGGER.debug("updating " + jarName + ", adding " + what);
+			// We HAVE TO create a new JarTool instance of every calL!
+			final Main jartool = new Main(System.out, System.err, "jar");
 
-			final boolean run = jartool.run(new String[] { "uf", jarName, "-C",
-					relDir.getAbsolutePath(), what });
-			if (!run)
-				throw new AtlasExportException("unable to update jar "
-						+ targetJar + " with " + what);
+			if (!targetJar.exists()) {
+				LOGGER.debug("creating new (without manifest)" + jarName);
+				final boolean run = jartool.run(new String[] { "cf", jarName,
+						"-C", baseDir.getAbsolutePath(), what2 });
+
+				if (!run)
+					throw new AtlasExportException("unable to create jar "
+							+ targetJar + " with " + what2 + " from " + baseDir);
+			} else {
+				LOGGER.debug("updating " + jarName + ", adding " + what2
+						+ " from " + baseDir);
+
+				final boolean run = jartool.run(new String[] { "uf", jarName,
+						"-C", baseDir.getAbsolutePath(), what2 });
+				if (!run)
+					throw new AtlasExportException("unable to update jar "
+							+ targetJar + " with " + what2 + " from "
+							+ baseDir.getAbsolutePath());
+			}
+
 		}
 
 	}
@@ -656,7 +726,7 @@ public class JarExportUtil {
 		boolean packNotExistingErrorAlreadyShown = false;
 
 		for (final String libName : getJarAndNativeLibNames()) {
-			
+
 			checkAbort();
 
 			File destination = new File(targetLibDir, libName);
@@ -886,7 +956,7 @@ public class JarExportUtil {
 			url = new URL("jar:" + findNativesJar.toString() + "!/" + libName);
 			url.openStream().close();
 		} catch (Exception e) {
-			LOGGER.error(e);
+			// LOGGER.info(e);
 			return null;
 		}
 		return url;
@@ -966,7 +1036,7 @@ public class JarExportUtil {
 		String classFileName = GeopublisherGUI.class.getSimpleName() + ".class";
 		URL url = GeopublisherGUI.class.getResource(classFileName);
 
-		LOGGER.debug(classFileName + " found in " + url);
+		// LOGGER.debug(classFileName + " found in " + url);
 
 		if (url != null) {
 			String stringUrl = url.toString();
@@ -1031,10 +1101,9 @@ public class JarExportUtil {
 		if (jarName.contains(ASCORE_JARNAME)) {
 			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
 		}
-//
+		//
 		if (jarName.contains(GPNATIVES_JARNAME)) {
-			path = "org/geopublishing/gpnatives/" + version
-					+ snapshot;
+			path = "org/geopublishing/gpnatives/" + version + snapshot;
 		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
@@ -1047,8 +1116,10 @@ public class JarExportUtil {
 		File file = new File(m2repo, path + "/" + jarName);
 
 		if (!file.exists()) {
-			throw new AtlasExportException("Can't find library: " + jarName
-					+ ". Please report this to the authors.");
+			throw new AtlasExportException(
+					"Can't find library: "
+							+ jarName
+							+ ". If you are running from source or IDE, try using 'mvn install' first. Otherwise please report this to the mailinglist. ");
 		}
 		fromURL = DataUtilities.fileToURL(file);
 
@@ -1061,7 +1132,7 @@ public class JarExportUtil {
 
 		String[] st = System.getProperty("java.library.path").split(":");
 		for (String t : st) {
-//			LOGGER.debug("looking in " + t + " for " + nativeName);
+			// LOGGER.debug("looking in " + t + " for " + nativeName);
 			File file = new File(t + "/" + nativeName);
 			if (file.exists()) {
 				return DataUtilities.fileToURL(file);
@@ -1196,8 +1267,7 @@ public class JarExportUtil {
 	 * Exception: The info HTML pages attached to {@link Map}s are stored in the
 	 * <ode>ARJAR_FILENAME</code> JAR.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @param dpe
 	 *            The {@link DpEntry} to export.
@@ -1222,40 +1292,54 @@ public class JarExportUtil {
 				+ getTempDir());
 		final BufferedOutputStream bo = new BufferedOutputStream(
 				new FileOutputStream(newJar.getAbsolutePath()));
-		final JarOutputStream jo = new JarOutputStream(bo);
+		try {
 
-		/**
-		 * Adding all the files as JarEntrys
-		 */
-		final String absolutePath = ace.getAtlasDir().getAbsolutePath();
-		final String relpath = "ad" + File.separator + "data" + File.separator
-				+ dpe.getDataDirname();
+			final JarOutputStream jo = new JarOutputStream(bo);
+			try {
 
-		final Collection<File> listFiles = FileUtils.listFiles(new File(
-				absolutePath, relpath), GpUtil.BlacklistesFilesFilter,
-				GpUtil.BlacklistedFoldersFilter);
-		for (final File intoJarSource : listFiles) {
+				/**
+				 * Adding all the files as JarEntrys
+				 */
+				final String absolutePath = ace.getAtlasDir().getAbsolutePath();
+				final String relpath = "ad" + File.separator + "data"
+						+ File.separator + dpe.getDataDirname();
 
-			String act = intoJarSource.getPath();
-			final BufferedInputStream bi = new BufferedInputStream(
-					new FileInputStream(act));
-			// act is now an absolute pathname. We need a relative pathname
-			// starting with ad/....
-			act = act.substring(absolutePath.length() + 1);
-			act = act.replace("\\", "/");
-			final JarEntry je = new JarEntry(act);
-			jo.putNextEntry(je);
+				final Collection<File> listFiles = FileUtils.listFiles(
+						new File(absolutePath, relpath),
+						GpUtil.BlacklistesFilesFilter,
+						GpUtil.BlacklistedFoldersFilter);
+				for (final File intoJarSource : listFiles) {
 
-			// Copy the data byte by byte...
-			final byte[] buf = new byte[1024];
-			int anz;
-			while ((anz = bi.read(buf)) != -1) {
-				jo.write(buf, 0, anz);
+					String act = intoJarSource.getPath();
+					final BufferedInputStream bi = new BufferedInputStream(
+							new FileInputStream(act));
+					try {
+
+						// act is now an absolute pathname. We need a relative
+						// pathname
+						// starting with ad/....
+						act = act.substring(absolutePath.length() + 1);
+						act = act.replace("\\", "/");
+						final JarEntry je = new JarEntry(act);
+						jo.putNextEntry(je);
+
+						// Copy the data byte by byte...
+						final byte[] buf = new byte[1024];
+						int anz;
+						while ((anz = bi.read(buf)) != -1) {
+							jo.write(buf, 0, anz);
+						}
+
+					} finally {
+						bi.close();
+					}
+				}
+			} finally {
+				jo.close();
 			}
-			bi.close();
+		} finally {
+			bo.close();
 		}
-		jo.close();
-		bo.close();
 
 		// Add a single index entry, that only contains its own contents
 		// addJarIndex(newJar);
@@ -1761,13 +1845,44 @@ public class JarExportUtil {
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
 						+ "/" + AtlasConfig.HTML_DIRNAME);
 
-				// addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-				// + "/" + AtlasConfig.ATLAS_XML_FILENAME);
 				addAtlasXMLToJar(targetJar, ace);
 
-				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + ace.getImagesDir().getName());
+				// Export the additional atlas fonts, go though all fonts in
+				// font dir and only export the ones that are readbale
+				{
+					File fontsDir = ace.getFontsDir();
 
+					Collection<File> listFiles = FileUtils.listFiles(fontsDir,
+							GpUtil.FontsFilesFilter,
+							GpUtil.BlacklistedFoldersFilter);
+					for (File f : listFiles) {
+						try {
+							Font createFont = Font.createFont(
+									Font.TRUETYPE_FONT, f);
+
+							String relPath = f.getAbsolutePath().substring(
+									fontsDir.getAbsolutePath().length() + 1);
+
+							addToJar(targetJar, ace.getAtlasDir(),
+									AtlasConfig.ATLASDATA_DIRNAME + "/"
+											+ AtlasConfig.FONTS_DIRNAME + "/"
+											+ relPath);
+
+						} catch (Exception e) {
+							LOGGER
+									.warn("Not adding "
+											+ f
+											+ " to jar, because it can't be loaded correctly.");
+						}
+					}
+
+				}
+
+				addToJar(targetJar, ace.getAtlasDir(),
+						AtlasConfig.ATLASDATA_DIRNAME + "/"
+								+ AtlasConfig.IMAGES_DIRNAME);
+
+				// Store the settings
 				ace.getProperties().save(
 						new File(ace.getAtlasDir(),
 								AVProps.PROPERTIESFILE_RESOURCE_NAME));
@@ -1787,7 +1902,7 @@ public class JarExportUtil {
 					// null, JOptionPane.YES_NO_OPTION);
 					// if (useDefaultSplashConfirmDialog ==
 					// JOptionPane.YES_OPTION) {
-					FileUtils.copyURLToFile(GpUtil.class.getClassLoader()
+					FileUtils.copyURLToFile(GpUtil.class
 							.getResource(SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
 							new File(ace.getAtlasDir(),
 									AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
@@ -1867,9 +1982,7 @@ public class JarExportUtil {
 			LOGGER.debug("Creating a JAR for every DpEntry used");
 			for (final DpEntry dpe : ace.getUsedDpes()) {
 
-				final File newJar = createJarFromDpe(dpe);
-				// listOfIndexJars = LangUtil.extendArray(listOfIndexJars,
-				// newJar);
+				createJarFromDpe(dpe);
 			}
 
 			// // using addJarIndex fails :-/
@@ -1985,7 +2098,8 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * Adjusts the right sof the DISK and JWS folder. They have some strange defaults since OpenJDK in Lucid?!
+	 * Adjusts the right sof the DISK and JWS folder. They have some strange
+	 * defaults since OpenJDK in Lucid?!
 	 */
 	private void adjustRights() {
 
@@ -2091,13 +2205,14 @@ public class JarExportUtil {
 				if (!baseJarsDefined[i])
 					libs = LangUtil.extendArray(libs, BASEJARS.get(i));
 		}
-		
+
 		// Von Leerstrings bereinigen
 		String[] libs2 = new String[0];
-		for (String s : libs){
+		for (String s : libs) {
 			s = s.trim();
-			if (s.isEmpty()) continue;
-			libs2 =  LangUtil.extendArray(libs2, s);
+			if (s.isEmpty())
+				continue;
+			libs2 = LangUtil.extendArray(libs2, s);
 		}
 
 		return libs2;
@@ -2111,13 +2226,14 @@ public class JarExportUtil {
 		// + nativeLibsLine);
 
 		String[] libs = nativeLibsLine.split(" ");
-		
+
 		// Von Leerstrings bereinigen
 		String[] libs2 = new String[0];
-		for (String s : libs){
+		for (String s : libs) {
 			s = s.trim();
-			if (s.isEmpty()) continue;
-			libs2 =  LangUtil.extendArray(libs2, s);
+			if (s.isEmpty())
+				continue;
+			libs2 = LangUtil.extendArray(libs2, s);
 		}
 		return libs2;
 	}

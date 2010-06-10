@@ -174,15 +174,8 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 	private static TextResources readDefaultResources() {
 		String resLocationName = "/com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
 		try {
-//			String propsLoc = "com/lightdev/app/shtm/resources/SimplyHTML_common.properties";
-			// URL defaultPropsURL = ClassLoader.getSystemResource(propsLoc);
-//			in = AtlasConfig.getResLoMan().getResourceAsStream(propsLoc);
-			
-			
 			InputStream in = null;
-//			in = new ClassResourceLoader(SHTMLPanelImpl.class).getResourceAsStream("com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
 			in = SHTMLPanelImpl.class.getResourceAsStream(resLocationName);
-//			in = SHTMLPanelImpl.class.getClassLoader().getSystemResourceAsStream("/com/lightdev/app/shtm/resources/SimplyHTML_common.properties");
 			
 			final Properties props = new Properties();
 			props.load(in);

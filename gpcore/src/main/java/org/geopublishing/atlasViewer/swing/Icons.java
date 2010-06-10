@@ -160,6 +160,9 @@ public class Icons {
 	public static final ImageIcon AS_REVERSE_COLORORDER = new ImageIcon(
 			Icons.class.getResource("/images/reverseColorOrder.gif"));
 
+	public static final ImageIcon ICON_FONTS_SMALL = new ImageIcon(Icons.class
+			.getResource("/icons/small/fonts.png"));
+
 	private static ImageIcon upArrow;
 
 	private static ImageIcon downArrow;
