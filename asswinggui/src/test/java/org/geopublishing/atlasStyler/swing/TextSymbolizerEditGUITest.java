@@ -64,7 +64,7 @@ public class TextSymbolizerEditGUITest {
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
 				tr, atlasStyler, featureSource_polygon.getFeatures());
 		JComboBox jComboBoxFont = textSymbolizerEditGUI.getJComboBoxFont();
-		assertEquals("default number of fonts is 6", 6, jComboBoxFont
+		assertEquals("default number of fonts is 5", 5, jComboBoxFont
 				.getItemCount());
 
 	}
@@ -78,7 +78,7 @@ public class TextSymbolizerEditGUITest {
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
 				tr, atlasStyler, featureSource_polygon.getFeatures());
 		JComboBox jComboBoxFont = textSymbolizerEditGUI.getJComboBoxFont();
-		assertEquals("default number of fonts is 6", 6, jComboBoxFont
+		assertEquals("default number of fonts is 5", 5, jComboBoxFont
 				.getItemCount());
 	}
 
