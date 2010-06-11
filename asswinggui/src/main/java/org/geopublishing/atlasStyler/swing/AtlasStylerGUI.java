@@ -57,6 +57,7 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
+import org.geotools.data.DataAccessFactory;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
@@ -85,6 +86,7 @@ import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
 import skrueger.geotools.StyledFeatureSourceInterface;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.i8n.Translation;
 import skrueger.versionnumber.ReleaseUtil;
 
 /**
@@ -96,12 +98,12 @@ import skrueger.versionnumber.ReleaseUtil;
  * 
  */
 public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
-	
+
 	static {
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
 		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 	}
-	
+
 	private static final long serialVersionUID = 1231321321258008431L;
 
 	final static private Logger LOGGER = ASUtil
@@ -163,7 +165,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		icons.add(new ImageIcon(cl.getResource(imagePackageName
 				+ "as_icon64.png")).getImage());
 		setIconImages(icons);
-		
+
 		AVSwingUtil.initEPSG(AtlasStylerGUI.this);
 	}
 
@@ -351,13 +353,20 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * DataStores#dispose()} garantiert werden.
 	 * 
 	 * @param host
+	 * @param schema
+	 *            <code>null</code> => "public"
 	 * @param port
+	 * @param password2
 	 * 
 	 * @throws IOException
 	 */
-	private DataStore createDatastore(String host, String port,
-			String database, String username, String password) {
-		HashMap<String, Object> params = new HashMap<String, Object>();
+	private DataStore createDbDatastore(String host, String port,
+			String database, String schema, String username, String password) {
+
+		if (schema == null)
+			schema = "public";
+
+		HashMap<Object, Object> params = new HashMap<Object, Object>();
 		params.put("dbtype", "postgis");
 		params.put("dbtype", "postgis");
 		params.put("host", host); // the name or ip
@@ -368,7 +377,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		// name
 		params.put("user", username); // the user to
 		params.put("passwd", password); // the
-		// password
+
+		params.put(JDBCDataStoreFactory.SCHEMA, schema);
 
 		params.put(JDBCDataStoreFactory.EXPOSE_PK.key, true);
 
@@ -404,16 +414,28 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				String password = pgD.getPassword();
 				String layer = pgD.getLayer();
 
-				DataStore ds = createDatastore(host, port, database, username,
-						password);
+				// Different Schemas maybe access via a "." in the tablename.
+				String schema = "public";
+				if (layer.contains(".")) {
+					schema = layer.substring(0, layer.indexOf("."));
+					layer = layer.substring(layer.indexOf(".") + 1);
+				}
+
+				DataStore ds = createDbDatastore(host, port, database, schema,
+						username, password);
 				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
 				try {
 					featureSource = ds.getFeatureSource(layer);
-//					Set<Key> supportedHints = featureSource.getSupportedHints();
-//					for (Key k : supportedHints) {
-//						System.out.println(k);
-//					}
+					// Set<Key> supportedHints =
+					// featureSource.getSupportedHints();
+					// for (Key k : supportedHints) {
+					// System.out.println(k);
+					// }
 					StyledFS styledFS = new StyledFS(featureSource);
+
+					styledFS.setTitle(new Translation(database + ": " + layer));
+					styledFS.setDesc(new Translation(host + ":" + port + "/"
+							+ database + "?" + schema + "." + layer));
 
 					styledFS.setSldFile(new File(System
 							.getProperty("user.home")
@@ -422,8 +444,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							+ "."
 							+ database
 							+ "."
-							+ layer
-							+ ".sld"));
+							+ schema
+							+ "."
+							+ layer + ".sld"));
 
 					LOGGER.info("Pg layer has CRS = " + styledFS.getCrs());
 
@@ -548,7 +571,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						exportSLDFile = new File(exportSLDFile.getParentFile(),
 								filenamelc + ".sld");
 						JOptionPane.showMessageDialog(AtlasStylerGUI.this,
-								ASUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",exportSLDFile.getName())); 
+								ASUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",
+										exportSLDFile.getName()));
 					}
 
 					// // Export
@@ -761,9 +785,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			// Handle if .SLD exists instead
 			if (!sldFile.exists()
 					&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
-				AVSwingUtil
-						.showMessageDialog(this,
-								"Change the file ending to .sld and try again!"); // i8n
+				AVSwingUtil.showMessageDialog(this,
+						"Change the file ending to .sld and try again!"); // i8n
 				return;
 			}
 
@@ -789,7 +812,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			{
 				AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
 						"AtlasStylerGUI.importVectorLayerNoSLD", styledFS
-								.getSldFile().getName() ));
+								.getSldFile().getName()));
 				styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
 			}
 		}
@@ -808,7 +831,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * @param args
 	 */
 	public static void main(final String[] args) throws IOException {
-//		System.out.println("Classpath: "+System.getProperty("java.class.path"));
+		// System.out.println("Classpath: "+System.getProperty("java.class.path"));
 
 		// Set the locale for running the application
 		try {
@@ -820,8 +843,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			LOGGER.error("Could not set locale to "
 					+ ASProps.get(Keys.language), e);
 		}
-		
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				AtlasStylerGUI asg = new AtlasStylerGUI();
