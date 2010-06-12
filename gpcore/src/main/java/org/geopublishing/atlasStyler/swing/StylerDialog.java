@@ -48,12 +48,6 @@ import skrueger.swing.OkButton;
 public class StylerDialog extends CancellableDialogAdapter {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	// public final static String PROPERTY_CANCEL_AND_CLOSE =
-	// "AtlasStylerDialog_CANCEL";
-	//
-	// public final static String PROPERTY_CLOSE_AND_APPLY =
-	// "AtlasStylerDialog_APPLY";
-
 	private JPanel jContentPane = null;
 
 	final private AtlasStyler atlasStyler;
@@ -123,7 +117,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel(new MigLayout("nogrid"));
-			jContentPane.add(tabbedPane, "grow, wrap");
+			jContentPane.add(tabbedPane, "height :500:, wrap"); // The textSymbolizer pane is making the big height
 
 			jContentPane.add(getJCheckboxPreviewl(), "left");
 			jContentPane.add(getJButtonUpdatePreview(), "left");

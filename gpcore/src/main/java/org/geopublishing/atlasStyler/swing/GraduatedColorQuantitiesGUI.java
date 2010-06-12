@@ -225,8 +225,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				classifier.popQuite();
 			}
 
-			atlasStyler.getMapLayer().addMapLayerListener(
-					listenToFilterChangesAndRecalcStatistics);
+			if (atlasStyler.getMapLayer() != null)
+				atlasStyler.getMapLayer().addMapLayerListener(
+						listenToFilterChangesAndRecalcStatistics);
 
 			initialize();
 
@@ -544,9 +545,10 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							// Click on the color field => Manually change the
 							// color.
 							final Color oldColor = rulesList.getColors()[row];
-							final Color newColor = AVSwingUtil.showColorChooser(
-									GraduatedColorQuantitiesGUI.this, "",
-									oldColor);
+							final Color newColor = AVSwingUtil
+									.showColorChooser(
+											GraduatedColorQuantitiesGUI.this,
+											"", oldColor);
 
 							if (newColor != oldColor) {
 								rulesList.getColors()[row] = newColor;
@@ -942,7 +944,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return
 	 */
 	private JButton getInvertColorsButton() {
-		final JButton button = new JButton(new AbstractAction("",Icons.AS_REVERSE_COLORORDER) {
+		final JButton button = new JButton(new AbstractAction("",
+				Icons.AS_REVERSE_COLORORDER) {
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
