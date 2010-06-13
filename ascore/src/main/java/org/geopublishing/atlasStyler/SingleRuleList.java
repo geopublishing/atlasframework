@@ -25,6 +25,7 @@ import java.util.Vector;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
+import org.geotools.data.DataUtilities;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.Rule;
@@ -117,7 +118,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *            The symbolizers to add.
 	 */
 	public boolean addSymbolizers(List<? extends Symbolizer> symbolizers) {
-		boolean add = layers.addAll((Collection<? extends SymbolizerType>) symbolizers);
+		boolean add = layers
+				.addAll((Collection<? extends SymbolizerType>) symbolizers);
 		if (add)
 			fireEvents(new RuleChangedEvent("Added " + symbolizers.size()
 					+ " symbolizers", this));
@@ -165,8 +167,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *            not cloned. If <code>false</code> they are ignored (e.g. left
 	 *            behind)
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public abstract SingleRuleList<? extends SymbolizerType> clone(
 			boolean copyListeners);
@@ -209,8 +210,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * This fires an event to all {@link RuleChangeListener}s.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean loadURL(URL url) {
 		pushQuite();
@@ -221,7 +221,11 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
-			String fileNameWithoutSLD = url.toExternalForm().substring(0, url.toExternalForm().lastIndexOf('.'));
+			// Transforming http://en.geopublishing.org/openmapsymbols/point/Circle.sld to Circle
+			String fileName = new File(url.getFile()).getName();
+			String fileNameWithoutSLD = fileName.substring(0,
+					fileName.lastIndexOf('.'));
+
 			setStyleName(fileNameWithoutSLD);
 
 			try {
@@ -255,8 +259,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * are not changed. The {@link RuleChangeListener}s of the second
 	 * {@link SinglePointSymbolRuleList} are fired afterwards.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public SingleRuleList<SymbolizerType> copyTo(SingleRuleList to) {
@@ -295,8 +298,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
 	 *         symbols. The are painted in reverse order.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public Vector<SymbolizerType> getSymbolizers() {
 		return layers;
@@ -305,8 +307,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
 	 *         symbols. The are painted in reverse order.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setSymbolizers(Vector<SymbolizerType> newlayers) {
 		layers = newlayers;
@@ -382,8 +383,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * given color parameter. Any other occurrence of the original color will
 	 * also be replaced.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	abstract public Color getColor();
 
@@ -392,16 +392,14 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * given color parameter. Any other occurrence of the original color will
 	 * also be replaced. This fires an event to all {@link RuleChangeListener}s.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	abstract public void setColor(Color newColor);
 
 	/**
 	 * @return <code>True</code> if any item is used that has a changeable
 	 *         {@link Color} TODO think again .. do we need that?
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean hasColor() {
 		return getColor() != null;
@@ -452,8 +450,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @return The title of the first and only {@link Rule}. This is used as the
 	 *         label for this rule in the legend.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public String getTitle() {
 		return title;
@@ -463,8 +460,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * Set the title of the first and only {@link Rule}. This is used as the
 	 * label for this rule in the legend.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setTitle(String title) {
 
@@ -492,8 +488,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * Set the title of the first and only {@link Rule}. This is used as the
 	 * label for this rule in the legend.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setTitle(Translation translation) {
 		setTitle(translation.toOneLine());
@@ -508,8 +503,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * 
 	 * @param styleAbstract
 	 *            Description
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setStyleAbstract(final String styleAbstract) {
 
@@ -534,8 +528,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * The Title is used for the author
 	 * 
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public String getStyleTitle() {
 		return styleTitle;
@@ -545,8 +538,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * Use for Author
 	 * 
 	 * @param styleTitle
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setStyleTitle(String styleTitle) {
 		this.styleTitle = styleTitle;

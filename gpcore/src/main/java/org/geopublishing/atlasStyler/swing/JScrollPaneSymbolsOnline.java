@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -35,15 +36,18 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 
@@ -61,35 +65,44 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 		return Icons.ICON_ONLINE;
 	}
 
-	private final GeometryDescriptor attType;
+	// private final GeometryDescriptor attType;
 
 	private URL url;
+	private final GeometryForm geoForm;
 
 	/**
+	 * Construct a {@link JScrollPaneSymbolsOnline}, listing all .sld symbols
+	 * from http://freemapsymbols.org. filtered for a special geoemtry type
+	 * (point, line, polygon)
 	 * 
 	 * @param attType
 	 *            The {@link GeometryAttributeType} determines which folder will
 	 *            be scanned for SLD fragments.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public JScrollPaneSymbolsOnline(GeometryDescriptor attType) {
-		this.attType = attType;
+		this(FeatureUtil.getGeometryForm(attType));
+	}
 
-		switch (FeatureUtil.getGeometryForm(attType)) {
-		case POINT:
-			url = AtlasStyler.getPointSymbolsURL();
-			break;
-		case LINE:
-			url = AtlasStyler.getLineSymbolsURL();
-			break;
-		case POLYGON:
-			url = AtlasStyler.getPolygonSymbolsURL();
-			break;
-		default:
-			throw new IllegalStateException(
-					"GeometryAttributeType not recognized!");
+	/**
+	 * Construct a {@link JScrollPaneSymbolsOnline}, listing all .sld symbols
+	 * from http://freemapsymbols.org. filtered for a special geoemtry type
+	 * (point, line, polygon)
+	 * 
+	 * @param attType
+	 *            The {@link GeometryAttributeType} determines which folder will
+	 *            be scanned for SLD fragments.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public JScrollPaneSymbolsOnline(GeometryForm geoForm) {
+		this.geoForm = geoForm;
+		try {
+			url = new URL(FreeMapSymbols.BASE_URL
+					+ geoForm.toString().toLowerCase());
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
 		}
 
 		rescan(true);
@@ -102,150 +115,169 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 * @param reset
 	 *            Shall the {@link JList} be cleared before rescan
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void rescan(boolean reset) {
 
 		if (reset)
 			((DefaultListModel) getJListSymbols().getModel()).clear();
 
-		SwingWorker<Object, Object> symbolLoader = getWorker();
+		SwingWorker<Void, Void> symbolLoader = getWorker();
 		symbolLoader.execute();
 	}
 
 	/**
 	 * @return A SwingWorker that adds the Online-Symbols in a background task.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private SwingWorker<Object, Object> getWorker() {
-		SwingWorker<Object, Object> swingWorker = new SwingWorker<Object, Object>() {
+	private SwingWorker<Void, Void> getWorker() {
+		SwingWorker<Void, Void> swingWorker = new SwingWorker<Void, Void>() {
 
 			@Override
-			protected Object doInBackground() throws Exception {
-				LOGGER.debug("Seaching for online Symbols");
-
-				String a = url.toExternalForm();
-				a += "/index";
-				URL index = new URL(a);
-
-				BufferedReader in = null;
+			protected Void doInBackground() {
 				try {
-					in = new BufferedReader(new InputStreamReader(index
-							.openStream()));
 
-					// Sorting them alphabetically by using a set
-					SortedSet<String> symbolURLStrings = new TreeSet<String>();
-					String oneLIne;
-					while ((oneLIne = in.readLine()) != null) {
-						String lastPartInURI = new File(oneLIne.substring(1))
-								.toURI().getRawPath();
-						// Thats what happens on Windows: lastPartInURI = "C:/"
-						// + lastPartInURI;
-						// Ich work arroundthat.. not very ellegant!
-						// LOGGER.debug("lastpartinURI " + lastPartInURI);
-						if (lastPartInURI.matches(".[A-Z]:.+")) {
-							lastPartInURI = lastPartInURI.substring(3);
+					LOGGER.debug("Seaching for online Symbols");
+
+					// String a = url.toExternalForm();
+					// a += "/index";
+					// URL index = new URL(a);
+
+					URL index = DataUtilities.extendURL(url, "index");
+
+					BufferedReader in = null;
+					try {
+						in = new BufferedReader(new InputStreamReader(index
+								.openStream()));
+
+						// Sorting them alphabetically by using a set
+						SortedSet<String> symbolURLStrings = new TreeSet<String>();
+						String oneLIne;
+						while ((oneLIne = in.readLine()) != null) {
+							String lastPartInURI = new File(oneLIne
+									.substring(1)).toURI().getRawPath();
+							// Thats what happens on Windows: lastPartInURI =
+							// "C:/"
+							// + lastPartInURI;
+							// Ich work arroundthat.. not very ellegant!
+							// LOGGER.debug("lastpartinURI " + lastPartInURI);
+							if (lastPartInURI.matches(".[A-Z]:.+")) {
+								lastPartInURI = lastPartInURI.substring(3);
+							}
+							String string = url.toExternalForm()
+									+ lastPartInURI;
+							// LOGGER.debug("string " + string);
+							symbolURLStrings.add(new URL(string).toString());
 						}
-						String string = url.toExternalForm() + lastPartInURI;
-						// LOGGER.debug("string " + string);
-						symbolURLStrings.add(new URL(string).toString());
-					}
 
-					List<URL> symbolURLs = new ArrayList<URL>();
-					for (String urlStr : symbolURLStrings) {
-						symbolURLs.add(new URL(urlStr));
-					}
+						List<URL> symbolURLs = new ArrayList<URL>();
+						for (String urlStr : symbolURLStrings) {
+							symbolURLs.add(new URL(urlStr));
+						}
 
-					/**
-					 * Add every symbol as a SymbolButton
-					 */
-					for (final URL url : symbolURLs) {
-
-						/*******************************************************
-						 * Checking if a Style with the same name allready
-						 * exists
+						/**
+						 * Add every symbol as a SymbolButton
 						 */
-						// Name without .sld
-						String newNameWithOUtSLD = url.getFile().substring(0,
-								url.getFile().length() - 4);
+						for (final URL url : symbolURLs) {
 
-						final DefaultListModel model = (DefaultListModel) getJListSymbols()
-								.getModel();
-						Enumeration<?> name2 = model.elements();
-						while (name2.hasMoreElements()) {
-							String styleName = ((SingleRuleList) name2
-									.nextElement()).getStyleName();
-							if (styleName.equals(newNameWithOUtSLD)) {
-								// A Symbol with the same StyleName already
-								// exits
-								continue;
+							/*******************************************************
+							 * Checking if a Style with the same name allready
+							 * exists
+							 */
+							// Name without .sld
+							String newNameWithOUtSLD = url.getFile().substring(
+									0, url.getFile().length() - 4);
+
+							final DefaultListModel model = (DefaultListModel) getJListSymbols()
+									.getModel();
+							Enumeration<?> name2 = model.elements();
+							while (name2.hasMoreElements()) {
+								String styleName = ((SingleRuleList) name2
+										.nextElement()).getStyleName();
+								if (styleName.equals(newNameWithOUtSLD)) {
+									// A Symbol with the same StyleName already
+									// exits
+									continue;
+								}
+							}
+
+							final SingleRuleList symbolRuleList;
+
+							switch (geoForm) {
+							case POINT:
+								symbolRuleList = new SinglePointSymbolRuleList(
+										"");
+								break;
+							case LINE:
+								symbolRuleList = new SingleLineSymbolRuleList(
+										"");
+								break;
+							case POLYGON:
+								symbolRuleList = new SinglePolygonSymbolRuleList(
+										"");
+								break;
+							default:
+								throw new IllegalStateException(
+										"unrecognized type");
+							}
+
+							boolean b = symbolRuleList.loadURL(url);
+							if (b) {
+
+								// Cache
+
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+
+										model.addElement(symbolRuleList);
+
+										JScrollPaneSymbolsOnline.this
+												.setViewportView(JScrollPaneSymbolsOnline.this
+														.getJListSymbols());
+										JScrollPaneSymbolsOnline.this
+												.doLayout();
+										JScrollPaneSymbolsOnline.this.repaint();
+									}
+								});
+							} else {
+								// Load failed
+								LOGGER.warn("Loading " + url + " failed");
 							}
 						}
 
-						final SingleRuleList symbolRuleList;
-
-						switch (FeatureUtil.getGeometryForm(attType)) {
-						case POINT:
-							symbolRuleList = new SinglePointSymbolRuleList("");
-							break;
-						case LINE:
-							symbolRuleList = new SingleLineSymbolRuleList("");
-							break;
-						case POLYGON:
-							symbolRuleList = new SinglePolygonSymbolRuleList("");
-							break;
-						default:
-							throw new IllegalStateException("unrecognized type");
-						}
-
-						boolean b = symbolRuleList.loadURL(url);
-						if (b) {
-
-							// Cache
-
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-
-									model.addElement(symbolRuleList);
-
-									JScrollPaneSymbolsOnline.this
-											.setViewportView(JScrollPaneSymbolsOnline.this
-													.getJListSymbols());
-									JScrollPaneSymbolsOnline.this.doLayout();
-									JScrollPaneSymbolsOnline.this.repaint();
-								}
-							});
-						} else {
-							// Load failed
-							LOGGER.warn("Loading " + url + " failed");
-						}
+					} catch (IOException e) {
+						JLabel notOnlineLabel = new JLabel(
+								AtlasStyler
+										.R("JScrollPaneSymbolsOnline.notOnlineErrorLabel"));
+						JScrollPaneSymbolsOnline.this
+								.setViewportView(notOnlineLabel);
+					} catch (Exception e) {
+						ExceptionDialog
+								.show(
+										SwingUtil
+												.getParentWindowComponent(JScrollPaneSymbolsOnline.this),
+										e);
+					} finally {
+						if (in != null)
+							try {
+								in.close();
+							} catch (IOException e) {
+								LOGGER.error(e);
+							}
 					}
+					//
+					// /**
+					// * Sort the file list, so we have a sorted list of symbols
+					// */
+					// Collections.sort(Arrays.asList(symbolPaths));
 
-				} catch (IOException e) {
-					JLabel notOnlineLabel = new JLabel(AtlasStyler
-							.R("JScrollPaneSymbolsOnline.notOnlineErrorLabel"));
-					JScrollPaneSymbolsOnline.this
-							.setViewportView(notOnlineLabel);
-				} catch (Exception e) {
-					ExceptionDialog
-							.show(
-									SwingUtil
-											.getParentWindowComponent(JScrollPaneSymbolsOnline.this),
-									e);
-				} finally {
-					if (in != null)
-						in.close();
+					return null;
+				} catch (MalformedURLException e1) {
+					ExceptionDialog.show(e1);
+					return null;
 				}
-				//
-				// /**
-				// * Sort the file list, so we have a sorted list of symbols
-				// */
-				// Collections.sort(Arrays.asList(symbolPaths));
 
-				return null;
 			}
 
 		};

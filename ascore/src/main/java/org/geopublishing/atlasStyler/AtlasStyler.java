@@ -1230,38 +1230,6 @@ public class AtlasStyler {
 		return dir;
 	}
 
-	public static URL getPointSymbolsURL() {
-		URL url = null;
-		try {
-			url = new URL(
-					"http://www.geopublishing.org/atlasstyler/openmapsymbols/point");
-		} catch (final MalformedURLException e) {
-			LOGGER.error(e);
-		}
-		return url;
-	}
-
-	public static URL getLineSymbolsURL() {
-		URL url = null;
-		try {
-			url = new URL(
-					"http://www.geopublishing.org/atlasstyler/openmapsymbols/line");
-		} catch (final MalformedURLException e) {
-			LOGGER.error(e);
-		}
-		return url;
-	}
-
-	public static URL getPolygonSymbolsURL() {
-		URL url = null;
-		try {
-			url = new URL(
-					"http://www.geopublishing.org/atlasstyler/openmapsymbols/polygon");
-		} catch (final MalformedURLException e) {
-			LOGGER.error(e);
-		}
-		return url;
-	}
 
 	/**
 	 * Disposes the {@link AtlasStyler}. Tries to help the Java GC by removing
