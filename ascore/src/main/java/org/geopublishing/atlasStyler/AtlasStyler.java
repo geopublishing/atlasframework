@@ -305,7 +305,8 @@ public class AtlasStyler {
 		// this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
 
-		// If no params were passed, use an empty List, so we don't have to check against null
+		// If no params were passed, use an empty List, so we don't have to
+		// check against null
 		if (params == null)
 			params = new HashMap<String, Object>();
 
@@ -499,7 +500,6 @@ public class AtlasStyler {
 							.getMinScaleDenominator());
 
 					singleRuleList.pushQuite();
-
 					try {
 
 						// singleRuleList.setStyleTitle(importStyle.getTitle());
@@ -573,61 +573,66 @@ public class AtlasStyler {
 					}
 
 					uniqueRuleList.pushQuite();
+					try {
 
-					uniqueRuleList.parseMetaInfoString(metaInfoString, fts);
+						uniqueRuleList.parseMetaInfoString(metaInfoString, fts);
 
-					/***********************************************************
-					 * Parsing information in the RULEs
-					 * 
-					 * title, unique values, symbols=>singleRuleLists, template?
-					 */
-					int countRules = 0;
-					uniqueRuleList.setWithDefaultSymbol(false);
-					for (final Rule r : fts.rules()) {
+						/***********************************************************
+						 * Parsing information in the RULEs
+						 * 
+						 * title, unique values, symbols=>singleRuleLists,
+						 * template?
+						 */
+						int countRules = 0;
+						uniqueRuleList.setWithDefaultSymbol(false);
+						for (final Rule r : fts.rules()) {
 
-						if (r.getName() != null
-								&& r.getName().toString().startsWith(
-										FeatureRuleList.NODATA_RULE_NAME)) {
-							// This rule defines the NoDataSymbol
-							uniqueRuleList.importNoDataRule(r);
-							continue;
+							if (r.getName() != null
+									&& r.getName().toString().startsWith(
+											FeatureRuleList.NODATA_RULE_NAME)) {
+								// This rule defines the NoDataSymbol
+								uniqueRuleList.importNoDataRule(r);
+								continue;
+							}
+
+							// set Title
+							uniqueRuleList.getLabels().add(
+									r.getDescription().getTitle().toString());
+
+							// Interpret Filter!
+							final String[] strings = UniqueValuesRuleList
+									.interpretFilter(r.getFilter());
+							uniqueRuleList.getValues().add(strings[1]);
+
+							uniqueRuleList.setPropertyFieldName(strings[0],
+									false);
+
+							final Symbolizer[] symbolizers = r.getSymbolizers();
+
+							final SingleRuleList<? extends Symbolizer> singleRLprototype = uniqueRuleList
+									.getDefaultTemplate();
+
+							// Forget bout generics here!!!
+							final SingleRuleList symbolRL = singleRLprototype
+									.copy();
+
+							symbolRL.getSymbolizers().clear();
+							for (final Symbolizer symb : symbolizers) {
+								final Vector symbolizers2 = symbolRL
+										.getSymbolizers();
+								symbolizers2.add(symb);
+							}
+							symbolRL.reverseSymbolizers();
+							uniqueRuleList.getSymbols().add(symbolRL);
+
+							countRules++;
 						}
 
-						// set Title
-						uniqueRuleList.getLabels().add(
-								r.getDescription().getTitle().toString());
-
-						// Interpret Filter!
-						final String[] strings = UniqueValuesRuleList
-								.interpretFilter(r.getFilter());
-						uniqueRuleList.getValues().add(strings[1]);
-
-						uniqueRuleList.setPropertyFieldName(strings[0], false);
-
-						final Symbolizer[] symbolizers = r.getSymbolizers();
-
-						final SingleRuleList<? extends Symbolizer> singleRLprototype = uniqueRuleList
-								.getDefaultTemplate();
-
-						// Forget bout generics here!!!
-						final SingleRuleList symbolRL = singleRLprototype
-								.copy();
-
-						symbolRL.getSymbolizers().clear();
-						for (final Symbolizer symb : symbolizers) {
-							final Vector symbolizers2 = symbolRL
-									.getSymbolizers();
-							symbolizers2.add(symb);
-						}
-						symbolRL.reverseSymbolizers();
-						uniqueRuleList.getSymbols().add(symbolRL);
-
-						countRules++;
+						LOGGER.debug("Imported " + countRules
+								+ " UNIQUE rules ");
+					} finally {
+						uniqueRuleList.popQuite();
 					}
-
-					LOGGER.debug("Imported " + countRules + " UNIQUE rules ");
-
-					uniqueRuleList.popQuite();
 
 					importedThisAbstractRuleList = uniqueRuleList;
 				}
@@ -676,7 +681,7 @@ public class AtlasStyler {
 					}
 
 					quantitiesRuleList.pushQuite();
-					try {
+					try { // popQuite
 
 						// This also imports the template from the first rule.
 						quantitiesRuleList.parseMetaInfoString(metaInfoString,
@@ -886,14 +891,17 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @return <code>true</code> means, that {@link AtlasStyler} will fire
+	 *         {@link StyleChangedEvent}s
 	 */
 	public boolean isQuite() {
 		return quite;
 	}
 
+	/**
+	 * <code>true</code> means, that {@link AtlasStyler} will fire
+	 * {@link StyleChangedEvent}s
+	 */
 	public void setQuite(final boolean quite) {
 		this.quite = quite;
 	}
@@ -1230,7 +1238,6 @@ public class AtlasStyler {
 		return dir;
 	}
 
-
 	/**
 	 * Disposes the {@link AtlasStyler}. Tries to help the Java GC by removing
 	 * dependencies.
@@ -1395,9 +1402,9 @@ public class AtlasStyler {
 	 * the font-families.
 	 */
 	public static List<Literal>[] getDefaultFontFamilies() {
-		
+
 		ArrayList<Literal>[] fontFamilies = new ArrayList[5];
-	
+
 		/**
 		 * Every group represents the aliases of similar fonts on different
 		 * systems. @see http://www.ampsoft.net/webdesign-l/WindowsMacFonts.html
@@ -1406,27 +1413,27 @@ public class AtlasStyler {
 		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Arial"));
 		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("Helvetica"));
 		fontFamilies[0].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
-	
+
 		fontFamilies[1] = new ArrayList<Literal>();
 		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Arial Black"));
 		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("Gadget"));
 		fontFamilies[1].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
-	
+
 		fontFamilies[2] = new ArrayList<Literal>();
 		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier New"));
 		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("Courier"));
 		fontFamilies[2].add(FilterUtil.FILTER_FAC.literal("monospace"));
-	
+
 		fontFamilies[3] = new ArrayList<Literal>();
 		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("Times New Roman"));
 		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("Times"));
 		fontFamilies[3].add(FilterUtil.FILTER_FAC.literal("serif"));
-	
+
 		fontFamilies[4] = new ArrayList<Literal>();
 		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Impact"));
 		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Charcoal"));
 		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
-	
+
 		return fontFamilies;
 	}
 
