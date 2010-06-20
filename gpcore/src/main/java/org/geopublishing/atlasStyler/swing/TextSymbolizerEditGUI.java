@@ -35,7 +35,6 @@ import javax.swing.JPopupMenu;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.taskdefs.Tstamp;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;

@@ -98,21 +98,21 @@ public class UniqueValuesAddGUI extends JDialog {
 			progressWindow = null;
 		}
 
-		SwingWorker<Set<String>, Object> findUniques = new SwingWorker<Set<String>, Object>() {
+		SwingWorker<Set<Object>, Object> findUniques = new SwingWorker<Set<Object>, Object>() {
 
 			@Override
-			protected Set<String> doInBackground() throws Exception {
+			protected Set<Object> doInBackground() throws Exception {
 				return rulesList
 						.getAllUniqueValuesThatAreNotYetIncluded(progressWindow);
 			}
 
 			@Override
 			protected void done() {
-				Set<String> uniqueValues;
+				Set<Object> uniqueValues;
 				try {
 					uniqueValues = get();
 					DefaultListModel defaultListModel = new DefaultListModel();
-					for (String uv : uniqueValues) {
+					for (Object uv : uniqueValues) {
 						defaultListModel.addElement(uv);
 					}
 					getJListValues().setModel(defaultListModel);

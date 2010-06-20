@@ -11,7 +11,6 @@
 package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
-import org.geotools.data.FeatureSource;
 
 public class FreeMapSymbols {
 	protected static Logger LOGGER = ASUtil.createLogger(FreeMapSymbols.class);

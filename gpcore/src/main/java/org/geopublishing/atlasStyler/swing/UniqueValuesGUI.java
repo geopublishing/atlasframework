@@ -477,7 +477,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 				public void actionPerformed(ActionEvent e) {
 					int[] selectedRows = getJTable().getSelectedRows();
-					List<String> removeValues = new ArrayList<String>();
+					List<Object> removeValues = new ArrayList<Object>();
 					for (int rowIdx : selectedRows) {
 
 						removeValues.add(rulesList.getValues().get(rowIdx));
@@ -527,9 +527,9 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					// vals.remove(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE);
 					// rulesList.removeValues(vals);
 
-					List<String> vals = rulesList.getValues();
-					List<String> vals2 = new ArrayList<String>();
-					for (String s : vals) {
+					List<Object> vals = rulesList.getValues();
+					List<Object> vals2 = new ArrayList<Object>();
+					for (Object s : vals) {
 						if (!s
 								.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE))
 							vals2.add(s);
@@ -584,24 +584,29 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 				public void actionPerformed(ActionEvent e) {
 					int row = getJTable().getSelectedRow();
 
-					rulesList.pushQuite();
-
 					if (row == 0)
 						return;
+					
+					rulesList.pushQuite();
+					
+					try {
+						
 
 					// values has one less, that all the minus
-					String val = rulesList.getValues().remove(row - 1);
+					Object val = rulesList.getValues().remove(row - 1);
 					rulesList.getValues().add(row, val);
 
-					val = rulesList.getLabels().remove(row - 1);
-					rulesList.getLabels().add(row, val);
+					String label = rulesList.getLabels().remove(row - 1);
+					rulesList.getLabels().add(row, label);
 
 					SingleRuleList<? extends Symbolizer> valS = rulesList
 							.getSymbols().remove(row - 1);
 					rulesList.getSymbols().add(row, valS);
 
-					rulesList.popQuite(new RuleChangedEvent("Order changed",
-							rulesList));
+					} finally {
+						rulesList.popQuite(new RuleChangedEvent("Order changed",
+								rulesList));
+					}
 
 					// Update the selection
 					getJTable().getSelectionModel().clearSelection();
@@ -658,11 +663,11 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 						return;
 
 					// values has one less, that all the minus
-					String val = rulesList.getValues().remove(row + 1);
+					Object val = rulesList.getValues().remove(row + 1);
 					rulesList.getValues().add(row, val);
 
-					val = rulesList.getLabels().remove(row + 1);
-					rulesList.getLabels().add(row, val);
+					String label = rulesList.getLabels().remove(row + 1);
+					rulesList.getLabels().add(row, label);
 
 					SingleRuleList<? extends Symbolizer> valS = rulesList
 							.getSymbols().remove(row + 1);
@@ -745,7 +750,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 						if (col == 2) {
 
-							String ruleTitle = rulesList.getValues().get(row);
+							Object val = rulesList.getValues().get(row);
 
 							if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 								LOGGER.debug(AtlasStyler.getLanguages());
@@ -757,7 +762,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 								if (ask == null) {
 									TranslationEditJPanel transLabel;
-									if (ruleTitle
+									if (val
 											.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
 										/** We are in the default rule* */
 										transLabel = new TranslationEditJPanel(

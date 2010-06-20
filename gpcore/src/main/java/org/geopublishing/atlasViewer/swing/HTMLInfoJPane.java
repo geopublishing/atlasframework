@@ -29,7 +29,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;

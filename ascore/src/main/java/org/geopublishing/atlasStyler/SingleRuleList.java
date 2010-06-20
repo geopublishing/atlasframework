@@ -25,7 +25,6 @@ import java.util.Vector;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
-import org.geotools.data.DataUtilities;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.Rule;

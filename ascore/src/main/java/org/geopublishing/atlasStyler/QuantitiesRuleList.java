@@ -272,7 +272,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 					.toString());
 			return new double[] { lower, upper };
 		}
-		return null;
+		throw new RuntimeException("Unparsable Filter "+filter);
 	}
 
 	private HashMap<Integer, String> ruleTitles = new HashMap<Integer, String>();

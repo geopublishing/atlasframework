@@ -457,7 +457,7 @@ public class TextRuleList extends AbstractRuleList {
 
 				for (int i = (uniqueRL.isWithDefaultSymbol() ? 1 : 0); i < uniqueRL
 						.getValues().size(); i++) {
-					String val = uniqueRL.getValues().get(i);
+					Object val = uniqueRL.getValues().get(i);
 
 					// Copy the first rules's settings to the new class:
 					TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
@@ -473,7 +473,7 @@ public class TextRuleList extends AbstractRuleList {
 					setClassEnabled(1 + i
 							- (uniqueRL.isWithDefaultSymbol() ? 1 : 0), true);
 
-					getRuleNames().add(val);
+					getRuleNames().add(uniqueRL.getLabels().get(i));
 
 					classesMaxScales.add(uniqueRL.getSymbols().get(i)
 							.getMaxScaleDenominator());

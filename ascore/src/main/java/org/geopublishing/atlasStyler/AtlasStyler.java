@@ -15,8 +15,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -595,14 +593,11 @@ public class AtlasStyler {
 								continue;
 							}
 
-							// set Title
-							uniqueRuleList.getLabels().add(
-									r.getDescription().getTitle().toString());
+							uniqueRuleList.test();
 
 							// Interpret Filter!
 							final String[] strings = UniqueValuesRuleList
 									.interpretFilter(r.getFilter());
-							uniqueRuleList.getValues().add(strings[1]);
 
 							uniqueRuleList.setPropertyFieldName(strings[0],
 									false);
@@ -623,8 +618,17 @@ public class AtlasStyler {
 								symbolizers2.add(symb);
 							}
 							symbolRL.reverseSymbolizers();
-							uniqueRuleList.getSymbols().add(symbolRL);
+							
+							
 
+							// Finally set all three values into the RL
+							uniqueRuleList.getLabels().add(
+									r.getDescription().getTitle().toString());
+							uniqueRuleList.getSymbols().add(symbolRL);
+							uniqueRuleList.getValues().add(strings[1]);
+
+							uniqueRuleList.test();
+							
 							countRules++;
 						}
 
@@ -791,7 +795,7 @@ public class AtlasStyler {
 			}
 
 		} catch (final Exception importError) {
-			LOGGER.warn("ked for: " + importError.getLocalizedMessage(),
+			LOGGER.warn("Import error: " + importError.getLocalizedMessage(),
 					importError);
 			// TODO Inform about import failure
 		}
