@@ -117,7 +117,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 						+ dataDir.getAbsolutePath());
 
 			parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
-					.getParentUrl(url), "README"),1);
+					.getParentUrl(url), "README"), 1);
 
 			DpeImportUtil.copyFilesWithOrWithoutGUI(this, url, owner, dataDir);
 
@@ -268,9 +268,9 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
 
 				}
-				
+
 				parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
-						.getParentUrl(urlToShape), "README"),2);				
+						.getParentUrl(urlToShape), "README"), 2);
 
 				// Add the empty string as a default NODATA-Value to all textual
 				// layers
@@ -325,7 +325,9 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 </code>
 	 * 
 	 * @param schema
-	 * @param phase 1 or 2. 1 is before the shapefiel has been copied into the internal folder, 2 is after.
+	 * @param phase
+	 *            1 or 2. 1 is before the shapefiel has been copied into the
+	 *            internal folder, 2 is after.
 	 */
 	private void parseGeocommonsReadme(URL geocommonsReadmeURL, int phase) {
 		try {
@@ -340,7 +342,8 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 						while (title.trim().isEmpty()) {
 							title = inReader.readLine();
 						}
-						if (phase == 1) setTitle(new Translation(title));
+						if (phase == 1)
+							setTitle(new Translation(title));
 
 						String desc = "";
 						String oneLine = "";
@@ -352,9 +355,11 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 									&& !oneLine.startsWith("Attributes:"))
 								desc += oneLine + " ";
 						}
-						if (phase == 1) setDesc(new Translation(desc));
+						if (phase == 1)
+							setDesc(new Translation(desc));
 
-						if (phase != 2) return; 
+						if (phase != 2)
+							return;
 						String attLine = "";
 						while (attLine != null) {
 							attLine = inReader.readLine();
@@ -405,10 +410,14 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 				openStream.close();
 			}
 		} catch (Exception e) {
-			LOGGER
-					.warn(
-							"Parsing GeoComons README failed, maybe not in GeoCommons format?!",
-							e);
+			if (e instanceof FileNotFoundException
+					&& e.getMessage().contains("README")) {
+				// NOthing bad... Just not a Geocommons file.
+			} else {
+				LOGGER
+						.warn("Parsing GeoComons README failed, probably not in GeoCommons format");
+
+			}
 		}
 	}
 
