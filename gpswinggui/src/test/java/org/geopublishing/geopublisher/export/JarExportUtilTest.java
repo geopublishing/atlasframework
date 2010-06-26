@@ -83,7 +83,7 @@ public class JarExportUtilTest {
 
 		// "/" needed here 
 		assertNotNull(GpUtil.class
-				.getResource("/"+AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
+				.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
 
 	}
 

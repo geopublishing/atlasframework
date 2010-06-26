@@ -30,8 +30,9 @@ import java.util.Iterator;
 import rachel.ResourceLoader;
 
 public class ResourceLoaderManager implements ResourceLoader {
-	 HashSet<ResourceLoader> _loaders = new HashSet<ResourceLoader>();
-//	ArrayList<ResourceLoader> _loaders = new ArrayList<ResourceLoader>();
+	HashSet<ResourceLoader> _loaders = new HashSet<ResourceLoader>();
+
+	// ArrayList<ResourceLoader> _loaders = new ArrayList<ResourceLoader>();
 
 	public InputStream getResourceAsStream(String name) {
 		Iterator<ResourceLoader> it = _loaders.iterator();
@@ -45,6 +46,8 @@ public class ResourceLoaderManager implements ResourceLoader {
 	}
 
 	public URL getResourceAsUrl(String name) {
+//		if (name.startsWith("/"))
+//			name = name.substring(1);
 		Iterator<ResourceLoader> it = _loaders.iterator();
 		while (it.hasNext()) {
 			ResourceLoader loader = it.next();
@@ -54,7 +57,6 @@ public class ResourceLoaderManager implements ResourceLoader {
 		}
 		return null;
 	}
-	
 
 	public boolean removeResourceLoader(ResourceLoader loader) {
 		return _loaders.remove(loader);

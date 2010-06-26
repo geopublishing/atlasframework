@@ -1934,7 +1934,7 @@ public class JarExportUtil {
 				URL iconURL = ace
 						.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
 				if (iconURL == null) {
-					iconURL = GpUtil.class.getClassLoader().getResource(
+					iconURL = GpUtil.class.getResource(
 							AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 					FileUtils.copyURLToFile(iconURL, new File(
 							ace.getAtlasDir(),
@@ -2033,7 +2033,7 @@ public class JarExportUtil {
 			if (!AVUtil.exists(iconURL)) {
 				// LOGGER
 				// .info("No user-defined icon provided. Using the default one.");
-				iconURL = GpUtil.class.getClassLoader().getResource(
+				iconURL = GpUtil.class.getResource(
 						AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
 			}
 			FileUtils.copyURLToFile(iconURL, new File(

@@ -32,6 +32,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
+import org.geopublishing.geopublisher.GpUtil;
 
 import rachel.ResourceLoader;
 import rachel.loader.ResourceLoaderManager;
@@ -66,7 +67,7 @@ public class AtlasConfig implements Disposable {
 	 * Resource name of the icon that will be used for JavaWebStart if the
 	 * user-defined one can't be found.
 	 */
-	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "export/jws/icon.gif";
+	public static final String JWSICON_RESOURCE_NAME_FALLBACK = "/export/jws/icon.gif";
 
 	// /**
 	// * If true, then the AtlasViewer classes will try to not cache files that
@@ -397,8 +398,7 @@ public class AtlasConfig implements Disposable {
 	public URL getIconURL() {
 		URL iconURL = getResLoMan().getResourceAsUrl(JWSICON_RESOURCE_NAME);
 		if (iconURL == null)
-			iconURL = getResLoMan().getResourceAsUrl(
-					JWSICON_RESOURCE_NAME_FALLBACK);
+			iconURL = GpUtil.class.getResource(JWSICON_RESOURCE_NAME_FALLBACK);
 		return iconURL;
 	}
 
