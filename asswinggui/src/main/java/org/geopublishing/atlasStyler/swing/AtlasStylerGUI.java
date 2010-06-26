@@ -539,7 +539,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					SaveSLDXMLFileChooser chooser = new SaveSLDXMLFileChooser(
 							saveDir);
 
-					int result = chooser.showSaregionenDialog(AtlasStylerGUI.this);
+					int result = chooser.showSaveDialog(AtlasStylerGUI.this);
 
 					File exportSLDFile = chooser.getSelectedFile();
 					if (exportSLDFile == null
