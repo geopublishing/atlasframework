@@ -40,7 +40,7 @@
 		
 		<desktopEntry toFile="${TARGET.DEB.DIR}/buildIcon/geopublishing-doc.desktop" name="Geopublishing documentation" comment="Documentation for Geopublisher and AtlasStyler" exec="xdg-open file:///usr/share/doc/geopublishing/index.html" icon="/usr/share/geopublishing/geopublishing-doc.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 
-		<deb todir="${TARGET.DEB.DIR}/dist" package="geopublishing-doc" section="science" depends="geopublishing" priority="extra">
+		<deb todir="${TARGET.DEB.DIR}/dist" package="geopublishing-doc" section="science" recommends="geopublisher atlasstyler" priority="extra">
 			<version upstream="${version.upstream}" />
 
 			<maintainer name="Stefan A. Tzeggai" email="tzeggai@wikisquare.de" />
