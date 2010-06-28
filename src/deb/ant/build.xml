@@ -33,6 +33,7 @@
 		
 		<mkdir dir="${TARGET.DEB.DIR}"/>
 		<mkdir dir="${TARGET.DEB.DIR}/build"/>
+		<mkdir dir="${TARGET.DEB.DIR}/dist"/>
 		<mkdir dir="${TARGET.DEB.DIR}/buildIcon"/>
 
 		<get src="http://en.geopublishing.org/workingcopies/ChartDemoAtlas_WorkingCopy.zip" dest="${TARGET.DEB.DIR}/build/ChartDemoAtlas_WorkingCopy.zip" description="Download the lastest version of the chart atlas workingcopy" />
