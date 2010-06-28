@@ -25,7 +25,7 @@
 	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 	<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 
-	<property name="version.upstream" value="1.5.0" description="The upstream version of the .deb package, containing the svn revision" />
+	<property name="version.upstream" value="1.5.1" description="The upstream version of the .deb package, containing the svn revision" />
 	<property name="TARGET.DEB.DIR" value="${mvn.basedir}/target/deb" description="Subfolder in maven target directory where all files are created." />
 	<property name="REPO.DIR" value="/var/www/www.geopublishing.org/htdocs/repository" description="Path the the linux repository directory on the server" />
 
