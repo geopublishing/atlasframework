@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing.geopublisher</groupId>
 	<artifactId>gpdocs</artifactId>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<version>1.5</version>
 	<name>Geopublishing Documentation</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
@@ -42,13 +42,6 @@
 								</goals>
 								<configuration>
 									<tasks>
-										<ant target="publishDocs" inheritRefs="true">
-											<property name="mvn.buildNumber" value="${buildNumber}" />
-											<property name="mvn.project.version" value="${project.version}" />
-											<property name="mvn.buildTime" value="${maven.build.timestamp}" />
-											<property name="mvn.basedir" value="${project.basedir}" />
-											<property name="mvn.project.artifactId" value="${project.artifactId}" />
-										</ant>
 										<ant target="add-deb-to-repo" inheritRefs="true"
 											antfile="${basedir}/src/deb/ant/build.xml">
 											<property name="mvn.buildNumber" value="${buildNumber}" />
@@ -62,29 +55,29 @@
 							</execution>
 						</executions>
 					</plugin>
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.2-beta-5</version>
-
-						<configuration>
-							<filters />
-							<descriptors>
-								<descriptor>${project.basedir}/src/assembly/full.xml
-								</descriptor>
-							</descriptors>
-						</configuration>
-						<executions>
-							<execution>
-								<id>full</id>
-								<phase>package</phase>
-								<goals>
-									<goal>attached</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
+<!---->
+					<!--					<plugin>-->
+					<!--						<groupId>org.apache.maven.plugins</groupId>-->
+					<!--						<artifactId>maven-assembly-plugin</artifactId>-->
+					<!--						<version>2.2-beta-5</version>-->
+<!---->
+					<!--						<configuration>-->
+					<!--							<filters />-->
+					<!--							<descriptors>-->
+					<!--								<descriptor>${project.basedir}/src/assembly/full.xml-->
+					<!--								</descriptor>-->
+					<!--							</descriptors>-->
+					<!--						</configuration>-->
+					<!--						<executions>-->
+					<!--							<execution>-->
+					<!--								<id>full</id>-->
+					<!--								<phase>package</phase>-->
+					<!--								<goals>-->
+					<!--									<goal>attached</goal>-->
+					<!--								</goals>-->
+					<!--							</execution>-->
+					<!--						</executions>-->
+					<!--					</plugin>-->
 
 				</plugins>
 
