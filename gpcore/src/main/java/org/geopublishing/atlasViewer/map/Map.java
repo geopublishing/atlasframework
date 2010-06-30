@@ -594,7 +594,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				getKeywords());
 
 		/**
-		 * Count HTML Infos
+		 * Count HTML Infos  
 		 */
 		final double countHTMLexist = (double) languages.size()
 				- (double) getMissingHTMLLanguages().size();
@@ -606,6 +606,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		if (getLayers().size() > 0) {
 			averageLayerQuality = getAverageLayerQuality();
 		}
+		
+		//MJ hier muss die QM fuer die charts dazu 
+		
 		result = (averageLayerQuality * 3. + qmMap * 1.) / 4.;
 
 		return result;

@@ -86,14 +86,14 @@ import com.vividsolutions.jts.geom.Point;
 public class SVGSelector extends JDialog {
 	static private final Logger LOGGER = ASUtil.createLogger(SVGSelector.class);
 
-	String SVG_PATH_BASE = "/openmapsymbols/svg/"; 
+	String SVG_PATH_BASE = "/openmapsymbols/svg/";
 
 	final public String GEOPUBLISHINGORG_BASE_URL_FOR_SVG = "http://de.geopublishing.org"
-			+ SVG_PATH_BASE; 
+			+ SVG_PATH_BASE;
 
 	protected static final Dimension SVGICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
-	protected static final String PROPERTY_UPDATED = "Property Updated sdfd"; 
+	protected static final String PROPERTY_UPDATED = "Property Updated sdfd";
 
 	private JPanel jContentPane = null;
 
@@ -123,7 +123,7 @@ public class SVGSelector extends JDialog {
 
 	private JButton jButtonUp = null;
 
-	final static protected Map weakImageCache = new SoftValueHashMap(); 
+	final static protected Map weakImageCache = new SoftValueHashMap();
 
 	private ExternalGraphic[] backup;
 
@@ -143,13 +143,6 @@ public class SVGSelector extends JDialog {
 		backup = preSelection;
 
 		folderUrl = null;
-
-		if (FeatureUtil.getGeometryForm(attType) == GeometryForm.POLYGON) {
-			JOptionPane
-					.showMessageDialog(
-							this,
-							"The GeoTools library version 2.6.1 still can fill polygons with external SVG graphics :-(. You will not see much.");
-		}
 
 		try {
 			if (preSelection != null && preSelection.length > 0) {
@@ -384,7 +377,28 @@ public class SVGSelector extends JDialog {
 
 						Object value = jList.getModel().getElementAt(i);
 
-						if (value instanceof SinglePointSymbolRuleList) {
+						if (value instanceof SinglePolygonSymbolRuleList) {
+							/***************************************************
+							 * A SVG Symbol has been selected. Throws an event.
+							 */
+							final ExternalGraphic[] egs;
+
+							if (FeatureUtil.getGeometryForm(attType) == GeometryForm.POLYGON) {
+								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
+								PolygonSymbolizer symbolizer = rl
+										.getSymbolizers().get(0);
+								egs = symbolizer.getFill().getGraphicFill()
+										.getExternalGraphics();
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+										SVGSelector.this.firePropertyChange(
+												SVGSelector.PROPERTY_UPDATED,
+												null, egs);
+									}
+								});
+							}
+
+						} else if (value instanceof SinglePointSymbolRuleList) {
 							/***************************************************
 							 * A SVG Symbol has been selected. Throws an event.
 							 */
@@ -396,25 +410,14 @@ public class SVGSelector extends JDialog {
 										.getSymbolizers().get(0);
 								egs = symbolizer.getGraphic()
 										.getExternalGraphics();
-							} else {
-
-								// TODO Can SVGs be used for lines?
-
-								// if (GTUtil.isPolygon(attType)) {
-								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
-								PolygonSymbolizer symbolizer = rl
-										.getSymbolizers().get(0);
-								egs = symbolizer.getFill().getGraphicFill()
-										.getExternalGraphics();
+								SwingUtilities.invokeLater(new Runnable() {
+									public void run() {
+										SVGSelector.this.firePropertyChange(
+												SVGSelector.PROPERTY_UPDATED,
+												null, egs);
+									}
+								});
 							}
-
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									SVGSelector.this.firePropertyChange(
-											SVGSelector.PROPERTY_UPDATED, null,
-											egs);
-								}
-							});
 						} else if (value instanceof URL) {
 							/***************************************************
 							 * A folder has been selected... Change the
@@ -585,8 +588,7 @@ public class SVGSelector extends JDialog {
 
 	/**
 	 * @param args
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @throws MalformedURLException
 	 */
 	public static void main(String[] args) throws MalformedURLException {
@@ -606,8 +608,7 @@ public class SVGSelector extends JDialog {
 	/**
 	 * @return A SwingWorker that adds the Online-Symbols in a background task.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private SwingWorker<Object, Object> getWorker(final ProgressWindow pw) {
 		SwingWorker<Object, Object> swingWorker = new SwingWorker<Object, Object>() {
@@ -921,4 +922,4 @@ public class SVGSelector extends JDialog {
 		}
 		return jContentPane;
 	}
-} 
+}

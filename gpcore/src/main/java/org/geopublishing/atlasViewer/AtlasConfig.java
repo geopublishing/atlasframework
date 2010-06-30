@@ -42,7 +42,7 @@ import skrueger.i8n.Translation;
 import skrueger.swing.Disposable;
 
 /**
- * The whole Configuration for one Atlas project
+ * The whole configuration for one Atlas project
  * 
  * @author Stefan Alfons Tzeggai
  */
@@ -249,6 +249,9 @@ public class AtlasConfig implements Disposable {
 
 	}
 
+	/**
+	 * @return List of enabled languages. Strings are ISO language code (2 letter)
+	 */
 	public final List<String> getLanguages() {
 		return languages;
 	}
