@@ -37,6 +37,21 @@
 		<replace file="${basedir}/target/jnlp/short.txt">
 			<replacefilter token="@VERSION@" value="${ant.project.version}" />
 		</replace>
+		
+		<exec executable="/bin/fusermount" failifexecutionfails="false" failonerror="false" description="Unmounting any previously mounted gpwww">
+			<arg value="-u" />
+			<arg value="/var/www/www.geopublishing.org/htdocs" />
+		</exec>
+
+		<exec executable="/usr/bin/sshfs" failifexecutionfails="true" failonerror="true" description="mounting gpwww">
+			<arg value="-o"/>
+			<arg value="uid=107"/>
+			<arg value="-o"/>
+			<arg value="gid=117"/>
+
+			<arg value="gpwww:/var/www/www.geopublishing.org/htdocs/" />
+			<arg value="/var/www/www.geopublishing.org/htdocs" />
+		</exec>
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
 		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
@@ -57,6 +72,11 @@
 			<arg value="-s" />
 			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/AtlasStyler-${ant.project.version}-full.zip" />
 			<arg value="AtlasStyler-full.zip" />
+		</exec>
+
+		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
+			<arg value="-u" />
+			<arg value="/var/www/www.geopublishing.org/htdocs" />
 		</exec>
 
 	</target>

@@ -97,10 +97,10 @@
 	<profiles>
 		<profile>
 			<!--
-				If run on the special "prodi" profile, the application is released
+				If run on the special "gisbert" profile, the application is released
 				to the geopublishing.org webpage
 			-->
-			<id>prodi</id>
+			<id>gisbert</id>
 			<build>
 				<plugins>
 
