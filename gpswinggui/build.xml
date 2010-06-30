@@ -28,14 +28,14 @@
 
 		<!-- Diese Datei wird dann von Drupal gelesen um die Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/version.txt">
-			<replacefilter token="@VERSION@" value="${ant.project.version}" />
-			<replacefilter token="@BUILD@" value="${ant.buildNumber}" />
-			<replacefilter token="@TIMESTAMP@" value="${ant.buildTime}" />
+			<replacefilter token="@VERSION@" value="${mvn.project.version}" />
+			<replacefilter token="@BUILD@" value="${mvn.buildNumber}" />
+			<replacefilter token="@TIMESTAMP@" value="${mvn.buildTime}" />
 		</replace>
 
 		<!-- Diese Datei wird dann von Drupal gelesen um eine kurze Versionsangane im CMS zu erstellen -->
 		<replace file="${basedir}/target/jnlp/short.txt">
-			<replacefilter token="@VERSION@" value="${ant.project.version}" />
+			<replacefilter token="@VERSION@" value="${mvn.project.version}" />
 		</replace>
 
 		<exec executable="/bin/fusermount" failifexecutionfails="false" failonerror="false" description="Unmounting any previously mounted gpwww">
@@ -53,8 +53,10 @@
 			<arg value="/var/www/www.geopublishing.org/htdocs" />
 		</exec>
 
+		<echo message="Mounted FUSE" />
+
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
-		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
+		<copy todir="/var/www/www.geopublishing.org/htdocs/gp-${mvn.project.version}" failonerror="true" description="Copy the JNLP files to the webserver folder">
 			<fileset dir="${basedir}/target/jnlp">
 				<include name="**/*" />
 			</fileset>
@@ -62,16 +64,16 @@
 
 		<!-- Jetzt die .zip (Windows) und .tar.gz (Linux) Zusammenstellungen kopieren -->
 		<!-- Besser wenn hier auf die Daten in einem Linux unstable repository verwiesen würde -->
-		<copy file="${basedir}/target/gpswinggui-${ant.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-${ant.project.version}-full.zip" />
+		<copy file="${basedir}/target/gpswinggui-${mvn.project.version}-full.zip" tofile="/var/www/www.geopublishing.org/htdocs/gp-${mvn.project.version}/Geopublisher-${mvn.project.version}-full.zip" />
 
 
 		<!-- Delete any old symlink -->
-		<delete failonerror="false" file="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-full.zip" />
+		<delete failonerror="false" file="/var/www/www.geopublishing.org/htdocs/gp-${mvn.project.version}/Geopublisher-full.zip" />
 
 		<!-- Create newsymlink -->
 		<exec executable="/bin/ln">
 			<arg value="-s" />
-			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${ant.project.version}/Geopublisher-${ant.project.version}-full.zip" />
+			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${mvn.project.version}/Geopublisher-${mvn.project.version}-full.zip" />
 			<arg value="Geopublisher-full.zip" />
 		</exec>
 
@@ -79,6 +81,8 @@
 			<arg value="-u" />
 			<arg value="/var/www/www.geopublishing.org/htdocs" />
 		</exec>
+
+		<echo message="UnMounded FUSE" />
 
 	</target>
 

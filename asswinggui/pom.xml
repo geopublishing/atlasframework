@@ -117,9 +117,9 @@
 								<configuration>
 									<tasks>
 										<ant target="publish" inheritRefs="true">
-											<property name="ant.buildNumber" value="${buildNumber}" />
-											<property name="ant.project.version" value="${project.version}" />
-											<property name="ant.buildTime" value="${maven.build.timestamp}" />
+											<property name="mvn.buildNumber" value="${buildNumber}" />
+											<property name="mvn.project.version" value="${project.version}" />
+											<property name="mvn.buildTime" value="${maven.build.timestamp}" />
 										</ant>
 									</tasks>
 								</configuration>
