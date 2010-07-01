@@ -44,6 +44,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
@@ -321,21 +322,27 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	private Component getUpdateModeJCheckbox() {
 		if (updateModeJCheckbox == null) {
 
-			updateModeJCheckbox = new JCheckBox(new AbstractAction(GeopublisherGUI
-					.R("DesignAtlasChartJDialog.previewModeCheckboxLabel")) {
+			updateModeJCheckbox = new JCheckBox(
+					new AbstractAction(
+							GeopublisherGUI
+									.R("DesignAtlasChartJDialog.previewModeCheckboxLabel")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
+						@Override
+						public void actionPerformed(ActionEvent e) {
 
-					setAutoUpdateMode(!isAutoUpdateMode());
-					getUpdateChartJButton().setEnabled(!isAutoUpdateMode());
+							setAutoUpdateMode(!isAutoUpdateMode());
+							getUpdateChartJButton().setEnabled(
+									!isAutoUpdateMode());
 
-					/* If it has just been switched on, trigger an update */
-					if (autoUpdateMode) {
-						updateChart();
-					}
-				}
-			});
+							/*
+							 * If it has just been switched on, trigger an
+							 * update
+							 */
+							if (autoUpdateMode) {
+								updateChart();
+							}
+						}
+					});
 
 			updateModeJCheckbox.setToolTipText(GeopublisherGUI
 					.R("DesignAtlasChartJDialog.previewModeCheckboxLabel.TT"));
@@ -602,8 +609,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 * Ensure that there are no NULLs
 		 */
 		if (chartStyle.getAxisStyle(axisNr) == null) {
-			chartStyle.setAxisStyle(axisNr, new TableChartAxisStyle(
-					chartStyle));
+			chartStyle
+					.setAxisStyle(axisNr, new TableChartAxisStyle(chartStyle));
 			fireChartChangedEvent();
 		}
 
@@ -749,7 +756,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		/*
 		 * Now add a box to enter a unit string
 		 */
-		JPanel unitPanel = new JPanel(new MigLayout(), GeopublisherGUI.R("Unit"));
+		JPanel unitPanel = new JPanel(new MigLayout(), GeopublisherGUI
+				.R("Unit"));
 
 		/** A textfield that shows the unit (untranslatable). **/
 		final JTextField unitTextfield = getUnitTextFieldForAxis(axisNr);
@@ -1074,7 +1082,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		/** build a panel... */
 		final JPanel attPanel = new JPanel(new MigLayout("flowy, wrap 2"),
-				GeopublisherGUI.R("DesignAtlasChartJDialog.SeriesDataBorderTitle"));
+				GeopublisherGUI
+						.R("DesignAtlasChartJDialog.SeriesDataBorderTitle"));
 
 		attPanel.add(attribComboBox);
 
@@ -1110,7 +1119,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 							.getSelectedItem();
 					// System.out.println(idx+"="+aggFunc);
 					chartStyle.setAttributeAggregation(idx, aggFunc);
-					
+
 					if (idx != ChartStyle.DOMAIN_AXIS) {
 						// Grey-out the weighting attribute if the aggregation
 						// method doesn't support it.
@@ -1125,7 +1134,6 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 						getUnitTextFieldForAxis(ChartStyle.RANGE_AXIS).setText(
 								unit);
 					}
-
 
 					fireChartChangedEvent(true);
 				}
@@ -1211,8 +1219,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				String attLocalName = (String) attribComboBox.getSelectedItem();
 
 				chartStyle.setAttributeName(seriesIdx + 1, attLocalName);
-				AttributeMetadataImpl atm = styledLayer.getAttributeMetaDataMap()
-						.get(attLocalName);
+				AttributeMetadataImpl atm = styledLayer
+						.getAttributeMetaDataMap().get(attLocalName);
 
 				chartStyle
 						.setNoDataValues(seriesIdx + 1, atm.getNodataValues());
@@ -1256,8 +1264,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		JPanel normPanel = new JPanel(new MigLayout("wrap 1"));
 
 		// An explaining text
-		normPanel
-				.add(new JLabel(GeopublisherGUI.R("Normalize.Chart.Explanation")));
+		normPanel.add(new JLabel(GeopublisherGUI
+				.R("Normalize.Chart.Explanation")));
 
 		// The check-box in the next line
 		JCheckBox cb = new JCheckBox(GeopublisherGUI
@@ -1270,6 +1278,12 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
+
+				System.out.println("\n\neventSource = " + e.getSource());
+				System.out.println("event = " + e);
+
+				System.out.println("event state= " + e.getStateChange());
+
 				final boolean normalize = e.getStateChange() == ItemEvent.SELECTED;
 
 				for (int idx = 0; idx < chartStyle.getAttributeCount(); idx++)
@@ -1277,6 +1291,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 				// LOGGER.debug("Setting setAttributeNormalized for all attribs to "
 				// + normalize);
+
+				System.out.println("0=" + chartStyle.isAttributeNormalized(0));
+				System.out.println("1=" + chartStyle.isAttributeNormalized(1));
 
 				fireChartChangedEvent(true);
 			}
@@ -1520,7 +1537,12 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	 */
 	void fireChartChangedEvent() {
 		if (isAutoUpdateMode()) {
-			updateChart();
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					updateChart();
+				}
+			});
 		}
 	}
 
