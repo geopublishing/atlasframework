@@ -33,7 +33,7 @@
 		<profile>
 			<id>ms_kallisto</id>
 			<modules>
-				<module>../../schmitzm/trunk</module>
+				<module>../../../SCHMITZM/Trunk</module>
 			</modules>
 		</profile>
 
