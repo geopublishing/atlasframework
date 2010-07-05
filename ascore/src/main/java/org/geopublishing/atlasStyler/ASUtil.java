@@ -130,6 +130,40 @@ public class ASUtil {
 		return list.toArray(new String[0]);
 	}
 
+	/**
+	 * Rounds all elements of the {@link TreeSet} to the number of digits
+	 * specified by {@link #limitsDigits}. The first break (start of the first
+	 * interval) is rounded down and the last break (end of last interval) is
+	 * rounded up, so that every possible value is still included in one
+	 * interval.
+	 * 
+	 * @param breaksList
+	 *            interval breaks
+	 * @return a new {@link TreeSet}
+	 */
+	public static TreeSet<Double> roundLimits(final TreeSet<Double> breaksList, Integer limitsDigits) {
+		// No round -> use the original values
+		if (limitsDigits == null)
+			return breaksList;
+
+		final TreeSet<Double> roundedBreaks = new TreeSet<Double>();
+		for (final double value : breaksList) {
+			int roundMode = 0; // normal round
+			// begin of first interval must be rounded DOWN, so that all
+			// values are included
+			if (value == breaksList.first())
+				roundMode = -1;
+			// end of last interval must be rounded UP, so that all
+			// values are included
+			if (value == breaksList.last())
+				roundMode = 1;
+
+			// round value and put it into the new TreeSet
+			roundedBreaks.add(LangUtil.round(value, limitsDigits, roundMode));
+		}
+		return roundedBreaks;
+	}
+
 
 	/**
 	 * Convenience method to access the {@link AtlasStyler}s translation
