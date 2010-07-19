@@ -2167,25 +2167,29 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * @return List of JAR dependencies.
+	 * @return List of .jar dependencies needed by the exported swing atlas.
 	 */
-	private String[] getJarLibNames() {
+	String[] getJarLibNames() {
 		String[] libs;
 		// Read maven2 generated list of dependencies
 		Properties p = new Properties();
-		String proeprtiesName = "/atlasdependencies.properties";
+		String propertiesName = "/atlasdependencies.properties";
 		try {
-			p.load(GpUtil.class.getResource(proeprtiesName).openStream());
+			p.load(GpUtil.class.getResource(propertiesName).openStream());
 			String atlasDependecies = p.getProperty("classpath");
 
 			// remove any maven-made :./classes entries
 			atlasDependecies = atlasDependecies.replaceAll("\\./classes", "")
 					.replaceAll("::", ":");
+			
+			// Unnice, but remove all ant-related dependencies. They are only part of the build provess:
+			atlasDependecies = atlasDependecies.replaceAll("\\./ant-.*?-.*?\\.jar", "")
+					.replaceAll("::", ":");
 
 			// Add the new libs to the existing list
 			libs = atlasDependecies.split(":");
 		} catch (IOException e) {
-			throw new AtlasExportException(proeprtiesName + " not found!", e);
+			throw new AtlasExportException(propertiesName + " not found!", e);
 		}
 
 		// If the .properties file does not contain a base jar, we add it.

@@ -50,6 +50,32 @@ public class JarExportUtilTest {
 	public static void setUp() throws Exception {
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
 	}
+	
+
+	/**
+	 * Check that all ant related dependencies have been removed
+	 * @throws IOException
+	 */
+	@Test
+	public void testGetJarLibNames() throws IOException {
+		assertNotNull(atlasExportTesttDir);
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		// GuiAndTools.deleteDir(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, true, false);
+		
+		String[] jarLibNames = jeu.getJarLibNames();
+		
+		assertTrue("Number of dependencies should be greater than 20", jarLibNames.length > 20);
+		
+		for (String dep : jarLibNames){
+			assertFalse(dep+" is an unwanted dependency", dep.toLowerCase().contains("ant"));
+		}
+	}
 
 	@Test
 	public void testFindNativeDllURL() throws IOException {
@@ -299,8 +325,5 @@ public class JarExportUtilTest {
 						"autorun.inf"));
 	}
 
-	public void testGetJarLibNames() {
-	
-	}
 
 }
