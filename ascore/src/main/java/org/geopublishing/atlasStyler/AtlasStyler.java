@@ -436,7 +436,7 @@ public class AtlasStyler {
 						"/home/stefan/Desktop/goingToImport.sld"));
 			} catch (final TransformerException e) {
 				LOGGER.error("Transforming to XML failed!", e);
-			} catch (final Exception e) {
+			} catch (final Throwable e) {
 			}
 
 			for (final FeatureTypeStyle fts : importStyle.featureTypeStyles()) {
@@ -972,7 +972,7 @@ public class AtlasStyler {
 						"/home/stefan/Desktop/update.sld"));
 			} catch (final TransformerException e) {
 				LOGGER.error("Transforming to XML failed!", e);
-			} catch (final IOException e) {
+			} catch (final Throwable e) {
 			}
 
 		}
