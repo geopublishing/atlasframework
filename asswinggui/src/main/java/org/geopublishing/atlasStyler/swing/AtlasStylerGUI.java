@@ -13,7 +13,6 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.MenuItem;
-import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -57,7 +55,6 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geotools.data.DataAccessFactory;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
@@ -82,6 +79,7 @@ import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
 import skrueger.geotools.StyledFeatureSourceInterface;
@@ -176,6 +174,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				+ ReleaseUtil.getVersionInfo(AVUtil.class);
 		this.setTitle(AtlasStyler_MainWindowTitle);
 
+		// In Xubuntu (OS-Geo Live DVD) the JFrame otherwise is hidden behind the top-bar.
+		SwingUtil.centerFrameOnScreen(this);
 	}
 
 	/**
