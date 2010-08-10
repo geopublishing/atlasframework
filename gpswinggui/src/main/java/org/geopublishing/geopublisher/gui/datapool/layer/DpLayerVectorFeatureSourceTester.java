@@ -33,8 +33,10 @@ import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 
 import schmitzm.geotools.io.GeoImportUtil;
+import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 
@@ -47,23 +49,23 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 			.getLogger(DpLayerVectorFeatureSourceTester.class);
 
 	DataStore dataStore = null;
-	
-	public static final FileFilter FILEFILTER = new FileFilter () {
+
+	public static final FileFilter FILEFILTER = new FileFilter() {
 
 		@Override
 		public boolean accept(File f) {
-			return f.isDirectory() || f.getName().toLowerCase().endsWith(".shp") || f.getName().toLowerCase().endsWith(".zip");
+			return f.isDirectory()
+					|| f.getName().toLowerCase().endsWith(".shp")
+					|| f.getName().toLowerCase().endsWith(".zip");
 		}
-		
-
 
 		@Override
 		public String getDescription() {
 			return DpEntryType.VECTOR.getDesc();
 		}
-		
+
 	};
-	
+
 	/**
 	 * @param url
 	 * @return true if the url can be imported as a DpLayerVectorFeatureSource
@@ -75,18 +77,23 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 					.getAvailableDataStores();
 			while (availableDataStores.hasNext()) {
 				final DataStoreFactorySpi nextDS = availableDataStores.next();
-//				LOGGER.debug("Available DataStores : "
-//						+ nextDS.getClass().toString());
+				// LOGGER.debug("Available DataStores : "
+				// + nextDS.getClass().toString());
 			}
-			
+
 			if (url.getFile().toLowerCase().endsWith("zip")) {
 				// Falls es sich um eine .ZIP datei handelt, wird sie entpackt.
 				url = GeoImportUtil.uncompressShapeZip(url);
 			}
 
-
 			Map<Object, Object> params = new HashMap<Object, Object>();
 			params.put("url", url);
+
+			// When importing any shapefiles, we do not want to create .fix
+			// files automatically. The files could be read only.
+			// params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
+			// Boolean.FALSE);
+
 			dataStore = DataStoreFinder.getDataStore(params);
 
 			if (dataStore == null) {
@@ -94,21 +101,23 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 				return false;
 			}
 
-			/**
-			 * We have to ask the user if there exist more than one layer in the
-			 * DataStore TODO
-			 */
-			if (dataStore.getTypeNames().length != 1) {
-				JOptionPane.showMessageDialog(owner,
-						"Error while importing. File contains no layers.");
-				dataStore.dispose();
-				return false;
-			}
+			try {
+				/**
+				 * We have to ask the user if there exist more than one layer in
+				 * the DataStore TODO
+				 */
+				if (dataStore.getTypeNames().length != 1) {
+					JOptionPane.showMessageDialog(owner,
+							"Error while importing. File contains no layers.");
+					return false;
+				}
 
-			if (dataStore instanceof ShapefileDataStore) {
-				ShapefileDataStore shapefileDS = (ShapefileDataStore) dataStore;
-				shapefileDS.dispose();
-				return true;
+				if (dataStore instanceof ShapefileDataStore) {
+//					ShapefileDataStore shapefileDS = (ShapefileDataStore) dataStore;
+					return true;
+				}
+			} finally {
+				dataStore.dispose();
 			}
 
 		} catch (IOException e1) {
@@ -140,9 +149,11 @@ public class DpLayerVectorFeatureSourceTester implements DpEntryTesterInterface 
 	 * , java.io.File)
 	 */
 	@Override
-	public DpEntry<FeatureChartStyle> create(AtlasConfigEditable ace, File file, Component owner) throws AtlasImportException {
+	public DpEntry<FeatureChartStyle> create(AtlasConfigEditable ace,
+			File file, Component owner) throws AtlasImportException {
 		try {
-			return new DpLayerVectorFeatureSourceShapefileEd(ace, DataUtilities.fileToURL(file), owner);
+			return new DpLayerVectorFeatureSourceShapefileEd(ace, DataUtilities
+					.fileToURL(file), owner);
 		} catch (Exception e) {
 			throw new AtlasImportException(e);
 		}

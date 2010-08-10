@@ -60,6 +60,7 @@ import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
@@ -733,6 +734,18 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			Map<Object, Object> params = new HashMap<Object, Object>();
 			params.put("url", urlToShape);
+			
+			/*
+			 * Test whether we have write permissions to create any .fix file
+			 */
+			if (!IOUtil.changeFileExt(openFile, "fix").canWrite()) {
+				// If the file is not writable, we max not try to create an
+				// index. Even if the file already exists, it could be that
+				// the index has to be regenerated.
+				params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
+						Boolean.FALSE);
+			}
+			
 			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
 					.getDataStore(params);
 

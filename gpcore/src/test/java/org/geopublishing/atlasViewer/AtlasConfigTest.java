@@ -1,6 +1,6 @@
 package org.geopublishing.atlasViewer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
 

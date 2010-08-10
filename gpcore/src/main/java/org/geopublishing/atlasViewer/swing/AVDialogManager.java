@@ -26,6 +26,7 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledRasterInterface;
 import skrueger.swing.AtlasDialog;
@@ -47,49 +48,60 @@ public class AVDialogManager {
 		@Override
 		public AtlasStylerRasterDialog getInstanceFor(final Object key,
 				final Component owner, final Object... constArgs) {
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-						@Override
-						public AtlasStylerRasterDialog create() {
-							final StyledRasterInterface styledRaster = (StyledRasterInterface) key;
-							final AtlasConfig ac = (AtlasConfig) constArgs[0];
+							@Override
+							public AtlasStylerRasterDialog create() {
+								final StyledRasterInterface styledRaster = (StyledRasterInterface) key;
+								final AtlasConfig ac = (AtlasConfig) constArgs[0];
 
-							/***********************************************************************
-							 * First create the AtlasStyler ....
-							 */
-							final AtlasStylerRasterDialog atlasRasterStyler = new AtlasStylerRasterDialog(
-									owner, styledRaster, ac.getLanguages());
+								/***********************************************************************
+								 * First create the AtlasStyler ....
+								 */
+								final AtlasStylerRasterDialog atlasRasterStyler = new AtlasStylerRasterDialog(
+										owner, styledRaster, ac.getLanguages());
 
-							if (constArgs.length == 2 && constArgs[1] != null) {
-								final MapLayerLegend mapLayerLegend = (MapLayerLegend) constArgs[1];
+								if (constArgs.length == 2
+										&& constArgs[1] != null) {
+									final MapLayerLegend mapLayerLegend = (MapLayerLegend) constArgs[1];
 
-								atlasRasterStyler
-										.addListener(new StyleChangeListener() {
+									atlasRasterStyler
+											.addListener(new StyleChangeListener() {
 
-											@Override
-											public void changed(
-													StyleChangedEvent e) {
-												styledRaster.setStyle(e
-														.getStyle());
-												mapLayerLegend.updateStyle(e
-														.getStyle());
+												@Override
+												public void changed(
+														StyleChangedEvent e) {
+													styledRaster.setStyle(e
+															.getStyle());
+													mapLayerLegend
+															.updateStyle(e
+																	.getStyle());
 
-												// Because events from this
-												// Dialog might also have
-												// changed the Gap on-off state,
-												// without changing the style,
-												// we always recreate the legend
-												// for this layer
-												mapLayerLegend.recreateLegend();
-											}
-										});
+													// Because events from this
+													// Dialog might also have
+													// changed the Gap on-off
+													// state,
+													// without changing the
+													// style,
+													// we always recreate the
+													// legend
+													// for this layer
+													mapLayerLegend
+															.recreateLegend();
+												}
+											});
+								}
+
+								return atlasRasterStyler;
 							}
 
-							return atlasRasterStyler;
-						}
-
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 
 	};
@@ -101,37 +113,42 @@ public class AVDialogManager {
 				final StyledFeaturesInterface<?> key, final Component owner,
 				final Object... constArgs) {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
 
-						private MapLegend mapLegend = null;
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-						@Override
-						public AttributeTableJDialog create() {
+							private MapLegend mapLegend = null;
 
-							mapLegend = (MapLegend) constArgs[1];
-							final StyledFeaturesInterface<?> styledObj = (StyledFeaturesInterface<?>) constArgs[0];
+							@Override
+							public AttributeTableJDialog create() {
 
-							return new AttributeTableJDialog(owner, styledObj,
-									mapLegend);
-						}
+								mapLegend = (MapLegend) constArgs[1];
+								final StyledFeaturesInterface<?> styledObj = (StyledFeaturesInterface<?>) constArgs[0];
 
-						@Override
-						public void afterCreation(AtlasDialog newInstance) {
-							if (mapLegend != null)
-								mapLegend.showOrHideSelectionButtons();
-							super.afterCreation(newInstance);
-						}
+								return new AttributeTableJDialog(owner,
+										styledObj, mapLegend);
+							}
 
-						public void beforeDispose(AtlasDialog newInstance) {
-							if (mapLegend != null)
-								mapLegend.showOrHideSelectionButtons();
-						};
+							@Override
+							public void afterCreation(AtlasDialog newInstance) {
+								if (mapLegend != null)
+									mapLegend.showOrHideSelectionButtons();
+								super.afterCreation(newInstance);
+							}
 
-					}));
+							public void beforeDispose(AtlasDialog newInstance) {
+								if (mapLegend != null)
+									mapLegend.showOrHideSelectionButtons();
+							};
 
+						}));
+
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
-
 	};
 
 	public static final DialogManager<ChartStyle, AtlasChartJDialog> dm_Charts = new DialogManager<ChartStyle, AtlasChartJDialog>() {
@@ -139,55 +156,64 @@ public class AVDialogManager {
 		@Override
 		public AtlasChartJDialog getInstanceFor(final ChartStyle key,
 				final Component owner, final Object... constArgs) {
-			final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
 
-			final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
+			try {
 
-				@Override
-				public void windowClosed(WindowEvent e) {
-					/**
-					 * Maybe it's time to show the selection-related buttons?!
-					 */
-					mapLegend.showOrHideSelectionButtons();
+				final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
 
-				}
-			};
+				final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						/**
+						 * Maybe it's time to show the selection-related
+						 * buttons?!
+						 */
+						mapLegend.showOrHideSelectionButtons();
 
-						@Override
-						public void afterCreation(AtlasDialog newInstance) {
-							if (mapLegend != null) {
+					}
+				};
 
-								mapLegend.showOrHideSelectionButtons();
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-								newInstance
-										.addWindowListener(listenerForMapLegendSelectionButtons);
+							@Override
+							public void afterCreation(AtlasDialog newInstance) {
+								if (mapLegend != null) {
+
+									mapLegend.showOrHideSelectionButtons();
+
+									newInstance
+											.addWindowListener(listenerForMapLegendSelectionButtons);
+								}
+
+							};
+
+							@Override
+							public void beforeDispose(AtlasDialog newInstance) {
+								if (mapLegend != null) {
+
+									newInstance
+											.removeWindowListener(listenerForMapLegendSelectionButtons);
+								}
+
+							};
+
+							@Override
+							public AtlasChartJDialog create() {
+
+								return new AtlasChartJDialog(
+										owner,
+										(ChartStyle) constArgs[0],
+										mapLegend,
+										(StyledFeaturesInterface<?>) constArgs[2]);
 							}
 
-						};
-
-						@Override
-						public void beforeDispose(AtlasDialog newInstance) {
-							if (mapLegend != null) {
-
-								newInstance
-										.removeWindowListener(listenerForMapLegendSelectionButtons);
-							}
-
-						};
-
-						@Override
-						public AtlasChartJDialog create() {
-
-							return new AtlasChartJDialog(owner,
-									(ChartStyle) constArgs[0], mapLegend,
-									(StyledFeaturesInterface<?>) constArgs[2]);
-						}
-
-					}));
-
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 
 	};
@@ -203,48 +229,62 @@ public class AVDialogManager {
 		@Override
 		public StylerDialog getInstanceFor(Object key, final Component owner,
 				final Object... constArgs) {
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-						@Override
-						public StylerDialog create() {
-							final StyledFeaturesInterface<?> styledFeatures = (StyledFeaturesInterface<?>) constArgs[0];
-							final MapLayer mapLayer = (MapLayer) constArgs[1];
-							final MapLegend mapLegend = (MapLegend) constArgs[2];
+							@Override
+							public StylerDialog create() {
+								final StyledFeaturesInterface<?> styledFeatures = (StyledFeaturesInterface<?>) constArgs[0];
+								final MapLayer mapLayer = (MapLayer) constArgs[1];
+								final MapLegend mapLegend = (MapLegend) constArgs[2];
 
-//							// Create a copy of the Style.. otherwise some
-//							// updates where not detected
-//							DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
-//							dsv.visit(mapLayer.getStyle());
-//							Style importStyleCopy = (Style) dsv.getCopy();
+								// // Create a copy of the Style.. otherwise
+								// some
+								// // updates where not detected
+								// DuplicatingStyleVisitor dsv = new
+								// DuplicatingStyleVisitor();
+								// dsv.visit(mapLayer.getStyle());
+								// Style importStyleCopy = (Style)
+								// dsv.getCopy();
 
-							/***********************************************************************
-							 * First create the AtlasStyler ....
-							 */
-							final AtlasStyler atlasStyler = new AtlasStyler(
-									styledFeatures, mapLayer.getStyle(), 
-									mapLayer, null);
+								/***********************************************************************
+								 * First create the AtlasStyler ....
+								 */
+								final AtlasStyler atlasStyler = new AtlasStyler(
+										styledFeatures, mapLayer.getStyle(),
+										mapLayer, null);
 
-							final MapLayerLegend mapLayerLegend = mapLegend
-									.getLayerLegendForId(styledFeatures.getId());
+								final MapLayerLegend mapLayerLegend = mapLegend
+										.getLayerLegendForId(styledFeatures
+												.getId());
 
-							// This listener informs the MapLayerLegend,
-							// resulting in a new legend and repained JMapPane
-							atlasStyler.addListener(new StyleChangeListener() {
+								// This listener informs the MapLayerLegend,
+								// resulting in a new legend and repained
+								// JMapPane
+								atlasStyler
+										.addListener(new StyleChangeListener() {
 
-								@Override
-								public void changed(StyleChangedEvent e) {
-									final Style style = atlasStyler.getStyle();
-									styledFeatures.setStyle(style);
-									mapLayerLegend.updateStyle(style);
-								}
+											@Override
+											public void changed(
+													StyleChangedEvent e) {
+												final Style style = atlasStyler
+														.getStyle();
+												styledFeatures.setStyle(style);
+												mapLayerLegend
+														.updateStyle(style);
+											}
 
-							});
+										});
 
-							return new StylerDialog(owner, atlasStyler);
-						}
+								return new StylerDialog(owner, atlasStyler);
+							}
 
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 
 	};
@@ -260,21 +300,26 @@ public class AVDialogManager {
 		@Override
 		public AtlasStylerDialog getInstanceFor(Object key,
 				final Component owner, final Object... constArgs) {
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-						@Override
-						public AtlasStylerDialog create() {
-							final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
-							final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
-							final MapLayer mapLayer = (MapLayer) constArgs[2];
-							final LayerStyle layerStyle = (LayerStyle) constArgs[3];
+							@Override
+							public AtlasStylerDialog create() {
+								final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
+								final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
+								final MapLayer mapLayer = (MapLayer) constArgs[2];
+								final LayerStyle layerStyle = (LayerStyle) constArgs[3];
 
-							return new AtlasStylerDialog(owner, dpl, mapLegend,
-									mapLayer, layerStyle);
-						}
+								return new AtlasStylerDialog(owner, dpl,
+										mapLegend, mapLayer, layerStyle);
+							}
 
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 
 	};
