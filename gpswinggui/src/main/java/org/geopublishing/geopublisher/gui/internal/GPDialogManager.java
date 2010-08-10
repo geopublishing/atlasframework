@@ -33,6 +33,7 @@ import org.geotools.map.MapLayer;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
+import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancellableDialogManager;
@@ -55,17 +56,21 @@ public class GPDialogManager {
 				final DpEntry<? extends ChartStyle> key, final Component owner,
 				final Object... constArgs) {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
 
-						@Override
-						public EditDpEntryGUI create() {
-							return new EditDpEntryGUI(
-									owner,
-									key);
-						}
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-					}));
+							@Override
+							public EditDpEntryGUI create() {
+								return new EditDpEntryGUI(owner, key);
+							}
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
@@ -75,16 +80,21 @@ public class GPDialogManager {
 		@Override
 		public EditMapJDialog getInstanceFor(final Map key,
 				final Component owner, final Object... constArgs) {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+							@Override
+							public EditMapJDialog create() {
+								return new EditMapJDialog(owner,
+										(Map) constArgs[0]);
+							}
 
-						@Override
-						public EditMapJDialog create() {
-							return new EditMapJDialog(owner, (Map) constArgs[0]);
-						}
-
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
@@ -96,16 +106,23 @@ public class GPDialogManager {
 				final DpLayerVectorFeatureSource key, final Component owner,
 				final Object... constArgs) {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
 
-						@Override
-						public EditAttributesJDialog create() {
-							return new EditAttributesJDialog(owner,
-									(DpLayerVectorFeatureSource) constArgs[0]);
-						}
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-					}));
+							@Override
+							public EditAttributesJDialog create() {
+								return new EditAttributesJDialog(
+										owner,
+										(DpLayerVectorFeatureSource) constArgs[0]);
+							}
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
@@ -115,39 +132,44 @@ public class GPDialogManager {
 		@Override
 		public DesignMapViewJDialog getInstanceFor(final Map key,
 				final Component owner, final Object... constArgs) {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+							// @SuppressWarnings("deprecation")
+							@Override
+							public DesignMapViewJDialog create() {
+								final Map map = (Map) constArgs[0];
 
-						// @SuppressWarnings("deprecation")
-						@Override
-						public DesignMapViewJDialog create() {
-							final Map map = (Map) constArgs[0];
+								// JDialog waitDialog =
+								// AVUtil.getWaitDialog(owner,
+								// AtlasViewer.R(
+								// "AmlViewer.process.opening_map",
+								// map.getTitle()));
 
-							// JDialog waitDialog = AVUtil.getWaitDialog(owner,
-							// AtlasViewer.R(
-							// "AmlViewer.process.opening_map",
-							// map.getTitle()));
+								Cursor oldCursor = owner.getCursor();
+								try {
+									owner
+											.setCursor(Cursor
+													.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-							Cursor oldCursor = owner.getCursor();
-							try {
-								owner
-										.setCursor(Cursor
-												.getPredefinedCursor(Cursor.WAIT_CURSOR));
+									final DesignMapViewJDialog designMapViewJDialog = new DesignMapViewJDialog(
+											owner, map);
 
-								final DesignMapViewJDialog designMapViewJDialog = new DesignMapViewJDialog(
-										owner, map);
+									// waitDialog.dispose();
 
-								// waitDialog.dispose();
+									return designMapViewJDialog;
 
-								return designMapViewJDialog;
-
-							} finally {
-								owner.setCursor(oldCursor);
+								} finally {
+									owner.setCursor(oldCursor);
+								}
 							}
-						}
 
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
@@ -157,56 +179,64 @@ public class GPDialogManager {
 		public DesignAtlasChartJDialog getInstanceFor(FeatureChartStyle key,
 				final Component owner, final Object... constArgs) {
 
-			final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
+			try {
 
-			final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
+				final AtlasMapLegend mapLegend = (AtlasMapLegend) constArgs[1];
 
-				@Override
-				public void windowClosed(WindowEvent e) {
-					/**
-					 * Maybe it's time to show the selection-related buttons?!
-					 */
-					mapLegend.showOrHideSelectionButtons();
-				}
-			};
+				final WindowAdapter listenerForMapLegendSelectionButtons = new WindowAdapter() {
 
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						/**
+						 * Maybe it's time to show the selection-related
+						 * buttons?!
+						 */
+						mapLegend.showOrHideSelectionButtons();
+					}
+				};
 
-						@Override
-						public DesignAtlasChartJDialog create() {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-							return new DesignAtlasChartJDialog(owner,
-									(FeatureChartStyle) constArgs[0],
-									mapLegend,
-									(StyledFeaturesInterface<?>) constArgs[2],
-									(AtlasConfigEditable) constArgs[3]);
+							@Override
+							public DesignAtlasChartJDialog create() {
 
-						}
+								return new DesignAtlasChartJDialog(
+										owner,
+										(FeatureChartStyle) constArgs[0],
+										mapLegend,
+										(StyledFeaturesInterface<?>) constArgs[2],
+										(AtlasConfigEditable) constArgs[3]);
 
-						@Override
-						public void afterCreation(AtlasDialog newInstance) {
-							if (mapLegend != null) {
-
-								mapLegend.showOrHideSelectionButtons();
-
-								newInstance
-										.addWindowListener(listenerForMapLegendSelectionButtons);
 							}
 
-						};
+							@Override
+							public void afterCreation(AtlasDialog newInstance) {
+								if (mapLegend != null) {
 
-						@Override
-						public void beforeDispose(AtlasDialog newInstance) {
-							if (mapLegend != null) {
+									mapLegend.showOrHideSelectionButtons();
 
-								newInstance
-										.removeWindowListener(listenerForMapLegendSelectionButtons);
-							}
+									newInstance
+											.addWindowListener(listenerForMapLegendSelectionButtons);
+								}
 
-						};
+							};
 
-					}));
+							@Override
+							public void beforeDispose(AtlasDialog newInstance) {
+								if (mapLegend != null) {
+
+									newInstance
+											.removeWindowListener(listenerForMapLegendSelectionButtons);
+								}
+
+							};
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 
 	};
@@ -216,21 +246,27 @@ public class GPDialogManager {
 		@Override
 		public DesignAtlasStylerDialog getInstanceFor(Object key,
 				final Component owner, final Object... constArgs) {
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
 
-						@Override
-						public DesignAtlasStylerDialog create() {
-							final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
-							final DesignAtlasMapLegend mapLegend = (DesignAtlasMapLegend) constArgs[1];
-							final MapLayer mapLayer = (MapLayer) constArgs[2];
-							final LayerStyle layerStyle = (LayerStyle) constArgs[3];
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-							return new DesignAtlasStylerDialog(owner, dpl,
-									mapLegend, mapLayer, layerStyle);
-						}
+							@Override
+							public DesignAtlasStylerDialog create() {
+								final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
+								final DesignAtlasMapLegend mapLegend = (DesignAtlasMapLegend) constArgs[1];
+								final MapLayer mapLayer = (MapLayer) constArgs[2];
+								final LayerStyle layerStyle = (LayerStyle) constArgs[3];
 
-					}));
+								return new DesignAtlasStylerDialog(owner, dpl,
+										mapLegend, mapLayer, layerStyle);
+							}
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
@@ -240,19 +276,24 @@ public class GPDialogManager {
 		public ManageChartsForMapDialog getInstanceFor(
 				DpEntry<? extends ChartStyle> key, final Component owner,
 				final Object... constArgs) {
-			return bringup(super.getInstanceFor(key,
-					new DialogManager.FactoryInterface() {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
 
-						@Override
-						public ManageChartsForMapDialog create() {
-							final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
-							final DesignAtlasMapLegend mapLegend = (DesignAtlasMapLegend) constArgs[1];
+							@Override
+							public ManageChartsForMapDialog create() {
+								final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
+								final DesignAtlasMapLegend mapLegend = (DesignAtlasMapLegend) constArgs[1];
 
-							return new ManageChartsForMapDialog(owner, dpl,
-									mapLegend);
-						}
+								return new ManageChartsForMapDialog(owner, dpl,
+										mapLegend);
+							}
 
-					}));
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
 		}
 	};
 
