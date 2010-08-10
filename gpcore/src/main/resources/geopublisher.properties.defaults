@@ -14,11 +14,8 @@
 startJVMWithXmx=256
 jnlpURL=http\://www.geopublishing.org/your_atlas/
 windowMaximized=0
-# multiplayer.jar mediaplayer.jar jmf.jar  
 NativeLibs=libmlib_jai.so mlib_jai_mmx.dll mlib_jai_util.dll mlib_jai.dll libgdal.so
 compressJARs=1
-#signingkeystorePassword=stefan
-#signingAlias=myself
 signingkeystorePassword=wasser
 signingAlias=IMPETUS
 bugReportEmail=skpublic@wikisquare.de
