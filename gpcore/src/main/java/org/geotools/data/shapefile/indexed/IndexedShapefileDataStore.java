@@ -16,11 +16,7 @@
  */
 package org.geotools.data.shapefile.indexed;
 
-import static org.geotools.data.shapefile.ShpFileType.DBF;
-import static org.geotools.data.shapefile.ShpFileType.FIX;
-import static org.geotools.data.shapefile.ShpFileType.QIX;
-import static org.geotools.data.shapefile.ShpFileType.SHP;
-import static org.geotools.data.shapefile.ShpFileType.SHX;
+import static org.geotools.data.shapefile.ShpFileType.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +107,9 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
 
     final boolean useIndex;
     
+    /**
+     * If <code>true</code> the index files will be created automatically. If they can not be created (because the URL is not local or not writable) the value will be false.   
+     */
     final boolean createIndex;
 
     /**
@@ -192,30 +191,32 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
      * 
      * @throws NullPointerException
      *                 DOCUMENT ME!
-     * @throws .
      */
-    public IndexedShapefileDataStore(URL url, URI namespace,
-            boolean useMemoryMappedBuffer, boolean createIndex,
-            IndexType treeType, Charset dbfCharset)
+    public IndexedShapefileDataStore(URL url, URI namespace, boolean useMemoryMappedBuffer,
+            boolean createIndex, IndexType treeType, Charset dbfCharset)
             throws java.net.MalformedURLException {
         super(url, namespace, useMemoryMappedBuffer, dbfCharset);
 
         this.treeType = treeType;
         this.useIndex = treeType != IndexType.NONE;
-        this.createIndex = createIndex;
+
+        if (!isWriteable()) {
+            if (createIndex)
+                ShapefileDataStoreFactory.LOGGER
+                        .log(
+                                Level.WARNING,
+                                "Any not-existing or outdated index for '"+shpFiles.get(SHP)+"' will can not be automatically created due to missing write permissions.");
+            this.createIndex = false;
+        } else {
+            this.createIndex = createIndex;
+        }
+
         try {
-            if (shpFiles.isLocal() && needsGeneration(FIX) ) {
-            	final File fixFile = new File(shpFiles.get(FIX));
-				if (!fixFile.canWrite() ) {
-					ShapefileDataStoreFactory.LOGGER.log(Level.SEVERE, "Can't generate/update "+fixFile.getAbsolutePath()+" due to missing write permission.");
-				}
-            	else {
-            		generateFidIndex();
-            	}
+            if (this.createIndex && shpFiles.isLocal() && needsGeneration(FIX)) {
+                generateFidIndex();
             }
         } catch (IOException e) {
-            ShapefileDataStoreFactory.LOGGER.log(Level.SEVERE, e
-                    .getLocalizedMessage());
+            ShapefileDataStoreFactory.LOGGER.log(Level.SEVERE, e.getLocalizedMessage());
         }
 
     }
@@ -391,9 +392,12 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
      * 
      * @throws IOException
      */
-    public void generateFidIndex() throws IOException {
-        FidIndexer.generate(shpFiles);
-    }
+        public void generateFidIndex() throws IOException {
+                if (!shpFiles.isWriteable())
+                        throw new IOException(
+                                        "Can not generate index due to missing write permissions.");
+                FidIndexer.generate(shpFiles);
+        }
 
     /**
      * Returns the attribute reader, allowing for a pure shape reader, or a
@@ -580,7 +584,7 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
         if(indexType == null)
             return false;
         
-        if (!isLocal())
+        if (!isLocal() || !isWriteable())
             throw new IllegalStateException(
                     "This method only applies if the files are local and the file can be created");
 
