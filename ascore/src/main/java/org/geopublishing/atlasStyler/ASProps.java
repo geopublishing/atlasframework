@@ -76,12 +76,10 @@ public abstract class ASProps {
 		lastImportDirectory,
 		/** Last directory used for save full SLD dialog */
 		lastExportDirectory,
-		/** AC JFrame starts maximized? */
+		/** JFrame starts maximized? */
 		windowMaximized,
 		/** Name of charset used for exporting SLD XML* */
 		charsetName,
-		/** Shall Warning1 popup again? 1 == yes* */
-		showWarning1,
 		/**
 		 * java2d AntiAliasing, Quality and TextAntiALiasing Hints turned on or
 		 * off*
