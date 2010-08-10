@@ -316,11 +316,11 @@ public class JarExportUtilTest {
 
 		jeu.export(null);
 
-		assertTrue("Datei autorun.inf exists in DISK folder", Arrays.asList(
+		assertTrue("File autorun.inf exists in DISK folder", Arrays.asList(
 				new File(atlasExportTesttDir, "DISK").list()).contains(
 				"autorun.inf"));
 
-		assertTrue("Datei autorun.inf may not exist in JWS folder", !Arrays
+		assertTrue("File autorun.inf may not exist in JWS folder", !Arrays
 				.asList(new File(atlasExportTesttDir, "JWS").list()).contains(
 						"autorun.inf"));
 	}
