@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,6 +62,7 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
+import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
@@ -175,7 +177,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				+ ReleaseUtil.getVersionInfo(AVUtil.class);
 		this.setTitle(AtlasStyler_MainWindowTitle);
 
-		// In Xubuntu (OS-Geo Live DVD) the JFrame otherwise is hidden behind the top-bar.
+		// In Xubuntu (OS-Geo Live DVD) the JFrame otherwise is hidden behind
+		// the top-bar.
 		SwingUtil.centerFrameOnScreen(this);
 	}
 
@@ -734,7 +737,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			Map<Object, Object> params = new HashMap<Object, Object>();
 			params.put("url", urlToShape);
-			
+
 			/*
 			 * Test whether we have write permissions to create any .fix file
 			 */
@@ -745,7 +748,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
 						Boolean.FALSE);
 			}
-			
+
 			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
 					.getDataStore(params);
 
@@ -857,27 +860,94 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					+ ASProps.get(Keys.language), e);
 		}
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				AtlasStylerGUI asg = new AtlasStylerGUI();
+		/**
+		 * Check for addFix agruments. If found, the GUI will not start,
+		 */
+		boolean addedIndexes = checkFixIndexCreation(args);
 
-				if (args.length != 0) {
-					for (String param : args) {
+		if (!addedIndexes) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					AtlasStylerGUI asg = new AtlasStylerGUI();
 
-						if ((param.startsWith("\"")) && (param.endsWith("\""))) {
-							param = param.substring(1, param.length() - 1);
+					if (args.length != 0) {
+						for (String param : args) {
+
+							if ((param.startsWith("\""))
+									&& (param.endsWith("\""))) {
+								param = param.substring(1, param.length() - 1);
+							}
+
+							File fileParamter = new File(param);
+
+							if (fileParamter.exists()) {
+								LOGGER.info("Opening command line argument "
+										+ param + " as file.");
+								asg.addShapeLayer(fileParamter);
+							}
 						}
 
-						LOGGER.info("Opening command line argument " + param
-								+ " as file.");
-						asg.addShapeLayer(new File(param));
 					}
-
+					asg.setVisible(true);
 				}
-				asg.setVisible(true);
-			}
-		});
+			});
 
+		} else {
+			LOGGER.info("Not starting GUI");
+			System.out.println("Not starting GUI");
+		}
+
+	}
+
+	private static boolean checkFixIndexCreation(String[] args) {
+		boolean fixParamFound = false;
+		if (args.length != 0) {
+			for (String param : args) {
+
+				if ((param.startsWith("\"")) && (param.endsWith("\""))) {
+					param = param.substring(1, param.length() - 1);
+				}
+
+				if (!param.startsWith("addFix="))
+					continue;
+				
+				fixParamFound = true;
+
+				param = param.substring(7);
+
+				File fileParamter = new File(param);
+
+				if (!fileParamter.exists()) {
+					LOGGER.warn("Not understanding " + param + " as file.");
+					continue;
+				}
+
+				if (!fileParamter.canWrite()) {
+					LOGGER.warn("Can't write to " + param + ", skipping.");
+					continue;
+				}
+
+				URL shpUrl = DataUtilities.fileToURL(fileParamter);
+				try {
+					IndexedShapefileDataStore ds = new IndexedShapefileDataStore(
+							shpUrl);
+					try {
+						ds.createSpatialIndex();
+					} catch (IOException e) {
+						LOGGER.warn("", e);
+					} finally {
+						ds.dispose();
+					}
+					
+					LOGGER.info("Added .fix index to "+fileParamter);
+					
+				} catch (MalformedURLException e) {
+					LOGGER.warn("", e);
+				}
+			}
+		}
+		
+		return fixParamFound;
 	}
 
 	/**
