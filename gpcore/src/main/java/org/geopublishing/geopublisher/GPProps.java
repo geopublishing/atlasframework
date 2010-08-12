@@ -113,10 +113,11 @@ public abstract class GPProps {
 		return properties.getProperty(key, defaultValue);
 	}
 
+	// TODO Add the possibility to provide default boolean values
 	public static Boolean getBoolean(final Keys key) {
 		return Boolean.valueOf(get(key));
-
 	}
+
 
 	public static Integer getInt(final Keys key, final Integer def) {
 		return getInt(key.toString(), def);

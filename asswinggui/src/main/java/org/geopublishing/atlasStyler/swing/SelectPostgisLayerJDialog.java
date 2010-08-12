@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -14,6 +15,7 @@ import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 
+import schmitzm.swing.SwingUtil;
 import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
@@ -105,6 +107,8 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		loadFromProps();
 
 		pack();
+		
+		SwingUtil.centerFrameOnScreen(this);
 	}
 
 	/**

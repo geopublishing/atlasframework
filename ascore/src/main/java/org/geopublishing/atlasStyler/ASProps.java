@@ -21,6 +21,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -94,7 +95,9 @@ public abstract class ASProps {
 		/** Last postgis table used **/
 		lastPgTable,
 		/** Last postgis username used **/
-		lastPgUsername
+		lastPgUsername,
+		/** JVM/System wide default setting. Applied when starting up **/
+		FORCE_LONGITUDE_FIRST_AXIS_ORDER,
 		
 	}
 
@@ -121,9 +124,10 @@ public abstract class ASProps {
 	 *         Tzeggai</a>
 	 */
 	protected static void init(String propertiesFilename, String appDirname) {
-		LOGGER.info("Initialising the AS Properties");
+		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
+		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
-		LOGGER.info("Native JVM Charset is " + Charset.defaultCharset().name());
+		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
 
 		ASProps.propertiesFilename = propertiesFilename;
 		ASProps.appDirname = appDirname;
@@ -226,6 +230,15 @@ public abstract class ASProps {
 
 	public static String get(Keys key, String def) {
 		return get(key.toString(), def);
+	}
+	
+	public static boolean get(Keys key, boolean def) {
+		return get(key.toString(), def);
+	}
+
+	private static boolean get(String key, boolean def) {
+		String propertyAsString = properties.getProperty(key, new Boolean(def).toString());
+		return Boolean.parseBoolean(propertyAsString);
 	}
 
 	public static Integer getInt(Keys key, Integer def) {

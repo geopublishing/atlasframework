@@ -64,6 +64,7 @@ import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
 import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.factory.Hints;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
@@ -126,7 +127,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		// Setting up the logger from a XML configuration file
+		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
 		// Output information about the LGPL license
@@ -430,11 +431,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
 				try {
 					featureSource = ds.getFeatureSource(layer);
-					// Set<Key> supportedHints =
-					// featureSource.getSupportedHints();
-					// for (Key k : supportedHints) {
-					// System.out.println(k);
-					// }
 					StyledFS styledFS = new StyledFS(featureSource);
 
 					styledFS.setTitle(new Translation(database + ": " + layer));
@@ -860,6 +856,10 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					+ ASProps.get(Keys.language), e);
 		}
 
+		// Setup the AXIS order property
+		Hints.putSystemDefault(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, ASProps
+				.get(Keys.FORCE_LONGITUDE_FIRST_AXIS_ORDER, true));
+
 		/**
 		 * Check for addFix agruments. If found, the GUI will not start,
 		 */
@@ -893,60 +893,76 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			});
 
 		} else {
-			LOGGER.info("Not starting GUI");
-			System.out.println("Not starting GUI");
+			LOGGER
+					.info("Not starting GUI because command line parameter addFix was passed");
+			System.out
+					.println("Not starting GUI because command line parameter addFix was passed");
 		}
 
 	}
 
+	/**
+	 * This method is evaluating command line arguments to look for
+	 * "addFix=FILE" paramters. If at least one "addFix=" parameter is passen,
+	 * the method returns <code>true</code> and the application is expected not
+	 * to start a GUI.
+	 */
 	private static boolean checkFixIndexCreation(String[] args) {
 		boolean fixParamFound = false;
+
 		if (args.length != 0) {
 			for (String param : args) {
 
+				// Allows "addFix=/Eigene Dateien/Meine Dateien" etc...
 				if ((param.startsWith("\"")) && (param.endsWith("\""))) {
 					param = param.substring(1, param.length() - 1);
 				}
 
+				// Here we just handle addFix paramters (for now)
 				if (!param.startsWith("addFix="))
 					continue;
-				
-				fixParamFound = true;
 
 				param = param.substring(7);
 
-				File fileParamter = new File(param);
+				// Remember that a paramter was interpreted and the mnethod has
+				// to return true
+				fixParamFound = true;
+
+				final File fileParamter = new File(param);
 
 				if (!fileParamter.exists()) {
-					LOGGER.warn("Not understanding " + param + " as file.");
+					LOGGER.warn("Not understanding " + param
+							+ " as file to add an index.");
 					continue;
 				}
 
 				if (!fileParamter.canWrite()) {
-					LOGGER.warn("Can't write to " + param + ", skipping.");
+					LOGGER.warn("Can't write to " + param
+							+ " due to missing permissions, skipping.");
 					continue;
 				}
 
-				URL shpUrl = DataUtilities.fileToURL(fileParamter);
+				// Starting the .fix creation
+				final URL shpUrl = DataUtilities.fileToURL(fileParamter);
 				try {
-					IndexedShapefileDataStore ds = new IndexedShapefileDataStore(
+					final IndexedShapefileDataStore ds = new IndexedShapefileDataStore(
 							shpUrl);
 					try {
 						ds.createSpatialIndex();
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						LOGGER.warn("", e);
 					} finally {
 						ds.dispose();
 					}
-					
-					LOGGER.info("Added .fix index to "+fileParamter);
-					
-				} catch (MalformedURLException e) {
-					LOGGER.warn("", e);
+
+					LOGGER.info("Added .fix to " + fileParamter);
+
+				} catch (final MalformedURLException e) {
+					LOGGER.warn("Error adding a .fix to " + param, e);
 				}
 			}
 		}
-		
+
 		return fixParamFound;
 	}
 
