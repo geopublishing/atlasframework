@@ -82,7 +82,7 @@ package org.geopublishing.geopublisher.gui.export;
 //import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 //import skrueger.atlas.internal.ProgressListener;
 //import skrueger.creator.AtlasConfigEditable;
-//import skrueger.creator.AtlasCreator;
+//import skrueger.creator.Geopublisher;
 //import skrueger.creator.GPProps;
 //import skrueger.creator.export.AtlasExportCancelledException;
 //import skrueger.creator.export.JarExportUtil;
@@ -136,7 +136,7 @@ package org.geopublishing.geopublisher.gui.export;
 //		dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 //		dc.setAcceptAllFileFilterUsed(false);
 //
-//		dc.setDialogTitle(AtlasCreator.R("Export.Dialog.WhereTo"));
+//		dc.setDialogTitle(Geopublisher.R("Export.Dialog.WhereTo"));
 //		dc.setMultiSelectionEnabled(false);
 //		if ((dc.showSaveDialog(owner) != JFileChooser.APPROVE_OPTION)
 //				|| dc.getSelectedFile() == null) {
@@ -160,7 +160,7 @@ package org.geopublishing.geopublisher.gui.export;
 //		if (DISKdir.exists() || JWSdir.exists()) {
 //			// DISK and JWS folders already exist. OK to overwrite them?
 //
-//			if (!AVUtil.askYesNo(owner, AtlasCreator
+//			if (!AVUtil.askYesNo(owner, Geopublisher
 //					.R("Export.Dialog.ConfimDelete")))
 //				return;
 //
@@ -244,7 +244,7 @@ package org.geopublishing.geopublisher.gui.export;
 //		exportAllLibs = exportLibsCheckbox.isSelected();
 //		signJARs = signJarsCheckbox.isSelected();
 //
-//		AtlasExportTask exportTask = new AtlasExportTask(owner, AtlasCreator
+//		AtlasExportTask exportTask = new AtlasExportTask(owner, Geopublisher
 //				.R("ExportDialog.processWindowTitle.Exporting")) {
 //
 //			@Override
@@ -334,15 +334,15 @@ package org.geopublishing.geopublisher.gui.export;
 //								.replace("\\", "\\\\");
 //					}
 //
-//					if (AVUtil.askYesNo(owner, AtlasCreator.R(
+//					if (AVUtil.askYesNo(owner, Geopublisher.R(
 //							"Export.Dialog.Finished.Msg",
 //							exportJWSandDISKdirRepresentation))) {
 //						AVUtil.openOSFolder(exportJWSandDISKdir);
 //					}
 //				} else {
 //					JOptionPane
-//							.showMessageDialog(owner, AtlasCreator
-//									.R("Export.Error.Msg"), AtlasCreator
+//							.showMessageDialog(owner, Geopublisher
+//									.R("Export.Error.Msg"), Geopublisher
 //									.R("Export.Error.Title"),
 //									JOptionPane.ERROR_MESSAGE);
 //				}
@@ -378,7 +378,7 @@ package org.geopublishing.geopublisher.gui.export;
 //					|| ace.getDesc().get(lang).equals("")
 //					|| ace.getCreator().get(lang) == null
 //					|| ace.getCreator().get(lang).equals("")) {
-//				AVUtil.showMessageDialog(owner, AtlasCreator
+//				AVUtil.showMessageDialog(owner, Geopublisher
 //						.R("Export.Error.MissingMetaData"));
 //				return false;
 //			}

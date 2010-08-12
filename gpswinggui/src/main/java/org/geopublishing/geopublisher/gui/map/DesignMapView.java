@@ -64,7 +64,7 @@ public class DesignMapView extends AtlasMapView {
 		// Show Exceptions in the map window
 		getGeoMapPane().getMapPane().setShowExceptions(true);
 
-		// Using the AtlasCreator settings
+		// Using the Geopublisher settings
 		getGeoMapPane().getMapPane().setAntiAliasing(
 				GPProps.getInt(GPProps.Keys.antialiasingMaps, 1) == 1);
 	}

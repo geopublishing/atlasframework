@@ -24,7 +24,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import schmitzm.swing.ExceptionDialog;
 
 /**
- * Singleton and delegation pattern to the {@link AtlasCreator}'s
+ * Singleton and delegation pattern to the {@link Geopublisher}'s
  * {@link Properties}
  * 
  * Only the methods working on the enumeration {@link Keys} are public
@@ -304,7 +304,7 @@ public abstract class GPProps {
 			haveToCloseFOS = true;
 
 			properties.store(FOS,
-					"This is the properties file for the AtlasCreator");
+					"This is the properties file for the Geopublisher");
 		} catch (final IOException e) {
 			LOGGER.error("Can't write to " + getPropertiesFile().toString(), e); // i8nlog
 			LOGGER.error(e);

@@ -1493,7 +1493,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			// * Border
 			// */
 			// legendSettingsJPanel.setBorder(BorderFactory
-			// .createTitledBorder(AtlasCreator
+			// .createTitledBorder(Geopublisher
 			// .R("DesignAtlasChartJDialog.LegendBorderTitle")));
 
 			legendTitleTranslationEditPanels.put(rendererIndex * 1000

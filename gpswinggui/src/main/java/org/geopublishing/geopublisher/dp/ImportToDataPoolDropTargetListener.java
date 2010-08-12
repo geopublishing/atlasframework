@@ -242,7 +242,7 @@ public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener 
 //			 * 
 //			 * TODO We need a better logic here
 //			 */
-//			ace.save(AtlasCreator.getInstance().getJFrame(), false);
+//			ace.save(Geopublisher.getInstance().getJFrame(), false);
 
 			return true;
 

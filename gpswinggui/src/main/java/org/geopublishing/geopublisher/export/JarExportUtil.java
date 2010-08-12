@@ -1897,7 +1897,7 @@ public class JarExportUtil {
 					// final int useDefaultSplashConfirmDialog = JOptionPane
 					// .showConfirmDialog(
 					// null,
-					// AtlasCreator
+					// Geopublisher
 					// .R("Export.NoSplashscreenExists_DoYouWantToUseTheDefault"),
 					// null, JOptionPane.YES_NO_OPTION);
 					// if (useDefaultSplashConfirmDialog ==
@@ -1909,7 +1909,7 @@ public class JarExportUtil {
 					// JOptionPane
 					// .showMessageDialog(
 					// null,
-					// AtlasCreator
+					// Geopublisher
 					// .R(
 					// "Export.NoSplashscreenExists_TheDefaultHasBeenCopied",
 					// new File(

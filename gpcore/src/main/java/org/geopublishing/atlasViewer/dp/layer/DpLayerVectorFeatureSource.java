@@ -401,16 +401,6 @@ public abstract class DpLayerVectorFeatureSource
 					+ getFilename()
 					+ "\n. Will continue without validation.";
 				LOGGER.error(msg,e);
-				
-//				
-//				ExceptionDialog
-//						.show(
-//								AtlasCreator.getInstance().getJFrame(),
-//								new AtlasException(
-//										"Error while validating the described attributes against the \"physical\" schema of the datafile "
-//												+ getFilename()
-//												+ "\n. Will continue without validation.",
-//										e));
 			}
 		}
 

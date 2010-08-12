@@ -33,7 +33,7 @@ public class AMLImportEd extends AMLImport {
 	 * [atlasDir/ad/html]
 	 * 
 	 * <br>
-	 * This should only be called by the AtlasCreator!
+	 * This should only be called by the Geopublisher!
 	 * 
 	 * @param atlasDir
 	 *            The atlas directory always has a folder ad and ad/atlas.xml

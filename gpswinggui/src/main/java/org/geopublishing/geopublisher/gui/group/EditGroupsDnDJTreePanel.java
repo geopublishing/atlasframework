@@ -428,7 +428,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 	// private JButton getNewGroupJButton() {
 	// final JButton newGroupJButton = new JButton();
 	//
-	// newGroupJButton.setAction(new AbstractAction(AtlasCreator
+	// newGroupJButton.setAction(new AbstractAction(Geopublisher
 	// .R("GroupTree.Action.New"), Icons.ICON_ADD_SMALL) {
 	//
 	// public void actionPerformed(final ActionEvent e) {

@@ -93,7 +93,7 @@ public class GpUtil {
 	protected final static ResourceProvider RESOURCE = ResourceProvider.newInstance("locales.GeopublisherTranslation", Locale.ENGLISH);
 
 	/**
-	 * Convenience method to access the {@link AtlasCreator}s translation
+	 * Convenience method to access the {@link Geopublisher}s translation
 	 * resources.
 	 * 
 	 * @param key

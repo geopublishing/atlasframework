@@ -244,7 +244,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of
-		 * AtlasCreator via JavaWebStart will fall back to this instance
+		 * Geopublisher via JavaWebStart will fall back to this instance
 		 */
 		JNLPUtil.registerAsSingleInstance(GeopublisherGUI.this, true);
 
@@ -902,7 +902,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		if (gpJFrame != null)
 			gpJFrame.dispose();
 
-		LOGGER.info("AtlasCreator " + ReleaseUtil.getVersionInfo(AVUtil.class)
+		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(AVUtil.class)
 				+ " terminated normally.");
 
 		System.exit(exitCode);
@@ -1095,7 +1095,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	@Override
 	public void newActivation(final String[] arg0) {
 		LOGGER
-				.info("A second instance of AtlasCreator has been started.. The single instance if requesting focus now...");
+				.info("A second instance of Geopublisher has been started.. The single instance if requesting focus now...");
 		if (gpJFrame != null) {
 			gpJFrame.requestFocus();
 			gpJFrame.toFront();

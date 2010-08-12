@@ -49,7 +49,7 @@ import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
 /**
- * An extension of the AtlasConfig for use within AtlasCreator. One purpose is,
+ * An extension of the AtlasConfig for use within Geopublisher. One purpose is,
  * to keep {@link File} related references out of {@link AtlasViewerGUI}
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>

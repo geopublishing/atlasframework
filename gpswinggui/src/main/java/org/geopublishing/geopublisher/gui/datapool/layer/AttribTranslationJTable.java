@@ -242,7 +242,7 @@ public class AttribTranslationJTable extends JTable {
 				case COLIDX_NODATA:
 					return GeopublisherGUI.R("NodataValues");
 					// case COLIDX_TRANSLATE:
-					// return AtlasCreator.R("Attributes.Edit.TitleDesc");
+					// return Geopublisher.R("Attributes.Edit.TitleDesc");
 				case COLIDX_TITLES:
 					return GeopublisherGUI.R("Attributes.Edit.Title");
 				case COLIDX_DESCS:

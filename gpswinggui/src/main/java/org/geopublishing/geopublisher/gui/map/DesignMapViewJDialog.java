@@ -272,7 +272,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					// if (AVUtil
 					// .askYesNo(
 					// DesignMapViewJDialog.this,
-					// AtlasCreator
+					// Geopublisher
 					// .R("DesignMapViewJDialog.SaveBBOX.Question.forAllMaps")))
 					// {
 					// for (final Map map : ace.getMapPool().values()) {
@@ -700,7 +700,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		{
 
 			// final JPanel maxExtendPanel = new JPanel(new MigLayout(),
-			// AtlasCreator
+			// Geopublisher
 			// .R("DesignMapViewJDialog.mapArea.maxExtend.border"));
 			// final JPanel maxExtendPanel = new JPanel(new MigLayout());
 

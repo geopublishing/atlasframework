@@ -54,7 +54,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 //				 * Create a new chart using the ChartWizard
 //				 */
 //				JMenuItem chartWizardJMenuItem = new JMenuItem(
-//						new AbstractAction(AtlasCreator
+//						new AbstractAction(Geopublisher
 //								.R("LayerToolMenu.chartWizard"),
 //								Icons.ICON_CHART_SMALL) {
 //
@@ -103,7 +103,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 //				 * Add a new MenuItem, to switch "showTableInLegend" on/off
 //				 */
 //				JCheckBoxMenuItem showTableInLegendOnOff = new JCheckBoxMenuItem(
-//						new AbstractAction(AtlasCreator
+//						new AbstractAction(Geopublisher
 //								.R("LayerToolMenu.showTableInLegend")) {
 //
 //							@Override
@@ -182,8 +182,8 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 			// * Add a test-WFS to the FeatureSource
 			// */
 			// JMenuItem addWFS = new JMenuItem();
-			// addWFS.setText(AtlasCreator.R("DataPoolWindow.Action.AddWFS"));
-			// addWFS.setToolTipText(AtlasCreator
+			// addWFS.setText(Geopublisher.R("DataPoolWindow.Action.AddWFS"));
+			// addWFS.setToolTipText(Geopublisher
 			// .R("DataPoolWindow.Action.AddWFS.TT"));
 			//
 			// addWFS.addActionListener(new ActionListener() {
@@ -259,9 +259,9 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 			// * Add a test-WFS to the FeatureSource
 			// */
 			// JMenuItem addWMS = new JMenuItem();
-			// addWMS.setText(AtlasCreator
+			// addWMS.setText(Geopublisher
 			// .R("DataPoolWindow.Action.AddWMS"));
-			// addWMS.setToolTipText(AtlasCreator
+			// addWMS.setToolTipText(Geopublisher
 			// .R("DataPoolWindow.Action.AddWMS.TT"));
 			//
 			// addWMS.addActionListener(new ActionListener() {

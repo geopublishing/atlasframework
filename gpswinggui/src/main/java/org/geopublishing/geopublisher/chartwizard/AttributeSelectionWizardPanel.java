@@ -156,9 +156,9 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 //	 */
 //	private JCheckBox getNormalizeJCheckboxFor(int idx) {
 //		if (normalizeJCheckboxs.get(idx) == null) {
-//			JCheckBox cb = new JCheckBox(AtlasCreator
+//			JCheckBox cb = new JCheckBox(Geopublisher
 //					.R("AttributeSelectionPanel.NormalizeCheckbox"));
-//			cb.setToolTipText(AtlasCreator
+//			cb.setToolTipText(Geopublisher
 //					.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
 //			
 //			final ChartType chartType = (ChartType)getWizardData(ChartWizard.CHARTTYPE);

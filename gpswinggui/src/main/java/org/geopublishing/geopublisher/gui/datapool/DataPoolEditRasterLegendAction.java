@@ -51,7 +51,7 @@ package org.geopublishing.geopublisher.gui.datapool;
 //import skrueger.atlas.dp.DpEntry;
 //import org.geopublishing.atlasViewer.swing.MapLayerLegend;
 //import skrueger.creator.AtlasConfigEditable;
-//import skrueger.creator.AtlasCreator;
+//import skrueger.creator.Geopublisher;
 //import skrueger.creator.gui.EditRasterLegendDataJPanel;
 //import skrueger.geotools.StyledRasterInterface;
 //
@@ -64,7 +64,7 @@ package org.geopublishing.geopublisher.gui.datapool;
 //
 //	public DataPoolEditRasterLegendAction(DataPoolJTable dpTable,
 //			Component owner) {
-//		super(AtlasCreator.R("DataPoolWindow_Action_EditRasterLegend_label"));
+//		super(Geopublisher.R("DataPoolWindow_Action_EditRasterLegend_label"));
 //
 //		this.dpTable = dpTable;
 //		this.owner = owner;
@@ -73,7 +73,7 @@ package org.geopublishing.geopublisher.gui.datapool;
 //
 //	public DataPoolEditRasterLegendAction(StyledRasterInterface<?> dpr,AtlasConfigEditable ace,
 //			MapLayerLegend owner) {
-//		super(AtlasCreator.R("DataPoolWindow_Action_EditRasterLegend_label"));
+//		super(Geopublisher.R("DataPoolWindow_Action_EditRasterLegend_label"));
 //		this.dpr = dpr;
 //		this.ace = ace;
 //		this.owner = owner;

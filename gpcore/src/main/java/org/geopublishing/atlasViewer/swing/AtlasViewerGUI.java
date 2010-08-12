@@ -817,7 +817,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 	/**
 	 * If the AtlasViewer is used in a preview mode (e.g. started via
-	 * AtlasCreator, this helps the GC. Also calls {@link DpEntry#cleanupTemp()}
+	 * Geopublisher, this helps the GC. Also calls {@link DpEntry#cleanupTemp()}
 	 * . Variable Instance is set to <code>null</code>.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
@@ -924,7 +924,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 *         Tzeggai</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewerGUI} and
-	 *         AtlasCreator
+	 *         Geopublisher
 	 */
 	private void updateLangMenu() {
 		if (getAtlasConfig() == null)

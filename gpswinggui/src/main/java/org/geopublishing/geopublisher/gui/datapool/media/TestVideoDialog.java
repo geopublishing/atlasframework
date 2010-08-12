@@ -187,7 +187,7 @@ package org.geopublishing.geopublisher.gui.datapool.media;
 //
 //			// i8nAC
 //			JTextArea text = new JTextArea(
-//					"AtlasCreator is testing if the movie is compatible with pure Java playback.\n"
+//					"Geopublisher is testing if the movie is compatible with pure Java playback.\n"
 //							+ "You should only import if you can see and hear it correctly now.");
 //			text.setLineWrap(true);
 //			text.setWrapStyleWord(true);
