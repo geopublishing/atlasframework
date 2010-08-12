@@ -13,9 +13,9 @@ package org.geopublishing.geopublisher.gui;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.geopublishing.geopublisher.swing.GpSwingUtil;
-
 import net.miginfocom.swing.MigLayout;
+
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 /**
  * The status bar of the {@link GpFrame}

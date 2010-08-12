@@ -1,13 +1,11 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -16,15 +14,15 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 
 import schmitzm.swing.SwingUtil;
-import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancelButton;
+import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
 
 /**
  * This dloag asks the user for all paramters needed to add a PostGIS layer to
  * the map.
  */
-public class SelectPostgisLayerJDialog extends AtlasDialog {
+public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 
 	private JTextField hostInput;
 	private JTextField databaseInput;
@@ -81,27 +79,30 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 				.R("AtlasStyler.SelectPostgisLayerDialog.table.label")));
 		add(getLayerInputField());
 
-		OkButton okButton = new OkButton();
-		okButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				storeInProps();
-				close();
-			}
-
-		});
+		
+		OkButton okButton = getOkButton();
+//		OkButton okButton = new OkButton();
+//		okButton.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				storeInProps();
+//				okClose();
+//			}
+//
+//		});
 		add(okButton, "span 2, split 2, tag ok");
 
-		CancelButton cancelButton = new CancelButton();
-		cancelButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancelled = true;
-				close();
-			}
-		});
+//		CancelButton cancelButton = new CancelButton();
+//		cancelButton.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				cancelled = true;
+//				close();
+//			}
+//		});
+		CancelButton cancelButton = getCancelButton();
 		add(cancelButton, "tag cancel");
 
 		loadFromProps();
@@ -138,8 +139,12 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		ASProps.set(Keys.lastPgTable, getLayer());
 		ASProps.set(Keys.lastPgHost, getHost());
 	}
-
-	private boolean cancelled = false;
+	
+	@Override
+	public boolean okClose() {
+		storeInProps();
+		return super.okClose();
+	}
 
 	private JTextField getLayerInputField() {
 		if (layerInput == null) {
@@ -183,10 +188,6 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 		return hostInput;
 	}
 
-	public boolean isCancelled() {
-		return cancelled;
-	}
-
 	/**
 	 * Return the host selected by the user
 	 */
@@ -212,6 +213,20 @@ public class SelectPostgisLayerJDialog extends AtlasDialog {
 
 	public String getPassword() {
 		return new String(getPasswordInputField().getPassword());
+	}
+
+	@Override
+	public void cancel() {
+	}
+	
+
+	/**
+	 * Allows to close the {@link JDialog} from "outside". The user will be
+	 * asked and she may cancel the close process.
+	 */
+	public boolean close() {
+		cancelClose();
+		return true;
 	}
 
 }

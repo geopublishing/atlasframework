@@ -1,21 +1,14 @@
 package org.geopublishing.atlasViewer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
-import org.xml.sax.SAXException;
 
 public class AtlasConfigTest {
 	

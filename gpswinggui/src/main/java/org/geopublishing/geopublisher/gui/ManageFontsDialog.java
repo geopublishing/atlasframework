@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
-import javax.swing.ListCellRenderer;
 
 import net.miginfocom.swing.MigLayout;
 

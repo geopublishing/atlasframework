@@ -253,7 +253,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * 
 	 * @return skrueger.sld.gui.StylerMapView
 	 */
-	private StylerMapView getStylerMapView() {
+	StylerMapView getStylerMapView() {
 		if (stylerMapView == null) {
 			stylerMapView = new StylerMapView(this);
 			stylerMapView.getMapManager().addMapLayerListListener(
@@ -333,7 +333,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(getJButtonAddLayer());
 		jToolBar.add(getJButtonAddPostGIS());
-		jToolBar.add(getJButtonAntiAliasing());
+//		jToolBar.add(getJButtonAntiAliasing());
 		jToolBar.add(getJTButtonShowXML());
 		jToolBar.add(getJTButtonExportAsSLD());
 
@@ -342,7 +342,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ASOptionsDialog(AtlasStylerGUI.this);
+				new ASOptionsDialog(AtlasStylerGUI.this, AtlasStylerGUI.this);
 			}
 		});
 
@@ -466,32 +466,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	}
 
-	private JToggleButton getJButtonAntiAliasing() {
-		final JToggleButton jToggleButtonAntiAliasing = new JToggleButton(
-				AtlasStyler
-						.R("AtlasStylerGUI.toolbarButton.toggle_antialiasing"));
-		jToggleButtonAntiAliasing.setSelected(ASProps.getInt(
-				ASProps.Keys.antialiasingMaps, 1) != 1);
-
-		jToggleButtonAntiAliasing.addActionListener(new AbstractAction() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				SwingUtilities.invokeLater(new Runnable() {
-
-					public void run() {
-						boolean b = !jToggleButtonAntiAliasing.isSelected();
-						ASProps.set(ASProps.Keys.antialiasingMaps, b ? "1"
-								: "0");
-
-						getStylerMapView().getMapPane().setAntiAliasing(b);
-						getStylerMapView().getMapPane().repaint();
-					}
-				});
-			}
-		});
-		return jToggleButtonAntiAliasing;
-	}
 
 	public JToggleButton getJTButtonShowXML() {
 		final JToggleButton jButtonShowXML = new JToggleButton(AtlasStyler

@@ -19,7 +19,6 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geopublishing.geopublisher.AMLImportEd;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.CheckableAtlasJTree;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;

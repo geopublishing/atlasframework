@@ -17,7 +17,6 @@ import javax.swing.AbstractAction;
 
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 /**
  * This action allows to configure additional fonts that can be used in the atlas.

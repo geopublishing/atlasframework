@@ -18,6 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -33,14 +34,18 @@ import skrueger.swing.OkButton;
 
 public class ASOptionsDialog extends CancellableDialogAdapter {
 	final JCheckBox overideLocaleCB = new JCheckBox();
-	
-//	final JComboBox langComboBox = new JComboBox(new String[] { "en", "fr",
-//			"de" });
-	
+
+	// final JComboBox langComboBox = new JComboBox(new String[] { "en", "fr",
+	// "de" });
+
 	final JComboBox langComboBox = new JComboBox(ASUtil.getSupportedLanguages());
 
-	public ASOptionsDialog(final Component parentWindow) {
+	private final AtlasStylerGUI asg;
+
+	public ASOptionsDialog(final Component parentWindow, AtlasStylerGUI asg) {
 		super(parentWindow);
+		this.asg = asg;
+
 		initGUI();
 
 		pack();
@@ -62,7 +67,7 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 	private void initGUI() {
 
 		setTitle(AtlasStyler.R("Options.ButtonLabel"));
-		
+
 		setLayout(new MigLayout("wrap 3"));
 
 		final JLabel langSelectionLabel = new JLabel(AtlasStyler
@@ -82,16 +87,17 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 			}
 		});
 
+		// Fist line
 		add(overideLocaleCB);
 		add(new JLabel(AtlasStyler.R("Options.ForceLocaleCheckboxLabel")),
 				"span 2");
 
-		// second line
+		// Second line
 		add(new JLabel());
 		add(langSelectionLabel);
 		add(langComboBox);
 
-		// third line
+		// Third line
 		add(new JLabel());
 		add(noteLocaleChangesNeedRestartLabel, "span 2");
 
@@ -104,26 +110,36 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 		add(new JLabel(AtlasStyler.R(
 				"Options.SystemLocaleInformationSystemLocale", Locale
 						.getDefault())), "span 2");
+
+		// Sixth line
+		add(new JLabel(AtlasStyler.R("Options.Performance")), "span 3");
 		
+		// 7th line
+		add(new JLabel());
+//		add(new JLabel(AtlasStyler.R("Options.Performance.Antialiasing")), "span 1");
+		add(getJButtonAntiAliasing(), "span 2");
+
+		// End
+
 		// Buttons
 		OkButton okBtn = new OkButton(new AbstractAction() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				okClose();
 			}
 		});
-		
-		CancelButton cancelBtn = new CancelButton( new AbstractAction() {
-			
+
+		CancelButton cancelBtn = new CancelButton(new AbstractAction() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancelClose();
 			}
 		});
-		
-		add(okBtn,"tag ok, span 3, split 2");
-		add(cancelBtn,"tag cancel");
+
+		add(okBtn, "tag ok, span 3, split 2");
+		add(cancelBtn, "tag cancel");
 
 		// Initialize what is enabled
 		boolean defaultInUse = ASProps.get(Keys.language, "system")
@@ -132,14 +148,40 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 		langSelectionLabel.setEnabled(!defaultInUse);
 		langComboBox.setEnabled(!defaultInUse);
 
-//		if (defaultInUse) {
-			langComboBox.setSelectedItem(ASProps.get(Keys.language, "en"));
-//		}
-		
+		// if (defaultInUse) {
+		langComboBox.setSelectedItem(ASProps.get(Keys.language, "en"));
+		// }
+
 	}
 
 	@Override
 	public void cancel() {
+	}
+
+	private JCheckBox getJButtonAntiAliasing() {
+		final JCheckBox jCheckboxAntiAliasing = new JCheckBox(
+				AtlasStyler.R("Options.Performance.Antialiasing"));
+		jCheckboxAntiAliasing.setSelected(ASProps.getInt(
+				ASProps.Keys.antialiasingMaps, 1) != 1);
+
+		jCheckboxAntiAliasing.addActionListener(new AbstractAction() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				SwingUtilities.invokeLater(new Runnable() {
+
+					public void run() {
+						boolean b = !jCheckboxAntiAliasing.isSelected();
+						ASProps.set(ASProps.Keys.antialiasingMaps, b ? "1"
+								: "0");
+
+						asg.getStylerMapView().getMapPane().setAntiAliasing(b);
+						asg.getStylerMapView().getMapPane().repaint();
+					}
+				});
+			}
+		});
+		return jCheckboxAntiAliasing;
 	}
 
 	@Override

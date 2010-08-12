@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

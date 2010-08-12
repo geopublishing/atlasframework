@@ -33,10 +33,8 @@ import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 
 import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 

@@ -34,7 +34,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 

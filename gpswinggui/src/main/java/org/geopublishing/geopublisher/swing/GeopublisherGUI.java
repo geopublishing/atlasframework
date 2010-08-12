@@ -51,7 +51,6 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
-import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.exceptions.AtlasRecoverableException;
 import org.geopublishing.atlasViewer.http.Webserver;

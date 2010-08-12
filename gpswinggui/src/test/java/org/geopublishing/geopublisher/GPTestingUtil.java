@@ -26,7 +26,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.http.Webserver;

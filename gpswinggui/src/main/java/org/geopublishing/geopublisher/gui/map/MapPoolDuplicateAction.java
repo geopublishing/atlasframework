@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.AbstractAction;
 
@@ -31,9 +30,6 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.swing.ExceptionMonitor;
-import org.hsqldb.lib.FileUtil;
-
-import schmitzm.geotools.GTUtil;
 
 public class MapPoolDuplicateAction extends AbstractAction {
 	final static private Logger LOGGER = Logger
