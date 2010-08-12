@@ -94,7 +94,7 @@
 				<executions>
 					<execution>
 						<id>Create atlasdependencies.properties</id>
-						<phase>generate-sources</phase>
+						<phase>clean</phase>
 						<goals>
 							<goal>build-classpath</goal>
 						</goals>
@@ -103,8 +103,9 @@
 							<includeScope>compile</includeScope>
 							<outputFile>src/main/resources/atlasdependencies.properties</outputFile>
 							<outputFilterFile>true</outputFilterFile>
+							<pathSeparator>:</pathSeparator>
 							<prefix>.</prefix>
-							<regenerateFile>false</regenerateFile>
+							<regenerateFile>true</regenerateFile>
 						</configuration>
 					</execution>
 					<execution>
