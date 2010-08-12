@@ -172,7 +172,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	}
 
 	private void initialize() {
-		this.setSize(800, 600);
+		this.setSize(750, 510);
 		this.setContentPane(getJContentPane());
 		String AtlasStyler_MainWindowTitle = "AtlasStyler "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class);

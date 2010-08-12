@@ -151,13 +151,13 @@ public class GpFrame extends JFrame {
 				.getVersionInfo(GpUtil.class)));
 
 		setSize(new Dimension(GPProps.getInt(GPProps.Keys.gpWindowWidth, 750),
-				GPProps.getInt(GPProps.Keys.gpWindowHeight, 600)));
+				GPProps.getInt(GPProps.Keys.gpWindowHeight, 510)));
 
 		Boolean newStart = GPProps.get(GPProps.Keys.gpWindowWidth) == null;
 		if (newStart) {
 			SwingUtil.centerFrameOnScreen(this);
 		} else {
-			// TODO Fensterposition setzen und merken!?
+			SwingUtil.centerFrameOnScreen(this);
 		}
 
 		// MMaximize the JFrame, depending on the last saved state.
