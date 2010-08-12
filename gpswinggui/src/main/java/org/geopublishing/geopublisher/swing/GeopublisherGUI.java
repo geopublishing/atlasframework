@@ -205,7 +205,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * resources.
 	 * 
 	 * @param key
-	 *            the key for the Geopublisher.properties file
+	 *            the key for the *Translation.properties file
 	 * @param values
 	 *            optional values
 	 */
@@ -231,8 +231,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		// Setting up the logger from a XML configuration file
-		DOMConfigurator.configure(GeopublisherGUI.class
+		// Setting up the logger from a XML configuration file. We do that gain in GPPros, as it outputs log messages first.
+		DOMConfigurator.configure(GPProps.class
 				.getResource("/gp_log4j.xml"));
 
 		/** Output information about the GPL license **/

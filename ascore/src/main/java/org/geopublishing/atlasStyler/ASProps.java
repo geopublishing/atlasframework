@@ -60,9 +60,15 @@ public abstract class ASProps {
 	private static String appDirname;
 
 	private static Window owner;
+	
+
+	public static final String PROPERTIES_FILENAME = "atlasStyler.properties";
+
+	public static final String PROPERTIES_FOLDER = ".AtlasStyler";
+
 
 	static {
-		init("atlasStyler.properties", ".AtlasStyler");
+		init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
 	}
 
 	/**
@@ -289,7 +295,7 @@ public abstract class ASProps {
 
 	/**
 	 * Deletes the .properties in the ApplicationPreferences directory and
-	 * creates a default AtlasStyler.properties
+	 * creates a default .properties file
 	 * 
 	 * @param guiOwner
 	 *            If not <code>null</code> a JDialog message will inform the

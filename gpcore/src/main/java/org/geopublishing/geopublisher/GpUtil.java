@@ -97,7 +97,7 @@ public class GpUtil {
 	 * resources.
 	 * 
 	 * @param key
-	 *            the key for the Geopublisher.properties file
+	 *            the key for the *Translation.properties file
 	 * @param values
 	 *            optional values
 	 */

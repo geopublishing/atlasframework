@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -40,8 +41,7 @@ public abstract class GPProps {
 	/**
 	 * List of all legal keys in the
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
@@ -72,6 +72,10 @@ public abstract class GPProps {
 	/** This stores the properties */
 	private static final Properties properties = new Properties();
 
+	public static final String PROPERTIES_FILENAME = "geopublisher.properties";
+
+	public static final String PROPERTIES_FOLDER = ".Geopublisher";
+
 	private static File propertiesFile = null;
 
 	/**
@@ -85,7 +89,7 @@ public abstract class GPProps {
 	 * and filename
 	 */
 	static {
-		init("geopublisher.properties", ".Geopublisher");
+		init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
 	}
 
 	/**
@@ -117,7 +121,6 @@ public abstract class GPProps {
 	public static Boolean getBoolean(final Keys key) {
 		return Boolean.valueOf(get(key));
 	}
-
 
 	public static Integer getInt(final Keys key, final Integer def) {
 		return getInt(key.toString(), def);
@@ -184,12 +187,14 @@ public abstract class GPProps {
 	 *            Dirname in the User Home directory, e.g. ".ssh" or
 	 *            ".AtlasSTyler"
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected static void init(final String propertiesFilename,
 			final String appDirname) {
-		LOGGER.info("Initialising the Properties");
+
+		// Setting up the logger from a XML configuration file. We do that gain
+		// in GPPros, as it outputs log messages first.
+		DOMConfigurator.configure(GPProps.class.getResource("/gp_log4j.xml"));
 
 		GPProps.propertiesFilename = propertiesFilename;
 		GPProps.appDirname = appDirname;
@@ -218,8 +223,7 @@ public abstract class GPProps {
 	 * @param guiOwner
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void resetProperties(final Component guiOwner) {
 		final String msg = GpUtil
@@ -234,7 +238,8 @@ public abstract class GPProps {
 		// If we don't have a .properties file, we copy the one from the jar
 		URL inJar = null;
 		try {
-			inJar = GpUtil.class.getResource("/"+propertiesFilename+DEFAULTS_POSTFIX);
+			inJar = GpUtil.class.getResource("/" + propertiesFilename
+					+ DEFAULTS_POSTFIX);
 			// LOGGER.debug("inJar = " + inJar);
 
 			if (inJar == null)
@@ -319,17 +324,17 @@ public abstract class GPProps {
 
 	/**
 	 * Copies more or less application dependent properties from the JAR to the
-	 * .AtlasCreator/geopublisher.properties...<br/>
+	 * .Geopublisher/geopublisher.properties...<br/>
 	 * TODO should probably be seperated into a user and a system properties
 	 * file...
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void upgrade() {
-		LOGGER.debug("upgrade from geopublisher.properties");
+		LOGGER.debug("upgrade from "+PROPERTIES_FILENAME);
 
-		final URL inJar = GpUtil.class.getResource("/" + propertiesFilename+DEFAULTS_POSTFIX);
+		final URL inJar = GpUtil.class.getResource("/" + propertiesFilename
+				+ DEFAULTS_POSTFIX);
 		final Properties virginProps = new Properties();
 		try {
 			virginProps.load(inJar.openStream());
@@ -337,10 +342,6 @@ public abstract class GPProps {
 			LOGGER.error(e);
 		}
 
-//		set(Keys.ClassPathLibs, virginProps.getProperty(Keys.ClassPathLibs
-//				.toString()));
-//		LOGGER.debug(" setting " + Keys.ClassPathLibs + " to "
-//				+ virginProps.getProperty(Keys.ClassPathLibs.toString()));
 		set(Keys.NativeLibs, virginProps
 				.getProperty(Keys.NativeLibs.toString()));
 		set(Keys.signingAlias, virginProps.getProperty(Keys.signingAlias

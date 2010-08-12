@@ -7,7 +7,7 @@ public class ASPropsTest {
 	@Test
 	public void testInit() {
 		// Just check that there is no NPE about missing resources
-		ASProps.init("atlasStyler.properties", ".AtlasStyler");
+		ASProps.init(ASProps.PROPERTIES_FILENAME, ASProps.PROPERTIES_FOLDER);
 	}
 
 }
