@@ -133,21 +133,21 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		if (style == null) {
 			// First try to load a .sld file from the same location
 			Style[] styles = null;
-			
+
 			URL changeUrlExt = IOUtil.changeUrlExt(getUrl(), "sld");
 			try {
 				styles = StylingUtil.loadSLD(changeUrlExt);
 			} catch (Exception e) {
 				LOGGER.error("Loading the Style from " + changeUrlExt
 						+ ". Using default Style.", e);
-				
+
 				style = ASUtil.createDefaultStyle(DpLayer.this);
 				return style;
 			}
 
 			if (styles == null || styles.length == 0 || styles[0] == null) {
 				LOGGER.warn("SLD file doesn't contain a style!");
-				
+
 				style = ASUtil.createDefaultStyle(DpLayer.this);
 			} else
 				style = styles[0];
@@ -157,6 +157,8 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 				style = StylingUtil.correctPropertyNames(style,
 						((DpLayerVectorFeatureSource) this).getSchema());
 			} else {
+				// RasterSymbolizers may have a wrong geometry property name
+				// which would be corrected here
 				style = StylingUtil.correctPropertyNames(style, null);
 			}
 		}
@@ -316,8 +318,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * @return <code>null</code> if no {@link LayerStyle} with given ID can be
 	 *         found.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public LayerStyle getLayerStyleByID(String styleID) {
 		for (LayerStyle ls : getLayerStyles()) {
