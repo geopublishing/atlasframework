@@ -85,8 +85,8 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 
 		add(explanationJLabel);
 		add(fileTextFieldJLabel, "gapy unrelated");
-		add(getFileJTextField(), "growx, split 2, left");
-		add(getFileChooserJButton(), "right");
+		add(getFileChooserJButton(), "split 2");
+		add(getFileJTextField(), "growx, left");
 	}
 
 	private JTextField getFileJTextField() {
