@@ -449,7 +449,7 @@ public abstract class DpLayerVectorFeatureSource
 					publish(file.getAbsolutePath());
 					FileUtils.copyURLToFile(AVSwingUtil.getUrl(DpLayerVectorFeatureSource.this, owner), file);
 
-					// Try to copy any pending world files...
+					// Try to copy any pending files...
 					for (SHP_POSTFIXES pf : GeoImportUtil.SHP_POSTFIXES
 							.values()) {
 						final File changeFileExt = IOUtil.changeFileExt(file,
