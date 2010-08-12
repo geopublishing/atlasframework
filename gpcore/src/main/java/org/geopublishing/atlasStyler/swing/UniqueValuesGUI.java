@@ -12,9 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -155,8 +152,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAttributeJPanel() {
-		JPanel jPanelValueField = new JPanel(new MigLayout(), AtlasStyler
-				.R("UniqueValuesGUI.borderTitle.value_Field"));
+		JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 1"),
+				AtlasStyler.R("UniqueValuesGUI.borderTitle.value_Field"));
 
 		jLabelValue = new JLabel(AtlasStyler
 				.R("UniqueValuesGUI.labelFor.valueFieldSelectionCombobox"));
@@ -219,7 +216,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JPanel getJPanelColorAndTemplate() {
 		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
-				"wrap 2", "[grow][]"));
+				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
 				.setBorder(BorderFactory
 						.createTitledBorder(AtlasStyler
@@ -1153,46 +1150,19 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 * @return void
 	 */
 	private void initialize() {
-		GridBagConstraints gridBagConstraints41 = new GridBagConstraints();
-		gridBagConstraints41.gridx = 0;
-		gridBagConstraints41.gridwidth = 3;
-		gridBagConstraints41.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints41.gridy = 3;
-		GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-		gridBagConstraints31.gridx = 0;
-		gridBagConstraints31.gridwidth = 3;
-		gridBagConstraints31.fill = GridBagConstraints.BOTH;
-		gridBagConstraints31.weightx = 1.0;
-		gridBagConstraints31.weighty = 1.0;
-		gridBagConstraints31.gridy = 2;
-		GridBagConstraints gridBagConstraints21 = new GridBagConstraints();
-		gridBagConstraints21.gridx = 2;
-		gridBagConstraints21.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints21.anchor = GridBagConstraints.EAST;
-		gridBagConstraints21.gridy = 1;
-
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.gridwidth = 3;
-		gridBagConstraints1.gridy = 0;
-		gridBagConstraints1.insets = new Insets(5, 5, 7, 5);
-		jLabelHeading = new JLabel();
+		jLabelHeading = new JLabel(AtlasStyler.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
-		jLabelHeading.setText(AtlasStyler.R("UniqueValues.Heading"));
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.fill = GridBagConstraints.VERTICAL;
-		gridBagConstraints.gridy = 1;
-		this.setLayout(new GridBagLayout());
-		// this.setSize(new Dimension(AtlasStylerTabbedPane.TAB_WIDTH - 30,
-		// AtlasStylerTabbedPane.TAB_HEIGHT - 100));
-		this.add(getAttributeJPanel(), gridBagConstraints);
-		this.add(jLabelHeading, gridBagConstraints1);
-		this.add(getJPanelColorAndTemplate(), gridBagConstraints21);
-		this.add(new JScrollPane(getJTable()), gridBagConstraints31);
+		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
-		JPanel jPanelButtons = new JPanel(new MigLayout("ins n 0 n 0, fillx"));
+		this.add(jLabelHeading, "center");
+		this.add(getAttributeJPanel(), "split 2, grow x");
+		this.add(getJPanelColorAndTemplate(), "grow x");
+
+		this.add(new JScrollPane(getJTable()), "grow x");
+
+		JPanel jPanelButtons = new JPanel(new MigLayout(
+				"ins n 0 n 0, gap 1, fillx"));
 		{
 			jPanelButtons.add(getJButtonAddAllValues());
 			jPanelButtons.add(getJButtonAddValues(), "gapx rel unrel");
@@ -1201,7 +1171,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			jPanelButtons.add(getJButtonUp());
 			jPanelButtons.add(getJButtonDown(), "gapx rel");
 		}
-		this.add(jPanelButtons, gridBagConstraints41);
+		this.add(jPanelButtons, "");
 
 	}
 

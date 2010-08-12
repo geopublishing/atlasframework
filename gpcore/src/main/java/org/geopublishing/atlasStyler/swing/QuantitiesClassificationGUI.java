@@ -165,7 +165,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			jContentPane = new JPanel(new MigLayout("flowy"));
+			jContentPane = new JPanel(new MigLayout("flowy, gap 1, inset 1"));
 
 			jContentPane.add(getJPanelLinksOben(), "sgx1, split 3");
 			jContentPane.add(getJPanelDataExclusion(), "sgx1");
@@ -194,9 +194,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jLabelMethodSelection = new JLabel(AtlasStyler
 					.R("QuantitiesClassificationGUI.Combobox.Method"));
 
-			jPanelLinksOben = new JPanel(new MigLayout("wrap 2"), AtlasStyler
+			jPanelLinksOben = new JPanel(new MigLayout("wrap 2, gap 1, inset 1"), AtlasStyler
 					.R("GraduatedColorQuantities.classification.BorderTitle"));
-
+			
 			jPanelLinksOben.add(jLabelMethodSelection);
 			jPanelLinksOben.add(getJComboBoxMethod());
 			jPanelLinksOben.add(jLabelParameter);
@@ -223,7 +223,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelDataExclusion() {
 		if (jPanelData == null) {
-			jPanelData = new JPanel(new MigLayout());
+			jPanelData = new JPanel(new MigLayout("gap 1, inset 1"));
 			jPanelData.setBorder(BorderFactory.createTitledBorder(AtlasStyler
 					.R("QuantitiesClassificationGUI.Data.BorderTitle")));
 
@@ -321,7 +321,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelDescriptiveStatistics() {
 		if (jPanelDescriptiveStatistics == null) {
-			jPanelDescriptiveStatistics = new JPanel(new MigLayout());
+			jPanelDescriptiveStatistics = new JPanel(new MigLayout("gap 1, inset 1"));
 			jPanelDescriptiveStatistics
 					.setBorder(BorderFactory
 							.createTitledBorder(AtlasStyler
@@ -473,7 +473,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelLowerPart() {
 		if (panelLowerPart == null) {
-			panelLowerPart = new JPanel(new MigLayout("flowy"));
+			panelLowerPart = new JPanel(new MigLayout("flowy, gap 1, inset 1"));
 			JLabel jLabelBreaksTable = new JLabel(AtlasStyler
 					.R("Classification.BreakValues"));
 			jLabelBreaksTable.setToolTipText(AtlasStyler
@@ -1002,7 +1002,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jLabelHistogrammColumns
 					.setToolTipText(AtlasStyler
 							.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums.TT"));
-			jPanelHistParams = new JPanel(new MigLayout());
+			jPanelHistParams = new JPanel(new MigLayout("gap 1, inset 1"));
 			jPanelHistParams.add(jLabelHistogrammColumns);
 			jPanelHistParams.add(getJComboBoxColumns(), "gap rel");
 			jPanelHistParams.add(getJCheckBoxShowSD(), "gap unrel");

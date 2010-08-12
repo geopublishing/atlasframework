@@ -147,10 +147,10 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private void initialize(
 			FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
-		this.setLayout(new MigLayout("wrap 1", "[grow]", "[grow][][]"));
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1", "[grow]", "[grow][][]"));
 		this.add(getPreviewMapPane(features), "top, growy, gap 0! 0! 0! 0!");
 
-		JPanel jPanelFont = new JPanel(new MigLayout("", "[grow]"));
+		JPanel jPanelFont = new JPanel(new MigLayout("gap 1, inset 1", "[grow]"));
 		{
 
 			jPanelFont.add(new JLabel(AtlasStyler
@@ -580,7 +580,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		rulesList.addListener(ruleChangedUpadteThePreview);
 
 		// mapPane.setMinimumSize(new Dimension(300, 40));
-		mapPane.setMinimumSize(new Dimension(500, 170));
+		mapPane.setMinimumSize(new Dimension(500, 130));
 
 		// A mouse listener to toggel anti-aliasing
 		mapPane.addMouseListener(new MouseAdapter() {
@@ -869,7 +869,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define point placement settings
 	 */
 	private JPanel getJPanelPointPlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout("wrap 3, fillx"),
+		JPanel jPanelPlacement = new JPanel(new MigLayout("wrap 3, fillx, gap 1, inset 1"),
 				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 
 		// Avoid nulls and fill with default if needed
@@ -929,7 +929,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define Line placement settings
 	 */
 	private JPanel getJPanelLinePlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout("nogrid, fillx"),
+		JPanel jPanelPlacement = new JPanel(new MigLayout("nogrid, fillx, gap 1, inset 1"),
 				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 		{
 

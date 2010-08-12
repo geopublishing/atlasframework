@@ -12,8 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -242,17 +240,17 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return void
 	 */
 	private void initialize() {
-		setLayout(new MigLayout("wrap 2, w 100%", "grow"));
+		setLayout(new MigLayout("wrap 2, fillx", "grow"));
 		jLabelHeading = new JLabel(AtlasStyler
 				.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
 
 		this.add(jLabelHeading, "span 2");
-		this.add(getJPanelFields());
-		this.add(getJPanelClassification());
+		this.add(getJPanelFields(), "grow x");
+		this.add(getJPanelClassification(), "grow x");
 		this.add(getJPanelColorsAndTemplate(), "span 2, growx");
-		this.add(new JScrollPane(getJTableClasses()), "span 2, grow, bottom");
+		this.add(new JScrollPane(getJTableClasses()), "span 2, grow x, bottom");
 	}
 
 	/**
@@ -262,42 +260,22 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	private JPanel getJPanelFields() {
 		if (jPanel == null) {
-			final GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints8.gridy = 1;
-			gridBagConstraints8.weightx = 1.0;
-			gridBagConstraints8.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints8.gridx = 1;
-			final GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints7.gridx = 1;
-			final GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 0;
-			gridBagConstraints6.gridy = 1;
-			jLabel3 = new JLabel();
-			jLabel3.setText(AtlasStyler
-					.R("GraduatedColorQuantities.NormalizationAttribute"));
-			jLabel3.setToolTipText(AtlasStyler
-					.R("GraduatedColorQuantities.NormalizationAttribute.TT"));
-			final GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 0;
-			gridBagConstraints5.gridy = 0;
-			jLabel2 = new JLabel();
-			jLabel2.setText(AtlasStyler
-					.R("GraduatedColorQuantities.ValueAttribute"));
-			jLabel2.setToolTipText(AtlasStyler
-					.R("GraduatedColorQuantities.ValueAttribute.TT"));
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
+			jPanel = new JPanel(new MigLayout("inset 1, gap 1, wrap 2"));
 			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
 					.R("GraduatedColorQuantities.Attributes.BorderTitle")));
-			jPanel.add(jLabel2, gridBagConstraints5);
-			jPanel.add(jLabel3, gridBagConstraints6);
-			jPanel.add(getJComboBoxValueField(), gridBagConstraints7);
-			jPanel.add(getJComboBoxNormalizationField(), gridBagConstraints8);
+
+			JLabel jLabelNormalization = new JLabel(AtlasStyler
+					.R("GraduatedColorQuantities.NormalizationAttribute"));
+			jLabelNormalization.setToolTipText(AtlasStyler
+					.R("GraduatedColorQuantities.NormalizationAttribute.TT"));
+			JLabel jLabelValue = new JLabel(AtlasStyler
+					.R("GraduatedColorQuantities.ValueAttribute"));
+			jLabelValue.setToolTipText(AtlasStyler
+					.R("GraduatedColorQuantities.ValueAttribute.TT"));
+			jPanel.add(jLabelValue, "");
+			jPanel.add(getJComboBoxValueField(), "");
+			jPanel.add(jLabelNormalization, "");
+			jPanel.add(getJComboBoxNormalizationField(), "");
 		}
 		return jPanel;
 	}
@@ -335,8 +313,11 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 		});
 
-		JPanel jPanelClassification = new JPanel(new MigLayout(), AtlasStyler
-				.R("GraduatedColorQuantities.classification.BorderTitle"));
+
+		JPanel jPanelClassification = new JPanel(
+				new MigLayout("inset 1, gap 1"),
+				AtlasStyler
+						.R("GraduatedColorQuantities.classification.BorderTitle"));
 		jPanelClassification.add(jLabelClassificationTypeDescription, "wrap");
 		jPanelClassification.add(jLabelParam, "split 3");
 		jPanelClassification.add(getNumClassesJComboBox());

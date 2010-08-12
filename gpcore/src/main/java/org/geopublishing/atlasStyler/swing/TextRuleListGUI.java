@@ -230,7 +230,7 @@ public class TextRuleListGUI extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setLayout(new MigLayout("wrap 1, top"));
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top"));
 		this.add(getJCheckBoxEnabled(), "top");
 		this.add(getJPanelClass());
 	}
@@ -272,7 +272,7 @@ public class TextRuleListGUI extends JPanel {
 	private JPanel getJPanelClass() {
 		if (jPanelClass == null) {
 		
-			jPanelClass = new JPanel(new MigLayout("nogrid"));
+			jPanelClass = new JPanel(new MigLayout("nogrid, gap 1, inset 1"));
 			
 			jPanelClass.add(new JLabel(AtlasStyler.R("TextRulesList.Labelclass")+":"));
 			jPanelClass.add(getJComboBoxClass());
@@ -511,7 +511,7 @@ public class TextRuleListGUI extends JPanel {
 
 		if (jPanelLabelDefinition == null) {
 
-			jPanelLabelDefinition = new JPanel(new MigLayout("wrap 2"),
+			jPanelLabelDefinition = new JPanel(new MigLayout("wrap 2, gap 1, inset 1"),
 					AtlasStyler.R("TextRulesList.Labeltext.Title"));
 
 			{
