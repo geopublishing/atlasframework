@@ -10,11 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Rule;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -29,12 +26,6 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.QUANTITIES_COLORIZED_POLYGON;
-	}
-	
-	@Override
-	public List<Rule> getRules() {
-		// TODO Auto-generated method stub
-		return super.getRules();
 	}
 
 	@Override

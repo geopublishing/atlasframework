@@ -87,9 +87,8 @@ public class QuantitiesClassification extends FeatureClassification {
 		}
 
 		if ((calcNewStats) && (recalcAutomatically)) {
-			LOGGER
-					.debug("Starting to calculate new class-limits on another thread due to "
-							+ e.getType().toString());
+			LOGGER.debug("Starting to calculate new class-limits on another thread due to "
+					+ e.getType().toString());
 			calculateClassLimitsWithWorker();
 		}
 	}
@@ -280,8 +279,8 @@ public class QuantitiesClassification extends FeatureClassification {
 
 		getStatistics();
 
-//		LOGGER.debug("getQuantileLimits numClasses ziel variable ist : "
-//				+ numClasses);
+		// LOGGER.debug("getQuantileLimits numClasses ziel variable ist : "
+		// + numClasses);
 
 		breaks = new TreeSet<Double>();
 		final Double step = 100. / new Double(numClasses);
@@ -294,7 +293,10 @@ public class QuantitiesClassification extends FeatureClassification {
 		breaks.add(stats.max());
 		breaks = ASUtil.roundLimits(breaks, limitsDigits);
 
-		// LOGGER.debug(breaks.size() + "  " + breaks);
+//		// Special case: Create a second classLimit with the same value!
+//		if (breaks.size() == 1) {
+//			breaks.add(breaks.first());
+//		}
 
 		return breaks;
 	}
@@ -486,8 +488,8 @@ public class QuantitiesClassification extends FeatureClassification {
 	 * @param digits
 	 *            positive values means round to digits AFTER comma, negative
 	 *            values means round to digits BEFORE comma
-	 *            
-	 * TODO abgleichen mit QuantitiesRuleListe#setClassDigits           
+	 * 
+	 *            TODO abgleichen mit QuantitiesRuleListe#setClassDigits
 	 */
 	public void setLimitsDigits(final Integer digits) {
 		this.limitsDigits = digits;
@@ -534,8 +536,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		 * Do we have all necessary information to calculate ClassLimits?
 		 */
 		if (getMethod() == METHOD.MANUAL) {
-			LOGGER
-					.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
+			LOGGER.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
 			// getStatistics();
 			return getClassLimits();
 		}
@@ -664,9 +665,16 @@ public class QuantitiesClassification extends FeatureClassification {
 		return recalcAutomatically;
 	}
 
-	public void setClassLimits(final TreeSet<Double> classLimits2) {
-		this.classLimits = classLimits2;
-		this.numClasses = classLimits2.size() - 1;
+	public void setClassLimits(final TreeSet<Double> classLimits_) {
+
+//		if (classLimits_.size() == 1) {
+//			// Special case: Create a second classLimit with the same value!
+//			classLimits_.add(classLimits_.first());
+//		}
+
+		this.classLimits = classLimits_;
+		this.numClasses = classLimits_.size() - 1;
+
 		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
 	}
 
@@ -682,8 +690,10 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	/**
-	 * Rplaces all values in the classification limits that can make problems when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf, Na
-	 *  
+	 * Rplaces all values in the classification limits that can make problems
+	 * when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf,
+	 * Na
+	 * 
 	 * @param replacement
 	 *            A number that will replace Inf+ as abs(replacement), and Inf-
 	 *            as -abs(replacement)

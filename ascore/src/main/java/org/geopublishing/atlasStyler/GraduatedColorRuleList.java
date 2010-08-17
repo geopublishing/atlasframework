@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
@@ -52,7 +51,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	private BrewerPalette brewerPalette = ASUtil.getPalettes(new PaletteType(
 			true, false), -1)[0];
 
-	protected METHOD method = QuantitiesClassification.DEFAULT_METHOD;
 
 	/**
 	 * This {@link RuleChangeListener} is added to the template in
@@ -70,10 +68,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
-	}
-
-	public METHOD getMethod() {
-		return method;
 	}
 
 	/**
@@ -94,6 +88,11 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	public List<Rule> getRules() {
 
 		ArrayList<Double> classLimitsAsArray = getClassLimitsAsArrayList();
+		
+		if (classLimitsAsArray.size() == 1) {
+			// Special case
+			classLimitsAsArray.add(classLimitsAsArray.get(0));
+		}
 
 		if (classLimitsAsArray.size() == 0) {
 			return new ArrayList<Rule>();
@@ -231,10 +230,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		final Color[] colors = super.getColors();
 		return colors;
-	}
-
-	public void setMethod(METHOD method) {
-		this.method = method;
 	}
 
 	/**

@@ -20,6 +20,8 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
+import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
@@ -56,7 +58,21 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	private Color[] colors = null;
 
 	public int getNumClasses() {
+		if (classLimits.size() == 1) {
+			// Special case
+			return 1;
+		}
 		return classLimits.size() - 1;
+	}
+
+	public void setMethod(METHOD method) {
+		this.method = method;
+	}
+
+	protected METHOD method = QuantitiesClassification.DEFAULT_METHOD;
+
+	public METHOD getMethod() {
+		return method;
 	}
 
 	/** Caches the limits* */
@@ -67,7 +83,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * Default is 3
 	 */
 	private int classDigits = 3;
-	private final DecimalFormat classDigitsFormat = new DecimalFormat(SwingUtil.getNumberFormatPattern(classDigits));
+	private final DecimalFormat classDigitsFormat = new DecimalFormat(
+			SwingUtil.getNumberFormatPattern(classDigits));
 
 	/**
 	 * Returns the number of digits shown in the rule description.
@@ -92,8 +109,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	/**
 	 * @return the classLimits as an {@link ArrayList}.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public ArrayList<NUMBERTYPE> getClassLimitsAsArrayList() {
 		return new ArrayList<NUMBERTYPE>(classLimits);
@@ -107,8 +123,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @param classLimits
 	 *            Classlimits or the Classes to set.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits) {
 		setClassLimits(classLimits, false);
@@ -125,16 +140,16 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @param resetRuleTitles
 	 *            if <code>true</code> the rule titles will be reset to default
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits,
 			boolean resetRuleTitles) {
 
 		this.classLimits = classLimits;
-		if (classLimits.size() < 2) {
-			LOGGER.error("numClasses < 1 bei setClassLimits. NOT accepting it");
-			// numClasses = 0;
+
+		if (classLimits.size() < 1) {
+			LOGGER.error("numClasses == " + classLimits.size()
+					+ " bei setClassLimits!?");
 			return;
 		}
 
@@ -144,6 +159,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		if (resetRuleTitles)
 			getRuleTitles().clear();
 
+		// This loop will only be executed if there are at least 2 breaks
 		for (int i = 0; i < classLimits.size() - 1; i++) {
 			NUMBERTYPE lower = getClassLimitsAsArrayList().get(i);
 			NUMBERTYPE upper = getClassLimitsAsArrayList().get(i + 1);
@@ -162,8 +178,15 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 			}
 
 		}
+		
+		// Special case
+		if (classLimits.size()==1 && resetRuleTitles) {
+			getRuleTitles().put(0, classLimits.first().toString());
+		}
+				
+		
 
-		// Setting the colors to null we lead to new colors beeing created the
+		// Setting the colors to null we lead to new colors being created the
 		// next time getColors() is called.
 		setColors(null);
 
@@ -171,7 +194,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	}
 
 	/**
-	 * Creates a default Rules Label for that class. It checks and honours the
+	 * Creates a default Rules Label for that class. It checks and honors the
 	 * {@link LANGUAGE_MODE} setting.
 	 * 
 	 * @param lower
@@ -185,14 +208,20 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	public String createDefaultClassLabelFor(Number lower, Number upper,
 			boolean isLast) {
 
-		String limitsLabel = "[" + classDigitsFormat.format(lower) + " - "
-				+ classDigitsFormat.format(upper);
-		limitsLabel += isLast ? "]" : "[";
+		String limitsLabel;
 
-		String unit = getStyledFeatures().getAttributeMetaDataMap().get(
-				getValue_field_name()).getUnit();
+		if (lower.equals(upper)) {
+			limitsLabel = classDigitsFormat.format(lower);
+		} else {
+			limitsLabel = "[" + classDigitsFormat.format(lower) + " - "
+					+ classDigitsFormat.format(upper);
+			limitsLabel += isLast ? "]" : "[";
+		}
+
+		String unit = getStyledFeatures().getAttributeMetaDataMap()
+				.get(getValue_field_name()).getUnit();
 		if (unit != null && !unit.isEmpty())
-			limitsLabel += " "+ unit;
+			limitsLabel += " " + unit;
 
 		String stringTitle;
 		/**
@@ -249,8 +278,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	/**
 	 * @param filter
 	 *            A {@link Filter}
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @return <code>null</code> if it is not a "BetweenFilter"
 	 */
@@ -272,7 +300,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 					.toString());
 			return new double[] { lower, upper };
 		}
-		throw new RuntimeException("Unparsable Filter "+filter);
+		throw new RuntimeException("Unparsable Filter " + filter);
 	}
 
 	private HashMap<Integer, String> ruleTitles = new HashMap<Integer, String>();
@@ -296,8 +324,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * 
 	 * @return an expanded {@link String} with more KVPs
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected String extendMetaInfoString(String metaInfoString) {
 		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_VALUE_FIELD
@@ -318,8 +345,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * 
 	 * @return an expanded {@link String} with more KVPs
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected void parseMetaInfoString(String metaInfoString) {
 
