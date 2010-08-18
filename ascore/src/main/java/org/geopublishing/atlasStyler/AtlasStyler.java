@@ -434,7 +434,7 @@ public class AtlasStyler {
 				StylingUtil.saveStyleToSLD(importStyle, new File(
 						"/home/stefan/Desktop/goingToImport.sld"));
 			} catch (final TransformerException e) {
-				LOGGER.error("Transforming to XML failed!", e);
+				LOGGER.warn("Transforming to XML failed!", e);
 			} catch (final Throwable e) {
 			}
 
@@ -443,8 +443,8 @@ public class AtlasStyler {
 				final String metaInfoString = fts.getName();
 
 				final int anzRules = fts.rules().size();
-				LOGGER.info("Importing: '" + metaInfoString
-						+ "', has #Rules = " + anzRules);
+//				LOGGER.info("Importing: '" + metaInfoString
+//						+ "', has #Rules = " + anzRules);
 
 				if ((metaInfoString == null)) {
 					LOGGER
@@ -801,10 +801,10 @@ public class AtlasStyler {
 
 		final int ist = countImportedFeatureTypeStyles;
 		final int soll = importStyle.featureTypeStyles().size();
-		if (ist < soll) {
-			LOGGER.debug("Only " + ist + " of all " + soll
-					+ " Rulelists have been recognized fully...");
-		}
+//		if (ist < soll) {
+//			LOGGER.debug("Only " + ist + " of all " + soll
+//					+ " Rulelists have been recognized fully...");
+//		}
 
 		setQuite(false);
 		if (importedThisAbstractRuleList != null) {
