@@ -517,14 +517,43 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (isBroken())
 			return 0.;
 		final List<String> languages = getAtlasConfig().getLanguages();
-
-		final Double result = (I8NUtil.qmTranslation(languages, getTitle())
-				* 4. + I8NUtil.qmTranslation(languages, getDesc()) * 2. + I8NUtil
-				.qmTranslation(languages, getKeywords()) * 1.) / 7.;
-
+		Double averageChartQuality = 1.;
+		if (getCharts().size()>0){
+			averageChartQuality = getAverageChartQuality();
+		}
+		final Double result = (I8NUtil.qmTranslation(languages, getTitle()) * 4. 
+				+ I8NUtil.qmTranslation(languages, getDesc()) * 2. 
+				+ I8NUtil.qmTranslation(languages, getKeywords()) * 1.
+				+ averageChartQuality * 3.) / 10.;
 		return result;
 	}
 
+	/**
+	 * @return the average quality index of the charts in this {@link Layer}
+	 */
+	public Double getAverageChartQuality() {
+		if (getCharts().size() == 0)
+			return null;
+		Double averageChartQM = 0.;
+		for (final CHART_STYLE_IMPL chart : getCharts()){
+			averageChartQM += getChartQuality(chart);
+		}
+		averageChartQM /= getCharts().size();
+		return averageChartQM;
+	}
+	
+	/**
+	 * @param Chart
+	 * 			The Chart to check
+	 * @return A value between 0 and 1 describing how much metadata is provided for given Chart.
+	 */
+	public Double getChartQuality(ChartStyle Chart){
+		final List<String> languages = getAtlasConfig().getLanguages();
+		final Double result = (I8NUtil.qmTranslation(languages,Chart.getTitleStyle().getLabelTranslation()) *4
+				+ I8NUtil.qmTranslation(languages,Chart.getDescStyle().getLabelTranslation()) * 2)/6;
+		return result;
+	}
+	
 	/**
 	 * Caches the {@link DpEntryType} of this layer when queried by
 	 * {@link #getType()}
