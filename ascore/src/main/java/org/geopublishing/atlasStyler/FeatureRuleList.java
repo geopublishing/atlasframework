@@ -10,14 +10,21 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler;
 
+import java.awt.Color;
+
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
+import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
+
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerUtil;
 
@@ -84,8 +91,8 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	@Override
 	public FeatureTypeStyle getFTS() {
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle(
-				styledFeatures.getSchema().getTypeName(), getRules().toArray(
-						new Rule[] {}));
+				styledFeatures.getSchema().getTypeName(),
+				getRules().toArray(new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
 		return ftstyle;
 	}
@@ -104,8 +111,7 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	 * Sets a template Symbol used for this color graduation
 	 * 
 	 * @param template
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setTemplate(SingleRuleList<? extends Symbolizer> template) {
 		this.template = template;
@@ -145,6 +151,57 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	}
 
 	/**
+	 * Define how to draw NODATA values (null, NaN, Inf) by setting a
+	 * {@link SingleRuleList}
+	 */
+	public void setNoDataSymbol(
+			SingleRuleList<? extends Symbolizer> noDataRuleList) {
+		if (noDataRuleList == null) {
+			noDataSymbol = null;
+		} else {
+			// Maybe better: noDataSymbol = noDataRuleList; ?
+			noDataRuleList.copyTo(getNoDataSymbol());
+		}
+	}
+
+	/**
+	 * Define how to draw NODATA values (null, NaN, Inf) by setting a Color and
+	 * Opacity that will be used {@link SingleRuleList}
+	 */
+	public void setNoDataSymbol(Color color, double opacity) {
+
+		if (color == null)
+			throw new IllegalArgumentException("Color may not be null!");
+
+//		getNoDataSymbol().getSymbolizers().clear();
+		// Symbolizer symbolizer = getGeometryForm()
+
+		// Style style = FeatureUtil.createDefaultStyle(getGeometryForm());
+		// Symbolizer symbolizer =
+		// style.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
+
+		SingleRuleList rl = ASUtil.getDefaultNoDataSymbol(getGeometryForm(), opacity, 
+				color, color);
+//		rl.copyTo(getNoDataSymbol());
+		
+		noDataSymbol = rl;
+	}
+
+	/**
+	 * Define how to draw NODATA values (null, NaN, Inf) by setting a single
+	 * {@link Symbolizer}
+	 */
+	public void setNoDataSymbol(Symbolizer noDataSymbolizer) {
+		if (noDataSymbolizer == null) {
+			noDataSymbol = null;
+		} else {
+			// Maybe better: noDataSymbol = noDataRuleList; ?
+			getNoDataSymbol().getSymbolizers().clear();
+			getNoDataSymbol().addSymbolizer(noDataSymbolizer);
+		}
+	}
+
+	/**
 	 * Must be overwritten in the class that is specific for line, point or
 	 * polygons
 	 **/
@@ -161,8 +218,8 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		getNoDataSymbol().addSymbolizers(r.symbolizers());
 		getNoDataSymbol().setTitle(r.getDescription().getTitle().toString());
 
-		if (r.getName().toString().equals(
-				FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
+		if (r.getName().toString()
+				.equals(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
 			getNoDataSymbol().setVisibleInLegend(false);
 		}
 	}

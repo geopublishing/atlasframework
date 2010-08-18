@@ -109,22 +109,24 @@ public class ASUtil {
 
 	public static final Filter allwaysTrueFilter = ff2.equals(ff2.literal("1"),
 			ff2.literal("1"));
-	
+
 	/**
 	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
 	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
 	 */
-	private final static ResourceProvider RESOURCE = ResourceProvider.newInstance("locales.AtlasStylerTranslation",
-					 Locale.ENGLISH);
-	
+	private final static ResourceProvider RESOURCE = ResourceProvider
+			.newInstance("locales.AtlasStylerTranslation", Locale.ENGLISH);
+
 	/**
-	 * Liefert eine Liste aller Sprachen, in die die {@link AtlasStylerGUI} übersetzt ist. 
+	 * Liefert eine Liste aller Sprachen, in die die {@link AtlasStylerGUI}
+	 * übersetzt ist.
 	 */
 	public static String[] getSupportedLanguages() {
-		Set<Locale> availableLocales = ResourceProvider.getAvailableLocales(RESOURCE, true);
-		ArrayList<String> list = new ArrayList<String>(availableLocales.size());
-		for (Locale l :  availableLocales) {
+		final Set<Locale> availableLocales = ResourceProvider.getAvailableLocales(
+				RESOURCE, true);
+		final ArrayList<String> list = new ArrayList<String>(availableLocales.size());
+		for (final Locale l : availableLocales) {
 			list.add(l.getLanguage());
 		}
 		return list.toArray(new String[0]);
@@ -141,7 +143,8 @@ public class ASUtil {
 	 *            interval breaks
 	 * @return a new {@link TreeSet}
 	 */
-	public static TreeSet<Double> roundLimits(final TreeSet<Double> breaksList, Integer limitsDigits) {
+	public static TreeSet<Double> roundLimits(final TreeSet<Double> breaksList,
+			final Integer limitsDigits) {
 		// No round -> use the original values
 		if (limitsDigits == null)
 			return breaksList;
@@ -163,7 +166,6 @@ public class ASUtil {
 		}
 		return roundedBreaks;
 	}
-
 
 	/**
 	 * Convenience method to access the {@link AtlasStyler}s translation
@@ -192,7 +194,7 @@ public class ASUtil {
 	 * @param values
 	 *            optional values
 	 */
-	public static String R(Locale locale, String key, final Object... values) {
+	public static String R(final Locale locale, final String key, final Object... values) {
 		String string = RESOURCE.getString(key, locale, values);
 		if (string.equals("???")) {
 			string = "???" + key;
@@ -208,8 +210,8 @@ public class ASUtil {
 	 * 
 	 * @param object
 	 *            ein Objekt
-	 * @return Logger mit dem Namen "NULL", falls das uebergebene Objekt {@code
-	 *         null} ist
+	 * @return Logger mit dem Namen "NULL", falls das uebergebene Objekt
+	 *         {@code null} ist
 	 * 
 	 * @author Martin Schmitz
 	 * @see xulu
@@ -225,8 +227,7 @@ public class ASUtil {
 	/**
 	 * Creates a default {@link SimpleFeatureType} for a given class type
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static SimpleFeatureType createFeatureType(
 			final GeometryDescriptor defaultGeometry) {
@@ -240,12 +241,11 @@ public class ASUtil {
 	 * 
 	 * @param featureSource
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static Vector<String> getValueFieldNames(
 			final FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
-			boolean empty) {
+			final boolean empty) {
 
 		return getValueFieldNames(featureSource.getSchema(), empty);
 	}
@@ -256,11 +256,10 @@ public class ASUtil {
 	 * 
 	 * @param featureSource
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static Vector<String> getValueFieldNames(
-			SimpleFeatureType featureType, boolean empty) {
+			final SimpleFeatureType featureType, final boolean empty) {
 
 		final Vector<String> fieldNames = new Vector<String>();
 
@@ -288,7 +287,7 @@ public class ASUtil {
 	 * first
 	 */
 	public static Vector<String> getValueFieldNamesPrefereStrings(
-			SimpleFeatureType schema, boolean empty) {
+			final SimpleFeatureType schema, final boolean empty) {
 
 		final Vector<String> result = getValueFieldNamesPrefereNumerical(
 				schema, false);
@@ -305,7 +304,7 @@ public class ASUtil {
 	 * attributes first
 	 */
 	public static Vector<String> getValueFieldNamesPrefereNumerical(
-			SimpleFeatureType schema, boolean empty) {
+			final SimpleFeatureType schema, final boolean empty) {
 		final Vector<String> result = new Vector<String>();
 
 		if (empty)
@@ -327,8 +326,7 @@ public class ASUtil {
 	/**
 	 * @return a default {@link Mark} with a <code>circle</code>
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static final Mark createDefaultMark() {
 		return SB.createMark("circle");
@@ -405,8 +403,7 @@ public class ASUtil {
 	/**
 	 * Replaces the "main" color in a given {@link PolygonSymbolizer} element
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void replacePolygonSymbolizerSize(final PolygonSymbolizer ps,
 			final Float factor) {
@@ -556,14 +553,14 @@ public class ASUtil {
 
 				@Override
 				public Component getTableCellRendererComponent(
-						final JTable table, Object value,
+						final JTable table, final Object value,
 						final boolean isSelected, final boolean hasFocus,
 						final int row, final int column) {
 					final JLabel label = (JLabel) super
 							.getTableCellRendererComponent(table, value,
 									isSelected, hasFocus, row, column);
 
-					NumberFormat doubleFormat = NumberFormat
+					final NumberFormat doubleFormat = NumberFormat
 							.getNumberInstance();
 					doubleFormat.setMinimumFractionDigits(3);
 					doubleFormat.setMaximumFractionDigits(3);
@@ -613,8 +610,7 @@ public class ASUtil {
 	 * 
 	 * @param requestor
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static boolean isClipboardContainingText(final Object requestor) {
 		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -630,8 +626,7 @@ public class ASUtil {
 	 * 
 	 * @param requestor
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static String getClipboardContents(final Object requestor) {
 		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -708,43 +703,114 @@ public class ASUtil {
 		return rl;
 	}
 
+	//
+	// /**
+	// * Returns a default {@link SingleRuleList} symbol for NODATA values. If
+	// * {@link AtlasStyler} is running in multilanguage mode, it tries to find
+	// a
+	// * default legend label automatically for all languages.
+	// */
+	// public static SingleRuleList getDefaultNoDataSymbol(GeometryForm form) {
+	// final SingleRuleList rl;
+	// switch (form) {
+	// case POINT:
+	// rl = new SinglePointSymbolRuleList("");
+	// // A white circle is the default NODATA symbol for points
+	// rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null, SB
+	// .createMark("circle", Color.white), null)));
+	// break;
+	// case POLYGON:
+	// rl = new SinglePolygonSymbolRuleList("");
+	// // A 50% white fill is the default NODATA symbol for polygons
+	// rl.addSymbolizer(SB.createPolygonSymbolizer(SB
+	// .createStroke(Color.LIGHT_GRAY), SB
+	// .createFill(Color.WHITE)));
+	// break;
+	// default:
+	// case LINE:
+	// rl = new SingleLineSymbolRuleList("");
+	// // A white line is the default NODATA symbol for lines
+	// rl.addSymbolizer(SB.createLineSymbolizer(Color.white));
+	// break;
+	// }
+	//
+	// // Find suitable default labels
+	// if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+	//
+	// Translation nodT = new Translation();
+	// for (String lang : AtlasStyler.getLanguages()) {
+	//
+	// // Try to find a default for every language
+	// String localized = R(new Locale(lang),
+	// "NoDataLegendEntry.Default");
+	// nodT.put(lang, localized);
+	// }
+	//
+	// rl.setTitle(nodT);
+	// } else
+	// rl.setTitle(R("NoDataLegendEntry.Default"));
+	// return rl;
+	// }
+	//
+	
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
 	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
 	 * default legend label automatically for all languages.
+	 * 
+	 * @param colors
+	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList getDefaultNoDataSymbol(GeometryForm form) {
+	public static SingleRuleList getDefaultNoDataSymbol(final GeometryForm form, 
+			final Color... colors) {
+		return getDefaultNoDataSymbol(form, 1., colors);
+	}
+
+
+	/**
+	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
+	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
+	 * default legend label automatically for all languages.
+	 * @param colors
+	 *            none or one or two color paramters that will be used.
+	 */
+	public static SingleRuleList getDefaultNoDataSymbol(final GeometryForm form, final double opacity_fill, 
+			final Color... colors) {
 		final SingleRuleList rl;
+		
+		final Color defaultWhite = colors.length > 0 ? colors[0] : Color.WHITE;
+		final Color defaultGray = colors.length > 1  ? colors[1] : Color.LIGHT_GRAY;
+		
 		switch (form) {
 		case POINT:
 			rl = new SinglePointSymbolRuleList("");
 			// A white circle is the default NODATA symbol for points
-			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null, SB
-					.createMark("circle", Color.white), null)));
+			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null,
+					SB.createMark("circle", defaultWhite), null, opacity_fill, 8., 0.)));
 			break;
 		case POLYGON:
 			rl = new SinglePolygonSymbolRuleList("");
 			// A 50% white fill is the default NODATA symbol for polygons
-			rl.addSymbolizer(SB.createPolygonSymbolizer(SB
-					.createStroke(Color.LIGHT_GRAY), SB
-					.createFill(Color.WHITE)));
+			rl.addSymbolizer(SB.createPolygonSymbolizer(
+					SB.createStroke(defaultGray, 1, opacity_fill),
+					SB.createFill(defaultWhite, opacity_fill)));
 			break;
 		default:
 		case LINE:
 			rl = new SingleLineSymbolRuleList("");
 			// A white line is the default NODATA symbol for lines
-			rl.addSymbolizer(SB.createLineSymbolizer(Color.white));
+			rl.addSymbolizer(SB.createLineSymbolizer(defaultWhite));
 			break;
 		}
 
 		// Find suitable default labels
 		if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
-			Translation nodT = new Translation();
-			for (String lang : AtlasStyler.getLanguages()) {
+			final Translation nodT = new Translation();
+			for (final String lang : AtlasStyler.getLanguages()) {
 
 				// Try to find a default for every language
-				String localized = R(new Locale(lang),
+				final String localized = R(new Locale(lang),
 						"NoDataLegendEntry.Default");
 				nodT.put(lang, localized);
 			}
@@ -782,7 +848,7 @@ public class ASUtil {
 		return tempRL;
 	}
 
-	public static SingleRuleList getDefaultTemplate(GeometryForm geomForm) {
+	public static SingleRuleList getDefaultTemplate(final GeometryForm geomForm) {
 		if (geomForm == GeometryForm.POINT) {
 			return getDefaultPointTemplate();
 		} else if (geomForm == GeometryForm.LINE) {
@@ -847,7 +913,7 @@ public class ASUtil {
 			}
 
 			else if (comboBox.getItemAt(0) instanceof Float) {
-				Float floatVal = Float.valueOf(lit.toString());
+				final Float floatVal = Float.valueOf(lit.toString());
 				selectOrInsert(comboBox, floatVal);
 			} else {
 				throw new RuntimeException("selectOrInsert neede for type "
@@ -906,8 +972,7 @@ public class ASUtil {
 				if (elementAt != null) {
 					floats.add(elementAt);
 				} else {
-					LOGGER
-							.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -939,8 +1004,7 @@ public class ASUtil {
 				if (elementAt != null) {
 					strings.add(elementAt);
 				} else {
-					LOGGER
-							.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -975,8 +1039,7 @@ public class ASUtil {
 				if (elementAt != null) {
 					doubles.add(elementAt);
 				} else {
-					LOGGER
-							.warn("A null in the JComboBoxmodel has been ignored");
+					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
 				}
 			}
 			model.removeAllElements();
@@ -1022,8 +1085,7 @@ public class ASUtil {
 	 * 
 	 * @return <code>null</code> is canceled. Otherwise the new {@link String}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static String askForString(final Component owner,
 			final String preset, final String question) {
@@ -1124,8 +1186,7 @@ public class ASUtil {
 	 * @param number
 	 *            The number to express as a {@link Literal}
 	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static Literal getLiteralForField(final AttributeDescriptor at,
 			final Number number) {
@@ -1198,12 +1259,12 @@ public class ASUtil {
 	 *            -1 may be passed.
 	 */
 	public static BrewerPalette[] getPalettes(
-			PaletteType paletteTypeGraduation, int numClasses) {
+			final PaletteType paletteTypeGraduation, final int numClasses) {
 
 		ColorBrewer brewer;
 		try {
 			brewer = ColorBrewer.instance(paletteTypeGraduation);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			LOGGER.error("Error loading new  PaletteType(true, false)", e);
 			brewer = ColorBrewer.instance();
 		}
@@ -1212,12 +1273,12 @@ public class ASUtil {
 				numClasses);
 
 		try {
-			BrewerPalette arthursPalette = getArthursPalette();
+			final BrewerPalette arthursPalette = getArthursPalette();
 
 			final int maxColors = arthursPalette.getMaxColors();
 			if (maxColors >= numClasses)
 				palettes = LangUtil.extendArray(palettes, arthursPalette);
-		} catch (IOException e1) {
+		} catch (final IOException e1) {
 			LOGGER.error("Creating Arthurs special palette failed:", e1);
 		}
 
@@ -1274,15 +1335,15 @@ public class ASUtil {
 	 * Returns a {@link Vector} of Attribute LocalNames, excluding any Geometry
 	 * columns
 	 */
-	public static Vector<String> getValueFieldNames(SimpleFeatureType schema) {
+	public static Vector<String> getValueFieldNames(final SimpleFeatureType schema) {
 		return getValueFieldNames(schema, false);
 	}
 
 	/**
 	 * Creates a default Style that is compatible with {@link AtlasStyler}.
 	 */
-	public static Style createDefaultStyle(StyledLayerInterface<?> styledLayer) {
-		Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
+	public static Style createDefaultStyle(final StyledLayerInterface<?> styledLayer) {
+		final Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
 
 		if (!(styledLayer instanceof StyledFeaturesInterface<?>))
 			return loadStyle;
@@ -1290,6 +1351,5 @@ public class ASUtil {
 		return new AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
 				loadStyle, null, null).getStyle();
 	}
-
 
 }

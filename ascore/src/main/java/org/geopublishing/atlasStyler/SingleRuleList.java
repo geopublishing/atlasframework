@@ -97,14 +97,28 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	private double maxScaleDenominator = Double.MAX_VALUE;
 	private double minScaleDenominator = Double.MIN_VALUE;
 
+//	/**
+//	 * Adds a symbolizer to the {@link SingleRuleList}
+//	 * 
+//	 * @param symbolizer
+//	 *            The symbolizer to add.
+//	 */
+//	public boolean addSymbolizer(SymbolizerType symbolizer) {
+//		boolean add = layers.add(symbolizer);
+//		if (add)
+//			fireEvents(new RuleChangedEvent("Added a Symbolizer", this));
+//		return add;
+//	}
+	
+
 	/**
 	 * Adds a symbolizer to the {@link SingleRuleList}
 	 * 
 	 * @param symbolizer
 	 *            The symbolizer to add.
 	 */
-	public boolean addSymbolizer(SymbolizerType symbolizer) {
-		boolean add = layers.add(symbolizer);
+	public boolean addSymbolizer(Symbolizer symbolizer) {
+		boolean add = layers.add((SymbolizerType) symbolizer);
 		if (add)
 			fireEvents(new RuleChangedEvent("Added a Symbolizer", this));
 		return add;

@@ -766,10 +766,10 @@ public class AtlasStyler {
 				}
 
 				else {
-					LOGGER
-							.info("Importing a FTS failed because the Name field was not recognized. Name='"
-									+ metaInfoString
-									+ ". An empty AtlasStyler will start if no other FTS are defined.");
+//					LOGGER
+//							.info("Importing a FTS failed because the Name field was not recognized. Name='"
+//									+ metaInfoString
+//									+ "'. An empty AtlasStyler will start if no other FTS are defined.");
 
 					/**
 					 * Adding default layers to all SingleRules
