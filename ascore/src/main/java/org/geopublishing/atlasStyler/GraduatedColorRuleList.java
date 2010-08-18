@@ -51,7 +51,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	private BrewerPalette brewerPalette = ASUtil.getPalettes(new PaletteType(
 			true, false), -1)[0];
 
-
 	/**
 	 * This {@link RuleChangeListener} is added to the template in
 	 * {@link #getTemplate()} and will propagate any template changes to this
@@ -88,7 +87,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	public List<Rule> getRules() {
 
 		ArrayList<Double> classLimitsAsArray = getClassLimitsAsArrayList();
-		
+
 		if (classLimitsAsArray.size() == 1) {
 			// Special case
 			classLimitsAsArray.add(classLimitsAsArray.get(0));
@@ -114,15 +113,22 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				upperRange = ff2.literal(classLimitsAsArray.get(i + 1));
 
 			} else {
-				value = ff2.divide(ff2.property(getValue_field_name()), ff2
-						.property(getNormalizer_field_name()));
+				value = ff2.divide(ff2.property(getValue_field_name()),
+						ff2.property(getNormalizer_field_name()));
 
 				// If we have a normalizing field, we always go for double
 				lowerRange = ff2.literal(classLimitsAsArray.get(i));
 				upperRange = ff2.literal(classLimitsAsArray.get(i + 1));
 			}
 
-			filter = ff2.between(value, lowerRange, upperRange);
+			if (lowerRange.equals(upperRange)) {
+				// If Upper and Lower are the same, use a PropertyEquals Filter
+				// instead
+				filter = ff2.equals(value, lowerRange);
+			} else {
+				// Normally use a between filter
+				filter = ff2.between(value, lowerRange, upperRange);
+			}
 
 			SingleRuleList<? extends Symbolizer> clone = getTemplate().copy();
 
@@ -184,8 +190,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		 * greater than brewerPalette.getMaxColors(). So we try that first.
 		 */
 		int maxColors = brewerPalette.getPaletteSuitability() != null ? brewerPalette
-				.getPaletteSuitability().getMaxColors()
-				: brewerPalette.getMaxColors();
+				.getPaletteSuitability().getMaxColors() : brewerPalette
+				.getMaxColors();
 
 		if (getNumClasses() > maxColors) {
 
@@ -330,8 +336,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
 		if (amd1 != null && amd1.getNodataValues() != null)
 			for (Object ndValue : amd1.getNodataValues()) {
-				ors.add(ff2.equals(ff2.property(attributeLocalName), ff2
-						.literal(ndValue)));
+				ors.add(ff2.equals(ff2.property(attributeLocalName),
+						ff2.literal(ndValue)));
 			}
 
 		// Checking the normalization attribute for NODATA values
@@ -343,13 +349,13 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
 
 			// As we are dividing by this value, always add the zero also!
-			ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2
-					.literal(0)));
+			ors.add(ff2.equals(ff2.property(normalizerLocalName),
+					ff2.literal(0)));
 
 			if (amd2 != null && amd2.getNodataValues() != null)
 				for (Object ndValue : amd2.getNodataValues()) {
-					ors.add(ff2.equals(ff2.property(normalizerLocalName), ff2
-							.literal(ndValue)));
+					ors.add(ff2.equals(ff2.property(normalizerLocalName),
+							ff2.literal(ndValue)));
 				}
 		}
 
