@@ -10,8 +10,8 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.ASProps.Keys;
+import org.geopublishing.atlasStyler.ASUtil;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;

@@ -14,17 +14,12 @@ import java.awt.Color;
 
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
-import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
-import com.sun.org.apache.xalan.internal.xsltc.compiler.sym;
-
 import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerUtil;
 

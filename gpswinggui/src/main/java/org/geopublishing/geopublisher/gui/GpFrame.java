@@ -61,8 +61,8 @@ import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.BugReportmailer;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.DataUtilities;
 
 import schmitzm.io.IOUtil;

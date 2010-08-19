@@ -70,8 +70,8 @@ import javax.swing.text.Element;
 import javax.swing.text.ElementIterator;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.NavigationFilter;
-import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.Position.Bias;
+import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 

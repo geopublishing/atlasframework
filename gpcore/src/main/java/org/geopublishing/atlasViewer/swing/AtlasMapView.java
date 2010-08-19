@@ -55,10 +55,10 @@ import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.MapPaneToolBar;
+import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 
 import com.vividsolutions.jts.geom.Envelope;
 

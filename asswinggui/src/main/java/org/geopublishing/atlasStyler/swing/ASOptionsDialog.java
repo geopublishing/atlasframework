@@ -23,9 +23,9 @@ import javax.swing.SwingUtilities;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
+import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.ASProps.Keys;
 
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;

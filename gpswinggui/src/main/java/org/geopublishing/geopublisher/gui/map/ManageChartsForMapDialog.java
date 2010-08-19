@@ -45,6 +45,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.chartwizard.ChartWizard;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;
+import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -103,8 +104,9 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 	public ManageChartsForMapDialog(Component owner,
 			DpLayerVectorFeatureSource dplv, AtlasMapLegend mapLegend) {
 
-		super(owner, GeopublisherGUI.R("ManageChartsForMapDialog.TitleForDPLayer",
-				dplv.getTitle().toString()));
+		super(owner, GeopublisherGUI.R(
+				"ManageChartsForMapDialog.TitleForDPLayer", dplv.getTitle()
+						.toString()));
 		this.dplv = dplv;
 		this.atlasConfigEditable = (AtlasConfigEditable) dplv.getAtlasConfig();
 		this.map = mapLegend.getMap();
@@ -195,11 +197,10 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 						.askYesNo(
 								ManageChartsForMapDialog.this,
 								GeopublisherGUI
-										.R(
-												"ManageChartsForMapDialog.addNewChartsToAllMaps.ConfirmationQuestion",
+										.R("ManageChartsForMapDialog.addNewChartsToAllMaps.ConfirmationQuestion",
 												newlyCreatedCharts.size(),
-												mapsUsingTheDpe.size() - 1, map
-														.getTitle())))
+												mapsUsingTheDpe.size() - 1,
+												map.getTitle())))
 			;
 		{
 			for (ChartStyle cs : newlyCreatedCharts) {
@@ -219,8 +220,9 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 		if (chartsJTable == null) {
 			chartsJTable = new JTable();
 
-			chartsJTable.setModel(createAvailableChartsTableModel(dplv
-					.getCharts(), map.getAvailableChartIDsFor(dplv.getId())));
+			chartsJTable
+					.setModel(createAvailableChartsTableModel(dplv.getCharts(),
+							map.getAvailableChartIDsFor(dplv.getId())));
 
 			chartsJTable.addMouseListener(new MouseAdapter() {
 
@@ -231,10 +233,6 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 						int row = getChartsJTable().rowAtPoint(evt.getPoint());
 
 						final FeatureChartStyle chartStyle = getChartForRow(row);
-						//
-						// dplv.openChart(mapLegend != null ? mapLegend
-						// : ManageChartsForMapDialog.this,
-						// chartStyle.getID(), mapLegend);
 
 						openDesignChartDialog(chartStyle);
 
@@ -242,6 +240,23 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 				}
 
 			});
+			// Show the Quality of the chart as a colorful column
+			SwingUtil
+					.setColumnLook(chartsJTable, 0,
+							new QualityPercentageTableCellRenderer(
+									atlasConfigEditable),
+							QualityPercentageTableCellRenderer.MINWIDTH,
+							QualityPercentageTableCellRenderer.MAXWIDTH,
+							QualityPercentageTableCellRenderer.MAXWIDTH);
+
+			SwingUtil.setColumnLook(chartsJTable, 1, null, null, null, 100);
+
+			SwingUtil.setColumnLook(chartsJTable, 2, null, 120, 160, null);
+			SwingUtil.setColumnLook(chartsJTable, 3, null, 120, 160, null);
+
+			SwingUtil.setColumnLook(chartsJTable, 4, null, 32, 32, 40);
+			SwingUtil.setColumnLook(chartsJTable, 5, null, 32, 32, 40);
+
 		}
 
 		return chartsJTable;
@@ -278,7 +293,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 			@Override
 			public boolean isCellEditable(int rowIndex, int columnIndex) {
 				switch (columnIndex) {
-				case 0:
+				case 1:
 					return true;
 				}
 				return false;
@@ -286,13 +301,16 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 			@Override
 			public int getColumnCount() {
-				return 5;
+				return 6;
 			}
 
 			@Override
 			public String getColumnName(int column) {
+				if (column == 0)
+					return GeopublisherGUI
+							.R("MapPoolJTable.ColumnName.Quality");
 				return GeopublisherGUI.R("ManageChartsForMapDialog.ColumnName."
-						+ (column + 1));
+						+ (column));
 			}
 
 			@Override
@@ -303,9 +321,9 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				switch (columnIndex) {
-				case 0:
+				case 1:
 					return Boolean.class;
-				case 3:
+				case 4:
 					return Icon.class;
 				default:
 					return super.getColumnClass(columnIndex);
@@ -328,15 +346,18 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 				switch (column) {
 				case 0:
-					return (row < getVisibleChartIDs().size());
+					return dplv.getChartQuality(rowChartStyle);
 				case 1:
-					return rowChartStyle.getTitleStyle().getLabel();
+					return (row < getVisibleChartIDs().size());
 				case 2:
-					return rowChartStyle.getDescStyle().getLabel();
+					return rowChartStyle.getTitleStyle().getLabel();
 				case 3:
-					return rowChartStyle.getType().getIcon();
+					return rowChartStyle.getDescStyle().getLabel();
 				case 4:
+					return rowChartStyle.getType().getIcon();
+				case 5:
 					return rowChartStyle.getAttributeCount();
+
 				}
 
 				return super.getValueAt(row, column);
@@ -346,7 +367,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 			public void setValueAt(Object value, int row, int column) {
 
 				switch (column) {
-				case 0:
+				case 1:
 					String chartId = getChartForRow(row).getID();
 					boolean isVisible = (Boolean) value;
 					if (isVisible) {
@@ -445,7 +466,8 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 									.getSelectedRow();
 
 							boolean enabled = (selectedRow >= 1)
-									&& (selectedRow < getVisibleChartIDs().size());
+									&& (selectedRow < getVisibleChartIDs()
+											.size());
 							upJButton.setEnabled(enabled);
 						}
 
@@ -499,7 +521,8 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 									.getSelectedRow();
 
 							boolean enabled = (selectedRow >= 0)
-									&& (selectedRow < getVisibleChartIDs().size() - 1);
+									&& (selectedRow < getVisibleChartIDs()
+											.size() - 1);
 							downJButton.setEnabled(enabled);
 						}
 
@@ -514,8 +537,8 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getDelButton() {
 		if (delButton == null) {
-			delButton = new JButton(new AbstractAction(GeopublisherGUI
-					.R("ManageChartsForMapDialog.DeleteChart")) {
+			delButton = new JButton(new AbstractAction(
+					GeopublisherGUI.R("ManageChartsForMapDialog.DeleteChart")) {
 
 				/**
 				 * Remove the ChartStyle from the Map and the dpLayer
@@ -531,7 +554,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 							.disposeInstanceFor(chartStyle);
 
 					getVisibleChartIDs().remove(chartStyle.getID());
-					
+
 					dplv.getCharts().remove(chartStyle);
 
 					/* Update the Chart button in the AtlasMapView */
@@ -577,8 +600,8 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getEditButton() {
 		if (editButton == null) {
-			editButton = new JButton(new AbstractAction(GeopublisherGUI
-					.R("ManageChartsForMapDialog.EditChart")) {
+			editButton = new JButton(new AbstractAction(
+					GeopublisherGUI.R("ManageChartsForMapDialog.EditChart")) {
 
 				/**
 				 * Edit the ChartStyle, starting with the wizard
@@ -618,15 +641,15 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 	public JButton getAddButton() {
 		if (addButton == null) {
-			addButton = new JButton(new AbstractAction(GeopublisherGUI
-					.R("ManageChartsForMapDialog.AddChart")) {
+			addButton = new JButton(new AbstractAction(
+					GeopublisherGUI.R("ManageChartsForMapDialog.AddChart")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					FeatureChartStyle newChart = ChartWizard.showWizard(dplv
-							.getFeatureSource(),
-							dplv.getAttributeMetaDataMap(), atlasConfigEditable
-									.getLanguages());
+					FeatureChartStyle newChart = ChartWizard.showWizard(
+							dplv.getFeatureSource(),
+							dplv.getAttributeMetaDataMap(),
+							atlasConfigEditable.getLanguages());
 					if (newChart == null)
 						return;
 
@@ -664,7 +687,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 	}
 
 	public ArrayList<String> getVisibleChartIDs() {
-//		System.out.println(visibleChartIDs.size()+"    "+visibleChartIDs);
+		// System.out.println(visibleChartIDs.size()+"    "+visibleChartIDs);
 		return visibleChartIDs;
 	}
 

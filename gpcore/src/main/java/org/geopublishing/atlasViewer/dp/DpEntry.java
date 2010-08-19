@@ -82,7 +82,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	private List<CHART_STYLE_IMPL> charts = new ArrayList<CHART_STYLE_IMPL>();
 
 	/**
-	 * Returns the list of charts for this layer. Never <code>null</code>
+	 * Returns the list of charts for this layer. Never <code>null</code>.
+	 * manipulating this list directly affects the numer of charts.
 	 */
 	public List<CHART_STYLE_IMPL> getCharts() {
 		return charts;
@@ -182,84 +183,86 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public void uncache() {
 
 		// Do not set charset to null... even though if could be changed on
-		// disk, we want to keep the GUI change 
+		// disk, we want to keep the GUI change
 		// charset = null;
 
 		downloadedAndVisible = false;
 		brokenException = null;
 		url = null;
 	}
-	
-//
-//	/**
-//	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"
-//	 * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
-//	 * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
-//	 * generated using {@link IOUtil}.changeUrlExt
-//	 * 
-//	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Tzeggai</a>
-//	 * 
-//	 * @throws IOException
-//	 * @throws AtlasFatalException
-//	 * @return <code>null</code> or the main URL for this Layer, usually
-//	 *         pointing to a .tif or .gif (or WMS or shp or GML etc)
-//	 * 
-//	 */
-//	public final URL getUrl(Component comp) {
-//		if (comp == null) return getUrl((AtlasStatusDialog)null);
-//		return getUrl(new AtlasStatusDialog(comp));
-//	}
-//	
-//	public URL getUrl() {
-//		return getUrl((Component)null);
-//	}
 
-//
-//	/**
-//	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"
-//	 * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
-//	 * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
-//	 * generated using {@link IOUtil}.changeUrlExt
-//	 * 
-//	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Tzeggai</a>
-//	 * 
-//	 * @throws IOException
-//	 * @throws AtlasFatalException
-//	 * @return <code>null</code> or the main URL for this Layer, usually
-//	 *         pointing to a .tif or .gif (or WMS or shp or GML etc)
-//	 * 
-//	 */
-//	public final URL getUrl(AtlasStatusDialog statusDialog) {
-//		if (url == null) {
-//			String location = ac.getResouceBasename() + getDataDirname() + "/"
-//					+ getFilename();
-//
-//			if (JNLPUtil.isAtlasDataFromJWS(ac)) {
-//				try {
-//					JNLPUtil.loadPart(getId(), statusDialog);
-//					//TODO was ist wenn man abbricht?!
-//				} catch (IOException e) {
-//					LOGGER.error("loading part failed", e);
-//				}
-//			}
-//
-//			url = ac.getResource(location);
-//			
-//			// Testing if we really can see it in the resources now...
-//			try {
-//				InputStream openStream = url.openStream();
-//				openStream.close();
-//			} catch (Exception e) {
-//				setBrokenException(new AtlasException(
-//						"Trying to open and close a stream to URL " + url
-//								+ " failed: ", e));
-//				return null;
-//			}
-//		}
-//		return url;
-//	}
+	//
+	// /**
+	// * Returns a URL for this {@link CopyOfDpEntry}. This references the
+	// "main"
+	// * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
+	// * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
+	// * generated using {@link IOUtil}.changeUrlExt
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// * Tzeggai</a>
+	// *
+	// * @throws IOException
+	// * @throws AtlasFatalException
+	// * @return <code>null</code> or the main URL for this Layer, usually
+	// * pointing to a .tif or .gif (or WMS or shp or GML etc)
+	// *
+	// */
+	// public final URL getUrl(Component comp) {
+	// if (comp == null) return getUrl((AtlasStatusDialog)null);
+	// return getUrl(new AtlasStatusDialog(comp));
+	// }
+	//
+	// public URL getUrl() {
+	// return getUrl((Component)null);
+	// }
+
+	//
+	// /**
+	// * Returns a URL for this {@link CopyOfDpEntry}. This references the
+	// "main"
+	// * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
+	// * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
+	// * generated using {@link IOUtil}.changeUrlExt
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// * Tzeggai</a>
+	// *
+	// * @throws IOException
+	// * @throws AtlasFatalException
+	// * @return <code>null</code> or the main URL for this Layer, usually
+	// * pointing to a .tif or .gif (or WMS or shp or GML etc)
+	// *
+	// */
+	// public final URL getUrl(AtlasStatusDialog statusDialog) {
+	// if (url == null) {
+	// String location = ac.getResouceBasename() + getDataDirname() + "/"
+	// + getFilename();
+	//
+	// if (JNLPUtil.isAtlasDataFromJWS(ac)) {
+	// try {
+	// JNLPUtil.loadPart(getId(), statusDialog);
+	// //TODO was ist wenn man abbricht?!
+	// } catch (IOException e) {
+	// LOGGER.error("loading part failed", e);
+	// }
+	// }
+	//
+	// url = ac.getResource(location);
+	//
+	// // Testing if we really can see it in the resources now...
+	// try {
+	// InputStream openStream = url.openStream();
+	// openStream.close();
+	// } catch (Exception e) {
+	// setBrokenException(new AtlasException(
+	// "Trying to open and close a stream to URL " + url
+	// + " failed: ", e));
+	// return null;
+	// }
+	// }
+	// return url;
+	// }
 
 	/**
 	 * Set the sub directory where data of this {@link CopyOfDpEntry} is saved
@@ -325,8 +328,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 *         {@link CopyOfDpEntry} or <code>null</code> is not title has been
 	 *         set so far.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public final Translation getTitle() {
 		return title;
@@ -337,8 +339,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 *            Defines a {@link Translation} as human-readable title for this
 	 *            {@link CopyOfDpEntry}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public final void setTitle(Translation title) {
 		this.title = title;
@@ -418,30 +419,29 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public void setImageIcon(ImageIcon imageIcon) {
 		this.imageIcon = imageIcon;
 	}
-	
-// AVSwingUtil
-//	/**
-//	 * Copies ONLY the {@link #getFilename()} to a {@link File} in the
-//	 * temp-folder
-//	 * 
-//	 * @see #cleanupTemp() which is responsible to remove these files again.
-//	 * 
-//	 * @return {@link File} in temp
-//	 * @throws IOException
-//	 */
-//	public File getLocalCopy(Component owner) throws IOException {
-//
-//		if ((localTempFile == null) || (!localTempFile.exists())) {
-//
-//			String postFix = IOUtil.getFileExt(new File(getFilename()));
-//
-//			localTempFile = AVUtil.createLocalCopyFromURL(owner, getUrl(owner),
-//					getTitle().toString(), postFix.equals("") ? null : postFix);
-//
-//		}
-//		return localTempFile;
-//	}
 
+	// AVSwingUtil
+	// /**
+	// * Copies ONLY the {@link #getFilename()} to a {@link File} in the
+	// * temp-folder
+	// *
+	// * @see #cleanupTemp() which is responsible to remove these files again.
+	// *
+	// * @return {@link File} in temp
+	// * @throws IOException
+	// */
+	// public File getLocalCopy(Component owner) throws IOException {
+	//
+	// if ((localTempFile == null) || (!localTempFile.exists())) {
+	//
+	// String postFix = IOUtil.getFileExt(new File(getFilename()));
+	//
+	// localTempFile = AVUtil.createLocalCopyFromURL(owner, getUrl(owner),
+	// getTitle().toString(), postFix.equals("") ? null : postFix);
+	//
+	// }
+	// return localTempFile;
+	// }
 
 	/*
 	 * (non-Javadoc)
@@ -518,42 +518,44 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 			return 0.;
 		final List<String> languages = getAtlasConfig().getLanguages();
 		Double averageChartQuality = 1.;
-		if (getCharts().size()>0){
+		if (getCharts().size() > 0) {
 			averageChartQuality = getAverageChartQuality();
 		}
-		final Double result = (I8NUtil.qmTranslation(languages, getTitle()) * 4. 
-				+ I8NUtil.qmTranslation(languages, getDesc()) * 2. 
-				+ I8NUtil.qmTranslation(languages, getKeywords()) * 1.
-				+ averageChartQuality * 3.) / 10.;
+		final Double result = (I8NUtil.qmTranslation(languages, getTitle())
+				* 4. + I8NUtil.qmTranslation(languages, getDesc()) * 2.
+				+ I8NUtil.qmTranslation(languages, getKeywords()) * 1. + averageChartQuality * 3.) / 10.;
 		return result;
 	}
 
 	/**
-	 * @return the average quality index of the charts in this {@link Layer}
+	 * @return the average quality index of the charts in this {@link DpLayer}
 	 */
 	public Double getAverageChartQuality() {
 		if (getCharts().size() == 0)
 			return null;
 		Double averageChartQM = 0.;
-		for (final CHART_STYLE_IMPL chart : getCharts()){
+		for (final CHART_STYLE_IMPL chart : getCharts()) {
 			averageChartQM += getChartQuality(chart);
 		}
 		averageChartQM /= getCharts().size();
 		return averageChartQM;
 	}
-	
+
 	/**
 	 * @param Chart
-	 * 			The Chart to check
-	 * @return A value between 0 and 1 describing how much metadata is provided for given Chart.
+	 *            The Chart to check
+	 * @return A value between 0 and 1 describing how much metadata is provided
+	 *         for given Chart.
 	 */
-	public Double getChartQuality(ChartStyle Chart){
+	public Double getChartQuality(ChartStyle Chart) {
 		final List<String> languages = getAtlasConfig().getLanguages();
-		final Double result = (I8NUtil.qmTranslation(languages,Chart.getTitleStyle().getLabelTranslation()) *4
-				+ I8NUtil.qmTranslation(languages,Chart.getDescStyle().getLabelTranslation()) * 2)/6;
+		final Double result = (I8NUtil.qmTranslation(languages, Chart
+				.getTitleStyle().getLabelTranslation()) * 4 + I8NUtil
+				.qmTranslation(languages, Chart.getDescStyle()
+						.getLabelTranslation()) * 2) / 6;
 		return result;
 	}
-	
+
 	/**
 	 * Caches the {@link DpEntryType} of this layer when queried by
 	 * {@link #getType()}
@@ -620,22 +622,23 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
-	@deprecated attention, do you want to use the AVSwingUtil.getUrl... method?
+	 * @deprecated attention, do you want to use the AVSwingUtil.getUrl...
+	 *             method?
 	 */
 	public URL getUrl() {
 		if (url == null) {
-			
+
 			if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
 				try {
 					JNLPUtil.loadPart(getId());
-					//TODO was ist wenn man abbricht?!
+					// TODO was ist wenn man abbricht?!
 				} catch (IOException e) {
 					LOGGER.error("loading part failed", e);
 				}
 			}
 
-			String location = getAtlasConfig().getResouceBasename() + getDataDirname() + "/"
-			+ getFilename();
+			String location = getAtlasConfig().getResouceBasename()
+					+ getDataDirname() + "/" + getFilename();
 			url = getAtlasConfig().getResource(location);
 			// Testing if we really can see it in the resources now...
 			try {
@@ -677,6 +680,5 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public File getLocalTempFile() {
 		return localTempFile;
 	}
-
 
 }

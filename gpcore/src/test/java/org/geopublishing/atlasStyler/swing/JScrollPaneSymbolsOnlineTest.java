@@ -10,12 +10,12 @@ public class JScrollPaneSymbolsOnlineTest {
 	@Test
 	public void testJScrollPaneSymbols() throws Throwable {
 
-		TestingUtil.testPanel(new JScrollPaneSymbolsOnline(GeometryForm.POINT));
+		TestingUtil.testGui(new JScrollPaneSymbolsOnline(GeometryForm.POINT));
 
-		TestingUtil.testPanel(new JScrollPaneSymbolsOnline(GeometryForm.LINE));
+		TestingUtil.testGui(new JScrollPaneSymbolsOnline(GeometryForm.LINE));
 
 		TestingUtil
-				.testPanel(new JScrollPaneSymbolsOnline(GeometryForm.POLYGON));
+				.testGui(new JScrollPaneSymbolsOnline(GeometryForm.POLYGON));
 
 	}
 
