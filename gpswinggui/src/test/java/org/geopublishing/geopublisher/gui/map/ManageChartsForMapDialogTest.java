@@ -42,12 +42,14 @@ public class ManageChartsForMapDialogTest {
 		assertNotNull("One vector layer should be in the chart demo atlas",
 				dplv);
 
-		AtlasMapLegend mapLegend = new AtlasMapLegend(new GeoMapPane(), map,
-				ace, null);
-		ManageChartsForMapDialog manageChartsForMapDialog = new ManageChartsForMapDialog(
-				null, dplv, mapLegend);
+		if (TestingUtil.INTERACTIVE) {
+			AtlasMapLegend mapLegend = new AtlasMapLegend(new GeoMapPane(),
+					map, ace, null);
+			ManageChartsForMapDialog manageChartsForMapDialog = new ManageChartsForMapDialog(
+					null, dplv, mapLegend);
 
-		TestingUtil.testGui(manageChartsForMapDialog);
+			TestingUtil.testGui(manageChartsForMapDialog);
+		}
 	}
 
 }

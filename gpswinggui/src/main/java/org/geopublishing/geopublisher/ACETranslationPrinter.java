@@ -19,6 +19,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.AttributeMetadataMap;
@@ -36,6 +37,7 @@ public class ACETranslationPrinter {
 
 	/**
 	 * This method can take a while and produce disk traffic.
+	 * 
 	 * @return a {@link String} containing a human-readable summary of all
 	 *         {@link Translation}s used.
 	 */
@@ -60,7 +62,7 @@ public class ACETranslationPrinter {
 		 * DataPool
 		 */
 		printWayH1(R("DataPoolJTable.Border.Title"));
-		for (DpEntry dpe : ace.getDataPool().values()) {
+		for (DpEntry<? extends ChartStyle> dpe : ace.getDataPool().values()) {
 
 			printWayH2(R("DataPoolJTable.Border.Title"),
 					R("DataPoolJTable.ColumnName.Filename"), dpe.getFilename(),
@@ -79,8 +81,8 @@ public class ACETranslationPrinter {
 
 				DpLayerVector<?, ?> dplv = (DpLayerVector<?, ?>) dpe;
 				for (LayerStyle ls : dplv.getLayerStyles()) {
-					printWayH3(R("DataPoolJTable.Border.Title"), "\"<b>"
-							+ dpe.getFilename() + "</b>\"",
+					printWayH3(R("DataPoolJTable.Border.Title"),
+							"\"<b>" + dpe.getFilename() + "</b>\"",
 							R("DataPoolWindow_Action_ManageLayerStyles_label"),
 							"\"<b>" + ls.getFilename() + "</b>\"");
 
@@ -99,14 +101,16 @@ public class ACETranslationPrinter {
 				DpLayerVectorFeatureSource dplv = (DpLayerVectorFeatureSource) dpe;
 				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = dplv
 						.getAttributeMetaDataMap();
-				for (AttributeMetadataImpl attributeMetaData : attributeMetaDataMap.sortedValues()) {
+				for (AttributeMetadataImpl attributeMetaData : attributeMetaDataMap
+						.sortedValues()) {
 					if (attributeMetaData.isVisible()) {
 						try {
 							printWayH3(
 									R("DataPoolJTable.Border.Title"),
 									"\"<b>" + dpe.getFilename() + "</b>\"",
 									R("DataPoolWindow_Action_EditColumns_label"),
-									"\"<b>" + attributeMetaData.getName() + "</b>\"");
+									"\"<b>" + attributeMetaData.getName()
+											+ "</b>\"");
 
 							txt.append("<ul>");
 							printTranslation(attributeMetaData.getTitle(),
@@ -127,18 +131,28 @@ public class ACETranslationPrinter {
 				}
 			}
 
+			for (ChartStyle cs : dpe.getCharts()) {
+				// MJ
+//				txt.append("<ul>");
+//				printTranslation(ls.getTitle(), "Attributes.Edit.Title");
+//				printTranslation(ls.getDesc(), "Attributes.Edit.Desc");
+//				txt.append("</ul>");
+			}
+
 		}
 
 		/**
 		 * MapPool
 		 */
 		printWayH1(R("MapPoolJTable.Border.Title"));
-		for (org.geopublishing.atlasViewer.map.Map map : ace.getMapPool().values()) {
+		for (org.geopublishing.atlasViewer.map.Map map : ace.getMapPool()
+				.values()) {
 
-			printWayH2(R("MapPoolJTable.Border.Title"), R(
-					"MapPoolJTable.ColumnName.NameLang", Translation
-							.getActiveLang()), "<b>\""
-					+ map.getTitle().toString() + "\"</b>",
+			printWayH2(
+					R("MapPoolJTable.Border.Title"),
+					R("MapPoolJTable.ColumnName.NameLang",
+							Translation.getActiveLang()), "<b>\""
+							+ map.getTitle().toString() + "\"</b>",
 					R("MapPoolWindow.Button_EditMap_label"));
 			printTranslation(map.getTitle(),
 					"MapPreferences_translateTheMapsName");
