@@ -130,15 +130,30 @@ public class ACETranslationPrinter {
 
 				}
 			}
-
-			for (ChartStyle cs : dpe.getCharts()) {
-				// MJ
-//				txt.append("<ul>");
-//				printTranslation(ls.getTitle(), "Attributes.Edit.Title");
-//				printTranslation(ls.getDesc(), "Attributes.Edit.Desc");
-//				txt.append("</ul>");
+			
+			/**
+			 * list Charts
+			 */
+			printWayH1(R("Charts"));
+			try {
+			    org.geopublishing.atlasViewer.map.Map map = ace.getMapPool().get(0);
+			    for (ChartStyle cs : dpe.getCharts()) {
+			        txt.append("<ul>");
+			        printWayH2(
+			                R("MapPoolJTable.Border.Title"),
+			                R("MapPoolJTable.ColumnName.NameLang",Translation.getActiveLang()),
+			                "<b>\"" + map.getTitle().toString() + "\"</b>",
+			                R("MapPoolWindow.Action.OpenInMapComposer"),
+			                "<b>\"" +dpe.getTitle().toString() + "\"</b>",
+			                R("DataPoolWindow_Action_ManageCharts_label")
+			        );
+			        printTranslation(cs.getTitleStyle().getLabelTranslation(), "Attributes.Edit.Title");
+			        printTranslation(cs.getDescStyle().getLabelTranslation(), "Attributes.Edit.Desc");
+			        txt.append("</ul>");
+			    }
+			} catch (Exception e) {
+                txt.append(ERROR + e.getLocalizedMessage());
 			}
-
 		}
 
 		/**
