@@ -790,8 +790,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 					.get(mapLayer.getTitle());
 
 			if ((bestRes != Double.MAX_VALUE) && (bestRes != Double.MIN_VALUE)) {
-				// LOGGER.debug("Setting maxZoomScale to " + bestRes / 16.);
-				getGeoMapPane().getMapPane().setMaxZoomScale(bestRes / 16.);
+				 LOGGER.debug("Setting maxZoomScale to " + bestRes / 64.);
+				getGeoMapPane().getMapPane().setMaxZoomScale(bestRes / 64.);
 			} else {
 				getGeoMapPane().getMapPane().setMaxZoomScale(null);
 			}
