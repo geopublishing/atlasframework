@@ -130,9 +130,14 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 					.R("EditDpEntryGUI.raster.nodata.explanation")), "span 2");
 
 			final JPanel noDataValuePanel = new JPanel(new MigLayout());
-			final GridCoverage2D geoObject = dpRaster.getGeoObject();
-			final double[] noDataValues = geoObject.getSampleDimension(0)
-					.getNoDataValues();
+//MS-01.sc: DpLayerRaster modified to use a GridReader instead of GridCoverage2D
+//			--> no data values can not be resolved like from GridCoverage2D
+//			--> code temporary removed
+//			final GridCoverage2D geoObject = dpRaster.getGeoObject();
+//			final double[] noDataValues = geoObject.getSampleDimension(0)
+//					.getNoDataValues();
+			final double[] noDataValues = new double[] {};
+//MS-01.ec
 
 			noDataValuePanel.add(new JLabel(GeopublisherGUI
 					.R("EditDpEntryGUI.raster.nodata.label")
