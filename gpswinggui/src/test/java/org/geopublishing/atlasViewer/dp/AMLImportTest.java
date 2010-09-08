@@ -30,10 +30,12 @@ public class AMLImportTest {
 		map1_0 = ace.getMapPool().get(0);
 		map1_0.setScaleUnits(ScalePanel.ScaleUnits.US);
 		map1_0.setScaleVisible(true);
+		map1_0.setPreviewMapExtendInGeopublisher(true);
 		ace2 = GPTestingUtil.saveAndLoad(ace);
 		map2_0 = ace2.getMapPool().get(0);
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
 		assertEquals(map1_0.isScaleVisible(), map2_0.isScaleVisible());
+		assertEquals(map1_0.isPreviewMapExtendInGeopublisher(), map2_0.isPreviewMapExtendInGeopublisher());
 
 		ace.dispose();
 		ace2.dispose();

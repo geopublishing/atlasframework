@@ -26,7 +26,6 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.geotools.coverage.grid.GridCoverage2D;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.JPanel;

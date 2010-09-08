@@ -180,8 +180,8 @@ public class AMLImport {
 						+ AtlasConfig.ATLAS_XML_FILENAME);
 
 		if (atlasXmlAsStream == null) {
-			throw new AtlasFatalException(AVUtil
-					.R("AmlImport.error.cant_find_atlas.xml"));
+			throw new AtlasFatalException(
+					AVUtil.R("AmlImport.error.cant_find_atlas.xml"));
 		}
 
 		/**
@@ -209,8 +209,7 @@ public class AMLImport {
 			// }
 
 			if (validate)
-				LOGGER
-						.debug("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
+				LOGGER.debug("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
 			validate = false;
 
 			DocumentBuilder builder = getDocumentBuilder(validate);
@@ -277,11 +276,11 @@ public class AMLImport {
 	 * 
 	 * @throws AtlasException
 	 */
-	public final void parseAtlasConfig(final AtlasConfig ac,
-			final Document xml) throws AtlasException {
+	public final void parseAtlasConfig(final AtlasConfig ac, final Document xml)
+			throws AtlasException {
 
 		readDefaultCRS(ac);
-		
+
 		NodeList nodes;
 		// LOGGER.debug("Parsing DOM to AtlasConfig...");
 
@@ -292,26 +291,23 @@ public class AMLImport {
 
 		// parsing name, desc, creator and copyright
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "name");
-		ac.setTitle(AMLImport
-				.parseTranslation(ac.getLanguages(), nodes.item(0)));
+		ac.setTitle(AMLImport.parseTranslation(ac.getLanguages(), nodes.item(0)));
 
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "desc");
-		ac
-				.setDesc(AMLImport.parseTranslation(ac.getLanguages(), nodes
-						.item(0)));
+		ac.setDesc(AMLImport.parseTranslation(ac.getLanguages(), nodes.item(0)));
 
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "creator");
-		ac.setCreator(AMLImport.parseTranslation(ac.getLanguages(), nodes
-				.item(0)));
+		ac.setCreator(AMLImport.parseTranslation(ac.getLanguages(),
+				nodes.item(0)));
 
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "copyright");
-		ac.setCopyright(AMLImport.parseTranslation(ac.getLanguages(), nodes
-				.item(0)));
+		ac.setCopyright(AMLImport.parseTranslation(ac.getLanguages(),
+				nodes.item(0)));
 
 		// aml:atlasversion
-		ac.setAtlasversion(Float.valueOf(xml.getElementsByTagNameNS(
-				AMLUtil.AMLURI, "atlasversion").item(0).getFirstChild()
-				.getNodeValue()));
+		ac.setAtlasversion(Float.valueOf(xml
+				.getElementsByTagNameNS(AMLUtil.AMLURI, "atlasversion").item(0)
+				.getFirstChild().getNodeValue()));
 
 		// aml:supportedLanguages
 		// aml:language lang="de"
@@ -323,8 +319,8 @@ public class AMLImport {
 			final Node languageNode = nodes.item(i);
 			if (languageNode.getLocalName() == null)
 				continue;
-			final String langCode = languageNode.getAttributes().getNamedItem(
-					"lang").getNodeValue();
+			final String langCode = languageNode.getAttributes()
+					.getNamedItem("lang").getNodeValue();
 			// LOGGER.debug("aml:supportedLanguages: adding " + langCode);
 			ac.getLanguages().add(langCode);
 		}
@@ -401,8 +397,7 @@ public class AMLImport {
 			}
 
 		} else
-			LOGGER
-					.info("No <aml:group> defined in the atlas.xml, but group is optional");
+			LOGGER.info("No <aml:group> defined in the atlas.xml, but group is optional");
 
 		final Node rootGroupNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI,
 				"group").item(0);
@@ -412,15 +407,15 @@ public class AMLImport {
 			// + firstGroup.getTitle().toOneLine());
 			ac.setFirstGroup(firstGroup);
 		} else
-			LOGGER
-					.info("No <aml:group> defined in the atlas.xml, but group is optional");
-		
+			LOGGER.info("No <aml:group> defined in the atlas.xml, but group is optional");
+
 		// Check if any extra fonts are defined
-		final Node rootFontsNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI, AMLUtil.TAG_FONTS).item(0);
+		final Node rootFontsNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_FONTS).item(0);
 		if (rootFontsNode != null) {
-			parseFonts(ac,rootFontsNode);
+			parseFonts(ac, rootFontsNode);
 		}
-		
+
 		ac.registerFonts();
 	}
 
@@ -428,22 +423,27 @@ public class AMLImport {
 		final NodeList childNodes = rootFontsNode.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node childNode = childNodes.item(i);
-			if (!AMLUtil.TAG_FONT.equals(childNode.getLocalName())) continue;
-			
-			String relFontPath = childNode.getAttributes().getNamedItem(AMLUtil.ATT_FONT_FILENAME).getTextContent();
-			
-			String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME+"/"+AtlasConfig.FONTS_DIRNAME+"/"+relFontPath;
+			if (!AMLUtil.TAG_FONT.equals(childNode.getLocalName()))
+				continue;
+
+			String relFontPath = childNode.getAttributes()
+					.getNamedItem(AMLUtil.ATT_FONT_FILENAME).getTextContent();
+
+			String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME + "/"
+					+ AtlasConfig.FONTS_DIRNAME + "/" + relFontPath;
 			InputStream is = ac.getResourceAsStream(resourceLocation);
-			if (is == null){
-				warn("Fonts","The font "+relFontPath+" could not be found at "+resourceLocation);
-			}
-			else try {
-				Font font = Font.createFont(Font.TRUETYPE_FONT, is);
-				ac.getFonts().add(font);
-				LOGGER.debug("Registered a new TTF font: "+font.getName());
-			} catch (Exception e) {
-				Log.error("Couldn't load or register font "+relFontPath,e);
-			}
+			if (is == null) {
+				warn("Fonts", "The font " + relFontPath
+						+ " could not be found at " + resourceLocation);
+			} else
+				try {
+					Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+					ac.getFonts().add(font);
+					LOGGER.debug("Registered a new TTF font: " + font.getName());
+				} catch (Exception e) {
+					Log.error("Couldn't load or register font " + relFontPath,
+							e);
+				}
 		}
 	}
 
@@ -478,8 +478,7 @@ public class AMLImport {
 
 		if (majMin < 1.3) {
 			upgradeFiltersToCQL = true;
-			LOGGER
-					.info("atlas.xml has been created with a version prior to 1.3. Filters will be converted to CQL!");
+			LOGGER.info("atlas.xml has been created with a version prior to 1.3. Filters will be converted to CQL!");
 		}
 
 	}
@@ -574,8 +573,7 @@ public class AMLImport {
 			} else if (name.equals("desc")) {
 				dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
 			} else if (name.equals("keywords")) {
-				dpe.setKeywords(AMLImport
-						.parseTranslation(ac.getLanguages(), n));
+				dpe.setKeywords(AMLImport.parseTranslation(ac.getLanguages(), n));
 			}
 		}
 		return dpe;
@@ -640,10 +638,9 @@ public class AMLImport {
 				// MS-01.en
 				// ****************************************************************************
 
-				LOGGER
-						.debug("Wir denken, dass kein <translation> angegeben wurde, und setzen '"
-								+ node.getFirstChild().getNodeValue()
-								+ "' als default.");
+				LOGGER.debug("Wir denken, dass kein <translation> angegeben wurde, und setzen '"
+						+ node.getFirstChild().getNodeValue()
+						+ "' als default.");
 				trans = new Translation(languages, node.getFirstChild()
 						.getNodeValue());
 				// trans = new Translation( node.getNodeValue() );
@@ -697,8 +694,7 @@ public class AMLImport {
 			} else if (name.equals("desc")) {
 				dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
 			} else if (name.equals("keywords")) {
-				dpe.setKeywords(AMLImport
-						.parseTranslation(ac.getLanguages(), n));
+				dpe.setKeywords(AMLImport.parseTranslation(ac.getLanguages(), n));
 			}
 		}
 		return dpe;
@@ -740,8 +736,8 @@ public class AMLImport {
 				dpe.setFilename(value);
 			} else {
 				if (name.equals("name")) {
-					final Translation transname = AMLImport.parseTranslation(ac
-							.getLanguages(), n);
+					final Translation transname = AMLImport.parseTranslation(
+							ac.getLanguages(), n);
 					dpe.setTitle(transname);
 				} else if (name.equals("dataDirname")) {
 					final String value = n.getFirstChild().getNodeValue();
@@ -772,8 +768,8 @@ public class AMLImport {
 	private static RasterLegendData parseRasterLegendData(AtlasConfig ac,
 			Node node) throws AtlasRecoverableException {
 		RasterLegendData rld = new RasterLegendData(false);
-		rld.setPaintGaps(Boolean.valueOf(node.getAttributes().getNamedItem(
-				"paintGaps").getNodeValue()));
+		rld.setPaintGaps(Boolean.valueOf(node.getAttributes()
+				.getNamedItem("paintGaps").getNodeValue()));
 
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
@@ -826,26 +822,23 @@ public class AMLImport {
 				dpe.setFilename(value);
 			} else {
 				if (name.equals("name")) {
-					final Translation transname = AMLImport.parseTranslation(ac
-							.getLanguages(), n);
+					final Translation transname = AMLImport.parseTranslation(
+							ac.getLanguages(), n);
 
 					dpe.setTitle(transname);
 				} else if (name.equals("dataDirname")) {
 					final String value = n.getFirstChild().getNodeValue();
 					dpe.setDataDirname(value);
 				} else if (name.equals("desc")) {
-					dpe.setDesc(AMLImport
-							.parseTranslation(ac.getLanguages(), n));
+					dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
 				} else if (name.equals("rasterLegendData")) {
 					dpe.setLegendMetaData(parseRasterLegendData(ac, n));
 				} else if (name.equals("keywords")) {
-					dpe.setKeywords(AMLImport.parseTranslation(ac
-							.getLanguages(), n));
+					dpe.setKeywords(AMLImport.parseTranslation(
+							ac.getLanguages(), n));
 				} else if (name.equals("transparentColor")) {
 					final String colorStr = n.getFirstChild().getNodeValue();
-					dpe
-							.setInputTransparentColor(SwingUtil
-									.parseColor(colorStr));
+					dpe.setInputTransparentColor(SwingUtil.parseColor(colorStr));
 				}
 			}
 		}
@@ -897,9 +890,7 @@ public class AMLImport {
 			} else if (tagName.equals("desc")) {
 				group.setDesc(parseTranslation(ac.getLanguages(), childNode));
 			} else if (tagName.equals("keywords")) {
-				group
-						.setKeywords(parseTranslation(ac.getLanguages(),
-								childNode));
+				group.setKeywords(parseTranslation(ac.getLanguages(), childNode));
 			} else if (tagName.equals("datapoolRef")) {
 				final String id = childNode.getAttributes().getNamedItem("id")
 						.getNodeValue();
@@ -912,9 +903,7 @@ public class AMLImport {
 				} else {
 					// LOGGER.debug(" Adding datapoolRef " + testDpe
 					// + " to group " + group);
-					group
-							.add(new DpRef<DpEntry<? extends ChartStyle>>(
-									testDpe));
+					group.add(new DpRef<DpEntry<? extends ChartStyle>>(testDpe));
 				}
 			} else if (tagName.equals("mapRef")) {
 				final String id = childNode.getAttributes().getNamedItem("id")
@@ -943,7 +932,7 @@ public class AMLImport {
 	 * @throws AtlasRecoverableException
 	 * 
 	 *             TODO TODO TODO Hier muss eine URL hin!
-	 * @throws AtlasCancelException 
+	 * @throws AtlasCancelException
 	 */
 	public final static DpLayerVectorFeatureSource parseDatapoolLayerVector(
 			final Node node, final AtlasConfig ac)
@@ -956,11 +945,9 @@ public class AMLImport {
 		// TODO ATM we only expect Shapefiles here!
 		final DpLayerVectorFeatureSource dplvfs = new DpLayerVectorFeatureSourceShapefile(
 				ac);
-		
+
 		try {
-			dplvfs
-					.setId(node.getAttributes().getNamedItem("id")
-							.getNodeValue());
+			dplvfs.setId(node.getAttributes().getNamedItem("id").getNodeValue());
 			// LOGGER.info("ID = "+dplvfs.getId());
 
 			/***********************************************************************
@@ -1021,8 +1008,8 @@ public class AMLImport {
 					final String value = n.getFirstChild().getNodeValue();
 					dplvfs.setFilename(value);
 				} else if (name.equals("name")) {
-					final Translation transname = parseTranslation(ac
-							.getLanguages(), n);
+					final Translation transname = parseTranslation(
+							ac.getLanguages(), n);
 					// info("parsing vector " + transname);
 					dplvfs.setTitle(transname);
 				} else if (name.equals("dataDirname")) {
@@ -1062,14 +1049,12 @@ public class AMLImport {
 									.upgradeMartinFilter2ECQL(filterString);
 							dplvfs.setFilterRule(convertedFilterString);
 						} catch (CQLException filterParserEx) {
-							LOGGER
-									.error(
-											"Converting filter "
-													+ filterString
-													+ " to CQL failed! Setting filter to no-filter",
-											filterParserEx);
-							warn(
-									dplvfs.getTitle().toString(),
+							LOGGER.error(
+									"Converting filter "
+											+ filterString
+											+ " to CQL failed! Setting filter to no-filter",
+									filterParserEx);
+							warn(dplvfs.getTitle().toString(),
 									"Failed to convert old filter\n  "
 											+ filterString
 											+ "\n to the new ECQL filter language. This setting is lost.");
@@ -1108,8 +1093,8 @@ public class AMLImport {
 	private static FeatureChartStyle parseFeatureChartStyle(AtlasConfig ac,
 			Node node, final DpLayerVectorFeatureSource dplvfs)
 			throws IOException {
-		final String filenameValue = node.getAttributes().getNamedItem(
-				"filename").getNodeValue();
+		final String filenameValue = node.getAttributes()
+				.getNamedItem("filename").getNodeValue();
 
 		URL url = dplvfs.getUrl();
 
@@ -1130,8 +1115,8 @@ public class AMLImport {
 
 		// Check if the attributes still exist or whether their
 		// uppercase/lowercase mode changed
-		if (FeatureChartUtil.correctAttributeNames(featureChartStyle, dplvfs
-				.getSchema())) {
+		if (FeatureChartUtil.correctAttributeNames(featureChartStyle,
+				dplvfs.getSchema())) {
 			// How to handle chartstyles that had attributes removed?
 		}
 
@@ -1171,13 +1156,12 @@ public class AMLImport {
 		return new LayerStyle(filename, name, desc, dpLayer);
 
 	}
-	
-	// TODO
-//	private static void checkCancel() throws AtlasCancelException {
-//		if (statusDialog != null && statusDialog.isCanceled())
-//			throw new AtlasCancelException();
-//	}
 
+	// TODO
+	// private static void checkCancel() throws AtlasCancelException {
+	// if (statusDialog != null && statusDialog.isCanceled())
+	// throw new AtlasCancelException();
+	// }
 
 	/**
 	 * Parses a node that is of type < aml : dataAttribute > to a
@@ -1189,28 +1173,28 @@ public class AMLImport {
 	 * @return {@link AttributeMetadataImpl} or <code>null</code>, if the
 	 *         attribute doesn't exist anymore.
 	 * @throws AtlasRecoverableException
-	 * @throws AtlasCancelException 
+	 * @throws AtlasCancelException
 	 */
 	public static AttributeMetadataImpl parseAttributeMetadata(
 			DpLayerVectorFeatureSource dplvfs, AtlasConfig ac, final Node node)
 			throws AtlasRecoverableException, AtlasCancelException {
-		
+
 		String localname;
 		String nameSpace;
 		Integer weight = 0;
 		Double functionX = 1.;
 		Double functionA = 0.;
 		try {
-			nameSpace = String.valueOf(node.getAttributes().getNamedItem(
-					AMLUtil.ATT_namespace).getNodeValue());
-			localname = String.valueOf(node.getAttributes().getNamedItem(
-					AMLUtil.ATT_localname).getNodeValue());
-			weight = Integer.valueOf(node.getAttributes().getNamedItem(
-					AMLUtil.ATT_weight).getNodeValue());
-			functionX = Double.valueOf(node.getAttributes().getNamedItem(
-					AMLUtil.ATT_functionX).getNodeValue());
-			functionA = Double.valueOf(node.getAttributes().getNamedItem(
-					AMLUtil.ATT_functionA).getNodeValue());
+			nameSpace = String.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_namespace).getNodeValue());
+			localname = String.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_localname).getNodeValue());
+			weight = Integer.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_weight).getNodeValue());
+			functionX = Double.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_functionX).getNodeValue());
+			functionA = Double.valueOf(node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_functionA).getNodeValue());
 		} catch (Exception e) {
 
 			functionX = 1.;
@@ -1238,11 +1222,9 @@ public class AMLImport {
 				// LOGGER.debug(msg);
 
 			} catch (Exception ee) {
-				LOGGER
-						.warn(dplvfs.getId()
-								+ " is broken. Can not import old colIdx-based attributeMetadata");
-				warn(
-						dplvfs.getTitle().toString(),
+				LOGGER.warn(dplvfs.getId()
+						+ " is broken. Can not import old colIdx-based attributeMetadata");
+				warn(dplvfs.getTitle().toString(),
 						dplvfs.getId()
 								+ " is broken. Can not import old colIdx-based attributeMetadata");
 				return null;
@@ -1296,8 +1278,8 @@ public class AMLImport {
 			} else if (childNodes.item(i).getLocalName().equals("desc")) {
 				attributeMetadata.setDesc(parseTranslation(ac.getLanguages(),
 						childNodes.item(i)));
-			} else if (childNodes.item(i).getLocalName().equals(
-					AMLUtil.TAG_nodataValue)) {
+			} else if (childNodes.item(i).getLocalName()
+					.equals(AMLUtil.TAG_nodataValue)) {
 				// NODATA values
 
 				Node item = childNodes.item(i);
@@ -1352,6 +1334,19 @@ public class AMLImport {
 		final Map map = new Map(node.getAttributes().getNamedItem("id")
 				.getNodeValue(), ac);
 
+		// Whether any maxMapExtend should be applied in Geopublisher's
+		// MapComposer
+		if (node.getAttributes().getNamedItem(
+				AMLUtil.ATT_PREVIEW_MAX_MAPEXTEND_IN_GP) != null) {
+			map.setPreviewMapExtendInGeopublisher(Boolean.valueOf(node
+					.getAttributes()
+					.getNamedItem(AMLUtil.ATT_PREVIEW_MAX_MAPEXTEND_IN_GP)
+					.getNodeValue()));
+		} else {
+			// Default is false
+			map.setPreviewMapExtendInGeopublisher(false);
+		}
+
 		// Reading the map's legend left/right ratio
 		if (node.getAttributes().getNamedItem("leftRightRatio") != null) {
 			Double leftRightRatio = Double.valueOf(node.getAttributes()
@@ -1365,8 +1360,9 @@ public class AMLImport {
 		// Shall the map scale be shown?
 		if (node.getAttributes().getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE) != null) {
 			map.setScaleVisible(Boolean
-					.valueOf(node.getAttributes().getNamedItem(
-							AMLUtil.ATT_MAP_SCALE_VISIBLE).getNodeValue()));
+					.valueOf(node.getAttributes()
+							.getNamedItem(AMLUtil.ATT_MAP_SCALE_VISIBLE)
+							.getNodeValue()));
 		}
 
 		// Shall the map scale be shown?
@@ -1501,8 +1497,8 @@ public class AMLImport {
 							.getNamedItem("hidden");
 					if (namedItem != null) {
 						final String hidden = namedItem.getNodeValue();
-						map.setHiddenFor(dpRef.getTargetId(), Boolean
-								.valueOf(hidden));
+						map.setHiddenFor(dpRef.getTargetId(),
+								Boolean.valueOf(hidden));
 					}
 
 					// Checking for the optional attribute
@@ -1512,16 +1508,16 @@ public class AMLImport {
 							"selectable");
 					if (namedItem != null) {
 						final String hidden = namedItem.getNodeValue();
-						map.setSelectableFor(dpRef.getTargetId(), Boolean
-								.valueOf(hidden));
+						map.setSelectableFor(dpRef.getTargetId(),
+								Boolean.valueOf(hidden));
 					}
 
 					map.add(dpRef);
 				}
 			} else if (tagName.equals("additionalStyles")) {
 
-				String layerID = childNode.getAttributes().getNamedItem(
-						"layerID").getNodeValue();
+				String layerID = childNode.getAttributes()
+						.getNamedItem("layerID").getNodeValue();
 				Node whichIsSelectedAttribute = childNode.getAttributes()
 						.getNamedItem("selectedStyleID");
 
@@ -1586,8 +1582,8 @@ public class AMLImport {
 				map.getAdditionalStyles().put(layerID, styles);
 			} else if (tagName.equals("availableCharts")) {
 
-				String layerID = childNode.getAttributes().getNamedItem(
-						"layerID").getNodeValue();
+				String layerID = childNode.getAttributes()
+						.getNamedItem("layerID").getNodeValue();
 
 				ArrayList<String> availChartsIDs = new ArrayList<String>();
 

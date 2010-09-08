@@ -24,6 +24,7 @@ import schmitzm.geotools.gui.ScalePanel;
 public class AMLUtil {
 	private static Logger LOGGER = Logger.getLogger(AMLUtil.class);
 
+
 	/**
 	 * XML Schema name spaces of the AtlasMarkupLanguage (AML) and others
 	 */
@@ -56,6 +57,8 @@ public class AMLUtil {
 	public static final String ATT_functionX = "functionX";
 	/** Attribute used in AMLURI name-space **/
 	public static final String ATT_functionA = "functionA";
+	/** Attribute used in AMLURI name-space **/
+	public static final String ATT_PREVIEW_MAX_MAPEXTEND_IN_GP = "previewMaxMapExtendInGP";
 
 	/**
 	 * Attribute used in AML map description to describe the units that shall be

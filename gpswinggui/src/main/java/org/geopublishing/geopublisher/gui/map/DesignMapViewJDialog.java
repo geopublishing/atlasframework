@@ -361,8 +361,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	 */
 	public DesignMapViewJDialog(final Component owner, final Map map_)
 			throws HeadlessException {
-		super(owner, GeopublisherGUI.R("DesignMapViewJDialog.title", map_
-				.getTitle()));
+		super(owner, GeopublisherGUI.R("DesignMapViewJDialog.title",
+				map_.getTitle()));
 
 		this.ace = (AtlasConfigEditable) map_.getAc();
 
@@ -425,8 +425,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		// Create a feature for the max map extend
 		if (map.getMaxExtend() != null) {
 
-			final ReferencedEnvelope mapMaxExtend = new ReferencedEnvelope(map
-					.getMaxExtend(), mapCrs);
+			final ReferencedEnvelope mapMaxExtend = new ReferencedEnvelope(
+					map.getMaxExtend(), mapCrs);
 
 			final Coordinate c1 = new Coordinate(mapMaxExtend.getLowerCorner()
 					.getCoordinate()[0], mapMaxExtend.getLowerCorner()
@@ -442,7 +442,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					.getCoordinate()[0], mapMaxExtend.getLowerCorner()
 					.getCoordinate()[1]);
 			final SimpleFeature maxExtendFeature = SimpleFeatureBuilder.build(
-					specialLinesFeatureType, new Object[] {
+					specialLinesFeatureType,
+					new Object[] {
 							factory.createLineString(new Coordinate[] { c1, c3,
 									c2, c4, c1 }), MAXMAPENTEND_FEATURE_ID },
 					MAXMAPENTEND_FEATURE_ID);
@@ -471,9 +472,11 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 					.getLowerCorner().getCoordinate()[1]);
 
 			final SimpleFeature defaultMapAraFeature = SimpleFeatureBuilder
-					.build(specialLinesFeatureType, new Object[] {
-							factory.createLineString(new Coordinate[] { c1, c3,
-									c2, c4, c1 }), DEFAULTMAPAREA_FEATURE_ID },
+					.build(specialLinesFeatureType,
+							new Object[] {
+									factory.createLineString(new Coordinate[] {
+											c1, c3, c2, c4, c1 }),
+									DEFAULTMAPAREA_FEATURE_ID },
 							DEFAULTMAPAREA_FEATURE_ID);
 
 			fc.add(defaultMapAraFeature);
@@ -524,8 +527,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 		// Wenn das layer schon existierte, dann entfernen wir es.
 		if (specialMapLayer != null) {
-			getDesignMapView().getMapPane().getMapContext().removeLayer(
-					specialMapLayer);
+			getDesignMapView().getMapPane().getMapContext()
+					.removeLayer(specialMapLayer);
 		}
 
 		if (!fc.isEmpty()) {
@@ -534,8 +537,8 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			System.err.println(style);
 			specialMapLayer.setTitle(XMapPane.SPECIAL_LINES_LAYER_ID);
 
-			getDesignMapView().getMapPane().getMapContext().addLayer(
-					specialMapLayer);
+			getDesignMapView().getMapPane().getMapContext()
+					.addLayer(specialMapLayer);
 			getDesignMapView().getMapPane().setMapLayerSelectable(
 					specialMapLayer, false);
 		}
@@ -574,8 +577,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final JPanel panel = new JPanel(new MigLayout());
 
 		final JButton saveDividerRatioButton = new SmallButton(
-				new AbstractAction(GeopublisherGUI
-						.R("DesignMapViewJDialog.Button.SaveDivider.Label")) {
+				new AbstractAction(
+						GeopublisherGUI
+								.R("DesignMapViewJDialog.Button.SaveDivider.Label")) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {
@@ -601,12 +605,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
-												.R(
-														"DesignMapViewJDialog.SaveDivider.Question.forMap",
+												.R("DesignMapViewJDialog.SaveDivider.Question.forMap",
 														NumberFormat
 																.getPercentInstance()
-																.format(
-																		currentRatio))))
+																.format(currentRatio))))
 							return;
 						map.setLeftRightRatio(currentRatio);
 
@@ -617,12 +619,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
-												.R(
-														"DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
+												.R("DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
 														NumberFormat
 																.getPercentInstance()
-																.format(
-																		currentRatio))))
+																.format(currentRatio))))
 							return;
 						for (final Map map : ace.getMapPool().values()) {
 							map.setLeftRightRatio(currentRatio);
@@ -633,8 +633,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						.R("DesignMapViewJDialog.Button.SaveDivider.TT"));
 
 		final JButton saveAutoDividerRatioButton = new SmallButton(
-				new AbstractAction(GeopublisherGUI
-						.R("DesignMapViewJDialog.Button.AutoDivider.Label")) {
+				new AbstractAction(
+						GeopublisherGUI
+								.R("DesignMapViewJDialog.Button.AutoDivider.Label")) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {
@@ -651,12 +652,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
-												.R(
-														"DesignMapViewJDialog.SaveDivider.Question.forMap",
+												.R("DesignMapViewJDialog.SaveDivider.Question.forMap",
 														NumberFormat
 																.getPercentInstance()
-																.format(
-																		currentRatio))))
+																.format(currentRatio))))
 							return;
 						map.setLeftRightRatio(currentRatio);
 
@@ -667,12 +666,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
-												.R(
-														"DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
+												.R("DesignMapViewJDialog.SaveDivider.Question.forAllMaps",
 														NumberFormat
 																.getPercentInstance()
-																.format(
-																		currentRatio))))
+																.format(currentRatio))))
 							return;
 						for (final Map map : ace.getMapPool().values()) {
 							map.setLeftRightRatio(currentRatio);
@@ -704,9 +701,11 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			// .R("DesignMapViewJDialog.mapArea.maxExtend.border"));
 			// final JPanel maxExtendPanel = new JPanel(new MigLayout());
 
-			mapAreaPanel.add(new JLabel(GeopublisherGUI
-					.R("DesignMapViewJDialog.mapArea.maxExtend.explanation")),
-					"span 3, wrap");
+			mapAreaPanel
+					.add(new JLabel(
+							GeopublisherGUI
+									.R("DesignMapViewJDialog.mapArea.maxExtend.explanation")),
+							"span 3, wrap");
 
 			/*
 			 * Adding the Button to select a max. zoom extend
@@ -750,26 +749,26 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 			/*
 			 * Adding the Button to reset the min. zoom extend
 			 */
-			maxExtendResetButton = new SmallButton(new AbstractAction(
-					GeopublisherGUI
+			maxExtendResetButton = new SmallButton(
+					new AbstractAction(GeopublisherGUI
 							.R("DesignMapView.SetMaxBBoxTool.RemoveButton"),
-					Icons.ICON_MAPEXTEND_BBOX_RESET) {
+							Icons.ICON_MAPEXTEND_BBOX_RESET) {
 
-				@Override
-				public void actionPerformed(final ActionEvent e) {
+						@Override
+						public void actionPerformed(final ActionEvent e) {
 
-					// Reset the extend
-					map.setMaxExtend(null);
-					getDesignMapView().getMapPane().setMaxExtend(null);
+							// Reset the extend
+							map.setMaxExtend(null);
+							getDesignMapView().getMapPane().setMaxExtend(null);
 
-					updateMapMaxExtendInMapContext();
+							updateMapMaxExtendInMapContext();
 
-					maxExtendResetButton.setEnabled(false);
-					maxExtendButton.setEnabled(true);
+							maxExtendResetButton.setEnabled(false);
+							maxExtendButton.setEnabled(true);
 
-				}
+						}
 
-			});
+					});
 			maxExtendResetButton.setToolTipText(GeopublisherGUI
 					.R("DesignMapView.SetMaxBBoxTool.RemoveButton.TT"));
 			mapAreaPanel.add(maxExtendResetButton);
@@ -782,16 +781,20 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void actionPerformed(final ActionEvent e) {
+
+							map.setPreviewMapExtendInGeopublisher(maxExtendPreviewCheckBox
+									.isSelected());
+
 							if (maxExtendPreviewCheckBox.isSelected()) {
 
 								if (map.getMaxExtend() != null) {
 									getDesignMapView().getGeoMapPane()
-											.getMapPane().setMaxExtend(
-													map.getMaxExtend());
+											.getMapPane()
+											.setMaxExtend(map.getMaxExtend());
 
 									getDesignMapView().getGeoMapPane()
-											.getMapPane().setMapArea(
-													map.getMaxExtend());
+											.getMapPane()
+											.setMapArea(map.getMaxExtend());
 									getDesignMapView().getGeoMapPane()
 											.getMapPane().repaint();
 								}
@@ -805,16 +808,23 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 			// Unset the MaxMapExtend from the XMapPane, as this is the default
 			// state of the checkbox
-			maxExtendPreviewCheckBox.setSelected(false);
-			getDesignMapView().getMapPane().setMaxExtend(null);
+			maxExtendPreviewCheckBox.setSelected(map
+					.isPreviewMapExtendInGeopublisher());
+
+			// If set, apply the maxMapExtend to the mapPane
+			getDesignMapView().getMapPane().setMaxExtend(
+					map.isPreviewMapExtendInGeopublisher() ? map.getMaxExtend()
+							: null);
 
 			mapAreaPanel.add(maxExtendPreviewCheckBox, "wrap");
 
 		} // maxExtend stuff
 
-		mapAreaPanel.add(new JLabel(GeopublisherGUI
-				.R("DesignMapViewJDialog.mapArea.defaultArea.explanation")),
-				"span 3, wrap");
+		mapAreaPanel
+				.add(new JLabel(
+						GeopublisherGUI
+								.R("DesignMapViewJDialog.mapArea.defaultArea.explanation")),
+						"span 3, wrap");
 
 		/**
 		 * A button to store the start area
@@ -834,14 +844,13 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						getDesignMapView().getToolBar().setAllToolsEnabled(
 								false, false);
 
-						JOptionPane
-								.showMessageDialog(
-										DesignMapViewJDialog.this,
-										GeopublisherGUI
-												.R("DesignMapView.SetDefaultBBoxTool.pleaseSelectBBOX.msg"),
-										GeopublisherGUI
-												.R("DesignMapViewJDialog.Button.SaveBBOX.Label"),
-										JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(
+								DesignMapViewJDialog.this,
+								GeopublisherGUI
+										.R("DesignMapView.SetDefaultBBoxTool.pleaseSelectBBOX.msg"),
+								GeopublisherGUI
+										.R("DesignMapViewJDialog.Button.SaveBBOX.Label"),
+								JOptionPane.INFORMATION_MESSAGE);
 
 						// Disable itself until the listener got an event
 						setDefaultMapAreaButton.setEnabled(false);
@@ -987,10 +996,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 				map.setGridPanelCRS(crs);
 
-				designMapView.getGeoMapPane().getHorGrid().setGridFormatter(
-						map.getGridPanelFormatter());
-				designMapView.getGeoMapPane().getVertGrid().setGridFormatter(
-						map.getGridPanelFormatter());
+				designMapView.getGeoMapPane().getHorGrid()
+						.setGridFormatter(map.getGridPanelFormatter());
+				designMapView.getGeoMapPane().getVertGrid()
+						.setGridFormatter(map.getGridPanelFormatter());
 
 				designMapView.getGeoMapPane().repaint();
 			}
@@ -1020,10 +1029,10 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 				map.setGridPanelFormatter(formatter);
 
-				designMapView.getGeoMapPane().getHorGrid().setGridFormatter(
-						formatter);
-				designMapView.getGeoMapPane().getVertGrid().setGridFormatter(
-						formatter);
+				designMapView.getGeoMapPane().getHorGrid()
+						.setGridFormatter(formatter);
+				designMapView.getGeoMapPane().getVertGrid()
+						.setGridFormatter(formatter);
 
 				designMapView.getGeoMapPane().repaint();
 			}
@@ -1031,23 +1040,23 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		});
 
 		final JCheckBox gridVisibibleJCheckBox = new JCheckBox(
-				new AbstractAction(GeopublisherGUI
-						.R("DesignMapViewJDialog.MapFrameVisible")) {
+				new AbstractAction(
+						GeopublisherGUI
+								.R("DesignMapViewJDialog.MapFrameVisible")) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {
 						map.setGridPanelVisible(((JCheckBox) e.getSource())
 								.isSelected());
-						designMapView.getGeoMapPane().getVertGrid().setVisible(
-								map.isGridPanelVisible());
-						designMapView.getGeoMapPane().getHorGrid().setVisible(
-								map.isGridPanelVisible());
+						designMapView.getGeoMapPane().getVertGrid()
+								.setVisible(map.isGridPanelVisible());
+						designMapView.getGeoMapPane().getHorGrid()
+								.setVisible(map.isGridPanelVisible());
 					}
 
 				});
 		gridVisibibleJCheckBox.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapFrameVisible.TT"));
-
 
 		// Select the scale units for the scale-bar: meter or miles
 		final JComboBox scaleUnitComboBox = new JComboBox(
@@ -1058,17 +1067,20 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				ScalePanel.ScaleUnits selectedUnit = (ScalePanel.ScaleUnits) scaleUnitComboBox.getSelectedItem();
+				ScalePanel.ScaleUnits selectedUnit = (ScalePanel.ScaleUnits) scaleUnitComboBox
+						.getSelectedItem();
 				map.setScaleUnits(selectedUnit);
-				designMapView.getGeoMapPane().getScalePane().setUnits(selectedUnit);
+				designMapView.getGeoMapPane().getScalePane()
+						.setUnits(selectedUnit);
 			}
 		});
 		scaleUnitComboBox.setEnabled(map.isScaleVisible());
 
 		// Select whether the scalebar shall be visible
 		final JCheckBox scaleVisibibleJCheckBox = new JCheckBox(
-				new AbstractAction(GeopublisherGUI
-						.R("DesignMapViewJDialog.MapScaleVisible")) {
+				new AbstractAction(
+						GeopublisherGUI
+								.R("DesignMapViewJDialog.MapScaleVisible")) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {
@@ -1083,7 +1095,6 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		scaleVisibibleJCheckBox.setToolTipText(GeopublisherGUI
 				.R("DesignMapViewJDialog.MapScaleVisible.TT"));
 
-
 		// Setting the initial values
 		gridCrsSelector.setSelectedItem(map.getGridPanelCRS());
 		gridFormatterSelector.setSelectedItem(map.getGridPanelFormatter()
@@ -1091,12 +1102,16 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		gridVisibibleJCheckBox.setSelected(map.isGridPanelVisible());
 		scaleVisibibleJCheckBox.setSelected(map.isScaleVisible());
 
-		panel.add(new JLabel(GeopublisherGUI
-				.R("DesignMapViewJDialog.MapFrameCRS")), "split 2, right");
+		panel.add(
+				new JLabel(GeopublisherGUI
+						.R("DesignMapViewJDialog.MapFrameCRS")),
+				"split 2, right");
 		panel.add(gridCrsSelector);
 
-		panel.add(new JLabel(GeopublisherGUI
-				.R("DesignMapViewJDialog.MapFrameFormat")), "split 2, right");
+		panel.add(
+				new JLabel(GeopublisherGUI
+						.R("DesignMapViewJDialog.MapFrameFormat")),
+				"split 2, right");
 		panel.add(gridFormatterSelector, "wrap");
 		panel.add(gridVisibibleJCheckBox, "split 2");
 		panel.add(scaleVisibibleJCheckBox);
@@ -1111,21 +1126,21 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	private JTabbedPane createTabs() {
 		final JTabbedPane tabbedPane = new JTabbedPane();
 
-		tabbedPane.insertTab(GeopublisherGUI
-				.R("DesignMapViewJDialog.legend.tab"), null,
-				createLegendePanel(), GeopublisherGUI
-						.R("DesignMapViewJDialog.legend.tab.tt"), tabbedPane
-						.getTabCount());
-		tabbedPane.insertTab(GeopublisherGUI
-				.R("DesignMapViewJDialog.margin.tab"), null,
-				createMapMarginPanel(), GeopublisherGUI
-						.R("DesignMapViewJDialog.margin.tab.tt"), tabbedPane
-						.getTabCount());
-		tabbedPane.insertTab(GeopublisherGUI
-				.R("DesignMapViewJDialog.mapArea.tab"), null,
-				createMapAreaPanel(), GeopublisherGUI
-						.R("DesignMapViewJDialog.mapArea.tab.tt"), tabbedPane
-						.getTabCount());
+		tabbedPane.insertTab(
+				GeopublisherGUI.R("DesignMapViewJDialog.legend.tab"), null,
+				createLegendePanel(),
+				GeopublisherGUI.R("DesignMapViewJDialog.legend.tab.tt"),
+				tabbedPane.getTabCount());
+		tabbedPane.insertTab(
+				GeopublisherGUI.R("DesignMapViewJDialog.margin.tab"), null,
+				createMapMarginPanel(),
+				GeopublisherGUI.R("DesignMapViewJDialog.margin.tab.tt"),
+				tabbedPane.getTabCount());
+		tabbedPane.insertTab(
+				GeopublisherGUI.R("DesignMapViewJDialog.mapArea.tab"), null,
+				createMapAreaPanel(),
+				GeopublisherGUI.R("DesignMapViewJDialog.mapArea.tab.tt"),
+				tabbedPane.getTabCount());
 
 		return tabbedPane;
 	}
@@ -1244,7 +1259,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 				// saved...
 				// File sldFile = DataUtilities.urlToFile(DataUtilities
 				// .changeUrlExt(dpEntry.getUrl(), "sld"));
-				//				
+				//
 				// StylingUtil.saveStyleToSLD(mlStyle, sldFile);
 
 			} catch (final Exception e) {

@@ -153,6 +153,12 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	private ScaleUnits scaleUnits = ScaleUnits.METRIC;
 
 	/**
+	 * If <code>true</code>, the max. map extend will be applied in the
+	 * MapComposer. Otherwise it will will only be applied in the exported Atlas
+	 **/
+	private boolean previewMapExtendInGeopublisher = false;
+
+	/**
 	 * Resets the cache that remembers for which languages the HTML info pages
 	 * exist.
 	 */
@@ -484,8 +490,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            #Filename of {@link LayerStyle} or <code>null</code> for
 	 *            default.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setSelectedStyleID(final String layerID, final String styleID) {
 		// LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
@@ -504,8 +509,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            #Filename of {@link LayerStyle} or <code>null</code> for
 	 *            default.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public String getSelectedStyleID(final String layerID) {
 		// LOGGER.debug("getSelectedStyleID for layerID " + layerID + " ="
@@ -523,8 +527,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *            #Filename of {@link LayerStyle} or <code>null</code> for
 	 *            default.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public LayerStyle getSelectedStyle(final String layerID) {
 		final String lsID = getSelectedStyleID(layerID);
@@ -556,8 +559,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * @param owner
 	 *            GUI element to refer to
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 * @throws IOException
 	 *             JWS is used and data is not cached and we can't download it!
@@ -594,7 +596,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				getKeywords());
 
 		/**
-		 * Count HTML Infos  
+		 * Count HTML Infos
 		 */
 		final double countHTMLexist = (double) languages.size()
 				- (double) getMissingHTMLLanguages().size();
@@ -606,9 +608,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		if (getLayers().size() > 0) {
 			averageLayerQuality = getAverageLayerQuality();
 		}
-		
-		//MJ hier muss die QM fuer die charts dazu 
-		
+
+		// MJ hier muss die QM fuer die charts dazu
+
 		result = (averageLayerQuality * 3. + qmMap * 1.) / 4.;
 
 		return result;
@@ -886,14 +888,13 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * @param newMap
 	 *            copy destination {@link Map}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public Map copyTo(final Map newMap) {
 
 		newMap.setDefaultMapArea(getDefaultMapArea());
-
+		
 		// newMap.setHTML(map.getHTML());
 
 		// Copy the Layer-Refs
@@ -985,6 +986,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		}
 
 		newMap.resetMissingHTMLinfos();
+		
+		newMap.setPreviewMapExtendInGeopublisher(isPreviewMapExtendInGeopublisher());
 
 		return newMap;
 	}
@@ -1008,5 +1011,22 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 */
 	public void setScaleUnits(ScaleUnits scaleUnits) {
 		this.scaleUnits = scaleUnits;
+	}
+
+	/**
+	 * If <code>true</code>, the max. map extend will be applied in the
+	 * MapComposer. Otherwise it will will only be applied in the exported Atlas
+	 */
+	public boolean isPreviewMapExtendInGeopublisher() {
+		return previewMapExtendInGeopublisher;
+	}
+
+	/**
+	 * If <code>true</code>, the max. map extend will be applied in the
+	 * MapComposer. Otherwise it will will only be applied in the exported Atlas
+	 */
+	public void setPreviewMapExtendInGeopublisher(
+			boolean previewMapExtendInGeopublisher) {
+		this.previewMapExtendInGeopublisher = previewMapExtendInGeopublisher;
 	}
 }

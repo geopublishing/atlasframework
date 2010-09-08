@@ -187,10 +187,9 @@ public class AMLExporter {
 
 					final Transformer xformer = tf.newTransformer();
 					xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-					xformer
-							.setOutputProperty(
-									"{http://www.wikisquare.de/AtlasML.xsd}indent-amount",
-									"4");
+					xformer.setOutputProperty(
+							"{http://www.wikisquare.de/AtlasML.xsd}indent-amount",
+							"4");
 					xformer.setOutputProperty(
 							"{http://xml.apache.org/xalan}indent-amount", "2");
 
@@ -259,20 +258,20 @@ public class AMLExporter {
 
 		// Storing the version this atlas.xml is being created with inside the
 		// atlas.xml
-		atlas.setAttribute(AMLUtil.ATT_majVersion, String.valueOf(ReleaseUtil
-				.getVersionMaj(AVUtil.class)));
-		atlas.setAttribute(AMLUtil.ATT_minVersion, String.valueOf(ReleaseUtil
-				.getVersionMin(AVUtil.class)));
-		atlas.setAttribute(AMLUtil.ATT_buildVersion, String.valueOf(ReleaseUtil
-				.getVersionBuild(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_majVersion,
+				String.valueOf(ReleaseUtil.getVersionMaj(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_minVersion,
+				String.valueOf(ReleaseUtil.getVersionMin(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_buildVersion,
+				String.valueOf(ReleaseUtil.getVersionBuild(AVUtil.class)));
 
 		// <aml:name, desc, creator, copyright
 		atlas.appendChild(exportTranslation(document, "name", ace.getTitle()));
 		atlas.appendChild(exportTranslation(document, "desc", ace.getDesc()));
-		atlas.appendChild(exportTranslation(document, "creator", ace
-				.getCreator()));
-		atlas.appendChild(exportTranslation(document, "copyright", ace
-				.getCopyright()));
+		atlas.appendChild(exportTranslation(document, "creator",
+				ace.getCreator()));
+		atlas.appendChild(exportTranslation(document, "copyright",
+				ace.getCopyright()));
 
 		// <aml:atlasversion>
 		final Element atlasversion = document.createElementNS(AMLUtil.AMLURI,
@@ -312,8 +311,9 @@ public class AMLExporter {
 				try {
 					final Style style = dpl.getStyle();
 					StylingUtil.saveStyleToSLD(style, DataUtilities
-							.urlToFile(DataUtilities.changeUrlExt(AVSwingUtil
-									.getUrl(dpl, statusWindow), "sld")));
+							.urlToFile(DataUtilities.changeUrlExt(
+									AVSwingUtil.getUrl(dpl, statusWindow),
+									"sld")));
 
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
@@ -404,16 +404,15 @@ public class AMLExporter {
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
@@ -455,8 +454,8 @@ public class AMLExporter {
 			element.setAttribute("startMap", mapPool.getStartMapID());
 		} else {
 			if (exportMode)
-				throw new AtlasExportException(GpUtil
-						.R("ExportAtlas.NeedAtLeastOneMap"));
+				throw new AtlasExportException(
+						GpUtil.R("ExportAtlas.NeedAtLeastOneMap"));
 		}
 
 		// maps MUST contain at least one map
@@ -499,17 +498,21 @@ public class AMLExporter {
 			element.setAttribute("leftRightRatio", preferredRatio.toString());
 		}
 
+		// whether any maxMapExtend should be applied in Geopublisher's
+		// MapComposer
+		element.setAttribute(AMLUtil.ATT_PREVIEW_MAX_MAPEXTEND_IN_GP,
+				String.valueOf(map.isPreviewMapExtendInGeopublisher()));
+
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", map.getTitle()));
+		element.appendChild(exportTranslation(document, "name", map.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", map.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!map.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", map
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					map.getKeywords()));
 
 		// Creating optional startViewEnvelope tag ...
 		if (map.getDefaultMapArea() != null) {
@@ -522,8 +525,7 @@ public class AMLExporter {
 					+ area.getMinY()
 					+ " "
 					+ area.getMaxX()
-					+ ","
-					+ area.getMaxY()));
+					+ "," + area.getMaxY()));
 			element.appendChild(startViewEnvelope);
 		}
 
@@ -539,16 +541,16 @@ public class AMLExporter {
 		}
 
 		// Is the ScalePanel visible in this map?
-		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE, Boolean.valueOf(
-				map.isScaleVisible()).toString());
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE,
+				Boolean.valueOf(map.isScaleVisible()).toString());
 
 		// The units used in the ScalePanel?
 		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits()
 				.toString());
 
 		// Are the vert. and hor. GridPanels visible in this map?
-		element.setAttribute("gridPanelVisible", Boolean.valueOf(
-				map.isGridPanelVisible()).toString());
+		element.setAttribute("gridPanelVisible",
+				Boolean.valueOf(map.isGridPanelVisible()).toString());
 		// Which formatter to use for the map grid?
 		element.setAttribute("gridPanelFormatter", map.getGridPanelFormatter()
 				.getId());
@@ -683,16 +685,15 @@ public class AMLExporter {
 		// info(dpe.getTitle());
 
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
@@ -764,16 +765,15 @@ public class AMLExporter {
 		}
 
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
@@ -916,8 +916,7 @@ public class AMLExporter {
 		element.setAttribute("filename", ls.getFilename());
 		element.setAttribute("id", ls.getFilename());
 
-		element
-				.appendChild(exportTranslation(document, "title", ls.getTitle()));
+		element.appendChild(exportTranslation(document, "title", ls.getTitle()));
 
 		element.appendChild(exportTranslation(document, "desc", ls.getDesc()));
 
@@ -947,12 +946,13 @@ public class AMLExporter {
 		element.setAttribute(AMLUtil.ATT_localname, attrib.getName()
 				.getLocalPart());
 
-		element.setAttribute(AMLUtil.ATT_weight, new Integer(new Double(attrib
-				.getWeight()).intValue()).toString());
-		element.setAttribute(AMLUtil.ATT_functionA, new Double(attrib
-				.getFunctionA()).toString());
-		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib
-				.getFunctionX()).toString());
+		element.setAttribute(AMLUtil.ATT_weight,
+				new Integer(new Double(attrib.getWeight()).intValue())
+						.toString());
+		element.setAttribute(AMLUtil.ATT_functionA,
+				new Double(attrib.getFunctionA()).toString());
+		element.setAttribute(AMLUtil.ATT_functionX,
+				new Double(attrib.getFunctionX()).toString());
 		//
 		// try { // was a TO DO: was for backward compatibility. remove in 1.4
 		// final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
@@ -987,12 +987,12 @@ public class AMLExporter {
 			element.setAttribute("unit", attrib.getUnit());
 
 		// Creating a aml:name tag...
-		element.appendChild(exportTranslation(document, "name", attrib
-				.getTitle()));
+		element.appendChild(exportTranslation(document, "name",
+				attrib.getTitle()));
 
 		// Creating a aml:desc tag...
-		element.appendChild(exportTranslation(document, "desc", attrib
-				.getDesc()));
+		element.appendChild(exportTranslation(document, "desc",
+				attrib.getDesc()));
 
 		// Storing the NODATA values
 		for (Object nodatavalue : attrib.getNodataValues()) {
@@ -1021,16 +1021,15 @@ public class AMLExporter {
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
@@ -1045,8 +1044,8 @@ public class AMLExporter {
 		element.appendChild(filename);
 
 		// Creating aml:rasterLegendData
-		element.appendChild(exportRasterLegendData(document, dpe
-				.getLegendMetaData()));
+		element.appendChild(exportRasterLegendData(document,
+				dpe.getLegendMetaData()));
 
 		return element;
 	}
@@ -1095,16 +1094,15 @@ public class AMLExporter {
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
 		// Creating a aml:name tag...
-		element
-				.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
@@ -1119,8 +1117,8 @@ public class AMLExporter {
 		element.appendChild(filename);
 
 		// Creating aml:rasterLegendData
-		element.appendChild(exportRasterLegendData(document, dpe
-				.getLegendMetaData()));
+		element.appendChild(exportRasterLegendData(document,
+				dpe.getLegendMetaData()));
 
 		// Creating an optional aml:transparentColor tag...
 		final Color color = dpe.getInputTransparentColor();
@@ -1166,18 +1164,16 @@ public class AMLExporter {
 		}
 
 		// Creating a aml:name tag...
-		element.appendChild(exportTranslation(document, "name", group
-				.getTitle()));
+		element.appendChild(exportTranslation(document, "name",
+				group.getTitle()));
 
 		// Creating aml:desc tag
-		element
-				.appendChild(exportTranslation(document, "desc", group
-						.getDesc()));
+		element.appendChild(exportTranslation(document, "desc", group.getDesc()));
 
 		// Creating optional aml:keywords tag
 		if (!group.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", group
-					.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					group.getKeywords()));
 
 		final Enumeration<TreeNode> children = group.children();
 		while (children.hasMoreElements()) {

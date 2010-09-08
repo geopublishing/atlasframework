@@ -25,14 +25,11 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
-import org.geotools.data.DataUtilities;
 import org.geotools.gce.arcgrid.ArcGridReader;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.gce.image.WorldImageReader;
 import org.geotools.styling.Style;
-import org.opengis.coverage.Coverage;
 import org.opengis.coverage.grid.GridEnvelope;
-import org.opengis.geometry.Envelope;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -45,11 +42,9 @@ import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.RasterLegendData;
-import skrueger.geotools.StyledGridCoverageInterface;
 import skrueger.geotools.StyledGridCoverageReaderInterface;
 import skrueger.geotools.StyledLayerUtil;
 import skrueger.geotools.ZoomRestrictableGridInterface;
-import skrueger.geotools.io.GeoImportUtilURL;
 import skrueger.i8n.Translation;
 
 /**
@@ -223,7 +218,7 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 //MS-01.sc
 //                            gc = GeoImportUtilURL.readGridFromGeoTiff(inTemp,
 //                                null, readParams);
-							  gc = new WorldImageReader(inTemp); 
+							  gc = new GeoTiffReader(inTemp); 
 //MS-01.ec
 						} else {
 //MS-01.sc
