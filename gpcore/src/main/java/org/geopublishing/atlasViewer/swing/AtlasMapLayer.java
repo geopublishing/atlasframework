@@ -11,6 +11,7 @@
 package org.geopublishing.atlasViewer.swing;
 
 import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.data.FeatureSource;
 import org.geotools.factory.FactoryRegistryException;
 import org.geotools.feature.FeatureCollection;
@@ -27,6 +28,10 @@ import schmitzm.geotools.io.GeoImportUtil;
 public class AtlasMapLayer extends DefaultMapLayer {
 
 	public AtlasMapLayer(GridCoverage2D geoObject, Style style) throws FactoryRegistryException, TransformException, SchemaException {
+		super(geoObject, style);
+	}
+	
+	public AtlasMapLayer(AbstractGridCoverage2DReader geoObject, Style style) throws FactoryRegistryException, TransformException, SchemaException {
 		super(geoObject, style);
 	}
 	

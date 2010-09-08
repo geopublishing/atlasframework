@@ -136,7 +136,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 //			final GridCoverage2D geoObject = dpRaster.getGeoObject();
 //			final double[] noDataValues = geoObject.getSampleDimension(0)
 //					.getNoDataValues();
-			final double[] noDataValues = new double[] {};
+			final double[] noDataValues = null;
 //MS-01.ec
 
 			noDataValuePanel.add(new JLabel(GeopublisherGUI

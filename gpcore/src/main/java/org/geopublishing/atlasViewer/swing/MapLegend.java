@@ -69,6 +69,7 @@ import skrueger.geotools.MapView;
 import skrueger.geotools.StyledFeatureSourceInterface;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledGridCoverageInterface;
+import skrueger.geotools.StyledGridCoverageReaderInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledRasterInterface;
 import skrueger.geotools.StyledRasterPyramidInterface;
@@ -537,6 +538,13 @@ public class MapLegend extends JXTaskPaneContainer implements
 			// ****************************************************************************
 			// Determine what kind of styledLayer we have
 			// ****************************************************************************
+			if (styledObj instanceof StyledGridCoverageReaderInterface) {
+				StyledGridCoverageReaderInterface styledGridReader = (StyledGridCoverageReaderInterface) styledObj;
+
+				mapLayer = new AtlasMapLayer(styledGridReader.getGeoObject(),
+						styledGridReader.getStyle());
+
+			} else
 			if (styledObj instanceof StyledGridCoverageInterface) {
 				StyledGridCoverageInterface styledGrid = (StyledGridCoverageInterface) styledObj;
 
