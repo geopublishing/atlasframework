@@ -609,8 +609,6 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			averageLayerQuality = getAverageLayerQuality();
 		}
 
-		// MJ hier muss die QM fuer die charts dazu
-
 		result = (averageLayerQuality * 3. + qmMap * 1.) / 4.;
 
 		return result;
