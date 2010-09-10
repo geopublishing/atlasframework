@@ -16,7 +16,6 @@ import javax.swing.table.AbstractTableModel;
  * An interface thought to be used with {@link AbstractTableModel}. It adds a
  * method to request a tooltip for a given row and column.
  * 
- * MJ Guck hier
  */
 public interface TableModelWithToolTooltip {
 
