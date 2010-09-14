@@ -520,8 +520,8 @@ public class QuantitiesClassification extends FeatureClassification {
 	public void setNumClasses(final Integer numClasses2) {
 		if (numClasses2 != null && !numClasses2.equals(numClasses)) {
 			numClasses = numClasses2;
-			LOGGER.debug("QuanClassification set NumClasses to " + numClasses2
-					+ " and fires event");
+//			LOGGER.debug("QuanClassification set NumClasses to " + numClasses2
+//					+ " and fires event");
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.NUM_CLASSES_CHG));
 		}
 
