@@ -30,7 +30,6 @@
 		<replace file="${basedir}/target/jnlp/version.txt">
 			<replacefilter token="@VERSION@" value="${mvn.project.version}" />
 			<replacefilter token="@BUILD@" value="${mvn.buildNumber}" />
-			<replacefilter token="@TIMESTAMP@" value="${mvn.buildTime}" />
 		</replace>
 		
 		<!-- Diese Datei wird dann von Drupal gelesen um eine kurze Versionsangane im CMS zu erstellen -->

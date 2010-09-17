@@ -210,11 +210,15 @@
 					</execution>
 				</executions>
 				<configuration>
-					<doCheck>false</doCheck>
+<!--					<doCheck>false</doCheck>
 					<doUpdate>false</doUpdate>
 					<providerImplementations>
 						<svn>javasvn</svn>
-					</providerImplementations>
+					</providerImplementations> -->
+					<format>{0,date,yyyyMMddHHmm}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
 				</configuration>
 			</plugin>
 
