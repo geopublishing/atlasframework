@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
@@ -56,7 +57,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 	private JPanel rasterLegendDataPanel;
 	private JTable rasterLegendDataTable;
 	private DefaultTableModel rasterLegendDataTableModel;
-	
+
 	final private RasterLegendData legendData;
 	private final Style workingStyle;
 	private final Style backupStyle;
@@ -113,7 +114,11 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 	private void initGUI() {
 		JPanel contentPane = new JPanel(new MigLayout("wrap 1, fillx"));
 
-		contentPane.add(getColorMapPanel() , "grow, height 200");
+		contentPane
+				.add(new JLabel(
+						"Use the right mouse button on the column header to create a new entry:"));
+
+		contentPane.add(getColorMapPanel(), "grow, height 200");
 		contentPane.add(getRasterLegendDataPanel(), "grow, height 200");
 
 		contentPane.add(getApplyButton(), "left, split 3, tag apply"); //$NON-NLS-1$
@@ -129,24 +134,24 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 	private ColorMapPanel getColorMapPanel() {
 		if (colorMapPanel == null) {
 			colorMapPanel = new ColorMapPanel(rasterSymbolizer.getColorMap());
-//			SwingUtil.setPreferredHeight(colorMapPanel, 300);
+			// SwingUtil.setPreferredHeight(colorMapPanel, 300);
 		}
 		return colorMapPanel;
 	}
 
-//	protected CancelButton getCancelButton() {
-//		CancelButton cancelButton = new CancelButton();
-//		cancelButton.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				cancel();
-//				dispose();
-//			}
-//
-//		});
-//		return cancelButton;
-//	}
+	// protected CancelButton getCancelButton() {
+	// CancelButton cancelButton = new CancelButton();
+	// cancelButton.addActionListener(new ActionListener() {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	// cancel();
+	// dispose();
+	// }
+	//
+	// });
+	// return cancelButton;
+	// }
 
 	protected OkButton getOkButton() {
 		OkButton okButton = new OkButton();
@@ -182,7 +187,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			al.changed(new StyleChangedEvent(backupStyle));
 		}
 
-		backupLegendData.copyTo( styledRaster.getLegendMetaData() );
+		backupLegendData.copyTo(styledRaster.getLegendMetaData());
 	}
 
 	protected void apply() {
@@ -223,8 +228,12 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 
 			getRasterLegendTableModel().addColumn(
 					AtlasStyler.R("RasterLegendPanel.Table.Column.Value"));
-			rasterLegendDataTable.getColumnModel().getColumn(0).setHeaderValue(
-					AtlasStyler.R("RasterLegendPanel.Table.Column.Value"));
+			rasterLegendDataTable
+					.getColumnModel()
+					.getColumn(0)
+					.setHeaderValue(
+							AtlasStyler
+									.R("RasterLegendPanel.Table.Column.Value"));
 
 			int idx = 0;
 			for (String code : languages) {
@@ -233,8 +242,8 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 				rasterLegendDataTable.getColumnModel().getColumn(idx)
 						.setHeaderValue(code); // lang name in locale is nicer
 			}
-			
-//			SwingUtil.setPreferredHeight(rasterLegendDataPanel, 300);
+
+			// SwingUtil.setPreferredHeight(rasterLegendDataPanel, 300);
 		}
 
 		return rasterLegendDataTable;
@@ -328,8 +337,8 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			// ****************************************************************************
 			// Delete a legend entry
 			// ****************************************************************************
-			JButton delete = new JButton(new AbstractAction(AtlasStyler
-					.R("RasterLegendPanel.Button.Remove")) {
+			JButton delete = new JButton(new AbstractAction(
+					AtlasStyler.R("RasterLegendPanel.Button.Remove")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -362,15 +371,16 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			// ****************************************************************************
 			// Add a legend entry
 			// ****************************************************************************
-			JButton add = new JButton(new AbstractAction(AtlasStyler
-					.R("RasterLegendPanel.Button.InsertNew")) {
+			JButton add = new JButton(new AbstractAction(
+					AtlasStyler.R("RasterLegendPanel.Button.InsertNew")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (legendData.getSortedKeys().size() > 0)
-						legendData.put(legendData.getSortedKeys().get(
-								legendData.getSortedKeys().size() - 1) + 1,
-								new Translation());
+						legendData
+								.put(legendData.getSortedKeys().get(
+										legendData.getSortedKeys().size() - 1) + 1,
+										new Translation());
 					else
 						legendData.put(0., new Translation());
 					getRasterLegendTableModel().fireTableStructureChanged();
@@ -390,8 +400,8 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			rasterLegendDataPanel.add(new JScrollPane(
 					getRasterLegendDataTable()), BorderLayout.CENTER);
 			rasterLegendDataPanel.add(buttons, BorderLayout.SOUTH);
-			LayoutUtil.borderTitle(rasterLegendDataPanel, AtlasStyler
-					.R("RasterLegendPanel.Border.Title"));
+			LayoutUtil.borderTitle(rasterLegendDataPanel,
+					AtlasStyler.R("RasterLegendPanel.Border.Title"));
 		}
 		return rasterLegendDataPanel;
 	}
