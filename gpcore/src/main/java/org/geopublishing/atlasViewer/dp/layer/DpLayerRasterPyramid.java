@@ -60,8 +60,8 @@ public class DpLayerRasterPyramid
 	@Override
 	public Style getStyle() {
 		super.getStyle();
-		if (StyledLayerUtil.isStyleable(this) && super.getStyle() == null )
-			setStyle( GridUtil.createDefaultStyle() );
+		if (StyledLayerUtil.isStyleable(this) && super.getStyle() == null)
+			setStyle(GridUtil.createDefaultStyle());
 		return super.getStyle();
 	}
 
@@ -81,7 +81,7 @@ public class DpLayerRasterPyramid
 	public DpLayerRasterPyramid(AtlasConfig ac) {
 		super(ac);
 		setType(DpEntryType.RASTER_PYRAMID);
-		}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -97,10 +97,28 @@ public class DpLayerRasterPyramid
 				GeneralParameterValue[] params = new GeneralParameterValue[] {};
 
 				if (getInputTransparentColor() != null) {
-					ParameterValue<Color> inputTransarent = ImagePyramidFormat.INPUT_TRANSPARENT_COLOR
-							.createValue();
-					inputTransarent.setValue(getInputTransparentColor());
-					params = LangUtil.extendArray(params, inputTransarent);
+					{
+						ParameterValue<Color> inputTransarent = ImagePyramidFormat.INPUT_TRANSPARENT_COLOR
+								.createValue();
+						inputTransarent.setValue(getInputTransparentColor());
+						params = LangUtil.extendArray(params, inputTransarent);
+					}
+
+					{
+						ParameterValue<double[]> backgroundValues = ImagePyramidFormat.BACKGROUND_VALUES
+								.createValue();
+						backgroundValues
+								.setValue(new double[] { 0., 0., 0., 0. });
+						params = LangUtil.extendArray(params, backgroundValues);
+					}
+
+					{
+						ParameterValue<Color> outputTransp = ImagePyramidFormat.OUTPUT_TRANSPARENT_COLOR
+								.createValue();
+						outputTransp.setValue(new Color(0, true));
+						params = LangUtil.extendArray(params, outputTransp);
+					}
+
 				}
 
 				final ImagePyramidReader gridCoverageReader = new ImagePyramidReader(
@@ -108,12 +126,12 @@ public class DpLayerRasterPyramid
 				wrappedReader = FeatureUtilities.wrapGridCoverageReader(
 						gridCoverageReader, params);
 
-				//				
+				//
 				// reader = new ImagePyramidReader(getUrl(), hints) {
 				// @Override
 				// public Format getFormat() {
 				// return new ImagePyramidFormat() {
-				//							
+				//
 				// @Override
 				// protected void setInfo() {
 				// super.setInfo();
@@ -123,7 +141,7 @@ public class DpLayerRasterPyramid
 				// new DefaultParameterDescriptor(
 				// "InputTransparentColor", Color.class, null,
 				// getInputTransparentColor());
-				//								
+				//
 				// // reading parameters
 				// readParameters = new ParameterGroup(
 				// new DefaultParameterDescriptorGroup(mInfo,
@@ -131,18 +149,18 @@ public class DpLayerRasterPyramid
 				// INPUT_TRANSPARENT_COLOR,
 				// INPUT_IMAGE_THRESHOLD_VALUE ,OUTPUT_TRANSPARENT_COLOR}));
 				//
-				//								
+				//
 				// }
 				// };
 				// }
 				// };
-				//				
+				//
 				// ParameterValueGroup readParameters =
 				// reader.getFormat().getReadParameters();
-				//				
+				//
 				// readParameters.parameter("InputTransparentColor").setValue(getInputTransparentColor());
 				// readParameters.parameter("OutputTransparentColor").setValue(getInputTransparentColor());
-				//				
+				//
 				// readParameters = reader.getFormat().getReadParameters();
 
 				// TODO
@@ -227,7 +245,6 @@ public class DpLayerRasterPyramid
 		return false;
 	}
 
-
 	/**
 	 * This method returns the value/{@link Translation} pairs that will be
 	 * shown in the Legend
@@ -248,22 +265,22 @@ public class DpLayerRasterPyramid
 		DpLayerRasterPyramid copy = new DpLayerRasterPyramid(ac);
 		return copyTo(copy);
 	}
-	
+
 	@Override
 	public DpLayer<FeatureCollection<SimpleFeatureType, SimpleFeature>, ChartStyle> copyTo(
 			DpLayer<FeatureCollection<SimpleFeatureType, SimpleFeature>, ChartStyle> target) {
 		DpLayerRasterPyramid copy = (DpLayerRasterPyramid) super.copyTo(target);
-		
+
 		copy.setInputTransparentColor(getInputTransparentColor());
 		copy.setLegendMetaData(getLegendMetaData()); // TODO Copyable! copy it!
-		
+
 		return copy;
 	}
 
 	@Override
 	public void exportWithGUI(Component owner) throws IOException {
 		// TODO Auto-generated method stub
-		LOGGER.warn("not implemented"); //TODO
+		LOGGER.warn("not implemented"); // TODO
 	}
 
 }
