@@ -1674,6 +1674,7 @@ public class JarExportUtil {
 			try {
 				info("Creating " + ARJAR_FILENAME); // 1st call to info
 
+				// TODO Only export the map descriptions that are needed by the atlas
 				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
 						+ "/" + AtlasConfig.HTML_DIRNAME);
 
