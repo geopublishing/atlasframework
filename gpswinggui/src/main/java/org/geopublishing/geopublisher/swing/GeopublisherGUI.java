@@ -191,7 +191,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		String[] st = System.getProperty("java.class.path").split(":");
 		LOGGER.debug("Classpath:");
-		System.out.println("Classpth:");
+		System.out.println("Classpath:");
 		for (String t : st) {
 			System.out.println(t);
 			LOGGER.debug(t);
