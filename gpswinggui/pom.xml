@@ -74,7 +74,7 @@
 									<groupId>org.geopublishing</groupId>
 									<artifactId>gpnatives</artifactId>
 									<version>${project.version}</version>
-									<!--								<classifier>${build.type}</classifier>-->
+									<!-- <classifier>${build.type}</classifier> -->
 									<type>jar</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/natives
@@ -96,10 +96,8 @@
 
 	<profiles>
 		<profile>
-			<!--
-				If run on the special "gisbert" profile, the application is released
-				to the geopublishing.org webpage
-			-->
+			<!-- If run on the special "gisbert" profile, the application is released 
+				to the geopublishing.org webpage -->
 			<id>gisbert</id>
 			<build>
 				<plugins>
@@ -178,13 +176,11 @@
 						</executions>
 						<configuration>
 							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile>
-							<!--
-								<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
-							-->
+							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
 							<setExeName>false</setExeName>
 							<setJarName>true</setJarName>
 							<includeDependencies>true</includeDependencies>
-							<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
+							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
 						</configuration>
 					</plugin>
 
@@ -411,18 +407,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!--
-			Disabled, because we need the tools.jar for signing in GP, even in
-			OpenJDK
-		-->
-		<!--		<dependency>-->
-		<!--			<groupId>com.sun</groupId>-->
-		<!--			<artifactId>tools</artifactId>-->
-		<!--			<version>1.6.0</version>-->
-		<!--			<scope>system</scope>-->
-		<!--			<systemPath>${java.home}/../lib/tools.jar</systemPath>-->
-		<!--		</dependency>-->
-
 		<dependency>
 			<groupId>com.sun</groupId>
 			<artifactId>tools</artifactId>
@@ -430,15 +414,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-
-		<!--			<dependency>-->
-		<!--				<groupId>com.sun</groupId>-->
-		<!--				<artifactId>tools</artifactId>-->
-		<!--				<version>1.2.1</version>-->
-		<!--				<scope>system</scope>-->
-		<!--				<systemPath>${java.home}/../lib/tools.jar</systemPath>-->
-		<!--			</dependency>-->
-
 	</dependencies>
 
 </project>

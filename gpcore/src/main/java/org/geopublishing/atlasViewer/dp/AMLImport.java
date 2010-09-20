@@ -461,8 +461,6 @@ public class AMLImport {
 				AMLUtil.ATT_majVersion);
 		Node nodeMinVersion = atlasNode.getAttributes().getNamedItem(
 				AMLUtil.ATT_minVersion);
-		Node nodeBuildVersion = atlasNode.getAttributes().getNamedItem(
-				AMLUtil.ATT_buildVersion);
 
 		// if no version information is defined in atlas.xml, we assume it's
 		// 1.2 b1, because versioning has been introduced in 1.3
@@ -470,8 +468,6 @@ public class AMLImport {
 				.getNodeValue().toString());
 		int min = nodeMinVersion == null ? 2 : Integer.valueOf(nodeMinVersion
 				.getNodeValue().toString());
-		int build = nodeBuildVersion == null ? 1 : Integer
-				.valueOf(nodeBuildVersion.getNodeValue().toString());
 
 		// Check if the filters have to be converted from MartinFilters to ECQL
 		double majMin = new Double(maj) + new Double(min) / 10.;
