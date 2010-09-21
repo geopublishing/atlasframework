@@ -29,9 +29,9 @@ import org.geotools.gce.imagepyramid.ImagePyramidFormat;
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
  */
-public class DpLayerRasterPyramidTest implements DpEntryTesterInterface {
+public class DpLayerRasterPyramidTester implements DpEntryTesterInterface {
 	static private final Logger LOGGER = Logger
-			.getLogger(DpLayerRasterPyramidTest.class);
+			.getLogger(DpLayerRasterPyramidTester.class);
 
 	final static AbstractGridFormat format = new ImagePyramidFormat();
 
