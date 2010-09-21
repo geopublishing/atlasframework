@@ -2055,6 +2055,7 @@ public class JarExportUtil {
 		String[] libs3 = new String[0];
 		for (String s : libs2) {
 			if (s.startsWith("./tools"))
+				continue;
 			libs3 = LangUtil.extendArray(libs3, s);
 		}
 
