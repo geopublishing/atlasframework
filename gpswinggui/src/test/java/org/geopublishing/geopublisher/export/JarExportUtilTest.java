@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
@@ -50,10 +52,47 @@ public class JarExportUtilTest {
 	public static void setUp() throws Exception {
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
 	}
-	
+
+	@Test
+	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
+		assertNotNull(atlasExportTesttDir);
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		// GuiAndTools.deleteDir(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, true, false);
+
+		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		// LOGGER.info("Signer Passwort = " + passwort);
+		assertNotNull(passwort);
+
+		jeu.export(null);
+
+		assertTrue("File autorun.inf exists in DISK folder",
+				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
+						.contains("autorun.inf"));
+
+		assertTrue("File autorun.inf may not exist in JWS folder",
+				!Arrays.asList(new File(atlasExportTesttDir, "JWS").list())
+						.contains("autorun.inf"));
+
+		{
+			List<String> listOfFilesInAtlasDataDir = Arrays.asList(new File(
+					atlasExportTesttDir, "DISK/" + JarExportUtil.DISK_SUB_DIR)
+					.list());
+			for (String s : listOfFilesInAtlasDataDir) {
+				if (s.startsWith("tools-"))
+					fail("File "+s+" should not be part of the exported atlas!");
+			}
+		}
+	}
 
 	/**
 	 * Check that all ant related dependencies have been removed
+	 * 
 	 * @throws IOException
 	 */
 	@Test
@@ -67,20 +106,22 @@ public class JarExportUtilTest {
 
 		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
 				true, true, false);
-		
+
 		String[] jarLibNames = jeu.getJarLibNames();
-		
-		assertTrue("Number of dependencies should be greater than 20", jarLibNames.length > 20);
-		
-		for (String dep : jarLibNames){
-			assertFalse(dep+" is an unwanted dependency", dep.toLowerCase().contains("ant"));
+
+		assertTrue("Number of dependencies should be greater than 20",
+				jarLibNames.length > 20);
+
+		for (String dep : jarLibNames) {
+			assertFalse(dep + " is an unwanted dependency", dep.toLowerCase()
+					.contains("ant"));
 		}
 	}
 
 	@Test
 	public void testFindNativeDllURL() throws IOException {
-		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig, IOUtil
-				.getTempDir(), true, true, false);
+		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
+				IOUtil.getTempDir(), true, true, false);
 		URL soDllUrl = jarExportUtil.findJarUrl("gdal14.dll");
 
 		assertNotNull(soDllUrl);
@@ -107,7 +148,7 @@ public class JarExportUtilTest {
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE3));
 
-		// "/" needed here 
+		// "/" needed here
 		assertNotNull(GpUtil.class
 				.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK));
 
@@ -193,22 +234,22 @@ public class JarExportUtilTest {
 
 		jeu.export(null);
 
-		assertTrue("Datei autorun.inf exists in DISK folder", Arrays.asList(
-				new File(atlasExportTesttDir, "DISK").list()).contains(
-				"autorun.inf"));
+		assertTrue("Datei autorun.inf exists in DISK folder",
+				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
+						.contains("autorun.inf"));
 
 		assertTrue("Datei start.sh exists in DISK exists ", new File(
 				atlasExportTesttDir, "DISK/start.sh").exists());
 		assertTrue("Datei start.sh exists in DISK is executable", new File(
 				atlasExportTesttDir, "DISK/start.sh").canExecute());
 
-		assertTrue("Datei autorun.inf exists in DISK folder", Arrays.asList(
-				new File(atlasExportTesttDir, "DISK").list()).contains(
-				"atlas.exe"));
+		assertTrue("Datei autorun.inf exists in DISK folder",
+				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
+						.contains("atlas.exe"));
 
-		assertTrue("Datei autorun.inf may not exist in JWS folder", !Arrays
-				.asList(new File(atlasExportTesttDir, "JWS").list()).contains(
-						"autorun.inf"));
+		assertTrue("Datei autorun.inf may not exist in JWS folder",
+				!Arrays.asList(new File(atlasExportTesttDir, "JWS").list())
+						.contains("autorun.inf"));
 
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.JNLP_FILENAME).exists());
@@ -228,14 +269,14 @@ public class JarExportUtilTest {
 		assertTrue(fileGpCoreDiskJar.exists());
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.GPCORE_JARNAME).exists());
-		
-// asswinggui is not needed for exported atlases
-//		assertTrue(new File(atlasExportTesttDir, "DISK/"
-//				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
-//				.exists());
-//
-//		assertTrue(new File(atlasExportTesttDir, "JWS/"
-//				+ JarExportUtil.ASSWINGGUI_JARNAME).exists());
+
+		// asswinggui is not needed for exported atlases
+		// assertTrue(new File(atlasExportTesttDir, "DISK/"
+		// + JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
+		// .exists());
+		//
+		// assertTrue(new File(atlasExportTesttDir, "JWS/"
+		// + JarExportUtil.ASSWINGGUI_JARNAME).exists());
 
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME)
@@ -250,10 +291,10 @@ public class JarExportUtilTest {
 
 			Process p = Runtime.getRuntime().exec(cmd);
 
-			BufferedReader input = new BufferedReader(new InputStreamReader(p
-					.getInputStream()));
-			BufferedReader error = new BufferedReader(new InputStreamReader(p
-					.getErrorStream()));
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+			BufferedReader error = new BufferedReader(new InputStreamReader(
+					p.getErrorStream()));
 			String line;
 			while ((line = input.readLine()) != null) {
 				System.err.println(line);
@@ -293,37 +334,10 @@ public class JarExportUtilTest {
 
 		assertTrue("createJarFromDpe didn't create an existing file?",
 				createdJar.exists());
-		assertEquals("Created JAR isn't where expected?", dpeJarFileExpected
-				.getAbsolutePath(), createdJar.getAbsolutePath());
+		assertEquals("Created JAR isn't where expected?",
+				dpeJarFileExpected.getAbsolutePath(),
+				createdJar.getAbsolutePath());
 		dpeJarFileExpected.delete();
 	}
-
-	@Test
-	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
-		assertNotNull(atlasExportTesttDir);
-		LOGGER.debug("atlasExportTesttDir="
-				+ atlasExportTesttDir.getAbsolutePath());
-		FileUtils.deleteDirectory(atlasExportTesttDir);
-		// GuiAndTools.deleteDir(atlasExportTesttDir);
-		assertTrue(atlasExportTesttDir.mkdir());
-
-		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
-				true, true, false);
-
-		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
-		// LOGGER.info("Signer Passwort = " + passwort);
-		assertNotNull(passwort);
-
-		jeu.export(null);
-
-		assertTrue("File autorun.inf exists in DISK folder", Arrays.asList(
-				new File(atlasExportTesttDir, "DISK").list()).contains(
-				"autorun.inf"));
-
-		assertTrue("File autorun.inf may not exist in JWS folder", !Arrays
-				.asList(new File(atlasExportTesttDir, "JWS").list()).contains(
-						"autorun.inf"));
-	}
-
 
 }

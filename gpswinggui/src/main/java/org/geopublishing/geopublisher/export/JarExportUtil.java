@@ -2054,8 +2054,7 @@ public class JarExportUtil {
 		// Remove any tools.jar to save 12mb
 		String[] libs3 = new String[0];
 		for (String s : libs2) {
-			if (s.contains("./tools.jar"))
-				continue;
+			if (s.startsWith("./tools"))
 			libs3 = LangUtil.extendArray(libs3, s);
 		}
 
