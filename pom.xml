@@ -52,7 +52,7 @@
 	</licenses>
 
 	<properties>
-		<geotools.version>2.6.5</geotools.version>
+		<geotools.version>2.6.1</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<schmitzm.version>2.3-SNAPSHOT</schmitzm.version>
 	</properties>
@@ -97,7 +97,7 @@
 	<build>
 
 		<!-- Explicitly setting the final name! Do not remove -->
-		<finalName>${artifactId}-${version}</finalName>
+		<finalName>${artifactId}-${project.version}</finalName>
 
 		<resources>
 			<resource>
