@@ -61,7 +61,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 	}
 
 	public URL getResourceAsUrl(String name) {
-		Status.debug("getResourceAsUrl( name=" + name + " )");
+//		Status.debug("getResourceAsUrl( name=" + name + " )");
 
 		try {
 			// check if entry exists
@@ -71,7 +71,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 
 			URL jarURL = new URL("jar:" + _file.toURI().toURL() + "!/" + name);
 
-			Status.debug("jarURL=" + jarURL.toExternalForm());
+//			Status.debug("jarURL=" + jarURL.toExternalForm());
 
 			return jarURL;
 		} catch (IOException ioex) {

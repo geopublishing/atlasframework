@@ -385,7 +385,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		params.put(JDBCDataStoreFactory.SCHEMA, schema);
 
-		params.put(JDBCDataStoreFactory.EXPOSE_PK.key, true);
+//	TODO TODO for 2.6.1 disabled	params.put(JDBCDataStoreFactory.EXPOSE_PK.key, true);
 
 		try {
 			DataStore ds = DataStoreFinder.getDataStore(params);

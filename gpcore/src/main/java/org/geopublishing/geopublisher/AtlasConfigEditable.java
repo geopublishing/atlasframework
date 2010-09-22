@@ -687,11 +687,15 @@ public class AtlasConfigEditable extends AtlasConfig {
 			dpl.getCrs();
 
 			// Correcting any wrongly upper/lowercased attribute names
-			if (dpe instanceof DpLayerVectorFeatureSource) {
-				Style style = ((DpLayerVectorFeatureSource) dpe).getStyle();
+			if (dpe instanceof DpLayer){
+				Style style = ((DpLayer) dpe).getStyle();
 
-				style = StylingUtil.correctPropertyNames(style,
-						((DpLayerVectorFeatureSource) dpe).getSchema());
+				if (dpe instanceof DpLayerVectorFeatureSource) {
+					style = StylingUtil.correctPropertyNames(style,
+							((DpLayerVectorFeatureSource) dpe).getSchema());
+				} else {
+					style = StylingUtil.correctPropertyNames(style,null);
+				}
 
 				((DpLayer) dpe).setStyle(style);
 			}

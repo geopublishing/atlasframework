@@ -54,7 +54,7 @@ public class GPTestingUtil {
 
 	/** An enumeration of available test-atlases **/
 	public enum Atlas {
-		small, iida2
+		small, iida2, rasters
 	}
 
 	public static int showHeap() {
@@ -100,9 +100,12 @@ public class GPTestingUtil {
 
 		new AMLImportEd().parseAtlasConfig(null, atlasConfig, false);
 
-		assertNotNull("AtlasConfig is null after parseAtlasConfig!", atlasConfig);
-		assertNotNull("MapPool is null after parseAtlasConfig!",atlasConfig.getMapPool());
-		assertNotNull("DataPool is null after parseAtlasConfig!",atlasConfig.getDataPool());
+		assertNotNull("AtlasConfig is null after parseAtlasConfig!",
+				atlasConfig);
+		assertNotNull("MapPool is null after parseAtlasConfig!",
+				atlasConfig.getMapPool());
+		assertNotNull("DataPool is null after parseAtlasConfig!",
+				atlasConfig.getDataPool());
 
 		return atlasConfig;
 	}
@@ -160,16 +163,27 @@ public class GPTestingUtil {
 			ExceptionDialog.show(null, e);
 		}
 
-//		System.out.println("Start loading test atlas config ...");
+		// System.out.println("Start loading test atlas config ...");
 		switch (type) {
-		case small:
+		case small: {
+
 			String atlasChartDemoAtlasURL = "/atlases/ChartDemoAtlas/atlas.gpa";
 			URL resourceURL = GPTestingUtil.class
 					.getResource(atlasChartDemoAtlasURL);
 			assertNotNull(atlasChartDemoAtlasURL + " not found as resource!",
 					resourceURL);
-			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL).getParent());
-		case iida2:
+			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL)
+					.getParent());
+		}
+		case rasters: {
+			String atlasRastersURL = "/atlases/rastersAtlas/atlas.gpa";
+			URL resourceURL = GPTestingUtil.class.getResource(atlasRastersURL);
+			assertNotNull(atlasRastersURL + " not found as resource!",
+					resourceURL);
+			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL)
+					.getParent());
+		}
+		case iida2: {
 			if (SystemUtils.IS_OS_LINUX) {
 				// For Stefan:
 				return getAtlasConfigE("/home/stefan/Desktop/GP/Atlanten/IIDA2/IIDA2 Arbeitskopie");
@@ -177,6 +191,7 @@ public class GPTestingUtil {
 				// For Martin:
 				return getAtlasConfigE("../../Daten/AndiAtlas_1.2");
 			}
+		}
 		}
 		throw new RuntimeException("JUnit testing data not found");
 	}
@@ -208,22 +223,26 @@ public class GPTestingUtil {
 		dialog.dispose();
 	}
 
-	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace) throws Exception {
-		File tempDir = new File(IOUtil.getTempDir(),"testAtlasImportExport/"+AtlasConfig.ATLASDATA_DIRNAME );
+	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace)
+			throws Exception {
+		File tempDir = new File(IOUtil.getTempDir(), "testAtlasImportExport/"
+				+ AtlasConfig.ATLASDATA_DIRNAME);
 		tempDir.mkdirs();
-		
-		File atlasXmlFile = new File(tempDir, AtlasConfigEditable.ATLAS_XML_FILENAME);
-		
+
+		File atlasXmlFile = new File(tempDir,
+				AtlasConfigEditable.ATLAS_XML_FILENAME);
+
 		AMLExporter amlExporter = new AMLExporter(ace);
 		amlExporter.setAtlasXml(atlasXmlFile);
 		boolean saved = amlExporter.saveAtlasConfigEditable();
-		
+
 		assertTrue(saved);
-		
-		AtlasConfigEditable ace2 = new AMLImportEd().parseAtlasConfig(null, atlasXmlFile.getParentFile().getParentFile());
-		
+
+		AtlasConfigEditable ace2 = new AMLImportEd().parseAtlasConfig(null,
+				atlasXmlFile.getParentFile().getParentFile());
+
 		FileUtils.deleteDirectory(tempDir);
-		
+
 		return ace2;
 	}
 
