@@ -1181,10 +1181,10 @@ public class AMLImport {
 		Double functionX = 1.;
 		Double functionA = 0.;
 		try {
-			nameSpace = String.valueOf(node.getAttributes()
-					.getNamedItem(AMLUtil.ATT_namespace).getNodeValue());
-			localname = String.valueOf(node.getAttributes()
-					.getNamedItem(AMLUtil.ATT_localname).getNodeValue());
+			nameSpace = node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_namespace).getNodeValue();
+			localname = node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_localname).getNodeValue();
 			weight = Integer.valueOf(node.getAttributes()
 					.getNamedItem(AMLUtil.ATT_weight).getNodeValue());
 			functionX = Double.valueOf(node.getAttributes()
