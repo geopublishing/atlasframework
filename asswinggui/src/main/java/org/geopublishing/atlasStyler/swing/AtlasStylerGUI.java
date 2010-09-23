@@ -307,7 +307,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		if (!AVSwingUtil.askYesNo(AtlasStylerGUI.this, AtlasStyler.R(
 				"AtlasStylerGUI.saveToSLDFileQuestion", styledFS.getTitle(),
-				sldFile.getAbsolutePath())))
+				IOUtil.escapePath(sldFile))))
 			return;
 
 		Style style = styledFS.getStyle();

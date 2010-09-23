@@ -478,12 +478,13 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 			File[] listFiles = tmpDir.listFiles((FileFilter) f);
 			for (File ff : listFiles) {
 				LOGGER.debug("Going to delete temporary file/directory "
-						+ ff.getAbsolutePath());
+						+ IOUtil.escapePath(ff));
 
+				
 				boolean b = ff.delete();
 				if (!b) {
 					LOGGER.warn("Couldn't delete temp file "
-							+ ff.getAbsolutePath());
+							+ IOUtil.escapePath(ff));
 				} else
 					count++;
 			}

@@ -16,6 +16,7 @@ import java.io.File;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
+import schmitzm.io.IOUtil;
 import schmitzm.swing.SwingUtil;
 
 public abstract class AtlasExportTask extends AtlasTask<Boolean> {
@@ -43,8 +44,9 @@ public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 			setPrefix("");
 
 			final String exportDoneMsg = AVUtil.R(
-					"AtlasExportTask.export_to_XXX_done", exportDir
-							.getAbsolutePath());
+					"AtlasExportTask.export_to_XXX_done",
+					IOUtil.escapePath( exportDir
+							));
 
 			if ((exportDir != null)) {
 				final String openExportFolderMsg = AVUtil

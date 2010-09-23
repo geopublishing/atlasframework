@@ -99,7 +99,7 @@ public class DpeImportUtil {
 
 						if (!targetDir.exists())
 							throw new IOException("Couldn't create "
-									+ targetDir.getAbsolutePath());
+									+ IOUtil.escapePath( targetDir));
 
 						dped.copyFiles(sourceUrl, owner, targetDir,
 								atlasStatusDialog);

@@ -47,6 +47,7 @@ import org.geotools.swing.ProgressWindow;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.io.IOUtil;
 
 /**
  * A special {@link JScrollPane} that does threaded filling of the GUI with SLD
@@ -425,8 +426,6 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 		File symbolsDir = AtlasStyler
 				.getSymbolsDir(attType);
 		// Be more windows friendly
-		String path = symbolsDir.getAbsolutePath().replace("\\", "\\\\");
-		path = path.replace("%20", " ");
-		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT", path);
+		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT", IOUtil.escapePath(symbolsDir));
 	}
 }

@@ -58,7 +58,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		while (! IOUtil.canWriteOrCreate(styledShp.getSldFile()) ) {
 
 			AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
-					"StyledLayerSLDNotWritable.Msg", styledShp.getSldFile().getAbsolutePath()));
+					"StyledLayerSLDNotWritable.Msg", IOUtil.escapePath(styledShp.getSldFile())));
 
 			File startWithFile = new File(System.getProperty("user.home"),
 					styledShp.getSldFile().getName());
@@ -107,11 +107,11 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 			if (backup)
 				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
 						"AtlasStylerGUI.saveToSLDFileSuccessAndBackedUp",
-						styledShp.getSldFile().getAbsolutePath()));
+						IOUtil.escapePath(styledShp.getSldFile())));
 			else
 				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
-						"AtlasStylerGUI.saveToSLDFileSuccess", styledShp
-								.getSldFile().getAbsolutePath()));
+						"AtlasStylerGUI.saveToSLDFileSuccess", IOUtil.escapePath(styledShp
+								.getSldFile())));
 
 		} catch (Exception e1) {
 			LOGGER.error("saveStyleToSLD", e1);
