@@ -727,6 +727,16 @@ public class TextRuleListGUI extends JPanel {
 								new DefaultQuery(rulesList.getStyledFeatures()
 										.getSchema().getTypeName(), filter,
 										100, null, "max 100 sample features"));
+				
+				if (features.size() == 0 && filter != Filter.INCLUDE) {
+					LOGGER.info("Getting preview features for the filter "+filter+" failed, getting preview features without a filter!");
+					
+					features = rulesList.getStyledFeatures().getFeatureSource()
+					.getFeatures(
+							new DefaultQuery(rulesList.getStyledFeatures()
+									.getSchema().getTypeName(), Filter.INCLUDE,
+									100, null, "max 100 sample features"));
+				}				
 
 			} catch (IOException e) {
 				LOGGER
