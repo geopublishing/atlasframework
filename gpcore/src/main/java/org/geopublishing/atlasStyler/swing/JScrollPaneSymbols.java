@@ -150,6 +150,10 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 				public void mouseClicked(MouseEvent e) {
 					int i = jListSymbols.locationToIndex(e.getPoint());
+					if (i < 0 ) {
+						// Clicked where not symbol is
+						return;
+					}
 
 					if ((e.getClickCount() == 2)
 							&& (e.getButton() == MouseEvent.BUTTON1)) {

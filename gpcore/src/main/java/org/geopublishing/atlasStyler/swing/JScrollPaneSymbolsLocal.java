@@ -422,7 +422,11 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 	@Override
 	protected String getToolTip() {
-		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT", AtlasStyler
-				.getSymbolsDir(attType));
+		File symbolsDir = AtlasStyler
+				.getSymbolsDir(attType);
+		// Be more windows friendly
+		String path = symbolsDir.getAbsolutePath().replace("\\", "\\\\");
+		path = path.replace("%20", " ");
+		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT", path);
 	}
 }

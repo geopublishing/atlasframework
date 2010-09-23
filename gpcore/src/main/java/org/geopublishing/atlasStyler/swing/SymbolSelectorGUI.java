@@ -154,7 +154,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(510, 320);
 		this.setContentPane(getJContentPane());
 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -165,8 +164,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			}
 		});
 
+		pack();
+		
 		SwingUtil.setRelativeFramePosition(this, getParent(),
 				SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
+		
 	}
 
 	/**
@@ -176,44 +178,50 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = GridBagConstraints.BOTH;
-			gridBagConstraints16.gridy = 1;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.weighty = 1.0;
-			gridBagConstraints16.gridheight = 4;
-			gridBagConstraints16.gridx = 0;
-			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
-			gridBagConstraints51.gridx = 3;
-			gridBagConstraints51.gridwidth = 3;
-			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints51.anchor = GridBagConstraints.SOUTH;
-			gridBagConstraints51.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints51.gridy = 4;
-			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
-			gridBagConstraints61.gridx = 2;
-			gridBagConstraints61.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints61.gridwidth = 4;
-			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints61.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints61.gridy = 2;
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints5.gridx = 0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 2;
-			gridBagConstraints4.gridheight = 2;
-			gridBagConstraints4.anchor = GridBagConstraints.NORTH;
-			gridBagConstraints4.gridwidth = 4;
-			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints4.gridy = 0;
-			jContentPane = new JPanel();
-			jContentPane.setLayout(new GridBagLayout());
-			jContentPane.add(getJPanelPreview(), gridBagConstraints4);
-			jContentPane.add(getJPanelOptions(), gridBagConstraints61);
-			jContentPane.add(getJPanel(), gridBagConstraints51);
-			jContentPane.add(getJTabbedPane(), gridBagConstraints16);
+//			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
+//			gridBagConstraints16.fill = GridBagConstraints.BOTH;
+//			gridBagConstraints16.gridy = 1;
+//			gridBagConstraints16.weightx = 1.0;
+//			gridBagConstraints16.weighty = 1.0;
+//			gridBagConstraints16.gridheight = 4;
+//			gridBagConstraints16.gridx = 0;
+//			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
+//			gridBagConstraints51.gridx = 3;
+//			gridBagConstraints51.gridwidth = 3;
+//			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
+//			gridBagConstraints51.anchor = GridBagConstraints.SOUTH;
+//			gridBagConstraints51.insets = new Insets(0, 5, 0, 0);
+//			gridBagConstraints51.gridy = 4;
+//			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
+//			gridBagConstraints61.gridx = 2;
+//			gridBagConstraints61.anchor = GridBagConstraints.NORTH;
+//			gridBagConstraints61.gridwidth = 4;
+//			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
+//			gridBagConstraints61.insets = new Insets(0, 5, 0, 0);
+//			gridBagConstraints61.gridy = 2;
+//			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
+//			gridBagConstraints5.anchor = GridBagConstraints.NORTH;
+//			gridBagConstraints5.gridx = 0;
+//			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
+//			gridBagConstraints4.gridx = 2;
+//			gridBagConstraints4.gridheight = 2;
+//			gridBagConstraints4.anchor = GridBagConstraints.NORTH;
+//			gridBagConstraints4.gridwidth = 4;
+//			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
+//			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
+//			gridBagConstraints4.gridy = 0;
+			jContentPane = new JPanel(new MigLayout("flowy, wrap 1"));
+			jContentPane.add(getJTabbedPane(), "growy, growx 1, w 300");
+			
+			JPanel rightSide = new JPanel(new MigLayout("wrap 1, fillx"));
+			rightSide.add(getJPanelPreview(), "growx, center");
+			rightSide.add(getJPanelOptions(), "growx");
+			rightSide.add(getJPanelButtons(), "growx");
+			
+			jContentPane.add(rightSide, "growx 2");
+			
+			
+			
 		}
 		return jContentPane;
 	}
@@ -225,7 +233,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelPreview() {
 		if (jPanelPreview == null) {
-			jPanelPreview = new JPanel(new MigLayout("align center"),
+			jPanelPreview = new JPanel(new MigLayout("align center, w 100"),
 					AtlasStyler.R("SymbolSelector.Preview.BorderTitle"));
 			jLabelPreviewIcon.setOpaque(false);
 			jPanelPreview.add(jLabelPreviewIcon, "align center");
@@ -244,54 +252,54 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints11.gridy = 2;
-			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.anchor = GridBagConstraints.WEST;
-			gridBagConstraints11.insets = new Insets(0, 5, 5, 0);
-			gridBagConstraints11.gridx = 1;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 0;
-			gridBagConstraints10.anchor = GridBagConstraints.EAST;
-			gridBagConstraints10.gridy = 2;
+//			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
+//			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
+//			gridBagConstraints11.gridy = 2;
+//			gridBagConstraints11.weightx = 1.0;
+//			gridBagConstraints11.anchor = GridBagConstraints.WEST;
+//			gridBagConstraints11.insets = new Insets(0, 5, 5, 0);
+//			gridBagConstraints11.gridx = 1;
+//			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
+//			gridBagConstraints10.gridx = 0;
+//			gridBagConstraints10.anchor = GridBagConstraints.EAST;
+//			gridBagConstraints10.gridy = 2;
+//			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
+//			gridBagConstraints9.fill = GridBagConstraints.VERTICAL;
+//			gridBagConstraints9.gridy = 1;
+//			gridBagConstraints9.weightx = 1.0;
+//			gridBagConstraints9.anchor = GridBagConstraints.WEST;
+//			gridBagConstraints9.insets = new Insets(0, 5, 5, 0);
+//			gridBagConstraints9.gridx = 1;
+//			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
+//			gridBagConstraints8.gridx = 0;
+//			gridBagConstraints8.anchor = GridBagConstraints.EAST;
+//			gridBagConstraints8.gridy = 1;
+//			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
+//			gridBagConstraints7.gridx = 0;
+//			gridBagConstraints7.anchor = GridBagConstraints.EAST;
+//			gridBagConstraints7.gridy = 0;
+//			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
+//			gridBagConstraints6.fill = GridBagConstraints.VERTICAL;
+//			gridBagConstraints6.gridy = 0;
+//			gridBagConstraints6.weightx = 1.0;
+//			gridBagConstraints6.anchor = GridBagConstraints.WEST;
+//			gridBagConstraints6.insets = new Insets(5, 5, 5, 0);
+//			gridBagConstraints6.gridx = 1;
 			jLabelRotation = new JLabel(AtlasStyler.R("RotationLabel"));
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints9.gridy = 1;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.anchor = GridBagConstraints.WEST;
-			gridBagConstraints9.insets = new Insets(0, 5, 5, 0);
-			gridBagConstraints9.gridx = 1;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 0;
-			gridBagConstraints8.anchor = GridBagConstraints.EAST;
-			gridBagConstraints8.gridy = 1;
 			jLabelSize = new JLabel(AtlasStyler.R("SizeLabel"));
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.gridx = 0;
-			gridBagConstraints7.anchor = GridBagConstraints.EAST;
-			gridBagConstraints7.gridy = 0;
 			jLabelColor = new JLabel(AtlasStyler.R("ColorLabel"));
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints6.gridy = 0;
-			gridBagConstraints6.weightx = 1.0;
-			gridBagConstraints6.anchor = GridBagConstraints.WEST;
-			gridBagConstraints6.insets = new Insets(5, 5, 5, 0);
-			gridBagConstraints6.gridx = 1;
-			jPanelOptions = new JPanel();
-			jPanelOptions.setLayout(new GridBagLayout());
+			jPanelOptions = new JPanel(new MigLayout("wrap 2"));
+//			jPanelOptions.setLayout(new GridBagLayout());
 			jPanelOptions.setBorder(BorderFactory
 					.createEmptyBorder(5, 15, 5, 5));
-			jPanelOptions.add(getJButtonColor(), gridBagConstraints6);
-			jPanelOptions.add(jLabelColor, gridBagConstraints7);
-			jPanelOptions.add(jLabelSize, gridBagConstraints8);
-			jPanelOptions.add(getJComboBoxSize(), gridBagConstraints9);
+			jPanelOptions.add(jLabelColor, "sgx1");
+			jPanelOptions.add(getJButtonColor(), "sgx2");
+			jPanelOptions.add(jLabelSize, "sgx1");
+			jPanelOptions.add(getJComboBoxSize(), "sgx2");
 
 			if (singleSymbolRuleList.getRotation() != null) {
-				jPanelOptions.add(jLabelRotation, gridBagConstraints10);
-				jPanelOptions.add(getJComboBoxAngle(), gridBagConstraints11);
+				jPanelOptions.add(jLabelRotation, "sgx1");
+				jPanelOptions.add(getJComboBoxAngle(), "sgx2");
 			}
 		}
 		return jPanelOptions;
@@ -472,15 +480,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jComboBoxRotation
 					.setRenderer(AbstractEditGUI.ROTATION_VALUES_RENDERER);
 
-			// // if (!Arrays.asList(AbstractEditGUI.ROTATION_VALUES).contains(
-			// // singleSymbolRuleList.getRotation())) {
-			// // // TODO Value not in list!
-			// // // Need ASUtil.insertOrAdd for double, int etc..
-			// // }
-			//
-			// jComboBoxRotation.setSelectedItem(singleSymbolRuleList
-			// .getRotation());
-
 			ASUtil.selectOrInsert(jComboBoxRotation, singleSymbolRuleList
 					.getRotation());
 
@@ -494,8 +493,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 						singleSymbolRuleList.setRotation(size);
 						singleSymbolRuleList.fireEvents(new RuleChangedEvent(
 								"rotation changed", singleSymbolRuleList));
-						// firePropertyChange(PROPERTY_PREVIEW_UPDATE, null,
-						// null);
 					}
 
 				}
@@ -736,45 +733,14 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanel() {
+	private JPanel getJPanelButtons() {
 		if (jPanel == null) {
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.anchor = GridBagConstraints.EAST;
-			gridBagConstraints15.gridx = 2;
-			gridBagConstraints15.gridy = 2;
-			gridBagConstraints15.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints15.insets = new Insets(0, 5, 2, 5);
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.anchor = GridBagConstraints.WEST;
-			gridBagConstraints14.insets = new Insets(0, 5, 2, 0);
-			gridBagConstraints14.gridx = 1;
-			gridBagConstraints14.gridy = 2;
-			gridBagConstraints14.fill = GridBagConstraints.HORIZONTAL;
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.anchor = GridBagConstraints.EAST;
-			gridBagConstraints13.gridx = 2;
-			gridBagConstraints13.gridy = 1;
-			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.insets = new Insets(5, 6, 5, 5);
-			GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-			gridBagConstraints12.anchor = GridBagConstraints.WEST;
-			gridBagConstraints12.gridx = 1;
-			gridBagConstraints12.gridy = 1;
-			gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints12.insets = new Insets(5, 5, 5, 0);
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints2.gridwidth = 3;
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.insets = new Insets(5, 5, 0, 5);
-			jPanel = new JPanel();
-			jPanel.setLayout(new GridBagLayout());
-			jPanel.add(getJButtonProperties(), gridBagConstraints2);
-			jPanel.add(getJButtonSave(), gridBagConstraints12);
-			jPanel.add(getJButtonReset(), gridBagConstraints13);
-			jPanel.add(getJButtonOK(), gridBagConstraints14);
-			jPanel.add(getJButtonCancel(), gridBagConstraints15);
+			jPanel = new JPanel(new MigLayout("wrap 1, fillx"));
+			jPanel.add(getJButtonSave(), "growx, split 2");
+			jPanel.add(getJButtonReset(), "growx");
+			jPanel.add(getJButtonProperties(), "split 3");
+			jPanel.add(getJButtonOK(), "growx");
+			jPanel.add(getJButtonCancel(), "growx");
 		}
 		return jPanel;
 	}
@@ -824,7 +790,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				if (symbolsLocal.getToolTip() != null)
 					symbolsLocalPanel.add(new JLabel("<html>"
 							+ symbolsLocal.getToolTip() + "</html>"),"sgx");
-				symbolsLocalPanel.add(symbolsLocal,"sgx");
+				symbolsLocalPanel.add(symbolsLocal,"sgx, grow, h :300:");
 
 				jTabbedPane.addTab(symbolsLocal.getDesc(), symbolsLocal
 						.getIcon(), symbolsLocalPanel, symbolsLocal
@@ -844,7 +810,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				if (symbolsOnline.getToolTip() != null)
 					symbolsOnlinePanel.add(new JLabel("<html>"
 							+ symbolsOnline.getToolTip() + "</html>"),"sgx");
-				symbolsOnlinePanel.add(symbolsOnline,"sgx");
+				symbolsOnlinePanel.add(symbolsOnline,"sgx, grow, h :300:");
 
 				jTabbedPane.addTab(symbolsOnline.getDesc(), symbolsOnline
 						.getIcon(), symbolsOnlinePanel, symbolsOnline.getToolTip());
