@@ -45,18 +45,20 @@ public class JarExportUtilTest {
 	static private final Logger LOGGER = Logger
 			.getLogger(JarExportUtilTest.class);
 
-	final File atlasExportTesttDir = GPTestingUtil.getAtlasExportTesttDir();
+	File atlasExportTesttDir;
 
 	private static AtlasConfigEditable atlasConfig;
 
 	@Before
 	public void setUp() throws Exception {
+		atlasExportTesttDir = GPTestingUtil.createAtlasExportTesttDir();
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
 	}
-	
+
 	@After
 	public void tearDown() throws Exception {
 		atlasConfig.dispose();
+		FileUtils.deleteDirectory(atlasExportTesttDir);
 	}
 
 	@Test
@@ -91,7 +93,8 @@ public class JarExportUtilTest {
 					.list());
 			for (String s : listOfFilesInAtlasDataDir) {
 				if (s.startsWith("tools-"))
-					fail("File "+s+" should not be part of the exported atlas!");
+					fail("File " + s
+							+ " should not be part of the exported atlas!");
 			}
 		}
 	}
@@ -214,13 +217,14 @@ public class JarExportUtilTest {
 		File exeFile = new File(atlasDISKDir, "atlas.exe");
 
 		exeFile.delete();
-		assertFalse(exeFile+" must not exist before it's creation", exeFile.exists());
+		assertFalse(exeFile + " must not exist before it's creation",
+				exeFile.exists());
 
 		jeu.createJSmooth(atlasDISKDir);
 
-		assertTrue(exeFile+" must exist after creation", exeFile.exists());
+		assertTrue(exeFile + " must exist after creation", exeFile.exists());
 	}
-	
+
 	@Test
 	public void testExportAtlasLibsSignNoGUI() throws Exception {
 

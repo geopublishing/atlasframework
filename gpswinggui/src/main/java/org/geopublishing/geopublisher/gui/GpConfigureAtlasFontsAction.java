@@ -37,7 +37,8 @@ public class GpConfigureAtlasFontsAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// Opens a modal dialog to configure the fonts
-		new ManageFontsDialog(owner, ace);
+		ManageFontsDialog manageFontsDialog = new ManageFontsDialog(owner, ace);
+		manageFontsDialog.setVisible(true);
 	}
 
 }

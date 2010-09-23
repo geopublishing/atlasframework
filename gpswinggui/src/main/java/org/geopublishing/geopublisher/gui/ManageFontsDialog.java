@@ -60,7 +60,7 @@ public class ManageFontsDialog extends AtlasDialog {
 		initGui();
 		pack();
 		setModal(true);
-		setVisible(true);
+//		setVisible(true);
 	}
 
 	private void initGui() {

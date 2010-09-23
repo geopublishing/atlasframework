@@ -32,6 +32,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -109,10 +110,12 @@ public class GPTestingUtil {
 		return atlasConfig;
 	}
 
-	public static File getAtlasExportTesttDir() {
+	/**
+	 * Creates a directory in /tmp that can be used to export an atlas.  
+	 */
+	public static File createAtlasExportTesttDir() {
 		File atlasExportTesttDir = new File(IOUtil.getTempDir(),
-				"junitTestAtlasExport");
-
+				"junitTestAtlasExport" + System.currentTimeMillis());
 		atlasExportTesttDir.mkdirs();
 		return atlasExportTesttDir;
 	}

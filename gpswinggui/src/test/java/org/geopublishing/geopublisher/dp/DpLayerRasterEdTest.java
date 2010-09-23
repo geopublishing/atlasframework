@@ -19,6 +19,8 @@ import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geotools.map.DefaultMapLayer;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
@@ -34,6 +36,18 @@ public class DpLayerRasterEdTest {
 	private static final String RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS = "raster_02067770230";
 
 	static AtlasConfigEditable ace;
+
+	File atlasExportTesttDir;
+
+	@Before
+	public void setupTest() {
+		atlasExportTesttDir = GPTestingUtil.createAtlasExportTesttDir();
+	}
+
+	@After
+	public void tearDown() throws IOException {
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+	}
 
 	@Test
 	public void testTransparencyOfGeotiffWithSLD_AVJARafterExport()
@@ -144,15 +158,12 @@ public class DpLayerRasterEdTest {
 
 	@Test
 	public void testTransparencyOfGeotiffRGBonly_GP() throws Throwable {
-		DpLayerRaster raster = (DpLayerRaster) ace.getDataPool()
-				.get(RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS);
-		DefaultMapLayer mlayer = new DefaultMapLayer(
-				raster.getGeoObject(),
+		DpLayerRaster raster = (DpLayerRaster) ace.getDataPool().get(
+				RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS);
+		DefaultMapLayer mlayer = new DefaultMapLayer(raster.getGeoObject(),
 				raster.getStyle());
 		checkMapLayer_GEOTIFF_RGB(mlayer);
 	}
-
-	final File atlasExportTesttDir = GPTestingUtil.getAtlasExportTesttDir();
 
 	private void exportAtlas() throws IOException, Exception {
 		prepareExportTestDirectory();
