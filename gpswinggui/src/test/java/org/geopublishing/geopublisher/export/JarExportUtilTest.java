@@ -194,38 +194,6 @@ public class JarExportUtilTest {
 	}
 
 	@Test
-	public void testJSmooth() throws Exception {
-
-		assertNotNull(atlasExportTesttDir);
-
-		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
-				true, true, true);
-
-		LOGGER.debug("atlasExportTesttDir="
-				+ atlasExportTesttDir.getAbsolutePath());
-
-		FileUtils.deleteDirectory(atlasExportTesttDir);
-		assertTrue(atlasExportTesttDir.mkdir());
-
-		jeu.export(null);
-
-		String[] files = atlasExportTesttDir.list();
-		assertTrue((files[0].equals("JWS") && files[1].equals("DISK"))
-				|| (files[1].equals("JWS") && files[0].equals("DISK")));
-
-		File atlasDISKDir = new File(atlasExportTesttDir, "DISK");
-		File exeFile = new File(atlasDISKDir, "atlas.exe");
-
-		exeFile.delete();
-		assertFalse(exeFile + " must not exist before it's creation",
-				exeFile.exists());
-
-		jeu.createJSmooth(atlasDISKDir);
-
-		assertTrue(exeFile + " must exist after creation", exeFile.exists());
-	}
-
-	@Test
 	public void testExportAtlasLibsSignNoGUI() throws Exception {
 
 		assertNotNull(atlasExportTesttDir);
@@ -347,6 +315,39 @@ public class JarExportUtilTest {
 				dpeJarFileExpected.getAbsolutePath(),
 				createdJar.getAbsolutePath());
 		dpeJarFileExpected.delete();
+	}
+	
+
+	@Test
+	public void testJSmooth() throws Exception {
+
+		assertNotNull(atlasExportTesttDir);
+
+		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
+				true, true, true);
+
+		LOGGER.debug("atlasExportTesttDir="
+				+ atlasExportTesttDir.getAbsolutePath());
+
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		assertTrue(atlasExportTesttDir.mkdir());
+
+		jeu.export(null);
+
+		String[] files = atlasExportTesttDir.list();
+		assertTrue((files[0].equals("JWS") && files[1].equals("DISK"))
+				|| (files[1].equals("JWS") && files[0].equals("DISK")));
+
+		File atlasDISKDir = new File(atlasExportTesttDir, "DISK");
+		File exeFile = new File(atlasDISKDir, "atlas.exe");
+
+		exeFile.delete();
+		assertFalse(exeFile + " must not exist before it's creation",
+				exeFile.exists());
+
+		jeu.createJSmooth(atlasDISKDir);
+
+		assertTrue(exeFile + " must exist after creation", exeFile.exists());
 	}
 
 }
