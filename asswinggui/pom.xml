@@ -18,9 +18,9 @@
 	<properties>
 		<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
 	</properties>
-	
+
 	<build>
-	
+
 		<plugins>
 
 			<plugin>
@@ -58,10 +58,8 @@
 
 	<profiles>
 		<profile>
-			<!--
-				If run on the special "gisbert" profile, the application is released
-				to the geopublishing.org webpage
-			-->
+			<!-- If run on the special "gisbert" profile, the application is released 
+				to the geopublishing.org webpage -->
 			<id>gisbert</id>
 			<build>
 				<plugins>
@@ -141,13 +139,11 @@
 						</executions>
 						<configuration>
 							<jsmoothFile>target/classes/atlasStyler.jsmooth</jsmoothFile>
-							<!--
-								<iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation>
-							-->
+							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
 							<setExeName>false</setExeName>
 							<setJarName>true</setJarName>
 							<includeDependencies>true</includeDependencies>
-							<!--					<dependencyBaseDir>lib</dependencyBaseDir>-->
+							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
 						</configuration>
 					</plugin>
 
@@ -195,19 +191,29 @@
 			<scope>compile</scope>
 		</dependency>
 <!---->
-<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-imagepyramid</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--			<type>jar</type>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagepyramid</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
 <!---->
-<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-imagemosaic</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--			<type>jar</type>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagemosaic</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
+
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-image</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
 
 		<dependency>
 			<groupId>javax.jnlp</groupId>
