@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,8 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
@@ -48,9 +49,14 @@ public class JarExportUtilTest {
 
 	private static AtlasConfigEditable atlasConfig;
 
-	@BeforeClass
-	public static void setUp() throws Exception {
+	@Before
+	public void setUp() throws Exception {
 		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		atlasConfig.dispose();
 	}
 
 	@Test
@@ -208,14 +214,13 @@ public class JarExportUtilTest {
 		File exeFile = new File(atlasDISKDir, "atlas.exe");
 
 		exeFile.delete();
-		assertTrue(!exeFile.exists());
+		assertFalse(exeFile+" must not exist before it's creation", exeFile.exists());
 
 		jeu.createJSmooth(atlasDISKDir);
 
-		assertTrue(exeFile.exists());
-
+		assertTrue(exeFile+" must exist after creation", exeFile.exists());
 	}
-
+	
 	@Test
 	public void testExportAtlasLibsSignNoGUI() throws Exception {
 

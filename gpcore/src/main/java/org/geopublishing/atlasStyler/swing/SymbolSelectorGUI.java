@@ -13,9 +13,6 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -178,38 +175,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-//			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-//			gridBagConstraints16.fill = GridBagConstraints.BOTH;
-//			gridBagConstraints16.gridy = 1;
-//			gridBagConstraints16.weightx = 1.0;
-//			gridBagConstraints16.weighty = 1.0;
-//			gridBagConstraints16.gridheight = 4;
-//			gridBagConstraints16.gridx = 0;
-//			GridBagConstraints gridBagConstraints51 = new GridBagConstraints();
-//			gridBagConstraints51.gridx = 3;
-//			gridBagConstraints51.gridwidth = 3;
-//			gridBagConstraints51.fill = GridBagConstraints.HORIZONTAL;
-//			gridBagConstraints51.anchor = GridBagConstraints.SOUTH;
-//			gridBagConstraints51.insets = new Insets(0, 5, 0, 0);
-//			gridBagConstraints51.gridy = 4;
-//			GridBagConstraints gridBagConstraints61 = new GridBagConstraints();
-//			gridBagConstraints61.gridx = 2;
-//			gridBagConstraints61.anchor = GridBagConstraints.NORTH;
-//			gridBagConstraints61.gridwidth = 4;
-//			gridBagConstraints61.fill = GridBagConstraints.HORIZONTAL;
-//			gridBagConstraints61.insets = new Insets(0, 5, 0, 0);
-//			gridBagConstraints61.gridy = 2;
-//			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-//			gridBagConstraints5.anchor = GridBagConstraints.NORTH;
-//			gridBagConstraints5.gridx = 0;
-//			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-//			gridBagConstraints4.gridx = 2;
-//			gridBagConstraints4.gridheight = 2;
-//			gridBagConstraints4.anchor = GridBagConstraints.NORTH;
-//			gridBagConstraints4.gridwidth = 4;
-//			gridBagConstraints4.fill = GridBagConstraints.HORIZONTAL;
-//			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
-//			gridBagConstraints4.gridy = 0;
 			jContentPane = new JPanel(new MigLayout("flowy, wrap 1"));
 			jContentPane.add(getJTabbedPane(), "growy, growx 1, w 300");
 			
@@ -252,44 +217,10 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
-//			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-//			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
-//			gridBagConstraints11.gridy = 2;
-//			gridBagConstraints11.weightx = 1.0;
-//			gridBagConstraints11.anchor = GridBagConstraints.WEST;
-//			gridBagConstraints11.insets = new Insets(0, 5, 5, 0);
-//			gridBagConstraints11.gridx = 1;
-//			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-//			gridBagConstraints10.gridx = 0;
-//			gridBagConstraints10.anchor = GridBagConstraints.EAST;
-//			gridBagConstraints10.gridy = 2;
-//			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-//			gridBagConstraints9.fill = GridBagConstraints.VERTICAL;
-//			gridBagConstraints9.gridy = 1;
-//			gridBagConstraints9.weightx = 1.0;
-//			gridBagConstraints9.anchor = GridBagConstraints.WEST;
-//			gridBagConstraints9.insets = new Insets(0, 5, 5, 0);
-//			gridBagConstraints9.gridx = 1;
-//			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-//			gridBagConstraints8.gridx = 0;
-//			gridBagConstraints8.anchor = GridBagConstraints.EAST;
-//			gridBagConstraints8.gridy = 1;
-//			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-//			gridBagConstraints7.gridx = 0;
-//			gridBagConstraints7.anchor = GridBagConstraints.EAST;
-//			gridBagConstraints7.gridy = 0;
-//			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-//			gridBagConstraints6.fill = GridBagConstraints.VERTICAL;
-//			gridBagConstraints6.gridy = 0;
-//			gridBagConstraints6.weightx = 1.0;
-//			gridBagConstraints6.anchor = GridBagConstraints.WEST;
-//			gridBagConstraints6.insets = new Insets(5, 5, 5, 0);
-//			gridBagConstraints6.gridx = 1;
 			jLabelRotation = new JLabel(AtlasStyler.R("RotationLabel"));
 			jLabelSize = new JLabel(AtlasStyler.R("SizeLabel"));
 			jLabelColor = new JLabel(AtlasStyler.R("ColorLabel"));
 			jPanelOptions = new JPanel(new MigLayout("wrap 2"));
-//			jPanelOptions.setLayout(new GridBagLayout());
 			jPanelOptions.setBorder(BorderFactory
 					.createEmptyBorder(5, 15, 5, 5));
 			jPanelOptions.add(jLabelColor, "sgx1");

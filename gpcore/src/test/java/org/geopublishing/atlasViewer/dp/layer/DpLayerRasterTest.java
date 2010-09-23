@@ -9,14 +9,8 @@ import java.net.URL;
 import org.geotools.data.DataUtilities;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.map.DefaultMapLayer;
-import org.geotools.styling.ColorMap;
-import org.geotools.styling.ColorMapEntry;
-import org.geotools.styling.ColorMapEntryImpl;
-import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Style;
-import org.geotools.styling.StyleVisitor;
 import org.junit.Test;
-import org.opengis.filter.expression.Expression;
 
 import schmitzm.geotools.grid.GridUtil;
 import schmitzm.geotools.styling.StylingUtil;

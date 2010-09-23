@@ -1586,7 +1586,9 @@ public class JarExportUtil {
 				if (!jsmoothSkelDir.getCanonicalFile().delete()) {
 					jsmoothSkelDir.getCanonicalFile().delete();
 				}
-				new File(atlasDir, "icon.gif").getCanonicalFile().delete();
+				File iconFile = new File(atlasDir, "icon.gif").getCanonicalFile();
+				if (iconFile.exists())
+					iconFile.delete();
 				destinationProjectFile.delete();
 			} catch (final IOException e) {
 				LOGGER.warn(
