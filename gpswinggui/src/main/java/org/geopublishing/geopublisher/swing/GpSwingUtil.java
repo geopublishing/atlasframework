@@ -1,4 +1,5 @@
 package org.geopublishing.geopublisher.swing;
+
 /*******************************************************************************
  * Copyright (c) 2010 Stefan A. Tzeggai.
  * All rights reserved. This program and the accompanying materials
@@ -9,7 +10,6 @@ package org.geopublishing.geopublisher.swing;
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-
 
 import java.awt.Component;
 import java.io.File;
@@ -41,15 +41,16 @@ import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.jfree.util.Log;
 
+import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.I8NUtil;
 
-public class GpSwingUtil extends GpUtil{
+public class GpSwingUtil extends GpUtil {
 
 	private static final Logger LOGGER = Logger.getLogger(GpSwingUtil.class);
-	
 
 	/**
 	 * Deletes a {@link DpEntry}. This deletes the Entry from the Atlas'
@@ -108,13 +109,10 @@ public class GpSwingUtil extends GpUtil{
 			int res = JOptionPane
 					.showConfirmDialog(
 							owner,
-							GpUtil
-									.R(
-											"AtlasConfig.DeleteDpEntry.DeleteReferences.Question",
-											countRefsInMappool, references
-													.size()
-													- countRefsInMappool),
-													GpUtil
+							GpUtil.R(
+									"AtlasConfig.DeleteDpEntry.DeleteReferences.Question",
+									countRefsInMappool, references.size()
+											- countRefsInMappool), GpUtil
 									.R("DataPoolWindow_Action_DeleteDPE_label"
 											+ " " + dpe.getTitle()),
 							JOptionPane.YES_NO_OPTION);
@@ -175,8 +173,6 @@ public class GpSwingUtil extends GpUtil{
 
 	}
 
-
-
 	/**
 	 * Checks if a filename is OK for the AV. Asks the use to accespt the
 	 * changed name
@@ -200,8 +196,8 @@ public class GpSwingUtil extends GpUtil{
 			 * or cancel.
 			 */
 
-			if (!AVSwingUtil.askOKCancel(owner, R("Cleanfile.Question",
-					nameCandidate, cleanName))) {
+			if (!AVSwingUtil.askOKCancel(owner,
+					R("Cleanfile.Question", nameCandidate, cleanName))) {
 				throw new AtlasImportException(R(
 						"Cleanfile.Denied.ImportCancelled", nameCandidate));
 			}
@@ -209,12 +205,13 @@ public class GpSwingUtil extends GpUtil{
 
 		return cleanName;
 	}
-	
 
 	/**
 	 * Validates, that all directory references actually exist. If some
 	 * directory is missing, asks the user if he want's to delete the entry and
 	 * all references to it.<br/>
+	 * Also checks that all directories in <code>ad/data</code> folder are
+	 * actually referenced. If now, the used is asked to delete the folder.</br>
 	 * This method also initializes the size-cache for every {@link DpEntry}.
 	 */
 	public static void validate(AtlasConfigEditable ace, final Component owner) {
@@ -253,14 +250,65 @@ public class GpSwingUtil extends GpUtil{
 					new File(ace.getDataDir(), dpe.getDataDirname())
 							.getAbsolutePath());
 
-			final String question = GpUtil.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
+			final String question = GpUtil
+					.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
 
-			if (AVSwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n" + question)) {
+			if (AVSwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n"
+					+ question)) {
 				deleteDpEntry(owner, ace, dpe, false);
 			}
 		}
-	}
 
+		// ****************************************************************************
+		// now list all directories in ad/data and check whether they are
+		// actuall used
+		// ****************************************************************************
+		for (File d : ace.getDataDir().listFiles()) {
+			if (!d.isDirectory())
+				continue;
+			if (d.getName().startsWith(".")) {
+				continue;
+			}
+
+			boolean isReferenced = false;
+			for (DpEntry<?> dpe : ace.getDataPool().values()) {
+				if (dpe.getDataDirname().equals(d.getName())) {
+					isReferenced = true;
+					break;
+				}
+			}
+
+			if (isReferenced)
+				continue;
+
+			LOGGER.info("The directory " + IOUtil.escapePath(d)
+					+ " is not referenced in the atlas.");
+
+			boolean askDelete = AVSwingUtil
+					.askOKCancel(
+							owner,
+							GpSwingUtil
+									.R("UnreferencedDirectoryFoundInAtlasDataDir_AskIfItShouldBeDeleted",
+											IOUtil.escapePath(ace.getDataDir()),
+											d.getName()));
+			if (askDelete) {
+				LOGGER.info("User allowed to delete folder " + IOUtil.escapePath(d)
+						+ ".");
+				if (new File(d, ".svn").exists()) {
+					LOGGER.info("Please use:\nsvn del \""+IOUtil.escapePath(d)+"\" && svn commit \""+IOUtil.escapePath(d)+"\" -m \"deleted an unused directory\"");
+					AVSwingUtil
+							.showMessageDialog(
+									owner,
+									GpSwingUtil
+											.R("UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",d.getName(),
+													IOUtil.escapePath(d)));
+				} else {
+					FileUtils.deleteQuietly(d);
+				}
+			}
+
+		}
+	}
 
 	/**
 	 * Save the {@link AtlasConfig} to its project directory
@@ -272,7 +320,8 @@ public class GpSwingUtil extends GpUtil{
 	 * @return false Only if there happened an error while saving. If there is
 	 *         nothing to save, returns true;
 	 */
-	public static boolean save(final AtlasConfigEditable ace,  final Component parentGUI, boolean confirm) {
+	public static boolean save(final AtlasConfigEditable ace,
+			final Component parentGUI, boolean confirm) {
 
 		AVUtil.checkThatWeAreOnEDT();
 
@@ -281,13 +330,12 @@ public class GpSwingUtil extends GpUtil{
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
-				AMLExporter amlExporter = new AMLExporter(
-						ace);
+				AMLExporter amlExporter = new AMLExporter(ace);
 
 				if (amlExporter.saveAtlasConfigEditable(statusDialog)) {
-					ace.getProperties().save(new File(ace
-							.getAtlasDir(),
-							AVProps.PROPERTIESFILE_RESOURCE_NAME));
+					ace.getProperties().save(
+							new File(ace.getAtlasDir(),
+									AVProps.PROPERTIESFILE_RESOURCE_NAME));
 
 					new File(ace.getAtlasDir(),
 							AtlasConfigEditable.ATLAS_GPA_FILENAME)
@@ -303,8 +351,8 @@ public class GpSwingUtil extends GpUtil{
 		try {
 			Boolean saved = swingWorker.executeModal();
 			if (saved && confirm) {
-				JOptionPane.showMessageDialog(parentGUI, GeopublisherGUI
-						.R("SaveAtlas.Success.Message"));
+				JOptionPane.showMessageDialog(parentGUI,
+						GeopublisherGUI.R("SaveAtlas.Success.Message"));
 			}
 			return saved;
 		} catch (Exception e) {
@@ -312,7 +360,6 @@ public class GpSwingUtil extends GpUtil{
 			return false;
 		}
 	}
-
 
 	/**
 	 * Returns a {@link List} of {@link File}s that point to the HTML info files
@@ -324,19 +371,21 @@ public class GpSwingUtil extends GpUtil{
 	 * @param dpl
 	 *            {@link DpLayer} that the HTML files belong to.
 	 */
-	static public List<File> getHTMLFilesFor(DpLayer<?, ? extends ChartStyle> dpl) {
+	static public List<File> getHTMLFilesFor(
+			DpLayer<?, ? extends ChartStyle> dpl) {
 
 		List<File> htmlFiles = new ArrayList<File>();
-		
-		AtlasConfigEditable ac = (AtlasConfigEditable)dpl.getAtlasConfig();
+
+		AtlasConfigEditable ac = (AtlasConfigEditable) dpl.getAtlasConfig();
 
 		File dir = new File(ac.getDataDir(), dpl.getDataDirname());
 		for (String lang : ac.getLanguages()) {
 			try {
-				File htmlFile = new File((FilenameUtils
-						.removeExtension(new File(dir, dpl.getFilename())
-								.getCanonicalPath())
-						+ "_" + lang + ".html"));
+				File htmlFile = new File(
+						(FilenameUtils.removeExtension(new File(dir, dpl
+								.getFilename()).getCanonicalPath())
+								+ "_"
+								+ lang + ".html"));
 
 				if (!htmlFile.exists()) {
 
@@ -360,12 +409,12 @@ public class GpSwingUtil extends GpUtil{
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(),
+						e);
 			}
 		}
 		return htmlFiles;
 	}
-
 
 	/**
 	 * Returns a {@link List} of {@link File}s that point to the HTML info
@@ -380,8 +429,8 @@ public class GpSwingUtil extends GpUtil{
 	public static List<File> getHTMLFilesFor(Map map) {
 
 		List<File> htmlFiles = new ArrayList<File>();
-		
-		AtlasConfigEditable ace = (AtlasConfigEditable)map.getAc();
+
+		AtlasConfigEditable ace = (AtlasConfigEditable) map.getAc();
 
 		File dir = new File(ace.getHtmlDir(), map.getId());
 		dir.mkdirs();
@@ -401,9 +450,9 @@ public class GpSwingUtil extends GpUtil{
 					 */
 
 					FileWriter fw = new FileWriter(htmlFile);
-					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile",
-							I8NUtil.getLocaleFor(lang).getDisplayLanguage(),
-							map.getTitle()));
+					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I8NUtil
+							.getLocaleFor(lang).getDisplayLanguage(), map
+							.getTitle()));
 
 					fw.flush();
 					fw.close();
@@ -412,7 +461,8 @@ public class GpSwingUtil extends GpUtil{
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(),
+						e);
 			}
 		}
 		return htmlFiles;
