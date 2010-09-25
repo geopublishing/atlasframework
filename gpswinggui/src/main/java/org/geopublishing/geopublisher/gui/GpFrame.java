@@ -574,7 +574,7 @@ public class GpFrame extends JFrame {
 				} catch (Exception ee) {
 					try {
 					
-						File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\tmp" : "/tmp",
+						File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
 							GPBugReportmailer.GEOPUBLISHERLOG)
 							.getCanonicalFile();
 					
@@ -582,7 +582,7 @@ public class GpFrame extends JFrame {
 					} catch (Exception usoe) {
 						
 						try {
-							File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\tmp" : "/tmp",
+							File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
 									GPBugReportmailer.GEOPUBLISHERLOG)
 									.getCanonicalFile();
 							
