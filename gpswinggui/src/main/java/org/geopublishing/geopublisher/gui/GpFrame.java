@@ -551,6 +551,14 @@ public class GpFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				/**
+				 * Stefan Tzeggai 25th Sep 2010
+				 * Some real ugly stuff: On Windows 7 the line
+				 *  <param name="File" value="${java.io.tmpdir}/geopublisher.log" />
+				 *  from gp_log4j.xml resolves to "C:\tmp", but during 
+				 *  program execution it resolves to "C:\ Users\ username\ AppData\ Local\ Temp" 
+				 */
 
 				try {
 					File logFile = new File(IOUtil.getTempDir(),
@@ -564,7 +572,26 @@ public class GpFrame extends JFrame {
 								DataUtilities.fileToURL(logFile).toURI());
 					}
 				} catch (Exception ee) {
-					ExceptionDialog.show(GpFrame.this, ee);
+					try {
+					
+						File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\tmp" : "/tmp",
+							GPBugReportmailer.GEOPUBLISHERLOG)
+							.getCanonicalFile();
+					
+						Desktop.getDesktop().edit(logFile);
+					} catch (Exception usoe) {
+						
+						try {
+							File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\tmp" : "/tmp",
+									GPBugReportmailer.GEOPUBLISHERLOG)
+									.getCanonicalFile();
+							
+							Desktop.getDesktop().browse(
+									DataUtilities.fileToURL(logFile).toURI());
+						} catch (Exception eee) {
+							ExceptionDialog.show(GpFrame.this, eee);
+						}
+					}
 
 				}
 			}
