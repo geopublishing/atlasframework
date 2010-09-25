@@ -540,13 +540,14 @@ public class JarExportUtil {
 	 *            command line argument of what to put into the jar. All
 	 *            '/'-chars will be replaces with the systemdependent
 	 *            File.seperator
+	 * @throws AtlasCancelException 
 	 * @throws Exception
 	 *             So many things can fail ;-)
 	 * 
 	 * @see Thanks to http://www.jguru.com/faq/view.jsp?EID=68627
 	 */
 	public void addToJar(final File targetJar, final File baseDir,
-			final String what) throws AtlasExportException, IOException {
+			final String what) throws AtlasExportException, IOException, AtlasCancelException {
 
 		final String jarName = targetJar.getAbsolutePath();
 
@@ -568,6 +569,7 @@ public class JarExportUtil {
 			listRelFileNames.add(what);
 
 		for (String what2 : listRelFileNames) {
+			checkAbort();
 
 			// We HAVE TO create a new JarTool instance of every calL!
 			final Main jartool = new Main(System.out, System.err, "jar");
