@@ -27,6 +27,7 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.opengis.filter.expression.Literal;
 
+import schmitzm.io.IOUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.AtlasDialog;
@@ -67,7 +68,7 @@ public class ManageFontsDialog extends AtlasDialog {
 		setLayout(new MigLayout("wrap 1", "[,,400]"));
 
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.explanation.html",
-				AtlasStyler.getDefaultFontFamilies().length, ace.getFontsDir())));
+				AtlasStyler.getDefaultFontFamilies().length, IOUtil.escapePath(ace.getFontsDir()))));
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.defaults.explanation")));
 		add(new JScrollPane(getDefaultFontsList()), "grow");
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.userfonts.explanation")));
