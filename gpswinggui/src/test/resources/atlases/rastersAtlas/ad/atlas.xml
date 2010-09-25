@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<atlas xmlns="http://www.wikisquare.de/AtlasML" buildVersion="201009221213" majVersion="1" minVersion="6" schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd">
+<atlas xmlns="http://www.wikisquare.de/AtlasML" buildVersion="201009241933" majVersion="1" minVersion="6" schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd">
   <name>
     <translation lang="de">testing rasters</translation>
     <translation lang="en">testing rasters</translation>
@@ -21,6 +21,23 @@
     <language lang="de"/>
     <language lang="en"/>
   </supportedLanguages>
+  <rasterLayer exportable="false" id="raster_00993740883">
+    <name>
+      <translation lang="de">ARCASCII With SLD With Transparency</translation>
+      <translation lang="en">ARCASCII With SLD With Transparency</translation>
+    </name>
+    <desc>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </keywords>
+    <dataDirname>raster_00993740883_asciiwithsldtransparency</dataDirname>
+    <filename>asciiwithsldtransparency.asc</filename>
+    <rasterLegendData paintGaps="false"/>
+  </rasterLayer>
   <rasterLayer exportable="false" id="raster_01619177922">
     <name>
       <translation lang="de">geotiffwithsld.tif</translation>
@@ -86,6 +103,21 @@
       </keywords>
       <datapoolRef id="raster_01619177922"/>
     </map>
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_01889321308" previewMaxMapExtendInGP="false" scaleUnits="METRIC" scaleVisible="true">
+      <name>
+        <translation lang="de">ARCASCII With SLD With Transparency</translation>
+        <translation lang="en">ARCASCII With SLD With Transparency</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </desc>
+      <keywords>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </keywords>
+      <datapoolRef id="raster_00993740883"/>
+    </map>
   </mapPool>
   <group>
     <name>
@@ -100,6 +132,7 @@
     </keywords>
     <mapRef id="map_00602900553"/>
     <mapRef id="map_00602900553"/>
+    <mapRef id="map_01889321308"/>
   </group>
   <fonts/>
 </atlas>

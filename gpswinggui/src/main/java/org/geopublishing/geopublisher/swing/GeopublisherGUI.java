@@ -450,7 +450,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		} else if (cmd.equals(ActionCmds.showImagesInfo.toString())) {
 
-			// TODO TODO TODO
+			// TODO TODO TODO much nicer
 
 			final JDialog d = new JDialog(getJFrame(),
 					GpUtil.R("PersonalizeImages_MenuEntryLabel"));
@@ -473,22 +473,22 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_JWSIcon")
 					+ "<br><i>");
-			msg.append(new File(ace.getAtlasDir(),
-					AtlasConfig.JWSICON_RESOURCE_NAME).toString() + "</i>");
+			msg.append(IOUtil.escapePath(  new File(ace.getAtlasDir(),
+					AtlasConfig.JWSICON_RESOURCE_NAME)) + "</i>");
 
 			// Where to find the splashscreen image
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_Splashscreen")
 					+ "<br><i>");
-			msg.append(new File(ace.getAtlasDir(),
-					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME).toString() + "</i>");
+			msg.append(IOUtil.escapePath( new File(ace.getAtlasDir(),
+					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)) + "</i>");
 
 			// Where to find the flying logo image
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_FlyingLogo")
 					+ "<br><i>");
-			msg.append(new File(ace.getAtlasDir(),
-					AtlasConfig.MAPICON_RESOURCE_NAME).toString() + "</i>");
+			msg.append(IOUtil.escapePath( new File(ace.getAtlasDir(),
+					AtlasConfig.MAPICON_RESOURCE_NAME)) + "</i>");
 
 			msg.append("</ul>");
 			msg.append("</html>");
