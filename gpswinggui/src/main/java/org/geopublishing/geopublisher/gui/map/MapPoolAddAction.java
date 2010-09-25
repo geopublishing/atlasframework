@@ -17,7 +17,6 @@ import javax.swing.AbstractAction;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -66,7 +65,7 @@ public class MapPoolAddAction extends AbstractAction {
 //		}
 
 		// The map is created and automatically added to the mappool.
-		Map newMap = new Map(GpUtil.getRandomID("map"), mapPoolJTable.getAce());
+		Map newMap = new Map(mapPoolJTable.getAce());
 		mapPool.put(newMap);
 
 		if (mapPool.size() == 1) {

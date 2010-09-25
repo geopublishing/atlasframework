@@ -30,6 +30,7 @@ import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.map.MapContext;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -123,7 +124,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * Creates a {@link Map} and defines a random ID
 	 */
 	public Map(final AtlasConfig ac) {
-		this(null, ac);
+		this(GpUtil.getRandomID("map"), ac);
 	}
 
 	/**

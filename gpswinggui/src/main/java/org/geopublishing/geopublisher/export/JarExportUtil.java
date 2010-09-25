@@ -1678,9 +1678,11 @@ public class JarExportUtil {
 			try {
 				info("Creating " + ARJAR_FILENAME); // 1st call to info
 
-				// TODO Only export the map descriptions that are needed by the atlas
-				addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
-						+ "/" + AtlasConfig.HTML_DIRNAME);
+				// Export only the HTML map info for the layers that are referenced in the atlas
+				for (Map m : ace.getUsedMaps()) {
+					addToJar(targetJar, ace.getAtlasDir(), ace.getAd().getName()
+							+ "/" + AtlasConfig.HTML_DIRNAME+"/"+m.getId());
+				}
 
 				addAtlasXMLToJar(targetJar, ace);
 
@@ -1820,28 +1822,9 @@ public class JarExportUtil {
 				createJarFromDpe(dpe);
 			}
 
-			// // using addJarIndex fails :-/
-			// LOGGER.debug("Indexing " + ARJAR_FILENAME + "...");
-			// // addJarIndex(listOfIndexJars);
-			// // Just add a INDEX file manually that contains the index of all
-			// RESOURCE DPE Jars...
-			// File indexListFile = getIndexListFile();
-			// addToJar(targetJar,
-			// indexListFile.getParentFile().getParentFile(),
-			// "META-INF/INDEX.LIST");
 
 			checkAbort();
 
-			// // * Before the atlas_resources.jar is signed, create an index
-			// Main jartool = new Main(System.out, System.err, "jar");
-			// String[] args = new String[] { "i", targetJar.getAbsolutePath()
-			// };
-			// args = LangUtil.extendArray(args, listOfDataJarNames);
-			// LOGGER.debug("Calling jartool with " + LangUtil.listString(" ",
-			// args));
-			// if (!jartool.run(args))
-			// throw new AtlasExportException("unable to add index to "
-			// + targetJar);
 
 			/**
 			 * now we add the correct manifest
@@ -2136,41 +2119,6 @@ public class JarExportUtil {
 		return manifestTempFile;
 	}
 
-	// private File getIndexListFile() throws IOException {
-	//
-	// // final File indexTempFile = File.createTempFile(
-	// // AVUtil.ATLAS_TEMP_FILE_ID, "META_INF/INDEX.LST");
-	//
-	// File miFolder = new File(IOUtil.getTempDir(), "META-INF");
-	// try {
-	// FileUtils.deleteDirectory(miFolder);
-	// } catch (Exception e) {
-	// }
-	// miFolder.mkdirs();
-	// File indexTempFile = new File(miFolder, "INDEX.LIST");
-	//
-	// FileWriter indexwriter = new FileWriter(indexTempFile);
-	//
-	// indexwriter.write("JarIndex-Version: 1.0\n\n");
-	//
-	// // ******************************************************************
-	// // Adding the DatapoolEntries
-	// // ******************************************************************
-	// for (final DpEntry dpe : ace.getDataPool().values()) {
-	// if (unusedDpes.contains(dpe))
-	// continue;
-	//
-	// // name of the JAR:
-	// indexwriter.write(dpe.getId() + ".jar\n");
-	//
-	// // The main packacge/folder contained:
-	// indexwriter.write(ace.getAd().getName() + "/"
-	// + ace.getDataDir().getName() + "/" + dpe.getId() + "\n");
-	// indexwriter.write("\n");
-	// }
-	//
-	// return indexTempFile;
-	// }
 
 	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
 		if (unusedDpes == null) {

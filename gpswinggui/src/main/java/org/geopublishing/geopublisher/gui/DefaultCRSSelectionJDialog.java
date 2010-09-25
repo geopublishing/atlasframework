@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,6 +26,7 @@ import javax.swing.event.DocumentListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.referencing.CRS;
@@ -61,6 +63,9 @@ public class DefaultCRSSelectionJDialog extends JDialog {
 	private String crsNotRecognizedText = GeopublisherGUI
 			.R("DefaultCRSSelectionJPanel.NotRecognized");
 	private final AtlasConfigEditable atlasConfigEditable;
+	
+	public static final ImageIcon defaultCRSIcon = new ImageIcon(GPProps.class
+			.getResource("/icons/defaultCrs.png"));
 
 	/**
 	 * This is <code>null</code> or the {@link CRS} parsed from the
@@ -75,6 +80,8 @@ public class DefaultCRSSelectionJDialog extends JDialog {
 		this.atlasConfigEditable = atlasConfigEditable;
 
 		initGui();
+		
+		setIconImage(defaultCRSIcon.getImage());
 
 		pack();
 	}

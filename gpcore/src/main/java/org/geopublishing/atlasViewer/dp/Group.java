@@ -26,6 +26,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 import org.geopublishing.atlasViewer.map.Map;
+import org.geopublishing.atlasViewer.map.MapRef;
 
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -358,4 +359,17 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 		return fileMenu;
 	}
 
+	/**
+	 * {@link Map}s are not added to the group tree directly, but wrapped in a {@link MapRef} 
+	 */
+	public void add(Map map){
+		add( new MapRef(map, getAc().getMapPool()));
+	}
+	
+	/**
+	 * {@link DpEntry}s are not added to the group tree directly, but wrapped in a {@link DpRef} 
+	 */
+	public void add(DpEntry dpe){
+		add( new DpRef(dpe));
+	}
 }

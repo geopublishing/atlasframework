@@ -20,9 +20,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -121,6 +123,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	@Override
 	public final Group getFirstGroup() {
 		Group fg = super.getFirstGroup();
+		
 		/**
 		 * Fill the description of the first group and tell the user, that it is
 		 * never visible in the atlas.
@@ -346,6 +349,47 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		return used;
 	}
+	
+	/**
+	 * @return a {@link List} of all {@link Map}s that will be exported. A map
+	 *         is exported if it is referenced from the {@link Group} tree OR if
+	 *         the map is selected as the default start map.
+	 */
+	public Set<Map> getUsedMaps() {
+		
+		Set<Map> usedMaps = new HashSet<Map>();
+
+		for (Map m : getMapPool().values()) {
+			boolean thisMapIsInteresting = false;
+
+			// Check, if this map is directly reachable from the group tree.
+			LinkedList<AtlasRefInterface<?>> refs2map = new LinkedList<AtlasRefInterface<?>>();
+			Group.findReferencesTo(this, m, refs2map, false);
+
+			if (refs2map.size() == 0) {
+				// This map is not interesting, EXCEPT it is the default map
+
+				if (m.getId().equals(getMapPool().getStartMapID())) {
+					// Startupmap has been defined and this is it.
+					thisMapIsInteresting = true;
+				}
+				if ((getMapPool().getStartMapID() == null && getMapPool()
+						.get(0).equals(m))) {
+					// NO startup map has been defined, but this is map
+					// number zero.
+					thisMapIsInteresting = true;
+				}
+			} else {
+				thisMapIsInteresting = true;
+			}
+
+			if (thisMapIsInteresting)
+				usedMaps.add(m);
+
+		}
+		
+		return usedMaps;
+	}
 
 	/**
 	 * @return A {@link List} of {@link DpEntry}s which are not used in the
@@ -357,6 +401,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		List<DpEntry<? extends ChartStyle>> unrefed = new LinkedList<DpEntry<? extends ChartStyle>>();
 
+		Set<Map> usedMaps = getUsedMaps();
+		
 		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
 			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
 			Group.findReferencesTo(this, dpe, refs, false);
@@ -372,35 +418,9 @@ public class AtlasConfigEditable extends AtlasConfig {
 			 */
 			boolean referencedFromAMap = false;
 
-			for (Map m : getMapPool().values()) {
-				boolean thisMapIsInteresting = false;
-
-				// Check, if this map is directly reachable from the group tree.
-				LinkedList<AtlasRefInterface<?>> refs2map = new LinkedList<AtlasRefInterface<?>>();
-				Group.findReferencesTo(this, m, refs2map, false);
-
-				if (refs2map.size() == 0) {
-					// This map is not interesting, EXCEPT it is the default map
-
-					if (m.getId().equals(getMapPool().getStartMapID())) {
-						// Startupmap has been defined and this is it.
-						thisMapIsInteresting = true;
-					}
-					if ((getMapPool().getStartMapID() == null && getMapPool()
-							.get(0).equals(m))) {
-						// NO startup map has been defined, but this is map
-						// number zero.
-						thisMapIsInteresting = true;
-					}
-				} else {
-					thisMapIsInteresting = true;
-				}
-
-				if (!thisMapIsInteresting)
-					continue;
-
+			for (Map m : usedMaps) {
 				/**
-				 * OK... If we find a reference to our DPE in this map, the
+				 * If we find a reference to our DPE in this map, the
 				 * DpEntry can be reached from the atlas
 				 */
 				if (m.containsDpe(dpe.getId())) {

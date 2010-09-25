@@ -12,6 +12,8 @@ package org.geopublishing.atlasViewer.dp;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -19,6 +21,8 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -234,4 +238,28 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 		return crss;
 	}
 
+
+	/**
+	 * Return an unsorted list of only the vector layer data pool entries
+	 */
+	public Set<DpLayerVector> getVectorLayers() {
+		HashSet<DpLayerVector> vectorLayers = new HashSet<DpLayerVector>();
+		for (DpEntry dpe : values()) {
+			if (dpe instanceof DpLayerVector)
+				vectorLayers.add((DpLayerVector) dpe);
+		}
+		return vectorLayers;
+	}
+
+	/**
+	 * Return an unsorted list of only the raster layer data pool entries
+	 */
+	public Set<DpLayerRaster> getRasterLayers() {
+		HashSet<DpLayerRaster> rasterLayers = new HashSet<DpLayerRaster>();
+		for (DpEntry dpe : values()) {
+			if (dpe instanceof DpLayerRaster)
+				rasterLayers.add((DpLayerRaster) dpe);
+		}
+		return rasterLayers;
+	}
 }

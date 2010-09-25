@@ -24,7 +24,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVProps.Keys;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
 import schmitzm.swing.ExceptionDialog;

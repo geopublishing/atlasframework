@@ -726,7 +726,7 @@ public class GpFrame extends JFrame {
 			 * A an item to change the default CRS used in the atlas
 			 */
 			JMenuItem jMenuItemDefaultCRS = new JMenuItem(new AbstractAction(
-					R("MenuBar.OptionsMenu.SetDefaultCRS")) {
+					R("MenuBar.OptionsMenu.SetDefaultCRS"), DefaultCRSSelectionJDialog.defaultCRSIcon) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
