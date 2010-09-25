@@ -78,6 +78,7 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
+import schmitzm.io.IOUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
@@ -108,6 +109,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public enum ActionCmds {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
+		 * 
 		 * 
 		 * 
 		 * 
@@ -768,7 +770,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (!AVSwingUtil.askYesNo(
 					getJFrame(),
 					R("CreateAtlas.Dialog.CreateFolderQuestion",
-							atlasDir.getAbsolutePath())))
+							IOUtil.escapePath(atlasDir))))
 				return;
 			atlasDir.mkdirs();
 		}
