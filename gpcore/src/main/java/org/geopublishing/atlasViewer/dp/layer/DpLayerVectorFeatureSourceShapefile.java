@@ -97,7 +97,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 					// + getTitle());
 
 					dataStore = DataStoreFinder.getDataStore(map);
-					
+
 					// TODO By default we take the first SimpleFeatureType. This
 					// could/should be extended to be defined in the Atlas.XML
 					setTypeName(dataStore.getNames().get(0));
@@ -112,26 +112,32 @@ public class DpLayerVectorFeatureSourceShapefile extends
 				 * Determining the CRS and saving it in the DpLayer
 				 */
 				crs = featureSource.getSchema().getCoordinateReferenceSystem();
-				
-				if (crs == null ) {
-//					boolean deletePrj = false; 
+
+				if (crs == null) {
+					// boolean deletePrj = false;
 					try {
-						((ShapefileDataStore)dataStore).forceSchemaCRS(GeoImportUtil.getDefaultCRS());
-//						deletePrj = true;
-					}catch (FileNotFoundException fe) {
-						ExceptionDialog.show(null, fe, "", "Unable to set default CRS for Shapefile "+getFilename());
+						((ShapefileDataStore) dataStore)
+								.forceSchemaCRS(GeoImportUtil.getDefaultCRS());
+						// deletePrj = true;
+					} catch (FileNotFoundException fe) {
+						ExceptionDialog.show(null, fe, "",
+								"Unable to set default CRS for Shapefile "
+										+ getFilename());
 					}
 					featureSource = dataStore.getFeatureSource(getTypeName());
-//					crs = featureSource.getSchema().getCoordinateReferenceSystem();
-//					if (deletePrj) {
-//						try {
-//							DataUtilities.urlToFile( DataUtilities.changeUrlExt(getUrl(),"prj") ).delete();
-//						}
-//						catch (Exception e) {
-//							ExceptionDialog.show("Deleting a temporary", e);
-//						}
-//					}
-					crs = featureSource.getSchema().getCoordinateReferenceSystem();
+					// crs =
+					// featureSource.getSchema().getCoordinateReferenceSystem();
+					// if (deletePrj) {
+					// try {
+					// DataUtilities.urlToFile(
+					// DataUtilities.changeUrlExt(getUrl(),"prj") ).delete();
+					// }
+					// catch (Exception e) {
+					// ExceptionDialog.show("Deleting a temporary", e);
+					// }
+					// }
+					crs = featureSource.getSchema()
+							.getCoordinateReferenceSystem();
 				}
 
 				// Cache an Envelope of the BoundingBox of this FeatureSource
@@ -141,7 +147,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 				/**
 				 * Determine the file type
 				 */
-		
+
 				switch (FeatureUtil.getGeometryForm(featureSource.getSchema())) {
 				case POINT:
 					setType(DpEntryType.VECTOR_SHP_POINT);
@@ -212,25 +218,25 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		if (charset == null) {
 
-			try {
-				URL cpgUrl = getCharsetUrl();
+			URL[] cpgUrls = getCharsetUrls();
 
-				// LOGGER.debug("Reading Charset from " + cpgUrl);
+			for (URL cpgUrl : cpgUrls) {
+				try {
 
-				String charsetName = IOUtil.readURLasString(cpgUrl);
+					String charsetName = IOUtil.readURLasString(cpgUrl);
 
-				if (charsetName.equals(""))
-					return super.getCharset();
-				//
-				// LOGGER.info("Trying to interprete '" + charsetName
-				// + "' as a charset.");
+					if (charsetName.equals(""))
+						continue;
+					
+					charset = Charset.forName(charsetName);
+					break;
 
-				charset = Charset.forName(charsetName);
-
-			} catch (Exception e) {
-				LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ", e);
-				return super.getCharset();
+				} catch (Exception e) {
+//					 LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
+				}
 			}
+			
+			return super.getCharset();
 		}
 
 		// LOGGER.debug("charset of "+getId()+" is "+charset);
