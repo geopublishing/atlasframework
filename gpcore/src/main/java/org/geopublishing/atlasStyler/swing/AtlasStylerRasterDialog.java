@@ -75,7 +75,8 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 
 	public AtlasStylerRasterDialog(Component parentGUI,
 			StyledRasterInterface<?> styledRaster, List<String> languages) {
-		super(parentGUI);
+		super(parentGUI, styledRaster.getTitle() != null ? styledRaster
+				.getTitle().toString() : "raster style");
 		this.styledRaster = styledRaster;
 		this.languages = languages;
 
