@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import rachel.ResourceLoader;
 
 public class JarResourceLoaderHelper implements ResourceLoader {
-	static Logger Status = Logger.getLogger(JarResourceLoaderHelper.class);
+	static Logger log = Logger.getLogger(JarResourceLoaderHelper.class);
 
 	private File _file;
 	private JarFile _jarFile;
@@ -45,7 +45,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 	}
 
 	public InputStream getResourceAsStream(String name) {
-		Status.debug("getResourceAsStream( name=" + name + " )");
+//		Status.debug("getResourceAsStream( name=" + name + " )");
 
 		try {
 			JarEntry entry = (JarEntry) _jarFile.getEntry(name);
@@ -54,7 +54,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 
 			return _jarFile.getInputStream(entry);
 		} catch (IOException ioex) {
-			Status.error("*** failed to retrieve resource '" + name
+			log.error("*** failed to retrieve resource '" + name
 					+ "' inside jar: " + ioex.getMessage());
 			return null;
 		}
@@ -75,7 +75,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 
 			return jarURL;
 		} catch (IOException ioex) {
-			Status.error("*** failed to retrieve resource '" + name
+			log.error("*** failed to retrieve resource '" + name
 					+ "' inside jar: " + ioex.getMessage());
 			return null;
 		}

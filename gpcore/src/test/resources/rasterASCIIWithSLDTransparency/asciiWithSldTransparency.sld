@@ -20,6 +20,7 @@
           <sld:null/>
         </sld:OverlapBehavior>
         <sld:ColorMap>
+          <sld:ColorMapEntry color="#000000" opacity="0.0" quantity="-9999.0"/>
           <sld:ColorMapEntry color="#CCFFFF" opacity="1.0" quantity="700.0"/>
           <sld:ColorMapEntry color="#003399" opacity="1.0" quantity="1500.0"/>
         </sld:ColorMap>

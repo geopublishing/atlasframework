@@ -54,20 +54,22 @@ import skrueger.i8n.Translation;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-//MS-01.sc
-//public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
-//		implements StyledGridCoverageInterface, ZoomRestrictableGridInterface{
-public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartStyle> implements StyledGridCoverageReaderInterface, ZoomRestrictableGridInterface{
-//MS-01.ec
-  
-  static final private Logger LOGGER = Logger.getLogger(DpLayerRaster.class);
+// MS-01.sc
+// public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
+// implements StyledGridCoverageInterface, ZoomRestrictableGridInterface{
+public class DpLayerRaster extends
+		DpLayer<AbstractGridCoverage2DReader, ChartStyle> implements
+		StyledGridCoverageReaderInterface, ZoomRestrictableGridInterface {
+	// MS-01.ec
+
+	static final private Logger LOGGER = Logger.getLogger(DpLayerRaster.class);
 
 	/**
 	 * caches the {@link GridCoverage2D} Can be un-cached by calling uncache()
 	 */
-//MS-01.sc
-//    protected GridCoverage2D gc;
-    protected AbstractGridCoverage2DReader gc;
+	// MS-01.sc
+	// protected GridCoverage2D gc;
+	protected AbstractGridCoverage2DReader gc;
 
 	private RasterLegendData legendMetaData;
 
@@ -81,7 +83,6 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 		super(ac);
 		setType(DpEntryType.RASTER);
 	}
-
 
 	/**
 	 * Exports the raster file and all related files. Only failure on the main
@@ -100,7 +101,8 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 
 				try {
 					// waitDialog.setVisible(false);
-					exportDir = AVSwingUtil.selectExportDir(owner, getAtlasConfig());
+					exportDir = AVSwingUtil.selectExportDir(owner,
+							getAtlasConfig());
 					// waitDialog.setVisible(true);
 
 					if (exportDir == null) {
@@ -115,7 +117,9 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 					// Copy main file and possibly throw an Exception
 					// ****************************************************************************
 					publish(file.getAbsolutePath());
-					FileUtils.copyURLToFile(AVSwingUtil.getUrl(DpLayerRaster.this,owner), file);
+					FileUtils
+							.copyURLToFile(AVSwingUtil.getUrl(
+									DpLayerRaster.this, owner), file);
 
 					// Try to copy pending world files...
 					for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
@@ -123,17 +127,19 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 						final File changeFileExt = IOUtil.changeFileExt(file,
 								pf.toString());
 						publish(changeFileExt.getAbsolutePath());
-						AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(
-								url, pf.toString()), changeFileExt);
+						AtlasConfig.exportURLtoFileNoEx(
+								IOUtil.changeUrlExt(url, pf.toString()),
+								changeFileExt);
 					}
 
 					final File changeFileExt = IOUtil
 							.changeFileExt(file, "prj");
 					publish(changeFileExt.getAbsolutePath());
-					AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(url,
-							"prj"), changeFileExt);
-					AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(url,
-							"sld"), IOUtil.changeFileExt(file, "sld"));
+					AtlasConfig.exportURLtoFileNoEx(
+							IOUtil.changeUrlExt(url, "prj"), changeFileExt);
+					AtlasConfig.exportURLtoFileNoEx(
+							IOUtil.changeUrlExt(url, "sld"),
+							IOUtil.changeFileExt(file, "sld"));
 					publish("done");
 					success = true;
 				} catch (Exception e) {
@@ -145,7 +151,6 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 		};
 		exportTask.execute();
 	}
-
 
 	/**
 	 * This method is caching the geotools object, and can be uncached by
@@ -163,7 +168,7 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 				 */
 				GeneralParameterValue[] readParams = null;
 
-				URL url = getUrl(); 
+				URL url = getUrl();
 
 				final String filename = getFilename().toLowerCase();
 
@@ -177,55 +182,58 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 						 * GEOTiffReader fails for jar:file:....jar!bla.tif URLs
 						 * :-(
 						 */
-						if (url.getProtocol().startsWith("jar")	&& url.getPath().startsWith("file")) {
+						if (url.getProtocol().startsWith("jar")
+								&& url.getPath().startsWith("file")) {
 							// We copy the Tiff to the local temp dir
 							File inTemp = new File(IOUtil.getTempDir(),
 									getFilename());
-							LOGGER.info("Workaround for the GeoTiffReader bug, new source = " + inTemp);
+							LOGGER.debug("Workaround for the GeoTiffReader bug, new source = "
+									+ inTemp);
 							if (!inTemp.exists()) {
 								/**
 								 * This is a work-around for GeoTiffReader
 								 * problems for jar:// URLs We just all files to
 								 * the local tempdir.
 								 */
-								LOGGER.info("The local copy doesn't exist, so we copy " + url + " to " + inTemp);
+								LOGGER.debug("Local copy does not exist, so we copy "
+										+ url + " to " + inTemp);
 								FileUtils.copyURLToFile(url, inTemp);
 
 								// Try to copy pending world files...
 								for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
 										.values()) {
-									final URL src = IOUtil.changeUrlExt(url, pf
-											.toString());
-									LOGGER.debug(src);
-									AVUtil.copyURLNoException( src,
+									final URL src = IOUtil.changeUrlExt(url,
+											pf.toString());
+
+									// clean = false, because we only clean
+									// filenames on import
+									AVUtil.copyURLNoException(src,
 											IOUtil.getTempDir(), false);
-									// clean = false, because we conly clean
-									// filesnames on import
 								}
 
 								// Copy optional .prj file to data directory
-								AVUtil.copyURLNoException( IOUtil
-										.changeUrlExt(url, "prj"), IOUtil
-										.getTempDir(), false);
+								AVUtil.copyURLNoException(
+										IOUtil.changeUrlExt(url, "prj"),
+										IOUtil.getTempDir(), false);
 
 								// Copy optional .sld file to data directory
-								AVUtil.copyURLNoException( IOUtil
-										.changeUrlExt(url, "sld"), IOUtil
-										.getTempDir(), false);
+								AVUtil.copyURLNoException(
+										IOUtil.changeUrlExt(url, "sld"),
+										IOUtil.getTempDir(), false);
 
 							}
 
-//MS-01.sc
-//                            gc = GeoImportUtilURL.readGridFromGeoTiff(inTemp,
-//                                null, readParams);
-							  gc = new GeoTiffReader(inTemp); 
-//MS-01.ec
+							// MS-01.sc
+							// gc = GeoImportUtilURL.readGridFromGeoTiff(inTemp,
+							// null, readParams);
+							gc = new GeoTiffReader(inTemp);
+							// MS-01.ec
 						} else {
-//MS-01.sc
-//                          gc = GeoImportUtilURL.readGridFromGeoTiff(url,
-//                              null, readParams);
-						  gc = new GeoTiffReader(url);
-//MS-01.ec
+							// MS-01.sc
+							// gc = GeoImportUtilURL.readGridFromGeoTiff(url,
+							// null, readParams);
+							gc = new GeoTiffReader(url);
+							// MS-01.ec
 						}
 
 						setType(DpEntryType.RASTER_GEOTIFF);
@@ -238,10 +246,10 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 				for (ARCASCII_POSTFIXES ending : GeoImportUtil.ARCASCII_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-//MS-01.sc
-//						gc = GeoImportUtil.GridFromArcInfoASCII(url);
-					    gc = new ArcGridReader(url);
-//MS-01.ec
+						// MS-01.sc
+						// gc = GeoImportUtil.GridFromArcInfoASCII(url);
+						gc = new ArcGridReader(url);
+						// MS-01.ec
 						setType(DpEntryType.RASTER_ARCASCII);
 					}
 				}
@@ -251,11 +259,11 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 				for (IMAGE_POSTFIXES ending : GeoImportUtil.IMAGE_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-//MS-01.sc
-//						gc = GeoImportUtilURL.readGridFromImage(url);
-					    gc = new WorldImageReader(url);
+						// MS-01.sc
+						// gc = GeoImportUtilURL.readGridFromImage(url);
+						gc = new WorldImageReader(url);
 						setType(DpEntryType.RASTER_IMAGEWORLD);
-//MS-01.ec
+						// MS-01.ec
 					}
 				}
 
@@ -265,31 +273,29 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 
 				// Create an Envelope that contains all information of the
 				// raster
-//MS-01.sc
-//                Envelope e = gc.getEnvelope();
-//                envelope = new com.vividsolutions.jts.geom.Envelope(e
-//                    .getUpperCorner().getOrdinate(0), // X1
-//                    e.getLowerCorner().getOrdinate(0), // X2
-//                    e.getUpperCorner().getOrdinate(1), // Y1dddd
-//                    e.getLowerCorner().getOrdinate(1) // Y2
-//                );
-                GridEnvelope e = gc.getOriginalGridRange();
+				// MS-01.sc
+				// Envelope e = gc.getEnvelope();
+				// envelope = new com.vividsolutions.jts.geom.Envelope(e
+				// .getUpperCorner().getOrdinate(0), // X1
+				// e.getLowerCorner().getOrdinate(0), // X2
+				// e.getUpperCorner().getOrdinate(1), // Y1dddd
+				// e.getLowerCorner().getOrdinate(1) // Y2
+				// );
+				GridEnvelope e = gc.getOriginalGridRange();
 				envelope = new com.vividsolutions.jts.geom.Envelope(
-				        e.getHigh(0), // X1
-						e.getLow(0),  // X2
+						e.getHigh(0), // X1
+						e.getLow(0), // X2
 						e.getHigh(1), // Y1
-						e.getLow(1)   // Y2
+						e.getLow(1) // Y2
 				);
-//MS-01.ec
+				// MS-01.ec
 
-				
-				
-//MS-01.sc
-//                crs = gc.getCoordinateReferenceSystem2D();
-                crs = gc.getCrs();
-//MS-01.ec
+				// MS-01.sc
+				// crs = gc.getCoordinateReferenceSystem2D();
+				crs = gc.getCrs();
+				// MS-01.ec
 
-                // Object object = gc.getProperties().get("GC_NODATA");
+				// Object object = gc.getProperties().get("GC_NODATA");
 				// gc.getSampleDimension(0).getNoDataValues();
 				// System.out.println(object);
 			}
@@ -307,8 +313,7 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 	 * {@link Style} from a file with the same URL but the ending
 	 * <code>.sld</code>. If it doesn't exist, returns a default RasterStyle.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public Style getStyle() {
@@ -325,16 +330,16 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 	public void uncache() {
 		LOGGER.debug("unchaching " + getId() + " aka " + getTitle());
 		super.uncache();
-		
+
 		/** Close any open attribute table for this layer */
 		AVDialogManager.dm_AtlasRasterStyler.disposeInstanceFor(this);
 
 		if (gc != null) {
-//MS-01.sc
-//            gc.dispose(true);
-            gc.dispose();
-//MS-01.ec
-            gc = null;
+			// MS-01.sc
+			// gc.dispose(true);
+			gc.dispose();
+			// MS-01.ec
+			gc = null;
 		}
 
 		envelope = null;
@@ -365,25 +370,25 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 	 * @return width in CRS units divided by pixel width
 	 */
 	public Double getMaxResolution() {
-//MS-01.sc
-//		try {
-//			double pixelwidth = getGeoObject().getGridGeometry().getGridRange()
-//					.getHigh().getCoordinateValues()[0];
-//			double crswidth = getGeoObject().getEnvelope().getUpperCorner()
-//					.getDirectPosition().getCoordinate()[0]
-//					- getGeoObject().getEnvelope().getLowerCorner()
-//							.getDirectPosition().getCoordinate()[0];
-////			LOGGER.debug("resolution of " + getTitle().toString() + " = "
-////					+ crswidth / pixelwidth);
-//			return crswidth / pixelwidth;
-//		} catch (Exception e) {
-//			LOGGER.error(e);
-//
-//			return 0.;
-//		}
-	  LOGGER.warn("DpLayerRaster.getMaxResolution() not yet implemented for AbstractGridCoverage2DReader!");
-	  return null;
-//MS-01.ec
+		// MS-01.sc
+		// try {
+		// double pixelwidth = getGeoObject().getGridGeometry().getGridRange()
+		// .getHigh().getCoordinateValues()[0];
+		// double crswidth = getGeoObject().getEnvelope().getUpperCorner()
+		// .getDirectPosition().getCoordinate()[0]
+		// - getGeoObject().getEnvelope().getLowerCorner()
+		// .getDirectPosition().getCoordinate()[0];
+		// // LOGGER.debug("resolution of " + getTitle().toString() + " = "
+		// // + crswidth / pixelwidth);
+		// return crswidth / pixelwidth;
+		// } catch (Exception e) {
+		// LOGGER.error(e);
+		//
+		// return 0.;
+		// }
+		LOGGER.warn("DpLayerRaster.getMaxResolution() not yet implemented for AbstractGridCoverage2DReader!");
+		return null;
+		// MS-01.ec
 	}
 
 	@Override
@@ -396,31 +401,31 @@ public class DpLayerRaster extends DpLayer<AbstractGridCoverage2DReader, ChartSt
 		this.legendMetaData = legendMetaData;
 	}
 
-//	/**
-//	 * Returns the number of bands contained in this {@link Coverage}
-//	 */
-//	public int getNumSampleDimensions() {
-//	  // TODO: Determine the sample dimensions from AbstractGridCoverage2DReader
-//	  LOGGER.error("DpLayerRaster.getNumSampleDimensions() not yet implemented correctly for AbstractGridCoverage2DReader!");
-////	  return getGeoObject().getNumSampleDimensions();
-//	  return 1;
-//	}
-	
+	// /**
+	// * Returns the number of bands contained in this {@link Coverage}
+	// */
+	// public int getNumSampleDimensions() {
+	// // TODO: Determine the sample dimensions from
+	// AbstractGridCoverage2DReader
+	// LOGGER.error("DpLayerRaster.getNumSampleDimensions() not yet implemented correctly for AbstractGridCoverage2DReader!");
+	// // return getGeoObject().getNumSampleDimensions();
+	// return 1;
+	// }
+
 	public DpLayerRaster copy() {
 		DpLayerRaster copy = new DpLayerRaster(ac);
 		return (DpLayerRaster) copyTo(copy);
 	}
-	
+
 	@Override
 	public DpLayer<AbstractGridCoverage2DReader, ChartStyle> copyTo(
 			DpLayer<AbstractGridCoverage2DReader, ChartStyle> target) {
-		
+
 		DpLayerRaster copy = (DpLayerRaster) super.copyTo(target);
-		
+
 		copy.setLegendMetaData(getLegendMetaData()); // TODO should be copied!
-		
+
 		return copy;
 	}
-
 
 }

@@ -89,7 +89,7 @@ public class DpLayerRasterTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithFileObject_USE_ARCGRIDREADER()
 			throws Throwable {
 		GeoImportUtilURL
@@ -108,7 +108,7 @@ public class DpLayerRasterTest {
 	}
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithURL2FileObject_USE_ARCGRIDREADER()
 			throws Throwable {
 		GeoImportUtilURL
@@ -167,7 +167,7 @@ public class DpLayerRasterTest {
 		assertTrue("Some blue color at 20/30",
 				TestingUtil.checkPixel(bi, 20, 30, 129, 180, 217, 255));
 		assertTrue("Some blue color at 24/34",
-				TestingUtil.checkPixel(bi, 24, 34, 123, 174, 214, 255));
+				TestingUtil.checkPixel(bi, 24, 34, 124, 175, 215, 255));
 		assertTrue("Transparency at 10/10",
 				TestingUtil.checkPixel(bi, 10, 10, 0, 0, 0, 0));
 	}
