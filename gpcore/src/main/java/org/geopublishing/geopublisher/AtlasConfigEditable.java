@@ -47,7 +47,6 @@ import rachel.loader.FileResourceLoader;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
 /**
@@ -124,18 +123,18 @@ public class AtlasConfigEditable extends AtlasConfig {
 	public final Group getFirstGroup() {
 		Group fg = super.getFirstGroup();
 		
-		/**
-		 * Fill the description of the first group and tell the user, that it is
-		 * never visible in the atlas.
-		 */
-		if (fg != null && I8NUtil.isEmpty(fg.getTitle())) {
-			List<String> activeLang = new ArrayList<String>();
-			activeLang.add(Translation.getActiveLang());
-			fg.setTitle(new Translation(activeLang, GpUtil
-					.R("FirstGroup.DefaultTitle")));
-			fg.setDesc(new Translation(activeLang, GpUtil
-					.R("FirstGroup.DefaultDesc")));
-		}
+//		/**
+//		 * Fill the description of the first group and tell the user, that it is
+//		 * never visible in the atlas.
+//		 */
+//		if (fg != null && I8NUtil.isEmpty(fg.getTitle())) {
+//			List<String> activeLang = new ArrayList<String>();
+//			activeLang.add(Translation.getActiveLang());
+//			fg.setTitle(new Translation(activeLang, GpUtil
+//					.R("FirstGroup.DefaultTitle")));
+//			fg.setDesc(new Translation(activeLang, GpUtil
+//					.R("FirstGroup.DefaultDesc")));
+//		}
 
 		return fg;
 

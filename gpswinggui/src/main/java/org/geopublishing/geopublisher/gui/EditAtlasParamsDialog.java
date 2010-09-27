@@ -41,24 +41,35 @@ import skrueger.swing.TranslationEditJPanel;
  */
 public class EditAtlasParamsDialog extends TranslationAskJDialog {
 
+	private final AtlasConfigEditable ace;
+
 	public EditAtlasParamsDialog(Component owner, AtlasConfigEditable ace) {
 		super(owner);
+		this.ace = ace;
 
 		TranslationEditJPanel transName = new TranslationEditJPanel(
-				GeopublisherGUI.R("AtlasParamsTranslationDialog.Title"), ace
-						.getTitle(), ace.getLanguages());
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Title"),
+				ace.getTitle(), ace.getLanguages());
 		TranslationEditJPanel transDesc = new TranslationEditJPanel(
-				GeopublisherGUI.R("AtlasParamsTranslationDialog.Description"), ace
-						.getDesc(), ace.getLanguages());
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Description"),
+				ace.getDesc(), ace.getLanguages());
 		TranslationEditJPanel transCreator = new TranslationEditJPanel(
-				GeopublisherGUI.R("AtlasParamsTranslationDialog.Creator"), ace
-						.getCreator(), ace.getLanguages());
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Creator"),
+				ace.getCreator(), ace.getLanguages());
 		TranslationEditJPanel transCopyright = new TranslationEditJPanel(
-				GeopublisherGUI.R("AtlasParamsTranslationDialog.Copyright"), ace
-						.getCopyright(), ace.getLanguages());
+				GeopublisherGUI.R("AtlasParamsTranslationDialog.Copyright"),
+				ace.getCopyright(), ace.getLanguages());
 
 		setComponents(transName, transDesc, transCreator, transCopyright);
 
+	}
+
+	public boolean okClose() {
+		boolean result = super.okClose();
+		if (result) {
+			ace.fireChangeEvents();
+		}
+		return result;
 	}
 
 }

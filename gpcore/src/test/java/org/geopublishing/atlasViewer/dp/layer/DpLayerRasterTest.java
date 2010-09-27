@@ -11,7 +11,6 @@ import org.geotools.data.DataUtilities;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.map.DefaultMapLayer;
 import org.geotools.styling.Style;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.geotools.grid.GridUtil;

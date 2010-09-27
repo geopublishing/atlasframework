@@ -77,10 +77,9 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 *            in.
 	 */
 	public Group(AtlasConfig ac) {
-		super();
 		this.ac = ac;
-		title = new Translation(getAc().getLanguages(), AVUtil
-				.R("NewGroup.DefaultTitle"));
+		title = new Translation(getAc().getLanguages(),
+				AVUtil.R("NewGroup.DefaultTitle"));
 		desc = new Translation(getAc().getLanguages(), "");
 		keywords = new Translation(getAc().getLanguages(), "");
 	}
@@ -91,8 +90,8 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	@Override
 	public String toString() {
 		String returnme = "";
-		if (title != null)
-			returnme = title.toString();
+		if (getTitle() != null)
+			returnme = getTitle().toString();
 		return returnme;
 	}
 
@@ -141,8 +140,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @param delete
 	 *            if true, than all references will be deleted
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void findReferencesTo(AtlasConfig ac, Object dpeOrMap,
 			LinkedList<AtlasRefInterface<?>> references, boolean delete) {
@@ -171,9 +169,8 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 		} else if (dpeOrMap instanceof Map) {
 			id = ((Map) dpeOrMap).getId();
 		} else {
-			LOGGER
-					.warn("findReferencesTo was called with an unidentifies Class="
-							+ dpeOrMap.getClass());
+			LOGGER.warn("findReferencesTo was called with an unidentifies Class="
+					+ dpeOrMap.getClass());
 			return;
 		}
 
@@ -252,7 +249,9 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	/**
 	 * @return {@link Translation} of the group's name
 	 */
-	public final Translation getTitle() {
+	public Translation getTitle() {
+		if (isRoot())
+			return ac.getTitle();
 		return title;
 	}
 
@@ -262,7 +261,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @param name
 	 *            {@link Translation} to set
 	 */
-	public final void setTitle(Translation name) {
+	public void setTitle(Translation name) {
 		this.title = name;
 	}
 
@@ -270,6 +269,8 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @return {@link Translation} of the group's desciption
 	 */
 	public Translation getDesc() {
+		if (isRoot())
+			return ac.getDesc();
 		return desc;
 	}
 
@@ -360,16 +361,18 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	}
 
 	/**
-	 * {@link Map}s are not added to the group tree directly, but wrapped in a {@link MapRef} 
+	 * {@link Map}s are not added to the group tree directly, but wrapped in a
+	 * {@link MapRef}
 	 */
-	public void add(Map map){
-		add( new MapRef(map, getAc().getMapPool()));
+	public void add(Map map) {
+		add(new MapRef(map, getAc().getMapPool()));
 	}
-	
+
 	/**
-	 * {@link DpEntry}s are not added to the group tree directly, but wrapped in a {@link DpRef} 
+	 * {@link DpEntry}s are not added to the group tree directly, but wrapped in
+	 * a {@link DpRef}
 	 */
-	public void add(DpEntry dpe){
-		add( new DpRef(dpe));
+	public void add(DpEntry dpe) {
+		add(new DpRef(dpe));
 	}
 }
