@@ -12,7 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
-import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -94,7 +93,7 @@ import skrueger.versionnumber.ReleaseUtil;
 /**
  * This is the main GUI for the AtlasStyler standalone. It looks like a
  * condensed {@link AtlasViewer}, and its main purpose is to reach the "Style"
- * {@link MenuItem} in the tools menu.
+ * item in the tools menu.
  * 
  * @author Stefan A. Tzeggai
  * 

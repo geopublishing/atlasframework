@@ -162,7 +162,7 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 		final JCheckBox jCheckboxAntiAliasing = new JCheckBox(
 				AtlasStyler.R("Options.Performance.Antialiasing"));
 		jCheckboxAntiAliasing.setSelected(ASProps.getInt(
-				ASProps.Keys.antialiasingMaps, 1) != 1);
+				ASProps.Keys.antialiasingMaps, 1) != 0);
 
 		jCheckboxAntiAliasing.addActionListener(new AbstractAction() {
 
@@ -171,12 +171,12 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 				SwingUtilities.invokeLater(new Runnable() {
 
 					public void run() {
-						boolean b = !jCheckboxAntiAliasing.isSelected();
+						boolean b = jCheckboxAntiAliasing.isSelected();
 						ASProps.set(ASProps.Keys.antialiasingMaps, b ? "1"
 								: "0");
 
 						asg.getStylerMapView().getMapPane().setAntiAliasing(b);
-						asg.getStylerMapView().getMapPane().repaint();
+						asg.getStylerMapView().getMapPane().refresh();
 					}
 				});
 			}
