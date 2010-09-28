@@ -147,10 +147,12 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 */
 	private void initialize(
 			FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
-		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1", "[grow]", "[grow][][]"));
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1", "[grow]",
+				"[grow][][]"));
 		this.add(getPreviewMapPane(features), "top, growy, gap 0! 0! 0! 0!");
 
-		JPanel jPanelFont = new JPanel(new MigLayout("gap 1, inset 1", "[grow]"));
+		JPanel jPanelFont = new JPanel(
+				new MigLayout("gap 1, inset 1", "[grow]"));
 		{
 
 			jPanelFont.add(new JLabel(AtlasStyler
@@ -228,21 +230,38 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	ColorButton getJButtonColorHalo() {
 		if (jButtonColorHalo == null) {
 			jButtonColorHalo = new ColorButton();
+			
+			if (rulesList.getSymbolizer().getHalo() == null) {
+				rulesList.getSymbolizer().setHalo(
+						ASUtil.SB.createHalo(Color.WHITE,
+								.5, 1));
+			}
+			if (rulesList.getSymbolizer().getHalo().getFill() == null) {
+				rulesList.getSymbolizer().getHalo().setFill(
+						ASUtil.SB.createFill(Color.white,
+								.5));
+			}
+			
 			jButtonColorHalo.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
+					
 					Color color = AVSwingUtil.showColorChooser(
 
-					TextSymbolizerEditGUI.this, AtlasStyler
-							.R("Text.Halo.ColorChooserDialog.Title"),
+							TextSymbolizerEditGUI.this,
+							AtlasStyler.R("Text.Halo.ColorChooserDialog.Title"),
 							StylingUtil.getColorFromExpression(rulesList
 									.getSymbolizer().getHalo().getFill()
 									.getColor()));
 
 					if (color != null) {
-						rulesList.getSymbolizer().getHalo().getFill().setColor(
-								StylingUtil.STYLE_BUILDER
-										.colorExpression(color));
+						rulesList
+								.getSymbolizer()
+								.getHalo()
+								.getFill()
+								.setColor(
+										StylingUtil.STYLE_BUILDER
+												.colorExpression(color));
 						jButtonColorHalo.setColor(color);
 
 						rulesList.fireEvents(new RuleChangedEvent(
@@ -282,8 +301,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 									.getColor() : Color.green;
 							Float restoreOpacity = (Float) (getJComboBoxHaloOpacity()
 									.getSelectedItem() != null ? getJComboBoxHaloOpacity()
-									.getSelectedItem()
-									: 1f);
+									.getSelectedItem() : 1f);
 
 							if (rulesList.getSymbolizer().getHalo() == null) {
 								rulesList.getSymbolizer().setHalo(
@@ -291,9 +309,13 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 												restoreOpacity, radius));
 							}
 							if (rulesList.getSymbolizer().getHalo().getFill() == null) {
-								rulesList.getSymbolizer().getHalo().setFill(
-										ASUtil.SB.createFill(restoreColor,
-												restoreOpacity));
+								rulesList
+										.getSymbolizer()
+										.getHalo()
+										.setFill(
+												ASUtil.SB.createFill(
+														restoreColor,
+														restoreOpacity));
 							}
 
 							getJButtonColorHalo().setColor(
@@ -308,8 +330,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 							getJComboBoxHaloOpacity().setEnabled(true);
 							getJButtonColorHalo().setEnabled(true);
 
-							rulesList.getSymbolizer().getHalo().setRadius(
-									ASUtil.ff2.literal(radius));
+							rulesList.getSymbolizer().getHalo()
+									.setRadius(ASUtil.ff2.literal(radius));
 						}
 
 						rulesList.popQuite(new RuleChangedEvent(
@@ -389,14 +411,12 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 								.getSelectedItem();
 
 						rulesList.getSymbolizer().getFont().getFamily().clear();
-						rulesList.getSymbolizer().getFont().getFamily().addAll(
-								fontExpressions);
+						rulesList.getSymbolizer().getFont().getFamily()
+								.addAll(fontExpressions);
 
-						rulesList
-								.fireEvents(new RuleChangedEvent(
-										"The FontFamiliy changed to "
-												+ fontExpressions.toString(),
-										rulesList));
+						rulesList.fireEvents(new RuleChangedEvent(
+								"The FontFamiliy changed to "
+										+ fontExpressions.toString(), rulesList));
 
 					}
 				}
@@ -475,14 +495,17 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				public void actionPerformed(ActionEvent e) {
 					Color color = AVSwingUtil.showColorChooser(
-							TextSymbolizerEditGUI.this, AtlasStyler
-									.R("Text.ColorChooserDialog.Title"),
+							TextSymbolizerEditGUI.this,
+							AtlasStyler.R("Text.ColorChooserDialog.Title"),
 							StylingUtil.getColorFromExpression(rulesList
 									.getSymbolizer().getFill().getColor()));
 					if (color != null) {
-						rulesList.getSymbolizer().getFill().setColor(
-								StylingUtil.STYLE_BUILDER
-										.colorExpression(color));
+						rulesList
+								.getSymbolizer()
+								.getFill()
+								.setColor(
+										StylingUtil.STYLE_BUILDER
+												.colorExpression(color));
 						jButtonColor.setColor(color);
 					}
 					rulesList.fireEvents(new RuleChangedEvent(
@@ -508,9 +531,12 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						rulesList.getSymbolizer().getFont().setStyle(
-								ASUtil.ff2.literal(jComboBoxStyle
-										.getSelectedItem()));
+						rulesList
+								.getSymbolizer()
+								.getFont()
+								.setStyle(
+										ASUtil.ff2.literal(jComboBoxStyle
+												.getSelectedItem()));
 						rulesList.fireEvents(new RuleChangedEvent("FontStyle",
 								rulesList));
 					}
@@ -535,9 +561,12 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						rulesList.getSymbolizer().getFont().setWeight(
-								ASUtil.ff2.literal(jComboBoxWeight
-										.getSelectedItem()));
+						rulesList
+								.getSymbolizer()
+								.getFont()
+								.setWeight(
+										ASUtil.ff2.literal(jComboBoxWeight
+												.getSelectedItem()));
 						rulesList.fireEvents(new RuleChangedEvent("FontWeight",
 								rulesList));
 					}
@@ -566,9 +595,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		try {
 			bounds = layer.getBounds();
 		} catch (Exception e) {
-			LOGGER
-					.error("Calculating BOUNDs for the PreviewMapPane failed:",
-							e);
+			LOGGER.error("Calculating BOUNDs for the PreviewMapPane failed:", e);
 
 			bounds = features.getBounds();
 
@@ -591,8 +618,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					JPopupMenu popup = new JPopupMenu();
 					final JCheckBoxMenuItem menuItemAntiAliased = new JCheckBoxMenuItem(
 							new AbstractAction(
-									ASUtil
-											.R("TextSymbolizerEditGUI.Preview.ToggleAntiAliasing.label")) {
+									ASUtil.R("TextSymbolizerEditGUI.Preview.ToggleAntiAliasing.label")) {
 
 								@Override
 								public void actionPerformed(ActionEvent e) {
@@ -840,8 +866,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			PointPlacement pPlacement = (PointPlacement) rulesList
 					.getSymbolizer().getLabelPlacement();
 
-			ASUtil.selectOrInsert(jComboBoxLabelRotation, pPlacement
-					.getRotation());
+			ASUtil.selectOrInsert(jComboBoxLabelRotation,
+					pPlacement.getRotation());
 
 			jComboBoxLabelRotation.addItemListener(new ItemListener() {
 
@@ -869,7 +895,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define point placement settings
 	 */
 	private JPanel getJPanelPointPlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout("wrap 3, fillx, gap 1, inset 1"),
+		JPanel jPanelPlacement = new JPanel(new MigLayout(
+				"wrap 3, fillx, gap 1, inset 1"),
 				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 
 		// Avoid nulls and fill with default if needed
@@ -899,8 +926,10 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			}
 		}
 
-		jPanelPlacement.add(new JLabel(AtlasStyler
-				.R("TextRuleListGUI.PointPlacement.Displacement")), "right");
+		jPanelPlacement.add(
+				new JLabel(AtlasStyler
+						.R("TextRuleListGUI.PointPlacement.Displacement")),
+				"right");
 		// jPanelPlacement
 		// .add(new JLabel(AtlasStyler
 		// .R("TextRuleListGUI.PointPlacement.Displacement.X")),
@@ -912,13 +941,15 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		// .R("TextRuleListGUI.PointPlacement.Displacement.Y")),
 		// "split 2");
 
-		jPanelPlacement.add(new JLabel(AtlasStyler
-				.R("TextRuleListGUI.PointPlacement.Anchor.Rotation")),
+		jPanelPlacement.add(
+				new JLabel(AtlasStyler
+						.R("TextRuleListGUI.PointPlacement.Anchor.Rotation")),
 				"split 2, right");
 		jPanelPlacement.add(getJComboBoxLabelRotation(), "right");
 
-		jPanelPlacement.add(new JLabel(AtlasStyler
-				.R("TextRuleListGUI.PointPlacement.Anchor")), "right");
+		jPanelPlacement.add(
+				new JLabel(AtlasStyler
+						.R("TextRuleListGUI.PointPlacement.Anchor")), "right");
 		jPanelPlacement.add(getJComboBoxAnchorX(), "split 2");
 		jPanelPlacement.add(getJComboBoxAnchorY(), "left");
 
@@ -929,7 +960,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define Line placement settings
 	 */
 	private JPanel getJPanelLinePlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout("nogrid, fillx, gap 1, inset 1"),
+		JPanel jPanelPlacement = new JPanel(new MigLayout(
+				"nogrid, fillx, gap 1, inset 1"),
 				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 		{
 
@@ -995,9 +1027,11 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 							}
 						}
 					});
-			jPanelPlacement.add(new JLabel(AtlasStyler
-					.R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
-					"right, split 2, gap right rel");
+			jPanelPlacement
+					.add(new JLabel(
+							AtlasStyler
+									.R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
+							"right, split 2, gap right rel");
 			jPanelPlacement.add(jComboBoxLinePlacementPerpendicularGap,
 					"left, gap right unrel");
 			SwingUtil
