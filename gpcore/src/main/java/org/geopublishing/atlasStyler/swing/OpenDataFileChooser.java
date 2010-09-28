@@ -15,6 +15,8 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.geopublishing.atlasStyler.ASUtil;
+
 /**
  * This extension of a {@link JFileChooser} is ment to be used to open one of
  * the Supported Geodata filestypes
@@ -28,8 +30,7 @@ public class OpenDataFileChooser extends JFileChooser {
 		super(currentDirectory);
 
 		addChoosableFileFilter(new FileNameExtensionFilter("GML", "gml"));
-		addChoosableFileFilter(new FileNameExtensionFilter("Shape", "shp", "SHP", "zip", "ZIP")); // TODO Let them click on any part of a shapefile
-		setDialogTitle("Open a file"); // i8n i8nAS
+		addChoosableFileFilter(new FileNameExtensionFilter(ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP")); // TODO Let them click on any part of a shapefile
 		setDialogType(OPEN_DIALOG);
 	}
 

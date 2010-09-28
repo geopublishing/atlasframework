@@ -16,7 +16,7 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * This extension to a {@link JFileChooser} is ment to be used to open SLD/SE
+ * This extension to a {@link JFileChooser} is meant to be used to open SLD/SE
  * files.
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
