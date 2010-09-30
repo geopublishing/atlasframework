@@ -359,9 +359,18 @@ public class AtlasStyler {
 	 * Create an AtlasStyler object for any {@link FeatureSource}
 	 */
 	public AtlasStyler(
-			FeatureSource<SimpleFeatureType, SimpleFeature> featureSourcePolygon) {
-		this(new StyledFS(featureSourcePolygon));
+			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource) {
+		this(new StyledFS(featureSource));
 	}
+	
+	/**
+	 * Create an AtlasStyler object for any {@link FeatureSource} and import the given {@link Style}.
+	 */
+	public AtlasStyler(
+			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource, Style style) {
+		this(new StyledFS(featureSource), style, null, null);
+	}
+
 
 	/**
 	 * Before loading a style we have to forget everything we might have
@@ -645,7 +654,7 @@ public class AtlasStyler {
 				 */
 				else if (metaInfoString.startsWith("QUANTITIES")) {
 
-					QuantitiesRuleList quantitiesRuleList = null;
+					QuantitiesRuleList<Double> quantitiesRuleList = null;
 
 					/***********************************************************
 					 * Importing a QUANTITIES_COLORIZED_POINT RuleList
@@ -741,6 +750,7 @@ public class AtlasStyler {
 										.getSymbolizerColor(s);
 
 								if (c != null) {
+									System.out.println("Rule "+ri+" has color "+c);
 									quantitiesRuleList.getColors()[ri] = c;
 									break;
 								}

@@ -34,9 +34,6 @@ public class GraduatedColorRuleListTest  {
 	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
 	@Test
-	/**
-	 * Pretty nonsense :-(
-	 */
 	public void testGraduatedColorRuleList() throws IOException {
 		URL shpURL = AtlasStylerTest.class.getResource(
 				"/data/shp countries/country.shp");

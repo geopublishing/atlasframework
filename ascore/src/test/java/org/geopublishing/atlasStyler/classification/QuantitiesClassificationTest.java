@@ -11,23 +11,33 @@
 package org.geopublishing.atlasStyler.classification;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerTest;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
+import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
+import org.geotools.styling.PolygonSymbolizer;
+import org.geotools.styling.Rule;
+import org.geotools.styling.Style;
+import org.geotools.styling.Symbolizer;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -35,6 +45,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.FilterFactory2;
 
+import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFS;
 
@@ -44,23 +55,88 @@ public class QuantitiesClassificationTest {
 
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
+	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_snowPolygon;
+
+	@Test
+	public void testQuantilesClassificationImportWithManualColors() {
+		URL sldUrl = DataUtilities.changeUrlExt(AtlasStylerTest.class
+				.getResource(AtlasStylerTest.SNOWPOLYGON_RESNAME), "sld");
+
+		Style snowStyleOriginal = StylingUtil.loadSLD(sldUrl)[0];
+		Style snowStyle = StylingUtil.clone(snowStyleOriginal);
+		assertFalse(StylingUtil.isStyleDifferent(snowStyleOriginal, snowStyle));
+
+		List<Color> beforeColors = new ArrayList<Color>();
+		List<Color> afterColors = new ArrayList<Color>();
+
+		extractColors(snowStyleOriginal, beforeColors);
+
+		AtlasStyler atlasStyler = new AtlasStyler(featureSource_snowPolygon,
+				snowStyle);
+		Style afterImport = atlasStyler.getStyle();
+
+		extractColors(afterImport, afterColors);
+
+		assertEquals("The actual color values must be the same", beforeColors,
+				afterColors);
+	}
+
+	private void extractColors(Style snowStyleOriginal, List<Color> beforeColors) {
+		for (Rule r : snowStyleOriginal.featureTypeStyles().get(0).rules()) {
+			for (final Symbolizer s : r.getSymbolizers()) {
+
+				PolygonSymbolizer ps = (PolygonSymbolizer) s;
+
+				final Color c = StylingUtil.getSymbolizerColor(s);
+
+				if (c != null) {
+					// System.out.println("Original Rule has color " +
+					// c+"  "+SwingUtil.convertColorToHex(c)+" and fill is "+ps.getFill().getColor());
+					beforeColors.add(c);
+					break;
+				}
+
+			}
+		}
+	}
+
 	@BeforeClass
 	public static void setup() throws IOException {
-		URL shpURL = AtlasStylerTest.class
-				.getResource(AtlasStylerTest.COUNTRY_SHP_RESNAME);
-		assertNotNull(AtlasStylerTest.COUNTRY_SHP_RESNAME + " not found!",
-				shpURL);
 
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("url", shpURL);
-		DataStore dataStore = DataStoreFinder.getDataStore(params);
-		featureSource_polygon = dataStore.getFeatureSource(dataStore
-				.getTypeNames()[0]);
+		{
+			// Prepare countries.shp featureStore
+			URL shpURL = AtlasStylerTest.class
+					.getResource(AtlasStylerTest.COUNTRY_SHP_RESNAME);
+			assertNotNull(AtlasStylerTest.COUNTRY_SHP_RESNAME + " not found!",
+					shpURL);
+
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("url", shpURL);
+			DataStore dataStore = DataStoreFinder.getDataStore(params);
+			featureSource_polygon = dataStore.getFeatureSource(dataStore
+					.getTypeNames()[0]);
+		}
+
+		{
+			// Prepare countries.shp featureStore
+			URL shpURL = AtlasStylerTest.class
+					.getResource(AtlasStylerTest.SNOWPOLYGON_RESNAME);
+			assertNotNull(AtlasStylerTest.SNOWPOLYGON_RESNAME + " not found!",
+					shpURL);
+
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("url", shpURL);
+			DataStore dataStore = DataStoreFinder.getDataStore(params);
+			featureSource_snowPolygon = dataStore.getFeatureSource(dataStore
+					.getTypeNames()[0]);
+		}
+
 	}
 
 	@After
 	public void after() {
 		featureSource_polygon.getDataStore().dispose();
+		featureSource_snowPolygon.getDataStore().dispose();
 	}
 
 	@Test
@@ -229,7 +305,7 @@ public class QuantitiesClassificationTest {
 	}
 
 	/**
-	 * Utility method to easitly check the breaks
+	 * Utility method to easily check the breaks
 	 */
 	private boolean testBreaks(TreeSet<Double> classLimits, Double... expected) {
 		Double[] actual = classLimits.toArray(new Double[] {});

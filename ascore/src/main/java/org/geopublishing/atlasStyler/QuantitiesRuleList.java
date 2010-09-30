@@ -178,19 +178,29 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 			}
 
 		}
-		
+
 		// Special case
-		if (classLimits.size()==1 && resetRuleTitles) {
+		if (classLimits.size() == 1 && resetRuleTitles) {
 			getRuleTitles().put(0, classLimits.first().toString());
 		}
-				
-		
 
 		// Setting the colors to null we lead to new colors being created the
 		// next time getColors() is called.
-		setColors(null);
+		updateColorsClassesChanged();
 
 		fireEvents(new RuleChangedEvent("Set class limits", this));
+	}
+
+	protected void updateColorsClassesChanged() {
+		if (getColors() != null) {
+			// The user might have manually adapted the colors, so we try to
+			// keep them where possible.
+			if (getColors().length == getNumClasses()) {
+				return;
+			} else {
+				setColors(null);
+			}
+		}
 	}
 
 	/**
@@ -391,9 +401,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		}
 	}
 
-	/**
-	 * @param colors
-	 */
 	public void setColors(Color[] colors) {
 		this.colors = colors;
 	}

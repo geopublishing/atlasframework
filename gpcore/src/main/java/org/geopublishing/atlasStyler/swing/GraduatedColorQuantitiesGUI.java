@@ -71,6 +71,7 @@ import schmitzm.geotools.map.event.MapLayerAdapter;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
+import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.i8n.Translation;
 import skrueger.swing.Disposable;
@@ -89,10 +90,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private JPanel jPanel = null;
 
 	private JLabel jLabelClassificationTypeDescription = null;
-
-	private JLabel jLabel2 = null;
-
-	private JLabel jLabel3 = null;
 
 	private JComboBox jComboBoxValueField = null;
 
@@ -366,7 +363,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
 				// if (quantGUI == null) {
-				AttributeMetadataMap attributeMetaDataMap = rulesList
+				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = rulesList
 						.getStyledFeatures().getAttributeMetaDataMap();
 
 				// Title like :

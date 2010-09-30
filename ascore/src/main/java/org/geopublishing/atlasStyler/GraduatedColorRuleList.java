@@ -217,6 +217,19 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
 	}
 
+//	/**
+//	 * Setting colors to <code>null</code> will result in new colors beeing
+//	 * created (from a palette) the next time #getColors is called.
+//	 */
+//	@Override
+//	public void updateColorsClassesChanged() {
+//		if (newColors != null) {
+//			super.setColors(newColors);
+//		} else {
+//			// Colors are set to null. This would lead directly to 
+//		}
+//	}
+
 	/**
 	 * @return An Array of Colors for the classes. The length of the array
 	 *         equals the number of classes.
@@ -234,8 +247,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 			setColors(getBrewerPalette().getColors(getNumClasses()));
 		}
 
-		final Color[] colors = super.getColors();
-		return colors;
+		return super.getColors();
 	}
 
 	/**
