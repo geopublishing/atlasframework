@@ -47,10 +47,6 @@ public class AttributeTableJDialog extends AtlasDialog {
 	
 	/** If a table will contain more than that many cells, the user will be warned **/
 	private static final int WARN_CELLS = 15000;
-	//
-	// /** A cache that manages maximum one instance of this class per layer **/
-	// private static HashMap<String, AttributeTableJDialog> dialogCache = new
-	// HashMap<String, AttributeTableJDialog>();
 
 	private StyledFeatureCollectionTableModel model;
 
