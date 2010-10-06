@@ -138,6 +138,10 @@ Demodata
 			<arg line='-b ${REPO.DIR} includedeb jaunty ${TARGET.DEB.DIR}/dist/geopublishing-doc_${version.upstream}-1_all.deb' />
 		</exec>
 
+		<exec executable="/usr/bin/reprepro" failonerror="false" description="Import the .deb for jaunty to the repo">
+			<arg line='-b ${REPO.DIR} includedeb freemantle ${TARGET.DEB.DIR}/dist/geopublishing-doc_${version.upstream}-1_all.deb' />
+		</exec>
+
 		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
 			<arg value="-u" />
 			<arg value="/var/www/www.geopublishing.org/htdocs" />
