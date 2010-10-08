@@ -103,6 +103,21 @@ public class AVUtil {
 	public static String R(final String key, final Object... values) {
 		return RESOURCE.getString(key, values);
 	}
+	
+
+	/**
+	 * Convenience method to access the {@link AtlasViewerGUI}s translation
+	 * resources.
+	 * 
+	 * @param key
+	 *            the key for the AtlasViewerTranslation.properties file
+	 * @param reqLanguage requested Language/Locale
+	 * @param values
+	 *            optinal values
+	 */
+	public static String R(final String key, Locale reqLanguage, final Object... values) {
+		return RESOURCE.getString(key, reqLanguage, values);
+	}
 
 	public static final Logger LOGGER = Logger.getLogger(AVUtil.class);
 

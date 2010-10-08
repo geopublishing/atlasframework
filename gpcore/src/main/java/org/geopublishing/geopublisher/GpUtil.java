@@ -62,18 +62,19 @@ public class GpUtil {
 	 */
 	public static final IOFileFilter BlacklistedFoldersFilter = FileFilterUtils
 			.makeCVSAware(FileFilterUtils.makeSVNAware(null));
-	
+
 	/**
 	 * This {@link IOFileFilter} only return .ttf files
 	 */
 	public static final IOFileFilter FontsFilesFilter = new IOFileFilter() {
-		
+
 		@Override
 		public boolean accept(File file) {
-			if (file.getName().toLowerCase().endsWith(".ttf")) return true;
+			if (file.getName().toLowerCase().endsWith(".ttf"))
+				return true;
 			return false;
 		}
-		
+
 		@Override
 		public boolean accept(File dir, String name) {
 			return accept(new File(dir, name));
@@ -83,14 +84,14 @@ public class GpUtil {
 
 	public static final MbDecimalFormatter MbDecimalFormatter = new MbDecimalFormatter();
 
-
 	/**
 	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
 	 * Package {@code skrueger.swing} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.swing.resource.locales}
 	 * hinterlegt.
 	 */
-	protected final static ResourceProvider RESOURCE = ResourceProvider.newInstance("locales.GeopublisherTranslation", Locale.ENGLISH);
+	protected final static ResourceProvider RESOURCE = ResourceProvider
+			.newInstance("locales.GeopublisherTranslation", Locale.ENGLISH);
 
 	/**
 	 * Convenience method to access the {@link Geopublisher}s translation
@@ -105,6 +106,21 @@ public class GpUtil {
 		return RESOURCE.getString(key, values);
 	}
 
+	/**
+	 * Convenience method to access the {@link Geopublisher}s translation
+	 * resources.
+	 * 
+	 * @param key
+	 *            the key for the *Translation.properties file
+	 * @param reqLanguage
+	 *            requested Language/Locale	            
+	 * @param values
+	 *            optional values
+	 */
+	public static String R(final String key, Locale reqLanguage,
+			final Object... values) {
+		return RESOURCE.getString(key, reqLanguage, values);
+	}
 
 	/**
 	 * Generates a random ID number with fix number of digits (11) and a leading
@@ -127,7 +143,8 @@ public class GpUtil {
 	 */
 	public static void saveCpg(DpLayerVectorFeatureSource dpe) {
 		try {
-			final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAtlasConfig();
+			final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
+					.getAtlasConfig();
 
 			final File cpgFile = IOUtil.changeFileExt(ace.getFileFor(dpe),
 					"cpg");
@@ -160,8 +177,7 @@ public class GpUtil {
 					+ dpe + "\nThe export will be continued."; // i8n
 			LOGGER.warn(errMessage, e);
 			// NULL TODO Null owner not nice
-			ExceptionDialog.show(null, e,
-					null, errMessage);
+			ExceptionDialog.show(null, e, null, errMessage);
 		}
 
 	}

@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -27,6 +28,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
+import org.geopublishing.geopublisher.GpUtil;
 
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
@@ -55,6 +57,14 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 
 	private Translation keywords;
 
+	/**
+	 * <code>true</code> if this {@link Group} is the root of all atlas
+	 * {@link Group}s. The difference to {@link #isRoot()} is, that
+	 * {@link #isRoot()} returns true, until the {@link Group} is inserted into
+	 * the tree.
+	 */
+	private boolean isAtlasRoot;
+
 	// ****************************************************************************
 	// D'n'D stuff
 	// ****************************************************************************
@@ -77,9 +87,29 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 *            in.
 	 */
 	public Group(AtlasConfig ac) {
+		this(ac, false);
+	}
+
+	/**
+	 * A {@link Group} is an rather abstract container to organize the
+	 * information of the atlas. A {@link Group} can contain subgroups. The root
+	 * {@link Group} is stored in the {@link AtlasConfig}. A {@link Group} has a
+	 * {@link #title}, a {@link #desc} and {@link #keywords} The children of a
+	 * {@link Group} can be:
+	 * 
+	 * <li>a sub-{@link Group} <li>a {@link DpRef} to any {@link DpEntry}.
+	 * 
+	 * @param ac
+	 *            {@link AtlasConfig} the Atlas that this {@link Group} exists
+	 *            in.
+	 */
+	public Group(AtlasConfig ac, boolean isAtlasRoot) {
 		this.ac = ac;
-		title = new Translation(getAc().getLanguages(),
-				AVUtil.R("NewGroup.DefaultTitle"));
+		this.setAtlasRoot(isAtlasRoot);
+		title = new Translation(getAc().getLanguages(), "");
+		for (String lang : getAc().getLanguages()) {
+			title.put(lang, GpUtil.R("NewGroup.DefaultTitle", new Locale(lang)));
+		}
 		desc = new Translation(getAc().getLanguages(), "");
 		keywords = new Translation(getAc().getLanguages(), "");
 	}
@@ -250,9 +280,19 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @return {@link Translation} of the group's name
 	 */
 	public Translation getTitle() {
-		if (isRoot())
+		if (isAtlasRoot())
 			return ac.getTitle();
 		return title;
+	}
+
+	/**
+	 * Return <code>true</code> if this {@link Group} is the root of all atlas
+	 * {@link Group}s. The difference to {@link #isRoot()} is, that
+	 * {@link #isRoot()} returns true, until the {@link Group} is inserted into
+	 * the tree.
+	 */
+	public boolean isAtlasRoot() {
+		return isAtlasRoot;
 	}
 
 	/**
@@ -269,7 +309,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @return {@link Translation} of the group's desciption
 	 */
 	public Translation getDesc() {
-		if (isRoot())
+		if (isAtlasRoot())
 			return ac.getDesc();
 		return desc;
 	}
@@ -374,5 +414,15 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 */
 	public void add(DpEntry dpe) {
 		add(new DpRef(dpe));
+	}
+
+	/**
+	 * <code>true</code> if this {@link Group} is the root of all atlas
+	 * {@link Group}s. The difference to {@link #isRoot()} is, that
+	 * {@link #isRoot()} returns true, until the {@link Group} is inserted into
+	 * the tree.
+	 */
+	public void setAtlasRoot(boolean isAtlasRoot) {
+		this.isAtlasRoot = isAtlasRoot;
 	}
 }

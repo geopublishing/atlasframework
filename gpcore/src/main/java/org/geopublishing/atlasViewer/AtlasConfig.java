@@ -170,7 +170,7 @@ public class AtlasConfig implements Disposable {
 	 * subgroup called "menubar" will be parsed as {@link JMenuBar} in the
 	 * AtlasViewer.
 	 */
-	private Group firstGroup = new Group(this);
+	private Group firstGroup = new Group(this, true);
 
 	private String resourceBasename = ATLASDATA_DIRNAME + "/" + DATA_DIRNAME
 			+ "/";
@@ -250,7 +250,8 @@ public class AtlasConfig implements Disposable {
 	}
 
 	/**
-	 * @return List of enabled languages. Strings are ISO language code (2 letter)
+	 * @return List of enabled languages. Strings are ISO language code (2
+	 *         letter)
 	 */
 	public final List<String> getLanguages() {
 		return languages;
@@ -278,6 +279,7 @@ public class AtlasConfig implements Disposable {
 	 */
 	public void setFirstGroup(Group firstGroup) {
 		this.firstGroup = firstGroup;
+		this.firstGroup.setAtlasRoot(true);
 	}
 
 	/**
