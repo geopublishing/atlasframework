@@ -117,7 +117,7 @@
 					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
 				</excludes>
 			</resource>
-			
+
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/assembly</directory>
@@ -125,18 +125,18 @@
 					<include>*.jsmooth</include>
 				</includes>
 			</resource>
-			
-		</resources>	
-			
+
+		</resources>
+
 		<testResources>
 			<testResource>
-				<!--				<filtering>true</filtering>-->
+				<!-- <filtering>true</filtering> -->
 				<directory>src/test/resources</directory>
 			</testResource>
 		</testResources>
 
 		<plugins>
-		
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -210,11 +210,8 @@
 					</execution>
 				</executions>
 				<configuration>
-<!--					<doCheck>false</doCheck>
-					<doUpdate>false</doUpdate>
-					<providerImplementations>
-						<svn>javasvn</svn>
-					</providerImplementations> -->
+					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+						<svn>javasvn</svn> </providerImplementations> -->
 					<format>{0,date,yyyyMMddHHmm}</format>
 					<items>
 						<item>timestamp</item>
@@ -231,7 +228,7 @@
 						<index>false</index>
 						<manifest>
 							<addClasspath>true</addClasspath>
-							<!-- children modules only define their mainClass here  -->
+							<!-- children modules only define their mainClass here -->
 						</manifest>
 						<manifestEntries>
 							<Implementation-Version>${project.version}
@@ -240,13 +237,19 @@
 						</manifestEntries>
 					</archive>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>
 
-		<!--
-			<finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName>
-		-->
+		<!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
 	</build>
 
 	<dependencies>
@@ -266,9 +269,9 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
-		<!-- For i8n correction -->
+			<!-- For i8n correction -->
 			<groupId>ant</groupId>
 			<artifactId>ant-nodeps</artifactId>
 			<version>1.6.5</version>
@@ -276,20 +279,20 @@
 		</dependency>
 
 		<dependency>
-		<!-- For i8n correction -->
+			<!-- For i8n correction -->
 			<groupId>ant-contrib</groupId>
 			<artifactId>ant-contrib</artifactId>
 			<version>1.0b3</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<repositories>
 
 		<repository>
-			<!-- Releases for geopublishing.org & more by www.wikisquare.de-->
+			<!-- Releases for geopublishing.org & more by www.wikisquare.de -->
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -299,7 +302,7 @@
 		</repository>
 
 		<repository>
-			<!-- Snapshot releases  geopublishing.org & more by www.wikisquare.de-->
+			<!-- Snapshot releases geopublishing.org & more by www.wikisquare.de -->
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -329,27 +332,23 @@
 
 	<pluginRepositories>
 
-		<!--		<pluginRepository>-->
-		<!--			<id>central</id>-->
-		<!--			<name>Maven Central repository</name>-->
-		<!--			<url>http://repo1.maven.org/maven2</url>-->
-		<!--		</pluginRepository>-->
+		<!-- <pluginRepository> -->
+		<!-- <id>central</id> -->
+		<!-- <name>Maven Central repository</name> -->
+		<!-- <url>http://repo1.maven.org/maven2</url> -->
+		<!-- </pluginRepository> -->
 <!---->
-		<!--		<pluginRepository>-->
-		<!--			<id>insight.release.repo</id>-->
-		<!--			<name>Insight Release Repository</name>-->
-		<!--
-			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url>
-		-->
-		<!--		</pluginRepository>-->
+		<!-- <pluginRepository> -->
+		<!-- <id>insight.release.repo</id> -->
+		<!-- <name>Insight Release Repository</name> -->
+		<!-- <url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url> -->
+		<!-- </pluginRepository> -->
 <!---->
-		<!--		<pluginRepository>-->
-		<!--			<id>insight.snapshot.repo</id>-->
-		<!--			<name>Insight Snapshot Repository</name>-->
-		<!--
-			<url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url>
-		-->
-		<!--		</pluginRepository>-->
+		<!-- <pluginRepository> -->
+		<!-- <id>insight.snapshot.repo</id> -->
+		<!-- <name>Insight Snapshot Repository</name> -->
+		<!-- <url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url> -->
+		<!-- </pluginRepository> -->
 
 
 		<pluginRepository>
