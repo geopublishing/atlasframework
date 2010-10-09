@@ -39,7 +39,7 @@ public class ManageChartsForMapDialogTest {
 				continue;
 		}
 
-		assertNotNull("One vector layer should be in the chart demo atlas",
+		assertNotNull("At least one vector layer with charts should be in the chart demo atlas",
 				dplv);
 
 		if (TestingUtil.INTERACTIVE) {

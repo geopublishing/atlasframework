@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
-  <sld:Name>AtlasStyler v1.4, b780 (Wed Mar 10 14:23:00 CET 2010)</sld:Name>
+  <sld:Name>AtlasStyler v1.4, b760 (Sun Feb 28 17:53:00 CET 2010)</sld:Name>
   <sld:Title/>
   <sld:FeatureTypeStyle>
-    <sld:Name>QUANTITIES_COLORIZED_POLYGON:VALUE#RANKF:NORM#null:METHOD#MANUAL:PALETTE#PiYG</sld:Name>
+    <sld:Name>QUANTITIES_COLORIZED_POLYGON:VALUE#BANDWF:NORM#null:METHOD#MANUAL:PALETTE#RdYlGn</sld:Name>
     <sld:FeatureTypeName>join10</sld:FeatureTypeName>
-    <sld:SemanticTypeIdentifier>SemanticType[ANY]</sld:SemanticTypeIdentifier>
     <sld:Rule>
-      <sld:Name>AS: 1/3 GraduatedColorPolygonRuleList</sld:Name>
-      <sld:Title>en{TOP 50}</sld:Title>
+      <sld:Name>AS: 1/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 3 MBps/billion capita}</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:Not>
             <ogc:Or>
               <ogc:PropertyIsNull>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
               </ogc:PropertyIsNull>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
-                <ogc:Literal>0</ogc:Literal>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
               </ogc:PropertyIsEqualTo>
             </ogc:Or>
           </ogc:Not>
           <ogc:PropertyIsBetween>
-            <ogc:PropertyName>RANKF</ogc:PropertyName>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
             <ogc:LowerBoundary>
-              <ogc:Literal>1.0</ogc:Literal>
+              <ogc:Literal>0.0</ogc:Literal>
             </ogc:LowerBoundary>
             <ogc:UpperBoundary>
-              <ogc:Literal>50.0</ogc:Literal>
+              <ogc:Literal>3.0</ogc:Literal>
             </ogc:UpperBoundary>
           </ogc:PropertyIsBetween>
         </ogc:And>
@@ -40,58 +43,38 @@
           <ogc:PropertyName>the_geom</ogc:PropertyName>
         </sld:Geometry>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#E9A3C9</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#D73027</sld:CssParameter>
         </sld:Fill>
-        <sld:Stroke>
-          <sld:CssParameter name="stroke">
-            <ogc:Literal>#000000</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linecap">
-            <ogc:Literal>butt</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linejoin">
-            <ogc:Literal>miter</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-opacity">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-width">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-dashoffset">
-            <ogc:Literal>0</ogc:Literal>
-          </sld:CssParameter>
-        </sld:Stroke>
+        <sld:Stroke/>
       </sld:PolygonSymbolizer>
     </sld:Rule>
     <sld:Rule>
-      <sld:Name>AS: 2/3 GraduatedColorPolygonRuleList</sld:Name>
-      <sld:Title>en{}</sld:Title>
+      <sld:Name>AS: 2/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 30 MBps/billion capita}</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:Not>
             <ogc:Or>
               <ogc:PropertyIsNull>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
               </ogc:PropertyIsNull>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
-                <ogc:Literal>0</ogc:Literal>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
               </ogc:PropertyIsEqualTo>
             </ogc:Or>
           </ogc:Not>
           <ogc:PropertyIsBetween>
-            <ogc:PropertyName>RANKF</ogc:PropertyName>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
             <ogc:LowerBoundary>
-              <ogc:Literal>50.0</ogc:Literal>
+              <ogc:Literal>3.0</ogc:Literal>
             </ogc:LowerBoundary>
             <ogc:UpperBoundary>
-              <ogc:Literal>138.0</ogc:Literal>
+              <ogc:Literal>30.0</ogc:Literal>
             </ogc:UpperBoundary>
           </ogc:PropertyIsBetween>
         </ogc:And>
@@ -103,58 +86,38 @@
           <ogc:PropertyName>the_geom</ogc:PropertyName>
         </sld:Geometry>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#F7F7F7</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#FC8D59</sld:CssParameter>
         </sld:Fill>
-        <sld:Stroke>
-          <sld:CssParameter name="stroke">
-            <ogc:Literal>#000000</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linecap">
-            <ogc:Literal>butt</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linejoin">
-            <ogc:Literal>miter</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-opacity">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-width">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-dashoffset">
-            <ogc:Literal>0</ogc:Literal>
-          </sld:CssParameter>
-        </sld:Stroke>
+        <sld:Stroke/>
       </sld:PolygonSymbolizer>
     </sld:Rule>
     <sld:Rule>
-      <sld:Name>AS: 3/3 GraduatedColorPolygonRuleList</sld:Name>
-      <sld:Title>en{BOTTOM 50}</sld:Title>
+      <sld:Name>AS: 3/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 400 MBps/billion capita}</sld:Title>
       <ogc:Filter>
         <ogc:And>
           <ogc:Not>
             <ogc:Or>
               <ogc:PropertyIsNull>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
               </ogc:PropertyIsNull>
               <ogc:PropertyIsEqualTo>
-                <ogc:PropertyName>RANKF</ogc:PropertyName>
-                <ogc:Literal>0</ogc:Literal>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
               </ogc:PropertyIsEqualTo>
             </ogc:Or>
           </ogc:Not>
           <ogc:PropertyIsBetween>
-            <ogc:PropertyName>RANKF</ogc:PropertyName>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
             <ogc:LowerBoundary>
-              <ogc:Literal>138.0</ogc:Literal>
+              <ogc:Literal>30.0</ogc:Literal>
             </ogc:LowerBoundary>
             <ogc:UpperBoundary>
-              <ogc:Literal>188.0</ogc:Literal>
+              <ogc:Literal>400.0</ogc:Literal>
             </ogc:UpperBoundary>
           </ogc:PropertyIsBetween>
         </ogc:And>
@@ -166,46 +129,155 @@
           <ogc:PropertyName>the_geom</ogc:PropertyName>
         </sld:Geometry>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#A1D76A</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#FEE08B</sld:CssParameter>
         </sld:Fill>
-        <sld:Stroke>
-          <sld:CssParameter name="stroke">
-            <ogc:Literal>#000000</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linecap">
-            <ogc:Literal>butt</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linejoin">
-            <ogc:Literal>miter</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-opacity">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-width">
-            <ogc:Literal>1</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-dashoffset">
-            <ogc:Literal>0</ogc:Literal>
-          </sld:CssParameter>
-        </sld:Stroke>
+        <sld:Stroke/>
       </sld:PolygonSymbolizer>
     </sld:Rule>
     <sld:Rule>
-      <sld:Name>NODATA_RULE_HIDE_IN_LEGEND</sld:Name>
+      <sld:Name>AS: 4/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 10k MBps/billion capita}</sld:Title>
+      <ogc:Filter>
+        <ogc:And>
+          <ogc:Not>
+            <ogc:Or>
+              <ogc:PropertyIsNull>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+              </ogc:PropertyIsNull>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+            </ogc:Or>
+          </ogc:Not>
+          <ogc:PropertyIsBetween>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
+            <ogc:LowerBoundary>
+              <ogc:Literal>400.0</ogc:Literal>
+            </ogc:LowerBoundary>
+            <ogc:UpperBoundary>
+              <ogc:Literal>10000.0</ogc:Literal>
+            </ogc:UpperBoundary>
+          </ogc:PropertyIsBetween>
+        </ogc:And>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>4.9E-324</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>1.7976931348623157E308</sld:MaxScaleDenominator>
+      <sld:PolygonSymbolizer>
+        <sld:Geometry>
+          <ogc:PropertyName>the_geom</ogc:PropertyName>
+        </sld:Geometry>
+        <sld:Fill>
+          <sld:CssParameter name="fill">#D9EF8B</sld:CssParameter>
+        </sld:Fill>
+        <sld:Stroke/>
+      </sld:PolygonSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>AS: 5/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 20k MBps/billion capita}</sld:Title>
+      <ogc:Filter>
+        <ogc:And>
+          <ogc:Not>
+            <ogc:Or>
+              <ogc:PropertyIsNull>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+              </ogc:PropertyIsNull>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+            </ogc:Or>
+          </ogc:Not>
+          <ogc:PropertyIsBetween>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
+            <ogc:LowerBoundary>
+              <ogc:Literal>10000.0</ogc:Literal>
+            </ogc:LowerBoundary>
+            <ogc:UpperBoundary>
+              <ogc:Literal>20000.0</ogc:Literal>
+            </ogc:UpperBoundary>
+          </ogc:PropertyIsBetween>
+        </ogc:And>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>4.9E-324</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>1.7976931348623157E308</sld:MaxScaleDenominator>
+      <sld:PolygonSymbolizer>
+        <sld:Geometry>
+          <ogc:PropertyName>the_geom</ogc:PropertyName>
+        </sld:Geometry>
+        <sld:Fill>
+          <sld:CssParameter name="fill">#91CF60</sld:CssParameter>
+        </sld:Fill>
+        <sld:Stroke/>
+      </sld:PolygonSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>AS: 6/6 GraduatedColorPolygonRuleList</sld:Name>
+      <sld:Title>en{- 35k MBps/billion capita}</sld:Title>
+      <ogc:Filter>
+        <ogc:And>
+          <ogc:Not>
+            <ogc:Or>
+              <ogc:PropertyIsNull>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+              </ogc:PropertyIsNull>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>0.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+              <ogc:PropertyIsEqualTo>
+                <ogc:PropertyName>BANDWF</ogc:PropertyName>
+                <ogc:Literal>-1.0</ogc:Literal>
+              </ogc:PropertyIsEqualTo>
+            </ogc:Or>
+          </ogc:Not>
+          <ogc:PropertyIsBetween>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
+            <ogc:LowerBoundary>
+              <ogc:Literal>20000.0</ogc:Literal>
+            </ogc:LowerBoundary>
+            <ogc:UpperBoundary>
+              <ogc:Literal>35000.0</ogc:Literal>
+            </ogc:UpperBoundary>
+          </ogc:PropertyIsBetween>
+        </ogc:And>
+      </ogc:Filter>
+      <sld:MinScaleDenominator>4.9E-324</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator>1.7976931348623157E308</sld:MaxScaleDenominator>
+      <sld:PolygonSymbolizer>
+        <sld:Geometry>
+          <ogc:PropertyName>the_geom</ogc:PropertyName>
+        </sld:Geometry>
+        <sld:Fill>
+          <sld:CssParameter name="fill">#1A9850</sld:CssParameter>
+        </sld:Fill>
+        <sld:Stroke/>
+      </sld:PolygonSymbolizer>
+    </sld:Rule>
+    <sld:Rule>
+      <sld:Name>NODATA_RULE</sld:Name>
       <sld:Title>en{missing data, probably very low}</sld:Title>
       <ogc:Filter>
         <ogc:Or>
           <ogc:PropertyIsNull>
-            <ogc:PropertyName>RANKF</ogc:PropertyName>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
           </ogc:PropertyIsNull>
           <ogc:PropertyIsEqualTo>
-            <ogc:PropertyName>RANKF</ogc:PropertyName>
-            <ogc:Literal>0</ogc:Literal>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
+            <ogc:Literal>0.0</ogc:Literal>
+          </ogc:PropertyIsEqualTo>
+          <ogc:PropertyIsEqualTo>
+            <ogc:PropertyName>BANDWF</ogc:PropertyName>
+            <ogc:Literal>-1.0</ogc:Literal>
           </ogc:PropertyIsEqualTo>
         </ogc:Or>
       </ogc:Filter>
@@ -216,32 +288,10 @@
           <ogc:PropertyName>the_geom</ogc:PropertyName>
         </sld:Geometry>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#FFFFFF</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#FFFFFF</sld:CssParameter>
         </sld:Fill>
         <sld:Stroke>
-          <sld:CssParameter name="stroke">
-            <ogc:Literal>#C0C0C0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linecap">
-            <ogc:Literal>butt</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-linejoin">
-            <ogc:Literal>miter</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-width">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="stroke-dashoffset">
-            <ogc:Literal>0.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="stroke">#C0C0C0</sld:CssParameter>
         </sld:Stroke>
       </sld:PolygonSymbolizer>
     </sld:Rule>
@@ -249,7 +299,6 @@
   <sld:FeatureTypeStyle>
     <sld:Name>TEXT_LABEL</sld:Name>
     <sld:FeatureTypeName>Feature</sld:FeatureTypeName>
-    <sld:SemanticTypeIdentifier>SemanticType[ANY]</sld:SemanticTypeIdentifier>
     <sld:Rule>
       <sld:Name>Default/all others</sld:Name>
       <ogc:Filter>
@@ -308,18 +357,10 @@
           </ogc:Function>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">
-            <ogc:Literal>Lucida Sans</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-size">
-            <ogc:Literal>11.0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-style">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-weight">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="font-family">Lucida Sans</sld:CssParameter>
+          <sld:CssParameter name="font-size">11.0</sld:CssParameter>
+          <sld:CssParameter name="font-style">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
         </sld:Font>
         <sld:LabelPlacement>
           <sld:PointPlacement>
@@ -349,21 +390,12 @@
             <ogc:Literal>1.0</ogc:Literal>
           </sld:Radius>
           <sld:Fill>
-            <sld:CssParameter name="fill">
-              <ogc:Literal>#EEEEEE</ogc:Literal>
-            </sld:CssParameter>
-            <sld:CssParameter name="fill-opacity">
-              <ogc:Literal>0.9</ogc:Literal>
-            </sld:CssParameter>
+            <sld:CssParameter name="fill">#EEEEEE</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">0.9</sld:CssParameter>
           </sld:Fill>
         </sld:Halo>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#000000</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#000000</sld:CssParameter>
         </sld:Fill>
         <sld:Priority>
           <ogc:PropertyName>POP_CNTRY</ogc:PropertyName>
@@ -420,18 +452,10 @@
           <ogc:PropertyName>CNTRY_NAME</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">
-            <ogc:Literal>Lucida Sans</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-size">
-            <ogc:Literal>11.0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-style">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-weight">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="font-family">Lucida Sans</sld:CssParameter>
+          <sld:CssParameter name="font-size">11.0</sld:CssParameter>
+          <sld:CssParameter name="font-style">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
         </sld:Font>
         <sld:LabelPlacement>
           <sld:PointPlacement>
@@ -461,21 +485,12 @@
             <ogc:Literal>1.0</ogc:Literal>
           </sld:Radius>
           <sld:Fill>
-            <sld:CssParameter name="fill">
-              <ogc:Literal>#EEEEEE</ogc:Literal>
-            </sld:CssParameter>
-            <sld:CssParameter name="fill-opacity">
-              <ogc:Literal>0.9</ogc:Literal>
-            </sld:CssParameter>
+            <sld:CssParameter name="fill">#EEEEEE</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">0.9</sld:CssParameter>
           </sld:Fill>
         </sld:Halo>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#000000</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#000000</sld:CssParameter>
         </sld:Fill>
         <sld:Priority>
           <ogc:PropertyName>POP_CNTRY</ogc:PropertyName>
@@ -517,18 +532,10 @@
           <ogc:PropertyName>CNTRY_NAME</ogc:PropertyName>
         </sld:Label>
         <sld:Font>
-          <sld:CssParameter name="font-family">
-            <ogc:Literal>Lucida Sans</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-size">
-            <ogc:Literal>9.0</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-style">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="font-weight">
-            <ogc:Literal>normal</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="font-family">Lucida Sans</sld:CssParameter>
+          <sld:CssParameter name="font-size">9.0</sld:CssParameter>
+          <sld:CssParameter name="font-style">normal</sld:CssParameter>
+          <sld:CssParameter name="font-weight">normal</sld:CssParameter>
         </sld:Font>
         <sld:LabelPlacement>
           <sld:PointPlacement>
@@ -558,21 +565,12 @@
             <ogc:Literal>1.0</ogc:Literal>
           </sld:Radius>
           <sld:Fill>
-            <sld:CssParameter name="fill">
-              <ogc:Literal>#EEEEEE</ogc:Literal>
-            </sld:CssParameter>
-            <sld:CssParameter name="fill-opacity">
-              <ogc:Literal>0.6</ogc:Literal>
-            </sld:CssParameter>
+            <sld:CssParameter name="fill">#EEEEEE</sld:CssParameter>
+            <sld:CssParameter name="fill-opacity">0.6</sld:CssParameter>
           </sld:Fill>
         </sld:Halo>
         <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#999999</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>1.0</ogc:Literal>
-          </sld:CssParameter>
+          <sld:CssParameter name="fill">#999999</sld:CssParameter>
         </sld:Fill>
       </sld:TextSymbolizer>
     </sld:Rule>

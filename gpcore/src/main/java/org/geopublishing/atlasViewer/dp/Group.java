@@ -23,7 +23,6 @@ import java.util.Locale;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 import org.geopublishing.atlasViewer.map.Map;
