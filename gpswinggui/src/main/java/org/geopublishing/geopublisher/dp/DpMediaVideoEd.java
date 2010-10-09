@@ -24,6 +24,8 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
 
+import schmitzm.io.IOUtil;
+
 
 /**
  * A subclass of {@link DpMediaVideo} that is editable. It can be created from a
@@ -82,7 +84,7 @@ public class DpMediaVideoEd extends DpMediaVideo implements DpEditableInterface 
 		setDataDirname(dirname);
 
 		// Copy file to data directory
-		AVUtil.copyFile(log, file, dataDir);
+		IOUtil.copyFile(log, file, dataDir, true);
 	}
 
 	/*

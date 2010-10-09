@@ -26,6 +26,8 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.dp.DpeImportUtil;
 import org.geotools.data.DataUtilities;
 
+import schmitzm.io.IOUtil;
+
 
 /**
  * A subclass of {@link DpMediaPDF} that is bound to a {@link File} object, not
@@ -48,7 +50,7 @@ public class DpMediaPDFEd extends DpMediaPDF implements DpEditableInterface {
 	 */
 	public DpMediaPDFEd(AtlasConfigEditable ace, File file, Component owner) throws AtlasImportException {
 		super(ace);
-		String cleanFilename = AVUtil.cleanFilename(file.getName());
+		String cleanFilename = IOUtil.cleanFilename(file.getName());
 		
 		setFilename(cleanFilename);
 		
@@ -80,7 +82,7 @@ public class DpMediaPDFEd extends DpMediaPDF implements DpEditableInterface {
 	public void copyFiles(URL sourceUrl, Component owner, File targetDir,
 			AtlasStatusDialogInterface atlasStatusDialog) throws Exception {
 		
-		AVUtil.copyUrl( sourceUrl, targetDir, true);
+		IOUtil.copyUrl( sourceUrl, targetDir, true);
 		
 	}
 

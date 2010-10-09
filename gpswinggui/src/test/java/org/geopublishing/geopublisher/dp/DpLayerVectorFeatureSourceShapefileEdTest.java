@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
@@ -24,32 +25,13 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.geotools.styling.TestingUtil2;
+import schmitzm.io.IOUtil;
+import schmitzm.swing.TestingUtil;
+
+import com.sun.org.apache.xml.internal.resolver.helpers.FileURL;
+
 public class DpLayerVectorFeatureSourceShapefileEdTest {
-
-	@Test
-	public void testImportArabic() throws AtlasException, FactoryException,
-			TransformException, SAXException, IOException,
-			ParserConfigurationException {
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
-
-		URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
-				.getResource("/arabicShapefiles/arabicdata.shp");
-		assertNotNull(url);
-		System.out.println(url);
-		DpLayerVectorFeatureSourceShapefileEd dpl = new DpLayerVectorFeatureSourceShapefileEd(
-				ace, url, null);
-
-		FeatureCollection<SimpleFeatureType, SimpleFeature> fc = dpl
-				.getGeoObject().getFeatures();
-		Iterator<SimpleFeature> fi = fc.iterator();
-		try {
-			SimpleFeature f = fi.next();
-			Object arabic = f.getAttribute(3);
-			assertEquals("وكالة الحوض المائي للوكوس", arabic);
-		} finally {
-			fc.close(fi);
-		}
-	}
 
 	@Test
 	public void testImportArabicInHeader() throws AtlasException,
@@ -65,6 +47,36 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 
 		assertEquals(1, illegalAtts.size());
 		assertTrue(illegalAtts.get(0).startsWith("3:"));
+	}
+
+	@Test
+	public void testImportArabic() throws AtlasException, FactoryException,
+			TransformException, SAXException, IOException,
+			ParserConfigurationException, URISyntaxException {
+		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+
+		URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
+				.getResource("/arabicShapefiles/arabicdata.shp");
+		assertNotNull(url);
+
+		System.out.println(url);
+
+		url = TestingUtil.copyShapefileToTemp(url);
+
+		System.out.println(url);
+		DpLayerVectorFeatureSourceShapefileEd dpl = new DpLayerVectorFeatureSourceShapefileEd(
+				ace, url, null);
+
+		FeatureCollection<SimpleFeatureType, SimpleFeature> fc = dpl
+				.getGeoObject().getFeatures();
+		Iterator<SimpleFeature> fi = fc.iterator();
+		try {
+			SimpleFeature f = fi.next();
+			Object arabic = f.getAttribute(3);
+			assertEquals("وكالة الحوض المائي للوكوس", arabic);
+		} finally {
+			fc.close(fi);
+		}
 	}
 
 }

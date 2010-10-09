@@ -70,6 +70,7 @@ import org.w3c.dom.Node;
 import schmitzm.geotools.io.GeoExportUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
@@ -211,7 +212,7 @@ public class AMLExporter {
 				try {
 					LOGGER.warn("copying " + AtlasConfig.ATLAS_XML_FILENAME
 							+ ".bak to " + AtlasConfig.ATLAS_XML_FILENAME);
-					AVUtil.copyFile(LOGGER, new File(ace.getAd(),
+					IOUtil.copyFile(LOGGER, new File(ace.getAd(),
 							AtlasConfig.ATLAS_XML_FILENAME + ".bak"),
 							getAtlasXml(), false);
 				} catch (final IOException ioEx) {
@@ -1317,11 +1318,11 @@ public class AMLExporter {
 				+ ".bak.bak.bak");
 
 		if (bak2.exists())
-			AVUtil.copyFile(LOGGER, bak2, bak3, false);
+			IOUtil.copyFile(LOGGER, bak2, bak3, false);
 		if (bak1.exists())
-			AVUtil.copyFile(LOGGER, bak1, bak2, false);
+			IOUtil.copyFile(LOGGER, bak1, bak2, false);
 		if (atlasXml.exists()) {
-			AVUtil.copyFile(LOGGER, atlasXml, bak1, false);
+			IOUtil.copyFile(LOGGER, atlasXml, bak1, false);
 			return true;
 		}
 		return false;

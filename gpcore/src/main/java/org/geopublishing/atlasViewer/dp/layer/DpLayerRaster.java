@@ -207,17 +207,17 @@ public class DpLayerRaster extends
 
 									// clean = false, because we only clean
 									// filenames on import
-									AVUtil.copyURLNoException(src,
+									IOUtil.copyURLNoException(src,
 											IOUtil.getTempDir(), false);
 								}
 
 								// Copy optional .prj file to data directory
-								AVUtil.copyURLNoException(
+								IOUtil.copyURLNoException(
 										IOUtil.changeUrlExt(url, "prj"),
 										IOUtil.getTempDir(), false);
 
 								// Copy optional .sld file to data directory
-								AVUtil.copyURLNoException(
+								IOUtil.copyURLNoException(
 										IOUtil.changeUrlExt(url, "sld"),
 										IOUtil.getTempDir(), false);
 

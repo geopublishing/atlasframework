@@ -187,7 +187,7 @@ public class GpSwingUtil extends GpUtil {
 	 */
 	public static String cleanFilenameWithUI(Component owner,
 			String nameCandidate) throws AtlasImportException {
-		String cleanName = AVUtil.cleanFilename(nameCandidate);
+		String cleanName = IOUtil.cleanFilename(nameCandidate);
 
 		if (!cleanName.equals(nameCandidate)) {
 			/**

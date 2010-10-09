@@ -223,7 +223,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 				// final File prjFile = new File(prjFilename);
 				try {
-					AVUtil.copyUrl(prjURL, targetDir, true);
+					IOUtil.copyUrl(prjURL, targetDir, true);
 				} catch (FileNotFoundException e) {
 					LOGGER.debug(prjURL
 							+ " not found, trying with capital '.PRJ'");
@@ -234,7 +234,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 						// Creating a destination File with small ending!
 						final String basename = getFilename().substring(0,
 								getFilename().lastIndexOf("."));
-						AVUtil.copyUrl(prjURL, new File(targetDir, basename
+						IOUtil.copyUrl(prjURL, new File(targetDir, basename
 								+ ".prj"), true);
 					} catch (FileNotFoundException e2) {
 						LOGGER.debug("No .prj or .PRJ file for Shapefile found.");
@@ -259,31 +259,31 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				 * Copy main SHP file!
 				 */
 				final URL shpURL = IOUtil.changeUrlExt(urlToShape, "shp");
-				AVUtil.copyUrl(shpURL, targetDir, true);
+				IOUtil.copyUrl(shpURL, targetDir, true);
 
 				final URL shxURL = IOUtil.changeUrlExt(urlToShape, "shx");
-				AVUtil.copyURLNoException(shxURL, targetDir, true);
+				IOUtil.copyURLNoException(shxURL, targetDir, true);
 
 				final URL grxURL = IOUtil.changeUrlExt(urlToShape, "grx");
-				AVUtil.copyURLNoException(grxURL, targetDir, true);
+				IOUtil.copyURLNoException(grxURL, targetDir, true);
 
 				final URL fixURL = IOUtil.changeUrlExt(urlToShape, "fix");
-				AVUtil.copyURLNoException(fixURL, targetDir, true);
+				IOUtil.copyURLNoException(fixURL, targetDir, true);
 
 				final URL qixURL = IOUtil.changeUrlExt(urlToShape, "qix");
-				AVUtil.copyURLNoException(qixURL, targetDir, true);
+				IOUtil.copyURLNoException(qixURL, targetDir, true);
 
 				final URL xmlURL = IOUtil.changeUrlExt(urlToShape, "shp.xml");
-				AVUtil.copyURLNoException(xmlURL, targetDir, true);
+				IOUtil.copyURLNoException(xmlURL, targetDir, true);
 
 				final URL dbfURL = IOUtil.changeUrlExt(urlToShape, "dbf");
-				AVUtil.copyURLNoException(dbfURL, targetDir, true);
+				IOUtil.copyURLNoException(dbfURL, targetDir, true);
 
 				/**
 				 * Optionally copy a .cpg file that describes the
 				 */
 				final URL cpgURL = IOUtil.changeUrlExt(urlToShape, "cpg");
-				AVUtil.copyURLNoException(cpgURL, targetDir, true);
+				IOUtil.copyURLNoException(cpgURL, targetDir, true);
 
 				/**
 				 * Try to copy an attached .sld / .SLD files or create a default
@@ -295,10 +295,10 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				try {
 					try {
 
-						AVUtil.copyUrl(IOUtil.changeUrlExt(urlToShape, "sld"),
+						IOUtil.copyUrl(IOUtil.changeUrlExt(urlToShape, "sld"),
 								targetDir, true);
 					} catch (Exception e) {
-						AVUtil.copyUrl(IOUtil.changeUrlExt(urlToShape, "SLD"),
+						IOUtil.copyUrl(IOUtil.changeUrlExt(urlToShape, "SLD"),
 								targetDir, true);
 					}
 				} catch (Exception e) {

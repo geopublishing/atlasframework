@@ -120,20 +120,20 @@ public class DpLayerRasterEd extends DpLayerRaster implements
 		// Copy the files into the atlas folder tree, clean the filenames on the
 		// way.
 		// ****************************************************************************
-		AVUtil.copyUrl(sourceUrlSpecial, targetDir, true);
+		IOUtil.copyUrl(sourceUrlSpecial, targetDir, true);
 
 		// Try to copy pending world files...
 		for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES.values()) {
-			AVUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, pf
+			IOUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, pf
 					.toString()), targetDir, true);
 		}
 
 		// Copy optional .prj file to data directory
-		AVUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, "prj"),
+		IOUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, "prj"),
 				targetDir, true);
 
 		// Copy optional .sld file to data directory
-		AVUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, "sld"),
+		IOUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, "sld"),
 				targetDir, true);
 	}
 

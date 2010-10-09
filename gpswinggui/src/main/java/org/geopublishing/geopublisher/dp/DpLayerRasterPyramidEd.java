@@ -89,7 +89,7 @@ public class DpLayerRasterPyramidEd extends DpLayerRasterPyramid implements
 			AtlasStatusDialogInterface atlasStatusDialog) throws Exception {
 
 		// Copy TIFF file to data directory
-		AVUtil.copyFile(null, DataUtilities.urlToFile(sourceUrl)
+		IOUtil.copyFile(null, DataUtilities.urlToFile(sourceUrl)
 				.getParentFile(), targetDir, true);
 
 		// Reading the CRS now!

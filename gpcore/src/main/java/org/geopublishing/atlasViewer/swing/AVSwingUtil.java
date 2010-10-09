@@ -258,7 +258,7 @@ public class AVSwingUtil extends AVUtil {
 		// .debug("Adding a Postfix to the temp file so Windows will recognize it: "
 		// + fuerWindows);
 		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_ID
-				+ cleanFilename(title), postFix);
+				+ IOUtil.cleanFilename(title), postFix);
 
 		new AtlasExportTask(owner, AVUtil.R("dialog.title.wait")) {
 
@@ -311,7 +311,7 @@ public class AVSwingUtil extends AVUtil {
 
 			if (source.exists()) {
 				try {
-					AVSwingUtil.copyFile(log, source, targetDir, true);
+					IOUtil.copyFile(log, source, targetDir, true);
 				} catch (final IOException e) {
 					if (statusDialog != null)
 						statusDialog.warningOccurred(e.getLocalizedMessage(),

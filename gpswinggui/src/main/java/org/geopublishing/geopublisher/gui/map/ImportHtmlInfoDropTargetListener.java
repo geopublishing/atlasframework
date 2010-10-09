@@ -23,13 +23,13 @@ import java.net.URLConnection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.AtlasDropTargetListener;
 
+import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 
 /**
@@ -111,10 +111,9 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 						importHtmlFolder(files[0]));
 				return;
 			} catch (Exception e) {
-				LOGGER
-						.info(
-								" DataFlavor.stringFlavor not successful, witj Exception",
-								e);
+				LOGGER.info(
+						" DataFlavor.stringFlavor not successful, witj Exception",
+						e);
 			}
 		}
 
@@ -147,9 +146,7 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 							"Problems Converting URL to File with '"
 									+ droppedString + "'");
 				}
-				LOGGER
-						.debug("Got an existing file = "
-								+ file.getAbsolutePath());
+				LOGGER.debug("Got an existing file = " + file.getAbsolutePath());
 				if (!file.isDirectory()) {
 					AVSwingUtil.showMessageDialog(owner, "Not a dir"); // i8nAC
 					return false;
@@ -198,7 +195,7 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 				targetDir.mkdir();
 			}
 
-			AVUtil.copyFile(LOGGER, file, targetDir);
+			IOUtil.copyFile(LOGGER, file, targetDir, false);
 
 		} catch (IOException e) {
 			ExceptionDialog.show(owner, e);
