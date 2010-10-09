@@ -37,7 +37,7 @@ import skrueger.swing.TranslationEditJPanel;
 
 public class DpeImportUtil {
 
-	public static void askTranslationsBeforeCopy(DpEntry dpe, Component owner) {
+	public static void askTranslationsBeforeCopy(DpEntry<?> dpe, Component owner) {
 
 		// ****************************************************************************
 		// Edit the Title, Description and Keywords modally. If the user
@@ -76,7 +76,7 @@ public class DpeImportUtil {
 		final Boolean guiInteraction = owner != null;
 
 		if (guiInteraction) {
-			final DpEntry dpe = (DpEntry) dped;
+			final DpEntry<?> dpe = (DpEntry<?>) dped;
 
 			DpeImportUtil.askTranslationsBeforeCopy(dpe, owner);
 

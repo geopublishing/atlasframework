@@ -53,6 +53,7 @@ public class GPTestingUtil {
 
 	/** An enumeration of available test-atlases **/
 	public enum Atlas {
+		// TODO Create atype "new" that creates a new atlas in tmp dir
 		small, iida2, rasters
 	}
 

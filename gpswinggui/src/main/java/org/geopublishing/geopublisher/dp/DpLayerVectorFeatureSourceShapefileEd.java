@@ -17,9 +17,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.TransformerException;
@@ -33,6 +36,7 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
@@ -41,16 +45,24 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.NameImpl;
 import org.geotools.styling.Style;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryDescriptor;
+
+import com.sun.org.omg.CORBA.AttributeDescription;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledLayerUtil;
+import skrueger.geotools.io.GeoImportUtilURL;
 import skrueger.i8n.Translation;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
@@ -87,8 +99,21 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			// Otherwise an AtlasImportException is thrown
 			final String name = GpSwingUtil.cleanFilenameWithUI(owner,
 					new File(url.toURI()).getName());
-
 			setFilename(name);
+
+			// Check for "illegal" attribute names.
+			List<String> illegalAtts = checkAttributeNames(url);
+			if (illegalAtts.size() > 0) {
+				String illegalAttsString = LangUtil.stringConcatWithSep(", ",
+						illegalAtts.toArray());
+				if (!AVSwingUtil.askOKCancel(owner, GpUtil.R(
+						"DbfAttributeNames.Illegal.ProceedQuestion",
+						illegalAttsString))) {
+					throw new AtlasImportException(GpUtil.R(
+							"DbfAttributeNames.Illegal.ProceedQuestion.Denied",
+							illegalAttsString));
+				}
+			}
 
 			/**
 			 * Base name is cities if URL points to cities.gml or cities.shp
@@ -116,8 +141,8 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				throw new IOException("Couldn't create "
 						+ dataDir.getAbsolutePath());
 
-			parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
-					.getParentUrl(url), "README"), 1);
+			parseGeocommonsReadme(DataUtilities.extendURL(
+					DataUtilities.getParentUrl(url), "README"), 1);
 
 			DpeImportUtil.copyFilesWithOrWithoutGUI(this, url, owner, dataDir);
 
@@ -138,8 +163,28 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				throw new AtlasImportException(e);
 			} else
 				throw (AtlasImportException) e;
-
 		}
+	}
+
+	/**
+	 * Checks whether any of the attribute names do not follow the DBF standard.
+	 * 
+	 * @throws IOException
+	 */
+	static List<String> checkAttributeNames(URL url) throws IOException {
+		ArrayList<String> illegalAttributeNames = new ArrayList<String>();
+
+		ShapefileDataStore store = new ShapefileDataStore(url);
+		SimpleFeatureType schema2 = store.getSchema();
+		for (int aindex = 0; aindex < schema2.getAttributeCount(); aindex++) {
+			AttributeDescriptor ad = schema2.getDescriptor(aindex);
+			String localName = ad.getLocalName();
+			boolean ok = FeatureUtil.checkAttributeNameRestrictions(localName);
+			if (!ok)
+				illegalAttributeNames.add(aindex + ":" + localName);
+		}
+
+		return illegalAttributeNames;
 	}
 
 	@Override
@@ -192,8 +237,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 						AVUtil.copyUrl(prjURL, new File(targetDir, basename
 								+ ".prj"), true);
 					} catch (FileNotFoundException e2) {
-						LOGGER
-								.debug("No .prj or .PRJ file for Shapefile found.");
+						LOGGER.debug("No .prj or .PRJ file for Shapefile found.");
 
 						// Ask the user what to do, unless we run in
 						// automatic
@@ -269,8 +313,8 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 				}
 
-				parseGeocommonsReadme(DataUtilities.extendURL(DataUtilities
-						.getParentUrl(urlToShape), "README"), 2);
+				parseGeocommonsReadme(DataUtilities.extendURL(
+						DataUtilities.getParentUrl(urlToShape), "README"), 2);
 
 				// Add the empty string as a default NODATA-Value to all textual
 				// layers
@@ -326,8 +370,11 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 	 * 
 	 * @param schema
 	 * @param phase
-	 *            1 or 2. 1 is before the shapefiel has been copied into the
-	 *            internal folder, 2 is after.
+	 *            1 or 2. 1 is before the shapefile has been copied into the
+	 *            internal folder, 2 is after. In the first phase, the title and
+	 *            description are set according the the first lines in the
+	 *            readme. In phase 2, the attributes descriptors are set into
+	 *            the AMD map.
 	 */
 	private void parseGeocommonsReadme(URL geocommonsReadmeURL, int phase) {
 		try {
@@ -414,8 +461,7 @@ exported on Wed Apr 28 23:51:34 -0400 2010
 					&& e.getMessage().contains("README")) {
 				// NOthing bad... Just not a Geocommons file.
 			} else {
-				LOGGER
-						.warn("Parsing GeoComons README failed, probably not in GeoCommons format");
+				LOGGER.warn("Parsing GeoComons README failed, probably not in GeoCommons format");
 
 			}
 		}
