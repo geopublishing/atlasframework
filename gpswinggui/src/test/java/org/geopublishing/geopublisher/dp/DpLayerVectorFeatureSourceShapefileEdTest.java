@@ -16,6 +16,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.geotools.feature.FeatureCollection;
+import org.jfree.util.Log;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -34,6 +35,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 		URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
 				.getResource("/arabicShapefiles/arabicdata.shp");
 		assertNotNull(url);
+		System.out.println(url);
 		DpLayerVectorFeatureSourceShapefileEd dpl = new DpLayerVectorFeatureSourceShapefileEd(
 				ace, url, null);
 
