@@ -17,7 +17,6 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPTestingUtil;
 import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.geotools.feature.FeatureCollection;
-import org.jfree.util.Log;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -25,11 +24,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import schmitzm.geotools.styling.TestingUtil2;
-import schmitzm.io.IOUtil;
 import schmitzm.swing.TestingUtil;
-
-import com.sun.org.apache.xml.internal.resolver.helpers.FileURL;
 
 public class DpLayerVectorFeatureSourceShapefileEdTest {
 
