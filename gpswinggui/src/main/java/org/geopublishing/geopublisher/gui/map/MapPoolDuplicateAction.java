@@ -54,7 +54,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 		final Map map = mapPool.get(mapPoolJTable.convertRowIndexToModel(idx));
 
 		actionPerformed(map);
-		
+
 	}
 
 	/**
@@ -86,7 +86,11 @@ public class MapPoolDuplicateAction extends AbstractAction {
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				FileUtils.copyDirectory(htmlDir, newHtmlDir);
+
+				// When copying the directory, we are SVN friendly and do not
+				// copy svn files.
+				FileUtils.copyDirectory(htmlDir, newHtmlDir,
+						GpUtil.BlacklistedFoldersFilter);
 				return null;
 			}
 
@@ -120,7 +124,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 		}
 
 		mapPool.add(newMap);
-		
+
 		return newMap;
 	}
 
