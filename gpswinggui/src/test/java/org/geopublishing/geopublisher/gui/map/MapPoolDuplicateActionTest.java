@@ -32,34 +32,32 @@ public class MapPoolDuplicateActionTest {
 
 		int count1 = htmlDir1.list().length;
 		long size1 = FileUtils.sizeOfDirectory(htmlDir1);
-		
+
 		assertTrue("map html dir may not be empty for this test", count1 > 0);
 
-		if (GPTestingUtil.INTERACTIVE) {
-			MapPoolDuplicateAction mapPoolDuplicateAction = new MapPoolDuplicateAction(
-					new MapPoolJTable(ace));
-			
-			// Start copy now!
-			Map map2 = mapPoolDuplicateAction
-					.actionPerformed(map1);
-			
-			
-			assertFalse(map1.equals(map2));
-			File htmlDir2 = ace.getHtmlDirFor(map2);
-			assertFalse(htmlDir1.equals(htmlDir2));
-			
-			long size2 = FileUtils.sizeOfDirectory(htmlDir2);
-			int count2 = htmlDir2.list().length;
-			
-			assertEquals(size1, size2);
-			assertEquals(count1, count2);
-			
-			// Cleanup
-			FileUtils.deleteDirectory(htmlDir2);
-		}
-		
-		
-		
+		// if (TestingUtil.INTERACTIVE) {
+		MapPoolDuplicateAction mapPoolDuplicateAction = new MapPoolDuplicateAction(
+				new MapPoolJTable(ace));
+
+		// Start copy now!
+		Map map2 = mapPoolDuplicateAction.actionPerformed(map1);
+
+		assertFalse(map1.equals(map2));
+		File htmlDir2 = ace.getHtmlDirFor(map2);
+		assertFalse(htmlDir1.equals(htmlDir2));
+
+		// Assert, that the files have been copied to.
+		long size2 = FileUtils.sizeOfDirectory(htmlDir2);
+		int count2 = htmlDir2.list().length;
+
+		assertEquals(size1, size2);
+		assertEquals(count1, count2);
+		assertFalse("SVN files should have been omitted during copy", new File(
+				htmlDir2, ".svn").exists());
+
+		// Cleanup
+		FileUtils.deleteDirectory(htmlDir2);
+
 	}
 
 }

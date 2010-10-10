@@ -113,6 +113,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 * 
 		 * 
 		 * 
+		 * 
 		 * Import data into the atlas using the {@link ImportWizard}
 		 **/
 		importWizard
@@ -473,21 +474,21 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_JWSIcon")
 					+ "<br><i>");
-			msg.append(IOUtil.escapePath(  new File(ace.getAtlasDir(),
+			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
 					AtlasConfig.JWSICON_RESOURCE_NAME)) + "</i>");
 
 			// Where to find the splashscreen image
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_Splashscreen")
 					+ "<br><i>");
-			msg.append(IOUtil.escapePath( new File(ace.getAtlasDir(),
+			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
 					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)) + "</i>");
 
 			// Where to find the flying logo image
 			msg.append("<li>"
 					+ GpUtil.R("PersonalizeImagesExplanationText_FlyingLogo")
 					+ "<br><i>");
-			msg.append(IOUtil.escapePath( new File(ace.getAtlasDir(),
+			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
 					AtlasConfig.MAPICON_RESOURCE_NAME)) + "</i>");
 
 			msg.append("</ul>");
@@ -1074,7 +1075,10 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (ace.getLanguages().contains(locale.getLanguage())) {
 				Translation.setActiveLang(locale.getLanguage());
 			} else {
-				new SwitchLanguageDialog(getJFrame(), ace.getLanguages());
+				// a modal dialog popup
+				SwitchLanguageDialog switchLanguageDialog = new SwitchLanguageDialog(
+						getJFrame(), ace.getLanguages());
+				switchLanguageDialog.setVisible(true);
 			}
 
 			GpSwingUtil.validate(ace, getJFrame());

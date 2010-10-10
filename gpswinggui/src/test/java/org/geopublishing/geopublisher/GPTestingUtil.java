@@ -42,15 +42,10 @@ import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.TestingUtil;
 import skrueger.geotools.MapPaneToolBar;
 
 public class GPTestingUtil {
-
-	/**
-	 * Set to <code>true</code> to also run the interactive tests that will not
-	 * finish without your GUI input.
-	 **/
-	public static final boolean INTERACTIVE = !GraphicsEnvironment.isHeadless();
 
 	/** An enumeration of available test-atlases **/
 	public enum Atlas {
@@ -58,27 +53,6 @@ public class GPTestingUtil {
 		small, iida2, rasters
 	}
 
-	public static int showHeap() {
-
-		// Get current size of heap in bytes
-		long heapSize = Runtime.getRuntime().totalMemory();
-
-		// Get maximum size of heap in bytes. The heap cannot grow beyond this
-		// size.
-		// Any attempt will result in an OutOfMemoryException.
-		long heapMaxSize = Runtime.getRuntime().maxMemory();
-
-		// Get amount of free memory within the heap in bytes. This size will
-		// increase
-		// after garbage collection and decrease as new objects are created.
-		long heapFreeSize = Runtime.getRuntime().freeMemory();
-
-		long used = (heapSize - heapFreeSize);
-
-		int perc = (int) (used * 100. / heapMaxSize);
-
-		return perc;
-	}
 
 	public static AtlasConfigEditable getAtlasConfigE(String atlasDir)
 			throws FactoryException, TransformException, AtlasException,
@@ -112,7 +86,7 @@ public class GPTestingUtil {
 	}
 
 	/**
-	 * Creates a directory in /tmp that can be used to export an atlas.  
+	 * Creates a directory in /tmp that can be used to export an atlas.
 	 */
 	public static File createAtlasExportTesttDir() {
 		File atlasExportTesttDir = new File(IOUtil.getTempDir(),
@@ -204,27 +178,21 @@ public class GPTestingUtil {
 			ParserConfigurationException {
 		return getCities(getAtlasConfigE());
 	}
-
-	public static void showJMapPane(org.geotools.swing.JMapPane mapPane)
-			throws InterruptedException {
-		JDialog dialog = new JDialog();
-		mapPane.setMinimumSize(new Dimension(500, 500));
-		mapPane.setPreferredSize(new Dimension(500, 500));
-		mapPane.setSize(new Dimension(500, 500));
-		dialog.setContentPane(mapPane);
-		dialog.pack();
-		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-
-		if (GPTestingUtil.INTERACTIVE) {
-			dialog.setModal(true);
-			dialog.setVisible(true);
-		} else {
-			dialog.setVisible(true);
-			// Thread.sleep(3000);
-		}
-
-		dialog.dispose();
-	}
+//
+//	public static void showJMapPane(org.geotools.swing.JMapPane mapPane)
+//			throws InterruptedException {
+//		JDialog dialog = new JDialog();
+//		mapPane.setMinimumSize(new Dimension(500, 500));
+//		mapPane.setPreferredSize(new Dimension(500, 500));
+//		mapPane.setSize(new Dimension(500, 500));
+//		dialog.setContentPane(mapPane);
+//		dialog.pack();
+//		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//
+//		TestingUtil.testGui(dialog);
+//
+//		dialog.dispose();
+//	}
 
 	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace)
 			throws Exception {

@@ -81,7 +81,7 @@ import skrueger.swing.TranslationEditJPanel;
  * 
  * @see ManageLayerStylesForMapDialog
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  * 
  */
 public class ManageLayerStylesDialog extends JDialog {

@@ -56,9 +56,10 @@ public class GpUtil {
 	};
 
 	/**
+	 * This filter omits SVN and CSV sub-folders.<br/>
 	 * This {@link IOFileFilter} returns <code>false</code> for folder that
 	 * should be omitted during export and when calculating the size of a
-	 * {@link DpEntry} folder. This filter omits SVN and CSV folder.
+	 * {@link DpEntry} folder or chen copying folders in general.
 	 */
 	public static final IOFileFilter BlacklistedFoldersFilter = FileFilterUtils
 			.makeCVSAware(FileFilterUtils.makeSVNAware(null));
@@ -113,7 +114,7 @@ public class GpUtil {
 	 * @param key
 	 *            the key for the *Translation.properties file
 	 * @param reqLanguage
-	 *            requested Language/Locale	            
+	 *            requested Language/Locale
 	 * @param values
 	 *            optional values
 	 */

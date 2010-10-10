@@ -2,7 +2,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -18,8 +17,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 public class AsTestingUtil {
 	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
 	
-	public static boolean INTERACTIVE = !GraphicsEnvironment.isHeadless();
-
 	public static FeatureSource<SimpleFeatureType, SimpleFeature> getPolygonsFeatureSource()
 			throws IOException {
 		final URL shpURL = AtlasStyler.class

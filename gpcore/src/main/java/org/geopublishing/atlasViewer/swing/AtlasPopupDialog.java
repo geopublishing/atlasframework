@@ -50,7 +50,7 @@ import skrueger.swing.OkButton;
 /**
  * A {@link JDialog} showing some HTML-Info.
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  */
 public class AtlasPopupDialog extends javax.swing.JDialog {
 

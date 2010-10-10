@@ -29,7 +29,7 @@ import schmitzm.io.IOUtil;
  * This class handles the preparation and sending of bug reports by mail. Its
  * abstract, and different subclasses exists for AV and GP
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  * 
  */
 public abstract class BugReportmailer {

@@ -7,13 +7,10 @@ import org.junit.Test;
 
 import schmitzm.swing.TestingUtil;
 
-
 public class ManageFontsDialogTest {
 	
 	@Test
 	public void testJustOpenGUI() throws Throwable {
-		if (!GPTestingUtil.INTERACTIVE) return;
-		
 		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
 		ManageFontsDialog manageFontsDialog = new ManageFontsDialog(null, ace);
 		TestingUtil.testGui(manageFontsDialog);

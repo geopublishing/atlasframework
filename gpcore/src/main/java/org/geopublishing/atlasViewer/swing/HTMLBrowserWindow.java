@@ -32,7 +32,7 @@ import schmitzm.swing.SwingUtil;
  * information about a layer. TODO Suboptimal.. .HTMLBrowserWindow should become
  * a Facory/singleton pattern (getInstanceFor(URL))
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  * 
  */
 public class HTMLBrowserWindow extends JDialog {

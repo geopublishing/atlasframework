@@ -39,7 +39,7 @@ import skrueger.i8n.Translation;
  * static method {@link #showWizard(FeatureSource, Map)} returns
  * <code>null</code> or an instance of {@link FeatureChartStyle}
  * 
- * @author Stefan Alfons Krueger
+ * @author Stefan Alfons Tzeggai
  * 
  */
 public class ChartWizard extends WizardBranchController {

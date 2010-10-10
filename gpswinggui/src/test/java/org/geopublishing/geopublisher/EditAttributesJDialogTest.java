@@ -18,6 +18,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.type.Name;
 
+import schmitzm.swing.TestingUtil;
+
 public class EditAttributesJDialogTest {
 
 	static DpLayerRasterPyramid pyr;
@@ -44,20 +46,16 @@ public class EditAttributesJDialogTest {
 	}
 
 	@Test
-	public void testConstruct() throws InterruptedException {
+	public void testConstruct() throws Throwable {
 
 		Name aname = dplv.getSchema().getAttributeDescriptors().get(1)
 				.getName();
 
 		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de", "aaa");
 
-		if (GPTestingUtil.INTERACTIVE) {
-			EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
-					.getInstanceFor(dplv, null, dplv);
-			dialog.setModal(true);
-			dialog.setVisible(true);
-			dialog.dispose();
-		}
+		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
+				.getInstanceFor(dplv, null, dplv);
+		TestingUtil.testGui(dialog);
 	}
 
 }

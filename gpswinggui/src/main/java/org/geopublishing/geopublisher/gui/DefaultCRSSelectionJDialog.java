@@ -47,7 +47,7 @@ import skrueger.swing.OkButton;
  * {@link GeoImportUtil}. Multiple instances of {@link GeopublisherGUI} will hence
  * always use the same default CRS - a future problem if this will ever happen.
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  * 
  * TODO should implement {@link CancellableDialogAdapter}
  */

@@ -40,6 +40,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
+import schmitzm.swing.TestingUtil;
 
 public class JarExportUtilTest {
 	static private final Logger LOGGER = Logger
@@ -262,7 +263,7 @@ public class JarExportUtilTest {
 				+ JarExportUtil.SCHMITZM_JARNAME).exists());
 
 		// Test start atlas..
-		if (GPTestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
+		if (TestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
 			String[] cmd = { "/usr/bin/java", "-jar",
 					fileArDiskJar.getAbsolutePath() };
 

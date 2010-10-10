@@ -30,14 +30,17 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import schmitzm.io.IOUtil;
+import schmitzm.swing.TestingUtil;
 
 import com.lightdev.app.shtm.DocNameMissingException;
 import com.lightdev.app.shtm.DocumentPane;
 
-public class ACETranslationPrinterTest  {
+public class ACETranslationPrinterTest {
 
 	@Test
-	public void testPrint() throws DocNameMissingException, IOException, AtlasException, FactoryException, TransformException, SAXException, ParserConfigurationException {
+	public void testPrint() throws DocNameMissingException, IOException,
+			AtlasException, FactoryException, TransformException, SAXException,
+			ParserConfigurationException {
 		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE();
 		assertNotNull(ace);
 
@@ -45,20 +48,19 @@ public class ACETranslationPrinterTest  {
 		 * Ask the user to select a save position
 		 */
 
-		File exportFile = new File(IOUtil.getTempDir(),
-			"translations.html");
-		if (GPTestingUtil.INTERACTIVE) {
+		File exportFile = new File(IOUtil.getTempDir(), "translations.html");
+
+		if (TestingUtil.INTERACTIVE) {
 			JFileChooser dc = new JFileChooser(exportFile);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
 			dc.setDialogTitle(GpUtil
 					.R("PrintTranslations.SaveHTMLDialog.Title"));
 			dc.setSelectedFile(exportFile);
-			if ((dc.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
-					|| (dc.getSelectedFile() == null))
-				return;
+//			if ((dc.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
+//					|| (dc.getSelectedFile() == null))
+//				return;
 			exportFile = dc.getSelectedFile();
 		}
-
 
 		exportFile.delete();
 
@@ -76,16 +78,14 @@ public class ACETranslationPrinterTest  {
 		out.write(allTrans);
 		out.close();
 
-		if (GPTestingUtil.INTERACTIVE) {
-			DocumentPane documentPane = new DocumentPane(
-					DataUtilities.fileToURL(exportFile), 0);
-			documentPane.saveDocument();
-			documentPane = null;
-			
-			assertTrue(exportFile.exists());
-		}
+		DocumentPane documentPane = new DocumentPane(
+				DataUtilities.fileToURL(exportFile), 0);
+		documentPane.saveDocument();
+		documentPane = null;
 
-		if (GPTestingUtil.INTERACTIVE)
+		assertTrue(exportFile.exists());
+
+		if (TestingUtil.INTERACTIVE)
 			AVSwingUtil.lauchHTMLviewer(null, exportFile.toURI());
 	}
 }

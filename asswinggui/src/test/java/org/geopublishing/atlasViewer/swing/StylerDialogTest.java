@@ -13,11 +13,11 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFS;
 
 public class StylerDialogTest {
 	private static TextRuleList tr;
-//	private static AtlasStyler atlasStyler;
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
 	@BeforeClass
@@ -26,7 +26,6 @@ public class StylerDialogTest {
 		StyledFS styledFeatures = new StyledFS(featureSource_polygon);
 		tr = new TextRuleList(styledFeatures);
 		tr.addDefaultClass();
-//		atlasStyler = new AtlasStyler(styledFeatures);
 	}
 
 	@AfterClass
@@ -35,15 +34,11 @@ public class StylerDialogTest {
 	}
 
 	@Test
-	public void testStylerDialog() {
+	public void testStylerDialog() throws Throwable {
 		AtlasStyler as = new AtlasStyler(featureSource_polygon);
 
-		if (AsTestingUtil.INTERACTIVE) {
-			StylerDialog stylerDialog = new StylerDialog(null, as);
-			stylerDialog.setVisible(true);
-			while (stylerDialog.isVisible())
-				;
-		}
+		StylerDialog stylerDialog = new StylerDialog(null, as);
+		TestingUtil.testGui(stylerDialog);
 
 	}
 

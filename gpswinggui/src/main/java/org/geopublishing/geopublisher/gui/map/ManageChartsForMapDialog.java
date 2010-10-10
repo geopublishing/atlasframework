@@ -60,7 +60,7 @@ import skrueger.swing.CancellableDialogAdapter;
  * {@link #getInstanceFor(Component, DpLayerVectorFeatureSource, AtlasConfigEditable, Map, AtlasMapLegend)}
  * to create instances.
  * 
- * @author Stefan A. Krueger
+ * @author Stefan A. Tzeggai
  * 
  */
 public class ManageChartsForMapDialog extends CancellableDialogAdapter {

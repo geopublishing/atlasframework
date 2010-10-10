@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
  * A utility class with static methods that deal with JNLP / JavaWebStart
  * related stuff.
  * 
- * @author Stefan Alfons Krueger
+ * @author Stefan Alfons Tzeggai
  * 
  */
 public class JNLPSwingUtil extends JNLPUtil {
