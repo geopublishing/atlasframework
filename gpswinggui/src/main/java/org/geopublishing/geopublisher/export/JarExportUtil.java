@@ -669,7 +669,7 @@ public class JarExportUtil {
 				FileUtils.copyURLToFile(fromURL, destination);
 
 				if (toJws && libName.endsWith(".jar")
-						&& JNLPUtil.isJnlpServiceAvailable()) {
+						&& !JNLPUtil.isJnlpServiceAvailable()) {
 					// if they come from local, we might have to
 					// sign them.
 					jarSign(destination);
