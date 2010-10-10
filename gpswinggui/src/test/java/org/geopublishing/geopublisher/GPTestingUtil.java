@@ -13,13 +13,10 @@ package org.geopublishing.geopublisher;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.swing.JDialog;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
@@ -32,7 +29,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -42,7 +38,6 @@ import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.TestingUtil;
 import skrueger.geotools.MapPaneToolBar;
 
 public class GPTestingUtil {
