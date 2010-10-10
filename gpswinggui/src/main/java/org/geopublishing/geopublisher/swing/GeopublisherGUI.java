@@ -70,7 +70,7 @@ import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
 import org.geopublishing.geopublisher.gui.GpJSplitPane;
-import org.geopublishing.geopublisher.gui.LanguageSelectionDialog;
+import org.geopublishing.geopublisher.gui.AtlasLanguagesConfigDialog;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.export.ExportWizard;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
@@ -109,6 +109,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public enum ActionCmds {
 		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
+		 * 
 		 * 
 		 * 
 		 * 
@@ -320,11 +321,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		else if (cmd.equals(ActionCmds.editAtlasLanguages.toString())) {
-			final LanguageSelectionDialog languageSelectionDialog = new LanguageSelectionDialog(
+			final AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
 					getJFrame(), ace.getLanguages());
 			languageSelectionDialog.setVisible(true);
-			// if (!languageSelectionDialog.isCancel()) {
-			// }
 		}
 
 		else if (cmd.startsWith(ActionCmds.changeLnF.toString())) {
@@ -451,7 +450,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		} else if (cmd.equals(ActionCmds.showImagesInfo.toString())) {
 
-			// TODO TODO TODO much nicer
+			// TODO much nicer
 
 			final JDialog d = new JDialog(getJFrame(),
 					GpUtil.R("PersonalizeImages_MenuEntryLabel"));
@@ -514,7 +513,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			previewLabel.add(previewJWSIcon);
 			cp.add(previewLabel, BorderLayout.CENTER);
 
-			//
 			// URL urlSplashscreenFallback = AtlasConfig.getResLoMan()
 			// .getResourceAsUrl(
 			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
@@ -821,13 +819,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 * Ask the use to enter the languages supported by the atlas. Uses the
 		 * Locale language + English as defaults.
 		 */
-		LanguageSelectionDialog languageSelectionDialog = new LanguageSelectionDialog(
+		AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
 				getJFrame(), ace.getLanguages());
 		languageSelectionDialog.setVisible(true); // its a modal dialog
 		boolean cancelled = languageSelectionDialog.isCancel();
 		while (cancelled) {
-			languageSelectionDialog = new LanguageSelectionDialog(getJFrame(),
-					ace.getLanguages());
+			languageSelectionDialog = new AtlasLanguagesConfigDialog(
+					getJFrame(), ace.getLanguages());
 			languageSelectionDialog.setVisible(true);
 			cancelled = languageSelectionDialog.isCancel();
 		}
@@ -1077,7 +1075,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			} else {
 				// a modal dialog popup
 				SwitchLanguageDialog switchLanguageDialog = new SwitchLanguageDialog(
-						getJFrame(), ace.getLanguages());
+						getJFrame(), ace.getLanguages(), false);
 				switchLanguageDialog.setVisible(true);
 			}
 

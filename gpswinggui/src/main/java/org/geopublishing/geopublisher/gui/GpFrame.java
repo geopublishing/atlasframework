@@ -147,8 +147,8 @@ public class GpFrame extends JFrame {
 		// React to changes of the locale
 		Translation.addLocaleChangeListener(localeChangeListener);
 
-		setTitle(R("ApplicationMainWindowTitle", ReleaseUtil
-				.getVersionInfo(GpUtil.class)));
+		setTitle(R("ApplicationMainWindowTitle",
+				ReleaseUtil.getVersionInfo(GpUtil.class)));
 
 		setSize(new Dimension(GPProps.getInt(GPProps.Keys.gpWindowWidth, 750),
 				GPProps.getInt(GPProps.Keys.gpWindowHeight, 510)));
@@ -192,8 +192,8 @@ public class GpFrame extends JFrame {
 	protected JMenuBar createMenuBar() {
 		AtlasConfigEditable ace = gp.getAce();
 		if (ace == null) {
-			setTitle(R("ApplicationMainWindowTitle", ReleaseUtil
-					.getVersionInfo(GpUtil.class)));
+			setTitle(R("ApplicationMainWindowTitle",
+					ReleaseUtil.getVersionInfo(GpUtil.class)));
 		} else {
 			setTitle(R("ApplicationMainWindowTitle_with_open_atlas",
 					ReleaseUtil.getVersionInfo(GpUtil.class), ace.getTitle()
@@ -283,11 +283,9 @@ public class GpFrame extends JFrame {
 		// "Import data into the atlas using a wizard
 		// ******************************************************************
 		if (ace != null) {
-			fileMenu
-					.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"),
-							null, ActionCmds.importWizard, null, KeyStroke
-									.getKeyStroke(KeyEvent.VK_I,
-											Event.CTRL_MASK, true)));
+			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"),
+					null, ActionCmds.importWizard, null, KeyStroke
+							.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK, true)));
 		}
 
 		// ******************************************************************
@@ -303,8 +301,8 @@ public class GpFrame extends JFrame {
 		// "Test atlas without creating JARs" Menu Item - testAVMenuItem
 		// ******************************************************************
 		if (ace != null) {
-			ImageIcon previewIcon = new ImageIcon(GPProps.class
-					.getResource("/icons/testRun.png"));
+			ImageIcon previewIcon = new ImageIcon(
+					GPProps.class.getResource("/icons/testRun.png"));
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.Preview"),
 					R("MenuBar.FileMenu.Preview.TT"), ActionCmds.previewAtlas,
 					previewIcon, KeyStroke.getKeyStroke(KeyEvent.VK_F5,
@@ -320,9 +318,10 @@ public class GpFrame extends JFrame {
 		// ******************************************************************
 		// "Exit" Menu Item - exitMenuItem
 		// ******************************************************************
-		menuItem = new GpMenuItem(AtlasViewerGUI
-				.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"), null,
-				ActionCmds.exitGP, Icons.ICON_EXIT_SMALL);
+		menuItem = new GpMenuItem(
+				AtlasViewerGUI
+						.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
+				null, ActionCmds.exitGP, Icons.ICON_EXIT_SMALL);
 		fileMenu.add(menuItem);
 		return fileMenu;
 	}
@@ -408,7 +407,7 @@ public class GpFrame extends JFrame {
 
 	/**
 	 * Saves the dimensions of the main frame and the state of the internal
-	 * split pane to the .properties file.
+	 * split pane to a .properties file.
 	 */
 	public void saveWindowPosition() {
 
@@ -418,8 +417,9 @@ public class GpFrame extends JFrame {
 		GPProps.set(GPProps.Keys.gpWindowWidth, (Integer) getSize().width);
 		GPProps.set(GPProps.Keys.gpWindowHeight, (Integer) getSize().height);
 
-		// TODO This will be different
 		if (getContentPane() instanceof GpJSplitPane) {
+			// getContentPane() is a JPanel until an atlas is loaded.
+
 			GpJSplitPane gpSplit = (GpJSplitPane) getContentPane();
 
 			GPProps.set(GPProps.Keys.gpWindowLeftDividerLocation,
@@ -450,8 +450,9 @@ public class GpFrame extends JFrame {
 					KeyEvent.VK_R, Event.CTRL_MASK, true));
 			optionsMenu.add(uncacheMenuItem);
 		}
+
+		// OLD CODE TO SWITCH THE RENDERER
 		//
-		// // TODO Should only appear when start with debug option
 		// final JCheckBoxMenuItem rendererSwitchCheckBox = new
 		// JCheckBoxMenuItem();
 		// rendererSwitchCheckBox.setAction(new AbstractAction(
@@ -551,13 +552,14 @@ public class GpFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				/**
-				 * Stefan Tzeggai 25th Sep 2010
-				 * Some real ugly stuff: On Windows 7 the line
-				 *  <param name="File" value="${java.io.tmpdir}/geopublisher.log" />
-				 *  from gp_log4j.xml resolves to "C:\tmp", but during 
-				 *  program execution it resolves to "C:\ Users\ username\ AppData\ Local\ Temp" 
+				 * Stefan Tzeggai 25th Sep 2010 Some real ugly stuff: On Windows
+				 * 7 the line <param name="File"
+				 * value="${java.io.tmpdir}/geopublisher.log" /> from
+				 * gp_log4j.xml resolves to "C:\tmp", but during program
+				 * execution it resolves to "C:\ Users\ username\ AppData\
+				 * Local\ Temp"
 				 */
 
 				try {
@@ -573,19 +575,22 @@ public class GpFrame extends JFrame {
 					}
 				} catch (Exception ee) {
 					try {
-					
-						File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
-							GPBugReportmailer.GEOPUBLISHERLOG)
-							.getCanonicalFile();
-					
+
+						File logFile = new File(
+								SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
+								GPBugReportmailer.GEOPUBLISHERLOG)
+								.getCanonicalFile();
+
 						Desktop.getDesktop().edit(logFile);
 					} catch (Exception usoe) {
-						
+
 						try {
-							File logFile = new File(SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
+							File logFile = new File(
+									SystemUtils.IS_OS_WINDOWS ? "C:\\tmp"
+											: "/tmp",
 									GPBugReportmailer.GEOPUBLISHERLOG)
 									.getCanonicalFile();
-							
+
 							Desktop.getDesktop().browse(
 									DataUtilities.fileToURL(logFile).toURI());
 						} catch (Exception eee) {
@@ -647,8 +652,9 @@ public class GpFrame extends JFrame {
 
 		AtlasConfigEditable ace = gp.getAce();
 
-		JMenu languageSubMenu = new JMenu(AtlasViewerGUI
-				.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
+		JMenu languageSubMenu = new JMenu(
+				AtlasViewerGUI
+						.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
 		languageSubMenu.setToolTipText(AtlasViewerGUI
 				.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_tt"));
 		languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
@@ -668,8 +674,7 @@ public class GpFrame extends JFrame {
 			JMenuItem langMenuItem = new JMenuItem(
 					new AbstractAction(
 							AtlasViewerGUI
-									.R(
-											"AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
+									.R("AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
 											locale.getDisplayLanguage(locale),
 											locale.getDisplayLanguage(), code)) {
 
@@ -753,7 +758,8 @@ public class GpFrame extends JFrame {
 			 * A an item to change the default CRS used in the atlas
 			 */
 			JMenuItem jMenuItemDefaultCRS = new JMenuItem(new AbstractAction(
-					R("MenuBar.OptionsMenu.SetDefaultCRS"), DefaultCRSSelectionJDialog.defaultCRSIcon) {
+					R("MenuBar.OptionsMenu.SetDefaultCRS"),
+					DefaultCRSSelectionJDialog.defaultCRSIcon) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -766,7 +772,7 @@ public class GpFrame extends JFrame {
 
 			});
 			atlasJMenu.add(jMenuItemDefaultCRS);
-			
+
 			atlasJMenu.add(new JMenuItem(new GpConfigureAtlasFontsAction(
 					R("MenuBar.AtlasMenu.ManageFonts"), ace, GpFrame.this)));
 		}

@@ -48,11 +48,11 @@ import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
 
 /**
- * A modal dialog that allows to define the languages for the atlas.
+ * A modal dialog that allows to DEFINE the languages for the atlas.
  */
-public class LanguageSelectionDialog extends CancellableDialogAdapter {
+public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 
-	Vector<String> availLangs = new Vector<String>();
+	private Vector<String> availLangs = new Vector<String>();
 
 	private final List<String> orig;
 	private final List<String> aceLanguages = new ArrayList<String>();
@@ -65,7 +65,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 	 *            The original list of supported iso language codes. This object
 	 *            will be modified if the dialog is closed with approval.
 	 */
-	public LanguageSelectionDialog(Window owner, List<String> orig) {
+	public AtlasLanguagesConfigDialog(Window owner, List<String> orig) {
 
 		super(owner, GeopublisherGUI.R("LanguageSelectionDialog.Title"));
 
@@ -230,7 +230,7 @@ public class LanguageSelectionDialog extends CancellableDialogAdapter {
 				if (aceLanguages.size() < 1) {
 					AVSwingUtil
 							.showMessageDialog(
-									LanguageSelectionDialog.this,
+									AtlasLanguagesConfigDialog.this,
 									GeopublisherGUI
 											.R("LanguageSelectionDialog.ErrorMsg.YouNeedMinimumOneLanguage"));
 					cancelClose();
