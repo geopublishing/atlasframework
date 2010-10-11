@@ -228,14 +228,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-library</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
 			<version>${project.version}</version>

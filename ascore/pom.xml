@@ -86,14 +86,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-library</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>

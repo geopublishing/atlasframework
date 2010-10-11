@@ -222,7 +222,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.3.1</version>
 				<configuration>
 					<archive>
 						<index>false</index>
@@ -253,6 +253,23 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-library</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-library</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.geotools</groupId>
