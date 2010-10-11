@@ -64,7 +64,7 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 		AtlasConfigEditable ace = dpTable.getAce();
 		for (String l : ace.getLanguages()) {
 			tabTitles.add(GeopublisherGUI.R("DPLayer.HTMLInfo.LanguageTabTitle",
-					I8NUtil.getLocaleFor(l).getDisplayLanguage()));
+					I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(dpTable, ace, infoFiles, tabTitles,

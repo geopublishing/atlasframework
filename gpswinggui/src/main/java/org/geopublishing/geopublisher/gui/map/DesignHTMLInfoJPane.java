@@ -67,7 +67,7 @@ public class DesignHTMLInfoJPane extends HTMLInfoJPane {
 			setContentType("text/html");
 			
 			setText(GeopublisherGUI.R("DesignHTMLPanel.NoHTML.Message", I8NUtil
-					.getLocaleFor(Translation.getActiveLang())
+					.getFirstLocaleForLang(Translation.getActiveLang())
 					.getDisplayLanguage()));
 		} else
 			super.showDocument(url);

@@ -44,7 +44,6 @@ import javax.swing.UIManager;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -102,7 +101,7 @@ public class GpFrame extends JFrame {
 	/**
 	 * A listener to exchange all components on language change.
 	 */
-	PropertyChangeListener localeChangeListener = new PropertyChangeListener() {
+	PropertyChangeListener repaintGuiListener = new PropertyChangeListener() {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
@@ -145,7 +144,9 @@ public class GpFrame extends JFrame {
 		});
 
 		// React to changes of the locale
-		Translation.addLocaleChangeListener(localeChangeListener);
+		Translation.addActiveLangChangeListener(repaintGuiListener);
+		// React to changes of atlas language changes
+		Translation.addLocaleChangeListener(repaintGuiListener);
 
 		setTitle(R("ApplicationMainWindowTitle",
 				ReleaseUtil.getVersionInfo(GpUtil.class)));
@@ -470,10 +471,15 @@ public class GpFrame extends JFrame {
 		// rendererSwitchCheckBox.setSelected(true);
 
 		// ******************************************************************
-		// Switch Geopublisher language
+		// Switch Atlas Translations language
 		// ******************************************************************
 		if (ace != null && ace.getLanguages().size() > 1)
-			optionsMenu.add(getChangeLangJMenu());
+			optionsMenu.add(getChangeAtlasLangJMenu());
+
+		// ******************************************************************
+		// Switch Geopublisher GUI language
+		// ******************************************************************
+		optionsMenu.add(getChangeGpLangJMenu());
 
 		/**
 		 * The MenuItem Language to create a new language
@@ -636,19 +642,18 @@ public class GpFrame extends JFrame {
 	}
 
 	/**
-	 * Change the {@link JMenu} languageSubMenu that allows changing the
-	 * displayed language Attention, not to replace the object in the
-	 * {@link JMenu} structure Call this after changes to atlasConfig.languages.
+	 * Creates a {@link JMenu} languageSubMenu that allows changing the language
+	 * the atlas data is displayed in. <br/>
+	 * Attention, not to replace the object in the {@link JMenu} structure Call
+	 * this after changes to atlasConfig.languages.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 *         Note: This method is double in {@link AtlasViewerGUI} and
 	 *         {@link GeopublisherGUI}
 	 */
-	private JMenu getChangeLangJMenu() {
-		AVUtil.checkThatWeAreOnEDT();
-		// Assuming that the language was changed, update the windows title
-		// getJFrame().setTitle("Loaded ace.getName().toString());
+	private JMenu getChangeAtlasLangJMenu() {
+		SwingUtil.checkOnEDT();;
 
 		AtlasConfigEditable ace = gp.getAce();
 
@@ -669,7 +674,7 @@ public class GpFrame extends JFrame {
 			 * Lookup a country where they speak the language, so we can print
 			 * the language in local tounge.
 			 */
-			Locale locale = I8NUtil.getLocaleFor(code);
+			Locale locale = I8NUtil.getFirstLocaleForLang(code);
 
 			JMenuItem langMenuItem = new JMenuItem(
 					new AbstractAction(
@@ -680,12 +685,63 @@ public class GpFrame extends JFrame {
 
 						public void actionPerformed(ActionEvent e) {
 							String actionCommand = e.getActionCommand();
-							Translation.setActiveLang(actionCommand);
+							Translation.setActiveLang(actionCommand, false);
 						}
 
 					});
 
 			langMenuItem.setActionCommand(code);
+			languageSubMenu.add(langMenuItem);
+
+		}
+		return languageSubMenu;
+	}
+
+	/**
+	 * Creates a {@link JMenu} languageSubMenu that allows changing the language
+	 * the atlas data is displayed in. <br/>
+	 * Attention, not to replace the object in the {@link JMenu} structure Call
+	 * this after changes to atlasConfig.languages.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * 
+	 *         Note: This method is double in {@link AtlasViewerGUI} and
+	 *         {@link GeopublisherGUI}
+	 */
+	private JMenu getChangeGpLangJMenu() {
+		SwingUtil.checkOnEDT();;
+
+		// AtlasConfigEditable ace = gp.getAce();
+
+		JMenu languageSubMenu = new JMenu(
+				GpUtil.R("MenuBar.OptionsMenu.change_gp_language"));
+		languageSubMenu.setToolTipText(GpUtil
+				.R("MenuBar.OptionsMenu.change_gp_language.tt"));
+		languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
+
+		for (Locale locale : GpUtil.getAvailableLocales()) {
+
+			// Not show the option to switch to actual GUI language...
+			if (locale.getLanguage().equals(Locale.getDefault()))
+				continue;
+
+			JMenuItem langMenuItem = new JMenuItem(
+					new AbstractAction(
+							AtlasViewerGUI
+									.R("AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
+											locale.getDisplayLanguage(locale),
+											locale.getDisplayLanguage(),
+											locale.getLanguage())) {
+
+						public void actionPerformed(ActionEvent e) {
+							String langCode = e.getActionCommand();
+							Locale.setDefault(new Locale(langCode));
+							Translation.fireLocaleChangeEvents();
+						}
+
+					});
+
+			langMenuItem.setActionCommand(locale.getLanguage());
 			languageSubMenu.add(langMenuItem);
 
 		}

@@ -90,6 +90,7 @@ import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.versionnumber.ReleaseUtil;
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
@@ -2173,7 +2174,7 @@ public class JarExportUtil {
 	 */
 	private void jarSign(final File jarFile) throws AtlasExportException {
 
-		AVUtil.checkThatWeAreNotOnEDT(); // i8n
+		SwingUtil.checkNotOnEDT(); // i8n
 
 		info("Signing JAR " + jarFile.getName());
 

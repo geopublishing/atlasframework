@@ -147,7 +147,7 @@ public class SHTMLPanelImpl extends SHTMLPanel implements CaretListener {
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (evt.getPropertyName().equals(
-					Translation.LOCALECHANGE_PROPERTY)) {
+					Translation.LOCALE_CHANGE_PROPERTY)) {
 				textResources = readDefaultResources();
 			}
 		}

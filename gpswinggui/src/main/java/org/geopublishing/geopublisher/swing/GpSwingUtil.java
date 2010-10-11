@@ -25,7 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -45,6 +44,7 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
 
 public class GpSwingUtil extends GpUtil {
@@ -322,7 +322,7 @@ public class GpSwingUtil extends GpUtil {
 	public static boolean save(final AtlasConfigEditable ace,
 			final Component parentGUI, boolean confirm) {
 
-		AVUtil.checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();;
 
 		AtlasSwingWorker<Boolean> swingWorker = new AtlasSwingWorker<Boolean>(
 				parentGUI) {
@@ -398,7 +398,7 @@ public class GpSwingUtil extends GpUtil {
 
 					FileWriter fw = new FileWriter(htmlFile);
 					fw.write(GpUtil.R("DPLayer.HTMLInfo.DefaultHTMLFile",
-							I8NUtil.getLocaleFor(lang).getDisplayLanguage(),
+							I8NUtil.getFirstLocaleForLang(lang).getDisplayLanguage(),
 							dpl.getTitle()));
 
 					fw.flush();
@@ -450,7 +450,7 @@ public class GpSwingUtil extends GpUtil {
 
 					FileWriter fw = new FileWriter(htmlFile);
 					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I8NUtil
-							.getLocaleFor(lang).getDisplayLanguage(), map
+							.getFirstLocaleForLang(lang).getDisplayLanguage(), map
 							.getTitle()));
 
 					fw.flush();

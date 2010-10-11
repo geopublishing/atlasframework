@@ -267,7 +267,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 				for (String l : ace.getLanguages()) {
 					tabTitles.add(GeopublisherGUI.R("EditLayerHTML.Tabs.Titles",
-							I8NUtil.getLocaleFor(l).getDisplayLanguage()));
+							I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 				}
 
 				SimplyHTMLUtil.openHTMLEditors(owner, ace, infoFiles,

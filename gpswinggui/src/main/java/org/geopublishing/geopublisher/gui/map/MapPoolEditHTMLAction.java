@@ -67,7 +67,7 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 		ArrayList<String> tabTitles = new ArrayList<String>();
 		for (String l : ace.getLanguages()) {
 			tabTitles.add(GeopublisherGUI.R("Map.HTMLInfo.LanguageTabTitle",
-					I8NUtil.getLocaleFor(l).getDisplayLanguage()));
+					I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,

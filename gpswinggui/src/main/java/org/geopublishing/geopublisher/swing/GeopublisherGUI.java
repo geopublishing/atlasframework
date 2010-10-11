@@ -100,7 +100,7 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 	static {
-		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
+		// Enable translations added by the user to the .Geopublishing directory
 		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 	}
 
@@ -108,16 +108,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
 	public enum ActionCmds {
-		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, /**
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * Import data into the atlas using the {@link ImportWizard}
-		 **/
-		importWizard
+		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, importWizard
 	}
 
 	/** A singleton pattern for the {@link GeopublisherGUI} instance **/
@@ -678,7 +669,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		if (ace == null)
 			return true;
 
-		AVUtil.checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();;
 
 		final int res = JOptionPane.showConfirmDialog(getJFrame(),
 				GpUtil.R("CloseAtlasDialog.SaveAtlas.msg"),
@@ -923,7 +914,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public GpFrame getJFrame() {
 		if (gpJFrame == null) {
-			AVUtil.checkThatWeAreOnEDT();
+			SwingUtil.checkOnEDT();;
 
 			// Disabled, because it looked ugly!
 			// /**
@@ -993,7 +984,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public void loadAtlas() {
 
-		AVUtil.checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();;
 
 		if (!closeAtlas())
 			return;
@@ -1038,7 +1029,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	private void loadAtlasFromDir(final File atlasDir) {
 
-		AVUtil.checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();;
 
 		if (!closeAtlas())
 			return;
