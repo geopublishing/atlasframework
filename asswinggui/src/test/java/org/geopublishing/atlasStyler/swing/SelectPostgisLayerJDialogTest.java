@@ -8,6 +8,8 @@ public class SelectPostgisLayerJDialogTest {
 
 	@Test
 	public void testGui() throws Throwable {
+		if (!TestingUtil.INTERACTIVE) return;
+		
 		SelectPostgisLayerJDialog selectPostgisLayerJDialog = new SelectPostgisLayerJDialog(
 				null);
 		TestingUtil.testGui(selectPostgisLayerJDialog);

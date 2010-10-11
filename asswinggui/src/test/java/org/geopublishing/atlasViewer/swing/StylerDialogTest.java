@@ -35,11 +35,14 @@ public class StylerDialogTest {
 
 	@Test
 	public void testStylerDialog() throws Throwable {
+
 		AtlasStyler as = new AtlasStyler(featureSource_polygon);
+
+		if (!TestingUtil.INTERACTIVE)
+			return;
 
 		StylerDialog stylerDialog = new StylerDialog(null, as);
 		TestingUtil.testGui(stylerDialog);
-
 	}
 
 }
