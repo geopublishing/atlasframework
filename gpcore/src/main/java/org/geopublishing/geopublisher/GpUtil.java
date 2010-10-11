@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.Set;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -93,6 +94,14 @@ public class GpUtil {
 	 */
 	protected final static ResourceProvider RESOURCE = ResourceProvider
 			.newInstance("locales.GeopublisherTranslation", Locale.ENGLISH);
+
+	/**
+	 * Return all langauges that we have at least some .properties translations
+	 * for.
+	 */
+	public static Set<Locale> getAvailableLocales() {
+		return RESOURCE.getAvailableLocales(true);
+	}
 
 	/**
 	 * Convenience method to access the {@link Geopublisher}s translation

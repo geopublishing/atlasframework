@@ -219,7 +219,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public final JFrame getJFrame() {
 		if (atlasJFrame == null) {
-			AVSwingUtil.checkThatWeAreOnEDT();
+			SwingUtil.checkOnEDT();
 
 			/**
 			 * Disabled, because Artuhr wants to make screenshots with Metal On
@@ -930,7 +930,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		// Assuming that the language was changed, update the windows title
 		// getJFrame().setTitle("Loaded ace.getName().toString());
 
-		AVSwingUtil.checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();;
 
 		if (languageSubMenu == null) {
 
@@ -970,7 +970,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			 * Lookup a country where they speak the language, so we can print
 			 * the language in local tounge.
 			 */
-			Locale locale = I8NUtil.getLocaleFor(langCode);
+			Locale locale = I8NUtil.getFirstLocaleForLang(langCode);
 
 			JMenuItem langMenuItem = new AtlasMenuItem(
 					new AbstractAction(

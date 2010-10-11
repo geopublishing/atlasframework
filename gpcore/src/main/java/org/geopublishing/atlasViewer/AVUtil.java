@@ -31,7 +31,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
@@ -260,24 +259,6 @@ public class AVUtil {
 		IOUtil.copyFile(log, source, destination, false);
 	}
 
-	/**
-	 * Throws a {@link RuntimeException} if this method is called on the EDT.
-	 */
-	public static void checkThatWeAreNotOnEDT() {
-		if (SwingUtilities.isEventDispatchThread())
-			throw new RuntimeException("On EDT!");
-	}
-
-	/**
-	 * Throws a {@link RuntimeException} if this method is NOT called on the
-	 * EDT.
-	 */
-	public static void checkThatWeAreOnEDT() {
-		if (!SwingUtilities.isEventDispatchThread()) {
-			LOGGER.error("Not on EDT");
-			throw new RuntimeException("Not on EDT!");
-		}
-	}
 
 	// /**
 	// * Provocates caching of the EPSG database.

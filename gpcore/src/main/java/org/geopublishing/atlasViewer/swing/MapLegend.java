@@ -59,6 +59,7 @@ import schmitzm.geotools.gui.XMapPaneTool;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.swing.JPanel;
+import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.AttributeMetadataMap;
@@ -861,7 +862,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 				}
 			});
 		} else {
-			AVSwingUtil.checkThatWeAreOnEDT();
+			SwingUtil.checkOnEDT();;
 			revalidate();
 			repaint();
 			getGeoMapPane().refreshMap();

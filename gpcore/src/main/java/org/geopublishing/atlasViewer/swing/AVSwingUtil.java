@@ -46,6 +46,7 @@ import schmitzm.geotools.GTUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 
 public class AVSwingUtil extends AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
@@ -188,8 +189,8 @@ public class AVSwingUtil extends AVUtil {
 					@Override
 					public void run() {
 						resultAskOkCancel = JOptionPane.showConfirmDialog(
-								owner, question, AVUtil
-										.R("GeneralQuestionDialogTitle"),
+								owner, question,
+								AVUtil.R("GeneralQuestionDialogTitle"),
 								JOptionPane.OK_CANCEL_OPTION,
 								JOptionPane.QUESTION_MESSAGE, null);
 
@@ -233,8 +234,7 @@ public class AVSwingUtil extends AVUtil {
 		// ****************************************************************************
 		if (!url.toString().contains("jar:")
 				&& (url.toString().contains("file"))) {
-			LOGGER
-					.debug("Not copying the URL to temp file because we are local and not in a JAR.");
+			LOGGER.debug("Not copying the URL to temp file because we are local and not in a JAR.");
 			return DataUtilities.urlToFile(url);
 		}
 
@@ -305,8 +305,8 @@ public class AVSwingUtil extends AVUtil {
 
 		for (final String lang : ac.getLanguages()) {
 
-			final File source = new File((path.substring(0, path
-					.lastIndexOf('.'))
+			final File source = new File((path.substring(0,
+					path.lastIndexOf('.'))
 					+ "_" + lang + ".html"));
 
 			if (source.exists()) {
@@ -372,8 +372,7 @@ public class AVSwingUtil extends AVUtil {
 			 * dir.
 			 */
 			if (url.getFile().contains("ad/html/about/../../../")) {
-				LOGGER
-						.debug("Special case here.. we expect the PDF to lay uncompressed next to atlas.jar or atlas.gpa");
+				LOGGER.debug("Special case here.. we expect the PDF to lay uncompressed next to atlas.jar or atlas.gpa");
 				String urlString = url.toExternalForm();
 				String replaced = urlString.replace("ad/html/about/../../../",
 						"");
@@ -391,8 +390,7 @@ public class AVSwingUtil extends AVUtil {
 				// becuase files located next to atlas.gpa / atlas.jar are not
 				// put into JARs
 
-				LOGGER
-						.debug("Special case here.. we expect the PDF to lay uncompressed next to atlas.jar or atlas.gpa");
+				LOGGER.debug("Special case here.. we expect the PDF to lay uncompressed next to atlas.jar or atlas.gpa");
 				String urlString = url.toExternalForm();
 				String replaced = urlString.substring(4);
 				replaced = replaced.replace("atlas_resources.jar!/", "");
@@ -408,9 +406,8 @@ public class AVSwingUtil extends AVUtil {
 				if (!pdfFile.exists()) {
 					System.out.println("pdfFile to open  does not exist");
 				}
-				LOGGER
-						.debug("Using Desktop.getDesktop().open to open the following canonical file:\n"
-								+ pdfFile);
+				LOGGER.debug("Using Desktop.getDesktop().open to open the following canonical file:\n"
+						+ pdfFile);
 				// HARDCRE CRASH ON arthurs computer!
 				Desktop.getDesktop().open(pdfFile);
 			} catch (Exception exWhileDesktop) {
@@ -596,7 +593,7 @@ public class AVSwingUtil extends AVUtil {
 	 * another thread.
 	 */
 	public static void initEPSG(Component parent) {
-		checkThatWeAreOnEDT();
+		SwingUtil.checkOnEDT();
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(parent, null,
 				AVUtil.R("AtlasViewer.process.EPSG_codes_caching"));
@@ -615,11 +612,11 @@ public class AVSwingUtil extends AVUtil {
 			swingWorker.executeModal();
 		} catch (CancellationException e) {
 		} catch (ExecutionException e) {
-			throw new RuntimeException(AVUtil
-					.R("AtlasViewer.process.EPSG_codes_caching"), e);
+			throw new RuntimeException(
+					AVUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
 		} catch (InterruptedException e) {
-			throw new RuntimeException(AVUtil
-					.R("AtlasViewer.process.EPSG_codes_caching"), e);
+			throw new RuntimeException(
+					AVUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
 		}
 	}
 
@@ -698,8 +695,9 @@ public class AVSwingUtil extends AVUtil {
 					String browser = null;
 					for (int count = 0; count < browsers.length
 							&& browser == null; count++)
-						if (Runtime.getRuntime().exec(
-								new String[] { "which", browsers[count] })
+						if (Runtime
+								.getRuntime()
+								.exec(new String[] { "which", browsers[count] })
 								.waitFor() == 0)
 							browser = browsers[count];
 					if (browser != null) {
@@ -836,8 +834,8 @@ public class AVSwingUtil extends AVUtil {
 	// }
 	// }
 	// }
-	//	
-	//	
+	//
+	//
 
 	/**
 	 * Copies ONLY the {@link #getFilename()} to a {@link File} in the
@@ -855,8 +853,8 @@ public class AVSwingUtil extends AVUtil {
 
 			String postFix = IOUtil.getFileExt(new File(dpe.getFilename()));
 
-			dpe.setLocalTempFile(createLocalCopyFromURL(owner, getUrl(dpe,
-					owner), dpe.getTitle().toString(),
+			dpe.setLocalTempFile(createLocalCopyFromURL(owner,
+					getUrl(dpe, owner), dpe.getTitle().toString(),
 					postFix.equals("") ? null : postFix));
 
 		}

@@ -126,7 +126,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
+		// Setting up the logger from a XML configuration file. This is also
+		// done in ASProps, as it is eventually called earlier.
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
 		// Output information about the LGPL license
@@ -304,9 +305,10 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					"Not yet implemented. Please contact the authors.");
 		}
 
-		if (!AVSwingUtil.askYesNo(AtlasStylerGUI.this, AtlasStyler.R(
-				"AtlasStylerGUI.saveToSLDFileQuestion", styledFS.getTitle(),
-				IOUtil.escapePath(sldFile))))
+		if (!AVSwingUtil.askYesNo(
+				AtlasStylerGUI.this,
+				AtlasStyler.R("AtlasStylerGUI.saveToSLDFileQuestion",
+						styledFS.getTitle(), IOUtil.escapePath(sldFile))))
 			return;
 
 		Style style = styledFS.getStyle();
@@ -332,12 +334,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(getJButtonAddLayer());
 		jToolBar.add(getJButtonAddPostGIS());
-//		jToolBar.add(getJButtonAntiAliasing());
+		// jToolBar.add(getJButtonAntiAliasing());
 		jToolBar.add(getJTButtonShowXML());
 		jToolBar.add(getJTButtonExportAsSLD());
 
-		JButton optionsButton = new JButton(new AbstractAction(AtlasStyler
-				.R("Options.ButtonLabel")) {
+		JButton optionsButton = new JButton(new AbstractAction(
+				AtlasStyler.R("Options.ButtonLabel")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -397,8 +399,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	}
 
 	private JButton getJButtonAddPostGIS() {
-		JButton jButtonAddPostgis = new JButton(AtlasStyler
-				.R("AtlasStylerGUI.toolbarButton.open_postgis"));
+		JButton jButtonAddPostgis = new JButton(
+				AtlasStyler.R("AtlasStylerGUI.toolbarButton.open_postgis"));
 
 		jButtonAddPostgis.addActionListener(new ActionListener() {
 
@@ -441,11 +443,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							+ "/"
 							+ host
 							+ "."
-							+ database
-							+ "."
-							+ schema
-							+ "."
-							+ layer + ".sld"));
+							+ database + "." + schema + "." + layer + ".sld"));
 
 					LOGGER.info("Pg layer has CRS = " + styledFS.getCrs());
 
@@ -465,10 +463,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	}
 
-
 	public JToggleButton getJTButtonShowXML() {
-		final JToggleButton jButtonShowXML = new JToggleButton(AtlasStyler
-				.R("AtlasStylerGUI.toolbarButton.show_xml"));
+		final JToggleButton jButtonShowXML = new JToggleButton(
+				AtlasStyler.R("AtlasStylerGUI.toolbarButton.show_xml"));
 		jButtonShowXML.setSelected(false);
 
 		jButtonShowXML.addActionListener(new AbstractAction() {
@@ -495,8 +492,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * StyledLayerDescriptor tag)
 	 */
 	private JButton getJTButtonExportAsSLD() {
-		final JButton jButtonExportAsSLD = new JButton(AtlasStyler
-				.R("AtlasStylerGUI.toolbarButton.exportSLD"));
+		final JButton jButtonExportAsSLD = new JButton(
+				AtlasStyler.R("AtlasStylerGUI.toolbarButton.exportSLD"));
 
 		jButtonExportAsSLD.addActionListener(new ActionListener() {
 
@@ -526,13 +523,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					// If the file exists, the user will be asked about
 					// overwriting it
 					if (exportSLDFile.exists()) {
-						if (!AVSwingUtil
-								.askOKCancel(
-										AtlasStylerGUI.this,
-										AtlasStyler
-												.R(
-														"AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
-														exportSLDFile.getName())))
+						if (!AVSwingUtil.askOKCancel(
+								AtlasStylerGUI.this,
+								AtlasStyler
+										.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
+												exportSLDFile.getName())))
 							return;
 					}
 
@@ -562,9 +557,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 						try {
 							if (!(smi instanceof StyledFS)) {
-								LOGGER
-										.info("Ein Layer aus dem MapContextManagerInterface ist kein StyledFeatureSourceInterface. Es wird ignoriert: "
-												+ smi.getTitle());
+								LOGGER.info("Ein Layer aus dem MapContextManagerInterface ist kein StyledFeatureSourceInterface. Es wird ignoriert: "
+										+ smi.getTitle());
 								continue;
 							}
 
@@ -630,8 +624,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonAddLayer() {
-		JButton jButtonAddLayer = new JButton(AtlasStyler
-				.R("AtlasStylerGUI.toolbarButton.open_vector"));
+		JButton jButtonAddLayer = new JButton(
+				AtlasStyler.R("AtlasStylerGUI.toolbarButton.open_vector"));
 
 		jButtonAddLayer.addActionListener(new ActionListener() {
 
@@ -656,8 +650,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						|| result != JFileChooser.APPROVE_OPTION)
 					return;
 
-				ASProps.set(ASProps.Keys.lastImportDirectory, selectedFile
-						.getAbsolutePath());
+				ASProps.set(ASProps.Keys.lastImportDirectory,
+						selectedFile.getAbsolutePath());
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 						AtlasStylerGUI.this);
@@ -733,8 +727,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							.askOKCancel(
 									this,
 									AtlasStyler
-											.R(
-													"AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
+											.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
 													e.getMessage(), prjFile
 															.getName(),
 													GeoImportUtil
@@ -747,8 +740,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						.askOKCancel(
 								this,
 								AtlasStyler
-										.R(
-												"AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
+										.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
 												prjFile.getName(),
 												GeoImportUtil.getDefaultCRS()
 														.getName())))
@@ -822,16 +814,20 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		try {
 			if (!ASProps.get(Keys.language, "system")
 					.equalsIgnoreCase("system")) {
-				Locale.setDefault(new Locale(ASProps.get(Keys.language, "en")));
+
+				Translation.setDefaultLocale(new Locale(ASProps.get(
+						Keys.language, "en")));
+
 			}
 		} catch (Exception e) {
-			LOGGER.error("Could not set locale to "
-					+ ASProps.get(Keys.language), e);
+			LOGGER.error(
+					"Could not set locale to " + ASProps.get(Keys.language), e);
+			ExceptionDialog.show(e);
 		}
 
 		// Setup the AXIS order property
-		Hints.putSystemDefault(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, ASProps
-				.get(Keys.FORCE_LONGITUDE_FIRST_AXIS_ORDER, true));
+		Hints.putSystemDefault(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER,
+				ASProps.get(Keys.FORCE_LONGITUDE_FIRST_AXIS_ORDER, true));
 
 		/**
 		 * Check for addFix agruments. If found, the GUI will not start,
@@ -866,8 +862,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			});
 
 		} else {
-			LOGGER
-					.info("Not starting GUI because command line parameter addFix was passed");
+			LOGGER.info("Not starting GUI because command line parameter addFix was passed");
 			System.out
 					.println("Not starting GUI because command line parameter addFix was passed");
 		}
@@ -945,8 +940,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	@Override
 	public void newActivation(String[] arg0) {
-		LOGGER
-				.info("A second instance of AtlasViewer has been started.. The single instance if requesting focus now...");
+		LOGGER.info("A second instance of AtlasViewer has been started.. The single instance if requesting focus now...");
 		requestFocus();
 		toFront();
 	}

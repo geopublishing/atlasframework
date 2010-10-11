@@ -191,7 +191,7 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 
 	/**
 	 * Informs all registered {@link PropertyChangeListener}s about a change in
-	 * the {@link MapPool}. The events are fires on the EDT.
+	 * the {@link MapPool}. The events are fired on the EDT.
 	 */
 	public void fireChangeEvents(final EventTypes type) {
 
