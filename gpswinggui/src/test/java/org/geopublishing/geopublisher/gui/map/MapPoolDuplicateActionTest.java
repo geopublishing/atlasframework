@@ -20,6 +20,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.swing.TestingUtil;
+
 public class MapPoolDuplicateActionTest {
 
 	@Test
@@ -40,23 +42,25 @@ public class MapPoolDuplicateActionTest {
 				new MapPoolJTable(ace));
 
 		// Start copy now!
-		Map map2 = mapPoolDuplicateAction.actionPerformed(map1);
+		if (TestingUtil.INTERACTIVE) {
+			Map map2 = mapPoolDuplicateAction.actionPerformed(map1);
 
-		assertFalse(map1.equals(map2));
-		File htmlDir2 = ace.getHtmlDirFor(map2);
-		assertFalse(htmlDir1.equals(htmlDir2));
+			assertFalse(map1.equals(map2));
+			File htmlDir2 = ace.getHtmlDirFor(map2);
+			assertFalse(htmlDir1.equals(htmlDir2));
 
-		// Assert, that the files have been copied to.
-		long size2 = FileUtils.sizeOfDirectory(htmlDir2);
-		int count2 = htmlDir2.list().length;
+			// Assert, that the files have been copied to.
+			long size2 = FileUtils.sizeOfDirectory(htmlDir2);
+			int count2 = htmlDir2.list().length;
 
-		assertEquals(size1, size2);
-		assertEquals(count1, count2);
-		assertFalse("SVN files should have been omitted during copy", new File(
-				htmlDir2, ".svn").exists());
+			assertEquals(size1, size2);
+			assertEquals(count1, count2);
+			assertFalse("SVN files should have been omitted during copy",
+					new File(htmlDir2, ".svn").exists());
 
-		// Cleanup
-		FileUtils.deleteDirectory(htmlDir2);
+			// Cleanup
+			FileUtils.deleteDirectory(htmlDir2);
+		}
 
 	}
 

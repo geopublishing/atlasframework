@@ -20,9 +20,11 @@ public class AtlasLanguagesConfigDialogTest {
 
 	@Test
 	public void testLanguageSelectionDialog() throws Throwable {
-		AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
-				null, orig);
-		TestingUtil.testGui(languageSelectionDialog);
+		if (TestingUtil.INTERACTIVE) {
+			AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
+					null, orig);
+			TestingUtil.testGui(languageSelectionDialog);
+		}
 	}
 
 }

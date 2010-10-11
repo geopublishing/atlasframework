@@ -53,9 +53,11 @@ public class EditAttributesJDialogTest {
 
 		dplv.getAttributeMetaDataMap().get(aname).getTitle().put("de", "aaa");
 
-		EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
-				.getInstanceFor(dplv, null, dplv);
-		TestingUtil.testGui(dialog);
+		if (TestingUtil.INTERACTIVE) {
+			EditAttributesJDialog dialog = GPDialogManager.dm_EditAttribute
+					.getInstanceFor(dplv, null, dplv);
+			TestingUtil.testGui(dialog);
+		}
 	}
 
 }
