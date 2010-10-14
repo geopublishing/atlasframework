@@ -266,7 +266,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 							"Die Shapedatei wird konvertiert");
 
 					String charsetName = IOUtil.readURLasString(cpgURL);
-					if (!charsetName.equals("")) {
+					if (charsetName != null && !charsetName.equals("")) {
 						charset = Charset.forName(charsetName);
 					}
 

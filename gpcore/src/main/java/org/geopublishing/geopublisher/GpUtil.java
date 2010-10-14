@@ -11,7 +11,6 @@
 package org.geopublishing.geopublisher;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
@@ -23,6 +22,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 
+import schmitzm.geotools.io.GeoExportUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
@@ -152,36 +152,13 @@ public class GpUtil {
 	 * content, it is not written (SVN friendly)
 	 */
 	public static void saveCpg(DpLayerVectorFeatureSource dpe) {
+		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
+				.getAtlasConfig();
+
+		final File cpgFile = IOUtil.changeFileExt(ace.getFileFor(dpe), "cpg");
+
 		try {
-			final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
-					.getAtlasConfig();
-
-			final File cpgFile = IOUtil.changeFileExt(ace.getFileFor(dpe),
-					"cpg");
-
-			final String whatToWrite = dpe.getCharset().name();
-
-			if (cpgFile.exists()) {
-				String origContent = IOUtil.readFileAsString(cpgFile);
-				if (whatToWrite.equals(origContent)) {
-					// if the file already exists and contains the same content,
-					// do not write it.
-					return;
-				} else
-					cpgFile.delete();
-			}
-
-			final FileWriter cpgWriter = new FileWriter(cpgFile);
-			try {
-				// LOGGER.debug("Writing CPG = " + dpe.getCharset().name()
-				// + " to file");
-
-				cpgWriter.write(whatToWrite);
-			} finally {
-				cpgWriter.flush();
-				cpgWriter.close();
-			}
-
+			GeoExportUtil.saveCpg(cpgFile, dpe.getCharset());
 		} catch (Exception e) {
 			final String errMessage = "Unable to store the codepage settings for "
 					+ dpe + "\nThe export will be continued."; // i8n

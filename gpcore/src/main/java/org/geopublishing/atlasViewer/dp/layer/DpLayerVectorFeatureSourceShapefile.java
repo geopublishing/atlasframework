@@ -218,7 +218,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		if (charset == null) {
 
-			URL[] cpgUrls = getCharsetUrls();
+			URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
 
 			for (URL cpgUrl : cpgUrls) {
 				try {

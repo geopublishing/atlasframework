@@ -615,18 +615,6 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
-	 * The URLs where a <code>.cpg</code> or <code>.cst</code> file describing
-	 * the {@link Charset} could be found.
-	 */
-	public URL[] getCharsetUrls() {
-		URL url_ = getUrl();
-		return new URL[] { IOUtil.changeUrlExt(url_, "cpg"),
-				IOUtil.changeUrlExt(url_, "cst"),
-				IOUtil.changeUrlExt(url_, "CPG"),
-				IOUtil.changeUrlExt(url_, "CST") };
-	}
-
-	/**
 	 * @deprecated attention, do you want to use the AVSwingUtil.getUrl...
 	 *             method?
 	 */
