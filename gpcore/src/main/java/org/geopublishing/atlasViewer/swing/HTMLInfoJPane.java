@@ -27,6 +27,7 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
 
@@ -53,14 +54,28 @@ public class HTMLInfoJPane extends JEditorPane {
 					if (ev instanceof HTMLFrameHyperlinkEvent) {
 						JEditorPane p = (JEditorPane) ev.getSource();
 						HTMLDocument doc = (HTMLDocument) p.getDocument();
-						doc
-								.processHTMLFrameHyperlinkEvent((HTMLFrameHyperlinkEvent) ev);
+						doc.processHTMLFrameHyperlinkEvent((HTMLFrameHyperlinkEvent) ev);
 					}
 
 					/**
 					 * Is this a pdf:// link?
 					 */
 					String evDesc = ev.getDescription();
+
+					if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
+						/**
+						 * If the atlas data is coming from JWS, and this evDesc
+						 * contains "../../.." we will change it to "../..".
+						 * Why? Because this URL references something that is
+						 * expected next to the <code>atlas.xml</code> in the
+						 * <code>ad</code> directory. In JWS, the
+						 */
+						String before = evDesc;
+						evDesc.replace("../../..", "../..");
+						evDesc.replace("..\\..\\..", "..\\..");
+						LOGGER.info("The URL to the PDF has been changed from "
+								+ before + " to " + evDesc + " bacause of JWS.");
+					}
 
 					if (AtlasProtocol.PDF.test(evDesc)) {
 
@@ -84,23 +99,25 @@ public class HTMLInfoJPane extends JEditorPane {
 						AtlasProtocol.PDF.performPDF(HTMLInfoJPane.this,
 								pdfUrl, new File(pdfPathOrName).getName());
 
-					} else
-					/**
-					 * Is this a map:// link?
-					 */
-					if (AtlasProtocol.MAP.test(evDesc) && (atlasConfig != null)) {
+					} else if (AtlasProtocol.MAP.test(evDesc)
+							&& (atlasConfig != null)) {
+						/**
+						 * Is this a map:// link?
+						 */
 
-						AtlasProtocol.MAP.performMap(HTMLInfoJPane.this, ev
-								.getURL() != null ? AtlasProtocol.MAP.cutOff(ev
-								.getURL().getFile()) : AtlasProtocol.MAP
-								.cutOff(ev.getDescription()), atlasConfig);
+						AtlasProtocol.MAP
+								.performMap(
+										HTMLInfoJPane.this,
+										ev.getURL() != null ? AtlasProtocol.MAP
+												.cutOff(ev.getURL().getFile())
+												: AtlasProtocol.MAP.cutOff(ev
+														.getDescription()),
+										atlasConfig);
 
-					} // internal map links
-					else
-					/**
-					 * Is this a browser:// link?
-					 */
-					if (AtlasProtocol.BROWSER.test(evDesc)) {
+					} else if (AtlasProtocol.BROWSER.test(evDesc)) {
+						/**
+						 * Is this a browser:// link?
+						 */
 
 						String targetPath = AtlasProtocol.BROWSER
 								.cutOff(evDesc);
@@ -119,8 +136,8 @@ public class HTMLInfoJPane extends JEditorPane {
 							 */
 
 							AtlasProtocol.BROWSER.performBrowser(
-									HTMLInfoJPane.this, IOUtil.extendURL(IOUtil
-											.getParentUrl(getPage()),
+									HTMLInfoJPane.this, IOUtil.extendURL(
+											IOUtil.getParentUrl(getPage()),
 											targetPath));
 						}
 

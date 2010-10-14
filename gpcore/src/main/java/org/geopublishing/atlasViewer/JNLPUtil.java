@@ -174,11 +174,11 @@ public class JNLPUtil {
 	/**
 	 * Evaluates where the atlas.xml comes from. There are 3 options:
 	 * <ul>
-	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed</li>
-	 * <li>* jar://htpp://asdasasda/online/av.jar!/atlas.xml => From the
-	 * Internet, JWS download nötig</li>
+	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed, returns <code>false</code></li>
+	 * <li>* jar://http://asdasasda/online/av.jar!/atlas.xml => From the
+	 * Internet, JWS download nötig, returns <code>true</code></li>
 	 * <li>* file://mein/verz/atlas.xml => Aus lokal dir, kein JWS download
-	 * nötig</li>
+	 * nötig, returns <code>false</code></li>
 	 * </ul>
 	 * The result is cached in {@value #isAtlasDataFromJWS}.
 	 */
