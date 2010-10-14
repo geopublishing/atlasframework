@@ -99,20 +99,21 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			final String name = GpSwingUtil.cleanFilenameWithUI(owner,
 					DataUtilities.urlToFile(url).getName());
 			setFilename(name);
-			
-			// Check for "illegal" attribute names not need here any more, they are converted
-//			List<String> illegalAtts = checkAttributeNames(url);
-//			if (illegalAtts.size() > 0) {
-//				String illegalAttsString = LangUtil.stringConcatWithSep(", ",
-//						illegalAtts.toArray());
-//				if (!AVSwingUtil.askOKCancel(owner, GpUtil.R(
-//						"DbfAttributeNames.Illegal.ProceedQuestion",
-//						illegalAttsString))) {
-//					throw new AtlasImportException(GpUtil.R(
-//							"DbfAttributeNames.Illegal.ProceedQuestion.Denied",
-//							illegalAttsString));
-//				}
-//			}
+
+			// Check for "illegal" attribute names not need here any more, they
+			// are converted
+			// List<String> illegalAtts = checkAttributeNames(url);
+			// if (illegalAtts.size() > 0) {
+			// String illegalAttsString = LangUtil.stringConcatWithSep(", ",
+			// illegalAtts.toArray());
+			// if (!AVSwingUtil.askOKCancel(owner, GpUtil.R(
+			// "DbfAttributeNames.Illegal.ProceedQuestion",
+			// illegalAttsString))) {
+			// throw new AtlasImportException(GpUtil.R(
+			// "DbfAttributeNames.Illegal.ProceedQuestion.Denied",
+			// illegalAttsString));
+			// }
+			// }
 
 			/**
 			 * Base name is cities if URL points to cities.gml or cities.shp
@@ -237,18 +238,10 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					} catch (FileNotFoundException e2) {
 						LOGGER.debug("No .prj or .PRJ file for Shapefile found.");
 
-						// Ask the user what to do, unless we run in
-						// automatic
-						// mode
-						// int importAsDefaultCRS;
-
 						if (status != null) {
-							// We have a modal atlas status dialog open. Just
-							// write a warning to the status dialog.
 							status.warningOccurred(getFilename(), "", GpUtil.R(
 									"DpVector.Import.NoCRS.WarningMsg",
 									GeoImportUtil.getDefaultCRS().getName()));
-							// importAsDefaultCRS = JOptionPane.YES_OPTION;
 						}
 					}
 				}
@@ -262,8 +255,8 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					/*******************************************************************
 					 * Now import and recreate the Shapefile
 					 ******************************************************************/
-					AVSwingUtil.showMessageDialog(owner,
-							"Die Shapedatei wird konvertiert");
+					// AVSwingUtil.showMessageDialog(owner,
+					// "Die Shapedatei wird konvertiert");
 
 					String charsetName = IOUtil.readURLasString(cpgURL);
 					if (charsetName != null && !charsetName.equals("")) {
@@ -278,11 +271,12 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 							.getFeatureSource();
 
 					copyImportExport(targetDir, fs,
-							charset = Charset.forName("utf-8"), crs);
+							charset = Charset.forName("utf-8"), crs, status);
 
 				} else {
 					/*******************************************************************
-					 * Now copy all the files that belong to ESRI Shapefile
+					 * SIMPLE METHOD: Now copy all the files that belong to ESRI
+					 * Shapefile
 					 ******************************************************************/
 					final URL shpURL = IOUtil.changeUrlExt(urlToShape, "shp");
 					IOUtil.copyUrl(shpURL, targetDir, true);
@@ -351,11 +345,13 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 	/**
 	 * Write all features of a {@link FeatureSource} into a Shapefile in the
+	 * 
+	 * @param status
 	 */
 	private void copyImportExport(File targetDir,
 			FeatureSource<SimpleFeatureType, SimpleFeature> fs,
-			Charset charset, CoordinateReferenceSystem forceCrs)
-			throws IOException {
+			Charset charset, CoordinateReferenceSystem forceCrs,
+			AtlasStatusDialogInterface status) throws IOException {
 		// Target file in ad/data/folder
 		File outFile = new File(targetDir, getFilename());
 		IndexedShapefileDataStore outputFs = new IndexedShapefileDataStore(
@@ -378,15 +374,21 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 				String cleanAttname = FeatureUtil.cleanAttname(
 						ad.getLocalName(), i);
-				
+
 				if (AttributeModificationRule.containsNewName(destAttrs,
 						cleanAttname)) {
 					cleanAttname = cleanAttname.substring(0,
 							Math.min(5, cleanAttname.length() - 1));
 					cleanAttname += new Random().nextInt(999999);
 				}
+				amr.setNewAttrName(cleanAttname);
 
-				amr.setNewAttrName("COLUMN" + i);
+				if (status != null) {
+					status.warningOccurred(getFilename(), "", GpUtil.R(
+							"DpVector.Import.AttributeFieldCorrected", i,
+							ad.getLocalName(), cleanAttname));
+				}
+
 			}
 		}
 
