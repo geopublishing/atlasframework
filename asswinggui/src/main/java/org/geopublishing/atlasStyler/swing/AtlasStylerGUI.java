@@ -714,6 +714,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
 					.getDataStore(params);
+			openDatastores.add(dataStore);
 
 			// test for any .prj file
 			CoordinateReferenceSystem prjCRS = null;
