@@ -99,20 +99,20 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			final String name = GpSwingUtil.cleanFilenameWithUI(owner,
 					DataUtilities.urlToFile(url).getName());
 			setFilename(name);
-
-			// Check for "illegal" attribute names.
-			List<String> illegalAtts = checkAttributeNames(url);
-			if (illegalAtts.size() > 0) {
-				String illegalAttsString = LangUtil.stringConcatWithSep(", ",
-						illegalAtts.toArray());
-				if (!AVSwingUtil.askOKCancel(owner, GpUtil.R(
-						"DbfAttributeNames.Illegal.ProceedQuestion",
-						illegalAttsString))) {
-					throw new AtlasImportException(GpUtil.R(
-							"DbfAttributeNames.Illegal.ProceedQuestion.Denied",
-							illegalAttsString));
-				}
-			}
+			
+			// Check for "illegal" attribute names not need here any more, they are converted
+//			List<String> illegalAtts = checkAttributeNames(url);
+//			if (illegalAtts.size() > 0) {
+//				String illegalAttsString = LangUtil.stringConcatWithSep(", ",
+//						illegalAtts.toArray());
+//				if (!AVSwingUtil.askOKCancel(owner, GpUtil.R(
+//						"DbfAttributeNames.Illegal.ProceedQuestion",
+//						illegalAttsString))) {
+//					throw new AtlasImportException(GpUtil.R(
+//							"DbfAttributeNames.Illegal.ProceedQuestion.Denied",
+//							illegalAttsString));
+//				}
+//			}
 
 			/**
 			 * Base name is cities if URL points to cities.gml or cities.shp
