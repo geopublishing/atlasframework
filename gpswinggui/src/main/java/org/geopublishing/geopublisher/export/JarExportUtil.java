@@ -153,6 +153,10 @@ public class JarExportUtil {
 		public boolean accept(final File dir, final String name) {
 
 			// This is a list of files expected in ad that shall not be copied
+			if (dir.isDirectory() && name.equalsIgnoreCase(".cvs"))
+				return false;
+			if (dir.isDirectory() && name.equalsIgnoreCase(".svn"))
+				return false;
 			if (name.equalsIgnoreCase(AtlasConfigEditable.ATLAS_GPA_FILENAME))
 				return false;
 			if (name.equalsIgnoreCase(AVProps.PROPERTIESFILE_RESOURCE_NAME))
@@ -185,7 +189,8 @@ public class JarExportUtil {
 
 	private static final String version = ReleaseUtil
 			.getVersionMaj(AVUtil.class)
-			+ "." + ReleaseUtil.getVersionMin(AVUtil.class);
+			+ "."
+			+ ReleaseUtil.getVersionMin(AVUtil.class);
 
 	/**
 	 * Are we exporting froma SNAPSHOT relases, then the exported atlas need
@@ -223,9 +228,9 @@ public class JarExportUtil {
 	 * List of JARs that are all created from the one geopublihing.org POM file
 	 * and therefore are not part of the dependencies.
 	 */
-	final static List<String> BASEJARS = new ArrayList<String>(Arrays
-			.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
-			// ASSWINGGUI_JARNAME,
+	final static List<String> BASEJARS = new ArrayList<String>(
+			Arrays.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
+					// ASSWINGGUI_JARNAME,
 					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
@@ -352,8 +357,8 @@ public class JarExportUtil {
 
 			String jsScript = GPProps.get(Keys.JWSStartScript).replaceAll(
 					"__JNLPURL__", jnlpLocation + JNLP_FILENAME);
-			jsScript = jsScript.replace("__MINJAVAVERSION__", GPProps
-					.get(Keys.MinimumJavaVersion));
+			jsScript = jsScript.replace("__MINJAVAVERSION__",
+					GPProps.get(Keys.MinimumJavaVersion));
 			fileWriter.write(jsScript);
 
 			fileWriter.write("</center></html></body>\n");
@@ -372,8 +377,8 @@ public class JarExportUtil {
 		// ******************************************************************
 		// README.TXT
 		// ******************************************************************
-		final FileWriter fileWriter = new FileWriter(new File(targetJar
-				.getParentFile(), "README.TXT"));
+		final FileWriter fileWriter = new FileWriter(new File(
+				targetJar.getParentFile(), "README.TXT"));
 		fileWriter.write("JAVA " + GPProps.get(Keys.MinimumJavaVersion)
 				+ " is required to run the atlas\n");
 		fileWriter
@@ -519,9 +524,7 @@ public class JarExportUtil {
 		// Remove the created temporary atlas.xml, it has been copied into the
 		// jar
 		if (!exportAtlasXml.delete()) {
-			LOGGER
-					.warn("could not delete temporary atlas.xml file at "
-							+ adDir);
+			LOGGER.warn("could not delete temporary atlas.xml file at " + adDir);
 		}
 	}
 
@@ -995,8 +998,8 @@ public class JarExportUtil {
 					LOGGER.warn(t + " was not a valid entry on the classpath.");
 					continue;
 				}
-				jarUrlsFromClassPath.put(file.getName(), DataUtilities
-						.fileToURL(file));
+				jarUrlsFromClassPath.put(file.getName(),
+						DataUtilities.fileToURL(file));
 			}
 
 		}
@@ -1049,12 +1052,12 @@ public class JarExportUtil {
 
 			final File destLicense = new File(targetJar.getParentFile(),
 					"license.html");
-			FileUtils.copyURLToFile(GpUtil.class
-					.getResource(LICENSEHTML_RESOURCE_NAME), destLicense);
+			FileUtils.copyURLToFile(
+					GpUtil.class.getResource(LICENSEHTML_RESOURCE_NAME),
+					destLicense);
 		} catch (final Exception e) {
 			ExceptionDialog
-					.show(
-							null,
+					.show(null,
 							new AtlasException(
 									"Non-fatal error while copying the licence.txt:"
 											+ e.getMessage()
@@ -1310,8 +1313,10 @@ public class JarExportUtil {
 			final URL splashscreenURL = ace
 					.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 			if (splashscreenURL != null) {
-				FileUtils.copyURLToFile(splashscreenURL, new File(targetJar
-						.getParentFile(), "splashscreen.png"));
+				FileUtils
+						.copyURLToFile(splashscreenURL,
+								new File(targetJar.getParentFile(),
+										"splashscreen.png"));
 			}
 
 			// ******************************************************************
@@ -1353,14 +1358,13 @@ public class JarExportUtil {
 			// The amount of max HEAP is read from the .properties
 			// ******************************************************************
 			aResource = document.createElement("java");
-			aResource.setAttribute("version", GPProps.get(
-					Keys.MinimumJavaVersion, "1.6.0_14")
-					+ "+");
+			aResource.setAttribute("version",
+					GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14") + "+");
 			aResource.setAttribute("href",
 					"http://java.sun.com/products/autodl/j2se");
-			aResource.setAttribute("java-vm-args", "-Xmx"
-					+ GPProps.getInt(GPProps.Keys.startJVMWithXmx, 256) + "m"
-					+ " -Dfile.encoding=UTF-8");
+			aResource.setAttribute("java-vm-args",
+					"-Xmx" + GPProps.getInt(GPProps.Keys.startJVMWithXmx, 256)
+							+ "m" + " -Dfile.encoding=UTF-8");
 			resources.appendChild(aResource);
 
 			aResource = document.createElement("jar");
@@ -1439,8 +1443,8 @@ public class JarExportUtil {
 				// expect there...
 				aResource = document.createElement("package");
 				aResource.setAttribute("part", dpe.getId());
-				aResource.setAttribute("name", "ad.data."
-						+ dpe.getDataDirname() + ".*");
+				aResource.setAttribute("name",
+						"ad.data." + dpe.getDataDirname() + ".*");
 				// aResource.setAttribute("name", "skrueger.atlas.*");
 				aResource.setAttribute("recursive", "true");
 				resources.appendChild(aResource);
@@ -1533,19 +1537,22 @@ public class JarExportUtil {
 		jsmoothSkelDir.mkdirs();
 
 		final File jsmoothExeFile = new File(jsmoothSkelDir, "autodownload.exe");
-		FileUtils.copyURLToFile(GpUtil.class
-				.getResource(JSMOOTH_SKEL_AD_RESOURCE1), jsmoothExeFile);
+		FileUtils.copyURLToFile(
+				GpUtil.class.getResource(JSMOOTH_SKEL_AD_RESOURCE1),
+				jsmoothExeFile);
 		final File jsmoothSkelFile = new File(jsmoothSkelDir,
 				"autodownload.skel");
-		FileUtils.copyURLToFile(GpUtil.class
-				.getResource(JSMOOTH_SKEL_AD_RESOURCE2), jsmoothSkelFile);
+		FileUtils.copyURLToFile(
+				GpUtil.class.getResource(JSMOOTH_SKEL_AD_RESOURCE2),
+				jsmoothSkelFile);
 
 		/**
 		 * atlas.jsmooth is positioned in DISK/atlas.jsmooth
 		 */
 		final File destinationProjectFile = new File(atlasDir, "atlas.jsmooth");
-		FileUtils.copyURLToFile(GpUtil.class
-				.getResource(JSMOOTH_PROJEKT_RESOURCE), destinationProjectFile);
+		FileUtils.copyURLToFile(
+				GpUtil.class.getResource(JSMOOTH_PROJEKT_RESOURCE),
+				destinationProjectFile);
 		try {
 
 			/**
@@ -1594,10 +1601,9 @@ public class JarExportUtil {
 					iconFile.delete();
 				destinationProjectFile.delete();
 			} catch (final IOException e) {
-				LOGGER
-						.warn(
-								"Error during cleanup. Some unused files might be left in you DISK directory.",
-								e);
+				LOGGER.warn(
+						"Error during cleanup. Some unused files might be left in you DISK directory.",
+						e);
 				throw new AtlasExportException(
 						// i8n
 						"Error during cleanup. Some unused files might be left in you DISK directory.",
@@ -1685,7 +1691,10 @@ public class JarExportUtil {
 				for (Map m : ace.getUsedMaps()) {
 					addToJar(targetJar, ace.getAtlasDir(), ace.getAd()
 							.getName()
-							+ "/" + AtlasConfig.HTML_DIRNAME + "/" + m.getId());
+							+ "/"
+							+ AtlasConfig.HTML_DIRNAME
+							+ "/"
+							+ m.getId());
 				}
 
 				// Export the about and popup screen
@@ -1720,10 +1729,9 @@ public class JarExportUtil {
 											+ relPath);
 
 						} catch (Exception e) {
-							LOGGER
-									.warn("Not adding "
-											+ f
-											+ " to jar, because it can't be loaded correctly.");
+							LOGGER.warn("Not adding "
+									+ f
+									+ " to jar, because it can't be loaded correctly.");
 						}
 					}
 
@@ -1822,8 +1830,7 @@ public class JarExportUtil {
 				addToJar(targetJar, ace.getAtlasDir(), "ad/"
 						+ AtlasConfig.DEFAULTCRS_FILENAME);
 			} else {
-				LOGGER
-						.info("Not exporting defaultcrs.prj beacuse it doesn't exist or is too small");
+				LOGGER.info("Not exporting defaultcrs.prj beacuse it doesn't exist or is too small");
 			}
 
 			copyAndSignLibs(targetJar, ace);
