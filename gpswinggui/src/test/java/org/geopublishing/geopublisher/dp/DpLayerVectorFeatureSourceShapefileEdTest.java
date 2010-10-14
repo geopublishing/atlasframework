@@ -70,4 +70,10 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 		}
 	}
 
+	@Test
+	public void testParseGeocommonsReadme()
+	{
+		//TODO
+	}
+
 }

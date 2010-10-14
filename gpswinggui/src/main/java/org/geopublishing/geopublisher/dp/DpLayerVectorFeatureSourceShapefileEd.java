@@ -19,10 +19,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.xml.transform.TransformerException;
 
@@ -42,13 +44,17 @@ import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
+import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
 import org.geotools.feature.NameImpl;
 import org.geotools.styling.Style;
+import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.feature.type.GeometryDescriptor;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+import schmitzm.geotools.feature.AttributeModificationRule;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.styling.StylingUtil;
@@ -91,7 +97,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			// "filename".. IF the user accepts any changes to clean the name!
 			// Otherwise an AtlasImportException is thrown
 			final String name = GpSwingUtil.cleanFilenameWithUI(owner,
-					new File(url.toURI()).getName());
+					DataUtilities.urlToFile(url).getName());
 			setFilename(name);
 
 			// Check for "illegal" attribute names.
@@ -168,13 +174,19 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 		ArrayList<String> illegalAttributeNames = new ArrayList<String>();
 
 		ShapefileDataStore store = new ShapefileDataStore(url);
-		SimpleFeatureType schema2 = store.getSchema();
-		for (int aindex = 0; aindex < schema2.getAttributeCount(); aindex++) {
-			AttributeDescriptor ad = schema2.getDescriptor(aindex);
-			String localName = ad.getLocalName();
-			boolean ok = FeatureUtil.checkAttributeNameRestrictions(localName);
-			if (!ok)
-				illegalAttributeNames.add(aindex + ":" + localName);
+		try {
+			SimpleFeatureType schema2 = store.getSchema();
+			for (int aindex = 0; aindex < schema2.getAttributeCount(); aindex++) {
+				AttributeDescriptor ad = schema2.getDescriptor(aindex);
+				String localName = ad.getLocalName();
+				boolean ok = FeatureUtil
+						.checkAttributeNameRestrictions(localName);
+				if (!ok)
+					illegalAttributeNames.add(aindex + ":" + localName);
+			}
+
+		} finally {
+			store.dispose();
 		}
 
 		return illegalAttributeNames;
@@ -184,13 +196,6 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 	public void copyFiles(URL urlToShape, Component owner, File targetDir,
 			AtlasStatusDialogInterface status) throws URISyntaxException,
 			IOException, TransformerException {
-		//
-		// if (urlToShape.getFile().toLowerCase().endsWith("zip")) {
-		// // Falls es sich um eine .ZIP datei handelt, wird sie entpackt.
-		// urlToShape = GeoImportUtil.uncompressShapeZip(urlToShape
-		// .openStream());
-		// }
-
 		/**
 		 * Getting a DataStore for the VectorLayer
 		 */
@@ -201,12 +206,12 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 		try {
 
 			if (dataStore instanceof ShapefileDataStore) {
-				// ShapefileDataStore shapefileDS = (ShapefileDataStore)
-				// dataStore;
 
-				/*******************************************************************
-				 * Now copy all the files that belong to ESRI Shapefile
-				 ******************************************************************/
+				/**
+				 * Optionally copy a .cpg file that describes the
+				 */
+				final URL cpgURL = IOUtil.changeUrlExt(urlToShape, "cpg");
+				IOUtil.copyURLNoException(cpgURL, targetDir, true);
 
 				/**
 				 * Copy projection-file and deal with upper-case/lower-case
@@ -248,35 +253,58 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					}
 				}
 
-				/**
-				 * Copy main SHP file!
-				 */
-				final URL shpURL = IOUtil.changeUrlExt(urlToShape, "shp");
-				IOUtil.copyUrl(shpURL, targetDir, true);
+				if (checkAttributeNames(urlToShape).size() > 0) {
 
-				final URL shxURL = IOUtil.changeUrlExt(urlToShape, "shx");
-				IOUtil.copyURLNoException(shxURL, targetDir, true);
+					if (prjURL != null) {
+						crs = GeoImportUtil.determineProjection(prjURL);
+					}
 
-				final URL grxURL = IOUtil.changeUrlExt(urlToShape, "grx");
-				IOUtil.copyURLNoException(grxURL, targetDir, true);
+					/*******************************************************************
+					 * Now import and recreate the Shapefile
+					 ******************************************************************/
+					AVSwingUtil.showMessageDialog(owner,
+							"Die Shapedatei wird konvertiert");
 
-				final URL fixURL = IOUtil.changeUrlExt(urlToShape, "fix");
-				IOUtil.copyURLNoException(fixURL, targetDir, true);
+					String charsetName = IOUtil.readURLasString(cpgURL);
+					if (!charsetName.equals("")) {
+						charset = Charset.forName(charsetName);
+					}
 
-				final URL qixURL = IOUtil.changeUrlExt(urlToShape, "qix");
-				IOUtil.copyURLNoException(qixURL, targetDir, true);
+					ShapefileDataStore store = new ShapefileDataStore(
+							urlToShape);
+					if (charset != null)
+						store.setStringCharset(charset);
+					FeatureSource<SimpleFeatureType, SimpleFeature> fs = store
+							.getFeatureSource();
+
+					copyImportExport(targetDir, fs,
+							charset = Charset.forName("utf-8"), crs);
+
+				} else {
+					/*******************************************************************
+					 * Now copy all the files that belong to ESRI Shapefile
+					 ******************************************************************/
+					final URL shpURL = IOUtil.changeUrlExt(urlToShape, "shp");
+					IOUtil.copyUrl(shpURL, targetDir, true);
+
+					final URL shxURL = IOUtil.changeUrlExt(urlToShape, "shx");
+					IOUtil.copyURLNoException(shxURL, targetDir, true);
+
+					final URL grxURL = IOUtil.changeUrlExt(urlToShape, "grx");
+					IOUtil.copyURLNoException(grxURL, targetDir, true);
+
+					final URL fixURL = IOUtil.changeUrlExt(urlToShape, "fix");
+					IOUtil.copyURLNoException(fixURL, targetDir, true);
+
+					final URL qixURL = IOUtil.changeUrlExt(urlToShape, "qix");
+					IOUtil.copyURLNoException(qixURL, targetDir, true);
+
+					final URL dbfURL = IOUtil.changeUrlExt(urlToShape, "dbf");
+					IOUtil.copyURLNoException(dbfURL, targetDir, true);
+				}
 
 				final URL xmlURL = IOUtil.changeUrlExt(urlToShape, "shp.xml");
 				IOUtil.copyURLNoException(xmlURL, targetDir, true);
-
-				final URL dbfURL = IOUtil.changeUrlExt(urlToShape, "dbf");
-				IOUtil.copyURLNoException(dbfURL, targetDir, true);
-
-				/**
-				 * Optionally copy a .cpg file that describes the
-				 */
-				final URL cpgURL = IOUtil.changeUrlExt(urlToShape, "cpg");
-				IOUtil.copyURLNoException(cpgURL, targetDir, true);
 
 				/**
 				 * Try to copy an attached .sld / .SLD files or create a default
@@ -287,7 +315,6 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 				 */
 				try {
 					try {
-
 						IOUtil.copyUrl(IOUtil.changeUrlExt(urlToShape, "sld"),
 								targetDir, true);
 					} catch (Exception e) {
@@ -295,17 +322,14 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 								targetDir, true);
 					}
 				} catch (Exception e) {
-
-					GeometryDescriptor geometryType;
-
-					geometryType = getDefaultGeometry();
 					Style defaultStyle = ASUtil.createDefaultStyle(this);
 					File changeFileExt = IOUtil.changeFileExt(new File(
 							targetDir + "/" + getFilename()), "sld");
 					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
-
 				}
 
+				// Parse GeoCommons a second time, now that we know the column
+				// names
 				parseGeocommonsReadme(DataUtilities.extendURL(
 						DataUtilities.getParentUrl(urlToShape), "README"), 2);
 
@@ -323,6 +347,50 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 			if (dataStore != null)
 				dataStore.dispose();
 		}
+	}
+
+	/**
+	 * Write all features of a {@link FeatureSource} into a Shapefile in the
+	 */
+	private void copyImportExport(File targetDir,
+			FeatureSource<SimpleFeatureType, SimpleFeature> fs,
+			Charset charset, CoordinateReferenceSystem forceCrs)
+			throws IOException {
+		// Target file in ad/data/folder
+		File outFile = new File(targetDir, getFilename());
+		IndexedShapefileDataStore outputFs = new IndexedShapefileDataStore(
+				DataUtilities.fileToURL(outFile));
+
+		// Output Shapefile will have charset in UTF-8
+		if (charset != null)
+			outputFs.setStringCharset(charset = Charset.forName("utf-8"));
+
+		if (forceCrs != null)
+			outputFs.forceSchemaCRS(forceCrs);
+
+		AttributeModificationRule[] destAttrs = new AttributeModificationRule[0];
+		for (int i = 0; i < fs.getSchema().getAttributeCount(); i++) {
+			AttributeDescriptor ad = fs.getSchema().getAttributeDescriptors()
+					.get(i);
+			AttributeModificationRule amr = new AttributeModificationRule(i);
+			destAttrs = LangUtil.extendArray(destAttrs, amr);
+			if (!FeatureUtil.checkAttributeNameRestrictions(ad.getLocalName())) {
+
+				String cleanAttname = FeatureUtil.cleanAttname(
+						ad.getLocalName(), i);
+				
+				if (AttributeModificationRule.containsNewName(destAttrs,
+						cleanAttname)) {
+					cleanAttname = cleanAttname.substring(0,
+							Math.min(5, cleanAttname.length() - 1));
+					cleanAttname += new Random().nextInt(999999);
+				}
+
+				amr.setNewAttrName("COLUMN" + i);
+			}
+		}
+
+		FeatureUtil.modifyFeatureSource(fs, outputFs, destAttrs);
 	}
 
 	/**
