@@ -1,7 +1,6 @@
 package org.geopublishing.geopublisher.dp;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -33,9 +32,10 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 			FactoryException, TransformException, SAXException, IOException,
 			ParserConfigurationException {
 
-		URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
-				.getResource("/arabicShapefiles/arabicwitharabicinheader.shp");
-		assertNotNull(url);
+		// URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
+		// .getResource("/arabicShapefiles/arabicwitharabicinheader.shp");
+		// assertNotNull(url);
+		URL url = TestingUtil.TestDatasets.arabicInHeader.getUrl();
 
 		List<String> illegalAtts = DpLayerVectorFeatureSourceShapefileEd
 				.checkAttributeNames(url);
@@ -50,12 +50,8 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 			ParserConfigurationException, URISyntaxException {
 		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
 
-		URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
-				.getResource("/arabicShapefiles/arabicdata.shp");
-		assertNotNull(url);
-
-		System.out.println(url);
-
+		URL url = TestingUtil.TestDatasets.arabicInHeader.getUrl();
+		
 		url = TestingUtil.copyShapefileToTemp(url);
 
 		System.out.println(url);
