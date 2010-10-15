@@ -1383,12 +1383,10 @@ public class JarExportUtil {
 				aResource = document.createElement("jar");
 
 				String libNameChecked;
-				if (libName.equals("../gpcore.jar")) {
-					libNameChecked = "gpcore.jar";
+				if (libName.contains("gpcore"))
 					aResource.setAttribute("main", "true");
-				} else {
-					libNameChecked = LIB_DIR + "/" + libName;
-				}
+				
+				libNameChecked = LIB_DIR + "/" + libName;
 
 				aResource.setAttribute("href", libNameChecked);
 				aResource.setAttribute("part", "main");
