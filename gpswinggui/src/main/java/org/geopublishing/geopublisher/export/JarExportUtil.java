@@ -59,6 +59,7 @@ import net.charabia.jsmoothgen.skeleton.SkeletonList;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
@@ -342,11 +343,7 @@ public class JarExportUtil {
 			 * https://jdk6.dev.java.net/deployment_advice
 			 * .html#Deploying_Java_Web_Start_Applica
 			 */
-			String jnlpLocation = GPProps.get(GPProps.Keys.jnlpURL,
-					"http://localhost/atlas");
-			if (!jnlpLocation.endsWith("/")) {
-				jnlpLocation += "/";
-			}
+			String jnlpLocation = ace.getJnlpBaseUrl();
 
 			fileWriter
 					.write("<h2>"
@@ -724,8 +721,6 @@ public class JarExportUtil {
 	 * 
 	 * @param libName
 	 *            e.g. gpcore-1.5-SNAPSHOT.jar
-	 * 
-	 *            // * @throw {@link AtlasExportException} if jar can't be found
 	 */
 	public URL findJarUrl(String libName) {
 
@@ -789,9 +784,7 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * 
 	 * @param libName
-	 * @return
 	 */
 	private URL getJarUrlFromJWS(String libName) {
 
@@ -811,10 +804,6 @@ public class JarExportUtil {
 			String fileAndPath;
 			if (BASEJARS.contains(libName)) {
 				fileAndPath = path + libName;
-				// destination = new File(targetLibDir.getParentFile(),
-				// libName);
-				// destinationPackGz = new File(targetLibDir.getParentFile(),
-				// libName + ".pack.gz");
 			} else {
 				fileAndPath = path + LIB_DIR + "/" + libName;
 			}
@@ -828,12 +817,6 @@ public class JarExportUtil {
 			libsFromLocal = false;
 
 			return testURL;
-
-			// fromURLPackGZ = new URL(bs.getCodeBase().getProtocol(), bs
-			// .getCodeBase().getHost(), bs.getCodeBase().getPort(),
-			// fileAndPath + ".pack.gz");
-
-			// libsFromLocal = false;
 
 		} catch (final javax.jnlp.UnavailableServiceException e) {
 			/**
@@ -1202,8 +1185,10 @@ public class JarExportUtil {
 	 * 
 	 * @throws AtlasFatalException
 	 */
-	private void createJNLP(final AtlasConfigEditable ace,
-			final File targetJar, String codebase) throws AtlasExportException {
+	private void createJNLP(final AtlasConfigEditable ace, final File targetJar)
+			throws AtlasExportException {
+
+		String codebase = ace.getJnlpBaseUrl();
 
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -1213,9 +1198,6 @@ public class JarExportUtil {
 
 			final Element jnlp = document.createElement("jnlp");
 
-			if (!codebase.endsWith("/")) {
-				codebase += "/";
-			}
 			jnlp.setAttribute("codebase", codebase);
 
 			jnlp.setAttribute("href", codebase + JNLP_FILENAME);
@@ -1383,10 +1365,23 @@ public class JarExportUtil {
 				aResource = document.createElement("jar");
 
 				String libNameChecked;
-				if (libName.contains("gpcore"))
+				if (libName.contains(GPCORE_JARNAME))
 					aResource.setAttribute("main", "true");
-				
 				libNameChecked = LIB_DIR + "/" + libName;
+
+				// TODO Make this nicer!
+				// if (export SHould Reuse Online JARs) {
+				if (ReleaseUtil.isSnapshow(GeopublisherGUI.class)) {
+					libNameChecked = "http://www.geopublishing.org/gp_/"
+							+ libNameChecked;
+				} else {
+					libNameChecked = "http://www.geopublishing.org/gp_stable/"
+							+ libNameChecked;
+				}
+				// }
+
+				// Cleaning the URL for better reuse
+				libNameChecked.replace("./", "");
 
 				aResource.setAttribute("href", libNameChecked);
 				aResource.setAttribute("part", "main");
@@ -1879,8 +1874,7 @@ public class JarExportUtil {
 			 */
 			if (toJws) {
 				LOGGER.debug("Creating JNLP...");
-				createJNLP(ace, targetJar, GPProps.get(GPProps.Keys.jnlpURL,
-						"http://localhost/atlas"));
+				createJNLP(ace, targetJar);
 
 				createIndexHTML(ace, targetJar);
 			}
@@ -2280,7 +2274,8 @@ public class JarExportUtil {
 					getTempDir().getAbsolutePath().length() + 1);
 
 			/**
-			 * Copy files to DISK/#DISK_SUB_DIR
+			 * Copy files to DISK/#DISK_SUB_DIR, but not libs that reside on
+			 * www.geopublishing.org
 			 */
 			if (toDisk && !jar.getName().endsWith("pack.gz")) {
 
@@ -2295,7 +2290,9 @@ public class JarExportUtil {
 			/**
 			 * Copy files to JWS
 			 */
-			if (toJws) {
+			if (toJws
+					&& !ArrayUtils.contains(getJarAndNativeLibNames(), "./"
+							+ jar.getName())) {
 				final File targetSubDirJWS = new File(targetDirJWS, diffDir)
 						.getParentFile();
 				targetSubDirJWS.mkdirs();

@@ -122,19 +122,20 @@ public class AtlasConfigEditable extends AtlasConfig {
 	@Override
 	public final Group getFirstGroup() {
 		Group fg = super.getFirstGroup();
-		
-//		/**
-//		 * Fill the description of the first group and tell the user, that it is
-//		 * never visible in the atlas.
-//		 */
-//		if (fg != null && I8NUtil.isEmpty(fg.getTitle())) {
-//			List<String> activeLang = new ArrayList<String>();
-//			activeLang.add(Translation.getActiveLang());
-//			fg.setTitle(new Translation(activeLang, GpUtil
-//					.R("FirstGroup.DefaultTitle")));
-//			fg.setDesc(new Translation(activeLang, GpUtil
-//					.R("FirstGroup.DefaultDesc")));
-//		}
+
+		// /**
+		// * Fill the description of the first group and tell the user, that it
+		// is
+		// * never visible in the atlas.
+		// */
+		// if (fg != null && I8NUtil.isEmpty(fg.getTitle())) {
+		// List<String> activeLang = new ArrayList<String>();
+		// activeLang.add(Translation.getActiveLang());
+		// fg.setTitle(new Translation(activeLang, GpUtil
+		// .R("FirstGroup.DefaultTitle")));
+		// fg.setDesc(new Translation(activeLang, GpUtil
+		// .R("FirstGroup.DefaultDesc")));
+		// }
 
 		return fg;
 
@@ -348,14 +349,14 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		return used;
 	}
-	
+
 	/**
 	 * @return a {@link List} of all {@link Map}s that will be exported. A map
 	 *         is exported if it is referenced from the {@link Group} tree OR if
 	 *         the map is selected as the default start map.
 	 */
 	public Set<Map> getUsedMaps() {
-		
+
 		Set<Map> usedMaps = new HashSet<Map>();
 
 		for (Map m : getMapPool().values()) {
@@ -386,7 +387,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 				usedMaps.add(m);
 
 		}
-		
+
 		return usedMaps;
 	}
 
@@ -401,7 +402,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		List<DpEntry<? extends ChartStyle>> unrefed = new LinkedList<DpEntry<? extends ChartStyle>>();
 
 		Set<Map> usedMaps = getUsedMaps();
-		
+
 		for (DpEntry<? extends ChartStyle> dpe : getDataPool().values()) {
 			LinkedList<AtlasRefInterface<?>> refs = new LinkedList<AtlasRefInterface<?>>();
 			Group.findReferencesTo(this, dpe, refs, false);
@@ -419,8 +420,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 			for (Map m : usedMaps) {
 				/**
-				 * If we find a reference to our DPE in this map, the
-				 * DpEntry can be reached from the atlas
+				 * If we find a reference to our DPE in this map, the DpEntry
+				 * can be reached from the atlas
 				 */
 				if (m.containsDpe(dpe.getId())) {
 					referencedFromAMap = true;
@@ -464,21 +465,16 @@ public class AtlasConfigEditable extends AtlasConfig {
 					 */
 
 					FileWriter fw = new FileWriter(aboutHTMLfile);
-					fw
-							.write("<html> <body> <p> "
-									+ GpUtil
-											.R(
-													"EditAboutWindow.TabName",
-													(getTitle().get(lang) != null && getTitle()
-															.get(lang).equals(
-																	"")) ? "..."
-															: getTitle().get(
-																	lang),
-													new Locale(lang)
-															.getDisplayLanguage(new Locale(
-																	Translation
-																			.getActiveLang())))
-									+ " </p> </body> </html>");
+					fw.write("<html> <body> <p> "
+							+ GpUtil.R(
+									"EditAboutWindow.TabName",
+									(getTitle().get(lang) != null && getTitle()
+											.get(lang).equals("")) ? "..."
+											: getTitle().get(lang),
+									new Locale(lang)
+											.getDisplayLanguage(new Locale(
+													Translation.getActiveLang())))
+							+ " </p> </body> </html>");
 					fw.flush();
 					fw.close();
 				}
@@ -514,21 +510,16 @@ public class AtlasConfigEditable extends AtlasConfig {
 					 */
 
 					FileWriter fw = new FileWriter(popupHTMLfile);
-					fw
-							.write("<html> <body> <p> "
-									+ GpUtil
-											.R(
-													"EditPopupWindow.TabName",
-													(getTitle().get(lang) != null && getTitle()
-															.get(lang).equals(
-																	"")) ? "..."
-															: getTitle().get(
-																	lang),
-													new Locale(lang)
-															.getDisplayLanguage(new Locale(
-																	Translation
-																			.getActiveLang())))
-									+ " </p> </body> </html>");
+					fw.write("<html> <body> <p> "
+							+ GpUtil.R(
+									"EditPopupWindow.TabName",
+									(getTitle().get(lang) != null && getTitle()
+											.get(lang).equals("")) ? "..."
+											: getTitle().get(lang),
+									new Locale(lang)
+											.getDisplayLanguage(new Locale(
+													Translation.getActiveLang())))
+							+ " </p> </body> </html>");
 					fw.flush();
 					fw.close();
 				}
@@ -670,7 +661,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 	/**
 	 * Uncaches all cached information and will result in the GP to continue
-	 * with some IO stuff.
+	 * with some IO stuff. This will NOT reload the <code>atlas.xml</code>.  
 	 */
 	public void uncacheAndReread() {
 
@@ -706,14 +697,14 @@ public class AtlasConfigEditable extends AtlasConfig {
 			dpl.getCrs();
 
 			// Correcting any wrongly upper/lowercased attribute names
-			if (dpe instanceof DpLayer){
+			if (dpe instanceof DpLayer) {
 				Style style = ((DpLayer) dpe).getStyle();
 
 				if (dpe instanceof DpLayerVectorFeatureSource) {
 					style = StylingUtil.correctPropertyNames(style,
 							((DpLayerVectorFeatureSource) dpe).getSchema());
 				} else {
-					style = StylingUtil.correctPropertyNames(style,null);
+					style = StylingUtil.correctPropertyNames(style, null);
 				}
 
 				((DpLayer) dpe).setStyle(style);
@@ -731,8 +722,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 *         {@link DpEntry}
 	 */
 	public File getFileFor(DpEntry<? extends ChartStyle> dpe) {
-		return new File(new File(getDataDir(), dpe.getDataDirname()), dpe
-				.getFilename());
+		return new File(new File(getDataDir(), dpe.getDataDirname()),
+				dpe.getFilename());
 	}
 
 	/**
@@ -744,6 +735,5 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 		super.uncache();
 	}
-
 
 }

@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.feature.CQLFilterParser;
 import schmitzm.geotools.gui.ScalePane;
 import schmitzm.geotools.gui.ScalePanel;
 
@@ -23,7 +22,6 @@ import schmitzm.geotools.gui.ScalePanel;
  */
 public class AMLUtil {
 	private static Logger LOGGER = Logger.getLogger(AMLUtil.class);
-
 
 	/**
 	 * XML Schema name spaces of the AtlasMarkupLanguage (AML) and others
@@ -74,18 +72,32 @@ public class AMLUtil {
 
 	/**
 	 * Tag used to list font filenames that are part of an atlas
+	 * 
+	 * @since 1.5
 	 */
 	public static final String TAG_FONTS = "fonts";
-	
+
 	/**
 	 * Tag to describe one font inside the TAG_FONTS tag
+	 * 
+	 * @since 1.5
 	 */
 	public static final String TAG_FONT = "font";
 
 	/**
-	 * Atribute to describe the font filename 
+	 * Attribute to describe a font filename
+	 * 
+	 * @since 1.5
 	 */
 	public static final String ATT_FONT_FILENAME = "filename";
+
+	/**
+	 * If the atlas is exported to the web, this the URL that it is supposed to
+	 * run at. E.g. http://www.geopublishing.org/atlases/myatlas/
+	 * 
+	 * @since 1.6
+	 */
+	public static final String ATT_jnlpBaseUrl = "jnlpBaseUrl";
 
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
@@ -110,7 +122,7 @@ public class AMLUtil {
 
 		LOGGER.debug("old = \n" + old + " converted to \n" + filterString);
 
-		Filter filter = new CQLFilterParser().parseFilter(filterString);
+//		Filter filter = new CQLFilterParser().parseFilter(filterString);
 		// Filter cqlFilter = CQL.toFilter(filterString);
 		// cqlFilter.evaluate(null);
 

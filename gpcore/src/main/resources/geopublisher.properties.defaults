@@ -12,7 +12,6 @@
 #http://wald.intevation.org/projects/atlas-framework/
 ##########
 startJVMWithXmx=256
-jnlpURL=http\://www.geopublishing.org/your_atlas/
 windowMaximized=0
 NativeLibs=libmlib_jai.so mlib_jai_mmx.dll mlib_jai_util.dll mlib_jai.dll libgdal.so
 compressJARs=1

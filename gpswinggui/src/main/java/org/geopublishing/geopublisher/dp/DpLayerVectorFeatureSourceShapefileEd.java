@@ -36,7 +36,6 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;

@@ -12,7 +12,8 @@ public class SelectPostgisLayerJDialogTest {
 		
 		SelectPostgisLayerJDialog selectPostgisLayerJDialog = new SelectPostgisLayerJDialog(
 				null);
-		TestingUtil.testGui(selectPostgisLayerJDialog);
+		TestingUtil.testGui(selectPostgisLayerJDialog, -1);
+		System.out.println( selectPostgisLayerJDialog.getPassword() );
 	}
 
 }

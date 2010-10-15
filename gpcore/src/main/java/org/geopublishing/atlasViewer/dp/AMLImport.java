@@ -289,6 +289,12 @@ public class AMLImport {
 		Node atlasNode = nodes.item(0);
 		checkUpgrades(atlasNode);
 
+		// Read the jnlpBaseUrl attribute (since 1.6)
+		if (atlasNode.getAttributes().getNamedItem(AMLUtil.ATT_jnlpBaseUrl) != null) {
+			ac.setJnlpBaseUrl(atlasNode.getAttributes()
+					.getNamedItem(AMLUtil.ATT_jnlpBaseUrl).getTextContent());
+		}
+
 		// parsing name, desc, creator and copyright
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "name");
 		ac.setTitle(AMLImport.parseTranslation(ac.getLanguages(), nodes.item(0)));

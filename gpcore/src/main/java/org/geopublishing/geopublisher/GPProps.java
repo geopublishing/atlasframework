@@ -45,7 +45,7 @@ public abstract class GPProps {
 	 * 
 	 */
 	public enum Keys {
-		antialiasingMaps, bugReportEmail, compressJARs, gpWindowHeight, gpWindowLeftDividerLocation, gpWindowRightDividerLocation, gpWindowWidth, JarCmd, JarSignerCmd, jnlpURL, JWSStartScript,
+		antialiasingMaps, bugReportEmail, compressJARs, gpWindowHeight, gpWindowLeftDividerLocation, gpWindowRightDividerLocation, gpWindowWidth, JarCmd, JWSStartScript,
 		/** Remember the last file we imported **/
 		LAST_IMPORTED_FILE,
 		/** Remember the GP Atlas folder we imported stuff from the last time **/

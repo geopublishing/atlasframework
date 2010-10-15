@@ -265,6 +265,8 @@ public class AMLExporter {
 				String.valueOf(ReleaseUtil.getVersionMin(AVUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_buildVersion,
 				String.valueOf(ReleaseUtil.getVersionBuild(AVUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_jnlpBaseUrl,
+				String.valueOf(ace.getJnlpBaseUrl()));
 
 		// <aml:name, desc, creator, copyright
 		atlas.appendChild(exportTranslation(document, "name", ace.getTitle()));

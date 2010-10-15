@@ -711,8 +711,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				listenToMapPoolChangesAndClosePreviewAtlas);
 		ace.getDataPool().removeChangeListener(
 				listenToDataPoolChangesAndCloseAtlasViewerPreview);
+		
+		GpSwingUtil.cleanFolder(ace, getJFrame());
 
 		ace.dispose();
+		
 		ace = null;
 
 		getJFrame().updateAce();

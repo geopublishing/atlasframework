@@ -80,7 +80,9 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		 */
 		{
 			if (isJws) {
-				GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
+//				GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
+//						.get(ExportWizard.JNLPURL));
+				ace.setJnlpBaseUrl((String) wizardData
 						.get(ExportWizard.JNLPURL));
 			}
 

@@ -19,6 +19,7 @@ import javax.swing.ImageIcon;
 import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 
 
@@ -45,20 +46,22 @@ public class UncacheAtlasAction extends AbstractAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		final AtlasTask<Object> uncacheTask = new AtlasTask<Object>(parentGUI,
+		final AtlasTask<Void> uncacheTask = new AtlasTask<Void>(parentGUI,
 				GeopublisherGUI.R("ClearCaches.process.WaitMsg")) {
 
 			@Override
 			protected void done() {
 				super.done();
 				ace.getDataPool().fireChangeEvents(EventTypes.changeDpe);
+				GpSwingUtil.validate(ace, owner);
 			}
 
 			@Override
-			protected Object doInBackground() throws Exception {
-				if (ace != null)
+			protected Void doInBackground() throws Exception {
+				if (ace != null) {
 					ace.uncacheAndReread();
-
+					
+				}
 				return null;
 			}
 

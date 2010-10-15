@@ -47,6 +47,10 @@ import skrueger.swing.Disposable;
  * @author Stefan Alfons Tzeggai
  */
 public class AtlasConfig implements Disposable {
+	
+	/** Default JNLP base URL for new atlases **/
+	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS = "http://www.geopublishing.org/atlases/myatlas/";
+
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
 
 	{
@@ -176,6 +180,13 @@ public class AtlasConfig implements Disposable {
 			+ "/";
 
 	private AVProps avprops;
+
+	/**
+	 * If the atlas is exported to the web, this the URL that it is supposed to
+	 * run at. Should always end with a /. Defaults to
+	 * <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 */
+	private String jnlpBaseUrl = HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS;
 
 	/**
 	 * An readily instantiated DatapoolEntry is added...
@@ -486,6 +497,29 @@ public class AtlasConfig implements Disposable {
 			fc.registerFont(f);
 			// }
 		}
+	}
+
+	/**
+	 * If the atalas is exported to the web, this the URL that it is supposed to
+	 * run at. E.g. <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 */
+	public String getJnlpBaseUrl() {
+		if (jnlpBaseUrl == null) {
+			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS;
+		}
+
+		if (!jnlpBaseUrl.endsWith("/"))
+			jnlpBaseUrl += "/";
+
+		return jnlpBaseUrl;
+	}
+
+	/**
+	 * If the atalas is exported to the web, this the URL that it is supposed to
+	 * run at. E.g. <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 */
+	public void setJnlpBaseUrl(String jnlpBaseUrl) {
+		this.jnlpBaseUrl = jnlpBaseUrl;
 	}
 
 }

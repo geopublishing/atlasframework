@@ -24,6 +24,7 @@ import javax.swing.event.DocumentListener;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.export.JarExportUtil;
@@ -31,14 +32,14 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 public class ExportWizardPage_JNLPDefinition extends WizardPage {
-	private final JLabel JnlpURLLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.JNLP.JNLPURL.Label"));
-	private final JLabel AtlasURLLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.JNLP.AtlasURL.Label"));
-	private final JLabel JSCodeLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.JNLP.JavaScriptCode.Label"));
-	private final JLabel linkExplanationJLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.JNLP.Link.Explanation"));
+	private final JLabel JnlpURLLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.JNLP.JNLPURL.Label"));
+	private final JLabel AtlasURLLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.JNLP.AtlasURL.Label"));
+	private final JLabel JSCodeLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.JNLP.JavaScriptCode.Label"));
+	private final JLabel linkExplanationJLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.JNLP.Link.Explanation"));
 
 	private final String jsTemplate = GPProps.get(Keys.JWSStartScript);
 	JLabel explanation = new JLabel(GeopublisherGUI.R(
@@ -62,6 +63,8 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 
 	@Override
 	protected void renderingPage() {
+		AtlasConfigEditable ace = (AtlasConfigEditable) getWizardData(ExportWizard.ACE);
+		jnlpCodebaseJTextField.setText(ace.getJnlpBaseUrl());
 	}
 
 	private void initGui() {
@@ -88,8 +91,7 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 	private JTextField getAtlasURLJTextField() {
 		if (atlasURLJTextField == null) {
 			atlasURLJTextField = new JTextField(getJnlpCodebaseJTextField()
-					.getText()
-					+ "/" + JarExportUtil.JNLP_FILENAME);
+					.getText() + "/" + JarExportUtil.JNLP_FILENAME);
 			atlasURLJTextField.setEditable(false);
 
 			getJnlpCodebaseJTextField().getDocument().addDocumentListener(
@@ -120,8 +122,11 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 
 	public JTextField getJnlpCodebaseJTextField() {
 		if (jnlpCodebaseJTextField == null) {
-			jnlpCodebaseJTextField = new JTextField(GPProps.get(Keys.jnlpURL,
-					"http://www.domain.com/atlas"));
+			// jnlpCodebaseJTextField = new JTextField(GPProps.get(Keys.jnlpURL,
+			// "http://www.domain.com/atlas"));
+
+			jnlpCodebaseJTextField = new JTextField();
+
 			jnlpCodebaseJTextField.setName(ExportWizard.JNLPURL);
 		}
 
@@ -144,8 +149,8 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 			URL testUrl = new URL(getJnlpCodebaseJTextField().getText());
 		} catch (MalformedURLException e) {
 			return GeopublisherGUI.R(
-					"ExportWizard.JNLP.ValidationError.Invalid", e
-							.getLocalizedMessage());
+					"ExportWizard.JNLP.ValidationError.Invalid",
+					e.getLocalizedMessage());
 		}
 
 		return null;
@@ -191,8 +196,8 @@ public class ExportWizardPage_JNLPDefinition extends WizardPage {
 		String javaScriptCode = jsTemplate.replace("__JNLPURL__",
 				getJnlpCodebaseJTextField().getText()
 						+ JarExportUtil.JNLP_FILENAME);
-		javaScriptCode = javaScriptCode.replace("__MINJAVAVERSION__", GPProps
-				.get(Keys.MinimumJavaVersion));
+		javaScriptCode = javaScriptCode.replace("__MINJAVAVERSION__",
+				GPProps.get(Keys.MinimumJavaVersion));
 		linkJavaScriptJTextArea.setText(javaScriptCode);
 	}
 }

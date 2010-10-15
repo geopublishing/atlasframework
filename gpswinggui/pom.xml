@@ -86,10 +86,7 @@
 				</executions>
 			</plugin>
 
-
 		</plugins>
-
-
 
 	</build>
 

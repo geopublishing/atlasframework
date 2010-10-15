@@ -4,7 +4,6 @@ import java.awt.Component;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
@@ -13,6 +12,8 @@ import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.ASUtil;
 
+import schmitzm.swing.ManualInputOption;
+import schmitzm.swing.ManualInputOption.PasswordViewable;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
@@ -27,7 +28,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 	private JTextField hostInput;
 	private JTextField databaseInput;
 	private JTextField layerInput;
-	private JPasswordField passwordInput;
+	private PasswordViewable passwordInput;
 	private JTextField usernameInput;
 	private JTextField portInput;
 
@@ -153,9 +154,11 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		return layerInput;
 	}
 
-	private JPasswordField getPasswordInputField() {
+	private PasswordViewable getPasswordInputField() {
 		if (passwordInput == null) {
-			passwordInput = new JPasswordField(25);
+//			passwordInput = new JPasswordField(25);
+			passwordInput = new ManualInputOption.PasswordViewable(null, true);
+			((JTextField)passwordInput.getInputComponent()).setColumns(25);
 		}
 		return passwordInput;
 	}
@@ -212,7 +215,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 	}
 
 	public String getPassword() {
-		return new String(getPasswordInputField().getPassword());
+		return new String(getPasswordInputField().getValue());
 	}
 
 	@Override
