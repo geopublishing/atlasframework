@@ -209,7 +209,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		} else {
 			int resultCode;
 			resultCode = CliOptions.performArgs(args);
-			if (resultCode != 0) {
+			if (resultCode != -1) {
 
 				if (instance != null) {
 					instance.exitGP(resultCode);
