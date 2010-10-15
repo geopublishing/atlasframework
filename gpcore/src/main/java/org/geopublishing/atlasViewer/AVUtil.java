@@ -43,9 +43,11 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.resources.CRSUtilities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -53,13 +55,13 @@ import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.lang.ResourceProvider;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.AttributeMetadataInterface;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
-
 
 /**
  * Collection of Atlas related static methods.
@@ -97,7 +99,6 @@ public class AVUtil {
 	public static String R(final String key, final Object... values) {
 		return RESOURCE.getString(key, values);
 	}
-	
 
 	/**
 	 * Convenience method to access the {@link AtlasViewerGUI}s translation
@@ -105,11 +106,13 @@ public class AVUtil {
 	 * 
 	 * @param key
 	 *            the key for the AtlasViewerTranslation.properties file
-	 * @param reqLanguage requested Language/Locale
+	 * @param reqLanguage
+	 *            requested Language/Locale
 	 * @param values
 	 *            optinal values
 	 */
-	public static String R(final String key, Locale reqLanguage, final Object... values) {
+	public static String R(final String key, Locale reqLanguage,
+			final Object... values) {
 		return RESOURCE.getString(key, reqLanguage, values);
 	}
 
@@ -235,8 +238,8 @@ public class AVUtil {
 	 */
 	public final static void copyURL(final Logger log, final URL source,
 			final URL destination) throws IOException, URISyntaxException {
-		copyFile(log, new File(source.getFile()), new File(destination
-				.getFile()));
+		copyFile(log, new File(source.getFile()),
+				new File(destination.getFile()));
 	}
 
 	/**
@@ -258,7 +261,6 @@ public class AVUtil {
 			final File destination) throws IOException {
 		IOUtil.copyFile(log, source, destination, false);
 	}
-
 
 	// /**
 	// * Provocates caching of the EPSG database.
@@ -384,12 +386,12 @@ public class AVUtil {
 			final int seriesIdx, final List<String> languages) {
 
 		final Translation legendTooltipTranslation = chartStyle
-				.getRendererStyle(rendererIndex).getSeriesLegendTooltip(
-						seriesIdx).getLabelTranslation();
+				.getRendererStyle(rendererIndex)
+				.getSeriesLegendTooltip(seriesIdx).getLabelTranslation();
 
-		final Translation legendTitleTranslation = chartStyle.getRendererStyle(
-				rendererIndex).getSeriesLegendLabel(seriesIdx)
-				.getLabelTranslation();
+		final Translation legendTitleTranslation = chartStyle
+				.getRendererStyle(rendererIndex)
+				.getSeriesLegendLabel(seriesIdx).getLabelTranslation();
 
 		/* First series = DOMAIN */
 		final String attName = chartStyle.getAttributeName(seriesIdx + 1);
@@ -495,6 +497,27 @@ public class AVUtil {
 		waitFrame.setVisible(true);
 
 		return waitFrame;
+	}
+
+	/**
+	 * Does not change the configuration if there are already appenders defined.
+	 */
+	public static void initAtlasLogging() {
+		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
+			return;
+		try {
+			URL log4jURL = AtlasViewerGUI.class.getClassLoader().getResource(
+					"/" + "av_log4j.xml");
+			System.out.println("Configuring log4j from " + log4jURL);
+			if (log4jURL == null) {
+				log4jURL = GpUtil.class.getClassLoader().getResource(
+						"av_log4j.xml");
+				// System.out.println("Configuring log4j from " + log4jURL);
+			}
+			DOMConfigurator.configure(log4jURL);
+		} catch (Throwable e) {
+			ExceptionDialog.show(null, e);
+		}
 	}
 
 }

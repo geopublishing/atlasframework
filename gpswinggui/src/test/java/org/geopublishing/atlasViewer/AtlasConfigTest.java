@@ -4,8 +4,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ public class AtlasConfigTest {
 	@Before
 	public void setup() throws Exception
 	{
-		ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+		ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 	}
 	
 	@After

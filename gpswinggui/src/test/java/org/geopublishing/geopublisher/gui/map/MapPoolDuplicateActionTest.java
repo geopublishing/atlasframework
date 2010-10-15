@@ -13,8 +13,8 @@ import org.apache.commons.io.FileUtils;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -28,7 +28,7 @@ public class MapPoolDuplicateActionTest {
 	public void testDuplicateMap() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 		Map map1 = ace.getMapPool().get(0);
 		File htmlDir1 = ace.getHtmlDirFor(map1);
 

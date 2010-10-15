@@ -46,7 +46,6 @@ import javax.swing.WindowConstants;
 
 import org.apache.commons.io.DirectoryWalker.CancelException;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -580,11 +579,14 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// "av_log4j.xml");
 
-			final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
-					.getResource("av_log4j.xml");
+//			final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
+//					.getResource("av_log4j.xml");
 
-			System.out.println("Configuring log4j from " + log4jURL);
-			DOMConfigurator.configure(log4jURL);
+//			System.out.println("Configuring log4j from " + log4jURL);
+//			DOMConfigurator.configure(log4jURL);
+			
+			AVUtil.initAtlasLogging();
+			
 		} catch (Throwable e) {
 			ExceptionDialog.show(null, e);
 		}

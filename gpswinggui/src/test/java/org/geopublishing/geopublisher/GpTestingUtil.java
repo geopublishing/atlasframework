@@ -20,8 +20,7 @@ import java.net.URL;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.SystemUtils;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
@@ -37,21 +36,50 @@ import org.xml.sax.SAXException;
 import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.MapPaneToolBar;
 
-public class GPTestingUtil {
+public class GpTestingUtil {
 
 	/** An enumeration of available test-atlases **/
-	public enum Atlas {
+	public enum TestAtlas {
 		// TODO Create atype "new" that creates a new atlas in tmp dir
-		small, iida2, rasters
-	}
+		small("/atlases/ChartDemoAtlas/atlas.gpa"), rasters(
+				"/atlases/rastersAtlas/atlas.gpa");
 
+		private final String resourceLocation;
+
+		TestAtlas(String resourceLocation) {
+			this.resourceLocation = resourceLocation;
+		}
+
+		public String getReslocation() {
+			return resourceLocation;
+		}
+
+		public AtlasConfigEditable getAce() {
+			// System.out.println("Start loading test atlas config ...");
+			try {
+				return getAtlasConfigE(DataUtilities.urlToFile(getUrl())
+						.getParent());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		public URL getUrl() {
+			return GpTestingUtil.class.getResource(getReslocation());
+		}
+
+		public File getFile() {
+			return DataUtilities.urlToFile(getUrl());
+		}
+	}
 
 	public static AtlasConfigEditable getAtlasConfigE(String atlasDir)
 			throws FactoryException, TransformException, AtlasException,
 			SAXException, IOException, ParserConfigurationException {
+
+		AVUtil.initAtlasLogging();
 
 		AtlasViewerGUI.setupResLoMan(new String[] { atlasDir });
 
@@ -97,12 +125,13 @@ public class GPTestingUtil {
 	 * @throws TransformException
 	 * @throws FactoryException
 	 * @throws AtlasException
-	 * @Deprecated use {@link #getAtlasConfigE(Atlas)} with {@link Atlas.iida2}
+	 * @Deprecated use {@link #getAtlasConfigE(TestAtlas)} with
+	 *             {@link TestAtlas.iida2}
 	 */
 	public static AtlasConfigEditable getAtlasConfigE() throws AtlasException,
 			FactoryException, TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		return getAtlasConfigE(Atlas.small);
+		return getAtlasConfigE(TestAtlas.small);
 	}
 
 	public static DpLayerVectorFeatureSource getCities(AtlasConfigEditable ace) {
@@ -117,55 +146,24 @@ public class GPTestingUtil {
 		return new AtlasMapLegend(gmp, map, ace, mptb);
 	}
 
-	public static AtlasConfigEditable getAtlasConfigE(Atlas type)
+	public static AtlasConfigEditable getAtlasConfigE(TestAtlas type)
 			throws AtlasException, FactoryException, TransformException,
 			SAXException, IOException, ParserConfigurationException {
 
-		try {
-			URL log4jURL = AtlasViewerGUI.class.getClassLoader().getResource(
-					"/" + "av_log4j.xml");
-			System.out.println("Configuring log4j from " + log4jURL);
-			if (log4jURL == null) {
-				log4jURL = GPTestingUtil.class.getClassLoader().getResource(
-						"av_log4j.xml");
-				System.out.println("Configuring log4j from " + log4jURL);
-			}
-			DOMConfigurator.configure(log4jURL);
-		} catch (Throwable e) {
-			ExceptionDialog.show(null, e);
-		}
-
-		// System.out.println("Start loading test atlas config ...");
-		switch (type) {
-		case small: {
-
-			String atlasChartDemoAtlasURL = "/atlases/ChartDemoAtlas/atlas.gpa";
-			URL resourceURL = GPTestingUtil.class
-					.getResource(atlasChartDemoAtlasURL);
-			assertNotNull(atlasChartDemoAtlasURL + " not found as resource!",
-					resourceURL);
-			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL)
-					.getParent());
-		}
-		case rasters: {
-			String atlasRastersURL = "/atlases/rastersAtlas/atlas.gpa";
-			URL resourceURL = GPTestingUtil.class.getResource(atlasRastersURL);
-			assertNotNull(atlasRastersURL + " not found as resource!",
-					resourceURL);
-			return getAtlasConfigE(DataUtilities.urlToFile(resourceURL)
-					.getParent());
-		}
-		case iida2: {
-			if (SystemUtils.IS_OS_LINUX) {
-				// For Stefan:
-				return getAtlasConfigE("/home/stefan/Desktop/GP/Atlanten/IIDA2/IIDA2 Arbeitskopie");
-			} else {
-				// For Martin:
-				return getAtlasConfigE("../../Daten/AndiAtlas_1.2");
-			}
-		}
-		}
-		throw new RuntimeException("JUnit testing data not found");
+		return type.getAce();
+		// switch (type) {
+		// case iida2: {
+		// if (SystemUtils.IS_OS_LINUX) {
+		// // For Stefan:
+		// return
+		// getAtlasConfigE("/home/stefan/Desktop/GP/Atlanten/IIDA2/IIDA2 Arbeitskopie");
+		// } else {
+		// // For Martin:
+		// return getAtlasConfigE("../../Daten/AndiAtlas_1.2");
+		// }
+		// }
+		// }
+		// throw new RuntimeException("JUnit testing data not found");
 	}
 
 	public static DpLayerVectorFeatureSource getCities() throws AtlasException,
@@ -173,21 +171,22 @@ public class GPTestingUtil {
 			ParserConfigurationException {
 		return getCities(getAtlasConfigE());
 	}
-//
-//	public static void showJMapPane(org.geotools.swing.JMapPane mapPane)
-//			throws InterruptedException {
-//		JDialog dialog = new JDialog();
-//		mapPane.setMinimumSize(new Dimension(500, 500));
-//		mapPane.setPreferredSize(new Dimension(500, 500));
-//		mapPane.setSize(new Dimension(500, 500));
-//		dialog.setContentPane(mapPane);
-//		dialog.pack();
-//		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//
-//		TestingUtil.testGui(dialog);
-//
-//		dialog.dispose();
-//	}
+
+	//
+	// public static void showJMapPane(org.geotools.swing.JMapPane mapPane)
+	// throws InterruptedException {
+	// JDialog dialog = new JDialog();
+	// mapPane.setMinimumSize(new Dimension(500, 500));
+	// mapPane.setPreferredSize(new Dimension(500, 500));
+	// mapPane.setSize(new Dimension(500, 500));
+	// dialog.setContentPane(mapPane);
+	// dialog.pack();
+	// dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+	//
+	// TestingUtil.testGui(dialog);
+	//
+	// dialog.dispose();
+	// }
 
 	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace)
 			throws Exception {

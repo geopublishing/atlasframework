@@ -15,9 +15,12 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -31,6 +34,17 @@ import skrueger.swing.formatter.MbDecimalFormatter;
 public class GpUtil {
 
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
+
+	/**
+	 * // Setting up the logger from a XML configuration file. We do that gain
+	 * // in GPPros, as it outputs log messages first. Does not change the
+	 * configuration if there are already appenders defined.
+	 */
+	public static void initGpLogging() throws FactoryConfigurationError {
+		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
+			return;
+		DOMConfigurator.configure(GPProps.class.getResource("/gp_log4j.xml"));
+	}
 
 	/**
 	 * This {@link IOFileFilter} returns <code>false</code> for files that

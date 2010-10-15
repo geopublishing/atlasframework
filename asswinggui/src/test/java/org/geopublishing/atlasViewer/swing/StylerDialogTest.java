@@ -38,7 +38,7 @@ public class StylerDialogTest {
 
 		AtlasStyler as = new AtlasStyler(featureSource_polygon);
 
-		if (!TestingUtil.INTERACTIVE)
+		if (!TestingUtil.isInteractive())
 			return;
 
 		StylerDialog stylerDialog = new StylerDialog(null, as);

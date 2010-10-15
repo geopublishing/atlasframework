@@ -9,7 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -24,8 +24,8 @@ public class DpEntryTest {
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
 
-		AtlasConfigEditable atlasConfig = GPTestingUtil
-				.getAtlasConfigE(GPTestingUtil.Atlas.small);
+		AtlasConfigEditable atlasConfig = GpTestingUtil
+				.getAtlasConfigE(GpTestingUtil.TestAtlas.small);
 
 		DataPool dataPool = atlasConfig.getDataPool();
 		int dpeWithChartCount = 0;

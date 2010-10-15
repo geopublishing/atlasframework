@@ -107,6 +107,12 @@ import sun.tools.jar.Main;
  */
 public class JarExportUtil {
 
+	/** Subfolder in the export atlas directory for the JWS version of the atlas **/
+	public static final String JWS = "JWS";
+	/**
+	 * Subfolder in the export atlas directory for the DISK version of the atlas
+	 **/
+	public static final String DISK = "DISK";
 	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
 	public static final String JSMOOTH_PROJEKT_RESOURCE = "/export/jsmooth/atlas.jsmooth";
 	/** Location of a JSMOOTH resource describing how to create the atlas.exe **/
@@ -180,7 +186,7 @@ public class JarExportUtil {
 	private static final String LIB_DIR = ".";
 
 	/**
-	 * When exporting in DISK mode, the while application is put into a
+	 * When exporting in DISK mode, the whole application is put into a
 	 * DISK_SUB_DIR and only austart.inf, start.sh and atlas.exe reside in the
 	 * main directory.<br/>
 	 * Attention: This folder-name is also hard-coded into
@@ -427,6 +433,9 @@ public class JarExportUtil {
 	 **/
 	private HashMap<String, URL> jarUrlsFromClassPath = null;
 
+	/** Automatically create a ZIP if eported to DISK **/
+	private boolean zipDiskAfterExport = false;
+
 	/**
 	 * Initializes an {@link JarExportUtil} object to do the real work.
 	 * 
@@ -459,7 +468,7 @@ public class JarExportUtil {
 
 		// Create final export folders
 		if (toDisk) {
-			targetDirDISK = new File(exportDirectory, "DISK");
+			targetDirDISK = new File(exportDirectory, DISK);
 			// LOGGER.debug("Deleting old files...");
 			try {
 				FileUtils.deleteDirectory(targetDirDISK);
@@ -473,7 +482,7 @@ public class JarExportUtil {
 		}
 
 		if (toJws) {
-			targetDirJWS = new File(exportDirectory, "JWS");
+			targetDirJWS = new File(exportDirectory, JWS);
 			// LOGGER.debug("Deleting old files...");
 			try {
 				FileUtils.deleteDirectory(targetDirJWS);
@@ -1060,7 +1069,7 @@ public class JarExportUtil {
 	 * 
 	 * @throws IOException
 	 */
-	private void copyUncompressFiles() throws IOException {
+	private void copyUncompressedFiles() throws IOException {
 
 		final File[] filesToCopy = ace.getAtlasDir().listFiles(
 				filterForRootLevelFiles);
@@ -1905,10 +1914,14 @@ public class JarExportUtil {
 			// putting them in a JAR. This can be usefull for example for PDF
 			// files that should be referencable from within the atlas, but also
 			// reside uncompressed on the CD root directory.
-			copyUncompressFiles();
+			copyUncompressedFiles();
 
 			if (SystemUtils.IS_OS_LINUX)
 				adjustRights();
+
+			if (toDisk && zipDiskAfterExport) {
+				zipDiskDir(targetDirDISK);
+			}
 
 		} catch (final AtlasCancelException cancel) {
 			// // In that case we delete the target directory.
@@ -1924,6 +1937,23 @@ public class JarExportUtil {
 			// Whatever happened, we have to delete the temp dir
 			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
 			deleteOldTempExportDirs();
+		}
+	}
+
+	/**
+	 * @param targetDirDISK2
+	 */
+	public void zipDiskDir(File targetDirDISK2) {
+		File zipFile = new File(targetDirDISK2.getParent(), ace.getBaseName()
+				+ ".zip");
+
+		info("Create " + zipFile.getName());
+		try {
+			IOUtil.zipDir(targetDirDISK2, zipFile, targetDirDISK2);
+
+		} catch (Exception e) {
+			throw new AtlasExportException("Failed to create ZIP file "
+					+ IOUtil.escapePath(zipFile), e);
 		}
 	}
 
@@ -2339,6 +2369,23 @@ public class JarExportUtil {
 	 */
 	public File getTempDir() {
 		return tempDir;
+	}
+
+	/**
+	 * If <code>true</code>, an exported atlas DISK folder will automatically be
+	 * zipped with a nice filename.
+	 */
+	public boolean isZipDiskAfterExport() {
+		return zipDiskAfterExport;
+	}
+
+	/**
+	 * @param zipDiskAfterExport
+	 *            If <code>true</code>, an exported atlas DISK folder will
+	 *            automatically be zipped with a nice filename.
+	 */
+	public void setZipDiskAfterExport(boolean zipDiskAfterExport) {
+		this.zipDiskAfterExport = zipDiskAfterExport;
 	}
 
 }

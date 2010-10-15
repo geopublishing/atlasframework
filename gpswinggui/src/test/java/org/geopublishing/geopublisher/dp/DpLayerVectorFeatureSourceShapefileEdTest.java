@@ -13,8 +13,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.feature.FeatureCollection;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -48,7 +48,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 	public void testImportArabic() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException, URISyntaxException {
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
 		URL url = TestingUtil.TestDatasets.arabicInHeader.getUrl();
 		

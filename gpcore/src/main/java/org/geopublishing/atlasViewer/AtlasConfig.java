@@ -47,7 +47,7 @@ import skrueger.swing.Disposable;
  * @author Stefan Alfons Tzeggai
  */
 public class AtlasConfig implements Disposable {
-	
+
 	/** Default JNLP base URL for new atlases **/
 	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS = "http://www.geopublishing.org/atlases/myatlas/";
 
@@ -522,4 +522,14 @@ public class AtlasConfig implements Disposable {
 		this.jnlpBaseUrl = jnlpBaseUrl;
 	}
 
+	/**
+	 * @return A ASCII only simple name for this atlas. Derived from
+	 *         getJnlpBaseUrl at the moment.
+	 */
+	public String getBaseName() {
+		String bn = getJnlpBaseUrl();
+		return bn.substring(
+				bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
+				bn.length() - 1);
+	}
 }

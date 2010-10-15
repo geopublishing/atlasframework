@@ -56,13 +56,13 @@ import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Mark;
@@ -591,13 +591,15 @@ public class SVGSelector extends JDialog {
 	 * @throws MalformedURLException
 	 */
 	public static void main(String[] args) throws MalformedURLException {
-		try {
-			final URL log4jURL = ClassLoader.getSystemResource("av_log4j.xml");
-			System.out.println("Configuring log4j from " + log4jURL);
-			DOMConfigurator.configure(log4jURL);
-		} catch (Exception e) {
-			LOGGER.error(e);
-		}
+//		try {
+//			final URL log4jURL = ClassLoader.getSystemResource("av_log4j.xml");
+//			System.out.println("Configuring log4j from " + log4jURL);
+//			DOMConfigurator.configure(log4jURL);
+//		} catch (Exception e) {
+//			LOGGER.error(e);
+//		}
+		AVUtil.initAtlasLogging();
+		
 		SVGSelector selector = new SVGSelector(null, FeatureUtil
 				.createFeatureType(Point.class).getGeometryDescriptor(), null);
 		selector.setVisible(true);

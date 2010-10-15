@@ -136,7 +136,7 @@ public class GpFrame extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if (gp.closeAtlas()) {
+				if (gp.closeAtlas(null)) {
 
 					gp.exitGP(0);
 				}
@@ -259,7 +259,7 @@ public class GpFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gp.closeAtlas();
+				gp.closeAtlas(null);
 			}
 		});
 		closeAtlasMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W,
@@ -653,7 +653,8 @@ public class GpFrame extends JFrame {
 	 *         {@link GeopublisherGUI}
 	 */
 	private JMenu getChangeAtlasLangJMenu() {
-		SwingUtil.checkOnEDT();;
+		SwingUtil.checkOnEDT();
+		;
 
 		AtlasConfigEditable ace = gp.getAce();
 
@@ -709,7 +710,8 @@ public class GpFrame extends JFrame {
 	 *         {@link GeopublisherGUI}
 	 */
 	private JMenu getChangeGpLangJMenu() {
-		SwingUtil.checkOnEDT();;
+		SwingUtil.checkOnEDT();
+		;
 
 		// AtlasConfigEditable ace = gp.getAce();
 

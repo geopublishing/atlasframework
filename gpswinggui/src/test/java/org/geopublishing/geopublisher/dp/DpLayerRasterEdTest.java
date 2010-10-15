@@ -15,8 +15,8 @@ import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geotools.map.DefaultMapLayer;
 import org.junit.After;
@@ -71,7 +71,7 @@ public class DpLayerRasterEdTest {
 	public static void setupAndLoadAtlas() throws AtlasException,
 			FactoryException, TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		ace = GPTestingUtil.getAtlasConfigE(Atlas.rasters);
+		ace = GpTestingUtil.getAtlasConfigE(TestAtlas.rasters);
 	}
 
 	File atlasExportTesttDir;
@@ -137,7 +137,7 @@ public class DpLayerRasterEdTest {
 
 	@Before
 	public void setupTest() {
-		atlasExportTesttDir = GPTestingUtil.createAtlasExportTesttDir();
+		atlasExportTesttDir = GpTestingUtil.createAtlasExportTesttDir();
 	}
 
 	@After

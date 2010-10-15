@@ -32,7 +32,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
-import org.geopublishing.geopublisher.GPTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.junit.After;
@@ -52,8 +52,8 @@ public class JarExportUtilTest {
 
 	@Before
 	public void setUp() throws Exception {
-		atlasExportTesttDir = GPTestingUtil.createAtlasExportTesttDir();
-		atlasConfig = GPTestingUtil.getAtlasConfigE(GPTestingUtil.Atlas.small);
+		atlasExportTesttDir = GpTestingUtil.createAtlasExportTesttDir();
+		atlasConfig = GpTestingUtil.getAtlasConfigE(GpTestingUtil.TestAtlas.small);
 	}
 
 	@After

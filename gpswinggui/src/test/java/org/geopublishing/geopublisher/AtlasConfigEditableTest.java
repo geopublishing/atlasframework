@@ -11,7 +11,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -23,7 +23,7 @@ public class AtlasConfigEditableTest {
 	public void testGetUsedMaps() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
 		assertNotNull(ace.getJnlpBaseUrl());
 		assertEquals(AtlasConfig.HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS,

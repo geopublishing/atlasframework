@@ -28,7 +28,7 @@ public class EditAttributesJDialogTest {
 	@BeforeClass
 	public static void setUp() throws Exception {
 
-		AtlasConfigEditable atlasConfigE = GPTestingUtil.getAtlasConfigE();
+		AtlasConfigEditable atlasConfigE = GpTestingUtil.getAtlasConfigE();
 		for (DpEntry dpe : atlasConfigE.getDataPool().values()) {
 			if (dpe instanceof DpLayerRasterPyramid) {
 				pyr = (DpLayerRasterPyramid) dpe;

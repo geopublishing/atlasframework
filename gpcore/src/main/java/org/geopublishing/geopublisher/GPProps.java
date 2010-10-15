@@ -19,7 +19,6 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -133,12 +132,11 @@ public abstract class GPProps {
 				return defaultValue;
 			return Integer.valueOf(string.trim());
 		} catch (final Exception e) {
-			LOGGER
-					.warn(
-							"The property value saved for "
-									+ key
-									+ " can't be converted to Integer. Returning default value " // i8nlog
-									+ defaultValue, e);
+			LOGGER.warn(
+					"The property value saved for "
+							+ key
+							+ " can't be converted to Integer. Returning default value " // i8nlog
+							+ defaultValue, e);
 		}
 		return defaultValue;
 	}
@@ -194,7 +192,7 @@ public abstract class GPProps {
 
 		// Setting up the logger from a XML configuration file. We do that gain
 		// in GPPros, as it outputs log messages first.
-		DOMConfigurator.configure(GPProps.class.getResource("/gp_log4j.xml"));
+		GpUtil.initGpLogging();
 
 		GPProps.propertiesFilename = propertiesFilename;
 		GPProps.appDirname = appDirname;
@@ -331,7 +329,7 @@ public abstract class GPProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void upgrade() {
-		LOGGER.debug("upgrade from "+PROPERTIES_FILENAME);
+		LOGGER.debug("upgrade from " + PROPERTIES_FILENAME);
 
 		final URL inJar = GpUtil.class.getResource("/" + propertiesFilename
 				+ DEFAULTS_POSTFIX);
@@ -342,18 +340,18 @@ public abstract class GPProps {
 			LOGGER.error(e);
 		}
 
-		set(Keys.NativeLibs, virginProps
-				.getProperty(Keys.NativeLibs.toString()));
-		set(Keys.signingAlias, virginProps.getProperty(Keys.signingAlias
-				.toString()));
-		set(Keys.signingkeystorePassword, virginProps
-				.getProperty(Keys.signingkeystorePassword.toString()));
-		set(Keys.MinimumJavaVersion, virginProps
-				.getProperty(Keys.MinimumJavaVersion.toString()));
-		set(Keys.JWSStartScript, virginProps.getProperty(Keys.JWSStartScript
-				.toString()));
-		set(Keys.bugReportEmail, virginProps.getProperty(Keys.bugReportEmail
-				.toString()));
+		set(Keys.NativeLibs,
+				virginProps.getProperty(Keys.NativeLibs.toString()));
+		set(Keys.signingAlias,
+				virginProps.getProperty(Keys.signingAlias.toString()));
+		set(Keys.signingkeystorePassword,
+				virginProps.getProperty(Keys.signingkeystorePassword.toString()));
+		set(Keys.MinimumJavaVersion,
+				virginProps.getProperty(Keys.MinimumJavaVersion.toString()));
+		set(Keys.JWSStartScript,
+				virginProps.getProperty(Keys.JWSStartScript.toString()));
+		set(Keys.bugReportEmail,
+				virginProps.getProperty(Keys.bugReportEmail.toString()));
 	}
 
 	@Override

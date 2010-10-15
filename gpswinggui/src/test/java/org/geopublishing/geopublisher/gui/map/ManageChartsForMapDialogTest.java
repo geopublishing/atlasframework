@@ -8,8 +8,8 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPTestingUtil;
-import org.geopublishing.geopublisher.GPTestingUtil.Atlas;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 
 import schmitzm.geotools.gui.GeoMapPane;
@@ -24,7 +24,7 @@ public class ManageChartsForMapDialogTest {
 		Map map = null;
 
 		DpLayerVectorFeatureSource dplv = null;
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE(Atlas.small);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 		for (Map m : ace.getMapPool().values()) {
 			for (DpRef<DpLayer<?, ? extends ChartStyle>> dpe : m.getLayers()) {
 

@@ -22,7 +22,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.net.URL;
 import java.util.Arrays;
 
 import javax.swing.AbstractAction;
@@ -41,13 +40,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import schmitzm.geotools.feature.FeatureUtil;
@@ -754,8 +753,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	public static void main(String[] args) {
 		// Setting up the logger from a XML configuration file (actually the
 		// file is in the av.jar)
-		URL log4jXmlUrl = AtlasStyler.class.getResource("as_log4j.xml");
-		DOMConfigurator.configure(log4jXmlUrl);
+//		URL log4jXmlUrl = AtlasStyler.class.getResource("as_log4j.xml");
+//		DOMConfigurator.configure(log4jXmlUrl);
+		AVUtil.initAtlasLogging();
 
 		SymbolSelectorGUI selectorGUI = new SymbolSelectorGUI(null, null,
 				new SinglePolygonSymbolRuleList(""));

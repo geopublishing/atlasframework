@@ -41,7 +41,7 @@ public class ACETranslationPrinterTest {
 	public void testPrint() throws DocNameMissingException, IOException,
 			AtlasException, FactoryException, TransformException, SAXException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GPTestingUtil.getAtlasConfigE();
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE();
 		assertNotNull(ace);
 
 		/**

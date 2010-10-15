@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CancellationException;
@@ -45,9 +44,9 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
@@ -64,6 +63,7 @@ import org.geopublishing.geopublisher.ACETranslationPrinter;
 import org.geopublishing.geopublisher.AMLImportEd;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
+import org.geopublishing.geopublisher.CliOptions;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.export.JarExportUtil;
@@ -143,33 +143,43 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * Creates or returns the single instance of Geopublisher
 	 */
-	public static GeopublisherGUI getInstance() {
+	public static GeopublisherGUI getInstance(boolean askToOpenLastAtlas) {
 		if (instance == null) {
 			LOGGER.error(
 					"GeopublisherGUI instance is requested without arguments and it doesn't exists yet!",
 					new RuntimeException());
-			instance = new GeopublisherGUI(new ArrayList<String>());
+			instance = new GeopublisherGUI(askToOpenLastAtlas);
 		}
 		return instance;
 	}
 
 	/**
-	 * Creates and returns a single instance of Geopublisher, evaluating any
-	 * arguments passed on the command line.
+	 * Creates or returns the single instance of Geopublisher, if it has not yet
+	 * been created, the user will not be asked to open any last opened atlas.
 	 */
-	public static GeopublisherGUI getInstance(final List<String> args) {
-		if (instance != null) {
-			LOGGER.error(
-					"Geopublisher instance is requested with arguments but it exists already!",
-					new RuntimeException());
-			instance = null;
-		}
-		instance = new GeopublisherGUI(args);
-		return instance;
+	public static GeopublisherGUI getInstance() {
+		return getInstance(false);
 	}
+
+	// /**
+	// * Creates and returns a single instance of Geopublisher, evaluating any
+	// * arguments passed on the command line.
+	// */
+	// public static GeopublisherGUI getInstance(final String[] args) {
+	// if (instance != null) {
+	// LOGGER.error(
+	// "Geopublisher instance is requested with arguments but it exists already!",
+	// new RuntimeException());
+	// instance = null;
+	// }
+	// instance = new GeopublisherGUI();
+	// return instance;
+	// }
 
 	/**
 	 * Start routine for the {@link GeopublisherGUI}
+	 * 
+	 * @throws ParseException
 	 */
 	public static void main(final String[] args) {
 
@@ -185,15 +195,30 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// e.printStackTrace();
 		// }
 
-		String[] st = System.getProperty("java.class.path").split(":");
-		LOGGER.debug("Classpath:");
-		System.out.println("Classpath:");
-		for (String t : st) {
-			System.out.println(t);
-			LOGGER.debug(t);
+		// String[] st = System.getProperty("java.class.path").split(":");
+		// LOGGER.debug("Classpath:");
+		// System.out.println("Classpath:");
+		// for (String t : st) {
+		// System.out.println(t);
+		// LOGGER.debug(t);
+		// }
+
+		if (args.length == 0) {
+			// Starting Geopublisher without any arguments
+			GeopublisherGUI.getInstance(true);
+		} else {
+			int resultCode;
+			resultCode = CliOptions.performArgs(args);
+			if (resultCode != 0) {
+
+				if (instance != null) {
+					instance.exitGP(resultCode);
+				}
+
+				System.exit(resultCode);
+			}
 		}
 
-		getInstance(Arrays.asList(args));
 	}
 
 	/**
@@ -223,20 +248,18 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @param args
 	 *            command line arguments
 	 * **/
-	public GeopublisherGUI(final List<String> args) {
+	public GeopublisherGUI(final boolean askToOpenLastAtlas) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
-		// Setting up the logger from a XML configuration file. We do that gain
-		// in GPPros, as it outputs log messages first.
-		DOMConfigurator.configure(GPProps.class.getResource("/gp_log4j.xml"));
+		GpUtil.initGpLogging();
 
 		/** Output information about the GPL license **/
 		ReleaseUtil.logGPLCopyright(LOGGER);
 
 		System.setProperty("file.encoding", "UTF-8");
 
-		evaluateArgs(args);
+		// evaluateArgs(args);
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of
@@ -275,11 +298,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				try {
 					AVSwingUtil.initEPSG(getJFrame());
 
-					// Only open the load atlas dialog if we have already
-					// opened an atlas before
-					if (!GPProps.get(GPProps.Keys.LastOpenAtlasFolder, ".")
-							.equals("."))
-						loadAtlas();
+					if (askToOpenLastAtlas) {
+						// Only open the load atlas dialog if we have already
+						// opened an atlas before
+						if (!GPProps.get(GPProps.Keys.LastOpenAtlasFolder, ".")
+								.equals(".")) {
+							loadAtlas();
+						}
+					}
+
 				} catch (final Exception e) {
 					ExceptionDialog.show(getJFrame(), e);
 				}
@@ -657,24 +684,32 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * Closes the open Atlas if any Atlas is open. Asks the user if he wants to
 	 * save it before closing.
 	 * 
+	 * @param save
+	 *            if <code>null</code> the user will be asked whether he wants
+	 *            to save.
+	 * 
 	 * @return false only if the Cancel button was pressed and the atlas was not
 	 *         closed
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public boolean closeAtlas() {
+	public boolean closeAtlas(Boolean save) {
 
 		getJFrame().saveWindowPosition();
 
 		if (ace == null)
 			return true;
 
-		SwingUtil.checkOnEDT();;
+		int res;
+		if (save == null) {
+			SwingUtil.checkOnEDT();
 
-		final int res = JOptionPane.showConfirmDialog(getJFrame(),
-				GpUtil.R("CloseAtlasDialog.SaveAtlas.msg"),
-				GpUtil.R("CloseAtlasDialog.SaveAtlas.title"),
-				JOptionPane.YES_NO_CANCEL_OPTION);
+			res = JOptionPane.showConfirmDialog(getJFrame(),
+					GpUtil.R("CloseAtlasDialog.SaveAtlas.msg"),
+					GpUtil.R("CloseAtlasDialog.SaveAtlas.title"),
+					JOptionPane.YES_NO_CANCEL_OPTION);
+		} else
+			res = save ? JOptionPane.YES_OPTION : JOptionPane.NO_OPTION;
 
 		if (res == JOptionPane.YES_OPTION) {
 			/**
@@ -711,13 +746,14 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				listenToMapPoolChangesAndClosePreviewAtlas);
 		ace.getDataPool().removeChangeListener(
 				listenToDataPoolChangesAndCloseAtlasViewerPreview);
-		
-		GpSwingUtil.cleanFolder(ace, getJFrame());
+
+		GpSwingUtil.cleanFolder(ace, save == null ? getJFrame() : null);
 
 		ace.dispose();
-		
+
 		ace = null;
 
+		// Update the GUI, no not having loaded an atlas
 		getJFrame().updateAce();
 
 		return true;
@@ -730,7 +766,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	private void createNewAtlas() {
 
-		if (!closeAtlas())
+		if (!closeAtlas(null))
 			return;
 		// If there was an open Atlas, it is closed now.
 
@@ -842,36 +878,43 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		getJFrame().updateMenu();
 	}
 
-	/**
-	 * Evaluates the command line arguments. May react with GUI or commandline
-	 * messages.
-	 */
-	private void evaluateArgs(final List<String> args) {
-		boolean printHelpAndExit = false;
-
-		for (final String arg : args) {
-			boolean understood = false;
-
-			// Was help requested?
-			if (arg.equalsIgnoreCase("-h") || arg.equalsIgnoreCase("--help")
-					|| arg.equalsIgnoreCase("-?") || arg.equalsIgnoreCase("/?")) {
-				understood = true;
-				printHelpAndExit = true;
-			}
-
-			if (!understood) {
-				LOGGER.info("Not understood: " + arg);
-				printHelpAndExit = true;
-				break;
-			}
-
-		}
-
-		if (printHelpAndExit) {
-			printHelpAndExit();
-		}
-
-	}
+	// /**
+	// * Evaluates the command line arguments. May react with GUI or commandline
+	// * messages.
+	// * @throws ParseException
+	// */
+	// private void evaluateArgs(final String[] args) throws ParseException {
+	// // boolean printHelpAndExit = false;
+	// //
+	// // for (final String arg : args) {
+	// // boolean understood = false;
+	// //
+	// // // Was help requested?
+	// // if (arg.equalsIgnoreCase("-h") || arg.equalsIgnoreCase("--help")
+	// // || arg.equalsIgnoreCase("-?") || arg.equalsIgnoreCase("/?")) {
+	// // understood = true;
+	// // printHelpAndExit = true;
+	// // }
+	// //
+	// // // Was help requested?
+	// // if (arg.equalsIgnoreCase("-e") || arg.equalsIgnoreCase("--export")
+	// // || arg.equalsIgnoreCase("-?") || arg.equalsIgnoreCase("/?")) {
+	// // understood = true;
+	// // printHelpAndExit = true;
+	// // }
+	// //
+	// // if (!understood) {
+	// // LOGGER.info("Not understood: " + arg);
+	// // printHelpAndExit = true;
+	// // break;
+	// // }
+	// //
+	// // }
+	// //
+	// // if (printHelpAndExit) {
+	// // printHelpAndExit();
+	// // }
+	// }
 
 	/**
 	 * Exists Geopublisher. Asks to save and may be canceled by the user.
@@ -884,7 +927,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		JNLPUtil.registerAsSingleInstance(GeopublisherGUI.this, false);
 
 		if (ace != null) {
-			if (closeAtlas() == false)
+			if (closeAtlas(null) == false)
 				return;
 			if (ace != null)
 				return;
@@ -897,7 +940,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			gpJFrame.dispose();
 
 		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(AVUtil.class)
-				+ " terminated normally.");
+				+ " terminating with exitcode " + exitCode);
 
 		System.exit(exitCode);
 	}
@@ -917,7 +960,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public GpFrame getJFrame() {
 		if (gpJFrame == null) {
-			SwingUtil.checkOnEDT();;
+			SwingUtil.checkOnEDT();
+			;
 
 			// Disabled, because it looked ugly!
 			// /**
@@ -987,9 +1031,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public void loadAtlas() {
 
-		SwingUtil.checkOnEDT();;
+		SwingUtil.checkOnEDT();
 
-		if (!closeAtlas())
+		if (!closeAtlas(null))
 			return;
 
 		// **********************************************************************
@@ -1030,11 +1074,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * Closes any open atlas opens an atlas from the given directory.
 	 */
-	private void loadAtlasFromDir(final File atlasDir) {
+	public void loadAtlasFromDir(final File atlasDir) {
 
-		SwingUtil.checkOnEDT();;
+		SwingUtil.checkOnEDT();
 
-		if (!closeAtlas())
+		if (!closeAtlas(null))
 			return;
 
 		GPProps.set(GPProps.Keys.LastOpenAtlasFolder,
@@ -1117,6 +1161,10 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			System.exit(-1);
 		} else
 			System.exit(-1);
+	}
+
+	public static boolean isInstanciated() {
+		return instance != null;
 	}
 
 }
