@@ -695,7 +695,7 @@ public class JarExportUtil {
 					} catch (final Exception e) {
 
 						if (packNotExistingErrorAlreadyShown == false) {
-							LOGGER.warn(GpUtil.R("Export.Error.Pack200"), e);
+							LOGGER.warn(GpUtil.R("Export.Error.Pack200")+" "+e.getMessage());
 							// ExceptionDialog.show(null, new
 							// AtlasException(
 							// GpUtil.R("Export.Error.Pack200"), e));

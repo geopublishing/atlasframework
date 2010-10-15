@@ -259,8 +259,18 @@ public class JarExportUtilTest {
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME)
 				.exists());
-		assertTrue(new File(atlasExportTesttDir, "JWS/"
-				+ JarExportUtil.SCHMITZM_JARNAME).exists());
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.SCHMITZM_JARNAME).exists());
+
+		assertTrue("The resources are still in the DISK and JWS folder",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.ARJAR_FILENAME).exists());
+
+		assertTrue("The resources are still in the DISK and JWS folder",
+				new File(atlasExportTesttDir, "DISK/"
+						+ JarExportUtil.ARJAR_FILENAME).exists());
 
 		// Test start atlas..
 		if (TestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
@@ -317,7 +327,6 @@ public class JarExportUtilTest {
 				createdJar.getAbsolutePath());
 		dpeJarFileExpected.delete();
 	}
-	
 
 	@Test
 	public void testJSmooth() throws Exception {
