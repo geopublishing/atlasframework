@@ -264,13 +264,15 @@ public class JarExportUtilTest {
 				new File(atlasExportTesttDir, "JWS/"
 						+ JarExportUtil.SCHMITZM_JARNAME).exists());
 
-		assertTrue("The resources are still in the DISK and JWS folder",
-				new File(atlasExportTesttDir, "JWS/"
-						+ JarExportUtil.ARJAR_FILENAME).exists());
+		File file = new File(atlasExportTesttDir, "JWS/"
+				+ JarExportUtil.ARJAR_FILENAME);
+		assertTrue("The resources '" + file.getAbsolutePath()
+				+ "' must exist in the JWS folder", file.exists());
 
-		assertTrue("The resources are still in the DISK and JWS folder",
-				new File(atlasExportTesttDir, "DISK/"
-						+ JarExportUtil.ARJAR_FILENAME).exists());
+		file = new File(atlasExportTesttDir, "DISK/"
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.ARJAR_FILENAME);
+		assertTrue("The resources '" + file.getAbsolutePath()
+				+ "' must exist in the DISK folder", file.exists());
 
 		// Test start atlas..
 		if (TestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
