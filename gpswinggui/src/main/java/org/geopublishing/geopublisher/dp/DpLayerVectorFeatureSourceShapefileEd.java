@@ -269,8 +269,9 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					FeatureSource<SimpleFeatureType, SimpleFeature> fs = store
 							.getFeatureSource();
 
+					// TODO !??!
 					copyImportExport(targetDir, fs,
-							charset = Charset.forName("utf-8"), crs, status);
+							charset, crs, status);
 
 				} else {
 					/*******************************************************************
@@ -358,7 +359,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 		// Output Shapefile will have charset in UTF-8
 		if (charset != null)
-			outputFs.setStringCharset(charset = Charset.forName("utf-8"));
+			outputFs.setStringCharset(charset );
 
 		if (forceCrs != null)
 			outputFs.forceSchemaCRS(forceCrs);

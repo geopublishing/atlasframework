@@ -732,7 +732,7 @@ public class AMLExporter {
 		/*
 		 * Saving the Charset to a .cpg file
 		 */
-		GpUtil.saveCpg(dpe);
+		GpUtil.writeCpg(dpe);
 
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,

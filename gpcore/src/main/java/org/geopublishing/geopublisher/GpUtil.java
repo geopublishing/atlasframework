@@ -165,14 +165,14 @@ public class GpUtil {
 	 * containing the name of charset. If the file already contains the same
 	 * content, it is not written (SVN friendly)
 	 */
-	public static void saveCpg(DpLayerVectorFeatureSource dpe) {
+	public static void writeCpg(DpLayerVectorFeatureSource dpe) {
 		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
 				.getAtlasConfig();
 
 		final File cpgFile = IOUtil.changeFileExt(ace.getFileFor(dpe), "cpg");
 
 		try {
-			GeoExportUtil.saveCpg(cpgFile, dpe.getCharset());
+			GeoExportUtil.writeCharset(cpgFile, dpe.getCharset());
 		} catch (Exception e) {
 			final String errMessage = "Unable to store the codepage settings for "
 					+ dpe + "\nThe export will be continued."; // i8n
