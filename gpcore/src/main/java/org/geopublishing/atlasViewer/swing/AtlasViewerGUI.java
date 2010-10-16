@@ -78,6 +78,7 @@ import skrueger.i8n.I8NUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.versionnumber.ReleaseUtil;
+import skrueger.versionnumber.ReleaseUtil.License;
 
 /**
  * {@link AtlasViewerGUI} main class
@@ -157,8 +158,8 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		// Atlas Viewer is starting
 		LOGGER.info("Starting AtlasViewer.. "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
-
-		ReleaseUtil.logLGPLCopyright(LOGGER);
+		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasViewer"));
+		
 		/*
 		 * Register this as single instance
 		 */
@@ -579,14 +580,14 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
 			// "av_log4j.xml");
 
-//			final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
-//					.getResource("av_log4j.xml");
+			// final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
+			// .getResource("av_log4j.xml");
 
-//			System.out.println("Configuring log4j from " + log4jURL);
-//			DOMConfigurator.configure(log4jURL);
-			
+			// System.out.println("Configuring log4j from " + log4jURL);
+			// DOMConfigurator.configure(log4jURL);
+
 			AVUtil.initAtlasLogging();
-			
+
 		} catch (Throwable e) {
 			ExceptionDialog.show(null, e);
 		}
@@ -932,7 +933,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		// Assuming that the language was changed, update the windows title
 		// getJFrame().setTitle("Loaded ace.getName().toString());
 
-		SwingUtil.checkOnEDT();;
+		SwingUtil.checkOnEDT();
 
 		if (languageSubMenu == null) {
 

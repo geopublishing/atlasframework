@@ -18,6 +18,9 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import skrueger.versionnumber.ReleaseUtil;
+import skrueger.versionnumber.ReleaseUtil.License;
+
 /**
  * This class manages all the command line options of Geopublisher.
  */
@@ -30,6 +33,7 @@ public class CliOptions extends Options {
 	public static final String DISK = "d";
 	public static final String JWS = "j";
 	static final String ZIPDISK = "z";
+	private static final String LICENSE = "l";
 
 	private static final Logger log = Logger.getLogger(CliOptions.class);
 
@@ -57,8 +61,11 @@ public class CliOptions extends Options {
 	public CliOptions() {
 		addOption(new Option(HELP, "help", false, "print this message"));
 
-		addOption(new Option(VERSION, "version", false,
-				"print the version information"));
+		addOption(new Option(VERSION, "verbose", false,
+				"print verbose information while running"));
+
+		addOption(new Option(LICENSE, "license", false,
+				"print license information"));
 
 		Option optAwc = new Option(AWCFOLDER, "atlas", true,
 				"folder to load the atlas from (atlas.gpa)");
@@ -125,6 +132,13 @@ public class CliOptions extends Options {
 			if (commandLine.hasOption(CliOptions.HELP)) {
 				cliOptions.printHelp();
 				exitAfterInterpret = true;
+			}
+
+			// Show license
+			if (commandLine.hasOption(CliOptions.LICENSE)) {
+				/** Output information about the GPL license **/
+				System.out.println(ReleaseUtil.getLicense(License.GPL3,
+						"Geopublisher"));
 			}
 
 			// AWC folder

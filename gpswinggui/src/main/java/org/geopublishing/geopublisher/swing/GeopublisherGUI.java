@@ -254,12 +254,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		GpUtil.initGpLogging();
 
-		/** Output information about the GPL license **/
-		ReleaseUtil.logGPLCopyright(LOGGER);
-
 		System.setProperty("file.encoding", "UTF-8");
-
-		// evaluateArgs(args);
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of

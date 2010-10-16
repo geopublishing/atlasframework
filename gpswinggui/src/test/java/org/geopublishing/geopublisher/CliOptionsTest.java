@@ -16,7 +16,6 @@ import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.lang.LangUtil;
@@ -162,17 +161,16 @@ public class CliOptionsTest {
 		new CliOptions().printHelp();
 	}
 
-	@Test
-	@Ignore
-	public void testVerbose() {
-		File expDir = GpTestingUtil.createAtlasExportTesttDir();
-
-		assertEquals(
-				0,
-				CliOptions.performArgs(new String[] { "-v", "-e",
-						expDir.toString(), "-j", "--atlas",
-						TestAtlas.small.getFile().toString() }));
-	}
+//	@Test
+//	public void testVerbose() {
+//		File expDir = GpTestingUtil.createAtlasExportTesttDir();
+//
+//		assertEquals(
+//				0,
+//				CliOptions.performArgs(new String[] { "-l", "-e",
+//						expDir.toString(), "-j", "--atlas",
+//						TestAtlas.small.getFile().toString() }));
+//	}
 
 	@Test
 	public void testLoggerCange() {

@@ -89,6 +89,7 @@ import skrueger.geotools.StyledFeatureSourceInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.i8n.Translation;
 import skrueger.versionnumber.ReleaseUtil;
+import skrueger.versionnumber.ReleaseUtil.License;
 
 /**
  * This is the main GUI for the AtlasStyler standalone. It looks like a
@@ -131,7 +132,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
 		// Output information about the LGPL license
-		ReleaseUtil.logLGPLCopyright(LOGGER);
+		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
 
 		System.setProperty("file.encoding", "UTF-8");
 
