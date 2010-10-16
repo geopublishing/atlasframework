@@ -1,5 +1,6 @@
 package org.geopublishing.geopublisher;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
@@ -46,5 +47,6 @@ public class AMLExporterTest extends AMLExporter {
 			TransformException, SAXException, IOException,
 			ParserConfigurationException, TransformerException {
 		AMLExporterTest amlExporter = new AMLExporterTest();
+		assertNotNull(amlExporter);
 	}
 }
