@@ -1,5 +1,6 @@
 package org.geopublishing.geopublisher;
 
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 
 import javax.swing.SwingUtilities;
@@ -18,6 +19,9 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import com.sun.media.sound.Toolkit;
+
+import schmitzm.swing.TestingUtil;
 import skrueger.versionnumber.ReleaseUtil;
 import skrueger.versionnumber.ReleaseUtil.License;
 
@@ -41,7 +45,7 @@ public class CliOptions extends Options {
 
 		PARSEEXCEPTION(1), AWCPARAM_MISSING(2), AWCPARAM_ILLEGAL(3), EXPORTDIR_MISSING(
 				4), EXPORTDIR_ILLEGAL(5), EXPORTDIR_NOTEMPTYNOFORCE(6), EXPORT_FAILED(
-				7);
+				7), NOHEAD(8);
 
 		private final int errCode;
 
@@ -194,6 +198,13 @@ public class CliOptions extends Options {
 				}
 			}
 
+			if (startGui && GraphicsEnvironment.isHeadless()) {
+				exitAfterInterpret = true;
+				errorDuringInterpret = Errors.NOHEAD;
+				System.err
+						.println("Can open Geopublisher windows because your environment doesn't provide a window system. You may only use pure CLI commands like export (-e).");
+			}
+
 			if (exitAfterInterpret || errorDuringInterpret != null) {
 				System.out
 						.println("Error " + errorDuringInterpret.getErrCode());
@@ -204,8 +215,8 @@ public class CliOptions extends Options {
 			/***
 			 * Start Running the commands
 			 */
-
 			if (startGui) {
+
 				final File awcFileToLoad = awcFile;
 				SwingUtilities.invokeLater(new Runnable() {
 
