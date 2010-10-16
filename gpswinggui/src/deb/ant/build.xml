@@ -31,6 +31,7 @@
 	<property name="REPO.DIR" value="/var/www/www.geopublishing.org/htdocs/repository${SNAPSHOT}" description="Path the the linux repository directory on the server" />
 	<property name="version.upstream" value="${mvn.project.version}.${mvn.buildNumber}" description="The upstream version of the .deb package, containing the svn revision" />
 	<property name="TARGETDEB" value="${TARGET.DEB.DIR}/dist/geopublisher${SNAPSHOT}_${version.upstream}-1_all.deb" />
+	<property name="PROGNAME" value="Geopublisher\$\{SNAPSHOT\}" description="the name of the program / the .deb name without any versions" />
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
