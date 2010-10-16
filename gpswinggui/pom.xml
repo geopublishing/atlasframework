@@ -164,7 +164,6 @@
 						</executions>
 					</plugin>
 
-
 					<plugin>
 						<groupId>com.mindtree.techworks.insight.releng</groupId>
 						<artifactId>maven-jsmooth-plugin</artifactId>
@@ -186,7 +185,6 @@
 							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
 						</configuration>
 					</plugin>
-
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
