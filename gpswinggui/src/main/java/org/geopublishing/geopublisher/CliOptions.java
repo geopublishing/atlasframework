@@ -191,7 +191,8 @@ public class CliOptions extends Options {
 				}
 			}
 
-			if (startGui && GraphicsEnvironment.isHeadless()) {
+			if (startGui && GraphicsEnvironment.isHeadless()
+					&& !exitAfterInterpret && errorDuringInterpret == null) {
 				exitAfterInterpret = true;
 				errorDuringInterpret = Errors.NOHEAD;
 				System.err
