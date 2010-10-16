@@ -25,6 +25,7 @@
 <project basedir="${mvn.basedir}/src/deb/ant">
 	<property name="SNAPSHOT" value="-testing" />
 	<property name="PROGNAME" value="atlasstyler${SNAPSHOT}" description="the name of the program / the .deb name without any versions" />
+	<property name="FOLDERINZIPNAME" value="AtlasStyler-${mvn.project.version}" />
 	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 	<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 	<property name="FULLZIP" value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip" description="Path to the -full.zip file that has been created by maven-assembly process." />
@@ -76,13 +77,13 @@ Technical details:
     * Supports tiled image pyramids for big raster data.
             </description>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/${PROGNAME}">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/${FOLDERINZIPNAME}" prefix="usr/share/${PROGNAME}">
 				<!-- Copy everything except the start scripts which need executable flags -->
 				<include name="**/**" />
 				<exclude name="**/*.sh" />
 			</tarfileset>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/${PROGNAME}" filemode="755">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/${FOLDERINZIPNAME}" prefix="usr/share/${PROGNAME}" filemode="755">
 				<!-- Create the start scripts with executable flag -->
 				<include name="**/*.sh" />
 			</tarfileset>

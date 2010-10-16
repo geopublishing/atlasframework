@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -715,6 +716,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
 					.getDataStore(params);
+			
+			Charset stringCharset = GeoImportUtil.readCharset(urlToShape);
+			dataStore.setStringCharset(stringCharset);
 			
 			openDatastores.add(dataStore);
 

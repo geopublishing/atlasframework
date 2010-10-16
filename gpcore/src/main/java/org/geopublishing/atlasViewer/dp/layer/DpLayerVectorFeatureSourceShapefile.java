@@ -12,6 +12,7 @@ package org.geopublishing.atlasViewer.dp.layer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -218,24 +219,25 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		if (charset == null) {
 
-			URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
+			charset = GeoImportUtil.readCharset(getUrl());
 
-			for (URL cpgUrl : cpgUrls) {
-				try {
+//			URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
+//			for (URL cpgUrl : cpgUrls) {
+//				try {
+//
+//					String charsetName = IOUtil.readURLasString(cpgUrl);
+//
+//					if (charsetName.equals(""))
+//						continue;
+//					
+//					charset = Charset.forName(charsetName);
+//					break;
+//
+//				} catch (Exception e) {
+////					 LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
+//				}
+//			}
 
-					String charsetName = IOUtil.readURLasString(cpgUrl);
-
-					if (charsetName.equals(""))
-						continue;
-					
-					charset = Charset.forName(charsetName);
-					break;
-
-				} catch (Exception e) {
-//					 LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
-				}
-			}
-			
 			return super.getCharset();
 		}
 
@@ -243,6 +245,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		return charset;
 	}
+
 
 	@Override
 	public DpLayer<FeatureSource<SimpleFeatureType, SimpleFeature>, FeatureChartStyle> copy() {
