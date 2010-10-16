@@ -118,6 +118,13 @@
 											<property name="mvn.buildNumber" value="${buildNumber}" />
 											<property name="mvn.project.version" value="${project.version}" />
 										</ant>
+										<ant target="add-deb-to-repo" inheritRefs="true"
+											antfile="${basedir}/src/deb/ant/build.xml">
+											<property name="mvn.buildNumber" value="${buildNumber}" />
+											<property name="mvn.project.version" value="${project.version}" />
+											<property name="mvn.basedir" value="${project.basedir}" />
+											<property name="mvn.project.artifactId" value="${project.artifactId}" />
+										</ant>
 									</tasks>
 								</configuration>
 							</execution>

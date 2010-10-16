@@ -24,18 +24,18 @@
 
 <project basedir="${mvn.basedir}/src/deb/ant">
 	<property name="SNAPSHOT" value="-testing" />
+	<property name="PROGNAME" value="geopublisher${SNAPSHOT}" description="the name of the program / the .deb name without any versions" />
 	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 	<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
 	<property name="FULLZIP" value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip" description="Path to the -full.zip file that has been created by maven-assembly process." />
 	<property name="TARGET.DEB.DIR" value="${mvn.basedir}/target/deb" description="Subfolder in maven target directory where all files are created." />
 	<property name="REPO.DIR" value="/var/www/www.geopublishing.org/htdocs/repository" description="Path the the linux repository directory on the server" />
 	<property name="version.upstream" value="${mvn.project.version}.${mvn.buildNumber}" description="The upstream version of the .deb package, containing the svn revision" />
-	<property name="TARGETDEB" value="${TARGET.DEB.DIR}/dist/geopublisher${SNAPSHOT}_${version.upstream}-1_all.deb" />
-	<property name="PROGNAME" value="Geopublisher\$\{SNAPSHOT\}" description="the name of the program / the .deb name without any versions" />
+	<property name="TARGETDEB" value="${TARGET.DEB.DIR}/dist/${PROGNAME}_${version.upstream}-1_all.deb" />
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
-		<desktopEntry toFile="${TARGET.DEB.DIR}/build/geopublisher${SNAPSHOT}.desktop" name="Geopublisher${SNAPSHOT}" comment="Publish maps and geoproducts easily" description="An atlas authoring system to publish maps and geoproducts easily." exec="/usr/bin/geopublisher${SNAPSHOT}" icon="/usr/share/geopublisher/geopublisher${SNAPSHOT}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
+		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Publish maps and geoproducts easily" description="An atlas authoring system to publish maps and geoproducts easily." exec="/usr/bin/${PROGNAME}" icon="/usr/share/geopublisher/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 	</target>
 
 
@@ -47,9 +47,9 @@
 		<unzip src="${FULLZIP}" dest="${TARGET.DEB.DIR}/build" description="uncompress the .zip that we are repacking as a .deb" />
 
 		<echo message="Upstream-Version is ${version.upstream}" />
-		<echo message="Icon should be at ${mvn.basedir}/../logos/geopublisher${SNAPSHOT}.xpm" />
+		<echo message="Icon should be at ${mvn.basedir}/../logos/${PROGNAME}.xpm" />
 
-		<deb todir="${TARGET.DEB.DIR}/dist" package="geopublisher${SNAPSHOT}" section="science" recommends="qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
+		<deb todir="${TARGET.DEB.DIR}/dist" package="${PROGNAME}" section="science" recommends="qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
 			<version upstream="${version.upstream}" />
 
 			<maintainer name="Stefan A. Tzeggai" email="tzeggai@wikisquare.de" />
@@ -76,25 +76,25 @@ Technical details:
     * Supports tiled image pyramids for big raster data.
             </description>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/geopublisher${SNAPSHOT}">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/${PROGNAME}">
 				<!-- Copy everything except the start scripts which need executable flags -->
 				<include name="**/**" />
 				<exclude name="**/*.sh" />
 			</tarfileset>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/geopublisher${SNAPSHOT}" filemode="755">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/Geopublisher-${mvn.project.version}" prefix="usr/share/${PROGNAME}" filemode="755">
 				<!-- Create the start scripts with executable flag -->
 				<include name="**/*.sh" />
 			</tarfileset>
 
 			<!-- icons for the desktop entries -->
-			<tarfileset file="${mvn.basedir}/../logos/geopublisher${SNAPSHOT}.xpm" prefix="usr/share/geopublisher${SNAPSHOT}" />
+			<tarfileset file="${mvn.basedir}/../logos/${PROGNAME}.xpm" prefix="usr/share/${PROGNAME}" />
 
 			<!-- start scripts for /usr/bin -->
-			<tarfileset file="${mvn.basedir}/src/deb/resources/geopublisher${SNAPSHOT}" prefix="usr/bin" filemode="755" />
+			<tarfileset file="${mvn.basedir}/src/deb/resources/${PROGNAME}" prefix="usr/bin" filemode="755" />
 
 			<!-- Application starters -->
-			<tarfileset file="${TARGET.DEB.DIR}/build/geopublisher${SNAPSHOT}.desktop" prefix="usr/share/applications" />
+			<tarfileset file="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" prefix="usr/share/applications" />
 		</deb>
 	</target>
 
