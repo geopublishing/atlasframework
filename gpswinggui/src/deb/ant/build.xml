@@ -77,13 +77,13 @@ Technical details:
     * Supports tiled image pyramids for big raster data.
             </description>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/FOLDERINZIPNAME" prefix="usr/share/${PROGNAME}">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/${FOLDERINZIPNAME}" prefix="usr/share/${PROGNAME}">
 				<!-- Copy everything except the start scripts which need executable flags -->
 				<include name="**/**" />
 				<exclude name="**/*.sh" />
 			</tarfileset>
 
-			<tarfileset dir="${TARGET.DEB.DIR}/build/FOLDERINZIPNAME" prefix="usr/share/${PROGNAME}" filemode="755">
+			<tarfileset dir="${TARGET.DEB.DIR}/build/${FOLDERINZIPNAME}" prefix="usr/share/${PROGNAME}" filemode="755">
 				<!-- Create the start scripts with executable flag -->
 				<include name="**/*.sh" />
 			</tarfileset>
