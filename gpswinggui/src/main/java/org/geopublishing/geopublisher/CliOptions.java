@@ -19,9 +19,6 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import com.sun.media.sound.Toolkit;
-
-import schmitzm.swing.TestingUtil;
 import skrueger.versionnumber.ReleaseUtil;
 import skrueger.versionnumber.ReleaseUtil.License;
 
