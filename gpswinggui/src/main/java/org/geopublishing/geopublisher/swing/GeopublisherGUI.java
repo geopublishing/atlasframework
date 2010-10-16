@@ -202,22 +202,22 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// System.out.println(t);
 		// LOGGER.debug(t);
 		// }
+		//
+		// if (args.length == 0 && GraphicsEnvironment.isHeadless()) {
+		// // Starting Geopublisher without any arguments
+		// GeopublisherGUI.getInstance(true);
+		// } else {
+		int resultCode;
+		resultCode = CliOptions.performArgs(args);
+		if (resultCode != -1) {
 
-		if (args.length == 0) {
-			// Starting Geopublisher without any arguments
-			GeopublisherGUI.getInstance(true);
-		} else {
-			int resultCode;
-			resultCode = CliOptions.performArgs(args);
-			if (resultCode != -1) {
-
-				if (instance != null) {
-					instance.exitGP(resultCode);
-				}
-
-				System.exit(resultCode);
+			if (instance != null) {
+				instance.exitGP(resultCode);
 			}
+
+			System.exit(resultCode);
 		}
+		// }
 
 	}
 

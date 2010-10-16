@@ -146,17 +146,13 @@ public class CliOptions extends Options {
 			}
 
 			// AWC folder
-			if (!commandLine.hasOption(CliOptions.AWCFOLDER)) {
+			if (!commandLine.hasOption(CliOptions.AWCFOLDER)
+					&& commandLine.hasOption(CliOptions.EXPORT)) {
 				System.out.println("Paramter " + CliOptions.AWCFOLDER
 						+ " is needed.");
 				exitAfterInterpret = true;
 				errorDuringInterpret = Errors.AWCPARAM_MISSING;
-			} else if (commandLine.getOptionValue(CliOptions.AWCFOLDER) == null) {
-				System.out.println("Paramter " + CliOptions.AWCFOLDER
-						+ " needs a paramter pointing to an atlas.gpa");
-				exitAfterInterpret = false;
-				errorDuringInterpret = Errors.AWCPARAM_ILLEGAL;
-			} else {
+			} else if (commandLine.hasOption(CliOptions.AWCFOLDER)) {
 				awcFile = new File(commandLine.getOptionValue(
 						CliOptions.AWCFOLDER).trim());
 				if (AtlasConfig.isAtlasDir(awcFile)) {
@@ -235,7 +231,9 @@ public class CliOptions extends Options {
 									org.apache.log4j.Level.WARN);
 							// Logger.getLogger("root").setLevel(Level.WARNING);
 						}
-						instance.loadAtlasFromDir(awcFileToLoad);
+
+						if (awcFileToLoad != null)
+							instance.loadAtlasFromDir(awcFileToLoad);
 
 					}
 				});
