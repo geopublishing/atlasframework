@@ -135,7 +135,7 @@ public class TextRuleListGUI extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top"));
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top","grow"));
 		this.add(getJCheckBoxEnabled(), "top");
 		this.add(getJPanelClass());
 	}

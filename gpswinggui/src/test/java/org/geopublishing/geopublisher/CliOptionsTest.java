@@ -86,10 +86,6 @@ public class CliOptionsTest {
 
 		File expDir = GpTestingUtil.createAtlasExportTesttDir();
 		new File(expDir, "sometestfile").createNewFile();
-		// assertEquals(
-		// -1,
-		// CliOptions.performArgs(new String[] { "-e", expDir.toString(),
-		// "--atlas", TestAtlas.small.getFile().toString() }));
 
 		assertEquals(
 				Errors.EXPORTDIR_NOTEMPTYNOFORCE.getErrCode(),
@@ -161,17 +157,6 @@ public class CliOptionsTest {
 		new CliOptions().printHelp();
 	}
 
-//	@Test
-//	public void testVerbose() {
-//		File expDir = GpTestingUtil.createAtlasExportTesttDir();
-//
-//		assertEquals(
-//				0,
-//				CliOptions.performArgs(new String[] { "-l", "-e",
-//						expDir.toString(), "-j", "--atlas",
-//						TestAtlas.small.getFile().toString() }));
-//	}
-
 	@Test
 	public void testLoggerCange() {
 
@@ -184,11 +169,6 @@ public class CliOptionsTest {
 		Logger l = Logger.getLogger(CliOptionsTest.class);
 		l.warn("l");
 		l.debug("l");
-
-		// System.out.println("set rootlogger to debug:");
-		// rootLogger.setLevel(org.apache.log4j.Level.DEBUG);
-		// l.warn("l");
-		// l.debug("l");
 
 	}
 

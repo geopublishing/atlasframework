@@ -1145,7 +1145,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		this.add(getAttributeJPanel(), "split 2, grow x");
 		this.add(getJPanelColorAndTemplate(), "grow x");
 
-		this.add(new JScrollPane(getJTable()), "grow x, height ::100");
+		this.add(new JScrollPane(getJTable()), "grow x, height 50:150:600");
 
 		JPanel jPanelButtons = new JPanel(new MigLayout(
 				"ins n 0 n 0, gap 1, fillx"));

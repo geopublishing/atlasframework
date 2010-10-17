@@ -141,10 +141,10 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			this.atlasStyler = atlasStyler;
 
 			classifier = new QuantitiesClassification(
-					GraduatedColorQuantitiesGUI.this, ruleList
-							.getStyledFeatures(), ruleList
-							.getValue_field_name(), ruleList
-							.getNormalizer_field_name());
+					GraduatedColorQuantitiesGUI.this,
+					ruleList.getStyledFeatures(),
+					ruleList.getValue_field_name(),
+					ruleList.getNormalizer_field_name());
 
 			classifier.pushQuite();
 			try {
@@ -183,9 +183,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 								.getNormalizer_field_name()
 								|| (classifier.getNormalizer_field_name() != null && classifier
 										.getNormalizer_field_name()
-										.equals(
-												ruleList
-														.getNormalizer_field_name()));
+										.equals(ruleList
+												.getNormalizer_field_name()));
 						boolean equalsNumClasses = classifier.getNumClasses() == ruleList
 								.getNumClasses();
 						boolean noChange = equalsValue && equalsNormalizer
@@ -236,9 +235,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return void
 	 */
 	private void initialize() {
-		setLayout(new MigLayout("wrap 2, fillx", "grow"));
-		jLabelHeading = new JLabel(AtlasStyler
-				.R("GraduatedColorQuantities.Heading"));
+		setLayout(new MigLayout("wrap 2, fillx", "grow","grow"));
+		jLabelHeading = new JLabel(
+				AtlasStyler.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
 
@@ -246,7 +245,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		this.add(getJPanelFields(), "grow x");
 		this.add(getJPanelClassification(), "grow x");
 		this.add(getJPanelColorsAndTemplate(), "span 2, growx");
-		this.add(new JScrollPane(getJTableClasses()), "span 2, height ::100, grow x, bottom");
+		this.add(new JScrollPane(getJTableClasses()),
+				"span 2, height 50:150:600, grow x, bottom");
 	}
 
 	/**
@@ -257,15 +257,16 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private JPanel getJPanelFields() {
 		if (jPanel == null) {
 			jPanel = new JPanel(new MigLayout("inset 1, gap 1, wrap 2"));
-//			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
-//					.R("GraduatedColorQuantities.Attributes.BorderTitle")));
+			// jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			// .R("GraduatedColorQuantities.Attributes.BorderTitle")));
 
-			JLabel jLabelNormalization = new JLabel(AtlasStyler
-					.R("GraduatedColorQuantities.NormalizationAttribute"));
+			JLabel jLabelNormalization = new JLabel(
+					AtlasStyler
+							.R("GraduatedColorQuantities.NormalizationAttribute"));
 			jLabelNormalization.setToolTipText(AtlasStyler
 					.R("GraduatedColorQuantities.NormalizationAttribute.TT"));
-			JLabel jLabelValue = new JLabel(AtlasStyler
-					.R("GraduatedColorQuantities.ValueAttribute"));
+			JLabel jLabelValue = new JLabel(
+					AtlasStyler.R("GraduatedColorQuantities.ValueAttribute"));
 			jLabelValue.setToolTipText(AtlasStyler
 					.R("GraduatedColorQuantities.ValueAttribute.TT"));
 			jPanel.add(jLabelValue, "");
@@ -283,8 +284,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	private JPanel getJPanelClassification() {
 
-		JLabel jLabelParam = new JLabel(AtlasStyler
-				.R("ComboBox.NumberOfClasses"));
+		JLabel jLabelParam = new JLabel(
+				AtlasStyler.R("ComboBox.NumberOfClasses"));
 		jLabelParam
 				.setToolTipText(AtlasStyler.R("ComboBox.NumberOfClasses.TT"));
 
@@ -308,7 +309,6 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			}
 
 		});
-
 
 		JPanel jPanelClassification = new JPanel(
 				new MigLayout("inset 1, gap 1"),
@@ -366,14 +366,15 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						.getStyledFeatures().getAttributeMetaDataMap();
 
 				// Title like :
-				String titleVariables = attributeMetaDataMap.get(
-						classifier.getValue_field_name()).getTitle().toString();
+				String titleVariables = attributeMetaDataMap
+						.get(classifier.getValue_field_name()).getTitle()
+						.toString();
 
 				if (classifier.getNormalizer_field_name() != null
 						&& !classifier.getNormalizer_field_name().isEmpty()) {
 					titleVariables += ":"
-							+ attributeMetaDataMap.get(
-									classifier.getNormalizer_field_name())
+							+ attributeMetaDataMap
+									.get(classifier.getNormalizer_field_name())
 									.getTitle().toString();
 				}
 
@@ -497,9 +498,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		if (jTable == null) {
 			jTable = new JTable(getTableModel());
 
-			jTable
-					.setDefaultRenderer(Color.class,
-							new ColorTableCellRenderer());
+			jTable.setDefaultRenderer(Color.class, new ColorTableCellRenderer());
 
 			((JLabel) jTable.getDefaultRenderer(String.class))
 					.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -534,15 +533,13 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							}
 
 						} else if (col == 1) {
-							JOptionPane
-									.showMessageDialog(
-											SwingUtil
-													.getParentWindowComponent(GraduatedColorQuantitiesGUI.this),
-											AtlasStyler
-													.R(
-															"GraduatedColorQuantities.ClassesTable.ClickLimits.Message",
-															AtlasStyler
-																	.R("GraduatedColorQuantities.Classify.Button")));
+							JOptionPane.showMessageDialog(
+									SwingUtil
+											.getParentWindowComponent(GraduatedColorQuantitiesGUI.this),
+									AtlasStyler
+											.R("GraduatedColorQuantities.ClassesTable.ClickLimits.Message",
+													AtlasStyler
+															.R("GraduatedColorQuantities.Classify.Button")));
 							return;
 						}
 
@@ -555,23 +552,20 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						 */
 						if (e.getButton() == MouseEvent.BUTTON3) {
 							final JPopupMenu toolPopup = new JPopupMenu();
-							toolPopup
-									.add(new JMenuItem(
-											new AbstractAction(
-													AtlasStyler
-															.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
+							toolPopup.add(new JMenuItem(
+									new AbstractAction(
+											AtlasStyler
+													.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
 
-												public void actionPerformed(
-														final ActionEvent e) {
-													rulesList
-															.setClassLimits(
-																	rulesList
-																			.getClassLimits(),
-																	true);
-													jTable.repaint();
-												}
+										public void actionPerformed(
+												final ActionEvent e) {
+											rulesList.setClassLimits(
+													rulesList.getClassLimits(),
+													true);
+											jTable.repaint();
+										}
 
-											}));
+									}));
 							toolPopup.show(jTable, e.getX(), e.getY());
 							return;
 						}
@@ -587,44 +581,34 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 								final TranslationEditJPanel transLabel = new TranslationEditJPanel(
 										AtlasStyler
-												.R(
-														"GraduatedColorsQuant.translate_label_for_classN",
+												.R("GraduatedColorsQuant.translate_label_for_classN",
 														(row + 1)),
 										translation, AtlasStyler.getLanguages());
 
 								ask = new TranslationAskJDialog(
 										GraduatedColorQuantitiesGUI.this,
 										transLabel);
-								ask
-										.addPropertyChangeListener(new PropertyChangeListener() {
+								ask.addPropertyChangeListener(new PropertyChangeListener() {
 
-											public void propertyChange(
-													final PropertyChangeEvent evt) {
-												if (evt
-														.getPropertyName()
-														.equals(
-																TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
-													ask = null;
-												}
-												if (evt
-														.getPropertyName()
-														.equals(
-																TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
-													rulesList
-															.getRuleTitles()
-															.put(
-																	row,
-																	translation
-																			.toOneLine());
-												}
-												ask = null;
-												rulesList
-														.fireEvents(new RuleChangedEvent(
-																"Legend Label changed",
-																rulesList));
-											}
+									public void propertyChange(
+											final PropertyChangeEvent evt) {
+										if (evt.getPropertyName()
+												.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+											ask = null;
+										}
+										if (evt.getPropertyName()
+												.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+											rulesList.getRuleTitles().put(row,
+													translation.toOneLine());
+										}
+										ask = null;
+										rulesList
+												.fireEvents(new RuleChangedEvent(
+														"Legend Label changed",
+														rulesList));
+									}
 
-										});
+								});
 
 							}
 							ask.setVisible(true);
@@ -633,14 +617,12 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							 * Simple OGC conform labels.. not in multi-language
 							 * mode
 							 */
-							final String newTitle = ASUtil
-									.askForString(
-											GraduatedColorQuantitiesGUI.this,
-											ruleTitle,
-											AtlasStyler
-													.R(
-															"GraduatedColorsQuant.translate_label_for_classN",
-															(row + 1)));
+							final String newTitle = ASUtil.askForString(
+									GraduatedColorQuantitiesGUI.this,
+									ruleTitle,
+									AtlasStyler
+											.R("GraduatedColorsQuant.translate_label_for_classN",
+													(row + 1)));
 
 							if (newTitle != null) {
 								rulesList.getRuleTitles().put(row, newTitle);
@@ -792,13 +774,13 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private JPanel getJPanelColorsAndTemplate() {
 		final JPanel panel = new JPanel(new MigLayout("width 100%", "grow"));
 
-		jLabelTemplate = new JLabel(AtlasStyler
-				.R("GraduatedColorQuantities.Template"));
+		jLabelTemplate = new JLabel(
+				AtlasStyler.R("GraduatedColorQuantities.Template"));
 		jLabelTemplate.setToolTipText(AtlasStyler
 				.R("GraduatedColorQuantities.Template.TT"));
 
-		final JLabel jLabelColorPalette = new JLabel(AtlasStyler
-				.R("GraduatedColorQuantities.ColorRamp"));
+		final JLabel jLabelColorPalette = new JLabel(
+				AtlasStyler.R("GraduatedColorQuantities.ColorRamp"));
 
 		panel.add(jLabelColorPalette, "left");
 		panel.add(getJComboBoxColors(), "left");
@@ -822,8 +804,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			// final String noDataLegendString = noDataRule.getTitle();
 
 			final SmallButton noDataLabelButton = new SmallButton(
-					new Translation(noDataSymbol.getTitle()) + ":", AtlasStyler
-							.R("translate_label_for_NODATA_values.tt"));
+					new Translation(noDataSymbol.getTitle()) + ":",
+					AtlasStyler.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -847,19 +829,15 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 					ask.addPropertyChangeListener(new PropertyChangeListener() {
 
 						public void propertyChange(final PropertyChangeEvent evt) {
-							if (evt
-									.getPropertyName()
-									.equals(
-											TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+							if (evt.getPropertyName()
+									.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
 								return;
 							} else if (evt
 									.getPropertyName()
-									.equals(
-											TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+									.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
 								noDataLabelButton.setText(translation
-										.toString()
-										+ ":");
+										.toString() + ":");
 								noDataSymbol.setTitle(translation.toOneLine());
 
 								rulesList.getNoDataSymbol().fireEvents(
@@ -879,8 +857,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			noDataPanel.add(noDataLabelButton, "gap 0");
 
 			// A button to change the NODATA symbol
-			SymbolButton noDataSymbolButton = new EditSymbolButton(rulesList
-					.getNoDataSymbol(), new Dimension(14, 14));
+			SymbolButton noDataSymbolButton = new EditSymbolButton(
+					rulesList.getNoDataSymbol(), new Dimension(14, 14));
 			noDataPanel.add(noDataSymbolButton, "gap 0, wrap");
 
 			// If running in GP/Atlas context, the user may disable the NODATA
@@ -955,9 +933,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 		if (jComboBoxPalettes == null) {
 
-			final DefaultComboBoxModel aModel = new DefaultComboBoxModel(ASUtil
-					.getPalettes(new PaletteType(true, false), classifier
-							.getNumClasses()));
+			final DefaultComboBoxModel aModel = new DefaultComboBoxModel(
+					ASUtil.getPalettes(new PaletteType(true, false),
+							classifier.getNumClasses()));
 			aModel.setSelectedItem(rulesList.getBrewerPalette());
 
 			jComboBoxPalettes = new JComboBox(aModel);
@@ -968,8 +946,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						rulesList
-								.setBrewerPalette((BrewerPalette) (e.getItem()));
+						rulesList.setBrewerPalette((BrewerPalette) (e.getItem()));
 						getTableModel().fireTableDataChanged();
 					}
 				}
@@ -991,8 +968,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							.getSelectedItem();
 
 					final BrewerPalette[] palettes = ASUtil.getPalettes(
-							new PaletteType(true, false), classifier
-									.getNumClasses());
+							new PaletteType(true, false),
+							classifier.getNumClasses());
 					jComboBoxPalettes.setModel(new DefaultComboBoxModel(
 							palettes));
 

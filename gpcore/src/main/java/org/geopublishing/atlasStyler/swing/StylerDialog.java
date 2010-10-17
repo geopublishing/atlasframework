@@ -116,10 +116,10 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			jContentPane = new JPanel(new MigLayout("gap 1, inset 1, nogrid"));
-			jContentPane.add(tabbedPane, "wrap"); // The textSymbolizer pane is making the big height
+			jContentPane = new JPanel(new MigLayout("gap 1, inset 1, wrap 1","[grow]","[grow]"));
+			jContentPane.add(tabbedPane, ""); // The textSymbolizer pane is making the big height
 
-			jContentPane.add(getJCheckboxPreviewl(), "left");
+			jContentPane.add(getJCheckboxPreviewl(), "split 4, left");
 			jContentPane.add(getJButtonUpdatePreview(), "left");
 
 			jContentPane.add(getJButtonOk(), "tag ok");

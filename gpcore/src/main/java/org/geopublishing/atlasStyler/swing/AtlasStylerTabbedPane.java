@@ -152,11 +152,11 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 	 * This tab contains the {@link JComboBox} and the settings {@link JPanel}.
 	 */
 	private JPanel getSymbologyTab() {
-		JPanel jPanelSymbology = new JPanel(new MigLayout("wrap 1", "grow"));
+		JPanel jPanelSymbology = new JPanel(new MigLayout("wrap 1", "grow", "grow"));
 
 		jPanelSymbology.add(getJComboBoxRuleListType(),
-				"split 2, growx, growy, top");
-		jPanelSymbology.add(jLabelRuleListeTypeImage);
+				"split 2, growx, height 50, top");
+		jPanelSymbology.add(jLabelRuleListeTypeImage, "top");
 
 		jPanelSymbology.add(jPanelRuleListEditor, "grow, top");
 		return jPanelSymbology;
