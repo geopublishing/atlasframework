@@ -507,7 +507,7 @@ public class AtlasChartJPanel extends JPanel implements
 	}
 
 	/**
-	 * If {@link #mapPane} and {@link #mapLegend} are both not <code>null</code>
+	 * If {@link #previewMapPane} and {@link #mapLegend} are both not <code>null</code>
 	 * , this method adds a {@link JButton}
 	 * 
 	 * @param atlasChartPanel

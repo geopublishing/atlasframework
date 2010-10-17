@@ -78,10 +78,10 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 		if (schema == null)
 			return;
 
-		atts = ASUtil.getValueFieldNames(schema, false).size();
+		atts = ASUtil.getValueFieldNames(schema).size();
 
-		final List<String> numericalFieldNames = FeatureUtil.getNumericalFieldNames(
-				schema, false);
+		final List<String> numericalFieldNames = FeatureUtil
+				.getNumericalFieldNames(schema);
 		numAtts = numericalFieldNames.size();
 		visNumAtts = 0;
 
@@ -150,11 +150,10 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 			attPanel.add(attsLabel, "center");
 			attPanel.add(visAttsLabel, "center");
 
-			attPanel
-					.add(
-							new JLabel(
-									R("DpLayerVectorAttributesJPanel.attOverview.numericalAtts")
-											+ ":"), "right");
+			attPanel.add(
+					new JLabel(
+							R("DpLayerVectorAttributesJPanel.attOverview.numericalAtts")
+									+ ":"), "right");
 			attPanel.add(numAttsLabel, "center");
 			attPanel.add(visNumAttsLabel, "center");
 
@@ -219,8 +218,9 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 			charsetPanel.setBorder(BorderFactory
 					.createTitledBorder(R("EditDpEntryGUI.charset.border")));
 
-			charsetPanel.add(new JLabel(R("EditDpEntryGUI.charset.explanation",
-					dplv.getType().getDesc())),
+			charsetPanel.add(
+					new JLabel(R("EditDpEntryGUI.charset.explanation", dplv
+							.getType().getDesc())),
 					"span 2, right, width 100%, growx");
 
 			charsetPanel.setToolTipText(R("EditDpEntryGUI.ChartsetLabel.TT"));
@@ -245,9 +245,9 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 					final String item = (String) e.getItem();
 
 					Charset newCharset = Charset.forName(item);
-					
-					System.out.println("new charset = "+newCharset);
-					
+
+					System.out.println("new charset = " + newCharset);
+
 					dplv.setCharset(newCharset);
 				}
 

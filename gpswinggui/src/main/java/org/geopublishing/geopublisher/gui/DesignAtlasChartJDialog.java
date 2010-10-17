@@ -218,8 +218,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		this.styledLayer = styledFeatures;
 
 		this.mapPane = mapLegend != null ? (mapLegend.getGeoMapPane() != null ? mapLegend
-				.getGeoMapPane().getMapPane()
-				: null)
+				.getGeoMapPane().getMapPane() : null)
 				: null;
 
 		// GPDialogManager.dm_MapComposer.getInstanceFor(mapLegend.getm,
@@ -294,19 +293,18 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		buttons.add(getUpdateModeJCheckbox());
 		buttons.add(getUpdateChartJButton());
 
-		JButton attributes = new JButton(
-				new AbstractAction(AtlasViewerGUI.R("LayerToolMenu.table"),
-						BasicMapLayerLegendPaneUI.ICON_TABLE) {
+		JButton attributes = new JButton(new AbstractAction(
+				AtlasViewerGUI.R("LayerToolMenu.table"),
+				BasicMapLayerLegendPaneUI.ICON_TABLE) {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-						AVDialogManager.dm_AttributeTable.getInstanceFor(
-								styledLayer, DesignAtlasChartJDialog.this,
-								styledLayer, mapLegend);
-					}
+				AVDialogManager.dm_AttributeTable.getInstanceFor(styledLayer,
+						DesignAtlasChartJDialog.this, styledLayer, mapLegend);
+			}
 
-				});
+		});
 		buttons.add(attributes);
 
 		buttons.add(getOkButton(), "right, tag ok");
@@ -358,8 +356,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		if (updateChartJButton == null) {
 
-			updateChartJButton = new JButton(new AbstractAction(GeopublisherGUI
-					.R("DesignAtlasChartJDialog.previewChartButton")) {
+			updateChartJButton = new JButton(new AbstractAction(
+					GeopublisherGUI
+							.R("DesignAtlasChartJDialog.previewChartButton")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -444,8 +443,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		if (chartStyle.getPlotStyle().isRangeGridlineVisible() == null)
 			chartStyle.getPlotStyle().setRangeGridlineVisible(true);
 
-		JPanel grids = new JPanel(new MigLayout(), GeopublisherGUI
-				.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.Grid.Border"));
+		JPanel grids = new JPanel(
+				new MigLayout(),
+				GeopublisherGUI
+						.R("DesignAtlasChartJDialog.Tabs.ChartPlotStyle.Grid.Border"));
 		{
 			// Domain Axis
 			JCheckBox cb = new JCheckBox(
@@ -635,10 +636,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final List<String> fieldNames;
 
 			if (chartStyle.getType().isCategoryAllowedForDomainAxis()) {
-				fieldNames = ASUtil.getValueFieldNames(styledLayer
-						.getFeatureSource(), false);
+				fieldNames = ASUtil.getValueFieldNames(schema);
 			} else
-				fieldNames = FeatureUtil.getNumericalFieldNames(schema, false);
+				fieldNames = FeatureUtil.getNumericalFieldNames(schema);
 			final AttributesJComboBox attribComboBox = new AttributesJComboBox(
 					schema, styledLayer.getAttributeMetaDataMap(), fieldNames);
 
@@ -655,9 +655,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			attPanel.add(attribComboBox);
 
 			// A JPanel showing the NODATA values for the selected attribute
-			final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
-					.getAttributeMetaDataMap(), domainAxisAttributeLocalName,
-					styledLayer.getSchema());
+			final NoDataPanel noDataPanel = new NoDataPanel(
+					styledLayer.getAttributeMetaDataMap(),
+					domainAxisAttributeLocalName, styledLayer.getSchema());
 			// Update the chart whenever the NODATA values changes
 			noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -696,8 +696,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					AttributeMetadataImpl atm = styledLayer
 							.getAttributeMetaDataMap().get(attLocalName);
 
-					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS, atm
-							.getNodataValues());
+					chartStyle.setNoDataValues(ChartStyle.DOMAIN_AXIS,
+							atm.getNodataValues());
 
 					/**
 					 * Update the legend labeling with the AttributeMetaData
@@ -706,8 +706,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					{
 						AVUtil.applyDefaultTitleAndTranslationToAxis(
 								styledLayer, chartStyle,
-								ChartStyle.DOMAIN_AXIS, 0, atlasConfigEditable
-										.getLanguages());
+								ChartStyle.DOMAIN_AXIS, 0,
+								atlasConfigEditable.getLanguages());
 					}
 
 					/*
@@ -756,14 +756,15 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		/*
 		 * Now add a box to enter a unit string
 		 */
-		JPanel unitPanel = new JPanel(new MigLayout(), GeopublisherGUI
-				.R("Unit"));
+		JPanel unitPanel = new JPanel(new MigLayout(),
+				GeopublisherGUI.R("Unit"));
 
 		/** A textfield that shows the unit (untranslatable). **/
 		final JTextField unitTextfield = getUnitTextFieldForAxis(axisNr);
 
-		unitPanel.add(new JLabel(GeopublisherGUI
-				.R("DesignChartDialog.Unit.Explanation")), "wrap");
+		unitPanel.add(
+				new JLabel(GeopublisherGUI
+						.R("DesignChartDialog.Unit.Explanation")), "wrap");
 		unitPanel.add(unitTextfield);
 		axisPane.add(unitPanel, "sgy");
 
@@ -772,20 +773,20 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		 */
 		JPanel anglePanel = new JPanel(new MigLayout());
 
-		anglePanel.add(new JLabel(GeopublisherGUI
-				.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")),
-				"wrap");
+		anglePanel
+				.add(new JLabel(
+						GeopublisherGUI
+								.R("DesignAtlasChartJDialog.AxisSettings.ValueLabelAngle")),
+						"wrap");
 
 		boolean isANumberAxis = true;
 		try {
 			isANumberAxis = Number.class.isAssignableFrom(styledLayer
-					.getSchema().getDescriptor(
-							chartStyle.getAttributeName(axisNr)).getType()
-					.getBinding());
+					.getSchema()
+					.getDescriptor(chartStyle.getAttributeName(axisNr))
+					.getType().getBinding());
 		} catch (Exception e) {
-			LOGGER
-					.warn("Could not determine wherther this is a number axis",
-							e);
+			LOGGER.warn("Could not determine wherther this is a number axis", e);
 		}
 
 		if (isANumberAxis) {
@@ -899,8 +900,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		if (categoryDomainAxisJCheckBox == null) {
 
-			categoryDomainAxisJCheckBox = new JCheckBox(GeopublisherGUI
-					.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
+			categoryDomainAxisJCheckBox = new JCheckBox(
+					GeopublisherGUI
+							.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
 			categoryDomainAxisJCheckBox.setToolTipText(GeopublisherGUI
 					.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
 
@@ -923,8 +925,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 	}
 
 	private JCheckBox getDomainSortedJCheckbox() {
-		JCheckBox cb = new JCheckBox(GeopublisherGUI
-				.R("AttributeSelectionPanel.DomainSortCheckbox"));
+		JCheckBox cb = new JCheckBox(
+				GeopublisherGUI.R("AttributeSelectionPanel.DomainSortCheckbox"));
 		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainSortCheckbox.TT"));
 
@@ -933,8 +935,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				chartStyle
-						.setSortDomainAxis(e.getStateChange() == ItemEvent.SELECTED);
+				chartStyle.setSortDomainAxis(e.getStateChange() == ItemEvent.SELECTED);
 
 				fireChartChangedEvent(true);
 			}
@@ -1005,14 +1006,16 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			rendererSettingsPanel.add(new JLabel());
 		}
 
-		rendererSettingsPanel.add(getSeriesDataSelectionJPanel(rendererIndex,
-				seriesIdx), "span 2, growx");
+		rendererSettingsPanel.add(
+				getSeriesDataSelectionJPanel(rendererIndex, seriesIdx),
+				"span 2, growx");
 
 		/*
 		 * Legend...
 		 */
-		rendererSettingsPanel.add(getLegendTitleTranslationEditPanel(
-				rendererIndex, seriesIdx), "span 2, growx");
+		rendererSettingsPanel.add(
+				getLegendTitleTranslationEditPanel(rendererIndex, seriesIdx),
+				"span 2, growx");
 
 		rendererSettingsPanel
 				.addPropertyChangeListener(new PropertyChangeListener() {
@@ -1075,8 +1078,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		SimpleFeatureType schema = styledLayer.getFeatureSource().getSchema();
 
 		final AttributesJComboBox attribComboBox = new AttributesJComboBox(
-				schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
-						.getNumericalFieldNames(schema, false));
+				schema, styledLayer.getAttributeMetaDataMap(),
+				FeatureUtil.getNumericalFieldNames(schema));
 		final String attributeName = chartStyle.getAttributeName(seriesIdx + 1);
 		attribComboBox.setSelectedItem(attributeName);
 
@@ -1088,9 +1091,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		attPanel.add(attribComboBox);
 
 		// A Panel that will list all NODATA-Value
-		final NoDataPanel noDataPanel = new NoDataPanel(styledLayer
-				.getAttributeMetaDataMap(), attributeName, styledLayer
-				.getSchema());
+		final NoDataPanel noDataPanel = new NoDataPanel(
+				styledLayer.getAttributeMetaDataMap(), attributeName,
+				styledLayer.getSchema());
 		// Update the chart whenever the NODATA values changes
 		noDataPanel.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -1143,8 +1146,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					.getAttributeAggregation(seriesIdx + 1));
 
 			JPanel panelAggregationMethod = new JPanel(new MigLayout());
-			JLabel aggMethodlabel = new JLabel(GeopublisherGUI
-					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label"));
+			JLabel aggMethodlabel = new JLabel(
+					GeopublisherGUI
+							.R("DesignAtlasChartJDialog.SeriesData.Aggregation.Label"));
 			aggMethodlabel.setToolTipText(GeopublisherGUI
 					.R("DesignAtlasChartJDialog.SeriesData.Aggregation.TT"));
 			panelAggregationMethod.add(aggMethodlabel, "gap unrel, w 150");
@@ -1153,14 +1157,13 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			attPanel.add(panelAggregationMethod);
 
 			panelAggregationWeight
-					.add(
-							new JLabel(
-									GeopublisherGUI
-											.R("DesignAtlasChartJDialog.SeriesData.Aggregation.WeightLabel")),
+					.add(new JLabel(
+							GeopublisherGUI
+									.R("DesignAtlasChartJDialog.SeriesData.Aggregation.WeightLabel")),
 							"gap unrel, w 150");
 			final AttributesJComboBox weightFunctionAttributeComboBox = new AttributesJComboBox(
-					schema, styledLayer.getAttributeMetaDataMap(), FeatureUtil
-							.getNumericalFieldNames(schema, false));
+					schema, styledLayer.getAttributeMetaDataMap(),
+					FeatureUtil.getNumericalFieldNames(schema));
 
 			// Initialize weight combobox
 			String attributeAggregationWeightAttributeName_InChartStyle = chartStyle
@@ -1222,8 +1225,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				AttributeMetadataImpl atm = styledLayer
 						.getAttributeMetaDataMap().get(attLocalName);
 
-				chartStyle
-						.setNoDataValues(seriesIdx + 1, atm.getNodataValues());
+				chartStyle.setNoDataValues(seriesIdx + 1, atm.getNodataValues());
 
 				// LOGGER.debug("Setting attribute " + seriesIdx + 1 + " to "
 				// + chartStyle.getAttributeName(seriesIdx + 1));
@@ -1268,8 +1270,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				.R("Normalize.Chart.Explanation")));
 
 		// The check-box in the next line
-		JCheckBox cb = new JCheckBox(GeopublisherGUI
-				.R("AttributeSelectionPanel.NormalizeCheckbox"));
+		JCheckBox cb = new JCheckBox(
+				GeopublisherGUI.R("AttributeSelectionPanel.NormalizeCheckbox"));
 
 		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
@@ -1409,19 +1411,19 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final JPanel legendSettingsJPanel = new JPanel(new MigLayout(
 					"wrap 2", "[grow]"));
 
-			Translation legendTitleTranslation = chartStyle.getRendererStyle(
-					rendererIndex).getSeriesLegendLabel(seriesIndex)
-					.getLabelTranslation();
+			Translation legendTitleTranslation = chartStyle
+					.getRendererStyle(rendererIndex)
+					.getSeriesLegendLabel(seriesIndex).getLabelTranslation();
 
 			final TranslationEditJPanel legendTitleTranslationJPanel = new TranslationEditJPanel(
 					legendTitleTranslation, atlasConfigEditable.getLanguages());
 
-			Translation legendTooltipTranslation = chartStyle.getRendererStyle(
-					rendererIndex).getSeriesLegendTooltip(seriesIndex)
-					.getLabelTranslation();
+			Translation legendTooltipTranslation = chartStyle
+					.getRendererStyle(rendererIndex)
+					.getSeriesLegendTooltip(seriesIndex).getLabelTranslation();
 			final TranslationEditJPanel legendTooltipTranslationJPanel = new TranslationEditJPanel(
-					legendTooltipTranslation, atlasConfigEditable
-							.getLanguages());
+					legendTooltipTranslation,
+					atlasConfigEditable.getLanguages());
 
 			/*
 			 * The checkbox
@@ -1471,9 +1473,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					.addTranslationChangeListener(actionListenerLegendTitleChanged);
 
 			legendTitleTranslationJPanel
-					.setBorder(BorderFactory
-							.createTitledBorder(GeopublisherGUI
-									.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle")));
+					.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
+							.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle")));
 			legendSettingsJPanel.add(legendTitleTranslationJPanel, "span 2");
 
 			/*
@@ -1484,9 +1485,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					.addTranslationChangeListener(actionListenerLegendTooltipChanges);
 
 			legendTooltipTranslationJPanel
-					.setBorder(BorderFactory
-							.createTitledBorder(GeopublisherGUI
-									.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle.TT")));
+					.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
+							.R("DesignAtlasChartJDialog.SeriesLegendLabel.BorderTitle.TT")));
 			legendSettingsJPanel.add(legendTooltipTranslationJPanel, "span 2");
 
 			// /*
@@ -1517,10 +1517,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
-							if (evt
-									.getPropertyName()
-									.equals(
-											GeneralChartSettingsJPanel.PROPERTYNAME_CHART_STYLE)) {
+							if (evt.getPropertyName()
+									.equals(GeneralChartSettingsJPanel.PROPERTYNAME_CHART_STYLE)) {
 								fireChartChangedEvent();
 							}
 						}
@@ -1573,9 +1571,9 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				reapplyChartStyleToFeatureCollection = false;
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						DesignAtlasChartJDialog.this, AtlasViewerGUI
-								.R("dialog.title.wait"), AtlasViewerGUI
-								.R("dialog.title.wait"));
+						DesignAtlasChartJDialog.this,
+						AtlasViewerGUI.R("dialog.title.wait"),
+						AtlasViewerGUI.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
@@ -1686,8 +1684,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			}
 
 			final StyledLayerSelectionModel<?> anySelectionModel = mapLegend != null ? mapLegend
-					.getRememberSelection(styledLayer.getId())
-					: null;
+					.getRememberSelection(styledLayer.getId()) : null;
 
 			if ((anySelectionModel instanceof StyledFeatureLayerSelectionModel)) {
 				final StyledFeatureLayerSelectionModel selectionModel = (StyledFeatureLayerSelectionModel) anySelectionModel;

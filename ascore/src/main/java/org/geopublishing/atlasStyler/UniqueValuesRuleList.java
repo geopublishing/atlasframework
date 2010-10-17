@@ -156,8 +156,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					 </code>
 					 */
 					// filters.add(Utilities.allwaysFalseFilter);
-					filter = ASUtil.ff2.equals(propertyFieldName2, ASUtil.ff2
-							.literal("-9090909090"));
+					filter = ASUtil.ff2.equals(propertyFieldName2,
+							ASUtil.ff2.literal("-9090909090"));
 					filters.add(filter);
 				}
 				// LOGGER.debug("filters size = "+filters.size());
@@ -314,8 +314,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	public String getPropertyFieldName() {
 		if (propertyFieldName == null) {
-			final List<String> valueFieldNames = ASUtil.getValueFieldNames(
-					getStyledFeatures().getSchema(), false);
+			final List<String> valueFieldNames = ASUtil
+					.getValueFieldNames(getStyledFeatures().getSchema());
 			if (valueFieldNames.size() > 0)
 				propertyFieldName = valueFieldNames.get(0);
 			else
@@ -573,12 +573,13 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				if ((componentForGui != null) && (!warnedOnce)) {
 
 					final String msg = AtlasStyler
-							.R(
-									"UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
 									getBrewerPalette().getMaxColors(),
 									getValues().size());
-					JOptionPane.showMessageDialog(SwingUtil
-							.getParentWindowComponent(componentForGui), msg);
+					JOptionPane
+							.showMessageDialog(SwingUtil
+									.getParentWindowComponent(componentForGui),
+									msg);
 					warnedOnce = true;
 				}
 			}
@@ -716,8 +717,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 		if (amd.getNodataValues() != null)
 			for (Object ndValue : amd.getNodataValues()) {
-				ors.add(ff2.equals(ff2.property(attributeLocalName), ff2
-						.literal(ndValue)));
+				ors.add(ff2.equals(ff2.property(attributeLocalName),
+						ff2.literal(ndValue)));
 			}
 
 		return ff2.or(ors);

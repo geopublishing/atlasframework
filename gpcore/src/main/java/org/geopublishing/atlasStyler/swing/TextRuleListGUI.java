@@ -10,14 +10,12 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -28,7 +26,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.SwingUtilities;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -36,7 +33,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
@@ -47,11 +43,7 @@ import org.geotools.styling.TextSymbolizer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
-import org.opengis.filter.expression.Expression;
-import org.opengis.filter.expression.PropertyName;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ThinButton;
@@ -80,19 +72,11 @@ public class TextRuleListGUI extends JPanel {
 
 	private JButton jButtonClassFromSymbols = null;
 
-	private AttributesJComboBox jComboBoxLabelField = null;
-	
-	private AttributesJComboBox jComboBoxLabelField2 = null;
-	
-	private AttributesJComboBox jComboBoxPriorityField;
-
 	private TextSymbolizerEditGUI jPanelEditTextSymbolizer = null;
 
 	private final TextRuleList rulesList;
 
 	private final AtlasStyler atlasStyler;
-
-	private JPanel jPanelLabelDefinition;
 
 	/**
 	 * This is the default constructor
@@ -103,8 +87,9 @@ public class TextRuleListGUI extends JPanel {
 		this.atlasStyler = atlasStyler;
 		rulesList.addDefaultClass();
 
+		// Create components
 		initialize();
-
+		// Set the componets according to the presentation oin the Style
 		updateGUI();
 
 		atlasStyler.addListener(new StyleChangeListener() {
@@ -120,106 +105,26 @@ public class TextRuleListGUI extends JPanel {
 
 	}
 
+	/**
+	 * Called when the text symbolizer CLASS has been changed.
+	 */
 	protected void updateGUI() {
 
-		rulesList.pushQuite();
-		final TextSymbolizer symbolizer = rulesList.getSymbolizer();
-
-		/***********************************************************************
-		 * LabelFieldName
-		 */
-		PropertyName pn1 = StylingUtil.getFirstPropertyName(rulesList
-				.getStyledFeatures().getSchema(), rulesList.getSymbolizer());
-		jComboBoxLabelField.setSelectedItem(pn1.toString());
-
-		PropertyName pn2 = StylingUtil.getSecondPropertyName(rulesList
-				.getStyledFeatures().getSchema(), rulesList.getSymbolizer());
-		if (pn2 != null) {
-			jComboBoxLabelField2.setSelectedItem(pn2.toString());
-		} else
-			jComboBoxLabelField2.setSelectedItem("-");
-
-		/***********************************************************************
-		 * PriorityFieldName
-		 */
-		if (symbolizer.getPriority() != null) {
-			jComboBoxPriorityField.setSelectedItem(symbolizer.getPriority()
-					.toString());
-		} else {
-			jComboBoxPriorityField.setSelectedItem("");
-		}
-
-		/***********************************************************************
-		 * FontFamiliy
-		 */
-		String fontFamiliyString = symbolizer.getFont().getFamily().toString();
-		jPanelEditTextSymbolizer.getJComboBoxFont().setSelectedItem(
-				fontFamiliyString);
-
-		/***********************************************************************
-		 * Font Size
-		 */
-		String fontFamiliySize = symbolizer.getFont().getSize().toString();
-		ASUtil.selectOrInsert(jPanelEditTextSymbolizer.getJComboBoxSize(),
-				Double.parseDouble(fontFamiliySize));
-
-		/***********************************************************************
-		 * Font Style
-		 */
-		String fontStyle = symbolizer.getFont().getStyle().toString();
-		ASUtil.selectOrInsert(jPanelEditTextSymbolizer.getJComboBoxStyle(),
-				fontStyle);
-
-		/***********************************************************************
-		 * Font Weight
-		 */
-		String fontWeight = symbolizer.getFont().getWeight().toString();
-		ASUtil.selectOrInsert(jPanelEditTextSymbolizer.getJComboBoxWeight(),
-				fontWeight.toString());
-
-		jPanelEditTextSymbolizer.getJButtonColor().setColor(
-				symbolizer.getFill().getColor());
-
-		/***********************************************************************
-		 * Halo FILL
-		 */
-		if (symbolizer.getHalo() == null) {
-			jPanelEditTextSymbolizer.getJComboBoxHaloRadius().setSelectedItem(
-					0f);
-			jPanelEditTextSymbolizer.getJComboBoxHaloOpacity()
-					.setEnabled(false);
-			jPanelEditTextSymbolizer.getJButtonColorHalo().setEnabled(false);
-		} else {
-			ASUtil.selectOrInsert(jPanelEditTextSymbolizer
-					.getJComboBoxHaloRadius(), Float.valueOf(symbolizer
-					.getHalo().getRadius().toString()));
-
-			if (symbolizer.getHalo().getFill() == null) {
-				symbolizer.getHalo().setFill(ASUtil.SB.createFill(Color.white));
-			}
-
-			jPanelEditTextSymbolizer.getJButtonColorHalo().setColor(
-					symbolizer.getHalo().getFill().getColor());
-
-			float opacity = Float.valueOf(symbolizer.getHalo().getFill()
-					.getOpacity().toString());
-			ASUtil.selectOrInsert(jPanelEditTextSymbolizer
-					.getJComboBoxHaloOpacity(), opacity);
-		}
+		// The new symbolizer to present
+		getJPanelEditTextSymbolizer().updateGui(rulesList.getSymbolizer());
 
 		/***********************************************************************
 		 * Class management buttons
 		 */
-		jButtonClassDelete.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
-		jButtonClassRename.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
-		
+		jButtonClassDelete
+				.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
+		jButtonClassRename
+				.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
 
 		// Change the state of the class enabled CB
-		jCheckBoxClassEnabled.setSelected(rulesList
-				.getClassEnabled(rulesList.getSelIdx()));
+		jCheckBoxClassEnabled.setSelected(rulesList.getClassEnabled(rulesList
+				.getSelIdx()));
 		reactToClassEnabledChange();
-		
-		rulesList.popQuite();
 	}
 
 	/**
@@ -248,8 +153,10 @@ public class TextRuleListGUI extends JPanel {
 
 				public void actionPerformed(ActionEvent e) {
 					rulesList.setEnabled(jCheckBoxEnabled.isSelected());
-					TextRuleListGUI.this.setEnabled(jCheckBoxEnabled.isSelected());
-					jCheckBoxEnabled.setEnabled(true); // THIS CB has to stay enabled
+					TextRuleListGUI.this.setEnabled(jCheckBoxEnabled
+							.isSelected());
+					jCheckBoxEnabled.setEnabled(true); // THIS CB has to stay
+														// enabled
 					reactToClassEnabledChange();
 				}
 
@@ -271,22 +178,21 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JPanel getJPanelClass() {
 		if (jPanelClass == null) {
-		
+
 			jPanelClass = new JPanel(new MigLayout("nogrid, gap 1, inset 1"));
-			
-			jPanelClass.add(new JLabel(AtlasStyler.R("TextRulesList.Labelclass")+":"));
+
+			jPanelClass.add(new JLabel(AtlasStyler
+					.R("TextRulesList.Labelclass") + ":"));
 			jPanelClass.add(getJComboBoxClass());
-			jPanelClass.add(getJCheckBoxClassEnabled(),"wrap");
-			
-//			jPanelClass.add(getJButtonClassAdd());
-			jPanelClass
-			.add(getJButtonClassDelete());
+			jPanelClass.add(getJCheckBoxClassEnabled(), "wrap");
+
+			// jPanelClass.add(getJButtonClassAdd());
+			jPanelClass.add(getJButtonClassDelete());
 			jPanelClass.add(getJButtonClassRename());
-			jPanelClass.add(getJButtonClassFromSymbols(),"wrap");
-			
-			jPanelClass.add(getJPanelLabelDefinition(), "wrap");
-			jPanelClass
-					.add(getJPanelEditTextSymbolizer());
+			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
+
+			// jPanelClass.add(getJPanelLabelDefinition(), "wrap");
+			jPanelClass.add(getJPanelEditTextSymbolizer());
 		}
 		return jPanelClass;
 	}
@@ -305,41 +211,55 @@ public class TextRuleListGUI extends JPanel {
 			jComboBoxClass.setSelectedIndex(0);
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxClass, false);
-			
-			jComboBoxClass.setRenderer( new DefaultListCellRenderer() {
+
+			jComboBoxClass.setRenderer(new DefaultListCellRenderer() {
 				@Override
 				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
-					
-					JComponent superT = (JComponent)super.getListCellRendererComponent(list, value, index, isSelected,
-							cellHasFocus);
 
-					if (index >= 0 && index < rulesList.getClassesFilters().size())
-						superT.setToolTipText("<html>"+rulesList.getClassesFilters().get(index).toString()+"</html>");
-					else 
+					JComponent superT = (JComponent) super
+							.getListCellRendererComponent(list, value, index,
+									isSelected, cellHasFocus);
+
+					if (index >= 0
+							&& index < rulesList.getClassesFilters().size())
+						superT.setToolTipText("<html>"
+								+ rulesList.getClassesFilters().get(index)
+										.toString() + "</html>");
+					else
 						superT.setToolTipText(null);
-					
+
 					return superT;
 				}
 			});
-			
+
 			jComboBoxClass.addItemListener(new ItemListener() {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						rulesList.setSelIdx(getJComboBoxClass().getSelectedIndex());
+						rulesList.setSelIdx(getJComboBoxClass()
+								.getSelectedIndex());
 
 						// Update the tool-tip
-						getJComboBoxClass().setToolTipText("<html>"+rulesList.getClassesFilters().get(getJComboBoxClass().getSelectedIndex()).toString()+"</html>");
-						
-						updateGUI();
+						getJComboBoxClass().setToolTipText(
+								"<html>"
+										+ rulesList
+												.getClassesFilters()
+												.get(getJComboBoxClass()
+														.getSelectedIndex())
+												.toString() + "</html>");
+
+						fireClassChanged();
 					}
 				}
 			});
-			
+
 			// Update the tool-tip
-			jComboBoxClass.setToolTipText("<html>"+rulesList.getClassesFilters().get(getJComboBoxClass().getSelectedIndex()).toString()+"</html>");
+			jComboBoxClass.setToolTipText("<html>"
+					+ rulesList.getClassesFilters()
+							.get(getJComboBoxClass().getSelectedIndex())
+							.toString() + "</html>");
 		}
 		return jComboBoxClass;
 	}
@@ -351,14 +271,13 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JCheckBox getJCheckBoxClassEnabled() {
 		if (jCheckBoxClassEnabled == null) {
-			jCheckBoxClassEnabled = new JCheckBox(AtlasStyler
-					.R("TextRulesList.Labelclass.Checkbox"));
-			
+			jCheckBoxClassEnabled = new JCheckBox(
+					AtlasStyler.R("TextRulesList.Labelclass.Checkbox"));
+
 			jCheckBoxClassEnabled.setSelected(rulesList
 					.getClassEnabled(rulesList.getSelIdx()));
 			reactToClassEnabledChange();
-			
-			
+
 			jCheckBoxClassEnabled.addActionListener(new ActionListener() {
 
 				@Override
@@ -374,10 +293,9 @@ public class TextRuleListGUI extends JPanel {
 	}
 
 	private void reactToClassEnabledChange() {
-			getJPanelEditTextSymbolizer().setEnabled(
-					getJCheckBoxClassEnabled().isSelected() && getJCheckBoxEnabled().isSelected());
-			getJPanelLabelDefinition().setEnabled(
-					getJCheckBoxClassEnabled().isSelected() && getJCheckBoxEnabled().isSelected());
+		getJPanelEditTextSymbolizer().setEnabled(
+				getJCheckBoxClassEnabled().isSelected()
+						&& getJCheckBoxEnabled().isSelected());
 	}
 
 	/**
@@ -387,8 +305,8 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JButton getJButtonClassAdd() {
 		if (jButtonClassAdd == null) {
-			jButtonClassAdd = new ThinButton(AtlasStyler
-					.R("TextRulesList.Labelclass.Action.Add"));
+			jButtonClassAdd = new ThinButton(
+					AtlasStyler.R("TextRulesList.Labelclass.Action.Add"));
 			// jButtonClassAdd.setFont(jButtonClassAdd.getFont().deriveFont(
 			// AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
 			// AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
@@ -406,15 +324,14 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JButton getJButtonClassDelete() {
 		if (jButtonClassDelete == null) {
-			jButtonClassDelete = new ThinButton(AtlasStyler
-					.R("TextRulesList.Labelclass.Action.Delete"));
+			jButtonClassDelete = new ThinButton(
+					AtlasStyler.R("TextRulesList.Labelclass.Action.Delete"));
 
 			jButtonClassDelete.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
 					if (rulesList.getSelIdx() == 0) {
-						LOGGER
-								.warn("Will not delete the default rule.. Why is the button enabled anyway?");
+						LOGGER.warn("Will not delete the default rule.. Why is the button enabled anyway?");
 						jButtonClassDelete.setEnabled(false);
 						return;
 					}
@@ -422,13 +339,14 @@ public class TextRuleListGUI extends JPanel {
 					rulesList.getSymbolizers().remove(idx);
 					rulesList.getClassesFilters().remove(idx);
 					rulesList.getRuleNames().remove(idx);
-					getJComboBoxClass().setModel(new DefaultComboBoxModel(rulesList
-							.getRuleNames().toArray()));
+					getJComboBoxClass().setModel(
+							new DefaultComboBoxModel(rulesList.getRuleNames()
+									.toArray()));
 					rulesList.removeClassMinScale(idx);
 					rulesList.removeClassMaxScale(idx);
 					rulesList.removeClassEnabledScale(idx);
-					rulesList.setSelIdx(idx-1);
-					updateGUI();
+					rulesList.setSelIdx(idx - 1);
+					fireClassChanged();
 				}
 
 			});
@@ -439,6 +357,12 @@ public class TextRuleListGUI extends JPanel {
 		return jButtonClassDelete;
 	}
 
+	private void fireClassChanged() {
+//		rulesList.pushQuite();
+		updateGUI();
+//		rulesList.popQuite(null);
+	}
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -446,8 +370,8 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JButton getJButtonClassRename() {
 		if (jButtonClassRename == null) {
-			jButtonClassRename = new ThinButton(AtlasStyler
-					.R("TextRulesList.Labelclass.Action.Rename"));
+			jButtonClassRename = new ThinButton(
+					AtlasStyler.R("TextRulesList.Labelclass.Action.Rename"));
 			jButtonClassRename.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -458,12 +382,13 @@ public class TextRuleListGUI extends JPanel {
 					if (result != null) {
 						// We do not check if the name exists twice, because it
 						// wouldn't really matter
-						rulesList.getRuleNames().set(
-								rulesList.getSelIdx(), result);
-						getJComboBoxClass().setModel(new DefaultComboBoxModel(
-								rulesList.getRuleNames().toArray()));
-						getJComboBoxClass().setSelectedIndex(rulesList
-								.getSelIdx());
+						rulesList.getRuleNames().set(rulesList.getSelIdx(),
+								result);
+						getJComboBoxClass().setModel(
+								new DefaultComboBoxModel(rulesList
+										.getRuleNames().toArray()));
+						getJComboBoxClass().setSelectedIndex(
+								rulesList.getSelIdx());
 					}
 				}
 			});
@@ -491,8 +416,9 @@ public class TextRuleListGUI extends JPanel {
 					rulesList.importClassesFromStyle(symbRL,
 							TextRuleListGUI.this);
 
-					getJComboBoxClass().setModel(new DefaultComboBoxModel(rulesList
-							.getRuleNames().toArray()));
+					getJComboBoxClass().setModel(
+							new DefaultComboBoxModel(rulesList.getRuleNames()
+									.toArray()));
 					getJComboBoxClass().setSelectedIndex(0);
 				}
 			});
@@ -505,248 +431,16 @@ public class TextRuleListGUI extends JPanel {
 	}
 
 	/**
-	 * A {@link JPanel} allowing to define the label settings for a text symbolizer class
-	 */
-	private JPanel getJPanelLabelDefinition() {
-
-		if (jPanelLabelDefinition == null) {
-
-			jPanelLabelDefinition = new JPanel(new MigLayout("wrap 2, gap 1, inset 1"),
-					AtlasStyler.R("TextRulesList.Labeltext.Title"));
-
-			{
-				/**
-				 * Label for the selection of the value attribute
-				 */
-
-				DefaultComboBoxModel model = new DefaultComboBoxModel(ASUtil
-						.getValueFieldNamesPrefereStrings(
-								rulesList.getStyledFeatures().getSchema(),
-								false).toArray());
-				jComboBoxLabelField = new AttributesJComboBox(atlasStyler,
-						model);
-				jComboBoxLabelField.addItemListener(new ItemListener() {
-
-					public void itemStateChanged(ItemEvent e) {
-						if (e.getStateChange() == ItemEvent.SELECTED) {
-
-							SwingUtilities.invokeLater(new Runnable() {
-								public void run() {
-									PropertyName literalLabelField1 = ASUtil.ff2
-											.property((String) jComboBoxLabelField
-													.getSelectedItem());
-
-									PropertyName literalLabelField2 = ASUtil.ff2
-											.property((String) jComboBoxLabelField2
-													.getSelectedItem());
-
-									StylingUtil.setDoublePropertyName(rulesList
-											.getSymbolizer(),
-											literalLabelField1,
-											literalLabelField2);
-
-									rulesList.fireEvents(new RuleChangedEvent(
-											"The LabelProperyName changed to "
-													+ jComboBoxLabelField
-															.getSelectedItem(),
-											rulesList));
-								}
-							});
-						}
-					}
-
-				});
-
-				jPanelLabelDefinition.add(new JLabel(AtlasStyler
-						.R("TextRulesList.LabellingAttribute")));
-				jPanelLabelDefinition.add(jComboBoxLabelField);
-				
-			}
-			
-			{
-				// Second label
-				
-				JLabel comp = new JLabel(AtlasStyler
-						.R("TextRulesList.2ndLabellingAttribute"));
-				comp.setToolTipText( AtlasStyler.R("TextRulesList.2ndLabellingAttribute") );
-				
-				jPanelLabelDefinition.add(comp);
-				
-				jPanelLabelDefinition.add(getJComboBoxLabelField2());
-				
-				getJComboBoxLabelField2().setToolTipText( AtlasStyler.R("TextRulesList.2ndLabellingAttribute") );
-			}
-
-			{
-				DefaultComboBoxModel model = new DefaultComboBoxModel(
-						FeatureUtil
-								.getNumericalFieldNames(
-										rulesList.getStyledFeatures()
-												.getSchema(), true).toArray());
-				jComboBoxPriorityField = new AttributesJComboBox(atlasStyler,
-						model);
-				jComboBoxPriorityField.addItemListener(new ItemListener() {
-
-					public void itemStateChanged(ItemEvent e) {
-						if (e.getStateChange() == ItemEvent.SELECTED) {
-
-							final String selectedItem = (String) jComboBoxPriorityField
-									.getSelectedItem();
-
-							if (selectedItem == null || selectedItem.equals("")) {
-								rulesList.getSymbolizer().setPriority(
-										Expression.NIL);
-
-							} else {
-								rulesList.getSymbolizer().setPriority(
-										ASUtil.ff2.property(selectedItem));
-							}
-
-							rulesList.fireEvents(new RuleChangedEvent(
-									"LabelPriorityField changed to "
-											+ jComboBoxPriorityField
-													.getSelectedItem(),
-									rulesList));
-						}
-					}
-
-				});
-
-				final JLabel priorityLabel = new JLabel(AtlasStyler
-						.R("TextRuleListGUI.labelingPriorityField"));
-				priorityLabel.setToolTipText(AtlasStyler
-						.R("TextRuleListGUI.labelingPriorityField.TT"));
-				jComboBoxPriorityField.setToolTipText(AtlasStyler
-						.R("TextRuleListGUI.labelingPriorityField.TT"));
-				jPanelLabelDefinition.add(priorityLabel);
-				jPanelLabelDefinition.add(jComboBoxPriorityField);
-			}
-		}
-
-		return jPanelLabelDefinition;
-	}
-
-	/**
-	 * Creates a {@link JComboBox} that offers to select attributes - text
-	 * attributes preferred
-	 */
-	private JComboBox getJComboBoxLabelField2() {
-		if (jComboBoxLabelField2 == null) {
-
-			final List<String> valueFieldNamesPrefereStrings = ASUtil
-					.getValueFieldNamesPrefereStrings(rulesList
-							.getStyledFeatures().getSchema(), false);
-			valueFieldNamesPrefereStrings.add(0, "-");
-			jComboBoxLabelField2 = new AttributesJComboBox(atlasStyler,
-					valueFieldNamesPrefereStrings);
-
-			/**
-			 * Read the selected attribute name from the symbolizer and set it
-			 * in the JComboBox
-			 */
-			try {
-				final TextSymbolizer textSymbolizer = rulesList.getSymbolizer();
-				PropertyName pn2 = StylingUtil.getSecondPropertyName(rulesList
-						.getStyledFeatures().getSchema(), textSymbolizer);
-
-				if (pn2 == null) {
-					jComboBoxLabelField2.setSelectedItem("-");
-				} else {
-					jComboBoxLabelField2.setSelectedItem(pn2.toString());
-				}
-			} catch (Exception e) {
-				LOGGER
-						.error(
-								"Unable to read the value attribute from the TextSymbolizer",
-								e);
-			}
-
-			/**
-			 * Update the Label in the TextRuleList
-			 */
-			jComboBoxLabelField2.addItemListener(new ItemListener() {
-
-				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						SwingUtilities.invokeLater(new Runnable() {
-							public void run() {
-								PropertyName literalLabelField1 = ASUtil.ff2
-										.property((String) jComboBoxLabelField
-												.getSelectedItem());
-								PropertyName literalLabelField2 = ASUtil.ff2
-										.property((String) jComboBoxLabelField2
-												.getSelectedItem());
-								StylingUtil.setDoublePropertyName(rulesList
-										.getSymbolizer(), literalLabelField1,
-										literalLabelField2);
-
-								rulesList.fireEvents(new RuleChangedEvent(
-										"The LabelProperyName changed to "
-												+ jComboBoxLabelField2
-														.getSelectedItem(),
-										rulesList));
-							}
-						});
-					}
-				}
-
-			});
-		}
-		return jComboBoxLabelField2;
-	}
-
-	/**
 	 * This method initializes jPanel
 	 * 
 	 * @param features
 	 * 
 	 * @return javax.swing.JPanel
 	 */
-	private JPanel getJPanelEditTextSymbolizer() {
+	private TextSymbolizerEditGUI getJPanelEditTextSymbolizer() {
 		if (jPanelEditTextSymbolizer == null) {
 
-			// TODO ! We need as many samples, as we have label style classes.
-			// they
-			// have to be created with thour filters..
-			// TODO or we make the jmappane not a symbolzer preview, but a
-			// ruleliste
-			// preview.. so we have all styles in one preview... and maybe all
-			// features in
-			// the preview..
-			FeatureCollection<SimpleFeatureType, SimpleFeature> features;
-			try {
-
-				LOGGER.debug("Putting 100 random features into the preview");
-				Filter filter = rulesList.getClassesFilters().get(0) != null ? rulesList
-						.getClassesFilters().get(0)
-						: Filter.INCLUDE;
-
-				features = rulesList.getStyledFeatures().getFeatureSource()
-						.getFeatures(
-								new DefaultQuery(rulesList.getStyledFeatures()
-										.getSchema().getTypeName(), filter,
-										100, null, "max 100 sample features"));
-				
-				if (features.size() == 0 && filter != Filter.INCLUDE) {
-					LOGGER.info("Getting preview features for the filter "+filter+" failed, getting preview features without a filter!");
-					
-					features = rulesList.getStyledFeatures().getFeatureSource()
-					.getFeatures(
-							new DefaultQuery(rulesList.getStyledFeatures()
-									.getSchema().getTypeName(), Filter.INCLUDE,
-									100, null, "max 100 sample features"));
-				}				
-
-			} catch (IOException e) {
-				LOGGER
-						.error(
-								"Sample features for TextSymbolizer Preview could not be requested:",
-								e);
-				throw new RuntimeException(
-						"Sample features for TextSymbolizer Preview could not be requested",
-						e);
-			}
+			FeatureCollection<SimpleFeatureType, SimpleFeature> features = getPreviewFeatures();
 
 			jPanelEditTextSymbolizer = new TextSymbolizerEditGUI(rulesList,
 					atlasStyler, features);
@@ -755,6 +449,62 @@ public class TextRuleListGUI extends JPanel {
 			// .R("TextRuleListGUI.TextStyling.BorderTitle")));
 		}
 		return jPanelEditTextSymbolizer;
+	}
+
+	FeatureCollection<SimpleFeatureType, SimpleFeature> features;
+
+	/**
+	 * Caches the limited number of features for the preview in memory.
+	 * 
+	 * TODO ! We need as many samples, as we have label style classes. they have
+	 * to be created with any filters set.. TODO or we make the jmappane not a
+	 * symbolzer preview, but a ruleliste preview.. so we have all styles in one
+	 * preview... and maybe all features in the preview..
+	 * 
+	 * @return
+	 */
+	private FeatureCollection<SimpleFeatureType, SimpleFeature> getPreviewFeatures() {
+		if (features == null) {
+			try {
+
+				LOGGER.debug("Putting 100 random features into the preview");
+				Filter filter = rulesList.getClassesFilters().get(0) != null ? rulesList
+						.getClassesFilters().get(0) : Filter.INCLUDE;
+
+				features = rulesList
+						.getStyledFeatures()
+						.getFeatureSource()
+						.getFeatures(
+								new DefaultQuery(rulesList.getStyledFeatures()
+										.getSchema().getTypeName(), filter,
+										100, null, "max 100 sample features"));
+
+				if (features.size() == 0 && filter != Filter.INCLUDE) {
+					LOGGER.info("Getting preview features for the filter "
+							+ filter
+							+ " failed, getting preview features without a filter!");
+
+					features = rulesList
+							.getStyledFeatures()
+							.getFeatureSource()
+							.getFeatures(
+									new DefaultQuery(rulesList
+											.getStyledFeatures().getSchema()
+											.getTypeName(), Filter.INCLUDE,
+											100, null,
+											"max 100 sample features"));
+				}
+
+			} catch (IOException e) {
+				LOGGER.error(
+						"Sample features for TextSymbolizer Preview could not be requested:",
+						e);
+				throw new RuntimeException(
+						"Sample features for TextSymbolizer Preview could not be requested",
+						e);
+			}
+		}
+		return features;
 	}
 
 	//
@@ -769,17 +519,17 @@ public class TextRuleListGUI extends JPanel {
 	// jButtonPlacement.setFont(jButtonPlacement.getFont().deriveFont(
 	// AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
 	// AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
-	//			
+	//
 	// LabelPlacement labelPlacement =
 	// rulesList.getSymbolizers().get(0).getLabelPlacement();
 	// PointPlacement pPlacement;
 	// LinePlacement linePlacement;
-	//			
+	//
 	// linePlacement.set
-	//			
+	//
 	// AnchorPoint ap = StylingUtil.STYLE_BUILDER.createAnchorPoint(10., 10.);
 	// pPlacement.setAnchorPoint(ap);
-	//			
+	//
 	// jButtonPlacement.setEnabled(false);
 	// }
 	// return jButtonPlacement;

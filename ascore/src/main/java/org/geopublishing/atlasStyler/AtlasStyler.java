@@ -46,6 +46,7 @@ import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFS;
@@ -266,7 +267,8 @@ public class AtlasStyler {
 	private Style backupStyle;
 
 	/**
-	 * A list of fonts that will be available for styling.
+	 * A list of fonts that will be available for styling in extension to the
+	 * default font families. {@link #getDefaultFontFamilies()}
 	 */
 	private List<Font> fonts = new ArrayList<Font>();
 
@@ -362,15 +364,16 @@ public class AtlasStyler {
 			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource) {
 		this(new StyledFS(featureSource));
 	}
-	
+
 	/**
-	 * Create an AtlasStyler object for any {@link FeatureSource} and import the given {@link Style}.
+	 * Create an AtlasStyler object for any {@link FeatureSource} and import the
+	 * given {@link Style}.
 	 */
 	public AtlasStyler(
-			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource, Style style) {
+			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
+			Style style) {
 		this(new StyledFS(featureSource), style, null, null);
 	}
-
 
 	/**
 	 * Before loading a style we have to forget everything we might have
@@ -452,12 +455,11 @@ public class AtlasStyler {
 				final String metaInfoString = fts.getName();
 
 				final int anzRules = fts.rules().size();
-//				LOGGER.info("Importing: '" + metaInfoString
-//						+ "', has #Rules = " + anzRules);
+				// LOGGER.info("Importing: '" + metaInfoString
+				// + "', has #Rules = " + anzRules);
 
 				if ((metaInfoString == null)) {
-					LOGGER
-							.warn("This FeatureTypeStyle can't be proppery imported! It has not been created with AtlasStyler");
+					LOGGER.warn("This FeatureTypeStyle can't be proppery imported! It has not been created with AtlasStyler");
 					continue;
 				}
 
@@ -529,14 +531,12 @@ public class AtlasStyler {
 									.getTitle();
 							singleRuleList.setTitle(title2.toString());
 						} catch (final NullPointerException e) {
-							LOGGER
-									.warn("The title style to import has been null!");
+							LOGGER.warn("The title style to import has been null!");
 							singleRuleList.setTitle("");
 						} catch (final Exception e) {
-							LOGGER
-									.error(
-											"The title style to import could not been set!",
-											e);
+							LOGGER.error(
+									"The title style to import could not been set!",
+									e);
 							singleRuleList.setTitle("");
 						}
 
@@ -594,8 +594,10 @@ public class AtlasStyler {
 						for (final Rule r : fts.rules()) {
 
 							if (r.getName() != null
-									&& r.getName().toString().startsWith(
-											FeatureRuleList.NODATA_RULE_NAME)) {
+									&& r.getName()
+											.toString()
+											.startsWith(
+													FeatureRuleList.NODATA_RULE_NAME)) {
 								// This rule defines the NoDataSymbol
 								uniqueRuleList.importNoDataRule(r);
 								continue;
@@ -626,8 +628,6 @@ public class AtlasStyler {
 								symbolizers2.add(symb);
 							}
 							symbolRL.reverseSymbolizers();
-							
-							
 
 							// Finally set all three values into the RL
 							uniqueRuleList.getLabels().add(
@@ -636,7 +636,7 @@ public class AtlasStyler {
 							uniqueRuleList.getValues().add(strings[1]);
 
 							uniqueRuleList.test();
-							
+
 							countRules++;
 						}
 
@@ -709,8 +709,10 @@ public class AtlasStyler {
 						double[] ds = null;
 						for (final Rule r : fts.rules()) {
 
-							if (r.getName().toString().startsWith(
-									FeatureRuleList.NODATA_RULE_NAME)) {
+							if (r.getName()
+									.toString()
+									.startsWith(
+											FeatureRuleList.NODATA_RULE_NAME)) {
 								// This rule defines the NoDataSymbol
 								quantitiesRuleList.importNoDataRule(r);
 								continue;
@@ -750,7 +752,8 @@ public class AtlasStyler {
 										.getSymbolizerColor(s);
 
 								if (c != null) {
-									System.out.println("Rule "+ri+" has color "+c);
+									System.out.println("Rule " + ri
+											+ " has color " + c);
 									quantitiesRuleList.getColors()[ri] = c;
 									break;
 								}
@@ -776,10 +779,11 @@ public class AtlasStyler {
 				}
 
 				else {
-//					LOGGER
-//							.info("Importing a FTS failed because the Name field was not recognized. Name='"
-//									+ metaInfoString
-//									+ "'. An empty AtlasStyler will start if no other FTS are defined.");
+					// LOGGER
+					// .info("Importing a FTS failed because the Name field was not recognized. Name='"
+					// + metaInfoString
+					// +
+					// "'. An empty AtlasStyler will start if no other FTS are defined.");
 
 					/**
 					 * Adding default layers to all SingleRules
@@ -811,15 +815,14 @@ public class AtlasStyler {
 
 		final int ist = countImportedFeatureTypeStyles;
 		final int soll = importStyle.featureTypeStyles().size();
-//		if (ist < soll) {
-//			LOGGER.debug("Only " + ist + " of all " + soll
-//					+ " Rulelists have been recognized fully...");
-//		}
+		// if (ist < soll) {
+		// LOGGER.debug("Only " + ist + " of all " + soll
+		// + " Rulelists have been recognized fully...");
+		// }
 
 		setQuite(false);
 		if (importedThisAbstractRuleList != null) {
-			LOGGER
-					.debug("Imported a valid FeatureTypeStyle for Symbolization, fireing StyleChangedEvents... ");
+			LOGGER.debug("Imported a valid FeatureTypeStyle for Symbolization, fireing StyleChangedEvents... ");
 			fireStyleChangedEvents(importedThisAbstractRuleList);
 		}
 
@@ -936,11 +939,9 @@ public class AtlasStyler {
 
 			if (lastChangedRuleList == null) {
 
-				LOGGER
-						.warn("Returning empty style because no lastChangedRuleList==null");
+				LOGGER.warn("Returning empty style because no lastChangedRuleList==null");
 
-				xxxstyle
-						.getDescription()
+				xxxstyle.getDescription()
 						.setTitle(
 								"AS:Returning empty style because no lastChangedRuleList==null");
 				return xxxstyle;
@@ -1199,8 +1200,8 @@ public class AtlasStyler {
 	 */
 	public static File getApplicationPreferencesDir() {
 		if (applicationPreferencesDir == null) {
-			applicationPreferencesDir = new File(new File(System
-					.getProperty("user.home")), ".AtlasStyler");
+			applicationPreferencesDir = new File(new File(
+					System.getProperty("user.home")), ".AtlasStyler");
 			applicationPreferencesDir.mkdirs();
 		}
 		return applicationPreferencesDir;
@@ -1391,7 +1392,8 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * A list of fonts that will be available for styling.
+	 * A list of fonts that will be available for styling in extension to the
+	 * default font families. #getDefaultFontFamilies
 	 */
 	public List<Font> getFonts() {
 		return fonts;
@@ -1447,6 +1449,29 @@ public class AtlasStyler {
 		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("Charcoal"));
 		fontFamilies[4].add(FilterUtil.FILTER_FAC.literal("sans-serif"));
 
+		return fontFamilies;
+	}
+
+	/**
+	 * Returns a list of available fonts: A combination of the the
+	 * AtlasStyler.getDefaultFontFamilies() and the fonts passed to
+	 * {@link AtlasStyler} on construction.
+	 */
+	public List<Literal>[] getAvailableFonts() {
+		List<Literal>[] fontFamilies = AtlasStyler.getDefaultFontFamilies();
+
+		/**
+		 * Add user defined Fonts. One Family for every extra font.
+		 */
+		List<Font> extraFonts = getFonts();
+
+		int i = 6;
+		for (Font f : extraFonts) {
+			fontFamilies = LangUtil.extendArray(fontFamilies,
+					new ArrayList<Literal>());
+			fontFamilies[i].add(FilterUtil.FILTER_FAC.literal(f.getName()));
+			i++;
+		}
 		return fontFamilies;
 	}
 

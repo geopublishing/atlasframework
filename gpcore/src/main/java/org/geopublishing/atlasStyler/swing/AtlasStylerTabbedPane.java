@@ -53,8 +53,8 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 	public final Icon ICON_SYMBOLOGY = new ImageIcon(
 			AtlasStylerTabbedPane.class.getResource("/images/symbology.png"));
 
-	public final Icon ICON_LABELS = new ImageIcon(AtlasStylerTabbedPane.class
-			.getResource("/images/labels.png"));
+	public final Icon ICON_LABELS = new ImageIcon(
+			AtlasStylerTabbedPane.class.getResource("/images/labels.png"));
 
 	private final AtlasStyler atlasStyler;
 
@@ -137,8 +137,9 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 		// Only allow labeling, if there is at least one attribute field
 		if (ASUtil.getValueFieldNames(
-				atlasStyler.getStyledFeatures().getSchema(), false).size() > 0) {
-			addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Labels"), ICON_LABELS,
+				atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
+			addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Labels"),
+					ICON_LABELS,
 					new TextRuleListGUI(atlasStyler.getTextRulesList(),
 							atlasStyler), null);
 		} else {
@@ -191,7 +192,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 			int countEntries = 0;
 
-			// 
+			//
 			cbmodel.addElement(AtlasStyler.R("StylerSelection.single_symbol"));
 			IDX_SINGLE_SYMBOL = countEntries++;
 
@@ -212,16 +213,16 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 				// For polygons we also offer to style a PointSymbolizer
 				if (atlasStyler.isPolygon()) {
-					cbmodel
-							.addElement(AtlasStyler
-									.R("StylerSelection.categories_unique_values_centroids"));
+					cbmodel.addElement(AtlasStyler
+							.R("StylerSelection.categories_unique_values_centroids"));
 					IDX_UNIQUE_VALUES_CENT = countEntries++;
 				}
 
 			}
 
 			if (FeatureUtil.getNumericalFieldNames(
-					atlasStyler.getStyledFeatures().getSchema(), false).size() > 0) {
+					atlasStyler.getStyledFeatures().getSchema(), false, true)
+					.size() > 0) {
 				{
 					// Quantities classification are only available if we have
 					// any numeric fields
@@ -230,9 +231,8 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 					IDX_COLORED_QUANTITIES = countEntries++;
 
 					if (atlasStyler.isPolygon()) {
-						cbmodel
-								.addElement(AtlasStyler
-										.R("StylerSelection.quantities_colored_centroids"));
+						cbmodel.addElement(AtlasStyler
+								.R("StylerSelection.quantities_colored_centroids"));
 						IDX_COLORED_QUANTITIES_CENT = countEntries++;
 					}
 				}
@@ -300,8 +300,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 				}
 			else {
-				LOGGER
-						.info("lastChangedRuleList == null => Selecting a default = IDX_SINGLE_SYMBOL:");
+				LOGGER.info("lastChangedRuleList == null => Selecting a default = IDX_SINGLE_SYMBOL:");
 				jComboBoxRuleListType.setSelectedIndex(IDX_SINGLE_SYMBOL);
 			}
 
@@ -317,8 +316,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 						return;
 					}
 
-					LOGGER
-							.debug("A selection was made on the jComboBoxRuleListType");
+					LOGGER.debug("A selection was made on the jComboBoxRuleListType");
 					updateGuiForSelectedIndex();
 
 					// TODO Maybe we can remove this... Check if all
@@ -340,8 +338,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 
 		int selIdx = jComboBoxRuleListType.getSelectedIndex();
 		if (selIdx < 0) {
-			LOGGER
-					.debug("not changing the GUI, because the newly selected index is -1");
+			LOGGER.debug("not changing the GUI, because the newly selected index is -1");
 			return;
 		}
 
@@ -351,7 +348,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 		if (jPanelRuleListEditor.getComponentCount() > 0) {
 			((Disposable) jPanelRuleListEditor.getComponent(0)).dispose();
 		}
-		
+
 		String imageName = null;
 
 		if (selIdx == IDX_SINGLE_SYMBOL) {
@@ -484,26 +481,25 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 		 * Update using the GUI we just created...
 		 */
 
-			jPanelRuleListEditor.removeAll();
-			jPanelRuleListEditor.add(gui, "top, grow");
+		jPanelRuleListEditor.removeAll();
+		jPanelRuleListEditor.add(gui, "top, grow");
 
-			/** Replace the preview image * */
-			if (imageName != null) {
-				URL resource = getClass().getResource(imageName);
-				if (resource != null) {
-					jLabelRuleListeTypeImage.setIcon(new ImageIcon(resource));
-				} else {
-
-				}
-			}
-
-			// Noe.. erstmal nicht mehr packen
-			if (AtlasStylerTabbedPane.this != null) {
-				if (SwingUtil.getParentWindow(AtlasStylerTabbedPane.this) != null)
-					SwingUtil.getParentWindow(AtlasStylerTabbedPane.this)
-							.pack();
+		/** Replace the preview image * */
+		if (imageName != null) {
+			URL resource = getClass().getResource(imageName);
+			if (resource != null) {
+				jLabelRuleListeTypeImage.setIcon(new ImageIcon(resource));
+			} else {
 
 			}
+		}
+
+		// Noe.. erstmal nicht mehr packen
+		if (AtlasStylerTabbedPane.this != null) {
+			if (SwingUtil.getParentWindow(AtlasStylerTabbedPane.this) != null)
+				SwingUtil.getParentWindow(AtlasStylerTabbedPane.this).pack();
+
+		}
 	}
 
 	public void dispose() {

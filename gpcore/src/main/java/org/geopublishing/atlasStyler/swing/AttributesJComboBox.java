@@ -39,7 +39,7 @@ import skrueger.i8n.Translation;
  * This extension of a {@link JComboBox} is specialized on the visualization of
  * a selection of attribute. If {@link AttributeMetadataImpl} is stored in the
  * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
- * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored. 
+ * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored.<br/>
  * 
  * @author Stefan A. Tzeggai
  */
@@ -100,7 +100,7 @@ public class AttributesJComboBox extends JComboBox {
 		 * Caching the list of numerical attributes, so we can quickly determine
 		 * the type of a selected attribute without accessing the schema.
 		 */
-		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false);
+		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false, true);
 
 		SwingUtil.addMouseWheelForCombobox(this, false);
 

@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -247,7 +246,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		this.add(getJPanelFields(), "grow x");
 		this.add(getJPanelClassification(), "grow x");
 		this.add(getJPanelColorsAndTemplate(), "span 2, growx");
-		this.add(new JScrollPane(getJTableClasses()), "span 2, grow x, bottom");
+		this.add(new JScrollPane(getJTableClasses()), "span 2, height ::100, grow x, bottom");
 	}
 
 	/**
@@ -258,8 +257,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	private JPanel getJPanelFields() {
 		if (jPanel == null) {
 			jPanel = new JPanel(new MigLayout("inset 1, gap 1, wrap 2"));
-			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
-					.R("GraduatedColorQuantities.Attributes.BorderTitle")));
+//			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+//					.R("GraduatedColorQuantities.Attributes.BorderTitle")));
 
 			JLabel jLabelNormalization = new JLabel(AtlasStyler
 					.R("GraduatedColorQuantities.NormalizationAttribute"));
@@ -270,9 +269,9 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 			jLabelValue.setToolTipText(AtlasStyler
 					.R("GraduatedColorQuantities.ValueAttribute.TT"));
 			jPanel.add(jLabelValue, "");
-			jPanel.add(getJComboBoxValueField(), "");
+			jPanel.add(getJComboBoxValueField(), "sgx1, growx");
 			jPanel.add(jLabelNormalization, "");
-			jPanel.add(getJComboBoxNormalizationField(), "");
+			jPanel.add(getJComboBoxNormalizationField(), "sgx1, growx");
 		}
 		return jPanel;
 	}

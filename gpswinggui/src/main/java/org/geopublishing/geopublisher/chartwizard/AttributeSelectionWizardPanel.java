@@ -59,7 +59,8 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	static String desc = GeopublisherGUI.R("AttributeSelectionWizardPanel.Title");
+	static String desc = GeopublisherGUI
+			.R("AttributeSelectionWizardPanel.Title");
 
 	@Override
 	protected String validateContents(Component component, Object event) {
@@ -69,8 +70,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 		for (int idx = 0; idx < chartType.getMinDimensions(); idx++) {
 			if (getAttribJComboBoxFor(idx).getSelectedIndex() == -1)
 				return GeopublisherGUI
-						.R(
-								"AttributeSelectionWizardPanel.ValidationFailed.NeedAtLeastXAttributes",
+						.R("AttributeSelectionWizardPanel.ValidationFailed.NeedAtLeastXAttributes",
 								chartType.getMinDimensions());
 		}
 
@@ -126,22 +126,22 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	 */
 	private JPanel getSettingsPanel(int idx) {
 		if (settingsPanels.get(idx) == null) {
-			
+
 			ChartType chartType = (ChartType) getWizardData(ChartWizard.CHARTTYPE);
 
 			JPanel settingsPanel;
 			if (idx == 0) {
 				settingsPanel = new JPanel(new MigLayout("wrap 1, insets 0"));
-//				settingsPanel.add(getNormalizeJCheckboxFor(idx));
-				
-				// For scatter plots they makes no sense: 
+				// settingsPanel.add(getNormalizeJCheckboxFor(idx));
+
+				// For scatter plots they makes no sense:
 				if (!(chartType == ChartType.SCATTER)) {
 					settingsPanel.add(getDomainSortedJCheckbox());
 					settingsPanel.add(getCategoryJCheckbox());
 				}
 			} else {
 				settingsPanel = new JPanel(new MigLayout("wrap 1, insets 0"));
-//				settingsPanel.add(getNormalizeJCheckboxFor(idx));
+				// settingsPanel.add(getNormalizeJCheckboxFor(idx));
 			}
 
 			settingsPanels.put(idx, settingsPanel);
@@ -151,56 +151,58 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 	}
 
-//	/**
-//	 * Returns the normlizeCheckBox for idx
-//	 */
-//	private JCheckBox getNormalizeJCheckboxFor(int idx) {
-//		if (normalizeJCheckboxs.get(idx) == null) {
-//			JCheckBox cb = new JCheckBox(Geopublisher
-//					.R("AttributeSelectionPanel.NormalizeCheckbox"));
-//			cb.setToolTipText(Geopublisher
-//					.R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
-//			
-//			final ChartType chartType = (ChartType)getWizardData(ChartWizard.CHARTTYPE);
-//			if (chartType == ChartType.SCATTER) {
-//				cb.setSelected(true);
-//			} else {
-//				cb.setSelected(false);
-//			}
-//
-//			cb.setName(ChartWizard.NORMALIZE_ + idx);
-//			normalizeJCheckboxs.put(idx, cb);
-//
-//			getAttribJComboBoxFor(0).addItemListener(new ItemListener() {
-//
-//				@Override
-//				public void itemStateChanged(ItemEvent e) {
-//
-//					// LOGGER.debug(normalizeJCheckboxs.get(0));
-//					// if (e.getSource() != normalizeJCheckboxs.get(0))
-//					// return;
-//
-//					if (getAttribJComboBoxFor(0).isNumericalAttribSelected()) {
-//						/* A numerical attribute */
-//						normalizeJCheckboxs.get(0).setEnabled(true);
-//					} else {
-//						/* A numerical attribute */
-//						normalizeJCheckboxs.get(0).setEnabled(false);
-//						normalizeJCheckboxs.get(0).setSelected(false);
-//					}
-//				}
-//			});
-//		}
-//		return normalizeJCheckboxs.get(idx);
-//	}
+	// /**
+	// * Returns the normlizeCheckBox for idx
+	// */
+	// private JCheckBox getNormalizeJCheckboxFor(int idx) {
+	// if (normalizeJCheckboxs.get(idx) == null) {
+	// JCheckBox cb = new JCheckBox(Geopublisher
+	// .R("AttributeSelectionPanel.NormalizeCheckbox"));
+	// cb.setToolTipText(Geopublisher
+	// .R("AttributeSelectionPanel.NormalizeCheckbox.TT"));
+	//
+	// final ChartType chartType =
+	// (ChartType)getWizardData(ChartWizard.CHARTTYPE);
+	// if (chartType == ChartType.SCATTER) {
+	// cb.setSelected(true);
+	// } else {
+	// cb.setSelected(false);
+	// }
+	//
+	// cb.setName(ChartWizard.NORMALIZE_ + idx);
+	// normalizeJCheckboxs.put(idx, cb);
+	//
+	// getAttribJComboBoxFor(0).addItemListener(new ItemListener() {
+	//
+	// @Override
+	// public void itemStateChanged(ItemEvent e) {
+	//
+	// // LOGGER.debug(normalizeJCheckboxs.get(0));
+	// // if (e.getSource() != normalizeJCheckboxs.get(0))
+	// // return;
+	//
+	// if (getAttribJComboBoxFor(0).isNumericalAttribSelected()) {
+	// /* A numerical attribute */
+	// normalizeJCheckboxs.get(0).setEnabled(true);
+	// } else {
+	// /* A numerical attribute */
+	// normalizeJCheckboxs.get(0).setEnabled(false);
+	// normalizeJCheckboxs.get(0).setSelected(false);
+	// }
+	// }
+	// });
+	// }
+	// return normalizeJCheckboxs.get(idx);
+	// }
 
 	/**
 	 * This checkbox defines whether the the domain axis will treat numerical
 	 * data as category data
 	 */
 	private Component getCategoryJCheckbox() {
-		final JCheckBox cb = new JCheckBox(GeopublisherGUI
-				.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
+		final JCheckBox cb = new JCheckBox(
+				GeopublisherGUI
+						.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
 		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainForceCategoryCheckbox"));
 
@@ -246,8 +248,8 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	// }
 
 	private JCheckBox getDomainSortedJCheckbox() {
-		JCheckBox cb = new JCheckBox(GeopublisherGUI
-				.R("AttributeSelectionPanel.DomainSortCheckbox"));
+		JCheckBox cb = new JCheckBox(
+				GeopublisherGUI.R("AttributeSelectionPanel.DomainSortCheckbox"));
 		cb.setToolTipText(GeopublisherGUI
 				.R("AttributeSelectionPanel.DomainSortCheckbox.TT"));
 
@@ -262,9 +264,9 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 	public JLabel getDescriptionPanel() {
 		if (descriptionPanel == null) {
 			ChartType chartType = (ChartType) getWizardData(ChartWizard.CHARTTYPE);
-			descriptionPanel = new JLabel(GeopublisherGUI
-					.R("AttributeSelectionPanel.Explanation", chartType
-							.getTitle()));
+			descriptionPanel = new JLabel(
+					GeopublisherGUI.R("AttributeSelectionPanel.Explanation",
+							chartType.getTitle()));
 
 		}
 
@@ -318,14 +320,16 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 			 */
 			final ChartType chartType = (ChartType) getWizardData(ChartWizard.CHARTTYPE);
 			if (idx == 0 && chartType.isCategoryAllowedForDomainAxis()) {
-				dataArray = ASUtil.getValueFieldNames(featureSource, false);
+				dataArray = ASUtil
+						.getValueFieldNames(featureSource.getSchema());
 			} else {
-				dataArray = FeatureUtil.getNumericalFieldNames(featureSource.getSchema(), false);
+				dataArray = FeatureUtil.getNumericalFieldNames(featureSource
+						.getSchema());
 			}
 
 			/* Add the null as an item to the optional drop down lists only */
 			if (idx > 0 && idx > chartType.getMinDimensions() - 1)
-				dataArray.add(0,null);
+				dataArray.add(0, null);
 
 			final AttributesJComboBox jcombo = new AttributesJComboBox(
 					featureSource.getSchema(), attributeMetaDataMap,
@@ -361,7 +365,8 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 								.getSelectedItem();
 						getAttribJComboBoxFor(idx - 1).setModel(
 								new DefaultComboBoxModel(ASUtil
-										.getValueFieldNames(featureSource, false)));
+										.getValueFieldNames(featureSource
+												.getSchema())));
 						getAttribJComboBoxFor(idx - 1).setSelectedItem(
 								backupSelection);
 					} else if (selection == null
@@ -369,8 +374,8 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 						// LOGGER.debug("adding the null to " + (idx - 1));
 						Object backupSelection = getAttribJComboBoxFor(idx - 1)
 								.getSelectedItem();
-						Vector<String> dataArray = ASUtil.getValueFieldNames(
-								featureSource, false);
+						Vector<String> dataArray = ASUtil
+								.getValueFieldNames(featureSource.getSchema());
 						dataArray.insertElementAt(null, 0);
 						getAttribJComboBoxFor(idx - 1).setModel(
 								new DefaultComboBoxModel(dataArray));
@@ -388,14 +393,16 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 							getAttribJComboBoxFor(idx + 1).setEnabled(true);
 							getLabelFor(idx + 1).setEnabled(true);
-//							getNormalizeJCheckboxFor(idx + 1).setEnabled(true);
+							// getNormalizeJCheckboxFor(idx +
+							// 1).setEnabled(true);
 
 						} else {
 							// LOGGER
 							// .debug("sel == null. setting it to disabled.");
 							getAttribJComboBoxFor(idx + 1).setEnabled(false);
 							getLabelFor(idx + 1).setEnabled(false);
-//							getNormalizeJCheckboxFor(idx + 1).setEnabled(false);
+							// getNormalizeJCheckboxFor(idx +
+							// 1).setEnabled(false);
 
 							getAttribJComboBoxFor(idx + 1).setSelectedItem(
 									(Object) null);

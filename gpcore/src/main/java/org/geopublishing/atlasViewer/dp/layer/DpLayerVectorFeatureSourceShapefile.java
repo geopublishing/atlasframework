@@ -12,7 +12,6 @@ package org.geopublishing.atlasViewer.dp.layer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -36,7 +35,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.io.IOUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
 

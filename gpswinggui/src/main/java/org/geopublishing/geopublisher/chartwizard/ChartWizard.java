@@ -35,8 +35,8 @@ import skrueger.i8n.Translation;
 
 /**
  * Static class that creates a chart-definition-wizard for a given
- * {@link FeatureSource} and (optional) a Map of {@link AttributeMetadataImpl}. The
- * static method {@link #showWizard(FeatureSource, Map)} returns
+ * {@link FeatureSource} and (optional) a Map of {@link AttributeMetadataImpl}.
+ * The static method {@link #showWizard(FeatureSource, Map)} returns
  * <code>null</code> or an instance of {@link FeatureChartStyle}
  * 
  * @author Stefan Alfons Tzeggai
@@ -98,7 +98,7 @@ public class ChartWizard extends WizardBranchController {
 	/** Is initialized with <code>false</code> **/
 	public static final String DOMAIN_FORCE_CATEGORY = "forceCategoryDataEvenIfNumeric_Boolean";
 
-//	public static final String NORMALIZE_ = "normlizeSettingForIdx_Boolean";
+	// public static final String NORMALIZE_ = "normlizeSettingForIdx_Boolean";
 
 	public static final String TYPECHANGED = "kklökljö";
 
@@ -204,10 +204,11 @@ public class ChartWizard extends WizardBranchController {
 		/*
 		 * We cache the total number if attributes and numerical attributes
 		 */
-		initialProperties.put(NUMBER_OF_ATTRIBS, ASUtil.getValueFieldNames(
-				featureSource, false).size());
+		initialProperties.put(NUMBER_OF_ATTRIBS,
+				ASUtil.getValueFieldNames(featureSource, false, true).size());
 		initialProperties.put(NUMBER_OF_NUMERIC_ATTRIBS, FeatureUtil
-				.getNumericalFieldNames(featureSource.getSchema(), false).size());
+				.getNumericalFieldNames(featureSource.getSchema(), false)
+				.size());
 
 		if (editChart == null) {
 			/*
@@ -225,16 +226,17 @@ public class ChartWizard extends WizardBranchController {
 			initialProperties.put(EDITCHART, editChart);
 
 			initialProperties.put(CHARTTYPE, editChart.getType());
-			initialProperties.put(SORT_DOMAIN_AXIS, editChart
-					.isSortDomainAxis());
-			initialProperties.put(DOMAIN_FORCE_CATEGORY, editChart
-					.isForceCategories());
+			initialProperties.put(SORT_DOMAIN_AXIS,
+					editChart.isSortDomainAxis());
+			initialProperties.put(DOMAIN_FORCE_CATEGORY,
+					editChart.isForceCategories());
 
 			for (Integer index = 0; index < editChart.getAttributeCount(); index++) {
-				initialProperties.put(ChartWizard.ATTRIBUTE_ + index, editChart
-						.getAttributeName(index));
-//				initialProperties.put(ChartWizard.NORMALIZE_ + index, editChart
-//						.isAttributeNormalized(index));
+				initialProperties.put(ChartWizard.ATTRIBUTE_ + index,
+						editChart.getAttributeName(index));
+				// initialProperties.put(ChartWizard.NORMALIZE_ + index,
+				// editChart
+				// .isAttributeNormalized(index));
 			}
 
 			/* The title of the chart */

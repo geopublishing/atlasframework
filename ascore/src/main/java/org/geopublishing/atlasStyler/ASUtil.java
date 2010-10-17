@@ -123,9 +123,10 @@ public class ASUtil {
 	 * übersetzt ist.
 	 */
 	public static String[] getSupportedLanguages() {
-		final Set<Locale> availableLocales = ResourceProvider.getAvailableLocales(
-				RESOURCE, true);
-		final ArrayList<String> list = new ArrayList<String>(availableLocales.size());
+		final Set<Locale> availableLocales = ResourceProvider
+				.getAvailableLocales(RESOURCE, true);
+		final ArrayList<String> list = new ArrayList<String>(
+				availableLocales.size());
 		for (final Locale l : availableLocales) {
 			list.add(l.getLanguage());
 		}
@@ -194,7 +195,8 @@ public class ASUtil {
 	 * @param values
 	 *            optional values
 	 */
-	public static String R(final Locale locale, final String key, final Object... values) {
+	public static String R(final Locale locale, final String key,
+			final Object... values) {
 		String string = RESOURCE.getString(key, locale, values);
 		if (string.equals("???")) {
 			string = "???" + key;
@@ -245,9 +247,9 @@ public class ASUtil {
 	 */
 	public static Vector<String> getValueFieldNames(
 			final FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
-			final boolean empty) {
+			final boolean empty, boolean validOnly) {
 
-		return getValueFieldNames(featureSource.getSchema(), empty);
+		return getValueFieldNames(featureSource.getSchema(), empty, validOnly);
 	}
 
 	/**
@@ -259,7 +261,8 @@ public class ASUtil {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static Vector<String> getValueFieldNames(
-			final SimpleFeatureType featureType, final boolean empty) {
+			final SimpleFeatureType featureType, final boolean empty,
+			boolean validOnly) {
 
 		final Vector<String> fieldNames = new Vector<String>();
 
@@ -271,6 +274,13 @@ public class ASUtil {
 			/** Ignore geometry columns **/
 			if (ad instanceof GeometryDescriptor)
 				continue;
+
+			/** Ignore names that do contain non ascii charaters **/
+			if (validOnly) {
+				// Only "normal" characters, digits and '_' allowed
+				if (!ad.getLocalName().matches("\\w+"))
+					continue;
+			}
 
 			fieldNames.add(ad.getLocalName());
 
@@ -284,13 +294,28 @@ public class ASUtil {
 
 	/**
 	 * Returns an list of simple attribute names, ordered by: text attributes
-	 * first
+	 * first. The list is filtered for attribute names that do not contain any
+	 * special characters.
 	 */
 	public static Vector<String> getValueFieldNamesPrefereStrings(
 			final SimpleFeatureType schema, final boolean empty) {
+		return getValueFieldNamesPrefereStrings(schema, empty, true);
+	}
+
+	/**
+	 * Returns an list of simple attribute names, ordered by: text attributes
+	 * first
+	 * 
+	 * @param validOnly
+	 *            if <code>true</code>, the list is filtered for attribute names
+	 *            that do not contain any special characters
+	 */
+	public static Vector<String> getValueFieldNamesPrefereStrings(
+			final SimpleFeatureType schema, final boolean empty,
+			boolean validOnly) {
 
 		final Vector<String> result = getValueFieldNamesPrefereNumerical(
-				schema, false);
+				schema, false, validOnly);
 		Collections.reverse(result);
 
 		if (empty)
@@ -301,19 +326,22 @@ public class ASUtil {
 
 	/**
 	 * Returns an list of simple attribute names, ordered by: numerical
-	 * attributes first
+	 * attributes first. * @param validOnly if <code>true</code>, the list is
+	 * filtered for attribute names that do not contain any special characters
 	 */
 	public static Vector<String> getValueFieldNamesPrefereNumerical(
-			final SimpleFeatureType schema, final boolean empty) {
+			final SimpleFeatureType schema, final boolean empty,
+			boolean validOnly) {
 		final Vector<String> result = new Vector<String>();
 
 		if (empty)
 			result.add("");
 
 		final Vector<String> numericalFieldNames = FeatureUtil
-				.getNumericalFieldNames(schema, false);
+				.getNumericalFieldNames(schema, false, validOnly);
 		result.addAll(numericalFieldNames);
-		final Vector<String> valueFieldNames = getValueFieldNames(schema, false);
+		final Vector<String> valueFieldNames = getValueFieldNames(schema,
+				false, validOnly);
 		for (final String vaString : valueFieldNames) {
 			if (!result.contains(vaString)) {
 				result.add(vaString);
@@ -752,7 +780,7 @@ public class ASUtil {
 	// return rl;
 	// }
 	//
-	
+
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
 	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
@@ -761,32 +789,35 @@ public class ASUtil {
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList getDefaultNoDataSymbol(final GeometryForm form, 
-			final Color... colors) {
+	public static SingleRuleList getDefaultNoDataSymbol(
+			final GeometryForm form, final Color... colors) {
 		return getDefaultNoDataSymbol(form, 1., colors);
 	}
-
 
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
 	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
 	 * default legend label automatically for all languages.
+	 * 
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList getDefaultNoDataSymbol(final GeometryForm form, final double opacity_fill, 
+	public static SingleRuleList getDefaultNoDataSymbol(
+			final GeometryForm form, final double opacity_fill,
 			final Color... colors) {
 		final SingleRuleList rl;
-		
+
 		final Color defaultWhite = colors.length > 0 ? colors[0] : Color.WHITE;
-		final Color defaultGray = colors.length > 1  ? colors[1] : Color.LIGHT_GRAY;
-		
+		final Color defaultGray = colors.length > 1 ? colors[1]
+				: Color.LIGHT_GRAY;
+
 		switch (form) {
 		case POINT:
 			rl = new SinglePointSymbolRuleList("");
 			// A white circle is the default NODATA symbol for points
 			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null,
-					SB.createMark("circle", defaultWhite), null, opacity_fill, 8., 0.)));
+					SB.createMark("circle", defaultWhite), null, opacity_fill,
+					8., 0.)));
 			break;
 		case POLYGON:
 			rl = new SinglePolygonSymbolRuleList("");
@@ -1335,14 +1366,16 @@ public class ASUtil {
 	 * Returns a {@link Vector} of Attribute LocalNames, excluding any Geometry
 	 * columns
 	 */
-	public static Vector<String> getValueFieldNames(final SimpleFeatureType schema) {
-		return getValueFieldNames(schema, false);
+	public static Vector<String> getValueFieldNames(
+			final SimpleFeatureType schema) {
+		return getValueFieldNames(schema, false, true);
 	}
 
 	/**
 	 * Creates a default Style that is compatible with {@link AtlasStyler}.
 	 */
-	public static Style createDefaultStyle(final StyledLayerInterface<?> styledLayer) {
+	public static Style createDefaultStyle(
+			final StyledLayerInterface<?> styledLayer) {
 		final Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
 
 		if (!(styledLayer instanceof StyledFeaturesInterface<?>))

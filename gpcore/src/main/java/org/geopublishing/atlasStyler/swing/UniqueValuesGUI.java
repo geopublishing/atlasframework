@@ -152,15 +152,22 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAttributeJPanel() {
-		JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 1"),
+		// JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 1"),
+		// AtlasStyler.R("UniqueValuesGUI.borderTitle.value_Field"));
+		//
+		// jLabelValue = new JLabel(
+		// AtlasStyler
+		// .R("UniqueValuesGUI.labelFor.valueFieldSelectionCombobox"));
+
+		JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 4"));
+
+		jLabelValue = new JLabel(
 				AtlasStyler.R("UniqueValuesGUI.borderTitle.value_Field"));
 
-		jLabelValue = new JLabel(AtlasStyler
-				.R("UniqueValuesGUI.labelFor.valueFieldSelectionCombobox"));
 		jPanelValueField.add(jLabelValue);
 		jPanelValueField.add(getJComboBoxValueField(), "growx, right, wrap");
 
-		jPanelValueField.add(getWithDefaultCheckbox(), "span 2");
+		jPanelValueField.add(getWithDefaultCheckbox(), "span 2, align right");
 
 		return jPanelValueField;
 	}
@@ -172,7 +179,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	private AttributesJComboBox getJComboBoxValueField() {
 		AttributesJComboBox jComboBoxValueAttribute = new AttributesJComboBox(
 				atlasStyler, ASUtil.getValueFieldNames(rulesList
-						.getStyledFeatures().getSchema(), false));
+						.getStyledFeatures().getSchema()));
 
 		jComboBoxValueAttribute.setSelectedItem(rulesList
 				.getPropertyFieldName());
@@ -218,12 +225,11 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
-				.setBorder(BorderFactory
-						.createTitledBorder(AtlasStyler
-								.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
+				.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
 
-		jLabelTemplate = new JLabel(AtlasStyler
-				.R("UniqueValues.ChooseTemplate.Label"));
+		jLabelTemplate = new JLabel(
+				AtlasStyler.R("UniqueValues.ChooseTemplate.Label"));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette());
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
@@ -259,7 +265,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 				palettes = ColorBrewer.instance().getPalettes();
 			}
 			DefaultComboBoxModel aModel = new DefaultComboBoxModel(palettes);
-			//			
+			//
 			// DefaultComboBoxModel aModel = new
 			// DefaultComboBoxModel(StylingUtil.addReversePalettes( brewer
 			// .getPalettes(paletteTypeUnique)));
@@ -275,8 +281,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						rulesList
-								.setBrewerPalette((BrewerPalette) (e.getItem()));
+						rulesList.setBrewerPalette((BrewerPalette) (e.getItem()));
 						jComboBoxPalette.setToolTipText(rulesList
 								.getBrewerPalette().getDescription());
 						// getTableModel().fireTableDataChanged();
@@ -365,8 +370,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 					});
 
-					template
-							.addListener(listenToRuleListeChangesAndUpdateTemplate);
+					template.addListener(listenToRuleListeChangesAndUpdateTemplate);
 
 					gui.setModal(true);
 					gui.setVisible(true);
@@ -420,8 +424,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
-			jButtonAddAllValues = new ThinButton(new AbstractAction(AtlasStyler
-					.R("UniqueValues.Button.AddAllValues")) {
+			jButtonAddAllValues = new ThinButton(new AbstractAction(
+					AtlasStyler.R("UniqueValues.Button.AddAllValues")) {
 
 				public void actionPerformed(ActionEvent e) {
 					try {
@@ -445,8 +449,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonAddValues() {
 		if (jButtonAddValues == null) {
-			jButtonAddValues = new ThinButton(new AbstractAction(AtlasStyler
-					.R("UniqueValues.Button.AddValues")) {
+			jButtonAddValues = new ThinButton(new AbstractAction(
+					AtlasStyler.R("UniqueValues.Button.AddValues")) {
 
 				public void actionPerformed(ActionEvent e) {
 					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
@@ -469,8 +473,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
-			jButtonRemove = new ThinButton(new AbstractAction(AtlasStyler
-					.R("UniqueValues.Button.RemoveValue")) {
+			jButtonRemove = new ThinButton(new AbstractAction(
+					AtlasStyler.R("UniqueValues.Button.RemoveValue")) {
 
 				public void actionPerformed(ActionEvent e) {
 					int[] selectedRows = getJTable().getSelectedRows();
@@ -515,8 +519,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private JButton getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
-			jButtonRemoveAll = new ThinButton(new AbstractAction(AtlasStyler
-					.R("UniqueValues.Button.RemoveAllValues")) {
+			jButtonRemoveAll = new ThinButton(new AbstractAction(
+					AtlasStyler.R("UniqueValues.Button.RemoveAllValues")) {
 
 				public void actionPerformed(ActionEvent e) {
 					// Ahhh.. this changes the original List! :-/
@@ -527,8 +531,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					List<Object> vals = rulesList.getValues();
 					List<Object> vals2 = new ArrayList<Object>();
 					for (Object s : vals) {
-						if (!s
-								.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE))
+						if (!s.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE))
 							vals2.add(s);
 					}
 					rulesList.removeValues(vals2);
@@ -583,26 +586,25 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 					if (row == 0)
 						return;
-					
+
 					rulesList.pushQuite();
-					
+
 					try {
-						
 
-					// values has one less, that all the minus
-					Object val = rulesList.getValues().remove(row - 1);
-					rulesList.getValues().add(row, val);
+						// values has one less, that all the minus
+						Object val = rulesList.getValues().remove(row - 1);
+						rulesList.getValues().add(row, val);
 
-					String label = rulesList.getLabels().remove(row - 1);
-					rulesList.getLabels().add(row, label);
+						String label = rulesList.getLabels().remove(row - 1);
+						rulesList.getLabels().add(row, label);
 
-					SingleRuleList<? extends Symbolizer> valS = rulesList
-							.getSymbols().remove(row - 1);
-					rulesList.getSymbols().add(row, valS);
+						SingleRuleList<? extends Symbolizer> valS = rulesList
+								.getSymbols().remove(row - 1);
+						rulesList.getSymbols().add(row, valS);
 
 					} finally {
-						rulesList.popQuite(new RuleChangedEvent("Order changed",
-								rulesList));
+						rulesList.popQuite(new RuleChangedEvent(
+								"Order changed", rulesList));
 					}
 
 					// Update the selection
@@ -759,13 +761,11 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 								if (ask == null) {
 									TranslationEditJPanel transLabel;
-									if (val
-											.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
+									if (val.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
 										/** We are in the default rule* */
 										transLabel = new TranslationEditJPanel(
 												AtlasStyler
-														.R(
-																"UniqueValuesGUI.LabelForClass",
+														.R("UniqueValuesGUI.LabelForClass",
 																AtlasStyler
 																		.R("UniqueValuesGUI.AllOthersSymbol.label")),
 												translation, AtlasStyler
@@ -787,53 +787,44 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 										transLabel = new TranslationEditJPanel(
 												AtlasStyler
-														.R(
-																"UniqueValuesGUI.LabelForClass",
+														.R("UniqueValuesGUI.LabelForClass",
 																rulesList
 																		.getValues()
-																		.get(
-																				index)),
+																		.get(index)),
 												translation, AtlasStyler
 														.getLanguages());
 									}
 
 									ask = new TranslationAskJDialog(
 											UniqueValuesGUI.this, transLabel);
-									ask
-											.addPropertyChangeListener(new PropertyChangeListener() {
+									ask.addPropertyChangeListener(new PropertyChangeListener() {
 
-												public void propertyChange(
-														PropertyChangeEvent evt) {
-													if (evt
-															.getPropertyName()
-															.equals(
-																	TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
-														ask = null;
-													}
-													if (evt
-															.getPropertyName()
-															.equals(
-																	TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
-														LOGGER
-																.debug("Saving new ranslation in rulelist and fire event ");
+										public void propertyChange(
+												PropertyChangeEvent evt) {
+											if (evt.getPropertyName()
+													.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+												ask = null;
+											}
+											if (evt.getPropertyName()
+													.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+												LOGGER.debug("Saving new ranslation in rulelist and fire event ");
 
-														rulesList
-																.getLabels()
-																.set(
-																		row,
-																		translation
-																				.toOneLine());
+												rulesList
+														.getLabels()
+														.set(row,
+																translation
+																		.toOneLine());
 
-													}
-													ask = null;
-													//							
-													rulesList
-															.fireEvents(new RuleChangedEvent(
-																	"Legend Label changed",
-																	rulesList));
-												}
+											}
+											ask = null;
+											//
+											rulesList
+													.fireEvents(new RuleChangedEvent(
+															"Legend Label changed",
+															rulesList));
+										}
 
-											});
+									});
 
 								}
 								ask.setVisible(true);
@@ -876,29 +867,24 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 							/***************************************************
 							 * Listen to a CANCEL to use the backup
 							 */
-							gui
-									.addPropertyChangeListener(new PropertyChangeListener() {
+							gui.addPropertyChangeListener(new PropertyChangeListener() {
 
-										public void propertyChange(
-												PropertyChangeEvent evt) {
+								public void propertyChange(
+										PropertyChangeEvent evt) {
 
-											if (evt
-													.getPropertyName()
-													.equals(
-															SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
+									if (evt.getPropertyName()
+											.equals(SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
 
-												backup.copyTo(editSymbol);
-											}
+										backup.copyTo(editSymbol);
+									}
 
-											if (evt
-													.getPropertyName()
-													.equals(
-															SymbolSelectorGUI.PROPERTY_CLOSED)) {
-											}
+									if (evt.getPropertyName().equals(
+											SymbolSelectorGUI.PROPERTY_CLOSED)) {
+									}
 
-										}
+								}
 
-									});
+							});
 
 							// we have a referenct to it!
 							listenToEditedSymbolAndPassOnTheEvent = new RuleChangeListener() {
@@ -1099,8 +1085,8 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 * Creates a {@link JCheckBox} to add/remove the default/all-others rule.
 	 */
 	public JCheckBox getWithDefaultCheckbox() {
-		final JCheckBox jCheckBoxWithDefault = new JCheckBox(AtlasStyler
-				.R("UniqueValuesGUI.AllOthersSymbol.label"));
+		final JCheckBox jCheckBoxWithDefault = new JCheckBox(
+				AtlasStyler.R("UniqueValuesGUI.AllOthersSymbol.label"));
 
 		jCheckBoxWithDefault.addActionListener(new ActionListener() {
 
@@ -1159,7 +1145,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		this.add(getAttributeJPanel(), "split 2, grow x");
 		this.add(getJPanelColorAndTemplate(), "grow x");
 
-		this.add(new JScrollPane(getJTable()), "grow x");
+		this.add(new JScrollPane(getJTable()), "grow x, height ::100");
 
 		JPanel jPanelButtons = new JPanel(new MigLayout(
 				"ins n 0 n 0, gap 1, fillx"));
