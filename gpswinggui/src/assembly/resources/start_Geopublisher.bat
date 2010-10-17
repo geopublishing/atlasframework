@@ -7,4 +7,4 @@ rem  You should have received a copy of the GNU Lesser General Public License al
 
 echo "Starting Geopublisher..." 
 
-javaw -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp "%HOMEPATH%\.Geopublishing;gpswinggui-${project.version}.jar" org.geopublishing.geopublisher.swing.GeopublisherGUI %~f1 %~f2 %~f3 %~f4 %~f5 %~f6
+javaw -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp "%HOMEPATH%\.Geopublishing;gpswinggui-${project.version}.jar" org.geopublishing.geopublisher.swing.GeopublisherGUI %~f1 %~f2 %~f3 %~f4 %~f5 %~f6 %~f7 %~f8 %~f9 %~f10 %~f11 %~f12 %~f13

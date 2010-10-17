@@ -156,12 +156,20 @@ public class CliOptions extends Options {
 				} else if (AtlasConfig.isAtlasDir(awcFile.getParentFile())) {
 					awcFile = awcFile.getParentFile();
 				} else {
-					System.out
-							.println("'"
-									+ awcFile
-									+ "' is no valid atlas directory. It should contain an atlas.gpa.");
-					exitAfterInterpret = true;
-					errorDuringInterpret = Errors.AWCPARAM_ILLEGAL;
+					File awcFile2 = new File(new File("."), commandLine
+							.getOptionValue(CliOptions.AWCFOLDER).trim());
+					if (AtlasConfig.isAtlasDir(awcFile2)) {
+						awcFile = awcFile2;
+					} else if (AtlasConfig.isAtlasDir(awcFile2.getParentFile())) {
+						awcFile = awcFile2.getParentFile();
+					} else {
+						System.out
+								.println("'"
+										+ awcFile
+										+ "' is no valid atlas directory. It should contain an atlas.gpa.");
+						exitAfterInterpret = true;
+						errorDuringInterpret = Errors.AWCPARAM_ILLEGAL;
+					}
 				}
 			}
 
