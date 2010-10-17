@@ -33,10 +33,12 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DefaultQuery;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.styling.TextSymbolizer;
@@ -44,6 +46,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ThinButton;
@@ -77,6 +80,8 @@ public class TextRuleListGUI extends JPanel {
 	private final TextRuleList rulesList;
 
 	private final AtlasStyler atlasStyler;
+
+	private ThinButton jButtonClassLangCopy;
 
 	/**
 	 * This is the default constructor
@@ -113,6 +118,12 @@ public class TextRuleListGUI extends JPanel {
 		// The new symbolizer to present
 		getJPanelEditTextSymbolizer().updateGui(rulesList.getSymbolizer());
 
+		// Update the tool-tip
+		jComboBoxClass.setToolTipText("<html>"
+				+ rulesList.getClassFilter(
+						getJComboBoxClass().getSelectedIndex()).toString()
+				+ "</html>");
+
 		/***********************************************************************
 		 * Class management buttons
 		 */
@@ -135,7 +146,7 @@ public class TextRuleListGUI extends JPanel {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top","grow"));
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top", "grow"));
 		this.add(getJCheckBoxEnabled(), "top");
 		this.add(getJPanelClass());
 	}
@@ -189,6 +200,11 @@ public class TextRuleListGUI extends JPanel {
 			// jPanelClass.add(getJButtonClassAdd());
 			jPanelClass.add(getJButtonClassDelete());
 			jPanelClass.add(getJButtonClassRename());
+
+			// Only in GP mode
+			if (atlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE)
+				jPanelClass.add(getJButtonClassCopyToLanguage());
+
 			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
 
 			// jPanelClass.add(getJPanelLabelDefinition(), "wrap");
@@ -222,11 +238,10 @@ public class TextRuleListGUI extends JPanel {
 							.getListCellRendererComponent(list, value, index,
 									isSelected, cellHasFocus);
 
-					if (index >= 0
-							&& index < rulesList.getClassesFilters().size())
+					if (index >= 0 && index < rulesList.countClasses())
 						superT.setToolTipText("<html>"
-								+ rulesList.getClassesFilters().get(index)
-										.toString() + "</html>");
+								+ rulesList.getClassFilter(index).toString()
+								+ "</html>");
 					else
 						superT.setToolTipText(null);
 
@@ -244,9 +259,8 @@ public class TextRuleListGUI extends JPanel {
 						// Update the tool-tip
 						getJComboBoxClass().setToolTipText(
 								"<html>"
-										+ rulesList
-												.getClassesFilters()
-												.get(getJComboBoxClass()
+										+ rulesList.getClassFilter(
+												getJComboBoxClass()
 														.getSelectedIndex())
 												.toString() + "</html>");
 
@@ -254,12 +268,6 @@ public class TextRuleListGUI extends JPanel {
 					}
 				}
 			});
-
-			// Update the tool-tip
-			jComboBoxClass.setToolTipText("<html>"
-					+ rulesList.getClassesFilters()
-							.get(getJComboBoxClass().getSelectedIndex())
-							.toString() + "</html>");
 		}
 		return jComboBoxClass;
 	}
@@ -330,22 +338,16 @@ public class TextRuleListGUI extends JPanel {
 			jButtonClassDelete.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
-					if (rulesList.getSelIdx() == 0) {
-						LOGGER.warn("Will not delete the default rule.. Why is the button enabled anyway?");
-						jButtonClassDelete.setEnabled(false);
-						return;
-					}
 					int idx = rulesList.getSelIdx();
-					rulesList.getSymbolizers().remove(idx);
-					rulesList.getClassesFilters().remove(idx);
-					rulesList.getRuleNames().remove(idx);
+
+					rulesList.removeClass(idx);
+
+					rulesList.setSelIdx(idx - 1);
+
 					getJComboBoxClass().setModel(
 							new DefaultComboBoxModel(rulesList.getRuleNames()
 									.toArray()));
-					rulesList.removeClassMinScale(idx);
-					rulesList.removeClassMaxScale(idx);
-					rulesList.removeClassEnabledScale(idx);
-					rulesList.setSelIdx(idx - 1);
+
 					fireClassChanged();
 				}
 
@@ -358,15 +360,65 @@ public class TextRuleListGUI extends JPanel {
 	}
 
 	private void fireClassChanged() {
-//		rulesList.pushQuite();
+		// rulesList.pushQuite();
 		updateGUI();
-//		rulesList.popQuite(null);
+		// rulesList.popQuite(null);
 	}
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
+	 * This button will copy the selected symbolizer and ask the use to create a
+	 * language specific version of it. This button is only available in
+	 * AtlasLanguage mode.
+	 */
+	private JButton getJButtonClassCopyToLanguage() {
+		if (jButtonClassLangCopy == null) {
+			jButtonClassLangCopy = new ThinButton("Default for langauge");
+			jButtonClassLangCopy.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+
+					String lang = ASUtil.askForString(TextRuleListGUI.this,
+							"de", null);
+					if (lang != null) {
+
+						lang = lang.toLowerCase();
+
+						if (!atlasStyler.getLanguages().contains(lang)) {
+							AVSwingUtil
+									.showMessageDialog(TextRuleListGUI.this,
+											"Please enter one of the configured languages: "+LangUtil.stringConcatWithSep(",", atlasStyler.getLanguages())); // i8n
+							return;
+						}
+
+						int newIdx = rulesList.addDefaultClass(lang);
+
+						if (newIdx < 0) {
+							// alreadylexisted?
+							AVSwingUtil
+									.showMessageDialog(TextRuleListGUI.this,
+											"Class could could not be created. Maybe the class alreay exits?"); // i8n
+							return;
+						} else
+							rulesList.setSelIdx(newIdx);
+
+						getJComboBoxClass().setModel(
+								new DefaultComboBoxModel(rulesList
+										.getRuleNames().toArray()));
+
+						getJComboBoxClass().setSelectedIndex(
+								rulesList.getSelIdx());
+
+						// updateGUI();
+					}
+				}
+			});
+		}
+		return jButtonClassLangCopy;
+
+	}
+
+	/**
+	 * This button allows to rename a CLASS
 	 */
 	private JButton getJButtonClassRename() {
 		if (jButtonClassRename == null) {
@@ -455,21 +507,14 @@ public class TextRuleListGUI extends JPanel {
 
 	/**
 	 * Caches the limited number of features for the preview in memory.
-	 * 
-	 * TODO ! We need as many samples, as we have label style classes. they have
-	 * to be created with any filters set.. TODO or we make the jmappane not a
-	 * symbolzer preview, but a ruleliste preview.. so we have all styles in one
-	 * preview... and maybe all features in the preview..
-	 * 
-	 * @return
 	 */
 	private FeatureCollection<SimpleFeatureType, SimpleFeature> getPreviewFeatures() {
 		if (features == null) {
 			try {
 
 				LOGGER.debug("Putting 100 random features into the preview");
-				Filter filter = rulesList.getClassesFilters().get(0) != null ? rulesList
-						.getClassesFilters().get(0) : Filter.INCLUDE;
+				Filter filter = rulesList.getClassFilter(0) != null ? rulesList
+						.getClassFilter(0) : Filter.INCLUDE;
 
 				features = rulesList
 						.getStyledFeatures()
@@ -534,7 +579,7 @@ public class TextRuleListGUI extends JPanel {
 	// }
 	// return jButtonPlacement;
 	// }
-	//
+
 	// /**
 	// * This method initializes jButton
 	// *

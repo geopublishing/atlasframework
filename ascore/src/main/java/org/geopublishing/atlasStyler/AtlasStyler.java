@@ -198,6 +198,7 @@ public class AtlasStyler {
 
 	/**
 	 * The {@link AtlasStyler} can run in two {@link LANGUAGE_MODE}s.
+	 * TODO remove static 
 	 */
 	public static LANGUAGE_MODE getLanguageMode() {
 		return languageMode;
@@ -205,7 +206,8 @@ public class AtlasStyler {
 
 	/**
 	 * If we are running in {@link LANGUAGE_MODE} ATLAS_MULTILANGUAGE, these are
-	 * the supported languages.
+	 * the supported languages.<br/>
+	 * TODO remove static
 	 */
 	public final static List<String> getLanguages() {
 		return languages;
