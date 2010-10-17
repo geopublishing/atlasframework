@@ -159,7 +159,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		LOGGER.info("Starting AtlasViewer.. "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasViewer"));
-		
+
 		/*
 		 * Register this as single instance
 		 */
@@ -836,9 +836,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				Container cp = instance.getJFrame().getContentPane();
 
 				if (cp instanceof AtlasMapView) {
-					LOGGER.info("Uncaching old map items while disposing AtlasViewer");
 					AtlasMapView amv = (AtlasMapView) cp;
-
 					amv.dispose();
 				}
 

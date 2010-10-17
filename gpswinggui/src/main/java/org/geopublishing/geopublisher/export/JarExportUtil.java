@@ -1967,14 +1967,10 @@ public class JarExportUtil {
 			return;
 
 		// In JWS set to execute, read and NOTwrite
-		// targetDirJWS.setWritable(false, false);
 		if (toJws) {
 			targetDirJWS.setExecutable(true, false);
 			targetDirJWS.setReadable(true, false);
 
-			// Iterator<File> iterateFiles =
-			// FileUtils.iterateFiles(targetDirJWS,
-			// new String[] { "*" }, true);
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
 					GpUtil.BlacklistedFoldersFilter,
 					GpUtil.BlacklistesFilesFilter);
@@ -1987,21 +1983,15 @@ public class JarExportUtil {
 		}
 
 		// In DISK set to read and NOTwrite
-
 		if (toDisk) {
-			// targetDirDISK.setWritable(false, false);
 			targetDirDISK.setExecutable(true, false);
 			targetDirDISK.setReadable(true, false);
 
-			// Iterator<File> iterateFiles =
-			// FileUtils.iterateFiles(targetDirJWS,
-			// new String[] { "*" }, true);
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirDISK,
 					GpUtil.BlacklistedFoldersFilter,
 					GpUtil.BlacklistesFilesFilter);
 			while (iterateFiles.hasNext()) {
 				File next = iterateFiles.next();
-				// next.setWritable(false, false);
 				next.setReadable(true, false);
 			}
 			new File(targetDirDISK, "start.sh").setExecutable(true, false);

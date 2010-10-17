@@ -1465,7 +1465,7 @@ public class AtlasStyler {
 		 */
 		List<Font> extraFonts = getFonts();
 
-		int i = 6;
+		int i = fontFamilies.length;
 		for (Font f : extraFonts) {
 			fontFamilies = LangUtil.extendArray(fontFamilies,
 					new ArrayList<Literal>());

@@ -63,7 +63,8 @@ public class JNLPUtil {
 	}
 
 	/**
-	 * <code>true</code>, if the application has been started by Java Web Start (JWS)
+	 * <code>true</code>, if the application has been started by Java Web Start
+	 * (JWS)
 	 */
 	public static boolean isJnlpServiceAvailable() {
 		try {
@@ -119,12 +120,12 @@ public class JNLPUtil {
 
 		try {
 
-			for (DpEntry dpe : dataPool.values()) {
-				LOGGER.debug("Checking if part "
-						+ dpe.getId()
-						+ " is cached = "
-						+ JNLPUtil.getJNLPDownloadService().isPartCached(
-								dpe.getId()));
+			for (DpEntry<?> dpe : dataPool.values()) {
+				// LOGGER.debug("Checking if part "
+				// + dpe.getId()
+				// + " is cached = "
+				// + JNLPUtil.getJNLPDownloadService().isPartCached(
+				// dpe.getId()));
 				if (!JNLPUtil.getJNLPDownloadService()
 						.isPartCached(dpe.getId())) {
 					haveToDownload.add(dpe.getId());
@@ -134,8 +135,9 @@ public class JNLPUtil {
 			LOGGER.error(e);
 		}
 
-		LOGGER.debug("There are " + haveToDownload.size()
-				+ " parts that are not yet downloaded.");
+		if (haveToDownload.size() > 0)
+			LOGGER.debug("There are " + haveToDownload.size()
+					+ " parts that are not yet downloaded.");
 
 		return haveToDownload;
 	}
@@ -159,8 +161,8 @@ public class JNLPUtil {
 			return new String[] {};
 		}
 
-		for (final DpRef ref : map.getLayers()) {
-			final DpEntry dpe = ref.getTarget();
+		for (final DpRef<?> ref : map.getLayers()) {
+			final DpEntry<?> dpe = ref.getTarget();
 			if (!dpe.isDownloadedAndVisible()) {
 				if (!ds.isPartCached(dpe.getId())) {
 					partsToDownload.add(dpe.getId());
@@ -174,7 +176,8 @@ public class JNLPUtil {
 	/**
 	 * Evaluates where the atlas.xml comes from. There are 3 options:
 	 * <ul>
-	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed, returns <code>false</code></li>
+	 * <li>* jar://aufCD.jar!/atlas.xml => From CD, no JWS download needed,
+	 * returns <code>false</code></li>
 	 * <li>* jar://http://asdasasda/online/av.jar!/atlas.xml => From the
 	 * Internet, JWS download nötig, returns <code>true</code></li>
 	 * <li>* file://mein/verz/atlas.xml => Aus lokal dir, kein JWS download
@@ -201,10 +204,8 @@ public class JNLPUtil {
 
 				// First check for JWS and eventually download un-cached JARs
 				if (atlasXmlRes.toString().contains("http")) {
-					LOGGER
-							.info("resourceAsUrl and contains with HTTP => we need to get it via JWS if it is not cached....");
-					LOGGER
-							.debug("the data comes from JARs/URLs, adding it to resman...");
+					LOGGER.info("resourceAsUrl and contains with HTTP => we need to get it via JWS if it is not cached....");
+					LOGGER.debug("the data comes from JARs/URLs, adding it to resman...");
 					// moved up one block
 					ac.getResLoMan().addResourceLoader(
 							AtlasJWSCachedResourceLoader.getInstance());
@@ -231,7 +232,8 @@ public class JNLPUtil {
 			if (ds.isPartCached(part)) {
 				LOGGER.info("part " + part + " is JWS cached");
 			} else {
-				LOGGER.info("part " + part + " is NOT cached.. start DL ");
+				LOGGER.info("part " + part
+						+ " is NOT cached.. starting download... ");
 
 				// load the resource into the JWS Cache
 				ds.loadPart(part, new JnlpStatusDialog2()); // TODO use
