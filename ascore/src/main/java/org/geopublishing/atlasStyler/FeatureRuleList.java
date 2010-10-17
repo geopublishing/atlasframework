@@ -25,18 +25,15 @@ import skrueger.geotools.StyledLayerUtil;
 
 public abstract class FeatureRuleList extends AbstractRuleList {
 
+	public static final String METAINFO_KVP_EQUALS_CHAR = "#";
+
+	public static final String METAINFO_SEPERATOR_CHAR = ":";
+
 	/**
 	 * When importing {@link Rule}s, rules with this name are interpreted as the
 	 * "NODATA" rule.
 	 */
 	public static final String NODATA_RULE_NAME = "NODATA_RULE";
-
-	/**
-	 * When importing {@link Rule}s, rules with this name are interpreted as the
-	 * "NODATA" rule. If running in Atlas/GP mode, this rule will appear in the
-	 * legend.
-	 */
-	public static final String NODATA_RULE_NAME_SHOWINLEGEND = NODATA_RULE_NAME;
 
 	/**
 	 * When importing {@link Rule}s, rules with this name are interpreted as the
@@ -46,15 +43,14 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	public static final String NODATA_RULE_NAME_HIDEINLEGEND = NODATA_RULE_NAME
 			+ "_" + StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT;
 
-	final private StyledFeaturesInterface<?> styledFeatures;
+	/**
+	 * When importing {@link Rule}s, rules with this name are interpreted as the
+	 * "NODATA" rule. If running in Atlas/GP mode, this rule will appear in the
+	 * legend.
+	 */
+	public static final String NODATA_RULE_NAME_SHOWINLEGEND = NODATA_RULE_NAME;
 
-	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		this.styledFeatures = styledFeatures;
-	}
-
-	public StyledFeaturesInterface<?> getStyledFeatures() {
-		return styledFeatures;
-	}
+	protected FilterFactory2 ff2 = FilterUtil.FILTER_FAC2;
 
 	/**
 	 * This {@link RuleChangeListener} is added to the template in
@@ -70,13 +66,21 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		}
 	};
 
-	protected FilterFactory2 ff2 = FilterUtil.FILTER_FAC2;
+	private SingleRuleList<? extends Symbolizer> noDataSymbol = null;
+
+	final private StyledFeaturesInterface<?> styledFeatures;
 
 	private SingleRuleList<? extends Symbolizer> template;
 
-	public static final String METAINFO_SEPERATOR_CHAR = ":";
+	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		this.styledFeatures = styledFeatures;
+	}
 
-	public static final String METAINFO_KVP_EQUALS_CHAR = "#";
+	// abstract public SingleRuleList<? extends Symbolizer>
+	// getDefaultTemplate();
+	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
+		return ASUtil.getDefaultTemplate(getGeometryForm());
+	}
 
 	/***************************************************************************
 	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
@@ -92,40 +96,11 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		return ftstyle;
 	}
 
-	/***************************************************************************
-	 * TEMPLATE STUFF
-	 */
-
-	public SingleRuleList<? extends Symbolizer> getTemplate() {
-		if (template == null)
-			return getDefaultTemplate();
-		return template;
-	}
-
 	/**
-	 * Sets a template Symbol used for this color graduation
-	 * 
-	 * @param template
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setTemplate(SingleRuleList<? extends Symbolizer> template) {
-		this.template = template;
-		fireEvents(new RuleChangedEvent("Set template", this));
-	}
-
-	/***************************************************************************
-	 * ABSTRACT METHODS BEGIN HERE
-	 * 
-	 * @return
-	 **************************************************************************/
-
-	abstract public void importTemplate(FeatureTypeStyle importFTS);
-
-	// abstract public SingleRuleList<? extends Symbolizer>
-	// getDefaultTemplate();
-	public SingleRuleList<? extends Symbolizer> getDefaultTemplate() {
-		return ASUtil.getDefaultTemplate(getGeometryForm());
-	}
+	 * Must be overwritten in the class that is specific for line, point or
+	 * polygons
+	 **/
+	public abstract GeometryForm getGeometryForm();
 
 	/**
 	 * Return the {@link Filter} that will catch all NODATA values
@@ -145,19 +120,42 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		return noDataSymbol;
 	}
 
-	/**
-	 * Define how to draw NODATA values (null, NaN, Inf) by setting a
-	 * {@link SingleRuleList}
+	public StyledFeaturesInterface<?> getStyledFeatures() {
+		return styledFeatures;
+	}
+
+	/***************************************************************************
+	 * TEMPLATE STUFF
 	 */
-	public void setNoDataSymbol(
-			SingleRuleList<? extends Symbolizer> noDataRuleList) {
-		if (noDataRuleList == null) {
-			noDataSymbol = null;
-		} else {
-			// Maybe better: noDataSymbol = noDataRuleList; ?
-			noDataRuleList.copyTo(getNoDataSymbol());
+
+	public SingleRuleList<? extends Symbolizer> getTemplate() {
+		if (template == null)
+			return getDefaultTemplate();
+		return template;
+	}
+
+	/**
+	 * Will remove all other {@link Symbolizer}s and add the symbolizers of the
+	 * given rule to the {@link noDataSymbol}.
+	 */
+	public void importNoDataRule(Rule r) {
+		getNoDataSymbol().getSymbolizers().clear();
+		getNoDataSymbol().addSymbolizers(r.symbolizers());
+		getNoDataSymbol().setTitle(r.getDescription().getTitle().toString());
+
+		if (r.getName().toString()
+				.equals(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
+			getNoDataSymbol().setVisibleInLegend(false);
 		}
 	}
+
+	/***************************************************************************
+	 * ABSTRACT METHODS BEGIN HERE
+	 * 
+	 * @return
+	 **************************************************************************/
+
+	abstract public void importTemplate(FeatureTypeStyle importFTS);
 
 	/**
 	 * Define how to draw NODATA values (null, NaN, Inf) by setting a Color and
@@ -183,6 +181,20 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	}
 
 	/**
+	 * Define how to draw NODATA values (null, NaN, Inf) by setting a
+	 * {@link SingleRuleList}
+	 */
+	public void setNoDataSymbol(
+			SingleRuleList<? extends Symbolizer> noDataRuleList) {
+		if (noDataRuleList == null) {
+			noDataSymbol = null;
+		} else {
+			// Maybe better: noDataSymbol = noDataRuleList; ?
+			noDataRuleList.copyTo(getNoDataSymbol());
+		}
+	}
+
+	/**
 	 * Define how to draw NODATA values (null, NaN, Inf) by setting a single
 	 * {@link Symbolizer}
 	 */
@@ -197,26 +209,14 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 	}
 
 	/**
-	 * Must be overwritten in the class that is specific for line, point or
-	 * polygons
-	 **/
-	public abstract GeometryForm getGeometryForm();
-
-	private SingleRuleList<? extends Symbolizer> noDataSymbol = null;
-
-	/**
-	 * Will remove all other {@link Symbolizer}s and add the symbolizers of the
-	 * given rule to the {@link noDataSymbol}.
+	 * Sets a template Symbol used for this color graduation
+	 * 
+	 * @param template
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void importNoDataRule(Rule r) {
-		getNoDataSymbol().getSymbolizers().clear();
-		getNoDataSymbol().addSymbolizers(r.symbolizers());
-		getNoDataSymbol().setTitle(r.getDescription().getTitle().toString());
-
-		if (r.getName().toString()
-				.equals(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
-			getNoDataSymbol().setVisibleInLegend(false);
-		}
+	public void setTemplate(SingleRuleList<? extends Symbolizer> template) {
+		this.template = template;
+		fireEvents(new RuleChangedEvent("Set template", this));
 	}
 
 }

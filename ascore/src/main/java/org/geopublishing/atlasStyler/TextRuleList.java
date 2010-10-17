@@ -37,57 +37,9 @@ import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
 
 public class TextRuleList extends AbstractRuleList {
-	private static final Filter FILTER_DEFAULT_ALL_OTHERS_ID = ASUtil.allwaysTrueFilter;
-
-	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or Disabled the complete TextRuleList";
-
-	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
-
-	/** Stores all {@link TextSymbolizer}s for all classes **/
-	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
-
-	/** Stores all {@link Filter} for all classes **/
-	private List<Filter> classesFilters = new ArrayList<Filter>();
-
-	/** Stores all maxScale parameters for the classes **/
-	List<Double> classesMaxScales = new ArrayList<Double>();
-
-	/** Stores all minScale parameters for all classes **/
-	List<Double> classesMinScales = new ArrayList<Double>();
-
-	/** Stores whether the class specific {@link TextSymbolizer}s are enabled **/
-	private List<Boolean> classesEnabled = new ArrayList<Boolean>();
-
-	final private StyledFeaturesInterface<?> styledFeatures;
-
-	public StyledFeaturesInterface<?> getStyledFeatures() {
-		return styledFeatures;
-	}
-
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		this.styledFeatures = styledFeatures;
-	}
-
-	/**
-	 * This defines whether all {@link TextSymbolizer} rules shall be disabled.
-	 * By default, a new Style doesn't have labels activated
-	 */
-	boolean enabled = false;
-
-	private List<String> ruleNames = new ArrayList<String>();
-
-	private int selIdx = 0;
-
+	
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
-
-	/** A Filter to mark a {@link TextSymbolizer} class as enabled **/
-	public final static PropertyIsEqualTo classEnabledFilter = ff.equals(ff
-			.literal("LABEL_CLASS_ENABLED"), ff.literal("LABEL_CLASS_ENABLED"));
-
-	/** A Filter to mark a {@link TextSymbolizer} class as disabled **/
-	public final static PropertyIsEqualTo classDisabledFilter = ff.equals(ff
-			.literal("LABEL_CLASS_DISABLED"), ff.literal("YES"));
-
+	
 	/**
 	 * A Filter to mark that ALL classes have been disabled by the
 	 * {@link TextRuleList}{@link #setEnabled(boolean)} method
@@ -103,19 +55,50 @@ public class TextRuleList extends AbstractRuleList {
 			ff.literal("ALL_LABEL_CLASSES_ENABLED"), ff
 					.literal("ALL_LABEL_CLASSES_ENABLED"));
 
-	public int getSelIdx() {
-		return selIdx;
-	}
+	/** A Filter to mark a {@link TextSymbolizer} class as disabled **/
+	public final static PropertyIsEqualTo classDisabledFilter = ff.equals(ff
+			.literal("LABEL_CLASS_DISABLED"), ff.literal("YES"));
 
-	public void setSelIdx(int selIdx) {
-		this.selIdx = selIdx;
-	}
+	/** A Filter to mark a {@link TextSymbolizer} class as enabled **/
+	public final static PropertyIsEqualTo classEnabledFilter = ff.equals(ff
+			.literal("LABEL_CLASS_ENABLED"), ff.literal("LABEL_CLASS_ENABLED"));
+
+
+	private static final Filter FILTER_DEFAULT_ALL_OTHERS_ID = ASUtil.allwaysTrueFilter;
+
+	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
+
+	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or Disabled the complete TextRuleList";
+
+	/** Stores whether the class specific {@link TextSymbolizer}s are enabled **/
+	private List<Boolean> classesEnabled = new ArrayList<Boolean>();
+
+	/** Stores all {@link Filter} for all classes **/
+	private List<Filter> classesFilters = new ArrayList<Filter>();
+
+	/** Stores all maxScale parameters for the classes **/
+	List<Double> classesMaxScales = new ArrayList<Double>();
+
+	/** Stores all minScale parameters for all classes **/
+	List<Double> classesMinScales = new ArrayList<Double>();
+
+	/** Stores all {@link TextSymbolizer}s for all classes **/
+	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
 
 	/**
-	 * Are all {@link TextSymbolizer} classes disabled/enabled.
+	 * This defines whether all {@link TextSymbolizer} rules shall be disabled.
+	 * By default, a new Style doesn't have labels activated
 	 */
-	public boolean isEnabled() {
-		return enabled;
+	boolean enabled = false;
+
+	private List<String> ruleNames = new ArrayList<String>();
+
+	private int selIdx = 0;
+
+	final private StyledFeaturesInterface<?> styledFeatures;
+
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		this.styledFeatures = styledFeatures;
 	}
 
 	public void addDefaultClass() {
@@ -136,13 +119,33 @@ public class TextRuleList extends AbstractRuleList {
 		fireEvents(new RuleChangedEvent("Added a default TextSymbolizer", this));
 	}
 
-	public void setClassEnabled(int index, boolean b) {
-		while (classesEnabled.size()-1 < index ) {
-			classesEnabled.add(true);
+	/**
+	 * Adds filters that indicate whether this class or all classes are
+	 * disabled. Is added as the last filters so they are easierer identified.
+	 * 
+	 * @param idx
+	 *            the index of the label class (0=default)
+	 * 
+	 * @return modified filter
+	 * 
+	 * @see #removeEnabledDisabledFilters(Filter, int)
+	 */
+	private Filter addEnabledDisabledFilters(Filter filter, int idx) {
+
+		// Is this class enabled?
+		if (classesEnabled.get(idx)) {
+			filter = ff.and(classEnabledFilter, filter);
+		} else {
+			filter = ff.and(classDisabledFilter, filter);
 		}
-		classesEnabled.set(index, b);
-		fireEvents(new RuleChangedEvent(
-				"a text symbolizer class enablement has been set to " + b, this));
+
+		// Are all classes enabled?
+		if (isEnabled()) {
+			filter = ff.and(allClassesEnabledFilter, filter);
+		} else {
+			filter = ff.and(allClassesDisabledFilter, filter);
+		}
+		return filter;
 	}
 
 	private TextSymbolizer createDefaultTextSymbolizer() {
@@ -192,39 +195,25 @@ public class TextRuleList extends AbstractRuleList {
 		return ts;
 	}
 
-	/**
-	 * Allows to define whether all {@link TextSymbolizer}s are enabled. If
-	 * disabled, if doesn't throw away all informtion, but just disables al
-	 * textsymbolizers with an Allways-False filter.
-	 */
-	public void setEnabled(boolean enabled) {
-		if (enabled == this.enabled)
-			return;
-		this.enabled = enabled;
-		fireEvents(new RuleChangedEvent(RULE_CHANGE_EVENT_ENABLED_STRING, this));
+	@Override
+	public String getAtlasMetaInfoForFTSName() {
+		return RulesListType.TEXT_LABEL.toString();
+	}
+
+	public boolean getClassEnabled(int index) {
+		return classesEnabled.get(index);
 	}
 
 	public List<Filter> getClassesFilters() {
 		return classesFilters;
 	}
 
-	public void setClassesFilters(List<Filter> filterRules) {
-		this.classesFilters = filterRules;
-		fireEvents(new RuleChangedEvent("setFilterRules", this));
+	public String getRuleName() {
+		return ruleNames.get(selIdx);
 	}
 
-	public List<TextSymbolizer> getSymbolizers() {
-		return classesSymbolizers;
-	}
-
-	public void setSymbolizers(List<TextSymbolizer> symbolizers) {
-		this.classesSymbolizers = symbolizers;
-		fireEvents(new RuleChangedEvent("setSymbolizers", this));
-	}
-
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		return RulesListType.TEXT_LABEL.toString();
+	public List<String> getRuleNames() {
+		return ruleNames;
 	}
 
 	@Override
@@ -310,93 +299,12 @@ public class TextRuleList extends AbstractRuleList {
 		return rules;
 	}
 
-	/**
-	 * Adds filters that indicate whether this class or all classes are
-	 * disabled. Is added as the last filters so they are easierer identified.
-	 * 
-	 * @param idx
-	 *            the index of the label class (0=default)
-	 * 
-	 * @return modified filter
-	 * 
-	 * @see #removeEnabledDisabledFilters(Filter, int)
-	 */
-	private Filter addEnabledDisabledFilters(Filter filter, int idx) {
-
-		// Is this class enabled?
-		if (classesEnabled.get(idx)) {
-			filter = ff.and(classEnabledFilter, filter);
-		} else {
-			filter = ff.and(classDisabledFilter, filter);
-		}
-
-		// Are all classes enabled?
-		if (isEnabled()) {
-			filter = ff.and(allClassesEnabledFilter, filter);
-		} else {
-			filter = ff.and(allClassesDisabledFilter, filter);
-		}
-		return filter;
+	public int getSelIdx() {
+		return selIdx;
 	}
 
-	/**
-	 * Interpretes the filters added by
-	 * {@link #addEnabledDisabledFilters(Filter, int)}
-	 * 
-	 * @param idx
-	 *            the index of the label class (0=default)
-	 * 
-	 * @return The simpler filter that was inside all the mess.
-	 */
-	protected Filter removeEnabledDisabledFilters(Filter filter, int idx) {
-
-		try {
-			if (((AndImpl) filter).getChildren().get(0).equals(
-					allClassesDisabledFilter)) {
-				setEnabled(false);
-				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
-			} else if (((AndImpl) filter).getChildren().get(0).equals(
-					allClassesEnabledFilter)) {
-				setEnabled(true);
-				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
-			} else throw new RuntimeException();
-		} catch (Exception e) {
-			setEnabled(true);
-			LOGGER
-					.warn("Couldn't property interpret whether this TextRulesList is completely disabled or enabled. Assuming it is enabled.",e);
-		}
-
-		try {
-			if (((AndImpl) filter).getChildren().get(0).equals(
-					classDisabledFilter)) {
-				setClassEnabled(idx, false);
-				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
-			} else if (((AndImpl) filter).getChildren().get(0).equals(
-					classEnabledFilter)) {
-				setClassEnabled(idx, true);
-				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
-			}else throw new RuntimeException();
-		} catch (Exception e) {
-			setClassEnabled(idx, true);
-			LOGGER
-					.warn("Couldn't property interpret whether this TextRulesList CLASS is disabled or enabled. Assuming it is enabled.",e);
-		}
-
-		return filter;
-	}
-
-	@Override
-	public RulesListType getTypeID() {
-		return RulesListType.TEXT_LABEL;
-	}
-
-	public List<String> getRuleNames() {
-		return ruleNames;
-	}
-
-	public void setRuleNames(List<String> ruleNames) {
-		this.ruleNames = ruleNames;
-		// No Event needed! Its just a name...
+	public StyledFeaturesInterface<?> getStyledFeatures() {
+		return styledFeatures;
 	}
 
 	/**
@@ -407,8 +315,13 @@ public class TextRuleList extends AbstractRuleList {
 		return classesSymbolizers.get(selIdx);
 	}
 
-	public String getRuleName() {
-		return ruleNames.get(selIdx);
+	public List<TextSymbolizer> getSymbolizers() {
+		return classesSymbolizers;
+	}
+
+	@Override
+	public RulesListType getTypeID() {
+		return RulesListType.TEXT_LABEL;
 	}
 
 	public void importClassesFromStyle(AbstractRuleList symbRL, Component owner) {
@@ -562,36 +475,6 @@ public class TextRuleList extends AbstractRuleList {
 
 	}
 
-	private void removeAllClassesButFirst() {
-		TextSymbolizer backupS = getSymbolizers().get(0);
-		getSymbolizers().clear();
-		getSymbolizers().add(backupS);
-
-		String backupRN = getRuleNames().get(0);
-		getRuleNames().clear();
-		getRuleNames().add(backupRN);
-
-		Filter backupFR = getClassesFilters().get(0);
-		getClassesFilters().clear();
-		getClassesFilters().add(backupFR);
-
-		Double backupMin = classesMinScales.get(0);
-		classesMinScales.clear();
-		classesMinScales.add(backupMin);
-
-		Double backupMax = classesMaxScales.get(0);
-		classesMaxScales.clear();
-		classesMaxScales.add(backupMax);
-
-		Boolean backupEnabled = classesEnabled.get(0);
-		classesEnabled.clear();
-		classesEnabled.add(backupEnabled);
-	}
-
-	public boolean getClassEnabled(int index) {
-		return classesEnabled.get(index);
-	}
-
 	/**
 	 * Parses a list of {@link Rule}s and configures this {@link TextRuleList}
 	 * with it.
@@ -642,10 +525,43 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	/**
+	 * Are all {@link TextSymbolizer} classes disabled/enabled.
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	private void removeAllClassesButFirst() {
+		TextSymbolizer backupS = getSymbolizers().get(0);
+		getSymbolizers().clear();
+		getSymbolizers().add(backupS);
+
+		String backupRN = getRuleNames().get(0);
+		getRuleNames().clear();
+		getRuleNames().add(backupRN);
+
+		Filter backupFR = getClassesFilters().get(0);
+		getClassesFilters().clear();
+		getClassesFilters().add(backupFR);
+
+		Double backupMin = classesMinScales.get(0);
+		classesMinScales.clear();
+		classesMinScales.add(backupMin);
+
+		Double backupMax = classesMaxScales.get(0);
+		classesMaxScales.clear();
+		classesMaxScales.add(backupMax);
+
+		Boolean backupEnabled = classesEnabled.get(0);
+		classesEnabled.clear();
+		classesEnabled.add(backupEnabled);
+	}
+
+	/**
 	 * @param classIdx Label class idx, 0 = default/all others
 	 */
-	public void removeClassMinScale(int classIdx) {
-		classesMinScales.remove(classIdx);
+	public void removeClassEnabledScale(int classIdx) {
+		classesEnabled.remove(classIdx);
 	}
 
 	/**
@@ -658,8 +574,94 @@ public class TextRuleList extends AbstractRuleList {
 	/**
 	 * @param classIdx Label class idx, 0 = default/all others
 	 */
-	public void removeClassEnabledScale(int classIdx) {
-		classesEnabled.remove(classIdx);
+	public void removeClassMinScale(int classIdx) {
+		classesMinScales.remove(classIdx);
+	}
+
+	/**
+	 * Interpretes the filters added by
+	 * {@link #addEnabledDisabledFilters(Filter, int)}
+	 * 
+	 * @param idx
+	 *            the index of the label class (0=default)
+	 * 
+	 * @return The simpler filter that was inside all the mess.
+	 */
+	protected Filter removeEnabledDisabledFilters(Filter filter, int idx) {
+
+		try {
+			if (((AndImpl) filter).getChildren().get(0).equals(
+					allClassesDisabledFilter)) {
+				setEnabled(false);
+				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
+			} else if (((AndImpl) filter).getChildren().get(0).equals(
+					allClassesEnabledFilter)) {
+				setEnabled(true);
+				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
+			} else throw new RuntimeException();
+		} catch (Exception e) {
+			setEnabled(true);
+			LOGGER
+					.warn("Couldn't property interpret whether this TextRulesList is completely disabled or enabled. Assuming it is enabled.",e);
+		}
+
+		try {
+			if (((AndImpl) filter).getChildren().get(0).equals(
+					classDisabledFilter)) {
+				setClassEnabled(idx, false);
+				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
+			} else if (((AndImpl) filter).getChildren().get(0).equals(
+					classEnabledFilter)) {
+				setClassEnabled(idx, true);
+				filter = (Filter) ((AndImpl) filter).getChildren().get(1);
+			}else throw new RuntimeException();
+		} catch (Exception e) {
+			setClassEnabled(idx, true);
+			LOGGER
+					.warn("Couldn't property interpret whether this TextRulesList CLASS is disabled or enabled. Assuming it is enabled.",e);
+		}
+
+		return filter;
+	}
+
+	public void setClassEnabled(int index, boolean b) {
+		while (classesEnabled.size()-1 < index ) {
+			classesEnabled.add(true);
+		}
+		classesEnabled.set(index, b);
+		fireEvents(new RuleChangedEvent(
+				"a text symbolizer class enablement has been set to " + b, this));
+	}
+
+	public void setClassesFilters(List<Filter> filterRules) {
+		this.classesFilters = filterRules;
+		fireEvents(new RuleChangedEvent("setFilterRules", this));
+	}
+
+	/**
+	 * Allows to define whether all {@link TextSymbolizer}s are enabled. If
+	 * disabled, if doesn't throw away all informtion, but just disables al
+	 * textsymbolizers with an Allways-False filter.
+	 */
+	public void setEnabled(boolean enabled) {
+		if (enabled == this.enabled)
+			return;
+		this.enabled = enabled;
+		fireEvents(new RuleChangedEvent(RULE_CHANGE_EVENT_ENABLED_STRING, this));
+	}
+
+	public void setRuleNames(List<String> ruleNames) {
+		this.ruleNames = ruleNames;
+		// No Event needed! Its just a name...
+	}
+
+	public void setSelIdx(int selIdx) {
+		this.selIdx = selIdx;
+	}
+
+	public void setSymbolizers(List<TextSymbolizer> symbolizers) {
+		this.classesSymbolizers = symbolizers;
+		fireEvents(new RuleChangedEvent("setSymbolizers", this));
 	}
 	
 }

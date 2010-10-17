@@ -49,13 +49,229 @@ import skrueger.geotools.StyledFeaturesInterface;
  */
 public class QuantitiesClassification extends FeatureClassification {
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	/**
+	 * Different Methods to classify
+	 */
+	public enum METHOD {
+		EI, MANUAL, QUANTILES;
+
+		public String getDesc() {
+			return AtlasStyler
+					.R("QuantitiesClassifiction.Method.ComboboxEntry."
+							+ toString());
+		}
+
+		public String getToolTip() {
+			return AtlasStyler
+					.R("QuantitiesClassifiction.Method.ComboboxEntry."
+							+ toString() + ".TT");
+		}
+
+	}
+
+	public static final METHOD DEFAULT_METHOD = METHOD.QUANTILES;
+
+	static final public int MAX_FEATURES_DEFAULT = 10000;
 
 	/**
 	 * This CONSTANT is only used in the JCombobox. NORMALIZER_FIELD String is
 	 * null, and in the SLD a "null"
 	 */
 	public static final String NORMALIZE_NULL_VALUE_IN_COMBOBOX = "-";
+
+	/**
+	 * Rplaces all values in the classification limits that can make problems
+	 * when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf,
+	 * Na
+	 * 
+	 * @param replacement
+	 *            A number that will replace Inf+ as abs(replacement), and Inf-
+	 *            as -abs(replacement)
+	 */
+	public static TreeSet<Double> removeNanAndInf(
+			QuantitiesClassification classifier, Double replacement) {
+
+		// Filter class limits against -Inf and +Inf. GS doesn't like them
+		TreeSet<Double> newClassLimits = new TreeSet<Double>();
+		for (Double l : classifier.getClassLimits()) {
+			if (l == Double.NEGATIVE_INFINITY)
+				l = -1. * Math.abs(replacement);
+			if (l == Double.POSITIVE_INFINITY)
+				l = Math.abs(replacement);
+			if (l == Double.NaN)
+				l = 0.;
+			newClassLimits.add(l);
+		}
+		classifier.setClassLimits(newClassLimits);
+		return newClassLimits;
+	}
+
+	/**
+	 * If the classification contains 5 classes, then we have to save 5+1
+	 * breaks.
+	 */
+	protected volatile TreeSet<Double> breaks = null;
+
+	volatile private boolean cancelCalculation;
+
+	/** The type of classification that is used. Quantiles by default * */
+	public METHOD classificationMethod = DEFAULT_METHOD;
+
+	protected volatile TreeSet<Double> classLimits;
+
+	final String handle = "statisticsQuery";
+
+	/**
+	 * Count of digits the (quantile) classes are rounded to. A negative value
+	 * means round to digits BEFORE comma! If {@code null} (this is the
+	 * default!) no round is performed.
+	 */
+	private Integer limitsDigits = null;
+
+	protected Logger LOGGER = ASUtil.createLogger(this);
+
+	private String normalizer_field_name;
+
+	private DefaultComboBoxModel normlizationAttribsComboBoxModel;
+
+	private int numClasses = 5;
+
+	private boolean recalcAutomatically = true;
+
+	private DynamicBin1D stats = null;
+
+	protected String value_field_name;
+
+	private DefaultComboBoxModel valueAttribsComboBoxModel;
+
+	/**
+	 * @param featureSource
+	 *            The featuresource to use for the statistics
+	 */
+	public QuantitiesClassification(
+			final StyledFeaturesInterface<?> styledFeatures) {
+		this(styledFeatures, null, null);
+	}
+
+	/**
+	 * @param featureSource
+	 *            The featuresource to use for the statistics
+	 * @param value_field_name
+	 *            The column that is used for the classification
+	 */
+	public QuantitiesClassification(
+			final StyledFeaturesInterface<?> styledFeatures,
+			final String value_field_name) {
+		this(styledFeatures, value_field_name, null);
+	}
+
+	/**
+	 * @param featureSource
+	 *            The featuresource to use for the statistics
+	 * @param layerFilter
+	 *            The {@link Filter} that shall be applied whenever asking for
+	 *            the {@link FeatureCollection}. <code>null</code> is not
+	 *            allowed, use Filter.INCLUDE
+	 * @param value_field_name
+	 *            The column that is used for the classification
+	 * @param normalizer_field_name
+	 *            If null, no normalization will be used
+	 */
+	public QuantitiesClassification(StyledFeaturesInterface<?> styledFeatures,
+			final String value_field_name, final String normalizer_field_name) {
+		super(styledFeatures);
+		this.value_field_name = value_field_name;
+		this.normalizer_field_name = normalizer_field_name;
+	}
+
+	/**
+	 * Calculates the {@link TreeSet} of classLimits, blocking the thread.
+	 */
+	public TreeSet<Double> calculateClassLimitsBlocking() throws IOException,
+			InterruptedException {
+		/**
+		 * Do we have all necessary information to calculate ClassLimits?
+		 */
+		if (getMethod() == METHOD.MANUAL) {
+			LOGGER.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
+			// getStatistics();
+			return getClassLimits();
+		}
+		if (value_field_name == null)
+			throw new IllegalStateException("valueFieldName has to be set");
+		if (getMethod() == null)
+			throw new IllegalStateException("method has to be set");
+
+		switch (classificationMethod) {
+		case EI:
+			return classLimits = getEqualIntervalLimits();
+
+		case QUANTILES:
+		default:
+			return classLimits = getQuantileLimits();
+		}
+	}
+
+	/**
+	 * @deprecated TODO Das läuft jetzt nicht mehr mit worker!
+	 */
+	@Deprecated
+	public void calculateClassLimitsWithWorker() {
+		classLimits = new TreeSet<Double>();
+
+		/**
+		 * Do we have all necessary information to calculate ClassLimits?
+		 */
+		if (value_field_name == null)
+			return;
+
+		pushQuite();
+		TreeSet<Double> newLimits;
+		try {
+			newLimits = calculateClassLimitsBlocking();
+			setClassLimits(newLimits);
+			popQuite();
+		} catch (InterruptedException e) {
+			setQuite(stackQuites.pop());
+		} catch (CancellationException e) {
+			setQuite(stackQuites.pop());
+		} catch (IOException exception) {
+			setQuite(stackQuites.pop());
+		} finally {
+		}
+
+	}
+
+	/**
+	 * Return a {@link ComboBoxModel} that present all available attributes.
+	 * That excludes the attribute selected in
+	 * {@link #getValueFieldsComboBoxModel()}.
+	 */
+	public ComboBoxModel createNormalizationFieldsComboBoxModel() {
+		normlizationAttribsComboBoxModel = new DefaultComboBoxModel();
+		normlizationAttribsComboBoxModel
+				.addElement(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
+		normlizationAttribsComboBoxModel
+				.setSelectedItem(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
+		for (final String fn : FeatureUtil.getNumericalFieldNames(
+				getStyledFeatures().getSchema(), false)) {
+			if (fn != valueAttribsComboBoxModel.getSelectedItem())
+				normlizationAttribsComboBoxModel.addElement(fn);
+			else {
+				// System.out.println("Omittet field" + fn);
+			}
+		}
+		return normlizationAttribsComboBoxModel;
+	}
+
+	/**
+	 * Help the GC to clean up this object.
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		stats = null;
+	}
 
 	@Override
 	public void fireEvent(final ClassificationChangeEvent e) {
@@ -93,121 +309,6 @@ public class QuantitiesClassification extends FeatureClassification {
 		}
 	}
 
-	protected String value_field_name;
-
-	private String normalizer_field_name;
-
-	private DefaultComboBoxModel valueAttribsComboBoxModel;
-
-	private DefaultComboBoxModel normlizationAttribsComboBoxModel;
-
-	/**
-	 * Count of digits the (quantile) classes are rounded to. A negative value
-	 * means round to digits BEFORE comma! If {@code null} (this is the
-	 * default!) no round is performed.
-	 */
-	private Integer limitsDigits = null;
-
-	/**
-	 * If the classification contains 5 classes, then we have to save 5+1
-	 * breaks.
-	 */
-	protected volatile TreeSet<Double> breaks = null;
-
-	private DynamicBin1D stats = null;
-
-	final String handle = "statisticsQuery";
-
-	static final public int MAX_FEATURES_DEFAULT = 10000;
-
-	public static final METHOD DEFAULT_METHOD = METHOD.QUANTILES;
-
-	/**
-	 * Different Methods to classify
-	 */
-	public enum METHOD {
-		EI, MANUAL, QUANTILES;
-
-		public String getDesc() {
-			return AtlasStyler
-					.R("QuantitiesClassifiction.Method.ComboboxEntry."
-							+ toString());
-		}
-
-		public String getToolTip() {
-			return AtlasStyler
-					.R("QuantitiesClassifiction.Method.ComboboxEntry."
-							+ toString() + ".TT");
-		}
-
-	}
-
-	/** The type of classification that is used. Quantiles by default * */
-	public METHOD classificationMethod = DEFAULT_METHOD;
-
-	private int numClasses = 5;
-
-	volatile private boolean cancelCalculation;
-
-	protected volatile TreeSet<Double> classLimits;
-
-	private boolean recalcAutomatically = true;
-
-	/**
-	 * @param featureSource
-	 *            The featuresource to use for the statistics
-	 * @param layerFilter
-	 *            The {@link Filter} that shall be applied whenever asking for
-	 *            the {@link FeatureCollection}. <code>null</code> is not
-	 *            allowed, use Filter.INCLUDE
-	 * @param value_field_name
-	 *            The column that is used for the classification
-	 * @param normalizer_field_name
-	 *            If null, no normalization will be used
-	 */
-	public QuantitiesClassification(StyledFeaturesInterface<?> styledFeatures,
-			final String value_field_name, final String normalizer_field_name) {
-		super(styledFeatures);
-		this.value_field_name = value_field_name;
-		this.normalizer_field_name = normalizer_field_name;
-	}
-
-	/**
-	 * @param featureSource
-	 *            The featuresource to use for the statistics
-	 * @param value_field_name
-	 *            The column that is used for the classification
-	 */
-	public QuantitiesClassification(
-			final StyledFeaturesInterface<?> styledFeatures,
-			final String value_field_name) {
-		this(styledFeatures, value_field_name, null);
-	}
-
-	/**
-	 * @param featureSource
-	 *            The featuresource to use for the statistics
-	 */
-	public QuantitiesClassification(
-			final StyledFeaturesInterface<?> styledFeatures) {
-		this(styledFeatures, null, null);
-	}
-
-	@Override
-	public int getNumClasses() {
-		// if (numClasses <= 0 && breaks != null) {
-		// LOGGER
-		// .debug("getNumCLasses() sets numClasses to ( breaks.size()-1 = "
-		// + (breaks.size() - 1)
-		// + " ) because would return "
-		// + numClasses + " otherwise");
-		// numClasses = breaks.size() - 1;
-		// }
-
-		// return breaks.size() - 1;
-		return numClasses;
-	}
-
 	/**
 	 * @return A {@link ComboBoxModel} that contains a list of class numbers.<br/>
 	 *         When we supported SD as a classification METHOD long ago, this
@@ -227,6 +328,21 @@ public class QuantitiesClassification extends FeatureClassification {
 			return nClassesComboBoxModel;
 
 		}
+	}
+
+	public TreeSet<Double> getClassLimits() {
+		return classLimits;
+	}
+
+	/**
+	 * Returns the number of digits the (quantile) class limits are rounded to.
+	 * Positive values means round to digits AFTER comma, Negative values means
+	 * round to digits BEFORE comma.
+	 * 
+	 * @return {@code null} if no round is performed
+	 */
+	public Integer getClassValueDigits() {
+		return this.limitsDigits;
 	}
 
 	/**
@@ -261,6 +377,35 @@ public class QuantitiesClassification extends FeatureClassification {
 		breaks = ASUtil.roundLimits(breaks, limitsDigits);
 
 		return breaks;
+	}
+
+	public METHOD getMethod() {
+		return classificationMethod;
+	}
+
+	/**
+	 * @return the name of the {@link Attribute} used for the normalization of
+	 *         the value. e.g. value = value field / normalization field
+	 */
+	public String getNormalizer_field_name() {
+		return normalizer_field_name;
+	}
+
+	// ms-01.en
+
+	@Override
+	public int getNumClasses() {
+		// if (numClasses <= 0 && breaks != null) {
+		// LOGGER
+		// .debug("getNumCLasses() sets numClasses to ( breaks.size()-1 = "
+		// + (breaks.size() - 1)
+		// + " ) because would return "
+		// + numClasses + " otherwise");
+		// numClasses = breaks.size() - 1;
+		// }
+
+		// return breaks.size() - 1;
+		return numClasses;
 	}
 
 	/**
@@ -299,6 +444,15 @@ public class QuantitiesClassification extends FeatureClassification {
 //		}
 
 		return breaks;
+	}
+
+	/**
+	 * Determine if you want the classification to be recalculated whenever if
+	 * makes sense automatically. Events for START calculation and
+	 * NEW_STATS_AVAIL will be fired.
+	 */
+	public boolean getRecalcAutomatically() {
+		return recalcAutomatically;
 	}
 
 	/**
@@ -422,24 +576,76 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	/**
-	 * Change the LocalName of the {@link Attribute} that shall be used for the
-	 * values. <code>null</code> is not allowed.
-	 * 
-	 * @param value_field_name
-	 *            {@link Double}.
+	 * @return the name of the {@link Attribute} used for the value. It may
+	 *         additionally be normalized if #
 	 */
-	public void setValue_field_name(final String value_field_name) {
-		// IllegalArgumentException("null is not a valid value field name");
-		if ((value_field_name != null)
-				&& (this.value_field_name != value_field_name)) {
-			this.value_field_name = value_field_name;
-			stats = null;
+	public String getValue_field_name() {
+		return value_field_name;
+	}
 
-			if (normalizer_field_name == value_field_name) {
-				normalizer_field_name = null;
-			}
+	/**
+	 * Return a cached {@link ComboBoxModel} that present all available
+	 * attributes. Its connected to the
+	 * {@link #createNormalizationFieldsComboBoxModel()}
+	 */
+	public ComboBoxModel getValueFieldsComboBoxModel() {
+		if (valueAttribsComboBoxModel == null)
+			valueAttribsComboBoxModel = new DefaultComboBoxModel(FeatureUtil
+					.getNumericalFieldNames(getStyledFeatures().getSchema(),
+							false).toArray());
+		return valueAttribsComboBoxModel;
+	}
 
-			fireEvent(new ClassificationChangeEvent(CHANGETYPES.VALUE_CHG));
+	/**
+	 * Will trigger recalculating the statistics including firing events
+	 */
+	public void onFilterChanged() {
+		stats = null;
+		if (getMethod() == METHOD.MANUAL) {
+			fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
+		} else
+			calculateClassLimitsWithWorker();
+	}
+
+	public void setCancelCalculation(final boolean cancelCalculation) {
+		this.cancelCalculation = cancelCalculation;
+
+	}
+
+	public void setClassLimits(final TreeSet<Double> classLimits_) {
+
+//		if (classLimits_.size() == 1) {
+//			// Special case: Create a second classLimit with the same value!
+//			classLimits_.add(classLimits_.first());
+//		}
+
+		this.classLimits = classLimits_;
+		this.numClasses = classLimits_.size() - 1;
+
+		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
+	}
+
+	// ms-01.sn
+	/**
+	 * Setzs the number of digits the (quantile) class limits are rounded to. If
+	 * set to {@code null} no round is performed.
+	 * 
+	 * @param digits
+	 *            positive values means round to digits AFTER comma, negative
+	 *            values means round to digits BEFORE comma
+	 * 
+	 *            TODO abgleichen mit QuantitiesRuleListe#setClassDigits
+	 */
+	public void setLimitsDigits(final Integer digits) {
+		this.limitsDigits = digits;
+	}
+
+	public void setMethod(final METHOD newMethod) {
+		if ((classificationMethod != null)
+				&& (classificationMethod != newMethod)) {
+			classificationMethod = newMethod;
+
+			fireEvent(new ClassificationChangeEvent(CHANGETYPES.METHODS_CHG));
 		}
 	}
 
@@ -468,55 +674,6 @@ public class QuantitiesClassification extends FeatureClassification {
 		}
 	}
 
-	/**
-	 * Help the GC to clean up this object.
-	 */
-	public void dispose() {
-		super.dispose();
-		stats = null;
-	}
-
-	public METHOD getMethod() {
-		return classificationMethod;
-	}
-
-	// ms-01.sn
-	/**
-	 * Setzs the number of digits the (quantile) class limits are rounded to. If
-	 * set to {@code null} no round is performed.
-	 * 
-	 * @param digits
-	 *            positive values means round to digits AFTER comma, negative
-	 *            values means round to digits BEFORE comma
-	 * 
-	 *            TODO abgleichen mit QuantitiesRuleListe#setClassDigits
-	 */
-	public void setLimitsDigits(final Integer digits) {
-		this.limitsDigits = digits;
-	}
-
-	/**
-	 * Returns the number of digits the (quantile) class limits are rounded to.
-	 * Positive values means round to digits AFTER comma, Negative values means
-	 * round to digits BEFORE comma.
-	 * 
-	 * @return {@code null} if no round is performed
-	 */
-	public Integer getClassValueDigits() {
-		return this.limitsDigits;
-	}
-
-	// ms-01.en
-
-	public void setMethod(final METHOD newMethod) {
-		if ((classificationMethod != null)
-				&& (classificationMethod != newMethod)) {
-			classificationMethod = newMethod;
-
-			fireEvent(new ClassificationChangeEvent(CHANGETYPES.METHODS_CHG));
-		}
-	}
-
 	public void setNumClasses(final Integer numClasses2) {
 		if (numClasses2 != null && !numClasses2.equals(numClasses)) {
 			numClasses = numClasses2;
@@ -525,123 +682,6 @@ public class QuantitiesClassification extends FeatureClassification {
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.NUM_CLASSES_CHG));
 		}
 
-	}
-
-	/**
-	 * Calculates the {@link TreeSet} of classLimits, blocking the thread.
-	 */
-	public TreeSet<Double> calculateClassLimitsBlocking() throws IOException,
-			InterruptedException {
-		/**
-		 * Do we have all necessary information to calculate ClassLimits?
-		 */
-		if (getMethod() == METHOD.MANUAL) {
-			LOGGER.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
-			// getStatistics();
-			return getClassLimits();
-		}
-		if (value_field_name == null)
-			throw new IllegalStateException("valueFieldName has to be set");
-		if (getMethod() == null)
-			throw new IllegalStateException("method has to be set");
-
-		switch (classificationMethod) {
-		case EI:
-			return classLimits = getEqualIntervalLimits();
-
-		case QUANTILES:
-		default:
-			return classLimits = getQuantileLimits();
-		}
-	}
-
-	/**
-	 * @deprecated TODO Das läuft jetzt nicht mehr mit worker!
-	 */
-	public void calculateClassLimitsWithWorker() {
-		classLimits = new TreeSet<Double>();
-
-		/**
-		 * Do we have all necessary information to calculate ClassLimits?
-		 */
-		if (value_field_name == null)
-			return;
-
-		pushQuite();
-		TreeSet<Double> newLimits;
-		try {
-			newLimits = calculateClassLimitsBlocking();
-			setClassLimits(newLimits);
-			popQuite();
-		} catch (InterruptedException e) {
-			setQuite(stackQuites.pop());
-		} catch (CancellationException e) {
-			setQuite(stackQuites.pop());
-		} catch (IOException exception) {
-			setQuite(stackQuites.pop());
-		} finally {
-		}
-
-	}
-
-	public TreeSet<Double> getClassLimits() {
-		return classLimits;
-	}
-
-	public void setCancelCalculation(final boolean cancelCalculation) {
-		this.cancelCalculation = cancelCalculation;
-
-	}
-
-	/**
-	 * Return a cached {@link ComboBoxModel} that present all available
-	 * attributes. Its connected to the
-	 * {@link #createNormalizationFieldsComboBoxModel()}
-	 */
-	public ComboBoxModel getValueFieldsComboBoxModel() {
-		if (valueAttribsComboBoxModel == null)
-			valueAttribsComboBoxModel = new DefaultComboBoxModel(FeatureUtil
-					.getNumericalFieldNames(getStyledFeatures().getSchema(),
-							false).toArray());
-		return valueAttribsComboBoxModel;
-	}
-
-	/**
-	 * Return a {@link ComboBoxModel} that present all available attributes.
-	 * That excludes the attribute selected in
-	 * {@link #getValueFieldsComboBoxModel()}.
-	 */
-	public ComboBoxModel createNormalizationFieldsComboBoxModel() {
-		normlizationAttribsComboBoxModel = new DefaultComboBoxModel();
-		normlizationAttribsComboBoxModel
-				.addElement(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
-		normlizationAttribsComboBoxModel
-				.setSelectedItem(NORMALIZE_NULL_VALUE_IN_COMBOBOX);
-		for (final String fn : FeatureUtil.getNumericalFieldNames(
-				getStyledFeatures().getSchema(), false)) {
-			if (fn != valueAttribsComboBoxModel.getSelectedItem())
-				normlizationAttribsComboBoxModel.addElement(fn);
-			else {
-				// System.out.println("Omittet field" + fn);
-			}
-		}
-		return normlizationAttribsComboBoxModel;
-	}
-
-	/**
-	 * @return the name of the {@link Attribute} used for the value. It may
-	 *         additionally be normalized if #
-	 */
-	public String getValue_field_name() {
-		return value_field_name;
-	}
-
-	/**
-	 * @return the name of the {@link Attribute} used for the normalization of
-	 *         the value. e.g. value = value field / normalization field
-	 */
-	public String getNormalizer_field_name() {
-		return normalizer_field_name;
 	}
 
 	/**
@@ -657,63 +697,25 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	/**
-	 * Determine if you want the classification to be recalculated whenever if
-	 * makes sense automatically. Events for START calculation and
-	 * NEW_STATS_AVAIL will be fired.
-	 */
-	public boolean getRecalcAutomatically() {
-		return recalcAutomatically;
-	}
-
-	public void setClassLimits(final TreeSet<Double> classLimits_) {
-
-//		if (classLimits_.size() == 1) {
-//			// Special case: Create a second classLimit with the same value!
-//			classLimits_.add(classLimits_.first());
-//		}
-
-		this.classLimits = classLimits_;
-		this.numClasses = classLimits_.size() - 1;
-
-		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
-	}
-
-	/**
-	 * Will trigger recalculating the statistics including firing events
-	 */
-	public void onFilterChanged() {
-		stats = null;
-		if (getMethod() == METHOD.MANUAL) {
-			fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
-		} else
-			calculateClassLimitsWithWorker();
-	}
-
-	/**
-	 * Rplaces all values in the classification limits that can make problems
-	 * when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf,
-	 * Na
+	 * Change the LocalName of the {@link Attribute} that shall be used for the
+	 * values. <code>null</code> is not allowed.
 	 * 
-	 * @param replacement
-	 *            A number that will replace Inf+ as abs(replacement), and Inf-
-	 *            as -abs(replacement)
+	 * @param value_field_name
+	 *            {@link Double}.
 	 */
-	public static TreeSet<Double> removeNanAndInf(
-			QuantitiesClassification classifier, Double replacement) {
+	public void setValue_field_name(final String value_field_name) {
+		// IllegalArgumentException("null is not a valid value field name");
+		if ((value_field_name != null)
+				&& (this.value_field_name != value_field_name)) {
+			this.value_field_name = value_field_name;
+			stats = null;
 
-		// Filter class limits against -Inf and +Inf. GS doesn't like them
-		TreeSet<Double> newClassLimits = new TreeSet<Double>();
-		for (Double l : classifier.getClassLimits()) {
-			if (l == Double.NEGATIVE_INFINITY)
-				l = -1. * Math.abs(replacement);
-			if (l == Double.POSITIVE_INFINITY)
-				l = Math.abs(replacement);
-			if (l == Double.NaN)
-				l = 0.;
-			newClassLimits.add(l);
+			if (normalizer_field_name == value_field_name) {
+				normalizer_field_name = null;
+			}
+
+			fireEvent(new ClassificationChangeEvent(CHANGETYPES.VALUE_CHG));
 		}
-		classifier.setClassLimits(newClassLimits);
-		return newClassLimits;
 	}
 
 }

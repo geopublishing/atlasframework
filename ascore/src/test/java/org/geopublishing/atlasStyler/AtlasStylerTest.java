@@ -49,6 +49,11 @@ public class AtlasStylerTest {
 	public final static String SNOWPOLYGON_RESNAME = "/data/polygonSnowShape/polygonLayerSnow.shp";
 
 
+	@AfterClass
+	public static void after() {
+		featureSource_polygon.getDataStore().dispose();
+	}
+
 	@BeforeClass
 	public static void setup() throws IOException {
 		URL shpURL = AtlasStylerTest.class.getResource(COUNTRY_SHP_RESNAME);
@@ -60,19 +65,6 @@ public class AtlasStylerTest {
 				.getTypeNames()[0]);
 	}
 
-	@AfterClass
-	public static void after() {
-		featureSource_polygon.getDataStore().dispose();
-	}
-
-	@Test
-	public void testConstructors() {
-		AtlasStyler as1 = new AtlasStyler(featureSource_polygon);
-		AtlasStyler as2 = new AtlasStyler(new StyledFS(featureSource_polygon));
-		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon),
-				null, null, null);
-	}
-
 	@Test
 	@Ignore
 	public void testAvgNN() throws IOException {
@@ -82,17 +74,11 @@ public class AtlasStylerTest {
 	}
 
 	@Test
-	public void testGetNumericalFieldNames() {
-		Collection<String> numericalFieldNames = FeatureUtil
-				.getNumericalFieldNames(featureSource_polygon.getSchema(),
-						false);
-		System.out.println(numericalFieldNames);
-
-		String[] strings = numericalFieldNames.toArray(new String[] {});
-		assertEquals(3, strings.length);
-		assertEquals("POP_CNTRY", strings[0]);
-		assertEquals("SQKM_CNTRY", strings[1]);
-		assertEquals("SQMI_CNTRY", strings[2]);
+	public void testConstructors() {
+		AtlasStyler as1 = new AtlasStyler(featureSource_polygon);
+		AtlasStyler as2 = new AtlasStyler(new StyledFS(featureSource_polygon));
+		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon),
+				null, null, null);
 	}
 
 	@Test
@@ -159,6 +145,20 @@ public class AtlasStylerTest {
 			String xml2 = StylingUtil.toXMLString(s2.getFTS());
 			assertEquals(xml1, xml2);
 		}
+	}
+
+	@Test
+	public void testGetNumericalFieldNames() {
+		Collection<String> numericalFieldNames = FeatureUtil
+				.getNumericalFieldNames(featureSource_polygon.getSchema(),
+						false);
+		System.out.println(numericalFieldNames);
+
+		String[] strings = numericalFieldNames.toArray(new String[] {});
+		assertEquals(3, strings.length);
+		assertEquals("POP_CNTRY", strings[0]);
+		assertEquals("SQKM_CNTRY", strings[1]);
+		assertEquals("SQMI_CNTRY", strings[2]);
 	}
 
 }

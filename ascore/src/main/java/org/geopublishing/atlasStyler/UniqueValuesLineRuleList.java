@@ -18,11 +18,11 @@ import skrueger.geotools.StyledFeaturesInterface;
 
 public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	
+	protected Logger LOGGER = ASUtil.createLogger(this);
+
 	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
 	}
-
-	protected Logger LOGGER = ASUtil.createLogger(this);
 
 //
 //	@SuppressWarnings("unchecked")
@@ -32,9 +32,8 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 //	}
 
 	@Override
-	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));
-
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.LINE;
 	}
 
 	@Override
@@ -43,7 +42,8 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	}
 
 	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.LINE;
+	public void importTemplate(FeatureTypeStyle importFTS) {
+		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));
+
 	}
 }

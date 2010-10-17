@@ -24,9 +24,8 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
-	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));
-
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.LINE;
 	}
 
 	@Override
@@ -35,7 +34,8 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.LINE;
+	public void importTemplate(FeatureTypeStyle importFTS) {
+		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));
+
 	}
 }

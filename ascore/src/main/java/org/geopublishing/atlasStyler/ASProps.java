@@ -35,42 +35,6 @@ import schmitzm.swing.ExceptionDialog;
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public abstract class ASProps {
-	private static final Logger LOGGER = Logger.getLogger(ASProps.class);
-
-	/**
-	 * This stores the properties
-	 */
-	private static final Properties properties = new Properties();
-
-	/** TODO: Rethink where this "default" shall be used. */
-	public static final String DEFAULT_CHARSET_NAME = "UTF-8";
-
-	/**
-	 * Name of the file that is stored on the local mashine in an applicatin
-	 * preferences directory
-	 */
-	private static String propertiesFilename;
-
-	private static File propertiesFile = null;
-
-	private static FileOutputStream FOS = null;
-
-	private static boolean haveToCloseFOS = false;
-
-	private static String appDirname;
-
-	private static Window owner;
-	
-
-	public static final String PROPERTIES_FILENAME = "atlasStyler.properties";
-
-	public static final String PROPERTIES_FOLDER = ".AtlasStyler";
-
-
-	static {
-		init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
-	}
-
 	/**
 	 * List of all legal keys in the
 	 * 
@@ -79,75 +43,132 @@ public abstract class ASProps {
 	 * 
 	 */
 	public enum Keys {
-		/** Last directory used for open dialog */
-		lastImportDirectory,
-		/** Last directory used for save full SLD dialog */
-		lastExportDirectory,
-		/** JFrame starts maximized? */
-		windowMaximized,
-		/** Name of charset used for exporting SLD XML* */
-		charsetName,
 		/**
 		 * java2d AntiAliasing, Quality and TextAntiALiasing Hints turned on or
 		 * off*
 		 */
-		antialiasingMaps, automaticPreview, language,
-		/** Last postgis hostname used **/
-		lastPgPort,
-		/** Last postgis hostname used **/
-		lastPgHost,
+		antialiasingMaps,
+		automaticPreview,
+		/** Name of charset used for exporting SLD XML* */
+		charsetName,
+		/** JVM/System wide default setting. Applied when starting up **/
+		FORCE_LONGITUDE_FIRST_AXIS_ORDER,
+		language, /** Last directory used for save full SLD dialog */
+		lastExportDirectory, /** Last directory used for open dialog */
+		lastImportDirectory,
 		/** Last postgis database used **/
 		lastPgDatabase,
+		/** Last postgis hostname used **/
+		lastPgHost,
+		/** Last postgis hostname used **/
+		lastPgPort,
 		/** Last postgis table used **/
 		lastPgTable,
 		/** Last postgis username used **/
 		lastPgUsername,
-		/** JVM/System wide default setting. Applied when starting up **/
-		FORCE_LONGITUDE_FIRST_AXIS_ORDER,
+		/** JFrame starts maximized? */
+		windowMaximized,
 		
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
-		synchronized (FOS) {
-			if (haveToCloseFOS) {
-				FOS.close();
-				haveToCloseFOS = false;
-			}
-		}
+	private static String appDirname;
+
+	/** TODO: Rethink where this "default" shall be used. */
+	public static final String DEFAULT_CHARSET_NAME = "UTF-8";
+
+	private static FileOutputStream FOS = null;
+
+	private static boolean haveToCloseFOS = false;
+
+	private static final Logger LOGGER = Logger.getLogger(ASProps.class);
+
+	private static Window owner;
+
+	/**
+	 * This stores the properties
+	 */
+	private static final Properties properties = new Properties();
+
+	public static final String PROPERTIES_FILENAME = "atlasStyler.properties";
+	
+
+	public static final String PROPERTIES_FOLDER = ".AtlasStyler";
+
+	private static File propertiesFile = null;
+
+
+	/**
+	 * Name of the file that is stored on the local mashine in an applicatin
+	 * preferences directory
+	 */
+	private static String propertiesFilename;
+
+	static {
+		init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
 	}
 
 	/**
-	 * Initialize this helpercLass for a some application
-	 * 
-	 * @param propertiesFilename
-	 *            name or the Properties file, e.g. "ac.properties"
-	 * 
-	 * @param appDirname
-	 *            Dirname in the User Home directory, e.g. ".shh"
+	 * Returns the value as an {@link Integer}. If conversion fails, the default
+	 * value is returned
+	 */
+	public static final String get(Keys key) {
+		return get(key.toString());
+	}
+
+	public static boolean get(Keys key, boolean def) {
+		return get(key.toString(), def);
+	}
+
+	public static String get(Keys key, String def) {
+		return get(key.toString(), def);
+	}
+
+	/**
+	 * Get a value from the underlying {@link Properties}
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Tzeggai</a>
 	 */
-	protected static void init(String propertiesFilename, String appDirname) {
-		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
-		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
+	private static final String get(String key) {
+		return properties.getProperty(key);
+	}
 
-		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
+	private static boolean get(String key, boolean def) {
+		String propertyAsString = properties.getProperty(key, new Boolean(def).toString());
+		return Boolean.parseBoolean(propertyAsString);
+	}
 
-		ASProps.propertiesFilename = propertiesFilename;
-		ASProps.appDirname = appDirname;
+	private static final String get(String key, String defaultValue) {
+		return properties.getProperty(key, defaultValue);
+	}
 
-		/**
-		 * It is not a problem if the propertiesFile for the AtlasStyler can't
-		 * be loaded
-		 */
+	/** ****************** GET ****************************** */
+	/** ****************** GET ****************************** */
+	/** ****************** GET ****************************** */
+
+	public static Integer getInt(Keys key, Integer def) {
+		return getInt(key.toString(), def);
+	}
+
+	private static final Integer getInt(String key, Integer defaultValue) {
 		try {
-			properties.load(new FileInputStream(getPropertiesFile()));
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-			LOGGER.error(e);
+			final String string = get(key);
+			if (string == null)
+				return defaultValue;
+			return Integer.valueOf(string.trim());
+		} catch (Exception e) {
+			LOGGER
+					.warn(
+							"The property value saved for "
+									+ key
+									+ " can't be converted to Integer. Returning default value " // i8nlog
+									+ defaultValue, e);
 		}
+		return defaultValue;
+	}
+
+	public static Component getOwner() {
+		return owner;
 	}
 
 	protected static File getPropertiesFile() {
@@ -184,12 +205,57 @@ public abstract class ASProps {
 
 		return propertiesFile;
 	}
+	
+	/**
+	 * Initialize this helpercLass for a some application
+	 * 
+	 * @param propertiesFilename
+	 *            name or the Properties file, e.g. "ac.properties"
+	 * 
+	 * @param appDirname
+	 *            Dirname in the User Home directory, e.g. ".shh"
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	protected static void init(String propertiesFilename, String appDirname) {
+		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
+		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
+
+		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
+
+		ASProps.propertiesFilename = propertiesFilename;
+		ASProps.appDirname = appDirname;
+
+		/**
+		 * It is not a problem if the propertiesFile for the AtlasStyler can't
+		 * be loaded
+		 */
+		try {
+			properties.load(new FileInputStream(getPropertiesFile()));
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			LOGGER.error(e);
+		}
+	}
 
 	/**
-	 * Set the value in the underlying {@link Properties} and store it
+	 * Deletes the .properties in the ApplicationPreferences directory and
+	 * creates a default .properties file
+	 * 
+	 * @param guiOwner
+	 *            If not <code>null</code> a JDialog message will inform the
+	 *            user.
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
 	 */
-	private static final void set(String key, String value) {
-		properties.setProperty(key, value);
+	public static void resetProperties() {
+
+		// Create the new one
+		// LOGGER.error(e);
+		LOGGER.info("Resetting " + getPropertiesFile().getAbsolutePath());
+		// Delete the old one
+		getPropertiesFile().delete();
 		store();
 	}
 
@@ -208,64 +274,16 @@ public abstract class ASProps {
 		store();
 	}
 
-	/** ****************** GET ****************************** */
-	/** ****************** GET ****************************** */
-	/** ****************** GET ****************************** */
-
 	/**
-	 * Returns the value as an {@link Integer}. If conversion fails, the default
-	 * value is returned
+	 * Set the value in the underlying {@link Properties} and store it
 	 */
-	public static final String get(Keys key) {
-		return get(key.toString());
+	private static final void set(String key, String value) {
+		properties.setProperty(key, value);
+		store();
 	}
 
-	/**
-	 * Get a value from the underlying {@link Properties}
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	private static final String get(String key) {
-		return properties.getProperty(key);
-	}
-
-	private static final String get(String key, String defaultValue) {
-		return properties.getProperty(key, defaultValue);
-	}
-
-	public static String get(Keys key, String def) {
-		return get(key.toString(), def);
-	}
-	
-	public static boolean get(Keys key, boolean def) {
-		return get(key.toString(), def);
-	}
-
-	private static boolean get(String key, boolean def) {
-		String propertyAsString = properties.getProperty(key, new Boolean(def).toString());
-		return Boolean.parseBoolean(propertyAsString);
-	}
-
-	public static Integer getInt(Keys key, Integer def) {
-		return getInt(key.toString(), def);
-	}
-
-	private static final Integer getInt(String key, Integer defaultValue) {
-		try {
-			final String string = get(key);
-			if (string == null)
-				return defaultValue;
-			return Integer.valueOf(string.trim());
-		} catch (Exception e) {
-			LOGGER
-					.warn(
-							"The property value saved for "
-									+ key
-									+ " can't be converted to Integer. Returning default value " // i8nlog
-									+ defaultValue, e);
-		}
-		return defaultValue;
+	public static void setOwner(Window owner) {
+		ASProps.owner = owner;
 	}
 
 	/**
@@ -293,32 +311,14 @@ public abstract class ASProps {
 		}
 	}
 
-	/**
-	 * Deletes the .properties in the ApplicationPreferences directory and
-	 * creates a default .properties file
-	 * 
-	 * @param guiOwner
-	 *            If not <code>null</code> a JDialog message will inform the
-	 *            user.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public static void resetProperties() {
-
-		// Create the new one
-		// LOGGER.error(e);
-		LOGGER.info("Resetting " + getPropertiesFile().getAbsolutePath());
-		// Delete the old one
-		getPropertiesFile().delete();
-		store();
-	}
-
-	public static void setOwner(Window owner) {
-		ASProps.owner = owner;
-	}
-
-	public static Component getOwner() {
-		return owner;
+	@Override
+	protected void finalize() throws Throwable {
+		synchronized (FOS) {
+			if (haveToCloseFOS) {
+				FOS.close();
+				haveToCloseFOS = false;
+			}
+		}
 	}
 
 }

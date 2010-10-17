@@ -24,6 +24,11 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	}
 	
 	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POINT;
+	}
+
+	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.QUANTITIES_COLORIZED_POINT;
 	}
@@ -31,11 +36,6 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importPointTemplateFromFirstRule(importFTS));
-	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POINT;
 	}
 
 }

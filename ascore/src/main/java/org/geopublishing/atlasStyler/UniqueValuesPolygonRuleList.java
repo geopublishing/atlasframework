@@ -24,8 +24,8 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 	}
 
 	@Override
-	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POLYGON;
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 	}
 
 	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POLYGON;
+	public void importTemplate(FeatureTypeStyle importFTS) {
+		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
 	}
 }

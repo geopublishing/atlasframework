@@ -31,8 +31,6 @@ import org.geotools.util.WeakHashSet;
  */
 public abstract class AbstractRuleList {
 
-	final protected Logger LOGGER = ASUtil.createLogger(this);
-
 	/**
 	 * These enum names should not be changed anymore. We use them with
 	 * .tostring().equals(...)
@@ -41,29 +39,137 @@ public abstract class AbstractRuleList {
 	 *         Tzeggai</a>
 	 */
 	public enum RulesListType {
-		SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POLYGON, SINGLE_SYMBOL_LINE, QUANTITIES_COLORIZED_POINT, QUANTITIES_COLORIZED_LINE, QUANTITIES_COLORIZED_POLYGON, QUANTITIES_SIZED_POINT, QUANTITIES_SIZED_LINE, UNIQUE_VALUE_POINT, UNIQUE_VALUE_LINE, UNIQUE_VALUE_POLYGON, UNIQUE_VALUE_COMBINATIONS_POINT, UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POLYGONE, TEXT_LABEL
+		QUANTITIES_COLORIZED_LINE, QUANTITIES_COLORIZED_POINT, QUANTITIES_COLORIZED_POLYGON, QUANTITIES_SIZED_LINE, QUANTITIES_SIZED_POINT, SINGLE_SYMBOL_LINE, SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POLYGON, TEXT_LABEL, UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POINT, UNIQUE_VALUE_COMBINATIONS_POLYGONE, UNIQUE_VALUE_LINE, UNIQUE_VALUE_POINT, UNIQUE_VALUE_POLYGON
 	}
+
+	RuleChangedEvent lastOpressedEvent = null;
 
 	// This is a WeakHashSet, so references to the listeners have to exist in
 	// the classes adding the listeners. They shall not be anonymous instances.
 	final WeakHashSet<RuleChangeListener> listeners = new WeakHashSet<RuleChangeListener>(
 			RuleChangeListener.class);
 
+	final protected Logger LOGGER = ASUtil.createLogger(this);
+
 	/**
 	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
 	 * be fired.
 	 */
 	private boolean quite = false;
-
-	RuleChangedEvent lastOpressedEvent = null;
 	Stack<Boolean> stackQuites = new Stack<Boolean>();
 
 	/**
-	 * Add a QUITE-State to the event firing state stack
+	 * Adds a {@link RuleChangeListener} which listens to changes in the
+	 * {@link Rule}. Very good to update previews.<br>
+	 * <b>The listening class must keep a reference to the listener (e.g. make it a
+	 * field variable) because the listeners are kept in a WeakHashSet.</b>
+	 * 
+	 * @param listener
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
 	 */
-	public void pushQuite() {
-		stackQuites.push(quite);
-		setQuite(true);
+	public void addListener(RuleChangeListener listener) {
+		listeners.add(listener);
+	}
+
+	/**
+	 * Clears all {@link RuleChangeListener}s
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	public void clearListeners() {
+		listeners.clear();
+	}
+
+	/**
+	 * Tells all {@link RuleChangeListener} that the {@link Rule}s represented
+	 * by this {@link AbstractRuleList} implementation have changed.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	public void fireEvents(RuleChangedEvent rce) {
+
+		if (quite) {
+			lastOpressedEvent = rce;
+			return;
+		} else {
+			lastOpressedEvent = null;
+		}
+
+//		if (listeners.size() > 0)
+//			LOGGER.debug("Fire RCE event from "
+//					+ rce.getSourceRL().getClass().getSimpleName() + " = "
+//					+ rce.toString());
+
+		for (RuleChangeListener l : listeners) {
+			try {
+				l.changed(rce);
+			} catch (Exception e) {
+				LOGGER.error("While fireEvents: "+rce,e);
+			}
+		}
+	}
+
+	/**
+	 * The AtlasStyler stores meta information in the name tag of
+	 * {@link FeatureTypeStyle}s.
+	 * 
+	 * @return a {@link String} that contains all information for this
+	 *         particular RuleList
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	public abstract String getAtlasMetaInfoForFTSName();
+
+	/**
+	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
+	 *         RuleList. This method implemented here doesn't set the
+	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
+	 */
+	public FeatureTypeStyle getFTS() {
+		List<Rule> rules = getRules();
+		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
+				rules.toArray(new Rule[] {}));
+		ftstyle.setName(getAtlasMetaInfoForFTSName());
+		return ftstyle;
+	}
+
+	/**
+	 * Returns direct access to the {@link RuleChangeListener}s {@link HashSet}
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	public Set<RuleChangeListener> getListeners() {
+		return listeners;
+	}
+
+	/**
+	 * @return Returns the SLD {@link Rule}s that it represents.
+	 */
+	public abstract List<Rule> getRules();
+
+	/**
+	 * When importing a {@link Style}, the {@link AtlasStyler} recognizes its
+	 * RuleLists by reading meta information from the {@link FeatureTypeStyle}s
+	 * name. That information starts with a basic identifier for the RuleList
+	 * type.
+	 * 
+	 * @return An identifier string for that RuleList type.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
+	public abstract RulesListType getTypeID();
+
+	/**
+	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s
+	 */
+	public boolean isQuite() {
+		return quite;
 	}
 
 	/**
@@ -98,35 +204,11 @@ public abstract class AbstractRuleList {
 	}
 
 	/**
-	 * @return Returns the SLD {@link Rule}s that it represents.
+	 * Add a QUITE-State to the event firing state stack
 	 */
-	public abstract List<Rule> getRules();
-
-	/**
-	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
-	 *         RuleList. This method implemented here doesn't set the
-	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
-	 */
-	public FeatureTypeStyle getFTS() {
-		List<Rule> rules = getRules();
-		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
-				rules.toArray(new Rule[] {}));
-		ftstyle.setName(getAtlasMetaInfoForFTSName());
-		return ftstyle;
-	}
-
-	/**
-	 * Adds a {@link RuleChangeListener} which listens to changes in the
-	 * {@link Rule}. Very good to update previews.<br>
-	 * <b>The listening class must keep a reference to the listener (e.g. make it a
-	 * field variable) because the listeners are kept in a WeakHashSet.</b>
-	 * 
-	 * @param listener
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public void addListener(RuleChangeListener listener) {
-		listeners.add(listener);
+	public void pushQuite() {
+		stackQuites.push(quite);
+		setQuite(true);
 	}
 
 	/**
@@ -145,92 +227,10 @@ public abstract class AbstractRuleList {
 	}
 
 	/**
-	 * Clears all {@link RuleChangeListener}s
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public void clearListeners() {
-		listeners.clear();
-	}
-
-	/**
 	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s.
 	 */
 	private void setQuite(boolean b) {
 		quite = b;
 	}
-
-	/**
-	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s
-	 */
-	public boolean isQuite() {
-		return quite;
-	}
-
-	/**
-	 * Returns direct access to the {@link RuleChangeListener}s {@link HashSet}
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public Set<RuleChangeListener> getListeners() {
-		return listeners;
-	}
-
-	/**
-	 * Tells all {@link RuleChangeListener} that the {@link Rule}s represented
-	 * by this {@link AbstractRuleList} implementation have changed.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public void fireEvents(RuleChangedEvent rce) {
-
-		if (quite) {
-			lastOpressedEvent = rce;
-			return;
-		} else {
-			lastOpressedEvent = null;
-		}
-
-//		if (listeners.size() > 0)
-//			LOGGER.debug("Fire RCE event from "
-//					+ rce.getSourceRL().getClass().getSimpleName() + " = "
-//					+ rce.toString());
-
-		for (RuleChangeListener l : listeners) {
-			try {
-				l.changed(rce);
-			} catch (Exception e) {
-				LOGGER.error("While fireEvents: "+rce,e);
-			}
-		}
-	}
-
-	/**
-	 * When importing a {@link Style}, the {@link AtlasStyler} recognizes its
-	 * RuleLists by reading meta information from the {@link FeatureTypeStyle}s
-	 * name. That information starts with a basic identifier for the RuleList
-	 * type.
-	 * 
-	 * @return An identifier string for that RuleList type.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public abstract RulesListType getTypeID();
-
-	/**
-	 * The AtlasStyler stores meta information in the name tag of
-	 * {@link FeatureTypeStyle}s.
-	 * 
-	 * @return a {@link String} that contains all information for this
-	 *         particular RuleList
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
-	public abstract String getAtlasMetaInfoForFTSName();
 		
 }

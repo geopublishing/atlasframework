@@ -12,18 +12,18 @@ package org.geopublishing.atlasStyler.classification;
 
 public interface ClassificationChangedListener {
 
-	public void classifierNormalizationChanged(ClassificationChangeEvent e);
-
-	public void classifierValueFieldChanged(ClassificationChangeEvent e);
-
-	public void classifierMethodChanged(ClassificationChangeEvent e);
-
-	public void classifierExcludeFilterChanged(ClassificationChangeEvent e);
-
-	public void classifierNumClassesChanged(ClassificationChangeEvent e);
-
 	public void classifierAvailableNewClasses(ClassificationChangeEvent e);
 
 	public void classifierCalculatingStatistics(ClassificationChangeEvent e);
+
+	public void classifierExcludeFilterChanged(ClassificationChangeEvent e);
+
+	public void classifierMethodChanged(ClassificationChangeEvent e);
+
+	public void classifierNormalizationChanged(ClassificationChangeEvent e);
+
+	public void classifierNumClassesChanged(ClassificationChangeEvent e);
+
+	public void classifierValueFieldChanged(ClassificationChangeEvent e);
 
 }

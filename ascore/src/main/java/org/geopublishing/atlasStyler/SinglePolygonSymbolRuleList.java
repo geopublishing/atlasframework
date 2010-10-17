@@ -41,6 +41,17 @@ public class SinglePolygonSymbolRuleList extends
 		super(title);
 	}
 
+	@Override
+	public void addNewDefaultLayer() {
+		org.geotools.styling.Stroke stroke = ASUtil.createDefaultStroke();
+		Fill fill = ASUtil.createDefaultFill();
+
+		PolygonSymbolizer newPS = ASUtil.SB.createPolygonSymbolizer(stroke,
+				fill);
+
+		addSymbolizer(newPS);
+	}
+
 	/**
 	 * Clones this {@link SinglePolygonSymbolRuleList}
 	 * 
@@ -59,7 +70,7 @@ public class SinglePolygonSymbolRuleList extends
 		for (PolygonSymbolizer ps : layers) {
 
 			Symbolizer clonedSymbolizer = StylingUtil.clone(ps);
-			clone.addSymbolizer((PolygonSymbolizer) clonedSymbolizer);
+			clone.addSymbolizer(clonedSymbolizer);
 		}
 
 		if (copyListeners) {
@@ -72,22 +83,10 @@ public class SinglePolygonSymbolRuleList extends
 
 	}
 
-	/**
-	 * The {@link Color} returned by {@link #getColor()} is replaced against the
-	 * given color paramter. Any other occurence of the original color will also
-	 * be replaced.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
-	 */
 	@Override
-	public void setColor(Color color) {
-
-		for (PolygonSymbolizer ps : getSymbolizers()) {
-			StylingUtil.replacePolygonSymbolizerColor(ps, getColor(), color);
-		}
-
-		fireEvents(new RuleChangedEvent("setColor to " + color, this));
+	public SingleRuleList<PolygonSymbolizer> copy() {
+		SinglePolygonSymbolRuleList to = new SinglePolygonSymbolRuleList(getTitle());
+		return copyTo(to);
 	}
 
 	/**
@@ -110,6 +109,17 @@ public class SinglePolygonSymbolRuleList extends
 		return null;
 	}
 
+	@Override
+	public GeometryDescriptor getGeometryDescriptor() {
+		return FeatureUtil.createFeatureType(Polygon.class)
+				.getGeometryDescriptor();
+	}
+
+	@Override
+	public String getLayerTypeDesc(int idx) {
+		return getSymbolizers().get(idx).getClass().getSimpleName();
+	}
+
 	/** returns the Rotation if a GraphicFIll is used * */
 	@Override
 	public Double getRotation() {
@@ -117,11 +127,19 @@ public class SinglePolygonSymbolRuleList extends
 		return 0.;
 	}
 
-	/** Sets the rotation of any subelement where it makes sense * */
+	/** @return <code>0.</code> if no {@link Graphic}Fill is used * */
 	@Override
-	public void setRotation(Double rot) {
-		// TODO setRotation all ;-)
-		// fireEvents( new RuleChangedEvent("setRotation to "+rot, this) );
+	public Float getSizeBiggest() {
+		Float biggestSize = -1f;
+		for (PolygonSymbolizer ps : getSymbolizers()) {
+			biggestSize = ASUtil.getBiggestSize(ps, biggestSize);
+		}
+		return biggestSize;
+	}
+
+	@Override
+	public RulesListType getTypeID() {
+		return RulesListType.SINGLE_SYMBOL_POLYGON;
 	}
 
 	/**
@@ -151,14 +169,29 @@ public class SinglePolygonSymbolRuleList extends
 		return false;
 	}
 
-	/** @return <code>0.</code> if no {@link Graphic}Fill is used * */
+	/**
+	 * The {@link Color} returned by {@link #getColor()} is replaced against the
+	 * given color paramter. Any other occurence of the original color will also
+	 * be replaced.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	 *         Tzeggai</a>
+	 */
 	@Override
-	public Float getSizeBiggest() {
-		Float biggestSize = -1f;
+	public void setColor(Color color) {
+
 		for (PolygonSymbolizer ps : getSymbolizers()) {
-			biggestSize = ASUtil.getBiggestSize(ps, biggestSize);
+			StylingUtil.replacePolygonSymbolizerColor(ps, getColor(), color);
 		}
-		return biggestSize;
+
+		fireEvents(new RuleChangedEvent("setColor to " + color, this));
+	}
+
+	/** Sets the rotation of any subelement where it makes sense * */
+	@Override
+	public void setRotation(Double rot) {
+		// TODO setRotation all ;-)
+		// fireEvents( new RuleChangedEvent("setRotation to "+rot, this) );
 	}
 
 	/** Sets the size of any subelement where it makes sense * */
@@ -180,39 +213,6 @@ public class SinglePolygonSymbolRuleList extends
 		}
 
 		fireEvents(new RuleChangedEvent("setSize to " + newMax, this));
-	}
-
-	@Override
-	public GeometryDescriptor getGeometryDescriptor() {
-		return FeatureUtil.createFeatureType(Polygon.class)
-				.getGeometryDescriptor();
-	}
-
-	@Override
-	public String getLayerTypeDesc(int idx) {
-		return getSymbolizers().get(idx).getClass().getSimpleName();
-	}
-
-	@Override
-	public void addNewDefaultLayer() {
-		org.geotools.styling.Stroke stroke = ASUtil.createDefaultStroke();
-		Fill fill = ASUtil.createDefaultFill();
-
-		PolygonSymbolizer newPS = ASUtil.SB.createPolygonSymbolizer(stroke,
-				fill);
-
-		addSymbolizer(newPS);
-	}
-
-	@Override
-	public RulesListType getTypeID() {
-		return RulesListType.SINGLE_SYMBOL_POLYGON;
-	}
-
-	@Override
-	public SingleRuleList<PolygonSymbolizer> copy() {
-		SinglePolygonSymbolRuleList to = new SinglePolygonSymbolRuleList(getTitle());
-		return copyTo(to);
 	}
 
 }

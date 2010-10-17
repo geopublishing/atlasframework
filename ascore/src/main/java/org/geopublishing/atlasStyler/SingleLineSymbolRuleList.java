@@ -35,6 +35,12 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 		super(title);
 	}
 
+	@Override
+	public void addNewDefaultLayer() {
+		addSymbolizer(ASUtil
+				.createDefaultSymbolizer(getGeometryDescriptor()));
+	}
+
 	/**
 	 * Clones this {@link SingleLineSymbolRuleList}
 	 * 
@@ -52,20 +58,8 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	}
 
 	@Override
-	public GeometryDescriptor getGeometryDescriptor() {
-		return FeatureUtil.createFeatureType(LineString.class)
-				.getGeometryDescriptor();
-	}
-
-	@Override
-	public RulesListType getTypeID() {
-		return RulesListType.SINGLE_SYMBOL_LINE;
-	}
-
-	@Override
-	public void addNewDefaultLayer() {
-		addSymbolizer((LineSymbolizer) ASUtil
-				.createDefaultSymbolizer(getGeometryDescriptor()));
+	public SingleRuleList<LineSymbolizer> copy() {
+		return copyTo(new SingleLineSymbolRuleList(getTitle()));
 	}
 
 	@Override
@@ -79,6 +73,12 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 		}
 
 		return null;
+	}
+
+	@Override
+	public GeometryDescriptor getGeometryDescriptor() {
+		return FeatureUtil.createFeatureType(LineString.class)
+				.getGeometryDescriptor();
 	}
 
 	@Override
@@ -102,6 +102,11 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 			biggestSize = ASUtil.getBiggestWidth(ps, biggestSize);
 		}
 		return biggestSize;
+	}
+
+	@Override
+	public RulesListType getTypeID() {
+		return RulesListType.SINGLE_SYMBOL_LINE;
 	}
 
 	@Override
@@ -160,11 +165,6 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 		}
 
 		fireEvents(new RuleChangedEvent("SetWidth to " + newMax, this));
-	}
-
-	@Override
-	public SingleRuleList<LineSymbolizer> copy() {
-		return copyTo(new SingleLineSymbolRuleList(getTitle()));
 	}
 
 }

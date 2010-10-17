@@ -18,10 +18,6 @@ import skrueger.geotools.StyledFeaturesInterface;
 
 public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 
-	public UniqueValuesPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
-	}
-
 	protected Logger LOGGER = ASUtil.createLogger(this);
 //
 //	@Override
@@ -29,9 +25,13 @@ public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 //		return ASUtil.getDefaultPointTemplate();
 //	}
 
+	public UniqueValuesPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		super(styledFeatures);
+	}
+
 	@Override
-	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importPointTemplateFromFirstRule(importFTS));
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POINT;
 	}
 
 	@Override
@@ -40,8 +40,8 @@ public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 	}
 
 	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POINT;
+	public void importTemplate(FeatureTypeStyle importFTS) {
+		setTemplate(ASUtil.importPointTemplateFromFirstRule(importFTS));
 	}
 
 }

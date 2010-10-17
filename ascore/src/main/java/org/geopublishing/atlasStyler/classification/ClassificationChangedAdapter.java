@@ -13,25 +13,32 @@ package org.geopublishing.atlasStyler.classification;
 public class ClassificationChangedAdapter implements
 		ClassificationChangedListener {
 
-	public void classifierNormalizationChanged(ClassificationChangeEvent e) {
-	}
-
-	public void classifierMethodChanged(ClassificationChangeEvent e) {
-	}
-
-	public void classifierValueFieldChanged(ClassificationChangeEvent e) {
-	}
-
-	public void classifierExcludeFilterChanged(ClassificationChangeEvent e) {
-	}
-
-	public void classifierNumClassesChanged(ClassificationChangeEvent e) {
-	}
-
+	@Override
 	public void classifierAvailableNewClasses(ClassificationChangeEvent e) {
 	}
 
+	@Override
 	public void classifierCalculatingStatistics(ClassificationChangeEvent e) {
+	}
+
+	@Override
+	public void classifierExcludeFilterChanged(ClassificationChangeEvent e) {
+	}
+
+	@Override
+	public void classifierMethodChanged(ClassificationChangeEvent e) {
+	}
+
+	@Override
+	public void classifierNormalizationChanged(ClassificationChangeEvent e) {
+	}
+
+	@Override
+	public void classifierNumClassesChanged(ClassificationChangeEvent e) {
+	}
+
+	@Override
+	public void classifierValueFieldChanged(ClassificationChangeEvent e) {
 	}
 
 }

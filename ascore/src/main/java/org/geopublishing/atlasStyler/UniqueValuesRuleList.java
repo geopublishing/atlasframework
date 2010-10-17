@@ -49,23 +49,82 @@ import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public abstract class UniqueValuesRuleList extends FeatureRuleList {
-	private static final Logger LOGGER = Logger
-			.getLogger(UniqueValuesRuleList.class);
-
 	/**
 	 * Special unique value. When exporting by {@link #getRules()}, this value
 	 * is translated to the special "all others" rule *
 	 */
 	public static final String ALLOTHERS_IDENTIFICATION_VALUE = "ALLOTHERS_RULE_ID";
 
-	private String propertyFieldName = null;
+	private static final Logger LOGGER = Logger
+			.getLogger(UniqueValuesRuleList.class);
 
-	/** A List of the unique values **/
-	private final ArrayList<Object> values = new ArrayList<Object>();
+	/**
+	 * The Filter contains information about: unique value; ValueFieldName,
+	 * symbolizer, onOff
+	 * 
+	 * @param filter
+	 *            {@link Filter} to interpret
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * 
+	 * @return String[] with propertyName, uniqueValue
+	 */
+	public static String[] interpretFilter(final Filter filter)
+			throws RuntimeException {
+
+		if (filter instanceof PropertyIsEqualTo) {
+			// TODO Probably old unused code...
+			final PropertyIsEqualTo propertEqualTo = (PropertyIsEqualTo) filter;
+			final PropertyName pName = (PropertyName) propertEqualTo
+					.getExpression1();
+			final Literal value = (Literal) propertEqualTo.getExpression2();
+
+			return new String[] { pName.getPropertyName(), value.toString() };
+		} else if (filter instanceof Not) {
+			// This must be the default/all others rule...
+			final Not not = (Not) filter;
+			final Or or = (Or) not.getFilter();
+
+			StyleAttributeExtractor faex = new StyleAttributeExtractor();
+			Set attbibs = (Set) faex.visit(or, null);
+			String attName = (String) attbibs.iterator().next();
+
+			return new String[] { attName, ALLOTHERS_IDENTIFICATION_VALUE };
+		} else if (filter instanceof And) {
+			// AND (NOT NULL, PROP=VALUE)
+			And and = (AndImpl) filter;
+			for (Filter f : and.getChildren()) {
+				// Look for the Filter that has a PropertyIsEqualTo
+				if (f instanceof PropertyIsEqualTo) {
+					final PropertyIsEqualTo propertEqualTo = (PropertyIsEqualTo) f;
+					final PropertyName pName = (PropertyName) propertEqualTo
+							.getExpression1();
+					final Literal value = (Literal) propertEqualTo
+							.getExpression2();
+
+					return new String[] { pName.getPropertyName(),
+							value.toString() };
+				}
+			}
+		}
+
+		throw new RuntimeException("Filter not recognized.");
+	}
+
+	Integer countNew = 0;
+
+	private final ArrayList<String> labels = new ArrayList<String>();
+
+	private double maxScaleDenominator = Double.MAX_VALUE;
+
+	private BrewerPalette palette = ColorBrewer.instance().getPalettes()[0];
+
+	private String propertyFieldName = null;
 
 	private List<SingleRuleList<? extends Symbolizer>> symbols = new ArrayList<SingleRuleList<? extends Symbolizer>>();
 
-	private BrewerPalette palette = ColorBrewer.instance().getPalettes()[0];
+	/** A List of the unique values **/
+	private final ArrayList<Object> values = new ArrayList<Object>();
 
 	{
 		try {
@@ -77,17 +136,190 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		}
 	}
 
-	private final ArrayList<String> labels = new ArrayList<String>();
-
 	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
 	}
 
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		final String metaInfoString = getTypeID().toString();
+	/**
+	 * Adds all missing unique values to the list of rules...
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @throws IOException
+	 */
+	public void addAllValues(final Component parentGUI) throws IOException {
+		if (getPropertyFieldName() == null) {
+			JOptionPane
+					.showMessageDialog(
+							parentGUI,
+							AtlasStyler
+									.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
+			return;
+		}
 
-		return metaInfoString;
+		final ProgressWindow progressWindow;
+		if (parentGUI != null) {
+			progressWindow = new ProgressWindow(parentGUI);
+			progressWindow.setTitle(AtlasStyler
+					.R("UniqueValuesRuleList.AddAllValues.SearchingMsg"));
+			progressWindow.started();
+		} else {
+			progressWindow = null;
+		}
+
+		countNew = 0;
+
+		final SwingWorker<Set<Object>, Object> findUniques = new SwingWorker<Set<Object>, Object>() {
+
+			@Override
+			protected Set<Object> doInBackground() throws Exception {
+
+				return getAllUniqueValuesThatAreNotYetIncluded(progressWindow);
+			}
+
+			@Override
+			protected void done() {
+				pushQuite();
+				try {
+
+					for (final Object uniqueString : get()) {
+						addUniqueValue(uniqueString);
+						countNew++;
+					}
+				} catch (final Exception e) {
+					LOGGER.warn("Error finding all unique values", e); // i8n
+					if (progressWindow != null)
+						progressWindow.exceptionOccurred(e);
+				} finally {
+					if (progressWindow != null) {
+						progressWindow.complete();
+						progressWindow.dispose();
+					}
+
+					/** Fire an event * */
+					if (countNew > 0)
+						popQuite(new RuleChangedEvent("Added " + countNew
+								+ " values.", UniqueValuesRuleList.this));
+					else
+						popQuite();
+
+					JOptionPane.showMessageDialog(parentGUI, AtlasStyler.R(
+							"UniqueValuesRuleList.AddAllValues.DoneMsg",
+							countNew));
+				}
+
+			}
+		};
+
+		findUniques.execute();
+	}
+
+	/**
+	 * @param uniqueValue
+	 *            Unique value to all to the list.
+	 * 
+	 * @return <code>false</code> is the value already exists
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public boolean addUniqueValue(final Object uniqueValue)
+			throws IllegalArgumentException {
+
+		if (getValues().contains(uniqueValue)) {
+			LOGGER.warn("The unique Value '" + uniqueValue
+					+ "' can't be added, it is allready in the list");
+			return false;
+		}
+
+		test();
+
+		getSymbols().add(getTemplate().copy());
+		getLabels().add(uniqueValue.toString());
+		getValues().add(uniqueValue);
+
+		fireEvents(new RuleChangedEvent("Added value: '" + uniqueValue + "'",
+				this));
+
+		test();
+
+		return true;
+	}
+
+	/**
+	 * Apply the ColorPalette to all symbols at once
+	 * 
+	 * @param componentForGui
+	 *            If not <code>null</code>, a message may appear
+	 * 
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void applyPalette(final JComponent componentForGui) {
+		pushQuite();
+
+		boolean warnedOnce = false;
+
+		final Color[] colors = getBrewerPalette().getColors();
+
+		for (int i = 0; i < getValues().size(); i++) {
+
+			int idx = i;
+			while (idx >= getBrewerPalette().getMaxColors()) {
+				idx -= getBrewerPalette().getMaxColors();
+				if ((componentForGui != null) && (!warnedOnce)) {
+
+					final String msg = AtlasStyler
+							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+									getBrewerPalette().getMaxColors(),
+									getValues().size());
+					JOptionPane
+							.showMessageDialog(SwingUtil
+									.getParentWindowComponent(componentForGui),
+									msg);
+					warnedOnce = true;
+				}
+			}
+
+			getSymbols().get(i).setColor(colors[idx]);
+		}
+
+		popQuite(new RuleChangedEvent("Applied a COLORPALETTE to all rules",
+				this));
+	}
+
+	/**
+	 * Applies the Template to ALL values
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void applyTemplate() {
+		applyTemplate(getValues());
+	}
+
+	/**
+	 * Applies the template to the given ist of categories.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * 
+	 * @param values
+	 *            List of {@link String} values that shall be affected by this.
+	 */
+	public void applyTemplate(final List<Object> values) {
+		pushQuite();
+
+		for (final Object catString : values) {
+
+			final int idx = getValues().indexOf(catString);
+			final SingleRuleList oldSymbol = getSymbols().get(idx);
+			final Color oldColor = oldSymbol.getColor();
+			final SingleRuleList<? extends Symbolizer> newSymbol = getTemplate()
+					.copy();
+			newSymbol.setColor(oldColor);
+			getSymbols().remove(idx);
+			getSymbols().add(idx, newSymbol);
+		}
+
+		popQuite(new RuleChangedEvent("Applied the template to "
+				+ values.size() + " rules.", this));
 	}
 
 	/**
@@ -97,6 +329,127 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	public int getAllOthersRuleIdx() {
 		test();
 		return getValues().indexOf(ALLOTHERS_IDENTIFICATION_VALUE);
+	}
+
+	/**
+	 * Returns a {@link Set} or {@link String} representations (usable for the
+	 * {@link Filter}s) not yet included in any of the rule lists.
+	 * 
+	 * @param progressWindow
+	 * @return
+	 * @throws IOException
+	 */
+	public Set<Object> getAllUniqueValuesThatAreNotYetIncluded(
+			final ProgressWindow progressWindow) throws IOException {
+
+		/**
+		 * Searching for all values. The layerFilter is applied.
+		 **/
+		final FeatureCollection<SimpleFeatureType, SimpleFeature> aFeatureCollection = getStyledFeatures()
+				.getFeatureCollectionFiltered();
+
+		final UniqueVisitor uniqueVisitor = new UniqueVisitor(
+				getPropertyFieldName());
+
+		aFeatureCollection.accepts(uniqueVisitor, null);
+		final Set<Object> vals = uniqueVisitor.getResult().toSet();
+
+		// LOGGER.info("for prop name = "+getPropertyFieldName());
+
+		final Set<Object> uniques = new TreeSet<Object>();
+
+		for (final Object o : vals) {
+
+			if (o == null)
+				continue;
+			//
+			// if (o instanceof Number) {
+			// final Number number = (Number) o;
+			// if (!getValues().contains(number.toString()))
+			// uniques.add(number.toString());
+			// } else if (o instanceof String) {
+			// // Null or empty stings crash the PropertyEqualsImpl
+			// final String string = (String) o;
+			//
+			// if (string.trim().isEmpty())
+			// continue;
+			//
+			// if (!getValues().contains(string))
+			// uniques.add(string);
+			// } else {
+			// LOGGER.warn("Unrecognized value type = " + o.getClass());
+			// }
+
+			uniques.add(o);
+		}
+
+		return uniques;
+	}
+
+	@Override
+	public String getAtlasMetaInfoForFTSName() {
+		final String metaInfoString = getTypeID().toString();
+
+		return metaInfoString;
+	}
+
+	public BrewerPalette getBrewerPalette() {
+		return palette;
+	}
+
+	/**
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public ArrayList<String> getLabels() {
+		return labels;
+	}
+
+	/**
+	 * Return the {@link Filter} that will catch all NODATA values.
+	 */
+	@Override
+	public Filter getNoDataFilter() {
+		String attributeLocalName = getPropertyFieldName();
+		AttributeMetadataImpl amd = getStyledFeatures()
+				.getAttributeMetaDataMap().get(attributeLocalName);
+
+		List<Filter> ors = new ArrayList<Filter>();
+		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
+
+		if (amd.getNodataValues() != null)
+			for (Object ndValue : amd.getNodataValues()) {
+				ors.add(ff2.equals(ff2.property(attributeLocalName),
+						ff2.literal(ndValue)));
+			}
+
+		return ff2.or(ors);
+	}
+
+	/**
+	 * Return a {@link SingleRuleList} that shall be used to paint all NODATA
+	 * values. If <code>null</code>, then all features matching the
+	 * {@link #getNoDataFilter()} shall not be painted at all.
+	 */
+	@Override
+	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
+		return null; // TODO nice default?!
+	}
+
+	public int getNumClasses() {
+		return getValues().size();
+	}
+
+	public String getPropertyFieldName() {
+		if (propertyFieldName == null) {
+			final List<String> valueFieldNames = ASUtil
+					.getValueFieldNames(getStyledFeatures().getSchema());
+			if (valueFieldNames.size() > 0)
+				propertyFieldName = valueFieldNames.get(0);
+			else
+				throw new RuntimeException(
+						"Not possible for featureTypes without attributes");
+		}
+		return propertyFieldName;
 	}
 
 	/**
@@ -215,6 +568,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		return rules;
 	}
 
+	public List<SingleRuleList<? extends Symbolizer>> getSymbols() {
+		return symbols;
+	}
+
 	public ArrayList<Object> getValues() {
 		return values;
 	}
@@ -223,12 +580,102 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		return getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE);
 	}
 
-	public int getNumClasses() {
-		return getValues().size();
+	public void parseMetaInfoString(final String metaInfoString,
+			final FeatureTypeStyle fts) {
+		// TODO Do we have metainfo?
 	}
 
-	public List<SingleRuleList<? extends Symbolizer>> getSymbols() {
-		return symbols;
+	/**
+	 * Removes a single value
+	 * 
+	 * @param strVal
+	 *            Removes this value
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	private void removeValue(final String strVal) {
+
+		test();
+
+		final int idx = getValues().indexOf(strVal);
+
+		if (idx >= 0) {
+			getValues().remove(idx);
+			getLabels().remove(idx);
+			getSymbols().remove(idx);
+		} else {
+			LOGGER.warn("Asked to remove a value that doesn't exist !?: '"
+					+ strVal + "'");
+		}
+
+		test();
+
+		fireEvents(new RuleChangedEvent("Removed value " + strVal, this));
+		// LOGGER.debug("remove = "+strVal+" size left = "+getValues().size());
+	}
+
+	/**
+	 * Remove the given list of {@link String} values.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void removeValues(final List<Object> values) {
+		pushQuite();
+
+		try {
+
+			for (final String strVal : values
+					.toArray(new String[values.size()])) {
+				removeValue(strVal);
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(values.size()
+					+ " categories have been removed", this));
+		}
+	}
+
+	public void setBrewerPalette(final BrewerPalette palette) {
+		this.palette = palette;
+	}
+
+	public void setMaxScaleDenominator(double maxScaleDenominator) {
+		this.maxScaleDenominator = maxScaleDenominator;
+	}
+
+	/**
+	 * Set the first field used for the categorization.
+	 * 
+	 * @param newName
+	 *            Give the name directly as a {@link PropertyName}
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void setPropertyFieldName(final String newName,
+			final boolean removeOldClasses) {
+
+		// We may not use the Getter here!.. It generates content :-(
+		if (propertyFieldName != null)
+			if (propertyFieldName.equals(newName))
+				return;
+
+		propertyFieldName = newName;
+
+		if (removeOldClasses) {
+			for (int i = 0; i < values.size(); i++) {
+				if (values.get(i) != ALLOTHERS_IDENTIFICATION_VALUE) {
+					values.remove(i);
+					symbols.remove(i);
+					labels.remove(i);
+				}
+			}
+		}
+
+		fireEvents(new RuleChangedEvent("The PropertyField changed to "
+				+ getPropertyFieldName() + ". Other rules have been removed.",
+				this));
+
+		test();
 	}
 
 	public void setSymbols(
@@ -269,225 +716,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		}
 	}
 
-	public BrewerPalette getBrewerPalette() {
-		return palette;
-	}
-
-	public void setBrewerPalette(final BrewerPalette palette) {
-		this.palette = palette;
-	}
-
-	/**
-	 * Set the first field used for the categorization.
-	 * 
-	 * @param newName
-	 *            Give the name directly as a {@link PropertyName}
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setPropertyFieldName(final String newName,
-			final boolean removeOldClasses) {
-
-		// We may not use the Getter here!.. It generates content :-(
-		if (propertyFieldName != null)
-			if (propertyFieldName.equals(newName))
-				return;
-
-		propertyFieldName = newName;
-
-		if (removeOldClasses) {
-			for (int i = 0; i < values.size(); i++) {
-				if (values.get(i) != ALLOTHERS_IDENTIFICATION_VALUE) {
-					values.remove(i);
-					symbols.remove(i);
-					labels.remove(i);
-				}
-			}
-		}
-
-		fireEvents(new RuleChangedEvent("The PropertyField changed to "
-				+ getPropertyFieldName() + ". Other rules have been removed.",
-				this));
-
-		test();
-	}
-
-	public String getPropertyFieldName() {
-		if (propertyFieldName == null) {
-			final List<String> valueFieldNames = ASUtil
-					.getValueFieldNames(getStyledFeatures().getSchema());
-			if (valueFieldNames.size() > 0)
-				propertyFieldName = valueFieldNames.get(0);
-			else
-				throw new RuntimeException(
-						"Not possible for featureTypes without attributes");
-		}
-		return propertyFieldName;
-	}
-
-	Integer countNew = 0;
-
-	private double maxScaleDenominator = Double.MAX_VALUE;
-
-	/**
-	 * Returns a {@link Set} or {@link String} representations (usable for the
-	 * {@link Filter}s) not yet included in any of the rule lists.
-	 * 
-	 * @param progressWindow
-	 * @return
-	 * @throws IOException
-	 */
-	public Set<Object> getAllUniqueValuesThatAreNotYetIncluded(
-			final ProgressWindow progressWindow) throws IOException {
-
-		/**
-		 * Searching for all values. The layerFilter is applied.
-		 **/
-		final FeatureCollection<SimpleFeatureType, SimpleFeature> aFeatureCollection = getStyledFeatures()
-				.getFeatureCollectionFiltered();
-
-		final UniqueVisitor uniqueVisitor = new UniqueVisitor(
-				getPropertyFieldName());
-
-		aFeatureCollection.accepts(uniqueVisitor, null);
-		final Set<Object> vals = uniqueVisitor.getResult().toSet();
-
-		// LOGGER.info("for prop name = "+getPropertyFieldName());
-
-		final Set<Object> uniques = new TreeSet<Object>();
-
-		for (final Object o : vals) {
-
-			if (o == null)
-				continue;
-			//
-			// if (o instanceof Number) {
-			// final Number number = (Number) o;
-			// if (!getValues().contains(number.toString()))
-			// uniques.add(number.toString());
-			// } else if (o instanceof String) {
-			// // Null or empty stings crash the PropertyEqualsImpl
-			// final String string = (String) o;
-			//
-			// if (string.trim().isEmpty())
-			// continue;
-			//
-			// if (!getValues().contains(string))
-			// uniques.add(string);
-			// } else {
-			// LOGGER.warn("Unrecognized value type = " + o.getClass());
-			// }
-
-			uniques.add(o);
-		}
-
-		return uniques;
-	}
-
-	/**
-	 * Adds all missing unique values to the list of rules...
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @throws IOException
-	 */
-	public void addAllValues(final Component parentGUI) throws IOException {
-		if (getPropertyFieldName() == null) {
-			JOptionPane
-					.showMessageDialog(
-							parentGUI,
-							AtlasStyler
-									.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
-			return;
-		}
-
-		final ProgressWindow progressWindow;
-		if (parentGUI != null) {
-			progressWindow = new ProgressWindow(parentGUI);
-			progressWindow.setTitle(AtlasStyler
-					.R("UniqueValuesRuleList.AddAllValues.SearchingMsg"));
-			progressWindow.started();
-		} else {
-			progressWindow = null;
-		}
-
-		countNew = 0;
-
-		final SwingWorker<Set<Object>, Object> findUniques = new SwingWorker<Set<Object>, Object>() {
-
-			@Override
-			protected Set<Object> doInBackground() throws Exception {
-
-				return getAllUniqueValuesThatAreNotYetIncluded(progressWindow);
-			}
-
-			@Override
-			protected void done() {
-				pushQuite();
-				try {
-
-					for (final Object uniqueString : get()) {
-						addUniqueValue(uniqueString);
-						countNew++;
-					}
-				} catch (final Exception e) {
-					LOGGER.warn("Error finding all unique values", e); // i8n
-					if (progressWindow != null)
-						progressWindow.exceptionOccurred(e);
-				} finally {
-					if (progressWindow != null) {
-						progressWindow.complete();
-						progressWindow.dispose();
-					}
-
-					/** Fire an event * */
-					if (countNew > 0)
-						popQuite(new RuleChangedEvent("Added " + countNew
-								+ " values.", UniqueValuesRuleList.this));
-					else
-						popQuite();
-
-					JOptionPane.showMessageDialog(parentGUI, AtlasStyler.R(
-							"UniqueValuesRuleList.AddAllValues.DoneMsg",
-							countNew));
-				}
-
-			}
-		};
-
-		findUniques.execute();
-	}
-
-	/**
-	 * @param uniqueValue
-	 *            Unique value to all to the list.
-	 * 
-	 * @return <code>false</code> is the value already exists
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public boolean addUniqueValue(final Object uniqueValue)
-			throws IllegalArgumentException {
-
-		if (getValues().contains(uniqueValue)) {
-			LOGGER.warn("The unique Value '" + uniqueValue
-					+ "' can't be added, it is allready in the list");
-			return false;
-		}
-
-		test();
-
-		getSymbols().add(getTemplate().copy());
-		getLabels().add(uniqueValue.toString());
-		getValues().add(uniqueValue);
-
-		fireEvents(new RuleChangedEvent("Added value: '" + uniqueValue + "'",
-				this));
-
-		test();
-
-		return true;
-	}
-
 	/**
 	 * A helper method to debug
 	 */
@@ -504,234 +732,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			throw new RuntimeException(
 					"UniquevaluesRuleList is not in balance!");
 		}
-	}
-
-	/**
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public ArrayList<String> getLabels() {
-		return labels;
-	}
-
-	/**
-	 * Applies the template to the given ist of categories.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * 
-	 * @param values
-	 *            List of {@link String} values that shall be affected by this.
-	 */
-	public void applyTemplate(final List<Object> values) {
-		pushQuite();
-
-		for (final Object catString : values) {
-
-			final int idx = getValues().indexOf(catString);
-			final SingleRuleList oldSymbol = getSymbols().get(idx);
-			final Color oldColor = oldSymbol.getColor();
-			final SingleRuleList<? extends Symbolizer> newSymbol = getTemplate()
-					.copy();
-			newSymbol.setColor(oldColor);
-			getSymbols().remove(idx);
-			getSymbols().add(idx, newSymbol);
-		}
-
-		popQuite(new RuleChangedEvent("Applied the template to "
-				+ values.size() + " rules.", this));
-	}
-
-	/**
-	 * Applies the Template to ALL values
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void applyTemplate() {
-		applyTemplate(getValues());
-	}
-
-	/**
-	 * Apply the ColorPalette to all symbols at once
-	 * 
-	 * @param componentForGui
-	 *            If not <code>null</code>, a message may appear
-	 * 
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void applyPalette(final JComponent componentForGui) {
-		pushQuite();
-
-		boolean warnedOnce = false;
-
-		final Color[] colors = getBrewerPalette().getColors();
-
-		for (int i = 0; i < getValues().size(); i++) {
-
-			int idx = i;
-			while (idx >= getBrewerPalette().getMaxColors()) {
-				idx -= getBrewerPalette().getMaxColors();
-				if ((componentForGui != null) && (!warnedOnce)) {
-
-					final String msg = AtlasStyler
-							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
-									getBrewerPalette().getMaxColors(),
-									getValues().size());
-					JOptionPane
-							.showMessageDialog(SwingUtil
-									.getParentWindowComponent(componentForGui),
-									msg);
-					warnedOnce = true;
-				}
-			}
-
-			getSymbols().get(i).setColor(colors[idx]);
-		}
-
-		popQuite(new RuleChangedEvent("Applied a COLORPALETTE to all rules",
-				this));
-	}
-
-	/**
-	 * Remove the given list of {@link String} values.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void removeValues(final List<Object> values) {
-		pushQuite();
-
-		try {
-
-			for (final String strVal : values
-					.toArray(new String[values.size()])) {
-				removeValue(strVal);
-			}
-
-		} finally {
-			popQuite(new RuleChangedEvent(values.size()
-					+ " categories have been removed", this));
-		}
-	}
-
-	/**
-	 * Removes a single value
-	 * 
-	 * @param strVal
-	 *            Removes this value
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	private void removeValue(final String strVal) {
-
-		test();
-
-		final int idx = getValues().indexOf(strVal);
-
-		if (idx >= 0) {
-			getValues().remove(idx);
-			getLabels().remove(idx);
-			getSymbols().remove(idx);
-		} else {
-			LOGGER.warn("Asked to remove a value that doesn't exist !?: '"
-					+ strVal + "'");
-		}
-
-		test();
-
-		fireEvents(new RuleChangedEvent("Removed value " + strVal, this));
-		// LOGGER.debug("remove = "+strVal+" size left = "+getValues().size());
-	}
-
-	public void parseMetaInfoString(final String metaInfoString,
-			final FeatureTypeStyle fts) {
-		// TODO Do we have metainfo?
-	}
-
-	/**
-	 * The Filter contains information about: unique value; ValueFieldName,
-	 * symbolizer, onOff
-	 * 
-	 * @param filter
-	 *            {@link Filter} to interpret
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * 
-	 * @return String[] with propertyName, uniqueValue
-	 */
-	public static String[] interpretFilter(final Filter filter)
-			throws RuntimeException {
-
-		if (filter instanceof PropertyIsEqualTo) {
-			// TODO Probably old unused code...
-			final PropertyIsEqualTo propertEqualTo = (PropertyIsEqualTo) filter;
-			final PropertyName pName = (PropertyName) propertEqualTo
-					.getExpression1();
-			final Literal value = (Literal) propertEqualTo.getExpression2();
-
-			return new String[] { pName.getPropertyName(), value.toString() };
-		} else if (filter instanceof Not) {
-			// This must be the default/all others rule...
-			final Not not = (Not) filter;
-			final Or or = (Or) not.getFilter();
-
-			StyleAttributeExtractor faex = new StyleAttributeExtractor();
-			Set attbibs = (Set) faex.visit(or, null);
-			String attName = (String) attbibs.iterator().next();
-
-			return new String[] { attName, ALLOTHERS_IDENTIFICATION_VALUE };
-		} else if (filter instanceof And) {
-			// AND (NOT NULL, PROP=VALUE)
-			And and = (AndImpl) filter;
-			for (Filter f : and.getChildren()) {
-				// Look for the Filter that has a PropertyIsEqualTo
-				if (f instanceof PropertyIsEqualTo) {
-					final PropertyIsEqualTo propertEqualTo = (PropertyIsEqualTo) f;
-					final PropertyName pName = (PropertyName) propertEqualTo
-							.getExpression1();
-					final Literal value = (Literal) propertEqualTo
-							.getExpression2();
-
-					return new String[] { pName.getPropertyName(),
-							value.toString() };
-				}
-			}
-		}
-
-		throw new RuntimeException("Filter not recognized.");
-	}
-
-	public void setMaxScaleDenominator(double maxScaleDenominator) {
-		this.maxScaleDenominator = maxScaleDenominator;
-	}
-
-	/**
-	 * Return the {@link Filter} that will catch all NODATA values.
-	 */
-	@Override
-	public Filter getNoDataFilter() {
-		String attributeLocalName = getPropertyFieldName();
-		AttributeMetadataImpl amd = getStyledFeatures()
-				.getAttributeMetaDataMap().get(attributeLocalName);
-
-		List<Filter> ors = new ArrayList<Filter>();
-		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
-
-		if (amd.getNodataValues() != null)
-			for (Object ndValue : amd.getNodataValues()) {
-				ors.add(ff2.equals(ff2.property(attributeLocalName),
-						ff2.literal(ndValue)));
-			}
-
-		return ff2.or(ors);
-	}
-
-	/**
-	 * Return a {@link SingleRuleList} that shall be used to paint all NODATA
-	 * values. If <code>null</code>, then all features matching the
-	 * {@link #getNoDataFilter()} shall not be painted at all.
-	 */
-	@Override
-	public SingleRuleList<? extends Symbolizer> getNoDataSymbol() {
-		return null; // TODO nice default?!
 	}
 
 }

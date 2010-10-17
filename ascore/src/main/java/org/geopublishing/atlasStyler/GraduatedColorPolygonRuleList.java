@@ -24,6 +24,11 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
+	public GeometryForm getGeometryForm() {
+		return GeometryForm.POLYGON;
+	}
+
+	@Override
 	public RulesListType getTypeID() {
 		return RulesListType.QUANTITIES_COLORIZED_POLYGON;
 	}
@@ -31,11 +36,6 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
 		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
-	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POLYGON;
 	}
 
 }

@@ -44,30 +44,32 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			.createLogger(SingleRuleList.class);
 
 	/**
+	 * This {@link Vector} represents a list of all {@link Symbolizer}s that
+	 * will be used to paint the symbols
+	 */
+	protected Vector<SymbolizerType> layers = new Vector<SymbolizerType>();
+
+	private double maxScaleDenominator = Double.MAX_VALUE;
+
+	private double minScaleDenominator = Double.MIN_VALUE;
+
+	private String styleAbstract;
+
+	private String styleName;
+
+	private String styleTitle;
+
+	private String title = "title missing";
+
+	/**
 	 * This boolean defines whether the entry shall be shown the legend. <b>This
 	 * is only interpreted in GP/Atlas context.</b>
 	 */
 	private boolean visibleInLegend = true;
 
-	/**
-	 * Because a {@link SingleRuleList} only contains one {@link Rule}, this is
-	 * a convenience method to get it.
-	 */
-	public Rule getRule() {
-		return getRules().get(0);
-	}
-
 	@Deprecated
 	public SingleRuleList() {
 		setTitle(AtlasStyler.R("GraduatedColorQuantities.Column.Label"));
-	}
-
-	/**
-	 * @param title
-	 *            label for the rule
-	 */
-	public SingleRuleList(Translation title) {
-		setTitle(title);
 	}
 
 	/**
@@ -81,21 +83,17 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * This {@link Vector} represents a list of all {@link Symbolizer}s that
-	 * will be used to paint the symbols
+	 * @param title
+	 *            label for the rule
 	 */
-	protected Vector<SymbolizerType> layers = new Vector<SymbolizerType>();
-
-	private String title = "title missing";
-
-	private String styleTitle;
-
-	private String styleAbstract;
-
-	private String styleName;
-
-	private double maxScaleDenominator = Double.MAX_VALUE;
-	private double minScaleDenominator = Double.MIN_VALUE;
+	public SingleRuleList(Translation title) {
+		setTitle(title);
+	}
+	/**
+	 * Creates a new Symbolizer and adds it to the layers. This fires an event
+	 * to all {@link RuleChangeListener}s.
+	 */
+	public abstract void addNewDefaultLayer();
 
 //	/**
 //	 * Adds a symbolizer to the {@link SingleRuleList}
@@ -140,38 +138,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * Constantly reverses the order of symbolizers. Fires an event if the order
-	 * of symbolizers has changed.
-	 * 
-	 */
-	public void reverseSymbolizers() {
-		if (layers.size() > 1) {
-			Collections.reverse(layers);
-			fireEvents(new RuleChangedEvent("Changed the order of symbolizers",
-					this));
-		}
-	}
-
-	/**
-	 * Removes a symbolizer from the list of symbolizers.
-	 * 
-	 * @return <code>true</code> if the symbolizer has actually been removed.
-	 */
-	public boolean removeSymbolizer(SymbolizerType ps) {
-		boolean rmvd = layers.remove(ps);
-		if (rmvd)
-			fireEvents(new RuleChangedEvent("Removed a Symbolizer", this));
-		return rmvd;
-	}
-
-	public SymbolizerType removeSymbolizer(int index) {
-		SymbolizerType rmvd = layers.remove(index);
-		if (rmvd != null)
-			fireEvents(new RuleChangedEvent("Removed a Symbolizer", this));
-		return rmvd;
-	}
-
-	/**
 	 * Implementing the {@link Cloneable} interface, this method overwrites the
 	 * {@link Object}'s clone method.
 	 * 
@@ -184,87 +150,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	public abstract SingleRuleList<? extends SymbolizerType> clone(
 			boolean copyListeners);
-
-	/**
-	 * @return The {@link GeometryDescriptor} that this symbolization rules
-	 *         works on.
-	 */
-	public abstract GeometryDescriptor getGeometryDescriptor();
-
-	/**
-	 * Wraps the Symbol in a {@link Style} and saves it as an SLD to the
-	 * {@link File}
-	 * 
-	 * @param file
-	 *            Where to save the SLD
-	 * @throws TransformerException
-	 * @throws IOException
-	 */
-	public void saveSymbolToFile(File file) throws TransformerException,
-			IOException {
-		if (layers.size() == 0)
-			return;
-		Style style = ASUtil.SB.createStyle(layers.get(0));
-		style.featureTypeStyles().get(0).rules().get(0).symbolizers().clear();
-		style.featureTypeStyles().get(0).rules().get(0).symbolizers().addAll(
-				layers);
-
-		style.getDescription().setTitle(getStyleTitle());
-		style.getDescription().setAbstract(getStyleAbstract());
-		style.setName(getStyleName()); // Not really needed... we evaluate the
-		// filename
-
-		StylingUtil.saveStyleToSLD(style, file);
-
-		// TODO Override and call super from the specific implementations ??????
-		// really?
-	}
-
-	/**
-	 * This fires an event to all {@link RuleChangeListener}s.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public boolean loadURL(URL url) {
-		pushQuite();
-		try {
-			Style[] styles = StylingUtil.loadSLD(url);
-			// LOGGER.debug("Anzahl Styles in URL " + styles.length);
-
-			setStyleTitle(styles[0].getTitle());
-			setStyleAbstract(styles[0].getAbstract());
-
-			// Transforming http://en.geopublishing.org/openmapsymbols/point/Circle.sld to Circle
-			String fileName = new File(url.getFile()).getName();
-			String fileNameWithoutSLD = fileName.substring(0,
-					fileName.lastIndexOf('.'));
-
-			setStyleName(fileNameWithoutSLD);
-
-			try {
-				FeatureTypeStyle featureTypeStyle = styles[0]
-						.featureTypeStyles().get(0);
-				Rule rule = featureTypeStyle.rules().get(0);
-				Symbolizer[] symbolizers = rule.getSymbolizers();
-				for (Symbolizer s : symbolizers) {
-					addSymbolizer((SymbolizerType) s);
-				}
-				// System.out.println("SingleRuleList loaded "+symbolizers.length+"
-				// symbolizers from URL "+url.getFile());
-			} catch (Exception e) {
-				LOGGER.warn("Error loading " + url + ": "
-						+ e.getLocalizedMessage());
-				return false;
-			}
-
-			fireEvents(new RuleChangedEvent("Loaded from URL " + url, this));
-
-			return true;
-
-		} finally {
-			pushQuite();
-		}
-	}
 
 	/**
 	 * Copies all values from the first {@link SinglePointSymbolRuleList} to the
@@ -308,25 +193,25 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		return to;
 	}
 
-	/**
-	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
-	 *         symbols. The are painted in reverse order.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public Vector<SymbolizerType> getSymbolizers() {
-		return layers;
+	@Override
+	public String getAtlasMetaInfoForFTSName() {
+		return getTypeID().toString();
 	}
 
 	/**
-	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
-	 *         symbols. The are painted in reverse order.
+	 * The {@link Color} returned by {@link #getColor()} is replaced against the
+	 * given color parameter. Any other occurrence of the original color will
+	 * also be replaced.
+	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void setSymbolizers(Vector<SymbolizerType> newlayers) {
-		layers = newlayers;
-		fireEvents(new RuleChangedEvent("All symbolizers have been replaced",
-				this));
-	}
+	abstract public Color getColor();
+
+	/**
+	 * @return The {@link GeometryDescriptor} that this symbolization rules
+	 *         works on.
+	 */
+	public abstract GeometryDescriptor getGeometryDescriptor();
 
 	/**
 	 * Return a {@link BufferedImage} that represent the symbol with default
@@ -354,6 +239,28 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 						ASUtil.createFeatureType(getGeometryDescriptor()), size);
 
 		return image;
+	}
+
+	/** Returns a description or the type of the {@link Symbolizer} */
+	public abstract String getLayerTypeDesc(int idx);
+
+	public double getMaxScaleDenominator() {
+		return maxScaleDenominator;
+	}
+
+	public double getMinScaleDenominator() {
+		return minScaleDenominator;
+	}
+
+	/** returns the Rotation if it makes sense or null* */
+	abstract public Double getRotation();
+
+	/**
+	 * Because a {@link SingleRuleList} only contains one {@link Rule}, this is
+	 * a convenience method to get it.
+	 */
+	public Rule getRule() {
+		return getRules().get(0);
 	}
 
 	/**
@@ -392,71 +299,39 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 
 	/**
-	 * The {@link Color} returned by {@link #getColor()} is replaced against the
-	 * given color parameter. Any other occurrence of the original color will
-	 * also be replaced.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	abstract public Color getColor();
-
-	/**
-	 * The {@link Color} returned by {@link #getColor()} is replaced against the
-	 * given color parameter. Any other occurrence of the original color will
-	 * also be replaced. This fires an event to all {@link RuleChangeListener}s.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	abstract public void setColor(Color newColor);
-
-	/**
-	 * @return <code>True</code> if any item is used that has a changeable
-	 *         {@link Color} TODO think again .. do we need that?
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public boolean hasColor() {
-		return getColor() != null;
-	}
-
-	/** returns the Rotation if it makes sense or null* */
-	abstract public Double getRotation();
-
-	abstract public boolean hasRotation();
-
-	/**
-	 * Sets the rotation of any subelement where it makes sense. This fires an
-	 * event to all {@link RuleChangeListener}s.
-	 */
-	public abstract void setRotation(Double size);
-
-	/**
 	 * @return Returns the biggest Size used if any Size is used. If no size
 	 *         used returns 0.
 	 */
 	public abstract Float getSizeBiggest();
 
-	/**
-	 * Sets the size of any sub-element where it makes sense. This fires an
-	 * event to all {@link RuleChangeListener}s.
-	 */
-	public abstract void setSizeBiggest(Float size);
-
-	/** Returns a description or the type of the {@link Symbolizer} */
-	public abstract String getLayerTypeDesc(int idx);
-
-	/**
-	 * Creates a new Symbolizer and adds it to the layers. This fires an event
-	 * to all {@link RuleChangeListener}s.
-	 */
-	public abstract void addNewDefaultLayer();
-
-	public boolean hasSize() {
-		return getSizeBiggest() >= 0.;
+	public String getStyleAbstract() {
+		return styleAbstract;
 	}
 
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		return getTypeID().toString();
+	/**
+	 * Used for the filename without .sld
+	 */
+	public String getStyleName() {
+		return styleName;
+	}
+
+	/**
+	 * The Title is used for the author
+	 * 
+	 * @return
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public String getStyleTitle() {
+		return styleTitle;
+	}
+
+	/**
+	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
+	 *         symbols. The are painted in reverse order.
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public Vector<SymbolizerType> getSymbolizers() {
+		return layers;
 	}
 
 	/**
@@ -467,6 +342,225 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	/**
+	 * @return <code>True</code> if any item is used that has a changeable
+	 *         {@link Color} TODO think again .. do we need that?
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public boolean hasColor() {
+		return getColor() != null;
+	}
+
+	abstract public boolean hasRotation();
+
+	public boolean hasSize() {
+		return getSizeBiggest() >= 0.;
+	}
+
+	/**
+	 * This boolean defines whether the entry shall be shown the legend. <b>This
+	 * is only interpreted in GP/Atlas context.</b>
+	 */
+	public boolean isVisibleInLegend() {
+		return visibleInLegend;
+	}
+
+	/**
+	 * This fires an event to all {@link RuleChangeListener}s.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public boolean loadURL(URL url) {
+		pushQuite();
+		try {
+			Style[] styles = StylingUtil.loadSLD(url);
+			// LOGGER.debug("Anzahl Styles in URL " + styles.length);
+
+			setStyleTitle(styles[0].getTitle());
+			setStyleAbstract(styles[0].getAbstract());
+
+			// Transforming http://en.geopublishing.org/openmapsymbols/point/Circle.sld to Circle
+			String fileName = new File(url.getFile()).getName();
+			String fileNameWithoutSLD = fileName.substring(0,
+					fileName.lastIndexOf('.'));
+
+			setStyleName(fileNameWithoutSLD);
+
+			try {
+				FeatureTypeStyle featureTypeStyle = styles[0]
+						.featureTypeStyles().get(0);
+				Rule rule = featureTypeStyle.rules().get(0);
+				Symbolizer[] symbolizers = rule.getSymbolizers();
+				for (Symbolizer s : symbolizers) {
+					addSymbolizer(s);
+				}
+				// System.out.println("SingleRuleList loaded "+symbolizers.length+"
+				// symbolizers from URL "+url.getFile());
+			} catch (Exception e) {
+				LOGGER.warn("Error loading " + url + ": "
+						+ e.getLocalizedMessage());
+				return false;
+			}
+
+			fireEvents(new RuleChangedEvent("Loaded from URL " + url, this));
+
+			return true;
+
+		} finally {
+			pushQuite();
+		}
+	}
+
+	public SymbolizerType removeSymbolizer(int index) {
+		SymbolizerType rmvd = layers.remove(index);
+		if (rmvd != null)
+			fireEvents(new RuleChangedEvent("Removed a Symbolizer", this));
+		return rmvd;
+	}
+
+	/**
+	 * Removes a symbolizer from the list of symbolizers.
+	 * 
+	 * @return <code>true</code> if the symbolizer has actually been removed.
+	 */
+	public boolean removeSymbolizer(SymbolizerType ps) {
+		boolean rmvd = layers.remove(ps);
+		if (rmvd)
+			fireEvents(new RuleChangedEvent("Removed a Symbolizer", this));
+		return rmvd;
+	}
+
+	/**
+	 * Constantly reverses the order of symbolizers. Fires an event if the order
+	 * of symbolizers has changed.
+	 * 
+	 */
+	public void reverseSymbolizers() {
+		if (layers.size() > 1) {
+			Collections.reverse(layers);
+			fireEvents(new RuleChangedEvent("Changed the order of symbolizers",
+					this));
+		}
+	}
+
+	/**
+	 * Wraps the Symbol in a {@link Style} and saves it as an SLD to the
+	 * {@link File}
+	 * 
+	 * @param file
+	 *            Where to save the SLD
+	 * @throws TransformerException
+	 * @throws IOException
+	 */
+	public void saveSymbolToFile(File file) throws TransformerException,
+			IOException {
+		if (layers.size() == 0)
+			return;
+		Style style = ASUtil.SB.createStyle(layers.get(0));
+		style.featureTypeStyles().get(0).rules().get(0).symbolizers().clear();
+		style.featureTypeStyles().get(0).rules().get(0).symbolizers().addAll(
+				layers);
+
+		style.getDescription().setTitle(getStyleTitle());
+		style.getDescription().setAbstract(getStyleAbstract());
+		style.setName(getStyleName()); // Not really needed... we evaluate the
+		// filename
+
+		StylingUtil.saveStyleToSLD(style, file);
+
+		// TODO Override and call super from the specific implementations ??????
+		// really?
+	}
+
+	/**
+	 * The {@link Color} returned by {@link #getColor()} is replaced against the
+	 * given color parameter. Any other occurrence of the original color will
+	 * also be replaced. This fires an event to all {@link RuleChangeListener}s.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	abstract public void setColor(Color newColor);
+
+	public void setMaxScaleDenominator(double maxScaleDenominator) {
+		this.maxScaleDenominator = maxScaleDenominator;
+		fireEvents(new RuleChangedEvent("maxScale changed", this));
+	}
+
+	public void setMinScaleDenominator(double minScaleDenominator) {
+		this.minScaleDenominator = minScaleDenominator;
+		// TODO test for real change
+		fireEvents(new RuleChangedEvent("minScale changed", this));
+	}
+
+	/**
+	 * Sets the rotation of any subelement where it makes sense. This fires an
+	 * event to all {@link RuleChangeListener}s.
+	 */
+	public abstract void setRotation(Double size);
+
+	/**
+	 * Sets the size of any sub-element where it makes sense. This fires an
+	 * event to all {@link RuleChangeListener}s.
+	 */
+	public abstract void setSizeBiggest(Float size);
+
+	/**
+	 * The Abstract is used as a description line for a Symbol
+	 * 
+	 * @param styleAbstract
+	 *            Description
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void setStyleAbstract(final String styleAbstract) {
+
+		// Is the new title really different from the old one?
+		boolean change = true;
+		if (this.styleAbstract == null && styleAbstract == null)
+			change = false;
+		if (this.styleAbstract != null && styleAbstract != null
+				&& this.styleAbstract.equals(styleAbstract))
+			change = false;
+
+		if (change) {
+			// Update the title and fire an event
+			this.styleAbstract = styleAbstract;
+			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
+					+ title, this));
+		}
+
+	}
+
+	/**
+	 * Used for the filename without .sld
+	 * 
+	 * @param styleName
+	 */
+	public void setStyleName(String styleName) {
+		this.styleName = styleName;
+	}
+
+	/**
+	 * Use for Author
+	 * 
+	 * @param styleTitle
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void setStyleTitle(String styleTitle) {
+		this.styleTitle = styleTitle;
+
+	}
+
+	/**
+	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
+	 *         symbols. The are painted in reverse order.
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void setSymbolizers(Vector<SymbolizerType> newlayers) {
+		layers = newlayers;
+		fireEvents(new RuleChangedEvent("All symbolizers have been replaced",
+				this));
 	}
 
 	/**
@@ -507,92 +601,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		setTitle(translation.toOneLine());
 	}
 
-	public String getStyleAbstract() {
-		return styleAbstract;
-	}
-
-	/**
-	 * The Abstract is used as a description line for a Symbol
-	 * 
-	 * @param styleAbstract
-	 *            Description
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setStyleAbstract(final String styleAbstract) {
-
-		// Is the new title really different from the old one?
-		boolean change = true;
-		if (this.styleAbstract == null && styleAbstract == null)
-			change = false;
-		if (this.styleAbstract != null && styleAbstract != null
-				&& this.styleAbstract.equals(styleAbstract))
-			change = false;
-
-		if (change) {
-			// Update the title and fire an event
-			this.styleAbstract = styleAbstract;
-			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ title, this));
-		}
-
-	}
-
-	/**
-	 * The Title is used for the author
-	 * 
-	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public String getStyleTitle() {
-		return styleTitle;
-	}
-
-	/**
-	 * Use for Author
-	 * 
-	 * @param styleTitle
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setStyleTitle(String styleTitle) {
-		this.styleTitle = styleTitle;
-
-	}
-
-	/**
-	 * Used for the filename without .sld
-	 */
-	public String getStyleName() {
-		return styleName;
-	}
-
-	/**
-	 * Used for the filename without .sld
-	 * 
-	 * @param styleName
-	 */
-	public void setStyleName(String styleName) {
-		this.styleName = styleName;
-	}
-
-	public void setMaxScaleDenominator(double maxScaleDenominator) {
-		this.maxScaleDenominator = maxScaleDenominator;
-		fireEvents(new RuleChangedEvent("maxScale changed", this));
-	}
-
-	public double getMaxScaleDenominator() {
-		return maxScaleDenominator;
-	}
-
-	public void setMinScaleDenominator(double minScaleDenominator) {
-		this.minScaleDenominator = minScaleDenominator;
-		// TODO test for real change
-		fireEvents(new RuleChangedEvent("minScale changed", this));
-	}
-
-	public double getMinScaleDenominator() {
-		return minScaleDenominator;
-	}
-
 	/**
 	 * /** This boolean defines whether the entry shall be shown the legend.
 	 * <b>This is only interpreted in GP/Atlas context.</b> Changing this
@@ -604,14 +612,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			fireEvents(new RuleChangedEvent("visiblility in legend changed",
 					this));
 		}
-	}
-
-	/**
-	 * This boolean defines whether the entry shall be shown the legend. <b>This
-	 * is only interpreted in GP/Atlas context.</b>
-	 */
-	public boolean isVisibleInLegend() {
-		return visibleInLegend;
 	}
 
 }

@@ -17,29 +17,88 @@ import java.util.Stack;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 
-
 public abstract class Classification {
-//	protected Logger LOGGER = ASUtil.createLogger(this);
-	protected Logger LOGGER = Logger.getLogger(Classification.class);
+	ClassificationChangeEvent lastOpressedEvent = null;
 
 	private Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
-	
-	/** Counts the number of NODATA values found and excluded from the classification **/
+
+	// protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = Logger.getLogger(Classification.class);
+
+	/**
+	 * Counts the number of NODATA values found and excluded from the
+	 * classification
+	 **/
 	long noDataValuesCount = 0;
-	
-	/** Counts the number of NODATA values found and excluded from the classification **/
+
+	/**
+	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
+	 * be fired.
+	 */
+	private boolean quite = false;
+
+	protected Stack<Boolean> stackQuites = new Stack<Boolean>();
+
+	public void addListener(ClassificationChangedListener l) {
+		listeners.add(l);
+	}
+
+	public void dispose() {
+		listeners.clear();
+	}
+
+	/**
+	 * Fires the given {@link ClassificationChangeEvent} to all listeners.
+	 */
+	public void fireEvent(final ClassificationChangeEvent evt) {
+
+		if (quite) {
+			lastOpressedEvent = evt;
+			return;
+		} else {
+			lastOpressedEvent = null;
+		}
+
+		if (evt == null)
+			return;
+
+		LOGGER.debug("Classification fires event: " + evt.getType());
+
+		for (ClassificationChangedListener l : listeners) {
+			switch (evt.getType()) {
+			case NORM_CHG:
+				l.classifierNormalizationChanged(evt);
+				break;
+			case VALUE_CHG:
+				l.classifierValueFieldChanged(evt);
+				break;
+			case METHODS_CHG:
+				l.classifierMethodChanged(evt);
+				break;
+			case EXCLUDES_FILTER_CHG:
+				l.classifierExcludeFilterChanged(evt);
+				break;
+			case NUM_CLASSES_CHG:
+				l.classifierNumClassesChanged(evt);
+				break;
+			case START_NEW_STAT_CALCULATION:
+				l.classifierCalculatingStatistics(evt);
+				break;
+			case CLASSES_CHG:
+				l.classifierAvailableNewClasses(evt);
+				break;
+
+			}
+		}
+
+	}
+
+	/**
+	 * Counts the number of NODATA values found and excluded from the
+	 * classification
+	 **/
 	public long getNoDataValuesCount() {
 		return noDataValuesCount;
-	}
-	
-	/** resets the number of NODATA values found and excluded from the classification **/
-	public void resetNoDataCount() {
-		noDataValuesCount = 0;
-	}
-	
-	/** Adds one to the number of NODATA values found and excluded from the classification **/
-	public void increaseNoDataValue() {
-		noDataValuesCount++;
 	}
 
 	/**
@@ -47,29 +106,16 @@ public abstract class Classification {
 	 */
 	public abstract int getNumClasses();
 
-	public void addListener(ClassificationChangedListener l) {
-		listeners.add(l);
+	/**
+	 * Adds one to the number of NODATA values found and excluded from the
+	 * classification
+	 **/
+	public void increaseNoDataValue() {
+		noDataValuesCount++;
 	}
 
-	public void removeListener(ClassificationChangedListener l) {
-		listeners.remove(l);
-	}
-	
-	/**
-	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
-	 * be fired.
-	 */
-	private boolean quite = false;
-
-	ClassificationChangeEvent lastOpressedEvent = null;
-	protected Stack<Boolean> stackQuites = new Stack<Boolean>();
-
-	/**
-	 * Add a QUITE-State to the event firing state stack
-	 */
-	public void pushQuite() {
-		stackQuites.push(isQuite());
-		setQuite(true);
+	public boolean isQuite() {
+		return quite;
 	}
 
 	/**
@@ -88,7 +134,7 @@ public abstract class Classification {
 			LOGGER.debug("not firing event because there are "
 					+ stackQuites.size() + " 'quites' still on the stack");
 		}
-		
+
 	}
 
 	public void popQuite(ClassificationChangeEvent changedEvent) {
@@ -103,62 +149,28 @@ public abstract class Classification {
 		}
 	}
 
+	/**
+	 * Add a QUITE-State to the event firing state stack
+	 */
+	public void pushQuite() {
+		stackQuites.push(isQuite());
+		setQuite(true);
+	}
+
+	public void removeListener(ClassificationChangedListener l) {
+		listeners.remove(l);
+	}
 
 	/**
-	 * Fires the given {@link ClassificationChangeEvent} to all listeners.
-	 */
-	public void fireEvent(final ClassificationChangeEvent evt) {
-		
-		if (quite) {
-			lastOpressedEvent = evt;
-			return;
-		} else {
-			lastOpressedEvent = null;
-		}
-		
-		if (evt == null) return;
-		
-		LOGGER.debug("Classification fires event: " + evt.getType());
-
-		for (ClassificationChangedListener l : listeners) {
-			switch (evt.getType()) {
-			case NORM_CHG:
-				l.classifierNormalizationChanged(evt);
-				break;
-			case VALUE_CHG:
-				l.classifierValueFieldChanged(evt);
-				break;
-			case METHODS_CHG:
-				l.classifierMethodChanged(evt);
-				break;
-			case EXCLUDES_FILETER_CHG:
-				l.classifierExcludeFilterChanged(evt);
-				break;
-			case NUM_CLASSES_CHG:
-				l.classifierNumClassesChanged(evt);
-				break;
-			case START_NEW_STAT_CALCULATION:
-				l.classifierCalculatingStatistics(evt);
-				break;
-			case CLASSES_CHG:
-				l.classifierAvailableNewClasses(evt);
-				break;
-
-			}
-		}
-
+	 * resets the number of NODATA values found and excluded from the
+	 * classification
+	 **/
+	public void resetNoDataCount() {
+		noDataValuesCount = 0;
 	}
 
 	public void setQuite(boolean quite) {
 		this.quite = quite;
-	}
-
-	public boolean isQuite() {
-		return quite;
-	}
-	
-	public void dispose() {
-		listeners.clear();
 	}
 
 }

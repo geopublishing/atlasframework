@@ -37,13 +37,13 @@ import skrueger.geotools.StyledFeaturesInterface;
  * 
  */
 public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> {
-	private static final Logger LOGGER = Logger
-			.getLogger(GraduatedColorRuleList.class);
 	/** KEY-name for the KVPs in the meta information * */
 	private static final String KVP_METHOD = "METHOD";
-
 	/** KEY-name for the KVPs in the meta information * */
 	private static final String KVP_PALTETTE = "PALETTE";
+
+	private static final Logger LOGGER = Logger
+			.getLogger(GraduatedColorRuleList.class);
 
 	/**
 	 * The {@link BrewerPalette} used in this {@link QuantitiesRuleList}
@@ -70,18 +70,119 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	}
 
 	/**
-	 * Overriding it to add a listener that will automatically propagate the
-	 * rulelistechange to the graduate color rule list.
+	 * Together with {@link #parseMetaInfoString(String, FeatureTypeStyle)} this
+	 * allows loading and saving the RL
 	 */
 	@Override
-	public SingleRuleList<? extends Symbolizer> getTemplate() {
-		SingleRuleList<? extends Symbolizer> temp = super.getTemplate();
+	public String getAtlasMetaInfoForFTSName() {
+		String metaInfoString = getTypeID().toString();
 
-		// We may add this listener as often as we want, because the listeners
-		// are registered in a WeakHashSet
-		temp.addListener(listenToTemplateRLChangesAndPropageToGraduateColorsRL);
-		return temp;
+		metaInfoString = extendMetaInfoString(metaInfoString);
+
+		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_METHOD
+				+ METAINFO_KVP_EQUALS_CHAR + getMethod();
+
+		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
+				+ METAINFO_KVP_EQUALS_CHAR + getBrewerPalette().getName();
+
+		// LOGGER.debug("metainfo= " + metaInfoString);
+
+		return metaInfoString;
 	}
+
+	public BrewerPalette getBrewerPalette() {
+
+		/**
+		 * For whatever reason, the brewerPalette.getPaletteSuitability() can be
+		 * greater than brewerPalette.getMaxColors(). So we try that first.
+		 */
+		int maxColors = brewerPalette.getPaletteSuitability() != null ? brewerPalette
+				.getPaletteSuitability().getMaxColors() : brewerPalette
+				.getMaxColors();
+
+		if (getNumClasses() > maxColors) {
+
+			LOGGER.info("Reducing the Number of classes from "
+					+ getNumClasses() + " to " + maxColors
+					+ " because we don't have a betterPalette");
+		}
+
+		return brewerPalette;
+	}
+
+	/**
+	 * @return An Array of Colors for the classes. The length of the array
+	 *         equals the number of classes.
+	 */
+	@Override
+	public Color[] getColors() {
+
+		if (super.getColors() == null) {
+			if (getNumClasses() > getBrewerPalette().getMaxColors()) {
+				throw new RuntimeException(" numClasses (" + getNumClasses()
+						+ ") > getBrewerPalette().getMaxColors() ("
+						+ getBrewerPalette().getMaxColors() + ")");
+			}
+
+			setColors(getBrewerPalette().getColors(getNumClasses()));
+		}
+
+		return super.getColors();
+	}
+
+	/**
+	 * Return the {@link Filter} that will catch all NODATA values.
+	 */
+	@Override
+	public Filter getNoDataFilter() {
+
+		// Checking the value attribute for NODATA values
+		String attributeLocalName = getValue_field_name();
+		AttributeMetadataImpl amd1 = getStyledFeatures()
+				.getAttributeMetaDataMap().get(attributeLocalName);
+
+		List<Filter> ors = new ArrayList<Filter>();
+		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
+		if (amd1 != null && amd1.getNodataValues() != null)
+			for (Object ndValue : amd1.getNodataValues()) {
+				ors.add(ff2.equals(ff2.property(attributeLocalName),
+						ff2.literal(ndValue)));
+			}
+
+		// Checking the normalization attribute for NODATA values
+		String normalizerLocalName = getNormalizer_field_name();
+		if (normalizerLocalName != null) {
+			AttributeMetadataImpl amd2 = getStyledFeatures()
+					.getAttributeMetaDataMap().get(normalizerLocalName);
+
+			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
+
+			// As we are dividing by this value, always add the zero also!
+			ors.add(ff2.equals(ff2.property(normalizerLocalName),
+					ff2.literal(0)));
+
+			if (amd2 != null && amd2.getNodataValues() != null)
+				for (Object ndValue : amd2.getNodataValues()) {
+					ors.add(ff2.equals(ff2.property(normalizerLocalName),
+							ff2.literal(ndValue)));
+				}
+		}
+
+		return ff2.or(ors);
+	}
+
+//	/**
+//	 * Setting colors to <code>null</code> will result in new colors beeing
+//	 * created (from a palette) the next time #getColors is called.
+//	 */
+//	@Override
+//	public void updateColorsClassesChanged() {
+//		if (newColors != null) {
+//			super.setColors(newColors);
+//		} else {
+//			// Colors are set to null. This would lead directly to 
+//		}
+//	}
 
 	@Override
 	public List<Rule> getRules() {
@@ -144,7 +245,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 			rule.setFilter(filter);
 
-			rule.setTitle((String) getRuleTitles().get(i));
+			rule.setTitle(getRuleTitles().get(i));
 
 			rule.setName("AS: " + (i + 1) + "/" + (getClassLimits().size() - 1)
 					+ " " + this.getClass().getSimpleName());
@@ -183,92 +284,18 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		return rules;
 	}
 
-	public BrewerPalette getBrewerPalette() {
-
-		/**
-		 * For whatever reason, the brewerPalette.getPaletteSuitability() can be
-		 * greater than brewerPalette.getMaxColors(). So we try that first.
-		 */
-		int maxColors = brewerPalette.getPaletteSuitability() != null ? brewerPalette
-				.getPaletteSuitability().getMaxColors() : brewerPalette
-				.getMaxColors();
-
-		if (getNumClasses() > maxColors) {
-
-			LOGGER.info("Reducing the Number of classes from "
-					+ getNumClasses() + " to " + maxColors
-					+ " because we don't have a betterPalette");
-		}
-
-		return brewerPalette;
-	}
-
-	public void setBrewerPalette(BrewerPalette newPalette) {
-
-		// Only react to real changes
-		if (newPalette.getDescription() != null
-				&& newPalette.getDescription().equals(
-						brewerPalette.getDescription())) {
-			return;
-		}
-
-		this.brewerPalette = newPalette;
-		setColors(null);
-		fireEvents(new RuleChangedEvent("Set brewer palette", this));
-	}
-
-//	/**
-//	 * Setting colors to <code>null</code> will result in new colors beeing
-//	 * created (from a palette) the next time #getColors is called.
-//	 */
-//	@Override
-//	public void updateColorsClassesChanged() {
-//		if (newColors != null) {
-//			super.setColors(newColors);
-//		} else {
-//			// Colors are set to null. This would lead directly to 
-//		}
-//	}
-
 	/**
-	 * @return An Array of Colors for the classes. The length of the array
-	 *         equals the number of classes.
+	 * Overriding it to add a listener that will automatically propagate the
+	 * rulelistechange to the graduate color rule list.
 	 */
 	@Override
-	public Color[] getColors() {
+	public SingleRuleList<? extends Symbolizer> getTemplate() {
+		SingleRuleList<? extends Symbolizer> temp = super.getTemplate();
 
-		if (super.getColors() == null) {
-			if (getNumClasses() > getBrewerPalette().getMaxColors()) {
-				throw new RuntimeException(" numClasses (" + getNumClasses()
-						+ ") > getBrewerPalette().getMaxColors() ("
-						+ getBrewerPalette().getMaxColors() + ")");
-			}
-
-			setColors(getBrewerPalette().getColors(getNumClasses()));
-		}
-
-		return super.getColors();
-	}
-
-	/**
-	 * Together with {@link #parseMetaInfoString(String, FeatureTypeStyle)} this
-	 * allows loading and saving the RL
-	 */
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		String metaInfoString = getTypeID().toString();
-
-		metaInfoString = extendMetaInfoString(metaInfoString);
-
-		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_METHOD
-				+ METAINFO_KVP_EQUALS_CHAR + getMethod();
-
-		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
-				+ METAINFO_KVP_EQUALS_CHAR + getBrewerPalette().getName();
-
-		// LOGGER.debug("metainfo= " + metaInfoString);
-
-		return metaInfoString;
+		// We may add this listener as often as we want, because the listeners
+		// are registered in a WeakHashSet
+		temp.addListener(listenToTemplateRLChangesAndPropageToGraduateColorsRL);
+		return temp;
 	}
 
 	/**
@@ -333,45 +360,18 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 	}
 
-	/**
-	 * Return the {@link Filter} that will catch all NODATA values.
-	 */
-	@Override
-	public Filter getNoDataFilter() {
+	public void setBrewerPalette(BrewerPalette newPalette) {
 
-		// Checking the value attribute for NODATA values
-		String attributeLocalName = getValue_field_name();
-		AttributeMetadataImpl amd1 = getStyledFeatures()
-				.getAttributeMetaDataMap().get(attributeLocalName);
-
-		List<Filter> ors = new ArrayList<Filter>();
-		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
-		if (amd1 != null && amd1.getNodataValues() != null)
-			for (Object ndValue : amd1.getNodataValues()) {
-				ors.add(ff2.equals(ff2.property(attributeLocalName),
-						ff2.literal(ndValue)));
-			}
-
-		// Checking the normalization attribute for NODATA values
-		String normalizerLocalName = getNormalizer_field_name();
-		if (normalizerLocalName != null) {
-			AttributeMetadataImpl amd2 = getStyledFeatures()
-					.getAttributeMetaDataMap().get(normalizerLocalName);
-
-			ors.add(ff2.isNull(ff2.property(normalizerLocalName)));
-
-			// As we are dividing by this value, always add the zero also!
-			ors.add(ff2.equals(ff2.property(normalizerLocalName),
-					ff2.literal(0)));
-
-			if (amd2 != null && amd2.getNodataValues() != null)
-				for (Object ndValue : amd2.getNodataValues()) {
-					ors.add(ff2.equals(ff2.property(normalizerLocalName),
-							ff2.literal(ndValue)));
-				}
+		// Only react to real changes
+		if (newPalette.getDescription() != null
+				&& newPalette.getDescription().equals(
+						brewerPalette.getDescription())) {
+			return;
 		}
 
-		return ff2.or(ors);
+		this.brewerPalette = newPalette;
+		setColors(null);
+		fireEvents(new RuleChangedEvent("Set brewer palette", this));
 	}
 
 }

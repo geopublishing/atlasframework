@@ -36,16 +36,6 @@ public class RuleListTest {
 	protected org.apache.log4j.Logger LOGGER = ASUtil.createLogger(this);
 
 	@Test
-	public void testSaveToStyle() throws IOException, TransformerException {
-
-		Style style = FeatureUtil.createDefaultStyle(FeatureUtil
-				.createFeatureType(Point.class).getGeometryDescriptor());
-		File tempF = File.createTempFile("sld", "junit");
-		System.out.println(tempF);
-		StylingUtil.saveStyleToSLD(style, tempF);
-	}
-
-	@Test
 	public void testClone_SinglePointSymbolRuleList() throws IOException,
 			TransformerException, CloneNotSupportedException {
 
@@ -97,5 +87,15 @@ public class RuleListTest {
 		assertNotNull(ps);
 
 		assertNotSame(ps, psCloned);
+	}
+
+	@Test
+	public void testSaveToStyle() throws IOException, TransformerException {
+
+		Style style = FeatureUtil.createDefaultStyle(FeatureUtil
+				.createFeatureType(Point.class).getGeometryDescriptor());
+		File tempF = File.createTempFile("sld", "junit");
+		System.out.println(tempF);
+		StylingUtil.saveStyleToSLD(style, tempF);
 	}
 }
