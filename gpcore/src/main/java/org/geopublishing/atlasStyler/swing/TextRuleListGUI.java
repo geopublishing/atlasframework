@@ -49,6 +49,8 @@ import org.opengis.filter.Filter;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
+import skrueger.i8n.LanguagesComboBox;
+import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.ThinButton;
 
 /**
@@ -377,16 +379,25 @@ public class TextRuleListGUI extends JPanel {
 
 				public void actionPerformed(ActionEvent e) {
 
-					String lang = ASUtil.askForString(TextRuleListGUI.this,
-							"de", null);
+					// String lang = ASUtil.askForString(TextRuleListGUI.this,
+					// "de", null);
+
+					String lang = askForLang();
+
 					if (lang != null) {
 
 						lang = lang.toLowerCase();
 
-						if (!atlasStyler.getLanguages().contains(lang)) {
+						if (!AtlasStyler.getLanguages().contains(lang)) {
 							AVSwingUtil
-									.showMessageDialog(TextRuleListGUI.this,
-											"Please enter one of the configured languages: "+LangUtil.stringConcatWithSep(",", atlasStyler.getLanguages())); // i8n
+									.showMessageDialog(
+											TextRuleListGUI.this,
+											"Please enter one of the configured languages: "
+													+ LangUtil
+															.stringConcatWithSep(
+																	",",
+																	AtlasStyler
+																			.getLanguages())); // i8n
 							return;
 						}
 
@@ -410,6 +421,54 @@ public class TextRuleListGUI extends JPanel {
 
 						// updateGUI();
 					}
+				}
+
+				private String askForLang() {
+
+					if (AtlasStyler.getLanguages().size() == rulesList
+							.getDefaultLanguages().size()) {
+						AVSwingUtil.showMessageDialog(TextRuleListGUI.this,
+								"A rule for every language already exits.");
+						return null;
+
+					}
+
+					final LanguagesComboBox lcb = new LanguagesComboBox(
+							AtlasStyler.getLanguages(), rulesList
+									.getDefaultLanguages());
+
+					CancellableDialogAdapter d = new CancellableDialogAdapter(
+							TextRuleListGUI.this) {
+
+						@Override
+						protected void dialogInit() {
+							super.dialogInit();
+							setLayout(new MigLayout());
+							add(lcb);
+							add(getOkButton());
+							pack();
+							SwingUtil.setRelativeFramePosition(this,
+									TextRuleListGUI.this, 0.5, 0.5);
+
+						}
+
+						@Override
+						public boolean close() {
+							if (lcb.getSelectedIndex() == -1)
+								return false;
+							return super.close();
+						}
+
+						@Override
+						public void cancel() {
+						}
+
+					};
+
+					d.setModal(true);
+					d.setVisible(true);
+
+					return lcb.getSelectedLanguage();
 				}
 			});
 		}

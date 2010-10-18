@@ -16,6 +16,7 @@ public class AtlasLanguagesConfigDialogTest {
 		orig = new ArrayList<String>();
 		orig.add("en");
 		orig.add("fr");
+		orig.add("kj");
 	}
 
 	@Test
@@ -23,7 +24,7 @@ public class AtlasLanguagesConfigDialogTest {
 		if (TestingUtil.INTERACTIVE) {
 			AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
 					null, orig);
-			TestingUtil.testGui(languageSelectionDialog);
+			TestingUtil.testGui(languageSelectionDialog, 40);
 		}
 	}
 

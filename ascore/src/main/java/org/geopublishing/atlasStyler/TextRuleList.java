@@ -1061,4 +1061,18 @@ public class TextRuleList extends AbstractRuleList {
 		removeClassEnabled(idx);
 	}
 
+	/**
+	 * A list of languages that a default class has already been defined for
+	 * @return 
+	 */
+	public ArrayList<String> getDefaultLanguages() {
+		ArrayList<String> usedLangs = new ArrayList<String>();
+		for (String lang : AtlasStyler.getLanguages()) {
+			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
+				usedLangs.add(lang);
+			}
+		}
+		return usedLangs;
+	}
+
 }

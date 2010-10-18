@@ -17,16 +17,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -41,7 +38,7 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.SwingUtil;
-import skrueger.i8n.I8NUtil;
+import skrueger.i8n.LanguagesComboBox;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
@@ -52,11 +49,9 @@ import skrueger.swing.OkButton;
  */
 public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 
-	private Vector<String> availLangs = new Vector<String>();
-
 	private final List<String> orig;
 	private final List<String> aceLanguages = new ArrayList<String>();
-	private JComboBox languageCombo;
+	private LanguagesComboBox languageCombo;
 
 	private boolean cancel = false;
 
@@ -86,23 +81,24 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 	 * activated for the atlas.
 	 */
 	private void updateComboBox() {
-		availLangs.clear();
+		languageCombo.updateModel(null, aceLanguages);
+//		availLangs.clear();
 
-		for (String l1 : I8NUtil.getLanguageCodes()) {
-			if (!aceLanguages.contains(l1)) {
-				Locale locale = new Locale(l1);
-				availLangs.add(locale.getDisplayLanguage() + " / "
-						+ locale.getDisplayLanguage(locale) + " " + l1);
-			} else {
-				// System.out.println("Wird ausgelassen: " + l1);
-			}
-		}
-
-		Collections.sort(availLangs);
-
-		languageCombo.setModel(new DefaultComboBoxModel(availLangs));
-		languageCombo.setSelectedIndex(-1);
-		languageCombo.repaint();
+//		for (String l1 : I8NUtil.getLanguageCodes()) {
+//			if (!aceLanguages.contains(l1)) {
+//				Locale locale = new Locale(l1);
+//				availLangs.add(locale.getDisplayLanguage() + " / "
+//						+ locale.getDisplayLanguage(locale) + " " + l1);
+//			} else {
+//				// System.out.println("Wird ausgelassen: " + l1);
+//			}
+//		}
+//
+//		Collections.sort(availLangs);
+//
+//		languageCombo.setModel(new DefaultComboBoxModel(availLangs));
+//		languageCombo.setSelectedIndex(-1);
+//		languageCombo.repaint();
 	}
 
 	private void initialize() {
@@ -178,7 +174,7 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 				.R("LanguageSelectionDialog.AvailableLanguages")));
 		JPanel languageComboBox = new JPanel(new FlowLayout());
 
-		languageCombo = new JComboBox();
+		languageCombo = new LanguagesComboBox();
 		updateComboBox();
 
 		languageComboBox.add(languageCombo);
