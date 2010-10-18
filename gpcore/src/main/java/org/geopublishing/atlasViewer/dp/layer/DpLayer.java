@@ -20,6 +20,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
@@ -410,10 +411,16 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 
 	/**
 	 * When in AtlasViewer the user is changing a Style, and then switches to a
-	 * new map, the style changes will be forgotten by calling this method.
+	 * new map, the style changes will be forgotten by calling this method.<br/>
+	 * When running in GeopublisherGUI as a preview, we do not want to uncache a
+	 * style, as it would result in reloading Styled from disk.
 	 */
-	public void resetChanges() {
-		style = null;
+	public void resetStyleChanges() {
+		if (AtlasViewerGUI.isRunning()
+				&& AtlasViewerGUI.getInstance().isPreviewMode()) {
+			// Do not uncache Styles when running in preview mode.
+		} else
+			style = null;
 	}
 
 	/**

@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geotools.filter.AndImpl;
 import org.geotools.filter.BinaryComparisonAbstract;
 import org.geotools.filter.NotImpl;
@@ -429,7 +430,7 @@ public class TextRuleList extends AbstractRuleList {
 				} else {
 					// The default filter includes all, IF no other rules have
 					// been defined.
-					filter = Filter.INCLUDE;
+					filter = DEFAULT_FILTER_ALL_OTHERS;
 				}
 			}
 
@@ -695,7 +696,8 @@ public class TextRuleList extends AbstractRuleList {
 
 					if (ruleName.startsWith(DEFAULT_CLASS_RULENAME)
 							|| filter.equals(oldClassesEnabledFilter)
-							|| filter.equals(oldClassesDisabledFilter)) {
+							|| filter.equals(oldClassesDisabledFilter)
+							|| idx == 0) {
 						// Do not store the filter imported for default rules.
 						getClassesFilters().add(DEFAULT_FILTER_ALL_OTHERS);
 
@@ -873,6 +875,11 @@ public class TextRuleList extends AbstractRuleList {
 		 * Interpreting whether this class is language specific
 		 */
 
+		if (!(filter instanceof AndImpl)) {
+			setClassLang(idx, null);
+			return filter;
+		}
+
 		try {
 			AndImpl andFilter = (AndImpl) filter;
 
@@ -900,16 +907,16 @@ public class TextRuleList extends AbstractRuleList {
 
 		} catch (Exception e) {
 			setClassLang(idx, null);
-
-			if (filter instanceof BinaryComparisonAbstract) {
-				// All good, this is an old filter created with AS pre 1.5
-			} else if (filter instanceof NotImpl) {
-				// All good, this is the default filter without a language.
-			} else {
-				LOGGER.warn(
-						"Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
-						e);
-			}
+			//
+			// if (filter instanceof BinaryComparisonAbstract) {
+			// // All good, this is an old filter created with AS pre 1.5
+			// } else if (filter instanceof NotImpl) {
+			// // All good, this is the default filter without a language.
+			// } else {
+			LOGGER.warn(
+					"Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
+					e);
+			// }
 		}
 		return filter;
 	}
@@ -1063,10 +1070,15 @@ public class TextRuleList extends AbstractRuleList {
 
 	/**
 	 * A list of languages that a default class has already been defined for
-	 * @return 
+	 * 
+	 * @return
 	 */
 	public ArrayList<String> getDefaultLanguages() {
 		ArrayList<String> usedLangs = new ArrayList<String>();
+
+		if (AtlasStyler.languageMode == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
+			return usedLangs;
+
 		for (String lang : AtlasStyler.getLanguages()) {
 			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
 				usedLangs.add(lang);

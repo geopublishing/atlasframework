@@ -32,6 +32,7 @@ public class AsTestingUtil {
 	}
 
 	public enum TestSld {
+		textRulesDefaultLocalizedPre16("/oldLocalizedDefaultRule_pre16.sld"),
 		textRulesPre15("/oldTextRuleClasses_Pre15.sld");
 
 		private final String resLoc;

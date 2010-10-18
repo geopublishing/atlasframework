@@ -332,7 +332,7 @@ public class TextRuleListTest {
 	/**
 	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
 	 */
-	public void testOldTextRulePasedCorrectly() throws IOException {
+	public void testOldTextRuleParsedCorrectly() throws IOException {
 		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesPre15
 				.getStyle();
 
@@ -345,6 +345,34 @@ public class TextRuleListTest {
 
 		assertEquals(1, textRulesList.countClasses());
 		assertFalse(textRulesList.isEnabled());
+		assertTrue(textRulesList.isClassEnabled(0));
+
+		assertNull(textRulesList.getClassLang(0));
+		assertEquals(TextRuleList.DEFAULT_FILTER_ALL_OTHERS,
+				textRulesList.getClassFilter(0));
+		assertEquals(TextRuleList.DEFAULT_CLASS_RULENAME,
+				textRulesList.getRuleName(0));
+	}
+
+	@Test
+	/**
+	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
+	 */
+	public void testOldTextRuleDefaultLocalizedParsedCorrectly() throws IOException {
+		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesDefaultLocalizedPre16
+				.getStyle();
+
+		AtlasStyler as = new AtlasStyler(new StyledFS(
+				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+
+		as.importStyle(style);
+
+		TextRuleList textRulesList = as.getTextRulesList();
+
+		assertEquals(2, textRulesList.countClasses());
+		assertEquals(0, textRulesList.getDefaultLanguages().size());
+
+		assertTrue(textRulesList.isEnabled());
 		assertTrue(textRulesList.isClassEnabled(0));
 
 		assertNull(textRulesList.getClassLang(0));

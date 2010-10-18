@@ -915,6 +915,11 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	private JMenu languageSubMenu;
 
 	/**
+	 * If <code>true</code>, this AtlasViewer is running in preview mode.
+	 */
+	private boolean previewMode = false;
+
+	/**
 	 * Change the {@link JMenu} languageSubMenu that allows changing the
 	 * displayed language Attention, not to replace the object in the
 	 * {@link JMenu} structure Call this after changes to atlasConfig.langages.
@@ -1061,4 +1066,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		}
 	}
 
+	public void setPreviewMode(boolean isPreview) {
+		this.previewMode = isPreview;
+		setExitOnClose(!isPreview);
+	}
+
+	public boolean isPreviewMode() {
+		return previewMode;
+	}
 }

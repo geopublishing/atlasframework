@@ -211,7 +211,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				dpr.getTarget().uncache();
 
 			// Forget about the style changes. This may not be called from GP!
-			dpr.getTarget().resetChanges();
+			dpr.getTarget().resetStyleChanges();
 		}
 
 	}

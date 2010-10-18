@@ -617,7 +617,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			 * Create and configure a new visible Instance
 			 */
 			final AtlasViewerGUI av = AtlasViewerGUI.getInstance();
-			av.setExitOnClose(false);
+			av.setPreviewMode(true);
 			av.startGui(getAce());
 		} else if (cmd.equals(ActionCmds.previewAtlas.toString())) {
 			/**
@@ -649,6 +649,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			// Create and configure a new visible Instance
 			final AtlasViewerGUI av = AtlasViewerGUI.getInstance();
+			av.setPreviewMode(false);
 			av.setExitOnClose(false);
 			// Prepare the ResLoMan, so it will parse the AtlasWorkingDir
 			av.getAtlasConfig()
