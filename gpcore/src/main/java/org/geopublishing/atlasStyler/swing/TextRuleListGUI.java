@@ -133,7 +133,7 @@ public class TextRuleListGUI extends JPanel {
 				.setEnabled(getJComboBoxClass().getSelectedIndex() != 0);
 
 		// Change the state of the class enabled CB
-		jCheckBoxClassEnabled.setSelected(rulesList.getClassEnabled(rulesList
+		jCheckBoxClassEnabled.setSelected(rulesList.isClassEnabled(rulesList
 				.getSelIdx()));
 		reactToClassEnabledChange();
 	}
@@ -283,7 +283,7 @@ public class TextRuleListGUI extends JPanel {
 					AtlasStyler.R("TextRulesList.Labelclass.Checkbox"));
 
 			jCheckBoxClassEnabled.setSelected(rulesList
-					.getClassEnabled(rulesList.getSelIdx()));
+					.isClassEnabled(rulesList.getSelIdx()));
 			reactToClassEnabledChange();
 
 			jCheckBoxClassEnabled.addActionListener(new ActionListener() {

@@ -2,6 +2,7 @@ package org.geopublishing.atlasStyler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.util.Iterator;
 
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.filter.function.EnvFunction;
 import org.geotools.filter.text.cql2.CQLException;
@@ -322,8 +324,33 @@ public class TextRuleListTest {
 		assertFalse(trl.existsClass(ECQL.toFilter("SURFACE>2000"), null));
 		assertTrue(trl.existsClass(ECQL.toFilter("SURFACE>2000"), "de"));
 
-		assertTrue(trl.existsClass(TextRuleList.FILTER_DEFAULT_ALL_OTHERS_ID,
-				null));
+		assertTrue(trl
+				.existsClass(TextRuleList.DEFAULT_FILTER_ALL_OTHERS, null));
 	}
 
+	@Test
+	/**
+	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
+	 */
+	public void testOldTextRulePasedCorrectly() throws IOException {
+		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesPre15
+				.getStyle();
+
+		AtlasStyler as = new AtlasStyler(new StyledFS(
+				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+
+		as.importStyle(style);
+
+		TextRuleList textRulesList = as.getTextRulesList();
+
+		assertEquals(1, textRulesList.countClasses());
+		assertFalse(textRulesList.isEnabled());
+		assertTrue(textRulesList.isClassEnabled(0));
+
+		assertNull(textRulesList.getClassLang(0));
+		assertEquals(TextRuleList.DEFAULT_FILTER_ALL_OTHERS,
+				textRulesList.getClassFilter(0));
+		assertEquals(TextRuleList.DEFAULT_CLASS_RULENAME,
+				textRulesList.getRuleName(0));
+	}
 }

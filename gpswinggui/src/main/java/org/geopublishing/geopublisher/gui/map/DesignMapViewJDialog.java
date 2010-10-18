@@ -534,7 +534,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		if (!fc.isEmpty()) {
 			// Layer neu erzeugen
 			specialMapLayer = new AtlasMapLayer(fc, style);
-			System.err.println(style);
+
 			specialMapLayer.setTitle(XMapPane.SPECIAL_LINES_LAYER_ID);
 
 			getDesignMapView().getMapPane().getMapContext()

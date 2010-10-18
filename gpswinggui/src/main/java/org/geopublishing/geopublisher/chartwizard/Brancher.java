@@ -83,7 +83,7 @@ public class Brancher extends WizardBranchController {
 
 	@Override
 	public Wizard getWizardForStep(String step, Map data) {
-		System.err.println("Get Wizard For Step " + step + " with " + data);
+//		log.debug("Get Wizard For Step " + step + " with " + data);
 		// The class name is the default ID for instantiated WizardPages
 		if ("multibranchdemo.Brancher$B".equals(step)) {
 			if (Boolean.TRUE.equals(data.get("foo"))) { // check some data in

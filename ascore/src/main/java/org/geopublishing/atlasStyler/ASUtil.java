@@ -72,7 +72,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryDescriptor;
-import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.expression.Expression;
@@ -94,9 +93,6 @@ import skrueger.swing.OkButton;
 public class ASUtil {
 
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
-
-	public static final Filter allwaysTrueFilter = ff2.equals(ff2.literal("1"),
-			ff2.literal("1"));
 
 	private static BrewerPalette arthursPalette;
 

@@ -11,12 +11,15 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
+import org.geotools.styling.Style;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.styling.StylingUtil;
+
 public class AsTestingUtil {
 	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
-	
+
 	public static FeatureSource<SimpleFeatureType, SimpleFeature> getPolygonsFeatureSource()
 			throws IOException {
 		final URL shpURL = AtlasStyler.class
@@ -27,5 +30,28 @@ public class AsTestingUtil {
 		final DataStore dataStore = DataStoreFinder.getDataStore(params);
 		return dataStore.getFeatureSource(dataStore.getTypeNames()[0]);
 	}
+
+	public enum TestSld {
+		textRulesPre15("/oldTextRuleClasses_Pre15.sld");
+
+		private final String resLoc;
+
+		TestSld(String resLoc) {
+			this.resLoc = resLoc;
+		}
+
+		public Style getStyle() {
+			return StylingUtil.loadSLD(getUrl())[0];
+		}
+
+		public String getResLoc() {
+			return resLoc;
+		}
+
+		public URL getUrl() {
+			return AsTestingUtil.class.getResource(resLoc);
+		}
+	}
+
 
 }
