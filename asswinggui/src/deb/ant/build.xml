@@ -36,7 +36,7 @@
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
-		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Publish maps and geoproducts easily" description="An atlas authoring system to publish maps and geoproducts easily." exec="/usr/bin/${PROGNAME}" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
+		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Create OGC SLD/SE styling files" description="A dialog based tool to create SLD files." exec="/usr/bin/${PROGNAME}" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 	</target>
 
 
