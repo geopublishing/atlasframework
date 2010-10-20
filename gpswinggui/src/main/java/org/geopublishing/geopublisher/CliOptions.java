@@ -204,7 +204,8 @@ public class CliOptions extends Options {
 				exitAfterInterpret = true;
 				errorDuringInterpret = Errors.NOHEAD;
 				System.err
-						.println("Can open Geopublisher windows because your environment doesn't provide a window system. You may only use pure CLI commands like export (-e).");
+						.println("Can't open Geopublisher GUI because your environment doesn't provide a window system. You may only use pure CLI commands:");
+				cliOptions.printHelp();
 			}
 
 			if (exitAfterInterpret || errorDuringInterpret != null) {

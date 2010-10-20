@@ -71,6 +71,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				.get(ExportWizard.JWS_CHECKBOX);
 		final Boolean isDisk = (Boolean) wizardData
 				.get(ExportWizard.DISK_CHECKBOX);
+		final boolean isDiskZip = (Boolean) wizardData
+				.get(ExportWizard.DISK_CHECKBOX);
 		final String exportDir = (String) wizardData
 				.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
@@ -80,8 +82,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		 */
 		{
 			if (isJws) {
-//				GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
-//						.get(ExportWizard.JNLPURL));
+				// GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
+				// .get(ExportWizard.JNLPURL));
 				ace.setJnlpBaseUrl((String) wizardData
 						.get(ExportWizard.JNLPURL));
 			}
@@ -89,6 +91,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			GPProps.set(Keys.LastExportFolder, exportDir);
 
 			GPProps.set(Keys.LastExportDisk, isDisk);
+			GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
 			GPProps.set(Keys.LastExportJWS, isJws);
 
 			GPProps.store();
@@ -119,6 +122,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				try {
 					jarExportUtil = new JarExportUtil(ace, new File(exportDir),
 							isDisk, isJws, copyJRE);
+					jarExportUtil.setZipDiskAfterExport(isDiskZip);
 					jarExportUtil.export(progress);
 				} catch (AtlasCancelException e) {
 					LOGGER.info("Export aborted by user:", e);
@@ -167,8 +171,9 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 						"Export.Dialog.Finished.Msg",
 						exportJWSandDISKdirRepresentation)));
 
-				final JButton openFolderButton = new JButton(GeopublisherGUI
-						.R("ExportWizard.Result.OpenFolderButton.Label"));
+				final JButton openFolderButton = new JButton(
+						GeopublisherGUI
+								.R("ExportWizard.Result.OpenFolderButton.Label"));
 				openFolderButton.addActionListener(new ActionListener() {
 
 					@Override
@@ -193,9 +198,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 	protected Summary getAbortSummary() {
 		JPanel aborted = new JPanel(new MigLayout());
-		aborted
-				.add(new JLabel(
-						"The export has been aborted by the user. The temporary folder have been deleted."));
+		aborted.add(new JLabel(
+				"The export has been aborted by the user. The temporary folder have been deleted."));
 
 		return Summary.create(aborted, "abort");
 	}

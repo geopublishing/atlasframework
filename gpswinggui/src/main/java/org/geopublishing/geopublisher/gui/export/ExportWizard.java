@@ -58,11 +58,16 @@ public class ExportWizard extends WizardBranchController {
 	final public static String JWS_CHECKBOX = "exportJWS?";
 	/** Used to identify the DISK check-box in the wizard-data **/
 	final public static String DISK_CHECKBOX = "exportDISK?";
+	
+	/** Used to identify the DISK ZIP check-box in the wizard-data **/
+	public static final String DISKZIP_CHECKBOX = "zipDISK";
+	
 	public static final String COPYJRE = "copyJRE";
 
 	public static final String EXPORTFOLDER = "exportFolderAbsolutePath";
 
 	public static final String JNLPURL = "jnlpCodebase";
+
 
 	/**
 	 * This constructor also defines the default (first) steps of the wizard

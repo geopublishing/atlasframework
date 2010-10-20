@@ -27,15 +27,13 @@ import schmitzm.swing.ExceptionDialog;
  * {@link Properties}
  * 
  * Only the methods working on the enumeration {@link Keys} are public
- * Interanally the {@link Keys} are saved as {@link String}
+ * Internally the {@link Keys} are saved as {@link String}
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+ * 
+ * TODO used parent class together with ASpros and AVProps!
  */
 public abstract class GPProps {
-
-	private static final String DEFAULTS_POSTFIX = ".defaults";
-
-	private static final Logger LOGGER = Logger.getLogger(GPProps.class);
 
 	/**
 	 * List of all legal keys in the
@@ -50,23 +48,27 @@ public abstract class GPProps {
 		/** Remember the GP Atlas folder we imported stuff from the last time **/
 		LAST_IMPORTED_GPA, LastExportDisk,
 
-		LastExportFolder, LastExportJWS, LastOpenAtlasFolder,
+		LastExportDiskZipped, LastExportFolder, LastExportJWS,
+		LastOpenAtlasFolder,
 		/**
 		 * Height of the {@link DesignMapViewJDialog}
 		 **/
-		mapComposerHeight,
-		/** Width of the {@link DesignMapViewJDialog} **/
-		mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, signingkeystorePassword, startJVMWithXmx,
-		/** GP starts maximized **/
+		mapComposerHeight, /** Width of the {@link DesignMapViewJDialog} **/
+		mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, signingkeystorePassword,
+		startJVMWithXmx, /** GP starts maximized **/
 		windowMaximized
 	}
 
 	/** E.G. ".AtlasStyler" or ".Geopublisher" **/
 	private static String appDirname;
 
+	private static final String DEFAULTS_POSTFIX = ".defaults";
+
 	private static FileOutputStream FOS = null;
 
 	private static boolean haveToCloseFOS = false;
+
+	private static final Logger LOGGER = Logger.getLogger(GPProps.class);
 
 	/** This stores the properties */
 	private static final Properties properties = new Properties();
@@ -112,13 +114,28 @@ public abstract class GPProps {
 		return properties.getProperty(key);
 	}
 
+
+	/**
+	 * Returns the value as an boolean. If not yet defined of <code>null</code>, the default value is returned.
+	 */
 	private static final String get(final String key, final String defaultValue) {
 		return properties.getProperty(key, defaultValue);
 	}
 
-	// TODO Add the possibility to provide default boolean values
-	public static Boolean getBoolean(final Keys key) {
+	/**
+	 * Returns the value as an boolean. If not yet defined of <code>null</code>, <code>false</code> is returned.
+	 */
+	public static boolean getBoolean(final Keys key) {
 		return Boolean.valueOf(get(key));
+	}
+	/**
+	 * Returns the value as an {@link Integer}. If conversion fails, the default
+	 * value is returned
+	 */
+	public static boolean getBoolean(Keys key, boolean defaultValue) {
+		if (get(key) == null)
+			return defaultValue;
+		return getBoolean(key);
 	}
 
 	public static Integer getInt(final Keys key, final Integer def) {

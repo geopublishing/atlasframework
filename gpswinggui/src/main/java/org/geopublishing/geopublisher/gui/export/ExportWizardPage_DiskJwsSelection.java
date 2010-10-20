@@ -11,6 +11,8 @@
 package org.geopublishing.geopublisher.gui.export;
 
 import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -37,6 +39,8 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 	JCheckBox diskJCheckbox;
 	JCheckBox jwsJCheckbox;
 
+	private JCheckBox diskJCheckboxZip;
+
 	public static String getDescription() {
 		return GeopublisherGUI.R("ExportWizard.JwsOrDisk");
 	}
@@ -59,7 +63,8 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 
 		setLayout(new MigLayout("wrap 1"));
 		add(explanationJLabel);
-		add(getDiskJCheckbox(), "gapy unrelated");
+		add(getDiskJCheckbox(), "split 2, gapy unrelated");
+		add(getDiskZipJCheckbox(), "");
 		add(explanationDiskJLabel);
 		add(getJwsJCheckbox(), "gapy unrelated");
 		add(explanationJwsJLabel);
@@ -83,8 +88,29 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
 					.R("ExportWizard.JwsOrDisk.DiskCheckbox"));
 			diskJCheckbox.setName(ExportWizard.DISK_CHECKBOX);
 			diskJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportDisk));
+			
+			getDiskJCheckbox().addItemListener(new ItemListener() {
+				
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					getDiskZipJCheckbox().setEnabled(getDiskJCheckbox().isSelected());
+				}
+			});
 		}
 		return diskJCheckbox;
 	}
+	
+	private JCheckBox getDiskZipJCheckbox() {
+		if (diskJCheckboxZip == null) {
+			diskJCheckboxZip = new JCheckBox(GeopublisherGUI
+					.R("ExportWizard.JwsOrDisk.DiskZipCheckbox"));
+			diskJCheckboxZip.setName(ExportWizard.DISKZIP_CHECKBOX);
+			diskJCheckboxZip.setSelected(GPProps.getBoolean(Keys.LastExportDiskZipped, true));
+			diskJCheckboxZip.setEnabled(getDiskJCheckbox().isSelected());
+			
+		}
+		return diskJCheckboxZip;
+	}
+
 
 }
