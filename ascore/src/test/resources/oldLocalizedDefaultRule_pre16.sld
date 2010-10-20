@@ -45,7 +45,7 @@
         </sld:Geometry>
         <sld:Fill>
           <sld:CssParameter name="fill">
-            <ogc:Literal>#D73027</ogc:Literal>
+            <ogc:Literal>#111111</ogc:Literal>
           </sld:CssParameter>
           <sld:CssParameter name="fill-opacity">
             <ogc:Literal>1.0</ogc:Literal>

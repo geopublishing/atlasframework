@@ -1240,8 +1240,8 @@ public class AtlasStyler {
 										.getSymbolizerColor(s);
 
 								if (c != null) {
-									System.out.println("Rule " + ri
-											+ " has color " + c);
+//									System.out.println("Rule " + ri
+//											+ " has color " + c);
 									quantitiesRuleList.getColors()[ri] = c;
 									break;
 								}

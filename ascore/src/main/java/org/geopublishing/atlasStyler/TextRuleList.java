@@ -42,6 +42,7 @@ import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
+import sun.util.logging.resources.logging;
 
 public class TextRuleList extends AbstractRuleList {
 
@@ -325,7 +326,7 @@ public class TextRuleList extends AbstractRuleList {
 		if (getSymbolizers().size() > 0) {
 			DuplicatingStyleVisitor duplicatingStyleVisitor = new DuplicatingStyleVisitor(
 					StylingUtil.STYLE_FACTORY);
-			duplicatingStyleVisitor.visit(getSymbolizers().get(0));
+			duplicatingStyleVisitor.visit(getClassSymbolizer(0));
 			return (TextSymbolizer) duplicatingStyleVisitor.getCopy();
 		}
 
@@ -638,7 +639,7 @@ public class TextRuleList extends AbstractRuleList {
 					// Copy the first rules's settings to the new class:
 					TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
 					StylingUtil.copyAllValues(defaultTextSymbolizer,
-							getSymbolizers().get(0));
+							getClassSymbolizer(0));
 					getSymbolizers().add(defaultTextSymbolizer);
 
 					Filter filter = r.getFilter();
@@ -748,7 +749,7 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	private void removeAllClassesButFirst() {
-		TextSymbolizer backupS = getSymbolizers().get(0);
+		TextSymbolizer backupS = getClassSymbolizer(0);
 		getSymbolizers().clear();
 		getSymbolizers().add(backupS);
 
@@ -875,6 +876,8 @@ public class TextRuleList extends AbstractRuleList {
 		 * Interpreting whether this class is language specific
 		 */
 
+		LOGGER.debug("filter: " + filter);
+
 		if (!(filter instanceof AndImpl)) {
 			setClassLang(idx, null);
 			return filter;
@@ -913,9 +916,9 @@ public class TextRuleList extends AbstractRuleList {
 			// } else if (filter instanceof NotImpl) {
 			// // All good, this is the default filter without a language.
 			// } else {
-			LOGGER.warn(
-					"Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
-					e);
+//			LOGGER.warn(
+//					"Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
+//					e);
 			// }
 		}
 		return filter;
@@ -1086,5 +1089,10 @@ public class TextRuleList extends AbstractRuleList {
 		}
 		return usedLangs;
 	}
+
+	public TextSymbolizer getClassSymbolizer(int index) {
+		return classesSymbolizers.get(index);
+	}
+
 
 }

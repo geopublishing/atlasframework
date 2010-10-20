@@ -16,6 +16,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.styling.StylingUtil;
+import skrueger.geotools.StyledFS;
+import skrueger.geotools.io.GeoImportUtilURL;
 
 public class AsTestingUtil {
 	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
@@ -32,8 +34,8 @@ public class AsTestingUtil {
 	}
 
 	public enum TestSld {
-		textRulesDefaultLocalizedPre16("/oldLocalizedDefaultRule_pre16.sld"),
-		textRulesPre15("/oldTextRuleClasses_Pre15.sld");
+		textRulesDefaultLocalizedPre16("/oldLocalizedDefaultRule_pre16.sld"), textRulesPre15(
+				"/oldTextRuleClasses_Pre15.sld");
 
 		private final String resLoc;
 
@@ -52,7 +54,7 @@ public class AsTestingUtil {
 		public URL getUrl() {
 			return AsTestingUtil.class.getResource(resLoc);
 		}
-	}
 
+	}
 
 }

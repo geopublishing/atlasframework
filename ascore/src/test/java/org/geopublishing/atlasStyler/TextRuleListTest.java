@@ -17,10 +17,12 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
+import org.geotools.styling.TextSymbolizer;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
+import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;
@@ -120,8 +122,8 @@ public class TextRuleListTest {
 		System.out.println(filter);
 		assertEquals("[ de = env([LANG], [XX]) ]", filter.toString());
 
-		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestingUtil
-				.getTestFeatures(TestDatasets.arabicInHeader);
+		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasets.arabicInHeader
+				.getFeatureCollection();
 		Iterator<SimpleFeature> it = testFeatures.iterator();
 		try {
 			SimpleFeature f = it.next();
@@ -146,8 +148,8 @@ public class TextRuleListTest {
 		trl.addDefaultClass("de");
 		trl.addDefaultClass("ar");
 
-		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestingUtil
-				.getTestFeatures(TestDatasets.arabicInHeader);
+		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasets.arabicInHeader
+				.getFeatureCollection();
 		Iterator<SimpleFeature> it = testFeatures.iterator();
 		try {
 			SimpleFeature f = it.next();
@@ -358,7 +360,8 @@ public class TextRuleListTest {
 	/**
 	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
 	 */
-	public void testOldTextRuleDefaultLocalizedParsedCorrectly() throws IOException {
+	public void testOldTextRuleDefaultLocalizedParsedCorrectly()
+			throws IOException {
 		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesDefaultLocalizedPre16
 				.getStyle();
 
@@ -369,11 +372,35 @@ public class TextRuleListTest {
 
 		TextRuleList textRulesList = as.getTextRulesList();
 
+		assertEquals(
+				"3 testrules are expected since we one sime default and one language specific default with two label attributes",
+				3, as.getStyle().featureTypeStyles().get(1).rules().size());
+
 		assertEquals(2, textRulesList.countClasses());
 		assertEquals(0, textRulesList.getDefaultLanguages().size());
 
+		// The first rule has two label properties:
+		{
+			TextSymbolizer cSymb0 = textRulesList.getClassSymbolizer(0);
+			assertEquals("CNTRY_NAME",
+					StylingUtil.getFirstPropertyName(null, cSymb0).toString());
+			assertEquals("SURFACE",
+					StylingUtil.getSecondPropertyName(null, cSymb0).toString());
+		}
+
+		// The second rule has only one label property
+		{
+			TextSymbolizer cSymb1 = textRulesList.getClassSymbolizer(1);
+			assertEquals("SURFACE",
+					StylingUtil.getFirstPropertyName(null, cSymb1).toString());
+			assertEquals(null, StylingUtil.getSecondPropertyName(null, cSymb1));
+		}
+
 		assertTrue(textRulesList.isEnabled());
 		assertTrue(textRulesList.isClassEnabled(0));
+
+		assertEquals("DEFAULT", textRulesList.getRuleName(0));
+		assertEquals("missing data", textRulesList.getRuleName(1));
 
 		assertNull(textRulesList.getClassLang(0));
 		assertEquals(TextRuleList.DEFAULT_FILTER_ALL_OTHERS,
