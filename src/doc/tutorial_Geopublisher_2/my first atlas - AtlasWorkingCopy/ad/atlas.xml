@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas xmlns="http://www.wikisquare.de/AtlasML" buildVersion="506" majVersion="1" minVersion="3" schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd">
+  <name>
+    <translation lang="fr">atlas de Stefan</translation>
+  </name>
+  <desc>
+    <translation lang="fr">i can't write frensh, sorry</translation>
+  </desc>
+  <creator>
+    <translation lang="fr">Stefan Krüger, wikisquare.de</translation>
+  </creator>
+  <copyright>
+    <translation lang="fr"></translation>
+  </copyright>
+  <atlasversion>0.0</atlasversion>
+  <supportedLanguages>
+    <language lang="fr"/>
+  </supportedLanguages>
+  <pdfMedia exportable="false" id="pdf_00326844270_berlin-welcomecard_fr">
+    <name>
+      <translation lang="fr">Travel information for Berlin</translation>
+    </name>
+    <desc>
+      <translation lang="fr">de http://www.visitberlin.de/welcomecard</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <dataDirname>pdf_00326844270_berlin-welcomecard_fr</dataDirname>
+    <filename>berlin-welcomecard_fr.pdf</filename>
+  </pdfMedia>
+  <vectorLayer exportable="false" id="vector_00175704960" showFilterInLegend="true" showStylerInLegend="true" showTableInLegend="true">
+    <name>
+      <translation lang="fr">Builings</translation>
+    </name>
+    <desc>
+      <translation lang="fr">OpenStreetMap data from 10'2009</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <dataDirname>vector_00175704960_buildings2</dataDirname>
+    <filename>buildings2.shp</filename>
+    <dataAttribute col="2" functionA="0.0" functionX="1.0" localname="name" namespace="" visible="true" weight="2">
+      <name>
+        <translation lang="fr">name</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="1" functionA="0.0" functionX="1.0" localname="osm_id" namespace="" visible="true" weight="1">
+      <name>
+        <translation lang="fr">osm_id</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="3" functionA="0.0" functionX="1.0" localname="type" namespace="" visible="true" weight="3">
+      <name>
+        <translation lang="fr">type</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+  </vectorLayer>
+  <vectorLayer exportable="false" id="vector_01494502649" showFilterInLegend="true" showStylerInLegend="true" showTableInLegend="true">
+    <name>
+      <translation lang="fr">African points</translation>
+    </name>
+    <desc>
+      <translation lang="fr">points of interes, from OpenStreetMaps</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <dataDirname>vector_01494502649_africa_poi</dataDirname>
+    <filename>africa_poi.shp</filename>
+    <dataAttribute col="2" functionA="0.0" functionX="1.0" localname="name" namespace="" visible="true" weight="2">
+      <name>
+        <translation lang="fr">name</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="1" functionA="0.0" functionX="1.0" localname="osm_id" namespace="" visible="true" weight="1">
+      <name>
+        <translation lang="fr">osm_id</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="3" functionA="0.0" functionX="1.0" localname="type" namespace="" visible="true" weight="3">
+      <name>
+        <translation lang="fr">type</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+  </vectorLayer>
+  <vectorLayer exportable="false" id="vector_01644505914" showFilterInLegend="true" showStylerInLegend="true" showTableInLegend="true">
+    <name>
+      <translation lang="fr">Waterways in Berlin</translation>
+    </name>
+    <desc>
+      <translation lang="fr">OpenStreeMap data from 10'2009</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <dataDirname>vector_01644505914_waterways_dhdn</dataDirname>
+    <filename>waterways_dhdn.shp</filename>
+    <dataAttribute col="2" functionA="0.0" functionX="1.0" localname="name" namespace="" visible="true" weight="2">
+      <name>
+        <translation lang="fr">name</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="1" functionA="0.0" functionX="1.0" localname="osm_id" namespace="" visible="true" weight="1">
+      <name>
+        <translation lang="fr">osm_id</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="3" functionA="0.0" functionX="1.0" localname="type" namespace="" visible="true" weight="3">
+      <name>
+        <translation lang="fr">type</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="4" functionA="0.0" functionX="1.0" localname="width" namespace="" visible="true" weight="4">
+      <name>
+        <translation lang="fr">width</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+  </vectorLayer>
+  <vectorLayer exportable="false" id="vector_01745133959" showFilterInLegend="true" showStylerInLegend="true" showTableInLegend="true">
+    <name>
+      <translation lang="fr">African countries</translation>
+    </name>
+    <desc>
+      <translation lang="fr">from IMPETUS</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <dataDirname>vector_01745133959_african_countries</dataDirname>
+    <filename>african_countries.shp</filename>
+    <dataAttribute col="4" functionA="0.0" functionX="1.0" localname="CNTRY_NAME" namespace="" visible="true" weight="4">
+      <name>
+        <translation lang="fr">CNTRY_NAME</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="12" functionA="0.0" functionX="1.0" localname="COLOR_MAP" namespace="" visible="true" weight="12">
+      <name>
+        <translation lang="fr">COLOR_MAP</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="10" functionA="0.0" functionX="1.0" localname="CURR_CODE" namespace="" visible="true" weight="10">
+      <name>
+        <translation lang="fr">CURR_CODE</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="9" functionA="0.0" functionX="1.0" localname="CURR_TYPE" namespace="" visible="true" weight="9">
+      <name>
+        <translation lang="fr">CURR_TYPE</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="1" functionA="0.0" functionX="1.0" localname="FID_COUNTR" namespace="" visible="true" weight="1">
+      <name>
+        <translation lang="fr">FID_COUNTR</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="14" functionA="0.0" functionX="1.0" localname="FID_DISSOL" namespace="" visible="true" weight="14">
+      <name>
+        <translation lang="fr">FID_DISSOL</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="2" functionA="0.0" functionX="1.0" localname="FIPS_CNTRY" namespace="" visible="true" weight="2">
+      <name>
+        <translation lang="fr">FIPS_CNTRY</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="3" functionA="0.0" functionX="1.0" localname="GMI_CNTRY" namespace="" visible="true" weight="3">
+      <name>
+        <translation lang="fr">GMI_CNTRY</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="15" functionA="0.0" functionX="1.0" localname="ID" namespace="" visible="true" weight="15">
+      <name>
+        <translation lang="fr">ID</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="13" functionA="0.0" functionX="1.0" localname="ID2" namespace="" visible="true" weight="13">
+      <name>
+        <translation lang="fr">ID2</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="11" functionA="0.0" functionX="1.0" localname="LANDLOCKED" namespace="" visible="true" weight="11">
+      <name>
+        <translation lang="fr">LANDLOCKED</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="6" functionA="0.0" functionX="1.0" localname="POP_CNTRY" namespace="" visible="true" weight="6">
+      <name>
+        <translation lang="fr">POP_CNTRY</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="5" functionA="0.0" functionX="1.0" localname="SOVEREIGN" namespace="" visible="true" weight="5">
+      <name>
+        <translation lang="fr">SOVEREIGN</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="7" functionA="0.0" functionX="1.0" localname="SQKM_CNTRY" namespace="" visible="true" weight="7">
+      <name>
+        <translation lang="fr">SQKM_CNTRY</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute col="8" functionA="0.0" functionX="1.0" localname="SQMI_CNTRY" namespace="" visible="true" weight="8">
+      <name>
+        <translation lang="fr">SQMI_CNTRY</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+    </dataAttribute>
+  </vectorLayer>
+  <mapPool startMap="map_01338455645">
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_01338455645" scaleVisible="true">
+      <name>
+        <translation lang="fr">map of benin (or morocco)</translation>
+      </name>
+      <desc>
+        <translation lang="fr">my second map</translation>
+      </desc>
+      <keywords>
+        <translation lang="fr"></translation>
+      </keywords>
+      <maxExtend>-282645.76113260444,431079.7937744169 880713.6144012401,1657567.197438005</maxExtend>
+      <datapoolRef id="vector_01745133959"/>
+      <datapoolRef id="vector_01494502649"/>
+    </map>
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_01612229309" scaleVisible="true">
+      <name>
+        <translation lang="fr">my first map</translation>
+      </name>
+      <desc>
+        <translation lang="fr">A map of Berllin based on OpenStreetMap data</translation>
+      </desc>
+      <keywords>
+        <translation lang="fr"></translation>
+      </keywords>
+      <maxExtend>2996157.694117424,5842274.238705375 3004176.8254047344,5850687.7534986185</maxExtend>
+      <datapoolRef id="vector_01644505914"/>
+      <datapoolRef id="vector_00175704960"/>
+    </map>
+  </mapPool>
+  <group>
+    <name>
+      <translation lang="fr">menu principal</translation>
+    </name>
+    <desc>
+      <translation lang="fr">Le titre de ce menu n'est pas visible dans l'atlas.</translation>
+    </desc>
+    <keywords>
+      <translation lang="fr"></translation>
+    </keywords>
+    <group>
+      <name>
+        <translation lang="fr">my maps</translation>
+      </name>
+      <desc>
+        <translation lang="fr">this menu holds all maps that i have made today</translation>
+      </desc>
+      <keywords>
+        <translation lang="fr"></translation>
+      </keywords>
+      <mapRef id="map_01612229309"/>
+    </group>
+    <group>
+      <name>
+        <translation lang="fr">documents</translation>
+      </name>
+      <desc>
+        <translation lang="fr"></translation>
+      </desc>
+      <keywords>
+        <translation lang="fr"></translation>
+      </keywords>
+      <datapoolRef id="pdf_00326844270_berlin-welcomecard_fr"/>
+    </group>
+  </group>
+</atlas>
