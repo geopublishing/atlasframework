@@ -21,7 +21,7 @@
 		<module>gpcore</module>
 		<module>asswinggui</module>
 		<module>gpswinggui</module>
-		<module>gpdocs</module>
+		<module>gpdoc</module>
 	</modules>
 
 	<profiles>
