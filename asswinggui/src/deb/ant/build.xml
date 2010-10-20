@@ -23,7 +23,7 @@
 -->
 
 <project basedir="${mvn.basedir}/src/deb/ant">
-	<property name="SNAPSHOT" value="-testing" />
+	<property name="SNAPSHOT" value="-testing" description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty." />
 	<property name="PROGNAME" value="atlasstyler${SNAPSHOT}" description="the name of the program / the .deb name without any versions" />
 	<property name="FOLDERINZIPNAME" value="AtlasStyler-${mvn.project.version}" />
 	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
@@ -36,7 +36,7 @@
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
-		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Publish maps and geoproducts easily" description="An atlas authoring system to publish maps and geoproducts easily." exec="/usr/bin/${PROGNAME}" icon="/usr/share/geopublisher/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
+		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Publish maps and geoproducts easily" description="An atlas authoring system to publish maps and geoproducts easily." exec="/usr/bin/${PROGNAME}" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 	</target>
 
 
@@ -50,13 +50,13 @@
 		<echo message="Upstream-Version is ${version.upstream}" />
 		<echo message="Icon should be at ${mvn.basedir}/../logos/${PROGNAME}.xpm" />
 
-		<deb todir="${TARGET.DEB.DIR}/dist" package="${PROGNAME}" section="science" recommends="qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
+		<deb todir="${TARGET.DEB.DIR}/dist" package="${PROGNAME}" section="science" recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
 			<version upstream="${version.upstream}" />
 
 			<maintainer name="Stefan A. Tzeggai" email="tzeggai@wikisquare.de" />
 
 			<description synopsis="A GUI tool to publish maps as online and offline atlases based on OGC standards.">
-This is the testing version of Geopublisher. Use very carefully and please report exciting problems.				
+This is the testing version of AtlasStyler. Use very carefully and please report problems.				
 				
 Geopublisher is an atlas authoring system which allows easy publication of geo-data, documents, images, videos, and statistics in form of digital multimedia atlases. These atlases can be understood as minimal, pre-configured end-user GIS which offer selected functionality only where its meaningful.
 Geopublisher provides tools for quality assurance and multilingual meta-data management. No in-depth knowledge of HTML, SLD or XML is required to create an atlas. Atlases can be directly published on CD, DVD, memory stick, external hard-drive or the Internet. The software is platform-independent and Open-Source.
@@ -117,14 +117,8 @@ Technical details:
 			<arg value="/var/www/www.geopublishing.org/htdocs" />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for karmic to the repo">
-			<arg line='-b ${REPO.DIR} includedeb karmic ${TARGETDEB}' />
-		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
-			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
-		</exec>
-
+		<!-- DEBIAN -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
 		</exec>
@@ -133,17 +127,34 @@ Technical details:
 			<arg line='-b ${REPO.DIR} includedeb etch ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lucid to the repo">
-			<arg line='-b ${REPO.DIR} includedeb lucid ${TARGETDEB}' />
+
+		<!-- UBUNTU -->
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
+			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
 		</exec>
 
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for jaunty to the repo">
 			<arg line='-b ${REPO.DIR} includedeb jaunty ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for jaunty to the repo">
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for karmic to the repo">
+			<arg line='-b ${REPO.DIR} includedeb karmic ${TARGETDEB}' />
+		</exec>
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lucid to the repo">
+			<arg line='-b ${REPO.DIR} includedeb lucid ${TARGETDEB}' />
+		</exec>
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for maverick to the repo">
+			<arg line='-b ${REPO.DIR} includedeb maverick ${TARGETDEB}' />
+		</exec>
+
+
+		<!-- MAEMO -->
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for freemantle to the repo">
 			<arg line='-b ${REPO.DIR} includedeb freemantle ${TARGETDEB}' />
 		</exec>
+
 
 		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
 			<arg value="-u" />
