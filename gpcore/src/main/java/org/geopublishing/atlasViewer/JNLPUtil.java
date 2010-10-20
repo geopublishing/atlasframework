@@ -131,13 +131,15 @@ public class JNLPUtil {
 					haveToDownload.add(dpe.getId());
 				}
 			}
+		} catch (javax.jnlp.UnavailableServiceException ue) {
+			return haveToDownload;
 		} catch (Exception e) {
 			LOGGER.error(e);
 		}
 
-		if (haveToDownload.size() > 0)
-			LOGGER.debug("There are " + haveToDownload.size()
-					+ " parts that are not yet downloaded.");
+		// if (haveToDownload.size() > 0)
+		LOGGER.debug("There are " + haveToDownload.size()
+				+ " parts that are not yet downloaded.");
 
 		return haveToDownload;
 	}
