@@ -208,10 +208,13 @@ public class CliOptions extends Options {
 			}
 
 			if (exitAfterInterpret || errorDuringInterpret != null) {
-				System.out
-						.println("Error " + errorDuringInterpret.getErrCode());
-				// System.exit();
-				return errorDuringInterpret.getErrCode();
+				if (errorDuringInterpret != null) {
+					System.out.println("Error "
+							+ errorDuringInterpret.getErrCode());
+					// System.exit();
+					return errorDuringInterpret.getErrCode();
+				} else
+					return 0;
 			}
 
 			/***
