@@ -1,0 +1,35 @@
+# Changed to improve the JWS experience
+# http://www.askapache.com/htaccess/apache-speed-cache-control.html
+# 1 minute
+#<FilesMatch "\.(jar)$">
+#   Header set Cache-Control "max-age=1, must-revalidate"
+#</FilesMatch>
+
+# Changed to improve the JWS experience
+# http://www.askapache.com/htaccess/apache-speed-cache-control.html
+# 1 minute
+#<FilesMatch "\.(jnlp)$">
+#	Header set Cache-Control "max-age=1, must-revalidate"
+#</FilesMatch>
+
+
+AddType application/x-java-jnlp-file .jnlp
+AddType application/x-java-archive .jar
+
+### turn on the Expires engine
+ExpiresActive On
+ExpiresByType application/x-java-jnlp-file "now"
+ExpiresDefault "now"
+
+<Files *.jar.pack.gz>
+   AddEncoding pack200-gzip .jar
+   ForceType application/x-java-archive
+</Files>
+
+<Files *.jar.gz>
+   AddEncoding x-gzip .jar
+   ForceType application/x-java-archive
+</Files>
+
+Options +MultiViews
+MultiviewsMatch Any

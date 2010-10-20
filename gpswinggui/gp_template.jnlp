@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp codebase="http://www.geopublishing.org/gp/" href="http://www.geopublishing.org/gp/gp.jnlp" spec="1.0+">
+  <information>
+    <title>Geopublisher Atlas Author</title>
+    <description>A software to create interactive multimedia atlases</description>
+    <homepage href="http://en.geopublishing.org/Geopublisher"/>    
+    <vendor>geopublishing.org</vendor>
+    <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
+    <icon kind="splash" href="startGP.gif"/>    
+	<shortcut online="true">
+	  <desktop/>
+	  <menu submenu="Geopublishing"/>
+	</shortcut>    
+  </information>
+  
+  <security>
+    <all-permissions/>
+  </security>
+  
+  <update check="always" policy="always"/>
+  
+  <resources>
+    <java href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Dfile.encoding=UTF-8" max-heap-size="320m" version="1.6.0_14+"/>
+    <property name="jnlp.packEnabled" value="true"/>
+	<property name="file.encoding" value="UTF-8"/>
+	<nativelib  href="gpnatives-1.6-SNAPSHOT.jar" part="main" />
+
+	$dependencies
+
+  </resources>
+  <application-desc main-class="$mainClass"/>
+</jnlp>

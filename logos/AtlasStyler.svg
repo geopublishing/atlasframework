@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="297mm"
+   height="210mm"
+   id="svg2596"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="AtlasStyler.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs2598">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 372.04724 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1052.3622 : 372.04724 : 1"
+       inkscape:persp3d-origin="526.18109 : 248.03149 : 1"
+       id="perspective2605" />
+  </defs>
+  <sodipodi:namedview
+     inkscape:document-units="mm"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.43415836"
+     inkscape:cx="490"
+     inkscape:cy="380"
+     inkscape:current-layer="layer1"
+     id="namedview2600"
+     showgrid="false"
+     inkscape:window-width="909"
+     inkscape:window-height="684"
+     inkscape:window-x="5"
+     inkscape:window-y="50" />
+  <metadata
+     id="metadata2602">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>AtlasStyler Logo</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Stefan A. Krüger</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:date>2009/07/28</dc:date>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect2503"
+       width="982.3382"
+       height="588.39288"
+       x="38.46199"
+       y="70.830605"
+       ry="0"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001" />
+    <rect
+       style="fill:#d7ec9e;fill-opacity:1;stroke:#d7ec9e;stroke-width:31.0764122;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="rect3391"
+       width="954.62256"
+       height="559.96753"
+       x="52.449284"
+       y="86.36837"
+       ry="3.7337554"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001"
+       rx="3.7337554" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;fill-opacity:1;stroke:#225500;stroke-width:1.00504565;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="path3381"
+       sodipodi:cx="-99.482162"
+       sodipodi:cy="444.51205"
+       sodipodi:rx="2.9291368"
+       sodipodi:ry="2.9291368"
+       d="M -96.553026,444.51205 A 2.9291368,2.9291368 0 1 1 -102.4113,444.51205 A 2.9291368,2.9291368 0 1 1 -96.553026,444.51205 z"
+       transform="matrix(37.135802,0,0,37.136103,3923.5693,-16240.297)"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;fill-opacity:1;stroke:#677821;stroke-width:1.005;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="path3383"
+       sodipodi:cx="-99.482162"
+       sodipodi:cy="444.51205"
+       sodipodi:rx="2.9291368"
+       sodipodi:ry="2.9291368"
+       d="M -96.553026,444.51205 A 2.9291368,2.9291368 0 1 1 -102.4113,444.51205 A 2.9291368,2.9291368 0 1 1 -96.553026,444.51205 z"
+       transform="matrix(37.136081,0,0,37.136081,4224.0257,-16240.288)"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001" />
+    <path
+       sodipodi:type="arc"
+       style="fill:none;fill-opacity:1;stroke:#89a02c;stroke-width:1.005;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
+       id="path3385"
+       sodipodi:cx="-99.482162"
+       sodipodi:cy="444.51205"
+       sodipodi:rx="2.9291368"
+       sodipodi:ry="2.9291368"
+       d="M -96.553026,444.51205 A 2.9291368,2.9291368 0 1 1 -102.4113,444.51205 A 2.9291368,2.9291368 0 1 1 -96.553026,444.51205 z"
+       transform="matrix(37.136081,0,0,37.136081,4524.0186,-16240.288)"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001" />
+    <text
+       xml:space="preserve"
+       style="font-size:141.98864746px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Futura;-inkscape-font-specification:Futura"
+       x="532.30591"
+       y="565.28613"
+       id="text3387"
+       sodipodi:linespacing="125%"
+       inkscape:export-filename="/home/hp/Desktop/logo_as.png"
+       inkscape:export-xdpi="132.60001"
+       inkscape:export-ydpi="132.60001"><tspan
+         sodipodi:role="line"
+         id="tspan3389"
+         x="532.30591"
+         y="565.28613">AtlasStyler</tspan></text>
+  </g>
+</svg>

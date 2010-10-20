@@ -1,0 +1,438 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.geopublishing.geopublisher</groupId>
+	<artifactId>gpswinggui</artifactId>
+	<packaging>jar</packaging>
+	<version>1.6-SNAPSHOT</version>
+	<name>Geopublisher Swing GUI</name>
+	<url>http://en.geopublishing.org/Geopublisher</url>
+
+	<parent>
+		<groupId>org.geopublishing</groupId>
+		<artifactId>gp-atlas-framework</artifactId>
+		<version>1.6-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<properties>
+		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+	</properties>
+
+	<build>
+
+		<plugins>
+
+			<plugin>
+				<!-- Starting the application via mvn ecex:java -->
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.1.1</version>
+
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<mainClass>${mainClass}</mainClass>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>${mainClass}</mainClass>
+							<addClasspath>true</addClasspath>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>unpack native libs</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.geopublishing</groupId>
+									<artifactId>gpnatives</artifactId>
+									<version>${project.version}</version>
+									<!-- <classifier>${build.type}</classifier> -->
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/natives
+									</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+
+	<profiles>
+		<profile>
+			<!-- If run on the special "gisbert" profile, the application is released 
+				to the geopublishing.org webpage -->
+			<id>gisbert</id>
+			<build>
+				<plugins>
+
+					<plugin>
+						<groupId>org.codehaus.mojo.webstart</groupId>
+						<artifactId>webstart-maven-plugin</artifactId>
+						<version>1.0-beta-1-SNAPSHOT</version>
+
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>jnlp</goal>
+								</goals>
+							</execution>
+						</executions>
+
+						<configuration>
+							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
+
+							<jnlp>
+								<inputTemplate>gp_template.jnlp</inputTemplate>
+								<outputFile>gp.jnlp</outputFile>
+								<mainClass>${mainClass}</mainClass>
+							</jnlp>
+
+							<sign>
+								<keypass>wasser</keypass>
+								<storepass>wasser</storepass>
+								<alias>IMPETUS</alias>
+							</sign>
+
+							<verbose>false</verbose>
+							<excludeTransitive>false</excludeTransitive>
+
+							<pack200>true</pack200> <!-- still buggy sadly -->
+							<gzip>true</gzip> <!-- still buggy sadly -->
+
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.3</version>
+						<executions>
+							<execution>
+								<phase>deploy</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<tasks>
+										<ant target="publish" inheritRefs="true">
+											<property name="mvn.buildNumber" value="${buildNumber}" />
+											<property name="mvn.project.version" value="${project.version}" />
+										</ant>
+										<ant target="add-deb-to-repo" inheritRefs="true"
+											antfile="${basedir}/src/deb/ant/build.xml">
+											<property name="mvn.buildNumber" value="${buildNumber}" />
+											<property name="mvn.project.version" value="${project.version}" />
+											<property name="mvn.basedir" value="${project.basedir}" />
+											<property name="mvn.project.artifactId" value="${project.artifactId}" />
+										</ant>										
+									</tasks>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>com.mindtree.techworks.insight.releng</groupId>
+						<artifactId>maven-jsmooth-plugin</artifactId>
+						<version>0.1.0-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>jsmoothcompile</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile>
+							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
+							<setExeName>false</setExeName>
+							<setJarName>true</setJarName>
+							<includeDependencies>true</includeDependencies>
+							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.2-beta-5</version>
+
+						<configuration>
+							<filters />
+							<descriptors>
+								<descriptor>${project.basedir}/src/assembly/full.xml
+								</descriptor>
+							</descriptors>
+						</configuration>
+						<executions>
+							<execution>
+								<id>full</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attached</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+
+			</build>
+
+		</profile>
+	</profiles>
+
+
+
+	<dependencies>
+	
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>ascore</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-coverage</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile-renderer</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-svg</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagepyramid</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-imagemosaic</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>net.java.wizard</groupId>
+			<artifactId>wizard</artifactId>
+			<version>[0.998.1,1.1)</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>net.charabia</groupId>
+			<artifactId>jsmoothgen</artifactId>
+			<version>0.9.9-7</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Smooth runtime dependency -->
+			<groupId>com.wutka</groupId>
+			<artifactId>jox</artifactId>
+			<version>1.16</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>gnu-regexp</groupId>
+			<artifactId>gnu-regexp</artifactId>
+			<version>1.1.4</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.media</groupId>
+			<artifactId>jai_core</artifactId>
+			<version>[1.1.3,1.2)</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-arcgrid</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-swing</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geopublishing.geopublisher</groupId>
+			<artifactId>gpcore</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>org.geopublishing.geopublisher</groupId>
+			<artifactId>gpcore</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>ascore</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-render</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-brewer</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-main</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-geotiff</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.jnlp</groupId>
+			<artifactId>jnlp</artifactId>
+			<version>1.6</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.swinglabs</groupId>
+			<artifactId>swingx</artifactId>
+			<version>1.6.1</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>tools</artifactId>
+			<version>1.6.0.20</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-cli</groupId>
+			<artifactId>commons-cli</artifactId>
+			<version>1.2</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+
+</project>

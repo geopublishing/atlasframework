@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas xmlns="http://www.wikisquare.de/AtlasML" buildVersion="201009241933" majVersion="1" minVersion="6" schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd">
+  <name>
+    <translation lang="de">testing rasters</translation>
+    <translation lang="en">testing rasters</translation>
+  </name>
+  <desc>
+    <translation lang="de">testing rasters</translation>
+    <translation lang="en">testing rasters</translation>
+  </desc>
+  <creator>
+    <translation lang="de">testing rasters</translation>
+    <translation lang="en">testing rasters</translation>
+  </creator>
+  <copyright>
+    <translation lang="de">testing rasters</translation>
+    <translation lang="en">testing rasters</translation>
+  </copyright>
+  <atlasversion>0.0</atlasversion>
+  <supportedLanguages>
+    <language lang="de"/>
+    <language lang="en"/>
+  </supportedLanguages>
+  <rasterLayer exportable="false" id="raster_00993740883">
+    <name>
+      <translation lang="de">ARCASCII With SLD With Transparency</translation>
+      <translation lang="en">ARCASCII With SLD With Transparency</translation>
+    </name>
+    <desc>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </keywords>
+    <dataDirname>raster_00993740883_asciiwithsldtransparency</dataDirname>
+    <filename>asciiwithsldtransparency.asc</filename>
+    <rasterLegendData paintGaps="false"/>
+  </rasterLayer>
+  <rasterLayer exportable="false" id="raster_01619177922">
+    <name>
+      <translation lang="de">geotiffwithsld.tif</translation>
+      <translation lang="en">geotiffwithsld.tif</translation>
+    </name>
+    <desc>
+      <translation lang="de">GeoTIFF mit SLD Styling</translation>
+      <translation lang="en">GeoTIFF mit SLD Styling</translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </keywords>
+    <dataDirname>raster_01619177922_geotiffwithsld</dataDirname>
+    <filename>geotiffwithsld.tif</filename>
+    <rasterLegendData paintGaps="false"/>
+  </rasterLayer>
+  <rasterLayer exportable="false" id="raster_02067770230">
+    <name>
+      <translation lang="de">geotiff_rgb_ohnesld.tif</translation>
+      <translation lang="en">geotiff_rgb_ohnesld.tif</translation>
+    </name>
+    <desc>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </keywords>
+    <dataDirname>raster_02067770230_geotiff_rgb_ohnesld</dataDirname>
+    <filename>geotiff_rgb_ohnesld.tif</filename>
+    <rasterLegendData paintGaps="false"/>
+  </rasterLayer>
+  <mapPool startMap="map_00769137305">
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_00602900553" previewMaxMapExtendInGP="false" scaleUnits="METRIC" scaleVisible="true">
+      <name>
+        <translation lang="de">GeoTIFF RGB</translation>
+        <translation lang="en">GeoTIFF RGB</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </desc>
+      <keywords>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </keywords>
+      <datapoolRef id="raster_02067770230"/>
+    </map>
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_00769137305" previewMaxMapExtendInGP="false" scaleUnits="METRIC" scaleVisible="true">
+      <name>
+        <translation lang="de">GeoTiff mit SLD</translation>
+        <translation lang="en">GeoTiff mit SLD</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </desc>
+      <keywords>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </keywords>
+      <datapoolRef id="raster_01619177922"/>
+    </map>
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_01889321308" previewMaxMapExtendInGP="false" scaleUnits="METRIC" scaleVisible="true">
+      <name>
+        <translation lang="de">ARCASCII With SLD With Transparency</translation>
+        <translation lang="en">ARCASCII With SLD With Transparency</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </desc>
+      <keywords>
+        <translation lang="de"></translation>
+        <translation lang="en"></translation>
+      </keywords>
+      <datapoolRef id="raster_00993740883"/>
+    </map>
+  </mapPool>
+  <group>
+    <name>
+      <translation lang="de">Hauptmenu</translation>
+    </name>
+    <desc>
+      <translation lang="de">Die Beschriftung dieses Menüs ist im Atlas nicht sichtbar.</translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+      <translation lang="en"></translation>
+    </keywords>
+    <mapRef id="map_00602900553"/>
+    <mapRef id="map_00602900553"/>
+    <mapRef id="map_01889321308"/>
+  </group>
+  <fonts/>
+</atlas>

@@ -1,69 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.geopublishing.geopublisher</groupId>
-	<artifactId>gpdocs</artifactId>
-	<packaging>jar</packaging>
-	<version>1.5</version>
-	<name>Geopublishing Documentation</name>
-	<url>http://en.geopublishing.org/Geopublisher</url>
+	<groupId>org.geopublishing</groupId>
+	<artifactId>gp-atlas-framework</artifactId>
+	<name>Geopublishing Atlas Framework</name>
+	<version>1.6-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<description>Geopublisher (including AtlasStyler) applications.
+	</description>
+	<issueManagement>
+		<system>gforge</system>
+		<url>http://wald.intevation.org/tracker/?group_id=37</url>
+	</issueManagement>
 
-	<parent>
-		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
-		<version>1.5</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
-
-	<build>
-		<plugins>
-		</plugins>
-	</build>
-
+	<modules>
+		<module>ascore</module>
+		<module>gpnatives</module>
+		<module>gpcore</module>
+		<module>asswinggui</module>
+		<module>gpswinggui</module>
+	</modules>
 
 	<profiles>
 		<profile>
-			<!--
-				If run on the special "gisbert" profile, the application is released
-				to the geopublishing.org webpage
-			-->
-			<id>gisbert</id>
-			<build>
-				<plugins>
-
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.3</version>
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<ant target="add-deb-to-repo" inheritRefs="true"
-											antfile="${basedir}/src/deb/ant/build.xml">
-											<property name="mvn.buildNumber" value="${buildNumber}" />
-											<property name="mvn.project.version" value="${project.version}" />
-											<property name="mvn.buildTime" value="${maven.build.timestamp}" />
-											<property name="mvn.basedir" value="${project.basedir}" />
-											<property name="mvn.project.artifactId" value="${project.artifactId}" />
-										</ant>
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
-
-			</build>
-
+			<id>w2buero</id>
+			<modules>
+				<module>../../schmitzm/trunk</module>
+			</modules>
 		</profile>
+
+		<profile>
+			<id>ms_kallisto</id>
+			<modules>
+				<module>../../../SCHMITZM/Trunk</module>
+			</modules>
+		</profile>
+
 	</profiles>
 
+	<licenses>
+		<license>
+			<name>Lesser General Public License (LGPL)</name>
+			<url>http://www.gnu.org/copyleft/lgpl.txt</url>
+		</license>
+		<license>
+			<name>General Public License (LGPL)</name>
+			<url>http://www.gnu.org/copyleft/gpl.txt</url>
+		</license>
+	</licenses>
+
+	<properties>
+		<geotools.version>2.6.5</geotools.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<schmitzm.version>2.3-SNAPSHOT</schmitzm.version>
+	</properties>
+
+	<organization>
+		<name>geopublishing.org</name>
+		<url>http://www.geopublishing.org</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>alfonx</id>
+			<name>Stefan A. Tzeggai</name>
+			<email>tzeggai@wikisquare.de</email>
+			<url>http://www.wikisquare.de</url>
+			<organization>wikisquare.de</organization>
+			<organizationUrl>http://www.wikisquare.de</organizationUrl>
+			<timezone>GMT+1</timezone>
+			<roles>
+				<role>Developer</role>
+				<role>Maven package maintainer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>mschmitz</id>
+			<name>Martin Schmitz</name>
+			<timezone>GMT+1</timezone>
+			<organization>wikisquare.de</organization>
+			<organizationUrl>http://www.wikisquare.de</organizationUrl>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk</connection>
+		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/${project.artifactId}</developerConnection>
+	</scm>
+
+	<build>
+
+		<!-- Explicitly setting the final name! Do not remove -->
+		<finalName>${artifactId}-${project.version}</finalName>
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>export/export.keystore</include>
+					<include>export/jsmooth/autodownload-wrapper/*</include>
+				</includes>
+			</resource>
+
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>export/export.keystore</exclude>
+					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
+				</excludes>
+			</resource>
+
+			<resource>
+				<filtering>true</filtering>
+				<directory>src/assembly</directory>
+				<includes>
+					<include>*.jsmooth</include>
+				</includes>
+			</resource>
+
+		</resources>
+
+		<testResources>
+			<testResource>
+				<!-- <filtering>true</filtering> -->
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<systemProperties>
+						<property>
+							<name>java.library.path</name>
+							<value>${project.build.directory}/natives</value>
+						</property>
+					</systemProperties>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
+				<executions>
+					<execution>
+						<id>buildnumber in phase initialize</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+						<svn>javasvn</svn> </providerImplementations> -->
+					<format>{0,date,yyyyMMddHHmm}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
+				<configuration>
+					<archive>
+						<index>false</index>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<!-- children modules only define their mainClass here -->
+						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.version}
+							</Implementation-Version>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+		<!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
+	</build>
+
 	<dependencies>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-library</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-library</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-main</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-epsg-hsql</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- For i8n correction -->
+			<groupId>ant</groupId>
+			<artifactId>ant-nodeps</artifactId>
+			<version>1.6.5</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<!-- For i8n correction -->
+			<groupId>ant-contrib</groupId>
+			<artifactId>ant-contrib</artifactId>
+			<version>1.0b3</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
+
+	<repositories>
+
+		<repository>
+			<!-- Releases for geopublishing.org & more by www.wikisquare.de -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>releases.artifactory.wikisquare.de</id>
+			<name>Releases for geopublishing.org - powered by wikisquare.de</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-releases</url>
+		</repository>
+
+		<repository>
+			<!-- Snapshot releases geopublishing.org & more by www.wikisquare.de -->
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>snapshots.artifactory.wikisquare.de</id>
+			<name>Snapshots for geopublishing.org - powered by wikisquare.de</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots</url>
+		</repository>
+
+
+	</repositories>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-snapshots</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+		<repository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-releases</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+	</distributionManagement>
+
+	<pluginRepositories>
+
+		<!-- <pluginRepository> -->
+		<!-- <id>central</id> -->
+		<!-- <name>Maven Central repository</name> -->
+		<!-- <url>http://repo1.maven.org/maven2</url> -->
+		<!-- </pluginRepository> -->
+<!---->
+		<!-- <pluginRepository> -->
+		<!-- <id>insight.release.repo</id> -->
+		<!-- <name>Insight Release Repository</name> -->
+		<!-- <url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/release</url> -->
+		<!-- </pluginRepository> -->
+<!---->
+		<!-- <pluginRepository> -->
+		<!-- <id>insight.snapshot.repo</id> -->
+		<!-- <name>Insight Snapshot Repository</name> -->
+		<!-- <url>https://mindtreeinsight.svn.sourceforge.net/svnroot/mindtreeinsight/maven-repo/trunk/snapshot</url> -->
+		<!-- </pluginRepository> -->
+
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>plugins-snapshots.artifactory.wikisquare.de</id>
+			<url>http://artifactory.wikisquare.de/artifactory/plugins-snapshots
+			</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>plugins-releases.artifactory.wikisquare.de</id>
+			<url>http://artifactory.wikisquare.de/artifactory/plugins-releases
+			</url>
+		</pluginRepository>
+
+	</pluginRepositories>
 
 </project>
