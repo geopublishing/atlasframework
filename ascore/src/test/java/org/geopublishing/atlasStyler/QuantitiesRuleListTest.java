@@ -27,7 +27,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFeatureCollection;
-import skrueger.sld.RuleListTest;
 
 import com.vividsolutions.jts.geom.Point;
 

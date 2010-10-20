@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geotools.filter.AndImpl;
 import org.geotools.filter.BinaryComparisonAbstract;
-import org.geotools.filter.NotImpl;
 import org.geotools.styling.Font;
 import org.geotools.styling.LabelPlacement;
 import org.geotools.styling.PointPlacement;
@@ -42,7 +41,6 @@ import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
-import sun.util.logging.resources.logging;
 
 public class TextRuleList extends AbstractRuleList {
 
@@ -288,7 +286,7 @@ public class TextRuleList extends AbstractRuleList {
 
 	private Filter addLanguageFilter(Filter filter, int idx) {
 		// Is this class language specific?
-		if (classesLanguages.get(idx) != null) {
+		if (getClassLang(idx) != null) {
 			filter = ff.and(classLanguageFilter(classesLanguages.get(idx)),
 					filter);
 		} else {
@@ -370,15 +368,21 @@ public class TextRuleList extends AbstractRuleList {
 		return RulesListType.TEXT_LABEL.toString();
 	}
 
-	public boolean isClassEnabled(int index) {
+	public Boolean isClassEnabled(int index) {
+		if (index > classesEnabled.size() - 1)
+			return null;
 		return classesEnabled.get(index);
 	}
 
 	public Filter getClassFilter(int index) {
+		if (index > classesFilters.size() - 1)
+			return null;
 		return classesFilters.get(index);
 	}
 
 	public String getClassLang(int index) {
+		if (index > classesLanguages.size() - 1)
+			return null;
 		return classesLanguages.get(index);
 	}
 
@@ -490,6 +494,8 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	public String getRuleName(int index) {
+		if (index > classesRuleNames.size() - 1)
+			return null;
 		return classesRuleNames.get(index);
 	}
 
@@ -511,7 +517,7 @@ public class TextRuleList extends AbstractRuleList {
 	 * @deprecated move the selIdx out of this class
 	 */
 	public TextSymbolizer getSymbolizer() {
-		return classesSymbolizers.get(selIdx);
+		return getClassSymbolizer(selIdx);
 	}
 
 	public List<TextSymbolizer> getSymbolizers() {
@@ -580,6 +586,8 @@ public class TextRuleList extends AbstractRuleList {
 							ASUtil.ff2.literal(val));
 
 					getClassesFilters().add(filter);
+
+					classesLanguages.add(null);
 
 					setClassEnabled(1 + i
 							- (uniqueRL.isWithDefaultSymbol() ? 1 : 0), true);
@@ -916,9 +924,9 @@ public class TextRuleList extends AbstractRuleList {
 			// } else if (filter instanceof NotImpl) {
 			// // All good, this is the default filter without a language.
 			// } else {
-//			LOGGER.warn(
-//					"Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
-//					e);
+			// LOGGER.warn(
+			// "Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
+			// e);
 			// }
 		}
 		return filter;
@@ -1091,8 +1099,8 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	public TextSymbolizer getClassSymbolizer(int index) {
+		if (index > classesSymbolizers.size() -1) return null;
 		return classesSymbolizers.get(index);
 	}
-
 
 }

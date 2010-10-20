@@ -22,7 +22,6 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
-import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;

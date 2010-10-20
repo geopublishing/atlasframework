@@ -16,8 +16,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.styling.StylingUtil;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.io.GeoImportUtilURL;
 
 public class AsTestingUtil {
 	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
