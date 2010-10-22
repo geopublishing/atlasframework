@@ -15,7 +15,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -99,7 +98,7 @@ public class AtlasStylerTest {
 
 		uniqueRL1.setWithDefaultSymbol(true);
 		Set<Object> allNew = uniqueRL1
-				.getAllUniqueValuesThatAreNotYetIncluded(null);
+				.getAllUniqueValuesThatAreNotYetIncluded();
 
 		int numFeatures = 251;
 

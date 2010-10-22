@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
+import java.util.concurrent.CancellationException;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -35,6 +36,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -52,6 +54,7 @@ import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
+import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
@@ -59,6 +62,7 @@ import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.Symbolizer;
 
 import schmitzm.lang.LangUtil;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
@@ -418,9 +422,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	}
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
+	 * A button to add all unique values of the selected column
 	 */
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
@@ -428,12 +430,39 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					AtlasStyler.R("UniqueValues.Button.AddAllValues")) {
 
 				public void actionPerformed(ActionEvent e) {
-					try {
-						rulesList.addAllValues(UniqueValuesGUI.this);
+					if (rulesList.getPropertyFieldName() == null) {
+						JOptionPane
+								.showMessageDialog(
+										UniqueValuesGUI.this,
+										AtlasStyler
+												.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
+						return;
+					}
 
-					} catch (IOException e1) {
-						LOGGER.error(e1);
-						throw new RuntimeException(e1);
+					String title = AtlasStyler
+							.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
+
+					final AtlasSwingWorker<Integer> findUniques = new AtlasSwingWorker<Integer>(
+							UniqueValuesGUI.this, title) {
+
+						@Override
+						protected Integer doInBackground() throws Exception {
+							return rulesList.addAllValues(this);
+						}
+					};
+					try {
+						Integer added = findUniques.executeModal();
+						JOptionPane
+								.showMessageDialog(
+										UniqueValuesGUI.this,
+										AtlasStyler
+												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
+														added));
+					} catch (CancellationException ce) {
+//						findUniques.cancel(true);
+						return;
+					} catch (Exception ee) {
+						ExceptionDialog.show(ee);
 					}
 				}
 
@@ -443,9 +472,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	}
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
+	 * A button to add one unique value of the selected column
 	 */
 	private JButton getJButtonAddValues() {
 		if (jButtonAddValues == null) {
@@ -456,7 +483,6 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
 							SwingUtil.getParentWindow(UniqueValuesGUI.this),
 							rulesList);
-					valuesGUI.setVisible(true);
 				}
 
 			});

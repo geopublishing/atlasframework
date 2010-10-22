@@ -25,7 +25,6 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialogCloser;
 
-
 public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
@@ -35,13 +34,12 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 	protected void process(List<String> chunks) {
 		for (String s : chunks)
 			statusDialog.setDescription(s);
-
 	}
 
 	public AtlasSwingWorker(AtlasStatusDialogInterface statusDialog) {
 		this.statusDialog = statusDialog;
 		addPropertyChangeListener(new AtlasStatusDialogCloser(statusDialog));
-		
+
 		statusDialog.addCancelListener(new ActionListener() {
 
 			@Override
@@ -55,12 +53,22 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		this(new AtlasStatusDialog(parentGUI));
 	}
 
+	public AtlasSwingWorker(Component parentGUI, String title) {
+		this(new AtlasStatusDialog(parentGUI, title, title));
+	}
+
+	public AtlasSwingWorker(Component  parentGUI, String title, String startText) {
+		this(new AtlasStatusDialog(parentGUI, title, startText));
+	}
+
 	/**
 	 * @throws InterruptedException
 	 * @throws ExecutionException
-	 * @throws CancellationException When cancel has been pressed
+	 * @throws CancellationException
+	 *             When cancel has been pressed
 	 */
-	public K executeModal() throws InterruptedException, ExecutionException, CancellationException {
+	public K executeModal() throws InterruptedException, ExecutionException,
+			CancellationException {
 		execute();
 		statusDialog.startModal();
 		return get();

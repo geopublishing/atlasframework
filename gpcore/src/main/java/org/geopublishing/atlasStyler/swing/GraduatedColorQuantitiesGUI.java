@@ -77,7 +77,6 @@ import skrueger.swing.Disposable;
 import skrueger.swing.SmallButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
-import sun.tools.jstat.RowClosure;
 
 public class GraduatedColorQuantitiesGUI extends JPanel implements
 		ClosableSubwindows, Disposable {

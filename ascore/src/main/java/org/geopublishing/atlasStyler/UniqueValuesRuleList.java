@@ -11,7 +11,6 @@
 package org.geopublishing.atlasStyler;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +24,12 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
-import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.visitor.UniqueVisitor;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.StyleAttributeExtractor;
 import org.geotools.styling.Symbolizer;
-import org.geotools.swing.ProgressWindow;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.And;
 import org.opengis.filter.Filter;
 import org.opengis.filter.Not;
@@ -42,8 +37,6 @@ import org.opengis.filter.Or;
 import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
-
-import com.sun.tools.javac.code.Symbol.VarSymbol;
 
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
@@ -143,76 +136,31 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	}
 
 	/**
-	 * Adds all missing unique values to the list of rules...
+	 * Adds all missing unique values to the list of rules.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @throws IOException
+	 * @return the number of newly added unique values
 	 */
-	public void addAllValues(final Component parentGUI) throws IOException {
-		if (getPropertyFieldName() == null) {
-			JOptionPane
-					.showMessageDialog(
-							parentGUI,
-							AtlasStyler
-									.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
-			return;
-		}
-
-		final ProgressWindow progressWindow;
-		if (parentGUI != null) {
-			progressWindow = new ProgressWindow(parentGUI);
-			progressWindow.setTitle(AtlasStyler
-					.R("UniqueValuesRuleList.AddAllValues.SearchingMsg"));
-			progressWindow.started();
-		} else {
-			progressWindow = null;
-		}
+	public int addAllValues(SwingWorker<?,?> sw) {
+		if (getPropertyFieldName() == null)
+			return 0;
 
 		countNew = 0;
+		pushQuite();
+		for (final Object uniqueString : getAllUniqueValuesThatAreNotYetIncluded()) {
+			if (sw != null && sw.isCancelled())
+				return 0;
+			addUniqueValue(uniqueString);
+			countNew++;
+		}
 
-		final SwingWorker<Set<Object>, Object> findUniques = new SwingWorker<Set<Object>, Object>() {
+		/** Fire an event * */
+		if (countNew > 0)
+			popQuite(new RuleChangedEvent("Added " + countNew + " values.",
+					UniqueValuesRuleList.this));
+		else
+			popQuite();
 
-			@Override
-			protected Set<Object> doInBackground() throws Exception {
-
-				return getAllUniqueValuesThatAreNotYetIncluded(progressWindow);
-			}
-
-			@Override
-			protected void done() {
-				pushQuite();
-				try {
-
-					for (final Object uniqueString : get()) {
-						addUniqueValue(uniqueString);
-						countNew++;
-					}
-				} catch (final Exception e) {
-					LOGGER.warn("Error finding all unique values", e); // i8n
-					if (progressWindow != null)
-						progressWindow.exceptionOccurred(e);
-				} finally {
-					if (progressWindow != null) {
-						progressWindow.complete();
-						progressWindow.dispose();
-					}
-
-					/** Fire an event * */
-					if (countNew > 0)
-						popQuite(new RuleChangedEvent("Added " + countNew
-								+ " values.", UniqueValuesRuleList.this));
-					else
-						popQuite();
-
-					JOptionPane.showMessageDialog(parentGUI, AtlasStyler.R(
-							"UniqueValuesRuleList.AddAllValues.DoneMsg",
-							countNew));
-				}
-
-			}
-		};
-
-		findUniques.execute();
+		return countNew;
 	}
 
 	/**
@@ -334,58 +282,36 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	}
 
 	/**
-	 * Returns a {@link Set} or {@link String} representations (usable for the
-	 * {@link Filter}s) not yet included in any of the rule lists.
-	 * 
-	 * @param progressWindow
-	 * @return
-	 * @throws IOException
+	 * Returns a {@link Set} not yet included in any of the rule lists.
 	 */
-	public Set<Object> getAllUniqueValuesThatAreNotYetIncluded(
-			final ProgressWindow progressWindow) throws IOException {
+	public Set<Object> getAllUniqueValuesThatAreNotYetIncluded() {
 
-		/**
-		 * Searching for all values. The layerFilter is applied.
-		 **/
-		final FeatureCollection<SimpleFeatureType, SimpleFeature> aFeatureCollection = getStyledFeatures()
-				.getFeatureCollectionFiltered();
+		SwingUtil.checkNotOnEDT();
 
 		final UniqueVisitor uniqueVisitor = new UniqueVisitor(
 				getPropertyFieldName());
 
-		aFeatureCollection.accepts(uniqueVisitor, null);
-		final Set<Object> vals = uniqueVisitor.getResult().toSet();
+		try {
+			getStyledFeatures().getFeatureCollectionFiltered().accepts(
+					uniqueVisitor, null);
+			final Set<Object> vals = uniqueVisitor.getResult().toSet();
 
-		// LOGGER.info("for prop name = "+getPropertyFieldName());
+			// now filter the null values and the ones that are already part of
+			// the
+			// list
+			final Set<Object> uniques = new TreeSet<Object>();
+			for (final Object o : vals) {
+				if (o == null)
+					continue;
+				if (values.contains(o))
+					continue;
+				uniques.add(o);
+			}
 
-		final Set<Object> uniques = new TreeSet<Object>();
-
-		for (final Object o : vals) {
-
-			if (o == null)
-				continue;
-			//
-			// if (o instanceof Number) {
-			// final Number number = (Number) o;
-			// if (!getValues().contains(number.toString()))
-			// uniques.add(number.toString());
-			// } else if (o instanceof String) {
-			// // Null or empty stings crash the PropertyEqualsImpl
-			// final String string = (String) o;
-			//
-			// if (string.trim().isEmpty())
-			// continue;
-			//
-			// if (!getValues().contains(string))
-			// uniques.add(string);
-			// } else {
-			// LOGGER.warn("Unrecognized value type = " + o.getClass());
-			// }
-
-			uniques.add(o);
+			return uniques;
+		} catch (IOException ioe) {
+			throw new RuntimeException(ioe);
 		}
-
-		return uniques;
 	}
 
 	@Override
@@ -625,11 +551,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		pushQuite();
 
 		try {
-			
-//			System.out.println(values);
 
-			for (final Object strVal : values
-					.toArray(new Object[]{})) {
+			// System.out.println(values);
+
+			for (final Object strVal : values.toArray(new Object[] {})) {
 				removeValue(strVal);
 			}
 

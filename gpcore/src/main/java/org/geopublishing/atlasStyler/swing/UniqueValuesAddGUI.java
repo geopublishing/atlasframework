@@ -10,25 +10,24 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingWorker;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
@@ -38,19 +37,19 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geotools.swing.ProgressWindow;
+import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
+import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 import skrueger.swing.ThinButton;
 
-public class UniqueValuesAddGUI extends JDialog {
-	private static final Logger LOGGER = Logger
+public class UniqueValuesAddGUI extends AtlasDialog {
+	private static final Logger log = Logger
 			.getLogger(UniqueValuesAddGUI.class);
-
-	
 
 	private JPanel jContentPane = null;
 
@@ -82,56 +81,47 @@ public class UniqueValuesAddGUI extends JDialog {
 	 * @param owner
 	 * @param featureSource_polygon
 	 */
-	public UniqueValuesAddGUI(Window parentGUI,
+	public UniqueValuesAddGUI(Component owner,
 			final UniqueValuesRuleList rulesList) {
-		super(parentGUI);
+		super(owner);
 		this.rulesList = rulesList;
 		initialize();
 
-		final ProgressWindow progressWindow;
-		if (parentGUI != null) {
-			progressWindow = new ProgressWindow(parentGUI);
-			progressWindow.setTitle(AtlasStyler
-					.R("UniqueValuesRuleList.AddAllValues.SearchingMsg"));
-			progressWindow.started();
-		} else {
-			progressWindow = null;
-		}
+		String title = AtlasStyler
+				.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
+		final AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner,
+				title, title);
 
-		SwingWorker<Set<Object>, Object> findUniques = new SwingWorker<Set<Object>, Object>() {
+		AtlasSwingWorker<Set<Object>> findUniques = new AtlasSwingWorker<Set<Object>>(
+				statusDialog) {
 
 			@Override
 			protected Set<Object> doInBackground() throws Exception {
-				return rulesList
-						.getAllUniqueValuesThatAreNotYetIncluded(progressWindow);
+				return rulesList.getAllUniqueValuesThatAreNotYetIncluded();
 			}
 
-			@Override
-			protected void done() {
-				Set<Object> uniqueValues;
-				try {
-					uniqueValues = get();
-					DefaultListModel defaultListModel = new DefaultListModel();
-					for (Object uv : uniqueValues) {
-						defaultListModel.addElement(uv);
-					}
-					getJListValues().setModel(defaultListModel);
-				} catch (Exception e) {
-					LOGGER
-							.error(
-									"Adding the new unique value list to the listModel",
-									e);
-					if (progressWindow != null)
-						progressWindow.exceptionOccurred(e);
-				} finally {
-					if (progressWindow != null) {
-						progressWindow.complete();
-						progressWindow.dispose();
-					}
-				}
-			}
 		};
-		findUniques.execute();
+		try {
+			Set<Object> uniqueValues = findUniques.executeModal();
+
+			DefaultListModel defaultListModel = new DefaultListModel();
+			for (Object uv : uniqueValues) {
+				defaultListModel.addElement(uv);
+			}
+			getJListValues().setModel(defaultListModel);
+
+			SwingUtil.setRelativeFramePosition(UniqueValuesAddGUI.this, owner,
+					SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
+			setVisible(true);
+
+		} catch (CancellationException e) {
+			dispose();
+			return;
+		} catch (Exception e) {
+			ExceptionDialog.show(e);
+			dispose();
+			return;
+		}
 	}
 
 	/**
@@ -289,15 +279,17 @@ public class UniqueValuesAddGUI extends JDialog {
 	 */
 	private JButton getJButtonAddToList() {
 		if (jButtonAddToList == null) {
-			jButtonAddToList = new ThinButton(new AbstractAction(AtlasStyler
-					.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
+			jButtonAddToList = new ThinButton(
+					new AbstractAction(
+							AtlasStyler
+									.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
 
-				public void actionPerformed(ActionEvent e) {
-					((DefaultListModel) getJListValues().getModel())
-							.addElement(getJTextField().getText());
-				}
+						public void actionPerformed(ActionEvent e) {
+							((DefaultListModel) getJListValues().getModel())
+									.addElement(getJTextField().getText());
+						}
 
-			});
+					});
 
 			jButtonAddToList.setEnabled(false);
 
@@ -406,28 +398,5 @@ public class UniqueValuesAddGUI extends JDialog {
 		}
 		return jListValues;
 	}
-	//
-	// /**
-	// * @param args
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Tzeggai</a>
-	// * @throws IOException
-	// */
-	// public static void main(String[] args) throws IOException {
-	// URL shpURL = AtlasStylerTest.class.getClassLoader().getResource(
-	// "data/shp countries/country.shp");
-	// assertNotNull(shpURL);
-	// Map params = new HashMap();
-	// params.put("url", shpURL);
-	// DataStore dataStore = DataStoreFinder.getDataStore(params);
-	// final FeatureSource featureSource_polygon = dataStore
-	// .getFeatureSource(dataStore.getTypeNames()[0]);
-	//
-	// AtlasStyler atlasStyler = new AtlasStyler(featureSource_polygon, null);
-	// final UniqueValuesRuleList rl = atlasStyler
-	// .getUniqueValuesPolygonRuleList();
-	//
-	// UniqueValuesAddGUI dialog = new UniqueValuesAddGUI(null, rl);
-	// dialog.setVisible(true);
-	// }
+
 }

@@ -62,13 +62,15 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
+import org.geotools.data.Query;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
+import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSDataStoreFactory;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.factory.Hints;
-import org.geotools.filter.text.ecql.ECQL;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
@@ -79,9 +81,9 @@ import org.geotools.styling.StyledLayerDescriptor;
 import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.FeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+import schmitzm.geotools.JTSUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
@@ -402,8 +404,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					// Boolean(true));
 					m.put(WFSDataStoreFactory.TIMEOUT.key,
 							new java.lang.Integer(10000));
-//					m.put(WFSDataStoreFactory.MAXFEATURES.key,
-//							new java.lang.Integer(ASProps.get(ASProps.Keys.m)));
+					// m.put(WFSDataStoreFactory.MAXFEATURES.key,
+					// new java.lang.Integer(ASProps.get(ASProps.Keys.m)));
 
 					AtlasSwingWorker<StyledFS> wfsGetTypeNames = new AtlasSwingWorker<StyledFS>(
 							AtlasStylerGUI.this) {
@@ -411,7 +413,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						@Override
 						protected StyledFS doInBackground() throws IOException,
 								InterruptedException {
-							final DataStore wfs = (new WFSDataStoreFactory())
+							final WFSDataStore wfs = (new WFSDataStoreFactory())
 									.createDataStore(m);
 
 							try {
@@ -445,18 +447,34 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 									id = url.toString();
 								}
 
-								StyledFS wfsSfs = new StyledFS(wfsFS, id);
-								wfsSfs.setDesc(typeName);
-								wfsSfs.setTitle("WFS: " + url.getHost() + ":"
-										+ typeName);
-
 								File sldFile = new File(
 										System.getProperty("user.home")
 												+ "/"
 												+ wfsFS.getName()
 														.getLocalPart()
 												+ ".sld");
-								wfsSfs.setSldFile(sldFile);
+								// wfsSfs.setSldFile(sldFile);
+
+								ReferencedEnvelope bounds = wfsFS.getBounds();
+								// wfsFS.get
+								System.out.println(bounds);
+								//
+								ReferencedEnvelope transformEnvelope = JTSUtil
+										.transformEnvelope(
+												wfsFS.getBounds(Query.ALL),
+												GeoImportUtil.getDefaultCRS());
+								System.out.println(transformEnvelope);
+
+								StyledFS wfsSfs = new StyledFS(wfsFS, sldFile,
+										id);
+
+								CoordinateReferenceSystem crs = wfs
+										.getFeatureTypeCRS(typeName);
+								wfsSfs.setCRS(crs);
+
+								wfsSfs.setDesc(typeName);
+								wfsSfs.setTitle("WFS: " + url.getHost() + ":"
+										+ typeName);
 
 								// If successful until here, store the typeName
 								// value
@@ -563,27 +581,26 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
 				try {
 					featureSource = ds.getFeatureSource(layer);
-					StyledFS styledFS = new StyledFS(featureSource, host + port
-							+ database + schema + layer);
+
+					File sldFile = new File(System.getProperty("user.home")
+							+ "/" + host + "." + database + "." + schema + "."
+							+ layer + ".sld");
+
+					String id = host + port + database + schema + layer;
+					StyledFS styledFS = new StyledFS(featureSource, sldFile, id);
 
 					styledFS.setTitle(new Translation(database + ": " + layer));
 					styledFS.setDesc("PG: "
 							+ new Translation(host + ":" + port + "/"
 									+ database + "?" + schema + "." + layer));
 
-					// TODO Set SLD File twice??
-					styledFS.setSldFile(new File(System
-							.getProperty("user.home")
-							+ "/"
-							+ host
-							+ "."
-							+ database + "." + schema + "." + layer + ".sld"));
+					// styledFS.setSldFile(sldFile);
 
 					LOGGER.info("Pg layer has CRS = " + styledFS.getCrs());
 
-					File sldFile = new File(System.getProperty("user.home"),
-							styledFS.getSldFile().getName());
-					styledFS.setSldFile(sldFile);
+					// File sldFile = new File(System.getProperty("user.home"),
+					// styledFS.getSldFile().getName());
+					// styledFS.setSldFile(sldFile);
 
 					styledFS.loadStyle();
 
