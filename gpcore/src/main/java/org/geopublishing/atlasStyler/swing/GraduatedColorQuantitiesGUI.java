@@ -77,6 +77,7 @@ import skrueger.swing.Disposable;
 import skrueger.swing.SmallButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
+import sun.tools.jstat.RowClosure;
 
 public class GraduatedColorQuantitiesGUI extends JPanel implements
 		ClosableSubwindows, Disposable {
@@ -235,7 +236,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 * @return void
 	 */
 	private void initialize() {
-		setLayout(new MigLayout("wrap 2, fillx", "grow","grow"));
+		setLayout(new MigLayout("wrap 2, fillx", "grow", "grow"));
 		jLabelHeading = new JLabel(
 				AtlasStyler.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
@@ -728,7 +729,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						final ArrayList<Double> classLimitsAsArrayList = rulesList
 								.getClassLimitsAsArrayList();
 
-						if (classLimitsAsArrayList.size() < getRowCount()) {
+						if (rowIndex >= classLimitsAsArrayList.size()) {
 							return "-";
 						}
 

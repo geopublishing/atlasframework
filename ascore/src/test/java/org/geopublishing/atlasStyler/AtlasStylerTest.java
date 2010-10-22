@@ -15,6 +15,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,10 +45,10 @@ public class AtlasStylerTest {
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
 	/**
-	 * A tiny Shapefile with an .sld that contains a QuantilesClassification with manually adapted colors
+	 * A tiny Shapefile with an .sld that contains a QuantilesClassification
+	 * with manually adapted colors
 	 */
 	public final static String SNOWPOLYGON_RESNAME = "/data/polygonSnowShape/polygonLayerSnow.shp";
-
 
 	@AfterClass
 	public static void after() {
@@ -160,5 +161,6 @@ public class AtlasStylerTest {
 		assertEquals("SQKM_CNTRY", strings[1]);
 		assertEquals("SQMI_CNTRY", strings[2]);
 	}
+
 
 }

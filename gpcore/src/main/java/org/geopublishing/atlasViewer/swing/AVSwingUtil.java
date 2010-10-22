@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RunnableFuture;
 
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
@@ -967,6 +968,40 @@ public class AVSwingUtil extends AVUtil {
 				exportDir.getAbsolutePath());
 
 		return exportDir;
+	}
+
+	/**
+	 * 
+	 * @param runnable
+	 * @return
+	 * @throws Exception 
+	 */
+	public static Object runWaiting(Component owner,
+			final RunnableFuture<Object> runnable) throws Exception {
+
+		AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
+
+		AtlasSwingWorker<Object> openFileWorker = new AtlasSwingWorker<Object>(
+				statusDialog) {
+
+			@Override
+			protected Object doInBackground() throws IOException,
+					InterruptedException {
+				runnable.run();
+				try {
+					return runnable.get();
+				} catch (ExecutionException e) {
+					return e;
+				}
+			}
+
+		};
+		try {
+			openFileWorker.executeModal();
+			return runnable.get();
+		} catch (Exception e1) {
+			throw (e1);
+		}
 	}
 
 }

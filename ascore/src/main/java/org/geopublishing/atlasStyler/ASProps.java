@@ -68,6 +68,8 @@ public abstract class ASProps {
 		lastPgUsername,
 		/** JFrame starts maximized? */
 		windowMaximized,
+		lastWfsGetCapabilitesUrl,
+		lastWfsLayerName
 		
 	}
 

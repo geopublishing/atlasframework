@@ -40,7 +40,6 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 	}
 
 	private void initGUI() {
-		// Container cP = getContentPane();
 
 		setModal(true);
 
@@ -82,27 +81,8 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 
 		
 		OkButton okButton = getOkButton();
-//		OkButton okButton = new OkButton();
-//		okButton.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				storeInProps();
-//				okClose();
-//			}
-//
-//		});
 		add(okButton, "span 2, split 2, tag ok");
 
-//		CancelButton cancelButton = new CancelButton();
-//		cancelButton.addActionListener(new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				cancelled = true;
-//				close();
-//			}
-//		});
 		CancelButton cancelButton = getCancelButton();
 		add(cancelButton, "tag cancel");
 

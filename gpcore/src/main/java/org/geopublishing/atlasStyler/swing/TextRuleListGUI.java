@@ -575,13 +575,14 @@ public class TextRuleListGUI extends JPanel {
 				Filter filter = rulesList.getClassFilter(0) != null ? rulesList
 						.getClassFilter(0) : Filter.INCLUDE;
 
-				features = rulesList
-						.getStyledFeatures()
-						.getFeatureSource()
-						.getFeatures(
-								new DefaultQuery(rulesList.getStyledFeatures()
-										.getSchema().getTypeName(), filter,
-										100, null, "max 100 sample features"));
+				DefaultQuery query = new DefaultQuery(rulesList
+						.getStyledFeatures().getSchema().getTypeName(), filter,
+						100, null,
+						"sample features for the labelling preview in AtlasStyler");
+				query.setCoordinateSystem(rulesList.getStyledFeatures()
+						.getCrs());
+				features = rulesList.getStyledFeatures().getFeatureSource()
+						.getFeatures(query);
 
 				if (features.size() == 0 && filter != Filter.INCLUDE) {
 					LOGGER.info("Getting preview features for the filter "

@@ -43,6 +43,8 @@ import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
+import com.sun.tools.javac.code.Symbol.VarSymbol;
+
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
@@ -588,16 +590,16 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	/**
 	 * Removes a single value
 	 * 
-	 * @param strVal
+	 * @param value
 	 *            Removes this value
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private void removeValue(final String strVal) {
+	private void removeValue(final Object value) {
 
 		test();
 
-		final int idx = getValues().indexOf(strVal);
+		final int idx = getValues().indexOf(value);
 
 		if (idx >= 0) {
 			getValues().remove(idx);
@@ -605,12 +607,12 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			getSymbols().remove(idx);
 		} else {
 			LOGGER.warn("Asked to remove a value that doesn't exist !?: '"
-					+ strVal + "'");
+					+ value + "'");
 		}
 
 		test();
 
-		fireEvents(new RuleChangedEvent("Removed value " + strVal, this));
+		fireEvents(new RuleChangedEvent("Removed value " + value, this));
 		// LOGGER.debug("remove = "+strVal+" size left = "+getValues().size());
 	}
 
@@ -623,9 +625,11 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		pushQuite();
 
 		try {
+			
+//			System.out.println(values);
 
-			for (final String strVal : values
-					.toArray(new String[values.size()])) {
+			for (final Object strVal : values
+					.toArray(new Object[]{})) {
 				removeValue(strVal);
 			}
 

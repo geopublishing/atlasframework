@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 import javax.jnlp.SingleInstanceListener;
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -45,6 +46,7 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASProps;
@@ -53,9 +55,9 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
+import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
@@ -63,8 +65,10 @@ import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
+import org.geotools.data.wfs.WFSDataStoreFactory;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.factory.Hints;
+import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.jdbc.JDBCDataStoreFactory;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
@@ -75,14 +79,19 @@ import org.geotools.styling.StyledLayerDescriptor;
 import org.geotools.swing.ExceptionMonitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.FeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.ManualInputOption;
+import schmitzm.swing.ManualInputOption.Text;
+import schmitzm.swing.MultipleOptionPane;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
@@ -336,6 +345,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		JToolBar jToolBar = new JToolBar();
 		jToolBar.add(getJButtonAddLayer());
 		jToolBar.add(getJButtonAddPostGIS());
+		jToolBar.add(getJButtonAddWFS());
 		// jToolBar.add(getJButtonAntiAliasing());
 		jToolBar.add(getJTButtonShowXML());
 		jToolBar.add(getJTButtonExportAsSLD());
@@ -351,6 +361,125 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		jToolBar.add(optionsButton);
 		return jToolBar;
+	}
+
+	private Action getJButtonAddWFS() {
+		AbstractAction addmyWFS = new AbstractAction(
+				ASUtil.R("AtlasStylerGUI.toolbarButton.open_wfs")) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// URL url = new URL(
+				// "http://svn.ugi.ru:1580/geoserver/ows?version=1.0.0&service=WFS&request=GetCapabilities");
+
+				Text host = new ManualInputOption.Text(
+						"URL to getCapabilities 1.0.0 or 1.1.0",
+						ASProps.get(
+								Keys.lastWfsGetCapabilitesUrl,
+								"http://localhost:8080/geoserver/wfs?service=WFS&request=GetCapabilities&version=1.1.0"));
+				Text layername = new ManualInputOption.Text(
+						"Layername (namespace:localname)", ASProps.get(
+								Keys.lastWfsLayerName, "[workspace]:layername"));
+
+				Object[] cfgGui = MultipleOptionPane.showMultipleInputDialog(
+						AtlasStylerGUI.this, "WFS Connection", host, layername);
+
+				if (cfgGui == null)
+					return;
+
+				final String typeName = (String) cfgGui[1];
+
+				try {
+
+					// URL url = new URL(
+					// "http://localhost:8085/geoserver/ows?service=wfs&version=1.1.0&request=GetCapabilities");
+
+					final URL url = new URL((String) cfgGui[0]);
+
+					final Map m = new HashMap();
+					m.put(WFSDataStoreFactory.URL.key, url);
+					// m.put(WFSDataStoreFactory.LENIENT.key, new
+					// Boolean(true));
+					m.put(WFSDataStoreFactory.TIMEOUT.key,
+							new java.lang.Integer(10000));
+//					m.put(WFSDataStoreFactory.MAXFEATURES.key,
+//							new java.lang.Integer(ASProps.get(ASProps.Keys.m)));
+
+					AtlasSwingWorker<StyledFS> wfsGetTypeNames = new AtlasSwingWorker<StyledFS>(
+							AtlasStylerGUI.this) {
+
+						@Override
+						protected StyledFS doInBackground() throws IOException,
+								InterruptedException {
+							final DataStore wfs = (new WFSDataStoreFactory())
+									.createDataStore(m);
+
+							try {
+								final String[] typeNames = wfs.getTypeNames();
+
+								openDatastores.add(wfs);
+
+								// if we get here, the basic connection to the
+								// WFS
+								// worked
+								ASProps.set(Keys.lastWfsGetCapabilitesUrl,
+										url.toString());
+
+								if (!ArrayUtils.contains(typeNames, typeName)) {
+									throw new AtlasException(
+											"<html>"
+													+ typeName
+													+ " does not exist. Choose one of: "
+													+ LangUtil
+															.stringConcatWithSep(
+																	"<br/>",
+																	(Object[]) typeNames));
+								}
+
+								final FeatureSource<SimpleFeatureType, SimpleFeature> wfsFS = wfs
+										.getFeatureSource(typeName);
+
+								String id = wfs.getInfo().getSource()
+										.toString();
+								if (id == null) {
+									id = url.toString();
+								}
+
+								StyledFS wfsSfs = new StyledFS(wfsFS, id);
+								wfsSfs.setDesc(typeName);
+								wfsSfs.setTitle("WFS: " + url.getHost() + ":"
+										+ typeName);
+
+								File sldFile = new File(
+										System.getProperty("user.home")
+												+ "/"
+												+ wfsFS.getName()
+														.getLocalPart()
+												+ ".sld");
+								wfsSfs.setSldFile(sldFile);
+
+								// If successful until here, store the typeName
+								// value
+								ASProps.set(Keys.lastWfsLayerName, typeName);
+
+								return wfsSfs;
+
+							} catch (Exception e1) {
+								wfs.dispose();
+								throw new InterruptedException(e1.getMessage());
+							}
+
+						}
+
+					};
+					addLayer(wfsGetTypeNames.executeModal());
+
+				} catch (Exception ee) {
+					ExceptionDialog.show(ee);
+				}
+			}
+		};
+		return addmyWFS;
 	}
 
 	/**
@@ -434,12 +563,15 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				FeatureSource<SimpleFeatureType, SimpleFeature> featureSource;
 				try {
 					featureSource = ds.getFeatureSource(layer);
-					StyledFS styledFS = new StyledFS(featureSource);
+					StyledFS styledFS = new StyledFS(featureSource, host + port
+							+ database + schema + layer);
 
 					styledFS.setTitle(new Translation(database + ": " + layer));
-					styledFS.setDesc(new Translation(host + ":" + port + "/"
-							+ database + "?" + schema + "." + layer));
+					styledFS.setDesc("PG: "
+							+ new Translation(host + ":" + port + "/"
+									+ database + "?" + schema + "." + layer));
 
+					// TODO Set SLD File twice??
 					styledFS.setSldFile(new File(System
 							.getProperty("user.home")
 							+ "/"
@@ -655,11 +787,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				ASProps.set(ASProps.Keys.lastImportDirectory,
 						selectedFile.getAbsolutePath());
 
-				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						AtlasStylerGUI.this);
-
 				AtlasSwingWorker<Void> openFileWorker = new AtlasSwingWorker<Void>(
-						statusDialog) {
+						AtlasStylerGUI.this) {
 
 					@Override
 					protected Void doInBackground() throws IOException,
@@ -716,10 +845,10 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
 					.getDataStore(params);
-			
+
 			Charset stringCharset = GeoImportUtil.readCharset(urlToShape);
 			dataStore.setStringCharset(stringCharset);
-			
+
 			openDatastores.add(dataStore);
 
 			// test for any .prj file
@@ -762,8 +891,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			FeatureSource<SimpleFeatureType, SimpleFeature> featureSourceTry = dataStore
 					.getFeatureSource(dataStore.getTypeNames()[0]);
 
-			StyledFS styledFS;
-
 			File sldFile = IOUtil.changeFileExt(openFile, "sld");
 
 			// Handle if .SLD exists instead
@@ -774,10 +901,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				return;
 			}
 
-			styledFS = new StyledFS(featureSourceTry, sldFile);
-			// styledFS.getCrs();
-
-			addLayer(styledFS);
+			addLayer(new StyledFS(featureSourceTry, sldFile,
+					urlToShape.toString()));
 
 		} catch (Exception e2) {
 			LOGGER.info(e2);
@@ -794,9 +919,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		if (styledFS.getStyle() == null) {
 			// Einen default Style erstellen
 			{
-				AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
-						"AtlasStylerGUI.importVectorLayerNoSLD", styledFS
-								.getSldFile().getName()));
+				// AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
+				// "AtlasStylerGUI.importVectorLayerNoSLD", styledFS
+				// .getSldFile().getName()));
 				styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
 			}
 		}

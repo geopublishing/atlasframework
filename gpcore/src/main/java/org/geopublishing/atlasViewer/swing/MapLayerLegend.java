@@ -248,8 +248,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	/**
 	 * The small INFO Icon has been clicked
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void clickedInfoButton() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -419,8 +418,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 					dtde.dropComplete(
 					// layerManager.addStyledLayer(styledObj)
-							layerManager.insertStyledLayer(styledObj,
-									mapContext.indexOf(getMapLayer())));
+					layerManager.insertStyledLayer(styledObj,
+							mapContext.indexOf(getMapLayer())));
 					return;
 				}
 
@@ -465,9 +464,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				"LayerPaneGroup.ClickedInfoButton.information_about",
 				getTitle());
 
-		return new HTMLBrowserWindow(SwingUtil
-				.getParentWindow(MapLayerLegend.this), getInfoURL(), titleText,
-				null);
+		return new HTMLBrowserWindow(
+				SwingUtil.getParentWindow(MapLayerLegend.this), getInfoURL(),
+				titleText, null);
 	}
 
 	// ****************************************************************************
@@ -501,8 +500,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	/**
 	 * @return a {@link JPopupMenu} with valid MenuItems for this Layer.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public JPopupMenu getToolMenu() {
 
@@ -513,10 +511,10 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// ****************************************************************************
 		if (styledLayer instanceof StyledFS) {
 
-			final StyledFS styledShapefile = (StyledFS) styledLayer;
+			final StyledFS styledFS = (StyledFS) styledLayer;
 			// We are in AtlasStyler. Offer to save the .SLD
 			toolPopup.add(new JMenuItem(new AtlasStylerSaveLayerToSLDAction(
-					this, styledShapefile)));
+					this, styledFS)));
 		}
 
 		// ****************************************************************************
@@ -551,6 +549,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			toolPopup.add(removeFilterMenuItem);
 		}
 
+		long last = System.currentTimeMillis();
+
 		// ****************************************************************************
 		// Create AtlasStyler Button
 		// ****************************************************************************
@@ -568,6 +568,10 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				}
 			}));
 		}
+
+		System.out
+				.println("after styler" + (System.currentTimeMillis() - last));
+		last = System.currentTimeMillis();
 
 		// ****************************************************************************
 		// Show Attribute Table
@@ -588,8 +592,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 				}
 			};
-			showTableAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewerGUI
-					.R("LayerToolMenu.table.tt"));
+			showTableAction.putValue(Action.SHORT_DESCRIPTION,
+					AtlasViewerGUI.R("LayerToolMenu.table.tt"));
 			toolPopup.add(new JMenuItem(showTableAction));
 		}
 
@@ -629,9 +633,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				final String msg2 = AtlasViewerGUI
 						.R("LayerPaneGroup.GetParentWindow.JOptionPane.YesNoOption.remove");
 				// i8ndone
-				if (JOptionPane.showConfirmDialog(SwingUtil
-						.getParentWindow(MapLayerLegend.this), msg1, msg2,
-						JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				if (JOptionPane.showConfirmDialog(
+						SwingUtil.getParentWindow(MapLayerLegend.this), msg1,
+						msg2, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 					SwingUtilities.invokeLater(new Runnable() {
 
 						public void run() {
@@ -728,8 +732,21 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		final boolean rasterStylable = styledLayer instanceof StyledRasterInterface
 				&& StyledLayerUtil
 						.isStyleable((StyledRasterInterface<?>) styledLayer);
-		final boolean featureStylable = FeatureUtil
-				.getLayerSourceObject(getMapLayer()) instanceof FeatureCollection;
+		/**
+		 * getMapLayer().getFeatureSource()
+		 * .getClass().getSimpleName().contains("WFSFeatureStore"))
+		 * 
+		 * We are doing a string comparison here, because 1. we don't want a
+		 * dependency to gt-wfs only for one instance of, and 2. because the
+		 * FeatureUtil.getLayerSourceObject queries the WFS and hence takes
+		 * time-
+		 * 
+		 * Stefan Tzeggai, 22.10.2010
+		 */
+
+		final boolean featureStylable = (getMapLayer().getFeatureSource()
+				.getClass().getSimpleName().contains("WFSFeatureStore"))
+				|| (FeatureUtil.getLayerSourceObject(getMapLayer()) instanceof FeatureCollection);
 		return featureStylable || rasterStylable;
 	}
 
@@ -818,8 +835,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * Nuetzlich wenn die Componente gedruckt (z.B. wenn ein Screenshot gemacht
 	 * wird) wird. Dann werden wird der Hintergrund auf WEISS gesetzt.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public void print(Graphics g) {
@@ -847,8 +863,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * @return
 	 */
 	public boolean removeLayer() {
-		return mapLegend.getGeoMapPane().getMapContext().removeLayer(
-				getMapLayer());
+		return mapLegend.getGeoMapPane().getMapContext()
+				.removeLayer(getMapLayer());
 	}
 
 	/**
@@ -866,8 +882,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * @param style
 	 *            New {@link Style} to apply to the {@link MapLayer}.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void updateStyle(final Style style) {
 
