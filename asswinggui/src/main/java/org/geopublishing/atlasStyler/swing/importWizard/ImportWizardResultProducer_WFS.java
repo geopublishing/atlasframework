@@ -81,6 +81,7 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 
 					final WFSDataStore wfsDs = (new WFSDataStoreFactory())
 							.createDataStore(wfsServer);
+					
 					try {
 
 						final FeatureSource<SimpleFeatureType, SimpleFeature> wfsFS = wfsDs

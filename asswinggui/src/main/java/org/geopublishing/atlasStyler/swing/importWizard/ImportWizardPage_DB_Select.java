@@ -271,6 +271,13 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 
 			dbJComboBox.setName(ImportWizard.IMPORT_DB);
 
+			// Select the last used server
+			if (ASProps.get(Keys.lastDbIdx) != null) {
+				Integer idx = ASProps.getInt(Keys.lastDbIdx, -1);
+				if (idx < dbJComboBox.getDbList().size())
+					dbJComboBox.setSelectedIndex(idx);
+			}
+
 			dbJComboBox.addActionListener(new ActionListener() {
 
 				@Override
@@ -278,8 +285,12 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 					DbServerSettings val = (DbServerSettings) dbJComboBox
 							.getSelectedItem();
 					putWizardData(ImportWizard.IMPORT_DB, val);
+
+					// Store the last used server index
+					ASProps.set(Keys.lastDbIdx, dbJComboBox.getSelectedIndex());
 				}
 			});
+
 		}
 
 		return dbJComboBox;

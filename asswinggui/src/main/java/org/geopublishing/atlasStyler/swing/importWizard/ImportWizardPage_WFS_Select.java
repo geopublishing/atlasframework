@@ -37,7 +37,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 	private final String validationImportSourceTypeFailedMsg_CantRead = ASUtil
 			.R("ImportWizard.WFS.WfsUrlSelection.ValidationError.CantRead");
 
-	WfsSettingsJComboBox wfsUrlJComboBox;
+	WfsSettingsJComboBox wfsJComboBox;
 
 	private SmallButton wfsAddJButton;
 
@@ -272,25 +272,35 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 	}
 
 	private WfsSettingsJComboBox getWfsUrlJComboBox() {
-		if (wfsUrlJComboBox == null) {
+		if (wfsJComboBox == null) {
 
-			wfsUrlJComboBox = new WfsSettingsJComboBox(
+			wfsJComboBox = new WfsSettingsJComboBox(
 					WfsServerList.parsePropertiesString(ASProps
 							.get(ASProps.Keys.wfsList)));
 
-			wfsUrlJComboBox.setName(ImportWizard.IMPORT_WFS_URL);
+			wfsJComboBox.setName(ImportWizard.IMPORT_WFS_URL);
 
-			wfsUrlJComboBox.addActionListener(new ActionListener() {
+			// Select the last used server
+			if (ASProps.get(Keys.lastDbIdx) != null) {
+				Integer idx = ASProps.getInt(Keys.lastDbIdx, -1);
+				if (idx < wfsJComboBox.getWfsList().size())
+					wfsJComboBox.setSelectedIndex(idx);
+			}
+
+			wfsJComboBox.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					WfsServerSettings val = (WfsServerSettings) wfsUrlJComboBox
+					WfsServerSettings val = (WfsServerSettings) wfsJComboBox
 							.getSelectedItem();
 					putWizardData(ImportWizard.IMPORT_WFS_URL, val);
+
+					// Store the last used server index
+					ASProps.set(Keys.lastDbIdx, wfsJComboBox.getSelectedIndex());
 				}
 			});
 		}
 
-		return wfsUrlJComboBox;
+		return wfsJComboBox;
 	}
 }

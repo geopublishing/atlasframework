@@ -68,10 +68,16 @@ public abstract class ASProps {
 		lastPgUsername,
 		/** JFrame starts maximized? */
 		windowMaximized, LAST_IMPORTED_FILE,
-		/** List of WFS servers **/
+		/** List of WFS servers encoded in one String**/
 		wfsList,
-		/** List of DB (PostGIS) Servers **/
-		dbList
+		/** List of DB (PostGIS) Servers encoded in one String**/
+		dbList,
+		/** last used WFS server on the list of WFS servers**/
+		lastWfsIdx,
+		/** last used SB server on the list of DB servers**/
+		lastDbIdx,
+		/** last used import source in wizard**/
+		lastImportWizardType
 
 	}
 

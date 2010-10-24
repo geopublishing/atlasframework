@@ -140,7 +140,7 @@ public class AtlasStylerDialog extends StylerDialog {
 	@Override
 	public void cancel() {
 
-		// The restored Style will se put into the MapLayer.
+		// The restored Style will be put into the MapLayer.
 		super.cancel();
 
 		if (layerStyle == null) {

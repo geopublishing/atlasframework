@@ -48,6 +48,7 @@ import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
+import skrueger.AttributeMetadataInterface;
 import skrueger.geotools.AttributeMetadataImplMap;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.StyledFS;
@@ -197,8 +198,8 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * The {@link AtlasStyler} can run in two {@link LANGUAGE_MODE}s.
-	 * TODO remove static 
+	 * The {@link AtlasStyler} can run in two {@link LANGUAGE_MODE}s. TODO
+	 * remove static
 	 */
 	public static LANGUAGE_MODE getLanguageMode() {
 		return languageMode;
@@ -274,11 +275,11 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * Holds optional meta-information about the datasource. If not set, this
+	 * Holds optional meta-information about the data-source. If not set, this
 	 * empty Map is used. Otherwise meta like column name description will be
 	 * looked up here.
 	 **/
-	private AttributeMetadataMap attributeMetaDataMap = new AttributeMetadataImplMap();
+	private AttributeMetadataMap<? extends AttributeMetadataInterface> attributeMetaDataMap = new AttributeMetadataImplMap();
 
 	/**
 	 * If false, the {@link AtlasStyler} only fires {@link StyleChangedEvent}s
@@ -1240,8 +1241,8 @@ public class AtlasStyler {
 										.getSymbolizerColor(s);
 
 								if (c != null) {
-//									System.out.println("Rule " + ri
-//											+ " has color " + c);
+									// System.out.println("Rule " + ri
+									// + " has color " + c);
 									quantitiesRuleList.getColors()[ri] = c;
 									break;
 								}
