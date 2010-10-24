@@ -471,6 +471,7 @@ public class AtlasConfig implements Disposable {
 		}
 	}
 
+	@Override
 	public void dispose() {
 		uncache();
 	}

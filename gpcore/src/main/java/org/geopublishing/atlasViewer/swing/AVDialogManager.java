@@ -137,6 +137,7 @@ public class AVDialogManager {
 								super.afterCreation(newInstance);
 							}
 
+							@Override
 							public void beforeDispose(AtlasDialog newInstance) {
 								if (mapLegend != null)
 									mapLegend.showOrHideSelectionButtons();

@@ -35,7 +35,6 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -240,6 +239,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		 */
 		final JMapPaneListener infoClickMapPaneListener = new JMapPaneListener() {
 
+			@Override
 			public void performMapPaneEvent(XMapPaneEvent evt) {
 
 				/**
@@ -478,7 +478,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				// sowieso
 
 				if (dpLayer instanceof DpLayerRaster) {
-					layerManager.addStyledLayer((DpLayerRaster) dpLayer);
+					layerManager.addStyledLayer(dpLayer);
 				} else if (dpLayer instanceof DpLayerRasterPyramid) {
 					// **********************************************************
 					// Adding a Pyramidlayer to the map
@@ -507,7 +507,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					// repaint it every time
 					// **********************************************************
 					layerManager
-							.addStyledLayer((DpLayerVector<?, ChartStyle>) dpLayer);
+							.addStyledLayer(dpLayer);
 
 				}
 
@@ -553,7 +553,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		if (layerManager instanceof AtlasMapLegend) {
 			// while removing the layers from the context, we don't wont the
 			// legend to be recreated due to layerRevoed listeners...
-			MapLegend atlasMapLegend = (MapLegend) layerManager;
+			MapLegend atlasMapLegend = layerManager;
 			atlasMapLegend.setValuesAdjusting(true);
 		}
 
@@ -580,6 +580,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * skrueger.geotools.MapContextManagerInterface#addStyledLayer(skrueger.
 	 * StyledLayerInterface)
 	 */
+	@Override
 	public boolean addStyledLayer(StyledLayerInterface<?> styledLayerObject) {
 		return layerManager.addStyledLayer(styledLayerObject);
 	}
@@ -591,6 +592,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * skrueger.geotools.MapContextManagerInterface#insertStyledLayer(skrueger
 	 * .StyledLayerInterface, int)
 	 */
+	@Override
 	public boolean insertStyledLayer(StyledLayerInterface<?> styledLayer,
 			int mapContextIdx) {
 		return layerManager.insertStyledLayer(styledLayer, mapContextIdx);
@@ -601,14 +603,17 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * 
 	 * @see skrueger.geotools.MapContextManagerInterface#removeStyledLayer(int)
 	 */
+	@Override
 	public boolean removeStyledLayer(int mapContextIdx) {
 		return layerManager.removeStyledLayer(mapContextIdx);
 	}
 
+	@Override
 	public List<StyledLayerInterface<?>> getStyledObjects() {
 		return layerManager.getStyledObjects();
 	}
 
+	@Override
 	public List<AttributeMetadataImpl> getVisibleAttribsFor(MapLayer layer) {
 		return layerManager.getVisibleAttribsFor(layer);
 	}
@@ -617,26 +622,32 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	// Access to Listernes of the underlying MapContext
 	// **************************************************************************
 
+	@Override
 	public void addMapLayerListListener(MapLayerListListener listener) {
 		layerManager.addMapLayerListListener(listener);
 	}
 
+	@Override
 	public void removeMapLayerListListener(MapLayerListListener listener) {
 		layerManager.removeMapLayerListListener(listener);
 	}
 
+	@Override
 	public String getDescFor(MapLayer layer) {
 		return layerManager.getDescFor(layer);
 	}
 
+	@Override
 	public String getTitleFor(MapLayer layer) {
 		return layerManager.getTitleFor(layer);
 	}
 
+	@Override
 	public RasterLegendData getLegendMetaData(MapLayer layer) {
 		return layerManager.getLegendMetaData(layer);
 	}
 
+	@Override
 	public StyledLayerInterface<?> getStyledObjectFor(MapLayer layer) {
 		return layerManager.getStyledObjectFor(layer);
 	}
@@ -650,7 +661,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 *         presents the layer list.
 	 */
 	public AtlasMapLegend getLegend() {
-		return (AtlasMapLegend) layerManager;
+		return layerManager;
 	}
 
 	/**

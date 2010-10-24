@@ -22,11 +22,8 @@ import javax.swing.KeyStroke;
 import javax.swing.table.JTableHeader;
 
 import org.apache.log4j.Logger;
-import org.geotools.feature.FeatureCollection;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.map.MapLayer;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 
@@ -139,7 +136,7 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 
 			filterPanel = new FeatureCollectionFilterPanel(
 					FILTER_PARSER,
-					(FeatureCollection<SimpleFeatureType, SimpleFeature>) styedFeatures
+					styedFeatures
 							.getFeatureCollection(), false,
 					new AttributeMetaDataAttributeTypeFilter(attrMetaDataMap)) {
 
@@ -297,6 +294,7 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 		JRootPane rootPane = new JRootPane();
 		rootPane.registerKeyboardAction(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				dispose();

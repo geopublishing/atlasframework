@@ -111,7 +111,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 			AtlasMapLegend atlasMapLegend, DpLayer<?, ChartStyle> dpLayer,
 			Map map) {
 
-		super(mapLayer, exportable, (StyledLayerInterface<?>) dpLayer,
+		super(mapLayer, exportable, dpLayer,
 				atlasMapLegend);
 
 		this.map = map;
@@ -181,13 +181,14 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 					.R("LayerToolMenu.style"),
 					BasicMapLayerLegendPaneUI.ICON_STYLE) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					AVDialogManager.dm_AtlasRasterStyler.getInstanceFor(
-							(StyledRasterInterface<?>) styledLayer,
+							styledLayer,
 							AtlasMapLayerLegend.this,
-							(AtlasConfig) map.getAc(),
-							(MapLayerLegend) AtlasMapLayerLegend.this);
+							map.getAc(),
+							AtlasMapLayerLegend.this);
 				}
 			}));
 		}
@@ -265,6 +266,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 * Removes the {@link Query} that filters this {@link FeatureCollection} by
 	 * setting the {@link Query} to {@link Query}.ALL
 	 */
+	@Override
 	public void removeFilter() {
 		super.removeFilter();
 		((StyledFeaturesInterface)styledLayer).setFilter(Filter.INCLUDE);
@@ -309,6 +311,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	/**
 	 * Change the visibility of the associated {@link MapLayer} (on/off)
 	 */
+	@Override
 	public boolean toggleVisibility() {
 		final boolean b = super.toggleVisibility();
 		atlasMapLegend.showOrHideSearchButton();

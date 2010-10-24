@@ -284,6 +284,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 							AtlasStyler
 									.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
 
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							((DefaultListModel) getJListValues().getModel())
 									.addElement(getJTextField().getText());
@@ -295,6 +296,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 
 			getJTextField().addCaretListener(new CaretListener() {
 
+				@Override
 				public void caretUpdate(CaretEvent e) {
 					String str = getJTextField().getText();
 
@@ -320,6 +322,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 
 			jButtonOk.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rulesList.pushQuite();
 					for (Object obj : getJListValues().getSelectedValues()) {
@@ -343,6 +346,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			getJListValues().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							jButtonOk.setEnabled((getJListValues()
 									.getSelectedValues().length > 0));
@@ -365,6 +369,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			jButtonCancel = new CancelButton();
 			jButtonCancel.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					UniqueValuesAddGUI.this.dispose();
 				}

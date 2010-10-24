@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
-import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DragSource;
 import java.awt.dnd.DropTarget;
@@ -34,6 +34,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -127,8 +128,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * Links a {@link MapLayer} title (which is a {@link DpLayer} ID) to a
 	 * legend {@link JComponent}
 	 */
-	// protected final HashMap<String, Component> rememberLegend = new
-	// HashMap<String, Component>();
 
 	/**
 	 * Links a {@link MapLayer} title (which is a {@link DpLayer} ID) to a
@@ -145,12 +144,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * MapLayer
 	 */
 	protected final HashMap<String, StyledLayerSelectionModel<?>> rememberSelectionModel = new HashMap<String, StyledLayerSelectionModel<?>>();
-
-	// /**
-	// * Holds a reference to the MapLayers that this legend presents
-	// */
-	// protected final HashMap<String, MapLayer>
-	// rememberId2MapLayer = new HashMap<String, MapLayer>();
 
 	/**
 	 * Holds references to the {@link FeatureMapLayerSelectionSynchronizer}
@@ -266,18 +259,17 @@ public class MapLegend extends JXTaskPaneContainer implements
 		getMapPaneToolBar().addSeparator(SEPERATOR2, new JToolBar.Separator());
 
 		// Set Selection
-		getMapPaneToolBar()
-				.addTool(
-						new MapPaneToolBarAction(
-								MapPaneToolBar.TOOL_SELECTION_SET,
-								getMapPaneToolBar(),XMapPaneTool.SELECTION_SET) {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								super.actionPerformed(e);
-								getGeoMapPane().getMapPane().setTool(XMapPaneTool.SELECTION_SET);
-							}
+		getMapPaneToolBar().addTool(
+				new MapPaneToolBarAction(MapPaneToolBar.TOOL_SELECTION_SET,
+						getMapPaneToolBar(), XMapPaneTool.SELECTION_SET) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						super.actionPerformed(e);
+						getGeoMapPane().getMapPane().setTool(
+								XMapPaneTool.SELECTION_SET);
+					}
 
-						}, false);
+				}, false);
 
 		// Add Selection
 		getMapPaneToolBar().addTool(
@@ -292,17 +284,17 @@ public class MapLegend extends JXTaskPaneContainer implements
 				}, false);
 
 		// Remove Selection
-		getMapPaneToolBar()
-				.addTool(
-						new MapPaneToolBar.MapPaneToolBarAction(
-								MapPaneToolBar.TOOL_SELECTION_REMOVE,
-								getMapPaneToolBar(), XMapPaneTool.SELECTION_REMOVE) {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								super.actionPerformed(e);
-								getGeoMapPane().getMapPane().setTool(XMapPaneTool.SELECTION_REMOVE);
-							}
-						}, false);
+		getMapPaneToolBar().addTool(
+				new MapPaneToolBar.MapPaneToolBarAction(
+						MapPaneToolBar.TOOL_SELECTION_REMOVE,
+						getMapPaneToolBar(), XMapPaneTool.SELECTION_REMOVE) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						super.actionPerformed(e);
+						getGeoMapPane().getMapPane().setTool(
+								XMapPaneTool.SELECTION_REMOVE);
+					}
+				}, false);
 
 		// ResetSelection
 		getMapPaneToolBar()
@@ -360,6 +352,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			private MapLayerLegend lastSpecialGroup;
 
+			@Override
 			public void performMapPaneEvent(XMapPaneEvent e) {
 
 				if (e instanceof FeatureSelectedEvent) {
@@ -386,6 +379,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		// ****************************************************************************
 		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
 
+			@Override
 			public void performMapPaneEvent(XMapPaneEvent e) {
 				if (e instanceof FeatureSelectedEvent) {
 					FeatureSelectedEvent fse = (FeatureSelectedEvent) e;
@@ -399,8 +393,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 						// but a BugFix is underway...
 						if (fDialog.getFilter().equals(
 								fDialog.getMapLayer().getQuery().getFilter())) {
-							LOGGER
-									.debug("Not reacting to this Filter change, because the filters are equal.");
+							LOGGER.debug("Not reacting to this Filter change, because the filters are equal.");
 							return;
 						}
 
@@ -440,11 +433,13 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			getMapContext().addMapLayerListListener(new MapLayerListListener() {
 
+				@Override
 				public void layerAdded(MapLayerListEvent event) {
 					// LOGGER.debug("layerAdded MapLayerListListener");
 					recreateLayerList();
 				}
 
+				@Override
 				public void layerChanged(MapLayerListEvent event) {
 					// i suppose we don't need to update when only the
 					// layer's content is changed
@@ -452,6 +447,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 					// recreateLayerList();
 				}
 
+				@Override
 				public void layerMoved(MapLayerListEvent event) {
 					// LOGGER.debug("layerMoved MapLayerListListener");
 
@@ -459,6 +455,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 					recreateLayerList();
 				}
 
+				@Override
 				public void layerRemoved(MapLayerListEvent event) {
 
 					// LOGGER.debug("layerRemoved MapLayerListListener");
@@ -504,8 +501,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 *            in mapContext order (bottom first), -1 means to insert the
 	 *            layer topmost.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public boolean insertStyledLayer(StyledLayerInterface<?> styledObj, int idx) {
@@ -545,8 +541,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 				mapLayer = new AtlasMapLayer(styledGridReader.getGeoObject(),
 						styledGridReader.getStyle());
 
-			} else
-			if (styledObj instanceof StyledGridCoverageInterface) {
+			} else if (styledObj instanceof StyledGridCoverageInterface) {
 				StyledGridCoverageInterface styledGrid = (StyledGridCoverageInterface) styledObj;
 
 				mapLayer = new AtlasMapLayer(styledGrid.getGeoObject(),
@@ -554,8 +549,9 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			} else if (styledObj instanceof StyledRasterPyramidInterface) {
 
-				mapLayer = new AtlasMapLayer((FeatureCollection) styledObj
-						.getGeoObject(), styledObj.getStyle());
+				mapLayer = new AtlasMapLayer(
+						(FeatureCollection) styledObj.getGeoObject(),
+						styledObj.getStyle());
 
 			} else if (styledObj instanceof StyledFeaturesInterface) {
 				StyledFeaturesInterface<?> styledFS = (StyledFeaturesInterface<?>) styledObj;
@@ -594,9 +590,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			// Check for failure
 			if ((mapLayer == null)) {
-				LOGGER
-						.error("A MapLayer instance could not be created for this StyledLayerInterface with Title "
-								+ styledObj.getTitle());
+				LOGGER.error("A MapLayer instance could not be created for this StyledLayerInterface with Title "
+						+ styledObj.getTitle());
 				return false;
 			}
 
@@ -799,7 +794,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 					.get(mapLayer.getTitle());
 
 			if ((bestRes != Double.MAX_VALUE) && (bestRes != Double.MIN_VALUE)) {
-				 LOGGER.debug("Setting maxZoomScale to " + bestRes / 512.);
+				LOGGER.debug("Setting maxZoomScale to " + bestRes / 512.);
 				getGeoMapPane().getMapPane().setMaxZoomScale(bestRes / 512.);
 			} else {
 				getGeoMapPane().getMapPane().setMaxZoomScale(null);
@@ -862,7 +857,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 				}
 			});
 		} else {
-			SwingUtil.checkOnEDT();;
+			SwingUtil.checkOnEDT();
+			;
 			revalidate();
 			repaint();
 			getGeoMapPane().refreshMap();
@@ -995,6 +991,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * insertStyledLayer If the Layer already exists, it will not be inserted an
 	 * false is returned
 	 */
+	@Override
 	public boolean addStyledLayer(StyledLayerInterface<?> styledObj) {
 		return insertStyledLayer(styledObj, -1);
 
@@ -1003,6 +1000,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	/**
 	 * Helpt the GarbageCollection...
 	 */
+	@Override
 	public void dispose() {
 		rememberId2MapLayerLegend.clear();
 
@@ -1024,6 +1022,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * @see
 	 * java.awt.dnd.DropTargetListener#dragExit(java.awt.dnd.DropTargetEvent)
 	 */
+	@Override
 	public void dragExit(DropTargetEvent dte) {
 	}
 
@@ -1034,6 +1033,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * java.awt.dnd.DropTargetListener#dragEnter(java.awt.dnd.DropTargetDragEvent
 	 * )
 	 */
+	@Override
 	public void dragEnter(DropTargetDragEvent dtde) {
 	}
 
@@ -1044,16 +1044,15 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * java.awt.dnd.DropTargetListener#dragOver(java.awt.dnd.DropTargetDragEvent
 	 * )
 	 */
+	@Override
 	public void dragOver(DropTargetDragEvent dtde) {
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.dnd.DropTargetListener#drop(java.awt.dnd.DropTargetDropEvent)
-	 * TODO Move to its own DropTargetListener class?!
+	/**
+	 * @see java.awt.dnd.DropTargetListener#drop(java.awt.dnd.DropTargetDropEvent)
+	 *      TODO Move to its own DropTargetListener class?!
 	 */
+	@Override
 	public void drop(DropTargetDropEvent dtde) {
 		// LOGGER.debug("An object has been droppen onto the LayerPanel :"+dtde.getTransferable());
 		Object dragged;
@@ -1071,8 +1070,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 				// ****************************************************************************
 				// This Drop is a new Layer in the Layerlist
 				// ****************************************************************************
-				LOGGER
-						.debug(" inserting a new layer that has been dropped on the LayerPanel");
+				LOGGER.debug(" inserting a new layer that has been dropped on the LayerPanel");
 
 				if (transObj.getObject() instanceof StyledLayerInterface<?>) {
 					StyledLayerInterface<?> styledObj = (StyledLayerInterface<?>) transObj
@@ -1080,7 +1078,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 					dtde.dropComplete(
 					// layerManager.addStyledLayer(styledObj)
-							addStyledLayer(styledObj));
+					addStyledLayer(styledObj));
 					return;
 				}
 			}
@@ -1089,8 +1087,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 				// ****************************************************************************
 				// This Drop is a new Layer in the Layerlist
 				// ****************************************************************************
-				LOGGER
-						.debug("inserting a new layer from DnDTree that has been dropped on the LayerPanel");
+				LOGGER.debug("inserting a new layer from DnDTree that has been dropped on the LayerPanel");
 
 				if (transObj.getObject() instanceof StyledLayerInterface<?>) {
 					StyledLayerInterface<?> styledObj = (StyledLayerInterface<?>) transObj
@@ -1106,12 +1103,11 @@ public class MapLegend extends JXTaskPaneContainer implements
 		return;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seejava.awt.dnd.DropTargetListener#dropActionChanged(java.awt.dnd.
-	 * DropTargetDragEvent)
+	/**
+	 * @see java.awt.dnd.DropTargetListener#dropActionChanged(java.awt.dnd.
+	 *      DropTargetDragEvent )
 	 */
+	@Override
 	public void dropActionChanged(DropTargetDragEvent dtde) {
 	}
 
@@ -1128,6 +1124,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * @param listener
 	 *            The object to notify when Layers have changed.
 	 */
+	@Override
 	public void addMapLayerListListener(MapLayerListListener listener) {
 		getGeoMapPane().getMapContext().addMapLayerListListener(listener);
 	}
@@ -1138,10 +1135,12 @@ public class MapLegend extends JXTaskPaneContainer implements
 	 * @param listener
 	 *            The object to stop sending <code>LayerListEvent</code>s.
 	 */
+	@Override
 	public void removeMapLayerListListener(MapLayerListListener listener) {
 		getGeoMapPane().getMapContext().removeMapLayerListListener(listener);
 	}
 
+	@Override
 	public List<StyledLayerInterface<?>> getStyledObjects() {
 		final LinkedList<StyledLayerInterface<?>> styledObjects = new LinkedList<StyledLayerInterface<?>>();
 		for (final MapLayer mapLayer : getGeoMapPane().getMapContext()
@@ -1153,12 +1152,9 @@ public class MapLegend extends JXTaskPaneContainer implements
 		return styledObjects;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * skrueger.geotools.MapContextManagerInterface#getVisibleAttribsFor(org
-	 * .geotools.map.MapLayer)
+	/**
+	 * @see skrueger.geotools.MapContextManagerInterface#getVisibleAttribsFor(org
+	 *      .geotools.map.MapLayer)
 	 */
 	@Override
 	public List<AttributeMetadataImpl> getVisibleAttribsFor(MapLayer layer) {
@@ -1176,15 +1172,12 @@ public class MapLegend extends JXTaskPaneContainer implements
 				.getAttributeMetaDataMap();
 
 		return attributeMetaDataMap.sortedValuesVisibleOnly();
-		//		
-		// return new ArrayList<AttributeMetadata>(StyledLayerUtil
-		// .getVisibleAttributeMetaData(attributeMetaDataMap, true)
-		// .values());
 	}
 
 	/**
 	 * Returns a localized title for this layer.
 	 */
+	@Override
 	public String getTitleFor(MapLayer layer) {
 		StyledLayerInterface<?> StyledLayerInterface = rememberId2StyledLayer
 				.get(layer.getTitle());
@@ -1196,6 +1189,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	/**
 	 * Retunes a localized Description-String for this layer
 	 */
+	@Override
 	public String getDescFor(MapLayer layer) {
 		StyledLayerInterface<?> StyledLayerInterface = rememberId2StyledLayer
 				.get(layer.getTitle());
@@ -1204,6 +1198,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		return StyledLayerInterface.getDesc().toString();
 	}
 
+	@Override
 	public RasterLegendData getLegendMetaData(MapLayer layer) {
 		StyledLayerInterface<?> styledObj = rememberId2StyledLayer.get(layer
 				.getTitle());
@@ -1215,20 +1210,9 @@ public class MapLegend extends JXTaskPaneContainer implements
 		return null;
 	}
 
+	@Override
 	public StyledLayerInterface<?> getStyledObjectFor(MapLayer layer) {
 		return rememberId2StyledLayer.get(layer.getTitle());
-	}
-
-	/**
-	 * As a work-arround for bug 646 (
-	 * http://wald.intevation.org/tracker/index.php
-	 * ?func=detail&aid=646&group_id=37&atid=260 ) the preferred width of the
-	 * legend is always increased by 120px
-	 */
-	@Override
-	public Dimension getPreferredSize() {
-		Dimension is = super.getPreferredSize();
-		return is;
 	}
 
 	public StyledLayerSelectionModel<?> getRememberSelection(String id) {
@@ -1241,6 +1225,14 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 	public GeoMapPane getGeoMapPane() {
 		return geoMapPane;
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		if (getGeoMapPane().getMapContext().getLayers().length == 0) {
+			g.drawString(AVUtil.R("MapLegend.IsEmptyMsg"), 2, 20);
+		} else
+			super.paint(g);
 	}
 
 }

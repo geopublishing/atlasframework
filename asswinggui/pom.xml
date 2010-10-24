@@ -286,5 +286,13 @@
 			<type>jar</type>
 		</dependency>
 
+		<dependency>
+			<groupId>net.java.wizard</groupId>
+			<artifactId>wizard</artifactId>
+			<version>[0.998.1,1.1)</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
 	</dependencies>
 </project>

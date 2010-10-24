@@ -34,6 +34,7 @@ public class ResourceLoaderManager implements ResourceLoader {
 
 	// ArrayList<ResourceLoader> _loaders = new ArrayList<ResourceLoader>();
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		Iterator<ResourceLoader> it = _loaders.iterator();
 		while (it.hasNext()) {
@@ -45,6 +46,7 @@ public class ResourceLoaderManager implements ResourceLoader {
 		return null;
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 //		if (name.startsWith("/"))
 //			name = name.substring(1);

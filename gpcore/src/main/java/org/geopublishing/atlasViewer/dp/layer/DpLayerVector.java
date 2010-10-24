@@ -49,6 +49,7 @@ abstract public class DpLayerVector<E, CHART_STYLE_IMPL extends ChartStyle>
 	/**
 	 * Disposes
 	 */
+	@Override
 	public void dispose() {
 		uncache();
 	}

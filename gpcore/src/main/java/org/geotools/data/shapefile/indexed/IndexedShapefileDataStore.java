@@ -101,7 +101,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
         FileWriter {
     private final static class IdentifierComparator implements Comparator<Identifier>
     {
-        public int compare(Identifier o1, Identifier o2)
+        @Override
+		public int compare(Identifier o1, Identifier o2)
         {
             return o1.toString().compareTo(o2.toString());
         }
@@ -232,7 +233,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
         buildQuadTree();
     }
 
-    protected Filter getUnsupportedFilter(String typeName, Filter filter) {
+    @Override
+	protected Filter getUnsupportedFilter(String typeName, Filter filter) {
 
         if (filter instanceof Id && isLocal() && shpFiles.exists(FIX))
             return Filter.INCLUDE;
@@ -240,7 +242,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
         return filter;
     }
 
-    public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(String typeName,
+    @Override
+	public FeatureWriter<SimpleFeatureType, SimpleFeature> getFeatureWriterAppend(String typeName,
             Transaction transaction) throws IOException {
         if (transaction == null) {
             throw new NullPointerException(
@@ -271,7 +274,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
     /**
      * This method is identical to the super class WHY?
      */
-    protected TransactionStateDiff state(Transaction transaction) {
+    @Override
+	protected TransactionStateDiff state(Transaction transaction) {
         synchronized (transaction) {
             TransactionStateDiff state = (TransactionStateDiff) transaction
                     .getState(this);
@@ -293,7 +297,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
      * @see org.geotools.data.AbstractDataStore#getFeatureReader(java.lang.String,
      *      org.geotools.data.Query)
      */
-    protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName, Query query)
+    @Override
+	protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName, Query query)
             throws IOException {
         if (query.getFilter() == Filter.EXCLUDE)
             return new EmptyFeatureReader<SimpleFeatureType, SimpleFeature>(getSchema());
@@ -311,7 +316,7 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
             Set<String> attributes = new LinkedHashSet<String>(Arrays.asList(propertyNames));
             attributes.addAll(fae.getAttributeNameSet());
     
-            propertyNames = (String[]) attributes.toArray(new String[attributes
+            propertyNames = attributes.toArray(new String[attributes
                     .size()]);
         }
 
@@ -715,7 +720,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
      * @throws IOException
      *                 If an error occurs during creation.
      */
-    protected DbaseFileReader openDbfReader() throws IOException {
+    @Override
+	protected DbaseFileReader openDbfReader() throws IOException {
         if (shpFiles.get(DBF) == null) {
             return null;
         }
@@ -810,7 +816,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
      *                 If the typeName is not available or some other error
      *                 occurs.
      */
-    protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(String typeName,
+    @Override
+	protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(String typeName,
             Transaction transaction) throws IOException {
         typeCheck(typeName);
 
@@ -837,7 +844,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
     /**
      * @see org.geotools.data.AbstractDataStore#getBounds(org.geotools.data.Query)
      */
-    protected ReferencedEnvelope getBounds(Query query) throws IOException {
+    @Override
+	protected ReferencedEnvelope getBounds(Query query) throws IOException {
         ReferencedEnvelope ret = null;
 
         Set records = new HashSet();
@@ -1076,7 +1084,8 @@ public class IndexedShapefileDataStore extends ShapefileDataStore implements
         return useMemoryMappedBuffer;
     }
 
-    public String id() {
+    @Override
+	public String id() {
         return getClass().getName() + ": " + getCurrentTypeName();
     }
  

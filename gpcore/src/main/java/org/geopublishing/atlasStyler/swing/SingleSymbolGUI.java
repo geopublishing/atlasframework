@@ -63,6 +63,7 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 	 */
 	final RuleChangeListener listenToChangesInTheRulesToUpdateButton = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 			jButtonSymbolSelector.setIcon(new ImageIcon(singleSymbolRuleList
 					.getImage()));
@@ -274,6 +275,7 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 
 			private TranslationAskJDialog ask;
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				String oldTitle = singleSymbolRuleList.getTitle();
@@ -295,6 +297,7 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 						ask
 								.addPropertyChangeListener(new PropertyChangeListener() {
 
+									@Override
 									public void propertyChange(
 											PropertyChangeEvent evt) {
 										if (evt

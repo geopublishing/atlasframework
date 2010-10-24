@@ -54,6 +54,7 @@ public class DpMediaVideo extends DpMedia<ChartStyle> implements ActionListener 
 	/**
 	 * Called only by the OK/Close Button of the VideoPlayer...
 	 */
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		uncache();
 	}

@@ -120,7 +120,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 *            optinal values
 	 */
 	public static String R(String key, Object... values) {
-		return AVSwingUtil.R(key, values);
+		return AVUtil.R(key, values);
 	}
 
 	/**
@@ -395,6 +395,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * This is the {@link ActionListener} for the {@link JMenuItem}s and
 	 * {@link AtlasMenuItem}s
 	 */
+	@Override
 	public void actionPerformed(ActionEvent evt) {
 		final String cmd = evt.getActionCommand();
 		try {
@@ -461,6 +462,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			else if (cmd.equals("antiAliasing")) {
 				SwingUtilities.invokeLater(new Runnable() {
 
+					@Override
 					public void run() {
 						boolean b = AtlasViewerGUI.this.getAtlasMenuBar()
 								.getJCheckBoxMenuItemAntiAliasing()
@@ -551,6 +553,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				R("AtlasViewer.FileMenu.ShowThematicGroups"));
 		menuitemGroups.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				GroupsDialog groupsDialog = new GroupsDialog(getJFrame(),
 						getAtlasConfig());
@@ -986,6 +989,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 											locale.getDisplayLanguage(),
 											langCode)) {
 
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							try {
 								Translation.setActiveLang(e.getActionCommand());

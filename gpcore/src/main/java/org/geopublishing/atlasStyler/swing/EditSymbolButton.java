@@ -34,6 +34,7 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 	 */
 	PropertyChangeListener listenCancelOkForSelectionInSymbolSelectionGUI = new PropertyChangeListener() {
 
+		@Override
 		public void propertyChange(final PropertyChangeEvent evt) {
 
 			if (evt.getPropertyName().equals(
@@ -58,6 +59,7 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 		
 		addActionListener(new ActionListener(){
 			
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 
 				final SingleRuleList<? extends Symbolizer> template = getSingleSymbolRuleList();

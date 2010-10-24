@@ -224,6 +224,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 		if (jButtonStrokeColor == null) {
 			jButtonStrokeColor = new ColorButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Color color = null;
 
@@ -281,6 +282,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -320,6 +322,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -420,6 +423,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxLinejoin.setSelectedItem(preset);
 			jComboBoxLinejoin.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -477,6 +481,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxLineCap.setSelectedItem(preset);
 			jComboBoxLineCap.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -556,9 +561,11 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			jTextFieldDashPattern.addKeyListener(new KeyListener() {
 
+				@Override
 				public void keyPressed(KeyEvent e) {
 				}
 
+				@Override
 				public void keyReleased(KeyEvent e) {
 					if ((e.getKeyCode() == KeyEvent.VK_ENTER)
 							|| (e.getKeyCode() == KeyEvent.VK_TAB)) {
@@ -566,6 +573,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 					}
 				}
 
+				@Override
 				public void keyTyped(KeyEvent e) {
 				}
 
@@ -573,9 +581,11 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			jTextFieldDashPattern.addFocusListener(new FocusListener() {
 
+				@Override
 				public void focusGained(FocusEvent e) {
 				}
 
+				@Override
 				public void focusLost(FocusEvent e) {
 					updateDashFromtextfield();
 				}
@@ -640,6 +650,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxDashOffset.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 

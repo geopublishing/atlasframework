@@ -31,6 +31,7 @@ public class ColorTableCellRenderer extends JComponent implements
 	// The current color to display
 	Color curColor;
 
+	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
 		// // Set the color to paint

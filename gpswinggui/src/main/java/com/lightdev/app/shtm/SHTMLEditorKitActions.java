@@ -1231,15 +1231,15 @@ public class SHTMLEditorKitActions {
 			caretPos = this.panel.getDocumentPane().getEditor()
 					.getCaretPosition();
 			if (this.panel.getTabbedPaneForDocuments().getTabCount() > 1) {
-				System.out
-						.println("FindReplaceAction.actionPerformed with Listener");
-				FindReplaceDialog frd = new FindReplaceDialog(this.panel
-						.getMainFrame(), this.panel.getEditor(), this);
+//				System.out
+//						.println("FindReplaceAction.actionPerformed with Listener");
+//				FindReplaceDialog frd = new FindReplaceDialog(this.panel
+//						.getMainFrame(), this.panel.getEditor(), this);
 			} else {
-				System.out
-						.println("FindReplaceAction.actionPerformed NO Listener");
-				FindReplaceDialog frd = new FindReplaceDialog(this.panel
-						.getMainFrame(), this.panel.getEditor());
+//				System.out
+//						.println("FindReplaceAction.actionPerformed NO Listener");
+//				FindReplaceDialog frd = new FindReplaceDialog(this.panel
+//						.getMainFrame(), this.panel.getEditor());
 			}
 		}
 

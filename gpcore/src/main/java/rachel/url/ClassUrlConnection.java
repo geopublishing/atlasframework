@@ -38,6 +38,7 @@ public class ClassUrlConnection extends URLConnection {
 		super(url);
 	}
 
+	@Override
 	public String getContentType() {
 		String path = this.url.getPath();
 		// LOGGER.debug( "path=" + path );
@@ -48,6 +49,7 @@ public class ClassUrlConnection extends URLConnection {
 		return contentType;
 	}
 
+	@Override
 	public synchronized InputStream getInputStream() throws IOException {
 		// LOGGER.debug( "getInputStream()" );
 
@@ -67,6 +69,7 @@ public class ClassUrlConnection extends URLConnection {
 		return in;
 	}
 
+	@Override
 	public synchronized void connect() throws IOException {
 		// LOGGER.debug( "connect()" );
 

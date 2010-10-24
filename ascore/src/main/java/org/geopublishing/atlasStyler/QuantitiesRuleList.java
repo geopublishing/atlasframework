@@ -77,8 +77,11 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private int classDigits = 3;
 
-	private final DecimalFormat classDigitsFormat = new DecimalFormat(
+	public final DecimalFormat classDigitsDecimalFormat = new DecimalFormat(
 			SwingUtil.getNumberFormatPattern(classDigits));
+
+	public final DecimalFormat classDigitsIntegerFormat = new DecimalFormat(
+			SwingUtil.getNumberFormatPattern(0));
 
 	/** Caches the limits* */
 	private TreeSet<NUMBERTYPE> classLimits = new TreeSet<NUMBERTYPE>();
@@ -100,6 +103,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * values
 	 */
 	private String value_field_name;
+
 	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures);
 		Collection<String> numericalFieldNames = FeatureUtil
@@ -125,11 +129,13 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 		String limitsLabel;
 
+		DecimalFormat formatter = getFormatter();
+
 		if (lower.equals(upper)) {
-			limitsLabel = classDigitsFormat.format(lower);
+			limitsLabel = formatter.format(lower);
 		} else {
-			limitsLabel = "[" + classDigitsFormat.format(lower) + " - "
-					+ classDigitsFormat.format(upper);
+			limitsLabel = "[" + formatter.format(lower) + " - "
+					+ formatter.format(upper);
 			limitsLabel += isLast ? "]" : "[";
 		}
 
@@ -297,7 +303,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	public void setClassDigits(int classDigits) {
 		this.classDigits = Math.max(0, classDigits);
-		this.classDigitsFormat.applyPattern(SwingUtil
+		this.classDigitsDecimalFormat.applyPattern(SwingUtil
 				.getNumberFormatPattern(classDigits));
 	}
 
@@ -418,4 +424,20 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		}
 	}
 
+	/**
+	 * @return a {@link DecimalFormat} appropriate to render samples of the
+	 *         selected value attribute.
+	 */
+	public DecimalFormat getFormatter() {
+		if (getValue_field_name() == null)
+			return classDigitsDecimalFormat;
+
+		Class<?> binding = getStyledFeatures().getSchema()
+				.getDescriptor(getValue_field_name()).getType().getBinding();
+		if (binding == Integer.class || binding == Byte.class
+				|| binding == Long.class) {
+			return classDigitsIntegerFormat;
+		}
+		return classDigitsDecimalFormat;
+	}
 }

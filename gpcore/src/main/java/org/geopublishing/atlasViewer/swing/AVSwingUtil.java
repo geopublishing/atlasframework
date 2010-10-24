@@ -34,6 +34,7 @@ import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
+import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
@@ -900,7 +901,7 @@ public class AVSwingUtil extends AVUtil {
 			AtlasStatusDialogInterface statusDialog) {
 		if (dpe.url == null) {
 
-			if (JNLPSwingUtil.isAtlasDataFromJWS(dpe.getAtlasConfig())) {
+			if (JNLPUtil.isAtlasDataFromJWS(dpe.getAtlasConfig())) {
 				try {
 					JNLPSwingUtil.loadPart(dpe.getId(), statusDialog);
 					// TODO was ist wenn man abbricht?!

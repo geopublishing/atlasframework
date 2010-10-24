@@ -192,7 +192,8 @@ public class ShpFiles {
         }
         File[] files = directory.listFiles(new FilenameFilter(){
 
-            public boolean accept(File dir, String name) {
+            @Override
+			public boolean accept(File dir, String name) {
                 return file.getName().equalsIgnoreCase(name);
             }
             

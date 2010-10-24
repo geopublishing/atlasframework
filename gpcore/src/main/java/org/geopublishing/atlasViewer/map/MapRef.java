@@ -77,6 +77,7 @@ public class MapRef extends DefaultMutableTreeNode implements
 	/**
 	 * @return the referenced {@link Map} directly
 	 */
+	@Override
 	public Map getTarget() {
 		return getMapPool().get(targetId);
 	}
@@ -86,6 +87,7 @@ public class MapRef extends DefaultMutableTreeNode implements
 	 * 
 	 * @see skrueger.atlas.AtlasRefInterface#isTargetLayer()
 	 */
+	@Override
 	public boolean isTargetLayer() {
 		return false;
 	}
@@ -93,6 +95,7 @@ public class MapRef extends DefaultMutableTreeNode implements
 	/**
 	 * @return The ID of the {@link Map} referenced
 	 */
+	@Override
 	public final String getTargetId() {
 		return targetId;
 	}

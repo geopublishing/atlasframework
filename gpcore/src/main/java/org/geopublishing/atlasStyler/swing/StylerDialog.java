@@ -133,6 +133,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 			jButtonUpdatePreview = new JButton(new AbstractAction(AtlasStyler
 					.R("AtlasStylerGUI.UpdatePreview.Button")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					atlasStyler.fireStyleChangedEvents(true);
 				}
@@ -142,6 +143,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 			getJCheckboxPreviewl().getModel().addChangeListener(
 					new ChangeListener() {
 
+						@Override
 						public void stateChanged(ChangeEvent e) {
 							jButtonUpdatePreview.setEnabled(!atlasStyler
 									.isAutomaticPreview());
@@ -158,6 +160,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 			jCheckboxPreview = new JCheckBox(new AbstractAction(AtlasStyler
 					.R("AtlasStylerGUI.UpdatePreviewAutomatically.CheckBox")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					atlasStyler.setAutomaticPreview(jCheckboxPreview
 							.isSelected());
@@ -187,6 +190,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 		jButtonCancel.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancelClose();
 			}
@@ -201,6 +205,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
 	 *         Tzeggai</a>
 	 */
+	@Override
 	public void cancel() {
 		atlasStyler.cancel();
 	}
@@ -224,6 +229,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	private JButton getJButtonOk() {
 		OkButton jButtonOk = new OkButton(new AbstractAction() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				okClose();

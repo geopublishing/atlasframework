@@ -45,14 +45,17 @@ public class ErrorResource implements WebResource {
 		_data = html.toString().getBytes();
 	}
 
+	@Override
 	public String getContentType() {
 		return "text/html";
 	}
 
+	@Override
 	public byte[] getData() {
 		return _data;
 	}
 
+	@Override
 	public String getHeader() {
 		StringBuffer header = new StringBuffer();
 

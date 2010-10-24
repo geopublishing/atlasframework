@@ -73,6 +73,7 @@ public class StylerMapView extends MapView {
 		clickInfoDialog = new ClickInfoDialog(owner, false, layerManager, null);
 		infoClickMapPaneListener = new JMapPaneListener() {
 
+			@Override
 			public void performMapPaneEvent(XMapPaneEvent evt) {
 
 				/**
@@ -135,61 +136,26 @@ public class StylerMapView extends MapView {
 
 			layerManager = new MapLegend(getGeoMapPane(), getToolBar());
 
-			// layerManager.addMapLayerListListener(new MapLayerListListener() {
-			//
-			// public void layerAdded(MapLayerListEvent event) {
-			// // Adjust the size of the LayerPanel
-			// Dimension isSize = layerManager.getSize();
-			// Dimension sollSize = new Dimension(250, (int) isSize
-			// .getHeight());
-			//
-			// layerManager.setMinimumSize(sollSize);
-			// layerManager.setMaximumSize(sollSize);
-			// layerManager.setPreferredSize(sollSize);
-			//
-			// leftSide.setMinimumSize(sollSize);
-			// leftSide.setMaximumSize(sollSize);
-			// leftSide.setPreferredSize(sollSize);
-			//
-			// getSplitPane().setDividerLocation(-1);
-			// leftSide.setViewportView(getLayerManager());
-			//
-			// layerManager.invalidate();
-			// layerManager.doLayout();
-			// layerManager.repaint();
-			// invalidate();
-			// doLayout();
-			// repaint();
-			// LOGGER.debug("Maybe the sizes are better now?");
-			// }
-			//
-			// public void layerChanged(MapLayerListEvent event) {
-			// }
-			//
-			// public void layerMoved(MapLayerListEvent event) {
-			// }
-			//
-			// public void layerRemoved(MapLayerListEvent event) {
-			// }
-			//
-			// });
-
 			// ****************************************************************************
 			// Depending on the Title of the insered Layers, the width of the
 			// tabbedPane has to be updated
 			// ****************************************************************************
 			layerManager.addMapLayerListListener(new MapLayerListListener() {
 
+				@Override
 				public void layerAdded(MapLayerListEvent event) {
 					getSplitPane().setDividerLocation(0.5);
 				}
 
+				@Override
 				public void layerChanged(MapLayerListEvent event) {
 				}
 
+				@Override
 				public void layerMoved(MapLayerListEvent event) {
 				}
 
+				@Override
 				public void layerRemoved(MapLayerListEvent event) {
 					getSplitPane().setDividerLocation(0.5);
 				}

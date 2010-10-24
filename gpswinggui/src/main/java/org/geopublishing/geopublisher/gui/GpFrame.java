@@ -74,7 +74,7 @@ import skrueger.swing.HeapBar;
 import skrueger.versionnumber.ReleaseUtil;
 
 public class GpFrame extends JFrame {
-	private static final Logger LOGGER = Logger.getLogger(GpFrame.class);
+	private static final Logger log = Logger.getLogger(GpFrame.class);
 
 	/** A reference to the existing Geopublisher **/
 	private final GeopublisherGUI gp;
@@ -654,7 +654,6 @@ public class GpFrame extends JFrame {
 	 */
 	private JMenu getChangeAtlasLangJMenu() {
 		SwingUtil.checkOnEDT();
-		;
 
 		AtlasConfigEditable ace = gp.getAce();
 
@@ -711,7 +710,6 @@ public class GpFrame extends JFrame {
 	 */
 	private JMenu getChangeGpLangJMenu() {
 		SwingUtil.checkOnEDT();
-		;
 
 		// AtlasConfigEditable ace = gp.getAce();
 
@@ -844,13 +842,13 @@ public class GpFrame extends JFrame {
 	 */
 	class GpMenuItem extends JMenuItem {
 
-		public GpMenuItem(String label, ImageIcon imageIcon,
-				ActionCmds actionCmd, KeyStroke keyStroke) {
+		public GpMenuItem(final String label, final ImageIcon imageIcon,
+				final ActionCmds actionCmd, final KeyStroke keyStroke) {
 			this(label, null, actionCmd, null, null);
 		}
 
-		public GpMenuItem(String label, String tooltip, ActionCmds actionCmd,
-				ImageIcon iconFlagsSmall, KeyStroke keyStroke) {
+		public GpMenuItem(final String label, final String tooltip, final ActionCmds actionCmd,
+				final ImageIcon iconFlagsSmall, final KeyStroke keyStroke) {
 			super(label);
 			if (tooltip != null && !tooltip.isEmpty())
 				setToolTipText(tooltip);
@@ -863,16 +861,16 @@ public class GpFrame extends JFrame {
 			}
 		}
 
-		public GpMenuItem(String label, String tooltip, ActionCmds actionCmd,
-				ImageIcon icon) {
+		public GpMenuItem(final String label, final String tooltip, final ActionCmds actionCmd,
+				final ImageIcon icon) {
 			this(label, tooltip, actionCmd, icon, null);
 		}
 
-		public GpMenuItem(String label, ActionCmds cmd, ImageIcon icon) {
+		public GpMenuItem(final String label, final ActionCmds cmd, final ImageIcon icon) {
 			this(label, null, cmd, icon);
 		}
 
-		public GpMenuItem(String label, ActionCmds cmd) {
+		public GpMenuItem(final String label, final ActionCmds cmd) {
 			this(label, cmd, null);
 		}
 

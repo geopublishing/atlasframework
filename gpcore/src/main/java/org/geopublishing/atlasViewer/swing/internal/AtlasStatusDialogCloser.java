@@ -24,6 +24,7 @@ public class AtlasStatusDialogCloser implements PropertyChangeListener {
 		this.dialog = dialog;
 	}
 
+	@Override
 	public void propertyChange(PropertyChangeEvent event) {
 		if ("state".equals(event.getPropertyName())
 				&& SwingWorker.StateValue.DONE == event.getNewValue()) {

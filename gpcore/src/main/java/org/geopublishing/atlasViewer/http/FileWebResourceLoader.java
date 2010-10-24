@@ -38,6 +38,7 @@ public class FileWebResourceLoader extends FileResourceLoader implements
 	 * 
 	 * @see rachel.http.loader.WebResourceLoader#getResource(java.lang.String)
 	 */
+	@Override
 	public final WebResource getResource(String name) {
 		try {
 			final InputStream resourceAsStream = getResourceAsStream(name);

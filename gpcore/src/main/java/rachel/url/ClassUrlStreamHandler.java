@@ -28,6 +28,7 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
 public class ClassUrlStreamHandler extends URLStreamHandler {
+	@Override
 	protected URLConnection openConnection(URL url) throws IOException {
 		return new ClassUrlConnection(url);
 	}

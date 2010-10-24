@@ -74,7 +74,6 @@ import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.io.GeoImportUtilURL;
 import skrueger.i8n.Translation;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -510,7 +509,7 @@ public class AMLImport {
 		 * The file exists, read it now
 		 */
 		try {
-			CoordinateReferenceSystem defaultCRS = GeoImportUtilURL
+			CoordinateReferenceSystem defaultCRS = GeoImportUtil
 					.readProjectionFile(defaultCrsUrl);
 			GeoImportUtil.setDefaultCRS(defaultCRS); // TODO Default CRS must be
 			// part of
@@ -1397,7 +1396,7 @@ public class AMLImport {
 				map.setGridPanelCRS(GeoImportUtil.getDefaultCRS());
 			} else {
 				try {
-					map.setGridPanelCRS(GeoImportUtilURL
+					map.setGridPanelCRS(GeoImportUtil
 							.readProjectionFile(gridCrsURl));
 				} catch (IOException e) {
 					LOGGER.warn("Unable to read " + gridCrsURl, e);

@@ -18,7 +18,6 @@ import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.io.GeoImportUtil.ARCASCII_IMPORT_TYPE;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;
-import skrueger.geotools.io.GeoImportUtilURL;
 
 public class DpLayerRasterTest {
 
@@ -91,7 +90,7 @@ public class DpLayerRasterTest {
 //	@Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithFileObject_USE_ARCGRIDREADER()
 			throws Throwable {
-		GeoImportUtilURL
+		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDREADER);
 		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(DataUtilities
@@ -110,9 +109,9 @@ public class DpLayerRasterTest {
 //	@Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithURL2FileObject_USE_ARCGRIDREADER()
 			throws Throwable {
-		GeoImportUtilURL
+		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDREADER);
-		GridCoverage2D gc = GeoImportUtilURL
+		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(RASTER_AAIGRID_WITH_SLD__URL);
 		assertNotNull(gc);
 
@@ -127,7 +126,7 @@ public class DpLayerRasterTest {
 	@Test
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithFileObject_USE_ARCGRIDRASTER()
 			throws Throwable {
-		GeoImportUtilURL
+		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDRASTER);
 		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(DataUtilities
@@ -145,9 +144,9 @@ public class DpLayerRasterTest {
 	@Test
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithURL2FileObject_USE_ARCGRIDRASTER()
 			throws Throwable {
-		GeoImportUtilURL
+		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDRASTER);
-		GridCoverage2D gc = GeoImportUtilURL
+		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(RASTER_AAIGRID_WITH_SLD__URL);
 		assertNotNull(gc);
 

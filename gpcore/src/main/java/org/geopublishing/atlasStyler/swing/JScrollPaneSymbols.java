@@ -91,6 +91,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 			jListSymbols.setCellRenderer(new ListCellRenderer() {
 
+				@Override
 				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
@@ -148,6 +149,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 			// The JList has to react on click
 			jListSymbols.addMouseListener(new MouseListener() {
 
+				@Override
 				public void mouseClicked(MouseEvent e) {
 					int i = jListSymbols.locationToIndex(e.getPoint());
 					if (i < 0 ) {
@@ -161,6 +163,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 								.getModel().getElementAt(i);
 
 						SwingUtilities.invokeLater(new Runnable() {
+							@Override
 							public void run() {
 								JScrollPaneSymbols.this
 										.firePropertyChange(
@@ -172,6 +175,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 				}
 
+				@Override
 				public void mousePressed(MouseEvent evt) {
 					if (evt.isPopupTrigger()) {
 						mouseCLickEvent = evt;
@@ -181,6 +185,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 					}
 				}
 
+				@Override
 				public void mouseReleased(MouseEvent evt) {
 					if (evt.isPopupTrigger()) {
 						mouseCLickEvent = evt;
@@ -190,9 +195,11 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 					}
 				}
 
+				@Override
 				public void mouseEntered(MouseEvent e) {
 				}
 
+				@Override
 				public void mouseExited(MouseEvent e) {
 				}
 

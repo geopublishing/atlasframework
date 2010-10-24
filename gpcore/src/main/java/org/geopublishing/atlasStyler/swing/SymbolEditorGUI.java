@@ -110,6 +110,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 	protected SingleRuleList<?> backup;
 
+	@Override
 	public void cancel() {
 		backup.copyTo(singleSymbolRuleList);
 	}
@@ -121,6 +122,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	protected PropertyChangeListener propagateL = new PropertyChangeListener() {
 
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			if (!evt.getPropertyName().equals(AbstractEditGUI.PROPERTY_UPDATED))
 				return;
@@ -229,6 +231,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 	final PropertyChangeListener listenerUpdatePreview = new PropertyChangeListener() {
 
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 
 			if ((evt.getPropertyName().equals(PROPERTY_SYMBOL_CHANGED))
@@ -308,6 +311,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			addPropertyChangeListener(new PropertyChangeListener() {
 
 
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if ((evt.getPropertyName().equals(PROPERTY_LAYER_SELECTION))
 //							|| (evt.getPropertyName()
@@ -407,6 +411,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.setDefaultRenderer(BufferedImage.class,
 					new TableCellRenderer() {
 
+						@Override
 						public Component getTableCellRendererComponent(
 								JTable table, Object value, boolean isSelected,
 								boolean hasFocus, int row, int column) {
@@ -428,6 +433,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			// Listens for removed or new table entries (= PointSymbolizers)
 			addPropertyChangeListener(new PropertyChangeListener() {
 
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(PROPERTY_LAYERS_CHANGED)) {
 						
@@ -454,6 +460,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 
 							if (e.getValueIsAdjusting())
@@ -464,7 +471,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 							if (idx == -1) {
 								selectedSymbolizer = null;
 							} else {
-								selectedSymbolizer = (Symbolizer) singleSymbolRuleList
+								selectedSymbolizer = singleSymbolRuleList
 										.getSymbolizers().get(idx);
 							}
 
@@ -555,6 +562,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		if (jButtonNewLayer == null) {
 			jButtonNewLayer = new SmallButton(new AbstractAction(" + ") {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					singleSymbolRuleList.addNewDefaultLayer();
@@ -583,6 +591,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		if (jButtonRemoveLayer == null) {
 			jButtonRemoveLayer = new SmallButton(new AbstractAction(" - ") {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (jTableLayers.getSelectedRow() >= 0) {
 						// Something is selected
@@ -616,6 +625,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (e.getValueIsAdjusting())
 								return;
@@ -645,6 +655,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jButtonLayerDown = new SmallButton(new AbstractAction("", Icons
 					.getDownArrowIcon()) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (jTableLayers.getSelectedRow() >= 0) {
 						// Something is selected
@@ -678,6 +689,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (e.getValueIsAdjusting())
 								return;
@@ -711,6 +723,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jButtonLayerUp = new SmallButton(new AbstractAction("", Icons
 					.getUpArrowIcon()) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (jTableLayers.getSelectedRow() >= 0) {
 						// Something is selected
@@ -744,6 +757,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (e.getValueIsAdjusting())
 								return;
@@ -791,6 +805,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		if (jButtonCancel == null) {
 			jButtonCancel = new CancelButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					cancelClose();
 				}

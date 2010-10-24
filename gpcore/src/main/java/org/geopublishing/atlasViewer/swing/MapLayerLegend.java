@@ -252,6 +252,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 */
 	public void clickedInfoButton() {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 
 				HTMLBrowserWindow htmlWindow = htmlInfoWindows
@@ -482,6 +483,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * @deprecated TODO this method is called too often from
 	 *             BasicMapLayerLegendPaneUI. Needs a cache
 	 */
+	@Deprecated
 	public URL getInfoURL() {
 		if (styledLayer != null)
 			return styledLayer.getInfoURL();
@@ -526,6 +528,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 					.R("LayerToolMenu.filter"),
 					BasicMapLayerLegendPaneUI.ICON_FILTER) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					openFilterDialog();
 				}
@@ -537,6 +540,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 					.R("LayerToolMenu.remove_filter"),
 					BasicMapLayerLegendPaneUI.ICON_REMOVE_FILTER) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					removeFilter();
 					removeFilterMenuItem.setEnabled(false);
@@ -582,6 +586,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 					AtlasViewerGUI.R("LayerToolMenu.table"),
 					BasicMapLayerLegendPaneUI.ICON_TABLE) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					AVDialogManager.dm_AttributeTable
 							.getInstanceFor(
@@ -627,6 +632,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				.R("LayerToolMenu.remove"),
 				BasicMapLayerLegendPaneUI.ICON_REMOVE) {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				final String msg1 = AtlasViewerGUI
 						.R("LayerPaneGroup.GetParentWindow.This.realy_want_to_remove_layer");
@@ -638,6 +644,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 						msg2, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 					SwingUtilities.invokeLater(new Runnable() {
 
+						@Override
 						public void run() {
 							removeLayer();
 						}
@@ -655,6 +662,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 					.R("LayerToolMenu.export"),
 					BasicMapLayerLegendPaneUI.ICON_EXPORT) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					export();
 				}

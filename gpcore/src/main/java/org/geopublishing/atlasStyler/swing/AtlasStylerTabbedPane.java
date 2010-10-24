@@ -311,6 +311,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 			/** * Listens to Selections to open the according GUIs ** */
 			jComboBoxRuleListType.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() != ItemEvent.SELECTED) {
 						return;

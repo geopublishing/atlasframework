@@ -42,6 +42,7 @@ public class AtlasJWSCachedResourceLoader implements ResourceLoader {
 		return instance;
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		InputStream resourceAsStream = 
 			Thread.currentThread()
@@ -52,6 +53,7 @@ public class AtlasJWSCachedResourceLoader implements ResourceLoader {
 		return resourceAsStream;
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 		URL resourceAsURL = Thread.currentThread()
 				.getContextClassLoader().

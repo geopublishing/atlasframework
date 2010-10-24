@@ -231,6 +231,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @seejava.awt.datatransfer.Transferable#isDataFlavorSupported(java.awt.
 	 * datatransfer.DataFlavor)
 	 */
+	@Override
 	public final boolean isDataFlavorSupported(DataFlavor df) {
 		return df.equals(INFO_FLAVOR);
 	}
@@ -242,6 +243,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer
 	 * .DataFlavor)
 	 */
+	@Override
 	public final Object getTransferData(DataFlavor df)
 			throws UnsupportedFlavorException, IOException {
 		if (df.equals(INFO_FLAVOR)) {
@@ -255,6 +257,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * 
 	 * @see java.awt.datatransfer.Transferable#getTransferDataFlavors()
 	 */
+	@Override
 	public final DataFlavor[] getTransferDataFlavors() {
 		return flavors;
 	}

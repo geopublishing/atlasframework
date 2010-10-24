@@ -61,6 +61,7 @@ public class RJLTransferable implements Transferable {
 	 * java.awt.datatransfer.Transferable#getTransferData(java.awt.datatransfer
 	 * .DataFlavor)
 	 */
+	@Override
 	public Object getTransferData(DataFlavor df)
 			throws UnsupportedFlavorException, IOException {
 		if (isDataFlavorSupported(df))
@@ -69,10 +70,12 @@ public class RJLTransferable implements Transferable {
 			throw new UnsupportedFlavorException(df);
 	}
 
+	@Override
 	public boolean isDataFlavorSupported(DataFlavor df) {
 		return (df.equals(localObjectFlavor));
 	}
 
+	@Override
 	public DataFlavor[] getTransferDataFlavors() {
 		return supportedFlavors;
 	}

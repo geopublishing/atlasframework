@@ -81,6 +81,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 		JRootPane rootPane = new JRootPane();
 		rootPane.registerKeyboardAction(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				cancel();
 			}
@@ -173,6 +174,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 			jPanelEditGUI
 					.addPropertyChangeListener(new PropertyChangeListener() {
 
+						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
 							if (evt.getPropertyName().equals(
 									AbstractEditGUI.PROPERTY_UPDATED)) {
@@ -228,6 +230,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 			jButtonOk = new OkButton();
 			jButtonOk.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					dispose();
 				}
@@ -247,6 +250,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 			jButtonCancel = new CancelButton();
 			jButtonCancel.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}

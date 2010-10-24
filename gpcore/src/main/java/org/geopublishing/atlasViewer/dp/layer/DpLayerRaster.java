@@ -348,6 +348,7 @@ public class DpLayerRaster extends
 	 * This method returns the value/{@link Translation} pairs that will be
 	 * shown in the Legend
 	 */
+	@Override
 	public RasterLegendData getLegendMetaData() {
 		if (legendMetaData == null) {
 			legendMetaData = new RasterLegendData(false);
@@ -355,6 +356,7 @@ public class DpLayerRaster extends
 		return legendMetaData;
 	}
 
+	@Override
 	public void dispose() {
 		if (isDisposed())
 			return;
@@ -368,6 +370,7 @@ public class DpLayerRaster extends
 	 * 
 	 * @return width in CRS units divided by pixel width
 	 */
+	@Override
 	public Double getMaxResolution() {
 		// MS-01.sc
 		// try {
@@ -411,6 +414,7 @@ public class DpLayerRaster extends
 	// return 1;
 	// }
 
+	@Override
 	public DpLayerRaster copy() {
 		DpLayerRaster copy = new DpLayerRaster(ac);
 		return (DpLayerRaster) copyTo(copy);

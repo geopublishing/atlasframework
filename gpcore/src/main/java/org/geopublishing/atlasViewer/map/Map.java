@@ -351,6 +351,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
+	@Override
 	final public int compareTo(final Object o) {
 		if (o instanceof Map) {
 			final Map map = (Map) o;
@@ -540,7 +541,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				final DpLayer<?, ? extends ChartStyle> target = dpr.getTarget();
 
 				if (target instanceof DpLayer) {
-					final DpLayer<?, ? extends ChartStyle> dpl = (DpLayer<?, ? extends ChartStyle>) target;
+					final DpLayer<?, ? extends ChartStyle> dpl = target;
 					return dpl.getLayerStyleByID(lsID);
 				}
 

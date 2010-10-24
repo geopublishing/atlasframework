@@ -121,6 +121,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 	private RuleChangeListener listenToRuleChangesAndUpdatePreview = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 			jLabelPreviewIcon.setIcon(new ImageIcon(singleSymbolRuleList
 					.getImage(DEFAULT_PREVIEW_ICON_SIZE)));
@@ -247,6 +248,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 			jButtonColor.setAction(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Color color = null;
 
@@ -281,6 +283,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	/** Listen for RuleChanges to update the button */
 	RuleChangeListener colorButtonReactToStyleChangesListener = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 			boolean enabled = singleSymbolRuleList.hasColor();
 
@@ -346,6 +349,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			/** Change in the COmboBox * */
 			jComboBoxSize.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						Float size = (Float) jComboBoxSize.getSelectedItem();
@@ -370,6 +374,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	/** Listen for RuleChanges to update the button */
 	RuleChangeListener sizeComboBoxReactsToStyleChangesListener = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 
 			boolean enabled = singleSymbolRuleList.hasSize();
@@ -415,6 +420,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 			jComboBoxRotation.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						Double size = (Double) jComboBoxRotation
@@ -442,6 +448,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 	RuleChangeListener rotationComboBoxReactsToStyleChangeListener = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 			jComboBoxRotation.setEnabled(singleSymbolRuleList.hasRotation());
 			jLabelRotation.setEnabled(singleSymbolRuleList.hasRotation());
@@ -460,6 +467,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		if (jButtonOK == null) {
 			jButtonOK = new OkButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					SymbolSelectorGUI.this.firePropertyChange(PROPERTY_CLOSED,
 							null, null);
@@ -481,6 +489,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		if (jButtonCancel == null) {
 			jButtonCancel = new CancelButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					cancel();
 				}
@@ -511,6 +520,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jButtonProperties = new JButton(new AbstractAction(AtlasStyler
 					.R("SymbolSelector.EditSymbol")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					/**
@@ -538,6 +548,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jButtonSave = new JButton(new AbstractAction(AtlasStyler
 					.R("SymbolSelector.SaveToFile")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					if (singleSymbolRuleList.getSymbolizers().size() == 0) {
@@ -639,6 +650,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jButtonReset.setText(AtlasStyler.R("SymbolSelector.Reset"));
 			jButtonReset.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					if (lastSelectedRuleList == null
@@ -689,6 +701,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			 */
 			PropertyChangeListener listener = new PropertyChangeListener() {
 
+				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(
 							JScrollPaneSymbols.PROPERTY_SYMBOL_SELECTED)) {

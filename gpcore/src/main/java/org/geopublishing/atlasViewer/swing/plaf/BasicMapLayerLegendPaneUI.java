@@ -430,6 +430,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	 */
 	protected void ensureVisible() {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				mapLayerLegend.scrollRectToVisible(new Rectangle(mapLayerLegend
 						.getWidth(), mapLayerLegend.getHeight()));
@@ -442,10 +443,12 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	 * change.
 	 */
 	static class RepaintOnFocus implements FocusListener {
+		@Override
 		public void focusGained(FocusEvent e) {
 			e.getComponent().repaint();
 		}
 
+		@Override
 		public void focusLost(FocusEvent e) {
 			e.getComponent().repaint();
 		}
@@ -455,6 +458,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	 * Change listener responsible for change handling.
 	 */
 	class ChangeListener implements PropertyChangeListener {
+		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			// if group is expanded but not animated
 			// or if animated has reached expanded state
@@ -610,6 +614,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 					controlEyeWidth)) {
 
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						mapLayerLegend.setCollapsed(!mapLayerLegend
 								.toggleVisibility());
@@ -694,6 +699,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 
 			// Zoom to layer
 			SwingUtilities.invokeLater(new Runnable() {
+				@Override
 				public void run() {
 					(mapLayerLegend).zoomTo();
 					if (!(mapLayerLegend).isLayerVisible()) {
@@ -720,6 +726,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			super("toggleExpanded");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			mapLayerLegend.setCollapsed(!mapLayerLegend.isCollapsed());
 		}
@@ -740,14 +747,17 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			this.up = up;
 		}
 
+		@Override
 		public int getIconHeight() {
 			return 3;
 		}
 
+		@Override
 		public int getIconWidth() {
 			return 6;
 		}
 
+		@Override
 		public void paintIcon(Component c, Graphics g, int x, int y) {
 			if (up) {
 				g.drawLine(x + 3, y, x, y + 3);
@@ -769,14 +779,17 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			this.color = color;
 		}
 
+		@Override
 		public Insets getBorderInsets(Component c) {
 			return new Insets(0, 1, 1, 1);
 		}
 
+		@Override
 		public boolean isBorderOpaque() {
 			return true;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y,
 				int width, int height) {
 			g.setColor(color);
@@ -843,6 +856,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			label.setIconTextGap(8);
 		}
 
+		@Override
 		public Insets getBorderInsets(Component c) {
 			return new Insets(getTitleHeight(c), 0, 0, 0);
 		}
@@ -854,6 +868,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 		 * 
 		 * @see javax.swing.border.Border#isBorderOpaque()
 		 */
+		@Override
 		public boolean isBorderOpaque() {
 			return true;
 		}
@@ -1027,6 +1042,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 		 * @see javax.swing.border.Border#paintBorder(java.awt.Component,
 		 * java.awt.Graphics, int, int, int, int)
 		 */
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y,
 				int width, int height) {
 

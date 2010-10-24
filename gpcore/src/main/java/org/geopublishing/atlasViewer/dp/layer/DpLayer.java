@@ -93,6 +93,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * 
 	 * @return An object for GeoTools to play with
 	 */
+	@Override
 	public abstract E getGeoObject();
 
 	/*
@@ -109,6 +110,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * Returns the {@link Envelope} that contains all layer information.
 	 * Envelope supposed to be set by {@link #getGeoObject()}
 	 */
+	@Override
 	public final Envelope getEnvelope() {
 		if (envelope == null && !isBroken())
 			getGeoObject();
@@ -121,6 +123,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * {@link #getStyle()}
 	 * 
 	 */
+	@Override
 	public void setStyle(Style style) {
 		this.style = style;
 	}
@@ -130,6 +133,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * a {@link Style} from a file with the same {@link URL} as the main file,
 	 * but with ending <code>.sld</code>
 	 */
+	@Override
 	public Style getStyle() {
 		if (style == null) {
 			// First try to load a .sld file from the same location
@@ -176,6 +180,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * @throws IllegalArgumentException
 	 * 
 	 */
+	@Override
 	public String getCRSString() {
 
 		CoordinateReferenceSystem crs = getCrs();
@@ -209,6 +214,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * @throws IllegalArgumentException
 	 * 
 	 */
+	@Override
 	public CoordinateReferenceSystem getCrs() {
 		if (crs == null && !isBroken()) {
 			try {
@@ -251,6 +257,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * 
 	 * @see StyledLayerInterface which defines this as abstract
 	 */
+	@Override
 	public URL getInfoURL() {
 		return getInfoURL(Translation.getActiveLang());
 	}

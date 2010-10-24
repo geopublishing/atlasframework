@@ -34,6 +34,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -161,7 +163,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 			parentSize = Toolkit.getDefaultToolkit().getScreenSize();
 		window = new JDialog(parentWindow, title);
 		content = (JComponent) window.getContentPane();
-		window.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		window.setResizable(false);
 
 		window.setBounds((parentSize.width - WIDTH) / 2,
@@ -171,7 +173,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		 * This label is initially empty.
 		 */
 		description = new JLabel();
-		description.setHorizontalAlignment(JLabel.CENTER);
+		description.setHorizontalAlignment(SwingConstants.CENTER);
 		/*
 		 * Creates the progress bar.
 		 */
@@ -184,6 +186,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		 */
 		ok = new OkButton();
 		ok.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -194,6 +197,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		 */
 		cancel = new JButton(resources.getString(VocabularyKeys.CANCEL));
 		cancel.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setCanceled(true);
 			}
@@ -249,6 +253,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * 
 	 * @return the window title
 	 */
+	@Override
 	public String getTitle() {
 		return (String) get(Caller.TITLE);
 	}
@@ -259,6 +264,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * @param title
 	 *            the window title
 	 */
+	@Override
 	public void setTitle(String title) {
 		if (title == null) {
 			title = getString(VocabularyKeys.PROGRESSION);
@@ -269,6 +275,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getDescription() {
 		return (String) get(Caller.LABEL);
 	}
@@ -276,6 +283,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDescription(final String description) {
 		set(Caller.LABEL, description);
 	}
@@ -284,6 +292,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * Notifies that the operation begins. This method display the windows if it
 	 * was not already visible.
 	 */
+	@Override
 	public void started() {
 		call(Caller.STARTED);
 	}
@@ -291,6 +300,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void progress(final float percent) {
 		int p = (int) percent; // round toward 0
 		if (p < 0)
@@ -300,10 +310,11 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		set(Caller.PROGRESS, new Integer(p));
 	}
 
+	@Override
 	public float getProgress() {
 		BoundedRangeModel model = progressBar.getModel();
-		float progress = (float) (model.getValue() - model.getMinimum());
-		float limit = (float) model.getMaximum();
+		float progress = (model.getValue() - model.getMinimum());
+		float limit = model.getMaximum();
 
 		return progress / limit;
 	}
@@ -312,6 +323,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * Notifies that the operation has finished. The window will disaspears,
 	 * except if it contains warning or exception stack traces.
 	 */
+	@Override
 	public void complete() {
 		call(Caller.COMPLETE);
 	}
@@ -320,6 +332,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * Releases any resource holds by this window. Invoking this method destroy
 	 * the window.
 	 */
+	@Override
 	public void dispose() {
 		listeners.clear();
 		call(Caller.DISPOSE);
@@ -328,6 +341,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isCanceled() {
 		return canceled;
 	}
@@ -338,6 +352,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * @param stop
 	 *            true to stop; false otherwise
 	 */
+	@Override
 	public void setCanceled(final boolean stop) {
 		if (stop != canceled) {
 			canceled = stop;
@@ -348,6 +363,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		}
 	}
 	
+	@Override
 	public void addCancelListener(ActionListener l) {
 		listeners.add(l);
 	}
@@ -363,6 +379,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * @param warning
 	 *            DOCUMENT ME
 	 */
+	@Override
 	public synchronized void warningOccurred(final String source,
 			String margin, String warning) {
 
@@ -410,6 +427,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 	 * @param exception
 	 *            the exception to display
 	 */
+	@Override
 	public void exceptionOccurred(final Throwable exception) {
 		dispose();
 		ExceptionDialog.show(parentWindow, exception);
@@ -541,6 +559,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		/**
 		 * Run the task.
 		 */
+		@Override
 		public void run() {
 			final BoundedRangeModel model = progressBar.getModel();
 			switch (task) {
@@ -589,7 +608,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 			 */
 			synchronized (AtlasStatusDialog.this) {
 				// if (window instanceof JDialog) {
-				final JDialog window = (JDialog) AtlasStatusDialog.this.window;
+				final JDialog window = AtlasStatusDialog.this.window;
 				switch (task) {
 				case -TITLE: {
 					value = window.getTitle();
@@ -601,15 +620,15 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 				}
 				case STARTED: {
 					window
-							.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 					return;
 				}
 				case COMPLETE: {
-					window.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					return;
 				}
 				case DISPOSE: {
-					window.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					// if (warningArea == null || !window.isVisible()) {
 					window.dispose();
 					// }
@@ -655,20 +674,23 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		}
 	}
 
+	@Override
 	public void setTask(InternationalString task) {
 		setDescription(task.toString());
 	}
 
+	@Override
 	public InternationalString getTask() {
 		return new SimpleInternationalString(getDescription());
 	}
 
+	@Override
 	public void startModal() {
 		if (javax.swing.SwingUtilities.isEventDispatchThread()) {
 			final BoundedRangeModel model = progressBar.getModel();
 			model.setRangeProperties(0, 1, 0, 100, false);
 			SwingUtil.setRelativeFramePosition(window, parentWindow, .5, .5);
-			window.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+			window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 			window.setModal(true); // CALL zeug?!
 			window.setVisible(true);
 		} else {
@@ -677,6 +699,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		}
 	}
 
+	@Override
 	public boolean isWarningOccured() {
 		return warningOccured;
 	}

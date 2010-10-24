@@ -70,7 +70,7 @@ public abstract class AbstractEditGUI extends JPanel {
 							isSelected, cellHasFocus);
 
 			prototype.setText(NumberFormat.getIntegerInstance().format(
-					(Number) value)+"px");
+					value)+"px");
 
 			return prototype;
 
@@ -96,7 +96,7 @@ public abstract class AbstractEditGUI extends JPanel {
 							isSelected, cellHasFocus);
 
 			prototype.setText(NumberFormat.getIntegerInstance().format(
-					(Number) value)+"\u00b0");
+					value)+"\u00b0");
 
 			return prototype;
 
@@ -127,7 +127,7 @@ public abstract class AbstractEditGUI extends JPanel {
 							isSelected, cellHasFocus);
 
 			prototype.setText(NumberFormat.getIntegerInstance().format(
-					(Number) value)+"px");
+					value)+"px");
 
 			return prototype;
 
@@ -155,7 +155,7 @@ public abstract class AbstractEditGUI extends JPanel {
 
 			prototype.setAlignmentX(1f);
 			prototype.setText(NumberFormat.getPercentInstance().format(
-					(Number) value));
+					value));
 
 			return prototype;
 

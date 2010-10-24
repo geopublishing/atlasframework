@@ -42,6 +42,7 @@ public class FileResourceLoader implements ResourceLoader {
 		_root = root;
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		File file = new File(_root, name);
 
@@ -57,6 +58,7 @@ public class FileResourceLoader implements ResourceLoader {
 		}
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 		File file = new File(_root, name);
 

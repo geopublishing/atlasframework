@@ -228,6 +228,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 								// Cache
 
 								SwingUtilities.invokeLater(new Runnable() {
+									@Override
 									public void run() {
 
 										model.addElement(symbolRuleList);
@@ -302,6 +303,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 					.R("SymbolSelector.Tabs.OnlineSymbols.Action.Rescan"));
 			rescan.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rescan(true);
 				}

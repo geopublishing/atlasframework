@@ -277,6 +277,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jButtonExclusion.setAction(new AbstractAction(AtlasStyler
 					.R("QuantitiesClassificationGUI.DataExclusion.Button")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					final AtlasFeatureLayerFilterDialog filterDialog;
@@ -828,6 +829,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 					insertMenu.addActionListener(new ActionListener() {
 
+						@Override
 						public void actionPerformed(ActionEvent e) {
 
 							Double value = (Double) jTableBreakValues
@@ -901,6 +903,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 					removeMenu.setText(AtlasStyler
 							.R("Classification.BreakValues.RemoveBreak"));
 					removeMenu.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 
 							if (jTableBreakValues.getModel().getRowCount() <= 2) {
@@ -929,6 +932,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 					copyMenu.setText(AtlasStyler
 							.R("Classification.BreakValues.Copy"));
 					copyMenu.addActionListener(new ActionListener() {
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							Object value = jTableBreakValues.getModel()
 									.getValueAt(rowIndex, 1);
@@ -947,6 +951,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 						pasteMenu.addActionListener(new ActionListener() {
 
+							@Override
 							public void actionPerformed(ActionEvent e) {
 								String value = ASUtil
 										.getClipboardContents(QuantitiesClassificationGUI.this);
@@ -1029,6 +1034,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jComboBoxColumns.setSelectedIndex(histogramBins);
 
 			jComboBoxColumns.addItemListener(new ItemListener() {
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						histogramBins = (Integer) e.getItem();
@@ -1056,6 +1062,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							AtlasStyler
 									.R("QuantitiesClassificationGUI.HistogramParameters.ShowSD")) {
 
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							jFreeChartJLabel.setIcon(new ImageIcon(
 									getHistogramImage()));
@@ -1078,6 +1085,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							AtlasStyler
 									.R("QuantitiesClassificationGUI.HistogramParameters.ShowMean")) {
 
+						@Override
 						public void actionPerformed(ActionEvent e) {
 							// THe getHistogrammImage() function checks the
 							// state of

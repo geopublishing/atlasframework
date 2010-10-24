@@ -152,7 +152,7 @@ public class AtlasMenuItem extends JMenuItem {
 
 			// If this map
 			if (atlasViewer.getMap().getId().equals(mapId)) {
-				setForeground(Color.gray.lightGray);
+				setForeground(Color.lightGray);
 				super.paintComponent(g);
 				return;
 			}

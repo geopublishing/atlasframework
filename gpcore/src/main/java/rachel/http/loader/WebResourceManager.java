@@ -51,6 +51,7 @@ public class WebResourceManager implements WebResourceLoader {
 		return _instance;
 	}
 
+	@Override
 	public WebResource getResource(String name) {
 		for (int i = 0; i < _resourceLoaders.size(); i++) {
 			WebResourceLoader resourceLoader = _resourceLoaders.get(i);

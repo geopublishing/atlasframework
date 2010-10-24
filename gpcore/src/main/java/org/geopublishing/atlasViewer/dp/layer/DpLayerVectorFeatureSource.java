@@ -385,6 +385,7 @@ public abstract class DpLayerVectorFeatureSource
 	/**
 	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadataImpl}. 
 	 */
+	@Override
 	public AttributeMetadataMap<AttributeMetadataImpl> getAttributeMetaDataMap() {
 		if (!attribMetadataChecked && !AtlasViewerGUI.isRunning()) {
 			/**

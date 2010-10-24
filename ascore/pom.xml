@@ -61,7 +61,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.geotools.jdbc</groupId>
 			<artifactId>gt-jdbc-postgis</artifactId>

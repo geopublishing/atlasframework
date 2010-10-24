@@ -101,6 +101,7 @@ public class TextRuleListGUI extends JPanel {
 
 		atlasStyler.addListener(new StyleChangeListener() {
 
+			@Override
 			public void changed(StyleChangedEvent e) {
 				jButtonClassFromSymbols.setEnabled(!(atlasStyler
 						.getLastChangedRuleList() instanceof SingleRuleList));
@@ -164,6 +165,7 @@ public class TextRuleListGUI extends JPanel {
 			jCheckBoxEnabled.setAction(new AbstractAction(AtlasStyler
 					.R("TextRulesList.Labels.Checkbox")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rulesList.setEnabled(jCheckBoxEnabled.isSelected());
 					TextRuleListGUI.this.setEnabled(jCheckBoxEnabled
@@ -204,7 +206,7 @@ public class TextRuleListGUI extends JPanel {
 			jPanelClass.add(getJButtonClassRename());
 
 			// Only in GP mode
-			if (atlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE)
+			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE)
 				jPanelClass.add(getJButtonClassCopyToLanguage());
 
 			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
@@ -253,6 +255,7 @@ public class TextRuleListGUI extends JPanel {
 
 			jComboBoxClass.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						rulesList.setSelIdx(getJComboBoxClass()
@@ -339,6 +342,7 @@ public class TextRuleListGUI extends JPanel {
 
 			jButtonClassDelete.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					int idx = rulesList.getSelIdx();
 
@@ -377,6 +381,7 @@ public class TextRuleListGUI extends JPanel {
 			jButtonClassLangCopy = new ThinButton("Default for langauge");
 			jButtonClassLangCopy.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					// String lang = ASUtil.askForString(TextRuleListGUI.this,
@@ -485,6 +490,7 @@ public class TextRuleListGUI extends JPanel {
 					AtlasStyler.R("TextRulesList.Labelclass.Action.Rename"));
 			jButtonClassRename.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					String ruleName = rulesList.getRuleName();
@@ -520,6 +526,7 @@ public class TextRuleListGUI extends JPanel {
 
 			jButtonClassFromSymbols.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					AbstractRuleList symbRL = atlasStyler
 							.getLastChangedRuleList();

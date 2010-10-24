@@ -184,6 +184,7 @@ public class SVGSelector extends JDialog {
 
 	protected void cancel() {
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				SVGSelector.this.firePropertyChange(
 						SVGSelector.PROPERTY_UPDATED, null, backup);
@@ -282,6 +283,7 @@ public class SVGSelector extends JDialog {
 			jButtonOk = new OkButton();
 			jButtonOk.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
 				}
@@ -301,6 +303,7 @@ public class SVGSelector extends JDialog {
 			jButtonCancel = new CancelButton();
 			jButtonCancel.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					cancel();
 					setVisible(false);
@@ -389,6 +392,7 @@ public class SVGSelector extends JDialog {
 								egs = symbolizer.getFill().getGraphicFill()
 										.getExternalGraphics();
 								SwingUtilities.invokeLater(new Runnable() {
+									@Override
 									public void run() {
 										SVGSelector.this.firePropertyChange(
 												SVGSelector.PROPERTY_UPDATED,
@@ -410,6 +414,7 @@ public class SVGSelector extends JDialog {
 								egs = symbolizer.getGraphic()
 										.getExternalGraphics();
 								SwingUtilities.invokeLater(new Runnable() {
+									@Override
 									public void run() {
 										SVGSelector.this.firePropertyChange(
 												SVGSelector.PROPERTY_UPDATED,
@@ -434,6 +439,7 @@ public class SVGSelector extends JDialog {
 
 			jList.setCellRenderer(new ListCellRenderer() {
 
+				@Override
 				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
@@ -532,6 +538,7 @@ public class SVGSelector extends JDialog {
 
 		SwingUtilities.invokeLater(new Runnable() {
 
+			@Override
 			public void run() {
 				setVisible(false);
 				jList = null;
@@ -561,6 +568,7 @@ public class SVGSelector extends JDialog {
 			// This button is only enabled if we are not on the root level
 			jButtonUp.addActionListener(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Transform
 					// http://www.geopublishing.org/openmapsymbols/svg/health/

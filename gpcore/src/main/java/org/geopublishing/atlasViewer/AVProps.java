@@ -247,6 +247,7 @@ public class AVProps {
 
 			if (guiOwner != null) {
 				SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						JOptionPane.showMessageDialog(guiOwner, "A default "
 								+ propertiesFilename

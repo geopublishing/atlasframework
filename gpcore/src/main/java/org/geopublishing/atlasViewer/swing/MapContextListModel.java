@@ -42,6 +42,7 @@ public final class MapContextListModel implements ListModel {
 		// TODO BESSER
 		mapContext.addMapLayerListListener(new MapLayerListListener() {
 
+			@Override
 			public void layerAdded(MapLayerListEvent event) {
 				for (ListDataListener l : modelListeners) {
 					l.contentsChanged(new ListDataEvent(this,
@@ -50,6 +51,7 @@ public final class MapContextListModel implements ListModel {
 
 			}
 
+			@Override
 			public void layerChanged(MapLayerListEvent event) {
 				for (ListDataListener l : modelListeners) {
 					l.contentsChanged(new ListDataEvent(this,
@@ -58,6 +60,7 @@ public final class MapContextListModel implements ListModel {
 
 			}
 
+			@Override
 			public void layerMoved(MapLayerListEvent event) {
 				for (ListDataListener l : modelListeners) {
 					l.contentsChanged(new ListDataEvent(this,
@@ -66,6 +69,7 @@ public final class MapContextListModel implements ListModel {
 
 			}
 
+			@Override
 			public void layerRemoved(MapLayerListEvent event) {
 				for (ListDataListener l : modelListeners) {
 					l.contentsChanged(new ListDataEvent(this,
@@ -80,18 +84,22 @@ public final class MapContextListModel implements ListModel {
 	/**
 	 * The order has to be turned around!
 	 */
+	@Override
 	public final Object getElementAt(int index) {
 		return mapContext.getLayer(mapContext.getLayerCount() - 1 - index);
 	}
 
+	@Override
 	public final int getSize() {
 		return mapContext.getLayerCount();
 	}
 
+	@Override
 	public final void addListDataListener(ListDataListener l) {
 		modelListeners.add(l);
 	}
 
+	@Override
 	public final void removeListDataListener(ListDataListener l) {
 		modelListeners.remove(l);
 	}

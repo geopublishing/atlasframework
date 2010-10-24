@@ -38,8 +38,7 @@ public abstract class ASProps {
 	/**
 	 * List of all legal keys in the
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
@@ -47,13 +46,14 @@ public abstract class ASProps {
 		 * java2d AntiAliasing, Quality and TextAntiALiasing Hints turned on or
 		 * off*
 		 */
-		antialiasingMaps,
-		automaticPreview,
+		antialiasingMaps, automaticPreview,
 		/** Name of charset used for exporting SLD XML* */
 		charsetName,
 		/** JVM/System wide default setting. Applied when starting up **/
-		FORCE_LONGITUDE_FIRST_AXIS_ORDER,
-		language, /** Last directory used for save full SLD dialog */
+		FORCE_LONGITUDE_FIRST_AXIS_ORDER, language, /**
+		 * Last directory used for
+		 * save full SLD dialog
+		 */
 		lastExportDirectory, /** Last directory used for open dialog */
 		lastImportDirectory,
 		/** Last postgis database used **/
@@ -67,10 +67,12 @@ public abstract class ASProps {
 		/** Last postgis username used **/
 		lastPgUsername,
 		/** JFrame starts maximized? */
-		windowMaximized,
-		lastWfsGetCapabilitesUrl,
-		lastWfsLayerName
-		
+		windowMaximized, LAST_IMPORTED_FILE,
+		/** List of WFS servers **/
+		wfsList,
+		/** List of DB (PostGIS) Servers **/
+		dbList
+
 	}
 
 	private static String appDirname;
@@ -92,12 +94,10 @@ public abstract class ASProps {
 	private static final Properties properties = new Properties();
 
 	public static final String PROPERTIES_FILENAME = "atlasStyler.properties";
-	
 
 	public static final String PROPERTIES_FOLDER = ".AtlasStyler";
 
 	private static File propertiesFile = null;
-
 
 	/**
 	 * Name of the file that is stored on the local mashine in an applicatin
@@ -128,15 +128,15 @@ public abstract class ASProps {
 	/**
 	 * Get a value from the underlying {@link Properties}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private static final String get(String key) {
 		return properties.getProperty(key);
 	}
 
 	private static boolean get(String key, boolean def) {
-		String propertyAsString = properties.getProperty(key, new Boolean(def).toString());
+		String propertyAsString = properties.getProperty(key,
+				new Boolean(def).toString());
 		return Boolean.parseBoolean(propertyAsString);
 	}
 
@@ -159,12 +159,11 @@ public abstract class ASProps {
 				return defaultValue;
 			return Integer.valueOf(string.trim());
 		} catch (Exception e) {
-			LOGGER
-					.warn(
-							"The property value saved for "
-									+ key
-									+ " can't be converted to Integer. Returning default value " // i8nlog
-									+ defaultValue, e);
+			LOGGER.warn(
+					"The property value saved for "
+							+ key
+							+ " can't be converted to Integer. Returning default value " // i8nlog
+							+ defaultValue, e);
 		}
 		return defaultValue;
 	}
@@ -176,8 +175,8 @@ public abstract class ASProps {
 	protected static File getPropertiesFile() {
 
 		if (propertiesFile == null) {
-			File applicationPropertiesDirectory = new File(new File(System
-					.getProperty("user.home")), appDirname);
+			File applicationPropertiesDirectory = new File(new File(
+					System.getProperty("user.home")), appDirname);
 			if (!applicationPropertiesDirectory.exists())
 				applicationPropertiesDirectory.mkdirs();
 
@@ -207,7 +206,7 @@ public abstract class ASProps {
 
 		return propertiesFile;
 	}
-	
+
 	/**
 	 * Initialize this helpercLass for a some application
 	 * 
@@ -217,11 +216,11 @@ public abstract class ASProps {
 	 * @param appDirname
 	 *            Dirname in the User Home directory, e.g. ".shh"
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected static void init(String propertiesFilename, String appDirname) {
-		// Setting up the logger from a XML configuration file. This is also done in ASProps, as it is eventually called earlier.
+		// Setting up the logger from a XML configuration file. This is also
+		// done in ASProps, as it is eventually called earlier.
 		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
 
 		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
@@ -248,8 +247,7 @@ public abstract class ASProps {
 	 * @param guiOwner
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void resetProperties() {
 
@@ -292,7 +290,7 @@ public abstract class ASProps {
 	 * Save the changes to the .properties file
 	 */
 	public static void store() {
-//		LOGGER.debug("STORE AS PROPS");
+		// LOGGER.debug("STORE AS PROPS");
 		try {
 			FOS = new FileOutputStream(getPropertiesFile());
 			haveToCloseFOS = true;

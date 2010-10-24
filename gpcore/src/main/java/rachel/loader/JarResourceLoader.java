@@ -54,10 +54,12 @@ public class JarResourceLoader implements ResourceLoader {
 		init(file, jarFile);
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		return _delegate.getResourceAsStream(name);
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 		return _delegate.getResourceAsUrl(name);
 	}

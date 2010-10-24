@@ -290,6 +290,7 @@ public class TableColumnAdjuster implements PropertyChangeListener,
 	//
 	// Implement the PropertyChangeListener
 	//
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 		// When the TableModel changes we need to update the listeners
 		// and column widths
@@ -307,6 +308,7 @@ public class TableColumnAdjuster implements PropertyChangeListener,
 	//
 	// Implement the TableModelListener
 	//
+	@Override
 	public void tableChanged(TableModelEvent e) {
 		// A cell has been updated
 

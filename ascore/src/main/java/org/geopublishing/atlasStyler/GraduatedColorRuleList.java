@@ -171,18 +171,18 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		return ff2.or(ors);
 	}
 
-//	/**
-//	 * Setting colors to <code>null</code> will result in new colors beeing
-//	 * created (from a palette) the next time #getColors is called.
-//	 */
-//	@Override
-//	public void updateColorsClassesChanged() {
-//		if (newColors != null) {
-//			super.setColors(newColors);
-//		} else {
-//			// Colors are set to null. This would lead directly to 
-//		}
-//	}
+	// /**
+	// * Setting colors to <code>null</code> will result in new colors beeing
+	// * created (from a palette) the next time #getColors is called.
+	// */
+	// @Override
+	// public void updateColorsClassesChanged() {
+	// if (newColors != null) {
+	// super.setColors(newColors);
+	// } else {
+	// // Colors are set to null. This would lead directly to
+	// }
+	// }
 
 	@Override
 	public List<Rule> getRules() {
@@ -373,5 +373,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		setColors(null);
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
 	}
+
 
 }

@@ -21,6 +21,7 @@ public interface ClosableSubwindows extends Disposable {
 	/** All GUIs have to register their open GUIs here.. thereby */
 	public WeakHashSet<Window> openWindows = new WeakHashSet<Window>(Window.class);
 
+	@Override
 	public void dispose();
 
 }

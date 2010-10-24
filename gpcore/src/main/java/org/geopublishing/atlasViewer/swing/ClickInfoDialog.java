@@ -214,7 +214,7 @@ public class ClickInfoDialog extends JDialog {
 			LOGGER.error(e);
 		}
 
-		XMapPane mapPane = (XMapPane) objectSelectionEvent.getSource();
+		XMapPane mapPane = objectSelectionEvent.getSource();
 		// If it is a feature, let it blink for a moment
 		if (source instanceof XMapPane
 				&& objectSelectionEvent instanceof FeatureSelectedEvent) {
@@ -260,6 +260,7 @@ public class ClickInfoDialog extends JDialog {
 		JRootPane rootPane = new JRootPane();
 		rootPane.registerKeyboardAction(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}

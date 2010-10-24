@@ -44,6 +44,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 		_jarFile = jarFile;
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 //		Status.debug("getResourceAsStream( name=" + name + " )");
 
@@ -60,6 +61,7 @@ public class JarResourceLoaderHelper implements ResourceLoader {
 		}
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 //		Status.debug("getResourceAsUrl( name=" + name + " )");
 

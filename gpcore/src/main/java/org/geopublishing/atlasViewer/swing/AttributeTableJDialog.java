@@ -121,7 +121,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 				// DpLayerSelectionModel
 
 				final SortableJTable table = getFeatureTablePane().getTable();
-				synchronizer = (StyledLayerSelectionModelSynchronizer<?>) new TableSelectionSynchronizer(
+				synchronizer = new TableSelectionSynchronizer(
 						selectionModel, table);
 
 				selectionModel.addSelectionListener(synchronizer);
@@ -159,7 +159,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 
 						// we can cast here, because we checked above
 						getModel().setStyledFeatures(
-								(StyledFeaturesInterface<?>) styledObj);
+								styledObj);
 
 						if (styledLayerSelectionModel != null) {
 							styledLayerSelectionModel

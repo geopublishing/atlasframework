@@ -91,6 +91,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 					.R("SymbolSelector.Tabs.LocalSymbols.Action.Rename"));
 			rename.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					int index = getJListSymbols().locationToIndex(
 							mouseCLickEvent.getPoint());
@@ -154,6 +155,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 					.R("SymbolSelector.Tabs.LocalSymbols.Action.Delete"));
 			remove.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					int index = getJListSymbols().locationToIndex(
 							mouseCLickEvent.getPoint());
@@ -208,6 +210,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 					.R("SymbolSelector.Tabs.LocalSymbols.Action.Rescan"));
 			rescan.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rescan(true);
 				}
@@ -302,6 +305,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 				String[] symbolPaths = dir.list(new FilenameFilter() {
 
+					@Override
 					public boolean accept(File dir, String name) {
 						if ((name.endsWith(".sld")) || (name.endsWith(".SLD")))
 							return true;

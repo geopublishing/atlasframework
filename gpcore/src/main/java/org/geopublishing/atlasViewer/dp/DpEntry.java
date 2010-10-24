@@ -297,6 +297,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	/**
 	 * Responsible for the order when sorting {@link CopyOfDpEntry}s
 	 */
+	@Override
 	public int compareTo(DpEntry dpe2) {
 		if (dpe2.getId() == null) {
 			return -1;
@@ -448,6 +449,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * 
 	 * @see skrueger.atlas.ExportableLayer#isExportable()
 	 */
+	@Override
 	public Boolean isExportable() {
 		return exportable;
 	}
@@ -618,6 +620,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * @deprecated attention, do you want to use the AVSwingUtil.getUrl...
 	 *             method?
 	 */
+	@Deprecated
 	public URL getUrl() {
 		if (url == null) {
 

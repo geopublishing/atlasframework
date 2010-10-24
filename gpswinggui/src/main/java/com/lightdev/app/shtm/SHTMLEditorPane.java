@@ -1761,25 +1761,25 @@ public class SHTMLEditorPane extends JEditorPane implements DropTargetListener,
 		}
 	}
 
-	/**
-	 * get the number of the table column a given cell is in
-	 * 
-	 * @param cell
-	 *            the cell to get the column number for
-	 * @return the column number of the given cell
-	 */
-	private int getColNumber(Element cell) {
-		int i = 0;
-		Element thisRow = cell.getParentElement();
-		int last = thisRow.getElementCount() - 1;
-		Element aCell = thisRow.getElement(i);
-		if (aCell != cell) {
-			while ((i < last) && (aCell != cell)) {
-				aCell = thisRow.getElement(++i);
-			}
-		}
-		return i;
-	}
+//	/**
+//	 * get the number of the table column a given cell is in
+//	 * 
+//	 * @param cell
+//	 *            the cell to get the column number for
+//	 * @return the column number of the given cell
+//	 */
+//	private int getColNumber(Element cell) {
+//		int i = 0;
+//		Element thisRow = cell.getParentElement();
+//		int last = thisRow.getElementCount() - 1;
+//		Element aCell = thisRow.getElement(i);
+//		if (aCell != cell) {
+//			while ((i < last) && (aCell != cell)) {
+//				aCell = thisRow.getElement(++i);
+//			}
+//		}
+//		return i;
+//	}
 
 	/* ------- table manipulation end -------------------- */
 

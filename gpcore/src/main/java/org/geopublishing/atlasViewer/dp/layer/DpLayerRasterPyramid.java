@@ -201,6 +201,7 @@ public class DpLayerRasterPyramid
 		return inputTransparentColor;
 	}
 
+	@Override
 	public void dispose() {
 		if (isDisposed())
 			return;
@@ -221,6 +222,7 @@ public class DpLayerRasterPyramid
 	/**
 	 * Returns the maximum allowed resolution for this RasterPyramid.
 	 */
+	@Override
 	public Double getMaxResolution() {
 
 		// TODO This feature has been disabled because it's not in trunk.
@@ -233,6 +235,7 @@ public class DpLayerRasterPyramid
 	/**
 	 * Returns the minimum allowed resolution for this RasterPyramid.
 	 */
+	@Override
 	public Double getMinResolution() {
 		return null;
 	}
@@ -249,6 +252,7 @@ public class DpLayerRasterPyramid
 	 * This method returns the value/{@link Translation} pairs that will be
 	 * shown in the Legend
 	 */
+	@Override
 	public RasterLegendData getLegendMetaData() {
 		if (legendMetaData == null) {
 			legendMetaData = new RasterLegendData(false);

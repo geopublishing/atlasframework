@@ -80,6 +80,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	final RuleChangeListener updateClassificationTableWhenRuleListChanges = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 
 			// Try to remember the selected item
@@ -197,6 +198,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		// to the underlying rulesList
 		jComboBoxValueAttribute.addItemListener(new ItemListener() {
 
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 
 				if (e.getStateChange() != ItemEvent.SELECTED)
@@ -283,6 +285,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 			jComboBoxPalette.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						rulesList.setBrewerPalette((BrewerPalette) (e.getItem()));
@@ -308,6 +311,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		if (jButtonApplyPalette == null) {
 			jButtonApplyPalette = new ThinButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					rulesList.applyPalette(UniqueValuesGUI.this);
@@ -339,6 +343,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					.getImage(ICON_SIZE));
 			jButtonTemplate.setAction(new AbstractAction("", imageIcon) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					rulesList.getTemplate().getListeners().clear();
@@ -358,6 +363,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					 */
 					gui.addPropertyChangeListener(new PropertyChangeListener() {
 
+						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
 
 							if (evt.getPropertyName().equals(
@@ -388,6 +394,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 	RuleChangeListener listenToRuleListeChangesAndUpdateTemplate = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 
 			// LOGGER.debug("reason = " + e.toString());
@@ -409,6 +416,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 		if (jButtonApplyTemplate == null) {
 			jButtonApplyTemplate = new ThinButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					rulesList.applyTemplate();
 				}
@@ -429,6 +437,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			jButtonAddAllValues = new ThinButton(new AbstractAction(
 					AtlasStyler.R("UniqueValues.Button.AddAllValues")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (rulesList.getPropertyFieldName() == null) {
 						JOptionPane
@@ -479,6 +488,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			jButtonAddValues = new ThinButton(new AbstractAction(
 					AtlasStyler.R("UniqueValues.Button.AddValues")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
 							SwingUtil.getParentWindow(UniqueValuesGUI.this),
@@ -502,6 +512,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			jButtonRemove = new ThinButton(new AbstractAction(
 					AtlasStyler.R("UniqueValues.Button.RemoveValue")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					int[] selectedRows = getJTable().getSelectedRows();
 					List<Object> removeValues = new ArrayList<Object>();
@@ -521,6 +532,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			getJTable().getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (getJTable().getSelectedRows().length == 0)
 								jButtonRemove.setEnabled(false);
@@ -548,6 +560,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			jButtonRemoveAll = new ThinButton(new AbstractAction(
 					AtlasStyler.R("UniqueValues.Button.RemoveAllValues")) {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Ahhh.. this changes the original List! :-/
 					// List<String> vals = rulesList.getValues();
@@ -583,6 +596,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	/** Switch the button on/off when no rules exist no more * */
 	RuleChangeListener listenWhenDefaultSymbolisInTheRLandEnableButton = new RuleChangeListener() {
 
+		@Override
 		public void changed(RuleChangedEvent e) {
 			if (rulesList.getValues().size() < (rulesList.isWithDefaultSymbol() ? 2
 					: 1)) {
@@ -607,6 +621,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 			jButtonUp.setAction(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					int row = getJTable().getSelectedRow();
 
@@ -650,6 +665,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			getJTable().getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (getJTable().getSelectedRowCount() != 1)
 								jButtonUp.setEnabled(false);
@@ -678,6 +694,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 			jButtonDown = new JButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					rulesList.pushQuite();
@@ -717,6 +734,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			getJTable().getSelectionModel().addListSelectionListener(
 					new ListSelectionListener() {
 
+						@Override
 						public void valueChanged(ListSelectionEvent e) {
 							if (getJTable().getSelectedRowCount() != 1)// onyl
 								// single
@@ -825,6 +843,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 											UniqueValuesGUI.this, transLabel);
 									ask.addPropertyChangeListener(new PropertyChangeListener() {
 
+										@Override
 										public void propertyChange(
 												PropertyChangeEvent evt) {
 											if (evt.getPropertyName()
@@ -895,6 +914,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 							 */
 							gui.addPropertyChangeListener(new PropertyChangeListener() {
 
+								@Override
 								public void propertyChange(
 										PropertyChangeEvent evt) {
 
@@ -915,6 +935,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 							// we have a referenct to it!
 							listenToEditedSymbolAndPassOnTheEvent = new RuleChangeListener() {
 
+								@Override
 								public void changed(RuleChangedEvent e) {
 
 									/** Exchanging the Symbol * */
@@ -1116,6 +1137,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 		jCheckBoxWithDefault.addActionListener(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				rulesList.pushQuite();
@@ -1142,6 +1164,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 		listenToRLToDefineDefaultSymbol = new RuleChangeListener() {
 
+			@Override
 			public void changed(RuleChangedEvent e) {
 				jCheckBoxWithDefault.setSelected(rulesList
 						.isWithDefaultSymbol());
@@ -1187,6 +1210,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 	}
 
+	@Override
 	public void dispose() {
 		for (Window w : openWindows) {
 			if (w instanceof ClosableSubwindows) {

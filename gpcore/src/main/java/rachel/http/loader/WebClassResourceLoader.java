@@ -39,6 +39,7 @@ public class WebClassResourceLoader implements WebResourceLoader {
 		_loader = clazz.getClassLoader();
 	}
 
+	@Override
 	public WebResource getResource(String name) {
 		try {
 			// strip leading slash

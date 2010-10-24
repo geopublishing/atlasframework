@@ -34,10 +34,12 @@ public class ClassResourceLoader implements ResourceLoader {
 		_cl = anchor.getClassLoader();
 	}
 
+	@Override
 	public InputStream getResourceAsStream(String name) {
 		return _cl.getResourceAsStream(name);
 	}
 
+	@Override
 	public URL getResourceAsUrl(String name) {
 		return _cl.getResource(name);
 	}

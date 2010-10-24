@@ -69,6 +69,7 @@ public class QuantitiesClassification extends org.geopublishing.atlasStyler.clas
 		this(owner, styledFeatures, value_field_name, null);
 	}
 
+	@Override
 	public void calculateClassLimitsWithWorker() {
 		classLimits = new TreeSet<Double>();
 

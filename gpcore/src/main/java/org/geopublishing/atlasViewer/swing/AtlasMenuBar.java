@@ -162,6 +162,7 @@ public class AtlasMenuBar extends JMenuBar {
 								.R("AtlasViewer.FileMenu.JMenuItem.save_smart_screenshots"),
 						Icons.ICON_SCREENSHOT_SMALL) {
 
+					@Override
 					public void actionPerformed(ActionEvent e) {
 
 						if ((atlasViewer.getMap() == null)

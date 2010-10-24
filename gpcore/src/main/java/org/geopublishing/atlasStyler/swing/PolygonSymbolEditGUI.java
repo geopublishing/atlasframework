@@ -178,6 +178,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 		jButtonFillColor.setAction(new AbstractAction() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				Color color = null;
 
@@ -240,6 +241,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxFillOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -269,6 +271,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jCheckBoxFill.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					boolean enabled = jCheckBoxFill.isSelected();
@@ -315,6 +318,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 			jCheckBoxStroke = new JCheckBox();
 
 			jCheckBoxStroke.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					boolean onOff = jCheckBoxStroke.isSelected();
 
@@ -396,6 +400,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jButtonStrokeColor.setAction(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Color color = null;
 
@@ -467,6 +472,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -514,6 +520,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -565,6 +572,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jCheckBoxFillGraphic.addActionListener(new ActionListener() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					boolean enabled = jCheckBoxFillGraphic.isSelected();
@@ -633,6 +641,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jButtonFillGraphic.setAction(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					if (symbolizer.getFill() == null) {
@@ -650,6 +659,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 					editFillGraphicJDialog
 							.addPropertyChangeListener(new PropertyChangeListener() {
 
+								@Override
 								public void propertyChange(
 										PropertyChangeEvent evt) {
 									if (evt.getPropertyName().equals(
@@ -725,6 +735,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			jComboBoxGraphicFillOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 

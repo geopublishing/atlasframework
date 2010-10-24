@@ -246,6 +246,7 @@ public class DpLayerRasterArcASCII extends DpLayer<ArcGridReader, ChartStyle>
 	 * This method returns the value/{@link Translation} pairs that will be
 	 * shown in the Legend
 	 */
+	@Override
 	public RasterLegendData getLegendMetaData() {
 		if (legendMetaData == null) {
 			legendMetaData = new RasterLegendData(false);
@@ -253,6 +254,7 @@ public class DpLayerRasterArcASCII extends DpLayer<ArcGridReader, ChartStyle>
 		return legendMetaData;
 	}
 
+	@Override
 	public void dispose() {
 		if (isDisposed())
 			return;
@@ -266,6 +268,7 @@ public class DpLayerRasterArcASCII extends DpLayer<ArcGridReader, ChartStyle>
 	 * 
 	 * @return width in CRS units divided by pixel width
 	 */
+	@Override
 	public Double getMaxResolution() {
 		// MS-01.sc
 		// try {
@@ -297,6 +300,7 @@ public class DpLayerRasterArcASCII extends DpLayer<ArcGridReader, ChartStyle>
 		this.legendMetaData = legendMetaData;
 	}
 
+	@Override
 	public DpLayerRasterArcASCII copy() {
 		DpLayerRasterArcASCII copy = new DpLayerRasterArcASCII(ac);
 		return (DpLayerRasterArcASCII) copyTo(copy);

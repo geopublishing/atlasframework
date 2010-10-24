@@ -81,6 +81,7 @@ public class ClassificationMethodJComboBox extends JComboBox {
 		 */
 		addItemListener(new java.awt.event.ItemListener() {
 
+			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					classifier.setMethod((METHOD) e.getItem());

@@ -28,7 +28,6 @@ import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.GEOTIFF_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.IMAGE_POSTFIXES;
 import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.io.GeoImportUtilURL;
 
 /**
  * A tester class that can determine, if a file is importable as a
@@ -202,7 +201,7 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 		for (IMAGE_POSTFIXES ending : GeoImportUtil.IMAGE_POSTFIXES.values()) {
 			if (filename.endsWith(ending.toString())) {
 				try {
-					GeoImportUtilURL.readGridFromImage(DataUtilities
+					GeoImportUtil.readGridFromImage(DataUtilities
 							.fileToURL(file));
 					return true;
 				} catch (Exception e) {

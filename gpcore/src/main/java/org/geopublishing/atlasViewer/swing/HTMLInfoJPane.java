@@ -46,6 +46,7 @@ public class HTMLInfoJPane extends JEditorPane {
 
 	private final HyperlinkListener LISTENER = new HyperlinkListener() {
 
+		@Override
 		public void hyperlinkUpdate(HyperlinkEvent ev) {
 			if (ev.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 

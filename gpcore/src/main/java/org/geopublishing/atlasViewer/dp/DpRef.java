@@ -54,6 +54,7 @@ public class DpRef<T extends DpEntry<? extends ChartStyle>> extends
 	/**
 	 * @return The ID of the {@link DpEntry} referenced
 	 */
+	@Override
 	public String getTargetId() {
 		return targetId;
 	}
@@ -61,6 +62,7 @@ public class DpRef<T extends DpEntry<? extends ChartStyle>> extends
 	/**
 	 * @return true if the target {@link DpEntry} is a {@link DpLayer}
 	 */
+	@Override
 	public boolean isTargetLayer() {
 		DpEntry dpe = getDataPool().get(getTargetId());
 		if (dpe == null) {
@@ -163,6 +165,7 @@ public class DpRef<T extends DpEntry<? extends ChartStyle>> extends
 	/**
 	 * @return the targeted {@link DpRef}
 	 */
+	@Override
 	public T getTarget() {
 		// TODO check validity... might return null if the dpe was deleted!!!
 		return (T) getDataPool().get(getTargetId());

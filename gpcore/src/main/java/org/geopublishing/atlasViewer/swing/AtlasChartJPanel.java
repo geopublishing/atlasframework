@@ -493,6 +493,7 @@ public class AtlasChartJPanel extends JPanel implements
 	/**
 	 * Remove the listeners...
 	 */
+	@Override
 	public void dispose() {
 		List<FeatureDatasetSelectionModel<?, ?, ?>> datasetSelectionModelFor = FeatureChartUtil
 				.getFeatureDatasetSelectionModelFor(getSelectableChartPanel()

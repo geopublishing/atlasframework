@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -31,6 +31,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.TabSet;
@@ -236,6 +238,7 @@ public class AVUtil {
 	 * 
 	 * @deprecated Use celanFilenames !
 	 */
+	@Deprecated
 	public final static void copyURL(final Logger log, final URL source,
 			final URL destination) throws IOException, URISyntaxException {
 		copyFile(log, new File(source.getFile()),
@@ -257,6 +260,7 @@ public class AVUtil {
 	 * 
 	 * @throws IOException
 	 */
+	@Deprecated
 	public final static void copyFile(final Logger log, final File source,
 			final File destination) throws IOException {
 		IOUtil.copyFile(log, source, destination, false);
@@ -469,7 +473,7 @@ public class AVUtil {
 	public static String formatCoord(final CoordinateReferenceSystem crs,
 			final double value) {
 
-		final StringBuffer sb = new StringBuffer(DecimalFormat
+		final StringBuffer sb = new StringBuffer(NumberFormat
 				.getNumberInstance().format(value));
 
 		final Unit<?> unit = CRSUtilities.getUnit(crs.getCoordinateSystem());
@@ -483,11 +487,11 @@ public class AVUtil {
 	public static JDialog getWaitDialog(final Component owner, final String msg) {
 		final JDialog waitFrame = new JDialog(SwingUtil.getParentWindow(owner));
 
-		waitFrame.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		waitFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		final JPanel cp = new JPanel(new MigLayout());
 		final JLabel label = new JLabel(msg, Icons.ICON_TASKRUNNING_BIG,
-				JLabel.LEADING);
+				SwingConstants.LEADING);
 		cp.add(label);
 		waitFrame.setContentPane(cp);
 

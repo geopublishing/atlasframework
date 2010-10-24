@@ -205,7 +205,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * 
      * @return ShapefileServiceInfo describing service.
      */
-    public synchronized ServiceInfo getInfo(){
+    @Override
+	public synchronized ServiceInfo getInfo(){
         if( info == null ){
             if( isLocal() ){
                 info = new ShapefileFileServiceInfo( this );
@@ -272,7 +273,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * 
      * @return Map with xmlURL parsed, or an EMPTY_MAP.
      */
-    protected Map createMetadata(String typeName) {
+    @Override
+	protected Map createMetadata(String typeName) {
         String urlString = shpFiles.get(SHP_XML);
         if (urlString == null) {
             return Collections.EMPTY_MAP;
@@ -325,14 +327,16 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * @throws IOException
      *                 If an error occurs during creation
      */
-    protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName)
+    @Override
+	protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName)
             throws IOException {
         typeCheck(typeName);
 
         return getFeatureReader();
     }
     
-    public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader() throws IOException {
+    @Override
+	public FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader() throws IOException {
         try {
             return createFeatureReader(getSchema().getTypeName(),
                     getAttributesReader(true, new GeometryFactory()), schema);
@@ -349,7 +353,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * @see org.geotools.data.AbstractDataStore#getFeatureReader(java.lang.String,
      *      org.geotools.data.Query)
      */
-    protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName, Query query)
+    @Override
+	protected  FeatureReader<SimpleFeatureType, SimpleFeature> getFeatureReader(String typeName, Query query)
             throws IOException {
         String[] propertyNames = query.getPropertyNames();
         String defaultGeomName = schema.getGeometryDescriptor().getLocalName();
@@ -551,7 +556,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * 
      * @return An array of length one containing the single type held.
      */
-    public String[] getTypeNames() {
+    @Override
+	public String[] getTypeNames() {
         return new String[] { getCurrentTypeName(), };
     }
 
@@ -601,7 +607,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      *                 If the typeName is not available or some other error
      *                 occurs.
      */
-    protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(String typeName,
+    @Override
+	protected FeatureWriter<SimpleFeatureType, SimpleFeature> createFeatureWriter(String typeName,
             Transaction transaction) throws IOException {
         typeCheck(typeName);
 
@@ -636,12 +643,14 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * @throws IOException
      *                 If a type by the requested name is not present.
      */
-    public SimpleFeatureType getSchema(String typeName) throws IOException {
+    @Override
+	public SimpleFeatureType getSchema(String typeName) throws IOException {
         typeCheck(typeName);
         return getSchema();
     }
 
-    public SimpleFeatureType getSchema() throws IOException {
+    @Override
+	public SimpleFeatureType getSchema() throws IOException {
         if (schema == null) {
 
             List<AttributeDescriptor> types = readAttributes();
@@ -812,7 +821,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
      * @throws IOException
      *                 If the DataStore is remote.
      */
-    public void createSchema(SimpleFeatureType featureType) throws IOException {
+    @Override
+	public void createSchema(SimpleFeatureType featureType) throws IOException {
         if (!isLocal()) {
             throw new IOException(
                     "Cannot create FeatureType on remote shapefile");
@@ -912,7 +922,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
         try {
             ByteBuffer buffer = ByteBuffer.allocate(100);
             FileReader reader = new FileReader() {
-                public String id() {
+                @Override
+				public String id() {
                     return "Shapefile Datastore's getBounds Method";
                 }
             };
@@ -955,7 +966,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
         }
     }
 
-    protected ReferencedEnvelope getBounds(Query query) throws IOException {
+    @Override
+	protected ReferencedEnvelope getBounds(Query query) throws IOException {
         if (query.getFilter().equals(Filter.INCLUDE)) {
             return getBounds();
         }
@@ -968,7 +980,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
     /**
      * @see org.geotools.data.DataStore#getFeatureSource(java.lang.String)
      */
-    public FeatureSource<SimpleFeatureType, SimpleFeature> getFeatureSource(final String typeName)
+    @Override
+	public FeatureSource<SimpleFeatureType, SimpleFeature> getFeatureSource(final String typeName)
             throws IOException {
         final SimpleFeatureType featureType = getSchema(typeName);
 
@@ -986,7 +999,8 @@ public class ShapefileDataStore extends AbstractFileDataStore {
     /**
      * @see org.geotools.data.AbstractDataStore#getCount(org.geotools.data.Query)
      */
-    public int getCount(Query query) throws IOException {
+    @Override
+	public int getCount(Query query) throws IOException {
         if (query.getFilter() == Filter.INCLUDE) {
             IndexFile file = openIndexFile();
             if (file != null) {

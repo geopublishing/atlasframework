@@ -39,14 +39,15 @@ public class NumClassesJComboBox extends JComboBox {
 		setSelectedItem(classifier.getNumClasses());
 
 		addItemListener(new java.awt.event.ItemListener() {
+			@Override
 			public void itemStateChanged(java.awt.event.ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					LOGGER.debug("StateChangeEvent for ParamComboBox");
+//					LOGGER.debug("StateChangeEvent for ParamComboBox");
 
 					Integer newNum = (Integer) e.getItem();
-					LOGGER
-							.debug("       new number of clases set via the GUI = "
-									+ newNum);
+//					LOGGER
+//							.debug("       new number of clases set via the GUI = "
+//									+ newNum);
 
 					classifier.setNumClasses(newNum);
 					//

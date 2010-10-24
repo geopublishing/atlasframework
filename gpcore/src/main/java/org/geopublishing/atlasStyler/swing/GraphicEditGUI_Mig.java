@@ -337,6 +337,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxMarkType.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						Object item = e.getItem();
@@ -402,7 +403,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 						}
 
 						firePropertyChange(PROPERTY_UPDATED, null,
-								(MARKTYPE) item);
+								item);
 					}
 				}
 
@@ -513,6 +514,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 		if (jButtonStrokeColor == null) {
 			jButtonStrokeColor = new ColorButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Color oldColor = null;
 
@@ -574,6 +576,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -629,6 +632,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -711,6 +715,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxGraphicSize.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -750,6 +755,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxGraphicOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -820,6 +826,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 		if (jButtonFillColor == null) {
 			jButtonFillColor = new ColorButton(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					Color color = null;
 
@@ -888,6 +895,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jComboBoxFillOpacity.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -921,6 +929,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 					.getRotation().toString()));
 			jComboBoxGraphicRotation.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
@@ -947,6 +956,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 			jCheckBoxFill = new JCheckBox();
 
 			jCheckBoxFill.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 
 					boolean enabled = jCheckBoxFill.isSelected();
@@ -998,6 +1008,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 			jCheckBoxStroke = new JCheckBox();
 
 			jCheckBoxStroke.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					boolean onOff = jCheckBoxStroke.isSelected();
 					// TODO remember the Fill obejct!?
@@ -1243,6 +1254,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 			jButtonExtGraphic.setAction(new AbstractAction() {
 
+				@Override
 				public void actionPerformed(ActionEvent e) {
 					openExternalGraphicSelector();
 				}
@@ -1319,6 +1331,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 				selectExternalGraphicDialog
 						.addPropertyChangeListener(new PropertyChangeListener() {
 
+							@Override
 							public void propertyChange(PropertyChangeEvent evt) {
 
 								if (evt.getPropertyName().equals(

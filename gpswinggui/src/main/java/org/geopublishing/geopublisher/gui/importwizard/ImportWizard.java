@@ -11,7 +11,6 @@
 package org.geopublishing.geopublisher.gui.importwizard;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +42,6 @@ public class ImportWizard extends WizardBranchController {
 	private AtlasConfigEditable ace;
 
 	/** Used for a all-the-same look of the panels **/
-	final public static Dimension DEFAULT_WPANEL_SIZE = new Dimension(470, 370);
 
 	enum SOURCETYPE {
 		/** Import maps or DPEs from another atlas **/

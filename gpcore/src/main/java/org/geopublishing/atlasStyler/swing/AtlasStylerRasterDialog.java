@@ -152,6 +152,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 	// return cancelButton;
 	// }
 
+	@Override
 	protected OkButton getOkButton() {
 		OkButton okButton = new OkButton();
 		okButton.addActionListener(new ActionListener() {

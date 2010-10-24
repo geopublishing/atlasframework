@@ -514,6 +514,7 @@ public class ClickInfoPanel extends JPanel {
 											new AbstractAction(pdfFilename,
 													Icons.ICON_PDF_SMALL) {
 
+												@Override
 												public void actionPerformed(
 														final ActionEvent e) {
 
@@ -554,6 +555,7 @@ public class ClickInfoPanel extends JPanel {
 													.toString(),
 													Icons.ICON_MAP_SMALL) {
 
+												@Override
 												public void actionPerformed(
 														final ActionEvent e) {
 
@@ -618,6 +620,7 @@ public class ClickInfoPanel extends JPanel {
 											new AbstractAction("",
 													Icons.ICON_HTML_SMALL) {
 
+												@Override
 												public void actionPerformed(
 														final ActionEvent e) {
 
@@ -686,6 +689,7 @@ public class ClickInfoPanel extends JPanel {
 										new AbstractAction("",
 												Icons.ICON_HTML_SMALL) {
 
+											@Override
 											public void actionPerformed(
 													final ActionEvent e) {
 

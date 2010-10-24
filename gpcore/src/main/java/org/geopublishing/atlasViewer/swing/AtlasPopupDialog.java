@@ -178,6 +178,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		JRootPane rootPane = new JRootPane();
 		rootPane.registerKeyboardAction(new ActionListener() {
 
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}

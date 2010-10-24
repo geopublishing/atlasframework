@@ -57,14 +57,17 @@ public class InputStreamResource implements WebResource {
 		_contentType = MimeUtils.guessContentTypeFromName(name);
 	}
 
+	@Override
 	public String getContentType() {
 		return _contentType;
 	}
 
+	@Override
 	public byte[] getData() {
 		return _data;
 	}
 
+	@Override
 	public String getHeader() {
 		StringBuffer header = new StringBuffer();
 

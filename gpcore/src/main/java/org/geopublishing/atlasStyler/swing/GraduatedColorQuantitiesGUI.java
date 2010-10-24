@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -339,6 +340,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		jToggleButton_Classify.setAction(new AbstractAction(AtlasStyler
 				.R("GraduatedColorQuantities.Classify.Button")) {
 
+			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (jToggleButton_Classify.isSelected()) {
 
@@ -420,6 +422,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			jComboBoxValueField
 					.addItemListener(new java.awt.event.ItemListener() {
+						@Override
 						public void itemStateChanged(
 								final java.awt.event.ItemEvent e) {
 							if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -466,11 +469,12 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			jComboBoxNormlization
 					.addItemListener(new java.awt.event.ItemListener() {
+						@Override
 						public void itemStateChanged(
 								final java.awt.event.ItemEvent e) {
 							if (e.getStateChange() == ItemEvent.SELECTED) {
 
-								if (QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX == e
+								if (org.geopublishing.atlasStyler.classification.QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX == e
 										.getItem())
 									classifier.setNormalizer_field_name(null);
 								else
@@ -557,6 +561,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 											AtlasStyler
 													.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
 
+										@Override
 										public void actionPerformed(
 												final ActionEvent e) {
 											rulesList.setClassLimits(
@@ -570,8 +575,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 							return;
 						}
 
-						final String ruleTitle = (String) rulesList
-								.getRuleTitles().get(row);
+						final String ruleTitle = rulesList.getRuleTitles().get(
+								row);
 
 						if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 							final Translation translation = new Translation(
@@ -590,6 +595,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 										transLabel);
 								ask.addPropertyChangeListener(new PropertyChangeListener() {
 
+									@Override
 									public void propertyChange(
 											final PropertyChangeEvent evt) {
 										if (evt.getPropertyName()
@@ -706,7 +712,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				@Override
 				public int getRowCount() {
 					final int numClasses = rulesList.getNumClasses();
-					return numClasses >= 0 ? numClasses : 0;
+					int i = numClasses >= 0 ? numClasses : 0;
+					return i;
 				}
 
 				@Override
@@ -728,18 +735,23 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 						final ArrayList<Double> classLimitsAsArrayList = rulesList
 								.getClassLimitsAsArrayList();
 
-						if (rowIndex >= classLimitsAsArrayList.size()) {
-							return "-";
+						final Number lower = classLimitsAsArrayList
+								.get(rowIndex);
+
+						DecimalFormat formatter = rulesList.getFormatter();
+
+						if (rowIndex + 1 < classLimitsAsArrayList.size()) {
+							final Number upper = classLimitsAsArrayList
+									.get(rowIndex + 1);
+
+							final String limitsLabel = formatter.format(lower)
+									+ " -> " + formatter.format(upper);
+							return limitsLabel;
+						} else {
+							final String limitsLabel = formatter.format(lower);
+							return limitsLabel;
 						}
 
-						final Number lower = (Number) classLimitsAsArrayList
-								.get(rowIndex);
-						final Number upper = (Number) classLimitsAsArrayList
-								.get(rowIndex + 1);
-
-						final String limitsLabel = ASUtil.df.format(lower)
-								+ " -> " + ASUtil.df.format(upper);
-						return limitsLabel;
 					}
 
 					/***********************************************************
@@ -747,8 +759,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 					 */
 					if (columnIndex == 2) { // Label
 
-						String string = (String) rulesList.getRuleTitles().get(
-								rowIndex);
+						String string = rulesList.getRuleTitles().get(rowIndex);
 
 						if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 							string = new Translation(string).toString();
@@ -828,6 +839,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 					// when the dialog is closed
 					ask.addPropertyChangeListener(new PropertyChangeListener() {
 
+						@Override
 						public void propertyChange(final PropertyChangeEvent evt) {
 							if (evt.getPropertyName()
 									.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
@@ -944,6 +956,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 			jComboBoxPalettes.addItemListener(new ItemListener() {
 
+				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						rulesList.setBrewerPalette((BrewerPalette) (e.getItem()));
@@ -1016,6 +1029,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		return jButtonTemplate;
 	}
 
+	@Override
 	public void dispose() {
 		if (classifier != null)
 			classifier.dispose();
