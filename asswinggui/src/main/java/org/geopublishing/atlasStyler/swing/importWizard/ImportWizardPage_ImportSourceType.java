@@ -77,14 +77,6 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 					ASUtil.R("ImportWizard.ImportSourceType.File"));
 			buttonGroup.add(fileJRadioButton);
 
-			// Select this if it is the last used import option, select it
-			if (ASProps.get(Keys.lastImportWizardType) != null) {
-				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				fileJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.file);
-			}
-
 			fileJRadioButton.addActionListener(new ActionListener() {
 
 				@Override
@@ -103,6 +95,16 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 
 			});
 
+			// Select this if it is the last used import option, select it
+			if (ASProps.get(Keys.lastImportWizardType) != null) {
+				String lastImport = ASProps.get(Keys.lastImportWizardType);
+				fileJRadioButton
+						.setSelected(lastImport != null
+								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.file);
+				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+						ImportWizard.SOURCETYPE.file);
+
+			}
 		}
 		return fileJRadioButton;
 	}
@@ -112,14 +114,6 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			wfsJRadioButton = new JRadioButton(
 					ASUtil.R("ImportWizard.ImportSourceType.Wfs"));
 			buttonGroup.add(wfsJRadioButton);
-
-			// Select this if it is the last used import option, select it
-			if (ASProps.get(Keys.lastImportWizardType) != null) {
-				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				wfsJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.wfs);
-			}
 
 			wfsJRadioButton.addActionListener(new ActionListener() {
 
@@ -138,6 +132,18 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 				}
 
 			});
+
+			// Select this if it is the last used import option, select it
+			if (ASProps.get(Keys.lastImportWizardType) != null) {
+				String lastImport = ASProps.get(Keys.lastImportWizardType);
+				wfsJRadioButton
+						.setSelected(lastImport != null
+								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.wfs);
+
+				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+						ImportWizard.SOURCETYPE.wfs);
+
+			}
 		}
 		return wfsJRadioButton;
 	}
@@ -147,14 +153,6 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			pgJRadioButton = new JRadioButton(
 					ASUtil.R("AtlasStyler.SelectPostgisLayerDialog.title"));
 			buttonGroup.add(pgJRadioButton);
-
-			// Select this if it is the last used import option, select it
-			if (ASProps.get(Keys.lastImportWizardType) != null) {
-				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				pgJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.postgis);
-			}
 
 			pgJRadioButton.addActionListener(new ActionListener() {
 
@@ -173,6 +171,17 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 				}
 
 			});
+
+			// Select this if it is the last used import option, select it
+			if (ASProps.get(Keys.lastImportWizardType) != null) {
+				String lastImport = ASProps.get(Keys.lastImportWizardType);
+				pgJRadioButton
+						.setSelected(lastImport != null
+								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.postgis);
+				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+						ImportWizard.SOURCETYPE.postgis);
+
+			}
 		}
 		return pgJRadioButton;
 	}
