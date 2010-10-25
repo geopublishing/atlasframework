@@ -60,7 +60,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 
 				try {
 					progress.setBusy(dbServer.toString());
-
+					
 					final JDBCDataStore dbDs = (JDBCDataStore) DataStoreFinder
 							.getDataStore(dbServer);
 					try {

@@ -98,11 +98,12 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			// Select this if it is the last used import option, select it
 			if (ASProps.get(Keys.lastImportWizardType) != null) {
 				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				fileJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.file);
-				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
-						ImportWizard.SOURCETYPE.file);
+				boolean b = lastImport != null
+						&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.file;
+				fileJRadioButton.setSelected(b);
+				if (b)
+					putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+							ImportWizard.SOURCETYPE.file);
 
 			}
 		}
@@ -136,12 +137,12 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			// Select this if it is the last used import option, select it
 			if (ASProps.get(Keys.lastImportWizardType) != null) {
 				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				wfsJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.wfs);
-
-				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
-						ImportWizard.SOURCETYPE.wfs);
+				boolean b = lastImport != null
+						&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.wfs;
+				wfsJRadioButton.setSelected(b);
+				if (b)
+					putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+							ImportWizard.SOURCETYPE.wfs);
 
 			}
 		}
@@ -175,11 +176,12 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 			// Select this if it is the last used import option, select it
 			if (ASProps.get(Keys.lastImportWizardType) != null) {
 				String lastImport = ASProps.get(Keys.lastImportWizardType);
-				pgJRadioButton
-						.setSelected(lastImport != null
-								&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.postgis);
-				putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
-						ImportWizard.SOURCETYPE.postgis);
+				boolean b = lastImport != null
+						&& ImportWizard.SOURCETYPE.valueOf(lastImport) == SOURCETYPE.postgis;
+				pgJRadioButton.setSelected(b);
+				if (b)
+					putWizardData(ImportWizard.IMPORT_SOURCE_TYPE,
+							ImportWizard.SOURCETYPE.postgis);
 
 			}
 		}

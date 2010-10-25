@@ -553,7 +553,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			toolPopup.add(removeFilterMenuItem);
 		}
 
-		long last = System.currentTimeMillis();
+//		long last = System.currentTimeMillis();
 
 		// ****************************************************************************
 		// Create AtlasStyler Button
@@ -573,9 +573,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			}));
 		}
 
-		System.out
-				.println("after styler" + (System.currentTimeMillis() - last));
-		last = System.currentTimeMillis();
+//		System.out
+//				.println("after styler" + (System.currentTimeMillis() - last));
+//		last = System.currentTimeMillis();
 
 		// ****************************************************************************
 		// Show Attribute Table

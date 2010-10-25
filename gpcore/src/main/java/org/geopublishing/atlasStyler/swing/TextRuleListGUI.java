@@ -40,6 +40,7 @@ import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DefaultQuery;
+import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.styling.TextSymbolizer;
 import org.opengis.feature.simple.SimpleFeature;
@@ -606,6 +607,13 @@ public class TextRuleListGUI extends JPanel {
 											100, null,
 											"max 100 sample features"));
 				}
+
+				// Copy features into a Memory
+				MemoryFeatureCollection mfc = new MemoryFeatureCollection(
+						features.getSchema());
+				mfc.addAll(features);
+				features.close(features.iterator());
+				features = mfc;
 
 			} catch (IOException e) {
 				LOGGER.error(

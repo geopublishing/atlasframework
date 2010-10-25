@@ -432,12 +432,12 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		if (getValue_field_name() == null)
 			return classDigitsDecimalFormat;
 
-		Class<?> binding = getStyledFeatures().getSchema()
-				.getDescriptor(getValue_field_name()).getType().getBinding();
-		if (binding == Integer.class || binding == Byte.class
-				|| binding == Long.class) {
-			return classDigitsIntegerFormat;
-		}
+//		Class<?> binding = getStyledFeatures().getSchema()
+//				.getDescriptor(getValue_field_name()).getType().getBinding();
+//		if (binding == Integer.class || binding == Byte.class
+//				|| binding == Long.class) {
+//			return classDigitsIntegerFormat;
+//		}
 		return classDigitsDecimalFormat;
 	}
 }

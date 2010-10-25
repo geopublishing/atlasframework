@@ -128,7 +128,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	// Create a new JMapPane and fill it with 40 sample features
+	// Create a new JMapPane and fill it with sample features
 	final protected XMapPane previewMapPane = new SelectableXMapPane();
 
 	/**
@@ -1071,7 +1071,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			bounds = layer.getBounds();
 		} catch (Exception e) {
 			LOGGER.error("Calculating BOUNDs for the PreviewMapPane failed:", e);
-
 			bounds = features.getBounds();
 
 		}
