@@ -75,6 +75,7 @@ import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.export.ExportWizard;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.jfree.util.Log;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
@@ -253,6 +254,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		GpUtil.initGpLogging();
+		
+		Log.error("test");
 
 		System.setProperty("file.encoding", "UTF-8");
 
