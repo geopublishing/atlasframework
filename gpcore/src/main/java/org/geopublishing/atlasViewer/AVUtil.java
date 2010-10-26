@@ -40,6 +40,7 @@ import javax.swing.text.TabStop;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.xml.parsers.FactoryConfigurationError;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -49,6 +50,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.resources.CRSUtilities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -504,25 +506,18 @@ public class AVUtil {
 	}
 
 	/**
-	 * Does not change the configuration if there are already appenders defined.
+	 * Setting up the logger from a XML configuration file. We do that again in
+	 * GPPros, as it outputs log messages first. Does not change the
+	 * configuration if there are already appenders defined.
 	 */
-	public static void initAtlasLogging() {
+	public static void initAtlasLogging() throws FactoryConfigurationError {
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
-		try {
-			URL log4jURL = AtlasViewerGUI.class.getClassLoader().getResource(
-					"/" + "av_log4j.xml");
-			System.out.println("Configuring log4j from " + log4jURL);
-			if (log4jURL == null) {
-				log4jURL = GpUtil.class.getClassLoader().getResource(
-						"av_log4j.xml");
-				// System.out.println("Configuring log4j from " + log4jURL);
-			}
-			DOMConfigurator.configure(log4jURL);
-		} catch (Throwable e) {
-			ExceptionDialog.show(null, e);
-		}
-	}
+		DOMConfigurator.configure(GPProps.class
+				.getResource("/geopublishing_log4j.xml"));
 
+		Logger.getRootLogger().addAppender(
+				Logger.getLogger("dummy").getAppender("avFileLogger"));
+	}
 
 }

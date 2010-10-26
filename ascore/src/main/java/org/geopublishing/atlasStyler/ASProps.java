@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
@@ -68,15 +70,15 @@ public abstract class ASProps {
 		lastPgUsername,
 		/** JFrame starts maximized? */
 		windowMaximized, LAST_IMPORTED_FILE,
-		/** List of WFS servers encoded in one String**/
+		/** List of WFS servers encoded in one String **/
 		wfsList,
-		/** List of DB (PostGIS) Servers encoded in one String**/
+		/** List of DB (PostGIS) Servers encoded in one String **/
 		dbList,
-		/** last used WFS server on the list of WFS servers**/
+		/** last used WFS server on the list of WFS servers **/
 		lastWfsIdx,
-		/** last used SB server on the list of DB servers**/
+		/** last used SB server on the list of DB servers **/
 		lastDbIdx,
-		/** last used import source in wizard**/
+		/** last used import source in wizard **/
 		lastImportWizardType
 
 	}
@@ -225,9 +227,8 @@ public abstract class ASProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected static void init(String propertiesFilename, String appDirname) {
-		// Setting up the logger from a XML configuration file. This is also
-		// done in ASProps, as it is eventually called earlier.
-		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
+
+		initAsLogging();
 
 		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
 
@@ -244,6 +245,21 @@ public abstract class ASProps {
 		} catch (IOException e) {
 			LOGGER.error(e);
 		}
+	}
+
+	/**
+	 * Setting up the logger from a XML configuration file. We do that again in
+	 * GPPros, as it outputs log messages first. Does not change the
+	 * configuration if there are already appenders defined.
+	 */
+	public static void initAsLogging() throws FactoryConfigurationError {
+		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
+			return;
+		DOMConfigurator.configure(ASProps.class
+				.getResource("/geopublishing_log4j.xml"));
+
+		Logger.getRootLogger().addAppender(
+				Logger.getLogger("dummy").getAppender("asFileLogger"));
 	}
 
 	/**

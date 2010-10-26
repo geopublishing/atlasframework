@@ -16,6 +16,7 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import skrueger.versionnumber.ReleaseUtil;
 
 
+@Deprecated
 public class GPBugReportmailer extends BugReportmailer {
 	
 	public final static String GEOPUBLISHERLOG = "geopublisher.log"; 

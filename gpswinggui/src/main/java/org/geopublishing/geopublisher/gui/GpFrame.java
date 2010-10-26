@@ -68,6 +68,7 @@ import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.ResourceProviderManagerFrame;
 import schmitzm.swing.SwingUtil;
+import schmitzm.swing.log4j.LoggerFrame;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.HeapBar;
@@ -437,7 +438,6 @@ public class GpFrame extends JFrame {
 	 */
 	private JMenu getOptionsMenu() {
 		final AtlasConfigEditable ace = gp.getAce();
-
 		JMenu optionsMenu = new JMenu(R("MenuBar.OptionsMenu"));
 
 		if (ace != null) {
@@ -535,80 +535,65 @@ public class GpFrame extends JFrame {
 				GPProps.Keys.antialiasingMaps, 1) == 1);
 		optionsMenu.add(jCheckBoxMenuItemAntiAliasingAC);
 
-		// ******************************************************************
-		// Send logfiles to author by email
-		// ******************************************************************
-		JMenuItem jMenuItemSendLog = new JMenuItem(new AbstractAction(
-				R("MenuBar.OptionsMenu.SendLogToAuthor")) {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				BugReportmailer bugReport = new GPBugReportmailer();
-				bugReport.send(GpFrame.this);
-			}
-
-		});
-		optionsMenu.add(jMenuItemSendLog);
-
-		// ******************************************************************
-		// Send logfiles to author by email
-		// ******************************************************************
-		JMenuItem jMenuItemShowlog = new JMenuItem(new AbstractAction(
-				R("MenuBar.OptionsMenu.OpenLogFile")) {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				/**
-				 * Stefan Tzeggai 25th Sep 2010 Some real ugly stuff: On Windows
-				 * 7 the line <param name="File"
-				 * value="${java.io.tmpdir}/geopublisher.log" /> from
-				 * gp_log4j.xml resolves to "C:\tmp", but during program
-				 * execution it resolves to "C:\ Users\ username\ AppData\
-				 * Local\ Temp"
-				 */
-
-				try {
-					File logFile = new File(IOUtil.getTempDir(),
-							GPBugReportmailer.GEOPUBLISHERLOG)
-							.getCanonicalFile();
-					try {
-
-						Desktop.getDesktop().edit(logFile);
-					} catch (Exception usoe) {
-						Desktop.getDesktop().browse(
-								DataUtilities.fileToURL(logFile).toURI());
-					}
-				} catch (Exception ee) {
-					try {
-
-						File logFile = new File(
-								SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
-								GPBugReportmailer.GEOPUBLISHERLOG)
-								.getCanonicalFile();
-
-						Desktop.getDesktop().edit(logFile);
-					} catch (Exception usoe) {
-
-						try {
-							File logFile = new File(
-									SystemUtils.IS_OS_WINDOWS ? "C:\\tmp"
-											: "/tmp",
-									GPBugReportmailer.GEOPUBLISHERLOG)
-									.getCanonicalFile();
-
-							Desktop.getDesktop().browse(
-									DataUtilities.fileToURL(logFile).toURI());
-						} catch (Exception eee) {
-							ExceptionDialog.show(GpFrame.this, eee);
-						}
-					}
-
-				}
-			}
-
-		});
-		optionsMenu.add(jMenuItemShowlog);
+		// // ******************************************************************
+		// // Send logfiles to author by email
+		// // ******************************************************************
+		// JMenuItem jMenuItemShowlog = new JMenuItem(new AbstractAction(
+		// R("MenuBar.OptionsMenu.OpenLogFile")) {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		//
+		// /**
+		// * Stefan Tzeggai 25th Sep 2010 Some real ugly stuff: On Windows
+		// * 7 the line <param name="File"
+		// * value="${java.io.tmpdir}/geopublisher.log" /> from
+		// * gp_log4j.xml resolves to "C:\tmp", but during program
+		// * execution it resolves to "C:\ Users\ username\ AppData\
+		// * Local\ Temp"
+		// */
+		//
+		// try {
+		// File logFile = new File(IOUtil.getTempDir(),
+		// GPBugReportmailer.GEOPUBLISHERLOG)
+		// .getCanonicalFile();
+		// try {
+		//
+		// Desktop.getDesktop().edit(logFile);
+		// } catch (Exception usoe) {
+		// Desktop.getDesktop().browse(
+		// DataUtilities.fileToURL(logFile).toURI());
+		// }
+		// } catch (Exception ee) {
+		// try {
+		//
+		// File logFile = new File(
+		// SystemUtils.IS_OS_WINDOWS ? "C:\\tmp" : "/tmp",
+		// GPBugReportmailer.GEOPUBLISHERLOG)
+		// .getCanonicalFile();
+		//
+		// Desktop.getDesktop().edit(logFile);
+		// } catch (Exception usoe) {
+		//
+		// try {
+		// File logFile = new File(
+		// SystemUtils.IS_OS_WINDOWS ? "C:\\tmp"
+		// : "/tmp",
+		// GPBugReportmailer.GEOPUBLISHERLOG)
+		// .getCanonicalFile();
+		//
+		// Desktop.getDesktop().browse(
+		// DataUtilities.fileToURL(logFile).toURI());
+		// } catch (Exception eee) {
+		// ExceptionDialog.show(GpFrame.this, eee);
+		// }
+		// }
+		//
+		// }
+		// }
+		//
+		// });
+		// optionsMenu.add(jMenuItemShowlog);
 
 		/**
 		 * Allow to switch LookAndFeel
@@ -616,6 +601,30 @@ public class GpFrame extends JFrame {
 		if (UIManager.getInstalledLookAndFeels().length > 1)
 			optionsMenu.add(getLnFJMenu());
 
+		/**
+		 * Manage logging
+		 */
+		{
+			JMenu logMenu = SwingUtil.createChangeLog4JLevelJMenu();
+			optionsMenu.add(logMenu);
+
+			// ******************************************************************
+			// Send logfiles to author by email
+			// //
+			// ******************************************************************
+			// JMenuItem jMenuItemSendLog = new JMenuItem(new AbstractAction(
+			// R("MenuBar.OptionsMenu.SendLogToAuthor")) {
+			//
+			// @Override
+			// public void actionPerformed(ActionEvent e) {
+			// BugReportmailer bugReport = new GPBugReportmailer();
+			// bugReport.send(GpFrame.this);
+			// }
+			//
+			// });
+			// logMenu.add(jMenuItemSendLog);
+			
+		}
 		return optionsMenu;
 	}
 
@@ -847,8 +856,9 @@ public class GpFrame extends JFrame {
 			this(label, null, actionCmd, null, null);
 		}
 
-		public GpMenuItem(final String label, final String tooltip, final ActionCmds actionCmd,
-				final ImageIcon iconFlagsSmall, final KeyStroke keyStroke) {
+		public GpMenuItem(final String label, final String tooltip,
+				final ActionCmds actionCmd, final ImageIcon iconFlagsSmall,
+				final KeyStroke keyStroke) {
 			super(label);
 			if (tooltip != null && !tooltip.isEmpty())
 				setToolTipText(tooltip);
@@ -861,12 +871,13 @@ public class GpFrame extends JFrame {
 			}
 		}
 
-		public GpMenuItem(final String label, final String tooltip, final ActionCmds actionCmd,
-				final ImageIcon icon) {
+		public GpMenuItem(final String label, final String tooltip,
+				final ActionCmds actionCmd, final ImageIcon icon) {
 			this(label, tooltip, actionCmd, icon, null);
 		}
 
-		public GpMenuItem(final String label, final ActionCmds cmd, final ImageIcon icon) {
+		public GpMenuItem(final String label, final ActionCmds cmd,
+				final ImageIcon icon) {
 			this(label, null, cmd, icon);
 		}
 

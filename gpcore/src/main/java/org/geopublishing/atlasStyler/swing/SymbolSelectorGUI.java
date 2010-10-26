@@ -763,16 +763,5 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		return jTabbedPane;
 	}
 
-	public static void main(String[] args) {
-		// Setting up the logger from a XML configuration file (actually the
-		// file is in the av.jar)
-//		URL log4jXmlUrl = AtlasStyler.class.getResource("as_log4j.xml");
-//		DOMConfigurator.configure(log4jXmlUrl);
-		AVUtil.initAtlasLogging();
-
-		SymbolSelectorGUI selectorGUI = new SymbolSelectorGUI(null, null,
-				new SinglePolygonSymbolRuleList(""));
-		selectorGUI.setVisible(true);
-	}
 
 }

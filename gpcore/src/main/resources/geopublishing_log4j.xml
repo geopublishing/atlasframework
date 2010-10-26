@@ -1,0 +1,51 @@
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%r %-5p %-20c{1} %-25M %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="avFileLogger" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${user.home}/.AtlasViewer/atlas.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="2MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="asFileLogger" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${user.home}/.AtlasStyler/atlasStyler.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="2MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="gpFileLogger" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${user.home}/.Geopublisher/geopublisher.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="2MB" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c{2} - %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="dummy">
+		<level value="none" />
+		<appender-ref ref="asFileLogger" />
+		<appender-ref ref="gpFileLogger" />
+		<appender-ref ref="avFileLogger" />
+	</logger>
+
+	<root>
+		<priority value="warn" />
+		<appender-ref ref="console" />
+	</root>
+
+</log4j:configuration> 

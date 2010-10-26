@@ -130,10 +130,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
-
-		// Setting up the logger from a XML configuration file. This is also
-		// done in ASProps, as it is eventually called earlier.
-		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
+//
+//		// Setting up the logger from a XML configuration file. This is also
+//		// done in ASProps, as it is eventually called earlier.
+//		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
+		
+		ASUtil.initAsLogging();
 
 		// Output information about the LGPL license
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
@@ -215,6 +217,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					Event.CTRL_MASK, true));
 			fileMenu.add(mi);
 		}
+
+		fileMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 
 		{ // Exit
 			JMenuItem mi = new JMenuItem(

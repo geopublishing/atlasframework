@@ -14,12 +14,15 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -36,14 +39,18 @@ public class GpUtil {
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
 
 	/**
-	 * // Setting up the logger from a XML configuration file. We do that gain
-	 * // in GPPros, as it outputs log messages first. Does not change the
+	 * Setting up the logger from a XML configuration file. We do that again in
+	 * GPPros, as it outputs log messages first. Does not change the
 	 * configuration if there are already appenders defined.
 	 */
 	public static void initGpLogging() throws FactoryConfigurationError {
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
-		DOMConfigurator.configure(GPProps.class.getResource("/gp_log4j.xml"));
+		DOMConfigurator.configure(GPProps.class
+				.getResource("/geopublishing_log4j.xml"));
+
+		Logger.getRootLogger().addAppender(
+				Logger.getLogger("dummy").getAppender("gpFileLogger"));
 	}
 
 	/**

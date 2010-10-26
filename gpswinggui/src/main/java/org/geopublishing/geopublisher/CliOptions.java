@@ -26,7 +26,7 @@ import skrueger.versionnumber.ReleaseUtil.License;
  * This class manages all the command line options of Geopublisher.
  */
 public class CliOptions extends Options {
-	public static final String VERSION = "v";
+	public static final String VERBOSE = "v";
 	public static final String HELP = "h";
 	public static final String EXPORT = "e";
 	public static final String AWCFOLDER = "a";
@@ -62,7 +62,7 @@ public class CliOptions extends Options {
 	public CliOptions() {
 		addOption(new Option(HELP, "help", false, "print this message"));
 
-		addOption(new Option(VERSION, "verbose", false,
+		addOption(new Option(VERBOSE, "verbose", false,
 				"print verbose information while running"));
 
 		addOption(new Option(LICENSE, "license", false,
@@ -231,14 +231,14 @@ public class CliOptions extends Options {
 						// Load an atlas with GUI
 						GeopublisherGUI instance = GeopublisherGUI
 								.getInstance(false);
-						if (commandLine.hasOption(CliOptions.VERSION)) {
+						if (commandLine.hasOption(CliOptions.VERBOSE)) {
 							// exitAfterInterpret = true;
 							// Logger.getLogger("root").setLevel(Level.ALL);
 							Logger.getRootLogger().setLevel(
 									org.apache.log4j.Level.DEBUG);
 						} else {
-							Logger.getRootLogger().setLevel(
-									org.apache.log4j.Level.WARN);
+//							Logger.getRootLogger().setLevel(
+//									org.apache.log4j.Level.WARN);
 							// Logger.getLogger("root").setLevel(Level.WARNING);
 						}
 
@@ -255,12 +255,12 @@ public class CliOptions extends Options {
 				cp.setName("CLI output");
 				cp.setTarget("System.out");
 				Logger.getRootLogger().addAppender(cp);
-				if (commandLine.hasOption(CliOptions.VERSION))
+				if (commandLine.hasOption(CliOptions.VERBOSE))
 					Logger.getRootLogger().setLevel(
 							org.apache.log4j.Level.DEBUG);
-				else
-					Logger.getRootLogger()
-							.setLevel(org.apache.log4j.Level.WARN);
+//				else
+//					Logger.getRootLogger()
+//							.setLevel(org.apache.log4j.Level.WARN);
 
 				if (awcFile != null) {
 					final AtlasConfigEditable ace = new AMLImportEd()

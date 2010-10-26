@@ -32,6 +32,7 @@ import schmitzm.io.IOUtil;
  * @author Stefan A. Tzeggai
  * 
  */
+@Deprecated // MailUtil in schmitzm besser
 public abstract class BugReportmailer {
 
 	/**
