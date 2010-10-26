@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -58,7 +58,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					}
 					
 					JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
-					summaryPanel.add(new JLabel(ASUtil
+					summaryPanel.add(new JLabel(AsSwingUtil
 							.R("ImportWizard.ImportWasSuccessfull")));
 
 					Summary summary = Summary.create(new JScrollPane(

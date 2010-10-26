@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.swing.OpenDataFileChooser;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.netbeans.spi.wizard.WizardPage;
@@ -23,24 +23,24 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.FILE.FileSelection.Explanation"));
+			AsSwingUtil.R("ImportWizard.FILE.FileSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_NotExists = ASUtil
+	private final String validationImportSourceTypeFailedMsg_NotExists = AsSwingUtil
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotExists");
 
-	private final String validationImportSourceTypeFailedMsg_CantRead = ASUtil
+	private final String validationImportSourceTypeFailedMsg_CantRead = AsSwingUtil
 			.R("ImportWizard.FILE.FileSelection.ValidationError.CantRead");
 
-	private final String validationImportSourceTypeFailedMsg_NotImportable = ASUtil
+	private final String validationImportSourceTypeFailedMsg_NotImportable = AsSwingUtil
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotImportable");
 
 	private JButton fileChooserJButton;
 	JTextField fileJTextField;
 	final static private JLabel fileTextFieldJLabel = new JLabel(
-			ASUtil.R("ImportWizard.FILE.FileTextBoxLabel"));
+			AsSwingUtil.R("ImportWizard.FILE.FileTextBoxLabel"));
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.FILE.FileSelection");
+		return AsSwingUtil.R("ImportWizard.FILE.FileSelection");
 	}
 
 	public ImportWizardPage_FILE_Select() {
@@ -173,7 +173,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 					// dc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 					// dc.setAcceptAllFileFilterUsed(false);
 					//
-					// dc.setDialogTitle(ASUtil
+					// dc.setDialogTitle(AsSwingUtil
 					// .R("ImportWizard.FILE.WhereFrom.DialogTitle"));
 					// dc.setMultiSelectionEnabled(false);
 					//

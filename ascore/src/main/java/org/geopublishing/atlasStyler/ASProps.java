@@ -17,13 +17,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Properties;
 
-import javax.xml.parsers.FactoryConfigurationError;
-
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 
 import schmitzm.swing.ExceptionDialog;
 
@@ -228,9 +224,9 @@ public abstract class ASProps {
 	 */
 	protected static void init(String propertiesFilename, String appDirname) {
 
-		initAsLogging();
+//		initAsLogging();
 
-		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
+//		LOGGER.debug("Native JVM Charset is " + Charset.defaultCharset().name());
 
 		ASProps.propertiesFilename = propertiesFilename;
 		ASProps.appDirname = appDirname;
@@ -247,20 +243,6 @@ public abstract class ASProps {
 		}
 	}
 
-	/**
-	 * Setting up the logger from a XML configuration file. We do that again in
-	 * GPPros, as it outputs log messages first. Does not change the
-	 * configuration if there are already appenders defined.
-	 */
-	public static void initAsLogging() throws FactoryConfigurationError {
-		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
-			return;
-		DOMConfigurator.configure(ASProps.class
-				.getResource("/geopublishing_log4j.xml"));
-
-		Logger.getRootLogger().addAppender(
-				Logger.getLogger("dummy").getAppender("asFileLogger"));
-	}
 
 	/**
 	 * Deletes the .properties in the ApplicationPreferences directory and

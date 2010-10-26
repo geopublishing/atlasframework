@@ -10,7 +10,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 
 import schmitzm.swing.ManualInputOption;
 import schmitzm.swing.ManualInputOption.PasswordViewable;
@@ -33,7 +33,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 	private JTextField portInput;
 
 	public SelectPostgisLayerJDialog(Component parentWindowComponent) {
-		super(parentWindowComponent, ASUtil
+		super(parentWindowComponent, AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.title"));
 
 		initGUI();
@@ -44,7 +44,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		setModal(true);
 
 		setLayout(new MigLayout("wrap 2", "grow"));
-		JLabel explanation = new JLabel(ASUtil.R(
+		JLabel explanation = new JLabel(AsSwingUtil.R(
 				"AtlasStyler.SelectPostgisLayerDialog.explanation.html", System
 						.getProperty("user.home")));
 		add(explanation, "span 2");
@@ -55,27 +55,27 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		 * "secretIRI69."; String layer = "bundeslaender_2008";
 		 */
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.host.label")));
 		add(getHostInputField());
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.database.label")));
 		add(getDatabaseInputField());
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.port.label")));
 		add(getPortInputField());
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.username.label")));
 		add(getUsernameInputField());
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.password.label")));
 		add(getPasswordInputField());
 
-		add(new JLabel(ASUtil
+		add(new JLabel(AsSwingUtil
 				.R("AtlasStyler.SelectPostgisLayerDialog.table.label")));
 		add(getLayerInputField());
 

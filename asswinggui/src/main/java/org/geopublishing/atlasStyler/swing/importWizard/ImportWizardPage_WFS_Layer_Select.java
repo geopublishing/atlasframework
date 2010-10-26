@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.netbeans.spi.wizard.WizardPage;
 
 public class ImportWizardPage_WFS_Layer_Select extends WizardPage {
@@ -18,14 +18,14 @@ public class ImportWizardPage_WFS_Layer_Select extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.WFS.LayerSelection.Explanation"));
+			AsSwingUtil.R("ImportWizard.WFS.LayerSelection.Explanation"));
 
 	JComboBox wfsLayerJComboBox;
 	final static private JLabel wfsLayerSelectionLabel = new JLabel(
-			ASUtil.R("ImportWizard.WFS.LayerSelectionLabel"));
+			AsSwingUtil.R("ImportWizard.WFS.LayerSelectionLabel"));
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.WFS.WfsLayerSelection");
+		return AsSwingUtil.R("ImportWizard.WFS.WfsLayerSelection");
 	}
 
 	public ImportWizardPage_WFS_Layer_Select() {

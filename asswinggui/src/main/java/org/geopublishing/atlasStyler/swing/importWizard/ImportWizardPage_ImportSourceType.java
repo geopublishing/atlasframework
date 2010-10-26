@@ -12,7 +12,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard.SOURCETYPE;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -21,28 +21,28 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.ImportSourceType.Explanation"));
+			AsSwingUtil.R("ImportWizard.ImportSourceType.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg = ASUtil
+	private final String validationImportSourceTypeFailedMsg = AsSwingUtil
 			.R("ImportWizard.ImportSourceType.ValidationError");
 
 	private JLabel explanationFileJLabel = new JLabel(
-			ASUtil.R("ImportWizard.ImportSourceType.Explanation.File"));
+			AsSwingUtil.R("ImportWizard.ImportSourceType.Explanation.File"));
 
 	private JRadioButton fileJRadioButton;
 
 	private JLabel explanationWfsJLabel = new JLabel(
-			ASUtil.R("ImportWizard.ImportSourceType.Explanation.WFS"));
+			AsSwingUtil.R("ImportWizard.ImportSourceType.Explanation.WFS"));
 	private JRadioButton wfsJRadioButton;
 
 	private JLabel explanationPostGISJLabel = new JLabel(
-			ASUtil.R("ImportWizard.ImportSourceType.Explanation.PostGis"));
+			AsSwingUtil.R("ImportWizard.ImportSourceType.Explanation.PostGis"));
 	private JRadioButton pgJRadioButton;
 
 	private ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.ImportSourceType");
+		return AsSwingUtil.R("ImportWizard.ImportSourceType");
 	}
 
 	public ImportWizardPage_ImportSourceType() {
@@ -74,7 +74,7 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	private JRadioButton getFileJRadioButton() {
 		if (fileJRadioButton == null) {
 			fileJRadioButton = new JRadioButton(
-					ASUtil.R("ImportWizard.ImportSourceType.File"));
+					AsSwingUtil.R("ImportWizard.ImportSourceType.File"));
 			buttonGroup.add(fileJRadioButton);
 
 			fileJRadioButton.addActionListener(new ActionListener() {
@@ -113,7 +113,7 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	private JRadioButton getWfsJRadioButton() {
 		if (wfsJRadioButton == null) {
 			wfsJRadioButton = new JRadioButton(
-					ASUtil.R("ImportWizard.ImportSourceType.Wfs"));
+					AsSwingUtil.R("ImportWizard.ImportSourceType.Wfs"));
 			buttonGroup.add(wfsJRadioButton);
 
 			wfsJRadioButton.addActionListener(new ActionListener() {
@@ -152,7 +152,7 @@ public class ImportWizardPage_ImportSourceType extends WizardPage {
 	private JRadioButton getPostGisJRadioButton() {
 		if (pgJRadioButton == null) {
 			pgJRadioButton = new JRadioButton(
-					ASUtil.R("AtlasStyler.SelectPostgisLayerDialog.title"));
+					AsSwingUtil.R("AtlasStyler.SelectPostgisLayerDialog.title"));
 			buttonGroup.add(pgJRadioButton);
 
 			pgJRadioButton.addActionListener(new ActionListener() {

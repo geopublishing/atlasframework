@@ -14,7 +14,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -31,9 +31,9 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.DB.ServerSelection.Explanation"));
+			AsSwingUtil.R("ImportWizard.DB.ServerSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_CantRead = ASUtil
+	private final String validationImportSourceTypeFailedMsg_CantRead = AsSwingUtil
 			.R("ImportWizard.DB.ServerSelection.ValidationError.CantRead");
 
 	DbSettingsJComboBox dbJComboBox;
@@ -44,10 +44,10 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 
 	private SmallButton dbDelJButton;
 	final static private JLabel dbServerSelectionJLabel = new JLabel(
-			ASUtil.R("ImportWizard.DB.SelectionComboboxLabel"));
+			AsSwingUtil.R("ImportWizard.DB.SelectionComboboxLabel"));
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.DB.ServerSelection");
+		return AsSwingUtil.R("ImportWizard.DB.ServerSelection");
 	}
 
 	public ImportWizardPage_DB_Select() {

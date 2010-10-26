@@ -14,6 +14,7 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import javax.xml.parsers.FactoryConfigurationError;
@@ -51,6 +52,10 @@ public class GpUtil {
 
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("gpFileLogger"));
+		
+		if (GPProps.get(org.geopublishing.geopublisher.GPProps.Keys.logLevel) != null) {
+//			Logger.getRootLogger().setLevel() );
+		}
 	}
 
 	/**

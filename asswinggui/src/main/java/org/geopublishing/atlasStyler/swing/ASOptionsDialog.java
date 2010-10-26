@@ -24,7 +24,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 
 import schmitzm.swing.SwingUtil;
@@ -38,7 +38,7 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 	// final JComboBox langComboBox = new JComboBox(new String[] { "en", "fr",
 	// "de" });
 
-	final JComboBox langComboBox = new JComboBox(ASUtil.getSupportedLanguages());
+	final JComboBox langComboBox = new JComboBox(AsSwingUtil.getSupportedLanguages());
 
 	private final AtlasStylerGUI asg;
 

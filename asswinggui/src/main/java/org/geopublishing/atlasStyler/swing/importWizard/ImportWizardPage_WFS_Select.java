@@ -15,7 +15,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSDataStoreFactory;
@@ -32,9 +32,9 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.WFS.WfsUrlSelection.Explanation"));
+			AsSwingUtil.R("ImportWizard.WFS.WfsUrlSelection.Explanation"));
 
-	private final String validationImportSourceTypeFailedMsg_CantRead = ASUtil
+	private final String validationImportSourceTypeFailedMsg_CantRead = AsSwingUtil
 			.R("ImportWizard.WFS.WfsUrlSelection.ValidationError.CantRead");
 
 	WfsSettingsJComboBox wfsJComboBox;
@@ -45,10 +45,10 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 
 	private SmallButton wfsDelJButton;
 	final static private JLabel wfsServerSelectionJLabel = new JLabel(
-			ASUtil.R("ImportWizard.WFS.SelectionComboboxLabel"));
+			AsSwingUtil.R("ImportWizard.WFS.SelectionComboboxLabel"));
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.WFS.WfsUrlSelection");
+		return AsSwingUtil.R("ImportWizard.WFS.WfsUrlSelection");
 	}
 
 	public ImportWizardPage_WFS_Select() {

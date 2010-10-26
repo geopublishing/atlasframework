@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.netbeans.spi.wizard.WizardPage;
 
 public class ImportWizardPage_DB_Layer_Select extends WizardPage {
@@ -18,14 +18,14 @@ public class ImportWizardPage_DB_Layer_Select extends WizardPage {
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			ASUtil.R("ImportWizard.DB.LayerSelection.Explanation"));
+			AsSwingUtil.R("ImportWizard.DB.LayerSelection.Explanation"));
 
 	JComboBox dbLayerJComboBox;
 	final static private JLabel dbLayerSelectionLabel = new JLabel(
-			ASUtil.R("ImportWizard.DB.LayerSelectionLabel"));
+			AsSwingUtil.R("ImportWizard.DB.LayerSelectionLabel"));
 
 	public static String getDescription() {
-		return ASUtil.R("ImportWizard.DB.DbLayerSelection");
+		return AsSwingUtil.R("ImportWizard.DB.DbLayerSelection");
 	}
 
 	public ImportWizardPage_DB_Layer_Select() {

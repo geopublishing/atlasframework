@@ -50,10 +50,9 @@ import javax.swing.SwingUtilities;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
-import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
 import org.geopublishing.atlasViewer.AVUtil;
@@ -112,7 +111,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	private static final long serialVersionUID = 1231321321258008431L;
 
-	final static private Logger LOGGER = ASUtil
+	final static private Logger LOGGER = AsSwingUtil
 			.createLogger(AtlasStylerGUI.class);
 
 	private StylerMapView stylerMapView = null;
@@ -130,12 +129,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(AVUtil.class));
-//
-//		// Setting up the logger from a XML configuration file. This is also
-//		// done in ASProps, as it is eventually called earlier.
-//		DOMConfigurator.configure(ASUtil.class.getResource("/as_log4j.xml"));
-		
-		ASUtil.initAsLogging();
+		//
+		// // Setting up the logger from a XML configuration file. This is also
+		// // done in ASProps, as it is eventually called earlier.
+		// DOMConfigurator.configure(AsSwingUtil.class.getResource("/as_log4j.xml"));
+
+		AsSwingUtil.initAsLogging();
 
 		// Output information about the LGPL license
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
@@ -165,7 +164,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		 * Setting a nice AtlasStylerGUI icons
 		 */
 		List<Image> icons = new ArrayList<Image>(2);
-		ClassLoader cl = ASUtil.class.getClassLoader();
+		ClassLoader cl = AsSwingUtil.class.getClassLoader();
 		final String imagePackageName = "icons/";
 		icons.add(new ImageIcon(cl.getResource(imagePackageName
 				+ "as_icon16.png")).getImage());
@@ -199,13 +198,13 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	private JMenuBar createMenuBar() {
 		JMenuBar jMenuBar = new JMenuBar();
 
-		JMenu fileMenu = new JMenu(ASUtil.R("MenuBar.FileMenu"));
+		JMenu fileMenu = new JMenu(AsSwingUtil.R("MenuBar.FileMenu"));
 
 		jMenuBar.add(fileMenu);
 
 		{ // Import WIzard
 			JMenuItem mi = new JMenuItem(new AbstractAction(
-					ASUtil.R("MenuBar.FileMenu.ImportWizard")) {
+					AsSwingUtil.R("MenuBar.FileMenu.ImportWizard")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -489,7 +488,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						exportSLDFile = new File(exportSLDFile.getParentFile(),
 								filenamelc + ".sld");
 						JOptionPane.showMessageDialog(AtlasStylerGUI.this,
-								ASUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",
+								AsSwingUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",
 										exportSLDFile.getName()));
 					}
 
@@ -749,7 +748,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				// AVSwingUtil.showMessageDialog(this, AtlasStyler.R(
 				// "AtlasStylerGUI.importVectorLayerNoSLD", styledFS
 				// .getSldFile().getName()));
-				styledFS.setStyle(ASUtil.createDefaultStyle(styledFS));
+				styledFS.setStyle(AsSwingUtil.createDefaultStyle(styledFS));
 			}
 		}
 
