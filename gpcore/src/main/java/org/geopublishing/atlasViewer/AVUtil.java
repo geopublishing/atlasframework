@@ -51,7 +51,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
-import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.resources.CRSUtilities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -518,6 +517,8 @@ public class AVUtil {
 
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
+		
+		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 	}
 
 }

@@ -11,7 +11,6 @@
 package org.geopublishing.geopublisher.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Image;
@@ -49,7 +48,6 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPBugReportmailer;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
@@ -58,17 +56,13 @@ import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
-import org.geopublishing.geopublisher.swing.BugReportmailer;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
-import org.geotools.data.DataUtilities;
 
-import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.ResourceProviderManagerFrame;
 import schmitzm.swing.SwingUtil;
-import schmitzm.swing.log4j.LoggerFrame;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.HeapBar;

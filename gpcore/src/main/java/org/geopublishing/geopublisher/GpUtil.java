@@ -14,16 +14,12 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -56,6 +52,8 @@ public class GpUtil {
 		if (GPProps.get(org.geopublishing.geopublisher.GPProps.Keys.logLevel) != null) {
 //			Logger.getRootLogger().setLevel() );
 		}
+		
+		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 	}
 
 	/**

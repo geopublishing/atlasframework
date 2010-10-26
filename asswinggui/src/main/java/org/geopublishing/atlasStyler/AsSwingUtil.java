@@ -5,6 +5,8 @@ import javax.xml.parsers.FactoryConfigurationError;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import schmitzm.swing.ExceptionDialog;
+
 public class AsSwingUtil extends ASUtil {
 
 	/**
@@ -20,5 +22,7 @@ public class AsSwingUtil extends ASUtil {
 
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("asFileLogger"));
+
+		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 	}
 }
