@@ -27,6 +27,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
@@ -37,6 +38,7 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 
 /**
  * This extension of a {@link JMenuBar} holds all the logic of an atlas
@@ -67,16 +69,16 @@ public class AtlasMenuBar extends JMenuBar {
 		if (!hasFileMenu) {
 			// Create a new default help menu with standard labels!
 
-			AtlasJMenu fileMenu = new AtlasJMenu(AtlasViewerGUI
-					.R("AtlasViewer.FileMenu"));
+			AtlasJMenu fileMenu = new AtlasJMenu(
+					AtlasViewerGUI.R("AtlasViewer.FileMenu"));
 
 			addFileMenuItems(fileMenu);
 			add(fileMenu, 0);
 		}
 
 		if (!hasHelpMenu) {
-			AtlasJMenu helpMenu = new AtlasJMenu(AtlasViewerGUI
-					.R("AtlasViewer.HelpMenu"));
+			AtlasJMenu helpMenu = new AtlasJMenu(
+					AtlasViewerGUI.R("AtlasViewer.HelpMenu"));
 
 			addHelpMenuItems(helpMenu);
 			add(helpMenu);
@@ -109,8 +111,9 @@ public class AtlasMenuBar extends JMenuBar {
 			Object child = children.nextElement();
 			countHere++;
 			if (countHere > maxItems) {
-				JMenu weiterMenu = new JMenu(AtlasViewerGUI
-						.R("AtlasViewer.MenuToLongForScreen.Next"));
+				JMenu weiterMenu = new JMenu(
+						AtlasViewerGUI
+								.R("AtlasViewer.MenuToLongForScreen.Next"));
 				parent.add(weiterMenu);
 				parent = weiterMenu;
 				countHere = 0;
@@ -167,9 +170,9 @@ public class AtlasMenuBar extends JMenuBar {
 
 						if ((atlasViewer.getMap() == null)
 								|| (atlasViewer.getMapView() == null)) {
-							JOptionPane.showMessageDialog(atlasViewer
-									.getJFrame(), "Please open a map first!",
-									"message", // i8n
+							JOptionPane.showMessageDialog(
+									atlasViewer.getJFrame(),
+									"Please open a map first!", "message", // i8n
 									JOptionPane.OK_OPTION);
 							return;
 						}
@@ -199,7 +202,7 @@ public class AtlasMenuBar extends JMenuBar {
 		 * The MenuItem Language to change the language of the application
 		 */
 		fileMenu.add(atlasViewer.getLanguageSubMenu());
-		
+
 		/**
 		 * The MenuItem EXIT to end the application
 		 */
@@ -212,8 +215,7 @@ public class AtlasMenuBar extends JMenuBar {
 	 *         referenced in the whole atlas at once. It is invisible if we are
 	 *         not in a JavaWebStart environment.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @throws UnavailableServiceException
 	 */
 	public JMenuItem getJWSDownloadAllMenuItem()
@@ -267,7 +269,8 @@ public class AtlasMenuBar extends JMenuBar {
 									@Override
 									protected Void doInBackground()
 											throws Exception {
-										JNLPSwingUtil.loadPart(parts, statusDialog);
+										JNLPSwingUtil.loadPart(parts,
+												statusDialog);
 										return null;
 									}
 
@@ -326,9 +329,10 @@ public class AtlasMenuBar extends JMenuBar {
 		// exists a matching HTML file
 		// ******************************************************************
 		if (atlasViewer.getAtlasConfig().getAboutHTMLURL() != null) {
-			JMenuItem aboutMenuItem = new AtlasMenuItem(); 
-			aboutMenuItem.setText(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About",
-					atlasViewer.getAtlasConfig().getTitle().toString()));
+			JMenuItem aboutMenuItem = new AtlasMenuItem();
+			aboutMenuItem.setText(AtlasViewerGUI.R(
+					"AtlasViewer.HelpMenu.About", atlasViewer.getAtlasConfig()
+							.getTitle().toString()));
 			aboutMenuItem.setToolTipText(AtlasViewerGUI.R(
 					"AtlasViewer.HelpMenu.About.tooltip", atlasViewer
 							.getAtlasConfig().getTitle().toString()));
@@ -337,6 +341,9 @@ public class AtlasMenuBar extends JMenuBar {
 			aboutMenuItem.addActionListener(atlasViewer);
 			helpMenu.add(aboutMenuItem);
 		}
+
+		// Add the logging menu, which allows to open the logfile
+		helpMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 	}
 
 	/**
@@ -364,8 +371,9 @@ public class AtlasMenuBar extends JMenuBar {
 	public JCheckBoxMenuItem getJCheckBoxMenuItemAntiAliasing() {
 		if (jCheckBoxMenuItemAntiAliasing == null) {
 			jCheckBoxMenuItemAntiAliasing = new JCheckBoxMenuItem();
-			jCheckBoxMenuItemAntiAliasing.setSelected(atlasViewer.getAtlasConfig().getProperties().get(
-					AVProps.Keys.antialiasingMaps, "1").equals("1"));
+			jCheckBoxMenuItemAntiAliasing.setSelected(atlasViewer
+					.getAtlasConfig().getProperties()
+					.get(AVProps.Keys.antialiasingMaps, "1").equals("1"));
 			jCheckBoxMenuItemAntiAliasing.setText(AtlasViewerGUI
 					.R("AtlasViewer.AAMenuItem.SetText.toggle_antialiasing"));
 			jCheckBoxMenuItemAntiAliasing.setActionCommand("antiAliasing");
