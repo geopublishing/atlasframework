@@ -246,7 +246,7 @@ public class DpLayerRaster extends
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
 						// MS-01.sc
-						// gc = GeoImportUtil.GridFromArcInfoASCII(url);
+//						 gc = GeoImportUtil.GridFromArcInfoASCII(url);
 						gc = new ArcGridReader(url);
 						// MS-01.ec
 						setType(DpEntryType.RASTER_ARCASCII);
