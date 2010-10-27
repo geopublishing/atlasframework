@@ -23,6 +23,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AVProps.Keys;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -30,6 +31,8 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterReader;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_GridCoverage2D;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
@@ -711,7 +714,12 @@ public class AMLImport {
 
 		// LOGGER.debug("parseDatapoolLayerRaster");
 
-		final DpLayerRaster dpe = new DpLayerRaster(ac);
+		final DpLayerRaster<?, ChartStyle> dpe;
+		if (ac.getProperties().get(Keys.rasterReader, "1").equals("1")) {
+			dpe = new DpLayerRasterReader(ac);
+		} else {
+			dpe = new DpLayerRaster_GridCoverage2D(ac);
+		}
 
 		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
 		// ****************************************************************************

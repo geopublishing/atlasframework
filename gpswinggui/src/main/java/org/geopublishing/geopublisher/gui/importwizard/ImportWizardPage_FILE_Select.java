@@ -16,7 +16,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.dp.DpEntryFactory;
-import org.geopublishing.geopublisher.dp.DpLayerRasterTester;
+import org.geopublishing.geopublisher.dp.DpLayerRasterReaderTester;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
 import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -114,7 +114,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 
 					dc
 							.addChoosableFileFilter(DpLayerVectorFeatureSourceTester.FILEFILTER);
-					dc.addChoosableFileFilter(DpLayerRasterTester.FILEFILTER);
+					dc.addChoosableFileFilter(DpLayerRasterReaderTester.FILEFILTER);
 					dc.addChoosableFileFilter(DpMediaPDFTester.FILEFILTER);
 					dc
 							.addChoosableFileFilter(DpEntryFactory.FILEFILTER_ALL_DPE_IMPORTABLE);

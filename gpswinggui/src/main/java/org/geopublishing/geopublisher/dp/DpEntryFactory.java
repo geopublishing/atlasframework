@@ -46,7 +46,7 @@ public class DpEntryFactory {
 		
 		@Override
 		public boolean accept(File f) {
-			if (DpLayerRasterTester.FILEFILTER.accept(f)) return true;
+			if (DpLayerRasterReaderTester.FILEFILTER.accept(f)) return true;
 			if (DpLayerVectorFeatureSourceTester.FILEFILTER.accept(f)) return true;
 			if (DpMediaPDFTester.FILEFILTER.accept(f)) return true;
 			return false;
@@ -59,7 +59,7 @@ public class DpEntryFactory {
 		testers.add(new DpLayerVectorFeatureSourceTester());
 //		testers.add(new DpMediaVideoTest());
 		testers.add(new DpMediaPDFTester());
-		testers.add(new DpLayerRasterTester());
+		testers.add(new DpLayerRasterReaderTester());
 		testers.add(new DpLayerRasterPyramidTester());
 	}
 

@@ -18,7 +18,7 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_GridCoverage2D;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
@@ -31,10 +31,10 @@ import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
 import schmitzm.io.IOUtil;
 
-public class DpLayerRasterEd extends DpLayerRaster implements
+public class DpLayerRasterEd_ArcASCII extends DpLayerRaster_GridCoverage2D implements
 		DpEditableInterface {
 	final static private Logger LOGGER = Logger
-			.getLogger(DpLayerRasterEd.class);
+			.getLogger(DpLayerRasterEd_ArcASCII.class);
 
 	/**
 	 * Constructor
@@ -44,7 +44,7 @@ public class DpLayerRasterEd extends DpLayerRaster implements
 	 * 
 	 * @throws IOException
 	 */
-	public DpLayerRasterEd(Component owner, AtlasConfig ac, File file)
+	public DpLayerRasterEd_ArcASCII(Component owner, AtlasConfig ac, File file)
 			throws AtlasImportException {
 		super(ac);
 		copyAndImport(owner, file);

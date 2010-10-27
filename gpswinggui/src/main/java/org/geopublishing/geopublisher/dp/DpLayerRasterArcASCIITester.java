@@ -126,10 +126,10 @@ public class DpLayerRasterArcASCIITester implements DpEntryTesterInterface {
 		return false;
 	}
 
-	public DpLayerRasterEd create(AtlasConfigEditable ac, File f,
+	public DpLayerRasterEd_ArcASCII create(AtlasConfigEditable ac, File f,
 			Component owner) throws AtlasImportException {
 		// TODO Here we need to create an ArcASCIIEd instance
-		return new DpLayerRasterEd(owner, ac, f);
+		return new DpLayerRasterEd_ArcASCII(owner, ac, f);
 	}
 
 }

@@ -35,8 +35,8 @@ import schmitzm.swing.ExceptionDialog;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-public class DpLayerRasterTester implements DpEntryTesterInterface {
-	Logger log = Logger.getLogger(DpLayerRasterTester.class);
+public class DpLayerRasterReaderTester implements DpEntryTesterInterface {
+	Logger log = Logger.getLogger(DpLayerRasterReaderTester.class);
 
 	public static final FileFilter FILEFILTER = new FileFilter() {
 
@@ -214,9 +214,9 @@ public class DpLayerRasterTester implements DpEntryTesterInterface {
 		return false;
 	}
 
-	public DpLayerRasterEd create(AtlasConfigEditable ac, File f,
+	public DpLayerRasterEd_Reader create(AtlasConfigEditable ac, File f,
 			Component owner) throws AtlasImportException {
-		return new DpLayerRasterEd(owner, ac, f);
+		return new DpLayerRasterEd_Reader(owner, ac, f);
 	}
 
 }

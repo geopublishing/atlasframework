@@ -12,7 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.io.FileUtils;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.AMLImport;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterReader;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
@@ -149,7 +149,7 @@ public class DpLayerRasterEdTest {
 	public void testTransparencyOfAAIGrid_Transparent_With_SLD_GP()
 			throws Throwable {
 
-		DpLayerRaster rasterAAIGrid_TransparentWithSLD = (DpLayerRaster) ace
+		DpLayerRasterReader rasterAAIGrid_TransparentWithSLD = (DpLayerRasterReader) ace
 				.getDataPool().get(
 						RASTER_AAIGRID_SLDTRANSPARENT_ID_IN_RASTERATLAS);
 		DefaultMapLayer mlayer = new DefaultMapLayer(
@@ -160,8 +160,8 @@ public class DpLayerRasterEdTest {
 
 	@Test
 	public void testTransparencyOfGeotiffRGBonly_GP() throws Throwable {
-		DpLayerRaster raster = (DpLayerRaster) ace.getDataPool().get(
-				RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS);
+		DpLayerRasterReader raster = (DpLayerRasterReader) ace.getDataPool()
+				.get(RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS);
 		DefaultMapLayer mlayer = new DefaultMapLayer(raster.getGeoObject(),
 				raster.getStyle());
 		checkMapLayer_GEOTIFF_RGB(mlayer);
@@ -188,7 +188,7 @@ public class DpLayerRasterEdTest {
 		assertEquals(3, acLoaded.getDataPool().size());
 
 		{ // Test Raster 1
-			DpLayerRaster rasterGeoTIFFmitSLD = (DpLayerRaster) acLoaded
+			DpLayerRasterReader rasterGeoTIFFmitSLD = (DpLayerRasterReader) acLoaded
 					.getDataPool()
 					.get(RASTER_GEOTIFF_MIT_SLD_ID_IN_RASTERATLAS);
 			DefaultMapLayer mlayer = new DefaultMapLayer(
@@ -198,7 +198,7 @@ public class DpLayerRasterEdTest {
 		}
 
 		{ // Test Raster 2
-			DpLayerRaster rasterGeoTIFF_RGBonly = (DpLayerRaster) acLoaded
+			DpLayerRasterReader rasterGeoTIFF_RGBonly = (DpLayerRasterReader) acLoaded
 					.getDataPool().get(
 							RASTER_GEOTIFF_RGB_OHNESLD_ID_IN_RASTERATLAS);
 			DefaultMapLayer mlayer = new DefaultMapLayer(
@@ -208,7 +208,7 @@ public class DpLayerRasterEdTest {
 		}
 
 		{ // Test Raster 3
-			DpLayerRaster rasterAAIGrid_SLDTransp = (DpLayerRaster) acLoaded
+			DpLayerRasterReader rasterAAIGrid_SLDTransp = (DpLayerRasterReader) acLoaded
 					.getDataPool().get(
 							RASTER_AAIGRID_SLDTRANSPARENT_ID_IN_RASTERATLAS);
 			DefaultMapLayer mlayer = new DefaultMapLayer(
@@ -221,8 +221,8 @@ public class DpLayerRasterEdTest {
 
 	@Test
 	public void testTransparencyOfGeotiffWithSLD_GP() throws Throwable {
-		DpLayerRaster rasterGeoTIFFmitSLD = (DpLayerRaster) ace.getDataPool()
-				.get(RASTER_GEOTIFF_MIT_SLD_ID_IN_RASTERATLAS);
+		DpLayerRasterReader rasterGeoTIFFmitSLD = (DpLayerRasterReader) ace
+				.getDataPool().get(RASTER_GEOTIFF_MIT_SLD_ID_IN_RASTERATLAS);
 		DefaultMapLayer mlayer = new DefaultMapLayer(
 				rasterGeoTIFFmitSLD.getGeoObject(),
 				rasterGeoTIFFmitSLD.getStyle());

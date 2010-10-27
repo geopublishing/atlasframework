@@ -120,6 +120,8 @@ public class GpFrame extends JFrame {
 
 	};
 
+	private JCheckBoxMenuItem rasterCheckBoxMenuItem;
+
 	public AtlasConfigEditable getAce() {
 		return gp.getAce();
 	}
@@ -617,8 +619,38 @@ public class GpFrame extends JFrame {
 			//
 			// });
 			// logMenu.add(jMenuItemSendLog);
-			
+
 		}
+
+		// TODO unschön
+		rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
+				"User new raster reader for ascii") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean oldValue = GPProps
+						.getBoolean(
+								org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+								true);
+
+				boolean newValue = !oldValue;
+				GPProps.set(
+						org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+						newValue);
+				rasterCheckBoxMenuItem.setSelected(newValue);
+			}
+		});
+		rasterCheckBoxMenuItem
+				.setSelected((GPProps
+						.getBoolean(
+								org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+								true)));
+		optionsMenu.add(rasterCheckBoxMenuItem);
+
+		/**
+		 * Manage ASCII Reader
+		 */
+
 		return optionsMenu;
 	}
 
