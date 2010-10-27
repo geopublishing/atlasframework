@@ -63,6 +63,13 @@ public class JarExportUtilTest {
 	}
 
 	@Test
+	public void testCleanUrl(){
+		String libNameChecked = "http://www.geopublishing.org/gp/././gt-xsd-core-2.6.5.jar"; 
+		libNameChecked = libNameChecked.replace("./", "");
+		assertEquals("http://www.geopublishing.org/gp/gt-xsd-core-2.6.5.jar", libNameChecked);
+	}
+	
+	@Test
 	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
 		assertNotNull(atlasExportTesttDir);
 		LOGGER.debug("atlasExportTesttDir="
@@ -361,5 +368,6 @@ public class JarExportUtilTest {
 
 		assertTrue(exeFile + " must exist after creation", exeFile.exists());
 	}
+	
 
 }

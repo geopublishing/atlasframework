@@ -1377,12 +1377,13 @@ public class JarExportUtil {
 				String libNameChecked;
 				if (libName.contains(GPCORE_JARNAME))
 					aResource.setAttribute("main", "true");
+				
 				libNameChecked = LIB_DIR + "/" + libName;
 
 				// TODO Make this nicer!
 				// if (export SHould Reuse Online JARs) {
-				if (ReleaseUtil.isSnapshow(GeopublisherGUI.class)) {
-					libNameChecked = "http://www.geopublishing.org/gp_/"
+				if (ReleaseUtil.isSnapshot(GeopublisherGUI.class)) {
+					libNameChecked = "http://www.geopublishing.org/gp/"
 							+ libNameChecked;
 				} else {
 					libNameChecked = "http://www.geopublishing.org/gp_stable/"
@@ -1391,7 +1392,7 @@ public class JarExportUtil {
 				// }
 
 				// Cleaning the URL for better reuse
-				libNameChecked.replace("./", "");
+				libNameChecked = libNameChecked.replace("./", "");
 
 				aResource.setAttribute("href", libNameChecked);
 				aResource.setAttribute("part", "main");
