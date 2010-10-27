@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -319,30 +320,27 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * Creates an index.html that allows to start the Atlas
+	 * Creates an index.html that allows to start the Atlas.
 	 * 
-	 * @param targetJar
+	 * @param directory
+	 *            The directory to create the index.html in
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @param ace
-	 * @throws AtlasExportException
+	 * @return a {@link File} object to the created .html file.
 	 */
-	private static void createIndexHTML(final AtlasConfigEditable ace,
-			final File targetJar) throws AtlasExportException {
+	static File createIndexHTML(final AtlasConfigEditable ace,
+			final File directory) throws AtlasExportException {
 		// **********************************************************************
 		//
 		// Creating the index.html
 		//
 		// **********************************************************************
+		final File htmlFile = new File(directory, "index.html");
 
+		FileWriter fileWriter = null;
 		try {
-			final File indexFile = new File(targetJar.getParent(), "index.html");
-			final FileWriter fileWriter = new FileWriter(indexFile);
+			fileWriter = new FileWriter(htmlFile);
 			fileWriter
 					.write("<?xml version='1.0' encoding='UTF-8'?><html><body>\n");
-			final Date date = new Date();
-			fileWriter.write("<h2>atlas build time: " + date.toString()
-					+ "</h2>\n");
 
 			/**
 			 * Start des JNLP über das deplayJava.js
@@ -351,27 +349,45 @@ public class JarExportUtil {
 			 */
 			String jnlpLocation = ace.getJnlpBaseUrl();
 
+			fileWriter.write("<h2>" + ace.getTitle() + "</h2>");
 			fileWriter
-					.write("<h2>"
-							+ ace.getTitle()
-							+ "</h2>"
-							+ "Created with <a href=\"http://en.geopublishing.org/Geopublisher\">Geopublisher</a>!"
-							+ "<br>Us can use the following button to start the atlas:<center>");
+					.write("Exported: "
+							+ DateFormat.getDateInstance().format(new Date())
+							+ "<br/>"
+							+ "Created with <a href=\"http://en.geopublishing.org/Geopublisher\">Geopublisher</a> "
+							+ ReleaseUtil.getVersionInfo(GeopublisherGUI.class)
+							+ "<br/>");
 
+			// ZIP
+			final String zipname = ace.getBaseName() + ".zip";
+			fileWriter.write("Download offline version: ");
+			fileWriter.write("<a href='" + zipname + "'> " + zipname
+					+ "</a><br/>");
+
+			// JWS
+			fileWriter.write("Start atlas via JWS:");
 			String jsScript = GPProps.get(Keys.JWSStartScript).replaceAll(
 					"__JNLPURL__", jnlpLocation + JNLP_FILENAME);
 			jsScript = jsScript.replace("__MINJAVAVERSION__",
 					GPProps.get(Keys.MinimumJavaVersion));
 			fileWriter.write(jsScript);
+			fileWriter.write("<br/>");
 
-			fileWriter.write("</center></html></body>\n");
+			fileWriter.write("</html></body>\n");
 			fileWriter.close();
-		} catch (final FileNotFoundException e) {
-			throw new AtlasExportException("Creating index.html failed", e);
+			return htmlFile;
 		} catch (final IOException e) {
 			throw new AtlasExportException("Creating index.html failed", e);
+		} finally {
+			if (fileWriter != null) {
+				try {
+					fileWriter.close();
+				} catch (IOException e) {
+					throw new AtlasExportException(
+							"Creating index.html failed", e);
+				}
+			}
 		}
-
 	}
 
 	protected static void createReadmeTXT(final AtlasConfigEditable ace,
@@ -1377,7 +1393,7 @@ public class JarExportUtil {
 				String libNameChecked;
 				if (libName.contains(GPCORE_JARNAME))
 					aResource.setAttribute("main", "true");
-				
+
 				libNameChecked = LIB_DIR + "/" + libName;
 
 				// TODO Make this nicer!
@@ -1887,7 +1903,8 @@ public class JarExportUtil {
 				LOGGER.debug("Creating JNLP...");
 				createJNLP(ace, targetJar);
 
-				createIndexHTML(ace, targetJar);
+				// Create a generic index.html
+				createIndexHTML(ace, targetJar.getParentFile());
 			}
 
 			/*

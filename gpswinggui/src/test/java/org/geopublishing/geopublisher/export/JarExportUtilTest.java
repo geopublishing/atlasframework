@@ -30,11 +30,14 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
+import org.geotools.data.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +56,8 @@ public class JarExportUtilTest {
 	@Before
 	public void setUp() throws Exception {
 		atlasExportTesttDir = GpTestingUtil.createAtlasExportTesttDir();
-		atlasConfig = GpTestingUtil.getAtlasConfigE(GpTestingUtil.TestAtlas.small);
+		atlasConfig = GpTestingUtil
+				.getAtlasConfigE(GpTestingUtil.TestAtlas.small);
 	}
 
 	@After
@@ -63,12 +67,13 @@ public class JarExportUtilTest {
 	}
 
 	@Test
-	public void testCleanUrl(){
-		String libNameChecked = "http://www.geopublishing.org/gp/././gt-xsd-core-2.6.5.jar"; 
+	public void testCleanUrl() {
+		String libNameChecked = "http://www.geopublishing.org/gp/././gt-xsd-core-2.6.5.jar";
 		libNameChecked = libNameChecked.replace("./", "");
-		assertEquals("http://www.geopublishing.org/gp/gt-xsd-core-2.6.5.jar", libNameChecked);
+		assertEquals("http://www.geopublishing.org/gp/gt-xsd-core-2.6.5.jar",
+				libNameChecked);
 	}
-	
+
 	@Test
 	public void testExportAtlasLibsNoSignNoGUI() throws Exception {
 		assertNotNull(atlasExportTesttDir);
@@ -368,6 +373,23 @@ public class JarExportUtilTest {
 
 		assertTrue(exeFile + " must exist after creation", exeFile.exists());
 	}
-	
+
+	@Test
+	public void testCreateIndexHTML() throws IOException {
+		AtlasConfigEditable ace = TestAtlas.small.getAce();
+		File html = JarExportUtil.createIndexHTML(ace,
+				TestingUtil.getNewTempDir());
+
+		assertTrue(html.exists());
+
+		System.out.println(html.getAbsolutePath() + ":");
+		System.out.println(IOUtil.readFileAsString(html));
+
+		if (TestingUtil.INTERACTIVE) {
+			AVSwingUtil.lauchHTMLviewer(null, DataUtilities.fileToURL(html));
+		} else {
+		}
+
+	}
 
 }

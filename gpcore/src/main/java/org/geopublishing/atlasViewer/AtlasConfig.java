@@ -49,7 +49,7 @@ import skrueger.swing.Disposable;
 public class AtlasConfig implements Disposable {
 
 	/** Default JNLP base URL for new atlases **/
-	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS = "http://www.geopublishing.org/atlases/myatlas/";
+	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS = "http://atlas.geopublishing.org/atlases/myatlas/";
 
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
 
