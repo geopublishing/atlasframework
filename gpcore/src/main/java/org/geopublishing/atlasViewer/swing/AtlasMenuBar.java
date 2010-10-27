@@ -30,11 +30,13 @@ import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.AVProps.Keys;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.swing.internal.AtlasJMenu;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
+import org.geopublishing.geopublisher.GPProps;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
@@ -56,6 +58,8 @@ public class AtlasMenuBar extends JMenuBar {
 
 	boolean hasFileMenu = false;
 	boolean hasHelpMenu = false;
+
+	private JCheckBoxMenuItem rasterCheckBoxMenuItem;
 
 	public AtlasMenuBar(AtlasViewerGUI atlasViewer) {
 		this.atlasViewer = atlasViewer;
@@ -341,8 +345,32 @@ public class AtlasMenuBar extends JMenuBar {
 			helpMenu.add(aboutMenuItem);
 		}
 
-		// Add the logging menu, which allows to open the logfile
+		// Add the logging menu, which allows to open the logfile, TODO
+		// OptionsMenu
 		helpMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
+
+		// TODO unschön, Switch raster Renderers for testing
+		{
+			final AVProps p = atlasViewer.getAtlasConfig().getProperties();
+			rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
+					"Use new reader for raster") {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					boolean oldValue = p.getBoolean(Keys.rasterReader, true);
+
+					boolean newValue = !oldValue;
+					GPProps.set(
+							org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+							newValue);
+					rasterCheckBoxMenuItem.setSelected(newValue);
+				}
+			});
+			rasterCheckBoxMenuItem.setSelected(p.getBoolean(Keys.rasterReader,
+					true));
+			helpMenu.add(rasterCheckBoxMenuItem);
+		}
+
 	}
 
 	/**
