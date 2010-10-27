@@ -77,6 +77,10 @@ public class GpUtil {
 				return false;
 			if (file.getName().toLowerCase().endsWith("bak"))
 				return false;
+			if (file.getName().equals("build.xml"))
+				return false;
+			if (file.getName().equals("pom.xml"))
+				return false;
 			return true;
 		}
 
