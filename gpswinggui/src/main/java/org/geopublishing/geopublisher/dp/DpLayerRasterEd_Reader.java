@@ -18,7 +18,7 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterReader;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
@@ -31,7 +31,7 @@ import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
 import schmitzm.io.IOUtil;
 
-public class DpLayerRasterEd_Reader extends DpLayerRasterReader implements
+public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 		DpEditableInterface {
 	final static private Logger LOGGER = Logger
 			.getLogger(DpLayerRasterEd_Reader.class);
