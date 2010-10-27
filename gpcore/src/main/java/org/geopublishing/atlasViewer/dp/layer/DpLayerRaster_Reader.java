@@ -53,31 +53,25 @@ import skrueger.i8n.Translation;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-// MS-01.sc
-// public class DpLayerRaster extends DpLayer<GridCoverage2D, ChartStyle>
-// implements StyledGridCoverageInterface, ZoomRestrictableGridInterface{
-public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DReader, ChartStyle> implements
+public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DReader, ChartStyle> implements
 		StyledGridCoverageReaderInterface, ZoomRestrictableGridInterface {
-	// MS-01.ec
 
-	static final private Logger LOGGER = Logger.getLogger(DpLayerRasterReader.class);
+	static final private Logger LOGGER = Logger.getLogger(DpLayerRaster_Reader.class);
 
 	/**
 	 * caches the {@link GridCoverage2D} Can be un-cached by calling uncache()
 	 */
-	// MS-01.sc
-	// protected GridCoverage2D gc;
 	protected AbstractGridCoverage2DReader gc;
 
 	private RasterLegendData legendMetaData;
 
 	/**
-	 * Creates an empty {@link DpLayerRasterReader}.
+	 * Creates an empty {@link DpLayerRaster_Reader}.
 	 * 
 	 * @param ac
 	 *            {@link AtlasConfig}
 	 */
-	public DpLayerRasterReader(AtlasConfig ac) {
+	public DpLayerRaster_Reader(AtlasConfig ac) {
 		super(ac);
 		setType(DpEntryType.RASTER);
 	}
@@ -108,7 +102,7 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 						return false;
 					}
 
-					URL url = AVSwingUtil.getUrl(DpLayerRasterReader.this, owner);
+					URL url = AVSwingUtil.getUrl(DpLayerRaster_Reader.this, owner);
 					final File file = new File(exportDir, getFilename());
 
 					// ****************************************************************************
@@ -117,7 +111,7 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 					publish(file.getAbsolutePath());
 					FileUtils
 							.copyURLToFile(AVSwingUtil.getUrl(
-									DpLayerRasterReader.this, owner), file);
+									DpLayerRaster_Reader.this, owner), file);
 
 					// Try to copy pending world files...
 					for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
@@ -221,17 +215,9 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 
 							}
 
-							// MS-01.sc
-							// gc = GeoImportUtilURL.readGridFromGeoTiff(inTemp,
-							// null, readParams);
 							gc = new GeoTiffReader(inTemp);
-							// MS-01.ec
 						} else {
-							// MS-01.sc
-							// gc = GeoImportUtilURL.readGridFromGeoTiff(url,
-							// null, readParams);
 							gc = new GeoTiffReader(url);
-							// MS-01.ec
 						}
 
 						setType(DpEntryType.RASTER_GEOTIFF);
@@ -244,10 +230,7 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 				for (ARCASCII_POSTFIXES ending : GeoImportUtil.ARCASCII_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-						// MS-01.sc
-//						 gc = GeoImportUtil.GridFromArcInfoASCII(url);
 						gc = new ArcGridReader(url);
-						// MS-01.ec
 						setType(DpEntryType.RASTER_ARCASCII);
 					}
 				}
@@ -257,11 +240,8 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 				for (IMAGE_POSTFIXES ending : GeoImportUtil.IMAGE_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-						// MS-01.sc
-						// gc = GeoImportUtilURL.readGridFromImage(url);
 						gc = new WorldImageReader(url);
 						setType(DpEntryType.RASTER_IMAGEWORLD);
-						// MS-01.ec
 					}
 				}
 
@@ -286,12 +266,7 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 						e.getHigh(1), // Y1
 						e.getLow(1) // Y2
 				);
-				// MS-01.ec
-
-				// MS-01.sc
-				// crs = gc.getCoordinateReferenceSystem2D();
 				crs = gc.getCrs();
-				// MS-01.ec
 
 				// Object object = gc.getProperties().get("GC_NODATA");
 				// gc.getSampleDimension(0).getNoDataValues();
@@ -414,16 +389,16 @@ public class DpLayerRasterReader extends DpLayerRaster<AbstractGridCoverage2DRea
 	// }
 
 	@Override
-	public DpLayerRasterReader copy() {
-		DpLayerRasterReader copy = new DpLayerRasterReader(ac);
-		return (DpLayerRasterReader) copyTo(copy);
+	public DpLayerRaster_Reader copy() {
+		DpLayerRaster_Reader copy = new DpLayerRaster_Reader(ac);
+		return (DpLayerRaster_Reader) copyTo(copy);
 	}
 
 	@Override
 	public DpLayer<AbstractGridCoverage2DReader, ChartStyle> copyTo(
 			DpLayer<AbstractGridCoverage2DReader, ChartStyle> target) {
 
-		DpLayerRasterReader copy = (DpLayerRasterReader) super.copyTo(target);
+		DpLayerRaster_Reader copy = (DpLayerRaster_Reader) super.copyTo(target);
 
 		copy.setLegendMetaData(getLegendMetaData()); // TODO should be copied!
 

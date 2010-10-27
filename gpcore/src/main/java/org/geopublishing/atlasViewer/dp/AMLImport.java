@@ -31,7 +31,7 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterReader;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_GridCoverage2D;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
@@ -716,7 +716,7 @@ public class AMLImport {
 
 		final DpLayerRaster<?, ChartStyle> dpe;
 		if (ac.getProperties().get(Keys.rasterReader, "1").equals("1")) {
-			dpe = new DpLayerRasterReader(ac);
+			dpe = new DpLayerRaster_Reader(ac);
 		} else {
 			dpe = new DpLayerRaster_GridCoverage2D(ac);
 		}
