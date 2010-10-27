@@ -65,6 +65,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
 import org.geopublishing.geopublisher.CliOptions;
 import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.gui.AtlasLanguagesConfigDialog;
@@ -254,7 +255,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		GpUtil.initGpLogging();
-		
+
 		Log.error("test");
 
 		System.setProperty("file.encoding", "UTF-8");
@@ -859,12 +860,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			cancelled = languageSelectionDialog.isCancel();
 		}
 
-		// ******************************************************************
-		// The Atlas was configured successful
-		// ******************************************************************
-
-		// ace.createDirectoryStructure();
-
 		// We have to save this now, so that ad/atlas.xml exists
 		// Without ad/atlas.xml we will not find our resources
 		GpSwingUtil.save(ace, getJFrame(), false);
@@ -876,44 +871,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		getJFrame().updateMenu();
 	}
-
-	// /**
-	// * Evaluates the command line arguments. May react with GUI or commandline
-	// * messages.
-	// * @throws ParseException
-	// */
-	// private void evaluateArgs(final String[] args) throws ParseException {
-	// // boolean printHelpAndExit = false;
-	// //
-	// // for (final String arg : args) {
-	// // boolean understood = false;
-	// //
-	// // // Was help requested?
-	// // if (arg.equalsIgnoreCase("-h") || arg.equalsIgnoreCase("--help")
-	// // || arg.equalsIgnoreCase("-?") || arg.equalsIgnoreCase("/?")) {
-	// // understood = true;
-	// // printHelpAndExit = true;
-	// // }
-	// //
-	// // // Was help requested?
-	// // if (arg.equalsIgnoreCase("-e") || arg.equalsIgnoreCase("--export")
-	// // || arg.equalsIgnoreCase("-?") || arg.equalsIgnoreCase("/?")) {
-	// // understood = true;
-	// // printHelpAndExit = true;
-	// // }
-	// //
-	// // if (!understood) {
-	// // LOGGER.info("Not understood: " + arg);
-	// // printHelpAndExit = true;
-	// // break;
-	// // }
-	// //
-	// // }
-	// //
-	// // if (printHelpAndExit) {
-	// // printHelpAndExit();
-	// // }
-	// }
 
 	/**
 	 * Exists Geopublisher. Asks to save and may be canceled by the user.
@@ -940,6 +897,13 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(AVUtil.class)
 				+ " terminating with exitcode " + exitCode);
+
+		// Store the Logging Level in ~/.Geopublisher/Geopublisher.properties
+		{
+			GPProps.set(Keys.logLevel, Logger.getRootLogger().getLevel()
+					.toString());
+			GPProps.store();
+		}
 
 		System.exit(exitCode);
 	}

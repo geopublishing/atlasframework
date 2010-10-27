@@ -54,22 +54,18 @@ public class AVProps {
 	 * List of all valid Keys in the .properties file. Keys are mapped by
 	 * toString to Strings which equals their variable Name
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 */
 	public enum Keys {
 		maxMosaicTiles, // max number of tiles a mosaic my consist of
 		legendIconHeight, // Size of the Icons in the Legend
 		legendIconWidth, // Size of the Icons in the Legend
-		antialiasingMaps, // AntiAliase the Maps (needs much performance)
-
-		// TODO der ist komisch
-		antialiasingHTML // AntiAliase the HTML Editor Panels 0=false else
-		// =true
-		, LastExportFolder
+		antialiasingMaps, // AntiAliase the Maps (needs more performance) TODO
+							// antialiasing shoudl become map-specific
+		LastExportFolder
 		// Last folder anything was exported to
-		, showPopupOnStartup
+		, showPopupOnStartup, logLevel
 	}
 
 	private String propertiesFilename;
@@ -85,7 +81,7 @@ public class AVProps {
 	private final AtlasConfig atlasConfig;
 
 	// ****************************************************************************
-	// 
+	//
 	// The .properties file will be opened and parsed
 	//
 	// ****************************************************************************
@@ -127,21 +123,9 @@ public class AVProps {
 	 * @param appDirname
 	 *            Dirname in the User Home directory, e.g. ".shh"
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected void init(String propertiesFilename, String appDirname) {
-		// LOGGER.info("Initialising the AV Properties");
-
-		// String chartsetName = Charset.defaultCharset().name();
-		// LOGGER.info("Native JVM Charset is " + chartsetName);
-		//		
-		// String fileEncodingName = System.getProperty("file.encoding");
-		// LOGGER.info("Fileencoding is " + fileEncodingName);
-
-		// if (!chartsetName.equals("UTF-8")) throw new
-		// RuntimeException("JVM has to run in UTF-8. Please start JVM with '-Dfile.encoding=UTF-8'.");
-
 		this.propertiesFilename = propertiesFilename;
 		this.appDirname = appDirname;
 
@@ -160,8 +144,8 @@ public class AVProps {
 	protected File getPropertiesFile() {
 
 		if (propertiesFile == null) {
-			File applicationPropertiesDirectory = new File(new File(System
-					.getProperty("user.home")), appDirname);
+			File applicationPropertiesDirectory = new File(new File(
+					System.getProperty("user.home")), appDirname);
 			if (!applicationPropertiesDirectory.exists())
 				applicationPropertiesDirectory.mkdirs();
 
@@ -215,8 +199,7 @@ public class AVProps {
 	 * @param guiOwner
 	 *            If not <code>null</code> a JDialog message will inform the
 	 *            user.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void resetProperties(final Component guiOwner) {
 		// final String msg = AtlasViewer.RESOURCE
@@ -276,6 +259,15 @@ public class AVProps {
 	public final String get(Keys key, String defaultValue) {
 		return properties.getProperty(key.toString(), defaultValue);
 	}
+	
+
+	/**
+	 * Set a Value from the {@link Properties}
+	 */
+	public final void set(Keys key, String value) {
+		properties.setProperty(key.toString(), value);
+		store(null);
+	}
 
 	/**
 	 * Set a Value from the {@link Properties}
@@ -305,12 +297,11 @@ public class AVProps {
 				return defaultValue;
 			return Integer.valueOf(string.trim());
 		} catch (Exception e) {
-			LOGGER
-					.warn(
-							"The property value saved for "
-									+ key
-									+ " can't be converted to Integer. Returning default value "
-									+ defaultValue, e);
+			LOGGER.warn(
+					"The property value saved for "
+							+ key
+							+ " can't be converted to Integer. Returning default value "
+							+ defaultValue, e);
 		}
 		return defaultValue;
 	}
@@ -332,12 +323,11 @@ public class AVProps {
 				return defaultValue;
 			return Boolean.valueOf(string.trim());
 		} catch (Exception e) {
-			LOGGER
-					.warn(
-							"The property value saved for "
-									+ key
-									+ " can't be converted to Boolean. Returning default value "
-									+ defaultValue, e);
+			LOGGER.warn(
+					"The property value saved for "
+							+ key
+							+ " can't be converted to Boolean. Returning default value "
+							+ defaultValue, e);
 		}
 		return defaultValue;
 	}

@@ -75,7 +75,7 @@ public abstract class ASProps {
 		/** last used SB server on the list of DB servers **/
 		lastDbIdx,
 		/** last used import source in wizard **/
-		lastImportWizardType
+		lastImportWizardType, logLevel
 
 	}
 

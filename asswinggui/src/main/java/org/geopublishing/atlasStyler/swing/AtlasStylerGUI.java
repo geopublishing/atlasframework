@@ -280,6 +280,13 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		 */
 		JNLPUtil.registerAsSingleInstance(AtlasStylerGUI.this, false);
 
+		// Store the Logging Level in ~/.AtlasStyler/atlasStyler.properties
+		{
+			ASProps.set(Keys.logLevel, Logger.getRootLogger().getLevel()
+					.toString());
+			ASProps.store();
+		}
+
 		System.exit(exitCode);
 
 	}
@@ -488,7 +495,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 						exportSLDFile = new File(exportSLDFile.getParentFile(),
 								filenamelc + ".sld");
 						JOptionPane.showMessageDialog(AtlasStylerGUI.this,
-								AsSwingUtil.R("AtlasStylerGUI.FileNameChangeTo.msg",
+								AsSwingUtil.R(
+										"AtlasStylerGUI.FileNameChangeTo.msg",
 										exportSLDFile.getName()));
 					}
 

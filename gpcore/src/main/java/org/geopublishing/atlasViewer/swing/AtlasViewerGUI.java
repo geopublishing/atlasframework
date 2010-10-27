@@ -45,8 +45,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.io.DirectoryWalker.CancelException;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.AVProps.Keys;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
@@ -491,6 +493,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * seriouse exception during initialization.
 	 */
 	private void exitAV(int errorCode) {
+		// Store the Logging Level in ~/.AtlasStyler/atlasStyler.properties
+		if (getAtlasConfig() != null) {
+			getAtlasConfig().getProperties().set(atlasJFrame, Keys.logLevel,
+					Logger.getRootLogger().getLevel().toString());
+		}
+
 		// **************************************************************
 		// System is exiting...
 		// **************************************************************
@@ -637,6 +645,15 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 						publish(R("dialog.title.wait"));
 						new AMLImport().parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
+
+						// Apply the LOG level configured in the .properties
+						// file
+						String logLevelStr = getAtlasConfig().getProperties()
+								.get(Keys.logLevel);
+						if (logLevelStr != null) {
+							Logger.getRootLogger().setLevel(
+									Level.toLevel(logLevelStr));
+						}
 
 						return getAtlasConfig();
 					}

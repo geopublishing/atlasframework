@@ -19,11 +19,13 @@ import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
+import org.geopublishing.geopublisher.GPProps.Keys;
 
 import schmitzm.geotools.io.GeoExportUtil;
 import schmitzm.io.IOUtil;
@@ -36,23 +38,27 @@ public class GpUtil {
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
 
 	/**
-	 * Setting up the logger from a XML configuration file. We do that again in
-	 * GPPros, as it outputs log messages first. Does not change the
-	 * configuration if there are already appenders defined.
+	 * Setting up the logger from a global XML configuration file. This method
+	 * might be called multiple times.<br/>
+	 * This method does not do anything if there are already appenders defined.
 	 */
 	public static void initGpLogging() throws FactoryConfigurationError {
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
+		
 		DOMConfigurator.configure(GPProps.class
 				.getResource("/geopublishing_log4j.xml"));
 
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("gpFileLogger"));
-		
-		if (GPProps.get(org.geopublishing.geopublisher.GPProps.Keys.logLevel) != null) {
-//			Logger.getRootLogger().setLevel() );
+
+		// Apply the LOG level configured in the user-specific application .properties file 
+		String logLevelStr = GPProps
+				.get(Keys.logLevel);
+		if (logLevelStr != null) {
+			Logger.getRootLogger().setLevel(Level.toLevel(logLevelStr));
 		}
-		
+
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 	}
 

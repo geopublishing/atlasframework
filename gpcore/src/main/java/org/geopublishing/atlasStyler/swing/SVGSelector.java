@@ -62,7 +62,6 @@ import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Mark;
@@ -78,8 +77,6 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
-
-import com.vividsolutions.jts.geom.Point;
 
 // TODO Convert to AtlasDialog and add a local Database of SVG symbols
 public class SVGSelector extends JDialog {
@@ -591,27 +588,6 @@ public class SVGSelector extends JDialog {
 
 		}
 		return jButtonUp;
-	}
-
-	/**
-	 * @param args
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @throws MalformedURLException
-	 */
-	public static void main(String[] args) throws MalformedURLException {
-//		try {
-//			final URL log4jURL = ClassLoader.getSystemResource("av_log4j.xml");
-//			System.out.println("Configuring log4j from " + log4jURL);
-//			DOMConfigurator.configure(log4jURL);
-//		} catch (Exception e) {
-//			LOGGER.error(e);
-//		}
-		AVUtil.initAtlasLogging();
-		
-		SVGSelector selector = new SVGSelector(null, FeatureUtil
-				.createFeatureType(Point.class).getGeometryDescriptor(), null);
-		selector.setVisible(true);
-
 	}
 
 	/**
