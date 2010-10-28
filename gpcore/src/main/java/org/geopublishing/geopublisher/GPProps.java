@@ -56,7 +56,8 @@ public abstract class GPProps {
 		mapComposerHeight, /** Width of the {@link DesignMapViewJDialog} **/
 		mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, signingkeystorePassword,
 		startJVMWithXmx, /** GP starts maximized **/
-		windowMaximized, logLevel, rasterReader
+		windowMaximized, logLevel
+//		, rasterReader
 	}
 
 	/** E.G. ".AtlasStyler" or ".Geopublisher" **/

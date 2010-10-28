@@ -24,10 +24,12 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
+import org.geotools.data.DataUtilities;
 import org.geotools.gce.arcgrid.ArcGridReader;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.gce.image.WorldImageReader;
 import org.geotools.styling.Style;
+import org.jfree.util.Log;
 import org.opengis.coverage.grid.GridEnvelope;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -53,10 +55,12 @@ import skrueger.i8n.Translation;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DReader, ChartStyle> implements
+public class DpLayerRaster_Reader extends
+		DpLayerRaster<AbstractGridCoverage2DReader, ChartStyle> implements
 		StyledGridCoverageReaderInterface, ZoomRestrictableGridInterface {
 
-	static final private Logger LOGGER = Logger.getLogger(DpLayerRaster_Reader.class);
+	static final private Logger LOGGER = Logger
+			.getLogger(DpLayerRaster_Reader.class);
 
 	/**
 	 * caches the {@link GridCoverage2D} Can be un-cached by calling uncache()
@@ -102,16 +106,16 @@ public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DRe
 						return false;
 					}
 
-					URL url = AVSwingUtil.getUrl(DpLayerRaster_Reader.this, owner);
+					URL url = AVSwingUtil.getUrl(DpLayerRaster_Reader.this,
+							owner);
 					final File file = new File(exportDir, getFilename());
 
 					// ****************************************************************************
 					// Copy main file and possibly throw an Exception
 					// ****************************************************************************
 					publish(file.getAbsolutePath());
-					FileUtils
-							.copyURLToFile(AVSwingUtil.getUrl(
-									DpLayerRaster_Reader.this, owner), file);
+					FileUtils.copyURLToFile(AVSwingUtil.getUrl(
+							DpLayerRaster_Reader.this, owner), file);
 
 					// Try to copy pending world files...
 					for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
@@ -162,6 +166,58 @@ public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DRe
 
 				URL url = getUrl();
 
+				/**
+				 * GEOTiffReader fails for jar:file:....jar!bla.tif URLs :-(
+				 */
+				if (url.getProtocol().startsWith("jar")
+				// && url.getPath().startsWith("file")
+				) {
+					// We copy the Tiff to the local temp dir
+					File inTemp = new File(IOUtil.getTempDir(), getFilename());
+					LOGGER.debug("Workaround for the GeoTiffReader bug, new source = "
+							+ inTemp);
+					if (!inTemp.exists()) {
+						/**
+						 * This is a work-around for GeoTiffReader problems for
+						 * jar:// URLs We just all files to the local tempdir.
+						 */
+						LOGGER.debug("Local copy does not exist, so we copy "
+								+ url + " to " + inTemp);
+						FileUtils.copyURLToFile(url, inTemp);
+
+						// Try to copy pending world files...
+						for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
+								.values()) {
+							final URL src = IOUtil.changeUrlExt(url,
+									pf.toString());
+
+							// clean = false, because we only clean
+							// filenames on import
+							IOUtil.copyURLNoException(src, IOUtil.getTempDir(),
+									false);
+						}
+
+						// Copy optional .prj file to data directory
+						IOUtil.copyURLNoException(
+								IOUtil.changeUrlExt(url, "prj"),
+								IOUtil.getTempDir(), false);
+
+						// Copy optional .prj file to data directory
+						IOUtil.copyURLNoException(
+								IOUtil.changeUrlExt(url, "tfw"),
+								IOUtil.getTempDir(), false);
+
+						// Copy optional .sld file to data directory
+						IOUtil.copyURLNoException(
+								IOUtil.changeUrlExt(url, "sld"),
+								IOUtil.getTempDir(), false);
+
+					}
+
+					Log.info("Changed the URL from " + url + " to " + inTemp);
+					url = DataUtilities.fileToURL(inTemp);
+				}
+
 				final String filename = getFilename().toLowerCase();
 
 				// ****************************************************************************
@@ -170,56 +226,8 @@ public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DRe
 				for (GEOTIFF_POSTFIXES ending : GeoImportUtil.GEOTIFF_POSTFIXES
 						.values()) {
 					if (filename.endsWith(ending.toString())) {
-						/**
-						 * GEOTiffReader fails for jar:file:....jar!bla.tif URLs
-						 * :-(
-						 */
-						if (url.getProtocol().startsWith("jar")
-								&& url.getPath().startsWith("file")) {
-							// We copy the Tiff to the local temp dir
-							File inTemp = new File(IOUtil.getTempDir(),
-									getFilename());
-							LOGGER.debug("Workaround for the GeoTiffReader bug, new source = "
-									+ inTemp);
-							if (!inTemp.exists()) {
-								/**
-								 * This is a work-around for GeoTiffReader
-								 * problems for jar:// URLs We just all files to
-								 * the local tempdir.
-								 */
-								LOGGER.debug("Local copy does not exist, so we copy "
-										+ url + " to " + inTemp);
-								FileUtils.copyURLToFile(url, inTemp);
 
-								// Try to copy pending world files...
-								for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES
-										.values()) {
-									final URL src = IOUtil.changeUrlExt(url,
-											pf.toString());
-
-									// clean = false, because we only clean
-									// filenames on import
-									IOUtil.copyURLNoException(src,
-											IOUtil.getTempDir(), false);
-								}
-
-								// Copy optional .prj file to data directory
-								IOUtil.copyURLNoException(
-										IOUtil.changeUrlExt(url, "prj"),
-										IOUtil.getTempDir(), false);
-
-								// Copy optional .sld file to data directory
-								IOUtil.copyURLNoException(
-										IOUtil.changeUrlExt(url, "sld"),
-										IOUtil.getTempDir(), false);
-
-							}
-
-							gc = new GeoTiffReader(inTemp);
-						} else {
-							gc = new GeoTiffReader(url);
-						}
-
+						gc = new GeoTiffReader(url);
 						setType(DpEntryType.RASTER_GEOTIFF);
 					}
 				}
