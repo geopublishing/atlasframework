@@ -8,15 +8,14 @@
 	<version>1.6-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<parent>
-		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
-		<version>1.6-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+<!--	<parent>-->
+<!--		<groupId>org.geopublishing</groupId>-->
+<!--		<artifactId>gp-atlas-framework</artifactId>-->
+<!--		<version>1.6-SNAPSHOT</version>-->
+<!--		<relativePath>../pom.xml</relativePath>-->
+<!--	</parent>-->
 
 	<build>
-
 
 		<resources>
 
@@ -35,8 +34,6 @@
 			<resource>
 				<directory>src/main/natives/linux/32</directory>
 			</resource>
-
-
 
 		</resources>
 		<plugins>
@@ -66,7 +63,6 @@
 			</executions>
 		</plugin>
 		</plugins>
-
 
 	</build>
 
