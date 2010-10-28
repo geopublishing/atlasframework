@@ -17,7 +17,7 @@
 
 	<parent>
 		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
+		<artifactId>gp-atlas-framework-basics</artifactId>
 		<version>1.6-SNAPSHOT</version>
 		<relativePath>pom_basic.xml</relativePath>
 	</parent>

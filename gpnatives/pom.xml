@@ -8,12 +8,13 @@
 	<version>1.6-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-<!--	<parent>-->
-<!--		<groupId>org.geopublishing</groupId>-->
-<!--		<artifactId>gp-atlas-framework</artifactId>-->
-<!--		<version>1.6-SNAPSHOT</version>-->
-<!--		<relativePath>../pom.xml</relativePath>-->
-<!--	</parent>-->
+	<parent>
+		<groupId>org.geopublishing</groupId>
+		<artifactId>gp-atlas-framework</artifactId>
+		<version>1.6-SNAPSHOT</version>
+		<relativePath>../pom_basic.xml</relativePath>
+	</parent>
+
 
 	<build>
 
@@ -44,28 +45,28 @@
 					<archive>
 						<manifest>
 							<addClasspath>false</addClasspath>
-							<!-- children modules only define their mainClass here  -->
+							<!-- children modules only define their mainClass here -->
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
-		<plugin>
-			<!-- no -sources.jar for these natives  -->
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-source-plugin</artifactId>
-			<executions>
-				<execution>
-					<id>attach-sources</id>
-					<goals>
-						<!--							<goal>jar</goal>-->
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
+			<plugin>
+				<!-- no -sources.jar for these natives -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<!-- <goal>jar</goal> -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>
-	
+
 
 	<repositories>
 		<repository>
@@ -105,6 +106,6 @@
 		</repository>
 	</distributionManagement>
 
-	
+
 
 </project>
