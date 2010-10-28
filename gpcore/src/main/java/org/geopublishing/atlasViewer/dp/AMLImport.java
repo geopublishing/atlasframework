@@ -30,7 +30,6 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_GridCoverage2D;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -73,7 +72,6 @@ import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.AttributeMetadataMap;
@@ -348,14 +346,14 @@ public class AMLImport {
 		// LOGGER.debug("Starting to parse pyramid layers...");
 
 		// aml:rasterPyramidLayer
-		final NodeList rasterPyramidLayers = xml.getElementsByTagNameNS(
-				AMLUtil.AMLURI, "pyramidRasterLayer");
-		for (int i = 0; i < rasterPyramidLayers.getLength(); i++) {
-			final Node node = rasterPyramidLayers.item(i);
-			final DpLayerRasterPyramid pyramid = AMLImport
-					.parseDatapoolLayerRasterPyramid(node, ac);
-			ac.getDataPool().add(pyramid);
-		}
+//		final NodeList rasterPyramidLayers = xml.getElementsByTagNameNS(
+//				AMLUtil.AMLURI, "pyramidRasterLayer");
+//		for (int i = 0; i < rasterPyramidLayers.getLength(); i++) {
+//			final Node node = rasterPyramidLayers.item(i);
+//			final DpLayerRasterPyramid pyramid = AMLImport
+//					.parseDatapoolLayerRasterPyramid(node, ac);
+//			ac.getDataPool().add(pyramid);
+//		}
 
 		// LOGGER.debug("Starting to parse vector layers...");
 		// aml:vectorLayer
@@ -807,55 +805,55 @@ public class AMLImport {
 
 		return rld;
 	}
-
-	/**
-	 * Parses an AtlasML branch and fills values
-	 * 
-	 * @throws AtlasRecoverableException
-	 */
-	public final static DpLayerRasterPyramid parseDatapoolLayerRasterPyramid(
-			final Node node, final AtlasConfig ac)
-			throws AtlasRecoverableException {
-		if (ac == null)
-			throw new IllegalArgumentException("ac == null");
-		final DpLayerRasterPyramid dpe = new DpLayerRasterPyramid(ac);
-
-		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
-		final NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			final Node n = childNodes.item(i);
-			final String name = n.getLocalName();
-			// Cancel if it's an attribute
-			if (!n.hasChildNodes())
-				continue;
-
-			if (name.equals("filename")) {
-				final String value = n.getFirstChild().getNodeValue();
-				dpe.setFilename(value);
-			} else {
-				if (name.equals("name")) {
-					final Translation transname = AMLImport.parseTranslation(
-							ac.getLanguages(), n);
-
-					dpe.setTitle(transname);
-				} else if (name.equals("dataDirname")) {
-					final String value = n.getFirstChild().getNodeValue();
-					dpe.setDataDirname(value);
-				} else if (name.equals("desc")) {
-					dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
-				} else if (name.equals("rasterLegendData")) {
-					dpe.setLegendMetaData(parseRasterLegendData(ac, n));
-				} else if (name.equals("keywords")) {
-					dpe.setKeywords(AMLImport.parseTranslation(
-							ac.getLanguages(), n));
-				} else if (name.equals("transparentColor")) {
-					final String colorStr = n.getFirstChild().getNodeValue();
-					dpe.setInputTransparentColor(SwingUtil.parseColor(colorStr));
-				}
-			}
-		}
-		return dpe;
-	}
+//
+//	/**
+//	 * Parses an AtlasML branch and fills values
+//	 * 
+//	 * @throws AtlasRecoverableException
+//	 */
+//	public final static DpLayerRasterPyramid parseDatapoolLayerRasterPyramid(
+//			final Node node, final AtlasConfig ac)
+//			throws AtlasRecoverableException {
+//		if (ac == null)
+//			throw new IllegalArgumentException("ac == null");
+//		final DpLayerRasterPyramid dpe = new DpLayerRasterPyramid(ac);
+//
+//		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
+//		final NodeList childNodes = node.getChildNodes();
+//		for (int i = 0; i < childNodes.getLength(); i++) {
+//			final Node n = childNodes.item(i);
+//			final String name = n.getLocalName();
+//			// Cancel if it's an attribute
+//			if (!n.hasChildNodes())
+//				continue;
+//
+//			if (name.equals("filename")) {
+//				final String value = n.getFirstChild().getNodeValue();
+//				dpe.setFilename(value);
+//			} else {
+//				if (name.equals("name")) {
+//					final Translation transname = AMLImport.parseTranslation(
+//							ac.getLanguages(), n);
+//
+//					dpe.setTitle(transname);
+//				} else if (name.equals("dataDirname")) {
+//					final String value = n.getFirstChild().getNodeValue();
+//					dpe.setDataDirname(value);
+//				} else if (name.equals("desc")) {
+//					dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
+//				} else if (name.equals("rasterLegendData")) {
+//					dpe.setLegendMetaData(parseRasterLegendData(ac, n));
+//				} else if (name.equals("keywords")) {
+//					dpe.setKeywords(AMLImport.parseTranslation(
+//							ac.getLanguages(), n));
+//				} else if (name.equals("transparentColor")) {
+//					final String colorStr = n.getFirstChild().getNodeValue();
+//					dpe.setInputTransparentColor(SwingUtil.parseColor(colorStr));
+//				}
+//			}
+//		}
+//		return dpe;
+//	}
 
 	/**
 	 * Parses a aml:group tag

@@ -23,7 +23,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -81,9 +80,9 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 				Component typeSpecific = null;
 				if (dpe instanceof DpLayerRaster)
 					typeSpecific = createRasterTab((DpLayerRaster) dpe);
-				else if (dpe instanceof DpLayerRasterPyramid)
-					typeSpecific = new DpLayerRasterPyramidJPanel(
-							(DpLayerRasterPyramid) dpe);
+//				else if (dpe instanceof DpLayerRasterPyramid)
+//					typeSpecific = new DpLayerRasterPyramidJPanel(
+//							(DpLayerRasterPyramid) dpe);
 
 				if (typeSpecific != null)
 					tabbedPane.insertTab(dpe.getType().getLine2(), null,

@@ -21,7 +21,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
@@ -92,8 +91,8 @@ public class AtlasMenuItem extends JMenuItem {
 				setIcon(Icons.ICON_VIDEO_BIG);
 			else if (dpe instanceof DpLayerRaster)
 				setIcon(Icons.ICON_RASTER_BIG);
-			else if (dpe instanceof DpLayerRasterPyramid)
-				setIcon(Icons.ICON_RASTER_BIG);
+//			else if (dpe instanceof DpLayerRasterPyramid)
+//				setIcon(Icons.ICON_RASTER_BIG);
 			else if (dpe instanceof DpLayerVector) {
 				DpLayerVector dplv = (DpLayerVector) dpe;
 				setIcon(dplv.getType().getIconBig());

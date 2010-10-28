@@ -11,7 +11,6 @@
 package org.geopublishing.geopublisher;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.junit.BeforeClass;
@@ -22,7 +21,7 @@ import schmitzm.swing.TestingUtil;
 
 public class EditAttributesJDialogTest {
 
-	static DpLayerRasterPyramid pyr;
+//	static DpLayerRasterPyramid pyr;
 	private static DpLayerVectorFeatureSource dplv;
 
 	@BeforeClass
@@ -30,9 +29,9 @@ public class EditAttributesJDialogTest {
 
 		AtlasConfigEditable atlasConfigE = GpTestingUtil.getAtlasConfigE();
 		for (DpEntry dpe : atlasConfigE.getDataPool().values()) {
-			if (dpe instanceof DpLayerRasterPyramid) {
-				pyr = (DpLayerRasterPyramid) dpe;
-			}
+//			if (dpe instanceof DpLayerRasterPyramid) {
+//				pyr = (DpLayerRasterPyramid) dpe;
+//			}
 			if (dpe instanceof DpLayerVectorFeatureSource
 					&& ((DpLayerVectorFeatureSource) dpe)
 							.getAttributeMetaDataMap().size() >= 1) {

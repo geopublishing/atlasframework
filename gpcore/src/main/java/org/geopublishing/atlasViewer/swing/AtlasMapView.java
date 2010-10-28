@@ -34,7 +34,6 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -479,12 +478,12 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 				if (dpLayer instanceof DpLayerRaster) {
 					layerManager.addStyledLayer(dpLayer);
-				} else if (dpLayer instanceof DpLayerRasterPyramid) {
-					// **********************************************************
-					// Adding a Pyramidlayer to the map
-					// **********************************************************
-					final DpLayerRasterPyramid pyramid = (DpLayerRasterPyramid) dpLayer;
-					layerManager.addStyledLayer(pyramid);
+//				} else if (dpLayer instanceof DpLayerRasterPyramid) {
+//					// **********************************************************
+//					// Adding a Pyramidlayer to the map
+//					// **********************************************************
+//					final DpLayerRasterPyramid pyramid = (DpLayerRasterPyramid) dpLayer;
+//					layerManager.addStyledLayer(pyramid);
 
 				} else if (dpLayer instanceof DpLayerVectorFeatureSource) {
 

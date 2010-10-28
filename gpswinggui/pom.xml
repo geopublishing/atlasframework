@@ -157,7 +157,7 @@
 											<property name="mvn.project.version" value="${project.version}" />
 											<property name="mvn.basedir" value="${project.basedir}" />
 											<property name="mvn.project.artifactId" value="${project.artifactId}" />
-										</ant>										
+										</ant>
 									</tasks>
 								</configuration>
 							</execution>
@@ -219,7 +219,7 @@
 
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -259,20 +259,20 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagepyramid</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagepyramid</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagemosaic</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagemosaic</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>net.java.wizard</groupId>

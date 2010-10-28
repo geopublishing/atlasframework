@@ -193,19 +193,19 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagepyramid</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.geotools</groupId>-->
+<!--			<artifactId>gt-imagepyramid</artifactId>-->
+<!--			<version>${geotools.version}</version>-->
+<!--			<type>jar</type>-->
+<!--		</dependency>-->
 
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-imagemosaic</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.geotools</groupId>-->
+<!--			<artifactId>gt-imagemosaic</artifactId>-->
+<!--			<version>${geotools.version}</version>-->
+<!--			<type>jar</type>-->
+<!--		</dependency>-->
 
 	</dependencies>
 </project>

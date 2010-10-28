@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,7 +42,6 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRasterPyramid;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
@@ -331,9 +329,9 @@ public class AMLExporter {
 			} else if (de instanceof DpLayerRaster) {
 				exDpe = exportDatapoolLayerRaster(document, (DpLayerRaster) de);
 
-			} else if (de instanceof DpLayerRasterPyramid) {
-				exDpe = exportDatapoolLayerRasterPyramid(document,
-						(DpLayerRasterPyramid) de);
+//			} else if (de instanceof DpLayerRasterPyramid) {
+//				exDpe = exportDatapoolLayerRasterPyramid(document,
+//						(DpLayerRasterPyramid) de);
 
 			} else if (de instanceof DpMediaVideo) {
 				exDpe = exportDatapoolMediaVideo(document, (DpMediaVideo) de);
@@ -1080,62 +1078,62 @@ public class AMLExporter {
 		return element;
 	}
 
-	/**
-	 * Exports the {@link DpLayerRasterPyramid} to a AtlasML (XML) Document
-	 * branch
-	 * 
-	 * @author Stefan Alfons Tzeggai
-	 */
-	private final Element exportDatapoolLayerRasterPyramid(
-			final Document document, final DpLayerRasterPyramid dpe) {
-		// LOGGER.debug("exportDatapoolLayerRasterPyramid " + dpe + " to AML");
-
-		// Creating a aml:rasterLayer tag...
-		final Element element = document.createElementNS(AMLUtil.AMLURI,
-				"pyramidRasterLayer");
-		element.setAttribute("id", dpe.getId());
-		element.setAttribute("exportable", dpe.isExportable().toString());
-
-		// Creating a aml:name tag...
-		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
-
-		// Creating aml:desc tag
-		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
-
-		// Creating optinal aml:keywords tag
-		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords",
-					dpe.getKeywords()));
-
-		// Creating a aml:dataDirname tag...
-		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
-				"dataDirname");
-		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
-		element.appendChild(datadirname);
-
-		// Creating a aml:filename tag... (.properties file)
-		final Element filename = document.createElementNS(AMLUtil.AMLURI,
-				"filename");
-		filename.appendChild(document.createTextNode(dpe.getFilename()));
-		element.appendChild(filename);
-
-		// Creating aml:rasterLegendData
-		element.appendChild(exportRasterLegendData(document,
-				dpe.getLegendMetaData()));
-
-		// Creating an optional aml:transparentColor tag...
-		final Color color = dpe.getInputTransparentColor();
-		if (color != null) {
-			final Element transparentColor = document.createElementNS(
-					AMLUtil.AMLURI, "transparentColor");
-			final String colorStr = "RGB(" + color.getRed() + ","
-					+ color.getGreen() + "," + color.getBlue() + ")";
-			transparentColor.appendChild(document.createTextNode(colorStr));
-			element.appendChild(transparentColor);
-		}
-
-		return element;
-	}
+//	/**
+//	 * Exports the {@link DpLayerRasterPyramid} to a AtlasML (XML) Document
+//	 * branch
+//	 * 
+//	 * @author Stefan Alfons Tzeggai
+//	 */
+//	private final Element exportDatapoolLayerRasterPyramid(
+//			final Document document, final DpLayerRasterPyramid dpe) {
+//		// LOGGER.debug("exportDatapoolLayerRasterPyramid " + dpe + " to AML");
+//
+//		// Creating a aml:rasterLayer tag...
+//		final Element element = document.createElementNS(AMLUtil.AMLURI,
+//				"pyramidRasterLayer");
+//		element.setAttribute("id", dpe.getId());
+//		element.setAttribute("exportable", dpe.isExportable().toString());
+//
+//		// Creating a aml:name tag...
+//		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+//
+//		// Creating aml:desc tag
+//		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
+//
+//		// Creating optinal aml:keywords tag
+//		if (!dpe.getKeywords().isEmpty())
+//			element.appendChild(exportTranslation(document, "keywords",
+//					dpe.getKeywords()));
+//
+//		// Creating a aml:dataDirname tag...
+//		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+//				"dataDirname");
+//		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
+//		element.appendChild(datadirname);
+//
+//		// Creating a aml:filename tag... (.properties file)
+//		final Element filename = document.createElementNS(AMLUtil.AMLURI,
+//				"filename");
+//		filename.appendChild(document.createTextNode(dpe.getFilename()));
+//		element.appendChild(filename);
+//
+//		// Creating aml:rasterLegendData
+//		element.appendChild(exportRasterLegendData(document,
+//				dpe.getLegendMetaData()));
+//
+//		// Creating an optional aml:transparentColor tag...
+//		final Color color = dpe.getInputTransparentColor();
+//		if (color != null) {
+//			final Element transparentColor = document.createElementNS(
+//					AMLUtil.AMLURI, "transparentColor");
+//			final String colorStr = "RGB(" + color.getRed() + ","
+//					+ color.getGreen() + "," + color.getBlue() + ")";
+//			transparentColor.appendChild(document.createTextNode(colorStr));
+//			element.appendChild(transparentColor);
+//		}
+//
+//		return element;
+//	}
 
 	/**
 	 * Create a tree of <aml:group> and <aml:datapoolRef>

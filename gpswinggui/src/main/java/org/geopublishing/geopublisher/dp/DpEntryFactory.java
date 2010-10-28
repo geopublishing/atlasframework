@@ -60,7 +60,7 @@ public class DpEntryFactory {
 //		testers.add(new DpMediaVideoTest());
 		testers.add(new DpMediaPDFTester());
 		testers.add(new DpLayerRasterReaderTester());
-		testers.add(new DpLayerRasterPyramidTester());
+//		testers.add(new DpLayerRasterPyramidTester());
 	}
 
 	/**
