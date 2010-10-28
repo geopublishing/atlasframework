@@ -3,26 +3,14 @@ package org.geopublishing.atlasViewer.dp.layer;
 import static org.junit.Assert.assertNotNull;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFactorySpi;
-import org.geotools.data.DataStoreFinder;
 import org.geotools.gce.geotiff.GeoTiffReader;
-import org.junit.Before;
 import org.junit.Test;
-
-import schmitzm.geotools.io.GeoImportUtil;
 
 public class DpLayerRaster_GridCoverage2DTest {
 
-	@Before
-	public void setUp() throws Exception {
-	}
-
 	@Test
-	public void tear() throws Exception {
+	public void asdasd() throws Exception {
 		URL jarWithGeotiff = DpLayerRaster_GridCoverage2D.class
 				.getResource("/rasterGeotiffInjar/rn.jar");
 		assertNotNull(jarWithGeotiff);
