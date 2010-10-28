@@ -1787,28 +1787,10 @@ public class JarExportUtil {
 				 * ask the user if he wants to use the default one.
 				 */
 				if (ace.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
-					// final int useDefaultSplashConfirmDialog = JOptionPane
-					// .showConfirmDialog(
-					// null,
-					// Geopublisher
-					// .R("Export.NoSplashscreenExists_DoYouWantToUseTheDefault"),
-					// null, JOptionPane.YES_NO_OPTION);
-					// if (useDefaultSplashConfirmDialog ==
-					// JOptionPane.YES_OPTION) {
 					FileUtils.copyURLToFile(GpUtil.class
 							.getResource(SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
 							new File(ace.getAtlasDir(),
 									AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
-					// JOptionPane
-					// .showMessageDialog(
-					// null,
-					// Geopublisher
-					// .R(
-					// "Export.NoSplashscreenExists_TheDefaultHasBeenCopied",
-					// new File(
-					// ace.getAtlasDir(),
-					// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)
-					// .getAbsolutePath()));
 					addToJar(targetJar, ace.getAtlasDir(),
 							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 					// }
@@ -1876,7 +1858,7 @@ public class JarExportUtil {
 			// File[] listOfIndexJars = new File[] { targetJar };
 			// Creating a JAR for every DpEntry
 			LOGGER.debug("Creating a JAR for every DpEntry used");
-			for (final DpEntry dpe : ace.getUsedDpes()) {
+			for (final DpEntry<?> dpe : ace.getUsedDpes()) {
 
 				createJarFromDpe(dpe);
 			}
