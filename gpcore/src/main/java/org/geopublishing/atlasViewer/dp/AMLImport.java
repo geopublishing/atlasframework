@@ -340,8 +340,8 @@ public class AMLImport {
 				AMLUtil.AMLURI, "rasterLayer");
 		for (int i = 0; i < rasterLayers.getLength(); i++) {
 			final Node node = rasterLayers.item(i);
-			final DpLayerRaster raster = AMLImport.parseDatapoolLayerRaster(
-					node, ac);
+			final DpLayerRaster<?, ChartStyle> raster = AMLImport
+					.parseDatapoolLayerRaster(node, ac);
 			ac.getDataPool().add(raster);
 		}
 
@@ -709,19 +709,22 @@ public class AMLImport {
 	 * 
 	 * @throws AtlasRecoverableException
 	 */
-	public final static DpLayerRaster parseDatapoolLayerRaster(final Node node,
-			final AtlasConfig ac) throws AtlasRecoverableException {
+	public final static DpLayerRaster<?, ChartStyle> parseDatapoolLayerRaster(
+			final Node node, final AtlasConfig ac)
+			throws AtlasRecoverableException {
 
-		// LOGGER.debug("parseDatapoolLayerRaster");
+		String id = node.getAttributes().getNamedItem("id").getNodeValue();
 
 		final DpLayerRaster<?, ChartStyle> dpe;
-		if (ac.getProperties().get(Keys.rasterReader, "1").equals("1")) {
+		if (ac.getProperties().getBoolean(Keys.rasterReader, true)) {
+			Log.info("Using new raster reader for " + id);
 			dpe = new DpLayerRaster_Reader(ac);
 		} else {
+			Log.info("Using old gridCoverage " + id);
 			dpe = new DpLayerRaster_GridCoverage2D(ac);
 		}
 
-		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
+		dpe.setId(id);
 		// ****************************************************************************
 		// The exportable attribute is optional and defaults to false
 		// ****************************************************************************
