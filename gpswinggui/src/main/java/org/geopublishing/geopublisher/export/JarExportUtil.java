@@ -454,6 +454,12 @@ public class JarExportUtil {
 	private boolean zipDiskAfterExport = false;
 
 	/**
+	 * Allows to tell the exporter to NOT delte all temp directories. This is
+	 * usefull if atlases are exported parallel
+	 */
+	private boolean keepTempFiles = false;
+
+	/**
 	 * Initializes an {@link JarExportUtil} object to do the real work.
 	 * 
 	 * @param ace
@@ -1640,6 +1646,9 @@ public class JarExportUtil {
 	 */
 	public void deleteOldTempExportDirs() {
 
+		if (!isKeepTempFiles())
+			return;
+
 		/**
 		 * Delete any old/parallel export directories
 		 */
@@ -1655,6 +1664,10 @@ public class JarExportUtil {
 				ExceptionDialog.show(null, e);
 			}
 		}
+	}
+
+	public boolean isKeepTempFiles() {
+		return keepTempFiles;
 	}
 
 	/**
@@ -2399,6 +2412,10 @@ public class JarExportUtil {
 	 */
 	public void setZipDiskAfterExport(boolean zipDiskAfterExport) {
 		this.zipDiskAfterExport = zipDiskAfterExport;
+	}
+
+	public void setKeepTempFiles(boolean deleteTempFiles) {
+		this.keepTempFiles = deleteTempFiles;
 	}
 
 }

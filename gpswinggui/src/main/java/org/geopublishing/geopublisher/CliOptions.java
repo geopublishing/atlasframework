@@ -35,6 +35,7 @@ public class CliOptions extends Options {
 	public static final String JWS = "j";
 	static final String ZIPDISK = "z";
 	private static final String LICENSE = "l";
+	private static final String KEEPTEMP= "t";
 
 	private static final Logger log = Logger.getLogger(CliOptions.class);
 
@@ -67,7 +68,7 @@ public class CliOptions extends Options {
 
 		addOption(new Option(LICENSE, "license", false,
 				"print license information"));
-
+		
 		Option optAwc = new Option(AWCFOLDER, "atlas", true,
 				"folder to load the atlas from (atlas.gpa)");
 		optAwc.setArgName("srcDir");
@@ -93,6 +94,8 @@ public class CliOptions extends Options {
 
 		addOption(new Option(FORCE, "force", false,
 				"overwrite any existing files during export"));
+		
+		addOption(new Option(KEEPTEMP, "keeptemp", true, "do not clean temp files, needed if exporting in parallel"));
 
 	}
 
@@ -281,6 +284,7 @@ public class CliOptions extends Options {
 								toDisk, toJws, false);
 						jeu.setZipDiskAfterExport(commandLine
 								.hasOption(ZIPDISK));
+						jeu.setKeepTempFiles(commandLine.hasOption(KEEPTEMP));
 						jeu.export(null);
 					} catch (Exception e) {
 						errorDuringInterpret = Errors.EXPORT_FAILED;
