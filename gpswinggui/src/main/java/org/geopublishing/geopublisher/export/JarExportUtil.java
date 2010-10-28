@@ -12,7 +12,6 @@ package org.geopublishing.geopublisher.export;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -95,7 +94,6 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
-import schmitzm.swing.TestingUtil;
 import skrueger.versionnumber.ReleaseUtil;
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
