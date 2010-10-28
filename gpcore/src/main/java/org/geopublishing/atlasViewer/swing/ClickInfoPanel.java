@@ -46,10 +46,10 @@ import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
-import org.geotools.gce.imagepyramid.ImagePyramidReader;
 import org.geotools.map.MapLayer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -176,7 +176,7 @@ public class ClickInfoPanel extends JPanel {
 		valueLabel.setAlignmentX(1f);
 
 		if ((layerSourceObject instanceof GridCoverage2D)
-				|| (layerSourceObject instanceof ImagePyramidReader)) {
+				|| (layerSourceObject instanceof AbstractGridCoverage2DReader)) {
 
 			try {
 				// **************************************************************
