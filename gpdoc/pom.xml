@@ -8,12 +8,12 @@
 	<name>Geopublishing Documentation</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 
-<!--	<parent>-->
-<!--		<groupId>org.geopublishing</groupId>-->
-<!--		<artifactId>gp-atlas-framework</artifactId>-->
-<!--		<version>1.6-SNAPSHOT</version>-->
-<!--		<relativePath>../pom.xml</relativePath>-->
-<!--	</parent>-->
+	<!-- <parent> -->
+	<!-- <groupId>org.geopublishing</groupId> -->
+	<!-- <artifactId>gp-atlas-framework</artifactId> -->
+	<!-- <version>1.6-SNAPSHOT</version> -->
+	<!-- <relativePath>../pom.xml</relativePath> -->
+	<!-- </parent> -->
 
 	<build>
 		<plugins>
@@ -23,10 +23,8 @@
 
 	<profiles>
 		<profile>
-			<!--
-				If run on the special "gisbert" profile, the application is released
-				to the geopublishing.org webpage
-			-->
+			<!-- If run on the special "gisbert" profile, the application is released 
+				to the geopublishing.org webpage -->
 			<id>gisbert</id>
 			<build>
 				<plugins>
@@ -65,5 +63,46 @@
 
 	<dependencies>
 	</dependencies>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-snapshots</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+		<repository>
+			<id>artifactory.wikisquare.de</id>
+			<name>artifactory.wikisquare.de-releases</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+	</distributionManagement>
+
+	<pluginRepositories>
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+			<id>plugins-snapshots.artifactory.wikisquare.de</id>
+			<url>http://artifactory.wikisquare.de/artifactory/plugins-snapshots
+			</url>
+		</pluginRepository>
+
+		<pluginRepository>
+			<!-- Plugins needed to create exe files -->
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>plugins-releases.artifactory.wikisquare.de</id>
+			<url>http://artifactory.wikisquare.de/artifactory/plugins-releases
+			</url>
+		</pluginRepository>
+
+	</pluginRepositories>
+
 
 </project>
