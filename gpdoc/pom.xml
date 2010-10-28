@@ -8,12 +8,12 @@
 	<name>Geopublishing Documentation</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 
-	<parent>
-		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
-		<version>1.6-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
-	</parent>
+<!--	<parent>-->
+<!--		<groupId>org.geopublishing</groupId>-->
+<!--		<artifactId>gp-atlas-framework</artifactId>-->
+<!--		<version>1.6-SNAPSHOT</version>-->
+<!--		<relativePath>../pom.xml</relativePath>-->
+<!--	</parent>-->
 
 	<build>
 		<plugins>

@@ -47,7 +47,7 @@
 		<mkdir dir="${TARGET.DEB.DIR}/dist" />
 		<mkdir dir="${TARGET.DEB.DIR}/buildIcon" />
 
-		<get src="http://en.geopublishing.org/workingcopies/ChartDemoAtlas_WorkingCopy.zip" dest="${TARGET.DEB.DIR}/build/ChartDemoAtlas_WorkingCopy.zip" description="Download the lastest version of the chart atlas workingcopy" />
+		<get src="http://atlas.geopublishing.org/workingcopies/ChartDemoAtlas_WorkingCopy.zip" dest="${TARGET.DEB.DIR}/build/ChartDemoAtlas_WorkingCopy.zip" description="Download the lastest version of the chart atlas workingcopy" />
 
 		<desktopEntry toFile="${TARGET.DEB.DIR}/buildIcon/${PROGNAME}.desktop" name="Geopublishing documentation" comment="Documentation for Geopublisher and AtlasStyler" exec="xdg-open file:///usr/share/doc/geopublishing/index.html" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 
