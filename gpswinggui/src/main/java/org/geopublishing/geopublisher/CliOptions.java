@@ -95,7 +95,7 @@ public class CliOptions extends Options {
 		addOption(new Option(FORCE, "force", false,
 				"overwrite any existing files during export"));
 		
-		addOption(new Option(KEEPTEMP, "keeptemp", true, "do not clean temp files, needed if exporting in parallel"));
+		addOption(new Option(KEEPTEMP, "keeptemp", false, "do not clean temp files, needed if exporting in parallel"));
 
 	}
 
