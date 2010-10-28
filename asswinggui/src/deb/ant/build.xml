@@ -48,7 +48,7 @@
 		<unzip src="${FULLZIP}" dest="${TARGET.DEB.DIR}/build" description="uncompress the .zip that we are repacking as a .deb" />
 
 		<echo message="Upstream-Version is ${version.upstream}" />
-		<echo message="Icon should be at ${mvn.basedir}/../logos/${PROGNAME}.xpm" />
+		<echo message="Icon should be at ${mvn.basedir}/src/deb/logos/${PROGNAME}.xpm" />
 
 		<deb todir="${TARGET.DEB.DIR}/dist" package="${PROGNAME}" section="science" recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
 			<version upstream="${version.upstream}" />
@@ -89,7 +89,7 @@ Technical details:
 			</tarfileset>
 
 			<!-- icons for the desktop entries -->
-			<tarfileset file="${mvn.basedir}/../logos/${PROGNAME}.xpm" prefix="usr/share/${PROGNAME}" />
+			<tarfileset file="${mvn.basedir}/src/deb/logos/${PROGNAME}.xpm" prefix="usr/share/${PROGNAME}" />
 
 			<!-- start scripts for /usr/bin -->
 			<tarfileset file="${mvn.basedir}/src/deb/resources/${PROGNAME}" prefix="usr/bin" filemode="755" />
