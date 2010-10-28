@@ -237,8 +237,8 @@ public class CliOptions extends Options {
 							Logger.getRootLogger().setLevel(
 									org.apache.log4j.Level.DEBUG);
 						} else {
-//							Logger.getRootLogger().setLevel(
-//									org.apache.log4j.Level.WARN);
+							// Logger.getRootLogger().setLevel(
+							// org.apache.log4j.Level.WARN);
 							// Logger.getLogger("root").setLevel(Level.WARNING);
 						}
 
@@ -258,9 +258,9 @@ public class CliOptions extends Options {
 				if (commandLine.hasOption(CliOptions.VERBOSE))
 					Logger.getRootLogger().setLevel(
 							org.apache.log4j.Level.DEBUG);
-//				else
-//					Logger.getRootLogger()
-//							.setLevel(org.apache.log4j.Level.WARN);
+				// else
+				// Logger.getRootLogger()
+				// .setLevel(org.apache.log4j.Level.WARN);
 
 				if (awcFile != null) {
 					final AtlasConfigEditable ace = new AMLImportEd()
@@ -284,6 +284,7 @@ public class CliOptions extends Options {
 						jeu.export(null);
 					} catch (Exception e) {
 						errorDuringInterpret = Errors.EXPORT_FAILED;
+						log.error(Errors.EXPORT_FAILED.toString(), e);
 						return Errors.EXPORT_FAILED.errCode;
 					}
 
