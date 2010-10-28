@@ -15,39 +15,27 @@
 		<url>http://wald.intevation.org/tracker/?group_id=37</url>
 	</issueManagement>
 
-	<parent>
-		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
-		<version>1.6-SNAPSHOT</version>
-		<relativePath>pom_basic.xml</relativePath>
-	</parent>
+	<licenses>
+		<license>
+			<name>Lesser General Public License (LGPL)</name>
+			<url>http://www.gnu.org/copyleft/lgpl.txt</url>
+		</license>
+		<license>
+			<name>General Public License (LGPL)</name>
+			<url>http://www.gnu.org/copyleft/gpl.txt</url>
+		</license>
+	</licenses>
 
-	<modules>
-		<module>ascore</module>
-		<module>gpnatives</module>
-		<module>gpcore</module>
-		<module>asswinggui</module>
-		<module>gpswinggui</module>
-		<module>gpdoc</module>
-	</modules>
+	<properties>
+		<geotools.version>2.6.5</geotools.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<schmitzm.version>2.3-SNAPSHOT</schmitzm.version>
+	</properties>
 
-	<profiles>
-		<profile>
-			<id>w2buero</id>
-			<modules>
-				<module>../../schmitzm/trunk</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>ms_kallisto</id>
-			<modules>
-				<module>../../../SCHMITZM/Trunk</module>
-			</modules>
-		</profile>
-
-	</profiles>
-
+	<organization>
+		<name>geopublishing.org</name>
+		<url>http://www.geopublishing.org</url>
+	</organization>
 
 	<developers>
 		<developer>
@@ -86,158 +74,56 @@
 		<!-- Explicitly setting the final name! Do not remove -->
 		<finalName>${artifactId}-${project.version}</finalName>
 
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>export/export.keystore</include>
-					<include>export/jsmooth/autodownload-wrapper/*</include>
-					<include>geopublishing_log4j.xml</include>
-				</includes>
-			</resource>
-
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>export/export.keystore</exclude>
-					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
-					<exclude>geopublishing_log4j.xml</exclude>
-				</excludes>
-			</resource>
-
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/assembly</directory>
-				<includes>
-					<include>*.jsmooth</include>
-				</includes>
-			</resource>
-
-		</resources>
-
-		<testResources>
-			<testResource>
-				<!-- <filtering>true</filtering> -->
-				<directory>src/test/resources</directory>
-			</testResource>
-		</testResources>
-
 		<plugins>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.5.1</version>
 				<configuration>
-					<systemProperties>
-						<property>
-							<name>java.library.path</name>
-							<value>${project.build.directory}/natives</value>
-						</property>
-					</systemProperties>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>false</downloadJavadocs>
 				</configuration>
 			</plugin>
 
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
-				<configuration>
-					<archive>
-						<index>false</index>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<!-- children modules only define their mainClass here -->
-						</manifest>
-						<manifestEntries>
-							<Implementation-Version>${project.version}
-							</Implementation-Version>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-				</configuration>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
 				<executions>
 					<execution>
+						<id>buildnumber in phase initialize</id>
+						<phase>initialize</phase>
 						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
+							<goal>create</goal>
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+						<svn>javasvn</svn> </providerImplementations> -->
+					<format>{0,date,yyyyMMddHHmm}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
 			</plugin>
 
 		</plugins>
 
+		<!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
 	</build>
-
-	<dependencies>
-
-		<dependency>
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-library</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<!-- Test dependency -->
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-library</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-main</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-epsg-hsql</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
-			<!-- For i8n correction -->
-			<groupId>ant</groupId>
-			<artifactId>ant-nodeps</artifactId>
-			<version>1.6.5</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<!-- For i8n correction -->
-			<groupId>ant-contrib</groupId>
-			<artifactId>ant-contrib</artifactId>
-			<version>1.0b3</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
-
-	</dependencies>
 
 	<repositories>
 		<repository>
