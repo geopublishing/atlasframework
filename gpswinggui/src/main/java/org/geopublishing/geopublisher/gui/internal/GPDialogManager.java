@@ -129,6 +129,20 @@ public class GPDialogManager {
 	/** A DialogManager for DesignMapViewJDialogs **/
 	final static public CancellableDialogManager<Map, DesignMapViewJDialog> dm_MapComposer = new CancellableDialogManager<Map, DesignMapViewJDialog>() {
 
+//		public boolean closeAllInstancesReferencing(DpEntry<?> dpe) {
+//			for (DesignMapViewJDialog d : GPDialogManager.dm_MapComposer.getAllInstances()) {
+//				List<DpRef<?>> dpes = d.getMap().getDpes();
+//				for (DpRef<?> dpr : dpes) {
+//					if (dpr.getTarget().equals(dpe)) {
+//						if (!d.close()) return false;
+//						break;
+//					}
+//				}
+//			}
+//
+//			return true;
+//		}
+
 		@Override
 		public DesignMapViewJDialog getInstanceFor(final Map key,
 				final Component owner, final Object... constArgs) {

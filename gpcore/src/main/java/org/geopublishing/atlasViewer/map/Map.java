@@ -372,6 +372,10 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		this.keywords = keywords;
 	}
 
+	/**
+	 * Returns the {@link List} of {@link DpRef} to all {@link DpLayer}s referenced by
+	 * this {@link Map}.
+	 */
 	final public List<DpRef<DpLayer<?, ? extends ChartStyle>>> getLayers() {
 		return layers;
 	}
@@ -381,8 +385,23 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		this.layers = newLayers;
 	}
 
+	/**
+	 * Returns the {@link List} of {@link DpRef} to {@link DpMedia} referenced by
+	 * this {@link Map}.
+	 */
 	final public List<DpRef<DpMedia<? extends ChartStyle>>> getMedia() {
 		return media;
+	}
+
+	/**
+	 * Returns a {@link List} of {@link DpRef} to all Layers and Media (DpEntry) referenced by
+	 * this map.
+	 */
+	final public List<DpRef<?>> getDpes() {
+		List<DpRef<?>> allEntries = new ArrayList<DpRef<?>>();
+		allEntries.addAll(getLayers());
+		allEntries.addAll(getMedia());
+		return allEntries;
 	}
 
 	/**
@@ -894,7 +913,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	public Map copyTo(final Map newMap) {
 
 		newMap.setDefaultMapArea(getDefaultMapArea());
-		
+
 		// newMap.setHTML(map.getHTML());
 
 		// Copy the Layer-Refs
@@ -986,7 +1005,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		}
 
 		newMap.resetMissingHTMLinfos();
-		
+
 		newMap.setPreviewMapExtendInGeopublisher(isPreviewMapExtendInGeopublisher());
 
 		return newMap;

@@ -16,8 +16,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -40,9 +42,11 @@ import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
@@ -60,35 +64,41 @@ public class GpSwingUtil extends GpUtil {
 	 *            of.
 	 * @param dpe
 	 *            {@link DpEntry} to be deleted.
-	 * @param askAgainIfLinked
-	 *            If <code>true</code> and the {@link DpEntry} is linked, the
-	 *            user will be asked again if he really want to delete the
-	 *            {@link DpEntry}. If <code>false</code>, the references are
+	 * @param askUserToVerify
+	 *            If <code>true</code>, the user will be asked for confirmation.
+	 *            The confirmation will list all references. If
+	 *            <code>false</code>, the DPE and all references are
 	 *            automatically removed.
 	 * 
 	 * @return <code>null</code> if the deletion failed or was aborted by the
 	 *         user. Otherwise the removed {@link DpEntry}.
 	 */
 	public static DpEntry<?> deleteDpEntry(Component owner,
-			AtlasConfigEditable ace, DpEntry<?> dpe, boolean askAgainIfLinked) {
+			AtlasConfigEditable ace, DpEntry<?> dpe, boolean askUserToVerify) {
 		LinkedList<AtlasRefInterface<?>> references = new LinkedList<AtlasRefInterface<?>>();
 
-		if (!GPDialogManager.dm_MapComposer.closeAllInstances())
-			return null;
+		// TODO Only close the windows that reference this dplayer!
+		// if (!GPDialogManager.dm_MapComposer.closeAllInstances())
+		// return null;
 
 		// ****************************************************************************
 		// Go through all mapPoolEntries and groups and count the references to
 		// this DatapoolEntry
 		// ****************************************************************************
+		Set<Map> mapsWithReferences = new HashSet<Map>();
 		for (Map map : ace.getMapPool().values()) {
 
 			for (DpRef<DpLayer<?, ? extends ChartStyle>> ref : map.getLayers()) {
-				if (ref.getTargetId().equals(dpe.getId()))
+				if (ref.getTargetId().equals(dpe.getId())) {
 					references.add(ref);
+					mapsWithReferences.add(map);
+				}
 			}
 			for (DpRef<DpMedia<? extends ChartStyle>> ref : map.getMedia()) {
-				if (ref.getTargetId().equals(dpe.getId()))
+				if (ref.getTargetId().equals(dpe.getId())) {
 					references.add(ref);
+					mapsWithReferences.add(map);
+				}
 			}
 			map.getAdditionalStyles().remove(dpe.getId());
 			map.getSelectedStyleIDs().remove(dpe.getId());
@@ -102,21 +112,32 @@ public class GpSwingUtil extends GpUtil {
 		Group group = ace.getFirstGroup();
 		Group.findReferencesTo(group, dpe, references, false);
 
-		if (references.size() > 0 && askAgainIfLinked) {
+		if (askUserToVerify) {
 			// Ask the user if she still wants to delete the DPE, even though
 			// references exist.
-			int res = JOptionPane
-					.showConfirmDialog(
-							owner,
-							GpUtil.R(
-									"AtlasConfig.DeleteDpEntry.DeleteReferences.Question",
-									countRefsInMappool, references.size()
-											- countRefsInMappool), GpUtil
-									.R("DataPoolWindow_Action_DeleteDPE_label"
-											+ " " + dpe.getTitle()),
-							JOptionPane.YES_NO_OPTION);
+			int res = JOptionPane.showConfirmDialog(owner, GpUtil.R(
+					"DeleteDpEntry.QuestionDeleteDpeAndReferences", dpe
+							.getFilename(), countRefsInMappool, LangUtil
+							.stringConcatWithSep(", ", mapsWithReferences),
+					references.size() - countRefsInMappool, dpe.getTitle()
+							.toString()), GpUtil
+					.R("DataPoolWindow_Action_DeleteDPE_label" + " "
+							+ dpe.getTitle()), JOptionPane.YES_NO_OPTION);
 			if (res == JOptionPane.NO_OPTION)
 				return null;
+		}
+
+		// CLose all dialogs that use this layer
+		for (DesignMapViewJDialog d : GPDialogManager.dm_MapComposer
+				.getAllInstances()) {
+			List<DpRef<?>> dpes = d.getMap().getDpes();
+			for (DpRef<?> dpr : dpes) {
+				if (dpr.getTarget().equals(dpe)) {
+					if (!d.close())
+						return null;
+					break;
+				}
+			}
 		}
 
 		// ****************************************************************************
@@ -280,8 +301,8 @@ public class GpSwingUtil extends GpUtil {
 				continue;
 			if (dir.getName().startsWith("."))
 				continue;
-//			if (dir.getName().equals(AtlasConfigEditable.IMAGES_DIRNAME))
-//				continue;
+			// if (dir.getName().equals(AtlasConfigEditable.IMAGES_DIRNAME))
+			// continue;
 			if (dir.getName().equals(AtlasConfigEditable.ABOUT_DIRNAME))
 				continue;
 
@@ -356,7 +377,7 @@ public class GpSwingUtil extends GpUtil {
 				LOGGER.info("Automatically delete folder "
 						+ IOUtil.escapePath(d) + ".");
 
-			if ( (d.isDirectory() && new File(d, ".svn").exists()) ) {
+			if ((d.isDirectory() && new File(d, ".svn").exists())) {
 				LOGGER.info("Please use:\nsvn del \"" + IOUtil.escapePath(d)
 						+ "\" && svn commit \"" + IOUtil.escapePath(d)
 						+ "\" -m \"deleted an unused directory\"");

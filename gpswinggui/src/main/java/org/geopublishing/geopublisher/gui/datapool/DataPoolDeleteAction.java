@@ -20,20 +20,16 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
-
 
 /**
  * Delete a {@link DpEntry} from the {@link DataPool} and also remove all
  * references to it from the {@link MapPool} or the {@link Group}s
  * 
- * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
- * Tzeggai</a>
+ * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  **/
 public class DataPoolDeleteAction extends AbstractAction {
 
@@ -67,19 +63,15 @@ public class DataPoolDeleteAction extends AbstractAction {
 		DataPool dataPool = dpTable.getDataPool();
 		int modelIndex = dpTable.convertRowIndexToModel(dpTable
 				.getSelectedRow());
-		DpEntry dpe = dataPool.get(modelIndex);
+		DpEntry<?> dpe = dataPool.get(modelIndex);
 
-		if (AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
-				"Action_DeleteDPE_reallyDeleteQuestion", dpe.getTitle()
-						.toString(), dpe.getFilename())) == false)
-			return;
+		// if (AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
+		// "Action_DeleteDPE_reallyDeleteQuestion", dpe.getTitle()
+		// .toString(), dpe.getFilename())) == false)
+		// return;
 
-		// TODO Only close the windows that reference this dplayer!
-		if (!GPDialogManager.dm_MapComposer.closeAllInstances())
-			return;
-
-		GpSwingUtil.deleteDpEntry(owner, (AtlasConfigEditable) dpe
-				.getAtlasConfig(), dpe, true);
+		GpSwingUtil.deleteDpEntry(owner,
+				(AtlasConfigEditable) dpe.getAtlasConfig(), dpe, true);
 
 	}
 }

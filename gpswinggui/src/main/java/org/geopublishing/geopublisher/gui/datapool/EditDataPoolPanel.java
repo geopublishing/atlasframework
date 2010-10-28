@@ -51,12 +51,17 @@ public class EditDataPoolPanel extends JPanel {
 	private final AtlasConfigEditable ace;
 
 	/**
-	 * This panel allows to edit the {@link DataPool}. <li>New Items can be
-	 * imported by D'n'D from the host system. <li>Delete, <li>Edit preferences,
-	 * <li>edit colormaps for rasters <li>edit legend for raster
+	 * This panel allows to edit the {@link DataPool}.
+	 * <ul>
+	 * <li>New Items can be imported by D'n'D from the host system (or using the
+	 * import wizard),
+	 * <li>Delete,
+	 * <li>Edit preferences,
+	 * <li>edit colormaps for rasters
+	 * <li>edit legend for raster
+	 * </ul>
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * 
 	 */
 	public EditDataPoolPanel(final AtlasConfigEditable ace) {
@@ -70,8 +75,9 @@ public class EditDataPoolPanel extends JPanel {
 		add(new JLabel(GeopublisherGUI.R("EditDataPoolPanel.Explanation")),
 				"shrinky, split 2");
 
-		add(new SmallButton(new AbstractAction(GeopublisherGUI
-				.R("EditDataPoolPanel.ImportButton")) {
+		// A button to start the import-wizard
+		add(new SmallButton(new AbstractAction(
+				GeopublisherGUI.R("EditDataPoolPanel.ImportButton")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

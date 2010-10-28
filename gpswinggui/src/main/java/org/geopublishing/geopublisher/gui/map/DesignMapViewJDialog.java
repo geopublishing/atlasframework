@@ -1297,4 +1297,11 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		return rootPane;
 	}
 
+	/**
+	 * Returns the original map object that is beeing edited. This is the version we are playing with.
+	 **/	
+	public Map getMap() {
+		return map;
+	}
+
 }

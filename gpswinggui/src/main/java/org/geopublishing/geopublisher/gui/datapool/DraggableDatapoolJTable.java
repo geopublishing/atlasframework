@@ -79,10 +79,10 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 			return;
 
 		// What else could be in there ?! This is a Draggable-MapPool-JList
-		DpEntry draggedDatapoolEntry = getDataPool().get(
+		DpEntry<?> draggedDatapoolEntry = getDataPool().get(
 				convertRowIndexToModel(index));
 
-		DpRef datapoolRef = new DpRef(draggedDatapoolEntry);
+		DpRef<?> datapoolRef = new DpRef(draggedDatapoolEntry);
 		// Vorher nur die ref, jetzt den dpentry
 		Transferable trans = new RJLTransferable(datapoolRef.getTarget(),
 				AtlasDragSources.DATAPOOLLIST, DpEntry.class);
@@ -91,21 +91,12 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 				.getPredefinedCursor(Cursor.MOVE_CURSOR), trans, this);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * java.awt.dnd.DragSourceListener#dragDropEnd(java.awt.dnd.DragSourceDropEvent
-	 * )
-	 */
 	public void dragDropEnd(DragSourceDropEvent dsde) {
 		// draggedIndex = -1;
 		// log.debug("dragDropEnd");
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * java.awt.dnd.DragSourceListener#dragEnter(java.awt.dnd.DragSourceDragEvent
 	 * )
@@ -114,8 +105,6 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see
 	 * java.awt.dnd.DragSourceListener#dragExit(java.awt.dnd.DragSourceEvent)
 	 */
@@ -133,8 +122,6 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @seejava.awt.dnd.DragSourceListener#dropActionChanged(java.awt.dnd.
 	 * DragSourceDragEvent)
 	 */
