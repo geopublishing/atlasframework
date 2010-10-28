@@ -353,7 +353,7 @@ public class JarExportUtil {
 			fileWriter.write("<h2>" + ace.getTitle() + "</h2>");
 			fileWriter
 					.write("Exported: "
-							+ DateFormat.getDateInstance().format(new Date())
+							+ DateFormat.getInstance().format(new Date())
 							+ "<br/>"
 							+ "Created with <a href=\"http://en.geopublishing.org/Geopublisher\">Geopublisher</a> "
 							+ ReleaseUtil.getVersionInfo(GeopublisherGUI.class)
