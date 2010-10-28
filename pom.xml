@@ -84,7 +84,7 @@
 	<build>
 
 		<!-- Explicitly setting the final name! Do not remove -->
-		<finalName>${artifactId}-${project.version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 
 		<resources>
 			<resource>
