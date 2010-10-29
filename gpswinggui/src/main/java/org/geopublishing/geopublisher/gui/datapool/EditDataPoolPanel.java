@@ -16,18 +16,22 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.dp.ImportToDataPoolDropTargetListener;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import schmitzm.swing.JPanel;
+import skrueger.swing.FilterTableKeyListener;
 import skrueger.swing.SmallButton;
 
 /**
@@ -50,6 +54,9 @@ public class EditDataPoolPanel extends JPanel {
 
 	private final AtlasConfigEditable ace;
 
+	/** As the suer types into this filter, the list is filtered **/
+	private JTextField filterTextField;
+
 	/**
 	 * This panel allows to edit the {@link DataPool}.
 	 * <ul>
@@ -65,11 +72,19 @@ public class EditDataPoolPanel extends JPanel {
 	 * 
 	 */
 	public EditDataPoolPanel(final AtlasConfigEditable ace) {
-		super(new MigLayout("wrap 1", "[grow]", "[grow][shrink]"));
+		super(new MigLayout("wrap 1", "[grow]", "[shrink][grow][shrink]"));
 		this.ace = ace;
+
+		// A row to enter a filter:
+		JLabel filterLabel = new JLabel("Filter:");
+		add(filterLabel, "split 2, top, gap 0");
+		filterLabel.setToolTipText(GpSwingUtil
+				.R("DataPoolWindow.FilterTable.TT"));
+		add(getFilterTextField(), "growx, top, gap 0");
+
+		// The table
 		final JScrollPane scrollDatapoolTable = new JScrollPane(
 				getDatapoolJTable());
-
 		add(scrollDatapoolTable, "grow 2000");
 
 		add(new JLabel(GeopublisherGUI.R("EditDataPoolPanel.Explanation")),
@@ -77,7 +92,8 @@ public class EditDataPoolPanel extends JPanel {
 
 		// A button to start the import-wizard
 		add(new SmallButton(new AbstractAction(
-				GeopublisherGUI.R("EditDataPoolPanel.ImportButton")) {
+				GeopublisherGUI.R("EditDataPoolPanel.ImportButton"),
+				Icons.ICON_ADD_SMALL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -105,12 +121,35 @@ public class EditDataPoolPanel extends JPanel {
 	public DataPoolJTable getDatapoolJTable() {
 		if (datapoolJTable == null) {
 			datapoolJTable = new DraggableDatapoolJTable(ace);
+
+			// KeyListener reacts on every key
+			/*
+			 * DataPoolJTable.ColumnName.Quality=Quality
+			 * DataPoolJTable.ColumnName.Type=Type
+			 * DataPoolJTable.ColumnName.TitleLang=Title (${0})
+			 * DataPoolJTable.ColumnName.ViewsLang=Views (${0})
+			 * DataPoolJTable.ColumnName.Filename=Filename
+			 * sizeOnFilesystemWithoutSVN=Size (MB)
+			 */
+
+			// The constructor adds itself to the textfield
+			new FilterTableKeyListener(datapoolJTable, getFilterTextField(), 1,
+					2, 3, 4, 5);
 		}
 		return datapoolJTable;
 	}
 
 	public void setDatapoolJTable(DraggableDatapoolJTable datapoolJTable) {
 		this.datapoolJTable = datapoolJTable;
+	}
+
+	public JTextField getFilterTextField() {
+		if (filterTextField == null) {
+			filterTextField = new JTextField();
+			filterTextField.setToolTipText(GpSwingUtil
+					.R("DataPoolWindow.FilterTable.TT"));
+		}
+		return filterTextField;
 	}
 
 }

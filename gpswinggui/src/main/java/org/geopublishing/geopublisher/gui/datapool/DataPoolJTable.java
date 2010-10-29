@@ -112,7 +112,7 @@ public class DataPoolJTable extends JTable {
 		dataPool.addChangeListener(listenToDPChangesAndUpdateTheModel);
 	}
 
-	class DataPoolTableModel extends AbstractTableModel implements
+	public class DataPoolTableModel extends AbstractTableModel implements
 			TableModelWithToolTooltip {
 
 		/**

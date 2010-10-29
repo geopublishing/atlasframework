@@ -65,6 +65,7 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 		setDropMode(DropMode.INSERT_ROWS);
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
