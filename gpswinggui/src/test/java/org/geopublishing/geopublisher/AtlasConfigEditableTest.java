@@ -26,7 +26,7 @@ public class AtlasConfigEditableTest {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
 		assertNotNull(ace.getJnlpBaseUrl());
-		assertEquals(AtlasConfig.HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS,
+		assertEquals(AtlasConfig.HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT,
 				ace.getJnlpBaseUrl());
 
 		int countMaps = ace.getUsedMaps().size();

@@ -14,7 +14,6 @@ import java.awt.Component;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -23,6 +22,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
@@ -74,39 +74,11 @@ public class AVProps {
 
 	private File propertiesFile;
 
-	private FileOutputStream FOS;
+	private FileWriter FOS;
 
-	private boolean haveToCloseFOS;
+	private boolean haveToCloseFW;
 
 	private final AtlasConfig atlasConfig;
-
-	// ****************************************************************************
-	//
-	// The .properties file will be opened and parsed
-	//
-	// ****************************************************************************
-	// static {
-
-	// try {
-	// final InputStream resourceAsStream = AtlasConfig.getResLoMan()
-	// .getResourceAsStream(PROPERTIESFILE_RESOURCE_NAME);
-	// if (resourceAsStream == null) {
-	// log.warn("No *.properties found at '"
-	// + PROPERTIESFILE_RESOURCE_NAME
-	// + "'! Not parsing properties file...");
-	// System.err.println("No *.properties found at '"
-	// + PROPERTIESFILE_RESOURCE_NAME
-	// + "'! Not parsing properties file...");
-	// } else {
-	// // ResLoMan provided an InputStream to the properties, so lets
-	// // parse it...
-	// properties.load(resourceAsStream);
-	// }
-	// } catch (Exception e) {
-	// log.error("Error reading the properties file '"
-	// + PROPERTIESFILE_RESOURCE_NAME + "'");
-	// }
-	// }
 
 	public AVProps(AtlasConfig atlasConfig) {
 		this.atlasConfig = atlasConfig;
@@ -170,24 +142,27 @@ public class AVProps {
 	 * Save the changes to the .properties file
 	 */
 	public void store(Component owner) {
-		LOGGER.debug("STORE AV PROPS");
+		LOGGER.debug("Storing AtlasViewer " + getPropertiesFile());
 		try {
-			FOS = new FileOutputStream(getPropertiesFile());
-			haveToCloseFOS = true;
+			FOS = new FileWriter(getPropertiesFile());
+			haveToCloseFW = true;
 
 			properties.store(FOS,
 					"This is the properties file for AtlasViewer.");
 		} catch (IOException e) {
 			LOGGER.error("Can't write to " + getPropertiesFile().toString(), e);
 		} finally {
-			if (haveToCloseFOS)
+			if (haveToCloseFW)
 				try {
 					FOS.close();
-					haveToCloseFOS = false;
+					haveToCloseFW = false;
 				} catch (IOException e) {
 					LOGGER.error("Can't close FOS!", e);
 					ExceptionDialog.show(owner, e);
 				}
+
+			LOGGER.debug(" Done: AtlasViewer " + getPropertiesFile()
+					+ " stored.");
 		}
 	}
 
@@ -202,8 +177,6 @@ public class AVProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void resetProperties(final Component guiOwner) {
-		// final String msg = AtlasViewer.RESOURCE
-		// .getString("avprops.could_not_find_default_properties_in_file");
 
 		// Delete the old one
 		getPropertiesFile().delete();
@@ -219,8 +192,7 @@ public class AVProps {
 			if (inJar == null)
 				throw new RuntimeException("Can't find original av.properties");
 
-			org.apache.commons.io.FileUtils.copyURLToFile(inJar,
-					getPropertiesFile());
+			FileUtils.copyURLToFile(inJar, getPropertiesFile());
 
 			/**
 			 * After creating the new default file, we may not forget to read it
@@ -259,7 +231,6 @@ public class AVProps {
 	public final String get(Keys key, String defaultValue) {
 		return properties.getProperty(key.toString(), defaultValue);
 	}
-	
 
 	/**
 	 * Set a Value from the {@link Properties}
@@ -335,8 +306,5 @@ public class AVProps {
 	public AtlasConfig getAtlasConfig() {
 		return atlasConfig;
 	}
-	
-
-
 
 }

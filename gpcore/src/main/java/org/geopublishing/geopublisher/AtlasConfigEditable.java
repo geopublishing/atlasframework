@@ -736,4 +736,10 @@ public class AtlasConfigEditable extends AtlasConfig {
 		super.uncache();
 	}
 
+	// TODO Store in AML
+	public void setBaseName(String basename) {
+		this.basename = basename;
+	}
+
+
 }

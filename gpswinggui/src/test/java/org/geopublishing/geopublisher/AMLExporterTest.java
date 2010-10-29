@@ -2,13 +2,17 @@ package org.geopublishing.geopublisher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
@@ -19,12 +23,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import schmitzm.swing.TestingUtil;
+
 public class AMLExporterTest extends AMLExporter {
 
 	public AMLExporterTest() throws ParserConfigurationException,
 			AtlasException, FactoryException, TransformException, SAXException,
 			IOException, TransformerException {
 		super(GpTestingUtil.getAtlasConfigE(TestAtlas.small));
+
+	}
+
+	@Test
+	public void testFonts() throws AtlasException, FactoryException,
+			TransformException, SAXException, IOException,
+			ParserConfigurationException, TransformerException {
 
 		// Create a DOM builder and parse the fragment
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -43,10 +56,27 @@ public class AMLExporterTest extends AMLExporter {
 	}
 
 	@Test
-	public void testFonts() throws AtlasException, FactoryException,
+	public void testWriteBuildxml() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException, TransformerException {
-		AMLExporterTest amlExporter = new AMLExporterTest();
-		assertNotNull(amlExporter);
+
+		File newTempDir = TestingUtil.getNewTempDir();
+
+		// With default name should return null
+		getAce().setBaseName(AtlasConfig.DEFAULTBASENAME);
+		File created = writeBuildxml(newTempDir, getAce().getBaseName());
+		assertNull(created);
+
+		getAce().setBaseName(
+				AtlasConfig.DEFAULTBASENAME + System.currentTimeMillis());
+		created = writeBuildxml(newTempDir, getAce().getBaseName());
+		assertNotNull(created);
+		assertTrue(created.exists());
+
+		created = writeBuildxml(newTempDir, getAce().getBaseName() + "/");
+		assertNotNull(created);
+		assertTrue(created.exists());
+
 	}
+
 }

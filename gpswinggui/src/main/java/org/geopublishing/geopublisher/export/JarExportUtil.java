@@ -164,6 +164,10 @@ public class JarExportUtil {
 			// This is a list of files expected in ad that shall not be copied
 			if (dir.isDirectory() && name.equalsIgnoreCase(".cvs"))
 				return false;
+			if (dir.isFile() && name.equalsIgnoreCase("build.xml"))
+				return false;
+			if (dir.isFile() && name.equalsIgnoreCase("pom.xml"))
+				return false;
 			if (dir.isDirectory() && name.equalsIgnoreCase(".svn"))
 				return false;
 			if (name.equalsIgnoreCase(AtlasConfigEditable.ATLAS_GPA_FILENAME))
@@ -172,7 +176,6 @@ public class JarExportUtil {
 				return false;
 			if (name.equalsIgnoreCase(AtlasConfig.ATLASDATA_DIRNAME))
 				return false;
-
 			return true;
 		}
 	};

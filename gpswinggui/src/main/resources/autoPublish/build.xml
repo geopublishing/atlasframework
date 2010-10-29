@@ -1,0 +1,52 @@
+<!--
+  Copyright (c) 2010 Stefan A. Tzeggai.
+  This ant script allows to build and publish the atlases automatically with http://hudson.wikisquare.de. 
+  You can ignore it if you are not using that service. 
+  Do not make changes to this file. It will be recreated on every save of the atlas in Geopublisher.
+-->
+<project default="publish" basedir="." name="atlas publication">
+
+	<property name="basename" value="ATLASBASENAME" description="Should be the same like the last part of baseJnlpUrl" />
+	<property name="wwwdir" value="/var/www/atlas.geopublishing.org/atlases/${basename}" />
+	<property name="tmpdir" value="/tmp/${basename}" />
+
+	<!-- ================================= 
+	          target: clean : Clean the compiled classes, created ZIPs and exported JARs              
+	     ================================= -->
+	<target name="clean">
+		<delete dir="${tmpdir}" failonerror="false" />
+		<exec executable="/usr/bin/sudo" description="install latest geopublisher software" failonerror="false">
+			<arg line='/usr/local/sbin/updategp.sh' />
+		</exec>
+	</target>
+
+	<target name="export" depends="clean" description="Exporting atlas to ${tmpdir}... ">
+
+		<mkdir dir="${tmpdir}" />
+
+		<exec executable="geopublisher-testing" failonerror="true">
+			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t' />
+		</exec>
+	</target>
+
+	<target name="publish" depends="export" description="Moving files to ${wwwdir}... ">
+
+		<mkdir dir="${wwwdir}" />
+
+		<move todir="${wwwdir}" description="Moving zipped atlas">
+			<fileset dir="${tmpdir}">
+				<include name="*.zip" />
+			</fileset>
+		</move>
+
+		<move todir="${wwwdir}" description="Moving JWS atlas">
+			<fileset dir="${tmpdir}/JWS">
+				<include name="**/*" />
+			</fileset>
+		</move>
+
+	</target>
+
+</project>
+
+

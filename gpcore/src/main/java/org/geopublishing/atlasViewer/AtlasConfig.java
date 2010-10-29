@@ -49,7 +49,9 @@ import skrueger.swing.Disposable;
 public class AtlasConfig implements Disposable {
 
 	/** Default JNLP base URL for new atlases **/
-	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS = "http://atlas.geopublishing.org/atlases/myatlas/";
+	public static final String DEFAULTBASENAME = "myatlas";
+	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT = "http://atlas.geopublishing.org/atlases/"
+			+ DEFAULTBASENAME + "/";
 
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
 
@@ -184,9 +186,14 @@ public class AtlasConfig implements Disposable {
 	/**
 	 * If the atlas is exported to the web, this the URL that it is supposed to
 	 * run at. Should always end with a /. Defaults to
-	 * <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 * <code>http://atlas.geopublishing.org/atlases/myatlas/</code>
 	 */
-	private String jnlpBaseUrl = HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS;
+	private String jnlpBaseUrl = HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
+
+	/**
+	 * The shortes unique name for the tlas.
+	 */
+	protected String basename;
 
 	/**
 	 * An readily instantiated DatapoolEntry is added...
@@ -502,11 +509,11 @@ public class AtlasConfig implements Disposable {
 
 	/**
 	 * If the atalas is exported to the web, this the URL that it is supposed to
-	 * run at. E.g. <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 * run at. E.g. <code>http://atlas.geopublishing.org/atlases/myatlas/</code>
 	 */
 	public String getJnlpBaseUrl() {
 		if (jnlpBaseUrl == null) {
-			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_MYATLAS;
+			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
 		}
 
 		if (!jnlpBaseUrl.endsWith("/"))
@@ -517,7 +524,7 @@ public class AtlasConfig implements Disposable {
 
 	/**
 	 * If the atalas is exported to the web, this the URL that it is supposed to
-	 * run at. E.g. <code>http://www.geopublishing.org/atlases/myatlas/</code>
+	 * run at. E.g. <code>http://atlas.geopublishing.org/atlases/myatlas/</code>
 	 */
 	public void setJnlpBaseUrl(String jnlpBaseUrl) {
 		this.jnlpBaseUrl = jnlpBaseUrl;
@@ -528,9 +535,13 @@ public class AtlasConfig implements Disposable {
 	 *         getJnlpBaseUrl at the moment.
 	 */
 	public String getBaseName() {
-		String bn = getJnlpBaseUrl();
-		return bn.substring(
-				bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
-				bn.length() - 1);
+		if (basename == null) {
+			String bn = getJnlpBaseUrl();
+			return bn.substring(
+					bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
+					bn.length() - 1);
+		}
+		return basename;
 	}
+
 }
