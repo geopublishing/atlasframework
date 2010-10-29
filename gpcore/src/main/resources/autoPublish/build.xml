@@ -7,8 +7,13 @@
 <project default="publish" basedir="." name="atlas publication">
 
 	<property name="basename" value="ATLASBASENAME" description="Should be the same like the last part of baseJnlpUrl" />
+
 	<property name="wwwdir" value="/var/www/atlas.geopublishing.org/atlases/${basename}" />
+	<property name="wwwurl" value="http://atlas.geopublishing.org/atlases/${basename}/" />
+
 	<property name="wwwdirtesting" value="/var/www/atlas.geopublishing.org/atlases_testing/${basename}" />
+	<property name="wwwurltesting" value="http://atlas.geopublishing.org/atlases_testing/${basename}/" />
+
 	<property name="tmpdir" value="/tmp/${basename}" />
 
 	<!-- ================================= 
@@ -19,32 +24,24 @@
 		<exec executable="/usr/bin/sudo" description="install latest geopublisher software" failonerror="false">
 			<arg line='/usr/local/sbin/updategp.sh' />
 		</exec>
-
 		<sleep seconds="100" description="Waiting 100s for any parallel apt-get geopublisher... to finish..." />
-
+		<mkdir dir="${tmpdir}" />
 	</target>
 
 	<target name="export" depends="clean" description="Exporting atlas with GP stable from ${basedir} to ${tmpdir}... ">
-
-		<mkdir dir="${tmpdir}" />
-
 		<exec executable="geopublisher" failonerror="true">
-			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t' />
+			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t -u ${wwwurl}' />
 		</exec>
 	</target>
 
 
 	<target name="export_testing" depends="clean" description="Exporting atlas with GP testing from ${basedir} to ${tmpdir}... ">
-
-		<mkdir dir="${tmpdir}" />
-
 		<exec executable="geopublisher-testing" failonerror="true">
-			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t' />
+			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t -u ${wwwurltesting}' />
 		</exec>
 	</target>
 
 	<target name="publish" depends="export" description="Moving files from ${tmpdir} to ${wwwdir}... ">
-
 		<mkdir dir="${wwwdir}" />
 
 		<move todir="${wwwdir}" description="Moving zipped atlas to ${wwwdir}...">
@@ -58,10 +55,12 @@
 				<include name="**/*" />
 			</fileset>
 		</move>
+
+		<delete dir="${tmpdir}" failonerror="false" />
 	</target>
 
-	<target name="publish_testing" depends="export_testing" description="Exports the atlas">
 
+	<target name="publish_testing" depends="export_testing" description="Publish the exported testing atlas to ${wwwdirtesting}">
 		<mkdir dir="${wwwdirtesting}" />
 
 		<move todir="${wwwdirtesting}" description="Moving zipped atlas to ${wwwdirtesting}...">
@@ -76,6 +75,7 @@
 			</fileset>
 		</move>
 
+		<delete dir="${tmpdir}" failonerror="false" />
 	</target>
 
 </project>

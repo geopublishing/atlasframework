@@ -461,6 +461,12 @@ public class JarExportUtil {
 	 * usefull if atlases are exported parallel
 	 */
 	private boolean keepTempFiles = false;
+	
+	/**
+	 * It set to a value not <code>null</code>, the jnlp base url stored in the {@link AtlasConfigEditable} is overwritten with 
+	 * this value. If <code>null</code>, the value from the <code>atlas.xml</code> is used.
+	 */
+	private URL overwriteJnlpUrl = null;
 
 	/**
 	 * Initializes an {@link JarExportUtil} object to do the real work.
@@ -1225,6 +1231,12 @@ public class JarExportUtil {
 			throws AtlasExportException {
 
 		String codebase = ace.getJnlpBaseUrl();
+		
+		if (overwriteJnlpUrl != null) {
+			codebase = overwriteJnlpUrl.toString();
+			if (codebase.endsWith("/")) codebase += "/";
+			Log.info("Export JNLP base URL changed to "+codebase);
+		}
 
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -2401,6 +2413,14 @@ public class JarExportUtil {
 
 	public void setKeepTempFiles(boolean deleteTempFiles) {
 		this.keepTempFiles = deleteTempFiles;
+	}
+
+	/**
+	 * It set to a value not <code>null</code>, the jnlp base url stored in the {@link AtlasConfigEditable} is overwritten with 
+	 * this value. If <code>null</code>, the value from the <code>atlas.xml</code> is used.
+	 */
+	public void setOverwriteJnlpBaseUrl(URL jwsUrl) {
+		overwriteJnlpUrl = jwsUrl;
 	}
 
 }

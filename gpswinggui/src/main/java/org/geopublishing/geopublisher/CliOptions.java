@@ -2,6 +2,7 @@ package org.geopublishing.geopublisher;
 
 import java.awt.GraphicsEnvironment;
 import java.io.File;
+import java.net.URL;
 
 import javax.swing.SwingUtilities;
 
@@ -36,6 +37,8 @@ public class CliOptions extends Options {
 	static final String ZIPDISK = "z";
 	private static final String LICENSE = "l";
 	private static final String KEEPTEMP= "t";
+	private static final String JWSURL= "u";
+
 
 	private static final Logger log = Logger.getLogger(CliOptions.class);
 
@@ -61,16 +64,16 @@ public class CliOptions extends Options {
 	}
 
 	public CliOptions() {
-		addOption(new Option(HELP, "help", false, "print this message"));
+		addOption(new Option(HELP, "help", false, "print this message."));
 
 		addOption(new Option(VERBOSE, "verbose", false,
-				"print verbose information while running"));
+				"Print verbose information while running."));
 
 		addOption(new Option(LICENSE, "license", false,
-				"print license information"));
+				"Print license information."));
 		
 		Option optAwc = new Option(AWCFOLDER, "atlas", true,
-				"folder to load the atlas from (atlas.gpa)");
+				"Folder to load the atlas from (atlas.gpa). The path may not contain spaces!");
 		optAwc.setArgName("srcDir");
 		addOption(optAwc);
 
@@ -78,25 +81,30 @@ public class CliOptions extends Options {
 				EXPORT,
 				"export",
 				true,
-				"exports an atlas to a given directory, combine this option with -f / -d and/or -j.");
+				"exports an atlas to a given directory, combine this option with -f / -d and/or -j. The path may not contain spaces!");
 		optExport.setArgName("dstDir");
 		addOption(optExport);
 
 		Option diskOption = new Option(DISK, "disk", false,
-				"create DISK version of atlas when exporting");
+				"Create DISK version of atlas when exporting.");
 		addOption(diskOption);
+		
+		addOption(new Option(ZIPDISK, "zipdisk", false,
+		"Zip the DISK folder after export."));
 
 		addOption(new Option(JWS, "jws", false,
-				"create JavaWebStart version of atlas when exporting"));
-
-		addOption(new Option(ZIPDISK, "zipdisk", false,
-				"zip the DISK folder after export"));
+				"Create JavaWebStart version of atlas when exporting."));
+		
+		Option jwsUrlOp = new Option(JWSURL, "jwsurl", true, "Set the JNLP export URL specificly, overriding the URL stored in the atlas.xml. Must end with a /.");
+		jwsUrlOp.setArgName("jnlpUrl");
+		addOption(jwsUrlOp);
 
 		addOption(new Option(FORCE, "force", false,
-				"overwrite any existing files during export"));
+				"Overwrite any existing files during export."));
 		
-		addOption(new Option(KEEPTEMP, "keeptemp", false, "do not clean temp files, needed if exporting in parallel"));
-
+		addOption(new Option(KEEPTEMP, "keeptemp", false, "Do not clean temp files, needed if exporting in parallel"));
+	
+		
 	}
 
 	public CommandLine parse(String[] args) throws ParseException {
@@ -126,7 +134,7 @@ public class CliOptions extends Options {
 		File awcFile = null;
 		/** Export folder to use **/
 		File exportFile = null;
-
+		
 		CliOptions cliOptions = new CliOptions();
 
 		try {
@@ -268,22 +276,28 @@ public class CliOptions extends Options {
 				if (awcFile != null) {
 					final AtlasConfigEditable ace = new AMLImportEd()
 							.parseAtlasConfig(null, awcFile);
-					System.out
-							.println("Loaded atlas: '" + ace.getTitle() + "'");
+					log.info("Successfully loaded atlas: '" + ace.getTitle() + "'");
 
 					try {
-
 						boolean toDisk = commandLine.hasOption(DISK);
 						boolean toJws = commandLine.hasOption(JWS);
-
+						
 						// If nothing is selected, all export modes are selected
 						if (!toDisk && !toJws)
 							toDisk = toJws = true;
-
+						
 						JarExportUtil jeu = new JarExportUtil(ace, exportFile,
 								toDisk, toJws, false);
 						jeu.setZipDiskAfterExport(commandLine
 								.hasOption(ZIPDISK));
+						
+						// Is an extra JNLP base url specified?
+						if (commandLine.hasOption(JWSURL)) {
+							URL jwsUrl = new URL(commandLine.getOptionValue(JWSURL));
+							jeu.setOverwriteJnlpBaseUrl(jwsUrl);
+							if (!toJws) log.error("Paraeter -"+JWSURL+" ignored because not exporting to JWS.");
+						}
+						
 						jeu.setKeepTempFiles(commandLine.hasOption(KEEPTEMP));
 						jeu.export(null);
 					} catch (Exception e) {
