@@ -8,6 +8,7 @@
 
 	<property name="basename" value="ATLASBASENAME" description="Should be the same like the last part of baseJnlpUrl" />
 	<property name="wwwdir" value="/var/www/atlas.geopublishing.org/atlases/${basename}" />
+	<property name="wwwdirtesting" value="/var/www/atlas.geopublishing.org/atlases_testing/${basename}" />
 	<property name="tmpdir" value="/tmp/${basename}" />
 
 	<!-- ================================= 
@@ -23,7 +24,17 @@
 
 	</target>
 
-	<target name="export" depends="clean" description="Exporting atlas from ${basedir} to ${tmpdir}... ">
+	<target name="export" depends="clean" description="Exporting atlas with GP stable from ${basedir} to ${tmpdir}... ">
+
+		<mkdir dir="${tmpdir}" />
+
+		<exec executable="geopublisher" failonerror="true">
+			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t' />
+		</exec>
+	</target>
+
+
+	<target name="export_testing" depends="clean" description="Exporting atlas with GP testing from ${basedir} to ${tmpdir}... ">
 
 		<mkdir dir="${tmpdir}" />
 
@@ -43,6 +54,23 @@
 		</move>
 
 		<move todir="${wwwdir}" description="Moving JWS atlas to ${wwwdir}...">
+			<fileset dir="${tmpdir}/JWS">
+				<include name="**/*" />
+			</fileset>
+		</move>
+	</target>
+
+	<target name="publish_testing" depends="export_testing" description="Exports the atlas">
+
+		<mkdir dir="${wwwdirtesting}" />
+
+		<move todir="${wwwdirtesting}" description="Moving zipped atlas to ${wwwdirtesting}...">
+			<fileset dir="${tmpdir}">
+				<include name="*.zip" />
+			</fileset>
+		</move>
+
+		<move todir="${wwwdirtesting}" description="Moving JWS atlas to ${wwwdirtesting}...">
 			<fileset dir="${tmpdir}/JWS">
 				<include name="**/*" />
 			</fileset>
