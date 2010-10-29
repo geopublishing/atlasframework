@@ -3,6 +3,7 @@ package org.geopublishing.geopublisher;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.net.URL;
+import java.util.Enumeration;
 
 import javax.swing.SwingUtilities;
 
@@ -13,6 +14,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
@@ -36,9 +38,9 @@ public class CliOptions extends Options {
 	public static final String JWS = "j";
 	static final String ZIPDISK = "z";
 	private static final String LICENSE = "l";
-	private static final String KEEPTEMP= "t";
-	private static final String JWSURL= "u";
-
+	private static final String KEEPTEMP = "t";
+	private static final String JWSURL = "u";
+	private static final String SAVEANDEXIT = "s";
 
 	private static final Logger log = Logger.getLogger(CliOptions.class);
 
@@ -46,7 +48,7 @@ public class CliOptions extends Options {
 
 		PARSEEXCEPTION(1), AWCPARAM_MISSING(2), AWCPARAM_ILLEGAL(3), EXPORTDIR_MISSING(
 				4), EXPORTDIR_ILLEGAL(5), EXPORTDIR_NOTEMPTYNOFORCE(6), EXPORT_FAILED(
-				7), NOHEAD(8);
+				7), NOHEAD(8), SAVEERROR(9);
 
 		private final int errCode;
 
@@ -71,11 +73,17 @@ public class CliOptions extends Options {
 
 		addOption(new Option(LICENSE, "license", false,
 				"Print license information."));
-		
+
 		Option optAwc = new Option(AWCFOLDER, "atlas", true,
 				"Folder to load the atlas from (atlas.gpa). The path may not contain spaces!");
 		optAwc.setArgName("srcDir");
 		addOption(optAwc);
+
+		addOption(new Option(
+				SAVEANDEXIT,
+				"saveandexit",
+				false,
+				"Save the atlas after loading and exit. This will update atlas.xml to the lastest format."));
 
 		Option optExport = new Option(
 				EXPORT,
@@ -88,23 +96,27 @@ public class CliOptions extends Options {
 		Option diskOption = new Option(DISK, "disk", false,
 				"Create DISK version of atlas when exporting.");
 		addOption(diskOption);
-		
+
 		addOption(new Option(ZIPDISK, "zipdisk", false,
-		"Zip the DISK folder after export."));
+				"Zip the DISK folder after export."));
 
 		addOption(new Option(JWS, "jws", false,
 				"Create JavaWebStart version of atlas when exporting."));
-		
-		Option jwsUrlOp = new Option(JWSURL, "jwsurl", true, "Set the JNLP export URL specificly, overriding the URL stored in the atlas.xml. Must end with a /.");
+
+		Option jwsUrlOp = new Option(
+				JWSURL,
+				"jwsurl",
+				true,
+				"Set the JNLP export URL specificly, overriding the URL stored in the atlas.xml. Must end with a /.");
 		jwsUrlOp.setArgName("jnlpUrl");
 		addOption(jwsUrlOp);
 
 		addOption(new Option(FORCE, "force", false,
 				"Overwrite any existing files during export."));
-		
-		addOption(new Option(KEEPTEMP, "keeptemp", false, "Do not clean temp files, needed if exporting in parallel"));
-	
-		
+
+		addOption(new Option(KEEPTEMP, "keeptemp", false,
+				"Do not clean temp files, needed if exporting in parallel"));
+
 	}
 
 	public CommandLine parse(String[] args) throws ParseException {
@@ -134,7 +146,7 @@ public class CliOptions extends Options {
 		File awcFile = null;
 		/** Export folder to use **/
 		File exportFile = null;
-		
+
 		CliOptions cliOptions = new CliOptions();
 
 		try {
@@ -185,10 +197,11 @@ public class CliOptions extends Options {
 			}
 
 			// export?
-			if (!commandLine.hasOption(CliOptions.EXPORT)) {
+			if (!commandLine.hasOption(CliOptions.EXPORT)
+					&& !commandLine.hasOption(CliOptions.SAVEANDEXIT)) {
 				// Use the GUI
 				startGui = true;
-			} else {
+			} else if (commandLine.hasOption(CliOptions.EXPORT)) {
 				exportFile = new File(commandLine.getOptionValue(
 						CliOptions.EXPORT).trim());
 
@@ -235,6 +248,7 @@ public class CliOptions extends Options {
 			if (startGui) {
 
 				final File awcFileToLoad = awcFile;
+
 				SwingUtilities.invokeLater(new Runnable() {
 
 					@Override
@@ -260,12 +274,11 @@ public class CliOptions extends Options {
 				});
 				return -1;
 			} else {
-				// Not starting GUI, initialize logging
-				ConsoleAppender cp = new ConsoleAppender(new PatternLayout(
-						PatternLayout.TTCC_CONVERSION_PATTERN));
-				cp.setName("CLI output");
-				cp.setTarget("System.out");
-				Logger.getRootLogger().addAppender(cp);
+
+				// Not starting GUI, initialize logging. If other appends
+				// already exist, don't to anything
+				initLoggingForConsole();
+
 				if (commandLine.hasOption(CliOptions.VERBOSE))
 					Logger.getRootLogger().setLevel(
 							org.apache.log4j.Level.DEBUG);
@@ -276,34 +289,57 @@ public class CliOptions extends Options {
 				if (awcFile != null) {
 					final AtlasConfigEditable ace = new AMLImportEd()
 							.parseAtlasConfig(null, awcFile);
-					log.info("Successfully loaded atlas: '" + ace.getTitle() + "'");
+					log.info("Successfully loaded atlas: '" + ace.getTitle()
+							+ "'");
 
-					try {
-						boolean toDisk = commandLine.hasOption(DISK);
-						boolean toJws = commandLine.hasOption(JWS);
-						
-						// If nothing is selected, all export modes are selected
-						if (!toDisk && !toJws)
-							toDisk = toJws = true;
-						
-						JarExportUtil jeu = new JarExportUtil(ace, exportFile,
-								toDisk, toJws, false);
-						jeu.setZipDiskAfterExport(commandLine
-								.hasOption(ZIPDISK));
-						
-						// Is an extra JNLP base url specified?
-						if (commandLine.hasOption(JWSURL)) {
-							URL jwsUrl = new URL(commandLine.getOptionValue(JWSURL));
-							jeu.setOverwriteJnlpBaseUrl(jwsUrl);
-							if (!toJws) log.error("Paraeter -"+JWSURL+" ignored because not exporting to JWS.");
+					if (commandLine.hasOption(SAVEANDEXIT)) {
+						// Save and exit..
+						AMLExporter amlExporter = new AMLExporter(ace);
+						try {
+							amlExporter.saveAtlasConfigEditable();
+							return 0;
+						} catch (Exception e) {
+							errorDuringInterpret = Errors.SAVEERROR;
+							log.error("Error while saving the atlas", e);
+							ace.dispose();
+							return Errors.SAVEERROR.errCode;
 						}
-						
-						jeu.setKeepTempFiles(commandLine.hasOption(KEEPTEMP));
-						jeu.export(null);
-					} catch (Exception e) {
-						errorDuringInterpret = Errors.EXPORT_FAILED;
-						log.error(Errors.EXPORT_FAILED.toString(), e);
-						return Errors.EXPORT_FAILED.errCode;
+
+					} else if (exportFile != null) {
+						// Export
+						try {
+							boolean toDisk = commandLine.hasOption(DISK);
+							boolean toJws = commandLine.hasOption(JWS);
+
+							// If nothing is selected, all export modes are
+							// selected
+							if (!toDisk && !toJws)
+								toDisk = toJws = true;
+
+							JarExportUtil jeu = new JarExportUtil(ace,
+									exportFile, toDisk, toJws, false);
+							jeu.setZipDiskAfterExport(commandLine
+									.hasOption(ZIPDISK));
+
+							// Is an extra JNLP base url specified?
+							if (commandLine.hasOption(JWSURL)) {
+								URL jwsUrl = new URL(
+										commandLine.getOptionValue(JWSURL));
+								jeu.setOverwriteJnlpBaseUrl(jwsUrl);
+								if (!toJws)
+									log.error("Paraeter -"
+											+ JWSURL
+											+ " ignored because not exporting to JWS.");
+							}
+
+							jeu.setKeepTempFiles(commandLine
+									.hasOption(KEEPTEMP));
+							jeu.export(null);
+						} catch (Exception e) {
+							errorDuringInterpret = Errors.EXPORT_FAILED;
+							log.error(Errors.EXPORT_FAILED.toString(), e);
+							return Errors.EXPORT_FAILED.errCode;
+						}
 					}
 
 				}
@@ -320,5 +356,32 @@ public class CliOptions extends Options {
 
 			return CliOptions.Errors.PARSEEXCEPTION.getErrCode();
 		}
+	}
+
+	/**
+	 * Doens nothing, if there already is an {@link ConsoleAppender} registered
+	 * to the root logger.
+	 */
+	private static void initLoggingForConsole() {
+		{
+			Enumeration<Appender> allAppenders = Logger.getRootLogger()
+					.getAllAppenders();
+			while (allAppenders.hasMoreElements()) {
+				Appender app = (Appender) allAppenders.nextElement();
+				if (app instanceof ConsoleAppender)
+					return;
+			}
+
+			ConsoleAppender cp = new ConsoleAppender(new PatternLayout(
+					PatternLayout.TTCC_CONVERSION_PATTERN));
+			cp.setName("CLI output");
+			cp.setTarget("System.out");
+			Logger.getRootLogger().addAppender(cp);
+		}
+	}
+
+	private static void loadSaveAndExit(File awcFileToLoad) {
+		// TODO Auto-generated method stub
+
 	}
 }

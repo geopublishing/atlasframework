@@ -43,6 +43,20 @@ public class CliOptionsTest {
 	}
 
 	@Test
+	public void testsLoadWithGUIandSaveAndExit() throws Throwable {
+
+		if (TestingUtil.INTERACTIVE) {
+
+			// Loads an atlas into the GUI and closes GP after a few seconds
+
+			int performArgs = CliOptions.performArgs(new String[] { "-a",
+					TestAtlas.small.getFile().toString(), "-s" });
+			assertEquals(0, performArgs);
+			assertTrue(!GeopublisherGUI.isInstanciated());
+		}
+	}
+
+	@Test
 	public void testsLoadWithGUI() throws Throwable {
 
 		if (TestingUtil.INTERACTIVE) {
@@ -51,7 +65,7 @@ public class CliOptionsTest {
 
 			int performArgs = CliOptions.performArgs(new String[] { "-a "
 					+ TestAtlas.small.getFile() });
-			assertEquals(0, performArgs);
+			assertEquals(-1, performArgs);
 
 			LangUtil.sleepExceptionless(5000);
 
@@ -124,7 +138,8 @@ public class CliOptionsTest {
 				"--" + CliOptions.ZIPDISK, "-e", expDir.toString(), "-d",
 				"--atlas", TestAtlas.small.getFile().toString() }));
 
-		assertTrue(ArrayUtils.contains(expDir.list(), AtlasConfig.DEFAULTBASENAME+".zip"));
+		assertTrue(ArrayUtils.contains(expDir.list(),
+				AtlasConfig.DEFAULTBASENAME + ".zip"));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
 	}
@@ -159,7 +174,7 @@ public class CliOptionsTest {
 	}
 
 	@Test
-	public void testLoggerCange() {
+	public void testLoggerChange() {
 
 		Logger rootLogger = Logger.getRootLogger();
 		rootLogger.setLevel(org.apache.log4j.Level.WARN);
