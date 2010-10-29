@@ -1090,7 +1090,7 @@ public class AMLImport {
 								parseFeatureChartStyle(ac, n, dplvfs));
 					} catch (Exception e) {
 						// Broken URL or file doesn't exist
-						LOGGER.warn("Could not load chartStyle: " + e);
+						LOGGER.warn("Could not load chartStyle: ",e);
 					}
 				}
 			}
