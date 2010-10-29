@@ -1234,7 +1234,7 @@ public class JarExportUtil {
 		
 		if (overwriteJnlpUrl != null) {
 			codebase = overwriteJnlpUrl.toString();
-			if (codebase.endsWith("/")) codebase += "/";
+			if (!codebase.endsWith("/")) codebase += "/";
 			Log.info("Export JNLP base URL changed to "+codebase);
 		}
 

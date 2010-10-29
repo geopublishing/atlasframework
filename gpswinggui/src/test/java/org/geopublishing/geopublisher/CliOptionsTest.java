@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.io.IOUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.TestingUtil;
 
@@ -155,6 +156,27 @@ public class CliOptionsTest {
 
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
+	}
+
+	@Test
+	public void testExportJWSonlyWithUrl() throws Throwable {
+
+		File expDir = GpTestingUtil.createAtlasExportTesttDir();
+
+		assertEquals(
+				0,
+				CliOptions.performArgs(new String[] { "-e", expDir.toString(),
+						"-j", "--atlas", TestAtlas.small.getFile().toString(),
+						"-u", "http://atlas/atlas/" }));
+
+		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
+		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
+
+		String readFileAsString = IOUtil.readFileAsString(new File(new File(
+				expDir, JarExportUtil.JWS), JarExportUtil.JNLP_FILENAME));
+		assertTrue(readFileAsString.contains("http://atlas/atlas/"));
+		assertTrue(readFileAsString.contains("http://atlas/atlas/"
+				+ JarExportUtil.JNLP_FILENAME));
 	}
 
 	@Test
