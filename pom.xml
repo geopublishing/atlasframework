@@ -94,6 +94,7 @@
 					<include>export/export.keystore</include>
 					<include>export/jsmooth/autodownload-wrapper/*</include>
 					<include>geopublishing_log4j.xml</include>
+					<include>autoPublish/build.xml</include>
 				</includes>
 			</resource>
 
@@ -104,6 +105,7 @@
 					<exclude>export/export.keystore</exclude>
 					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
 					<exclude>geopublishing_log4j.xml</exclude>
+					<exclude>autoPublish/build.xml</exclude>
 				</excludes>
 			</resource>
 
