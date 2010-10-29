@@ -21,10 +21,9 @@
 	     ================================= -->
 	<target name="clean">
 		<delete dir="${tmpdir}" failonerror="false" />
-		<exec executable="/usr/bin/sudo" description="install latest geopublisher software" failonerror="false">
+		<exec executable="/usr/bin/sudo" description="install latest geopublisher software. If apt-get is busy, waits minute" failonerror="false">
 			<arg line='/usr/local/sbin/updategp.sh' />
 		</exec>
-		<sleep seconds="100" description="Waiting 100s for any parallel apt-get geopublisher... to finish..." />
 		<mkdir dir="${tmpdir}" />
 	</target>
 
