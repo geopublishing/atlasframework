@@ -18,6 +18,9 @@
 		<exec executable="/usr/bin/sudo" description="install latest geopublisher software" failonerror="false">
 			<arg line='/usr/local/sbin/updategp.sh' />
 		</exec>
+
+		<sleep seconds="100" description="Waiting 100s for any parallel apt-get geopublisher... to finish..." />
+
 	</target>
 
 	<target name="export" depends="clean" description="Exporting atlas from ${basedir} to ${tmpdir}... ">
