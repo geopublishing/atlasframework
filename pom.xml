@@ -30,7 +30,7 @@
 		<module>gpswinggui</module>
 		<module>gpdoc</module>
 	</modules>
-
+	
 	<profiles>
 		<profile>
 			<id>w2buero</id>
@@ -47,7 +47,6 @@
 		</profile>
 
 	</profiles>
-
 
 	<developers>
 		<developer>
