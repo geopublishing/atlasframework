@@ -4,7 +4,7 @@
   You can ignore it if you are not using that service. 
   Do not make changes to this file. It will be recreated on every save of the atlas in Geopublisher.
 -->
-<project default="publish" basedir="." name="atlas publication">
+<project basedir="." name="atlas publication">
 
 	<property name="basename" value="ATLASBASENAME" description="Should be the same like the last part of baseJnlpUrl" />
 
