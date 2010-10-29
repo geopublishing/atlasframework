@@ -3,7 +3,9 @@ package org.geopublishing.geopublisher;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.net.URL;
 import java.util.Enumeration;
 
 import org.apache.log4j.Appender;
@@ -11,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import schmitzm.io.IOUtil;
 
 public class GpUtilTest {
 
@@ -21,6 +25,19 @@ public class GpUtilTest {
 	@After
 	public void tearDown() throws Exception {
 	}
+	
+	@Test
+	public void testBuildXMLWithoutFiltering()
+	{
+
+		String resLoc = "/autoPublish/build.xml";
+		URL templateBuildXml = GpUtil.class.getResource(resLoc);
+		assertNotNull(templateBuildXml);
+		
+		String template = IOUtil.readURLasString(templateBuildXml);
+		assertTrue(template.contains("-a ${basedir}"));
+	}
+
 
 	@Test
 	public void testInitGpLogging()
@@ -34,7 +51,8 @@ public class GpUtilTest {
 		assertEquals(2, countRootLoggers());
 	}
 
-	private int countRootLoggers() {
+
+	public int countRootLoggers() {
 		int countAppenders = 0;
 		Enumeration allAppenders = Logger.getRootLogger().getAllAppenders();
 		while (allAppenders.hasMoreElements()) {
@@ -45,5 +63,4 @@ public class GpUtilTest {
 		}
 		return countAppenders;
 	}
-
 }
