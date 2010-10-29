@@ -33,7 +33,6 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
@@ -47,6 +46,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -163,7 +163,9 @@ public class DataPoolJTable extends JTable {
 		 */
 		@Override
 		public Class<?> getColumnClass(final int columnIndex) {
-			if (columnIndex == 6)
+			if (columnIndex == 2) {
+				return DpEntryType.class;
+			} else if (columnIndex == 6)
 				return Double.class;
 			return super.getColumnClass(columnIndex);
 		}
@@ -208,10 +210,10 @@ public class DataPoolJTable extends JTable {
 		 */
 		@Override
 		public String getToolTipFor(int rowIndex, int columnIdex) {
-			
+
 			rowIndex = convertRowIndexToModel(rowIndex);
 			columnIdex = convertColumnIndexToModel(columnIdex);
-			
+
 			final DpEntry<? extends ChartStyle> dpe = getDataPool().get(
 					rowIndex);
 
@@ -224,34 +226,28 @@ public class DataPoolJTable extends JTable {
 
 				final List<String> langs = getAce().getLanguages();
 				boolean somethingMissing = false;
-				final StringBuffer tooltTipHtml = new StringBuffer(
-						"<html><b>"
-								+ GeopublisherGUI
-										.R(
-												"MapPoolJTable.ColumnName.Quality.Tooltip",
-												NumberFormat
-														.getPercentInstance()
-														.format(
-																getValueAt(
-																		rowIndex,
-																		columnIdex)))
-								+ "</B><ul>");
-				
+				final StringBuffer tooltTipHtml = new StringBuffer("<html><b>"
+						+ GeopublisherGUI.R(
+								"MapPoolJTable.ColumnName.Quality.Tooltip",
+								NumberFormat.getPercentInstance().format(
+										getValueAt(rowIndex, columnIdex)))
+						+ "</B><ul>");
+
 				/**
-				 * Check for broken 
+				 * Check for broken
 				 */
 				if (dpe.isBroken()) {
 					somethingMissing = true;
 					tooltTipHtml.append("<li><font color='red'><b>ERROR: "
 							+ dpe.getBrokenException().getLocalizedMessage());
 					tooltTipHtml.append("</b></font></li>");
-				} 
+				}
 
 				/**
 				 * Check the Title translations:
 				 */
-				List<String> missing = AVUtil.getMissingLanguages(getAce(), dpe
-						.getTitle());
+				List<String> missing = AVUtil.getMissingLanguages(getAce(),
+						dpe.getTitle());
 				if (missing.size() > 0) {
 					somethingMissing = true;
 					tooltTipHtml.append("<li>"
@@ -280,8 +276,8 @@ public class DataPoolJTable extends JTable {
 				/**
 				 * Check the Keyword translations:
 				 */
-				missing = AVUtil.getMissingLanguages(getAce(), dpe
-						.getKeywords());
+				missing = AVUtil.getMissingLanguages(getAce(),
+						dpe.getKeywords());
 				if (missing.size() > 0) {
 					somethingMissing = true;
 
@@ -318,9 +314,10 @@ public class DataPoolJTable extends JTable {
 						somethingMissing = true;
 
 						tooltTipHtml.append("<li>"
-								+ GeopublisherGUI.R("DataPool_LayerStylesQM", dpl
-										.getLayerStyles().size(), NumberFormat
-										.getPercentInstance().format(lsQM)));
+								+ GeopublisherGUI.R("DataPool_LayerStylesQM",
+										dpl.getLayerStyles().size(),
+										NumberFormat.getPercentInstance()
+												.format(lsQM)));
 						tooltTipHtml.append("</li>");
 					}
 
@@ -336,18 +333,18 @@ public class DataPoolJTable extends JTable {
 					// int visibleAttributesCount =
 					// dplv.getVisibleAttributesCount();
 
-					final int visibleAttributesCount = dplv.getAttributeMetaDataMap().sortedValuesVisibleOnly().size();
+					final int visibleAttributesCount = dplv
+							.getAttributeMetaDataMap()
+							.sortedValuesVisibleOnly().size();
 					if (dplv.getQuality() < 1. && visibleAttributesCount > 0) {
-						double quality = dplv.getAttributeMetaDataMap().getQuality(dpe.getAtlasConfig().getLanguages());
-						tooltTipHtml
-								.append("<li>"
-										+ GeopublisherGUI
-												.R(
-														"DataPool_ColumQM",
-														visibleAttributesCount,
-														NumberFormat
-																.getPercentInstance()
-																.format(quality)));
+						double quality = dplv
+								.getAttributeMetaDataMap()
+								.getQuality(dpe.getAtlasConfig().getLanguages());
+						tooltTipHtml.append("<li>"
+								+ GeopublisherGUI.R("DataPool_ColumQM",
+										visibleAttributesCount,
+										NumberFormat.getPercentInstance()
+												.format(quality)));
 						tooltTipHtml.append("</li>");
 					}
 				}
@@ -358,6 +355,7 @@ public class DataPoolJTable extends JTable {
 			}
 			return null;
 		}
+
 	}
 
 	private void init() {
@@ -367,9 +365,11 @@ public class DataPoolJTable extends JTable {
 		/**
 		 * Use Java 1.6 to make the columns sortable:
 		 */
-		final RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
+		final TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(
 				getModel());
 		setRowSorter(sorter);
+
+		sorter.setComparator(1, DpEntryType.getComparatorForDpe());
 
 		/**
 		 * Define selection behavior
@@ -415,15 +415,15 @@ public class DataPoolJTable extends JTable {
 
 			}
 		});
-		
-		// React to Locale changes: the Table columns have to change their labels when the
-		 // Locale has been changed
+
+		// React to Locale changes: the Table columns have to change their
+		// labels when the
+		// Locale has been changed
 		Translation.addLocaleChangeListener(localeChangeListener);
 
 		setTableCellRenderers();
 
 	}
-	
 
 	/**
 	 * Change the table columns when the Locale has changed
@@ -461,8 +461,7 @@ public class DataPoolJTable extends JTable {
 				new QualityPercentageTableCellRenderer(getAce()),
 				QualityPercentageTableCellRenderer.MINWIDTH, null,
 				QualityPercentageTableCellRenderer.MAXWIDTH);
-		SwingUtil.setColumnLook(this, 1,
-				new DpEntryTypeTableCellRenderer(),
+		SwingUtil.setColumnLook(this, 1, new DpEntryTypeTableCellRenderer(),
 				DpEntryTypeTableCellRenderer.MINWIDTH, null,
 				DpEntryTypeTableCellRenderer.MAXWIDTH);
 
@@ -525,11 +524,11 @@ public class DataPoolJTable extends JTable {
 			/** Scrollen */
 			scrollRectToVisible(getCellRect(viewIndex, 0, true));
 		}
-		
+
 	}
 
 	/**
-	 * Help the GC  
+	 * Help the GC
 	 */
 	public void dispose() {
 		Translation.removeLocaleChangeListener(localeChangeListener);

@@ -92,8 +92,6 @@ public class DraggableDatapoolJTable extends DataPoolJTable implements
 	}
 
 	public void dragDropEnd(DragSourceDropEvent dsde) {
-		// draggedIndex = -1;
-		// log.debug("dragDropEnd");
 	}
 
 	/*

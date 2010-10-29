@@ -575,7 +575,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 
 	/**
 	 * Has to be implemented by the children of {@link CopyOfDpEntry}. Icons are
-	 * generated upon this information.
+	 * generated upon this information. Never returns <code>null</code>.
 	 * 
 	 * @return A constant from {@link DpEntryType}.
 	 */

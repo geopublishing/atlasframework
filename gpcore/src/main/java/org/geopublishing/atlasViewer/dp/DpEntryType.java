@@ -10,11 +10,12 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.dp;
 
+import java.util.Comparator;
+
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.Icons;
-
 
 /**
  * An {@link Enum} with all file types that can be put into the {@link DataPool}
@@ -254,5 +255,22 @@ public enum DpEntryType {
 	 */
 	public String getDesc() {
 		return getLine1() + " " + getLine2();
+	}
+
+	/**
+	 * @return a Comparator that compares the textual descriptions of the types,
+	 *         that the compared {@link DpEntry}s have. Usefull to sort a table
+	 *         row that returns {@link DpEntry}s.
+	 */
+	public static Comparator<DpEntry<?>> getComparatorForDpe() {
+		return new Comparator<DpEntry<?>>() {
+
+			@Override
+			public int compare(DpEntry<?> t1, DpEntry<?> t2) {
+				if (t1 == null && t2 == null)
+					return 0;
+				return t1.getType().getDesc().compareTo(t2.getType().getDesc());
+			}
+		};
 	}
 }
