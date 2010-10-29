@@ -20,7 +20,7 @@
 		</exec>
 	</target>
 
-	<target name="export" depends="clean" description="Exporting atlas to ${tmpdir}... ">
+	<target name="export" depends="clean" description="Exporting atlas from ${basedir} to ${tmpdir}... ">
 
 		<mkdir dir="${tmpdir}" />
 
@@ -29,17 +29,17 @@
 		</exec>
 	</target>
 
-	<target name="publish" depends="export" description="Moving files to ${wwwdir}... ">
+	<target name="publish" depends="export" description="Moving files from ${tmpdir} to ${wwwdir}... ">
 
 		<mkdir dir="${wwwdir}" />
 
-		<move todir="${wwwdir}" description="Moving zipped atlas">
+		<move todir="${wwwdir}" description="Moving zipped atlas to ${wwwdir}...">
 			<fileset dir="${tmpdir}">
 				<include name="*.zip" />
 			</fileset>
 		</move>
 
-		<move todir="${wwwdir}" description="Moving JWS atlas">
+		<move todir="${wwwdir}" description="Moving JWS atlas to ${wwwdir}...">
 			<fileset dir="${tmpdir}/JWS">
 				<include name="**/*" />
 			</fileset>

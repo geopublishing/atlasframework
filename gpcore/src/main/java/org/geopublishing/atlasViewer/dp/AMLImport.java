@@ -92,7 +92,8 @@ public class AMLImport {
 	 **/
 	private static boolean upgradeFromPreGP13 = false;
 	/**
-	 * If set to <code>true</code> empty Strings will be added as NODATA Values for every String attribute.
+	 * If set to <code>true</code> empty Strings will be added as NODATA Values
+	 * for every String attribute.
 	 **/
 	private static boolean upgradeFromPreGP14 = false;
 
@@ -485,12 +486,11 @@ public class AMLImport {
 			upgradeFromPreGP13 = true;
 			LOGGER.info("atlas.xml has been created with a version prior to 1.3. Filters will be converted to CQL!");
 		}
-		
+
 		if (majMin < 1.4) {
 			upgradeFromPreGP14 = true;
 			LOGGER.info("atlas.xml has been created with a version prior to 1.4. \"\" NODATA values for Strings will be added automatically.");
 		}
-
 
 	}
 
@@ -1347,7 +1347,7 @@ public class AMLImport {
 			} catch (Exception e) {
 				LOGGER.warn("NODATA value '" + textValue
 						+ "' can't be parsed as numeric. Ignoring..", e);
-//				attributeMetadata.getNodataValues().add(textValue);
+				// attributeMetadata.getNodataValues().add(textValue);
 			}
 		} else {
 			// Add the NODATA value as a String
