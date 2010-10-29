@@ -71,7 +71,6 @@ import schmitzm.jfree.chart.style.ChartStyleUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartUtil;
 import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.AttributeMetadataMap;
@@ -91,7 +90,11 @@ public class AMLImport {
 	 * {@link AMLImport} will try to convert the filters automatically OR throw
 	 * them away if conversion not possible.
 	 **/
-	private static boolean upgradeFiltersToCQL = false;
+	private static boolean upgradeFromPreGP13 = false;
+	/**
+	 * If set to <code>true</code> empty Strings will be added as NODATA Values for every String attribute.
+	 **/
+	private static boolean upgradeFromPreGP14 = false;
 
 	static void info(String msg) {
 		if (statusDialog != null)
@@ -346,14 +349,14 @@ public class AMLImport {
 		// LOGGER.debug("Starting to parse pyramid layers...");
 
 		// aml:rasterPyramidLayer
-//		final NodeList rasterPyramidLayers = xml.getElementsByTagNameNS(
-//				AMLUtil.AMLURI, "pyramidRasterLayer");
-//		for (int i = 0; i < rasterPyramidLayers.getLength(); i++) {
-//			final Node node = rasterPyramidLayers.item(i);
-//			final DpLayerRasterPyramid pyramid = AMLImport
-//					.parseDatapoolLayerRasterPyramid(node, ac);
-//			ac.getDataPool().add(pyramid);
-//		}
+		// final NodeList rasterPyramidLayers = xml.getElementsByTagNameNS(
+		// AMLUtil.AMLURI, "pyramidRasterLayer");
+		// for (int i = 0; i < rasterPyramidLayers.getLength(); i++) {
+		// final Node node = rasterPyramidLayers.item(i);
+		// final DpLayerRasterPyramid pyramid = AMLImport
+		// .parseDatapoolLayerRasterPyramid(node, ac);
+		// ac.getDataPool().add(pyramid);
+		// }
 
 		// LOGGER.debug("Starting to parse vector layers...");
 		// aml:vectorLayer
@@ -479,9 +482,15 @@ public class AMLImport {
 		double majMin = new Double(maj) + new Double(min) / 10.;
 
 		if (majMin < 1.3) {
-			upgradeFiltersToCQL = true;
+			upgradeFromPreGP13 = true;
 			LOGGER.info("atlas.xml has been created with a version prior to 1.3. Filters will be converted to CQL!");
 		}
+		
+		if (majMin < 1.4) {
+			upgradeFromPreGP14 = true;
+			LOGGER.info("atlas.xml has been created with a version prior to 1.4. \"\" NODATA values for Strings will be added automatically.");
+		}
+
 
 	}
 
@@ -805,55 +814,56 @@ public class AMLImport {
 
 		return rld;
 	}
-//
-//	/**
-//	 * Parses an AtlasML branch and fills values
-//	 * 
-//	 * @throws AtlasRecoverableException
-//	 */
-//	public final static DpLayerRasterPyramid parseDatapoolLayerRasterPyramid(
-//			final Node node, final AtlasConfig ac)
-//			throws AtlasRecoverableException {
-//		if (ac == null)
-//			throw new IllegalArgumentException("ac == null");
-//		final DpLayerRasterPyramid dpe = new DpLayerRasterPyramid(ac);
-//
-//		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
-//		final NodeList childNodes = node.getChildNodes();
-//		for (int i = 0; i < childNodes.getLength(); i++) {
-//			final Node n = childNodes.item(i);
-//			final String name = n.getLocalName();
-//			// Cancel if it's an attribute
-//			if (!n.hasChildNodes())
-//				continue;
-//
-//			if (name.equals("filename")) {
-//				final String value = n.getFirstChild().getNodeValue();
-//				dpe.setFilename(value);
-//			} else {
-//				if (name.equals("name")) {
-//					final Translation transname = AMLImport.parseTranslation(
-//							ac.getLanguages(), n);
-//
-//					dpe.setTitle(transname);
-//				} else if (name.equals("dataDirname")) {
-//					final String value = n.getFirstChild().getNodeValue();
-//					dpe.setDataDirname(value);
-//				} else if (name.equals("desc")) {
-//					dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
-//				} else if (name.equals("rasterLegendData")) {
-//					dpe.setLegendMetaData(parseRasterLegendData(ac, n));
-//				} else if (name.equals("keywords")) {
-//					dpe.setKeywords(AMLImport.parseTranslation(
-//							ac.getLanguages(), n));
-//				} else if (name.equals("transparentColor")) {
-//					final String colorStr = n.getFirstChild().getNodeValue();
-//					dpe.setInputTransparentColor(SwingUtil.parseColor(colorStr));
-//				}
-//			}
-//		}
-//		return dpe;
-//	}
+
+	//
+	// /**
+	// * Parses an AtlasML branch and fills values
+	// *
+	// * @throws AtlasRecoverableException
+	// */
+	// public final static DpLayerRasterPyramid parseDatapoolLayerRasterPyramid(
+	// final Node node, final AtlasConfig ac)
+	// throws AtlasRecoverableException {
+	// if (ac == null)
+	// throw new IllegalArgumentException("ac == null");
+	// final DpLayerRasterPyramid dpe = new DpLayerRasterPyramid(ac);
+	//
+	// dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
+	// final NodeList childNodes = node.getChildNodes();
+	// for (int i = 0; i < childNodes.getLength(); i++) {
+	// final Node n = childNodes.item(i);
+	// final String name = n.getLocalName();
+	// // Cancel if it's an attribute
+	// if (!n.hasChildNodes())
+	// continue;
+	//
+	// if (name.equals("filename")) {
+	// final String value = n.getFirstChild().getNodeValue();
+	// dpe.setFilename(value);
+	// } else {
+	// if (name.equals("name")) {
+	// final Translation transname = AMLImport.parseTranslation(
+	// ac.getLanguages(), n);
+	//
+	// dpe.setTitle(transname);
+	// } else if (name.equals("dataDirname")) {
+	// final String value = n.getFirstChild().getNodeValue();
+	// dpe.setDataDirname(value);
+	// } else if (name.equals("desc")) {
+	// dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
+	// } else if (name.equals("rasterLegendData")) {
+	// dpe.setLegendMetaData(parseRasterLegendData(ac, n));
+	// } else if (name.equals("keywords")) {
+	// dpe.setKeywords(AMLImport.parseTranslation(
+	// ac.getLanguages(), n));
+	// } else if (name.equals("transparentColor")) {
+	// final String colorStr = n.getFirstChild().getNodeValue();
+	// dpe.setInputTransparentColor(SwingUtil.parseColor(colorStr));
+	// }
+	// }
+	// }
+	// return dpe;
+	// }
 
 	/**
 	 * Parses a aml:group tag
@@ -1052,7 +1062,7 @@ public class AMLImport {
 				} else if (name.equals("filterRule")) {
 					String filterString = n.getFirstChild().getNodeValue();
 
-					if (upgradeFiltersToCQL && filterString != null
+					if (upgradeFromPreGP13 && filterString != null
 							&& !filterString.isEmpty()) {
 						try {
 							String convertedFilterString = AMLUtil
@@ -1276,9 +1286,13 @@ public class AMLImport {
 		// Parsing the childres
 
 		final NodeList childNodes = node.getChildNodes();
-		// Translation name = null;
-		// Translation desc = null;
+
+		// If the nodataValue tag is not found, this is probalby an atlas
+		// created with GP < 1.4. default NODATA values will be added
+		// automatically.
+		boolean nodataTagFound = false;
 		for (int i = 0; i < childNodes.getLength(); i++) {
+
 			if (childNodes.item(i).getLocalName() == null)
 				continue;
 
@@ -1292,43 +1306,53 @@ public class AMLImport {
 					.equals(AMLUtil.TAG_nodataValue)) {
 				// NODATA values
 
+				nodataTagFound = true;
+
 				Node item = childNodes.item(i);
 				if (item != null) {
-					String textValue = item.getTextContent();
-					// Depending on the schema we have to transform the String
-					// to Number.
-					AttributeDescriptor attDesc = dplvfs.getSchema()
-							.getDescriptor(correctedAttName);
-
-					Class<?> binding = attDesc.getType().getBinding();
-
-					if (attDesc != null
-							&& Number.class.isAssignableFrom(binding)) {
-						// Add the NODATA value parsed accoring to the binding
-						try {
-
-							Number noDataValue = LangUtil.parseNumberAs(
-									textValue, binding);
-							attributeMetadata.getNodataValues()
-									.add(noDataValue);
-
-						} catch (Exception e) {
-							ExceptionDialog.show(new RuntimeException(
-									"NODATA value '" + textValue
-											+ "' can't be parsed as numeric.",
-									e));
-							attributeMetadata.getNodataValues().add(textValue);
-						}
-					} else {
-						// Add the NODATA value as a String
-						attributeMetadata.getNodataValues().add(textValue);
-					}
+					String textNodataValue = item.getTextContent();
+					interpretAndAddNodataValue(dplvfs, correctedAttName,
+							attributeMetadata, textNodataValue);
 				}
 
 			}
 
 		}
+
+		if (nodataTagFound == false && upgradeFromPreGP14) {
+			interpretAndAddNodataValue(dplvfs, correctedAttName,
+					attributeMetadata, "");
+		}
+
 		return attributeMetadata;
+	}
+
+	private static void interpretAndAddNodataValue(
+			DpLayerVectorFeatureSource dplvfs, NameImpl correctedAttName,
+			AttributeMetadataImpl attributeMetadata, String textValue) {
+		// Depending on the schema we have to transform the String
+		// to Number.
+		AttributeDescriptor attDesc = dplvfs.getSchema().getDescriptor(
+				correctedAttName);
+
+		Class<?> binding = attDesc.getType().getBinding();
+
+		if (attDesc != null && Number.class.isAssignableFrom(binding)) {
+			// Add the NODATA value parsed accoring to the binding
+			try {
+
+				Number noDataValue = LangUtil.parseNumberAs(textValue, binding);
+				attributeMetadata.getNodataValues().add(noDataValue);
+
+			} catch (Exception e) {
+				LOGGER.warn("NODATA value '" + textValue
+						+ "' can't be parsed as numeric. Ignoring..", e);
+//				attributeMetadata.getNodataValues().add(textValue);
+			}
+		} else {
+			// Add the NODATA value as a String
+			attributeMetadata.getNodataValues().add(textValue);
+		}
 	}
 
 	/**
