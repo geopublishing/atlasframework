@@ -107,7 +107,8 @@ import sun.tools.jar.Main;
  */
 public class JarExportUtil {
 
-	public static final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = "AtlasTempFile_EXPORT_"+System.currentTimeMillis()+"_";
+	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = AVUtil.ATLAS_TEMP_FILE_BASE_ID
+			+ "_EXPORT_" + System.currentTimeMillis();
 
 	/** Subfolder in the export atlas directory for the JWS version of the atlas **/
 	public static final String JWS = "JWS";
@@ -461,10 +462,11 @@ public class JarExportUtil {
 	 * usefull if atlases are exported parallel
 	 */
 	private boolean keepTempFiles = false;
-	
+
 	/**
-	 * It set to a value not <code>null</code>, the jnlp base url stored in the {@link AtlasConfigEditable} is overwritten with 
-	 * this value. If <code>null</code>, the value from the <code>atlas.xml</code> is used.
+	 * It set to a value not <code>null</code>, the jnlp base url stored in the
+	 * {@link AtlasConfigEditable} is overwritten with this value. If
+	 * <code>null</code>, the value from the <code>atlas.xml</code> is used.
 	 */
 	private URL overwriteJnlpUrl = null;
 
@@ -1233,10 +1235,10 @@ public class JarExportUtil {
 		String codebase = ace.getJnlpBaseUrl();
 		if (overwriteJnlpUrl != null) {
 			codebase = overwriteJnlpUrl.toString();
-			if (!codebase.endsWith("/")) codebase += "/";
-			Log.info("Export JNLP base URL changed to "+codebase);
+			if (!codebase.endsWith("/"))
+				codebase += "/";
+			Log.info("Export JNLP base URL changed to " + codebase);
 		}
-
 
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -1662,30 +1664,32 @@ public class JarExportUtil {
 	public void deleteOldTempExportDirs() {
 
 		/**
-		 * On the command line -t can be specified to NOT delte any temp files. This needed in version 
-		 * 1.6 to run exports in parallel.<br/>
-		 *  TODO Temp file management must be improved, so that every instacne just deletes its own temp files after execution. 
+		 * On the command line -t can be specified to NOT delte any temp files.
+		 * This needed in version 1.6 to run exports in parallel.<br/>
+		 * TODO Temp file management must be improved, so that every instacne
+		 * just deletes its own temp files after execution.
 		 */
-//		if (isKeepTempFiles())
-//			return;
+		// if (isKeepTempFiles())
+		// return;
 
 		/**
 		 * Delete any old/parallel export directories
 		 */
-//		final IOFileFilter oldDirs = FileFilterUtils
-//				.makeDirectoryOnly(FileFilterUtils
-//						.prefixFileFilter(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID ));
-//		final String[] list = IOUtil.getTempDir().list(oldDirs);
-//		for (final String deleteOldTempDirName : list) {
-//			try {
-//				FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
-//						deleteOldTempDirName));
-//			} catch (final Exception e) {
-//				ExceptionDialog.show(null, e);
-//			}
-//		}
-		
-		AVUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, AVUtil.ATLAS_TEMP_FILE_BASE_ID);
+		// final IOFileFilter oldDirs = FileFilterUtils
+		// .makeDirectoryOnly(FileFilterUtils
+		// .prefixFileFilter(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID ));
+		// final String[] list = IOUtil.getTempDir().list(oldDirs);
+		// for (final String deleteOldTempDirName : list) {
+		// try {
+		// FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
+		// deleteOldTempDirName));
+		// } catch (final Exception e) {
+		// ExceptionDialog.show(null, e);
+		// }
+		// }
+
+		AVUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
+				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
 	}
 
 	public boolean isKeepTempFiles() {
@@ -2423,8 +2427,9 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * It set to a value not <code>null</code>, the jnlp base url stored in the {@link AtlasConfigEditable} is overwritten with 
-	 * this value. If <code>null</code>, the value from the <code>atlas.xml</code> is used.
+	 * It set to a value not <code>null</code>, the jnlp base url stored in the
+	 * {@link AtlasConfigEditable} is overwritten with this value. If
+	 * <code>null</code>, the value from the <code>atlas.xml</code> is used.
 	 */
 	public void setOverwriteJnlpBaseUrl(URL jwsUrl) {
 		overwriteJnlpUrl = jwsUrl;
