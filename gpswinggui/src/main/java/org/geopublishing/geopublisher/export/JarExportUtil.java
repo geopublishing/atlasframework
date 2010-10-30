@@ -59,8 +59,6 @@ import net.charabia.jsmoothgen.skeleton.SkeletonBean;
 import net.charabia.jsmoothgen.skeleton.SkeletonList;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
@@ -108,6 +106,8 @@ import sun.tools.jar.Main;
  * file will start the atlas using JavaWebStart
  */
 public class JarExportUtil {
+
+	public static final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = "AtlasTempFile_EXPORT_"+System.currentTimeMillis()+"_";
 
 	/** Subfolder in the export atlas directory for the JWS version of the atlas **/
 	public static final String JWS = "JWS";
@@ -434,7 +434,7 @@ public class JarExportUtil {
 	 * system temp directory.
 	 */
 	private final File tempDir = new File(IOUtil.getTempDir(),
-			AVUtil.ATLAS_TEMP_FILE_ID + "export" + AVUtil.RANDOM.nextInt(19999)
+			ATLAS_TEMP_FILE_EXPORTINSTANCE_ID + AVUtil.RANDOM.nextInt(19999)
 					+ 10000);
 
 	/** Is export to DISK requested? **/
@@ -1666,24 +1666,26 @@ public class JarExportUtil {
 		 * 1.6 to run exports in parallel.<br/>
 		 *  TODO Temp file management must be improved, so that every instacne just deletes its own temp files after execution. 
 		 */
-		if (isKeepTempFiles())
-			return;
+//		if (isKeepTempFiles())
+//			return;
 
 		/**
 		 * Delete any old/parallel export directories
 		 */
-		final IOFileFilter oldDirs = FileFilterUtils
-				.makeDirectoryOnly(FileFilterUtils
-						.prefixFileFilter(AVUtil.ATLAS_TEMP_FILE_ID + "export"));
-		final String[] list = IOUtil.getTempDir().list(oldDirs);
-		for (final String deleteOldTempDirName : list) {
-			try {
-				FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
-						deleteOldTempDirName));
-			} catch (final Exception e) {
-				ExceptionDialog.show(null, e);
-			}
-		}
+//		final IOFileFilter oldDirs = FileFilterUtils
+//				.makeDirectoryOnly(FileFilterUtils
+//						.prefixFileFilter(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID ));
+//		final String[] list = IOUtil.getTempDir().list(oldDirs);
+//		for (final String deleteOldTempDirName : list) {
+//			try {
+//				FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
+//						deleteOldTempDirName));
+//			} catch (final Exception e) {
+//				ExceptionDialog.show(null, e);
+//			}
+//		}
+		
+		AVUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, AVUtil.ATLAS_TEMP_FILE_BASE_ID);
 	}
 
 	public boolean isKeepTempFiles() {
@@ -2184,7 +2186,7 @@ public class JarExportUtil {
 	 */
 	private File getManifestFile() throws IOException, FileNotFoundException {
 		final File manifestTempFile = File.createTempFile(
-				AVUtil.ATLAS_TEMP_FILE_ID, ".manifest");
+				ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, ".manifest");
 		getManifest().write(new FileOutputStream(manifestTempFile));
 		return manifestTempFile;
 	}
@@ -2392,7 +2394,7 @@ public class JarExportUtil {
 	/**
 	 * @return the temp directory where jars are assembled. it is a random
 	 *         folder in the system temp directory: <br/>
-	 *         <code>new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_ID
+	 *         <code>new File(IOUtil.getTempDir(), AVUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID
 			+ "export" + AVUtil.RANDOM.nextInt(1999) + 1000);</code>
 	 */
 	public File getTempDir() {

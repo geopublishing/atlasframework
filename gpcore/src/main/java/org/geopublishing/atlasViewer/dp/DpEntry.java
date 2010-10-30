@@ -12,7 +12,6 @@ package org.geopublishing.atlasViewer.dp;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -30,12 +29,10 @@ import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
-import org.geotools.io.DefaultFileFilter;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
 import rachel.ResourceManager;
-import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
@@ -462,40 +459,18 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
-	 * This will delete any temp files that were created by the AtlasViewer
-	 * software. Tempfiles are created when contents from JARs are shown that
-	 * have to be extracted first.
+	 * This will delete any temp files that were created by the
+	 * {@link AtlasViewerGUI} software. Tempfiles are created when contents from
+	 * JARs are shown that have to be extracted first.
 	 * <p>
 	 * The temporary files of the AtlasViewer are identified by their filename
-	 * starting with {@link AVUtil#ATLAS_TEMP_FILE_ID}
+	 * starting with {@link AVUtil#ATLAS_TEMP_FILE_INSTANCE_ID}
 	 */
 	public static void cleanupTemp() {
-		int count = 0;
+		
+		AVUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID, AVUtil.ATLAS_TEMP_FILE_BASE_ID);
+		
 
-		try {
-			File tmp = File.createTempFile(AVUtil.ATLAS_TEMP_FILE_ID, null);
-			File tmpDir = tmp.getParentFile();
-			DefaultFileFilter f = new DefaultFileFilter(
-					AVUtil.ATLAS_TEMP_FILE_ID + "*");
-			File[] listFiles = tmpDir.listFiles((FileFilter) f);
-			for (File ff : listFiles) {
-				LOGGER.debug("Going to delete temporary file/directory "
-						+ IOUtil.escapePath(ff));
-
-				boolean b = ff.delete();
-				if (!b) {
-					LOGGER.warn("Couldn't delete temp file "
-							+ IOUtil.escapePath(ff));
-				} else
-					count++;
-			}
-
-		} catch (Exception e) {
-			ExceptionDialog.show(null, e);
-		} finally {
-			LOGGER.info(count
-					+ " temporary files and directories have been deleted.");
-		}
 
 	}
 

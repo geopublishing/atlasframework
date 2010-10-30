@@ -44,6 +44,7 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataUtilities;
 import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;
+import org.jfree.util.Log;
 
 import schmitzm.geotools.GTUtil;
 import schmitzm.io.IOUtil;
@@ -279,7 +280,7 @@ public class AVSwingUtil extends AVUtil {
 		// LOGGER
 		// .debug("Adding a Postfix to the temp file so Windows will recognize it: "
 		// + fuerWindows);
-		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_ID
+		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_BASE_ID
 				+ IOUtil.cleanFilename(title), postFix);
 
 		new AtlasExportTask(owner, AVUtil.R("dialog.title.wait")) {
@@ -288,7 +289,9 @@ public class AVSwingUtil extends AVUtil {
 			protected Boolean doInBackground() throws Exception {
 				FileUtils.copyURLToFile(url, localTempFile);
 				localTempFile.deleteOnExit();
-				System.out.println("downloaded to " + localTempFile);
+				String msg = "downloaded to " + localTempFile;
+				Log.debug(msg);
+				System.out.println(msg);
 				return true;
 			}
 

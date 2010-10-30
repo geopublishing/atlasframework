@@ -515,6 +515,8 @@ public class AtlasConfig implements Disposable {
 		if (jnlpBaseUrl == null) {
 			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
 		}
+		
+
 
 		if (!jnlpBaseUrl.endsWith("/"))
 			jnlpBaseUrl += "/";

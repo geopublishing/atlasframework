@@ -13,6 +13,7 @@ package org.geopublishing.atlasViewer;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -44,6 +45,7 @@ import javax.xml.parsers.FactoryConfigurationError;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -51,7 +53,9 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
+import org.geotools.io.DefaultFileFilter;
 import org.geotools.resources.CRSUtilities;
+import org.jfree.util.Log;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.io.IOUtil;
@@ -79,7 +83,14 @@ public class AVUtil {
 	 * 
 	 * @see DpEntry#cleanupTemp
 	 **************************************************************************/
-	public static final String ATLAS_TEMP_FILE_ID = "AtlasTempFile_";
+	public static final String ATLAS_TEMP_FILE_BASE_ID = "AtlasTempFile_";
+	
+	/***************************************************************************
+	 * This string is used to identify the temp files of the AV. Any files and
+	 * folders starting with this string in the temp folder will be deleted when
+	 * the Atlas ends.
+	 **************************************************************************/
+	public static final String ATLAS_TEMP_FILE_INSTANCE_ID = "AtlasTempFile_"+System.currentTimeMillis()+"_";
 
 	/**
 	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
@@ -519,6 +530,69 @@ public class AVUtil {
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
 		
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
+	}
+
+	
+	/**
+	 * 
+	 * @param deleteDirectlyPrefix Deletes any files+directories in the temp directory starting with this String directly.
+	 * @param deleteOldPrefix Deltes any files/directories starting with this string, if they have not been modified within 3 days.
+	 */
+	public static void cleanupTempDir(String deleteDirectlyPrefix,
+			String deleteOldPrefix) {
+		
+		int DAYS = 3;
+		
+		int count = 0;
+
+		try {
+			File tmp = File.createTempFile(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
+					null);
+			File tmpDir = tmp.getParentFile();
+			DefaultFileFilter f = new DefaultFileFilter(
+					AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID + "*");
+			File[] listFiles = tmpDir.listFiles((FileFilter) f);
+			for (File ff : listFiles) {
+				LOGGER.debug("Going to delete temporary instance file/directory created by this Java instance: "
+						+ IOUtil.escapePath(ff));
+
+				boolean b = FileUtils.deleteQuietly(ff);
+				if (!b) {
+					LOGGER.warn("Couldn't delete instance temp file "
+							+ IOUtil.escapePath(ff));
+				} else
+					count++;
+			}
+
+			// TODO Look for files starting with ATLAS_TEMP_FILE_BASE_ID, that
+			// are older that two days and remove them also!
+
+			f = new DefaultFileFilter(AVUtil.ATLAS_TEMP_FILE_BASE_ID + "*");
+			listFiles = tmpDir.listFiles((FileFilter) f);
+			for (File ff : listFiles) {
+
+				long diff = System.currentTimeMillis() - ff.lastModified();
+				if (diff < 1000 * 60 * 60 * 24 * DAYS) {
+					Log.debug("Not deleting "+IOUtil.escapePath(ff)+" since it is only "+ (diff / 1000 / 60)+" minutes old." );
+					continue;
+				}
+
+				LOGGER.debug("Going to delete orphaned temporary file/directory "
+						+ IOUtil.escapePath(ff));
+
+				boolean b = ff.delete();
+				if (!b) {
+					LOGGER.warn("Couldn't delete orphaned temp file "
+							+ IOUtil.escapePath(ff));
+				} else
+					count++;
+			}
+		} catch (Exception e) {
+			ExceptionDialog.show(null, e);
+		} finally {
+			LOGGER.info(count
+					+ " temporary files and directories have been deleted.");
+		}
 	}
 
 }
