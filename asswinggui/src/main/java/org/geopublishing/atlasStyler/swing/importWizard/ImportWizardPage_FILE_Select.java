@@ -31,9 +31,6 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 	private final String validationImportSourceTypeFailedMsg_CantRead = AsSwingUtil
 			.R("ImportWizard.FILE.FileSelection.ValidationError.CantRead");
 
-	private final String validationImportSourceTypeFailedMsg_NotImportable = AsSwingUtil
-			.R("ImportWizard.FILE.FileSelection.ValidationError.NotImportable");
-
 	private JButton fileChooserJButton;
 	JTextField fileJTextField;
 	final static private JLabel fileTextFieldJLabel = new JLabel(
