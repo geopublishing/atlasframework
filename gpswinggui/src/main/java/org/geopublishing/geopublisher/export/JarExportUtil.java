@@ -1231,12 +1231,12 @@ public class JarExportUtil {
 			throws AtlasExportException {
 
 		String codebase = ace.getJnlpBaseUrl();
-		
 		if (overwriteJnlpUrl != null) {
 			codebase = overwriteJnlpUrl.toString();
 			if (!codebase.endsWith("/")) codebase += "/";
 			Log.info("Export JNLP base URL changed to "+codebase);
 		}
+
 
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -1661,7 +1661,12 @@ public class JarExportUtil {
 	 */
 	public void deleteOldTempExportDirs() {
 
-		if (!isKeepTempFiles())
+		/**
+		 * On the command line -t can be specified to NOT delte any temp files. This needed in version 
+		 * 1.6 to run exports in parallel.<br/>
+		 *  TODO Temp file management must be improved, so that every instacne just deletes its own temp files after execution. 
+		 */
+		if (isKeepTempFiles())
 			return;
 
 		/**
