@@ -471,7 +471,9 @@ public class JarExportUtil {
 	private URL overwriteJnlpUrl = null;
 
 	/**
-	 * Initializes an {@link JarExportUtil} object to do the real work.
+	 * Initializes an {@link JarExportUtil} object to do the real work. The
+	 * constructor already creates a temp dir that start with
+	 * ATLAS_TEMP_FILE_EXPORTINSTANCE_ID.
 	 * 
 	 * @param ace
 	 *            Instance of {@link AtlasConfigEditable} to export.

@@ -18,6 +18,7 @@ import static org.junit.Assert.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -27,6 +28,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -178,20 +180,22 @@ public class JarExportUtilTest {
 	}
 
 	@Test
-	@Ignore
 	public void testCreateJarFromDpeUnsigned() throws AtlasExportException,
 			IOException, InterruptedException, AtlasCancelException {
 
 		JarExportUtil jarExportUtil = new JarExportUtil(atlasConfig,
 				atlasExportTesttDir, true, true, false);
 
+		assertExitsTempFilesCount(
+				jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
+
 		// Expected first entry in the datapool
 		String expected = "pdf_02034337607_geopublisher_1.4_chart_creation_tutorial";
 
-		File expoectedDpeJarFileLoaction = new File(jarExportUtil.getTempDir(),
+		File expectedDpeJarFileLoaction = new File(jarExportUtil.getTempDir(),
 				expected);
 
-		expoectedDpeJarFileLoaction.delete();
+		expectedDpeJarFileLoaction.delete();
 
 		DpEntry dpEntry = (DpEntry) atlasConfig.getDataPool().values()
 				.toArray()[0];
@@ -205,7 +209,31 @@ public class JarExportUtilTest {
 		assertTrue("createJarFromDpe failed: After export the expected file "
 				+ expected + " doesn't exist!", createJarFromDpe.exists());
 
-		expoectedDpeJarFileLoaction.delete();
+		expectedDpeJarFileLoaction.delete();
+
+		// Temp dir still exists, because this is just the export of one layer.
+		assertExitsTempFilesCount(
+				jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
+
+		AVUtil.cleanupTempDir(jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
+				null);
+
+		// Temp dir still exists, because this is just the export of one layer.
+		assertExitsTempFilesCount(
+				jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 0);
+
+	}
+
+	private void assertExitsTempFilesCount(final String tempPrefix, int count) {
+		// Assert no files with this prefix exist
+		String[] list = IOUtil.getTempDir().list(new FilenameFilter() {
+
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.startsWith(tempPrefix);
+			}
+		});
+		assertEquals(count, list.length);
 	}
 
 	@Test
@@ -220,11 +248,17 @@ public class JarExportUtilTest {
 		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
 				true, true, false);
 
+		// Temp dir created
+		assertExitsTempFilesCount(jeu.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
+
 		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
 		// LOGGER.info("Signer Passwort = " + passwort);
 		assertNotNull(passwort);
 
 		jeu.export(null);
+
+		// Temp dir created
+		assertExitsTempFilesCount(jeu.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 0);
 
 		assertTrue("Datei autorun.inf exists in DISK folder",
 				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
@@ -308,6 +342,7 @@ public class JarExportUtilTest {
 			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
 					p.waitFor());
 		}
+
 	}
 
 	@Test
