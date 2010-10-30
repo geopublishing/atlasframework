@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.RunnableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JColorChooser;
 import javax.swing.JDialog;
@@ -56,21 +57,43 @@ public class AVSwingUtil extends AVUtil {
 	static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
 
 	/**
-	 * Convenience method to ask a simple Yes/No question.
+	 * Convenience method to ask a simple Yes/No question. It can be started
+	 * from any Thread and will always show on the EDT.
 	 */
 	public static boolean askYesNo(final Component owner, final String question) {
+
 		if (!SwingUtilities.isEventDispatchThread()) {
-			final IllegalStateException illegalStateException = new IllegalStateException(
-					"GUI action while not on EDT.");
-			LOGGER.error(illegalStateException);
-			ExceptionDialog.show(owner, illegalStateException);
+			try {
+				final AtomicBoolean r = new AtomicBoolean();
+				SwingUtilities.invokeAndWait(new Runnable() {
+
+					@Override
+					public void run() {
+						final int result = JOptionPane.showConfirmDialog(owner,
+								question,
+								AVUtil.R("GeneralQuestionDialogTitle"),
+								JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE, null);
+						r.set(result == JOptionPane.YES_OPTION);
+					}
+				});
+
+				return r.get();
+			} catch (InterruptedException e) {
+				LOGGER.error(e);
+			} catch (InvocationTargetException e) {
+				LOGGER.error(e);
+			}
 			return false;
+		} else {
+			int result = JOptionPane.showConfirmDialog(owner, question,
+					AVUtil.R("GeneralQuestionDialogTitle"),
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+					null);
+
+			return result == JOptionPane.YES_OPTION;
 		}
 
-		final int result = JOptionPane.showConfirmDialog(owner, question,
-				AVUtil.R("GeneralQuestionDialogTitle"),
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-		return result == JOptionPane.YES_OPTION;
 	}
 
 	/**
@@ -139,9 +162,6 @@ public class AVSwingUtil extends AVUtil {
 	/**
 	 * A convenience wrapper for {@link JOptionPane}.showMessageDialog. This
 	 * wrapper checks if we are on the EDT.
-	 * 
-	 * @throws a
-	 *             RuntimeException ("Not on EDT!") if we are not on EDT.
 	 */
 	public final static void showMessageDialog(final Component owner,
 			final String message) {
@@ -167,15 +187,15 @@ public class AVSwingUtil extends AVUtil {
 
 	}
 
-	static Integer resultAskOkCancel;
-
 	/**
 	 * Convenience method to ask a simple OK/Cancel question. If this is not
-	 * executed on the EDT, it will be exectued on EDT via invokeAndWait
+	 * executed on the EDT, it will be executed on EDT via invokeAndWait
 	 * 
 	 */
 	public static boolean askOKCancel(final Component owner,
 			final String question) {
+
+		final AtomicBoolean resultAskOkCancel = new AtomicBoolean();
 
 		if (SwingUtilities.isEventDispatchThread()) {
 			final int result = JOptionPane.showConfirmDialog(owner, question,
@@ -190,11 +210,11 @@ public class AVSwingUtil extends AVUtil {
 
 					@Override
 					public void run() {
-						resultAskOkCancel = JOptionPane.showConfirmDialog(
-								owner, question,
-								AVUtil.R("GeneralQuestionDialogTitle"),
-								JOptionPane.OK_CANCEL_OPTION,
-								JOptionPane.QUESTION_MESSAGE, null);
+						resultAskOkCancel.set(JOptionPane.OK_OPTION == JOptionPane
+								.showConfirmDialog(owner, question,
+										AVUtil.R("GeneralQuestionDialogTitle"),
+										JOptionPane.OK_CANCEL_OPTION,
+										JOptionPane.QUESTION_MESSAGE, null));
 
 					}
 				});
@@ -202,7 +222,7 @@ public class AVSwingUtil extends AVUtil {
 				LOGGER.error(e);
 			}
 
-			return resultAskOkCancel == JOptionPane.OK_OPTION;
+			return resultAskOkCancel.get();
 
 		}
 
@@ -975,7 +995,7 @@ public class AVSwingUtil extends AVUtil {
 	 * 
 	 * @param runnable
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static Object runWaiting(Component owner,
 			final RunnableFuture<Object> runnable) throws Exception {

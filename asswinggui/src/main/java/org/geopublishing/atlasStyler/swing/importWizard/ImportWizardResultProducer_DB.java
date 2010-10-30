@@ -4,17 +4,14 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import net.miginfocom.swing.MigLayout;
-
-import org.geopublishing.atlasStyler.AsSwingUtil;
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
+import org.geotools.data.Query;
 import org.geotools.jdbc.JDBCDataStore;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -30,11 +27,15 @@ import skrueger.geotools.io.DbServerSettings;
 public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 		implements WizardResultProducer {
 
+	/** Logger for debug messages. */
+	protected static final Logger LOGGER = Logger
+			.getLogger(ImportWizardResultProducer_DB.class);
+
 	public ImportWizardResultProducer_DB() {
 		super();
 	}
 
-	@Override	
+	@Override
 	public Object finish(Map wizardData) throws WizardException {
 
 		/**
@@ -51,29 +52,41 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 				// Read stuff from the wizard map
 				final DbServerSettings dbServer = (DbServerSettings) wizardData
 						.get(ImportWizard.IMPORT_DB);
-				
+
 				final String typeName = (String) wizardData
 						.get(ImportWizard.IMPORT_DB_LAYERNAME);
-				
+
 				final AtlasStylerGUI asg = (AtlasStylerGUI) wizardData
 						.get(ImportWizard.ATLAS_STYLER_GUI);
 
 				try {
 					progress.setBusy(dbServer.toString());
-					
+
 					final JDBCDataStore dbDs = (JDBCDataStore) DataStoreFinder
 							.getDataStore(dbServer);
 					try {
-						
+
 						final FeatureSource<SimpleFeatureType, SimpleFeature> dbFS = dbDs
 								.getFeatureSource(typeName);
 
+						long start = System.currentTimeMillis();
+						
+						int countFeatures = dbFS.getCount(Query.FIDS);
+						if (countFeatures == 0) {
+							throw new IllegalStateException(
+									"The layer contains no features. AtlasStyler needs at least one feature."); // i8n
+						}
+
+						
 						String id = dbServer.getTitle() + " " + typeName;
 
-						File sldFile = new File(System.getProperty("user.home")
-								+ "/" + dbFS.getName().getLocalPart() + ".sld");
+						String sldFileName = dbFS.getName().getLocalPart()
+								+ ".sld";
 
-						final StyledFS dbSfs = new StyledFS(dbFS, sldFile, id);
+						final StyledFS dbSfs = new StyledFS(dbFS, id);
+
+						File importedSldFile = setSldFileAndAskImportIfExists(asg, 
+								sldFileName, dbSfs);
 
 						dbSfs.setDesc(typeName);
 						dbSfs.setTitle("DB: " + id);
@@ -92,14 +105,10 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 							return;
 						}
 
-						JPanel summaryPanel = new JPanel(
-								new MigLayout("wrap 1"));
-
-						summaryPanel.add(new JLabel(AsSwingUtil
-								.R("ImportWizard.ImportWasSuccessfull")));
-
-						Summary summary = Summary.create(new JScrollPane(
-								summaryPanel), "ok");
+						Summary summary = Summary
+								.create(new JScrollPane(getSummaryPanel(start,
+										countFeatures, dbSfs, importedSldFile)),
+										"ok");
 
 						progress.finished(summary);
 						asg.addOpenDatastore(dbSfs.getId(), dbDs);

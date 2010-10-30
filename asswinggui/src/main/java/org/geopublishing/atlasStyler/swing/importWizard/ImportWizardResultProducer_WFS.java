@@ -4,14 +4,9 @@ import java.io.File;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import net.miginfocom.swing.MigLayout;
-
-import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
@@ -63,6 +58,8 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 						.get(ImportWizard.ATLAS_STYLER_GUI);
 
 				try {
+					long startTime = System.currentTimeMillis();
+
 					progress.setBusy(wfsServer.getBaseUrl().getHost());
 
 					// URL url = new URL(
@@ -81,16 +78,15 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 
 					final WFSDataStore wfsDs = (new WFSDataStoreFactory())
 							.createDataStore(wfsServer);
-					
+
 					try {
 
 						final FeatureSource<SimpleFeatureType, SimpleFeature> wfsFS = wfsDs
 								.getFeatureSource(typeName);
 
-						String id = wfsServer.getTitle() + " " + typeName;
+						int countFeatures = countFeatures(wfsFS, true);
 
-						File sldFile = new File(System.getProperty("user.home")
-								+ "/" + wfsFS.getName().getLocalPart() + ".sld");
+						String id = wfsServer.getTitle() + " " + typeName;
 
 						{
 							ReferencedEnvelope bounds = wfsFS.getBounds();
@@ -105,14 +101,19 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 									+ transformEnvelope);
 						}
 
-						final StyledFS wfsSfs = new StyledFS(wfsFS, sldFile, id);
-
 						CoordinateReferenceSystem crs = wfsDs
 								.getFeatureTypeCRS(typeName);
+
+						final StyledFS wfsSfs = new StyledFS(wfsFS, id);
 						wfsSfs.setCRS(crs);
 
 						wfsSfs.setDesc(typeName);
 						wfsSfs.setTitle("WFS: " + id);
+
+						String sldFilename = wfsFS.getName().getLocalPart()
+								+ ".sld";
+						File importedSld = setSldFileAndAskImportIfExists(asg,
+								sldFilename, wfsSfs);
 
 						final AtomicBoolean added = new AtomicBoolean(false);
 						SwingUtilities.invokeAndWait(new Runnable() {
@@ -128,14 +129,10 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 							return;
 						}
 
-						JPanel summaryPanel = new JPanel(
-								new MigLayout("wrap 1"));
-
-						summaryPanel.add(new JLabel(AsSwingUtil
-								.R("ImportWizard.ImportWasSuccessfull")));
-
-						Summary summary = Summary.create(new JScrollPane(
-								summaryPanel), "ok");
+						Summary summary = Summary.create(
+								new JScrollPane(getSummaryPanel(startTime,
+										countFeatures, wfsSfs, importedSld)),
+								"ok");
 
 						progress.finished(summary);
 						asg.addOpenDatastore(id, wfsDs);
@@ -163,4 +160,5 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 
 		return result;
 	}
+
 }

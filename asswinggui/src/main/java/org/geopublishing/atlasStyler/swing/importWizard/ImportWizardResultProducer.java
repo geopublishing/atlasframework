@@ -1,5 +1,8 @@
 package org.geopublishing.atlasStyler.swing.importWizard;
 
+import java.awt.Component;
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -8,9 +11,18 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.AsSwingUtil;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geotools.data.FeatureSource;
+import org.geotools.data.Query;
 import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+
+import schmitzm.io.IOUtil;
+import skrueger.geotools.StyledFS;
 
 /**
  * This class is using the values collected during the {@link ImportWizard} to
@@ -38,10 +50,53 @@ public abstract class ImportWizardResultProducer implements
 		return true;
 	}
 
+	File setSldFileAndAskImportIfExists(Component owner, String sldFileName,
+			StyledFS dbSfs) {
+		File importedSldFile = null;
+		String sldDir = System.getProperty("user.home");
+		File sldFile = new File(sldDir + "/" + sldFileName);
+		dbSfs.setSldFile(sldFile);
+
+		if (sldFile.exists()) {
+			// i8n
+			boolean askYesNo = AVSwingUtil.askYesNo(owner, sldFileName
+					+ " found in \n" + sldDir // i8n
+					+ "\nDo you want to import the file?");
+
+			if (askYesNo == true) {
+				dbSfs.loadStyle();
+				importedSldFile = sldFile;
+			}
+		}
+
+		// Handle if .SLD exists instead
+		File SLDfile = IOUtil.changeFileExt(sldFile, "SLD");
+		if (owner != null && !sldFile.exists() && SLDfile.exists()) {
+			AVSwingUtil
+					.showMessageDialog(
+							owner,
+							SLDfile.getAbsolutePath()
+									+ " exits.\nChange the ending to .sld to associate it with the layer. It will not be imported."); // i8n
+		}
+
+		return importedSldFile;
+	}
+
 	protected JPanel getErrorPanel(Exception e) {
 		JPanel panel = new JPanel(new MigLayout("wrap 1"));
 
-		panel.add(new JLabel("<html>" + e.getLocalizedMessage() + "</html>"));
+		String errorMsg = e.getLocalizedMessage();
+
+		if (errorMsg == null)
+			errorMsg = e.getMessage();
+
+		if (errorMsg == null)
+			errorMsg = e.getClass().getSimpleName();
+		
+		LOGGER.error("Import failed: ", e);
+
+		panel.add(new JLabel("<html>The import has been aborted: " // i8n
+				+ errorMsg + "</html>"));
 
 		return panel;
 	}
@@ -52,4 +107,56 @@ public abstract class ImportWizardResultProducer implements
 
 		return Summary.create(aborted, "abort");
 	}
+
+	/**
+	 * Creates a report about an imported FeaatureSource
+	 * 
+	 * @param startTime
+	 * @param countFeatures
+	 * @param dbSfs
+	 * @param importedSld
+	 *            <code>null</code> if no .sldd has been impoerted.
+	 */
+	JPanel getSummaryPanel(long startTime, int countFeatures,
+			final StyledFS dbSfs, File importedSld) {
+		JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
+
+		summaryPanel.add(new JLabel(AsSwingUtil
+				.R("ImportWizard.ImportWasSuccessfull")));
+
+		LOGGER.debug("Count features from PG " + dbSfs.getTitle().toString()
+				+ " took " + (System.currentTimeMillis() - startTime) + "ms");
+
+		// i8n
+		summaryPanel.add(new JLabel("Features: " + countFeatures
+				+ (countFeatures == -1 ? " => query not supported" : "")));
+
+		if (importedSld == null) {
+			// i8n
+			summaryPanel.add(new JLabel("A default style has been applied."));
+		} else {
+			// i8n
+			summaryPanel
+					.add(new JLabel(
+							importedSld.getAbsolutePath()
+									+ " has been successfully parsed and applied to the layer."));
+		}
+		return summaryPanel;
+	}
+
+	int countFeatures(FeatureSource<SimpleFeatureType, SimpleFeature> wfsFS,
+			boolean hard) throws IOException {
+		int countFeatures = 0;
+		if (hard)
+			countFeatures = wfsFS.getFeatures(Query.FIDS).size();
+		else
+			countFeatures = wfsFS.getCount(Query.FIDS);
+		if (countFeatures == 0) {
+			throw new IllegalStateException(
+					"The layer contains no features. AtlasStyler needs at least one feature."); // i8n
+		}
+		return countFeatures;
+
+	}
+
 }

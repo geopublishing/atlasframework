@@ -24,12 +24,10 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.jnlp.SingleInstanceListener;
 import javax.swing.AbstractAction;
@@ -55,17 +53,14 @@ import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
+import org.geopublishing.atlasStyler.swing.importWizard.ImportWizardResultProducer_FILE;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
-import org.geotools.data.FeatureSource;
-import org.geotools.data.shapefile.ShapefileDataStore;
-import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.factory.Hints;
@@ -75,11 +70,7 @@ import org.geotools.styling.NamedLayer;
 import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
@@ -575,176 +566,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		return jButtonExportAsSLD;
 	}
 
-	// private JButton getJButtonAddLayer() {
-	// JButton jButtonAddLayer = new JButton(
-	// AtlasStyler.R("AtlasStylerGUI.toolbarButton.open_vector"));
-	//
-	// jButtonAddLayer.addActionListener(new ActionListener() {
-	//
-	// public void actionPerformed(ActionEvent e) {
-	//
-	// File getLastOpenDir = null;
-	// String lastFilePath = ASProps
-	// .get(ASProps.Keys.lastImportDirectory);
-	// if (lastFilePath != null)
-	// getLastOpenDir = new File(lastFilePath);
-	//
-	// OpenDataFileChooser chooser = new OpenDataFileChooser(
-	// getLastOpenDir);
-	//
-	// // properties
-	// chooser.setVisible(true);
-	// int result = chooser.showOpenDialog(AtlasStylerGUI.this);
-	//
-	// final File selectedFile = chooser.getSelectedFile();
-	//
-	// if (selectedFile == null
-	// || result != JFileChooser.APPROVE_OPTION)
-	// return;
-	//
-	// ASProps.set(ASProps.Keys.lastImportDirectory,
-	// selectedFile.getAbsolutePath());
-	//
-	// AtlasSwingWorker<Void> openFileWorker = new AtlasSwingWorker<Void>(
-	// AtlasStylerGUI.this) {
-	//
-	// @Override
-	// protected Void doInBackground() throws IOException,
-	// InterruptedException {
-	// addShapeLayer(selectedFile);
-	// return null;
-	// }
-	//
-	// };
-	// try {
-	// openFileWorker.executeModal();
-	// } catch (CancellationException e1) {
-	// e1.printStackTrace();
-	// } catch (InterruptedException e1) {
-	// e1.printStackTrace();
-	// } catch (ExecutionException e1) {
-	// e1.printStackTrace();
-	// }
-	//
-	// }
-	// });
-	// return jButtonAddLayer;
-	// }
-
-	/**
-	 * Basic method to add a Shapefile to the legend/map
-	 * 
-	 * @param openFile
-	 *            the file to open. May be a ZIP that contains a Shape.
-	 */
-	public boolean addShapeLayer(File openFile) {
-		try {
-			URL urlToShape;
-
-			if (openFile.getName().toLowerCase().endsWith("zip")) {
-				urlToShape = GeoImportUtil.uncompressShapeZip(openFile);
-			} else {
-				urlToShape = DataUtilities.fileToURL(openFile);
-			}
-
-			Map<Object, Object> params = new HashMap<Object, Object>();
-			params.put("url", urlToShape);
-
-			/*
-			 * Test whether we have write permissions to create any .fix file
-			 */
-			if (!IOUtil.changeFileExt(openFile, "fix").canWrite()) {
-				// If the file is not writable, we max not try to create an
-				// index. Even if the file already exists, it could be that
-				// the index has to be regenerated.
-				params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
-						Boolean.FALSE);
-			}
-
-			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
-					.getDataStore(params);
-
-			if (dataStore == null)
-				return false;
-
-			try {
-
-				Charset stringCharset = GeoImportUtil.readCharset(urlToShape);
-				dataStore.setStringCharset(stringCharset);
-
-				// test for any .prj file
-				CoordinateReferenceSystem prjCRS = null;
-				File prjFile = IOUtil.changeFileExt(openFile, "prj");
-				if (prjFile.exists()) {
-					try {
-						prjCRS = GeoImportUtil.readProjectionFile(prjFile);
-					} catch (Exception e) {
-						prjCRS = null;
-						if (!AVSwingUtil
-								.askOKCancel(
-										this,
-										AtlasStyler
-												.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
-														e.getMessage(),
-														prjFile.getName(),
-														GeoImportUtil
-																.getDefaultCRS()
-																.getName())))
-							dataStore.dispose();
-						return false;
-					}
-				} else {
-					if (!AVSwingUtil
-							.askOKCancel(
-									this,
-									AtlasStyler
-											.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
-													prjFile.getName(),
-													GeoImportUtil
-															.getDefaultCRS()
-															.getName())))
-						dataStore.dispose();
-					return false;
-				}
-
-				if (prjCRS == null) {
-					dataStore.forceSchemaCRS(GeoImportUtil.getDefaultCRS());
-				}
-
-				// After optionally forcing the CRS we get the FS
-				FeatureSource<SimpleFeatureType, SimpleFeature> fs = dataStore
-						.getFeatureSource(dataStore.getTypeNames()[0]);
-
-				File sldFile = IOUtil.changeFileExt(openFile, "sld");
-
-				// Handle if .SLD exists instead
-				if (!sldFile.exists()
-						&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
-					AVSwingUtil.showMessageDialog(this,
-							"Change the file ending to .sld and try again!"); // i8n
-					return false;
-				}
-
-				StyledFS styledFS = new StyledFS(fs, sldFile,
-						urlToShape.toString());
-
-				addOpenDatastore(styledFS.getId(), dataStore);
-
-				return addLayer(styledFS);
-
-			} catch (Exception e) {
-				dataStore.dispose();
-				throw e;
-			}
-
-		} catch (Exception e2) {
-			LOGGER.info(e2);
-			ExceptionDialog.show(AtlasStylerGUI.this, e2);
-			return false;
-		}
-
-	}
-
 	/**
 	 * Adds a layer to the map context to style it.
 	 */
@@ -819,7 +640,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							if (fileParamter.exists()) {
 								LOGGER.info("Opening command line argument "
 										+ param + " as file.");
-								asg.addShapeLayer(fileParamter);
+								ImportWizardResultProducer_FILE.addShapeLayer(
+										asg, fileParamter, asg);
 							}
 						}
 
