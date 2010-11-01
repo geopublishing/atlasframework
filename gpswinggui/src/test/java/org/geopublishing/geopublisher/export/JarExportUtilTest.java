@@ -42,7 +42,6 @@ import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geotools.data.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
