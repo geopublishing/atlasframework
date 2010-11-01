@@ -38,6 +38,7 @@ import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
+import schmitzm.geotools.FilterUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
@@ -140,7 +141,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 * 
 	 * @return the number of newly added unique values
 	 */
-	public int addAllValues(SwingWorker<?,?> sw) {
+	public int addAllValues(SwingWorker<?, ?> sw) {
 		if (getPropertyFieldName() == null)
 			return 0;
 
@@ -350,7 +351,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 						ff2.literal(ndValue)));
 			}
 
-		return ff2.or(ors);
+		return FilterUtil.correctOrForValidation(ff2.or(ors));
 	}
 
 	/**

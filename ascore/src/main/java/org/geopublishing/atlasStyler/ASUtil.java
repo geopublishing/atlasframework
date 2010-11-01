@@ -553,10 +553,10 @@ public class ASUtil {
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList getDefaultNoDataSymbol(
+	public static SingleRuleList<? extends Symbolizer> getDefaultNoDataSymbol(
 			final GeometryForm form, final double opacity_fill,
 			final Color... colors) {
-		final SingleRuleList rl;
+		final SingleRuleList<? extends Symbolizer> rl;
 
 		final Color defaultWhite = colors.length > 0 ? colors[0] : Color.WHITE;
 		final Color defaultGray = colors.length > 1 ? colors[1]
@@ -609,8 +609,7 @@ public class ASUtil {
 	public static SinglePointSymbolRuleList getDefaultPointTemplate() {
 
 		final SinglePointSymbolRuleList rl = new SinglePointSymbolRuleList("");
-		rl.addSymbolizer(createDefaultSymbolizer(rl
-				.getGeometryDescriptor()));
+		rl.addSymbolizer(createDefaultSymbolizer(rl.getGeometryDescriptor()));
 
 		return rl;
 	}
@@ -619,13 +618,12 @@ public class ASUtil {
 		final SinglePolygonSymbolRuleList rl = new SinglePolygonSymbolRuleList(
 				"");
 
-		rl.addSymbolizer(createDefaultSymbolizer(rl
-				.getGeometryDescriptor()));
+		rl.addSymbolizer(createDefaultSymbolizer(rl.getGeometryDescriptor()));
 
 		return rl;
 	}
 
-	public static SingleRuleList getDefaultTemplate(final GeometryForm geomForm) {
+	public static SingleRuleList<? extends Symbolizer> getDefaultTemplate(final GeometryForm geomForm) {
 		if (geomForm == GeometryForm.POINT) {
 			return getDefaultPointTemplate();
 		} else if (geomForm == GeometryForm.LINE) {
@@ -1384,7 +1382,5 @@ public class ASUtil {
 		}
 		model.setSelectedItem(stringVal);
 	}
-
-
 
 }

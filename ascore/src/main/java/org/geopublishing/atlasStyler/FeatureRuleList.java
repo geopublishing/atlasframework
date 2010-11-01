@@ -166,17 +166,17 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		if (color == null)
 			throw new IllegalArgumentException("Color may not be null!");
 
-//		getNoDataSymbol().getSymbolizers().clear();
+		// getNoDataSymbol().getSymbolizers().clear();
 		// Symbolizer symbolizer = getGeometryForm()
 
 		// Style style = FeatureUtil.createDefaultStyle(getGeometryForm());
 		// Symbolizer symbolizer =
 		// style.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
 
-		SingleRuleList rl = ASUtil.getDefaultNoDataSymbol(getGeometryForm(), opacity, 
-				color, color);
-//		rl.copyTo(getNoDataSymbol());
-		
+		SingleRuleList<? extends Symbolizer> rl = ASUtil.getDefaultNoDataSymbol(getGeometryForm(),
+				opacity, color, color);
+		// rl.copyTo(getNoDataSymbol());
+
 		noDataSymbol = rl;
 	}
 

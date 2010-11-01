@@ -45,8 +45,8 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 
 		setLayout(new MigLayout("wrap 2", "grow"));
 		JLabel explanation = new JLabel(AsSwingUtil.R(
-				"AtlasStyler.SelectPostgisLayerDialog.explanation.html", System
-						.getProperty("user.home")));
+				"AtlasStyler.SelectPostgisLayerDialog.explanation.html",
+				System.getProperty("user.home")));
 		add(explanation, "span 2");
 
 		/*
@@ -55,31 +55,36 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		 * "secretIRI69."; String layer = "bundeslaender_2008";
 		 */
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.host.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.host.label")));
 		add(getHostInputField());
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.database.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.database.label")));
 		add(getDatabaseInputField());
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.port.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.port.label")));
 		add(getPortInputField());
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.username.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.username.label")));
 		add(getUsernameInputField());
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.password.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.password.label")));
 		add(getPasswordInputField());
 
-		add(new JLabel(AsSwingUtil
-				.R("AtlasStyler.SelectPostgisLayerDialog.table.label")));
+		add(new JLabel(
+				AsSwingUtil
+						.R("AtlasStyler.SelectPostgisLayerDialog.table.label")));
 		add(getLayerInputField());
 
-		
 		OkButton okButton = getOkButton();
 		add(okButton, "span 2, split 2, tag ok");
 
@@ -89,7 +94,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		loadFromProps();
 
 		pack();
-		
+
 		SwingUtil.centerFrameOnScreen(this);
 	}
 
@@ -120,7 +125,7 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 		ASProps.set(Keys.lastPgTable, getLayer());
 		ASProps.set(Keys.lastPgHost, getHost());
 	}
-	
+
 	@Override
 	public boolean okClose() {
 		storeInProps();
@@ -136,9 +141,9 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 
 	private PasswordViewable getPasswordInputField() {
 		if (passwordInput == null) {
-//			passwordInput = new JPasswordField(25);
+			// passwordInput = new JPasswordField(25);
 			passwordInput = new ManualInputOption.PasswordViewable(null, true);
-			((JTextField)passwordInput.getInputComponent()).setColumns(25);
+			((JTextField) passwordInput.getInputComponent()).setColumns(25);
 		}
 		return passwordInput;
 	}
@@ -195,13 +200,15 @@ public class SelectPostgisLayerJDialog extends CancellableDialogAdapter {
 	}
 
 	public String getPassword() {
-		return new String(getPasswordInputField().getValue());
+		char[] chars = getPasswordInputField().getValue();
+		if (chars == null)
+			return null;
+		return new String(chars);
 	}
 
 	@Override
 	public void cancel() {
 	}
-	
 
 	/**
 	 * Allows to close the {@link JDialog} from "outside". The user will be

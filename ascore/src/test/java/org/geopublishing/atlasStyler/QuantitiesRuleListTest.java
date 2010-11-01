@@ -154,7 +154,7 @@ public class QuantitiesRuleListTest {
 				colorRl.getTypeID());
 		assertEquals("SURFACE", colorRl.getValue_field_name());
 		assertEquals(null, colorRl.getNormalizer_field_name());
-		assertEquals("[[ SURFACE IS NULL ]]", colorRl.getNoDataFilter()
+		assertEquals("[ SURFACE IS NULL ]", colorRl.getNoDataFilter()
 				.toString());
 	}
 }

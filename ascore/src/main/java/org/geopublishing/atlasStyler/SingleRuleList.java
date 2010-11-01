@@ -276,6 +276,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			symbolizers.add(ps);
 		}
 		Collections.reverse(symbolizers);
+		
+		// TODO Add support for NODATA
 
 		Rule rule = ASUtil.SB.createRule(symbolizers
 				.toArray(new Symbolizer[symbolizers.size()]));

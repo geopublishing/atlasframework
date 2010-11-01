@@ -25,6 +25,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
+import schmitzm.geotools.FilterUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
@@ -143,11 +144,12 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 		List<Filter> ors = new ArrayList<Filter>();
 		ors.add(ff2.isNull(ff2.property(attributeLocalName)));
-		if (amd1 != null && amd1.getNodataValues() != null)
+		if (amd1 != null && amd1.getNodataValues() != null) {
 			for (Object ndValue : amd1.getNodataValues()) {
 				ors.add(ff2.equals(ff2.property(attributeLocalName),
 						ff2.literal(ndValue)));
 			}
+		}
 
 		// Checking the normalization attribute for NODATA values
 		String normalizerLocalName = getNormalizer_field_name();
@@ -168,21 +170,18 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				}
 		}
 
-		return ff2.or(ors);
+		/**
+		 * Problem: If <or><isNull></or> is used, the filter works in Geotools,
+		 * BUT it is not valid: <br/>
+		 * <code>org.xml.sax.SAXParseException: cvc-complex-type.2.4.b: The content of element 'ogc:Or' is not
+		 * complete. One of '{"http://www.opengis.net/ogc":comparisonOps,
+		 * "http://www.opengis.net/ogc":spatialOps, "http://www.opengis.net/ogc":logicOps}' is expected.</code>
+		 * <br/>
+		 * Hence, to comply with SLD validity, if there is only one element in
+		 * the <code>ors</code> list, we remove the or around it.
+		 */
+		return FilterUtil.correctOrForValidation( ff2.or(ors) );
 	}
-
-	// /**
-	// * Setting colors to <code>null</code> will result in new colors beeing
-	// * created (from a palette) the next time #getColors is called.
-	// */
-	// @Override
-	// public void updateColorsClassesChanged() {
-	// if (newColors != null) {
-	// super.setColors(newColors);
-	// } else {
-	// // Colors are set to null. This would lead directly to
-	// }
-	// }
 
 	@Override
 	public List<Rule> getRules() {
@@ -373,6 +372,5 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		setColors(null);
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
 	}
-
 
 }
