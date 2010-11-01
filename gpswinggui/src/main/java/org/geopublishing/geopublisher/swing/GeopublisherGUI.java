@@ -129,7 +129,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		// Starting singleton WebServer
 		try {
-			new Webserver(true);
+			new Webserver();
 		} catch (final Exception e) {
 			ExceptionDialog.show(null, e);
 			System.exit(-3);

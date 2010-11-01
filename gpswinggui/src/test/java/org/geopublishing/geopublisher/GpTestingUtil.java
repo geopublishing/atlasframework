@@ -94,7 +94,7 @@ public class GpTestingUtil {
 
 		GTUtil.initEPSG();
 
-		Webserver webserver = new Webserver(false);
+		Webserver webserver = new Webserver();
 
 		new AMLImportEd().parseAtlasConfig(null, atlasConfig, false);
 

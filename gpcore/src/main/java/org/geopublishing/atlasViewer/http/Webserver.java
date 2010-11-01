@@ -16,8 +16,6 @@ package org.geopublishing.atlasViewer.http;
 import java.io.IOException;
 import java.net.BindException;
 
-import javax.swing.JOptionPane;
-
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
@@ -46,77 +44,54 @@ public class Webserver {
 
 	/**
 	 * Webserver
-	 * 
-	 * @param interactive
-	 *            If false, then the user will not be asked anything. If true
-	 *            and the port is occupied, the user might be asked if he wanto
-	 *            to start the server on another port.
-	 * @throws AtlasFatalException
-	 * @throws IOException
 	 */
-	public Webserver(boolean interactive) throws AtlasFatalException {
-		interactive=true;
+	public Webserver() throws AtlasFatalException {
 
 		/**
 		 * Replace PORT selection with a random Number iteration
 		 */
 
 		if (webserver == null) {
-			
+
 			try {
-			log.info("Starting internal webserver");
-			try {
-				webserver = new WebServer(PORT, WebResourceManager
-						.getInstance());
-			} catch (IOException e) {
+				log.info("Starting internal webserver");
 				try {
-					PORT = 8282;
-					webserver = new WebServer(PORT, WebResourceManager
-							.getInstance());
-				} catch (BindException e1) {
+					webserver = new WebServer(PORT,
+							WebResourceManager.getInstance());
+				} catch (IOException e) {
 					try {
-						PORT = (AVUtil.RANDOM.nextInt(200)) + 9000;
-						webserver = new WebServer(PORT, WebResourceManager
-								.getInstance());
-					} catch (BindException e2) {
+						PORT = 8282;
+						webserver = new WebServer(PORT,
+								WebResourceManager.getInstance());
+					} catch (BindException e1) {
+						try {
+							PORT = (AVUtil.RANDOM.nextInt(200)) + 9000;
+							webserver = new WebServer(PORT,
+									WebResourceManager.getInstance());
+						} catch (BindException e2) {
 
-						final String msg = "The internal webserver can't be started. All network ports are in use.\n"
-								+ // i8n
-								"You probably have too many instances of the atlas program open. Close\n"
-								+ "all other atlas programs and retry.\n"
-								+ "If you continue, this atlas-software might provide inconsistant HTML information.\n\n"
-								+ "Do you wan't to continue?";
-						log.error(msg);
+							final String msg = "The internal webserver can't be started. All network ports are in use.\n"
+									+ // i8n
+									"You probably have too many instances of the atlas program open. Close\n"
+									+ "all other atlas programs and retry.\n"
+									+ "If you continue, this atlas-software might provide inconsistant HTML information.\n\n"
+									+ "Do you wan't to continue?";
+							log.error(msg, e2);
 
-						int result;
-						if (interactive) {
-							result = JOptionPane.showConfirmDialog(null, msg,
-									"HTML support inconsistent!",
-									JOptionPane.OK_OPTION);
-
-							if (result != JOptionPane.YES_OPTION) {
-								log
-										.info(
-												"Application stopped by user after BindException:",
-												e2);
-								System.exit(-1);
-							}
+							startupWebserver = false;
+							PORT = DEFAULTPORT;
 						}
-						startupWebserver = false;
-						PORT = DEFAULTPORT;
 					}
 				}
-			}
 
-			if (startupWebserver) {
-				webserver.start();
-			} else {
-				log
-						.info("The constructor of Webserver has been started, but we decided not to start the webserver.");
+				if (startupWebserver) {
+					webserver.start();
+				} else {
+					log.info("The constructor of Webserver has been started, but we decided not to start the webserver.");
+				}
+			} catch (Throwable e) {
+				throw new AtlasFatalException("Webserver startup: ", e);
 			}
-		} catch (Throwable e) {
-			throw new AtlasFatalException("Webserver startup: ",e);
-		}
 		}
 	}
 
@@ -124,21 +99,21 @@ public class Webserver {
 	 * Shuts down the WebServer. TODO This is supposed to be not threadsafe!
 	 */
 	public static void dispose() {
-//		if (webserver != null) {
-//			log
-//					.warn("Thread.stop() is supposed to be NOT threadsafe. Disposing the WebServer anyway.");
-//			webserver.shutdown = true;
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				log.error("While waiting for the webserver to shutdown:",e);
-//			}
-//			if (webserver.isAlive()){
-//				log.error("WebServer didn't stop. Doing webserver.stop() now");
-//				webserver.stop();
-//			}
-//			webserver = null;
-//		}
+		// if (webserver != null) {
+		// log
+		// .warn("Thread.stop() is supposed to be NOT threadsafe. Disposing the WebServer anyway.");
+		// webserver.shutdown = true;
+		// try {
+		// Thread.sleep(500);
+		// } catch (InterruptedException e) {
+		// log.error("While waiting for the webserver to shutdown:",e);
+		// }
+		// if (webserver.isAlive()){
+		// log.error("WebServer didn't stop. Doing webserver.stop() now");
+		// webserver.stop();
+		// }
+		// webserver = null;
+		// }
 	}
 
 	/**

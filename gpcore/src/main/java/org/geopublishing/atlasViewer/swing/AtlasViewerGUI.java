@@ -640,7 +640,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 						GTUtil.initEPSG();
 
 						// Starting the internal WebServer
-						new Webserver(true);
+						new Webserver();
 
 						publish(R("dialog.title.wait"));
 						new AMLImport().parseAtlasConfig(statusDialog,
