@@ -37,11 +37,13 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerListListener;
 import org.geotools.styling.Style;
 
+import schmitzm.geotools.JTSUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.geotools.gui.XMapPaneEvent;
@@ -57,6 +59,7 @@ import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.geotools.StyledRasterInterface;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -127,8 +130,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * @param atlasConfig
 	 *            The AtlasConfig where the {@link Map} is defined
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public AtlasMapView(Component owner, AtlasConfig atlasConfig) {
 		super(owner);
@@ -147,11 +149,11 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					AtlasViewerGUI.R("MapPaneButtons.DefaultZoom.TT")) {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (map.getDefaultMapArea() != null )
+					if (map.getDefaultMapArea() != null)
 						getMapPane().setMapArea(map.getDefaultMapArea());
-					else if (map.getMaxExtend() != null ) 
+					else if (map.getMaxExtend() != null)
 						getMapPane().setMapArea(map.getMaxExtend());
-					else 
+					else
 						getMapPane().setMapArea(getMapPane().getMaxExtend());
 				}
 
@@ -166,8 +168,9 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 		getGeoMapPane().getMapPane()
 				.setAntiAliasing(
-						atlasConfig.getProperties().get(AVProps.Keys.antialiasingMaps, "1").equals(
-								"0") ? false : true);
+						atlasConfig.getProperties()
+								.get(AVProps.Keys.antialiasingMaps, "1")
+								.equals("0") ? false : true);
 
 		/**
 		 * When the component is hidden, close any open info dialog.
@@ -197,11 +200,11 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		// If we find a mapIcon we will set it to be always rendered into the
 		// map
 		// **********************************************************************
-//		final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
-//				AtlasConfig.MAPICON_RESOURCE_NAME);
-		final URL mapIconURL = atlasConfig.getResource(
-				AtlasConfig.MAPICON_RESOURCE_NAME);
-		
+		// final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+		// AtlasConfig.MAPICON_RESOURCE_NAME);
+		final URL mapIconURL = atlasConfig
+				.getResource(AtlasConfig.MAPICON_RESOURCE_NAME);
+
 		if (mapIconURL != null) {
 			try {
 				BufferedImage mapImageIcon = ImageIO.read(mapIconURL);
@@ -281,7 +284,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 			// SwingUtil.setRelativeFramePosition(clickInfoDialog, SwingUtil
 			// .getParentFrame(AtlasMapView.this), 1., .08);
-			//			
+			//
 			clickInfoDialog.setLocationRelativeTo(getMapPane());
 
 		}
@@ -329,8 +332,8 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				tabbedPane.addTab(AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.InfoTab_label"),
 						new JScrollPane(infoPanel));
-				tabbedPane.setToolTipTextAt(1, AtlasViewerGUI
-						.R("AtlasMapView.tabbedPane.InfoTab_tt"));
+				tabbedPane.setToolTipTextAt(1,
+						AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 				tabbedPane.setSelectedIndex(1);
 				add(tabbedPane, BorderLayout.CENTER);
@@ -423,7 +426,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		/** Configuring the map margin **/
 		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
 		getGeoMapPane().getScalePane().setVisible(map.isScaleVisible());
-		
+
 		getGeoMapPane().getVertGrid().setVisible(map.isGridPanelVisible());
 		getGeoMapPane().getHorGrid().setVisible(map.isGridPanelVisible());
 		map.getGridPanelFormatter().setCRS(map.getGridPanelCRS());
@@ -431,7 +434,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				map.getGridPanelFormatter());
 		getGeoMapPane().getVertGrid().setGridFormatter(
 				map.getGridPanelFormatter());
-		
+
 		getGeoMapPane().getScalePane().setUnits(map.getScaleUnits());
 	}
 
@@ -478,12 +481,15 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 				if (dpLayer instanceof DpLayerRaster) {
 					layerManager.addStyledLayer(dpLayer);
-//				} else if (dpLayer instanceof DpLayerRasterPyramid) {
-//					// **********************************************************
-//					// Adding a Pyramidlayer to the map
-//					// **********************************************************
-//					final DpLayerRasterPyramid pyramid = (DpLayerRasterPyramid) dpLayer;
-//					layerManager.addStyledLayer(pyramid);
+					// } else if (dpLayer instanceof DpLayerRasterPyramid) {
+					// //
+					// **********************************************************
+					// // Adding a Pyramidlayer to the map
+					// //
+					// **********************************************************
+					// final DpLayerRasterPyramid pyramid =
+					// (DpLayerRasterPyramid) dpLayer;
+					// layerManager.addStyledLayer(pyramid);
 
 				} else if (dpLayer instanceof DpLayerVectorFeatureSource) {
 
@@ -505,16 +511,15 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					// Adding a vectorlayer to the map. Ask the JMapPane NOT to
 					// repaint it every time
 					// **********************************************************
-					layerManager
-							.addStyledLayer(dpLayer);
+					layerManager.addStyledLayer(dpLayer);
 
 				}
 
 			} catch (final Exception e) {
 
 				IllegalStateException illegalStateException = new IllegalStateException(
-						"Layer " + ref.getTarget().getTitle() + " is missing! Will exit now.",
-						e);
+						"Layer " + ref.getTarget().getTitle()
+								+ " is missing! Will exit now.", e);
 				LOGGER.error("Layer not found?", illegalStateException);
 				ExceptionDialog.show(parentGUI, illegalStateException);
 				System.exit(-99);
@@ -581,6 +586,131 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 */
 	@Override
 	public boolean addStyledLayer(StyledLayerInterface<?> styledLayerObject) {
+
+		Envelope newLayerEnv = styledLayerObject.getReferencedEnvelope();
+		
+		// This check doesn't work for Rasters that are powered by a reader, since 
+		if (newLayerEnv != null
+				&& !(styledLayerObject instanceof StyledRasterInterface)) {
+			//
+			// if (map.getMaxExtend() != null) {
+			//
+			// // If the BBOX of the layer does not intersect with with
+			// // maxExtend,
+			// // do not allow to add it.
+			//
+			// ReferencedEnvelope maxExtendRef = new
+			// ReferencedEnvelope(map.getMaxExtend(), map
+			// .getLayer0Crs());
+			//
+			// maxExtendRef = JTSUtil.transformEnvelope(maxExtendRef,
+			// styledLayerObject.getCrs());
+			//
+			// if (!styledLayerObject.getReferencedEnvelope().intersects(
+			// (Envelope)
+			// maxExtendRef)) {
+			// AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
+			// "MapLegend.InsertLayer.LayerOutsideExtend",
+			// styledLayerObject.getTitle()));
+			// return false;
+			// }
+			// }
+
+			if (getMapPane().getMapContext().getCoordinateReferenceSystem() != null) {
+
+				// get maxExtend from map. it will use map.getMaxExtend is
+				// availbale.
+				ReferencedEnvelope maxExtend = new ReferencedEnvelope(
+						getMapPane().getMaxExtend(), getMapPane()
+								.getMapContext().getCoordinateReferenceSystem());
+
+				if (maxExtend != null) {
+
+					// transform it to the new layers CRS
+					ReferencedEnvelope maxExtendRef = JTSUtil
+							.transformEnvelope(maxExtend,
+									styledLayerObject.getCrs());
+
+					if (!maxExtendRef.intersects(newLayerEnv)) {
+						LOGGER.info(maxExtend);
+						LOGGER.info(maxExtendRef);
+						LOGGER.info(newLayerEnv);
+
+						AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
+								"MapLegend.InsertLayer.LayerOutsideExtend",
+								styledLayerObject.getTitle()));
+						return false;
+					}
+				}
+			}
+
+		}
+
+		// else
+		// {
+		//
+		// // If no maxExtend is defined, check against the bounds of the
+		// // EFFECTIVE CRS of the mapcontext.
+		// CoordinateReferenceSystem contextCrs = getGeoMapPane()
+		// .getMapContext().getCoordinateReferenceSystem();
+		// if (contextCrs != null) {
+		// if (contextCrs.getDomainOfValidity() != null
+		// && contextCrs.getDomainOfValidity()
+		// .getGeographicElements() != null)
+		// for (GeographicExtent ge : contextCrs.getDomainOfValidity()
+		// .getGeographicElements()) {
+		//
+		// if (ge instanceof GeographicBoundingBoxImpl) {
+		// GeographicBoundingBoxImpl gbb = (GeographicBoundingBoxImpl) ge;
+		// // Envelope latLonEnv = new
+		// // Envelope(gbb.getWestBoundLongitude(),
+		// // gbb.getSouthBoundLatitude(),
+		// // gbb.getEastBoundLongitude(),
+		// // gbb.getNorthBoundLatitude());
+		//
+		// double s = gbb.getSouthBoundLatitude();
+		// double w = gbb.getWestBoundLongitude();
+		// double n = gbb.getNorthBoundLatitude();
+		// double e = gbb.getEastBoundLongitude();
+		// Envelope latLonEnv = new Envelope(
+		// s,
+		// n,
+		// w,
+		// e);
+		//
+		// LOGGER.info("selfmade "+latLonEnv);
+		//
+		// ReferencedEnvelope crsEnvelope = new ReferencedEnvelope(
+		// latLonEnv, DefaultGeographicCRS.WGS84);
+		//
+		// if (!crsEnvelope.intersects(styledLayerObject
+		// .getReferencedEnvelope())) {
+		// AVSwingUtil
+		// .showMessageDialog(
+		// this,
+		// AtlasViewerGUI
+		// .R("MapLegend.InsertLayer.LayerOutsideExtend",
+		// styledLayerObject
+		// .getTitle()));
+		// }
+		//
+		// }
+		// LOGGER.info(ge);
+		// LOGGER.info(ge.getClass());
+		//
+		// }
+
+		// }
+		// }
+
+		// if (map.getCrs() != null &&
+		// !styledLayerObject.getEnvelope().intersects(map.getMaxExtend())) {
+		// AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
+		// "MapLegend.InsertLayer.LayerOutsideMaxExtend",
+		// styledLayerObject.getTitle()));
+		// return false;
+		// }
+
 		return layerManager.addStyledLayer(styledLayerObject);
 	}
 

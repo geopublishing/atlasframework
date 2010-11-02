@@ -22,7 +22,6 @@ import javax.swing.table.TableModel;
 
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 
-
 public class MapCRSCellRenderer extends DefaultTableCellRenderer {
 	private static final Color BRIGHTER_RED = new Color(.9f, .5f, .5f);
 	public static final int MAXWIDTH = 300;
@@ -52,7 +51,7 @@ public class MapCRSCellRenderer extends DefaultTableCellRenderer {
 			// s+=",";
 			// }
 			// s = s.substring(0, s.length()-1);
-			//			
+			//
 			// value = s;
 
 			value = crss.toString();
@@ -78,7 +77,7 @@ public class MapCRSCellRenderer extends DefaultTableCellRenderer {
 		} else {
 			((JComponent) fromSuper).setToolTipText(null);
 		}
-
+		
 		return fromSuper;
 	}
 

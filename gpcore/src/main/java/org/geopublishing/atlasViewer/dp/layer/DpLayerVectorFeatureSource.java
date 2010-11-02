@@ -30,6 +30,7 @@ import org.geotools.data.DataStore;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.NameImpl;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
@@ -57,7 +58,12 @@ public abstract class DpLayerVectorFeatureSource
 
 	static private final Logger LOGGER = Logger
 			.getLogger(DpLayerVectorFeatureSource.class);
-
+	
+	@Override
+	public ReferencedEnvelope getReferencedEnvelope() {
+		return new ReferencedEnvelope(getEnvelope(), getCrs());
+	}
+	
 	/**
 	 * The {@link Name} of the {@link SimpleFeatureType} of the
 	 * {@link DataStore} that is accessed.

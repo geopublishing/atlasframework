@@ -28,9 +28,9 @@ import org.geotools.data.DataUtilities;
 import org.geotools.gce.arcgrid.ArcGridReader;
 import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.gce.image.WorldImageReader;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
 import org.jfree.util.Log;
-import org.opengis.coverage.grid.GridEnvelope;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -267,13 +267,27 @@ public class DpLayerRaster_Reader extends
 				// e.getUpperCorner().getOrdinate(1), // Y1dddd
 				// e.getLowerCorner().getOrdinate(1) // Y2
 				// );
-				GridEnvelope e = gc.getOriginalGridRange();
-				envelope = new com.vividsolutions.jts.geom.Envelope(
-						e.getHigh(0), // X1
-						e.getLow(0), // X2
-						e.getHigh(1), // Y1
-						e.getLow(1) // Y2
-				);
+				
+				
+//				GridEnvelope e = gc.getOriginalGridRange();
+//				envelope = new com.vividsolutions.jts.geom.Envelope(
+//						e.getHigh(0), // X1
+//						e.getLow(0), // X2
+//						e.getHigh(1), // Y1
+//						e.getLow(1) // Y2
+//				
+//				ServiceInfo info = gc.getInfo();
+//				
+//				Object source = gc.getSource();
+//				
+//				LOGGER.debug(info);
+//				LOGGER.debug(source);
+//				envelope = new com.vividsolutions.jts.geom.Envelope(
+//						e.getHigh(0), // X1
+//						e.getLow(0), // X2
+//						e.getHigh(1), // Y1
+//						e.getLow(1) // Y2
+//				);
 				crs = gc.getCrs();
 
 				// Object object = gc.getProperties().get("GC_NODATA");
@@ -309,7 +323,7 @@ public class DpLayerRaster_Reader extends
 	 */
 	@Override
 	public void uncache() {
-		LOGGER.debug("unchaching " + getId() + " aka " + getTitle());
+		// LOGGER.debug("unchaching " + getId() + " aka " + getTitle());
 		super.uncache();
 
 		/** Close any open attribute table for this layer */
@@ -412,5 +426,12 @@ public class DpLayerRaster_Reader extends
 
 		return copy;
 	}
+
+	@Override
+	public ReferencedEnvelope getReferencedEnvelope() {
+		if (getEnvelope() == null) return null;
+		return new ReferencedEnvelope(getEnvelope(), getCrs());
+	}
+	
 
 }

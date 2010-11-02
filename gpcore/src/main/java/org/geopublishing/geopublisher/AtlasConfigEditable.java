@@ -677,7 +677,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		for (Map map : getMapPool().values()) {
 			map.uncache(null);
 			map.getMissingHTMLLanguages();
-			map.getCrs();
+			map.getLayer0Crs();
 		}
 
 	}

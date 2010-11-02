@@ -30,10 +30,10 @@ public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle>
 		super(ac);
 	}
 
-	// TODO 
+	// TODO doku
 	abstract public RasterLegendData getLegendMetaData();
 
-	// TODO 
+	// TODO doku
 	abstract public void setLegendMetaData(RasterLegendData parseRasterLegendData);
 
 }

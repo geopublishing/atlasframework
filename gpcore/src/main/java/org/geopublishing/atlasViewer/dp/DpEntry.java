@@ -296,12 +296,14 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 */
 	@Override
 	public int compareTo(DpEntry dpe2) {
+
 		if (dpe2.getId() == null) {
 			return -1;
 		}
 		if (getId() == null) {
 			return +1;
 		}
+		
 		return getId().compareTo(dpe2.getId());
 	}
 

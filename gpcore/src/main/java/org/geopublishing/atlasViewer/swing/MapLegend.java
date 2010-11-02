@@ -42,7 +42,6 @@ import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 import org.geotools.data.DefaultQuery;
 import org.geotools.data.FeatureSource;
-import org.geotools.feature.FeatureCollection;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerListEvent;
@@ -74,7 +73,6 @@ import skrueger.geotools.StyledGridCoverageInterface;
 import skrueger.geotools.StyledGridCoverageReaderInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.geotools.StyledRasterInterface;
-import skrueger.geotools.StyledRasterPyramidInterface;
 import skrueger.geotools.ZoomRestrictableGridInterface;
 import skrueger.geotools.selection.FeatureMapLayerSelectionSynchronizer;
 import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
@@ -525,6 +523,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 				return false;
 			}
 		}
+		
 
 		MapLayer mapLayer = null;
 		StyledLayerSelectionModel<?> selectionModel = null;
@@ -546,12 +545,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 				mapLayer = new AtlasMapLayer(styledGrid.getGeoObject(),
 						styledGrid.getStyle());
-
-			} else if (styledObj instanceof StyledRasterPyramidInterface) {
-
-				mapLayer = new AtlasMapLayer(
-						(FeatureCollection) styledObj.getGeoObject(),
-						styledObj.getStyle());
 
 			} else if (styledObj instanceof StyledFeaturesInterface) {
 				StyledFeaturesInterface<?> styledFS = (StyledFeaturesInterface<?>) styledObj;

@@ -168,6 +168,8 @@ public class MapPoolJTable extends JTable {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
+			
+
 			Map map = getMapPool().get(rowIndex);
 
 			if (columnIndex == 0) {
@@ -175,7 +177,7 @@ public class MapPoolJTable extends JTable {
 			} else if (columnIndex == 1) {
 				return map.getTitle().toString();
 			} else if (columnIndex == CRSCOL) {
-				CoordinateReferenceSystem mapCrs = map.getCrs();
+				CoordinateReferenceSystem mapCrs = map.getLayer0Crs();
 
 				// Returns a List of all DIFFERENT CRS used in the map
 				if (mapCrs != null) {
@@ -216,7 +218,8 @@ public class MapPoolJTable extends JTable {
 			} else if (columnIndex == 3) {
 				return getSize(map);
 			}
-
+//			long start = System.currentTimeMillis();
+//			System.out.println((System.currentTimeMillis() - start));
 			return getValueAt(rowIndex, columnIndex);
 		}
 
@@ -227,30 +230,27 @@ public class MapPoolJTable extends JTable {
 		 * @return <code>null</code> or {@link String}
 		 */
 		public String getToolTipFor(int rowIndex, int columnIndex) {
-			
+
 			rowIndex = convertRowIndexToModel(rowIndex);
 			columnIndex = convertColumnIndexToModel(columnIndex);
-			
+
 			final Map map = getMapPool().get(rowIndex);
 
 			if (columnIndex == 0) {
+
+				if (map.getQuality() == 1.)
+					return "Super!";
 				/**
 				 * Create a nice ToolTip for the QM of that Map
 				 */
 
 				final List<String> langs = getAce().getLanguages();
-				final StringBuffer tooltTipHtml = new StringBuffer(
-						"<html><b>"
-								+ GeopublisherGUI
-										.R(
-												"MapPoolJTable.ColumnName.Quality.Tooltip",
-												NumberFormat
-														.getPercentInstance()
-														.format(
-																getValueAt(
-																		rowIndex,
-																		columnIndex)))
-								+ "</B><ul>");
+				final StringBuffer tooltTipHtml = new StringBuffer("<html><b>"
+						+ GeopublisherGUI.R(
+								"MapPoolJTable.ColumnName.Quality.Tooltip",
+								NumberFormat.getPercentInstance().format(
+										getValueAt(rowIndex, columnIndex)))
+						+ "</B><ul>");
 
 				if (map.getLayers().size() > 0) {
 
@@ -262,15 +262,16 @@ public class MapPoolJTable extends JTable {
 									averageQMformatted + "</li>"));
 				} else {
 					tooltTipHtml.append("<li>"
-							+ GeopublisherGUI.R("MapPool_AverageLayerQM.NoLayers")
+							+ GeopublisherGUI
+									.R("MapPool_AverageLayerQM.NoLayers")
 							+ "</li>");
 				}
 
 				/**
 				 * Check the Title translations:
 				 */
-				List<String> missing = AVUtil.getMissingLanguages(getAce(), map
-						.getTitle());
+				List<String> missing = AVUtil.getMissingLanguages(getAce(),
+						map.getTitle());
 				if (missing.size() > 0) {
 					tooltTipHtml.append("<li>"
 							+ GeopublisherGUI.R("DataPool_Title"));
@@ -294,20 +295,20 @@ public class MapPoolJTable extends JTable {
 					tooltTipHtml.append("</li>");
 				}
 
-				/**
-				 * Check the Keyword translations:
-				 */
-				missing = AVUtil.getMissingLanguages(getAce(), map
-						.getKeywords());
-				if (missing.size() > 0) {
-
-					tooltTipHtml.append("<li>"
-							+ GeopublisherGUI.R("DataPool_Keywords"));
-					if (langs.size() > 1) {
-						tooltTipHtml.append(": " + missing.toString());
-					}
-					tooltTipHtml.append("</li>");
-				}
+				// /**
+				// * Check the Keyword translations:
+				// */
+				// missing = AVUtil.getMissingLanguages(getAce(), map
+				// .getKeywords());
+				// if (missing.size() > 0) {
+				//
+				// tooltTipHtml.append("<li>"
+				// + GeopublisherGUI.R("DataPool_Keywords"));
+				// if (langs.size() > 1) {
+				// tooltTipHtml.append(": " + missing.toString());
+				// }
+				// tooltTipHtml.append("</li>");
+				// }
 
 				/**
 				 * Layers additionally have HTML files that can be missing
@@ -320,6 +321,18 @@ public class MapPoolJTable extends JTable {
 					if (langs.size() > 1) {
 						tooltTipHtml.append(": " + missing.toString());
 					}
+					tooltTipHtml.append("</li>");
+				}
+
+				/**
+				 * The max map Extend should be set!
+				 */
+				if (map.getMaxExtend() == null) {
+
+					tooltTipHtml
+							.append("<li>"
+									+ GeopublisherGUI
+											.R("MapPoolJTable.QualityMissing.MapMaxEntend"));
 					tooltTipHtml.append("</li>");
 				}
 

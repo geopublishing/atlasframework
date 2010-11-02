@@ -159,6 +159,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 **/
 	private boolean previewMapExtendInGeopublisher = false;
 
+	private Double quality;
+	long qualityLastCalced;
+
 	/**
 	 * Resets the cache that remembers for which languages the HTML info pages
 	 * exist.
@@ -223,7 +226,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * 
 	 * @return null if no Layer is set yet
 	 */
-	public CoordinateReferenceSystem getCrs() {
+	public CoordinateReferenceSystem getLayer0Crs() {
+
+		// TODO Add a forceCrs as a Map property!
 		final int size = getLayers().size();
 		if (size > 0) {
 			// The last layer's CRS equals the first layer in the MapContext
@@ -606,33 +611,48 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *         metadata has been created for this {@link Map}
 	 */
 	public Double getQuality() {
+		// long start = System.currentTimeMillis();
 
-		Double result;
+		if (quality == null
+				|| (System.currentTimeMillis() - qualityLastCalced) > 1000) {
 
-		final List<String> languages = ac.getLanguages();
+			qualityLastCalced = System.currentTimeMillis();
 
-		final double qmTitle = I8NUtil.qmTranslation(languages, getTitle());
-		final double qmDesc = I8NUtil.qmTranslation(languages, getDesc());
-		final double qmKeywords = I8NUtil.qmTranslation(languages,
-				getKeywords());
+			final List<String> languages = ac.getLanguages();
 
-		/**
-		 * Count HTML Infos
-		 */
-		final double countHTMLexist = (double) languages.size()
-				- (double) getMissingHTMLLanguages().size();
-		final double qmHTML = countHTMLexist / ac.getLanguages().size();
+			final double qmTitle = I8NUtil.qmTranslation(languages, getTitle());
+			final double qmDesc = I8NUtil.qmTranslation(languages, getDesc());
 
-		final double qmMap = (qmTitle * 4. + qmDesc * 2. + qmKeywords * 1. + qmHTML * 4.) / 11.;
+			// final double qmKeywords = I8NUtil.qmTranslation(languages,
+			// getKeywords());
+			double qmKeywords = 1;
 
-		Double averageLayerQuality = 0.;
-		if (getLayers().size() > 0) {
-			averageLayerQuality = getAverageLayerQuality();
+			/**
+			 * Count HTML Infos
+			 */
+			final double countHTMLexist = (double) languages.size()
+					- (double) getMissingHTMLLanguages().size();
+			final double qmHTML = countHTMLexist / ac.getLanguages().size();
+
+			final double qmMap = (qmTitle * 4. + qmDesc * 2. + qmKeywords * 1. + qmHTML * 4.) / 11.;
+
+			Double averageLayerQuality = 0.;
+			if (getLayers().size() > 0) {
+				averageLayerQuality = getAverageLayerQuality();
+			}
+
+			quality = (averageLayerQuality * 3. + qmMap * 1.) / 4.;
+
+			// Subtract 20% if MaxExtend is not set.
+			if (getMaxExtend() == null) {
+				quality *= 0.8;
+			}
+
 		}
 
-		result = (averageLayerQuality * 3. + qmMap * 1.) / 4.;
+		// System.out.println(System.currentTimeMillis()-start);
 
-		return result;
+		return quality;
 
 	}
 
