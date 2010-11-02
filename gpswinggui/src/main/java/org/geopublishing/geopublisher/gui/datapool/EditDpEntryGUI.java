@@ -77,7 +77,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			
 
 			/** A tab with general settings **/
-			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.general.tab"),
+			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.usage.tab"),
 					null, new DpEntryUsageJPanel(dpe), null, tabbedPane
 							.getTabCount());
 

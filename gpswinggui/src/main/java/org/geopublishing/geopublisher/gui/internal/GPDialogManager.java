@@ -14,8 +14,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -129,19 +131,20 @@ public class GPDialogManager {
 	/** A DialogManager for DesignMapViewJDialogs **/
 	final static public CancellableDialogManager<Map, DesignMapViewJDialog> dm_MapComposer = new CancellableDialogManager<Map, DesignMapViewJDialog>() {
 
-//		public boolean closeAllInstancesReferencing(DpEntry<?> dpe) {
-//			for (DesignMapViewJDialog d : GPDialogManager.dm_MapComposer.getAllInstances()) {
-//				List<DpRef<?>> dpes = d.getMap().getDpes();
-//				for (DpRef<?> dpr : dpes) {
-//					if (dpr.getTarget().equals(dpe)) {
-//						if (!d.close()) return false;
-//						break;
-//					}
-//				}
-//			}
-//
-//			return true;
-//		}
+		// public boolean closeAllInstancesReferencing(DpEntry<?> dpe) {
+		// for (DesignMapViewJDialog d :
+		// GPDialogManager.dm_MapComposer.getAllInstances()) {
+		// List<DpRef<?>> dpes = d.getMap().getDpes();
+		// for (DpRef<?> dpr : dpes) {
+		// if (dpr.getTarget().equals(dpe)) {
+		// if (!d.close()) return false;
+		// break;
+		// }
+		// }
+		// }
+		//
+		// return true;
+		// }
 
 		@Override
 		public DesignMapViewJDialog getInstanceFor(final Map key,
@@ -163,9 +166,8 @@ public class GPDialogManager {
 
 								Cursor oldCursor = owner.getCursor();
 								try {
-									owner
-											.setCursor(Cursor
-													.getPredefinedCursor(Cursor.WAIT_CURSOR));
+									owner.setCursor(Cursor
+											.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 									final DesignMapViewJDialog designMapViewJDialog = new DesignMapViewJDialog(
 											owner, map);
@@ -310,5 +312,26 @@ public class GPDialogManager {
 			}
 		}
 	};
+
+	/**
+	 * Forces closing of all MapComposer dialogs using the {@link DpEntry}.
+	 * 
+	 * @return <code>false</code> if closing was canelled or somehow didn't
+	 *         work.
+	 */
+	public static boolean closeAllMapComposerDialogsUsing(DpEntry<?> dpe) {
+		for (DesignMapViewJDialog d : GPDialogManager.dm_MapComposer
+				.getAllInstances()) {
+			List<DpRef<?>> dpes = d.getMap().getDpes();
+			for (DpRef<?> dpr : dpes) {
+				if (dpr.getTarget().equals(dpe)) {
+					if (!d.close())
+						return false;
+					break;
+				}
+			}
+		}
+		return true;
+	}
 
 }

@@ -77,10 +77,6 @@ public class GpSwingUtil extends GpUtil {
 			AtlasConfigEditable ace, DpEntry<?> dpe, boolean askUserToVerify) {
 		LinkedList<AtlasRefInterface<?>> references = new LinkedList<AtlasRefInterface<?>>();
 
-		// TODO Only close the windows that reference this dplayer!
-		// if (!GPDialogManager.dm_MapComposer.closeAllInstances())
-		// return null;
-
 		// ****************************************************************************
 		// Go through all mapPoolEntries and groups and count the references to
 		// this DatapoolEntry
@@ -127,18 +123,9 @@ public class GpSwingUtil extends GpUtil {
 				return null;
 		}
 
-		// CLose all dialogs that use this layer
-		for (DesignMapViewJDialog d : GPDialogManager.dm_MapComposer
-				.getAllInstances()) {
-			List<DpRef<?>> dpes = d.getMap().getDpes();
-			for (DpRef<?> dpr : dpes) {
-				if (dpr.getTarget().equals(dpe)) {
-					if (!d.close())
-						return null;
-					break;
-				}
-			}
-		}
+		// Close all dialogs that use this layer
+		if (!GPDialogManager.closeAllMapComposerDialogsUsing(dpe))
+			return null;
 
 		// ****************************************************************************
 		// Delete the references first. Kill DesignMapViewJDialogs if affected.
