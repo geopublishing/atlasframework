@@ -53,6 +53,7 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
+import org.geopublishing.geopublisher.gui.group.DnDJTree;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
@@ -338,6 +339,12 @@ public class GpFrame extends JFrame {
 	public MapPoolJTable getMappoolJTable() {
 		return getGpSplitPane().getMappoolJTable();
 	}
+	
+
+	public DnDJTree getGroupJTree() {
+		return getGpSplitPane().getGroupJTable();
+	}
+
 
 	/**
 	 * Will recreate the {@link JMenuBar} of this {@link JFrame}. Should be
@@ -912,5 +919,4 @@ public class GpFrame extends JFrame {
 		}
 
 	}
-
 }

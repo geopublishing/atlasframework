@@ -924,7 +924,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	public GpFrame getJFrame() {
 		if (gpJFrame == null) {
 			SwingUtil.checkOnEDT();
-			;
 
 			// Disabled, because it looked ugly!
 			// /**

@@ -42,7 +42,6 @@ import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
-import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;

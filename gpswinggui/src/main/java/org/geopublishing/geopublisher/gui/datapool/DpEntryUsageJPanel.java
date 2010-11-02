@@ -10,36 +10,18 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui.datapool;
 
-import java.awt.event.ActionEvent;
-import java.io.File;
-
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasViewer.AVUtil;
-import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.geopublishing.geopublisher.swing.GpSwingUtil;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
 import skrueger.swing.Cancellable;
-import skrueger.swing.SmallButton;
-
-import com.vividsolutions.jts.geom.Envelope;
 
 public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 
@@ -56,72 +38,103 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 		backup();
 
 		// ****************************************************************************
-		// A bordered panel for system related to the local storage/ filesystem
+		// A bordered panel with a table listing the maps it is used in
 		// ****************************************************************************
-//		{
-			// final JPanel fileSystem = new JPanel(new MigLayout(
-			// "width 100%, wrap 2", "[grow]"));
-			// fileSystem.setBorder(BorderFactory
-			// .createTitledBorder(R("EditDpEntryGUI.filesystem.border")));
-			//
-			// fileSystem.add(new JLabel(R(
-			// "EditDpEntryGUI.filesystem.explanation", dpe.getType()
-			// .getLine1())), "span 2, right, width 100%, growx");
-			// fileSystem.add(new JLabel(R("path")), "right");
-			// final File dataDir = new File(ace.getDataDir(), dpe
-			// .getDataDirname());
-			//
-			// final JTextField folderTextField = new JTextField(dataDir
-			// .getAbsolutePath());
-			// folderTextField.setEditable(false);
-			// fileSystem.add(folderTextField, "right, growx");
-			//
-			// // A KVP for the folder size
-			// final JLabel sizeLabel = new
-			// JLabel(R("sizeOnFilesystemWithoutSVN")
-			// + ":");
-			// sizeLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
-			// fileSystem.add(sizeLabel, "split 2, right");
-			// final JLabel sizeValueLabel = new
-			// JLabel(GpUtil.MbDecimalFormatter
-			// .format(ace.getFolderSize(dpe)));
-			// sizeValueLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
-			// fileSystem.add(sizeValueLabel, "left");
-			//
-			// // A button to open the containing directory
-			// final JButton openDirJButton = new SmallButton(new
-			// AbstractAction(
-			// R("EditDPEDialog.OpenFolderButton") ) {
-			//
-			// public void actionPerformed(final ActionEvent e) {
-			// SwingUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
-			// .getAtlasConfig()).getDataDir(), dpe.getDataDirname()));
-			// }
-			//
-			// }, R("EditDPEDialog.OpenFolderButton.TT"));
-			// fileSystem.add(openDirJButton, "split 2, right");
-			//
-			// // A button to open the containing directory
-			// final JButton uncacheJButton = new SmallButton(new
-			// AbstractAction(
-			// R("EditDPEDialog.uncacheDpeButton"), new
-			// ImageIcon(GpSwingUtil.class
-			// .getResource("/icons/uncache.png")) ) {
-			//
-			// public void actionPerformed(final ActionEvent e) {
-			// ace.uncacheAndReread(dpe);
-			// ace.getDataPool().fireChangeEvents(DataPool.EventTypes.changeDpe);
-			// sizeValueLabel.setText(GpUtil.MbDecimalFormatter
-			// .format(ace.getFolderSize(dpe)));
-			// }
-			//
-			// }, R("EditDPEDialog.uncacheDpeButton.TT"));
-			// fileSystem.add(uncacheJButton, "right");
-			//
-			// add(fileSystem, "growx");
-			// }
+		// {
+		// final JPanel mapUsage = new JPanel(new
+		// MigLayout("width 100%, wrap 1",
+		// "[grow]","[150]"));
+		// mapUsage.setBorder(BorderFactory
+		// .createTitledBorder(R("EditDpEntryGUI.usage.Maps.border")));
 
-//		}
+		add(new JLabel(R("EditDpEntryGUI.usage.Maps.border")));
+		MapusageTable mapUt = new MapusageTable(dpe, ace.getMapPool());
+		// mapUsage.
+		add(new JScrollPane(mapUt), "height 150");
+		// add(mapUsage);
+
+		// ****************************************************************************
+		// A bordered panel with a table listing the maps it is used in
+		// ****************************************************************************
+		// {
+		// final JPanel menuUsage = new JPanel(new
+		// MigLayout("width 100%, wrap 1",
+		// "[grow]", "[150]"));
+		// mapUsage.setBorder(BorderFactory
+		// .createTitledBorder(R("EditDpEntryGUI.usage.Menu.border")));
+
+		add(new JLabel(R("EditDpEntryGUI.usage.Menu.border")), "gapy unrel");
+
+		MenuusageTable menuUt = new MenuusageTable(dpe, ace.getFirstGroup());
+		add(new JScrollPane(menuUt), "height 150");
+
+		if (menuUt.getModel().getRowCount() == 0
+				&& mapUt.getModel().getRowCount() == 0) {
+			add(new JLabel(R("EditDpEntryGUI.usage.notexported")), "gapy unrel");
+		}
+		add(new JLabel(R("EditDpEntryGUI.usage.exported")), "gapy unrel");
+
+		// menuUsage.add(new JScrollPane(menuUt));
+		// add(menuUsage);
+
+		// fileSystem.add(new JLabel(R(
+		// "EditDpEntryGUI.filesystem.explanation", dpe.getType()
+		// .getLine1())), "span 2, right, width 100%, growx");
+		// fileSystem.add(new JLabel(R("path")), "right");
+		// final File dataDir = new File(ace.getDataDir(), dpe
+		// .getDataDirname());
+		//
+		// final JTextField folderTextField = new JTextField(dataDir
+		// .getAbsolutePath());
+		// folderTextField.setEditable(false);
+		// fileSystem.add(folderTextField, "right, growx");
+		//
+		// // A KVP for the folder size
+		// final JLabel sizeLabel = new
+		// JLabel(R("sizeOnFilesystemWithoutSVN")
+		// + ":");
+		// sizeLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
+		// fileSystem.add(sizeLabel, "split 2, right");
+		// final JLabel sizeValueLabel = new
+		// JLabel(GpUtil.MbDecimalFormatter
+		// .format(ace.getFolderSize(dpe)));
+		// sizeValueLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
+		// fileSystem.add(sizeValueLabel, "left");
+		//
+		// // A button to open the containing directory
+		// final JButton openDirJButton = new SmallButton(new
+		// AbstractAction(
+		// R("EditDPEDialog.OpenFolderButton") ) {
+		//
+		// public void actionPerformed(final ActionEvent e) {
+		// SwingUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
+		// .getAtlasConfig()).getDataDir(), dpe.getDataDirname()));
+		// }
+		//
+		// }, R("EditDPEDialog.OpenFolderButton.TT"));
+		// fileSystem.add(openDirJButton, "split 2, right");
+		//
+		// // A button to open the containing directory
+		// final JButton uncacheJButton = new SmallButton(new
+		// AbstractAction(
+		// R("EditDPEDialog.uncacheDpeButton"), new
+		// ImageIcon(GpSwingUtil.class
+		// .getResource("/icons/uncache.png")) ) {
+		//
+		// public void actionPerformed(final ActionEvent e) {
+		// ace.uncacheAndReread(dpe);
+		// ace.getDataPool().fireChangeEvents(DataPool.EventTypes.changeDpe);
+		// sizeValueLabel.setText(GpUtil.MbDecimalFormatter
+		// .format(ace.getFolderSize(dpe)));
+		// }
+		//
+		// }, R("EditDPEDialog.uncacheDpeButton.TT"));
+		// fileSystem.add(uncacheJButton, "right");
+		//
+		// add(fileSystem, "growx");
+		// }
+
+		// }
 
 	}
 

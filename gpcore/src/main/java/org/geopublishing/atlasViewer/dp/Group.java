@@ -15,10 +15,12 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -29,6 +31,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.geopublisher.GpUtil;
 
+import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 
@@ -172,7 +175,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void findReferencesTo(AtlasConfig ac, Object dpeOrMap,
-			LinkedList<AtlasRefInterface<?>> references, boolean delete) {
+			List<AtlasRefInterface<?>> references, boolean delete) {
 		findReferencesTo(ac.getFirstGroup(), dpeOrMap, references, delete);
 	}
 
@@ -186,7 +189,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 *            if true, than all references will be deleted
 	 */
 	public static void findReferencesTo(Group g, Object dpeOrMap,
-			LinkedList<AtlasRefInterface<?>> references, boolean delete) {
+			List<AtlasRefInterface<?>> references, boolean delete) {
 		final Enumeration<DefaultMutableTreeNode> children = g.children();
 
 		// ****************************************************************************
@@ -427,4 +430,45 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	public void setAtlasRoot(boolean isAtlasRoot) {
 		this.isAtlasRoot = isAtlasRoot;
 	}
+
+	/**
+	 * Returns a {@link List} of {@link Group} using the queried Datapool entry.
+	 */
+	public List<? extends Group> getGroupsUsing(
+			DpEntry<? extends ChartStyle> dpe) {
+		
+		HashSet<Group> collectGroups = new HashSet<Group>();
+		findReferencesTo(this, dpe, collectGroups);
+		return new ArrayList(collectGroups);
+	}
+
+	/**
+	 * Search the Group tree and add all Groups containing a reference to a specific {@link DpEntry}.
+	 * @param collectGroups
+	 *            A List<Group> that will contain the results.
+	 */
+	public void findReferencesTo(Group g, DpEntry<? extends ChartStyle> dpe, Set<Group> collectGroups) {
+
+		final Enumeration<DefaultMutableTreeNode> children = g.children();
+
+		// ****************************************************************************
+		// Create a reference to the searched object
+		// ****************************************************************************
+		String id = dpe.getId();
+		int childIndex = -1;
+		while (children.hasMoreElements()) {
+			Object item = children.nextElement();
+			childIndex++;
+
+			if (item instanceof AtlasRefInterface) {
+				final AtlasRefInterface<?> testref = (AtlasRefInterface<?>) item;
+				if (testref.getTargetId().equals(id)) {
+					collectGroups.add(g);
+				}
+			} else if (item instanceof Group) {
+				findReferencesTo((Group) item, dpe, collectGroups);
+			}
+		}
+	}
+
 }

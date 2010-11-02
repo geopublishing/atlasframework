@@ -90,7 +90,7 @@ public class ExportWizardPage_Save extends WizardPage {
 
 				@Override
 				public Object getElementAt(int i) {
-					DpEntry dpe = notInGroupNorMap.get(i);
+					DpEntry<?> dpe = notInGroupNorMap.get(i);
 					String dpeDescription = dpe.getType().getLine1() + ": "
 							+ dpe.getTitle() + " (" + dpe.getFilename() + ")";
 					return dpeDescription;

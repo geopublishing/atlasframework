@@ -651,5 +651,5 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public File getLocalTempFile() {
 		return localTempFile;
 	}
-
+	
 }

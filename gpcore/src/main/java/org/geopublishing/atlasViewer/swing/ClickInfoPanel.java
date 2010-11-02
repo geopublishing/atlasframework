@@ -84,9 +84,9 @@ public class ClickInfoPanel extends JPanel {
 
 	static private final Logger LOGGER = Logger.getLogger(ClickInfoPanel.class);
 
-	private static final JLabel CRS_LABEL = new JLabel(AtlasViewerGUI
-			.R("ClickInfoPanel.CRS.label")
-			+ ":", SwingConstants.TRAILING);
+	private static final JLabel CRS_LABEL = new JLabel(
+			AtlasViewerGUI.R("ClickInfoPanel.CRS.label") + ":",
+			SwingConstants.TRAILING);
 
 	final static String CRSValueToolTip = AtlasViewerGUI
 			.R("ClickInfoPanel.CRS.tooltip");
@@ -104,24 +104,12 @@ public class ClickInfoPanel extends JPanel {
 	private static final Font DEFAULT_FONT = new JLabel().getFont().deriveFont(
 			Font.PLAIN);
 
-//	/** the Font for the Title * */
-//	private static final Font TITLE_FONT = DEFAULT_FONT.deriveFont(Font.BOLD,
-//			DEFAULT_FONT.getSize() + 3);
-
 	/** The {@link MapLayer} that the clicked object comes from * */
 	private MapLayer layer;
-
-	// JComponent videoComponent = null;
 
 	private final MapContextManagerInterface layerManager;
 
 	private JComponent infopanel;
-
-//	private String titleString;
-
-	private JLabel titleLabel;
-
-	// private JPanel positionPanel;
 
 	final static String cordinatesMsg = AtlasViewerGUI
 			.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.cordinates");
@@ -141,15 +129,6 @@ public class ClickInfoPanel extends JPanel {
 		this.atlasConfig = atlasConfig;
 
 	}
-
-	//
-	// /**
-	// * Updates the {@link JPanel}
-	// */
-	// private void updateGUI() {
-	//
-	//	
-	// }
 
 	/**
 	 * Creates a {@link JPanel} which displays information about the
@@ -217,43 +196,39 @@ public class ClickInfoPanel extends JPanel {
 					// **********************************************************
 
 					final Double value = gcValue[0];
+					final String doubleFomatted = NumberFormat
+							.getNumberInstance(Locale.getDefault()).format(
+									value);
 					final RasterLegendData legendMetaData = layerManager
 							.getLegendMetaData(layer);
 					if (legendMetaData != null) {
 
+						// Lookup any entry in the legend table for this value
 						final Translation translation = legendMetaData
 								.get(value);
-						if (translation != null) {
+						if (translation != null && !translation.isEmpty()) {
 							// **************************************************
 							// If we find a label for this value, show it
 							// **************************************************
-
-							final String doubleFomatted = NumberFormat
-									.getNumberInstance(Locale.getDefault())
-									.format(value);
 							valueLabel.setText(translation.toString() + " ("
 									+ doubleFomatted + ")");
+
 						} else {
 							// **************************************************
-							// , otherwise just show the DN
+							// , otherwise just show the value
 							// **************************************************
-							final String doubleFomatted = NumberFormat
-									.getNumberInstance(Locale.getDefault())
-									.format(value);
 							valueLabel.setText(doubleFomatted);
 						}
 					} else {
 						// ******************************************************
 						// fallback.. no RasterLegendData found
 						// ******************************************************
-						final String doubleFomatted = NumberFormat
-								.getNumberInstance(Locale.getDefault()).format(
-										value);
 						valueLabel.setText(doubleFomatted);
 					}
 
-					final JLabel key = new JLabel(AtlasViewerGUI
-							.R("ClickInfoPanel.label_for_raster_value"));
+					final JLabel key = new JLabel(
+							AtlasViewerGUI
+									.R("ClickInfoPanel.label_for_raster_value"));
 					key.setFont(DEFAULT_FONT);
 					key.setLabelFor(valueLabel);
 					panel.add(key);
@@ -277,7 +252,7 @@ public class ClickInfoPanel extends JPanel {
 		// **********************************************************************
 		// Set a Border and store the title
 		// **********************************************************************
-//		titleString = layerManager.getTitleFor(layer);
+		// titleString = layerManager.getTitleFor(layer);
 		panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
 				AtlasViewerGUI.R("ClickInfoPanel.titledBorder.bands")));
 
@@ -289,16 +264,11 @@ public class ClickInfoPanel extends JPanel {
 		layer = objectSelectionEvent.getSourceLayer();
 		final XMapPane mapPane = objectSelectionEvent.getSource();
 		final String humanReadableCrsString = mapPane.getMapContext()
-				.getCoordinateReferenceSystem().getName().getCode().replace(
-						'_', ' ');
-
-		// final double x = objectSelectionEvent.getSelectionRange().getMaxX();
-		// final double y = objectSelectionEvent.getSelectionRange().getMaxY();
+				.getCoordinateReferenceSystem().getName().getCode()
+				.replace('_', ' ');
 
 		final double x = objectSelectionEvent.getSelectionRange().getMaxX();
 		final double y = objectSelectionEvent.getSelectionRange().getMaxY();
-
-		// objectSelectionEvent.getSelectionRange()
 
 		final Point2D selectionPoint = new Point2D.Double(x, y);
 
@@ -334,11 +304,6 @@ public class ClickInfoPanel extends JPanel {
 			positionPanel.add(Y_LABEL);
 			positionPanel.add(yTextLabel, "sgx");
 		}
-
-		// // Layout the coordinates panel.
-		// SpringUtilities.makeCompactGrid(positionPanel, 3, 2, 5, 0, // initX,
-		// // initY
-		// 5, getYPad()); // xPad, yPad
 
 		positionPanel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
 				cordinatesMsg));
@@ -399,7 +364,8 @@ public class ClickInfoPanel extends JPanel {
 				 * java.lang.ArrayIndexOutOfBoundsException: 60 at
 				 * org.geotools.feature
 				 * .DefaultFeature.getAttribute(DefaultFeature.java:207) at
-				 * org.geopublishing.atlasViewer.swing.ClickInfoPanel.getOneFeatureInfoPanel(
+				 * org.geopublishing
+				 * .atlasViewer.swing.ClickInfoPanel.getOneFeatureInfoPanel(
 				 * ClickInfoPanel.java:388) at
 				 * org.geopublishing.atlasViewer.swing.ClickInfoPanel.
 				 * setSelectionEvent(ClickInfoPanel.java:631) *
@@ -459,9 +425,11 @@ public class ClickInfoPanel extends JPanel {
 								final DpLayerVector dpe = (DpLayerVector) layerManager
 										.getStyledObjectFor(layer);
 								try {
-									final URL imgURL = IOUtil.extendURL(IOUtil
-											.getParentUrl(AVSwingUtil.getUrl(dpe,owner)),
-											imageFilename);
+									final URL imgURL = IOUtil
+											.extendURL(
+													IOUtil.getParentUrl(AVSwingUtil
+															.getUrl(dpe, owner)),
+													imageFilename);
 
 									// TODO OPEN FILE IGNORE CASE fuer
 									// windows/linux
@@ -507,8 +475,8 @@ public class ClickInfoPanel extends JPanel {
 
 									final DpLayerVector dpe = (DpLayerVector) styledObj;
 									final URL pdfURL = IOUtil.extendURL(IOUtil
-											.getParentUrl(AVSwingUtil.getUrl(dpe,owner)),
-											pdfFilename);
+											.getParentUrl(AVSwingUtil.getUrl(
+													dpe, owner)), pdfFilename);
 
 									valueComponent = new JButton(
 											new AbstractAction(pdfFilename,
@@ -603,8 +571,8 @@ public class ClickInfoPanel extends JPanel {
 											"http://")) {
 										url = new URL(targetPath);
 									} else {
-										url = IOUtil.extendURL(
-												IOUtil.getParentUrl(AVSwingUtil
+										url = IOUtil.extendURL(IOUtil
+												.getParentUrl(AVSwingUtil
 														.getUrl(dpe, owner)),
 												targetPath);
 
@@ -634,8 +602,7 @@ public class ClickInfoPanel extends JPanel {
 											});
 									valueComponent
 											.setToolTipText(AtlasViewerGUI
-													.R(
-															"ClickInfoPanel.OpenHTMLButton.TT",
+													.R("ClickInfoPanel.OpenHTMLButton.TT",
 															title));
 								}
 							}
@@ -702,8 +669,7 @@ public class ClickInfoPanel extends JPanel {
 										});
 								valueComponent
 										.setToolTipText(AtlasViewerGUI
-												.R(
-														"ClickInfoPanel.OpenHTMLinBrowserButton.TT",
+												.R("ClickInfoPanel.OpenHTMLinBrowserButton.TT",
 														documentTitle));
 							}
 
@@ -836,19 +802,6 @@ public class ClickInfoPanel extends JPanel {
 					.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.attributes");
 			panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER, msg)); // i8ndone
 		}
-		//
-		// /**
-		// * TODO Why is this added here?! How does it fit into the layout?
-		// */
-		// if (videoComponent != null) {
-		// panel.add(videoComponent);
-		// }
-
-		// **********************************************************************
-		// Setting a nice Border that tells the Name of the Layer, and store the
-		// title
-		// **********************************************************************
-//		titleString = layerManager.getTitleFor(layer);
 
 		return panel;
 	}
@@ -870,24 +823,11 @@ public class ClickInfoPanel extends JPanel {
 		return countVisibleAttribsWithContent > 20 ? 1 : 3;
 	}
 
-	//
-	// public void disposeVideoPlayer() {
-	// // if (mediaPlayer != null) {
-	// // mediaPlayer.stop();
-	// // mediaPlayer.close();
-	// // mediaPlayer.deallocate();
-	// // mediaPlayer = null;
-	// // }
-	// // videoComponent = null;
-	// }
-
 	/**
 	 * Tell the {@link ClickInfoPanel} about newly selected Objects
 	 */
 	public void setSelectionEvent(
 			final ObjectSelectionEvent<?> objectSelectionEvent) {
-
-		// disposeVideoPlayer();
 
 		layer = objectSelectionEvent.getSourceLayer();
 
@@ -912,13 +852,6 @@ public class ClickInfoPanel extends JPanel {
 
 		int countRows = 0;
 
-//		titleLabel = new JLabel(titleString);
-//		titleLabel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-//		titleLabel.setFont(TITLE_FONT);
-
-//		add(titleLabel);
-//		countRows++;
-
 		add(infopanel);
 		countRows++;
 
@@ -929,7 +862,6 @@ public class ClickInfoPanel extends JPanel {
 		//
 		SwingUtil.getParentWindow(this).pack();
 		SwingUtil.getParentWindow(this).pack();
-		// invalidate(); could be interesting too
 
 	}
 }

@@ -78,8 +78,8 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 		 * Add a Listener to the MapPool to update the GroupTree whenever the
 		 * MapPool changed.
 		 */
-		rootGroup.getAc().getMapPool().addChangeListener(
-				new PropertyChangeListener() {
+		rootGroup.getAc().getMapPool()
+				.addChangeListener(new PropertyChangeListener() {
 
 					@Override
 					public void propertyChange(final PropertyChangeEvent evt) {
@@ -91,8 +91,8 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 		 * Add a Listener to the DataPool to update the GroupTree whenever the
 		 * DataPool changed. Note: ATM the listener is never removed :-/
 		 */
-		rootGroup.getAc().getDataPool().addChangeListener(
-				new PropertyChangeListener() {
+		rootGroup.getAc().getDataPool()
+				.addChangeListener(new PropertyChangeListener() {
 
 					@Override
 					public void propertyChange(final PropertyChangeEvent evt) {
@@ -104,7 +104,8 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 		 * Setting tool-tips so the users know how to handle this Panel
 		 */
 		setToolTipText(GeopublisherGUI.R("EditGroupsDnDJTreePanel.TT"));
-		getJTree().setToolTipText(GeopublisherGUI.R("EditGroupsDnDJTreePanel.TT"));
+		getJTree().setToolTipText(
+				GeopublisherGUI.R("EditGroupsDnDJTreePanel.TT"));
 
 	}
 
@@ -125,7 +126,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 	 * @return The {@link JTree} - actually a {@link DnDJTree} - that hold all
 	 *         the menu and menu-items together.
 	 */
-	public final JTree getJTree() {
+	public final DnDJTree getJTree() {
 		if (dndTree == null) {
 
 			if (rootGroup == null)
@@ -167,16 +168,16 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 
 							// Select the Entry in the table
 							GeopublisherGUI.getInstance().getJFrame()
-									.getMappoolJTable().select(
-											targetMap.getId());
+									.getMappoolJTable()
+									.select(targetMap.getId());
 
 						} else if (clickedNode instanceof DpRef<?>) {
 							final DpEntry<? extends ChartStyle> targetDpe = ((DpRef<DpEntry<? extends ChartStyle>>) clickedNode)
 									.getTarget();
 							// Select the Entry in the table
 							GeopublisherGUI.getInstance().getJFrame()
-									.getDatapoolJTable().select(
-											targetDpe.getId());
+									.getDatapoolJTable()
+									.select(targetDpe.getId());
 						}
 
 					}
@@ -190,12 +191,11 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 					{
 
 						new GroupJPopupMenu(EditGroupsDnDJTreePanel.this,
-								clickedNode, rootGroup)
-								.show(
-										e.getSource() instanceof Component ? (Component) e
-												.getSource()
-												: EditGroupsDnDJTreePanel.this,
-										clickPoint.x, clickPoint.y);
+								clickedNode, rootGroup).show(
+								e.getSource() instanceof Component ? (Component) e
+										.getSource()
+										: EditGroupsDnDJTreePanel.this,
+								clickPoint.x, clickPoint.y);
 					} else if (e.getClickCount() == 2)
 					// Double lick starts a default action
 					{

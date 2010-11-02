@@ -52,9 +52,7 @@ import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.AttributeMetadataMap;
-import skrueger.swing.AtlasDialog;
 import skrueger.swing.Cancellable;
-import skrueger.swing.DialogManager;
 import skrueger.swing.SmallButton;
 
 public class DpLayerVectorAttributesJPanel extends JPanel implements

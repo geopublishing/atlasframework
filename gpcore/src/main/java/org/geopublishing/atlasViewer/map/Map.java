@@ -373,8 +373,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	}
 
 	/**
-	 * Returns the {@link List} of {@link DpRef} to all {@link DpLayer}s referenced by
-	 * this {@link Map}.
+	 * Returns the {@link List} of {@link DpRef} to all {@link DpLayer}s
+	 * referenced by this {@link Map}.
 	 */
 	final public List<DpRef<DpLayer<?, ? extends ChartStyle>>> getLayers() {
 		return layers;
@@ -386,16 +386,16 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	}
 
 	/**
-	 * Returns the {@link List} of {@link DpRef} to {@link DpMedia} referenced by
-	 * this {@link Map}.
+	 * Returns the {@link List} of {@link DpRef} to {@link DpMedia} referenced
+	 * by this {@link Map}.
 	 */
 	final public List<DpRef<DpMedia<? extends ChartStyle>>> getMedia() {
 		return media;
 	}
 
 	/**
-	 * Returns a {@link List} of {@link DpRef} to all Layers and Media (DpEntry) referenced by
-	 * this map.
+	 * Returns a {@link List} of {@link DpRef} to all Layers and Media (DpEntry)
+	 * referenced by this map.
 	 */
 	final public List<DpRef<?>> getDpes() {
 		List<DpRef<?>> allEntries = new ArrayList<DpRef<?>>();
@@ -1047,5 +1047,24 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	public void setPreviewMapExtendInGeopublisher(
 			boolean previewMapExtendInGeopublisher) {
 		this.previewMapExtendInGeopublisher = previewMapExtendInGeopublisher;
+	}
+
+	/**
+	 * Is the entry visible in this map?
+	 */
+	public boolean isVisible(DpEntry<? extends ChartStyle> dpe) {
+		Boolean b = hidden.get(dpe.getId());
+		if (b == null)
+			return true;
+		else
+			return (!b);
+	}
+
+	public Object isVisibleInLegend(DpEntry<? extends ChartStyle> dpe) {
+		Boolean b = hideInLegendMap.get(dpe.getId());
+		if (b == null)
+			return true;
+		else
+			return (!b);
 	}
 }

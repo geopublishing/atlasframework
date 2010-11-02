@@ -21,6 +21,7 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.DraggableDatapoolJTable;
 import org.geopublishing.geopublisher.gui.datapool.EditDataPoolPanel;
+import org.geopublishing.geopublisher.gui.group.DnDJTree;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.gui.map.EditMapPoolPanel;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
@@ -147,6 +148,10 @@ public class GpJSplitPane extends JSplitPane {
 	 */
 	public MapPoolJTable getMappoolJTable() {
 		return editMapPoolPanel.getMapPoolJTable();
+	}
+	
+	public DnDJTree getGroupJTable() {
+		return editGroups.getJTree();
 	}
 
 	public void dispose() {

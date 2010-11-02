@@ -113,7 +113,8 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 		if (map.isSelectableFor(dpLayer.getId())) {
 			newtt += "<font color='green'><b>&lowast;</b> "
-					+ GeopublisherGUI.R("DesignAtlasMapLayer.TT.layerSelectable")
+					+ GeopublisherGUI
+							.R("DesignAtlasMapLayer.TT.layerSelectable")
 					+ "</font><br/>";
 		} else {
 			newtt += "<font color='red'><b>&lowast;</b> "
@@ -129,8 +130,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	 * This extension of the basic {@link MapLayerLegend} introduces menu items
 	 * and behavior which are only available in Geopublisher.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 * @param map
 	 *            Map that this
 	 */
@@ -266,13 +266,16 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				ArrayList<String> tabTitles = new ArrayList<String>();
 
 				for (String l : ace.getLanguages()) {
-					tabTitles.add(GeopublisherGUI.R("EditLayerHTML.Tabs.Titles",
-							I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
+					tabTitles.add(GeopublisherGUI.R(
+							"EditLayerHTML.Tabs.Titles", I8NUtil
+									.getFirstLocaleForLang(l)
+									.getDisplayLanguage()));
 				}
 
 				SimplyHTMLUtil.openHTMLEditors(owner, ace, infoFiles,
-						tabTitles, GeopublisherGUI.R("EditLayerHTML.Dialog.Title",
-								dpLayer.getTitle().toString()));
+						tabTitles, GeopublisherGUI.R(
+								"EditLayerHTML.Dialog.Title", dpLayer
+										.getTitle().toString()));
 
 				/**
 				 * Try to update a few cached values for the TODO nicer!
@@ -413,8 +416,8 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showTableInLegend" on/off
 		 */
 		JCheckBoxMenuItem showTableInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(GeopublisherGUI
-						.R("LayerToolMenu.showTableInLegend")) {
+				new AbstractAction(
+						GeopublisherGUI.R("LayerToolMenu.showTableInLegend")) {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -433,8 +436,8 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showFilterInLegend" on/off
 		 */
 		JCheckBoxMenuItem showFilterInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(GeopublisherGUI
-						.R("LayerToolMenu.showFilterInLegend")) {
+				new AbstractAction(
+						GeopublisherGUI.R("LayerToolMenu.showFilterInLegend")) {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -454,16 +457,14 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "showStylerInLegend" on/off
 		 */
 		JCheckBoxMenuItem showStylerInLegendOnOff = new JCheckBoxMenuItem(
-				new AbstractAction(GeopublisherGUI
-						.R("LayerToolMenu.showStylerInLegend")) {
+				new AbstractAction(
+						GeopublisherGUI.R("LayerToolMenu.showStylerInLegend")) {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						JCheckBoxMenuItem checkBoxMenuItem = (JCheckBoxMenuItem) e
 								.getSource();
-						dpLayer
-								.setStylerInLegend(checkBoxMenuItem
-										.isSelected());
+						dpLayer.setStylerInLegend(checkBoxMenuItem.isSelected());
 					}
 
 				});
@@ -474,7 +475,8 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 * Add a new MenuItem, to switch "anklickbar" on/off
 		 */
 		JCheckBoxMenuItem layerSelectable = new JCheckBoxMenuItem(
-				new AbstractAction(GeopublisherGUI.R("LayerToolMenu.selectable")) {
+				new AbstractAction(
+						GeopublisherGUI.R("LayerToolMenu.selectable")) {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -483,7 +485,9 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 						map.setSelectableFor(styledLayer.getId(),
 								checkBoxMenuItem.isSelected());
 
-						mapLegend.getGeoMapPane().getMapPane()
+						mapLegend
+								.getGeoMapPane()
+								.getMapPane()
 								.setMapLayerSelectable(
 										getMapLayer(),
 										checkBoxMenuItem.isSelected()
@@ -497,7 +501,11 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				.R("LayerToolMenu.selectable.TT"));
 
 		layerSelectable.setSelected(map.isSelectableFor(styledLayer.getId()));
-		layerSelectable.setEnabled(hasVisibleAttributes());
+		boolean hasVisibleAttributes = hasVisibleAttributes();
+		layerSelectable.setEnabled(hasVisibleAttributes);
+		if (!hasVisibleAttributes) {
+			layerSelectable.setText(GeopublisherGUI.R("LayerToolMenu.NOT.selectable"));
+		}
 
 		menu.add(layerSelectable);
 

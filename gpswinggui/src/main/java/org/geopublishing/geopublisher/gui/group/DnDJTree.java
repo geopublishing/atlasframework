@@ -46,11 +46,11 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
+import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.atlasViewer.swing.RJLTransferable;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
-
 
 /**
  * A {@link JTree} that is reorderable by D'n'D
@@ -176,50 +176,51 @@ public class DnDJTree extends JTree implements DragSourceListener,
 	 */
 	@Override
 	public void dragEnter(final DropTargetDragEvent dtde) {
-//		// figure out which cell it's over, no drag to self
-//		final Point dragPoint = dtde.getLocation();
-//		final TreePath path = getPathForLocation(dragPoint.x, dragPoint.y);
-//		if (path == null)
-//			dtde.acceptDrag(DnDConstants.ACTION_NONE);
-//		else {
-//			dropTargetNode = (TreeNode) path.getLastPathComponent();
-//
-//			Object droppedObject;
-//			try {
-//				droppedObject = dtde.getTransferable().getTransferData(
-//						localObjectFlavor);
-//				final DefaultMutableTreeNode dropTargetNode = (DefaultMutableTreeNode) path
-//						.getLastPathComponent();
-//				if (droppedObject instanceof DnDAtlasObject) {
-//					// remove from old location
-//					final DnDAtlasObject transObj = (DnDAtlasObject) droppedObject;
-//
-//					if ((transObj.getSource() == AtlasDragSources.DNDTREE)) {
-//						MutableTreeNode droppedNode = (MutableTreeNode) transObj
-//								.getObject();
-//
-//						// this is also checked in checkIsParent
-//						// if (droppedNode == dropTargetNode)
-//						// return;
-//
-//						if (!checkIsParent(dropTargetNode, droppedNode)) {
-							dtde.acceptDrag(DnDConstants.ACTION_MOVE); // OK!
-//							System.out.println("wanted");
-//							return;
-//						}
-//					}
-//				}
-//				
-//			} catch (UnsupportedFlavorException e) {
-//				dtde.acceptDrag(DnDConstants.ACTION_NONE);
-//			} catch (IOException e) {
-//				dtde.acceptDrag(DnDConstants.ACTION_NONE);
-//			}
-//
-//		}
-//		dtde.acceptDrag(DnDConstants.ACTION_NONE);
-//		System.out.println("not wanted");
-//		
+		// // figure out which cell it's over, no drag to self
+		// final Point dragPoint = dtde.getLocation();
+		// final TreePath path = getPathForLocation(dragPoint.x, dragPoint.y);
+		// if (path == null)
+		// dtde.acceptDrag(DnDConstants.ACTION_NONE);
+		// else {
+		// dropTargetNode = (TreeNode) path.getLastPathComponent();
+		//
+		// Object droppedObject;
+		// try {
+		// droppedObject = dtde.getTransferable().getTransferData(
+		// localObjectFlavor);
+		// final DefaultMutableTreeNode dropTargetNode =
+		// (DefaultMutableTreeNode) path
+		// .getLastPathComponent();
+		// if (droppedObject instanceof DnDAtlasObject) {
+		// // remove from old location
+		// final DnDAtlasObject transObj = (DnDAtlasObject) droppedObject;
+		//
+		// if ((transObj.getSource() == AtlasDragSources.DNDTREE)) {
+		// MutableTreeNode droppedNode = (MutableTreeNode) transObj
+		// .getObject();
+		//
+		// // this is also checked in checkIsParent
+		// // if (droppedNode == dropTargetNode)
+		// // return;
+		//
+		// if (!checkIsParent(dropTargetNode, droppedNode)) {
+		dtde.acceptDrag(DnDConstants.ACTION_MOVE); // OK!
+		// System.out.println("wanted");
+		// return;
+		// }
+		// }
+		// }
+		//
+		// } catch (UnsupportedFlavorException e) {
+		// dtde.acceptDrag(DnDConstants.ACTION_NONE);
+		// } catch (IOException e) {
+		// dtde.acceptDrag(DnDConstants.ACTION_NONE);
+		// }
+		//
+		// }
+		// dtde.acceptDrag(DnDConstants.ACTION_NONE);
+		// System.out.println("not wanted");
+		//
 		repaint();
 
 	}
@@ -257,8 +258,8 @@ public class DnDJTree extends JTree implements DragSourceListener,
 		draggedNode = (TreeNode) path.getLastPathComponent();
 		final Transferable trans = new RJLTransferable(draggedNode,
 				AtlasDragSources.DNDTREE, TreeNode.class);
-		dragSource.startDrag(dge, Cursor
-				.getPredefinedCursor(Cursor.MOVE_CURSOR), trans, this);
+		dragSource.startDrag(dge,
+				Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR), trans, this);
 	}
 
 	/*
@@ -418,5 +419,11 @@ public class DnDJTree extends JTree implements DragSourceListener,
 
 	@Override
 	public void dropActionChanged(final DropTargetDragEvent dtde) {
+	}
+
+	public void select(Group group) {
+		TreePath tp = new TreePath(group.getPath());
+		setExpandedState(tp, true);
+		setSelectionPath(tp);
 	}
 }

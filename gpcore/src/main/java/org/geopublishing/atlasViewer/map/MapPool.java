@@ -247,20 +247,20 @@ public class MapPool extends TreeMap<String, Map> {
 	}
 
 	/**
-	 * Returns a list of Maps that use the given DpEntry
+	 * Returns a list of {@link Map}s that use the given {@link DpEntry}
 	 */
 	public Set<Map> getMapsUsing(DpEntry<? extends ChartStyle> dpl) {
 		Set<Map> maps = new HashSet<Map>();
 
 		for (Map m : values()) {
-			for (DpRef dpRef : m.getLayers()) {
+			for (DpRef<?> dpRef : m.getLayers()) {
 				if (dpRef.getTarget().equals(dpl)) {
 					maps.add(m);
 					continue;
 				}
 			}
 
-			for (DpRef dpRef : m.getMedia()) {
+			for (DpRef<?> dpRef : m.getMedia()) {
 				if (dpRef.getTarget().equals(dpl)) {
 					maps.add(m);
 					continue;
