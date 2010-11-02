@@ -429,9 +429,12 @@ public class TextRuleList extends AbstractRuleList {
 
 						ors.add(addLanguageFilter(otherFilter, j));
 					}
+
 					if (ors.size() > 0) {
-						filter = ASUtil.ff2.not(ASUtil.ff2.or(ors));
+						filter = ASUtil.ff2.not(FilterUtil
+								.correctOrForValidation(ASUtil.ff2.or(ors)));
 					}
+
 				} else {
 					// The default filter includes all, IF no other rules have
 					// been defined.
@@ -1099,7 +1102,8 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	public TextSymbolizer getClassSymbolizer(int index) {
-		if (index > classesSymbolizers.size() -1) return null;
+		if (index > classesSymbolizers.size() - 1)
+			return null;
 		return classesSymbolizers.get(index);
 	}
 

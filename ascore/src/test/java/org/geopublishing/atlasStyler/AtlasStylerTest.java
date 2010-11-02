@@ -117,6 +117,9 @@ public class AtlasStylerTest {
 		assertEquals(numFeatures, uniqueRL1.getValues().size());
 		assertEquals(numFeatures, uniqueRL1.getLabels().size());
 		assertEquals(numFeatures, uniqueRL1.getSymbols().size());
+		
+
+		assertTrue(StylingUtil.validates(uniqueRL1.getFTS()));
 
 		org.geotools.styling.Style style1 = as.getStyle();
 
@@ -145,6 +148,8 @@ public class AtlasStylerTest {
 			String xml2 = StylingUtil.toXMLString(s2.getFTS());
 			assertEquals(xml1, xml2);
 		}
+
+		assertTrue(StylingUtil.validates(uniqueRL1.getFTS()));
 	}
 
 	@Test
@@ -160,6 +165,5 @@ public class AtlasStylerTest {
 		assertEquals("SQKM_CNTRY", strings[1]);
 		assertEquals("SQMI_CNTRY", strings[2]);
 	}
-
 
 }

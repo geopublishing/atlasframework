@@ -26,6 +26,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.xml.transform.TransformerException;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
 import org.geotools.data.FeatureSource;
@@ -842,12 +843,16 @@ public class AtlasStyler {
 			xxxstyle.featureTypeStyles().add(getTextRulesList().getFTS());
 			//
 			// // TODO Remove
+			Level level = Logger.getRootLogger().getLevel();
 			try {
+				Logger.getRootLogger().setLevel(Level.OFF);
 				StylingUtil.saveStyleToSLD(xxxstyle, new File(
 						"/home/stefan/Desktop/update.sld"));
 			} catch (final TransformerException e) {
 				LOGGER.error("Transforming to XML failed!", e);
 			} catch (final Throwable e) {
+			} finally {
+				Logger.getRootLogger().setLevel(level);
 			}
 
 		}
@@ -940,12 +945,16 @@ public class AtlasStyler {
 		try {
 			setQuite(true); // Quite the AtlasStyler!
 			// TODO Just for debugging at steve's PC. May be removed anytime.
+			Level level = Logger.getRootLogger().getLevel();
 			try {
+				Logger.getRootLogger().setLevel(Level.OFF);
 				StylingUtil.saveStyleToSLD(importStyle, new File(
 						"/home/stefan/Desktop/goingToImport.sld"));
 			} catch (final TransformerException e) {
 				LOGGER.warn("Transforming to XML failed!", e);
 			} catch (final Throwable e) {
+			} finally {
+				Logger.getRootLogger().setLevel(level);
 			}
 
 			for (final FeatureTypeStyle fts : importStyle.featureTypeStyles()) {

@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.xml.transform.TransformerException;
+
 import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
@@ -25,6 +27,7 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFeatureCollection;
 
@@ -52,7 +55,7 @@ public class QuantitiesRuleListTest {
 
 	@Test
 	public void testNormaleQuantiles() throws SchemaException, IOException,
-			InterruptedException {
+			InterruptedException, TransformerException {
 		StyledFeatureCollection sfc = new StyledFeatureCollection(features,
 				"someId", "titel", (Style) null);
 
@@ -76,16 +79,19 @@ public class QuantitiesRuleListTest {
 		assertEquals(5 + 1, rules.size());
 		assertTrue(rules.get(0).getTitle().contains(" - "));
 
+		assertTrue(StylingUtil.validates(ruleList.getFTS()));
+
 	}
 
 	/**
 	 * Creates an QuantileClassifier and runs it on data that just has the same
 	 * values. So no classes can be calculated. Then we set it to the rulelist,
 	 * and we expect the RL it to deal with it nicely.
+	 * @throws TransformerException 
 	 */
 	@Test
 	public void testQuantilesWhereTheyCannotBeCreated() throws SchemaException,
-			IOException, InterruptedException {
+			IOException, InterruptedException, TransformerException {
 		StyledFeatureCollection sfc = new StyledFeatureCollection(features,
 				"someId", "titel", (Style) null);
 
@@ -108,10 +114,13 @@ public class QuantitiesRuleListTest {
 		assertEquals(1 + 1, rules.size());
 		assertEquals("111.0", rules.get(0).getDescription().getTitle()
 				.toString());
+		
+		assertTrue(StylingUtil.validates(ruleList.getFTS()));
+
 	}
 
 	@Test
-	public void testImportSld_14() throws IOException {
+	public void testImportSld_14() throws IOException, TransformerException {
 		AtlasStyler as = new AtlasStyler(
 				TestingUtil.TestDatasets.arabicInHeader.getFeatureSource());
 
@@ -156,5 +165,8 @@ public class QuantitiesRuleListTest {
 		assertEquals(null, colorRl.getNormalizer_field_name());
 		assertEquals("[ SURFACE IS NULL ]", colorRl.getNoDataFilter()
 				.toString());
+		
+		assertTrue(StylingUtil.validates(colorRl.getFTS()));
+
 	}
 }
