@@ -53,6 +53,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.io.DefaultFileFilter;
 import org.geotools.resources.CRSUtilities;
 import org.jfree.util.Log;
@@ -69,6 +70,7 @@ import skrueger.AttributeMetadataInterface;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
+import skrueger.versionnumber.ReleaseUtil;
 
 /**
  * Collection of Atlas related static methods.
@@ -531,6 +533,9 @@ public class AVUtil {
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
 
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
+		
+		// Add application version number to Exception mails
+		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
 	}
 
 	/**

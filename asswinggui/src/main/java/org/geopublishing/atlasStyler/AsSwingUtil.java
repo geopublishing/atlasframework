@@ -6,8 +6,10 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASProps.Keys;
+import org.geopublishing.geopublisher.GpUtil;
 
 import schmitzm.swing.ExceptionDialog;
+import skrueger.versionnumber.ReleaseUtil;
 
 public class AsSwingUtil extends ASUtil {
 
@@ -33,5 +35,8 @@ public class AsSwingUtil extends ASUtil {
 		}
 
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
+		
+		// Add application version number to Exception mails
+		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
 	}
 }
