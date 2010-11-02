@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
@@ -21,6 +22,8 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFS;
 import skrueger.geotools.io.DbServerSettings;
 
@@ -69,15 +72,25 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 						final FeatureSource<SimpleFeatureType, SimpleFeature> dbFS = dbDs
 								.getFeatureSource(typeName);
 
+						// Tests against a table without a geometry.
+						if (FeatureUtil.getGeometryForm(dbFS) == GeometryForm.NONE) {
+							throw new IllegalStateException(
+									ASUtil.R("ImportWizard.Error.AbortedBecauseNotGeometryColumnExits"));
+						}
+
+						if (dbFS.getSchema().getCoordinateReferenceSystem() == null) {
+							throw new IllegalStateException(
+									ASUtil.R("ImportWizard.Error.AbortedBecauseNoCrsDefined"));
+						}
+
 						long start = System.currentTimeMillis();
-						
+
 						int countFeatures = dbFS.getCount(Query.FIDS);
 						if (countFeatures == 0) {
 							throw new IllegalStateException(
 									"The layer contains no features. AtlasStyler needs at least one feature."); // i8n
 						}
 
-						
 						String id = dbServer.getTitle() + " " + typeName;
 
 						String sldFileName = dbFS.getName().getLocalPart()
@@ -85,8 +98,8 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 
 						final StyledFS dbSfs = new StyledFS(dbFS, id);
 
-						File importedSldFile = setSldFileAndAskImportIfExists(asg, 
-								sldFileName, dbSfs);
+						File importedSldFile = setSldFileAndAskImportIfExists(
+								asg, sldFileName, dbSfs);
 
 						dbSfs.setDesc(typeName);
 						dbSfs.setTitle("DB: " + id);

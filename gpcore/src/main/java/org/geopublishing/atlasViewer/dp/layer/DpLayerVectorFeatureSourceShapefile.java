@@ -157,6 +157,8 @@ public class DpLayerVectorFeatureSourceShapefile extends
 				case POLYGON:
 					setType(DpEntryType.VECTOR_SHP_POLY);
 					break;
+					
+					// TODO NONE AND ANY!
 				}
 			}
 

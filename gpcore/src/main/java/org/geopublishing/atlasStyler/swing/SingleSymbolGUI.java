@@ -50,7 +50,7 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 	 */
 	public SingleSymbolGUI(final SingleRuleList<?> singleSymbolRuleList) {
 		if (singleSymbolRuleList == null)
-			throw new IllegalStateException("may not be null");
+			throw new IllegalStateException("A GUI can not be created if no RuleList is provided.");
 		this.singleSymbolRuleList = singleSymbolRuleList;
 		initialize();
 		singleSymbolRuleList.fireEvents(new RuleChangedEvent("GUI selected",

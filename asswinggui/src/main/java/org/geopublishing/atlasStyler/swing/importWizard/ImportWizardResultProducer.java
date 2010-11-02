@@ -21,6 +21,8 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.io.IOUtil;
 import skrueger.geotools.StyledFS;
 
@@ -92,7 +94,7 @@ public abstract class ImportWizardResultProducer implements
 
 		if (errorMsg == null)
 			errorMsg = e.getClass().getSimpleName();
-		
+
 		LOGGER.error("Import failed: ", e);
 
 		panel.add(new JLabel("<html>The import has been aborted: " // i8n
@@ -130,6 +132,17 @@ public abstract class ImportWizardResultProducer implements
 		// i8n
 		summaryPanel.add(new JLabel("Features: " + countFeatures
 				+ (countFeatures == -1 ? " => query not supported" : "")));
+
+		// i8n
+		GeometryForm geometryForm = FeatureUtil.getGeometryForm(dbSfs
+				.getFeatureSource());
+		String geometryFormString = (geometryForm == GeometryForm.ANY ? "Geometry is not explicitly defined as point, line, polygone etc. This will lead to problems!"
+				: geometryForm.toString());
+		summaryPanel.add(new JLabel("Geometry type: " + geometryFormString));
+
+		// i8n
+		summaryPanel.add(new JLabel("CRS: "
+				+ dbSfs.getSchema().getCoordinateReferenceSystem().getName().getCode()));
 
 		if (importedSld == null) {
 			// i8n

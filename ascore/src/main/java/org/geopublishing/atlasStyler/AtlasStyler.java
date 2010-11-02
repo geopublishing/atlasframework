@@ -649,15 +649,24 @@ public class AtlasStyler {
 	public GraduatedColorRuleList getGraduatedColorRuleList(
 			final GeometryDescriptor geometryAttributeType) {
 
-		if (FeatureUtil.getGeometryForm(geometryAttributeType) == GeometryForm.POINT) {
+		switch (FeatureUtil.getGeometryForm(geometryAttributeType)) {
+		case POINT:
 			return getGraduatedColorPointRulesList();
-		} else if (FeatureUtil.getGeometryForm(geometryAttributeType) == GeometryForm.LINE) {
+
+		case LINE:
 			return getGraduatedColorLineRulesList();
-		} else if (FeatureUtil.getGeometryForm(geometryAttributeType) == GeometryForm.POLYGON) {
+
+		case POLYGON:
 			return getGraduatedColorPolygonRuleList();
+
+		case ANY:
+			return getGraduatedColorPolygonRuleList();
+
+		case NONE:
+		default:
+			throw new RuntimeException("Unrecognized GeometryForm or NONE");
 		}
 
-		throw new RuntimeException("Unrecognized geometryAttributeType");
 	}
 
 	/***************************************************************************
@@ -1288,6 +1297,9 @@ public class AtlasStyler {
 					case POLYGON:
 						getSinglePolygonSymbolRulesList().addNewDefaultLayer();
 						break;
+
+					// TODO NONE AND ANY!
+
 					}
 
 					continue;
@@ -1350,6 +1362,11 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean isPolygon() {
+
+		// TODO rethink?!
+		if (FeatureUtil.getGeometryForm(getStyledFeatures().getFeatureSource()) == GeometryForm.ANY)
+			return true;
+
 		return FeatureUtil.getGeometryForm(getStyledFeatures()
 				.getFeatureSource()) == GeometryForm.POLYGON;
 	}

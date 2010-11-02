@@ -381,7 +381,7 @@ public class AtlasStylerTabbedPane extends JTabbedPane {
 				 */
 				ruleList = atlasStyler.getSinglePolygonSymbolRulesList();
 				imageName = "/images/single_polygon_symbol.png";
-			}
+			} 
 
 			atlasStyler.setLastChangedRuleList(ruleList);
 			gui = new SingleSymbolGUI(ruleList);

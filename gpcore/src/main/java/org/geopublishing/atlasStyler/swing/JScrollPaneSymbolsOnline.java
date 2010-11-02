@@ -213,16 +213,20 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 								symbolRuleList = new SingleLineSymbolRuleList(
 										"");
 								break;
+							case ANY:
 							case POLYGON:
 								symbolRuleList = new SinglePolygonSymbolRuleList(
 										"");
 								break;
+								
+							case NONE:
 							default:
 								throw new IllegalStateException(
 										"unrecognized type");
 							}
 
 							boolean b = symbolRuleList.loadURL(url);
+							//TODO collect updates with timer
 							if (b) {
 
 								// Cache

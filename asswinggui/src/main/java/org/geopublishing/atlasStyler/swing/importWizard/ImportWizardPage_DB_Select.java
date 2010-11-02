@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
@@ -27,6 +29,9 @@ import skrueger.geotools.io.DbSettingsJComboBox;
 import skrueger.swing.SmallButton;
 
 public class ImportWizardPage_DB_Select extends WizardPage {
+
+	final static Logger log = Logger
+			.getLogger(ImportWizardPage_DB_Select.class);
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
@@ -81,7 +86,20 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 							"DataStoreFinder returned null");
 
 				try {
-					final String[] typeNames = dbDs.getTypeNames();
+					String[] typeNames = dbDs.getTypeNames();
+
+					String[] describedTablesWithGeometry = dbServer
+							.getDescribedTablesWithGeometry();
+					for (String s : typeNames.clone()) {
+						if (!ArrayUtils
+								.contains(describedTablesWithGeometry, s)) {
+							typeNames = (String[]) ArrayUtils.remove(typeNames,
+									ArrayUtils.indexOf(typeNames, s));
+							log.debug("Table "
+									+ s
+									+ " has been removed from the list of available types, since it is not described in geometry columns");
+						}
+					}
 
 					dbServer.setCachedTypeNames(typeNames);
 

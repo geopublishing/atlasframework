@@ -60,6 +60,7 @@ import org.geopublishing.atlasViewer.swing.plaf.WindowsClassicMapLayerLegendPane
 import org.geopublishing.atlasViewer.swing.plaf.WindowsMapLayerLegendPaneUI;
 import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
+import org.geotools.jdbc.JDBCFeatureSource;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
@@ -75,6 +76,7 @@ import schmitzm.geotools.feature.FeatureOperationTreeFilter;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import schmitzm.geotools.gui.GeoMapPane;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
@@ -553,7 +555,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			toolPopup.add(removeFilterMenuItem);
 		}
 
-//		long last = System.currentTimeMillis();
+		// long last = System.currentTimeMillis();
 
 		// ****************************************************************************
 		// Create AtlasStyler Button
@@ -573,9 +575,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			}));
 		}
 
-//		System.out
-//				.println("after styler" + (System.currentTimeMillis() - last));
-//		last = System.currentTimeMillis();
+		// System.out
+		// .println("after styler" + (System.currentTimeMillis() - last));
+		// last = System.currentTimeMillis();
 
 		// ****************************************************************************
 		// Show Attribute Table
@@ -922,7 +924,26 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * Zoom the {@link GeoMapPane} to the extends of this {@link MapLayer}
 	 */
 	public void zoomTo() {
-		mapLegend.getGeoMapPane().getMapPane().zoomToLayer(getMapLayer());
+		try {
+			
+			// TODO That is new.. needs testing!
+			mapLegend.getGeoMapPane().setForceCrs(
+					getMapLayer().getFeatureSource().getSchema()
+							.getCoordinateReferenceSystem());
+			
+			mapLegend.getGeoMapPane().getMapPane().zoomToLayer(getMapLayer());
+
+		} catch (java.lang.IllegalArgumentException e) {
+			if (mapLayer.getFeatureSource() != null
+					&& mapLayer.getFeatureSource() instanceof JDBCFeatureSource) {
+
+				// i8n
+				ExceptionDialog
+						.show(MapLayerLegend.this,
+								new IllegalStateException(
+										"<html>The CRS could not be determined. Maybe the geometry column is not correctly described in 'geometry_columns'?</html>"));
+			}
+		}
 	}
 
 	/**
