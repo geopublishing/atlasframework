@@ -23,6 +23,7 @@ import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -80,10 +81,20 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		return (dpLayer instanceof StyledFeatureCollectionInterface && StyledLayerUtil
 				.getVisibleAttributeMetaData(
 						((StyledFeatureCollectionInterface) styledLayer)
-								.getAttributeMetaDataMap(), true).size() > 0)
+								.getAttributeMetaDataMap(),
+						true).size() > 0)
 				|| (dpLayer instanceof DpLayerVectorFeatureSource && ((DpLayerVectorFeatureSource) styledLayer)
 						.getAttributeMetaDataMap().sortedValuesVisibleOnly()
 						.size() > 0);
+	}
+
+	/**
+	 * Returns true, is the layer has visible attributes defined or is of type
+	 * grid. When this method returns <code>true</code>, it makes sense to show
+	 * clickInfo for this layer.
+	 */
+	protected boolean hasVisibleAttributesOrIsGrid() {
+		return dpLayer instanceof DpLayerRaster || hasVisibleAttributes();
 	}
 
 	/**
@@ -111,8 +122,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 			AtlasMapLegend atlasMapLegend, DpLayer<?, ChartStyle> dpLayer,
 			Map map) {
 
-		super(mapLayer, exportable, dpLayer,
-				atlasMapLegend);
+		super(mapLayer, exportable, dpLayer, atlasMapLegend);
 
 		this.map = map;
 
@@ -152,8 +162,6 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		LayerStyle selectedLayerStyle = dpLayer.getLayerStyleByID(map
 				.getSelectedStyleID(dpLayer.getId()));
-		
-
 
 		if (selectedLayerStyle == null) {
 			// The selected layer has probably been removed completely.
@@ -185,9 +193,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 				public void actionPerformed(ActionEvent e) {
 
 					AVDialogManager.dm_AtlasRasterStyler.getInstanceFor(
-							styledLayer,
-							AtlasMapLayerLegend.this,
-							map.getAc(),
+							styledLayer, AtlasMapLayerLegend.this, map.getAc(),
 							AtlasMapLayerLegend.this);
 				}
 			}));
@@ -222,15 +228,15 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 * Opens an {@link StylerDialog} which allows to change the selected
 	 * (Additional-)Style of the layer.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public StylerDialog openStylerDialog() {
 		LayerStyle layerStyle = map.getSelectedStyle(dpLayer.getId());
 		Object key = layerStyle == null ? dpLayer : layerStyle;
 		StylerDialog asDialog = AVDialogManager.dm_AtlasStyler.getInstanceFor(
-				key, mapLegend, styledLayer, mapLegend, getMapLayer(), layerStyle);
+				key, mapLegend, styledLayer, mapLegend, getMapLayer(),
+				layerStyle);
 
 		return asDialog;
 	}
@@ -269,7 +275,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	@Override
 	public void removeFilter() {
 		super.removeFilter();
-		((StyledFeaturesInterface)styledLayer).setFilter(Filter.INCLUDE);
+		((StyledFeaturesInterface) styledLayer).setFilter(Filter.INCLUDE);
 	}
 
 	/**
@@ -299,8 +305,8 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	public boolean isHiddenInLegend() {
 		if (atlasMapLegend != null && atlasMapLegend.getMap() != null
 				&& atlasMapLegend.getMap().getHideInLegendMap() != null) {
-			Boolean hidden = atlasMapLegend.getMap().getHideInLegendMap().get(
-					dpLayer.getId());
+			Boolean hidden = atlasMapLegend.getMap().getHideInLegendMap()
+					.get(dpLayer.getId());
 			if (hidden == null)
 				return false;
 			return hidden;

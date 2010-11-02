@@ -53,7 +53,7 @@ public class MapusageTable extends JTable {
 
 				if (e.getClickCount() >= 2) {
 					GPDialogManager.dm_MapComposer.getInstanceFor(map,
-							MapusageTable.this, map);
+							GeopublisherGUI.getInstance().getJFrame(), map);
 				}
 				super.mouseClicked(e);
 			}

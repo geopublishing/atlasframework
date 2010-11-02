@@ -491,7 +491,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 								.setMapLayerSelectable(
 										getMapLayer(),
 										checkBoxMenuItem.isSelected()
-												&& hasVisibleAttributes());
+												&& hasVisibleAttributesOrIsGrid());
 					}
 
 				});
@@ -501,10 +501,11 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				.R("LayerToolMenu.selectable.TT"));
 
 		layerSelectable.setSelected(map.isSelectableFor(styledLayer.getId()));
-		boolean hasVisibleAttributes = hasVisibleAttributes();
-		layerSelectable.setEnabled(hasVisibleAttributes);
-		if (!hasVisibleAttributes) {
-			layerSelectable.setText(GeopublisherGUI.R("LayerToolMenu.NOT.selectable"));
+		boolean hasVisibleAttributesOrIsGrid = hasVisibleAttributesOrIsGrid();
+		layerSelectable.setEnabled(hasVisibleAttributesOrIsGrid);
+		if (!hasVisibleAttributesOrIsGrid) {
+			layerSelectable.setText(GeopublisherGUI
+					.R("LayerToolMenu.NOT.selectable"));
 		}
 
 		menu.add(layerSelectable);
