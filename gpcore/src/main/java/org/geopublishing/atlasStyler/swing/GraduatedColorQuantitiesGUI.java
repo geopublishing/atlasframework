@@ -822,47 +822,71 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					// Open a dialog that allows to edit the NODATA legend
-					// entries label
+					if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
-					final Translation translation = new Translation(
-							noDataSymbol.getTitle());
+						// Open a dialog that allows to edit the NODATA legend
+						// entries label
 
-					final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-							AtlasStyler.R("translate_label_for_NODATA_values"),
-							translation, AtlasStyler.getLanguages());
+						final Translation translation = new Translation(
+								noDataSymbol.getTitle());
 
-					TranslationAskJDialog ask = new TranslationAskJDialog(
-							GraduatedColorQuantitiesGUI.this, transLabel);
+						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
+								AtlasStyler
+										.R("translate_label_for_NODATA_values"),
+								translation, AtlasStyler.getLanguages());
+						TranslationAskJDialog ask = new TranslationAskJDialog(
+								GraduatedColorQuantitiesGUI.this, transLabel);
 
-					// We have to convert the Translation object to a String
-					// when the dialog is closed
-					ask.addPropertyChangeListener(new PropertyChangeListener() {
+						// We have to convert the Translation object to a String
+						// when the dialog is closed
+						ask.addPropertyChangeListener(new PropertyChangeListener() {
 
-						@Override
-						public void propertyChange(final PropertyChangeEvent evt) {
-							if (evt.getPropertyName()
-									.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
-								return;
-							} else if (evt
-									.getPropertyName()
-									.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+							@Override
+							public void propertyChange(
+									final PropertyChangeEvent evt) {
+								if (evt.getPropertyName()
+										.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+									return;
+								} else if (evt
+										.getPropertyName()
+										.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-								noDataLabelButton.setText(translation
-										.toString() + ":");
-								noDataSymbol.setTitle(translation.toOneLine());
+									noDataLabelButton.setText(translation
+											.toString() + ":");
+									noDataSymbol.setTitle(translation
+											.toOneLine());
 
-								rulesList.getNoDataSymbol().fireEvents(
-										new RuleChangedEvent(
-												"nodata legend label changed",
-												rulesList.getNoDataSymbol()));
+									rulesList
+											.getNoDataSymbol()
+											.fireEvents(
+													new RuleChangedEvent(
+															"nodata legend label changed",
+															rulesList
+																	.getNoDataSymbol()));
+
+								}
 
 							}
 
-						}
+						});
+						ask.setVisible(true);
 
-					});
-					ask.setVisible(true);
+					} else {
+						final String newNodataTitle = ASUtil.askForString(
+								GraduatedColorQuantitiesGUI.this, noDataSymbol
+										.getTitle(), AtlasStyler
+										.R("translate_label_for_NODATA_values"));
+
+						if (newNodataTitle != null) {
+							noDataLabelButton.setText(newNodataTitle + ":");
+							noDataSymbol.setTitle(newNodataTitle);
+
+							rulesList.getNoDataSymbol().fireEvents(
+									new RuleChangedEvent(
+											"nodata legend label changed",
+											rulesList.getNoDataSymbol()));
+						}
+					}
 				}
 			});
 

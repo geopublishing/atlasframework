@@ -93,7 +93,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	private ColorButton jButtonColorHalo;
 
 	/**
-	 * When setting halo radius to 0, the halo elemnt is nulled. When we
+	 * When setting halo radius to 0, the halo element is nulled. When we
 	 * reactivate it, let's
 	 **/
 

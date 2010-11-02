@@ -41,12 +41,12 @@ import skrueger.swing.SmallButton;
 
 import com.vividsolutions.jts.geom.Envelope;
 
-public class DpEntryJPanel extends JPanel implements Cancellable {
+public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 
 	private final AtlasConfigEditable ace;
 	private final DpEntry<? extends ChartStyle> dpe;
 
-	public DpEntryJPanel(final DpEntry<? extends ChartStyle> dpe) {
+	public DpEntryUsageJPanel(final DpEntry<? extends ChartStyle> dpe) {
 
 		super(new MigLayout("width 100%, wrap 1", "[grow]"));
 		this.dpe = dpe;
@@ -64,16 +64,15 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 			fileSystem.setBorder(BorderFactory
 					.createTitledBorder(R("EditDpEntryGUI.filesystem.border")));
 
-			fileSystem.add(
-					new JLabel(R("EditDpEntryGUI.filesystem.explanation", dpe
-							.getType().getLine1())),
-					"span 2, right, width 100%, growx");
+			fileSystem.add(new JLabel(R(
+					"EditDpEntryGUI.filesystem.explanation", dpe.getType()
+							.getLine1())), "span 2, right, width 100%, growx");
 			fileSystem.add(new JLabel(R("path")), "right");
-			final File dataDir = new File(ace.getDataDir(),
-					dpe.getDataDirname());
+			final File dataDir = new File(ace.getDataDir(), dpe
+					.getDataDirname());
 
-			final JTextField folderTextField = new JTextField(
-					dataDir.getAbsolutePath());
+			final JTextField folderTextField = new JTextField(dataDir
+					.getAbsolutePath());
 			folderTextField.setEditable(false);
 			fileSystem.add(folderTextField, "right, growx");
 
@@ -82,38 +81,35 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 					+ ":");
 			sizeLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
 			fileSystem.add(sizeLabel, "split 2, right");
-			final JLabel sizeValueLabel = new JLabel(
-					GpUtil.MbDecimalFormatter.format(ace.getFolderSize(dpe)));
+			final JLabel sizeValueLabel = new JLabel(GpUtil.MbDecimalFormatter
+					.format(ace.getFolderSize(dpe)));
 			sizeValueLabel.setToolTipText(R("sizeOnFilesystemWithoutSVN.TT"));
 			fileSystem.add(sizeValueLabel, "left");
 
 			// A button to open the containing directory
 			final JButton openDirJButton = new SmallButton(new AbstractAction(
-					R("EditDPEDialog.OpenFolderButton")) {
+					R("EditDPEDialog.OpenFolderButton") ) {
 
 				public void actionPerformed(final ActionEvent e) {
 					SwingUtil.openOSFolder(new File(((AtlasConfigEditable) dpe
-							.getAtlasConfig()).getDataDir(), dpe
-							.getDataDirname()));
+							.getAtlasConfig()).getDataDir(), dpe.getDataDirname()));
 				}
 
 			}, R("EditDPEDialog.OpenFolderButton.TT"));
 			fileSystem.add(openDirJButton, "split 2, right");
-
+			
 			// A button to open the containing directory
 			final JButton uncacheJButton = new SmallButton(new AbstractAction(
-					R("EditDPEDialog.uncacheDpeButton"),
-					new ImageIcon(GpSwingUtil.class
-							.getResource("/icons/uncache.png"))) {
-
+					R("EditDPEDialog.uncacheDpeButton"), new ImageIcon(GpSwingUtil.class
+							.getResource("/icons/uncache.png")) ) {
+				
 				public void actionPerformed(final ActionEvent e) {
 					ace.uncacheAndReread(dpe);
-					ace.getDataPool().fireChangeEvents(
-							DataPool.EventTypes.changeDpe);
-					sizeValueLabel.setText(GpUtil.MbDecimalFormatter.format(ace
-							.getFolderSize(dpe)));
+					ace.getDataPool().fireChangeEvents(DataPool.EventTypes.changeDpe);
+					sizeValueLabel.setText(GpUtil.MbDecimalFormatter
+							.format(ace.getFolderSize(dpe)));
 				}
-
+				
 			}, R("EditDPEDialog.uncacheDpeButton.TT"));
 			fileSystem.add(uncacheJButton, "right");
 
@@ -153,22 +149,21 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 				final Envelope env = dpLayer.getEnvelope();
 				final CoordinateReferenceSystem crs = dpLayer.getCrs();
 
-				if (env != null) {
+				if (env != null ){
 					bbodyPanel.add(new JLabel("x1:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
-							env.getMinX())));
+					bbodyPanel.add(new JLabel(AVUtil
+							.formatCoord(crs, env.getMinX())));
 					bbodyPanel.add(new JLabel("y1:"));
-					bbodyPanel.add(
-							new JLabel(AVUtil.formatCoord(crs, env.getMinY())),
-							"wrap");
-
+					bbodyPanel.add(new JLabel(AVUtil
+							.formatCoord(crs, env.getMinY())), "wrap");
+					
 					bbodyPanel.add(new JLabel("x2:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
-							env.getMaxX())));
+					bbodyPanel.add(new JLabel(AVUtil
+							.formatCoord(crs, env.getMaxX())));
 					bbodyPanel.add(new JLabel("y2:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
-							env.getMaxY())));
-
+					bbodyPanel.add(new JLabel(AVUtil
+							.formatCoord(crs, env.getMaxY())));
+					
 					final JLabel bblabel = new JLabel(R("BBOX") + ":");
 					bblabel.setToolTipText(R("BBOX.TT"));
 					coorsPanel.add(bblabel, "top, split 2");

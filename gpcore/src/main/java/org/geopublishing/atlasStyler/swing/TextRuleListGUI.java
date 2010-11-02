@@ -39,6 +39,7 @@ import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.DefaultQuery;
 import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.FeatureCollection;
@@ -48,6 +49,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.lang.LangUtil;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.LanguagesComboBox;
@@ -577,52 +579,78 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private FeatureCollection<SimpleFeatureType, SimpleFeature> getPreviewFeatures() {
 		if (features == null) {
-			try {
 
-				LOGGER.debug("Putting 100 random features into the preview");
-				Filter filter = rulesList.getClassFilter(0) != null ? rulesList
-						.getClassFilter(0) : Filter.INCLUDE;
+			AtlasSwingWorker<MemoryFeatureCollection> createPreviewMemoryFeatures = new AtlasSwingWorker<MemoryFeatureCollection>(
+					TextRuleListGUI.this) {
 
-				DefaultQuery query = new DefaultQuery(rulesList
-						.getStyledFeatures().getSchema().getTypeName(), filter,
-						100, null,
-						"sample features for the labelling preview in AtlasStyler");
-				query.setCoordinateSystem(rulesList.getStyledFeatures()
-						.getCrs());
-				features = rulesList.getStyledFeatures().getFeatureSource()
-						.getFeatures(query);
+				@Override
+				protected MemoryFeatureCollection doInBackground()
+						throws Exception {
+					try {
+						LOGGER.debug("Putting 100 random features into the preview");
+						Filter filter = rulesList.getClassFilter(0) != null ? rulesList
+								.getClassFilter(0) : Filter.INCLUDE;
 
-				if (features.size() == 0 && filter != Filter.INCLUDE) {
-					LOGGER.info("Getting preview features for the filter "
-							+ filter
-							+ " failed, getting preview features without a filter!");
+						DefaultQuery query = new DefaultQuery(rulesList
+								.getStyledFeatures().getSchema().getTypeName(),
+								filter, 100, null,
+								"sample features for the labelling preview in AtlasStyler");
+						query.setCoordinateSystem(rulesList.getStyledFeatures()
+								.getCrs());
 
-					features = rulesList
-							.getStyledFeatures()
-							.getFeatureSource()
-							.getFeatures(
-									new DefaultQuery(rulesList
-											.getStyledFeatures().getSchema()
-											.getTypeName(), Filter.INCLUDE,
-											100, null,
-											"max 100 sample features"));
+						FeatureCollection<SimpleFeatureType, SimpleFeature> mfeatures = rulesList
+								.getStyledFeatures().getFeatureSource()
+								.getFeatures(query);
+
+						// Copy features into a MemoryFeatureCollection
+						MemoryFeatureCollection mfc = new MemoryFeatureCollection(
+								mfeatures.getSchema());
+						try {
+
+							if (mfeatures.size() == 0
+									&& filter != Filter.INCLUDE) {
+								LOGGER.info("Getting preview features for the filter "
+										+ filter
+										+ " failed, getting preview features without a filter!");
+
+								mfeatures = rulesList
+										.getStyledFeatures()
+										.getFeatureSource()
+										.getFeatures(
+												new DefaultQuery(rulesList
+														.getStyledFeatures()
+														.getSchema()
+														.getTypeName(),
+														Filter.INCLUDE, 100,
+														null,
+														"max 100 sample features"));
+							}
+
+							mfc.addAll(mfeatures);
+						} finally {
+							mfeatures.close(mfeatures.iterator());
+						}
+						// features = mfc;
+
+						return mfc;
+
+					} catch (IOException e) {
+						LOGGER.error(
+								"Sample features for TextSymbolizer Preview could not be requested:",
+								e);
+						throw new RuntimeException(
+								"Sample features for TextSymbolizer Preview could not be requested",
+								e);
+					}
 				}
+			};
 
-				// Copy features into a Memory
-				MemoryFeatureCollection mfc = new MemoryFeatureCollection(
-						features.getSchema());
-				mfc.addAll(features);
-				features.close(features.iterator());
-				features = mfc;
-
-			} catch (IOException e) {
-				LOGGER.error(
-						"Sample features for TextSymbolizer Preview could not be requested:",
-						e);
-				throw new RuntimeException(
-						"Sample features for TextSymbolizer Preview could not be requested",
-						e);
+			try {
+				features = createPreviewMemoryFeatures.executeModal();
+			} catch (Exception e) {
+				ExceptionDialog.show(e);
 			}
+
 		}
 		return features;
 	}

@@ -11,11 +11,14 @@
 package org.geopublishing.geopublisher.gui.datapool;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
@@ -33,15 +36,20 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.io.IOUtil;
+import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.swing.Cancellable;
@@ -117,7 +125,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 		}
 
 	};
-	private AttributeMetadataMap backupAttributeMetadataMap;
+	private AttributeMetadataMap<?> backupAttributeMetadataMap;
 
 	public DpLayerVectorAttributesJPanel(final DpLayerVectorFeatureSource dplv) {
 		super(new MigLayout("width 100%, wrap 1", "[grow]"));
@@ -185,7 +193,11 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 
 					}
 				});
-				attPanel.add(editColumns, "span 3, split 2, right");
+				attPanel.add(
+						editColumns,
+						"span 3, split "
+								+ (dplv instanceof DpLayerVectorFeatureSourceShapefile ? "3"
+										: "2") + ", align right");
 			}
 
 			//
@@ -202,7 +214,41 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 								DpLayerVectorAttributesJPanel.this, dplv, null);
 					}
 				});
-				attPanel.add(openTable, "right");
+				attPanel.add(openTable, "align right");
+			}
+
+			// A button to open the DBF directly:
+			if (dplv instanceof DpLayerVectorFeatureSourceShapefile) {
+
+				File shpFile = new File(
+						new File(
+								((AtlasConfigEditable) dplv.getAtlasConfig())
+										.getDataDir(),
+								dplv.getDataDirname()), dplv.getFilename());
+				final File dbfFile = IOUtil.changeFileExt(shpFile, "dbf");
+
+				if (dbfFile.exists() && Desktop.isDesktopSupported()) {
+					final JButton openDbfJButton = new SmallButton(
+							new AbstractAction(R("EditDPEDialog.OpenDBFButton")) {
+
+								public void actionPerformed(final ActionEvent e) {
+									if (!Desktop.isDesktopSupported())
+										return;
+									try {
+										AVSwingUtil.showMessageDialog(DpLayerVectorAttributesJPanel.this, R("EditDPEDialog.OpenDBFButton.TT"));
+										
+										Desktop.getDesktop().open(dbfFile);
+									} catch (IOException ee) {
+										ExceptionDialog
+												.show(DpLayerVectorAttributesJPanel.this,
+														ee);
+									}
+								}
+
+							}, R("EditDPEDialog.OpenDBFButton.TT"));
+					attPanel.add(openDbfJButton, "align right");
+				}
+
 			}
 
 			updateAttributeStats();

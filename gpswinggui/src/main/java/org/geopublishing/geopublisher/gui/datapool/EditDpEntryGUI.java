@@ -74,6 +74,12 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.general.tab"),
 					null, new DpEntryJPanel(dpe), null, tabbedPane
 							.getTabCount());
+			
+
+			/** A tab with general settings **/
+			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.general.tab"),
+					null, new DpEntryUsageJPanel(dpe), null, tabbedPane
+							.getTabCount());
 
 			/** A tab with DpEntryType specific stuff **/
 			{
@@ -116,9 +122,7 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 
 	private JPanel createRasterTab(final DpLayerRaster dpRaster) {
 		final JPanel rasterTab = new JPanel(new MigLayout());
-
 		{
-
 			JPanel noDataValuesPanel = new JPanel(new MigLayout("width 100%"));
 			noDataValuesPanel.setBorder(BorderFactory
 					.createTitledBorder(GeopublisherGUI
