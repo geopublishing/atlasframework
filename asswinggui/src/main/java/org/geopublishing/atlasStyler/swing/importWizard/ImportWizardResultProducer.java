@@ -53,10 +53,16 @@ public abstract class ImportWizardResultProducer implements
 	}
 
 	File setSldFileAndAskImportIfExists(Component owner, String sldFileName,
-			StyledFS dbSfs) {
+			StyledFS dbSfs, File sldFile) {
 		File importedSldFile = null;
-		String sldDir = System.getProperty("user.home");
-		File sldFile = new File(sldDir + "/" + sldFileName);
+		
+		String sldDir ;
+		if (sldFile == null) {
+			sldDir = System.getProperty("user.home");
+			sldFile = new File(sldDir + "/" + sldFileName);
+		} else {
+			sldDir = sldFile.getParentFile().getAbsolutePath();
+		}
 		dbSfs.setSldFile(sldFile);
 
 		if (sldFile.exists()) {
@@ -142,7 +148,8 @@ public abstract class ImportWizardResultProducer implements
 
 		// i8n
 		summaryPanel.add(new JLabel("CRS: "
-				+ dbSfs.getSchema().getCoordinateReferenceSystem().getName().getCode()));
+				+ dbSfs.getSchema().getCoordinateReferenceSystem().getName()
+						.getCode()));
 
 		if (importedSld == null) {
 			// i8n
@@ -166,7 +173,7 @@ public abstract class ImportWizardResultProducer implements
 			countFeatures = wfsFS.getCount(Query.FIDS);
 		if (countFeatures == 0) {
 			throw new IllegalStateException(
-					"The layer contains no features. AtlasStyler needs at least one feature."); // i8n
+					"The layer contains no features. AtlasStyler needs at least one feature. This is also sometimes reported if other internal problems with the layer occured."); // i8n
 		}
 		return countFeatures;
 

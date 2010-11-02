@@ -99,7 +99,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 						final StyledFS dbSfs = new StyledFS(dbFS, id);
 
 						File importedSldFile = setSldFileAndAskImportIfExists(
-								asg, sldFileName, dbSfs);
+								asg, sldFileName, dbSfs, null);
 
 						dbSfs.setDesc(typeName);
 						dbSfs.setTitle("DB: " + id);

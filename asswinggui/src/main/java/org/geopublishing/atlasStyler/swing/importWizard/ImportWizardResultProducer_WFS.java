@@ -113,7 +113,7 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 						String sldFilename = wfsFS.getName().getLocalPart()
 								+ ".sld";
 						File importedSld = setSldFileAndAskImportIfExists(asg,
-								sldFilename, wfsSfs);
+								sldFilename, wfsSfs, null);
 
 						final AtomicBoolean added = new AtomicBoolean(false);
 						SwingUtilities.invokeAndWait(new Runnable() {

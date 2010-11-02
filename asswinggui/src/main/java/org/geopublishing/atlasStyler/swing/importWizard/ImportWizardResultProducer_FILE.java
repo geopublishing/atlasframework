@@ -158,9 +158,11 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					String id = urlToShape.toString();
 					StyledFS styledFS = new StyledFS(fs, id);
 
+					File sldFile = IOUtil.changeFileExt(openFile, "sld");
+
 					File importedSld = setSldFileAndAskImportIfExists(asg,
 							IOUtil.changeFileExt(openFile, "sld").getName(),
-							styledFS);
+							styledFS, sldFile);
 
 					asg.addOpenDatastore(styledFS.getId(), dataStore);
 
