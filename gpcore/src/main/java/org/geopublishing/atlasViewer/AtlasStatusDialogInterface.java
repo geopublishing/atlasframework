@@ -105,5 +105,9 @@ public interface AtlasStatusDialogInterface extends DownloadServiceListener{
 
 	public boolean isWarningOccured() ;
 
+	void setCancelAllowed(boolean cancelAllowed);
+
+	boolean isCancelAllowed();
+
 
 }

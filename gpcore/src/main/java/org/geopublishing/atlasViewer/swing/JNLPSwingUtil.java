@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.jnlp.DownloadService;
 import javax.jnlp.DownloadServiceListener;
-import javax.jnlp.UnavailableServiceException;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
@@ -31,50 +30,9 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
  * @author Stefan Alfons Tzeggai
  * 
  */
+// TODO move to schmitzm
 public class JNLPSwingUtil extends JNLPUtil {
 	final static private Logger LOGGER = Logger.getLogger(JNLPSwingUtil.class);
-
-	//
-	// /**
-	// * Does not manage any GUI feedback! Please run it from an {@link
-	// AtlasTask}
-	// * . Will do nothing if the part is already cached.
-	// *
-	// * @param statusDialog
-	// */
-	// public static void loadPart(String part,
-	// DownloadServiceListener statusDialog) {
-	//
-	// LOGGER.debug("loadPart(String[] parts, AtlasStatusDialogInterface statusDialog) EDT:"
-	// + SwingUtilities.isEventDispatchThread());
-	//
-	// DownloadService ds;
-	// try {
-	// ds = getJNLPDownloadService();
-	//
-	// if (ds.isPartCached(part)) {
-	// LOGGER.debug("part " + part + " is JWS cached, returning");
-	// return;
-	// }
-	// LOGGER.info("part " + part + " is NOT cached.. start DL ");
-	//
-	// // load the resource into the JWS Cache
-	// ds.loadPart(part, statusDialog);
-	// } catch (Exception e) {
-	// LOGGER.error(e);
-	// }
-	// }
-
-	public static DownloadServiceListener getJNLPDialog()
-			throws UnavailableServiceException {
-
-		if (!AtlasViewerGUI.isRunning()
-				|| !SwingUtilities.isEventDispatchThread()) {
-			return new AtlasStatusDialog(null);
-		}
-
-		return new AtlasStatusDialog(AtlasViewerGUI.getInstance().getJFrame());
-	}
 
 	/**
 	 * Blocks and downloades the URL on this Thread. Uses the
@@ -88,6 +46,12 @@ public class JNLPSwingUtil extends JNLPUtil {
 
 		LOGGER.debug("loadPart(String[] parts, DownloadServiceListener statusDialog) EDT:"
 				+ SwingUtilities.isEventDispatchThread());
+
+		boolean oldCancelState = false;
+		if (serviceListener instanceof AtlasStatusDialog) {
+			oldCancelState = ((AtlasStatusDialog) serviceListener)
+					.isCancelAllowed();
+		}
 
 		DownloadService ds;
 		try {
@@ -105,6 +69,11 @@ public class JNLPSwingUtil extends JNLPUtil {
 
 		} catch (Exception e1) {
 			LOGGER.error(e1);
+		} finally {
+			if (serviceListener instanceof AtlasStatusDialog) {
+				((AtlasStatusDialog) serviceListener)
+						.setCancelAllowed(oldCancelState);
+			}
 		}
 	}
 

@@ -42,7 +42,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
 import org.geotools.resources.SwingUtilities;
 import org.geotools.resources.i18n.Vocabulary;
 import org.geotools.resources.i18n.VocabularyKeys;
@@ -53,11 +52,29 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.OkButton;
 
+// TODO move to schmitzm
 public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 	static public String CANCEL_PROPERTY = "atlas status dialog cancelled";
 	final static private Logger LOGGER = Logger
 			.getLogger(AtlasStatusDialog.class);
+
+	/**
+	 * If <code>false</code>, the dialog has no cancel button.
+	 */
+	private boolean cancelAllowed;
+
+	@Override
+	public void setCancelAllowed(boolean cancelAllowed) {
+		this.cancelAllowed = cancelAllowed;
+		cancelButton.setEnabled(cancelAllowed);
+		cancelButton.setVisible(cancelAllowed);
+	}
+
+	@Override
+	public boolean isCancelAllowed() {
+		return cancelAllowed;
+	}
 
 	/**
 	 * Initial width for the progress window, in pixels.
@@ -116,7 +133,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	/**
 	 * The cancel button.
 	 */
-	private final JButton cancel;
+	private final JButton cancelButton;
 
 	/**
 	 * Component where to display warnings. The actual component class is
@@ -202,16 +219,19 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		/*
 		 * Creates the cancel button.
 		 */
-		cancel = new JButton(resources.getString(VocabularyKeys.CANCEL));
-		cancel.addActionListener(new ActionListener() {
+		cancelButton = new JButton(resources.getString(VocabularyKeys.CANCEL));
+		cancelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setCanceled(true);
 			}
 		});
+		cancelButton.setEnabled(cancelAllowed);
+		cancelButton.setVisible(cancelAllowed);
+
 		final Box cancelBox = Box.createHorizontalBox();
 		cancelBox.add(Box.createGlue());
-		cancelBox.add(cancel);
+		cancelBox.add(cancelButton);
 		cancelBox.add(Box.createGlue());
 		cancelBox.add(ok);
 		cancelBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
@@ -576,8 +596,6 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			}
 			case +LABEL: {
 				description.setText((String) value);
-				// if ( ((String) value).length() > maxLength)
-				// window.pack();
 				return;
 			}
 			case PROGRESS: {
@@ -597,7 +615,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			case COMPLETE: {
 				progressBar.setIndeterminate(false);
 				model.setRangeProperties(100, 1, 0, 100, false);
-				cancel.setEnabled(false);
+				cancelButton.setEnabled(false);
 				if (warningArea != null) {
 					ok.setEnabled(true);
 				} else {
@@ -613,7 +631,6 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			 * window type before to apply the action.
 			 */
 			synchronized (AtlasStatusDialog.this) {
-				// if (window instanceof JDialog) {
 				final JDialog window = AtlasStatusDialog.this.window;
 				switch (task) {
 				case -TITLE: {
@@ -634,18 +651,11 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 				}
 				case DISPOSE: {
 					window.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-					// if (warningArea == null || !window.isVisible()) {
 					window.dispose();
-					// }
-
 					return;
 				}
 				}
-				/*
-				 * Si la tâche spécifiée n'est aucune des tâches énumérées
-				 * ci-haut, on supposera que l'on voulait afficher un message
-				 * d'avertissement.
-				 */
+
 				if (warningArea == null) {
 					final JTextArea warningArea = new JTextArea();
 					final JScrollPane scroll = new JScrollPane(warningArea);
@@ -660,15 +670,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 							BorderLayout.NORTH);
 					namedArea.add(scroll, BorderLayout.CENTER);
 					content.add(namedArea, BorderLayout.CENTER);
-					// if (window instanceof JDialog) {
-					// final JDialog window = (JDialog)
-					// AtlasStatusDialog.this.window;
 					window.setResizable(true);
-					// } else {
-					// final JInternalFrame window = (JInternalFrame)
-					// AtlasStatusDialog.this.window;
-					// window.setResizable(true);
-					// }
 					window.setSize(WIDTH, HEIGHT + WARNING_HEIGHT);
 					window.setVisible(true); // Seems required in order to force
 					// relayout.
@@ -711,14 +713,24 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 	@Override
 	public void downloadFailed(URL arg0, String arg1) {
+		// i8n
 		LOGGER.error("downloadFailed " + arg0 + " " + arg1);
 		setDescription(arg1);
 		exceptionOccurred(new AtlasImportException(arg1));
 	}
 
+	long lastPercentageUpdate = System.currentTimeMillis() - 10000;
+
 	@Override
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
+
+		// Not too many updates
+		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
+			return;
+
+		lastPercentageUpdate = System.currentTimeMillis();
+		// i8n
 		LOGGER.debug("progress " + url + " " + urlString + " " + doneSoFar
 				+ " " + full + " " + percentage);
 		setDescription("Downloading " + percentage + "%");
@@ -726,12 +738,24 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 	@Override
 	public void upgradingArchive(URL arg0, String arg1, int arg2, int arg3) {
+
+		// Not too many updates
+		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
+			return;
+
+		// i8n
 		LOGGER.debug("upgrading " + arg0 + " " + arg1 + " " + arg2 + " " + arg3);
 		setDescription("Upgrading " + arg1);
 	}
 
 	@Override
 	public void validating(URL arg0, String arg1, long arg2, long arg3, int arg4) {
+
+		// Not too many updates
+		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
+			return;
+
+		// i8n
 		LOGGER.debug("validating " + arg0 + " " + arg1 + " " + arg2 + " "
 				+ arg3 + " " + arg4);
 		setDescription("Validating " + arg1);

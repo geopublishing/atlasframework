@@ -35,7 +35,7 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		for (String s : chunks)
 			statusDialog.setDescription(s);
 	}
-
+	
 	public AtlasSwingWorker(AtlasStatusDialogInterface statusDialog) {
 		this.statusDialog = statusDialog;
 		addPropertyChangeListener(new AtlasStatusDialogCloser(statusDialog));
@@ -73,5 +73,6 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		statusDialog.startModal();
 		return get();
 	}
+
 
 }
