@@ -13,7 +13,9 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
@@ -21,9 +23,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geotools.swing.ExceptionMonitor;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
@@ -44,8 +48,8 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		this.owner = owner;
 		this.styledShp = styledShp;
 
-		setEnabled(StylingUtil.isStyleDifferent(styledShp.getStyle(), styledShp
-				.getSldFile()));
+		setEnabled(StylingUtil.isStyleDifferent(styledShp.getStyle(),
+				styledShp.getSldFile()));
 	}
 
 	@Override
@@ -55,10 +59,12 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 		// Test whether a .sld file can be created. Ask the user to change
 		// position of the .sld
-		while (! IOUtil.canWriteOrCreate(styledShp.getSldFile()) ) {
+		while (!IOUtil.canWriteOrCreate(styledShp.getSldFile())) {
 
-			AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
-					"StyledLayerSLDNotWritable.Msg", IOUtil.escapePath(styledShp.getSldFile())));
+			AVSwingUtil.showMessageDialog(
+					owner,
+					AtlasStyler.R("StyledLayerSLDNotWritable.Msg",
+							IOUtil.escapePath(styledShp.getSldFile())));
 
 			File startWithFile = new File(System.getProperty("user.home"),
 					styledShp.getSldFile().getName());
@@ -66,10 +72,10 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 			dc.addChoosableFileFilter(new FileNameExtensionFilter("SLD",
 					new String[] { "sld", "xml" }));
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
-			
+
 			dc.setDialogTitle(AtlasStyler
 					.R("StyledLayerSLDNotWritable.ChooseNewDialog.Title"));
-			
+
 			dc.setSelectedFile(startWithFile);
 
 			if ((dc.showSaveDialog(owner) != JFileChooser.APPROVE_OPTION)
@@ -80,9 +86,8 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 			if (!(exportFile.getName().toLowerCase().endsWith("sld") || exportFile
 					.getName().toLowerCase().endsWith("xml"))) {
-				exportFile = new File(exportFile.getParentFile(), exportFile
-						.getName()
-						+ ".sld");
+				exportFile = new File(exportFile.getParentFile(),
+						exportFile.getName() + ".sld");
 			}
 
 			styledShp.setSldFile(exportFile);
@@ -90,8 +95,9 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 		if (styledShp.getSldFile().exists()) {
 			try {
-				FileUtils.copyFile(styledShp.getSldFile(), IOUtil
-						.changeFileExt(styledShp.getSldFile(), "sld.bak"));
+				FileUtils
+						.copyFile(styledShp.getSldFile(), IOUtil.changeFileExt(
+								styledShp.getSldFile(), "sld.bak"));
 				backup = true;
 			} catch (IOException e1) {
 				LOGGER.warn("could not create a backup of the existing .sld",
@@ -101,8 +107,8 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		}
 
 		try {
-			StylingUtil.saveStyleToSLD(styledShp.getStyle(), styledShp
-					.getSldFile());
+			StylingUtil.saveStyleToSLD(styledShp.getStyle(),
+					styledShp.getSldFile());
 
 			if (backup)
 				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
@@ -110,8 +116,18 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 						IOUtil.escapePath(styledShp.getSldFile())));
 			else
 				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
-						"AtlasStylerGUI.saveToSLDFileSuccess", IOUtil.escapePath(styledShp
-								.getSldFile())));
+						"AtlasStylerGUI.saveToSLDFileSuccess",
+						IOUtil.escapePath(styledShp.getSldFile())));
+
+			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
+					styledShp.getSldFile()));
+			if (es.size() > 0) {
+				ExceptionDialog.show(
+						owner,
+						new IllegalStateException(ASUtil
+								.R("AtlasStylerExport.WarningSLDNotValid"), es
+								.get(0)));
+			}
 
 		} catch (Exception e1) {
 			LOGGER.error("saveStyleToSLD", e1);
