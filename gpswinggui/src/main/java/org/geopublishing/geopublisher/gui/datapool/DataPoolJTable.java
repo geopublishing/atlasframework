@@ -369,7 +369,7 @@ public class DataPoolJTable extends JTable {
 				getModel());
 		setRowSorter(sorter);
 
-		sorter.setComparator(1, DpEntryType.getComparatorForDpe());
+//		sorter.setComparator(1, DpEntryType.getComparatorForDpe());
 
 		/**
 		 * Define selection behavior

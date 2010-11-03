@@ -63,6 +63,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * tried again until {@link #geoObjBroken} is <code>false</code>.
 	 */
 	public void setBrokenException(Exception e) {
+		LOGGER.info(getId() + " is broken ", e);
 		brokenException = e;
 	}
 

@@ -17,7 +17,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geotools.styling.Style;
 import org.opengis.filter.Filter;
-import org.opengis.filter.Id;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;

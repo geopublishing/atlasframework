@@ -342,6 +342,7 @@ public abstract class DpLayerVectorFeatureSource
 		if (schema == null && !isBroken()) {
 			try {
 				schema = getFeatureSource().getSchema();
+				LOGGER.info("schema of " + getId() + " is ");
 			} catch (Exception e) {
 				setBrokenException(e);
 				return null;

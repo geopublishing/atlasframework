@@ -256,7 +256,13 @@ public class QuantitiesClassification extends FeatureClassification {
 		for (final String fn : FeatureUtil.getNumericalFieldNames(
 				getStyledFeatures().getSchema(), false)) {
 			if (fn != valueAttribsComboBoxModel.getSelectedItem())
-				normlizationAttribsComboBoxModel.addElement(fn);
+
+				if (FeatureUtil.checkAttributeNameRestrictions(fn))
+					normlizationAttribsComboBoxModel.addElement(fn);
+				else {
+					LOGGER.info("Hidden attribut " + fn
+							+ " in createNormalizationFieldsComboBoxModel");
+				}
 			else {
 				// System.out.println("Omittet field" + fn);
 			}
@@ -438,10 +444,10 @@ public class QuantitiesClassification extends FeatureClassification {
 		breaks.add(stats.max());
 		breaks = ASUtil.roundLimits(breaks, limitsDigits);
 
-//		// Special case: Create a second classLimit with the same value!
-//		if (breaks.size() == 1) {
-//			breaks.add(breaks.first());
-//		}
+		// // Special case: Create a second classLimit with the same value!
+		// if (breaks.size() == 1) {
+		// breaks.add(breaks.first());
+		// }
 
 		return breaks;
 	}
@@ -586,7 +592,6 @@ public class QuantitiesClassification extends FeatureClassification {
 	/**
 	 * Return a cached {@link ComboBoxModel} that present all available
 	 * attributes. Its connected to the
-	 * {@link #createNormalizationFieldsComboBoxModel()}
 	 */
 	public ComboBoxModel getValueFieldsComboBoxModel() {
 		if (valueAttribsComboBoxModel == null)
@@ -614,10 +619,10 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	public void setClassLimits(final TreeSet<Double> classLimits_) {
 
-//		if (classLimits_.size() == 1) {
-//			// Special case: Create a second classLimit with the same value!
-//			classLimits_.add(classLimits_.first());
-//		}
+		// if (classLimits_.size() == 1) {
+		// // Special case: Create a second classLimit with the same value!
+		// classLimits_.add(classLimits_.first());
+		// }
 
 		this.classLimits = classLimits_;
 		this.numClasses = classLimits_.size() - 1;
@@ -677,8 +682,9 @@ public class QuantitiesClassification extends FeatureClassification {
 	public void setNumClasses(final Integer numClasses2) {
 		if (numClasses2 != null && !numClasses2.equals(numClasses)) {
 			numClasses = numClasses2;
-//			LOGGER.debug("QuanClassification set NumClasses to " + numClasses2
-//					+ " and fires event");
+			// LOGGER.debug("QuanClassification set NumClasses to " +
+			// numClasses2
+			// + " and fires event");
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.NUM_CLASSES_CHG));
 		}
 

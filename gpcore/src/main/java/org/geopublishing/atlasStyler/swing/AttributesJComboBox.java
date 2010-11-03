@@ -12,6 +12,7 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -39,26 +40,42 @@ import skrueger.i8n.Translation;
  * This extension of a {@link JComboBox} is specialized on the visualization of
  * a selection of attribute. If {@link AttributeMetadataImpl} is stored in the
  * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
- * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED. UNSELETED is ignored.<br/>
+ * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED.
+ * UNSELETED is ignored.<br/>
  * 
  * @author Stefan A. Tzeggai
  */
 public class AttributesJComboBox extends JComboBox {
-	static final private Logger LOGGER = ASUtil.createLogger(AttributesJComboBox.class);
+	static final private Logger LOGGER = ASUtil
+			.createLogger(AttributesJComboBox.class);
 
 	private List<String> numericalAttribs;
 
 	public AttributesJComboBox(final AtlasStyler atlasStyler,
 			List<String> attributes) {
-		this(atlasStyler, new DefaultComboBoxModel(attributes
-				.toArray(new String[] {})));
+		this(atlasStyler, new DefaultComboBoxModel(cleanProblematicAttribute(
+				attributes).toArray(new String[] {})));
+	}
+
+	static List<String> cleanProblematicAttribute(List<String> attributes) {
+		ArrayList<String> newList = new ArrayList<String>();
+
+		for (String an : attributes) {
+			if (FeatureUtil.checkAttributeNameRestrictions(an))
+				newList.add(an);
+			else
+				LOGGER.info("An illegal attribute name " + an
+						+ " has been hidden in the AttributesJComboBox");
+		}
+
+		return newList;
 	}
 
 	public AttributesJComboBox(final SimpleFeatureType schema,
 			final AttributeMetadataMap attributeMetaDataMap,
 			List<String> attributes) {
-		this(schema, attributeMetaDataMap, new DefaultComboBoxModel(attributes
-				.toArray(new String[] {})));
+		this(schema, attributeMetaDataMap, new DefaultComboBoxModel(
+				cleanProblematicAttribute(attributes).toArray(new String[] {})));
 	}
 
 	public AttributesJComboBox(final AtlasStyler atlasStyler,
@@ -73,13 +90,15 @@ public class AttributesJComboBox extends JComboBox {
 		setValues(schema_, attributeMetaDataMap_, comboBoxModel_);
 		SwingUtil.setMaximumWidth(this, 350);
 	}
-	
+
 	/**
-	 * This {@link JComboBox} is only sending {@link ItemEvent} of thype SELECTED. UNSELETED is omittet. 
+	 * This {@link JComboBox} is only sending {@link ItemEvent} of thype
+	 * SELECTED. UNSELETED is omittet.
 	 */
 	@Override
 	protected void fireItemStateChanged(ItemEvent e) {
-		if (e.getStateChange() == ItemEvent.DESELECTED) return;
+		if (e.getStateChange() == ItemEvent.DESELECTED)
+			return;
 		super.fireItemStateChanged(e);
 	}
 
@@ -100,7 +119,8 @@ public class AttributesJComboBox extends JComboBox {
 		 * Caching the list of numerical attributes, so we can quickly determine
 		 * the type of a selected attribute without accessing the schema.
 		 */
-		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false, true);
+		numericalAttribs = FeatureUtil.getNumericalFieldNames(schema, false,
+				true);
 
 		SwingUtil.addMouseWheelForCombobox(this, false);
 
@@ -119,15 +139,15 @@ public class AttributesJComboBox extends JComboBox {
 
 				// This list may contain null or ""
 				if (value == null || value instanceof String
-						&& ((String) value).trim().isEmpty() || value instanceof String
+						&& ((String) value).trim().isEmpty()
+						|| value instanceof String
 						&& ((String) value).equalsIgnoreCase("-")) {
-					prototype.setText("-");					
+					prototype.setText("-");
 					return prototype;
 				}
 
 				AttributeMetadataInterface attributeMetadataFor = attributeMetaDataMap != null ? attributeMetaDataMap
-						.get(prototype.getText())
-						: null;
+						.get(prototype.getText()) : null;
 
 				prototype.setToolTipText(null);
 				if (attributeMetadataFor != null) {
@@ -149,14 +169,16 @@ public class AttributesJComboBox extends JComboBox {
 				 * Adding the Attribute-Type to the Label
 				 */
 				if (attributeMetadataFor != null) {
-					AttributeDescriptor attributeDesc = schema.getDescriptor(attributeMetadataFor.getName());
+					AttributeDescriptor attributeDesc = schema
+							.getDescriptor(attributeMetadataFor.getName());
 					if (attributeDesc != null) {
 						prototype.setText(prototype.getText()
 								+ " <i>("
 								+ attributeDesc.getType().getBinding()
-								.getSimpleName() + ")</i>");
+										.getSimpleName() + ")</i>");
 					} else {
-						LOGGER.warn("No attributedesc for "+attributeDesc+" found.");
+						LOGGER.warn("No attributedesc for " + attributeDesc
+								+ " found.");
 					}
 				}
 
