@@ -58,12 +58,16 @@ public abstract class DpLayerVectorFeatureSource
 
 	static private final Logger LOGGER = Logger
 			.getLogger(DpLayerVectorFeatureSource.class);
-	
+
 	@Override
 	public ReferencedEnvelope getReferencedEnvelope() {
+		if (getEnvelope() == null)
+			return null;
+		if (getCrs() == null)
+			return null;
 		return new ReferencedEnvelope(getEnvelope(), getCrs());
 	}
-	
+
 	/**
 	 * The {@link Name} of the {@link SimpleFeatureType} of the
 	 * {@link DataStore} that is accessed.
@@ -165,7 +169,6 @@ public abstract class DpLayerVectorFeatureSource
 			dataStore = null;
 		}
 	}
-
 
 	@Override
 	public GeometryDescriptor getDefaultGeometry() {
@@ -281,12 +284,12 @@ public abstract class DpLayerVectorFeatureSource
 		// public void layerChanged(MapLayerEvent arg0) {
 		//
 		// if (arg0.getReason() == MapLayerEvent.FILTER_CHANGED) {
-		//					
-		//					
+		//
+		//
 		// // TODO compare to old filter to see if anything has
 		// // chnaged
 		// // openTableDialog.getModel().getFilter().c
-		//					
+		//
 		// StyledLayerSelectionModel<?> styledLayerSelectionModel =
 		// layerPanel.rememberSelection
 		// .get(arg0.getSource());
@@ -308,7 +311,7 @@ public abstract class DpLayerVectorFeatureSource
 		// }
 		// }
 		// };
-		//		
+		//
 		// mapLayer.addMapLayerListener(mapLayerChangedListener);
 
 	}
@@ -376,8 +379,8 @@ public abstract class DpLayerVectorFeatureSource
 
 		final Double layerQM = super.getQuality();
 
-		result = (layerQM * 4. + attributeMetaDataMap.getQuality(getAtlasConfig()
-				.getLanguages()) * 1.) / 5.;
+		result = (layerQM * 4. + attributeMetaDataMap
+				.getQuality(getAtlasConfig().getLanguages()) * 1.) / 5.;
 
 		return result;
 	}
@@ -389,7 +392,7 @@ public abstract class DpLayerVectorFeatureSource
 	final AttributeMetadataMap attributeMetaDataMap;
 
 	/**
-	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadataImpl}. 
+	 * @return a {@link Map} with {@link Name} -> {@link AttributeMetadataImpl}.
 	 */
 	@Override
 	public AttributeMetadataMap<AttributeMetadataImpl> getAttributeMetaDataMap() {
@@ -401,24 +404,24 @@ public abstract class DpLayerVectorFeatureSource
 			 * Geopublisher (!AtlasViewer.isRunning)
 			 */
 			try {
-				StyledLayerUtil.checkAttribMetaData(attributeMetaDataMap, getSchema());
+				StyledLayerUtil.checkAttribMetaData(attributeMetaDataMap,
+						getSchema());
 				attribMetadataChecked = true;
 			} catch (Exception e) {
 				String msg = "Error while validating the described attributes against the \"physical\" schema of the datafile "
-					+ getFilename()
-					+ "\n. Will continue without validation.";
-				LOGGER.error(msg,e);
+						+ getFilename()
+						+ "\n. Will continue without validation.";
+				LOGGER.error(msg, e);
 			}
 		}
 
 		// I don't know how "the_geom" is getting into it again and again
-		if (attributeMetaDataMap.containsKey(new NameImpl("the_geom"))){
+		if (attributeMetaDataMap.containsKey(new NameImpl("the_geom"))) {
 			attributeMetaDataMap.remove(new NameImpl("the_geom"));
 		}
-		
+
 		return attributeMetaDataMap;
 	}
-
 
 	@Override
 	public void exportWithGUI(Component owner) throws IOException {
@@ -431,20 +434,23 @@ public abstract class DpLayerVectorFeatureSource
 				setPrefix("Exporting ");
 
 				try {
-					exportDir = AVSwingUtil.selectExportDir(owner, getAtlasConfig());
+					exportDir = AVSwingUtil.selectExportDir(owner,
+							getAtlasConfig());
 
 					if (exportDir == null) {
 						return false;
 					}
 
-					URL url = AVSwingUtil.getUrl(DpLayerVectorFeatureSource.this, owner);
+					URL url = AVSwingUtil.getUrl(
+							DpLayerVectorFeatureSource.this, owner);
 					final File file = new File(exportDir, getFilename());
 
 					// ****************************************************************************
 					// Copy main file and possibly throw an Exception
 					// ****************************************************************************
 					publish(file.getAbsolutePath());
-					FileUtils.copyURLToFile(AVSwingUtil.getUrl(DpLayerVectorFeatureSource.this, owner), file);
+					FileUtils.copyURLToFile(AVSwingUtil.getUrl(
+							DpLayerVectorFeatureSource.this, owner), file);
 
 					// Try to copy any pending files...
 					for (SHP_POSTFIXES pf : GeoImportUtil.SHP_POSTFIXES
@@ -452,18 +458,22 @@ public abstract class DpLayerVectorFeatureSource
 						final File changeFileExt = IOUtil.changeFileExt(file,
 								pf.toString());
 						publish(changeFileExt.getAbsolutePath());
-						AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(
-								url, pf.toString()), changeFileExt);
+						AtlasConfig.exportURLtoFileNoEx(
+								IOUtil.changeUrlExt(url, pf.toString()),
+								changeFileExt);
 					}
 
-					AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(url,
-							"prj"), IOUtil.changeFileExt(file, "prj"));
+					AtlasConfig.exportURLtoFileNoEx(
+							IOUtil.changeUrlExt(url, "prj"),
+							IOUtil.changeFileExt(file, "prj"));
 
-					AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(url,
-							"sld"), IOUtil.changeFileExt(file, "sld"));
+					AtlasConfig.exportURLtoFileNoEx(
+							IOUtil.changeUrlExt(url, "sld"),
+							IOUtil.changeFileExt(file, "sld"));
 
-					AtlasConfig.exportURLtoFileNoEx(IOUtil.changeUrlExt(url,
-							"shp.xml"), IOUtil.changeFileExt(file, "shp.xml"));
+					AtlasConfig.exportURLtoFileNoEx(
+							IOUtil.changeUrlExt(url, "shp.xml"),
+							IOUtil.changeFileExt(file, "shp.xml"));
 
 					publish("done");
 
