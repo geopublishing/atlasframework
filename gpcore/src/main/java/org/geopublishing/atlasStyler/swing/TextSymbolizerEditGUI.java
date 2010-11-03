@@ -611,7 +611,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			final List<String> valueFieldNamesPrefereStrings = ASUtil
 					.getValueFieldNamesPrefereStrings(rulesList
-							.getStyledFeatures().getSchema(), false);
+							.getStyledFeatures().getSchema(), true);
 			valueFieldNamesPrefereStrings.add(0, "-");
 			jComboBoxLabelField2 = new AttributesJComboBox(atlasStyler,
 					valueFieldNamesPrefereStrings);
@@ -853,11 +853,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 		if (jComboBoxPriorityField == null) {
 
-			DefaultComboBoxModel model = new DefaultComboBoxModel(FeatureUtil
-					.getNumericalFieldNames(
-							rulesList.getStyledFeatures().getSchema(), true)
-					.toArray());
-			jComboBoxPriorityField = new AttributesJComboBox(atlasStyler, model);
+			jComboBoxPriorityField = new AttributesJComboBox(atlasStyler,
+					FeatureUtil.getNumericalFieldNames(rulesList
+							.getStyledFeatures().getSchema(), true, true));
 			jComboBoxPriorityField.addItemListener(new ItemListener() {
 
 				@Override
@@ -898,11 +896,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			 * Label for the selection of the value attribute
 			 */
 
-			DefaultComboBoxModel model = new DefaultComboBoxModel(ASUtil
-					.getValueFieldNamesPrefereStrings(
-							rulesList.getStyledFeatures().getSchema(), false)
-					.toArray());
-			jComboBoxLabelField = new AttributesJComboBox(atlasStyler, model);
+			jComboBoxLabelField = new AttributesJComboBox(atlasStyler,
+					ASUtil.getValueFieldNamesPrefereStrings(rulesList
+							.getStyledFeatures().getSchema(), true));
 			jComboBoxLabelField.addItemListener(new ItemListener() {
 
 				@Override
