@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -42,7 +43,7 @@ public class JNLPSwingUtil extends JNLPUtil {
 	 * @param statusDialog
 	 */
 	public static void loadPart(String part,
-			AtlasStatusDialogInterface statusDialog) throws IOException {
+			DownloadServiceListener statusDialog) throws IOException {
 
 		LOGGER.debug("loadPart(String[] parts, AtlasStatusDialogInterface statusDialog) EDT:"
 				+ SwingUtilities.isEventDispatchThread());
@@ -76,9 +77,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 	}
 
 	public static void loadPart(String[] parts,
-			AtlasStatusDialogInterface statusDialog) throws IOException {
+			DownloadServiceListener serviceListener) throws IOException {
 
-		LOGGER.debug("loadPart(String[] parts, AtlasStatusDialogInterface statusDialog) EDT:"
+		LOGGER.debug("loadPart(String[] parts, DownloadServiceListener statusDialog) EDT:"
 				+ SwingUtilities.isEventDispatchThread());
 
 		DownloadService ds;
@@ -91,9 +92,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 			}
 
 			LOGGER.info("starting ds.loadParts with statusdialog "
-					+ statusDialog + " on EDT ("
+					+ serviceListener + " on EDT ("
 					+ SwingUtilities.isEventDispatchThread() + ") ");
-			ds.loadPart(parts, statusDialog);
+			ds.loadPart(parts, serviceListener);
 
 		} catch (UnavailableServiceException e1) {
 			LOGGER.error("", e1);
@@ -101,58 +102,30 @@ public class JNLPSwingUtil extends JNLPUtil {
 		}
 	}
 
-	// public static void loadPart(String part, Component owner)
-	// throws IOException {
-	//
-	// LOGGER.info("loadPart(String part, Component owner) EDT "
-	// + SwingUtilities.isEventDispatchThread() + " id =" + part
-	// + " owner " + owner);
-	//
-	// DownloadService ds;
-	// try {
-	// ds = getJNLPDownloadService();
-	//
-	// if (ds.isPartCached(part)) {
-	// LOGGER.info("part " + part + " is JWS cached");
-	// } else {
-	//
-	// LOGGER.info("part " + part
-	// + " is NOT cached.. starting download... ");
-	//
-	// // load the resource into the JWS Cache
-	// ds.loadPart(part, new AtlasStatusDialog(owner));
-	// }
-	// } catch (UnavailableServiceException e1) {
-	// throw new IOException(e1);
-	// }
-	// }
-
-	// public static void loadPart(String part) throws IOException {
-	//
-	// LOGGER.debug("loadPart(String part " + part + ") EDT:"
-	// + SwingUtilities.isEventDispatchThread());
-	//
-	// // TODO && SwingUtilities.isEventDispatchThread() removen!
-	// loadPart(new String[] { part } );
-	// }
-
 	public static void loadPartAndCreateDialogForIt(final String... parts) {
-		boolean edt = SwingUtilities.isEventDispatchThread();
-
-		LOGGER.debug("loadPartAndCreateDialogForIt(String[] parts) EDT:" + edt);
-
-		final AtlasStatusDialog sd = new AtlasStatusDialog(null,
-				"Downloading data", "Downloading data"); // i8n i8n i8n TODO TODO 
-		final AtlasSwingWorker<Void> asw = new AtlasSwingWorker<Void>(sd) {
-
-			@Override
-			protected Void doInBackground() throws Exception {
-				loadPart(parts, sd);
-				return null;
-			}
-		};
-
 		try {
+
+			if (GraphicsEnvironment.isHeadless()) {
+				loadPart(parts, new NoGuiDownloadServiceListener());
+				return;
+			}
+
+			boolean edt = SwingUtilities.isEventDispatchThread();
+
+			LOGGER.debug("loadPartAndCreateDialogForIt(String[] parts) EDT:"
+					+ edt);
+
+			final AtlasStatusDialog sd = new AtlasStatusDialog(null,
+					"Downloading data", "Downloading data"); // i8n i8n i8n TODO
+																// TODO
+			final AtlasSwingWorker<Void> asw = new AtlasSwingWorker<Void>(sd) {
+
+				@Override
+				protected Void doInBackground() throws Exception {
+					loadPart(parts, sd);
+					return null;
+				}
+			};
 
 			if (edt) {
 				LOGGER.debug("  starting a AtlasSwingWorker (null) to download on edt");

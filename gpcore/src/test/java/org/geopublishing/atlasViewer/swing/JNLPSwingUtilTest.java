@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.swing.TestingUtil;
+
 public class JNLPSwingUtilTest {
 
 	@Before
@@ -17,8 +19,10 @@ public class JNLPSwingUtilTest {
 	}
 
 	@Test
-	public void testLoadPart() throws IOException {
+	public void testLoadPartEvenHeadless() throws IOException {
+//		if (TestingUtil.isInteractive()) {
 		JNLPSwingUtil.loadPartAndCreateDialogForIt("a");
+//		}
 	}
 
 }

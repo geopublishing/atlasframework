@@ -38,9 +38,11 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
 import org.geotools.resources.SwingUtilities;
 import org.geotools.resources.i18n.Vocabulary;
 import org.geotools.resources.i18n.VocabularyKeys;
@@ -52,9 +54,11 @@ import schmitzm.swing.SwingUtil;
 import skrueger.swing.OkButton;
 
 public class AtlasStatusDialog implements AtlasStatusDialogInterface {
-	
+
 	static public String CANCEL_PROPERTY = "atlas status dialog cancelled";
-	
+	final static private Logger LOGGER = Logger
+			.getLogger(AtlasStatusDialog.class);
+
 	/**
 	 * Initial width for the progress window, in pixels.
 	 */
@@ -181,8 +185,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		 */
 		progressBar = new JProgressBar();
 		progressBar.setIndeterminate(true);
-		progressBar.setBorder(BorderFactory.createCompoundBorder(BorderFactory
-				.createEmptyBorder(3, 6, 3, 6), progressBar.getBorder()));
+		progressBar.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEmptyBorder(3, 6, 3, 6),
+				progressBar.getBorder()));
 		/*
 		 * Creates the ok button.
 		 */
@@ -358,13 +363,14 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	public void setCanceled(final boolean stop) {
 		if (stop != canceled) {
 			canceled = stop;
-			
-			for (ActionListener l : listeners ) {
-				l.actionPerformed(new ActionEvent(AtlasStatusDialog.this, 0, CANCEL_PROPERTY));
+
+			for (ActionListener l : listeners) {
+				l.actionPerformed(new ActionEvent(AtlasStatusDialog.this, 0,
+						CANCEL_PROPERTY));
 			}
 		}
 	}
-	
+
 	@Override
 	public void addCancelListener(ActionListener l) {
 		listeners.add(l);
@@ -386,8 +392,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			String margin, String warning) {
 
 		warningOccured = true;
-		
-		if (warning == null) warning = "";
+
+		if (warning == null)
+			warning = "";
 
 		final StringBuffer buffer = new StringBuffer(warning.length() + 16);
 		if (!source.equals(lastSource)) {
@@ -436,11 +443,10 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	}
 
 	/**
-	 * Returns the s//	public void warningOccurred(Exception e) {
-//		warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e
-//				.getLocalizedMessage() : e.getMessage());
-//		cancel
-//	}tring {@code margin} without the parenthesis (if any).
+	 * Returns the s// public void warningOccurred(Exception e) { //
+	 * warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e //
+	 * .getLocalizedMessage() : e.getMessage()); // cancel // }tring
+	 * {@code margin} without the parenthesis (if any).
 	 * 
 	 * @param margin
 	 *            DOCUMENT ME
@@ -461,13 +467,12 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	 * Queries one of the components in the progress window. This method doesn't
 	 * need to be invoked from the <cite>Swing</cite> thread.
 	 * 
-	 * @param task//	public void warningOccurred(Exception e) {
-//		warningOccurred("asdsad", null, e.getLocalizedMessage() != null ? e
-//				.getLocalizedMessage() : e.getMessage());
-//		cancel
-//	}
-	 *            The desired value as one of the {@link Caller#TITLE} or
-	 *            {@link Caller#LABEL} constants.
+	 * @param task
+	 *            // public void warningOccurred(Exception e) { //
+	 *            warningOccurred("asdsad", null, e.getLocalizedMessage() !=
+	 *            null ? e // .getLocalizedMessage() : e.getMessage()); //
+	 *            cancel // } The desired value as one of the
+	 *            {@link Caller#TITLE} or {@link Caller#LABEL} constants.
 	 * @return The value.
 	 */
 	private Object get(final int task) {
@@ -584,10 +589,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 				model.setRangeProperties(0, 1, 0, 100, false);
 				SwingUtil
 						.setRelativeFramePosition(window, parentWindow, .5, .5);
-				
-				
+
 				window.setVisible(true);
-				
+
 				break; // Need further action below.
 			}
 			case COMPLETE: {
@@ -621,8 +625,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 					return;
 				}
 				case STARTED: {
-					window
-							.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+					window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 					return;
 				}
 				case COMPLETE: {
@@ -708,6 +711,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 	@Override
 	public void downloadFailed(URL arg0, String arg1) {
+		LOGGER.error("downloadFailed " + arg0 + " " + arg1);
 		setDescription(arg1);
 		exceptionOccurred(new AtlasImportException(arg1));
 	}
@@ -715,16 +719,21 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	@Override
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
+		LOGGER.debug("progress " + url + " " + urlString + " " + doneSoFar
+				+ " " + full + " " + percentage);
 		setDescription("Downloading " + percentage + "%");
 	}
 
 	@Override
 	public void upgradingArchive(URL arg0, String arg1, int arg2, int arg3) {
+		LOGGER.debug("upgrading " + arg0 + " " + arg1 + " " + arg2 + " " + arg3);
 		setDescription("Upgrading " + arg1);
 	}
 
 	@Override
 	public void validating(URL arg0, String arg1, long arg2, long arg3, int arg4) {
+		LOGGER.debug("validating " + arg0 + " " + arg1 + " " + arg2 + " "
+				+ arg3 + " " + arg4);
 		setDescription("Validating " + arg1);
 	}
 
