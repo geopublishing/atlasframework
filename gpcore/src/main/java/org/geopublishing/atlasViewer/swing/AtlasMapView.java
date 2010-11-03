@@ -59,7 +59,6 @@ import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.StyledRasterInterface;
 
 import com.vividsolutions.jts.geom.Envelope;
 
@@ -590,8 +589,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		Envelope newLayerEnv = styledLayerObject.getReferencedEnvelope();
 		
 		// This check doesn't work for Rasters that are powered by a reader, since 
-		if (newLayerEnv != null
-				&& !(styledLayerObject instanceof StyledRasterInterface)) {
+		if (newLayerEnv != null) {
 
 			if (getMapPane().getMapContext().getCoordinateReferenceSystem() != null) {
 
