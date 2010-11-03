@@ -17,6 +17,7 @@ import java.io.IOException;
 import javax.jnlp.DownloadService;
 import javax.jnlp.DownloadServiceListener;
 import javax.jnlp.UnavailableServiceException;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
@@ -75,8 +76,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 		try {
 			ds = getJNLPDownloadService();
 
-			// load the resource into the JWS Cache
-			ds.loadPart(parts, getJNLPDialog()); // use statusDialog
+			LOGGER.debug("starting loadPart on EDT ("
+					+ SwingUtilities.isEventDispatchThread() + ") ");
+			ds.loadPart(parts, statusDialog);
 
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);
@@ -106,8 +108,8 @@ public class JNLPSwingUtil extends JNLPUtil {
 
 	public static void loadPart(String id) throws IOException {
 		if (!GraphicsEnvironment.isHeadless() && AtlasViewerGUI.isRunning()) {
-			JNLPSwingUtil.loadPart(id, AtlasViewerGUI.getInstance()
-					.getJFrame());
+			JNLPSwingUtil
+					.loadPart(id, AtlasViewerGUI.getInstance().getJFrame());
 		} else {
 			JNLPSwingUtil.loadPart(id);
 		}
