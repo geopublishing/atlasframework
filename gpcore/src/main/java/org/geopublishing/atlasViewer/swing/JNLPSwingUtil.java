@@ -115,21 +115,22 @@ public class JNLPSwingUtil extends JNLPUtil {
 			else {
 				LOGGER.debug("  starting a AtlasSwingWorker (null) to download not on edt, via Invoke AndWait");
 
-				SwingUtilities.invokeAndWait(new Runnable() {
+				org.geotools.resources.SwingUtilities
+						.invokeAndWait(new Runnable() {
 
-					@Override
-					public void run() {
-						try {
-							asw.executeModal();
-						} catch (CancellationException e) {
-							LOGGER.error(e);
-						} catch (InterruptedException e) {
-							LOGGER.error(e);
-						} catch (ExecutionException e) {
-							LOGGER.error(e);
-						}
-					}
-				});
+							@Override
+							public void run() {
+								try {
+									asw.executeModal();
+								} catch (CancellationException e) {
+									LOGGER.error(e);
+								} catch (InterruptedException e) {
+									LOGGER.error(e);
+								} catch (ExecutionException e) {
+									LOGGER.error(e);
+								}
+							}
+						});
 
 			}
 
