@@ -2,6 +2,7 @@ package org.geopublishing.atlasViewer.swing;
 
 import java.io.IOException;
 
+import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +22,12 @@ public class JNLPSwingUtilTest {
 	@Test
 	public void testLoadPartEvenHeadless() throws IOException {
 		if (TestingUtil.isInteractive()) {
-			JNLPSwingUtil.loadPartAndCreateDialogForIt("a");
+			JNLPSwingUtil.loadPartAndCreateDialogForIt(null, "a");
+			
+			AtlasStatusDialog myAsg = new AtlasStatusDialog(null, "my","my");
+			JNLPSwingUtil.loadPartAndCreateDialogForIt(myAsg, "a");
 		}
+		
 	}
 
 }

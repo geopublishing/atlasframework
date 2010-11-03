@@ -371,7 +371,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 			final AtlasMapView mapView_ = new AtlasMapView(getJFrame(),
 					getAtlasConfig());
-			mapView_.setMap(newMap);
+			mapView_.setMap(newMap, statusDialog);
 
 			mapView_.initialize();
 			if (lastMapsTool >= 0)

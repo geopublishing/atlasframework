@@ -514,7 +514,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (url == null) {
 
 			if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
-				JNLPSwingUtil.loadPartAndCreateDialogForIt(getId());
+				JNLPSwingUtil.loadPartAndCreateDialogForIt(null, getId());
 			}
 
 			String location = getAtlasConfig().getResouceBasename()

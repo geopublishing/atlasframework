@@ -371,7 +371,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		backup();
 
 		designMapView = new DesignMapView(owner, ace);
-		designMapView.setMap(map);
+		designMapView.setMap(map, null);
 		designMapView.initialize();
 
 		final JPanel cp = new JPanel(new BorderLayout());

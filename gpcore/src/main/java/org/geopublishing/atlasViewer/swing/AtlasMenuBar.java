@@ -57,7 +57,7 @@ public class AtlasMenuBar extends JMenuBar {
 	boolean hasFileMenu = false;
 	boolean hasHelpMenu = false;
 
-//	private JCheckBoxMenuItem rasterCheckBoxMenuItem;
+	// private JCheckBoxMenuItem rasterCheckBoxMenuItem;
 
 	public AtlasMenuBar(AtlasViewerGUI atlasViewer) {
 		this.atlasViewer = atlasViewer;
@@ -264,6 +264,7 @@ public class AtlasMenuBar extends JMenuBar {
 
 								AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 										AtlasMenuBar.this);
+								statusDialog.setCancelAllowed(false);
 								AtlasSwingWorker<Void> atlasSwingWorker = new AtlasSwingWorker<Void>(
 										statusDialog) {
 
@@ -347,26 +348,26 @@ public class AtlasMenuBar extends JMenuBar {
 		// OptionsMenu
 		helpMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 
-//		{
-//			final AVProps p = atlasViewer.getAtlasConfig().getProperties();
-//			rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
-//					"Use new reader for raster") {
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					boolean oldValue = p.getBoolean(Keys.rasterReader, true);
-//
-//					boolean newValue = !oldValue;
-//					GPProps.set(
-//							org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
-//							newValue);
-//					rasterCheckBoxMenuItem.setSelected(newValue);
-//				}
-//			});
-//			rasterCheckBoxMenuItem.setSelected(p.getBoolean(Keys.rasterReader,
-//					true));
-//			helpMenu.add(rasterCheckBoxMenuItem);
-//		}
+		// {
+		// final AVProps p = atlasViewer.getAtlasConfig().getProperties();
+		// rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
+		// "Use new reader for raster") {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// boolean oldValue = p.getBoolean(Keys.rasterReader, true);
+		//
+		// boolean newValue = !oldValue;
+		// GPProps.set(
+		// org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+		// newValue);
+		// rasterCheckBoxMenuItem.setSelected(newValue);
+		// }
+		// });
+		// rasterCheckBoxMenuItem.setSelected(p.getBoolean(Keys.rasterReader,
+		// true));
+		// helpMenu.add(rasterCheckBoxMenuItem);
+		// }
 
 	}
 

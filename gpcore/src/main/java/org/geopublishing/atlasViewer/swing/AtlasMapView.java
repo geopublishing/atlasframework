@@ -21,6 +21,8 @@ import java.net.URL;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.jnlp.DownloadService;
+import javax.jnlp.UnavailableServiceException;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -31,6 +33,8 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
+import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
@@ -50,6 +54,7 @@ import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
@@ -372,7 +377,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * 
 	 * @return <code>false</code> is any problem occured.
 	 */
-	public void setMap(final Map newMap) {
+	public void setMap(final Map newMap, AtlasStatusDialogInterface asd) {
 
 		map = newMap;
 
@@ -415,7 +420,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					calcAbsoluteWidthForDivider(1. - (1. / 1.618033)));
 		}
 
-		addTheLayersOfTheMapToTheMapLayerManager();
+		addTheLayersOfTheMapToTheMapLayerManager(asd);
 
 		// Optionally activate the SearchLabels button
 		getToolBar().setButtonEnabled(ACTION_SEARCH, map != null, true);
@@ -458,8 +463,34 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	 * Also sets the default map area after all layers have been added
 	 * 
 	 * @param layerRefs
+	 * @param asd
+	 *            may be <code>null</code>
 	 */
-	private void addTheLayersOfTheMapToTheMapLayerManager() {
+	private void addTheLayersOfTheMapToTheMapLayerManager(
+			AtlasStatusDialogInterface asd) {
+
+		// **********************************************************************
+		// Download all missing files together...
+		// **********************************************************************
+		if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
+
+			try {
+				String[] parts = new String[0];
+				for (DpRef ref : map.getLayers()) {
+					parts = LangUtil
+							.extendArray(parts, ref.getTarget().getId());
+				}
+
+				DownloadService ds = JNLPSwingUtil.getJNLPDownloadService();
+				if (!ds.isPartCached(parts)) {
+					JNLPSwingUtil.loadPartAndCreateDialogForIt(asd, parts);
+				}
+			} catch (UnavailableServiceException e) {
+
+			} catch (Exception e) {
+				LOGGER.error(e);
+			}
+		}
 
 		// **********************************************************************
 		// Adding all the Map's layers to the layerManager
@@ -475,20 +506,8 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 				final DpLayer<?, ? extends ChartStyle> dpLayer = (DpLayer<?, ChartStyle>) ref
 						.getTarget();
 
-				// dpLayer.seeJAR(AtlasMapView.this); // getURL holt das doch
-				// sowieso
-
 				if (dpLayer instanceof DpLayerRaster) {
 					layerManager.addStyledLayer(dpLayer);
-					// } else if (dpLayer instanceof DpLayerRasterPyramid) {
-					// //
-					// **********************************************************
-					// // Adding a Pyramidlayer to the map
-					// //
-					// **********************************************************
-					// final DpLayerRasterPyramid pyramid =
-					// (DpLayerRasterPyramid) dpLayer;
-					// layerManager.addStyledLayer(pyramid);
 
 				} else if (dpLayer instanceof DpLayerVectorFeatureSource) {
 
@@ -500,18 +519,16 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 						LOGGER.debug("dpLayer.getId():" + dpLayer.getId());
 
-						String selectedStyleID = map
-								.getSelectedStyleID(dpLayer.getId());
+						String selectedStyleID = map.getSelectedStyleID(dpLayer
+								.getId());
 						LOGGER.debug("selectedStyleID:" + selectedStyleID);
-						
+
 						LayerStyle layerStyleByID = dpLayer
 								.getLayerStyleByID(selectedStyleID);
 
 						LOGGER.debug("layerStyleByID:" + layerStyleByID);
 
 						Style style = layerStyleByID.getStyle();
-						// dpLayer.setTitle(layerStyleByID.getTitle());
-						// dpLayer.setDesc(layerStyleByID.getDesc());
 						dpLayer.setStyle(style);
 					}
 

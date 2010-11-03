@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
@@ -81,8 +82,12 @@ public class JNLPSwingUtil extends JNLPUtil {
 	 * Creates a {@link AtlasStatusDialog} (unless headless) and runs the
 	 * download in an {@link AtlasSwingWorker}. The {@link SwingWorker} is
 	 * started from the correct {@link Thread}.
+	 * 
+	 * @param A
+	 *            gui is created if <code>null</code>
 	 */
-	public static void loadPartAndCreateDialogForIt(final String... parts) {
+	public static void loadPartAndCreateDialogForIt(
+			AtlasStatusDialogInterface asg, final String... parts) {
 		try {
 
 			if (GraphicsEnvironment.isHeadless()) {
@@ -95,14 +100,19 @@ public class JNLPSwingUtil extends JNLPUtil {
 			LOGGER.debug("loadPartAndCreateDialogForIt(String[] parts) EDT:"
 					+ edt);
 
-			final AtlasStatusDialog sd = new AtlasStatusDialog(null,
-					"Downloading data", "Downloading data"); // i8n i8n i8n TODO
-																// TODO
-			final AtlasSwingWorker<Void> asw = new AtlasSwingWorker<Void>(sd) {
+			if (asg == null)
+				asg = new AtlasStatusDialog(null, "Downloading data",
+						"Downloading data"); // i8n i8n i8n TODO
+												// TODO
+
+			final AtlasStatusDialogInterface finalRefToStatusDialog = asg;
+
+			final AtlasSwingWorker<Void> asw = new AtlasSwingWorker<Void>(
+					finalRefToStatusDialog) {
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					loadPart(parts, sd);
+					loadPart(parts, finalRefToStatusDialog);
 					return null;
 				}
 			};
