@@ -16,35 +16,15 @@ import org.junit.Test;
 import schmitzm.geotools.grid.GridUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.io.GeoImportUtil.ARCASCII_IMPORT_TYPE;
-import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;
 
 public class DpLayerRasterTest {
 
-	private static final String RASTER_GEOTIFF_WITH_SLD__SLDLOCATION = "/rasterGeotiffWithSLD/geotiffwithsld.sld";
-	private static final Style RASTER_GEOTIFF_WITH_SLD__SLDSTYLE = StylingUtil
-			.loadSLD(DpLayerRasterTest.class
-					.getResource(RASTER_GEOTIFF_WITH_SLD__SLDLOCATION))[0];
-	private static final String RASTER_GEOTIFF_WITH_SLD__TIFLOCATION = "/rasterGeotiffWithSLD/geotiffwithsld.tif";
-	private static final URL RASTER_GEOTIFF_WITH_SLD__URL = DpLayerRasterTest.class
-			.getResource(RASTER_GEOTIFF_WITH_SLD__TIFLOCATION);
-
-	private static final String RASTER_GEOTIFF_RGBONLY__TIFLOCATION = "/rasterGeotiffRGBWithoutSLD/geotiff_rgb_ohnesld.tif";
-	private static final URL RASTER_GEOTIFF_RGBONLY__URL = DpLayerRasterTest.class
-			.getResource(RASTER_GEOTIFF_RGBONLY__TIFLOCATION);
-
-	private static final String RASTER_AAIGRID_WITH_SLD__SLDLOCATION = "/rasterASCIIWithSLDTransparency/asciiWithSldTransparency.sld";
-	private static final Style RASTER_AAIGRID_WITH_SLD__SLDSTYLE = StylingUtil
-			.loadSLD(DpLayerRasterTest.class
-					.getResource(RASTER_AAIGRID_WITH_SLD__SLDLOCATION))[0];
-	private static final String RASTER_AAIGRID_WITH_SLD__ASCII_LOCATION = "/rasterASCIIWithSLDTransparency/asciiWithSldTransparency.asc";
-	private static final URL RASTER_AAIGRID_WITH_SLD__URL = DpLayerRasterTest.class
-			.getResource(RASTER_AAIGRID_WITH_SLD__ASCII_LOCATION);
-
 	@Test
 	public void testJustColorsGeotiffRGB_GeoTiffReaderWithFileObject()
 			throws Throwable {
-		URL url = RASTER_GEOTIFF_RGBONLY__URL;
+		URL url = TestingUtil.TestDatasetsRaster.geotiffRGBWithoutSLD
+				.getUrl();
 		GeoTiffReader gc = new GeoTiffReader(DataUtilities.urlToFile(url));
 		assertNotNull(gc);
 
@@ -59,12 +39,14 @@ public class DpLayerRasterTest {
 	@Test
 	public void testTransparencyOfGeotiffWithSLD_GeoTiffReaderWithFileObject()
 			throws Throwable {
-		URL url = RASTER_GEOTIFF_WITH_SLD__URL;
+
+		URL url = TestingUtil.TestDatasetsRaster.geotiffWithSld.getUrl();
+
 		GeoTiffReader gc = new GeoTiffReader(DataUtilities.urlToFile(url));
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_GEOTIFF_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.geotiffWithSld.getSldStyle());
 
 		checkMapLayer_GEOTIFF_WITH_SLD(mlayer);
 
@@ -74,12 +56,12 @@ public class DpLayerRasterTest {
 	@Test
 	public void testTransparencyOfGeotiffWithSLD_GeoTiffReaderWithURL2FileObject()
 			throws Throwable {
-		URL url = RASTER_GEOTIFF_WITH_SLD__URL;
+		URL url = TestingUtil.TestDatasetsRaster.geotiffWithSld.getUrl();
 		GeoTiffReader gc = new GeoTiffReader(url);
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_GEOTIFF_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.geotiffWithSld.getSldStyle());
 
 		checkMapLayer_GEOTIFF_WITH_SLD(mlayer);
 
@@ -87,18 +69,18 @@ public class DpLayerRasterTest {
 	}
 
 	@Test
-//	@Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithFileObject_USE_ARCGRIDREADER()
 			throws Throwable {
 		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDREADER);
 		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(DataUtilities
-						.urlToFile(RASTER_AAIGRID_WITH_SLD__URL));
+						.urlToFile(TestingUtil.TestDatasetsRaster.arcAscii
+								.getUrl()));
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_AAIGRID_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.arcAscii.getSldStyle());
 
 		checkMapLayer_AAIGrid_Transparency_with_Sld(mlayer);
 
@@ -106,17 +88,18 @@ public class DpLayerRasterTest {
 	}
 
 	@Test
-//	@Ignore
+	// @Ignore
 	public void testTransparencyOfAAIGridWithSLD_AAIGridReaderWithURL2FileObject_USE_ARCGRIDREADER()
 			throws Throwable {
 		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDREADER);
 		GridCoverage2D gc = GeoImportUtil
-				.readGridFromArcInfoASCII(RASTER_AAIGRID_WITH_SLD__URL);
+				.readGridFromArcInfoASCII(TestingUtil.TestDatasetsRaster.arcAscii
+						.getUrl());
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_AAIGRID_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.arcAscii.getSldStyle());
 
 		checkMapLayer_AAIGrid_Transparency_with_Sld(mlayer);
 
@@ -130,11 +113,12 @@ public class DpLayerRasterTest {
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDRASTER);
 		GridCoverage2D gc = GeoImportUtil
 				.readGridFromArcInfoASCII(DataUtilities
-						.urlToFile(RASTER_AAIGRID_WITH_SLD__URL));
+						.urlToFile(TestingUtil.TestDatasetsRaster.arcAscii
+								.getUrl()));
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_AAIGRID_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.arcAscii.getSldStyle());
 
 		checkMapLayer_AAIGrid_Transparency_with_Sld(mlayer);
 
@@ -147,11 +131,12 @@ public class DpLayerRasterTest {
 		GeoImportUtil
 				.setAsciiRasterImportMode(ARCASCII_IMPORT_TYPE.USE_ARCGRIDRASTER);
 		GridCoverage2D gc = GeoImportUtil
-				.readGridFromArcInfoASCII(RASTER_AAIGRID_WITH_SLD__URL);
+				.readGridFromArcInfoASCII(TestingUtil.TestDatasetsRaster.arcAscii
+						.getUrl());
 		assertNotNull(gc);
 
 		DefaultMapLayer mlayer = new DefaultMapLayer(gc,
-				RASTER_AAIGRID_WITH_SLD__SLDSTYLE);
+				TestingUtil.TestDatasetsRaster.arcAscii.getSldStyle());
 
 		checkMapLayer_AAIGrid_Transparency_with_Sld(mlayer);
 

@@ -12,83 +12,51 @@ package org.geopublishing.atlasStyler.classification;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 
+import javax.xml.transform.TransformerException;
+
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.AtlasStylerTest;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
-import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
-import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.FilterFactory2;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
+import schmitzm.swing.TestingUtil;
+import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
 
 public class QuantitiesClassificationTest {
 
-	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
+	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
-	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_snowPolygon;
+	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_snowPolygon;
 
-	@BeforeClass
-	public static void setup() throws IOException {
+	@Before
+	public void setup() throws IOException {
+		featureSource_polygon = TestingUtil.TestDatasetsVector.countryShp
+				.getFeatureSource();
 
-		{
-			// Prepare countries.shp featureStore
-			URL shpURL = AtlasStylerTest.class
-					.getResource(AtlasStylerTest.COUNTRY_SHP_RESNAME);
-			assertNotNull(AtlasStylerTest.COUNTRY_SHP_RESNAME + " not found!",
-					shpURL);
-
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("url", shpURL);
-			DataStore dataStore = DataStoreFinder.getDataStore(params);
-			featureSource_polygon = dataStore.getFeatureSource(dataStore
-					.getTypeNames()[0]);
-		}
-
-		{
-			// Prepare countries.shp featureStore
-			URL shpURL = AtlasStylerTest.class
-					.getResource(AtlasStylerTest.SNOWPOLYGON_RESNAME);
-			assertNotNull(AtlasStylerTest.SNOWPOLYGON_RESNAME + " not found!",
-					shpURL);
-
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("url", shpURL);
-			DataStore dataStore = DataStoreFinder.getDataStore(params);
-			featureSource_snowPolygon = dataStore.getFeatureSource(dataStore
-					.getTypeNames()[0]);
-		}
-
+		featureSource_snowPolygon = TestDatasetsVector.polygonSnow.getFeatureSource();
 	}
-
-	FilterFactory2 ff = CommonFactoryFinder.getFilterFactory2(null);
 
 	@After
 	public void after() {
@@ -100,13 +68,9 @@ public class QuantitiesClassificationTest {
 		for (Rule r : snowStyleOriginal.featureTypeStyles().get(0).rules()) {
 			for (final Symbolizer s : r.getSymbolizers()) {
 
-				PolygonSymbolizer ps = (PolygonSymbolizer) s;
-
 				final Color c = StylingUtil.getSymbolizerColor(s);
 
 				if (c != null) {
-					// System.out.println("Original Rule has color " +
-					// c+"  "+SwingUtil.convertColorToHex(c)+" and fill is "+ps.getFill().getColor());
 					beforeColors.add(c);
 					break;
 				}
@@ -304,9 +268,10 @@ public class QuantitiesClassificationTest {
 	}
 
 	@Test
-	public void testQuantilesClassificationImportWithManualColors() {
-		URL sldUrl = DataUtilities.changeUrlExt(AtlasStylerTest.class
-				.getResource(AtlasStylerTest.SNOWPOLYGON_RESNAME), "sld");
+	public void testQuantilesClassificationImportWithManualColors()
+			throws IOException, TransformerException {
+		URL sldUrl = DataUtilities.changeUrlExt(
+				TestDatasetsVector.polygonSnow.getUrl(), "sld");
 
 		Style snowStyleOriginal = StylingUtil.loadSLD(sldUrl)[0];
 		Style snowStyle = StylingUtil.clone(snowStyleOriginal);
@@ -325,6 +290,8 @@ public class QuantitiesClassificationTest {
 
 		assertEquals("The actual color values must be the same", beforeColors,
 				afterColors);
+
+		StylingUtil.validates(afterImport);
 	}
 
 }

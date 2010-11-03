@@ -35,7 +35,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 		// URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
 		// .getResource("/arabicShapefiles/arabicwitharabicinheader.shp");
 		// assertNotNull(url);
-		URL url = TestingUtil.TestDatasets.arabicInHeader.getUrl();
+		URL url = TestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
 
 		List<String> illegalAtts = DpLayerVectorFeatureSourceShapefileEd
 				.checkAttributeNames(url);
@@ -50,7 +50,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest {
 			ParserConfigurationException, URISyntaxException {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
-		URL url = TestingUtil.TestDatasets.arabicInHeader.getUrl();
+		URL url = TestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
 		
 		url = TestingUtil.copyShapefileToTemp(url);
 

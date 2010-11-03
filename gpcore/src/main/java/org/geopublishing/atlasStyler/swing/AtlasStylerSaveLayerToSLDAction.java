@@ -106,7 +106,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		}
 
 		try {
-			StylingUtil.saveStyleToSLD(styledShp.getStyle(),
+			StylingUtil.saveStyleToSld(styledShp.getStyle(),
 					styledShp.getSldFile());
 
 			if (backup)

@@ -14,8 +14,6 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.transform.TransformerException;
-
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -57,8 +55,8 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 		}
 
 		if (!AVSwingUtil.askYesNo(DesignAtlasStylerDialog.this, GeopublisherGUI
-				.R("DesignMapLayerLegend.SaveStyleForLayer", layerStyle
-						.getTitle()))) {
+				.R("DesignMapLayerLegend.SaveStyleForLayer",
+						layerStyle.getTitle()))) {
 			// // The user canceled his changes
 			// TODO
 			// we.getSource();
@@ -76,17 +74,14 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 
 		final String filename = map.getSelectedStyleIDs().get(dpLayer.getId());
 		try {
-			StylingUtil.saveStyleToSLD(getAtlasStyler().getStyle(), new File(
+			StylingUtil.saveStyleToSld(getAtlasStyler().getStyle(), new File(
 					dataDir, filename));
-		} catch (TransformerException e) {
-			LOGGER.error("Saving additional layer style", e);
-			ExceptionDialog.show(DesignAtlasStylerDialog.this, e);
 		} catch (IOException e) {
 			LOGGER.error("Saving additional layer style", e);
 			ExceptionDialog.show(DesignAtlasStylerDialog.this, e);
 		}
 		layerStyle.uncache();
-		//		
+		//
 		return super.okClose();
 	}
 

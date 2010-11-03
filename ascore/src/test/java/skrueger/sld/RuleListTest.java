@@ -96,6 +96,6 @@ public class RuleListTest {
 				.createFeatureType(Point.class).getGeometryDescriptor());
 		File tempF = File.createTempFile("sld", "junit");
 		System.out.println(tempF);
-		StylingUtil.saveStyleToSLD(style, tempF);
+		StylingUtil.saveStyleToSld(style, tempF);
 	}
 }

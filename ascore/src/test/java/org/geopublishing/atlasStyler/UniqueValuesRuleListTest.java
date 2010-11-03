@@ -25,7 +25,7 @@ public class UniqueValuesRuleListTest {
 	public void testUniqueValues() throws IOException {
 
 		AtlasStyler atlasStyler = new AtlasStyler(
-				TestingUtil.TestDatasets.kreise.getFeatureSource());
+				TestingUtil.TestDatasetsVector.kreise.getFeatureSource());
 		final UniqueValuesRuleList rl = atlasStyler
 				.getUniqueValuesPolygonRuleList();
 

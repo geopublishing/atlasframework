@@ -717,7 +717,7 @@ public class ManageLayerStylesDialog extends JDialog {
 				JOptionPane.showMessageDialog(owner,
 						"Creating a new style. Default style doesn't exist!"); // i8n
 			}
-			StylingUtil.saveStyleToSLD(style, file);
+			StylingUtil.saveStyleToSld(style, file);
 
 			String fileName = file.getName();
 

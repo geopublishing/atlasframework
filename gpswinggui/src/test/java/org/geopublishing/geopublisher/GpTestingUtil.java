@@ -152,19 +152,6 @@ public class GpTestingUtil extends TestingUtil{
 			SAXException, IOException, ParserConfigurationException {
 
 		return type.getAce();
-		// switch (type) {
-		// case iida2: {
-		// if (SystemUtils.IS_OS_LINUX) {
-		// // For Stefan:
-		// return
-		// getAtlasConfigE("/home/stefan/Desktop/GP/Atlanten/IIDA2/IIDA2 Arbeitskopie");
-		// } else {
-		// // For Martin:
-		// return getAtlasConfigE("../../Daten/AndiAtlas_1.2");
-		// }
-		// }
-		// }
-		// throw new RuntimeException("JUnit testing data not found");
 	}
 
 	public static DpLayerVectorFeatureSource getCities() throws AtlasException,

@@ -118,10 +118,6 @@ public class DpLayerRasterEdTest {
 			acLoaded.getResLoMan().addResourceLoader(
 					new JarResourceLoader(exportedJarFile));
 		}
-		//
-		// File exportedAtlasResoucresFile = new File(exportedAtlasDir,
-		// JarExportUtil.ARJAR_FILENAME);
-		// assertTrue(exportedAtlasResoucresFile.exists());
 
 		new AMLImport().parseAtlasConfig(null, acLoaded, false);
 

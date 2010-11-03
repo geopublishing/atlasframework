@@ -25,7 +25,7 @@ import org.opengis.filter.Filter;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil;
-import schmitzm.swing.TestingUtil.TestDatasets;
+import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
 
 public class TextRuleListTest {
@@ -35,7 +35,7 @@ public class TextRuleListTest {
 			CQLException {
 
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		System.out.println("\n now testing with only the default filter");
 		trl.addDefaultClass();
@@ -88,7 +88,7 @@ public class TextRuleListTest {
 	public void testLanguageDefaultFilters() throws IOException, CQLException {
 
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -121,7 +121,7 @@ public class TextRuleListTest {
 		System.out.println(filter);
 		assertEquals("[ de = env([LANG], [XX]) ]", filter.toString());
 
-		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasets.arabicInHeader
+		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasetsVector.arabicInHeader
 				.getFeatureCollection();
 		Iterator<SimpleFeature> it = testFeatures.iterator();
 		try {
@@ -140,14 +140,14 @@ public class TextRuleListTest {
 	@Test
 	public void testLanguageDefaultClasses() throws IOException {
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
 		trl.addDefaultClass("de");
 		trl.addDefaultClass("ar");
 
-		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasets.arabicInHeader
+		FeatureCollection<SimpleFeatureType, SimpleFeature> testFeatures = TestDatasetsVector.arabicInHeader
 				.getFeatureCollection();
 		Iterator<SimpleFeature> it = testFeatures.iterator();
 		try {
@@ -187,7 +187,7 @@ public class TextRuleListTest {
 	public void testLanguageClasses() throws IOException, CQLException,
 			TransformerException {
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -234,7 +234,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl2 = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 		trl2.importRules(trl.getRules());
 
 		FeatureTypeStyle fts2 = StylingUtil.STYLE_BUILDER
@@ -243,7 +243,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl3 = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 		trl3.importRules(trl2.getRules());
 
 		FeatureTypeStyle fts3 = StylingUtil.STYLE_BUILDER
@@ -272,7 +272,7 @@ public class TextRuleListTest {
 	public void testGetRuleAndReimport() throws IOException, CQLException,
 			TransformerException {
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -289,7 +289,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl2 = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 		trl2.importRules(trl.getRules());
 
 		System.out.println("after reimport  "
@@ -310,7 +310,7 @@ public class TextRuleListTest {
 	@Test
 	public void testExistsClass() throws IOException, CQLException {
 		TextRuleList trl = new TextRuleList(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 		trl.setEnabled(true);
 		trl.addDefaultClass();
 		trl.addDefaultClass("de");
@@ -338,7 +338,7 @@ public class TextRuleListTest {
 				.getStyle();
 
 		AtlasStyler as = new AtlasStyler(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		as.importStyle(style);
 
@@ -365,7 +365,7 @@ public class TextRuleListTest {
 				.getStyle();
 
 		AtlasStyler as = new AtlasStyler(new StyledFS(
-				TestingUtil.getTestFeatureSource(TestDatasets.arabicInHeader)));
+				TestingUtil.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
 
 		as.importStyle(style);
 

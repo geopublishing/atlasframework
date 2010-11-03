@@ -122,7 +122,7 @@ public class QuantitiesRuleListTest {
 	@Test
 	public void testImportSld_14() throws IOException, TransformerException {
 		AtlasStyler as = new AtlasStyler(
-				TestingUtil.TestDatasets.arabicInHeader.getFeatureSource());
+				TestingUtil.TestDatasetsVector.arabicInHeader.getFeatureSource());
 
 		as.importStyle(AsTestingUtil.TestSld.textRulesDefaultLocalizedPre16
 				.getStyle());

@@ -112,7 +112,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 
 			SwingUtil.setRelativeFramePosition(UniqueValuesAddGUI.this, owner,
 					SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
-			setVisible(true);
+//			setVisible(true);
 
 		} catch (CancellationException e) {
 			dispose();

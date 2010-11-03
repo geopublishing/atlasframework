@@ -9,8 +9,6 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 

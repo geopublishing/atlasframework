@@ -198,7 +198,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 		}
 
 		try {
-			StylingUtil.saveStyleToSLD(workingStyle, new java.io.File(
+			StylingUtil.saveStyleToSld(workingStyle, new java.io.File(
 					"/home/stefan/Desktop/postOpenRasterStyler.sld"));
 		} catch (Exception e) {
 		}

@@ -493,6 +493,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
 							SwingUtil.getParentWindow(UniqueValuesGUI.this),
 							rulesList);
+					valuesGUI.setVisible(true);
 				}
 
 			});

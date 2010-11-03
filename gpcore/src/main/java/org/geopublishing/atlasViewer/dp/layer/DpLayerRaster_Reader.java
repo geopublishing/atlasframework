@@ -48,6 +48,8 @@ import skrueger.geotools.StyledLayerUtil;
 import skrueger.geotools.ZoomRestrictableGridInterface;
 import skrueger.i8n.Translation;
 
+import com.vividsolutions.jts.geom.Envelope;
+
 /**
  * This class represents any {@link GridCoverage2D} that is read from one file.
  * 
@@ -267,27 +269,36 @@ public class DpLayerRaster_Reader extends
 				// e.getUpperCorner().getOrdinate(1), // Y1dddd
 				// e.getLowerCorner().getOrdinate(1) // Y2
 				// );
-				
-				
-//				GridEnvelope e = gc.getOriginalGridRange();
-//				envelope = new com.vividsolutions.jts.geom.Envelope(
-//						e.getHigh(0), // X1
-//						e.getLow(0), // X2
-//						e.getHigh(1), // Y1
-//						e.getLow(1) // Y2
-//				
-//				ServiceInfo info = gc.getInfo();
-//				
-//				Object source = gc.getSource();
-//				
-//				LOGGER.debug(info);
-//				LOGGER.debug(source);
-//				envelope = new com.vividsolutions.jts.geom.Envelope(
-//						e.getHigh(0), // X1
-//						e.getLow(0), // X2
-//						e.getHigh(1), // Y1
-//						e.getLow(1) // Y2
-//				);
+
+				// GridEnvelope e = gc.getOriginalGridRange();
+				// envelope = new com.vividsolutions.jts.geom.Envelope(
+				// e.getHigh(0), // X1
+				// e.getLow(0), // X2
+				// e.getHigh(1), // Y1
+				// e.getLow(1) // Y2
+				//
+				// ServiceInfo info = gc.getInfo();
+				//
+				// Object source = gc.getSource();
+				//
+				// LOGGER.debug(info);
+				// LOGGER.debug(source);
+				// envelope = new com.vividsolutions.jts.geom.Envelope(
+				// e.getHigh(0), // X1
+				// e.getLow(0), // X2
+				// e.getHigh(1), // Y1
+				// e.getLow(1) // Y2
+				// );
+
+				double[] lower = gc.getOriginalEnvelope().getLowerCorner()
+						.getCoordinate();
+				double[] upper = gc.getOriginalEnvelope().getUpperCorner()
+						.getCoordinate();
+				envelope = new Envelope(lower[0], lower[1], upper[0], upper[1]);
+
+				LOGGER.info("Evaluated the following Enveloper for GeoTiffReader "
+						+ envelope);
+
 				crs = gc.getCrs();
 
 				// Object object = gc.getProperties().get("GC_NODATA");
@@ -429,9 +440,9 @@ public class DpLayerRaster_Reader extends
 
 	@Override
 	public ReferencedEnvelope getReferencedEnvelope() {
-		if (getEnvelope() == null) return null;
+		if (getEnvelope() == null)
+			return null;
 		return new ReferencedEnvelope(getEnvelope(), getCrs());
 	}
-	
 
 }

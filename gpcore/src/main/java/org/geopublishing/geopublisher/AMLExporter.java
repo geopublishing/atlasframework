@@ -393,7 +393,7 @@ public class AMLExporter {
 
 				try {
 					final Style style = dpl.getStyle();
-					StylingUtil.saveStyleToSLD(style, DataUtilities
+					StylingUtil.saveStyleToSld(style, DataUtilities
 							.urlToFile(DataUtilities.changeUrlExt(
 									AVSwingUtil.getUrl(dpl, statusWindow),
 									"sld")));

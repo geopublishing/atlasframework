@@ -10,53 +10,37 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+
+import javax.xml.transform.TransformerException;
 
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
-import org.geotools.data.FeatureSource;
 import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 
-import skrueger.geotools.StyledFS;
-
-public class GraduatedColorRuleListTest  {
-
-	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
+public class GraduatedColorRuleListTest {
 
 	@Test
-	public void testGraduatedColorRuleList() throws IOException {
-		URL shpURL = AtlasStylerTest.class.getResource(
-				"/data/shp countries/country.shp");
-		assertNotNull(shpURL);
-		Map<Object, Object> params = new HashMap<Object, Object>();
-		params.put("url", shpURL);
-		DataStore dataStore = DataStoreFinder.getDataStore(params);
-		featureSource_polygon = dataStore.getFeatureSource(dataStore
-				.getTypeNames()[0]);
+	public void testGraduatedColorRuleList() throws IOException,
+			TransformerException {
 
-		GraduatedColorPolygonRuleList polyRL = new GraduatedColorPolygonRuleList(
-				new StyledFS(featureSource_polygon ));
-		
-		polyRL.pushQuite();
-		
+//		GraduatedColorPolygonRuleList polyRL = new GraduatedColorPolygonRuleList(
+//				new StyledFS(TestDatasets.countryShp.getFeatureSource()));
+//
+//		polyRL.pushQuite();
+
 		BrewerPalette[] palettes = ColorBrewer
 				.instance(ColorBrewer.QUALITATIVE).getPalettes();
 		for (BrewerPalette bp : palettes) {
-			polyRL.setBrewerPalette(bp);
+//			polyRL.setBrewerPalette(bp);
 			assertTrue(bp.getMaxColors() <= bp.getPaletteSuitability()
 					.getMaxColors());
 		}
 
-		polyRL.popQuite();
+//		polyRL.popQuite();
+
+//		assertTrue(StylingUtil.validates(polyRL.getFTS()));
 	}
 }

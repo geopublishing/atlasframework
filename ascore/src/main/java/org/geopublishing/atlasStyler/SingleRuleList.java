@@ -470,7 +470,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		style.setName(getStyleName()); // Not really needed... we evaluate the
 		// filename
 
-		StylingUtil.saveStyleToSLD(style, file);
+		StylingUtil.saveStyleToSld(style, file);
 
 		// TODO Override and call super from the specific implementations ??????
 		// really?

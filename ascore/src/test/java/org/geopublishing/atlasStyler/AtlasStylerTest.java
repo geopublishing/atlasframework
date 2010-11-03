@@ -15,20 +15,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
-import org.geotools.data.DataStore;
-import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.Symbolizer;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,32 +31,17 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFS;
 
 public class AtlasStylerTest {
-	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
+
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
-
-	/**
-	 * A tiny Shapefile with an .sld that contains a QuantilesClassification
-	 * with manually adapted colors
-	 */
-	public final static String SNOWPOLYGON_RESNAME = "/data/polygonSnowShape/polygonLayerSnow.shp";
-
-	@AfterClass
-	public static void after() {
-		featureSource_polygon.getDataStore().dispose();
-	}
 
 	@BeforeClass
 	public static void setup() throws IOException {
-		URL shpURL = AtlasStylerTest.class.getResource(COUNTRY_SHP_RESNAME);
-		assertNotNull(COUNTRY_SHP_RESNAME + " not found!", shpURL);
-		Map<Object, Object> params = new HashMap<Object, Object>();
-		params.put("url", shpURL);
-		DataStore dataStore = DataStoreFinder.getDataStore(params);
-		featureSource_polygon = dataStore.getFeatureSource(dataStore
-				.getTypeNames()[0]);
+		featureSource_polygon = TestingUtil.TestDatasetsVector.countryShp
+				.getFeatureSource();
 	}
 
 	@Test
@@ -76,9 +55,15 @@ public class AtlasStylerTest {
 	@Test
 	public void testConstructors() {
 		AtlasStyler as1 = new AtlasStyler(featureSource_polygon);
+
+		assertNotNull(as1);
+
 		AtlasStyler as2 = new AtlasStyler(new StyledFS(featureSource_polygon));
+		assertNotNull(as2);
+
 		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon),
 				null, null, null);
+		assertNotNull(as3);
 	}
 
 	@Test
@@ -117,7 +102,6 @@ public class AtlasStylerTest {
 		assertEquals(numFeatures, uniqueRL1.getValues().size());
 		assertEquals(numFeatures, uniqueRL1.getLabels().size());
 		assertEquals(numFeatures, uniqueRL1.getSymbols().size());
-		
 
 		assertTrue(StylingUtil.validates(uniqueRL1.getFTS()));
 

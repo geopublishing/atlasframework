@@ -319,7 +319,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					Style defaultStyle = ASUtil.createDefaultStyle(this);
 					File changeFileExt = IOUtil.changeFileExt(new File(
 							targetDir + "/" + getFilename()), "sld");
-					StylingUtil.saveStyleToSLD(defaultStyle, changeFileExt);
+					StylingUtil.saveStyleToSld(defaultStyle, changeFileExt);
 				}
 
 				// Parse GeoCommons a second time, now that we know the column

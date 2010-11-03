@@ -22,13 +22,13 @@ public class UniqueValuesAddGUITest {
 	public void testUniqueValuesAddGUI() throws Throwable {
 
 		AtlasStyler atlasStyler = new AtlasStyler(
-				TestingUtil.TestDatasets.kreise.getFeatureSource());
+				TestingUtil.TestDatasetsVector.kreise.getFeatureSource());
 		final UniqueValuesRuleList rl = atlasStyler
 				.getUniqueValuesPolygonRuleList();
 		
 		if (TestingUtil.INTERACTIVE) {
 			UniqueValuesAddGUI dialog = new UniqueValuesAddGUI(null, rl);
-			TestingUtil.testGui(dialog);
+			TestingUtil.testGui(dialog,1);
 		}
 
 	}

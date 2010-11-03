@@ -24,7 +24,6 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
-import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -841,15 +840,13 @@ public class AtlasStyler {
 			xxxstyle.featureTypeStyles().add(getLastChangedRuleList().getFTS());
 
 			xxxstyle.featureTypeStyles().add(getTextRulesList().getFTS());
-			//
-			// // TODO Remove
+
+			// TODO Remove, this ist just for debugging
 			Level level = Logger.getRootLogger().getLevel();
 			try {
 				Logger.getRootLogger().setLevel(Level.OFF);
-				StylingUtil.saveStyleToSLD(xxxstyle, new File(
+				StylingUtil.saveStyleToSld(xxxstyle, new File(
 						"/home/stefan/Desktop/update.sld"));
-			} catch (final TransformerException e) {
-				LOGGER.error("Transforming to XML failed!", e);
 			} catch (final Throwable e) {
 			} finally {
 				Logger.getRootLogger().setLevel(level);
@@ -948,10 +945,8 @@ public class AtlasStyler {
 			Level level = Logger.getRootLogger().getLevel();
 			try {
 				Logger.getRootLogger().setLevel(Level.OFF);
-				StylingUtil.saveStyleToSLD(importStyle, new File(
+				StylingUtil.saveStyleToSld(importStyle, new File(
 						"/home/stefan/Desktop/goingToImport.sld"));
-			} catch (final TransformerException e) {
-				LOGGER.warn("Transforming to XML failed!", e);
 			} catch (final Throwable e) {
 			} finally {
 				Logger.getRootLogger().setLevel(level);

@@ -12,42 +12,33 @@ import javax.swing.JLabel;
 
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.TextRuleList;
-import org.geotools.data.FeatureSource;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
 
 public class TextSymbolizerEditGUITest {
+	private static StyledFS STYLED_FS;
 	private static TextRuleList tr;
 	private static AtlasStyler atlasStyler;
-	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
-	@BeforeClass
-	public static void setup() throws IOException {
-		featureSource_polygon = AsTestingUtil.getPolygonsFeatureSource();
-		StyledFS styledFeatures = new StyledFS(featureSource_polygon);
-		tr = new TextRuleList(styledFeatures);
+	@Before
+	public void befire() throws IOException {
+		STYLED_FS = TestDatasetsVector.countryShp.getStyledFS();
+		tr = new TextRuleList(STYLED_FS);
 		tr.addDefaultClass();
-		atlasStyler = new AtlasStyler(styledFeatures);
-	}
+		atlasStyler = new AtlasStyler(STYLED_FS);
 
-
-	@AfterClass
-	public static void after() {
-		featureSource_polygon.getDataStore().dispose();
 	}
 
 	@Test
 	public void testGetFontComboBox() throws IOException {
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
-				tr, atlasStyler, featureSource_polygon.getFeatures());
+				tr, atlasStyler, STYLED_FS.getFeatureCollection());
 		JComboBox jComboBoxFont = textSymbolizerEditGUI.getJComboBoxFont();
-		assertEquals("default number of fonts is 5", 5, jComboBoxFont
-				.getItemCount());
+		assertEquals("default number of fonts is 5", 5,
+				jComboBoxFont.getItemCount());
 
 	}
 
@@ -58,10 +49,10 @@ public class TextSymbolizerEditGUITest {
 		atlasStyler.setFonts(fonts);
 
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
-				tr, atlasStyler, featureSource_polygon.getFeatures());
+				tr, atlasStyler, TestDatasetsVector.countryShp.getFeatureCollection());
 		JComboBox jComboBoxFont = textSymbolizerEditGUI.getJComboBoxFont();
-		assertEquals("default number of fonts is 5", 5, jComboBoxFont
-				.getItemCount());
+		assertEquals("default number of fonts is 5", 5,
+				jComboBoxFont.getItemCount());
 	}
 
 }
