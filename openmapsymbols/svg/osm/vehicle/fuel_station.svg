@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.0"
+   width="198.17545"
+   height="232.01903"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   sodipodi:docname="fuel_station.svg"
+   sodipodi:docbase="C:\Dokumente und Einstellungen\ulfl\Eigene Dateien\svn.openstreetmap.org\applications\share\map-icons\svg\vehicle"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <metadata
+     id="metadata13">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:window-height="573"
+     inkscape:window-width="925"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     guidetolerance="10.0"
+     gridtolerance="10.0"
+     objecttolerance="10.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     inkscape:zoom="0.7875"
+     inkscape:cx="240"
+     inkscape:cy="151.59365"
+     inkscape:window-x="88"
+     inkscape:window-y="88"
+     inkscape:current-layer="svg2" />
+  <defs
+     id="defs4" />
+  <path
+     d="M 84.023751,232.01903 L 188.33081,231.95258 L 188.39727,215.77393 L 198.17545,215.84038 L 198.17545,8.25545 C 198.17545,3.82769 195.60974,-2.8421709e-014 190.78387,-2.8421709e-014 L 83.707701,-2.8421709e-014 C 78.181261,-2.8421709e-014 72.671391,3.98245 72.671391,10.37179 L 72.551861,215.77393 L 83.907051,215.77393 L 84.023751,232.01903 z "
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="path1897" />
+  <path
+     d="M 73.178191,70.59139 L 62.739841,70.52957 C 62.672161,113.00396 62.981711,196.82937 63.158611,198.26364 C 63.536231,201.32532 63.307891,204.49722 62.521781,207.38689 C 46.157971,248.61042 -6.7918587,229.67641 0.7263313,189.56353 C 17.238901,149.77503 40.392871,122.85142 51.916591,75.9224 L 52.942441,110.80777 C 42.571471,130.98896 24.275021,166.43201 10.085691,196.05867 C 8.8902413,223.41188 41.429441,232.42391 51.620391,203.06393 C 56.161811,151.67116 51.449641,95.6516 51.364271,41.94543 C 57.986631,22.25836 65.293711,20.3739 72.709331,21.31159"
+     style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="path1899" />
+  <path
+     d="M 94.304801,29.28045 L 93.943711,82.36063 C 93.943711,86.63271 97.372921,89.58242 101.34605,89.58242 L 170.13363,89.76297 C 174.30684,89.76297 176.27215,87.10133 176.27215,83.4439 L 176.27215,29.461 C 176.27215,24.24268 173.28591,22.69057 169.50172,22.69057 L 101.16551,22.69057 C 97.248941,22.69057 94.304801,25.03015 94.304801,29.28045 z "
+     style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     id="path1901" />
+</svg>

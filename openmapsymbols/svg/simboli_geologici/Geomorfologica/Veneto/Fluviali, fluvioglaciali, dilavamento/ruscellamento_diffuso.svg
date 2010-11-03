@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg5315"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="ruscellamento_diffuso.svg">
+  <defs
+     id="defs5317" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata5320">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g5345">
+      <line
+         x1="341.32648"
+         y1="532.76215"
+         x2="367.41507"
+         y2="523.56226"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line150" />
+      <path
+         d="M 352.91889,528.53721 L 352.91639,528.53721 L 352.91139,528.56221 L 352.90389,528.59971 L 352.89264,528.64971 L 352.87889,528.7247 L 352.86264,528.79971 L 352.84389,528.88721 L 352.82264,528.99971 L 352.80014,529.11221 L 352.77514,529.2372 L 352.74889,529.37471 L 352.72139,529.5247 L 352.69139,529.6747 L 352.66139,529.8372 L 352.6314,530.0122 L 352.5989,530.1997 L 352.56764,530.3872 L 352.53515,530.58719 L 352.47014,530.9997 L 352.4064,531.42469 L 352.34515,531.87469 L 352.28765,532.33718 L 352.23514,532.81218 L 352.1914,533.28718 L 352.15514,533.76218 L 352.12889,534.23717 L 352.11515,534.69967 L 352.1139,535.14967 L 352.1264,535.58716 L 352.13889,535.79966 L 352.1564,535.99966 L 352.17764,536.19966 L 352.2039,536.38716 L 352.2339,536.57466 L 352.2689,536.74966 L 352.31015,536.92466 L 352.35639,537.07465 L 352.40764,537.22465 L 352.46514,537.37466 L 352.5289,537.49965 L 352.59764,537.62465 L 352.67264,537.72465 L 352.75514,537.82465 L 352.84389,537.89965 L 352.94014,537.97465 L 353.04264,538.02465 L 353.15264,538.07465 L 353.26889,538.09964 L 353.39389,538.11215 L 353.52638,538.11215 L 353.66763,538.08715 L 353.81639,538.04965 L 353.97389,537.99965 C 357.41511,536.67466 363.18258,533.23718 361.85383,538.27465 C 360.53134,543.29961 359.79884,547.21209 359.79884,547.21209"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path152" />
+      <line
+         x1="382.58621"
+         y1="526.72473"
+         x2="408.67352"
+         y2="517.51227"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line154" />
+      <path
+         d="M 394.17362,522.48725 L 394.16113,522.48725 L 394.16113,522.51225 L 394.14863,522.54975 L 394.14863,522.59974 L 394.12363,522.67475 L 394.11113,522.74975 L 394.09863,522.83724 L 394.07362,522.94974 L 394.04863,523.06224 L 394.02363,523.18724 L 393.99863,523.32474 L 393.97363,523.47474 L 393.94862,523.62474 L 393.91113,523.78724 L 393.88613,523.96224 L 393.84863,524.14974 L 393.82363,524.33723 L 393.78613,524.53724 L 393.72363,524.94973 L 393.66113,525.37473 L 393.59863,525.82472 L 393.53613,526.28722 L 393.48613,526.76222 L 393.44863,527.23722 L 393.41113,527.71221 L 393.38613,528.18721 L 393.37363,528.64971 L 393.36113,529.0997 L 393.38613,529.5372 L 393.39863,529.7497 L 393.41113,529.9497 L 393.43613,530.1497 L 393.46113,530.34969 L 393.48613,530.5247 L 393.52363,530.69969 L 393.56113,530.8747 L 393.61113,531.03719 L 393.66113,531.18719 L 393.72363,531.32469 L 393.78613,531.44969 L 393.84863,531.57469 L 393.92363,531.67469 L 394.01113,531.77469 L 394.09863,531.84968 L 394.19862,531.92469 L 394.29862,531.98719 L 394.41112,532.02469 L 394.52362,532.04969 L 394.64862,532.06219 L 394.78612,532.06219 L 394.92362,532.03719 L 395.07362,531.99969 L 395.22362,531.94969 C 398.6736,530.6247 404.43606,527.18722 403.11107,532.22468 C 401.78608,537.24966 401.04858,541.16213 401.04858,541.16213"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path156" />
+    </g>
+  </g>
+</svg>

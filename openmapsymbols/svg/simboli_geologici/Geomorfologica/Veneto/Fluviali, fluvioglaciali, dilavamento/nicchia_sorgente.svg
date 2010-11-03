@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg6036"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="nicchia_sorgente.svg">
+  <defs
+     id="defs6038" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata6041">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g6047">
+      <line
+         x1="355.03763"
+         y1="533.64966"
+         x2="355.13763"
+         y2="533.21216"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line342" />
+      <path
+         d="M 355.06263,533.21218 L 355.23762,532.33718 L 355.45012,531.47469 L 355.70012,530.62469 L 355.98762,529.7872 L 356.31262,528.96221 L 356.67512,528.17471 L 357.06261,527.38721 L 357.48761,526.62472 L 357.93761,525.88722 L 358.42511,525.16223 L 358.9376,524.47473 L 359.4751,523.79974 L 360.0501,523.14974 L 360.65009,522.52474 L 361.26258,521.92475 L 361.91258,521.34975 L 362.58758,520.81226 L 363.28758,520.28726 L 364.00007,519.79977 L 364.73756,519.34977 L 365.50006,518.92477 L 366.27505,518.53727 L 367.07505,518.17478 L 367.90004,517.84978 L 368.72504,517.56228 L 369.57503,517.29978 L 370.43753,517.08728 L 371.32502,516.91229 L 372.21252,516.76228 L 373.11251,516.66229 L 374.03751,516.59978 L 374.9625,516.57479 C 385.07493,516.57479 393.44988,523.99974 394.93737,533.68718"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.87498796;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path344" />
+      <path
+         d="M 374.1375,548.14958 L 374.1375,548.14958 L 374.1125,548.14958 L 374.07501,548.14958 L 374.03751,548.13708 L 373.975,548.12458 L 373.9,548.12458 L 373.82501,548.11208 L 373.72501,548.09958 L 373.62501,548.07458 L 373.51251,548.06209 L 373.38751,548.03709 L 373.25001,548.01208 L 373.11251,547.98708 L 372.97501,547.94959 L 372.81251,547.92459 L 372.66251,547.88708 L 372.32502,547.79959 L 371.96252,547.71209 L 371.60002,547.59959 L 371.21252,547.47459 L 370.82503,547.33709 L 370.43753,547.17459 L 370.05003,546.99959 L 369.67503,546.81209 L 369.30004,546.59959 L 368.95004,546.36209 L 368.78753,546.24959 L 368.61254,546.11209 L 368.46254,545.9871 L 368.31254,545.8496 L 368.16254,545.6996 L 368.02504,545.5496 L 367.90004,545.3996 L 367.77504,545.2371 L 367.66254,545.0621 L 367.56255,544.8871 L 367.47505,544.71211 L 367.38754,544.5246 L 367.32505,544.33711 L 367.26255,544.13711 L 367.22505,543.93711 L 367.18755,543.72461 L 367.17505,543.49961 L 367.17505,543.27461 L 367.17505,543.04962 L 367.20005,542.81212 L 367.25005,542.56212 L 367.30005,542.31212 L 367.37505,542.04962 L 367.47505,541.77462 L 367.57505,541.49962 L 367.71255,541.22463 L 367.85004,540.93713 L 368.02504,540.63713 C 371.77502,534.18717 372.95001,534.29967 372.63751,530.0997 C 372.31252,525.88722 373.50001,523.94974 374.9,527.61221 C 376.29999,531.27469 376.96249,533.62467 379.31247,537.39965 C 381.66245,541.17463 382.93745,543.02461 379.72497,545.4746 C 376.51249,547.93709 374.1375,548.14958 374.1375,548.14958 z "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.87498796;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path346" />
+    </g>
+  </g>
+</svg>
