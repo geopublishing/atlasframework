@@ -925,12 +925,8 @@ public class AVSwingUtil extends AVUtil {
 		if (dpe.url == null) {
 
 			if (JNLPUtil.isAtlasDataFromJWS(dpe.getAtlasConfig())) {
-				try {
-					JNLPSwingUtil.loadPart(dpe.getId(), statusDialog);
-					// TODO was ist wenn man abbricht?!
-				} catch (IOException e) {
-					LOGGER.error("loading part failed", e);
-				}
+				JNLPSwingUtil.loadPart(new String[] { dpe.getId() },
+						statusDialog);
 			}
 
 			// Yes, we call the deplrecated one here!

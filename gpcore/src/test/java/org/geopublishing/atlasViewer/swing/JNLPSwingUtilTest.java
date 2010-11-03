@@ -20,9 +20,9 @@ public class JNLPSwingUtilTest {
 
 	@Test
 	public void testLoadPartEvenHeadless() throws IOException {
-//		if (TestingUtil.isInteractive()) {
-		JNLPSwingUtil.loadPartAndCreateDialogForIt("a");
-//		}
+		if (TestingUtil.isInteractive()) {
+			JNLPSwingUtil.loadPartAndCreateDialogForIt("a");
+		}
 	}
 
 }

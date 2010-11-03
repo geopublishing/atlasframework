@@ -11,7 +11,6 @@
 package org.geopublishing.atlasViewer.swing;
 
 import java.awt.GraphicsEnvironment;
-import java.io.IOException;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -19,12 +18,11 @@ import javax.jnlp.DownloadService;
 import javax.jnlp.DownloadServiceListener;
 import javax.jnlp.UnavailableServiceException;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart
@@ -36,34 +34,36 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 public class JNLPSwingUtil extends JNLPUtil {
 	final static private Logger LOGGER = Logger.getLogger(JNLPSwingUtil.class);
 
-	/**
-	 * Does not manage any GUI feedback! Please run it from an {@link AtlasTask}
-	 * . Will do nothing if the part is already cached.
-	 * 
-	 * @param statusDialog
-	 */
-	public static void loadPart(String part,
-			DownloadServiceListener statusDialog) throws IOException {
-
-		LOGGER.debug("loadPart(String[] parts, AtlasStatusDialogInterface statusDialog) EDT:"
-				+ SwingUtilities.isEventDispatchThread());
-
-		DownloadService ds;
-		try {
-			ds = getJNLPDownloadService();
-
-			if (ds.isPartCached(part)) {
-				LOGGER.debug("part " + part + " is JWS cached, returning");
-				return;
-			}
-			LOGGER.info("part " + part + " is NOT cached.. start DL ");
-
-			// load the resource into the JWS Cache
-			ds.loadPart(part, statusDialog);
-		} catch (UnavailableServiceException e1) {
-			throw new IOException(e1);
-		}
-	}
+	//
+	// /**
+	// * Does not manage any GUI feedback! Please run it from an {@link
+	// AtlasTask}
+	// * . Will do nothing if the part is already cached.
+	// *
+	// * @param statusDialog
+	// */
+	// public static void loadPart(String part,
+	// DownloadServiceListener statusDialog) {
+	//
+	// LOGGER.debug("loadPart(String[] parts, AtlasStatusDialogInterface statusDialog) EDT:"
+	// + SwingUtilities.isEventDispatchThread());
+	//
+	// DownloadService ds;
+	// try {
+	// ds = getJNLPDownloadService();
+	//
+	// if (ds.isPartCached(part)) {
+	// LOGGER.debug("part " + part + " is JWS cached, returning");
+	// return;
+	// }
+	// LOGGER.info("part " + part + " is NOT cached.. start DL ");
+	//
+	// // load the resource into the JWS Cache
+	// ds.loadPart(part, statusDialog);
+	// } catch (Exception e) {
+	// LOGGER.error(e);
+	// }
+	// }
 
 	public static DownloadServiceListener getJNLPDialog()
 			throws UnavailableServiceException {
@@ -76,8 +76,15 @@ public class JNLPSwingUtil extends JNLPUtil {
 		return new AtlasStatusDialog(AtlasViewerGUI.getInstance().getJFrame());
 	}
 
+	/**
+	 * Blocks and downloades the URL on this Thread. Uses the
+	 * {@link DownloadServiceListener} for any feedback. The
+	 * {@link DownloadServiceListener} can be a
+	 * {@link NoGuiDownloadServiceListener} or an {@link AtlasStatusDialog}.
+	 * Throws not {@link Exception}s, but logs them.
+	 */
 	public static void loadPart(String[] parts,
-			DownloadServiceListener serviceListener) throws IOException {
+			DownloadServiceListener serviceListener) {
 
 		LOGGER.debug("loadPart(String[] parts, DownloadServiceListener statusDialog) EDT:"
 				+ SwingUtilities.isEventDispatchThread());
@@ -96,12 +103,16 @@ public class JNLPSwingUtil extends JNLPUtil {
 					+ SwingUtilities.isEventDispatchThread() + ") ");
 			ds.loadPart(parts, serviceListener);
 
-		} catch (UnavailableServiceException e1) {
-			LOGGER.error("", e1);
-			throw new IOException("", e1);
+		} catch (Exception e1) {
+			LOGGER.error(e1);
 		}
 	}
 
+	/**
+	 * Creates a {@link AtlasStatusDialog} (unless headless) and runs the
+	 * download in an {@link AtlasSwingWorker}. The {@link SwingWorker} is
+	 * started from the correct {@link Thread}.
+	 */
 	public static void loadPartAndCreateDialogForIt(final String... parts) {
 		try {
 
