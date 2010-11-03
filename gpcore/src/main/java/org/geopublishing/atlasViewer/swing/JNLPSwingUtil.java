@@ -63,7 +63,8 @@ public class JNLPSwingUtil extends JNLPUtil {
 	public static DownloadServiceListener getJNLPDialog()
 			throws UnavailableServiceException {
 
-		if (!AtlasViewerGUI.isRunning()) {
+		if (!AtlasViewerGUI.isRunning()
+				|| !SwingUtilities.isEventDispatchThread()) {
 			return new AtlasStatusDialog(null);
 		}
 
@@ -107,7 +108,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 	}
 
 	public static void loadPart(String id) throws IOException {
-		if (!GraphicsEnvironment.isHeadless() && AtlasViewerGUI.isRunning()) {
+		// TODO && SwingUtilities.isEventDispatchThread() removen!
+		if (!GraphicsEnvironment.isHeadless() && AtlasViewerGUI.isRunning()
+				&& SwingUtilities.isEventDispatchThread()) {
 			JNLPSwingUtil
 					.loadPart(id, AtlasViewerGUI.getInstance().getJFrame());
 		} else {

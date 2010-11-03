@@ -534,6 +534,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 				setBrokenException(new AtlasException(
 						"Trying to open and close a stream to URL " + url
 								+ " failed: ", e));
+				url = null;
 				return null;
 			}
 		}

@@ -61,7 +61,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	@Override
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject() {
 
-		URL localUrl = getUrl(); // TODO
+		URL localUrl = getUrl(); 
 		if (localUrl == null) {
 			final AtlasException atlasException = new AtlasException(
 					"Could not find ID:" + getId() + " / Title:'" + getTitle()

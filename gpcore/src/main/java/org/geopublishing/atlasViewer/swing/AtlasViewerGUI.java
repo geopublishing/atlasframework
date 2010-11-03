@@ -62,7 +62,6 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geotools.swing.ExceptionMonitor;
 
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
@@ -128,7 +127,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	/**
 	 * The main JFrame of the AtlasViewer.
 	 */
-	private JFrame atlasJFrame;
+	volatile private JFrame atlasJFrame;
 
 	/** The unique main atlasConfig that this AtlasViewer will present * */
 	private AtlasConfig atlasConfig = new AtlasConfig();
@@ -221,7 +220,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public final JFrame getJFrame() {
 		if (atlasJFrame == null) {
-			SwingUtil.checkOnEDT();
+//			SwingUtil.checkOnEDT();
 
 			/**
 			 * Disabled, because Artuhr wants to make screenshots with Metal On
@@ -388,7 +387,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				// tries to load the default map, which should not
 				openFirstMap();
 			else
-				ExceptionMonitor.show(getJFrame(), e);
+				ExceptionDialog.show(getJFrame(), e);
 		} catch (InterruptedException e) {
 		} catch (CancellationException e) {
 		}

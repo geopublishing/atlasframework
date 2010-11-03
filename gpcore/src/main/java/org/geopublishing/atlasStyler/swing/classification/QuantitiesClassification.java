@@ -114,7 +114,7 @@ public class QuantitiesClassification extends org.geopublishing.atlasStyler.clas
 		} catch (CancellationException e) {
 			setQuite(stackQuites.pop());
 		} catch (ExecutionException exception) {
-//			ExceptionMonitor.show(owner, exception);
+//			ExceptionDialog.show(owner, exception);
 			setQuite(stackQuites.pop());
 		} finally {
 		}
