@@ -31,7 +31,6 @@ import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -52,7 +51,6 @@ import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
-import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
@@ -62,10 +60,7 @@ import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.geotools.referencing.CRS;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.gui.GeotoolsGUIUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
 

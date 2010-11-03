@@ -163,7 +163,7 @@ public class DataPoolJTable extends JTable {
 		 */
 		@Override
 		public Class<?> getColumnClass(final int columnIndex) {
-			if (columnIndex == 2) {
+			if (columnIndex == 1) {
 				return DpEntryType.class;
 			} else if (columnIndex == 6)
 				return Double.class;
@@ -178,7 +178,7 @@ public class DataPoolJTable extends JTable {
 			if (column == 0) {
 				return dpe.getQuality();
 			} else if (column == 1) {
-				return dpe;
+				return dpe.getType();
 			} else if (column == 2) {
 				return dpe.getTitle().toString();
 			} else if (column == 3) {

@@ -42,7 +42,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
 
-
 /**
  * A {@link TableCellRenderer} for {@link DpEntryType} values. Used in
  * {@link DataPoolJTable}
@@ -61,9 +60,12 @@ public class DpEntryTypeTableCellRenderer extends DefaultTableCellRenderer {
 			boolean isSelected, boolean hasFocus, int row, int column) {
 
 		if (value instanceof DpEntry) {
+			value = ((DpEntry) value).getType();
+		}
 
-			final DpEntry dpEntry = (DpEntry)value;
-			final DpEntryType type = (DpEntryType) dpEntry.getType();
+		if (value instanceof DpEntryType) {
+
+			final DpEntryType type = (DpEntryType) value;
 
 			ImageIcon icon = DpEntryType.getIconBigFor(type);
 			String line1 = DpEntryType.getLine1For(type);
@@ -87,23 +89,22 @@ public class DpEntryTypeTableCellRenderer extends DefaultTableCellRenderer {
 			center.add(line1Label);
 			center.add(line2Label);
 			prototype.add(center, BorderLayout.CENTER);
-//
-//			if (dpEntry.isBroken()){
-////				Graphics2D g = (Graphics2D) prototype.getGraphics();
-////				g.setColor(Color.RED);
-////				g.setFont(new Font("Arial",Font.BOLD, 15));
-////				g.drawString("!", 1, 15);
-//				comp.setIcon(DpEntryType.getIconBigFor(DpEntryType.UNKNOWN));
-//				prototype.setToolTipText("ERROR "+dpEntry.getBrokenException().getLocalizedMessage());
-//			}else
-//				prototype.setToolTipText(type.getDesc());
-//			
-//			
+			//
+			// if (dpEntry.isBroken()){
+			// // Graphics2D g = (Graphics2D) prototype.getGraphics();
+			// // g.setColor(Color.RED);
+			// // g.setFont(new Font("Arial",Font.BOLD, 15));
+			// // g.drawString("!", 1, 15);
+			// comp.setIcon(DpEntryType.getIconBigFor(DpEntryType.UNKNOWN));
+			// prototype.setToolTipText("ERROR "+dpEntry.getBrokenException().getLocalizedMessage());
+			// }else
+			// prototype.setToolTipText(type.getDesc());
+			//
+			//
 			prototype.setPreferredSize(new Dimension(66, 24));
 			// prototype.setMaximumSize(new Dimension(66, 26));
 
 			// setColorsForSelectionState(prototype, isSelected);
-			
 
 			return prototype;
 		} else
