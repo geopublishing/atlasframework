@@ -17,6 +17,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geotools.styling.Style;
 import org.opengis.filter.Filter;
+import org.opengis.filter.Id;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
@@ -45,6 +46,8 @@ public class LayerStyle {
 		this.title = name;
 		this.desc = desc;
 		this.dpLayer = dpLayer;
+		
+		LOGGER.debug("Creating new LayerStyle with "+filename+" "+title);
 	}
 
 	public Translation getDesc() {

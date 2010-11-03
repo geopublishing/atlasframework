@@ -500,9 +500,12 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 						LOGGER.debug("dpLayer.getId():" + dpLayer.getId());
 
+						String selectedStyleID = map
+								.getSelectedStyleID(dpLayer.getId());
+						LOGGER.debug("selectedStyleID:" + selectedStyleID);
+						
 						LayerStyle layerStyleByID = dpLayer
-								.getLayerStyleByID(map
-										.getSelectedStyleID(dpLayer.getId()));
+								.getLayerStyleByID(selectedStyleID);
 
 						LOGGER.debug("layerStyleByID:" + layerStyleByID);
 
