@@ -307,10 +307,11 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 			testUrl.openStream();
 			layerStyles.add(newLayerStyle);
 		} catch (Exception e) {
-			LOGGER.warn("Not adding additional style"
-					+ newLayerStyle.toString()
-					+ " because the URL can't be openend.\n   LayerID = "
-					+ getId());
+			LOGGER.warn(
+					"Not adding additional style"
+							+ newLayerStyle.toString()
+							+ " because the URL can't be openend.\n   LayerID = "
+							+ getId(), e);
 			return;
 		}
 
