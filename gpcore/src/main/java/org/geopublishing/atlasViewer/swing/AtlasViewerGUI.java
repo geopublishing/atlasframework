@@ -220,7 +220,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public final JFrame getJFrame() {
 		if (atlasJFrame == null) {
-//			SwingUtil.checkOnEDT();
+			// SwingUtil.checkOnEDT();
 
 			/**
 			 * Disabled, because Artuhr wants to make screenshots with Metal On
@@ -357,17 +357,15 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 				if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
 					LOGGER.debug("atlas data comes from JWS, so we download all parts of map "
-							+ map.getId() + " first (if not cached)...");
+							+ newMap.getId() + " (if not already cached)...");
 					publish(R("AmlViewer.process.downloading_map",
 							newMap.getTitle()));
 					newMap.downloadMap(statusDialog);
 				}
-
 				return true;
-
 			}
-
 		};
+
 		try {
 			startupTask.executeModal();
 
