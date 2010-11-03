@@ -12,9 +12,11 @@ package org.geopublishing.atlasViewer;
 
 import java.awt.event.ActionListener;
 
+import javax.jnlp.DownloadServiceListener;
+
 import org.opengis.util.InternationalString;
 
-public interface AtlasStatusDialogInterface {
+public interface AtlasStatusDialogInterface extends DownloadServiceListener{
 
 	/**
 	 * Returns the window title. The default title is "Progress" localized in

@@ -523,7 +523,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 				return false;
 			}
 		}
-		
 
 		MapLayer mapLayer = null;
 		StyledLayerSelectionModel<?> selectionModel = null;

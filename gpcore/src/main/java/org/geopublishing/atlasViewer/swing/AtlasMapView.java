@@ -592,29 +592,6 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		// This check doesn't work for Rasters that are powered by a reader, since 
 		if (newLayerEnv != null
 				&& !(styledLayerObject instanceof StyledRasterInterface)) {
-			//
-			// if (map.getMaxExtend() != null) {
-			//
-			// // If the BBOX of the layer does not intersect with with
-			// // maxExtend,
-			// // do not allow to add it.
-			//
-			// ReferencedEnvelope maxExtendRef = new
-			// ReferencedEnvelope(map.getMaxExtend(), map
-			// .getLayer0Crs());
-			//
-			// maxExtendRef = JTSUtil.transformEnvelope(maxExtendRef,
-			// styledLayerObject.getCrs());
-			//
-			// if (!styledLayerObject.getReferencedEnvelope().intersects(
-			// (Envelope)
-			// maxExtendRef)) {
-			// AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
-			// "MapLegend.InsertLayer.LayerOutsideExtend",
-			// styledLayerObject.getTitle()));
-			// return false;
-			// }
-			// }
 
 			if (getMapPane().getMapContext().getCoordinateReferenceSystem() != null) {
 
@@ -645,71 +622,6 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 			}
 
 		}
-
-		// else
-		// {
-		//
-		// // If no maxExtend is defined, check against the bounds of the
-		// // EFFECTIVE CRS of the mapcontext.
-		// CoordinateReferenceSystem contextCrs = getGeoMapPane()
-		// .getMapContext().getCoordinateReferenceSystem();
-		// if (contextCrs != null) {
-		// if (contextCrs.getDomainOfValidity() != null
-		// && contextCrs.getDomainOfValidity()
-		// .getGeographicElements() != null)
-		// for (GeographicExtent ge : contextCrs.getDomainOfValidity()
-		// .getGeographicElements()) {
-		//
-		// if (ge instanceof GeographicBoundingBoxImpl) {
-		// GeographicBoundingBoxImpl gbb = (GeographicBoundingBoxImpl) ge;
-		// // Envelope latLonEnv = new
-		// // Envelope(gbb.getWestBoundLongitude(),
-		// // gbb.getSouthBoundLatitude(),
-		// // gbb.getEastBoundLongitude(),
-		// // gbb.getNorthBoundLatitude());
-		//
-		// double s = gbb.getSouthBoundLatitude();
-		// double w = gbb.getWestBoundLongitude();
-		// double n = gbb.getNorthBoundLatitude();
-		// double e = gbb.getEastBoundLongitude();
-		// Envelope latLonEnv = new Envelope(
-		// s,
-		// n,
-		// w,
-		// e);
-		//
-		// LOGGER.info("selfmade "+latLonEnv);
-		//
-		// ReferencedEnvelope crsEnvelope = new ReferencedEnvelope(
-		// latLonEnv, DefaultGeographicCRS.WGS84);
-		//
-		// if (!crsEnvelope.intersects(styledLayerObject
-		// .getReferencedEnvelope())) {
-		// AVSwingUtil
-		// .showMessageDialog(
-		// this,
-		// AtlasViewerGUI
-		// .R("MapLegend.InsertLayer.LayerOutsideExtend",
-		// styledLayerObject
-		// .getTitle()));
-		// }
-		//
-		// }
-		// LOGGER.info(ge);
-		// LOGGER.info(ge.getClass());
-		//
-		// }
-
-		// }
-		// }
-
-		// if (map.getCrs() != null &&
-		// !styledLayerObject.getEnvelope().intersects(map.getMaxExtend())) {
-		// AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
-		// "MapLegend.InsertLayer.LayerOutsideMaxExtend",
-		// styledLayerObject.getTitle()));
-		// return false;
-		// }
 
 		return layerManager.addStyledLayer(styledLayerObject);
 	}

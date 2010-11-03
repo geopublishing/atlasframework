@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -26,7 +25,6 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
-import org.geopublishing.atlasViewer.jnlp.JnlpStatusDialog2;
 import org.geopublishing.atlasViewer.map.Map;
 
 /**
@@ -224,27 +222,6 @@ public class JNLPUtil {
 		}
 
 		return isAtlasDataFromJWS;
-	}
-
-	public static void loadPart(String part) throws IOException {
-		DownloadService ds;
-		try {
-			ds = getJNLPDownloadService();
-
-			if (ds.isPartCached(part)) {
-				LOGGER.info("part " + part + " is JWS cached");
-			} else {
-				LOGGER.info("part " + part
-						+ " is NOT cached.. starting download... ");
-
-				// load the resource into the JWS Cache
-				ds.loadPart(part, new JnlpStatusDialog2()); // TODO use
-															// statusDialog
-			}
-		} catch (UnavailableServiceException e1) {
-			throw new IOException(e1);
-		}
-
 	}
 
 }

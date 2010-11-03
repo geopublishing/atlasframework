@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
+import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.io.IOException;
 
 import javax.jnlp.DownloadService;
@@ -19,9 +21,8 @@ import javax.jnlp.UnavailableServiceException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
-import org.geopublishing.atlasViewer.jnlp.JnlpStatusDialog2;
+import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
-
 
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart
@@ -32,14 +33,15 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
  */
 public class JNLPSwingUtil extends JNLPUtil {
 	final static private Logger LOGGER = Logger.getLogger(JNLPSwingUtil.class);
+
 	/**
 	 * Does not manage any GUI feedback! Please run it from an {@link AtlasTask}
 	 * . Will do nothing if the part is already cached.
 	 * 
 	 * @param statusDialog
 	 */
-	public static void loadPart(String part, AtlasStatusDialogInterface statusDialog)
-			throws IOException {
+	public static void loadPart(String part,
+			AtlasStatusDialogInterface statusDialog) throws IOException {
 		DownloadService ds;
 		try {
 			ds = getJNLPDownloadService();
@@ -50,7 +52,7 @@ public class JNLPSwingUtil extends JNLPUtil {
 				LOGGER.info("part " + part + " is NOT cached.. start DL ");
 
 				// load the resource into the JWS Cache
-				ds.loadPart(part, getJNLPDialog()); // TODO use statusDialog
+				ds.loadPart(part, statusDialog);
 			}
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);
@@ -59,12 +61,16 @@ public class JNLPSwingUtil extends JNLPUtil {
 
 	public static DownloadServiceListener getJNLPDialog()
 			throws UnavailableServiceException {
-		// return getJNLPDownloadService().getDefaultProgressWindow();
-		return new JnlpStatusDialog2();
+
+		if (!AtlasViewerGUI.isRunning()) {
+			return new AtlasStatusDialog(null);
+		}
+
+		return new AtlasStatusDialog(AtlasViewerGUI.getInstance().getJFrame());
 	}
 
-	public static void loadPart(String[] parts, AtlasStatusDialogInterface statusDialog)
-			throws IOException {
+	public static void loadPart(String[] parts,
+			AtlasStatusDialogInterface statusDialog) throws IOException {
 		DownloadService ds;
 		try {
 			ds = getJNLPDownloadService();
@@ -74,6 +80,36 @@ public class JNLPSwingUtil extends JNLPUtil {
 
 		} catch (UnavailableServiceException e1) {
 			throw new IOException(e1);
+		}
+	}
+
+	public static void loadPart(String part, Component owner)
+			throws IOException {
+		DownloadService ds;
+		try {
+			ds = getJNLPDownloadService();
+
+			if (ds.isPartCached(part)) {
+				LOGGER.info("part " + part + " is JWS cached");
+			} else {
+
+				LOGGER.info("part " + part
+						+ " is NOT cached.. starting download... ");
+
+				// load the resource into the JWS Cache
+				ds.loadPart(part, new AtlasStatusDialog(owner));
+			}
+		} catch (UnavailableServiceException e1) {
+			throw new IOException(e1);
+		}
+	}
+
+	public static void loadPart(String id) throws IOException {
+		if (!GraphicsEnvironment.isHeadless() && AtlasViewerGUI.isRunning()) {
+			JNLPSwingUtil.loadPart(id, AtlasViewerGUI.getInstance()
+					.getJFrame());
+		} else {
+			JNLPSwingUtil.loadPart(id);
 		}
 	}
 

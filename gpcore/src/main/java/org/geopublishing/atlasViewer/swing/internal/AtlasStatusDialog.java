@@ -20,6 +20,7 @@ import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 import java.util.HashSet;
 
 import javax.swing.BorderFactory;
@@ -38,6 +39,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
+import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.resources.SwingUtilities;
 import org.geotools.resources.i18n.Vocabulary;
@@ -49,7 +51,7 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.OkButton;
 
-public class AtlasStatusDialog implements AtlasStatusDialogInterface{
+public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	
 	static public String CANCEL_PROPERTY = "atlas status dialog cancelled";
 	
@@ -704,5 +706,26 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface{
 		return warningOccured;
 	}
 
+	@Override
+	public void downloadFailed(URL arg0, String arg1) {
+		setDescription(arg1);
+		exceptionOccurred(new AtlasImportException(arg1));
+	}
+
+	@Override
+	public void progress(URL url, String urlString, long doneSoFar, long full,
+			int percentage) {
+		setDescription("Downloading " + percentage + "%");
+	}
+
+	@Override
+	public void upgradingArchive(URL arg0, String arg1, int arg2, int arg3) {
+		setDescription("Upgrading " + arg1);
+	}
+
+	@Override
+	public void validating(URL arg0, String arg1, long arg2, long arg3, int arg4) {
+		setDescription("Validating " + arg1);
+	}
 
 }

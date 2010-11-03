@@ -165,8 +165,9 @@ public class DpLayerRaster_Reader extends
 				 * Can we define transparent colors here?
 				 */
 				GeneralParameterValue[] readParams = null;
-
-				URL url = getUrl();
+				
+				URL url ;
+				url = getUrl();
 
 				/**
 				 * GEOTiffReader fails for jar:file:....jar!bla.tif URLs :-(

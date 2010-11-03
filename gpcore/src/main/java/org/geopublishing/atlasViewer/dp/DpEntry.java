@@ -30,6 +30,7 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
 
 import rachel.ResourceManager;
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -514,7 +515,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 
 			if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
 				try {
-					JNLPUtil.loadPart(getId());
+					JNLPSwingUtil.loadPart(getId());
 					// TODO was ist wenn man abbricht?!
 				} catch (IOException e) {
 					LOGGER.error("loading part failed", e);
