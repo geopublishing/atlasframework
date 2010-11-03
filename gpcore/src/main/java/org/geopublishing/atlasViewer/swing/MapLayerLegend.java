@@ -925,13 +925,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 */
 	public void zoomTo() {
 		try {
-			
-			// TODO That is new.. needs testing!
-			mapLegend.getGeoMapPane().setForceCrs(
-					getMapLayer().getFeatureSource().getSchema()
-							.getCoordinateReferenceSystem());
-			
-			mapLegend.getGeoMapPane().getMapPane().zoomToLayer(getMapLayer());
+
+			mapLegend.getGeoMapPane().getMapPane()
+					.zoomToLayer(getMapLayer(), true);
 
 		} catch (java.lang.IllegalArgumentException e) {
 			if (mapLayer.getFeatureSource() != null

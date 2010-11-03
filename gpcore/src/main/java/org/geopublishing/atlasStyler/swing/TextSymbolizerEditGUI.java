@@ -1076,7 +1076,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		}
 		bounds.expandBy(bounds.getSpan(0) * 1.5, bounds.getSpan(1));
 		previewMapPane.setMaxExtend(bounds);
-		previewMapPane.zoomToLayer(0);
+		previewMapPane.zoomToLayer(0, true);
 
 		rulesList.addListener(ruleChangedUpadteThePreview);
 
@@ -1197,7 +1197,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					getJComboBoxLabelField().setSelectedItem(pn1.toString());
 				else
 					getJComboBoxLabelField().setSelectedItem("-");
-//				System.out.println("pn1:" + pn1);
+				// System.out.println("pn1:" + pn1);
 			}
 
 			/***********************************************************************
@@ -1210,7 +1210,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					getJComboBoxLabelField2().setSelectedItem(pn2.toString());
 				} else
 					getJComboBoxLabelField2().setSelectedItem("-");
-//				System.out.println("pn2:" + pn2);
+				// System.out.println("pn2:" + pn2);
 			}
 
 			/***********************************************************************

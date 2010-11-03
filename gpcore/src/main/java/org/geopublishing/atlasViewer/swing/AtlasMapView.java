@@ -533,7 +533,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		// LOGGER.debug("Setting the MapArea to: " + defaultMapArea);
 		if (defaultMapArea == null) {
 			if (map.getLayers().size() > 0)
-				getGeoMapPane().getMapPane().zoomToLayer(0);
+				getGeoMapPane().getMapPane().zoomToLayer(0, true);
 		} else {
 			getGeoMapPane().getMapPane().setMapArea(defaultMapArea);
 		}
@@ -587,8 +587,9 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	public boolean addStyledLayer(StyledLayerInterface<?> styledLayerObject) {
 
 		Envelope newLayerEnv = styledLayerObject.getReferencedEnvelope();
-		
-		// This check doesn't work for Rasters that are powered by a reader, since 
+
+		// This check doesn't work for Rasters that are powered by a reader,
+		// since
 		if (newLayerEnv != null) {
 
 			if (getMapPane().getMapContext().getCoordinateReferenceSystem() != null) {
