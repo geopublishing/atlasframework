@@ -614,6 +614,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 
 		if (partsToDownload.length == 0) {
 			// All is cached
+			LOGGER.debug("  all is cached.");
 			return;
 		}
 

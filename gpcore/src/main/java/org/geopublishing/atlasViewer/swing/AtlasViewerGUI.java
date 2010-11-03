@@ -357,7 +357,8 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				}
 
 				if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
-					LOGGER.debug("atlas data comes from JWS, so we download all parts if needed first..");
+					LOGGER.debug("atlas data comes from JWS, so we download all parts of map "
+							+ map.getId() + " first (if not cached)...");
 					publish(R("AmlViewer.process.downloading_map",
 							newMap.getTitle()));
 					newMap.downloadMap(statusDialog);
