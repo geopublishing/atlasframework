@@ -284,12 +284,13 @@ public class JarExportUtil {
 			fileWriter
 					.write("# This will start the atlas with a maximum of "
 							+ xmx
-							+ "Mb of memory. Increase this number if have lots of memory.\n");
+							+ "Mb of memory. Increase this number if you have lots of memory.\n");
 			fileWriter.write("java -Xmx" + xmx
 					+ "m -Dfile.encoding=UTF-8 -Djava.library.path="
 					+ DISK_SUB_DIR + LIB_DIR + " -jar " + DISK_SUB_DIR + "/"
 					+ targetJar.getName() + "\n");
 			fileWriter.close();
+			
 
 			// //
 			// ******************************************************************
