@@ -16,8 +16,10 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.swing.TestingUtil;
 
-public class AsTestingUtil {
+public class AsTestingUtil extends TestingUtil{
+	
 	public final static String COUNTRY_SHP_RESNAME = "/data/shp countries/country.shp";
 
 	public static FeatureSource<SimpleFeatureType, SimpleFeature> getPolygonsFeatureSource()

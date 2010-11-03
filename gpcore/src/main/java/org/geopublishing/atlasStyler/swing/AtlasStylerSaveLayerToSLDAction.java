@@ -27,7 +27,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
-import org.geotools.swing.ExceptionMonitor;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;

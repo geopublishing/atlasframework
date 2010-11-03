@@ -28,7 +28,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -37,10 +36,11 @@ import org.xml.sax.SAXException;
 import schmitzm.geotools.GTUtil;
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.io.IOUtil;
+import schmitzm.swing.TestingUtil;
 import skrueger.geotools.MapPaneToolBar;
 
-public class GpTestingUtil {
-
+public class GpTestingUtil extends TestingUtil{
+	
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {
 		// TODO Create atype "new" that creates a new atlas in tmp dir
@@ -172,22 +172,6 @@ public class GpTestingUtil {
 			ParserConfigurationException {
 		return getCities(getAtlasConfigE());
 	}
-
-	//
-	// public static void showJMapPane(org.geotools.swing.JMapPane mapPane)
-	// throws InterruptedException {
-	// JDialog dialog = new JDialog();
-	// mapPane.setMinimumSize(new Dimension(500, 500));
-	// mapPane.setPreferredSize(new Dimension(500, 500));
-	// mapPane.setSize(new Dimension(500, 500));
-	// dialog.setContentPane(mapPane);
-	// dialog.pack();
-	// dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	//
-	// TestingUtil.testGui(dialog);
-	//
-	// dialog.dispose();
-	// }
 
 	public static AtlasConfigEditable saveAndLoad(AtlasConfigEditable ace)
 			throws Exception {
