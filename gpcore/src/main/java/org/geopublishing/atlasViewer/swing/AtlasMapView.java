@@ -497,9 +497,15 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					 * we have to apply it
 					 */
 					if (map.getSelectedStyleID(dpLayer.getId()) != null) {
+
+						LOGGER.debug("dpLayer.getId():" + dpLayer.getId());
+
 						LayerStyle layerStyleByID = dpLayer
 								.getLayerStyleByID(map
 										.getSelectedStyleID(dpLayer.getId()));
+
+						LOGGER.debug("layerStyleByID:" + layerStyleByID);
+
 						Style style = layerStyleByID.getStyle();
 						// dpLayer.setTitle(layerStyleByID.getTitle());
 						// dpLayer.setDesc(layerStyleByID.getDesc());
