@@ -29,7 +29,8 @@ import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.geotools.swing.ExceptionMonitor;
+
+import schmitzm.swing.ExceptionDialog;
 
 public class MapPoolDuplicateAction extends AbstractAction {
 	final static private Logger LOGGER = Logger
@@ -104,20 +105,17 @@ public class MapPoolDuplicateAction extends AbstractAction {
 				FileUtils.deleteDirectory(newHtmlDir);
 			} catch (IOException e2) {
 				LOGGER.error(e2);
-				ExceptionMonitor.show(mapPoolJTable, e2,
-						"While deleting the new map's HTML files");
+				ExceptionDialog.show(mapPoolJTable, e2);
 				return null;
 			}
 		} catch (Exception e1) {
-			ExceptionMonitor.show(mapPoolJTable, e1,
-					"While copying the new map's HTML files");
+			ExceptionDialog.show(mapPoolJTable, e1);
 
 			try {
 				FileUtils.deleteDirectory(newHtmlDir);
 			} catch (IOException e3) {
 				LOGGER.error(e3);
-				ExceptionMonitor.show(mapPoolJTable, e3,
-						"While deleting the new map's HTML files");
+				ExceptionDialog.show(mapPoolJTable, e3);
 			}
 
 			return null;

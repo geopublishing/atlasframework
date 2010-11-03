@@ -114,7 +114,7 @@ public class JNLPSwingUtil extends JNLPUtil {
 			JNLPSwingUtil
 					.loadPart(id, AtlasViewerGUI.getInstance().getJFrame());
 		} else {
-			JNLPSwingUtil.loadPart(id);
+			loadPart(new String[] { id }, null);
 		}
 	}
 
