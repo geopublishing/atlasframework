@@ -12,7 +12,6 @@ package org.geopublishing.atlasViewer.dp;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
@@ -515,12 +514,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (url == null) {
 
 			if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
-				try {
-					JNLPSwingUtil.loadPart(getId());
-					// TODO was ist wenn man abbricht?!
-				} catch (IOException e) {
-					LOGGER.error("loading part failed", e);
-				}
+				JNLPSwingUtil.loadPartAndCreateDialogForIt(getId());
 			}
 
 			String location = getAtlasConfig().getResouceBasename()
