@@ -36,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -49,6 +50,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.UncacheAtlasAction;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolJTable;
@@ -314,9 +316,35 @@ public class GpFrame extends JFrame {
 
 		}
 
+		/**
+		 * Show a link to load the last loaded atlas if one is stored
+		 */
+		if (GPProps.get(Keys.LastOpenAtlasFolder) != null) {
+
+			final File lastAtalsFolder = new File(
+					GPProps.get(Keys.LastOpenAtlasFolder));
+
+			if (lastAtalsFolder.exists()
+					&& AtlasConfigEditable.isAtlasDir(lastAtalsFolder)) {
+
+				fileMenu.add(new JSeparator());
+
+				fileMenu.add(new AbstractAction(lastAtalsFolder.getAbsolutePath()) {
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						gp.loadAtlasFromDir(lastAtalsFolder);
+					}
+				});
+
+			}
+
+		}
+
 		// ******************************************************************
 		// "Exit" Menu Item - exitMenuItem
 		// ******************************************************************
+		fileMenu.add(new JSeparator()); // SEPARATOR
 		menuItem = new GpMenuItem(
 				AtlasViewerGUI
 						.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
@@ -339,12 +367,10 @@ public class GpFrame extends JFrame {
 	public MapPoolJTable getMappoolJTable() {
 		return getGpSplitPane().getMappoolJTable();
 	}
-	
 
 	public DnDJTree getGroupJTree() {
 		return getGpSplitPane().getGroupJTable();
 	}
-
 
 	/**
 	 * Will recreate the {@link JMenuBar} of this {@link JFrame}. Should be
@@ -629,30 +655,30 @@ public class GpFrame extends JFrame {
 
 		}
 
-//		// TODO unschön, Switch raster Renderers for testing
-//		{
-//			rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
-//					"Use new reader for raster") {
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					boolean oldValue = GPProps
-//							.getBoolean(
-//									org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
-//									true);
-//
-//					boolean newValue = !oldValue;
-//					GPProps.set(
-//							org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
-//							newValue);
-//					rasterCheckBoxMenuItem.setSelected(newValue);
-//				}
-//			});
-//			rasterCheckBoxMenuItem.setSelected((GPProps.getBoolean(
-//					org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
-//					true)));
-//			optionsMenu.add(rasterCheckBoxMenuItem);
-//		}
+		// // TODO unschön, Switch raster Renderers for testing
+		// {
+		// rasterCheckBoxMenuItem = new JCheckBoxMenuItem(new AbstractAction(
+		// "Use new reader for raster") {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// boolean oldValue = GPProps
+		// .getBoolean(
+		// org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+		// true);
+		//
+		// boolean newValue = !oldValue;
+		// GPProps.set(
+		// org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+		// newValue);
+		// rasterCheckBoxMenuItem.setSelected(newValue);
+		// }
+		// });
+		// rasterCheckBoxMenuItem.setSelected((GPProps.getBoolean(
+		// org.geopublishing.geopublisher.GPProps.Keys.rasterReader,
+		// true)));
+		// optionsMenu.add(rasterCheckBoxMenuItem);
+		// }
 
 		/**
 		 * Manage ASCII Reader

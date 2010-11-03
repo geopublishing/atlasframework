@@ -177,49 +177,10 @@ public class MapPoolJTable extends JTable {
 			} else if (columnIndex == 1) {
 				return map.getTitle().toString();
 			} else if (columnIndex == CRSCOL) {
-				CoordinateReferenceSystem mapCrs = map.getLayer0Crs();
-
-				// Returns a List of all DIFFERENT CRS used in the map
-				if (mapCrs != null) {
-
-					List<String> crss = new ArrayList<String>();
-
-					// Name/Descriptor of the Map's CRS
-
-					// The Map's CRS is always the first one in the list
-					crss.add(GeotoolsGUIUtil.getTitleForCRS(mapCrs));
-
-					/**
-					 * Now iterate over the layer's CRSs and check A) If they
-					 * semantically differ from the Map's one, and B) check that
-					 * no CRS-Name is in the list twice.
-					 */
-					for (DpRef dpr : map.getLayers()) {
-						DpLayer dpl = (DpLayer) dpr.getTarget();
-						CoordinateReferenceSystem layerCrs = dpl.getCrs();
-
-						if (layerCrs != null) {
-							if (!CRS.equalsIgnoreMetadata(mapCrs, layerCrs)) {
-
-								String layerCrsName = GeotoolsGUIUtil
-										.getTitleForCRS(layerCrs);
-
-								if (layerCrsName != null
-										&& !crss.contains(layerCrsName)) {
-									crss.add(layerCrsName);
-								}
-							}
-						}
-
-					}
-					return crss;
-				}
-				return null;
+				return map.getUsedCrs();
 			} else if (columnIndex == 3) {
 				return getSize(map);
 			}
-//			long start = System.currentTimeMillis();
-//			System.out.println((System.currentTimeMillis() - start));
 			return getValueAt(rowIndex, columnIndex);
 		}
 

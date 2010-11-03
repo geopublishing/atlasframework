@@ -158,6 +158,16 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 */
 	protected Charset charset;
 
+	/**
+	 * Caches the quality calculated for this layer for a while
+	 */
+	private Double quality;
+
+	/**
+	 * Last time the quality was calculated
+	 */
+	long qualityLastTimeCalculated;
+
 	// DnD Stuff...
 	final public static DataFlavor INFO_FLAVOR = new DataFlavor(DpEntry.class,
 			"DatapoolEntry Information");
@@ -186,80 +196,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		downloadedAndVisible = false;
 		brokenException = null;
 		url = null;
+		quality = null;
 	}
-
-	//
-	// /**
-	// * Returns a URL for this {@link CopyOfDpEntry}. This references the
-	// "main"
-	// * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
-	// * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
-	// * generated using {@link IOUtil}.changeUrlExt
-	// *
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Tzeggai</a>
-	// *
-	// * @throws IOException
-	// * @throws AtlasFatalException
-	// * @return <code>null</code> or the main URL for this Layer, usually
-	// * pointing to a .tif or .gif (or WMS or shp or GML etc)
-	// *
-	// */
-	// public final URL getUrl(Component comp) {
-	// if (comp == null) return getUrl((AtlasStatusDialog)null);
-	// return getUrl(new AtlasStatusDialog(comp));
-	// }
-	//
-	// public URL getUrl() {
-	// return getUrl((Component)null);
-	// }
-
-	//
-	// /**
-	// * Returns a URL for this {@link CopyOfDpEntry}. This references the
-	// "main"
-	// * file, e.g. the .shp for a {@link DpLayerVector} or the .tiff for a
-	// * {@link DpLayerRaster} etc. All other {@link URL}s (e.g. .prj) can be
-	// * generated using {@link IOUtil}.changeUrlExt
-	// *
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Tzeggai</a>
-	// *
-	// * @throws IOException
-	// * @throws AtlasFatalException
-	// * @return <code>null</code> or the main URL for this Layer, usually
-	// * pointing to a .tif or .gif (or WMS or shp or GML etc)
-	// *
-	// */
-	// public final URL getUrl(AtlasStatusDialog statusDialog) {
-	// if (url == null) {
-	// String location = ac.getResouceBasename() + getDataDirname() + "/"
-	// + getFilename();
-	//
-	// if (JNLPUtil.isAtlasDataFromJWS(ac)) {
-	// try {
-	// JNLPUtil.loadPart(getId(), statusDialog);
-	// //TODO was ist wenn man abbricht?!
-	// } catch (IOException e) {
-	// LOGGER.error("loading part failed", e);
-	// }
-	// }
-	//
-	// url = ac.getResource(location);
-	//
-	// // Testing if we really can see it in the resources now...
-	// try {
-	// InputStream openStream = url.openStream();
-	// openStream.close();
-	// } catch (Exception e) {
-	// setBrokenException(new AtlasException(
-	// "Trying to open and close a stream to URL " + url
-	// + " failed: ", e));
-	// return null;
-	// }
-	// }
-	// return url;
-	// }
 
 	/**
 	 * Set the sub directory where data of this {@link CopyOfDpEntry} is saved
@@ -303,7 +241,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (getId() == null) {
 			return +1;
 		}
-		
+
 		return getId().compareTo(dpe2.getId());
 	}
 
@@ -420,32 +358,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		this.imageIcon = imageIcon;
 	}
 
-	// AVSwingUtil
-	// /**
-	// * Copies ONLY the {@link #getFilename()} to a {@link File} in the
-	// * temp-folder
-	// *
-	// * @see #cleanupTemp() which is responsible to remove these files again.
-	// *
-	// * @return {@link File} in temp
-	// * @throws IOException
-	// */
-	// public File getLocalCopy(Component owner) throws IOException {
-	//
-	// if ((localTempFile == null) || (!localTempFile.exists())) {
-	//
-	// String postFix = IOUtil.getFileExt(new File(getFilename()));
-	//
-	// localTempFile = AVUtil.createLocalCopyFromURL(owner, getUrl(owner),
-	// getTitle().toString(), postFix.equals("") ? null : postFix);
-	//
-	// }
-	// return localTempFile;
-	// }
-
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see skrueger.atlas.ExportableLayer#isExportable()
 	 */
 	@Override
@@ -469,10 +382,9 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * starting with {@link AVUtil#ATLAS_TEMP_FILE_INSTANCE_ID}
 	 */
 	public static void cleanupTemp() {
-		
-		AVUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID, AVUtil.ATLAS_TEMP_FILE_BASE_ID);
-		
 
+		AVUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
+				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
 
 	}
 
@@ -480,30 +392,29 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		return downloadedAndVisible;
 	}
 
-	// public static void setOwner(Component owner) {
-	// DpEntry.owner = owner;
-	// }
-	//
-	// public static Component getOwner() {
-	// return owner;
-	// }
-
 	/**
 	 * @return A value between 0 and 1 which describes how good much metadata
 	 *         has been provided. 1 is great. If the entry is broken returns 0.
 	 */
 	public Double getQuality() {
+
 		if (isBroken())
 			return 0.;
-		final List<String> languages = getAtlasConfig().getLanguages();
-		Double averageChartQuality = 1.;
-		if (getCharts().size() > 0) {
-			averageChartQuality = getAverageChartQuality();
+
+		if (quality != null
+				|| (System.currentTimeMillis() - qualityLastTimeCalculated) > 500) {
+			qualityLastTimeCalculated = System.currentTimeMillis();
+
+			final List<String> languages = getAtlasConfig().getLanguages();
+			Double averageChartQuality = 1.;
+			if (getCharts().size() > 0) {
+				averageChartQuality = getAverageChartQuality();
+			}
+			quality = (I8NUtil.qmTranslation(languages, getTitle()) * 4.
+					+ I8NUtil.qmTranslation(languages, getDesc()) * 2.
+					+ I8NUtil.qmTranslation(languages, getKeywords()) * 1. + averageChartQuality * 3.) / 10.;
 		}
-		final Double result = (I8NUtil.qmTranslation(languages, getTitle())
-				* 4. + I8NUtil.qmTranslation(languages, getDesc()) * 2.
-				+ I8NUtil.qmTranslation(languages, getKeywords()) * 1. + averageChartQuality * 3.) / 10.;
-		return result;
+		return quality;
 	}
 
 	/**
@@ -653,5 +564,5 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public File getLocalTempFile() {
 		return localTempFile;
 	}
-	
+
 }

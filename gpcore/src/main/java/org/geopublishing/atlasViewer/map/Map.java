@@ -32,8 +32,10 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.map.MapContext;
+import org.geotools.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
+import schmitzm.geotools.gui.GeotoolsGUIUtil;
 import schmitzm.geotools.gui.GridPanel;
 import schmitzm.geotools.gui.GridPanelFormatter;
 import schmitzm.geotools.gui.ScalePane;
@@ -163,6 +165,15 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	long qualityLastCalced;
 
 	/**
+	 * Caches a list of all CRS names used in this map
+	 */
+	private ArrayList<String> cacheUsedCrs;
+	/**
+	 * Remebers when this list has been calculated the last time
+	 */
+	private long cacheUsedCrsLastCheckedTime;
+
+	/**
 	 * Resets the cache that remembers for which languages the HTML info pages
 	 * exist.
 	 */
@@ -216,6 +227,9 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			// Forget about the style changes. This may not be called from GP!
 			dpr.getTarget().resetStyleChanges();
 		}
+
+		cacheUsedCrs = null;
+		quality = null;
 
 	}
 
@@ -1086,5 +1100,57 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 			return true;
 		else
 			return (!b);
+	}
+
+	/**
+	 * @return A {@link List} of {@link String} with the names of all different
+	 *         CRS used in the map.
+	 */
+	public List<String> getUsedCrs() {
+
+		if (cacheUsedCrs != null
+				|| (System.currentTimeMillis() - cacheUsedCrsLastCheckedTime) > 1000) {
+
+			cacheUsedCrsLastCheckedTime = System.currentTimeMillis();
+
+			CoordinateReferenceSystem mapCrs = getLayer0Crs();
+
+			// Returns a List of all DIFFERENT CRS used in the map
+			if (mapCrs != null) {
+
+				cacheUsedCrs = new ArrayList<String>();
+
+				// Name/Descriptor of the Map's CRS
+
+				// The Map's CRS is always the first one in the list
+				cacheUsedCrs.add(GeotoolsGUIUtil.getTitleForCRS(mapCrs));
+
+				/**
+				 * Now iterate over the layer's CRSs and check A) If they
+				 * semantically differ from the Map's one, and B) check that no
+				 * CRS-Name is in the list twice.
+				 */
+				for (DpRef dpr : getLayers()) {
+					DpLayer dpl = (DpLayer) dpr.getTarget();
+					CoordinateReferenceSystem layerCrs = dpl.getCrs();
+
+					if (layerCrs != null) {
+						if (!CRS.equalsIgnoreMetadata(mapCrs, layerCrs)) {
+
+							String layerCrsName = GeotoolsGUIUtil
+									.getTitleForCRS(layerCrs);
+
+							if (layerCrsName != null
+									&& !cacheUsedCrs.contains(layerCrsName)) {
+								cacheUsedCrs.add(layerCrsName);
+							}
+						}
+					}
+
+				}
+			} else
+				cacheUsedCrs = null;
+		}
+		return cacheUsedCrs;
 	}
 }
