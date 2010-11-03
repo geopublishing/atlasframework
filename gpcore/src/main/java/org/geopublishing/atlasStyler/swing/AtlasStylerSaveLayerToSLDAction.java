@@ -123,9 +123,9 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 			if (es.size() > 0) {
 				ExceptionDialog.show(
 						owner,
-						new IllegalStateException(ASUtil
-								.R("AtlasStylerExport.WarningSLDNotValid"), es
-								.get(0)));
+						new IllegalStateException(ASUtil.R(
+								"AtlasStylerExport.WarningSLDNotValid",
+								styledShp.getSldFile()), es.get(0)));
 			}
 
 		} catch (Exception e1) {
