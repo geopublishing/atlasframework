@@ -290,7 +290,6 @@ public class JarExportUtil {
 					+ DISK_SUB_DIR + LIB_DIR + " -jar " + DISK_SUB_DIR + "/"
 					+ targetJar.getName() + "\n");
 			fileWriter.close();
-			
 
 			// //
 			// ******************************************************************
@@ -346,7 +345,8 @@ public class JarExportUtil {
 		try {
 			fileWriter = new FileWriter(htmlFile);
 			fileWriter
-					.write("<?xml version='1.0' encoding='UTF-8'?><html><body>\n");
+					.write("<?xml version='1.0' encoding='UTF-8'?><html><head><title>"
+							+ ace.getTitle() + "</title></head><body>\n");
 
 			/**
 			 * Start des JNLP über das deplayJava.js
