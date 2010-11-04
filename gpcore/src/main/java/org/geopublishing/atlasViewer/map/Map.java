@@ -230,7 +230,6 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 
 		cacheUsedCrs = null;
 		quality = null;
-
 	}
 
 	/**

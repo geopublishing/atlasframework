@@ -400,7 +400,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		if (isBroken())
 			return 0.;
 
-		if (quality != null
+		if (quality == null
 				|| (System.currentTimeMillis() - qualityLastTimeCalculated) > 500) {
 			qualityLastTimeCalculated = System.currentTimeMillis();
 
@@ -511,10 +511,11 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	public URL getUrl() {
 		if (url == null) {
 
-// NOt a good idea, since we are calling this from AVswingUtil.getUrl which starts ad ialog			
-//			if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
-//				JNLPSwingUtil.loadPartAndCreateDialogForIt(null, getId());
-//			}
+			// NOt a good idea, since we are calling this from
+			// AVswingUtil.getUrl which starts ad ialog
+			// if (JNLPUtil.isAtlasDataFromJWS(getAtlasConfig())) {
+			// JNLPSwingUtil.loadPartAndCreateDialogForIt(null, getId());
+			// }
 
 			String location = getAtlasConfig().getResouceBasename()
 					+ getDataDirname() + "/" + getFilename();
