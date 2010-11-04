@@ -22,14 +22,10 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
-import org.geotools.data.FeatureSource;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.jfree.ui.Layer;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;

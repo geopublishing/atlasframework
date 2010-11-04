@@ -23,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.CancellationException;
@@ -520,7 +521,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * 
 	 * @return javax.swing.JMenuBar
 	 */
-	private AtlasMenuBar getAtlasMenuBar() {
+	AtlasMenuBar getAtlasMenuBar() {
 		if (atlasMenuBar == null) {
 			atlasMenuBar = new AtlasMenuBar(this);
 		}
@@ -626,7 +627,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 						// Starting the internal WebServer
 						new Webserver();
-						
+
 						publish(R("dialog.title.wait"));
 						new AMLImport().parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
@@ -693,13 +694,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			// Will not appear if there is only one language to select from
 			switchLanguageDialog.setVisible(true);
 		}
+		updateLangMenu();
 
 		/**
-		 * Open the AtlasPopupDialog while the atlas is still loading
+		 * Open the AtlasPopupDialog on the EDT later and then open the first
+		 * map
 		 */
-		// LOGGER.debug("popup props say: "+AVProps
-		// .getBoolean(Keys.showPopupOnStartup, true));
-		// LOGGER.debug("popup URL says = "+getAtlasConfig().getPopupHTMLURL());
 		if (getAtlasConfig().getPopupHTMLURL() != null
 				&& getAtlasConfig()
 						.getProperties()
@@ -720,7 +720,22 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			});
 		}
 
-		updateLangMenu();
+		/**
+		 * If there are parts to download from JNLP, ask the user to do it now..
+		 */
+		ArrayList<String> partsToDownload = JNLPUtil
+				.countPartsToDownload(atlasConfig.getDataPool());
+		if (partsToDownload.size() > 0) {
+			boolean dlNow = AVSwingUtil
+					.askYesNo(
+							getJFrame(),
+							"Download all "
+									+ partsToDownload.size()
+									+ " files now? After you can use the atlas without delays.");
+			if (dlNow == true) {
+				new DownloadAllJNLPAction(AtlasViewerGUI.this);
+			}
+		}
 
 		openFirstMap();
 	}

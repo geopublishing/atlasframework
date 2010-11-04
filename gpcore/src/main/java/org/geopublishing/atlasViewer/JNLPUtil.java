@@ -130,14 +130,14 @@ public class JNLPUtil {
 				}
 			}
 		} catch (javax.jnlp.UnavailableServiceException ue) {
+			// Return empty list!
 			return haveToDownload;
 		} catch (Exception e) {
 			LOGGER.error(e);
 		}
 
-		// if (haveToDownload.size() > 0)
-		LOGGER.debug("There are " + haveToDownload.size()
-				+ " parts that are not yet downloaded.");
+		if (haveToDownload.size() > 0)
+			LOGGER.debug(haveToDownload.size() + " parts not cached.");
 
 		return haveToDownload;
 	}

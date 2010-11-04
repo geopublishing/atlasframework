@@ -34,9 +34,7 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.swing.internal.AtlasJMenu;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
-import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 
 /**
@@ -222,81 +220,11 @@ public class AtlasMenuBar extends JMenuBar {
 	public JMenuItem getJWSDownloadAllMenuItem()
 			throws UnavailableServiceException {
 
+		DownloadAllJNLPAction downloadAllJNLPAction = new DownloadAllJNLPAction(
+				atlasViewer);
+
 		JMenuItem jwsDownloadAllMenuItem = new AtlasMenuItem(
-				new AbstractAction(AtlasViewerGUI
-						.R("AtlasViewer.FileMenu.downloadAllRessources")) {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						// **************************************************************
-						// Download all JWS resources into the local cache
-						// **************************************************************
-
-						LOGGER.info("Action Command: downloadAllJWS");
-						try {
-
-							ArrayList<String> haveToDownload = JNLPUtil
-									.countPartsToDownload(atlasViewer
-											.getAtlasConfig().getDataPool());
-							if (haveToDownload.size() == 0) {
-								/*
-								 * Nothing to download
-								 */
-								getJWSDownloadAllMenuItem().setEnabled(false);
-
-								AVSwingUtil
-										.showMessageDialog(
-												atlasViewer.getJFrame(),
-												AtlasViewerGUI
-														.R("AtlasViewer.FileMenu.downloadAllRessources.AlreadyDownloaded"));
-
-								return;
-
-							} else {
-
-								// There is stuf to down load
-
-								final String[] parts = haveToDownload
-										.toArray(new String[haveToDownload
-												.size()]);
-
-								LOGGER.info("Parts length = " + parts.length);
-
-								AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-										AtlasMenuBar.this);
-								statusDialog.setCancelAllowed(false);
-								AtlasSwingWorker<Void> atlasSwingWorker = new AtlasSwingWorker<Void>(
-										statusDialog) {
-
-									@Override
-									protected Void doInBackground()
-											throws Exception {
-										JNLPSwingUtil.loadPart(parts,
-												statusDialog);
-										return null;
-									}
-
-								};
-								atlasSwingWorker.executeModal();
-
-								AVSwingUtil
-										.showMessageDialog(
-												atlasViewer.getJFrame(),
-												AtlasViewerGUI
-														.R("AtlasViewer.FileMenu.downloadAllRessources.Success"));
-							}
-						} catch (UnavailableServiceException e1) {
-							ExceptionDialog.show(atlasViewer.getJFrame(), e1);
-						} catch (Throwable ee) {
-							LOGGER.error("Downloading all JARs via JWS", ee);
-							ExceptionDialog.show(atlasViewer.getJFrame(), ee);
-						}
-
-					}
-
-				},
-				AtlasViewerGUI
-						.R("AtlasViewer.FileMenu.downloadAllRessources.tooltip"));
+				downloadAllJNLPAction);
 
 		ArrayList<String> haveToDownload = JNLPUtil
 				.countPartsToDownload(atlasViewer.getAtlasConfig()
