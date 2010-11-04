@@ -735,8 +735,8 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 		// i8n
 		LOGGER.error("downloadFailed " + url + " " + arg1);
-		setDescription("downloadFailed " + url + " " + arg1);
-		exceptionOccurred(new AtlasImportException(arg1));
+		exceptionOccurred(new AtlasImportException("Download failed: " + url
+				+ " " + arg1));
 	}
 
 	long lastPercentageUpdate = System.currentTimeMillis() - 10000;
@@ -768,8 +768,10 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 
 		String fullSize = mbdf.format(full);
 
-		setDescription("Downloading " + filename + " " + percentage + "% of "
-				+ fullSize); // i8n
+		setDescription("Downloading " + filename + " ("+ percentage + "%)"); // i8n
+//		setDescription("Downloading " + filename + " " + percentage + "% of "
+//				+ fullSize); // i8n
+
 	}
 
 	@Override
@@ -810,7 +812,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	}
 
 	final static Pattern SHORTEN_ATLAS_JAR_NAMES = Pattern
-			.compile("(.*)\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d.jar");
+			.compile("(.*?)_?\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d.jar");
 
 	static String getShortFilename(URL url) {
 		if (url == null)
@@ -822,6 +824,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 				fn = matcher.group(1);
 			}
 		}
+		
 		return fn;
 	}
 

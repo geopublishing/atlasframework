@@ -64,8 +64,6 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
-import com.sun.codemodel.internal.JNullType;
-
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.ClassResourceLoader;
