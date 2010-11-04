@@ -22,7 +22,7 @@
   or try this link: http://www.gnu.org/licenses/gpl.html
   
 -->
-<project name="OpenMapSymbols">
+<project name="OpenMapSymbols" default="rsync_symbols" basedir=".">
 
 
 	<!-- Where are the local OpenSymbols stored. This folder is copied over to geopublishing.org  -->

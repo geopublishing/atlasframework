@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
   <sld:Name/>
-  <sld:Title/>
+  <sld:Title>wikisquare.de</sld:Title>
   <sld:Abstract/>
   <sld:FeatureTypeStyle>
     <sld:Name>name</sld:Name>

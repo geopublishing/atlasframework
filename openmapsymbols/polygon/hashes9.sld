@@ -2,7 +2,7 @@
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
   <sld:Name>hashes9</sld:Name>
   <sld:Title>Andrea Henneberger</sld:Title>
-  <sld:Abstract>use freely, needs GeoTools 2.6+</sld:Abstract>
+  <sld:Abstract>use freely, needs Geoserver 2.0++</sld:Abstract>
   <sld:FeatureTypeStyle>
     <sld:Name>name</sld:Name>
     <sld:FeatureTypeName>Feature</sld:FeatureTypeName>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
-  <sld:Name/>
-  <sld:Title>SK</sld:Title>
-  <sld:Abstract>good for anything</sld:Abstract>
+  <sld:Name>communes_outline</sld:Name>
+  <sld:Title>wikisquare.de</sld:Title>
+  <sld:Abstract>fast</sld:Abstract>
   <sld:FeatureTypeStyle>
     <sld:Name>name</sld:Name>
     <sld:Title>title</sld:Title>
@@ -12,17 +12,12 @@
     <sld:Rule>
       <sld:MaxScaleDenominator>1.7976931348623157E308</sld:MaxScaleDenominator>
       <sld:PolygonSymbolizer>
-        <sld:Fill>
-          <sld:CssParameter name="fill">
-            <ogc:Literal>#0000ff</ogc:Literal>
-          </sld:CssParameter>
-          <sld:CssParameter name="fill-opacity">
-            <ogc:Literal>0.3</ogc:Literal>
-          </sld:CssParameter>
-        </sld:Fill>
+        <sld:Geometry>
+          <sld:PropertyName>the_geom</sld:PropertyName>
+        </sld:Geometry>
         <sld:Stroke>
           <sld:CssParameter name="stroke">
-            <ogc:Literal>#000000</ogc:Literal>
+            <ogc:Literal>#666666</ogc:Literal>
           </sld:CssParameter>
           <sld:CssParameter name="stroke-linecap">
             <ogc:Literal>butt</ogc:Literal>
@@ -31,13 +26,13 @@
             <ogc:Literal>miter</ogc:Literal>
           </sld:CssParameter>
           <sld:CssParameter name="stroke-opacity">
-            <ogc:Literal>1</ogc:Literal>
+            <ogc:Literal>1.0</ogc:Literal>
           </sld:CssParameter>
           <sld:CssParameter name="stroke-width">
-            <ogc:Literal>2.0</ogc:Literal>
+            <ogc:Literal>1.0</ogc:Literal>
           </sld:CssParameter>
           <sld:CssParameter name="stroke-dashoffset">
-            <ogc:Literal>0</ogc:Literal>
+            <ogc:Literal>0.0</ogc:Literal>
           </sld:CssParameter>
         </sld:Stroke>
       </sld:PolygonSymbolizer>
