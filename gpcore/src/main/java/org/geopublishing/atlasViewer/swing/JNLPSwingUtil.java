@@ -39,8 +39,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 	 * Blocks and downloades the URL on this Thread. Uses the
 	 * {@link DownloadServiceListener} for any feedback. The
 	 * {@link DownloadServiceListener} can be a
-	 * {@link NoGuiDownloadServiceListener} or an {@link AtlasStatusDialog}.
-	 * Throws not {@link Exception}s, but logs them.
+	 * {@link NoGuiDownloadServiceListener} or an {@link AtlasStatusDialog} or
+	 * null (creates a {@link NoGuiDownloadServiceListener}). Throws not
+	 * {@link Exception}s, but logs them.
 	 */
 	public static void loadPart(String[] parts,
 			DownloadServiceListener serviceListener) {
@@ -49,7 +50,10 @@ public class JNLPSwingUtil extends JNLPUtil {
 				+ SwingUtilities.isEventDispatchThread());
 
 		boolean oldCancelState = false;
-		if (serviceListener instanceof AtlasStatusDialog) {
+
+		if (serviceListener == null) {
+			serviceListener = new NoGuiDownloadServiceListener();
+		} else if (serviceListener instanceof AtlasStatusDialog) {
 			oldCancelState = ((AtlasStatusDialog) serviceListener)
 					.isCancelAllowed();
 		}

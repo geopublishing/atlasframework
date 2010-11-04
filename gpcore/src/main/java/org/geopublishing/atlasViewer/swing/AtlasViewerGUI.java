@@ -591,10 +591,10 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			ExceptionDialog.show(null, e);
 		}
 
-		System.out.println("Classpath entries2:");
+		// Pure logging:
+		LOGGER.debug("Classpath entries:");
 		String[] st = System.getProperty("java.class.path").split(":");
 		for (String t : st) {
-			System.out.println(t);
 			LOGGER.debug(t);
 		}
 
@@ -621,15 +621,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 					@Override
 					protected AtlasConfig doInBackground() throws Exception {
-						// waitDialog.setVisible(true);
-						// waitDialog.setModal(true);
-
 						publish(R("AtlasViewer.process.EPSG_codes_caching"));
 						GTUtil.initEPSG();
 
 						// Starting the internal WebServer
 						new Webserver();
-
+						
 						publish(R("dialog.title.wait"));
 						new AMLImport().parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);

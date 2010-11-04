@@ -19,8 +19,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
@@ -60,8 +62,27 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	 */
 	@Override
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject() {
+		return getGeoObject(getUrl());
+	}
 
-		URL localUrl = getUrl(); 
+	/**
+	 * @return a {@link FeatureSource}
+	 */
+	@Override
+	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject(
+			AtlasStatusDialogInterface statusDialog) {
+		LOGGER.info("Called new getGeoObject(AtlasStatusDialog statusDialog) for Shapefile!");
+		return getGeoObject(AVSwingUtil.getUrl(this, statusDialog));
+	}
+
+	/**
+	 * @return a {@link FeatureSource}
+	 */
+	private FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject(
+			URL localUrl) {
+
+		// URL localUrl = getUrl();
+
 		if (localUrl == null) {
 			final AtlasException atlasException = new AtlasException(
 					"Could not find ID:" + getId() + " / Title:'" + getTitle()
@@ -157,8 +178,8 @@ public class DpLayerVectorFeatureSourceShapefile extends
 				case POLYGON:
 					setType(DpEntryType.VECTOR_SHP_POLY);
 					break;
-					
-					// TODO NONE AND ANY!
+
+				// TODO NONE AND ANY!
 				}
 			}
 
@@ -221,22 +242,23 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 			charset = GeoImportUtil.readCharset(getUrl());
 
-//			URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
-//			for (URL cpgUrl : cpgUrls) {
-//				try {
-//
-//					String charsetName = IOUtil.readURLasString(cpgUrl);
-//
-//					if (charsetName.equals(""))
-//						continue;
-//					
-//					charset = Charset.forName(charsetName);
-//					break;
-//
-//				} catch (Exception e) {
-////					 LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
-//				}
-//			}
+			// URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
+			// for (URL cpgUrl : cpgUrls) {
+			// try {
+			//
+			// String charsetName = IOUtil.readURLasString(cpgUrl);
+			//
+			// if (charsetName.equals(""))
+			// continue;
+			//
+			// charset = Charset.forName(charsetName);
+			// break;
+			//
+			// } catch (Exception e) {
+			// //
+			// LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
+			// }
+			// }
 
 			return super.getCharset();
 		}
@@ -245,7 +267,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		return charset;
 	}
-
 
 	@Override
 	public DpLayer<FeatureSource<SimpleFeatureType, SimpleFeature>, FeatureChartStyle> copy() {
@@ -256,6 +277,5 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 		return clone;
 	}
-
 
 }

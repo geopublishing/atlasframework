@@ -43,6 +43,7 @@ import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapRef;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.feature.NameImpl;
@@ -226,8 +227,6 @@ public class AMLImport {
 			// anymore. Maybe we should just start a webserver here
 			throw new AtlasImportException(ex);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 			throw new AtlasImportException(e);
 		}
 
@@ -721,13 +720,13 @@ public class AMLImport {
 		String id = node.getAttributes().getNamedItem("id").getNodeValue();
 
 		final DpLayerRaster<?, ChartStyle> dpe;
-//		if (ac.getProperties().getBoolean(Keys.rasterReader, true)) {
-			Log.info("Using new raster reader for " + id);
-			dpe = new DpLayerRaster_Reader(ac);
-//		} else {
-//			Log.info("Using old gridCoverage " + id);
-//			dpe = new DpLayerRaster_GridCoverage2D(ac);
-//		}
+		// if (ac.getProperties().getBoolean(Keys.rasterReader, true)) {
+		Log.info("Using new raster reader for " + id);
+		dpe = new DpLayerRaster_Reader(ac);
+		// } else {
+		// Log.info("Using old gridCoverage " + id);
+		// dpe = new DpLayerRaster_GridCoverage2D(ac);
+		// }
 
 		dpe.setId(id);
 		// ****************************************************************************
@@ -945,11 +944,12 @@ public class AMLImport {
 
 	/**
 	 * Parses an AtlasML branch and fills values to create an
-	 * {@link DpLayerVectorShpOld} object.
+	 * {@link DpLayerVectorFeatureSource} object.
 	 * 
 	 * @throws AtlasRecoverableException
 	 * 
-	 *             TODO TODO TODO Hier muss eine URL hin!
+	 *             TODO TODO TODO Hier muss eine URL hin! Bisher geht nur
+	 *             {@link DpLayerVectorFeatureSourceShapefile}
 	 * @throws AtlasCancelException
 	 */
 	public final static DpLayerVectorFeatureSource parseDatapoolLayerVector(
@@ -1082,13 +1082,16 @@ public class AMLImport {
 						dplvfs.setFilterRule(filterString);
 					}
 
-				} else if (name.equals("chart") && dplvfs.getUrl() != null) {
+					// } else if (name.equals("chart") && dplvfs.getUrl() !=
+					// null) {
+				} else if (name.equals("chart")
+						&& AVSwingUtil.getUrl(dplvfs, statusDialog) != null) {
 					try {
 						dplvfs.getCharts().add(
 								parseFeatureChartStyle(ac, n, dplvfs));
 					} catch (Exception e) {
 						// Broken URL or file doesn't exist
-						LOGGER.warn("Could not load chartStyle: ",e);
+						LOGGER.warn("Could not load chartStyle: ", e);
 					}
 				}
 			}
@@ -1114,7 +1117,8 @@ public class AMLImport {
 		final String filenameValue = node.getAttributes()
 				.getNamedItem("filename").getNodeValue();
 
-		URL url = dplvfs.getUrl();
+		// URL url = dplvfs.getUrl();
+		URL url = AVSwingUtil.getUrl(dplvfs, statusDialog);
 
 		String urlStr = url.toString();
 		// LOGGER.debug("urlstr ="+urlStr);
@@ -1175,12 +1179,6 @@ public class AMLImport {
 
 	}
 
-	// TODO
-	// private static void checkCancel() throws AtlasCancelException {
-	// if (statusDialog != null && statusDialog.isCanceled())
-	// throw new AtlasCancelException();
-	// }
-
 	/**
 	 * Parses a node that is of type < aml : dataAttribute > to a
 	 * {@link AttributeMetadataImpl}
@@ -1215,14 +1213,18 @@ public class AMLImport {
 					.getNamedItem(AMLUtil.ATT_functionA).getNodeValue());
 		} catch (Exception e) {
 
+			LOGGER.warn(
+					"Exception parseAttributeMetadata on first try. Starting second try using the Geoobject next..",
+					e);
+
 			functionX = 1.;
 			functionA = 0.;
-
-			// LOGGER.debug("Converting old colIdx data because",e);
 
 			try {
 				final Integer col = Integer.valueOf(node.getAttributes()
 						.getNamedItem("col").getNodeValue());
+
+				dplvfs.getGeoObject(statusDialog);
 
 				AttributeDescriptor attributeDescriptor = dplvfs
 						.getFeatureSource().getSchema()
@@ -1231,14 +1233,6 @@ public class AMLImport {
 				nameSpace = attributeDescriptor.getName().getNamespaceURI();
 				localname = attributeDescriptor.getName().getLocalPart();
 				weight = col;
-
-				// String msg =
-				// "Converting old attribute meta-data using colIdx="
-				// + col + " to new meta.data with atibLocalName="+localname;
-
-				// info(msg);
-				// LOGGER.debug(msg);
-
 			} catch (Exception ee) {
 				LOGGER.warn(dplvfs.getId()
 						+ " is broken. Can not import old colIdx-based attributeMetadata");

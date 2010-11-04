@@ -18,22 +18,24 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
+import schmitzm.jfree.chart.style.ChartStyle;
 
-public class DpMediaPDF extends DpMedia {
+public class DpMediaPDF extends DpMedia<ChartStyle> {
 	static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);
 
 	public DpMediaPDF(AtlasConfig ac) {
 		super(ac);
-		setType(DpEntryType.PDF	);
+		setType(DpEntryType.PDF);
 	}
-	
+
 	/**
 	 * Tries to open a PDF viewer of the host system.
 	 */
 	@Override
 	public Object show(Component owner) {
-		Exception error = AVSwingUtil.launchPDFViewer(owner, AVSwingUtil.getUrl(this, owner), getTitle().toString());
-		
+		Exception error = AVSwingUtil.launchPDFViewer(owner,
+				AVSwingUtil.getUrl(this, owner), getTitle().toString());
+
 		if (error != null) {
 			setBrokenException(error);
 		}

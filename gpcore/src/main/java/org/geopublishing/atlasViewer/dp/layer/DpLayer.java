@@ -18,13 +18,18 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
+import org.geotools.data.FeatureSource;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.jfree.ui.Layer;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;
@@ -509,5 +514,10 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		target.setStyle((Style) dsv.getCopy());
 
 		return target;
+	}
+
+	public E getGeoObject(AtlasStatusDialogInterface statusDialog) {
+		LOGGER.warn("called not fully implemented getGeoObject(AtlasStatusDialog statusDialog) in abstract DpLayer");
+		return getGeoObject();
 	}
 }
