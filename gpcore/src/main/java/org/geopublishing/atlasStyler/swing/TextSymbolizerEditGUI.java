@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
@@ -612,30 +613,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			final List<String> valueFieldNamesPrefereStrings = ASUtil
 					.getValueFieldNamesPrefereStrings(rulesList
 							.getStyledFeatures().getSchema(), true);
-			valueFieldNamesPrefereStrings.add(0, "-");
+
 			jComboBoxLabelField2 = new AttributesJComboBox(atlasStyler,
 					valueFieldNamesPrefereStrings);
-			//
-			// /**
-			// * Read the selected attribute name from the symbolizer and set it
-			// * in the JComboBox
-			// */
-			// try {
-			// final TextSymbolizer textSymbolizer = rulesList.getSymbolizer();
-			// PropertyName pn2 = StylingUtil.getSecondPropertyName(rulesList
-			// .getStyledFeatures().getSchema(), textSymbolizer);
-			//
-			// if (pn2 == null) {
-			// jComboBoxLabelField2.setSelectedItem("-");
-			// } else {
-			// jComboBoxLabelField2.setSelectedItem(pn2.toString());
-			// }
-			// } catch (Exception e) {
-			// LOGGER.error(
-			// "Unable to read the value attribute from the TextSymbolizer",
-			// e);
-			// }
-
 			/**
 			 * Update the Label in the TextRuleList
 			 */
@@ -853,9 +833,13 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 		if (jComboBoxPriorityField == null) {
 
+			Vector<String> numericalFieldNamesWithEmpty = FeatureUtil
+					.getNumericalFieldNames(rulesList.getStyledFeatures()
+							.getSchema(), true, true);
+
 			jComboBoxPriorityField = new AttributesJComboBox(atlasStyler,
-					FeatureUtil.getNumericalFieldNames(rulesList
-							.getStyledFeatures().getSchema(), true, true));
+					numericalFieldNamesWithEmpty);
+
 			jComboBoxPriorityField.addItemListener(new ItemListener() {
 
 				@Override

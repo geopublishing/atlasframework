@@ -12,7 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ComboBoxModel;
@@ -53,29 +52,29 @@ public class AttributesJComboBox extends JComboBox {
 
 	public AttributesJComboBox(final AtlasStyler atlasStyler,
 			List<String> attributes) {
-		this(atlasStyler, new DefaultComboBoxModel(cleanProblematicAttribute(
-				attributes).toArray(new String[] {})));
+		this(atlasStyler, new DefaultComboBoxModel(
+				attributes.toArray(new String[] {})));
 	}
-
-	static List<String> cleanProblematicAttribute(List<String> attributes) {
-		ArrayList<String> newList = new ArrayList<String>();
-
-		for (String an : attributes) {
-			if (FeatureUtil.checkAttributeNameRestrictions(an))
-				newList.add(an);
-			else
-				LOGGER.info("An illegal attribute name " + an
-						+ " has been hidden in the AttributesJComboBox");
-		}
-
-		return newList;
-	}
+//
+//	static List<String> cleanProblematicAttribute(List<String> attributes) {
+//		ArrayList<String> newList = new ArrayList<String>();
+//
+//		for (String an : attributes) {
+//			if (FeatureUtil.checkAttributeNameRestrictions(an))
+//				newList.add(an);
+//			else
+//				LOGGER.info("An illegal attribute name " + an
+//						+ " has been hidden in the AttributesJComboBox");
+//		}
+//
+//		return newList;
+//	}
 
 	public AttributesJComboBox(final SimpleFeatureType schema,
 			final AttributeMetadataMap attributeMetaDataMap,
 			List<String> attributes) {
 		this(schema, attributeMetaDataMap, new DefaultComboBoxModel(
-				cleanProblematicAttribute(attributes).toArray(new String[] {})));
+				attributes.toArray(new String[] {})));
 	}
 
 	public AttributesJComboBox(final AtlasStyler atlasStyler,

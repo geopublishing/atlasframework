@@ -35,7 +35,7 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		for (String s : chunks)
 			statusDialog.setDescription(s);
 	}
-	
+
 	public AtlasSwingWorker(AtlasStatusDialogInterface statusDialog) {
 		this.statusDialog = statusDialog;
 		addPropertyChangeListener(new AtlasStatusDialogCloser(statusDialog));
@@ -57,11 +57,14 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		this(new AtlasStatusDialog(parentGUI, title, title));
 	}
 
-	public AtlasSwingWorker(Component  parentGUI, String title, String startText) {
+	public AtlasSwingWorker(Component parentGUI, String title, String startText) {
 		this(new AtlasStatusDialog(parentGUI, title, startText));
 	}
 
 	/**
+	 * Starts the Work and opens a model dialog. The dialog is closed, when the
+	 * work is done.
+	 * 
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 * @throws CancellationException
@@ -73,25 +76,21 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		statusDialog.startModal();
 		return get();
 	}
-	
+
 	/**
-	 * @throws InterruptedException
-	 * @throws ExecutionException
-	 * @throws CancellationException
-	 *             When cancel has been pressed
+	 * Starts the Work and opens a model dialog. The dialog is closed, when the
+	 * work is done.
 	 */
-	public K executeModalNoEx() 
-	{
-		
-        try {
-            execute();
-            statusDialog.startModal();
-            return get();
-        } catch (Exception e) {
-			LOGGER.error(e);
+	public K executeModalNoEx() {
+
+		try {
+			execute();
+			statusDialog.startModal();
+			return get();
+		} catch (Exception e) {
+			LOGGER.error("dialog modal execution failed:", e);
 		}
 		return null;
 	}
-
 
 }

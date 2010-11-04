@@ -589,7 +589,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 							String creatorName = singleSymbolRuleList
 									.getStyleTitle();
 
-							if (creatorName == null || creatorName == ""){
+							if (creatorName == null || creatorName == "") {
 								LOGGER.debug("creatorName is empty");
 								creatorName = System.getProperty("user.name");
 							}
