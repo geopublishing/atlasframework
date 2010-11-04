@@ -730,7 +730,13 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
 
-		String filename = IOUtil.getFilename(url);
+		String filename;
+		
+		if (url != null) {
+			filename = IOUtil.getFilename(url);
+		} else {
+			filename = "";
+		}
 
 		if (percentage < 0) {
 			setDescription("Downloading " + filename); // i8n
