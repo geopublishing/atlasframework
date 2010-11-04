@@ -169,6 +169,8 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	 * 
 	 * @param parent
 	 *            The parent component, or {@code null} if none.
+	 *            
+	 *            TODO make working in no X11 environment!
 	 */
 	public AtlasStatusDialog(final Component parent) {
 		/*
