@@ -58,7 +58,7 @@ public class AtlasJWSCachedResourceLoader implements ResourceLoader {
 		URL resourceAsURL = Thread.currentThread()
 				.getContextClassLoader().
 				getResource(name);
-		LOGGER.debug("getResourceAsURL for name = "+name+" retruned "+resourceAsURL);
+		LOGGER.debug("getResourceAsURL for name = "+name+" returned "+resourceAsURL);
 		
 		LOGGER.debug(resourceAsURL);
 		return resourceAsURL;

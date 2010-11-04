@@ -73,7 +73,7 @@ public class JNLPSwingUtil extends JNLPUtil {
 			ds.loadPart(parts, serviceListener);
 
 		} catch (Exception e1) {
-			LOGGER.error(e1);
+			LOGGER.error("Ex while downloading from JNLP Dowbnload Service", e1);
 		} finally {
 			if (serviceListener instanceof AtlasStatusDialog) {
 				((AtlasStatusDialog) serviceListener)
@@ -137,11 +137,17 @@ public class JNLPSwingUtil extends JNLPUtil {
 								try {
 									asw.executeModal();
 								} catch (CancellationException e) {
-									LOGGER.error(e);
+									LOGGER.error(
+											"Ex on AtlasStwingWorker for loadPartAndCreateDialogForIt",
+											e);
 								} catch (InterruptedException e) {
-									LOGGER.error(e);
+									LOGGER.error(
+											"Ex on AtlasStwingWorker for loadPartAndCreateDialogForIt",
+											e);
 								} catch (ExecutionException e) {
-									LOGGER.error(e);
+									LOGGER.error(
+											"Ex on AtlasStwingWorker for loadPartAndCreateDialogForIt",
+											e);
 								}
 							}
 						});

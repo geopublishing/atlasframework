@@ -1195,6 +1195,10 @@ public class AMLImport {
 			DpLayerVectorFeatureSource dplvfs, AtlasConfig ac, final Node node)
 			throws AtlasRecoverableException, AtlasCancelException {
 
+		// Trigger caching the layer with a status-download-wait-GUI in case we
+		// are running on JavaWebStart
+		dplvfs.getGeoObject(statusDialog);
+
 		String localname;
 		String nameSpace;
 		Integer weight = 0;
@@ -1223,8 +1227,6 @@ public class AMLImport {
 			try {
 				final Integer col = Integer.valueOf(node.getAttributes()
 						.getNamedItem("col").getNodeValue());
-
-				dplvfs.getGeoObject(statusDialog);
 
 				AttributeDescriptor attributeDescriptor = dplvfs
 						.getFeatureSource().getSchema()
