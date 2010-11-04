@@ -48,9 +48,11 @@ import org.geotools.resources.i18n.VocabularyKeys;
 import org.geotools.util.SimpleInternationalString;
 import org.opengis.util.InternationalString;
 
+import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.OkButton;
+import skrueger.swing.formatter.MbDecimalFormatter;
 
 // TODO move to schmitzm
 public class AtlasStatusDialog implements AtlasStatusDialogInterface {
@@ -169,7 +171,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	 * 
 	 * @param parent
 	 *            The parent component, or {@code null} if none.
-	 *            
+	 * 
 	 *            TODO make working in no X11 environment!
 	 */
 	public AtlasStatusDialog(final Component parent) {
@@ -722,10 +724,18 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	}
 
 	long lastPercentageUpdate = System.currentTimeMillis() - 10000;
+	private final static MbDecimalFormatter mbdf = new MbDecimalFormatter();
 
 	@Override
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
+
+		String filename = IOUtil.getFilename(url);
+
+		if (percentage < 0) {
+			setDescription("Downloading " + filename); // i8n
+			return;
+		}
 
 		// Not too many updates
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
@@ -735,32 +745,42 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		// i8n
 		LOGGER.debug("progress " + url + " " + urlString + " " + doneSoFar
 				+ " " + full + " " + percentage);
-		setDescription("Downloading " + percentage + "%");
+
+		String fullSize = mbdf.format(full);
+
+		setDescription("Downloading " + filename + " " + percentage + "% of "
+				+ fullSize); // i8n
 	}
 
 	@Override
-	public void upgradingArchive(URL arg0, String arg1, int arg2, int arg3) {
+	public void upgradingArchive(URL url, String version, int patchPercent,
+			int overallPercent) {
 
 		// Not too many updates
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
 			return;
 
 		// i8n
-		LOGGER.debug("upgrading " + arg0 + " " + arg1 + " " + arg2 + " " + arg3);
-		setDescription("Upgrading " + arg1);
+		LOGGER.debug("upgrading " + url + " " + version + " " + patchPercent
+				+ " " + overallPercent);
+		String filename = IOUtil.getFilename(url);
+		setDescription("Upgrading " + filename + " " + overallPercent + "%");
 	}
 
 	@Override
-	public void validating(URL arg0, String arg1, long arg2, long arg3, int arg4) {
+	public void validating(URL url, String version, long entry, long total,
+			int overallPercent) {
 
 		// Not too many updates
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
 			return;
 
+		String filename = IOUtil.getFilename(url);
+
 		// i8n
-		LOGGER.debug("validating " + arg0 + " " + arg1 + " " + arg2 + " "
-				+ arg3 + " " + arg4);
-		setDescription("Validating " + arg1);
+		LOGGER.debug("validating " + url + " " + version + " " + entry + " "
+				+ total + " " + overallPercent);
+		setDescription("Validating " + filename + " " + overallPercent + "%");
 	}
 
 }
