@@ -676,11 +676,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JPanel getJPanelButtons() {
 		if (jPanel == null) {
 			jPanel = new JPanel(new MigLayout("wrap 1, fillx"));
-			jPanel.add(getJButtonSave(), "growx, split 2");
-			jPanel.add(getJButtonReset(), "growx");
-			jPanel.add(getJButtonProperties(), "split 3");
-			jPanel.add(getJButtonOK(), "growx");
-			jPanel.add(getJButtonCancel(), "growx");
+			jPanel.add(getJButtonProperties(), "grow");
+			jPanel.add(getJButtonSave(), "split 2, align left");
+			jPanel.add(getJButtonReset(), "align right");
+			jPanel.add(getJButtonOK(), "gapy unrel, split 2, bottom, tag ok");
+			jPanel.add(getJButtonCancel(), "gapy unrel, tag cancel");
 		}
 		return jPanel;
 	}

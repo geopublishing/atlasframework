@@ -73,6 +73,25 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 		statusDialog.startModal();
 		return get();
 	}
+	
+	/**
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 * @throws CancellationException
+	 *             When cancel has been pressed
+	 */
+	public K executeModalNoEx() 
+	{
+		
+        try {
+            execute();
+            statusDialog.startModal();
+            return get();
+        } catch (Exception e) {
+			LOGGER.error(e);
+		}
+		return null;
+	}
 
 
 }

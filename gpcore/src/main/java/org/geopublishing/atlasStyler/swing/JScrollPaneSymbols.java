@@ -15,8 +15,10 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -32,14 +34,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ListCellRenderer;
-import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleRuleList;
-
+import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 
 /**
  * A GUI class that unites the different types of SymbolLists we have: symbols
@@ -76,6 +77,8 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 		initialize();
 	}
 
+	static WeakHashMap<String, JPanel> weakSymbolPreviewComponentsCache = new WeakHashMap<String, JPanel>();
+
 	private void initialize() {
 		setViewportView(getJListSymbols());
 	}
@@ -97,49 +100,22 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 						boolean cellHasFocus) {
 
 					SingleRuleList rl = (SingleRuleList) value;
-
-					JPanel fullCell = new JPanel(new BorderLayout());
-					fullCell.setSize(size);
-
-					fullCell.setBorder(BorderFactory.createEmptyBorder(3, 5, 3,
-							5));
-					fullCell.setBackground(Color.white);
-
 					String key = JScrollPaneSymbols.this.getClass()
 							.getSimpleName()
 							+ rl.getStyleName()
-							+ rl.getStyleTitle()
-							+ rl.getStyleAbstract();
-					BufferedImage symbolImage = weakImageCache.get(key);
-					// LOGGER.info("Looking for "+key);
-					if (symbolImage == null) {
-						// LOGGER.info("A symbol for " + key
-						// + " was not found in cache. Rendering on EDT");
-						symbolImage = rl.getImage(SYMBOL_SIZE);
-						weakImageCache.put(key, symbolImage);
+							+ rl.getStyleTitle() + rl.getStyleAbstract();
+
+					JPanel fullCell = getOrCreateComponent(rl, key);
+					if (cellHasFocus) {
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.YELLOW, Color.BLACK));
+
+						// fullCell.setBackground(Color.yellow);
+					} else {
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.WHITE, Color.GRAY));
+						// fullCell.setBackground(Color.white);
 					}
-					ImageIcon image = new ImageIcon(symbolImage);
-
-					fullCell.add(new JLabel(image), BorderLayout.WEST);
-
-					JPanel infos = new JPanel(new BorderLayout());
-					JPanel nameAuthor = new JPanel(new BorderLayout());
-
-					JLabel styleName = new JLabel(rl.getStyleName());
-					nameAuthor.add(styleName, BorderLayout.WEST);
-
-					JLabel styleAuthor = new JLabel(rl.getStyleTitle());
-					styleAuthor.setFont(styleAuthor.getFont().deriveFont(9f)
-							.deriveFont(Font.ITALIC));
-					nameAuthor.add(styleAuthor, BorderLayout.EAST);
-
-					infos.add(nameAuthor, BorderLayout.NORTH);
-
-					JLabel description = new JLabel(rl.getStyleAbstract());
-					infos.add(description, BorderLayout.CENTER);
-					description.setFont(description.getFont().deriveFont(8f));
-
-					fullCell.add(infos, BorderLayout.CENTER);
 
 					return fullCell;
 				}
@@ -147,12 +123,12 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 			});
 
 			// The JList has to react on click
-			jListSymbols.addMouseListener(new MouseListener() {
+			jListSymbols.addMouseListener(new MouseAdapter() {
 
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					int i = jListSymbols.locationToIndex(e.getPoint());
-					if (i < 0 ) {
+					if (i < 0) {
 						// Clicked where not symbol is
 						return;
 					}
@@ -162,15 +138,29 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 						final AbstractRuleList rl = (AbstractRuleList) jListSymbols
 								.getModel().getElementAt(i);
 
-						SwingUtilities.invokeLater(new Runnable() {
+						// SwingUtilities.invokeLater(new Runnable() {
+						// @Override
+						// public void run() {
+						// JScrollPaneSymbols.this
+						// .firePropertyChange(
+						// JScrollPaneSymbols.PROPERTY_SYMBOL_SELECTED,
+						// null, rl);
+						// }
+						// });
+
+						new AtlasSwingWorker<Void>(JScrollPaneSymbols.this) {
+
 							@Override
-							public void run() {
+							protected Void doInBackground() throws Exception {
 								JScrollPaneSymbols.this
 										.firePropertyChange(
 												JScrollPaneSymbols.PROPERTY_SYMBOL_SELECTED,
 												null, rl);
+								return null;
 							}
-						});
+
+						}.executeModalNoEx();
+
 					}
 
 				}
@@ -185,28 +175,19 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 					}
 				}
 
-				@Override
-				public void mouseReleased(MouseEvent evt) {
-					if (evt.isPopupTrigger()) {
-						mouseCLickEvent = evt;
-						if (getPopupMenu() != null)
-							getPopupMenu().show(evt.getComponent(), evt.getX(),
-									evt.getY());
-					}
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent e) {
-				}
-
-				@Override
-				public void mouseExited(MouseEvent e) {
-				}
-
 			});
 
-			// contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));
-			// jListSymbols.setPreferredSize(size);
+			// The JList has to react on click
+			jListSymbols.addMouseMotionListener(new MouseMotionAdapter() {
+
+				@Override
+				public void mouseMoved(MouseEvent me) {
+					Point p = new Point(me.getPoint());
+					jListSymbols.setSelectedIndex(jListSymbols
+							.locationToIndex(p));
+				}
+			});
+
 		}
 		return jListSymbols;
 	}
@@ -216,23 +197,79 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 	/**
 	 * @return An {@link Icon} representing this {@link JScrollPaneSymbols}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected abstract Icon getIcon();
 
 	/**
 	 * @return a tooltipto display in the {@link JTabbedPane}
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected abstract String getToolTip();
 
 	/**
 	 * @return A description for this collection of symbols
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	protected abstract String getDesc();
+
+	/**
+	 * Do some tricks with the JScrollPane to show the results automatically.
+	 */
+	void updateJScrollPane() {
+		// setViewportView(getJListSymbols());
+		// doLayout();
+		// repaint();
+	}
+
+	/**
+	 * Renders the preview of the symbol and from the url and put the result in a cache.
+	 * @param rl SingleRuleList to render
+	 * @param key 
+	 */
+	JPanel getOrCreateComponent(SingleRuleList rl, String key) {
+
+		JPanel fullCell = weakSymbolPreviewComponentsCache.get(key);
+		if (fullCell == null) {
+
+			fullCell = new JPanel(new BorderLayout());
+			fullCell.setSize(size);
+
+			fullCell.setBackground(Color.white);
+
+			BufferedImage symbolImage = weakImageCache.get(key);
+			// LOGGER.info("Looking for "+key);
+			if (symbolImage == null) {
+//				LOGGER.info("A symbol for " + key
+//						+ " was not found in cache.");
+				symbolImage = rl.getImage(SYMBOL_SIZE);
+				weakImageCache.put(key, symbolImage);
+			}
+			ImageIcon image = new ImageIcon(symbolImage);
+
+			fullCell.add(new JLabel(image), BorderLayout.WEST);
+
+			JPanel infos = new JPanel(new BorderLayout());
+			JPanel nameAuthor = new JPanel(new BorderLayout());
+
+			JLabel styleName = new JLabel(rl.getStyleName());
+			nameAuthor.add(styleName, BorderLayout.WEST);
+
+			JLabel styleAuthor = new JLabel(rl.getStyleTitle());
+			styleAuthor.setFont(styleAuthor.getFont().deriveFont(9f)
+					.deriveFont(Font.ITALIC));
+			nameAuthor.add(styleAuthor, BorderLayout.EAST);
+
+			infos.add(nameAuthor, BorderLayout.NORTH);
+
+			JLabel description = new JLabel(rl.getStyleAbstract());
+			infos.add(description, BorderLayout.CENTER);
+			description.setFont(description.getFont().deriveFont(8f));
+			weakSymbolPreviewComponentsCache.put(key, fullCell);
+			fullCell.add(infos, BorderLayout.CENTER);
+		}
+		return fullCell;
+
+	}
 
 }

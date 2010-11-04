@@ -12,11 +12,12 @@ package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
 
-public class FreeMapSymbols {
+public class OpenMapSymbols {
+	// TODO MOVE to gisbert?!
 	static public final String BASE_URL = "http://en.geopublishing.org/openmapsymbols/";
 
 	static public final String LINE_URL = BASE_URL + "line";
-	protected static Logger LOGGER = ASUtil.createLogger(FreeMapSymbols.class);
+	protected static Logger LOGGER = ASUtil.createLogger(OpenMapSymbols.class);
 	static public final String POINT_URL = BASE_URL + "point";
 	static public final String POLYGON_URL = BASE_URL + "polygon";
 

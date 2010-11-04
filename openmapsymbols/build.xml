@@ -1,0 +1,67 @@
+<!--
+  Copyright (c) 2010 Stefan Tzeggai
+  
+  This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
+  http://www.geopublishing.org
+  
+  Geopublisher is part of the Geopublishing Framework hosted at:
+  http://wald.intevation.org/projects/atlas-framework/
+  
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+  
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+  
+  You should have received a copy of the GNU General Public License (license.txt)
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+  or try this link: http://www.gnu.org/licenses/gpl.html
+  
+-->
+<project name="OpenMapSymbols">
+
+
+	<!-- Where are the local OpenSymbols stored. This folder is copied over to geopublishing.org  -->
+	<property name="OS.location" value="${basedir}" />
+	<!-- <property name="OS.location" value="/home/stefan/EigeneDateien/code.svn/atlas/trunk/openmapsymbols" /> -->
+
+	<!-- ================================= 
+          target: rsync_symbols              
+         ================================= -->
+	<target name="rsync_symbols">
+		<echo message="Rsync the local symbols from ${OS.location} to PRODI" />
+
+		<delete file="${OS.location}/line/index" />
+		<delete file="${OS.location}/point/index" />
+		<delete file="${OS.location}/polygon/index" />
+		<touch file="${OS.location}/point/index" />
+		<touch file="${OS.location}/line/index" />
+		<touch file="${OS.location}/polygon/index" />
+
+		<exec executable="/usr/bin/find" dir="${OS.location}/point" output="${OS.location}/point/index">
+			<arg line='. -iname "*.sld"' />
+		</exec>
+		<exec executable="/usr/bin/find" dir="${OS.location}/line" output="${OS.location}/line/index">
+			<arg line='. -iname "*.sld"' />
+		</exec>
+		<exec executable="/usr/bin/find" dir="${OS.location}/polygon" output="${OS.location}/polygon/index">
+			<arg line='. -iname "*.sld"' />
+		</exec>
+
+		<!-- Set permissions that allow a web-server to serve these files -->
+		<chmod perm="ugo+rx">
+			<fileset dir="${OS.location}" />
+		</chmod>
+
+		<exec executable="/usr/bin/rsync">
+			<arg line='-rmcv --delete --exclude=".*" --exclude="*~" --exclude="*.bak" ${OS.location}/. prodi:gp/openmapsymbols ' />
+		</exec>
+
+	</target>
+
+</project>
+
