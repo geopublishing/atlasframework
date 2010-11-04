@@ -1197,6 +1197,9 @@ public class AMLImport {
 
 		// Trigger caching the layer with a status-download-wait-GUI in case we
 		// are running on JavaWebStart
+		LOGGER.debug("getting the GeoObject with a StatusDialog "
+				+ statusDialog + " to parseAttributeMetadata for "
+				+ dplvfs.getTitle().toString());
 		dplvfs.getGeoObject(statusDialog);
 
 		String localname;
