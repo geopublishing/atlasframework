@@ -1,4 +1,5 @@
 ./simple point.sld
+./missingIcon.sld
 ./water_well.sld
 ./sdsd.sld
 ./pool.sld
@@ -7,16 +8,14 @@
 ./crossing.sld
 ./transport.sld
 ./settlement square 1.sld
-./no icon.sld
 ./Circle.sld
 ./Circle2.sld
 ./eye.sld
-./Square3.sld
 ./shelter.sld
-./Circle3Frabig.sld
 ./settlement 2.sld
 ./veterinary.sld
-./Square2.sld
+./square.sld
 ./something.sld
+./Circle3Farbig.sld
 ./well.sld
 ./settlements.sld
