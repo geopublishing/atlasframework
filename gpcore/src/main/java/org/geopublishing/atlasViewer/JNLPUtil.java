@@ -124,6 +124,7 @@ public class JNLPUtil {
 				// + " is cached = "
 				// + JNLPUtil.getJNLPDownloadService().isPartCached(
 				// dpe.getId()));
+				
 				if (!JNLPUtil.getJNLPDownloadService()
 						.isPartCached(dpe.getId())) {
 					haveToDownload.add(dpe.getId());

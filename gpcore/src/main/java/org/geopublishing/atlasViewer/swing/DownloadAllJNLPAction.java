@@ -36,7 +36,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 		// Download all JWS resources into the local cache
 		// **************************************************************
 
-		LOGGER.info("Action Command: downloadAllJWS");
+//		LOGGER.info("Action Command: downloadAllJWS");
 		try {
 
 			ArrayList<String> haveToDownload = JNLPUtil

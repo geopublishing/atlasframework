@@ -64,6 +64,8 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
+import com.sun.codemodel.internal.JNullType;
+
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.ClassResourceLoader;
@@ -416,7 +418,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				final String id = cmd
 						.substring(AtlasMenuItem.ACTIONCMD_DATAPOOL_PREFIX
 								.length());
-				DpEntry<? extends ChartStyle> dpe = getAtlasConfig()
+				final DpEntry<? extends ChartStyle> dpe = getAtlasConfig()
 						.getDataPool().get(id);
 
 				if (!dpe.isLayer()) {
@@ -426,9 +428,17 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 					media.show(getJFrame());
 				} else {
 					try {
-						// Calling the mapView to add the Layer
-						getMapView().addStyledLayer(
-								(StyledLayerInterface<?>) dpe);
+
+						new AtlasSwingWorker<Boolean>(getJFrame()) {
+
+							@Override
+							protected Boolean doInBackground() throws Exception {
+								// Calling the mapView to add the Layer
+								return getMapView().addStyledLayer(
+										(StyledLayerInterface<?>) dpe);
+							}
+						}.executeModal();
+
 						// }
 					} catch (Throwable e) {
 						ExceptionDialog.show(getJFrame(), e);
@@ -726,14 +736,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		ArrayList<String> partsToDownload = JNLPUtil
 				.countPartsToDownload(atlasConfig.getDataPool());
 		if (partsToDownload.size() > 0) {
-			boolean dlNow = AVSwingUtil
-					.askYesNo(
-							getJFrame(),
-							"Download all "
-									+ partsToDownload.size()
-									+ " files now? After you can use the atlas without delays.");
+			boolean dlNow = AVSwingUtil.askYesNo(getJFrame(),
+					AVUtil.R("DownloadAllDataAtOnceQuestionAtAtlasStart"));
 			if (dlNow == true) {
-				new DownloadAllJNLPAction(AtlasViewerGUI.this);
+				// The actionperformed will start a SwingWorker
+				new DownloadAllJNLPAction(AtlasViewerGUI.this)
+						.actionPerformed(null);
 			}
 		}
 
