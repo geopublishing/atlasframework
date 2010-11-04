@@ -171,27 +171,29 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 	}
 
-	private void openFirstMap() {
+	/**
+	 * Calls {@link #setMap(Map)} with the map defined as the "startup map"
+	 */
+	private void setFirstMap() {
 		MapPool mapPool = getAtlasConfig().getMapPool();
 		// **************************************************************
 		// Which map to start with? We first check it attribute
 		// startMap
 		// points to a valid Map
 		// Otherwise a more or less random map will be shown (the
-		// first
-		// in the HashMap)
+		// first in the HashMap)
 		// **************************************************************
 		if (mapPool.size() > 0) {
 			if (mapPool.getStartMapID() != null
 					&& mapPool.get(mapPool.getStartMapID()) != null) {
 				setMap(mapPool.get(mapPool.getStartMapID()));
 			} else {
-				// progressWindow.progress(1f);
 				LOGGER.warn("No default start-up map selected, trying first one");
 				setMap(mapPool.get(0));
 			}
 		} else {
 			final String msgNoMapFound = R("AtlasViewer.error.noMapInAtlas");
+			LOGGER.warn(msgNoMapFound);
 			getJFrame().setContentPane(new JLabel(msgNoMapFound));
 		}
 	}
@@ -386,7 +388,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		} catch (ExecutionException e) {
 			if (e.getCause() instanceof CancelException)
 				// tries to load the default map, which should not
-				openFirstMap();
+				setFirstMap();
 			else
 				ExceptionDialog.show(getJFrame(), e);
 		} catch (InterruptedException e) {
@@ -707,8 +709,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		updateLangMenu();
 
 		/**
-		 * Open the AtlasPopupDialog on the EDT later and then open the first
-		 * map
+		 * Open the AtlasPopupDialog on the EDT (later)
 		 */
 		if (getAtlasConfig().getPopupHTMLURL() != null
 				&& getAtlasConfig()
@@ -731,7 +732,19 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		/**
-		 * If there are parts to download from JNLP, ask the user to do it now..
+		 * Open the first map on the EDT (later)
+		 */
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				setFirstMap();
+			}
+		});
+
+		/**
+		 * If there are parts to download from JNLP, ask the user if he wants to
+		 * do it now
 		 */
 		ArrayList<String> partsToDownload = JNLPUtil
 				.countPartsToDownload(atlasConfig.getDataPool());
@@ -745,7 +758,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			}
 		}
 
-		openFirstMap();
 	}
 
 	/**

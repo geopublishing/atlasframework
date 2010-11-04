@@ -36,7 +36,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 		// Download all JWS resources into the local cache
 		// **************************************************************
 
-//		LOGGER.info("Action Command: downloadAllJWS");
+		// LOGGER.info("Action Command: downloadAllJWS");
 		try {
 
 			ArrayList<String> haveToDownload = JNLPUtil
@@ -67,7 +67,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 				LOGGER.info("Parts length = " + parts.length);
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
-				statusDialog.setCancelAllowed(false);
+				statusDialog.setCancelAllowed(true);
 				AtlasSwingWorker<Void> atlasSwingWorker = new AtlasSwingWorker<Void>(
 						statusDialog) {
 
@@ -78,7 +78,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 					}
 
 				};
-				atlasSwingWorker.executeModal();
+				atlasSwingWorker.executeModalNoEx();
 
 				AVSwingUtil
 						.showMessageDialog(
