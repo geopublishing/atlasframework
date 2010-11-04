@@ -22,6 +22,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoundedRangeModel;
@@ -744,26 +746,20 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
 
+		// Not too many updates
+		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
+			return;
+
 		if (!window.isVisible()) {
 			started();
 		}
 
 		String filename;
-
-		if (url != null) {
-			filename = IOUtil.getFilename(url);
-		} else {
-			filename = "";
-		}
-
+		filename = getShortFilename(url);
 		if (percentage < 0) {
 			setDescription("Downloading " + filename); // i8n
 			return;
 		}
-
-		// Not too many updates
-		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
-			return;
 
 		lastPercentageUpdate = System.currentTimeMillis();
 		// i8n
@@ -790,7 +786,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		// i8n
 		LOGGER.debug("upgrading " + url + " " + version + " " + patchPercent
 				+ " " + overallPercent);
-		String filename = IOUtil.getFilename(url);
+		String filename = getShortFilename(url);
 		setDescription("Upgrading " + filename + " " + overallPercent + "%");
 	}
 
@@ -805,12 +801,28 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
 			return;
 
-		String filename = IOUtil.getFilename(url);
+		String filename = getShortFilename(url);
 
 		// i8n
 		LOGGER.debug("validating " + url + " " + version + " " + entry + " "
 				+ total + " " + overallPercent);
 		setDescription("Validating " + filename + " " + overallPercent + "%");
+	}
+
+	final static Pattern SHORTEN_ATLAS_JAR_NAMES = Pattern
+			.compile("(.*)\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d\\d.jar");
+
+	static String getShortFilename(URL url) {
+		if (url == null)
+			return "";
+		String fn = IOUtil.getFilename(url);
+		if (fn.length() > 12) {
+			Matcher matcher = SHORTEN_ATLAS_JAR_NAMES.matcher(fn);
+			if (matcher.find()) {
+				fn = matcher.group(1);
+			}
+		}
+		return fn;
 	}
 
 }
