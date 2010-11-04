@@ -125,7 +125,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 					try {
 						FileUtils.moveFile(symbolFile, newSymbolFile);
 					} catch (IOException e1) {
-						LOGGER.error(e1);
+						LOGGER.error("rename failed", e1);
 
 						rescan(true);
 
@@ -180,7 +180,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 					if (res != JOptionPane.YES_OPTION)
 						return;
-
+					
 					if (!symbolFile.delete()) {
 						String message = AtlasStyler
 								.R(

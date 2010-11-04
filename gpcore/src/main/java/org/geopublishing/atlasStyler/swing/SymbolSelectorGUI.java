@@ -160,10 +160,10 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		});
 
 		pack();
-		
+
 		SwingUtil.setRelativeFramePosition(this, getParent(),
 				SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
-		
+
 	}
 
 	/**
@@ -174,17 +174,15 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jContentPane = new JPanel(new MigLayout("flowy, wrap 1"));
-			jContentPane.add(getJTabbedPane(), "growy, growx 1, w 300");
-			
+			jContentPane.add(getJTabbedPane(), "growy, growx 1, w 300:350:400");
+
 			JPanel rightSide = new JPanel(new MigLayout("wrap 1, fillx"));
 			rightSide.add(getJPanelPreview(), "growx, center");
 			rightSide.add(getJPanelOptions(), "growx");
 			rightSide.add(getJPanelButtons(), "growx");
-			
+
 			jContentPane.add(rightSide, "growx 2");
-			
-			
-			
+
 		}
 		return jContentPane;
 	}
@@ -253,8 +251,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 					color = singleSymbolRuleList.getColor();
 
 					Color newColor = AVSwingUtil.showColorChooser(
-							SymbolSelectorGUI.this, AtlasStyler
-									.R("SymbolSelector.Preview.ChooseColor"),
+							SymbolSelectorGUI.this,
+							AtlasStyler.R("SymbolSelector.Preview.ChooseColor"),
 							color);
 
 					if (newColor != null) {
@@ -339,8 +337,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jComboBoxSize.setEnabled(singleSymbolRuleList.hasSize());
 			jLabelSize.setEnabled(singleSymbolRuleList.hasSize());
 
-			ASUtil.selectOrInsert(jComboBoxSize, singleSymbolRuleList
-					.getSizeBiggest());
+			ASUtil.selectOrInsert(jComboBoxSize,
+					singleSymbolRuleList.getSizeBiggest());
 			// jComboBoxSize
 			// .setSelectedItem(singleSymbolRuleList.getSizeBiggest());
 
@@ -386,8 +384,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 					((DefaultComboBoxModel) jComboBoxSize.getModel())
 							.addElement(singleSymbolRuleList.getSizeBiggest());
 				}
-				ASUtil.selectOrInsert(jComboBoxSize, singleSymbolRuleList
-						.getSizeBiggest());
+				ASUtil.selectOrInsert(jComboBoxSize,
+						singleSymbolRuleList.getSizeBiggest());
 				// jComboBoxSize.setSelectedItem(singleSymbolRuleList
 				// .getSizeBiggest());
 			}
@@ -413,8 +411,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			jComboBoxRotation
 					.setRenderer(AbstractEditGUI.ROTATION_VALUES_RENDERER);
 
-			ASUtil.selectOrInsert(jComboBoxRotation, singleSymbolRuleList
-					.getRotation());
+			ASUtil.selectOrInsert(jComboBoxRotation,
+					singleSymbolRuleList.getRotation());
 
 			jComboBoxRotation.addItemListener(new ItemListener() {
 
@@ -515,8 +513,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JButton getJButtonProperties() {
 		if (jButtonProperties == null) {
-			jButtonProperties = new JButton(new AbstractAction(AtlasStyler
-					.R("SymbolSelector.EditSymbol")) {
+			jButtonProperties = new JButton(new AbstractAction(
+					AtlasStyler.R("SymbolSelector.EditSymbol")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -543,8 +541,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JButton getJButtonSave() {
 		if (jButtonSave == null) {
-			jButtonSave = new JButton(new AbstractAction(AtlasStyler
-					.R("SymbolSelector.SaveToFile")) {
+			jButtonSave = new JButton(new AbstractAction(
+					AtlasStyler.R("SymbolSelector.SaveToFile")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -573,7 +571,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 					int i = chooser.showSaveDialog(SymbolSelectorGUI.this);
 					if (i == JFileChooser.APPROVE_OPTION) {
-						// TODO SwingWorker?!
 						try {
 							File selectedFile = chooser.getSelectedFile();
 							if (selectedFile == null)
@@ -583,20 +580,25 @@ public class SymbolSelectorGUI extends AtlasDialog {
 									&& (!selectedFile.getName().endsWith("SLD"))) {
 								selectedFile = new File(selectedFile
 										.getParentFile(), selectedFile
-										.getName()
-										+ ".sld");
+										.getName() + ".sld");
 							}
 
 							/*******************************************
 							 * Ask the user to enter AuthorName and Description
 							 */
-							String newerAuthor = ASUtil
-									.askForString(
-											SymbolSelectorGUI.this,
-											singleSymbolRuleList
-													.getStyleTitle(),
-											AtlasStyler
-													.R("SymbolSelector.SaveToFileDialog.Author"));
+							String creatorName = singleSymbolRuleList
+									.getStyleTitle();
+
+							if (creatorName == null || creatorName == ""){
+								LOGGER.debug("creatorName is empty");
+								creatorName = System.getProperty("user.name");
+							}
+
+							String newerAuthor = ASUtil.askForString(
+									SymbolSelectorGUI.this,
+									creatorName,
+									AtlasStyler
+											.R("SymbolSelector.SaveToFileDialog.Author"));
 							if (newerAuthor == null)
 								return;
 							singleSymbolRuleList.setStyleTitle(newerAuthor);
@@ -614,16 +616,12 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 							singleSymbolRuleList.saveSymbolToFile(selectedFile);
 						} catch (Exception e1) {
-							LOGGER
-									.error("Error saving symbol " + styleName,
-											e1);
-							JOptionPane
-									.showMessageDialog(
-											SymbolSelectorGUI.this,
-											AtlasStyler
-													.R("SymbolSelector.SaveToFileDialog.Error.FailedToSave")
-													+ "\n"
-													+ e1.getLocalizedMessage());
+							LOGGER.error("Error saving symbol " + styleName, e1);
+							JOptionPane.showMessageDialog(
+									SymbolSelectorGUI.this,
+									AtlasStyler
+											.R("SymbolSelector.SaveToFileDialog.Error.FailedToSave")
+											+ "\n" + e1.getLocalizedMessage());
 						}
 
 						symbolsLocal.rescan(true);
@@ -722,20 +720,21 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			 * Local Symbols
 			 */
 			{
-				symbolsLocal = new JScrollPaneSymbolsLocal(singleSymbolRuleList
-						.getGeometryDescriptor());
+				symbolsLocal = new JScrollPaneSymbolsLocal(
+						singleSymbolRuleList.getGeometryDescriptor());
 				symbolsLocal.addPropertyChangeListener(listener);
 
 				JPanel symbolsLocalPanel = new JPanel(new MigLayout(
 						"wrap 1, inset 0"));
 				if (symbolsLocal.getToolTip() != null)
-					symbolsLocalPanel.add(new JLabel("<html>"
-							+ symbolsLocal.getToolTip() + "</html>"),"sgx");
-				symbolsLocalPanel.add(symbolsLocal,"sgx, grow, h :300:");
+					symbolsLocalPanel.add(
+							new JLabel("<html>" + symbolsLocal.getToolTip()
+									+ "</html>"), "sgx");
+				symbolsLocalPanel.add(symbolsLocal, "sgx, grow, h :300:");
 
-				jTabbedPane.addTab(symbolsLocal.getDesc(), symbolsLocal
-						.getIcon(), symbolsLocalPanel, symbolsLocal
-						.getToolTip());
+				jTabbedPane.addTab(symbolsLocal.getDesc(),
+						symbolsLocal.getIcon(), symbolsLocalPanel,
+						symbolsLocal.getToolTip());
 			}
 
 			/**
@@ -749,17 +748,18 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				JPanel symbolsOnlinePanel = new JPanel(new MigLayout(
 						"wrap 1, inset 0"));
 				if (symbolsOnline.getToolTip() != null)
-					symbolsOnlinePanel.add(new JLabel("<html>"
-							+ symbolsOnline.getToolTip() + "</html>"),"sgx");
-				symbolsOnlinePanel.add(symbolsOnline,"sgx, grow, h :300:");
+					symbolsOnlinePanel.add(
+							new JLabel("<html>" + symbolsOnline.getToolTip()
+									+ "</html>"), "sgx");
+				symbolsOnlinePanel.add(symbolsOnline, "sgx, grow, h :300:");
 
-				jTabbedPane.addTab(symbolsOnline.getDesc(), symbolsOnline
-						.getIcon(), symbolsOnlinePanel, symbolsOnline.getToolTip());
+				jTabbedPane.addTab(symbolsOnline.getDesc(),
+						symbolsOnline.getIcon(), symbolsOnlinePanel,
+						symbolsOnline.getToolTip());
 			}
 
 		}
 		return jTabbedPane;
 	}
-
 
 }

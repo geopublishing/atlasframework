@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
   <sld:Name>AtlasStyler  version=24.3.08</sld:Name>
-  <sld:Title>Default Styler</sld:Title>
+  <sld:Title>wikisquare.de</sld:Title>
   <sld:FeatureTypeStyle>
     <sld:Name>SINGLE_SYMBOL_POLYGON</sld:Name>
     <sld:Title>title</sld:Title>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1252"?>
 <sld:UserStyle xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml">
   <sld:Name>AtlasStyler v1.4, b746 (Mon Feb 22 12:49:00 CET 2010)</sld:Name>
-  <sld:Title/>
+  <sld:Title>wikisquare.de</sld:Title>
   <sld:FeatureTypeStyle>
     <sld:Name>QUANTITIES_COLORIZED_POLYGON:VALUE#meat:NORM#null:METHOD#QUANTILES:PALETTE#OrRd</sld:Name>
     <sld:FeatureTypeName>join10</sld:FeatureTypeName>
