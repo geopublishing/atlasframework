@@ -702,11 +702,21 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			model.setRangeProperties(0, 1, 0, 100, false);
 			SwingUtil.setRelativeFramePosition(window, parentWindow, .5, .5);
 			window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			started();
 			window.setModal(true); // CALL zeug?!
 			window.setVisible(true);
 		} else {
-			started();
-			window.setModal(true); // CALL zeug?!
+			LOGGER.warn("startModel has been called NOT on EDT. Starting it on EDT now: "
+					+ this);
+			SwingUtilities.invokeAndWait(new Runnable() {
+
+				@Override
+				public void run() {
+					startModal();
+				}
+			});
+			// started();
+			// window.setModal(true); // CALL zeug?!
 		}
 	}
 
@@ -716,10 +726,14 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	}
 
 	@Override
-	public void downloadFailed(URL arg0, String arg1) {
+	public void downloadFailed(URL url, String arg1) {
+		if (!window.isVisible()) {
+			started();
+		}
+
 		// i8n
-		LOGGER.error("downloadFailed " + arg0 + " " + arg1);
-		setDescription(arg1);
+		LOGGER.error("downloadFailed " + url + " " + arg1);
+		setDescription("downloadFailed " + url + " " + arg1);
 		exceptionOccurred(new AtlasImportException(arg1));
 	}
 
@@ -730,8 +744,12 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	public void progress(URL url, String urlString, long doneSoFar, long full,
 			int percentage) {
 
+		if (!window.isVisible()) {
+			started();
+		}
+
 		String filename;
-		
+
 		if (url != null) {
 			filename = IOUtil.getFilename(url);
 		} else {
@@ -761,6 +779,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	@Override
 	public void upgradingArchive(URL url, String version, int patchPercent,
 			int overallPercent) {
+		if (!window.isVisible()) {
+			started();
+		}
 
 		// Not too many updates
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
@@ -776,6 +797,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 	@Override
 	public void validating(URL url, String version, long entry, long total,
 			int overallPercent) {
+		if (!window.isVisible()) {
+			started();
+		}
 
 		// Not too many updates
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)

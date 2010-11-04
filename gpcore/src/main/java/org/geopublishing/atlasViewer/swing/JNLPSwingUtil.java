@@ -104,10 +104,14 @@ public class JNLPSwingUtil extends JNLPUtil {
 			LOGGER.debug("loadPartAndCreateDialogForIt(String[] parts) EDT:"
 					+ edt);
 
-			if (asg == null)
+			if (asg == null) {
+				LOGGER.debug(
+						"loadPartAndCreateDialogForIt has been called with null AtlasStatusDialog",
+						new RuntimeException(
+								"loadPartAndCreateDialogForIt has been called with null AtlasStatusDialog"));
 				asg = new AtlasStatusDialog(null, "Downloading data",
 						"Downloading data"); // i8n i8n i8n TODO
-												// TODO
+			}
 
 			final AtlasStatusDialogInterface finalRefToStatusDialog = asg;
 

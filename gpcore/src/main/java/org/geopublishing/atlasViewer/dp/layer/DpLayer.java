@@ -350,7 +350,9 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		Double result;
 
 		Double simpleQM = super.getQuality();
-
+		
+		// TODO NPE when reloading atlas!
+		
 		int countLanguages = getAtlasConfig().getLanguages().size();
 		int existing = countLanguages - getMissingHTMLLanguages().size();
 		double htmlQM = (double) existing / (double) countLanguages;
