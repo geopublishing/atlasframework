@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
@@ -22,12 +23,16 @@ import org.geotools.data.wfs.WFSDataStoreFactory;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.geotools.io.WfsServerList;
 import skrueger.geotools.io.WfsServerSettings;
 import skrueger.geotools.io.WfsSettingsJComboBox;
 import skrueger.swing.SmallButton;
 
 public class ImportWizardPage_WFS_Select extends WizardPage {
+
+	final static Logger LOGGER = Logger
+			.getLogger(ImportWizardPage_WFS_Select.class);
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
@@ -70,6 +75,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 		try {
 			url.openStream().close();
 		} catch (Exception e) {
+			LOGGER.info("Can't connect to Server: ",e);
 			return validationImportSourceTypeFailedMsg_CantRead;
 		}
 
@@ -277,6 +283,8 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 			wfsJComboBox = new WfsSettingsJComboBox(
 					WfsServerList.parsePropertiesString(ASProps
 							.get(ASProps.Keys.wfsList)));
+
+			SwingUtil.addMouseWheelForCombobox(wfsJComboBox);
 
 			wfsJComboBox.setName(ImportWizard.IMPORT_WFS_URL);
 

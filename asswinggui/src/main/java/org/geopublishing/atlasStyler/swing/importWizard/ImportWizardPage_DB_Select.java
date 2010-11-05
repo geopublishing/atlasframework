@@ -23,6 +23,7 @@ import org.geotools.data.DataStoreFinder;
 import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 import skrueger.geotools.io.DbServerList;
 import skrueger.geotools.io.DbServerSettings;
 import skrueger.geotools.io.DbSettingsJComboBox;
@@ -286,6 +287,8 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 			dbJComboBox = new DbSettingsJComboBox(
 					DbServerList.parsePropertiesString(ASProps
 							.get(ASProps.Keys.dbList)));
+			
+			SwingUtil.addMouseWheelForCombobox(dbJComboBox);
 
 			dbJComboBox.setName(ImportWizard.IMPORT_DB);
 

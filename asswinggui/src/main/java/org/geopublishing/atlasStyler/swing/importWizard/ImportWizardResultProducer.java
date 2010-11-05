@@ -68,9 +68,11 @@ public abstract class ImportWizardResultProducer implements
 
 		if (sldFile.exists()) {
 
-			boolean askYesNo = AVSwingUtil.askYesNo(owner, AVSwingUtil.R(
-					"ImportWizard.ImportExistingSLDQuestion", sldFileName,
-					sldDir));
+			boolean askYesNo = AVSwingUtil.askYesNo(
+					owner,
+					ASUtil.R("ImportWizard.ImportExistingSLDQuestion",
+							IOUtil.escapePath(sldFileName),
+							IOUtil.escapePath(sldDir)));
 
 			if (askYesNo == true) {
 				dbSfs.loadStyle();
@@ -84,7 +86,7 @@ public abstract class ImportWizardResultProducer implements
 			AVSwingUtil
 					.showMessageDialog(
 							owner,
-							SLDfile.getAbsolutePath()
+							IOUtil.escapePath(SLDfile.getAbsolutePath())
 									+ " exits.\nChange the ending to .sld to associate it with the layer. It will not be imported."); // i8n
 		}
 
