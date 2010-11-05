@@ -237,8 +237,8 @@ public class AVSwingUtil extends AVUtil {
 	 * 
 	 * @param postFix
 	 *            The postfix for the temp file. Usefull, if we want windows
-	 *            start command to determine the type. E.g. ".pdf" - if null
-	 *            ".tmp" is used.
+	 *            start command to determine the type. E.g. ".pdf" - if
+	 *            <code>null</code> ".tmp" is used.
 	 * 
 	 * @return A {@link File} to a local Copy of the URL
 	 * 
@@ -250,7 +250,6 @@ public class AVSwingUtil extends AVUtil {
 
 		// Always copy to temp file, beacuse we want to simulate the change of
 		// the filename when we preview withing the GP
-		// //
 		// ****************************************************************************
 		// // Do not create local copy if we are not working on JARs or via http
 		// //
@@ -265,37 +264,46 @@ public class AVSwingUtil extends AVUtil {
 		// See, if we have already created a local copy
 		// ****************************************************************************
 		if (cachedLocalCopiedFiles.containsKey(url)) {
-			return cachedLocalCopiedFiles.get(url);
+			File fileInTemp = cachedLocalCopiedFiles.get(url);
+			if (fileInTemp.exists()) {
+				return fileInTemp;
+			} else {
+				// If the local copy has been deleted, forget about it.
+				cachedLocalCopiedFiles.remove(url);
+			}
 		}
 
 		if (title == null)
 			title = "";
 
-		// if ((titleHint == null) || (titleHint.equals("")))
-		// titleHint = fileNameHint;
-
-		// String fuerWindows = fileNameHint.lastIndexOf('.') > 0 ? fileNameHint
-		// .substring(fileNameHint.lastIndexOf('.')) : fileNameHint;
-
-		// LOGGER
-		// .debug("Adding a Postfix to the temp file so Windows will recognize it: "
-		// + fuerWindows);
 		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_BASE_ID
 				+ IOUtil.cleanFilename(title), postFix);
 
-		new AtlasExportTask(owner, AVUtil.R("dialog.title.wait")) {
+		// new AtlasExportTask(owner, AVUtil.R("dialog.title.wait")) {
+		//
+		// @Override
+		// protected Boolean doInBackground() throws Exception {
+		// FileUtils.copyURLToFile(url, localTempFile);
+		// localTempFile.deleteOnExit();
+		// String msg = "downloaded to " + localTempFile;
+		// Log.debug(msg);
+		// System.out.println(msg);
+		// return true;
+		// }
+		//
+		// }.run();
+
+		new AtlasSwingWorker<Void>(owner) {
 
 			@Override
-			protected Boolean doInBackground() throws Exception {
+			protected Void doInBackground() throws Exception {
 				FileUtils.copyURLToFile(url, localTempFile);
 				localTempFile.deleteOnExit();
 				String msg = "downloaded to " + localTempFile;
 				Log.debug(msg);
-				System.out.println(msg);
-				return true;
+				return null;
 			}
-
-		}.run();
+		}.executeModalNoEx();
 
 		cachedLocalCopiedFiles.put(url, localTempFile.getCanonicalFile());
 
@@ -380,7 +388,7 @@ public class AVSwingUtil extends AVUtil {
 					owner.setCursor(Cursor
 							.getPredefinedCursor(Cursor.WAIT_CURSOR));
 					try {
-						Thread.sleep(3000);
+						Thread.sleep(2000);
 					} catch (final InterruptedException e) {
 					} finally {
 						owner.setCursor(backup);
@@ -388,7 +396,7 @@ public class AVSwingUtil extends AVUtil {
 				}
 			});
 
-		File pdfFile = null; // = DataUtilities.urlToFile(url);
+		File pdfFile = null;
 		try {
 
 			/**
@@ -426,10 +434,8 @@ public class AVSwingUtil extends AVUtil {
 
 			try {
 
-				System.out.println("pdfFile to open  = " + pdfFile);
-
 				if (!pdfFile.exists()) {
-					System.out.println("pdfFile to open  does not exist");
+					LOGGER.warn("pdfFile to open does not exist " + pdfFile);
 				}
 				LOGGER.debug("Using Desktop.getDesktop().open to open the following canonical file:\n"
 						+ pdfFile);
@@ -915,7 +921,6 @@ public class AVSwingUtil extends AVUtil {
 			statusDialog.complete();
 		}
 	}
-
 
 	/**
 	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"

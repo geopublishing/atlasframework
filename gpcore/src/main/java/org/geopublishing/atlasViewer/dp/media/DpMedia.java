@@ -37,19 +37,11 @@ public abstract class DpMedia<CHART_STYLE_IMPL extends ChartStyle> extends
 		super.uncache();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see skrueger.atlas.datapool.DatapoolEntry#isLayer()
-	 */
 	@Override
 	public final boolean isLayer() {
 		return false;
 	}
 
-	/**
-	 * Should open Dialog that shows the media... Can be singleton, must not be
-	 */
 	public abstract Object show(Component owner);
 
 }

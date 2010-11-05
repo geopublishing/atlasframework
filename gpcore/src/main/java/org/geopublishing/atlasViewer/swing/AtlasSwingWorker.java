@@ -89,6 +89,8 @@ public abstract class AtlasSwingWorker<K> extends SwingWorker<K, String> {
 			return get();
 		} catch (Exception e) {
 			LOGGER.error("dialog modal execution failed:", e);
+			statusDialog.exceptionOccurred(e);
+			statusDialog.complete();
 		}
 		return null;
 	}
