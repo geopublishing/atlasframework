@@ -4,7 +4,7 @@
   You can ignore it if you are not using that service. 
   Do not make changes to this file. It will be recreated on every save of the atlas in Geopublisher.
 -->
-<project basedir="." name="atlas publication">
+<project basedir="." name="atlas publication" default="publish_both">
 
 	<property name="basename" value="ATLASBASENAME" description="Should be the same like the last part of baseJnlpUrl" />
 
@@ -16,6 +16,8 @@
 
 	<property name="tmpdir" value="/tmp/${basename}" />
 
+	<target name="publish_both" depends="publish, publish_testing" />
+
 	<!-- ================================= 
 	          target: clean : Clean the compiled classes, created ZIPs and exported JARs              
 	     ================================= -->
@@ -24,10 +26,11 @@
 		<exec executable="/usr/bin/sudo" description="install latest geopublisher software. If apt-get is busy, waits minute" failonerror="false">
 			<arg line='/usr/local/sbin/updategp.sh' />
 		</exec>
-		<mkdir dir="${tmpdir}" />
 	</target>
 
 	<target name="export" depends="clean" description="Exporting atlas with GP stable from ${basedir} to ${tmpdir}... ">
+		<mkdir dir="${tmpdir}" />
+		
 		<exec executable="geopublisher" failonerror="true">
 			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t -u ${wwwurl}' />
 		</exec>
@@ -35,6 +38,7 @@
 
 
 	<target name="export_testing" depends="clean" description="Exporting atlas with GP testing from ${basedir} to ${tmpdir}... ">
+		<mkdir dir="${tmpdir}" />
 		<exec executable="geopublisher-testing" failonerror="true">
 			<arg line='-a ${basedir} -e ${tmpdir} -z -d -j -f -t -u ${wwwurltesting}' />
 		</exec>
@@ -49,11 +53,17 @@
 			</fileset>
 		</move>
 
+		<!--
 		<move todir="${wwwdir}" description="Moving JWS atlas to ${wwwdir}...">
 			<fileset dir="${tmpdir}/JWS">
 				<include name="**/*" />
 			</fileset>
 		</move>
+		-->
+		<exec executable="/usr/bin/rsync">
+			<arg line='-rcv ${tmpdir}/JWS/. ${wwwdir}' />
+		</exec>
+
 
 		<delete dir="${tmpdir}" failonerror="false" />
 	</target>
@@ -68,11 +78,17 @@
 			</fileset>
 		</move>
 
+		<!--
 		<move todir="${wwwdirtesting}" description="Moving JWS atlas to ${wwwdirtesting}...">
 			<fileset dir="${tmpdir}/JWS">
 				<include name="**/*" />
 			</fileset>
 		</move>
+		-->
+
+		<exec executable="/usr/bin/rsync">
+			<arg line='-rcv ${tmpdir}/JWS/. ${wwwdirtesting}' />
+		</exec>
 
 		<delete dir="${tmpdir}" failonerror="false" />
 	</target>
