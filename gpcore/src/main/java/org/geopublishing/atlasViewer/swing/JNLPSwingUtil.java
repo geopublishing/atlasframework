@@ -24,6 +24,8 @@ import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
+import schmitzm.swing.SwingUtil;
+
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart
  * related stuff.
@@ -109,8 +111,12 @@ public class JNLPSwingUtil extends JNLPUtil {
 						"loadPartAndCreateDialogForIt has been called with null AtlasStatusDialog",
 						new RuntimeException(
 								"loadPartAndCreateDialogForIt has been called with null AtlasStatusDialog"));
-				asg = new AtlasStatusDialog(null, "Downloading data",
-						"Downloading data"); // i8n i8n i8n TODO
+				asg = new AtlasStatusDialog(
+						null,
+						SwingUtil
+								.R("AtlasStatusDialog.jnlp.generalDownload.Title"),
+						SwingUtil
+								.R("AtlasStatusDialog.jnlp.generalDownload.Desc"));
 			}
 
 			final AtlasStatusDialogInterface finalRefToStatusDialog = asg;

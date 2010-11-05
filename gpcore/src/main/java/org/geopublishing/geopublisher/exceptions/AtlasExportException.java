@@ -12,11 +12,15 @@ package org.geopublishing.geopublisher.exceptions;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
-
+import org.geopublishing.geopublisher.GpUtil;
 
 public class AtlasExportException extends AtlasException {
+
+	final static private Logger LOGGER = Logger
+			.getLogger(AtlasExportException.class);
+
 	public AtlasExportException() {
-		super("Exception while exporting the atlas."); // i8n
+		super(GpUtil.R("AtlasExportException.message"));
 	}
 
 	public AtlasExportException(String message, Throwable cause) {
@@ -30,7 +34,4 @@ public class AtlasExportException extends AtlasException {
 	public AtlasExportException(Throwable cause) {
 		super(cause);
 	}
-
-	final static private Logger LOGGER = Logger
-			.getLogger(AtlasExportException.class);
 }

@@ -571,7 +571,6 @@ public class AMLExporter {
 	 */
 	private Node exportMap(final Document document, final Map map)
 			throws AtlasExportException {
-		// info("map: " + map.getTitle()); // i8n
 
 		final Element element = document.createElementNS(AMLUtil.AMLURI, "map");
 		element.setAttribute("id", map.getId());
@@ -803,8 +802,6 @@ public class AMLExporter {
 	 */
 	private final Element exportDatapoolLayerVector(final Document document,
 			final DpLayerVectorFeatureSource dpe) throws IOException {
-
-		// info(dpe.getTitle()); // i8n
 
 		if (dpe.isBroken()) {
 			LOGGER.info("Trying to save a broken layer..." + dpe);
@@ -1096,7 +1093,6 @@ public class AMLExporter {
 	 */
 	private final Element exportDatapoolLayerRaster(final Document document,
 			final DpLayerRaster dpe) {
-		// info(dpe.getTitle()); // i8n
 
 		// Creating a aml:rasterLayer tag...
 		final Element element = document.createElementNS(AMLUtil.AMLURI,

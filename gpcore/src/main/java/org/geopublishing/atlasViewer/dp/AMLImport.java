@@ -914,7 +914,7 @@ public class AMLImport {
 				final DpEntry testDpe = ac.getDataPool().get(id);
 				if (testDpe == null) {
 					warn("menu structure",
-							"<datapoolRef> traget id can't be found in the Datapool. id="
+							"<datapoolRef> target-ID can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 
 				} else {
@@ -928,7 +928,7 @@ public class AMLImport {
 				final Map testMap = ac.getMapPool().get(id);
 				if (testMap == null) {
 					warn("menu structure",
-							"<mapRef> traget id can't be found in the Datapool. id="
+							"<mapRef> target-ID can't be found in the Datapool. id="
 									+ id + "\n Ignoring."); // i8n
 				} else {
 					// LOGGER.debug("Adding mapRef " + testMap + " to group "
@@ -948,7 +948,7 @@ public class AMLImport {
 	 * 
 	 * @throws AtlasRecoverableException
 	 * 
-	 *             TODO TODO TODO Hier muss eine URL hin! Bisher geht nur
+	 *             TODO Hier muss eine URL hin! Bisher geht nur
 	 *             {@link DpLayerVectorFeatureSourceShapefile}
 	 * @throws AtlasCancelException
 	 */

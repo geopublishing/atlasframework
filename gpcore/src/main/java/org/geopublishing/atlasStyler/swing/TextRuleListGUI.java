@@ -381,14 +381,12 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private JButton getJButtonClassCopyToLanguage() {
 		if (jButtonClassLangCopy == null) {
-			jButtonClassLangCopy = new ThinButton("Default for langauge");
+			jButtonClassLangCopy = new ThinButton(
+					ASUtil.R("TextSymbolizerClass.CreateALanguageDefaultButton"));
 			jButtonClassLangCopy.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
-					// String lang = ASUtil.askForString(TextRuleListGUI.this,
-					// "de", null);
 
 					String lang = askForLang();
 
@@ -397,25 +395,26 @@ public class TextRuleListGUI extends JPanel {
 						lang = lang.toLowerCase();
 
 						if (!AtlasStyler.getLanguages().contains(lang)) {
+							// Can not happen anymore...
 							AVSwingUtil
 									.showMessageDialog(
 											TextRuleListGUI.this,
-											"Please enter one of the configured languages: "
+											"Please choose one of the configured languages: "
 													+ LangUtil
 															.stringConcatWithSep(
 																	",",
 																	AtlasStyler
-																			.getLanguages())); // i8n
+																			.getLanguages()));
 							return;
 						}
 
 						int newIdx = rulesList.addDefaultClass(lang);
 
 						if (newIdx < 0) {
-							// alreadylexisted?
+							// Can not happen anymore...
 							AVSwingUtil
 									.showMessageDialog(TextRuleListGUI.this,
-											"Class could could not be created. Maybe the class alreay exits?"); // i8n
+											"Class could could not be created. Maybe the class alreay exits?"); 
 							return;
 						} else
 							rulesList.setSelIdx(newIdx);
@@ -435,8 +434,9 @@ public class TextRuleListGUI extends JPanel {
 
 					if (AtlasStyler.getLanguages().size() == rulesList
 							.getDefaultLanguages().size()) {
-						AVSwingUtil.showMessageDialog(TextRuleListGUI.this,
-								"A rule for every language already exits.");
+						AVSwingUtil.showMessageDialog(
+								TextRuleListGUI.this,
+								ASUtil.R("TextSymbolizerClass.CreateALanguageDefault.AllLanguagesAlreadyCreated"));
 						return null;
 
 					}

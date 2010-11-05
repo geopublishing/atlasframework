@@ -733,10 +733,9 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 			started();
 		}
 
-		// i8n
 		LOGGER.error("downloadFailed " + url + " " + arg1);
-		exceptionOccurred(new AtlasImportException("Download failed: " + url
-				+ " " + arg1));
+		exceptionOccurred(new AtlasImportException(SwingUtil.R(
+				"AtlasStatusDialog.jnlp.downloadFailed", url, arg1)));
 	}
 
 	long lastPercentageUpdate = System.currentTimeMillis() - 10000;
@@ -762,15 +761,19 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		}
 
 		lastPercentageUpdate = System.currentTimeMillis();
-		// i8n
+
 		LOGGER.debug("progress " + url + " " + urlString + " " + doneSoFar
 				+ " " + full + " " + percentage);
 
-		String fullSize = mbdf.format(full);
+		// String fullSize = mbdf.format(full);
 
-		setDescription("Downloading " + filename + " ("+ percentage + "%)"); // i8n
-//		setDescription("Downloading " + filename + " " + percentage + "% of "
-//				+ fullSize); // i8n
+		// setDescription("Downloading " + filename + " (" + percentage + "%)");
+
+		setDescription(SwingUtil.R("AtlasStatusDialog.jnlp.progress", filename,
+				percentage));
+
+		// setDescription("Downloading " + filename + " " + percentage + "% of "
+		// + fullSize);
 
 	}
 
@@ -785,11 +788,13 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
 			return;
 
-		// i8n
 		LOGGER.debug("upgrading " + url + " " + version + " " + patchPercent
 				+ " " + overallPercent);
 		String filename = getShortFilename(url);
-		setDescription("Upgrading " + filename + " " + overallPercent + "%");
+
+		setDescription(SwingUtil.R("AtlasStatusDialog.jnlp.upgrading",
+				filename, overallPercent));
+		// setDescription("Upgrading " + filename + " " + overallPercent + "%");
 	}
 
 	@Override
@@ -803,12 +808,14 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 		if (System.currentTimeMillis() - lastPercentageUpdate < 500)
 			return;
 
-		String filename = getShortFilename(url);
-
-		// i8n
 		LOGGER.debug("validating " + url + " " + version + " " + entry + " "
 				+ total + " " + overallPercent);
-		setDescription("Validating " + filename + " " + overallPercent + "%");
+
+		setDescription(SwingUtil.R("AtlasStatusDialog.jnlp.validating",
+				getShortFilename(url), overallPercent));
+
+		// setDescription("Validating " + filename + " " + overallPercent +
+		// "%");
 	}
 
 	final static Pattern SHORTEN_ATLAS_JAR_NAMES = Pattern
@@ -824,7 +831,7 @@ public class AtlasStatusDialog implements AtlasStatusDialogInterface {
 				fn = matcher.group(1);
 			}
 		}
-		
+
 		return fn;
 	}
 

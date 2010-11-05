@@ -604,29 +604,6 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			toolPopup.add(new JMenuItem(showTableAction));
 		}
 
-		//
-		// /**
-		// * // Create transparency button
-		// */
-		// final JCheckBoxMenuItem transparency50 = new JCheckBoxMenuItem();
-		//
-		// // i8n //DOK AbstractAction???
-		// transparency50.setAction(new AbstractAction("transparent") {
-		//
-		// public void actionPerformed(ActionEvent e) {
-		// SwingUtilities.invokeLater(new Runnable() {
-		// public void run() {
-		// boolean isTransp = toggleTransparency();
-		// transparency50.setSelected(isTransp);
-		// repaint();
-		// }
-		// });
-		// }
-		//
-		// });
-		// transparency50.setSelected(isTransparent());
-		// toolPopup.add(transparency50);
-
 		/**
 		 * Button to remove the layer from the MapContext
 		 */

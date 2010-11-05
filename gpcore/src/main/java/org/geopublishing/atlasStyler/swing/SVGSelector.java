@@ -492,10 +492,10 @@ public class SVGSelector extends JDialog {
 						styleAuthor.setText(rl.getStyleTitle());
 						description.setText(rl.getStyleAbstract());
 
-						fullCell.setToolTipText("ExternalGraphicURL: " // i8n
+						fullCell.setToolTipText("ExternalGraphic URL: " 
 								+ folderUrl.toString()
 								+ rl.getStyleName()
-								+ ".svg"); // i8n
+								+ ".svg"); 
 
 					} else if (value instanceof URL) {
 						/**

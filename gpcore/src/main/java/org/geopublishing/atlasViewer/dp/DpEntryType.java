@@ -15,6 +15,7 @@ import java.util.Comparator;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 /**
@@ -22,7 +23,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
  * 
  */
 public enum DpEntryType {
-	UNKNOWN, PDF, GML, RASTER, VECTOR, VIDEO, RASTER_PYRAMID, RASTER_GEOTIFF, RASTER_ARCASCII, RASTER_IMAGEWORLD, VECTOR_SHP_POINT, VECTOR_SHP_LINE, VECTOR_SHP_POLY;
+	UNKNOWN, PDF, GML, RASTER, VECTOR, VIDEO, RASTER_GEOTIFF, RASTER_ARCASCII, RASTER_IMAGEWORLD, VECTOR_SHP_POINT, VECTOR_SHP_LINE, VECTOR_SHP_POLY;
 
 	/**
 	 * Provides a small icon this {@link DpEntryType}
@@ -56,9 +57,6 @@ public enum DpEntryType {
 			icon = Icons.ICON_RASTER_SMALL;
 
 		} else if (type == DpEntryType.RASTER_IMAGEWORLD) {
-			icon = Icons.ICON_RASTER_SMALL;
-
-		} else if (type == DpEntryType.RASTER_PYRAMID) {
 			icon = Icons.ICON_RASTER_SMALL;
 
 		} else if (type == DpEntryType.VECTOR) {
@@ -110,9 +108,6 @@ public enum DpEntryType {
 		} else if (type == DpEntryType.RASTER_IMAGEWORLD) {
 			icon = Icons.ICON_RASTER_BIG;
 
-		} else if (type == DpEntryType.RASTER_PYRAMID) {
-			icon = Icons.ICON_RASTER_BIG;
-
 		} else if (type == DpEntryType.VECTOR) {
 			icon = Icons.ICON_VECTOR_BIG;
 
@@ -160,94 +155,90 @@ public enum DpEntryType {
 	 * Provides an short name for this {@link DpEntryType}
 	 */
 	public static String getLine1For(DpEntryType type) {
-		String line1 = null;
-		if (type == DpEntryType.VIDEO) {
-			line1 = "Video"; // i8n
+		return AVUtil.R("DpEntryType."+type.toString() + ".line1");
 
-		} else if (type == DpEntryType.RASTER) {
-			line1 = "Raster"; // i8n
-
-		} else if (type == DpEntryType.RASTER_ARCASCII) {
-			line1 = "Raster"; // i8n
-
-		} else if (type == DpEntryType.RASTER_GEOTIFF) {
-			line1 = "Raster"; // i8n
-
-		} else if (type == DpEntryType.RASTER_IMAGEWORLD) {
-			line1 = "Raster"; // i8n
-
-		} else if (type == DpEntryType.RASTER_PYRAMID) {
-			line1 = "Raster"; // i8n
-
-		} else if (type == DpEntryType.VECTOR) {
-			line1 = "Vector"; // i8n
-
-		} else if (type == DpEntryType.VECTOR_SHP_POINT
-				|| type == DpEntryType.VECTOR_SHP_LINE
-				|| type == DpEntryType.VECTOR_SHP_POLY) {
-			line1 = "Shape"; // i8n
-
-		} else if (type == DpEntryType.GML) {
-			line1 = "GML"; // i8n
-
-		} else if (type == DpEntryType.PDF) {
-			line1 = "PDF"; // i8n
-
-		} else {
-			line1 = "can't";
-		}
-
-		if (line1 == null) {
-			Logger.getLogger(DpEntryType.class).warn(
-					"No line1 for DpEntryType " + type);
-			line1 = "";
-		}
-		return line1;
+		// String line1 = null;
+		// if (type == DpEntryType.VIDEO) {
+		// line1 = "Video";
+		//
+		// } else if (type == DpEntryType.RASTER) {
+		// line1 = "Raster";
+		//
+		// } else if (type == DpEntryType.RASTER_ARCASCII) {
+		// line1 = "Raster";
+		//
+		// } else if (type == DpEntryType.RASTER_GEOTIFF) {
+		// line1 = "Raster";
+		//
+		// } else if (type == DpEntryType.RASTER_IMAGEWORLD) {
+		// line1 = "Raster";
+		//
+		// } else if (type == DpEntryType.VECTOR) {
+		// line1 = "Vector";
+		//
+		// } else if (type == DpEntryType.VECTOR_SHP_POINT
+		// || type == DpEntryType.VECTOR_SHP_LINE
+		// || type == DpEntryType.VECTOR_SHP_POLY) {
+		// line1 = "Shape";
+		//
+		// } else if (type == DpEntryType.GML) {
+		// line1 = "GML";
+		//
+		// } else if (type == DpEntryType.PDF) {
+		// line1 = "PDF";
+		//
+		// } else {
+		// line1 = "can't";
+		// }
+		//
+		// if (line1 == null) {
+		// Logger.getLogger(DpEntryType.class).warn(
+		// "No line1 for DpEntryType " + type);
+		// line1 = "";
+		// }
+		// return line1;
 	}
 
 	/**
 	 * Provides an additional detail for this {@link DpEntryType}
 	 */
 	public static String getLine2For(DpEntryType type) {
-		String line2 = null;
-		if (type == DpEntryType.VIDEO) {
-			line2 = "Video"; // i8n
-
-		} else if (type == DpEntryType.RASTER) {
-
-		} else if (type == DpEntryType.RASTER_ARCASCII) {
-			line2 = "ArcASCII"; // i8n
-
-		} else if (type == DpEntryType.RASTER_GEOTIFF) {
-			line2 = "GeoTIFF"; // i8n
-
-		} else if (type == DpEntryType.RASTER_IMAGEWORLD) {
-			line2 = "world"; // i8n
-
-		} else if (type == DpEntryType.RASTER_PYRAMID) {
-			line2 = "Pyramid"; // i8n
-
-		} else if (type == DpEntryType.VECTOR) {
-
-		} else if (type == DpEntryType.VECTOR_SHP_POINT) {
-			line2 = "point"; // i8n
-		} else if (type == DpEntryType.VECTOR_SHP_LINE) {
-			line2 = "line"; // i8n
-		} else if (type == DpEntryType.VECTOR_SHP_POLY) {
-			line2 = "poly"; // i8n
-
-		} else if (type == DpEntryType.GML) {
-
-		} else if (type == DpEntryType.PDF) {
-
-		} else {
-			line2 = "read!"; // i8n //TODO
-		}
-
-		if (line2 == null) {
-			line2 = "";
-		}
-		return line2;
+		return AVUtil.R("DpEntryType."+type.toString() + ".line2");
+		// String line2 = null;
+		// if (type == DpEntryType.VIDEO) {
+		//
+		// } else if (type == DpEntryType.RASTER) {
+		//
+		// } else if (type == DpEntryType.RASTER_ARCASCII) {
+		// line2 = "ArcASCII";
+		//
+		// } else if (type == DpEntryType.RASTER_GEOTIFF) {
+		// line2 = "GeoTIFF";
+		//
+		// } else if (type == DpEntryType.RASTER_IMAGEWORLD) {
+		// line2 = "world";
+		//
+		// } else if (type == DpEntryType.VECTOR) {
+		//
+		// } else if (type == DpEntryType.VECTOR_SHP_POINT) {
+		// line2 = "point";
+		// } else if (type == DpEntryType.VECTOR_SHP_LINE) {
+		// line2 = "line";
+		// } else if (type == DpEntryType.VECTOR_SHP_POLY) {
+		// line2 = "poly";
+		//
+		// } else if (type == DpEntryType.GML) {
+		//
+		// } else if (type == DpEntryType.PDF) {
+		//
+		// } else {
+		// line2 = "read!";
+		// }
+		//
+		// if (line2 == null) {
+		// line2 = "";
+		// }
+		// return line2;
 	}
 
 	/**
