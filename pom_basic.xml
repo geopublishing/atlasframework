@@ -6,7 +6,7 @@
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-atlas-framework-basics</artifactId>
 	<name>Geopublishing Atlas Framework</name>
-	<version>1.6-SNAPSHOT</version>
+	<version>1.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Geopublisher (including AtlasStyler) applications.
 	</description>
@@ -29,7 +29,7 @@
 	<properties>
 		<geotools.version>2.6.5</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<schmitzm.version>2.3-SNAPSHOT</schmitzm.version>
+		<schmitzm.version>2.4-SNAPSHOT</schmitzm.version>
 	</properties>
 
 	<organization>
