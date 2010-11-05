@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.swing.TestingUtil;
+
 public class AVSwingUtilTest {
 
 	@Before
@@ -25,6 +27,9 @@ public class AVSwingUtilTest {
 	@Test
 	public void testCreateLocalCopyFromURLRecoversIfTheFileIsDeleted()
 			throws IOException {
+
+		if (!TestingUtil.INTERACTIVE)
+			return;
 		URL url = new URL("http://www.wikisquare.de/favicon.ico");
 		assertNotNull(url);
 		File file = AVSwingUtil
