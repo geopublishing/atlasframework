@@ -903,8 +903,19 @@ public class AVSwingUtil extends AVUtil {
 	public static final URL getUrl(DpEntry<?> dpe, Component comp) {
 		if (comp == null)
 			return getUrl(dpe, (AtlasStatusDialog) null);
-		return getUrl(dpe, new AtlasStatusDialog(comp));
+
+		AtlasStatusDialog statusDialog = new AtlasStatusDialog(comp);
+		try {
+			URL url = getUrl(dpe, statusDialog);
+			return url;
+		} catch (Exception e) {
+			statusDialog.exceptionOccurred(e);
+			return null;
+		} finally {
+			statusDialog.complete();
+		}
 	}
+
 
 	/**
 	 * Returns a URL for this {@link CopyOfDpEntry}. This references the "main"

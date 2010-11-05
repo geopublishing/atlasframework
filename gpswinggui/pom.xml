@@ -114,7 +114,7 @@
 
 						<configuration>
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
-
+							
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
