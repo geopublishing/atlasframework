@@ -314,22 +314,16 @@ class SHTMLWriter extends HTMLWriter {
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.swing.text.html.HTMLWriter#startTag(javax.swing.text.Element)
 	 */
 	void writeStartTag(Element elem) throws IOException, BadLocationException {
-		// TODO Auto-generated method stub
 		super.startTag(elem);
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
 	 * @see javax.swing.text.html.HTMLWriter#endTag(javax.swing.text.Element)
 	 */
 	void writeEndTag(Element elem) throws IOException {
-		// TODO Auto-generated method stub
 		super.endTag(elem);
 	}
 

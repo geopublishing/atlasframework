@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -55,8 +56,8 @@ public abstract class ImportWizardResultProducer implements
 	File setSldFileAndAskImportIfExists(Component owner, String sldFileName,
 			StyledFS dbSfs, File sldFile) {
 		File importedSldFile = null;
-		
-		String sldDir ;
+
+		String sldDir;
 		if (sldFile == null) {
 			sldDir = System.getProperty("user.home");
 			sldFile = new File(sldDir + "/" + sldFileName);
@@ -66,10 +67,10 @@ public abstract class ImportWizardResultProducer implements
 		dbSfs.setSldFile(sldFile);
 
 		if (sldFile.exists()) {
-			// i8n
-			boolean askYesNo = AVSwingUtil.askYesNo(owner, sldFileName
-					+ " found in \n" + sldDir // i8n
-					+ "\nDo you want to import the file?");
+
+			boolean askYesNo = AVSwingUtil.askYesNo(owner, AVSwingUtil.R(
+					"ImportWizard.ImportExistingSLDQuestion", sldFileName,
+					sldDir));
 
 			if (askYesNo == true) {
 				dbSfs.loadStyle();
@@ -103,15 +104,16 @@ public abstract class ImportWizardResultProducer implements
 
 		LOGGER.error("Import failed: ", e);
 
-		panel.add(new JLabel("<html>The import has been aborted: " // i8n
-				+ errorMsg + "</html>"));
+		panel.add(new JLabel(AsSwingUtil.R(
+				"ImportWizard.ImportHasBeenAbortedWithError", errorMsg)));
 
 		return panel;
 	}
 
 	protected Summary getAbortSummary() {
 		JPanel aborted = new JPanel(new MigLayout());
-		aborted.add(new JLabel("The import has been aborted by the user.")); // i8n
+		aborted.add(new JLabel(AsSwingUtil
+				.R("ImportWizard.ImportHasBeenAbortedByTheUser")));
 
 		return Summary.create(aborted, "abort");
 	}
@@ -135,16 +137,22 @@ public abstract class ImportWizardResultProducer implements
 		LOGGER.debug("Count features from PG " + dbSfs.getTitle().toString()
 				+ " took " + (System.currentTimeMillis() - startTime) + "ms");
 
-		// i8n
-		summaryPanel.add(new JLabel("Features: " + countFeatures
-				+ (countFeatures == -1 ? " => query not supported" : "")));
+		// summaryPanel.add(new JLabel("Features: " + countFeatures
+		// + (countFeatures == -1 ? " => query not supported" : "")));
+		summaryPanel.add(new JLabel(ASUtil.R(
+				"ImportWizard.SummaryText.NumerOfFeatureImported",
+				countFeatures, (countFeatures == -1 ? " => query not supported"
+						: ""))));
 
-		// i8n
 		GeometryForm geometryForm = FeatureUtil.getGeometryForm(dbSfs
 				.getFeatureSource());
-		String geometryFormString = (geometryForm == GeometryForm.ANY ? "Geometry is not explicitly defined as point, line, polygone etc. This will lead to problems!"
+		String geometryFormString = (geometryForm == GeometryForm.ANY ? ASUtil
+				.R("ImportWizard.SummaryText.TypeOfGeometry.ANYmakesProblems")
 				: geometryForm.toString());
-		summaryPanel.add(new JLabel("Geometry type: " + geometryFormString));
+		summaryPanel
+				.add(new JLabel(ASUtil.R(
+						"ImportWizard.SummaryText.TypeOfGeometry",
+						geometryFormString)));
 
 		// i8n
 		summaryPanel.add(new JLabel("CRS: "
@@ -152,14 +160,15 @@ public abstract class ImportWizardResultProducer implements
 						.getCode()));
 
 		if (importedSld == null) {
-			// i8n
-			summaryPanel.add(new JLabel("A default style has been applied."));
+			summaryPanel.add(new JLabel(ASUtil
+					.R("ImportWizard.SummaryText.DefaultStyleHasBeenApplied")));
 		} else {
-			// i8n
 			summaryPanel
 					.add(new JLabel(
-							importedSld.getAbsolutePath()
-									+ " has been successfully parsed and applied to the layer."));
+							ASUtil.R(
+									"ImportWizard.SummaryText.LoadedStyleFromFileAndAppliedSuccessfully",
+									IOUtil.escapePath(importedSld
+											.getAbsolutePath()))));
 		}
 		return summaryPanel;
 	}
@@ -173,7 +182,7 @@ public abstract class ImportWizardResultProducer implements
 			countFeatures = wfsFS.getCount(Query.FIDS);
 		if (countFeatures == 0) {
 			throw new IllegalStateException(
-					"The layer contains no features. AtlasStyler needs at least one feature. This is also sometimes reported if other internal problems with the layer occured."); // i8n
+					ASUtil.R("ImportWizard.Error.LayerContainsNoFeatures"));
 		}
 		return countFeatures;
 

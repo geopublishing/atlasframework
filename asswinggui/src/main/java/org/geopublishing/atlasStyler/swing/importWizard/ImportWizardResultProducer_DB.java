@@ -12,7 +12,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.FeatureSource;
-import org.geotools.data.Query;
 import org.geotools.jdbc.JDBCDataStore;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -84,12 +83,8 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 						}
 
 						long start = System.currentTimeMillis();
-
-						int countFeatures = dbFS.getCount(Query.FIDS);
-						if (countFeatures == 0) {
-							throw new IllegalStateException(
-									"The layer contains no features. AtlasStyler needs at least one feature."); // i8n
-						}
+						
+						int countFeatures = countFeatures(dbFS, true);
 
 						String id = dbServer.getTitle() + " " + typeName;
 

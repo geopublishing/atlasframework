@@ -75,6 +75,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 
+import org.apache.log4j.Logger;
+
 /**
  * An editor pane for application SimplyHTML.
  * 
@@ -112,6 +114,9 @@ import javax.swing.text.html.HTML;
 
 public class SHTMLEditorPane extends JEditorPane implements DropTargetListener,
 		DragSourceListener, DragGestureListener {
+	
+	private static final Logger LOGGER = Logger.getLogger(SHTMLEditorPane.class);
+	
 	private static final boolean OLD_JAVA_VERSION = System.getProperty(
 			"java.version").compareTo("1.5.0") < 0;
 	private JPopupMenu popup;
@@ -950,12 +955,8 @@ public class SHTMLEditorPane extends JEditorPane implements DropTargetListener,
 			w.writeEndTag(first);
 			String htmlText = sw.toString();
 			doc.replaceHTML(first, 2, htmlText);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (BadLocationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			LOGGER.error("SimplyHTML", e);
 		}
 
 	}

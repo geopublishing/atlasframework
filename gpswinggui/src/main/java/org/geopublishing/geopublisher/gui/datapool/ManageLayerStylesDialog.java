@@ -58,6 +58,7 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.ManageLayerStylesForMapDialog;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -91,8 +92,6 @@ public class ManageLayerStylesDialog extends JDialog {
 	PropertyChangeListener dpListenerToUpdateTableModel;
 
 	private static TranslationAskJDialog ask;
-
-	
 
 	private JPanel jContentPane = null;
 
@@ -224,8 +223,9 @@ public class ManageLayerStylesDialog extends JDialog {
 			gridBagConstraints9.gridx = 0;
 			gridBagConstraints9.gridy = 0;
 			jLabelExplanation = new JLabel();
-			jLabelExplanation
-					.setText("Manage the available styles for this layer."); // i8n
+			jLabelExplanation.setText(GpUtil.R(
+					"ManageLayerStylesDialog.dialogTitle", dpLayer.getTitle()
+							.toString()));
 			jPanelTop = new JPanel();
 			jPanelTop.setLayout(new GridBagLayout());
 			jPanelTop.add(jLabelExplanation, gridBagConstraints9);
@@ -365,21 +365,21 @@ public class ManageLayerStylesDialog extends JDialog {
 
 					final int idx = row - 1;
 
-					final Translation styleName = dpLayer.getLayerStyles().get(
-							idx).getTitle();
+					final Translation styleName = dpLayer.getLayerStyles()
+							.get(idx).getTitle();
 					final Translation styleNameBackup = styleName.clone();
 
-					final Translation styleDesc = dpLayer.getLayerStyles().get(
-							idx).getDesc();
+					final Translation styleDesc = dpLayer.getLayerStyles()
+							.get(idx).getDesc();
 					final Translation styleDescBackup = styleDesc.clone();
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
-							GeopublisherGUI.R("LayerStyle.Edit.Title"), styleName,
-							dpLayer.getAtlasConfig().getLanguages());
+							GeopublisherGUI.R("LayerStyle.Edit.Title"),
+							styleName, dpLayer.getAtlasConfig().getLanguages());
 
 					TranslationEditJPanel transDescLabel = new TranslationEditJPanel(
-							GeopublisherGUI.R("LayerStyle.Edit.Desc"), styleDesc,
-							dpLayer.getAtlasConfig().getLanguages());
+							GeopublisherGUI.R("LayerStyle.Edit.Desc"),
+							styleDesc, dpLayer.getAtlasConfig().getLanguages());
 
 					ask = new TranslationAskJDialog(
 							ManageLayerStylesDialog.this, transNameLabel,
@@ -387,21 +387,17 @@ public class ManageLayerStylesDialog extends JDialog {
 					ask.addPropertyChangeListener(new PropertyChangeListener() {
 
 						public void propertyChange(PropertyChangeEvent evt) {
-							if (evt
-									.getPropertyName()
-									.equals(
-											TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+							if (evt.getPropertyName()
+									.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
 								ask = null;
 
-								dpLayer.getLayerStyles().get(idx).setTitle(
-										styleNameBackup);
-								dpLayer.getLayerStyles().get(idx).setDesc(
-										styleDescBackup);
+								dpLayer.getLayerStyles().get(idx)
+										.setTitle(styleNameBackup);
+								dpLayer.getLayerStyles().get(idx)
+										.setDesc(styleDescBackup);
 							}
-							if (evt
-									.getPropertyName()
-									.equals(
-											TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+							if (evt.getPropertyName()
+									.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 							}
 							// TODO update the GUI by listener to the datpool..
 							// done yet?
@@ -473,8 +469,8 @@ public class ManageLayerStylesDialog extends JDialog {
 
 						// Tell the user in which maps this default style is
 						// used
-						Collection<Map> maps = dpLayer.getAtlasConfig().getMapPool()
-								.values();
+						Collection<Map> maps = dpLayer.getAtlasConfig()
+								.getMapPool().values();
 						for (Map map : maps) {
 							// Check every map what additional styles are
 							// configured for THIS dpLayer
@@ -516,7 +512,8 @@ public class ManageLayerStylesDialog extends JDialog {
 					// user.
 
 					String mapListString = "";
-					for (Map map2 : dpLayer.getAtlasConfig().getMapPool().values()) {
+					for (Map map2 : dpLayer.getAtlasConfig().getMapPool()
+							.values()) {
 						java.util.Map<String, ArrayList<String>> additionalStyles = map2
 								.getAdditionalStyles();
 
@@ -616,7 +613,8 @@ public class ManageLayerStylesDialog extends JDialog {
 	protected JButton getJButtonAdd() {
 		if (jButtonAdd == null) {
 			jButtonAdd = new JButton();
-			jButtonAdd.setText(GeopublisherGUI.R("LayerStyle.New.Button.Label"));
+			jButtonAdd
+					.setText(GeopublisherGUI.R("LayerStyle.New.Button.Label"));
 			jButtonAdd.setToolTipText(GeopublisherGUI
 					.R("LayerStyle.New.Button.TT"));
 
@@ -660,8 +658,8 @@ public class ManageLayerStylesDialog extends JDialog {
 		final Translation desc = new Translation();
 
 		TranslationEditJPanel nameTransLabel = new TranslationEditJPanel(
-				GeopublisherGUI.R("LayerStyle.Edit.Title"), name, dplayer.getAtlasConfig()
-						.getLanguages());
+				GeopublisherGUI.R("LayerStyle.Edit.Title"), name, dplayer
+						.getAtlasConfig().getLanguages());
 
 		TranslationEditJPanel descTransLabel = new TranslationEditJPanel(
 				GeopublisherGUI.R("LayerStyle.Edit.Desc"), desc, langs);
@@ -687,16 +685,18 @@ public class ManageLayerStylesDialog extends JDialog {
 		int counter = 0;
 
 		try {
-			AtlasConfigEditable ace = (AtlasConfigEditable) dplayer.getAtlasConfig();
+			AtlasConfigEditable ace = (AtlasConfigEditable) dplayer
+					.getAtlasConfig();
 			while (IOUtil.changeFileExt(
-					new File(new File(ace.getDataDir(), dplayer
-							.getDataDirname()), dplayer.getFilename()),
+					new File(new File(ace.getDataDir(),
+							dplayer.getDataDirname()), dplayer.getFilename()),
 					String.format("%03d", counter) + ".sld").exists()) {
 				counter++;
 			}
-			File file = IOUtil.changeFileExt(new File(new File(
-					ace.getDataDir(), dplayer.getDataDirname()), dplayer
-					.getFilename()), String.format("%03d", counter) + ".sld");
+			File file = IOUtil.changeFileExt(
+					new File(new File(ace.getDataDir(), dplayer
+							.getDataDirname()), dplayer.getFilename()),
+					String.format("%03d", counter) + ".sld");
 
 			/*******************************************************************
 			 * Which Style to take as a template? .. Maybe we got one passed
@@ -764,7 +764,8 @@ public class ManageLayerStylesDialog extends JDialog {
 					}
 
 					if (!AVSwingUtil.askYesNo(ManageLayerStylesDialog.this,
-							GeopublisherGUI.R("LayerStyle.Remove.Action.Question",
+							GeopublisherGUI.R(
+									"LayerStyle.Remove.Action.Question",
 									lsRemove.getTitle()))) {
 						return;
 					}
@@ -798,9 +799,10 @@ public class ManageLayerStylesDialog extends JDialog {
 									.size() > 0) {
 								// Replace the selection with another additional
 								// style if one exists
-								map.setSelectedStyleID(dpLayer.getId(), map
-										.getAdditionalStyles().get(
-												dpLayer.getId()).get(0));
+								map.setSelectedStyleID(
+										dpLayer.getId(),
+										map.getAdditionalStyles()
+												.get(dpLayer.getId()).get(0));
 							} else {
 								// Reset the selection to null
 								map.setSelectedStyleID(dpLayer.getId(), null);
@@ -880,10 +882,11 @@ public class ManageLayerStylesDialog extends JDialog {
 									.getDataDir(), dpLayer.getDataDirname()),
 							style.getFilename());
 
-					File destFile = IOUtil.changeFileExt(new File(new File(
-							((AtlasConfigEditable) dpLayer.getAtlasConfig())
-									.getDataDir(), dpLayer.getDataDirname()),
-							dpLayer.getFilename()), ".sld");
+					File destFile = IOUtil.changeFileExt(
+							new File(new File(((AtlasConfigEditable) dpLayer
+									.getAtlasConfig()).getDataDir(), dpLayer
+									.getDataDirname()), dpLayer.getFilename()),
+							".sld");
 
 					try {
 						FileUtils.copyFile(srcFile, destFile);

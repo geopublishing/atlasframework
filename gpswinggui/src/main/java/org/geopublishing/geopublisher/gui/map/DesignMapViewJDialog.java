@@ -213,9 +213,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		public XMapPaneTool_SetDefaultMapExtend() {
 			XMapPaneTool.ZOOM_IN.copyTo(this);
 
-			setCursor(Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR)); // TODO
-			// nicer
-			// cursor
+			setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR));
 
 			// Clicking the right mouse button cancels the action.
 			setMouseAction(MouseInputType.RClick, new XMapPaneAction_Zoom.In() {

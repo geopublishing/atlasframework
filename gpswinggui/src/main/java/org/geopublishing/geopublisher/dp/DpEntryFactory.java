@@ -57,10 +57,8 @@ public class DpEntryFactory {
 
 	static {
 		testers.add(new DpLayerVectorFeatureSourceTester());
-//		testers.add(new DpMediaVideoTest());
 		testers.add(new DpMediaPDFTester());
 		testers.add(new DpLayerRasterReaderTester());
-//		testers.add(new DpLayerRasterPyramidTester());
 	}
 
 	/**
