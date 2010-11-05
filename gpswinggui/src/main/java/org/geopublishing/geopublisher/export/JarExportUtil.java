@@ -378,6 +378,11 @@ public class JarExportUtil {
 					GPProps.get(Keys.MinimumJavaVersion));
 			fileWriter.write(jsScript);
 			fileWriter.write("<br/>");
+			
+
+			// JWS commandline
+			fileWriter.write("Start from commandline: javaws "+jnlpLocation + JNLP_FILENAME);
+			fileWriter.write("<br/>");
 
 			fileWriter.write("</html></body>\n");
 			fileWriter.close();
