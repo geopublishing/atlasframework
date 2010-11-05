@@ -235,7 +235,7 @@ public class JarExportUtil {
 	/**
 	 * Filename of the schmitzm jar. TODO Very fucking ugly
 	 */
-	public static final String SCHMITZM_JARNAME = "schmitzm-library-2.3-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME = "schmitzm-library-2.4-SNAPSHOT.jar";
 
 	/**
 	 * List of JARs that are all created from the one geopublihing.org POM file
@@ -963,7 +963,7 @@ public class JarExportUtil {
 		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
-			path = "de/schmitzm/schmitzm-library/2.3-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-library/2.4-SNAPSHOT";
 		}
 
 		/*
