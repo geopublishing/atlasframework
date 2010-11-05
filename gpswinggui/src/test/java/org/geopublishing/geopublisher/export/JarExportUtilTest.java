@@ -413,8 +413,11 @@ public class JarExportUtilTest {
 	@Test
 	public void testCreateIndexHTML() throws IOException {
 		AtlasConfigEditable ace = TestAtlas.small.getAce();
-		File html = JarExportUtil.createIndexHTML(ace,
-				TestingUtil.getNewTempDir());
+
+		JarExportUtil jeu = new JarExportUtil(ace, TestingUtil.getNewTempDir(),
+				false, false, false);
+
+		File html = jeu.createIndexHTML(ace, TestingUtil.getNewTempDir());
 
 		assertTrue(html.exists());
 

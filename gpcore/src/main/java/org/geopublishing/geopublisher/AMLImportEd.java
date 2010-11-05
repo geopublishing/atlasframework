@@ -51,6 +51,9 @@ public class AMLImportEd extends AMLImport {
 		if (atlasDir.getName().endsWith(".gpa")) atlasDir  = atlasDir.getParentFile();
 		
 		LOGGER.info("Opening Atlas from Folder " + atlasDir );
+//		
+//		// Added 
+//		AtlasViewerGUI.setupResLoMan(new String[] { atlasDir.getAbsolutePath() });
 
 		// Create virgin AtlasConfigEditable
 		AtlasConfigEditable ace = new AtlasConfigEditable(atlasDir);

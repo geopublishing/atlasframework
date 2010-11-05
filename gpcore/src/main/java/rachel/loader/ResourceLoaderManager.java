@@ -24,15 +24,15 @@ package rachel.loader;
 
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import rachel.ResourceLoader;
 
 public class ResourceLoaderManager implements ResourceLoader {
-	HashSet<ResourceLoader> _loaders = new HashSet<ResourceLoader>();
+//	HashSet<ResourceLoader> _loaders = new HashSet<ResourceLoader>();
 
-	// ArrayList<ResourceLoader> _loaders = new ArrayList<ResourceLoader>();
+	 ArrayList<ResourceLoader> _loaders = new ArrayList<ResourceLoader>();
 
 	@Override
 	public InputStream getResourceAsStream(String name) {

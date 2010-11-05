@@ -303,6 +303,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 */
 	public void addLayerStyle(LayerStyle newLayerStyle) {
 		try {
+			LOGGER.debug("addLayerStyle "+newLayerStyle);
 			URL testUrl = IOUtil.extendURL(IOUtil.getParentUrl(getUrl()),
 					newLayerStyle.getFilename());
 			testUrl.openStream();

@@ -520,6 +520,15 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 			String location = getAtlasConfig().getResouceBasename()
 					+ getDataDirname() + "/" + getFilename();
 			url = getAtlasConfig().getResource(location);
+			if (url == null) {
+				setBrokenException(new AtlasException(
+						"getAtlasConfig().getResource(" + location
+								+ ") returned null! id=" + getId()));
+				return null;
+			} else {
+				LOGGER.debug("getAtlasConfig().getResource(" + location
+						+ ") return "+url.toExternalForm()+" , id=" + getId());
+			}
 
 			// Testing if we really can see it in the resources now...
 			try {

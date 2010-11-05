@@ -332,8 +332,8 @@ public class JarExportUtil {
 	 * 
 	 * @return a {@link File} object to the created .html file.
 	 */
-	static File createIndexHTML(final AtlasConfigEditable ace,
-			final File directory) throws AtlasExportException {
+	File createIndexHTML(final AtlasConfigEditable ace, final File directory)
+			throws AtlasExportException {
 		// **********************************************************************
 		//
 		// Creating the index.html
@@ -353,7 +353,7 @@ public class JarExportUtil {
 			 * https://jdk6.dev.java.net/deployment_advice
 			 * .html#Deploying_Java_Web_Start_Applica
 			 */
-			String jnlpLocation = ace.getJnlpBaseUrl();
+			String jnlpLocation = getJnlpBaseUrl();
 
 			fileWriter.write("<h2>" + ace.getTitle() + "</h2>");
 			fileWriter
@@ -378,10 +378,10 @@ public class JarExportUtil {
 					GPProps.get(Keys.MinimumJavaVersion));
 			fileWriter.write(jsScript);
 			fileWriter.write("<br/>");
-			
 
 			// JWS commandline
-			fileWriter.write("Start from commandline: javaws "+jnlpLocation + JNLP_FILENAME);
+			fileWriter.write("Start from commandline: javaws " + jnlpLocation
+					+ JNLP_FILENAME);
 			fileWriter.write("<br/>");
 
 			fileWriter.write("</html></body>\n");
@@ -1240,13 +1240,7 @@ public class JarExportUtil {
 	private void createJNLP(final AtlasConfigEditable ace, final File targetJar)
 			throws AtlasExportException {
 
-		String codebase = ace.getJnlpBaseUrl();
-		if (overwriteJnlpUrl != null) {
-			codebase = overwriteJnlpUrl.toString();
-			if (!codebase.endsWith("/"))
-				codebase += "/";
-			Log.info("Export JNLP base URL changed to " + codebase);
-		}
+		String codebase = getJnlpBaseUrl();
 
 		try {
 			final DocumentBuilderFactory factory = DocumentBuilderFactory
@@ -1569,6 +1563,22 @@ public class JarExportUtil {
 					+ " JNLP file failed!\n" + e.getMessage());
 		}
 
+	}
+
+	/**
+	 * Returns the JNLP b ase url setup for the atlas, unless the
+	 * "overwriteJnlpUrl" flag has been set.
+	 */
+	private String getJnlpBaseUrl() {
+		String codebase = ace.getJnlpBaseUrl();
+		if (overwriteJnlpUrl != null) {
+			codebase = overwriteJnlpUrl.toString();
+			if (!codebase.endsWith("/"))
+				codebase += "/";
+			Log.info("Export JNLP base URL changed to " + codebase);
+		}
+
+		return codebase;
 	}
 
 	/**
