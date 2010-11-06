@@ -18,5 +18,5 @@ compressJARs=1
 signingkeystorePassword=wasser
 signingAlias=IMPETUS
 bugReportEmail=skpublic@wikisquare.de
-MinimumJavaVersion=1.6.0_14
+MinimumJavaVersion=1.6.0_22
 JWSStartScript=<script src\="http\://java.com/js/deployJava.js"></script>\n<script>\n var url \= "__JNLPURL__";\n deployJava.createWebStartLaunchButton(url, "__MINJAVAVERSION__");\n</script>
