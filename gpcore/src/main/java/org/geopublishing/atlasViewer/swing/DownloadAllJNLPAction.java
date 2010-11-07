@@ -67,7 +67,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 				LOGGER.info("Parts length = " + parts.length);
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
-				statusDialog.setCancelAllowed(true);
+				statusDialog.setCancelAllowed(false); //TODO how to cancel a donwload?
 				AtlasSwingWorker<Void> atlasSwingWorker = new AtlasSwingWorker<Void>(
 						statusDialog) {
 
@@ -79,7 +79,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 
 				};
 				atlasSwingWorker.executeModalNoEx();
-
+				
 				AVSwingUtil
 						.showMessageDialog(
 								atlasViewer.getJFrame(),
