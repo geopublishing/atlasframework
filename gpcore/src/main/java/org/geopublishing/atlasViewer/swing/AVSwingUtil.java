@@ -40,7 +40,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
-import org.geopublishing.atlasViewer.swing.internal.AtlasExportTask;
 import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataUtilities;
 import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;

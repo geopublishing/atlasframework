@@ -34,6 +34,7 @@ public class AsSwingUtil extends ASUtil {
 			Logger.getRootLogger().setLevel(Level.toLevel(logLevelStr));
 		}
 
+		// # TODO bugreport@wikisquare.de from properties
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 		
 		// Add application version number to Exception mails

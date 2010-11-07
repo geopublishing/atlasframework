@@ -1566,7 +1566,7 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * Returns the JNLP b ase url setup for the atlas, unless the
+	 * Returns the JNLP base url setup for the atlas, unless the
 	 * "overwriteJnlpUrl" flag has been set.
 	 */
 	private String getJnlpBaseUrl() {
