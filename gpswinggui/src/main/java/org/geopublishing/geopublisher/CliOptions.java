@@ -107,7 +107,7 @@ public class CliOptions extends Options {
 				JWSURL,
 				"jwsurl",
 				true,
-				"Set the JNLP export URL specificly, overriding the URL stored in the atlas.xml. Must end with a /.");
+				"Set the JNLP export URL specifically, overriding the URL stored in the atlas.xml. Must end with a /.");
 		jwsUrlOp.setArgName("jnlpUrl");
 		addOption(jwsUrlOp);
 
