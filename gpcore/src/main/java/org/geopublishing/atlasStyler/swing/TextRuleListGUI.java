@@ -201,7 +201,7 @@ public class TextRuleListGUI extends JPanel {
 
 			jPanelClass.add(new JLabel(AtlasStyler
 					.R("TextRulesList.Labelclass") + ":"));
-			jPanelClass.add(getJComboBoxClass());
+			jPanelClass.add(getJComboBoxClass(), "w :200:240");
 			jPanelClass.add(getJCheckBoxClassEnabled(), "wrap");
 
 			// jPanelClass.add(getJButtonClassAdd());
