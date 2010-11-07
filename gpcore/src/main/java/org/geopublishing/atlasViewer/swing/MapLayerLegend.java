@@ -732,7 +732,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 */
 
 		final boolean featureStylable = (getMapLayer().getFeatureSource()
-				.getClass().getSimpleName().contains("WFSFeatureStore"))
+				.getClass().getSimpleName().contains("WFS"))
 				|| (FeatureUtil.getLayerSourceObject(getMapLayer()) instanceof FeatureCollection);
 		return featureStylable || rasterStylable;
 	}
