@@ -72,7 +72,7 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 				&& mapUt.getModel().getRowCount() == 0) {
 			add(new JLabel(R("EditDpEntryGUI.usage.notexported")), "gapy unrel");
 		}
-		add(new JLabel(R("EditDpEntryGUI.usage.exported")), "gapy unrel");
+		else add(new JLabel(R("EditDpEntryGUI.usage.exported")), "gapy unrel");
 
 		// menuUsage.add(new JScrollPane(menuUt));
 		// add(menuUsage);
