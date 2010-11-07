@@ -13,6 +13,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -28,6 +30,10 @@ import skrueger.swing.checkboxtree.CheckBoxNodeRenderer;
 import skrueger.swing.checkboxtree.NamedVector;
 
 public class CheckableAtlasJTree extends JTree {
+	
+	protected final static Logger LOGGER = ASUtil
+	.createLogger(CheckableAtlasJTree.class);
+
 
 	private AtlasConfig atlasConfig;
 	private TreeSet<String> selectedIds = new TreeSet<String>();
@@ -158,7 +164,7 @@ public class CheckableAtlasJTree extends JTree {
 
 			@Override
 			public void editingCanceled(ChangeEvent e) {
-				System.out.println(e);
+				LOGGER.debug("editingCanceled"+ e);
 			}
 		});
 

@@ -34,6 +34,7 @@ import javax.swing.JList;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
@@ -57,6 +58,11 @@ import skrueger.swing.SmallButton;
 
 public class DpLayerVectorAttributesJPanel extends JPanel implements
 		Cancellable {
+
+	private static final long serialVersionUID = 3815347428081593615L;
+
+	protected final static Logger LOGGER = ASUtil
+	.createLogger(DpLayerVectorAttributesJPanel.class);
 
 	private Charset backupCRS;
 	private final DpLayerVectorFeatureSource dplv;
@@ -300,7 +306,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 
 					Charset newCharset = Charset.forName(item);
 
-					System.out.println("new charset = " + newCharset);
+					LOGGER.debug("new charset = " + newCharset);
 
 					dplv.setCharset(newCharset);
 				}

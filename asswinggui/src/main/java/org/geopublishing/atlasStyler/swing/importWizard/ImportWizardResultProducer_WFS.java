@@ -7,6 +7,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
@@ -29,6 +32,8 @@ import skrueger.geotools.io.WfsServerSettings;
 
 public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 		implements WizardResultProducer {
+	protected final static Logger LOGGER = ASUtil
+	.createLogger(ImportWizardResultProducer_WFS.class);
 
 	public ImportWizardResultProducer_WFS() {
 		super();
@@ -90,14 +95,14 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 
 						{
 							ReferencedEnvelope bounds = wfsFS.getBounds();
-							System.out.println("Layout Boudns as passed"
+							LOGGER.debug("Layout Boudns as passed"
 									+ bounds);
 
 							ReferencedEnvelope transformEnvelope = JTSUtil
 									.transformEnvelope(
 											wfsFS.getBounds(Query.ALL),
 											GeoImportUtil.getDefaultCRS());
-							System.out.println("layer envelope in native WGS: "
+							LOGGER.debug("layer envelope in native WGS: "
 									+ transformEnvelope);
 						}
 

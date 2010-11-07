@@ -51,6 +51,8 @@ import javax.swing.text.Document;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 
+import org.apache.log4j.Logger;
+
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 
@@ -98,7 +100,7 @@ import schmitzm.swing.ExceptionDialog;
 
 public class DocumentPane extends JPanel implements DocumentListener,
 		ChangeListener {
-
+	static final Logger LOGGER = Logger.getLogger(DocumentPane.class);
 	/** the editor displaying the document in layout view */
 	private SHTMLEditorPane editor;
 
@@ -543,7 +545,7 @@ public class DocumentPane extends JPanel implements DocumentListener,
 						+ File.separator);
 			}
 		}
-		System.out.println("getImageDir " + srcDir.getAbsolutePath());
+		LOGGER.debug("getImageDir " + srcDir.getAbsolutePath());
 		return srcDir;
 	}
 

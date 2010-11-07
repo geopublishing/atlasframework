@@ -690,11 +690,6 @@ class ImageDialog extends DialogShell implements ActionListener,
 	 */
 	public void valueChanged(ListSelectionEvent e) {
 		if (!imgFileList.isSelectionEmpty()) {
-			/*
-			 * System.out.println("ImageDialog.valueChanged setting preview image to "
-			 * + imgDir.getAbsolutePath() + File.separator +
-			 * imgFileList.getSelectedValue().toString());
-			 */
 			preview.setImage(new ImageIcon(imgDir.getAbsolutePath()
 					+ File.separator
 					+ imgFileList.getSelectedValue().toString()));

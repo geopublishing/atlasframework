@@ -1281,10 +1281,10 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 
-				System.out.println("\n\neventSource = " + e.getSource());
-				System.out.println("event = " + e);
+//				LOGGER.debug("\n\neventSource = " + e.getSource());
+//				LOGGER.debug("event = " + e);
 
-				System.out.println("event state= " + e.getStateChange());
+				LOGGER.debug("event state= " + e.getStateChange());
 
 				final boolean normalize = e.getStateChange() == ItemEvent.SELECTED;
 
@@ -1294,8 +1294,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				// LOGGER.debug("Setting setAttributeNormalized for all attribs to "
 				// + normalize);
 
-				System.out.println("0=" + chartStyle.isAttributeNormalized(0));
-				System.out.println("1=" + chartStyle.isAttributeNormalized(1));
+				LOGGER.debug("0=" + chartStyle.isAttributeNormalized(0));
+				LOGGER.debug("1=" + chartStyle.isAttributeNormalized(1));
 
 				fireChartChangedEvent(true);
 			}
