@@ -25,7 +25,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 		this.owner = atlasViewer.getJFrame();
 		putValue(Action.LONG_DESCRIPTION,
 				AtlasViewerGUI
-						.R("lasViewer.FileMenu.downloadAllRessources.tooltip"));
+						.R("AtlasViewer.FileMenu.downloadAllRessources.tooltip"));
 	}
 
 	public static Logger LOGGER = Logger.getLogger(DownloadAllJNLPAction.class);
