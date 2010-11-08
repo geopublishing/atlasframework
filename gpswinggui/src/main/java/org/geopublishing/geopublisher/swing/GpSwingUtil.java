@@ -118,7 +118,7 @@ public class GpSwingUtil extends GpUtil {
 							.toString()), GpUtil
 					.R("DataPoolWindow_Action_DeleteDPE_label" + " "
 							+ dpe.getTitle()), JOptionPane.YES_NO_OPTION);
-			if (res == JOptionPane.NO_OPTION)
+			if (res != JOptionPane.YES_OPTION)
 				return null;
 		}
 
