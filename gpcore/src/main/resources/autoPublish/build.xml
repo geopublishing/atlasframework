@@ -18,9 +18,6 @@
 
 	<target name="publish_both" depends="publish, publish_testing" />
 
-	<!-- ================================= 
-	          target: clean : Clean the compiled classes, created ZIPs and exported JARs              
-	     ================================= -->
 	<target name="clean">
 		<delete dir="${tmpdir}" failonerror="false" />
 		<exec executable="/usr/bin/sudo" description="install latest geopublisher software. If apt-get is busy, waits minute" failonerror="false">
@@ -53,13 +50,6 @@
 			</fileset>
 		</move>
 
-		<!--
-		<move todir="${wwwdir}" description="Moving JWS atlas to ${wwwdir}...">
-			<fileset dir="${tmpdir}/JWS">
-				<include name="**/*" />
-			</fileset>
-		</move>
-		-->
 		<exec executable="/usr/bin/rsync">
 			<arg line='-rcv ${tmpdir}/JWS/. ${wwwdir}' />
 		</exec>
@@ -67,7 +57,6 @@
 
 		<delete dir="${tmpdir}" failonerror="false" />
 	</target>
-
 
 	<target name="publish_testing" depends="export_testing" description="Publish the exported testing atlas to ${wwwdirtesting}">
 		<mkdir dir="${wwwdirtesting}" />
@@ -77,14 +66,6 @@
 				<include name="*.zip" />
 			</fileset>
 		</move>
-
-		<!--
-		<move todir="${wwwdirtesting}" description="Moving JWS atlas to ${wwwdirtesting}...">
-			<fileset dir="${tmpdir}/JWS">
-				<include name="**/*" />
-			</fileset>
-		</move>
-		-->
 
 		<exec executable="/usr/bin/rsync">
 			<arg line='-rcv ${tmpdir}/JWS/. ${wwwdirtesting}' />
