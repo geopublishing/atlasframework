@@ -102,12 +102,7 @@ Technical details:
 
 	<target name="add-deb-to-repo" depends="create-deb" description="Imports the .deb into the repository using a tool called 'reprepro'.">
 
-		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww, FAILING HERE IS OK!">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="true" failonerror="true" description="mounting gpwww">
+		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww if not already mounted">
 			<arg value="-o" />
 			<arg value="uid=107" />
 			<arg value="-o" />
@@ -154,22 +149,12 @@ Technical details:
 			<arg line='-b ${REPO.DIR} includedeb freemantle ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
 	</target>
 
 
 	<target name="clean-repository" description="Delete all packages stored in the repository.">
 
-		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww, FAILING HERE IS OK!">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="true" failonerror="true" description="mounting gpwww">
+		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww if not already mounted">
 			<arg value="-o" />
 			<arg value="uid=107" />
 			<arg value="-o" />
@@ -183,12 +168,6 @@ Technical details:
 		<delete dir="${REPO.DIR}/db" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/dists" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/pool" verbose="true" description="resetting the repository" />
-
-		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
 
 	</target>
 

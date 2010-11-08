@@ -37,12 +37,7 @@
 			<replacefilter token="@VERSION@" value="${mvn.project.version}" />
 		</replace>
 
-		<exec executable="/bin/fusermount" failifexecutionfails="false" failonerror="false" description="Unmounting any previously mounted gpwww">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="true" failonerror="true" description="mounting gpwww">
+		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww if not already mounted">
 			<arg value="-o" />
 			<arg value="uid=107" />
 			<arg value="-o" />
@@ -75,13 +70,6 @@
 			<arg value="/var/www/www.geopublishing.org/htdocs/gp-${mvn.project.version}/Geopublisher-${mvn.project.version}-full.zip" />
 			<arg value="Geopublisher-full.zip" />
 		</exec>
-
-		<exec executable="/bin/fusermount" description="Unmounting any previously mounted gpwww">
-			<arg value="-u" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
-		<echo message="UnMounded FUSE" />
 
 	</target>
 
