@@ -11,6 +11,7 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -47,9 +48,11 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
@@ -76,6 +79,7 @@ import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.ResourceProviderManagerFrame;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledFS;
@@ -224,6 +228,31 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					});
 			fileMenu.add(mi);
 		}
+		
+
+		/**
+		 * MenuItem to create a new language
+		 */
+		JMenuItem manageLanguageJMenuitem = new JMenuItem(new AbstractAction(
+				ASUtil.R("TranslateSoftwareDialog.Title"),
+				Icons.ICON_FLAGS_SMALL) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String resPath = IOUtil.escapePath( System.getProperty("user.home")
+						+ File.separator + ".Geopublishing" );
+				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
+						AtlasStylerGUI.this, true, AsSwingUtil.R(
+								"TranslateSoftwareDialog.Explanation.Html",
+								resPath, SystemUtils.IS_OS_WINDOWS ? "bat"
+										: "sh"));
+				manLanguagesFrame.setRootPath(new File(resPath));
+				manLanguagesFrame.setTitle(ASUtil.R("TranslateSoftwareDialog.Title"));
+				manLanguagesFrame.setPreferredSize(new Dimension(780, 450));
+				manLanguagesFrame.setVisible(true);
+			}
+		});
+		fileMenu.add(manageLanguageJMenuitem);
 
 		return jMenuBar;
 	}

@@ -63,6 +63,7 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
+import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.ResourceProviderManagerFrame;
 import schmitzm.swing.SwingUtil;
@@ -519,8 +520,8 @@ public class GpFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String resPath = System.getProperty("user.home")
-						+ File.separator + ".Geopublishing";
+				String resPath = IOUtil.escapePath( System.getProperty("user.home")
+						+ File.separator + ".Geopublishing" );
 				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
 						GpFrame.this, true, GpSwingUtil.R(
 								"TranslateSoftwareDialog.Explanation.Html",
@@ -538,8 +539,6 @@ public class GpFrame extends JFrame {
 		manageLanguageJMenuitem.setToolTipText(GpSwingUtil
 				.R("MenuBar.OptionsMenu.TranslateSoftware.TT"));
 		optionsMenu.add(manageLanguageJMenuitem);
-
-		// TODO Switch startup language
 
 		// ******************************************************************
 		// Set rendering for the Geopublisher application
