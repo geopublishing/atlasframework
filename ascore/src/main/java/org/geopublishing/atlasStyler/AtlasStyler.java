@@ -639,7 +639,7 @@ public class AtlasStyler {
 	 *            newly selected RuleList
 	 */
 	void askToTransferTemplates(AbstractRuleList oldRl, FeatureRuleList newRl) {
-		if (oldRl == null || oldRl == newRl)
+		if (oldRl == null || newRl == null || oldRl == newRl)
 			return;
 		if (oldRl.getGeometryForm() != newRl.getGeometryForm())
 			return;
@@ -647,14 +647,19 @@ public class AtlasStyler {
 		 * Trying it this way: If we switched from a SinglePointSymbolRuleList,
 		 * let it be this GraduatedPointColorRuleList's template.
 		 */
-		if (oldRl instanceof SinglePointSymbolRuleList) {
+		if (oldRl instanceof SingleRuleList) {
 			SingleRuleList<Symbolizer> oldSingleRl = (SingleRuleList<Symbolizer>) oldRl;
+			final SingleRuleList<Symbolizer> singleRL = oldSingleRl;
+
+			if (!StylingUtil.isStyleDifferent(singleRL.getFTS(), newRl
+					.getTemplate().getFTS()))
+				return;
+
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,
 							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
 			if (res == JOptionPane.YES_OPTION) {
-				final SingleRuleList<Symbolizer> singleRL = oldSingleRl;
 				newRl.setTemplate(singleRL.copy());
 			}
 		}
@@ -665,11 +670,17 @@ public class AtlasStyler {
 		 */
 		if (oldRl instanceof FeatureRuleList) {
 			FeatureRuleList oldFeatureRl = (FeatureRuleList) oldRl;
+			final SingleRuleList<? extends Symbolizer> oldTemplate = oldFeatureRl
+					.getTemplate();
+
+			if (!StylingUtil.isStyleDifferent(oldTemplate.getFTS(), newRl
+					.getTemplate().getFTS()))
+				return;
+
 			final int res = JOptionPane.showConfirmDialog(null,
 					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
+
 			if (res == JOptionPane.YES_OPTION) {
-				final SingleRuleList<? extends Symbolizer> oldTemplate = oldFeatureRl
-						.getTemplate();
 				newRl.setTemplate(oldTemplate.copy());
 			}
 		}
@@ -699,11 +710,16 @@ public class AtlasStyler {
 		 */
 		if (oldRl instanceof FeatureRuleList) {
 			FeatureRuleList oldFeatureRl = (FeatureRuleList) lastChangedRuleList;
+			final SingleRuleList oldTemplate = oldFeatureRl.getTemplate();
+
+			if (!StylingUtil.isStyleDifferent(oldTemplate.getFTS(),
+					newRl.getFTS()))
+				return;
+
 			final int res = JOptionPane.showConfirmDialog(null,
 					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
 			if (res == JOptionPane.YES_OPTION) {
-				final SingleRuleList template = oldFeatureRl.getTemplate();
-				newRl.setSymbolizers(template.getSymbolizers());
+				newRl.setSymbolizers(oldTemplate.getSymbolizers());
 			}
 		}
 
@@ -714,6 +730,11 @@ public class AtlasStyler {
 		if (oldRl instanceof SingleRuleList) {
 			// TODO Untested, since it can't happen yet
 			SingleRuleList oldSingleRl = (SingleRuleList) oldRl;
+
+			if (!StylingUtil.isStyleDifferent(oldSingleRl.getFTS(),
+					newRl.getFTS()))
+				return;
+
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,

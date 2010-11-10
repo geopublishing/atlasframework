@@ -156,6 +156,10 @@ public class AtlasStylerTest {
 			return;
 
 		AtlasStyler as = new AtlasStyler(featureSource_polygon);
+		
+		as.setLastChangedRuleList(as.getSingleLineSymbolRulesList());
+		as.getUniqueValuesLineRulesList();
+
 
 		as.setLastChangedRuleList(as.getGraduatedColorLineRulesList());
 		as.getSingleLineSymbolRulesList();
