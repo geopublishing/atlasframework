@@ -86,7 +86,6 @@ public class AtlasStylerDialog extends StylerDialog {
 			setTitle(AtlasStyler.R("AtlasStylerDialog.Title.LayerXStyleY",
 					dpLayer.getTitle().toString(), layerStyle.getTitle()
 							.toString()));
-
 		}
 
 		/**

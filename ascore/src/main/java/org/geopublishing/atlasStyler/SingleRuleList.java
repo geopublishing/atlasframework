@@ -33,6 +33,7 @@ import org.geotools.styling.Symbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.type.GeometryDescriptor;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.Copyable;
 import skrueger.geotools.LegendIconFeatureRenderer;
@@ -67,16 +68,13 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	private boolean visibleInLegend = true;
 
-	@Deprecated
-	public SingleRuleList() {
-		setTitle(AtlasStyler.R("GraduatedColorQuantities.Column.Label"));
-	}
 
 	/**
 	 * @param title
 	 *            label for the rule
 	 */
-	public SingleRuleList(String title) {
+	public SingleRuleList(String title, GeometryForm geometryForm) {
+		super(geometryForm);
 		pushQuite();
 		setTitle(title);
 		popQuite();
@@ -86,7 +84,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param title
 	 *            label for the rule
 	 */
-	public SingleRuleList(Translation title) {
+	public SingleRuleList(Translation title, GeometryForm geometryForm) {
+		super( geometryForm);
 		setTitle(title);
 	}
 	/**

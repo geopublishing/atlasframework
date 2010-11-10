@@ -39,6 +39,7 @@ import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
@@ -132,8 +133,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		}
 	}
 
-	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
+	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+		super(styledFeatures, geometryForm);
 	}
 
 	/**

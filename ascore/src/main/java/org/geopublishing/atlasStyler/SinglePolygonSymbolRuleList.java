@@ -23,6 +23,7 @@ import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.i8n.Translation;
 
@@ -34,11 +35,11 @@ public class SinglePolygonSymbolRuleList extends
 			.createLogger(SinglePolygonSymbolRuleList.class);
 
 	public SinglePolygonSymbolRuleList(String title) {
-		super(title);
+		super(title, GeometryForm.POLYGON);
 	}
 
 	public SinglePolygonSymbolRuleList(Translation title) {
-		super(title);
+		super(title, GeometryForm.POLYGON);
 	}
 
 	@Override

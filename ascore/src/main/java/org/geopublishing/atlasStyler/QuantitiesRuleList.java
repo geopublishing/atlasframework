@@ -28,6 +28,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsBetween;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
@@ -104,8 +105,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private String value_field_name;
 
-	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
+	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+		super(styledFeatures, geometryForm);
 		Collection<String> numericalFieldNames = FeatureUtil
 				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
 		if (numericalFieldNames.size() > 0)

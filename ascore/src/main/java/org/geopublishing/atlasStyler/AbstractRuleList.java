@@ -21,6 +21,8 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)
  * styling {@link Rule}s is presented in AtlasStyler as a
@@ -30,6 +32,10 @@ import org.geotools.util.WeakHashSet;
  * 
  */
 public abstract class AbstractRuleList {
+	
+	public AbstractRuleList(GeometryForm geometryForm) {
+		this.geometryForm = geometryForm;
+	}
 
 	/**
 	 * These enum names should not be changed anymore. We use them with
@@ -43,6 +49,9 @@ public abstract class AbstractRuleList {
 	}
 
 	RuleChangedEvent lastOpressedEvent = null;
+	
+	/** The geometry form this RuleList is designed for. **/
+	final private GeometryForm geometryForm;
 
 	// This is a WeakHashSet, so references to the listeners have to exist in
 	// the classes adding the listeners. They shall not be anonymous instances.
@@ -97,11 +106,6 @@ public abstract class AbstractRuleList {
 		} else {
 			lastOpressedEvent = null;
 		}
-
-//		if (listeners.size() > 0)
-//			LOGGER.debug("Fire RCE event from "
-//					+ rce.getSourceRL().getClass().getSimpleName() + " = "
-//					+ rce.toString());
 
 		for (RuleChangeListener l : listeners) {
 			try {
@@ -180,10 +184,6 @@ public abstract class AbstractRuleList {
 		if (quite == false) {
 			if (lastOpressedEvent != null)
 				fireEvents(lastOpressedEvent);
-			// Not anymore.. if lastOpressedEvent == null, there is no reason to
-			// send an event now
-			// else
-			// fireEvents(new RuleChangedEvent("Not quite anymore", this));
 		} else {
 			LOGGER.debug("not firing event because there are "
 					+ stackQuites.size() + " 'quites' still on the stack");
@@ -231,6 +231,10 @@ public abstract class AbstractRuleList {
 	 */
 	private void setQuite(boolean b) {
 		quite = b;
+	}
+
+	public GeometryForm getGeometryForm() {
+		return geometryForm;
 	}
 		
 }

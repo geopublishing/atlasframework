@@ -147,9 +147,16 @@ public class TextRuleList extends AbstractRuleList {
 
 	final private StyledFeaturesInterface<?> styledFeatures;
 
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures) {
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+		super( geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
+	
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		super( GeometryForm.ANY);
+		this.styledFeatures = styledFeatures;
+	}
+
 
 	/**
 	 * @return the index of the newly added class

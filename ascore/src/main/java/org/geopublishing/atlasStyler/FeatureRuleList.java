@@ -72,7 +72,8 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 
 	private SingleRuleList<? extends Symbolizer> template;
 
-	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures) {
+	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+		super( geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
 
@@ -95,12 +96,6 @@ public abstract class FeatureRuleList extends AbstractRuleList {
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
 		return ftstyle;
 	}
-
-	/**
-	 * Must be overwritten in the class that is specific for line, point or
-	 * polygons
-	 **/
-	public abstract GeometryForm getGeometryForm();
 
 	/**
 	 * Return the {@link Filter} that will catch all NODATA values

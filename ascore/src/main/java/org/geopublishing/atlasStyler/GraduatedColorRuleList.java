@@ -26,6 +26,7 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
@@ -66,8 +67,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		}
 	};
 
-	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
+	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+		super(styledFeatures, geometryForm);
 	}
 
 	/**

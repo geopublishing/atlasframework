@@ -21,7 +21,7 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
+		super(styledFeatures,GeometryForm.LINE);
 	}
 
 //
@@ -30,11 +30,6 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 //	public SingleRuleList getDefaultTemplate() {
 //		return ASUtil.getDefaultLineTemplate();
 //	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.LINE;
-	}
 
 	@Override
 	public RulesListType getTypeID() {

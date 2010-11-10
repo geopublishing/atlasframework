@@ -17,6 +17,7 @@ import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Expression;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.i8n.Translation;
 
@@ -28,11 +29,11 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	protected org.apache.log4j.Logger LOGGER = ASUtil.createLogger(this);
 
 	public SingleLineSymbolRuleList(String title) {
-		super(title);
+		super(title, GeometryForm.LINE);
 	}
 
 	public SingleLineSymbolRuleList(Translation title) {
-		super(title);
+		super(title, GeometryForm.LINE);
 	}
 
 	@Override

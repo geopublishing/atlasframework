@@ -20,12 +20,7 @@ public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 	private Logger LOGGER = Logger.getLogger(UniqueValuesPolygonRuleList.class);
 
 	public UniqueValuesPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
-	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POLYGON;
+		super(styledFeatures, GeometryForm.POLYGON);
 	}
 
 	@Override

@@ -150,4 +150,24 @@ public class AtlasStylerTest {
 		assertEquals("SQMI_CNTRY", strings[2]);
 	}
 
+	@Test
+	public void testAskToTransferTemplates() {
+		if (!TestingUtil.INTERACTIVE)
+			return;
+
+		AtlasStyler as = new AtlasStyler(featureSource_polygon);
+
+		as.setLastChangedRuleList(as.getGraduatedColorLineRulesList());
+		as.getSingleLineSymbolRulesList();
+		
+		as.setLastChangedRuleList(as.getGraduatedColorPointRulesList());
+		as.getSinglePointSymbolRulesList();
+		
+		as.setLastChangedRuleList(as.getUniqueValuesLineRulesList());
+		as.getSinglePointSymbolRulesList();
+
+		System.out.println("s");
+		
+	}
+
 }

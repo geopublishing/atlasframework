@@ -20,12 +20,7 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	public GraduatedColorLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
-	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.LINE;
+		super(styledFeatures, GeometryForm.LINE);
 	}
 
 	@Override

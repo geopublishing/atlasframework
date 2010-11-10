@@ -20,12 +20,7 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	public GraduatedColorPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
-	}
-
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POLYGON;
+		super(styledFeatures,GeometryForm.POLYGON);
 	}
 
 	@Override

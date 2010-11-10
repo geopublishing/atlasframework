@@ -20,6 +20,7 @@ import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Expression;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.i8n.Translation;
 
@@ -32,11 +33,11 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	}
 
 	public SinglePointSymbolRuleList(String title) {
-		super(title);
+		super(title, GeometryForm.POINT);
 	}
 
 	public SinglePointSymbolRuleList(Translation title) {
-		super(title);
+		super(title, GeometryForm.POINT);
 	}
 
 	@Override

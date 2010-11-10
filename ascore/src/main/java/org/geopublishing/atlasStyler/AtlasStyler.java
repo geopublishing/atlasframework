@@ -510,7 +510,7 @@ public class AtlasStyler {
 	 * Explicitly informs all {@link StyleChangeListener}s about changed in the
 	 * {@link Style} due to the gicen parameter <code>ruleList</code>
 	 * 
-	 * Sets the parameter ruleList as the lastChangedSymbolizerRuleList
+	 * Sets the parameter ruleList as the lastChangedRuleList
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
@@ -562,7 +562,7 @@ public class AtlasStyler {
 		}
 	}
 
-	public AttributeMetadataMap getAttributeMetaDataMap() {
+	public AttributeMetadataMap<? extends AttributeMetadataInterface> getAttributeMetaDataMap() {
 		return attributeMetaDataMap;
 	}
 
@@ -603,8 +603,14 @@ public class AtlasStyler {
 					getStyledFeatures());
 
 			graduatedColorLineRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					graduatedColorLineRuleList);
 			fireStyleChangedEvents(graduatedColorLineRuleList);
-		}
+		} else
+
+			askToTransferTemplates(lastChangedRuleList,
+					graduatedColorLineRuleList);
 		return graduatedColorLineRuleList;
 	}
 
@@ -614,25 +620,112 @@ public class AtlasStyler {
 					getStyledFeatures());
 
 			graduatedColorPointRuleList.addListener(listenerFireStyleChange);
+			askToTransferTemplates(lastChangedRuleList,
+					graduatedColorPointRuleList);
 			fireStyleChangedEvents(graduatedColorPointRuleList);
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					graduatedColorPointRuleList);
+		return graduatedColorPointRuleList;
+	}
+
+	/**
+	 * When switching the ruleliste GUI, the user may be asked to use a single
+	 * symbol as a template in another {@link FeatureRuleList}.
+	 * 
+	 * @param oldRl
+	 *            previously selected RuleList
+	 * @param newRl
+	 *            newly selected RuleList
+	 */
+	void askToTransferTemplates(AbstractRuleList oldRl, FeatureRuleList newRl) {
+		if (oldRl == null || oldRl == newRl)
+			return;
+		if (oldRl.getGeometryForm() != newRl.getGeometryForm())
+			return;
+		/**
+		 * Trying it this way: If we switched from a SinglePointSymbolRuleList,
+		 * let it be this GraduatedPointColorRuleList's template.
+		 */
+		if (oldRl instanceof SinglePointSymbolRuleList) {
+			SingleRuleList<Symbolizer> oldSingleRl = (SingleRuleList<Symbolizer>) oldRl;
+			final int res = JOptionPane
+					.showConfirmDialog(
+							null,
+							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+			if (res == JOptionPane.YES_OPTION) {
+				final SingleRuleList<Symbolizer> singleRL = oldSingleRl;
+				newRl.setTemplate(singleRL.copy());
+			}
 		}
 
 		/**
 		 * Trying it this way: If we switched from a SinglePointSymbolRuleList,
 		 * let it be this GraduatedPointColorRuleList's template.
 		 */
-		if (lastChangedRuleList instanceof SinglePointSymbolRuleList) {
+		if (oldRl instanceof FeatureRuleList) {
+			FeatureRuleList oldFeatureRl = (FeatureRuleList) oldRl;
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,
 							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
 			if (res == JOptionPane.YES_OPTION) {
-				final SinglePointSymbolRuleList singleRL = (SinglePointSymbolRuleList) lastChangedRuleList;
-				graduatedColorPointRuleList.setTemplate(singleRL.copy());
+				final SingleRuleList<? extends Symbolizer> oldTemplate = oldFeatureRl
+						.getTemplate();
+				newRl.setTemplate(oldTemplate.copy());
 			}
 		}
 
-		return graduatedColorPointRuleList;
+	}
+
+	/**
+	 * When switching the ruleliste GUI, the user may be asked to use a selected
+	 * template as a new {@link SingleRuleList}
+	 * 
+	 * @param oldRl
+	 *            previously selected RuleList
+	 * @param newRl
+	 *            newly selected RuleList
+	 */
+	void askToTransferTemplates(AbstractRuleList oldRl, SingleRuleList newRl) {
+
+		if (oldRl == null || oldRl == newRl)
+			return;
+		if (oldRl.getGeometryForm() != newRl.getGeometryForm())
+			return;
+
+		/**
+		 * Trying it this way: If we switched from a
+		 * GraduatedColorPointRuleList, let this SinglePointSymbolRuleList be
+		 * the GraduatedColorPointRuleList's template.
+		 */
+		if (oldRl instanceof FeatureRuleList) {
+			FeatureRuleList oldFeatureRl = (FeatureRuleList) lastChangedRuleList;
+			final int res = JOptionPane
+					.showConfirmDialog(
+							null,
+							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); // i8n
+			if (res == JOptionPane.YES_OPTION) {
+				final SingleRuleList template = oldFeatureRl.getTemplate();
+				newRl.setSymbolizers(template.getSymbolizers());
+			}
+		}
+
+		/**
+		 * Trying it this way: If we switched from a SinglePointSymbolRuleList,
+		 * let it be this GraduatedPointColorRuleList's template.
+		 */
+		if (oldRl instanceof SingleRuleList) {
+			// TODO Untested, since it can't happen yet
+			SingleRuleList oldSingleRl = (SingleRuleList) oldRl;
+			final int res = JOptionPane
+					.showConfirmDialog(
+							null,
+							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+			if (res == JOptionPane.YES_OPTION) {
+				newRl.setSymbolizers(oldSingleRl.getSymbolizers());
+			}
+		}
 	}
 
 	public GraduatedColorRuleList getGraduatedColorPolygonRuleList() {
@@ -643,6 +736,10 @@ public class AtlasStyler {
 			graduatedColorPolygonRuleList.addListener(listenerFireStyleChange);
 			fireStyleChangedEvents(graduatedColorPolygonRuleList);
 		}
+
+		askToTransferTemplates(lastChangedRuleList,
+				graduatedColorPolygonRuleList);
+
 		return graduatedColorPolygonRuleList;
 	}
 
@@ -716,8 +813,13 @@ public class AtlasStyler {
 			}
 
 			singleLineSymbolRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					singleLineSymbolRuleList);
 			fireStyleChangedEvents(singleLineSymbolRuleList);
-		}
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					singleLineSymbolRuleList);
 		return singleLineSymbolRuleList;
 	}
 
@@ -744,27 +846,13 @@ public class AtlasStyler {
 			}
 
 			singlePointSymbolRuleList.addListener(listenerFireStyleChange);
-			fireStyleChangedEvents(singlePointSymbolRuleList);
-		}
 
-		/**
-		 * Trying it this way: If we switched from a
-		 * GraduatedColorPointRuleList, let this SinglePointSymbolRuleList be
-		 * the GraduatedColorPointRuleList's template.
-		 */
-		if (lastChangedRuleList instanceof GraduatedColorPointRuleList) {
-			final int res = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); // i8n
-			if (res == JOptionPane.YES_OPTION) {
-				final GraduatedColorPointRuleList gradColorRL = (GraduatedColorPointRuleList) lastChangedRuleList;
-				final SingleRuleList<?> template = gradColorRL.getTemplate();
-				singlePointSymbolRuleList
-						.setSymbolizers(((SinglePointSymbolRuleList) template)
-								.getSymbolizers());
-			}
-		}
+			askToTransferTemplates(lastChangedRuleList,
+					singlePointSymbolRuleList);
+			fireStyleChangedEvents(singlePointSymbolRuleList);
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					singlePointSymbolRuleList);
 
 		return singlePointSymbolRuleList;
 	}
@@ -782,8 +870,13 @@ public class AtlasStyler {
 			}
 
 			singlePolygonSymbolRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					singlePolygonSymbolRuleList);
 			fireStyleChangedEvents(singlePolygonSymbolRuleList);
-		}
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					singlePolygonSymbolRuleList);
 		return singlePolygonSymbolRuleList;
 	}
 
@@ -841,7 +934,7 @@ public class AtlasStyler {
 
 			xxxstyle.featureTypeStyles().add(getTextRulesList().getFTS());
 
-			// TODO Remove, this ist just for debugging
+			// Just for debugging
 			Level level = Logger.getRootLogger().getLevel();
 			try {
 				Logger.getRootLogger().setLevel(Level.OFF);
@@ -861,7 +954,7 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * @return the RulesList that describes the labelling.
+	 * @return the RulesList that describes the labeling.
 	 */
 	public TextRuleList getTextRulesList() {
 		if (textRulesList == null) {
@@ -881,8 +974,14 @@ public class AtlasStyler {
 			uniqueValuesLineRuleList = new UniqueValuesLineRuleList(
 					getStyledFeatures());
 			uniqueValuesLineRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesLineRuleList);
 			fireStyleChangedEvents(uniqueValuesLineRuleList);
-		}
+		} else
+
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesLineRuleList);
 		return uniqueValuesLineRuleList;
 	}
 
@@ -891,8 +990,13 @@ public class AtlasStyler {
 			uniqueValuesPointRuleList = new UniqueValuesPointRuleList(
 					getStyledFeatures());
 			uniqueValuesPointRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesPointRuleList);
 			fireStyleChangedEvents(uniqueValuesPointRuleList);
-		}
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesPointRuleList);
 		return uniqueValuesPointRuleList;
 	}
 
@@ -901,8 +1005,13 @@ public class AtlasStyler {
 			uniqueValuesPolygonRuleList = new UniqueValuesPolygonRuleList(
 					getStyledFeatures());
 			uniqueValuesPolygonRuleList.addListener(listenerFireStyleChange);
+
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesPolygonRuleList);
 			fireStyleChangedEvents(uniqueValuesPolygonRuleList);
-		}
+		} else
+			askToTransferTemplates(lastChangedRuleList,
+					uniqueValuesPolygonRuleList);
 		return uniqueValuesPolygonRuleList;
 	}
 
@@ -941,7 +1050,8 @@ public class AtlasStyler {
 		int countImportedFeatureTypeStyles = 0;
 		try {
 			setQuite(true); // Quite the AtlasStyler!
-			// TODO Just for debugging at steve's PC. May be removed anytime.
+
+			// Just for debugging at steve's PC.
 			Level level = Logger.getRootLogger().getLevel();
 			try {
 				Logger.getRootLogger().setLevel(Level.OFF);
@@ -1120,7 +1230,7 @@ public class AtlasStyler {
 									.getDefaultTemplate();
 
 							// Forget bout generics here!!!
-							final SingleRuleList symbolRL = singleRLprototype
+							final SingleRuleList<?> symbolRL = singleRLprototype
 									.copy();
 
 							symbolRL.getSymbolizers().clear();
@@ -1415,7 +1525,7 @@ public class AtlasStyler {
 	}
 
 	public void setAttributeMetaDataMap(
-			final AttributeMetadataMap attributeMetaDataMap) {
+			final AttributeMetadataMap<? extends AttributeMetadataInterface> attributeMetaDataMap) {
 		this.attributeMetaDataMap = attributeMetaDataMap;
 	}
 

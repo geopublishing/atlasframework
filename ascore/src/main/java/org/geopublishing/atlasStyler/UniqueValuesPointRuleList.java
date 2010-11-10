@@ -19,19 +19,10 @@ import skrueger.geotools.StyledFeaturesInterface;
 public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
-//
-//	@Override
-//	public SingleRuleList getDefaultTemplate() {
-//		return ASUtil.getDefaultPointTemplate();
-//	}
 
 	public UniqueValuesPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures);
-	}
+		super(styledFeatures, GeometryForm.POINT);
 
-	@Override
-	public GeometryForm getGeometryForm() {
-		return GeometryForm.POINT;
 	}
 
 	@Override
