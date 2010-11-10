@@ -665,10 +665,8 @@ public class AtlasStyler {
 		 */
 		if (oldRl instanceof FeatureRuleList) {
 			FeatureRuleList oldFeatureRl = (FeatureRuleList) oldRl;
-			final int res = JOptionPane
-					.showConfirmDialog(
-							null,
-							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+			final int res = JOptionPane.showConfirmDialog(null,
+					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
 			if (res == JOptionPane.YES_OPTION) {
 				final SingleRuleList<? extends Symbolizer> oldTemplate = oldFeatureRl
 						.getTemplate();
@@ -701,10 +699,8 @@ public class AtlasStyler {
 		 */
 		if (oldRl instanceof FeatureRuleList) {
 			FeatureRuleList oldFeatureRl = (FeatureRuleList) lastChangedRuleList;
-			final int res = JOptionPane
-					.showConfirmDialog(
-							null,
-							"Do you want to use the GraduatedColorPointRuleList template as SinglePointSymbol?"); // i8n
+			final int res = JOptionPane.showConfirmDialog(null,
+					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
 			if (res == JOptionPane.YES_OPTION) {
 				final SingleRuleList template = oldFeatureRl.getTemplate();
 				newRl.setSymbolizers(template.getSymbolizers());
@@ -721,7 +717,7 @@ public class AtlasStyler {
 			final int res = JOptionPane
 					.showConfirmDialog(
 							null,
-							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsSingleSymbol"));
 			if (res == JOptionPane.YES_OPTION) {
 				newRl.setSymbolizers(oldSingleRl.getSymbolizers());
 			}
