@@ -11,6 +11,7 @@
 package org.geopublishing.atlasStyler;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
@@ -377,6 +378,8 @@ public class AtlasStyler {
 		this(new StyledFS(featureSource));
 	}
 
+	private Component owner = null;
+
 	/**
 	 * Create an AtlasStyler object for any {@link FeatureSource} and import the
 	 * given {@link Style}.
@@ -655,10 +658,14 @@ public class AtlasStyler {
 					.getTemplate().getFTS()))
 				return;
 
-			final int res = JOptionPane
-					.showConfirmDialog(
-							null,
-							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+			int res = JOptionPane.NO_OPTION;
+
+			if (owner != null) {
+				res = JOptionPane
+						.showConfirmDialog(
+								owner,
+								R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsTemplate"));
+			}
 			if (res == JOptionPane.YES_OPTION) {
 				newRl.setTemplate(singleRL.copy());
 			}
@@ -677,8 +684,12 @@ public class AtlasStyler {
 					.getTemplate().getFTS()))
 				return;
 
-			final int res = JOptionPane.showConfirmDialog(null,
-					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
+			int res = JOptionPane.NO_OPTION;
+
+			if (owner != null) {
+				res = JOptionPane.showConfirmDialog(null,
+						R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
+			}
 
 			if (res == JOptionPane.YES_OPTION) {
 				newRl.setTemplate(oldTemplate.copy());
@@ -716,8 +727,12 @@ public class AtlasStyler {
 					newRl.getFTS()))
 				return;
 
-			final int res = JOptionPane.showConfirmDialog(null,
-					R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
+			int res = JOptionPane.NO_OPTION;
+			if (owner != null) {
+				JOptionPane.showConfirmDialog(null,
+						R("AtlasStyler.SwitchRuleListType.CopyTemplate"));
+			}
+
 			if (res == JOptionPane.YES_OPTION) {
 				newRl.setSymbolizers(oldTemplate.getSymbolizers());
 			}
@@ -735,13 +750,16 @@ public class AtlasStyler {
 					newRl.getFTS()))
 				return;
 
-			final int res = JOptionPane
-					.showConfirmDialog(
-							null,
-							R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsSingleSymbol"));
-			if (res == JOptionPane.YES_OPTION) {
-				newRl.setSymbolizers(oldSingleRl.getSymbolizers());
+			int res = JOptionPane.NO_OPTION;
+
+			if (owner != null) {
+				res = JOptionPane
+						.showConfirmDialog(
+								null,
+								R("AtlasStyler.SwitchRuleListType.CopySingleSymbolAsSingleSymbol"));
 			}
+			if (res == JOptionPane.YES_OPTION)
+				newRl.setSymbolizers(oldSingleRl.getSymbolizers());
 		}
 	}
 
@@ -1626,6 +1644,14 @@ public class AtlasStyler {
 
 	public void setTitle(final Translation title) {
 		this.title = title;
+	}
+
+	public void setOwner(Component owner) {
+		this.owner = owner;
+	}
+
+	public Component getOwner() {
+		return owner;
 	}
 
 }
