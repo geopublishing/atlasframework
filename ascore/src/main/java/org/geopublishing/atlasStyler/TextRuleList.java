@@ -47,32 +47,32 @@ public class TextRuleList extends AbstractRuleList {
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
 
 	/**
-	 * A Filter to mark that ALL classes have been disabled by the
-	 * {@link TextRuleList}{@link #setEnabled(boolean)} method
+	 * A Filter to mark that one class/rule is enabled
 	 **/
-	public static final PropertyIsEqualTo allClassesDisabledFilter = ff.equals(
+	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
+	
+	/**
+	 * A Filter to mark that one class/rule has been disabled
+	 **/
+	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
 			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link TextRuleList}{@link #setEnabled(boolean)} method
-	 **/
-	public static final PropertyIsEqualTo allClassesEnabledFilter = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
 	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility.
+	 * not used anymore and only for backward compatibility. Will be removed in
+	 * 2.0
 	 **/
-	public static final PropertyIsEqualTo oldAllClassesEnabledFilter = ff
+	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
 			.equals(ff.literal("1"), ff.literal("1"));
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
 	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility.
+	 * not used anymore and only for backward compatibility. Will be removed in
+	 * 2.0
 	 **/
 	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
 			.equals(ff.literal("1"), ff.literal("2"));
@@ -80,7 +80,8 @@ public class TextRuleList extends AbstractRuleList {
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
 	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility.
+	 * not used anymore and only for backward compatibility. Will be removed in
+	 * 2.0
 	 **/
 	public static final PropertyIsEqualTo oldClassesEnabledFilter = ff.equals(
 			ff.literal("1"), ff.literal("1"));
@@ -88,7 +89,8 @@ public class TextRuleList extends AbstractRuleList {
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
 	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility.
+	 * not used anymore and only for backward compatibility. Will be removed in
+	 * 2.0
 	 **/
 	public static final PropertyIsEqualTo oldClassesDisabledFilter = ff.equals(
 			ff.literal("1"), ff.literal("2"));
@@ -108,8 +110,6 @@ public class TextRuleList extends AbstractRuleList {
 	static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
 
 	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
-
-	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or Disabled the complete TextRuleList";
 
 	/** Stores whether the class specific {@link TextSymbolizer}s are enabled **/
 	private List<Boolean> classesEnabled = new ArrayList<Boolean>();
@@ -147,16 +147,17 @@ public class TextRuleList extends AbstractRuleList {
 
 	final private StyledFeaturesInterface<?> styledFeatures;
 
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
-		super( geometryForm);
-		this.styledFeatures = styledFeatures;
-	}
-	
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super( GeometryForm.ANY);
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm, boolean withDefaults) {
+		super(geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
 
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
+		super(GeometryForm.ANY);
+		this.styledFeatures = styledFeatures;
+		if (withDefaults) addDefaultClass();
+	}
 
 	/**
 	 * @return the index of the newly added class
@@ -284,9 +285,9 @@ public class TextRuleList extends AbstractRuleList {
 
 		// Are all classes enabled?
 		if (isEnabled()) {
-			filter = ff.and(allClassesEnabledFilter, filter);
+			filter = ff.and(RL_ENABLED_FILTER, filter);
 		} else {
-			filter = ff.and(allClassesDisabledFilter, filter);
+			filter = ff.and(RL_DISABLED_FILTER, filter);
 		}
 		return filter;
 	}
@@ -834,13 +835,13 @@ public class TextRuleList extends AbstractRuleList {
 		 */
 		try {
 			List<?> andChildren = ((AndImpl) filter).getChildren();
-			if (andChildren.get(0).equals(allClassesDisabledFilter)) {
+			if (andChildren.get(0).equals(RL_DISABLED_FILTER)) {
 				setEnabled(false);
 			} else if (andChildren.get(0).equals(oldAllClassesDisabledFilter)) {
 				setEnabled(false);
-			} else if (andChildren.get(0).equals(allClassesEnabledFilter)) {
+			} else if (andChildren.get(0).equals(RL_ENABLED_FILTER)) {
 				setEnabled(true);
-			} else if (andChildren.get(0).equals(oldAllClassesEnabledFilter)) {
+			} else if (andChildren.get(0).equals(OldAllClassesEnabledFilter)) {
 				setEnabled(true);
 			} else
 				throw new RuntimeException(andChildren.get(0).toString() + "\n"
@@ -1040,18 +1041,6 @@ public class TextRuleList extends AbstractRuleList {
 	// this.classesFilters = filterRules;
 	// fireEvents(new RuleChangedEvent("setFilterRules", this));
 	// }
-
-	/**
-	 * Allows to define whether all {@link TextSymbolizer}s are enabled. If
-	 * disabled, if doesn't throw away all informtion, but just disables al
-	 * textsymbolizers with an Allways-False filter.
-	 */
-	public void setEnabled(boolean enabled) {
-		if (enabled == this.enabled)
-			return;
-		this.enabled = enabled;
-		fireEvents(new RuleChangedEvent(RULE_CHANGE_EVENT_ENABLED_STRING, this));
-	}
 
 	public void setRuleNames(List<String> ruleNames) {
 		this.classesRuleNames = ruleNames;

@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -21,8 +20,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
@@ -30,19 +27,14 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
 import org.geotools.data.FeatureSource;
-import org.geotools.feature.GeometryAttributeType;
 import org.geotools.map.MapLayer;
-import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
-import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Literal;
-import org.opengis.util.InternationalString;
 
 import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil;
@@ -87,6 +79,11 @@ public class AtlasStyler {
 		OGC_SINGLELANGUAGE
 	}
 
+	/**
+	 * List of rulelists
+	 */
+	private final RulesList ruleLists = new RulesList();
+
 	/** All {@link AtlasStyler} related files will be saved blow this path */
 	private static File applicationPreferencesDir;
 
@@ -122,7 +119,7 @@ public class AtlasStyler {
 	 */
 	private static List<String> languages = new LinkedList<String>();
 
-	protected static Logger LOGGER = ASUtil.createLogger(AtlasStyler.class);
+	private final static Logger LOGGER = ASUtil.createLogger(AtlasStyler.class);
 
 	/**
 	 * Key for a parameter of type List<Font> of additional Fonts that are
@@ -302,16 +299,6 @@ public class AtlasStyler {
 	 */
 	private List<Font> fonts = new ArrayList<Font>();
 
-	private GraduatedColorLineRuleList graduatedColorLineRuleList;
-
-	/***************************************************************************
-	 * {@link AbstractRuleList}s aka RuleLists that this {@link AtlasStyler}
-	 * keeps track of
-	 */
-	private GraduatedColorPointRuleList graduatedColorPointRuleList;
-
-	private GraduatedColorPolygonRuleList graduatedColorPolygonRuleList;
-
 	private AbstractRuleList lastChangedRuleList;
 
 	/**
@@ -322,7 +309,7 @@ public class AtlasStyler {
 
 		@Override
 		public void changed(final RuleChangedEvent e) {
-			xxxstyle = null;
+			styleCached = null;
 
 			// Only the lastChangedRule will be used to create the Style
 			final AbstractRuleList someRuleList = e.getSourceRL();
@@ -346,29 +333,15 @@ public class AtlasStyler {
 	/** If true, no Events will be fired to listeners */
 	private boolean quite = true;
 
-	private SingleLineSymbolRuleList singleLineSymbolRuleList;
-
-	private SinglePointSymbolRuleList singlePointSymbolRuleList;
-
-	private SinglePolygonSymbolRuleList singlePolygonSymbolRuleList;
-
 	private final StyledFeaturesInterface<?> styledFeatures;
 
-	private TextRuleList textRulesList;
-
 	private Translation title;
-
-	private UniqueValuesLineRuleList uniqueValuesLineRuleList;
-
-	private UniqueValuesPointRuleList uniqueValuesPointRuleList;
-
-	private UniqueValuesPolygonRuleList uniqueValuesPolygonRuleList;
 
 	/**
 	 * The cache for the {@link Style} that is generated when
 	 * {@link #getStyle()} is called.
 	 */
-	protected Style xxxstyle = null;
+	protected Style styleCached = null;
 
 	/**
 	 * Create an AtlasStyler object for any {@link FeatureSource}
@@ -378,7 +351,15 @@ public class AtlasStyler {
 		this(new StyledFS(featureSource));
 	}
 
+	/**
+	 * If not <code>null</code>, swing dialogs might popup.
+	 */
 	private Component owner = null;
+
+	/**
+	 * This factory is used to create empty or default rule lists.
+	 */
+	private final RuleListFactory rlf;
 
 	/**
 	 * Create an AtlasStyler object for any {@link FeatureSource} and import the
@@ -415,6 +396,8 @@ public class AtlasStyler {
 			Style loadStyle, final MapLayer mapLayer,
 			HashMap<String, Object> params) {
 		this.styledFeatures = styledFeatures;
+		this.rlf = new RuleListFactory(styledFeatures);
+
 		// this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
 
@@ -478,7 +461,7 @@ public class AtlasStyler {
 	 * Mainly used when cancelling any activity
 	 */
 	public void cancel() {
-		xxxstyle = backupStyle;
+		styleCached = backupStyle;
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
@@ -493,7 +476,7 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void dispose() {
-		xxxstyle = null;
+		styleCached = null;
 		listeners.clear();
 	}
 
@@ -550,15 +533,15 @@ public class AtlasStyler {
 
 		// LOGGER.info(" FIREING EVENT to " + listeners.size());
 
-		xxxstyle = null;
-		xxxstyle = getStyle();
-		if (xxxstyle == null)
+		styleCached = null;
+		styleCached = getStyle();
+		if (styleCached == null)
 			return;
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			try {
-				l.changed(new StyleChangedEvent(xxxstyle));
+				l.changed(new StyleChangedEvent(styleCached));
 			} catch (Exception e) {
 				LOGGER.error(e);
 			}
@@ -598,38 +581,6 @@ public class AtlasStyler {
 	 */
 	public List<Font> getFonts() {
 		return fonts;
-	}
-
-	public GraduatedColorRuleList getGraduatedColorLineRulesList() {
-		if (graduatedColorLineRuleList == null) {
-			graduatedColorLineRuleList = new GraduatedColorLineRuleList(
-					getStyledFeatures());
-
-			graduatedColorLineRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					graduatedColorLineRuleList);
-			fireStyleChangedEvents(graduatedColorLineRuleList);
-		} else
-
-			askToTransferTemplates(lastChangedRuleList,
-					graduatedColorLineRuleList);
-		return graduatedColorLineRuleList;
-	}
-
-	public GraduatedColorRuleList getGraduatedColorPointRulesList() {
-		if (graduatedColorPointRuleList == null) {
-			graduatedColorPointRuleList = new GraduatedColorPointRuleList(
-					getStyledFeatures());
-
-			graduatedColorPointRuleList.addListener(listenerFireStyleChange);
-			askToTransferTemplates(lastChangedRuleList,
-					graduatedColorPointRuleList);
-			fireStyleChangedEvents(graduatedColorPointRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					graduatedColorPointRuleList);
-		return graduatedColorPointRuleList;
 	}
 
 	/**
@@ -763,44 +714,6 @@ public class AtlasStyler {
 		}
 	}
 
-	public GraduatedColorRuleList getGraduatedColorPolygonRuleList() {
-		if (graduatedColorPolygonRuleList == null) {
-			graduatedColorPolygonRuleList = new GraduatedColorPolygonRuleList(
-					getStyledFeatures());
-
-			graduatedColorPolygonRuleList.addListener(listenerFireStyleChange);
-			fireStyleChangedEvents(graduatedColorPolygonRuleList);
-		}
-
-		askToTransferTemplates(lastChangedRuleList,
-				graduatedColorPolygonRuleList);
-
-		return graduatedColorPolygonRuleList;
-	}
-
-	public GraduatedColorRuleList getGraduatedColorRuleList(
-			final GeometryDescriptor geometryAttributeType) {
-
-		switch (FeatureUtil.getGeometryForm(geometryAttributeType)) {
-		case POINT:
-			return getGraduatedColorPointRulesList();
-
-		case LINE:
-			return getGraduatedColorLineRulesList();
-
-		case POLYGON:
-			return getGraduatedColorPolygonRuleList();
-
-		case ANY:
-			return getGraduatedColorPolygonRuleList();
-
-		case NONE:
-		default:
-			throw new RuntimeException("Unrecognized GeometryForm or NONE");
-		}
-
-	}
-
 	/***************************************************************************
 	 * @return The last {@link AbstractRuleList} where change has been observed
 	 *         via the {@link RuleChangeListener}. Never return the labeling
@@ -824,7 +737,7 @@ public class AtlasStyler {
 	 * 
 	 * @return never <code>null</code> and never ""
 	 */
-	private Translation getRuleTileFor(StyledFeaturesInterface<?> sf) {
+	public static Translation getRuleTileFor(StyledFeaturesInterface<?> sf) {
 
 		if (!I8NUtil.isEmpty(sf.getTitle()))
 			return sf.getTitle();
@@ -836,85 +749,6 @@ public class AtlasStyler {
 		return translation;
 	}
 
-	public SingleLineSymbolRuleList getSingleLineSymbolRulesList() {
-		if (singleLineSymbolRuleList == null) {
-			Translation title2 = getRuleTileFor(styledFeatures);
-			singleLineSymbolRuleList = new SingleLineSymbolRuleList(title2);
-
-			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList
-				// with a default layer.
-				singleLineSymbolRuleList.addNewDefaultLayer();
-			}
-
-			singleLineSymbolRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					singleLineSymbolRuleList);
-			fireStyleChangedEvents(singleLineSymbolRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					singleLineSymbolRuleList);
-		return singleLineSymbolRuleList;
-	}
-
-	/**
-	 * @return an {@link GraduatedColorRuleList} for the given
-	 *         {@link GeometryAttributeType}
-	 * 
-	 * @param geometryAttributeType
-	 *            {@link GeometryAttributeType} that defines
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-
-	public SinglePointSymbolRuleList getSinglePointSymbolRulesList() {
-		if (singlePointSymbolRuleList == null) {
-			Translation title2 = getRuleTileFor(styledFeatures);
-
-			singlePointSymbolRuleList = new SinglePointSymbolRuleList(title2);
-
-			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList
-				// with a default layer.
-				singlePointSymbolRuleList.addNewDefaultLayer();
-			}
-
-			singlePointSymbolRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					singlePointSymbolRuleList);
-			fireStyleChangedEvents(singlePointSymbolRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					singlePointSymbolRuleList);
-
-		return singlePointSymbolRuleList;
-	}
-
-	public SinglePolygonSymbolRuleList getSinglePolygonSymbolRulesList() {
-		if (singlePolygonSymbolRuleList == null) {
-			Translation title2 = getRuleTileFor(styledFeatures);
-			singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
-					title2);
-
-			if (lastChangedRuleList != null) {
-				// We have already imported a Style and we fill this RuleList
-				// with a default layer.
-				singlePolygonSymbolRuleList.addNewDefaultLayer();
-			}
-
-			singlePolygonSymbolRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					singlePolygonSymbolRuleList);
-			fireStyleChangedEvents(singlePolygonSymbolRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					singlePolygonSymbolRuleList);
-		return singlePolygonSymbolRuleList;
-	}
-
 	/***************************************************************************
 	 * @return A full {@link Style} that represents the last RuleList that has
 	 *         been changed.
@@ -922,27 +756,23 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public Style getStyle() {
-		if (xxxstyle == null) {
+		if (styleCached == null) {
 
 			// Create an empty Style without any FeatureTypeStlyes
-			xxxstyle = ASUtil.SB.createStyle();
+			styleCached = ASUtil.SB.createStyle();
+			styleCached.setName("AtlasStyler "
+					+ ReleaseUtil.getVersion(ASUtil.class));
 
-			xxxstyle.setName("AtlasStyler "
-					+ ReleaseUtil.getVersionInfo(ASUtil.class));
-
-			if (lastChangedRuleList == null) {
-
-				LOGGER.warn("Returning empty style because no lastChangedRuleList==null");
-
-				xxxstyle.getDescription()
+			if (getRuleLists().size() == 0) {
+				LOGGER.warn("Returning empty style, rulesList empty");
+				styleCached
+						.getDescription()
 						.setTitle(
-								"AS:Returning empty style because no lastChangedRuleList==null");
-				return xxxstyle;
+								"AS:Returning empty style because atlasStyler has no rules");
+				return styleCached;
 			}
 
-			// LOGGER.info("*** The Style is generated from "
-			// + lastChangedRuleList.getClass().getSimpleName());
-
+			// TODO Somewhere else!
 			if (avgNN != null) {
 
 				/**
@@ -965,89 +795,88 @@ public class AtlasStyler {
 
 			}
 
-			xxxstyle.featureTypeStyles().add(getLastChangedRuleList().getFTS());
+			// TODO handle textRuleLists special at the end?
+			for (AbstractRuleList ruleList : getRuleLists()) {
+				styleCached.featureTypeStyles().add(ruleList.getFTS());
+			}
 
-			xxxstyle.featureTypeStyles().add(getTextRulesList().getFTS());
+			// styleCached.featureTypeStyles().add(createTextRulesList().getFTS());
 
 			// Just for debugging
 			Level level = Logger.getRootLogger().getLevel();
 			try {
 				Logger.getRootLogger().setLevel(Level.OFF);
-				StylingUtil.saveStyleToSld(xxxstyle, new File(
+				StylingUtil.saveStyleToSld(styleCached, new File(
 						"/home/stefan/Desktop/update.sld"));
 			} catch (final Throwable e) {
 			} finally {
 				Logger.getRootLogger().setLevel(level);
 			}
-
 		}
-		return xxxstyle;
+		return styleCached;
+		//
+		// // Create an empty Style without any FeatureTypeStlyes
+		// styleCached = ASUtil.SB.createStyle();
+		//
+		// styleCached.setName("AtlasStyler "
+		// + ReleaseUtil.getVersionInfo(ASUtil.class));
+		//
+		// if (lastChangedRuleList == null) {
+		//
+		// LOGGER.warn("Returning empty style because no lastChangedRuleList==null");
+		//
+		// styleCached.getDescription()
+		// .setTitle(
+		// "AS:Returning empty style because no lastChangedRuleList==null");
+		// return styleCached;
+		// }
+		//
+		// if (avgNN != null) {
+		//
+		// /**
+		// * Applying automatic MaxScaleDenominators
+		// */
+		// GeometryForm geom = FeatureUtil.getGeometryForm(styledFeatures
+		// .getSchema());
+		//
+		// if (lastChangedRuleList instanceof SingleRuleList) {
+		// SingleRuleList srl = (SingleRuleList) lastChangedRuleList;
+		// srl.setMaxScaleDenominator(StylingUtil
+		// .getMaxScaleDenominator(avgNN, geom));
+		// } else if (lastChangedRuleList instanceof UniqueValuesRuleList) {
+		// UniqueValuesRuleList srl = (UniqueValuesRuleList)
+		// lastChangedRuleList;
+		// srl.setMaxScaleDenominator(StylingUtil
+		// .getMaxScaleDenominator(avgNN, geom));
+		// } else if (lastChangedRuleList instanceof QuantitiesRuleList) {
+		// QuantitiesRuleList srl = (QuantitiesRuleList) lastChangedRuleList;
+		// }
+		//
+		// }
+		//
+		// styleCached.featureTypeStyles().add(getLastChangedRuleList().getFTS());
+		//
+		// styleCached.featureTypeStyles().add(createTextRulesList().getFTS());
+		//
+		// // Just for debugging
+		// Level level = Logger.getRootLogger().getLevel();
+		// try {
+		// Logger.getRootLogger().setLevel(Level.OFF);
+		// StylingUtil.saveStyleToSld(styleCached, new File(
+		// "/home/stefan/Desktop/update.sld"));
+		// } catch (final Throwable e) {
+		// } finally {
+		// Logger.getRootLogger().setLevel(level);
+		// }
+		// }
 	}
 
 	public StyledFeaturesInterface<?> getStyledFeatures() {
 		return styledFeatures;
 	}
 
-	/**
-	 * @return the RulesList that describes the labeling.
-	 */
-	public TextRuleList getTextRulesList() {
-		if (textRulesList == null) {
-			textRulesList = new TextRuleList(getStyledFeatures());
-			textRulesList.addListener(listenerFireStyleChange);
-			fireStyleChangedEvents();
-		}
-		return textRulesList;
-	}
-
 	public Translation getTitle() {
 		return title;
-	}
-
-	public UniqueValuesLineRuleList getUniqueValuesLineRulesList() {
-		if (uniqueValuesLineRuleList == null) {
-			uniqueValuesLineRuleList = new UniqueValuesLineRuleList(
-					getStyledFeatures());
-			uniqueValuesLineRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesLineRuleList);
-			fireStyleChangedEvents(uniqueValuesLineRuleList);
-		} else
-
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesLineRuleList);
-		return uniqueValuesLineRuleList;
-	}
-
-	public UniqueValuesPointRuleList getUniqueValuesPointRulesList() {
-		if (uniqueValuesPointRuleList == null) {
-			uniqueValuesPointRuleList = new UniqueValuesPointRuleList(
-					getStyledFeatures());
-			uniqueValuesPointRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesPointRuleList);
-			fireStyleChangedEvents(uniqueValuesPointRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesPointRuleList);
-		return uniqueValuesPointRuleList;
-	}
-
-	public UniqueValuesPolygonRuleList getUniqueValuesPolygonRuleList() {
-		if (uniqueValuesPolygonRuleList == null) {
-			uniqueValuesPolygonRuleList = new UniqueValuesPolygonRuleList(
-					getStyledFeatures());
-			uniqueValuesPolygonRuleList.addListener(listenerFireStyleChange);
-
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesPolygonRuleList);
-			fireStyleChangedEvents(uniqueValuesPolygonRuleList);
-		} else
-			askToTransferTemplates(lastChangedRuleList,
-					uniqueValuesPolygonRuleList);
-		return uniqueValuesPolygonRuleList;
 	}
 
 	/**
@@ -1061,419 +890,68 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void importStyle(Style importStyle) {
+		reset();
 
-		final DuplicatingStyleVisitor dupl = new DuplicatingStyleVisitor();
-
-		/**
-		 * Backup the existing Style
-		 */
+		// Backup
 		if (backupStyle == null) {
-			dupl.visit(importStyle);
-			backupStyle = (Style) dupl.getCopy();
+			backupStyle = StylingUtil.clone(importStyle);
 		}
 
 		// Makes a copy of the style before importing it. otherwise we might get
-		// the same obejct and not recognize changes later...
-		dupl.visit(importStyle);
-		importStyle = (Style) dupl.getCopy();
+		// the same object and not recognize changes later...
+		importStyle = StylingUtil.clone(importStyle);
 
-		// Forget anything we might have imported before
-		reset();
+		// Forget all RuleLists we might have imported before
 
-		AbstractRuleList importedThisAbstractRuleList = null;
-
-		int countImportedFeatureTypeStyles = 0;
+		// Just for debugging at steve's PC.
+		Level level = Logger.getRootLogger().getLevel();
 		try {
-			setQuite(true); // Quite the AtlasStyler!
-
-			// Just for debugging at steve's PC.
-			Level level = Logger.getRootLogger().getLevel();
-			try {
-				Logger.getRootLogger().setLevel(Level.OFF);
-				StylingUtil.saveStyleToSld(importStyle, new File(
-						"/home/stefan/Desktop/goingToImport.sld"));
-			} catch (final Throwable e) {
-			} finally {
-				Logger.getRootLogger().setLevel(level);
-			}
-
-			for (final FeatureTypeStyle fts : importStyle.featureTypeStyles()) {
-
-				final String metaInfoString = fts.getName();
-
-				final int anzRules = fts.rules().size();
-				// LOGGER.info("Importing: '" + metaInfoString
-				// + "', has #Rules = " + anzRules);
-
-				if ((metaInfoString == null)) {
-					LOGGER.warn("This FeatureTypeStyle can't be proppery imported! It has not been created with AtlasStyler");
-					continue;
-				}
-
-				/***************************************************************
-				 * Importing everything that starts with SINGLE
-				 */
-				if (metaInfoString.startsWith("SINGLE")) {
-					final Rule rule = fts.rules().get(0);
-
-					final List<? extends Symbolizer> symbs = rule.symbolizers();
-
-					SingleRuleList<? extends Symbolizer> singleRuleList = null;
-
-					/***********************************************************
-					 * Importing a SINGLE_SYMBOL_POINT RuleList
-					 */
-					if (metaInfoString
-							.startsWith(RulesListType.SINGLE_SYMBOL_POINT
-									.toString())) {
-						singleRuleList = getSinglePointSymbolRulesList();
-
-					} else
-					/***********************************************************
-					 * Importing a SINGLE_SYMBOL_LINE RuleList
-					 */
-					if (metaInfoString
-							.startsWith(RulesListType.SINGLE_SYMBOL_LINE
-									.toString())) {
-						singleRuleList = getSingleLineSymbolRulesList();
-					}
-					/***********************************************************
-					 * Importing a SINGLE_SYMBOL_POLYGON RuleList
-					 */
-					else if (metaInfoString
-							.startsWith(RulesListType.SINGLE_SYMBOL_POLYGON
-									.toString())) {
-						singleRuleList = getSinglePolygonSymbolRulesList();
-					} else {
-						throw new RuntimeException("metaInfoString = "
-								+ metaInfoString + ", but is not recognized!");
-					}
-
-					singleRuleList.setMaxScaleDenominator(rule
-							.getMaxScaleDenominator());
-					singleRuleList.setMinScaleDenominator(rule
-							.getMinScaleDenominator());
-
-					singleRuleList.pushQuite();
-					try {
-
-						// singleRuleList.setStyleTitle(importStyle.getTitle());
-						// singleRuleList.setStyleAbstract(importStyle.getAbstract());
-
-						singleRuleList.getSymbolizers().clear();
-
-						/**
-						 * This stuff is the same for all three SINGLE_RULES
-						 * types
-						 */
-						singleRuleList.addSymbolizers(symbs);
-
-						singleRuleList.reverseSymbolizers();
-
-						// We had some stupid AbstractMethodException here...
-						try {
-							final Description description = rule
-									.getDescription();
-							final InternationalString title2 = description
-									.getTitle();
-							singleRuleList.setTitle(title2.toString());
-						} catch (final NullPointerException e) {
-							LOGGER.warn("The title style to import has been null!");
-							singleRuleList.setTitle("");
-						} catch (final Exception e) {
-							LOGGER.error(
-									"The title style to import could not been set!",
-									e);
-							singleRuleList.setTitle("");
-						}
-
-						importedThisAbstractRuleList = singleRuleList;
-
-					} finally {
-						singleRuleList.popQuite();
-					}
-				}
-
-				/***************************************************************
-				 * Importing everything that starts with QUANTITIES
-				 */
-				else if (metaInfoString.startsWith("UNIQUE")) {
-
-					UniqueValuesRuleList uniqueRuleList = null;
-
-					/***********************************************************
-					 * Importing a UNIQUE_VALUE_POINT RuleList
-					 */
-					if (metaInfoString
-							.startsWith(RulesListType.UNIQUE_VALUE_POINT
-									.toString())) {
-
-						uniqueRuleList = getUniqueValuesPointRulesList();
-
-					} else if (metaInfoString
-							.startsWith(RulesListType.UNIQUE_VALUE_LINE
-									.toString())) {
-
-						uniqueRuleList = getUniqueValuesLineRulesList();
-					} else if (metaInfoString
-							.startsWith(RulesListType.UNIQUE_VALUE_POLYGON
-									.toString())) {
-
-						uniqueRuleList = getUniqueValuesPolygonRuleList();
-					} else {
-						throw new RuntimeException("metaInfoString = "
-								+ metaInfoString + ", but is not recognized!");
-					}
-
-					uniqueRuleList.pushQuite();
-					try {
-
-						uniqueRuleList.parseMetaInfoString(metaInfoString, fts);
-
-						/***********************************************************
-						 * Parsing information in the RULEs
-						 * 
-						 * title, unique values, symbols=>singleRuleLists,
-						 * template?
-						 */
-						int countRules = 0;
-						uniqueRuleList.setWithDefaultSymbol(false);
-						for (final Rule r : fts.rules()) {
-
-							if (r.getName() != null
-									&& r.getName()
-											.toString()
-											.startsWith(
-													FeatureRuleList.NODATA_RULE_NAME)) {
-								// This rule defines the NoDataSymbol
-								uniqueRuleList.importNoDataRule(r);
-								continue;
-							}
-
-							uniqueRuleList.test();
-
-							// Interpret Filter!
-							final String[] strings = UniqueValuesRuleList
-									.interpretFilter(r.getFilter());
-
-							uniqueRuleList.setPropertyFieldName(strings[0],
-									false);
-
-							final Symbolizer[] symbolizers = r.getSymbolizers();
-
-							final SingleRuleList<? extends Symbolizer> singleRLprototype = uniqueRuleList
-									.getDefaultTemplate();
-
-							// Forget bout generics here!!!
-							final SingleRuleList<?> symbolRL = singleRLprototype
-									.copy();
-
-							symbolRL.getSymbolizers().clear();
-							for (final Symbolizer symb : symbolizers) {
-								final Vector symbolizers2 = symbolRL
-										.getSymbolizers();
-								symbolizers2.add(symb);
-							}
-							symbolRL.reverseSymbolizers();
-
-							// Finally set all three values into the RL
-							uniqueRuleList.getLabels().add(
-									r.getDescription().getTitle().toString());
-							uniqueRuleList.getSymbols().add(symbolRL);
-							uniqueRuleList.getValues().add(strings[1]);
-
-							uniqueRuleList.test();
-
-							countRules++;
-						}
-
-						LOGGER.debug("Imported " + countRules
-								+ " UNIQUE rules ");
-					} finally {
-						uniqueRuleList.popQuite();
-					}
-
-					importedThisAbstractRuleList = uniqueRuleList;
-				}
-
-				/***************************************************************
-				 * Importing everything that starts with QUANTITIES
-				 */
-				else if (metaInfoString.startsWith("QUANTITIES")) {
-
-					QuantitiesRuleList<Double> quantitiesRuleList = null;
-
-					/***********************************************************
-					 * Importing a QUANTITIES_COLORIZED_POINT RuleList
-					 */
-					if (metaInfoString
-							.startsWith(RulesListType.QUANTITIES_COLORIZED_POINT
-									.toString())) {
-
-						quantitiesRuleList = getGraduatedColorPointRulesList();
-
-					}
-
-					/***********************************************************
-					 * Importing a QUANTITIES_COLORIZED_LINE RuleList
-					 */
-					else if (metaInfoString
-							.startsWith(RulesListType.QUANTITIES_COLORIZED_LINE
-									.toString())) {
-
-						quantitiesRuleList = getGraduatedColorLineRulesList();
-					}
-
-					/***********************************************************
-					 * Importing a QUANTITIES_COLORIZED_POLYGON RuleList
-					 */
-					else if (metaInfoString
-							.startsWith(RulesListType.QUANTITIES_COLORIZED_POLYGON
-									.toString())) {
-
-						quantitiesRuleList = getGraduatedColorPolygonRuleList();
-					}
-
-					else {
-						throw new RuntimeException("metaInfoString = "
-								+ metaInfoString + ", but is not recognized!");
-					}
-
-					quantitiesRuleList.pushQuite();
-					try { // popQuite
-
-						// This also imports the template from the first rule.
-						quantitiesRuleList.parseMetaInfoString(metaInfoString,
-								fts);
-
-						/***********************************************************
-						 * Parsing information in the RULEs
-						 * 
-						 * title, class limits
-						 */
-						int countRules = 0;
-						final TreeSet<Double> classLimits = new TreeSet<Double>();
-						double[] ds = null;
-						for (final Rule r : fts.rules()) {
-
-							if (r.getName()
-									.toString()
-									.startsWith(
-											FeatureRuleList.NODATA_RULE_NAME)) {
-								// This rule defines the NoDataSymbol
-								quantitiesRuleList.importNoDataRule(r);
-								continue;
-							}
-
-							// set Title
-							quantitiesRuleList.getRuleTitles().put(countRules,
-									r.getDescription().getTitle().toString());
-
-							// Class Limits
-							ds = QuantitiesRuleList.interpretBetweenFilter(r
-									.getFilter());
-							classLimits.add(ds[0]);
-
-							countRules++;
-						}
-						if (ds != null) {
-							// The last limit is only added if there have been
-							// any
-							// rules
-							classLimits.add(ds[1]);
-						}
-						quantitiesRuleList.setClassLimits(classLimits, false);
-
-						/**
-						 * Now determine the colors stored inside the
-						 * symbolizers.
-						 */
-						for (int ri = 0; ri < countRules; ri++) {
-							// Import the dominant color from the symbolizers
-							// (they can differ from the palette colors, because
-							// they might have been changed manually.
-							for (final Symbolizer s : fts.rules().get(ri)
-									.getSymbolizers()) {
-
-								final Color c = StylingUtil
-										.getSymbolizerColor(s);
-
-								if (c != null) {
-									// System.out.println("Rule " + ri
-									// + " has color " + c);
-									quantitiesRuleList.getColors()[ri] = c;
-									break;
-								}
-							}
-
-						}
-
-						importedThisAbstractRuleList = quantitiesRuleList;
-
-					} finally {
-						quantitiesRuleList.popQuite();
-					}
-				}
-
-				/***************************************************************
-				 * Importing everything that starts with TEXT, most likely a
-				 * RulesListType.TEXT_LABEL
-				 */
-				else if (metaInfoString.startsWith(RulesListType.TEXT_LABEL
-						.toString())) {
-					final TextRuleList textRulesList = getTextRulesList();
-					textRulesList.importRules(fts.rules());
-				}
-
-				else {
-					// LOGGER
-					// .info("Importing a FTS failed because the Name field was not recognized. Name='"
-					// + metaInfoString
-					// +
-					// "'. An empty AtlasStyler will start if no other FTS are defined.");
-
-					/**
-					 * Adding default layers to all SingleRules
-					 */
-					switch (FeatureUtil.getGeometryForm(styledFeatures
-							.getSchema())) {
-					case LINE:
-						getSingleLineSymbolRulesList().addNewDefaultLayer();
-						break;
-					case POINT:
-						getSinglePointSymbolRulesList().addNewDefaultLayer();
-						break;
-					case POLYGON:
-						getSinglePolygonSymbolRulesList().addNewDefaultLayer();
-						break;
-
-					// TODO NONE AND ANY!
-
-					}
-
-					continue;
-					// throw new RuntimeException("Not yet implemented");
-				}
-				countImportedFeatureTypeStyles++;
-			}
-
-		} catch (final Exception importError) {
-			LOGGER.warn("Import error: " + importError.getLocalizedMessage(),
-					importError);
-			// TODO Inform about import failure
+			Logger.getRootLogger().setLevel(Level.OFF);
+			StylingUtil.saveStyleToSld(importStyle, new File(
+					"/home/stefan/Desktop/goingToImport.sld"));
+		} catch (final Throwable e) {
+		} finally {
+			Logger.getRootLogger().setLevel(level);
 		}
 
-		final int ist = countImportedFeatureTypeStyles;
-		final int soll = importStyle.featureTypeStyles().size();
-		// if (ist < soll) {
-		// LOGGER.debug("Only " + ist + " of all " + soll
-		// + " Rulelists have been recognized fully...");
-		// }
+		for (final FeatureTypeStyle fts : importStyle.featureTypeStyles()) {
+			try {
+				setQuite(true); // Quite the AtlasStyler!
 
-		setQuite(false);
-		if (importedThisAbstractRuleList != null) {
-			LOGGER.debug("Imported a valid FeatureTypeStyle for Symbolization, fireing StyleChangedEvents... ");
-			fireStyleChangedEvents(importedThisAbstractRuleList);
+				AbstractRuleList importedThisAbstractRuleList = rlf.importFts(
+						fts, false);
+				if (importedThisAbstractRuleList != null) {
+
+					ruleLists.add(importedThisAbstractRuleList);
+
+					importedThisAbstractRuleList
+							.addListener(listenerFireStyleChange);
+					fireStyleChangedEvents(importedThisAbstractRuleList);
+				} else
+					throw new AtlasParsingException("importFts retuned null");
+
+			} catch (final Exception importError) {
+				LOGGER.warn(
+						"Import error: " + importError.getLocalizedMessage(),
+						importError);
+				// TODO Inform about import failure
+			} finally {
+				setQuite(false);
+			}
+
+		}
+		final int ist = getRuleLists().size();
+		final int soll = importStyle.featureTypeStyles().size();
+		if (ist < soll) {
+			LOGGER.debug("Only " + ist + " of all " + soll
+					+ " RuleLists have been recognized fully...");
+		}
+
+		if (getRuleLists().size() > 0) {
+			LOGGER.debug("Imported "
+					+ getRuleLists().size()
+					+ " valid FeatureTypeStyles, fireing StyleChangedEvents... ");
+			fireStyleChangedEvents(getRuleLists().get(0));
 		}
 
 	}
@@ -1512,7 +990,7 @@ public class AtlasStyler {
 	 */
 	public boolean isPolygon() {
 
-		// TODO rethink?!
+		// TODO rethink?! ANY != POLYGON
 		if (FeatureUtil.getGeometryForm(getStyledFeatures().getFeatureSource()) == GeometryForm.ANY)
 			return true;
 
@@ -1534,29 +1012,12 @@ public class AtlasStyler {
 	 */
 	public void reset() {
 
-		xxxstyle = null;
+		getRuleLists().clear();
+
+		styleCached = null;
 
 		lastChangedRuleList = null;
 
-		graduatedColorPointRuleList = null;
-
-		graduatedColorLineRuleList = null;
-
-		graduatedColorPolygonRuleList = null;
-
-		singlePointSymbolRuleList = null;
-
-		singleLineSymbolRuleList = null;
-
-		singlePolygonSymbolRuleList = null;
-
-		uniqueValuesPointRuleList = null;
-
-		uniqueValuesLineRuleList = null;
-
-		uniqueValuesPolygonRuleList = null;
-
-		textRulesList = null;
 	}
 
 	public void setAttributeMetaDataMap(
@@ -1580,15 +1041,6 @@ public class AtlasStyler {
 		else
 			this.fonts = fonts;
 	}
-
-	// /**
-	// * May return <code>null</code>, if no {@link MapLegend} is connected to
-	// the
-	// * {@link AtlasStyler}.
-	// */
-	// public MapLegend getMapLegend() {
-	// return mapLegend;
-	// }
 
 	/**
 	 * The {@link AtlasStyler} can run in two {@link LANGUAGE_MODE}s.
@@ -1646,12 +1098,35 @@ public class AtlasStyler {
 		this.title = title;
 	}
 
+	/**
+	 * If not <code>null</code>, swing dialogs might popup.
+	 */
 	public void setOwner(Component owner) {
 		this.owner = owner;
 	}
 
 	public Component getOwner() {
 		return owner;
+	}
+
+	/**
+	 * This factory is used to create rule-lists. Returns a
+	 * {@link RuleListFactory}.
+	 */
+	public RuleListFactory getRlf() {
+		return rlf;
+	}
+
+	public RulesList getRuleLists() {
+		return ruleLists;
+	}
+
+	public void addRulesList(AbstractRuleList importedThisAbstractRuleList) {
+		getRuleLists().add(importedThisAbstractRuleList);
+
+		importedThisAbstractRuleList.addListener(listenerFireStyleChange);
+		fireStyleChangedEvents(importedThisAbstractRuleList);
+
 	}
 
 }

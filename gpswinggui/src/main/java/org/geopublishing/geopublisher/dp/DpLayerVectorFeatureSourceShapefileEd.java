@@ -32,7 +32,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
@@ -62,6 +61,7 @@ import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledLayerUtil;
 import skrueger.i8n.Translation;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {

@@ -18,7 +18,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -35,6 +34,7 @@ import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 import com.vividsolutions.jts.geom.Envelope;
 

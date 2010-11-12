@@ -21,7 +21,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -46,6 +45,7 @@ import skrueger.geotools.Copyable;
 import skrueger.geotools.MapView;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 import com.vividsolutions.jts.geom.Envelope;
 

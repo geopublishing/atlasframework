@@ -23,8 +23,6 @@ import java.util.List;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
@@ -34,6 +32,8 @@ import schmitzm.io.IOUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class DpeImportUtil {
 

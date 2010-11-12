@@ -26,8 +26,8 @@ public class TextSymbolizerEditGUITest {
 	@Before
 	public void befire() throws IOException {
 		STYLED_FS = TestDatasetsVector.countryShp.getStyledFS();
-		tr = new TextRuleList(STYLED_FS);
-		tr.addDefaultClass();
+		tr = new TextRuleList(STYLED_FS, true);
+//		tr.addDefaultClass();
 		atlasStyler = new AtlasStyler(STYLED_FS);
 
 	}

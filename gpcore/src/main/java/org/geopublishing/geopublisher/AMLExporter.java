@@ -38,7 +38,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
@@ -78,6 +77,7 @@ import schmitzm.jfree.feature.style.FeatureChartUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.i8n.Translation;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 import skrueger.versionnumber.ReleaseUtil;
 
 import com.vividsolutions.jts.geom.Envelope;

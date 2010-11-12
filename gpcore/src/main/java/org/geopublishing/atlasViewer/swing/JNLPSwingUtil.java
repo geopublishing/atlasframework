@@ -20,11 +20,12 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.SwingUtil;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart

@@ -76,8 +76,8 @@ public class AtlasStylerTest {
 				.getAttributeDescriptors().get(1).getLocalName();
 
 		assertEquals("FIPS_CNTRY", propName);
-		final UniqueValuesPolygonRuleList uniqueRL1 = as
-				.getUniqueValuesPolygonRuleList();
+		final UniqueValuesPolygonRuleList uniqueRL1 = as.getRlf()
+				.createUniqueValuesPolygonRulesList(true);
 
 		uniqueRL1.setPropertyFieldName(propName, true);
 
@@ -110,8 +110,8 @@ public class AtlasStylerTest {
 		as = null;
 		// Create a new AtlasStyler
 		AtlasStyler as2 = new AtlasStyler(styledFeatures, style1, null, null);
-		UniqueValuesPolygonRuleList uniqueRL2 = as2
-				.getUniqueValuesPolygonRuleList();
+		UniqueValuesPolygonRuleList uniqueRL2 = as2.getRlf()
+				.createUniqueValuesPolygonRulesList(true);
 
 		assertEquals(uniqueRL1.isWithDefaultSymbol(),
 				uniqueRL2.isWithDefaultSymbol());
@@ -149,29 +149,29 @@ public class AtlasStylerTest {
 		assertEquals("SQKM_CNTRY", strings[1]);
 		assertEquals("SQMI_CNTRY", strings[2]);
 	}
-
-	@Test
-	public void testAskToTransferTemplates() {
-		if (!TestingUtil.INTERACTIVE)
-			return;
-
-		AtlasStyler as = new AtlasStyler(featureSource_polygon);
-		
-		as.setLastChangedRuleList(as.getSingleLineSymbolRulesList());
-		as.getUniqueValuesLineRulesList();
-
-
-		as.setLastChangedRuleList(as.getGraduatedColorLineRulesList());
-		as.getSingleLineSymbolRulesList();
-		
-		as.setLastChangedRuleList(as.getGraduatedColorPointRulesList());
-		as.getSinglePointSymbolRulesList();
-		
-		as.setLastChangedRuleList(as.getUniqueValuesLineRulesList());
-		as.getSinglePointSymbolRulesList();
-
-		System.out.println("s");
-		
-	}
+	//
+	// @Test
+	// public void testAskToTransferTemplates() {
+	// if (!TestingUtil.INTERACTIVE)
+	// return;
+	//
+	// AtlasStyler as = new AtlasStyler(featureSource_polygon);
+	//
+	// as.setLastChangedRuleList(as.getSingleLineSymbolRulesList());
+	// as.getUniqueValuesLineRulesList();
+	//
+	//
+	// as.setLastChangedRuleList(as.getGraduatedColorLineRulesList());
+	// as.getSingleLineSymbolRulesList();
+	//
+	// as.setLastChangedRuleList(as.getGraduatedColorPointRulesList());
+	// as.getSinglePointSymbolRulesList();
+	//
+	// as.setLastChangedRuleList(as.getUniqueValuesLineRulesList());
+	// as.getSinglePointSymbolRulesList();
+	//
+	// System.out.println("s");
+	//
+	// }
 
 }

@@ -33,7 +33,6 @@ import javax.swing.border.Border;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
@@ -64,6 +63,7 @@ import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
 import skrueger.geotools.MapPaneToolSelectedListener;
 import skrueger.geotools.MapView;
 import skrueger.geotools.StyledLayerInterface;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 import com.vividsolutions.jts.geom.Envelope;
 

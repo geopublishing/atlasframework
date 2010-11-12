@@ -53,7 +53,7 @@ public class AtlasStylerGUITest  {
 
 		AtlasStyler atlasStyler = new AtlasStyler(wfsSFS);
 
-		atlasStyler.getGraduatedColorPolygonRuleList();
+		atlasStyler.getRuleLists().add(atlasStyler.getRlf().createGraduatedColorRuleList(true));
 
 		atlasStyler.getStyle();
 

@@ -40,7 +40,8 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRuleList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
+
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A GUI class that unites the different types of SymbolLists we have: symbols

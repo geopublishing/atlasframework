@@ -17,7 +17,6 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -30,6 +29,7 @@ import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
 import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
 import schmitzm.io.IOUtil;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 		DpEditableInterface {

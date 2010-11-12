@@ -16,8 +16,10 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.opengis.feature.type.GeometryDescriptor;
 
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.StyledLayerInterface;
+import skrueger.geotools.StyledFeaturesInterface;
 
 /**
  * This {@link DpEntry} represents a vector layer. Type <code>E</code>
@@ -29,9 +31,35 @@ import skrueger.geotools.StyledLayerInterface;
  * TODO can be removed!
  */
 abstract public class DpLayerVector<E, CHART_STYLE_IMPL extends ChartStyle>
-		extends DpLayer<E, CHART_STYLE_IMPL> implements StyledLayerInterface<E> {
+		extends DpLayer<E, CHART_STYLE_IMPL> implements StyledFeaturesInterface<E> {
 	Logger log = Logger.getLogger(DpLayerVector.class);
 
+	/**
+	 * Defaults to the GeometryForm determined with FeatureUtil.getGeometryForm,
+	 * but can be set to override ANY.
+	 */
+	private GeometryForm geometryForm;
+
+	/**
+	 * Defaults to the GeometryForm determined with FeatureUtil.getGeometryForm,
+	 * but can be set to override ANY.
+	 */
+
+	@Override
+	public GeometryForm getGeometryForm() {
+		if (geometryForm == null) {
+			geometryForm = FeatureUtil.getGeometryForm(getSchema());
+		}
+		return geometryForm;
+	}
+
+	/**
+	 * Defaults to the GeometryForm determined with FeatureUtil.getGeometryForm,
+	 * but can be set to override ANY.
+	 */
+	public void setGeometryForm(GeometryForm geometryForm) {
+		this.geometryForm = geometryForm;
+	}
 
 	abstract public GeometryDescriptor getDefaultGeometry() throws Exception;
 

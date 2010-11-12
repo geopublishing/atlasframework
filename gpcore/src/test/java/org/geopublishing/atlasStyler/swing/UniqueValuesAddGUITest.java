@@ -1,6 +1,6 @@
 package org.geopublishing.atlasStyler.swing;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.RuleListFactory;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 import org.junit.After;
 import org.junit.Before;
@@ -21,14 +21,17 @@ public class UniqueValuesAddGUITest {
 	@Test
 	public void testUniqueValuesAddGUI() throws Throwable {
 
-		AtlasStyler atlasStyler = new AtlasStyler(
-				TestingUtil.TestDatasetsVector.kreise.getFeatureSource());
-		final UniqueValuesRuleList rl = atlasStyler
-				.getUniqueValuesPolygonRuleList();
-		
+		// AtlasStyler atlasStyler = new AtlasStyler();
+		// final UniqueValuesRuleList rl = atlasStyler.getRlf()
+		// .createUniqueValuesRuleList();
+
+		final UniqueValuesRuleList rl = new RuleListFactory(
+				TestingUtil.TestDatasetsVector.kreise.getStyledFS())
+				.createUniqueValuesRulesList(true);
+
 		if (TestingUtil.INTERACTIVE) {
 			UniqueValuesAddGUI dialog = new UniqueValuesAddGUI(null, rl);
-			TestingUtil.testGui(dialog,1);
+			TestingUtil.testGui(dialog, 1);
 		}
 
 	}

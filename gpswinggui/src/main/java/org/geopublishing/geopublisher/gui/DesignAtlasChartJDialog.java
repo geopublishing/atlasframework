@@ -62,10 +62,8 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasChartJDialog;
 import org.geopublishing.atlasViewer.swing.AtlasChartJPanel;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.chart.GeneralChartSettingsJPanel;
@@ -103,6 +101,8 @@ import skrueger.i8n.Translation;
 import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.ColorButton;
 import skrueger.swing.TranslationEditJPanel;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * This {@link JDialog} allows to interactively edit a {@link FeatureChartStyle}

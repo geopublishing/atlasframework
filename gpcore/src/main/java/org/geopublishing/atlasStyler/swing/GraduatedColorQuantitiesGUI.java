@@ -240,7 +240,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 		jLabelHeading = new JLabel(
 				AtlasStyler.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
-				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
+				AVSwingUtil.HEADING_FONT_SIZE));
 
 		this.add(jLabelHeading, "span 2");
 		this.add(getJPanelFields(), "grow x");

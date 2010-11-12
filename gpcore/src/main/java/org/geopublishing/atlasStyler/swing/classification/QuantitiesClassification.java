@@ -18,10 +18,10 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import skrueger.geotools.StyledFeaturesInterface;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A quantitative classification. The inveralls are defined by upper and lower

@@ -23,7 +23,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.jfree.chart.JFreeChart;
 
 import schmitzm.geotools.gui.SelectableXMapPane;
@@ -45,6 +44,8 @@ import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
 import skrueger.swing.AtlasDialog;
 import skrueger.swing.OkButton;
 import skrueger.swing.SmallButton;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class AtlasChartJDialog extends AtlasDialog {
 

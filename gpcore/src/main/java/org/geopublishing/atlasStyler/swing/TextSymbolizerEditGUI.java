@@ -387,8 +387,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 								pPlacement.getDisplacement().setDisplacementX(
 										ASUtil.ff2.literal(e.getItem()));
 
-								// firePropertyChange(PROPERTY_UPDATED, null,
-								// null);
 								rulesList.fireEvents(new RuleChangedEvent(
 										"placement changed", rulesList));
 							}
@@ -426,8 +424,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 								pPlacement.getDisplacement().setDisplacementY(
 										ASUtil.ff2.literal(e.getItem()));
 
-								// firePropertyChange(PROPERTY_UPDATED, null,
-								// null);
 								rulesList.fireEvents(new RuleChangedEvent(
 										"placement changed", rulesList));
 							}
@@ -671,7 +667,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 						pPlacement.setRotation(ASUtil.ff2.literal(e.getItem()));
 
-						// firePropertyChange(PROPERTX_UPDATED, null, null);
 						rulesList.fireEvents(new RuleChangedEvent(
 								"label rotation changed", rulesList));
 					}

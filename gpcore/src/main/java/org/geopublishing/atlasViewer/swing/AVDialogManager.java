@@ -255,6 +255,7 @@ public class AVDialogManager {
 								final AtlasStyler atlasStyler = new AtlasStyler(
 										styledFeatures, mapLayer.getStyle(),
 										mapLayer, null);
+								
 
 								final MapLayerLegend mapLayerLegend = mapLegend
 										.getLayerLegendForId(styledFeatures

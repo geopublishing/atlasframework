@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -39,6 +38,7 @@ import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
 import schmitzm.swing.ExceptionDialog;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * This extension of the {@link DpLayerVectorFeatureSource} is specialized to

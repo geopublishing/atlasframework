@@ -41,14 +41,14 @@ import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.feature.GeometryAttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.io.IOUtil;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A special {@link JScrollPane} that does threaded filling of the GUI with SLD

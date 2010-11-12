@@ -26,8 +26,8 @@ public class UniqueValuesRuleListTest {
 
 		AtlasStyler atlasStyler = new AtlasStyler(
 				TestingUtil.TestDatasetsVector.kreise.getFeatureSource());
-		final UniqueValuesRuleList rl = atlasStyler
-				.getUniqueValuesPolygonRuleList();
+		final UniqueValuesRuleList rl = atlasStyler.getRlf()
+				.createUniqueValuesPolygonRulesList(true);
 
 		assertEquals(0, rl.getValues().size());
 		Set<Object> newUniques = rl.getAllUniqueValuesThatAreNotYetIncluded();

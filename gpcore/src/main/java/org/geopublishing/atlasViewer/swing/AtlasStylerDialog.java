@@ -43,6 +43,8 @@ public class AtlasStylerDialog extends StylerDialog {
 				.getStyle() : dpLayer.getStyle(), 
 //				atlasMapLegend,
 				mapLayer, getParamMap(dpLayer)));
+		
+		getAtlasStyler().setOwner(this);
 		this.dpLayer = dpLayer;
 
 		this.layerStyle = layerStyle;

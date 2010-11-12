@@ -32,24 +32,23 @@ import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
  * 
  */
 public abstract class AbstractRuleList {
-	
+
 	public AbstractRuleList(GeometryForm geometryForm) {
 		this.geometryForm = geometryForm;
 	}
 
 	/**
-	 * These enum names should not be changed anymore. We use them with
+	 * These enum names must not be changed anymore. We use them with
 	 * .tostring().equals(...)
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public enum RulesListType {
 		QUANTITIES_COLORIZED_LINE, QUANTITIES_COLORIZED_POINT, QUANTITIES_COLORIZED_POLYGON, QUANTITIES_SIZED_LINE, QUANTITIES_SIZED_POINT, SINGLE_SYMBOL_LINE, SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POLYGON, TEXT_LABEL, UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POINT, UNIQUE_VALUE_COMBINATIONS_POLYGONE, UNIQUE_VALUE_LINE, UNIQUE_VALUE_POINT, UNIQUE_VALUE_POLYGON
 	}
 
 	RuleChangedEvent lastOpressedEvent = null;
-	
+
 	/** The geometry form this RuleList is designed for. **/
 	final private GeometryForm geometryForm;
 
@@ -70,12 +69,11 @@ public abstract class AbstractRuleList {
 	/**
 	 * Adds a {@link RuleChangeListener} which listens to changes in the
 	 * {@link Rule}. Very good to update previews.<br>
-	 * <b>The listening class must keep a reference to the listener (e.g. make it a
-	 * field variable) because the listeners are kept in a WeakHashSet.</b>
+	 * <b>The listening class must keep a reference to the listener (e.g. make
+	 * it a field variable) because the listeners are kept in a WeakHashSet.</b>
 	 * 
 	 * @param listener
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void addListener(RuleChangeListener listener) {
 		listeners.add(listener);
@@ -84,8 +82,7 @@ public abstract class AbstractRuleList {
 	/**
 	 * Clears all {@link RuleChangeListener}s
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void clearListeners() {
 		listeners.clear();
@@ -95,8 +92,7 @@ public abstract class AbstractRuleList {
 	 * Tells all {@link RuleChangeListener} that the {@link Rule}s represented
 	 * by this {@link AbstractRuleList} implementation have changed.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void fireEvents(RuleChangedEvent rce) {
 
@@ -111,7 +107,7 @@ public abstract class AbstractRuleList {
 			try {
 				l.changed(rce);
 			} catch (Exception e) {
-				LOGGER.error("While fireEvents: "+rce,e);
+				LOGGER.error("While fireEvents: " + rce, e);
 			}
 		}
 	}
@@ -123,10 +119,15 @@ public abstract class AbstractRuleList {
 	 * @return a {@link String} that contains all information for this
 	 *         particular RuleList
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public abstract String getAtlasMetaInfoForFTSName();
+
+	/**
+	 * If <code>false</code>, all rules in this filter will always evaluate to
+	 * false.
+	 */
+	private boolean enabled;
 
 	/**
 	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
@@ -144,8 +145,7 @@ public abstract class AbstractRuleList {
 	/**
 	 * Returns direct access to the {@link RuleChangeListener}s {@link HashSet}
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public Set<RuleChangeListener> getListeners() {
 		return listeners;
@@ -164,8 +164,7 @@ public abstract class AbstractRuleList {
 	 * 
 	 * @return An identifier string for that RuleList type.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public abstract RulesListType getTypeID();
 
@@ -188,7 +187,7 @@ public abstract class AbstractRuleList {
 			LOGGER.debug("not firing event because there are "
 					+ stackQuites.size() + " 'quites' still on the stack");
 		}
-		
+
 	}
 
 	public void popQuite(RuleChangedEvent ruleChangedEvent) {
@@ -219,8 +218,7 @@ public abstract class AbstractRuleList {
 	 *            {@link RuleChangeListener} to remove
 	 * @return <code>false</code> if {@link RuleChangeListener} not found
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean removeListener(RuleChangeListener listener) {
 		return listeners.remove(listener);
@@ -236,5 +234,28 @@ public abstract class AbstractRuleList {
 	public GeometryForm getGeometryForm() {
 		return geometryForm;
 	}
-		
+
+	/**
+	 * If <code>false</code>, all rules in this filter will always evaluate to
+	 * false.<br/>
+	 * Allows to define whether all rules are enabled. If disabled, if doesn't
+	 * throw away all information, but just disables rules with an Always-False
+	 * filter.
+	 */
+	public void setEnabled(boolean enabled) {
+		if (enabled == this.enabled)
+			return;
+		this.enabled = enabled;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_ENABLED_STRING, this));
+	}
+
+	/**
+	 * If <code>false</code>, all rules in this filter will always evaluate to
+	 * false.
+	 */
+	public boolean isEnabled() {
+		return enabled;
+	}
+
 }

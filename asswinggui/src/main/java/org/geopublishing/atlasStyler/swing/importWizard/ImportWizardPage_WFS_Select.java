@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSDataStoreFactory;
 import org.netbeans.spi.wizard.WizardPage;
@@ -28,6 +27,7 @@ import skrueger.geotools.io.WfsServerList;
 import skrueger.geotools.io.WfsServerSettings;
 import skrueger.geotools.io.WfsSettingsJComboBox;
 import skrueger.swing.SmallButton;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_WFS_Select extends WizardPage {
 

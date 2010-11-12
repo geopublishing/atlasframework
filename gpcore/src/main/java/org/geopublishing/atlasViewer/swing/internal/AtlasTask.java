@@ -19,6 +19,8 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
+import skrueger.swing.swingworker.AtlasStatusDialog;
+
 
 /**
  * super.done should be called when overwriting done !

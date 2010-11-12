@@ -27,6 +27,7 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Symbolizer;
 
 import schmitzm.swing.JPanel;
@@ -53,8 +54,8 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 			throw new IllegalStateException("A GUI can not be created if no RuleList is provided.");
 		this.singleSymbolRuleList = singleSymbolRuleList;
 		initialize();
-		singleSymbolRuleList.fireEvents(new RuleChangedEvent("GUI selected",
-				singleSymbolRuleList));
+//		singleSymbolRuleList.fireEvents(new RuleChangedEvent("GUI selected",
+//				singleSymbolRuleList));
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 		JLabel jLabelHeading = new JLabel(AtlasStyler
 				.R("SingleSymbolGUI.Heading.Label"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
-				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
+				AVSwingUtil.HEADING_FONT_SIZE));
 
 		this.setLayout(new MigLayout());
 		this.add(jLabelHeading, "span 2, wrap");

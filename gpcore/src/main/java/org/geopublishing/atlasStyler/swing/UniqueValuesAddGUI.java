@@ -37,8 +37,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
@@ -46,6 +44,8 @@ import skrueger.swing.AtlasDialog;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 import skrueger.swing.ThinButton;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesAddGUI extends AtlasDialog {
 	private static final Logger log = Logger

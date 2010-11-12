@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.netbeans.spi.wizard.WizardPage;
@@ -28,6 +27,7 @@ import skrueger.geotools.io.DbServerList;
 import skrueger.geotools.io.DbServerSettings;
 import skrueger.geotools.io.DbSettingsJComboBox;
 import skrueger.swing.SmallButton;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_DB_Select extends WizardPage {
 

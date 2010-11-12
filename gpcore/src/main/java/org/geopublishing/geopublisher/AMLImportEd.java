@@ -17,11 +17,12 @@ import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasCancelException;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.http.Webserver;
+
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 public class AMLImportEd extends AMLImport {
 	final static private Logger LOGGER = Logger.getLogger(AMLImportEd.class);

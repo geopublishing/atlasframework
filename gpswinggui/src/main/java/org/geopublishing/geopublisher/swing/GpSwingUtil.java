@@ -37,7 +37,6 @@ import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
@@ -49,6 +48,7 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.I8NUtil;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class GpSwingUtil extends GpUtil {
 

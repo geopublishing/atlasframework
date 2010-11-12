@@ -9,7 +9,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;

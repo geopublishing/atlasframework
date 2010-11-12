@@ -23,16 +23,12 @@ public class RuleChangedEvent {
 
 	private final AbstractRuleList sourceRL;
 
-	private final String string;
+	private final String reason;
+	
+	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RuleList";
 
-	//	
-	// public RuleChangedEvent( final AbstractRuleList sourceRL ) {
-	// this.sourceRL = sourceRL;
-	// string = "-";
-	// }
-
-	public RuleChangedEvent(String string, final AbstractRuleList sourceRL) {
-		this.string = string;
+	public RuleChangedEvent(String reason, final AbstractRuleList sourceRL) {
+		this.reason = reason;
 		this.sourceRL = sourceRL;
 	}
 
@@ -42,7 +38,7 @@ public class RuleChangedEvent {
 
 	@Override
 	public String toString() {
-		return string+" from RL: "+sourceRL.toString();
+		return ""+reason+" from RL: "+sourceRL.toString();
 	}
 
 }

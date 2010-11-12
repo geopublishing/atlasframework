@@ -62,7 +62,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
@@ -79,6 +78,8 @@ import skrueger.geotools.StyledLayerInterface;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 import skrueger.versionnumber.ReleaseUtil;
 import skrueger.versionnumber.ReleaseUtil.License;
 

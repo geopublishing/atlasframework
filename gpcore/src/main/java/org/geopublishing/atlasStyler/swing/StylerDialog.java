@@ -52,7 +52,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	final private AtlasStyler atlasStyler;
 
-	private final AtlasStylerTabbedPane tabbedPane;
+	private final AtlasStylerPane tabbedPane;
 
 	private JCheckBox jCheckboxPreview;
 
@@ -71,7 +71,8 @@ public class StylerDialog extends CancellableDialogAdapter {
 	public StylerDialog(Component owner, AtlasStyler atlasStyler) {
 		super(SwingUtil.getParentWindow(owner));
 		this.atlasStyler = atlasStyler;
-		this.tabbedPane = new AtlasStylerTabbedPane(atlasStyler);
+		atlasStyler.setOwner(this);
+		this.tabbedPane = new AtlasStylerPane(atlasStyler);
 		initialize();
 
 		pack();

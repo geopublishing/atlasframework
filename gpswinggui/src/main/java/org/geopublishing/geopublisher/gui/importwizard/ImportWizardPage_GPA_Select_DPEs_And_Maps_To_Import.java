@@ -17,8 +17,6 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.CheckableAtlasJTree;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -26,6 +24,8 @@ import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.jfree.chart.style.ChartStyle;
 import skrueger.swing.SmallButton;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		WizardPage {

@@ -2,12 +2,12 @@ package org.geopublishing.atlasViewer.swing;
 
 import java.io.IOException;
 
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import schmitzm.swing.TestingUtil;
+import skrueger.swing.swingworker.AtlasStatusDialog;
 
 public class JNLPSwingUtilTest {
 

@@ -23,14 +23,14 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.ExceptionDialog;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class MapPoolDuplicateAction extends AbstractAction {
 	final static private Logger LOGGER = Logger

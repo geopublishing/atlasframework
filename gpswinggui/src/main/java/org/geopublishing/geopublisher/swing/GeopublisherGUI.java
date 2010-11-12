@@ -56,9 +56,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geopublishing.geopublisher.ACETranslationPrinter;
 import org.geopublishing.geopublisher.AMLImportEd;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -87,6 +85,8 @@ import schmitzm.swing.SwingUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 import skrueger.versionnumber.ReleaseUtil;
 
 import com.lightdev.app.shtm.DocumentPane;

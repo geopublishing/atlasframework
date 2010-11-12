@@ -10,9 +10,10 @@ import javax.swing.Action;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.JNLPUtil;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 
 import schmitzm.swing.ExceptionDialog;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class DownloadAllJNLPAction extends AbstractAction {
 

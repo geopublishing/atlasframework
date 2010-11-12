@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -26,6 +25,7 @@ import org.geopublishing.geopublisher.dp.DpeImportUtil;
 import org.geotools.data.DataUtilities;
 
 import schmitzm.io.IOUtil;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 
 /**

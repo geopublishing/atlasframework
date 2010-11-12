@@ -40,9 +40,7 @@ import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
 import org.geotools.styling.Symbolizer;
@@ -52,6 +50,8 @@ import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 

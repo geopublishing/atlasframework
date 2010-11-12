@@ -54,7 +54,7 @@ import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
@@ -69,6 +69,7 @@ import skrueger.i8n.Translation;
 import skrueger.swing.ThinButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	protected Logger LOGGER = ASUtil.createLogger(this);
@@ -1188,7 +1189,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	private void initialize() {
 		jLabelHeading = new JLabel(AtlasStyler.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
-				AtlasStylerTabbedPane.HEADING_FONT_SIZE));
+				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
 		this.add(jLabelHeading, "center");

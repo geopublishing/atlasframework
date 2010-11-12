@@ -34,13 +34,11 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
-import org.geopublishing.atlasViewer.swing.internal.AtlasStatusDialog;
 import org.geotools.data.DataUtilities;
 import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;
 import org.jfree.util.Log;
@@ -50,9 +48,14 @@ import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class AVSwingUtil extends AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
+	
+	public final static float HEADING_FONT_SIZE = 14;
 
 	static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
 

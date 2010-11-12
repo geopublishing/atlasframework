@@ -15,7 +15,8 @@ import java.io.File;
 import java.net.URL;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.AtlasStatusDialogInterface;
+
+import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * This interface guarantees that you can edit and save the {@link AtlasConfig}

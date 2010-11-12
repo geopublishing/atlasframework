@@ -39,7 +39,6 @@ import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasSwingWorker;
 import org.geotools.data.DefaultQuery;
 import org.geotools.data.memory.MemoryFeatureCollection;
 import org.geotools.feature.FeatureCollection;
@@ -55,6 +54,7 @@ import schmitzm.swing.SwingUtil;
 import skrueger.i8n.LanguagesComboBox;
 import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.ThinButton;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
  * This GUI defines all the buttons to define the {@link TextSymbolizer}
@@ -95,7 +95,7 @@ public class TextRuleListGUI extends JPanel {
 			final AtlasStyler atlasStyler) {
 		this.rulesList = rulesList;
 		this.atlasStyler = atlasStyler;
-		rulesList.addDefaultClass();
+//		rulesList.addDefaultClass();
 
 		// Create components
 		initialize();

@@ -154,14 +154,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.jnlp</groupId>
-			<artifactId>jnlp</artifactId>
-			<version>1.6</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gpnatives</artifactId>
 			<version>${project.version}</version>
