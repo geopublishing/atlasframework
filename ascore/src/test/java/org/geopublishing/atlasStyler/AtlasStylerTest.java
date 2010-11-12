@@ -22,6 +22,8 @@ import java.util.Set;
 import javax.xml.transform.TransformerException;
 
 import org.geotools.data.FeatureSource;
+import org.geotools.styling.FeatureTypeStyle;
+import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -78,6 +80,7 @@ public class AtlasStylerTest {
 		assertEquals("FIPS_CNTRY", propName);
 		final UniqueValuesPolygonRuleList uniqueRL1 = as.getRlf()
 				.createUniqueValuesPolygonRulesList(true);
+		as.addRulesList(uniqueRL1);
 
 		uniqueRL1.setPropertyFieldName(propName, true);
 
@@ -103,15 +106,18 @@ public class AtlasStylerTest {
 		assertEquals(numFeatures, uniqueRL1.getLabels().size());
 		assertEquals(numFeatures, uniqueRL1.getSymbols().size());
 
-		assertTrue(StylingUtil.validates(uniqueRL1.getFTS()));
+		FeatureTypeStyle fts1 = uniqueRL1.getFTS();
+		assertTrue(StylingUtil.validates(fts1));
+		assertTrue(fts1.getName().startsWith("UNIQUE"));
 
-		org.geotools.styling.Style style1 = as.getStyle();
+		Style style1 = as.getStyle();
 
 		as = null;
 		// Create a new AtlasStyler
 		AtlasStyler as2 = new AtlasStyler(styledFeatures, style1, null, null);
-		UniqueValuesPolygonRuleList uniqueRL2 = as2.getRlf()
-				.createUniqueValuesPolygonRulesList(true);
+		assertEquals(1, as2.getRuleLists().size());
+		UniqueValuesPolygonRuleList uniqueRL2 = (UniqueValuesPolygonRuleList) as2
+				.getRuleLists().get(0);
 
 		assertEquals(uniqueRL1.isWithDefaultSymbol(),
 				uniqueRL2.isWithDefaultSymbol());
