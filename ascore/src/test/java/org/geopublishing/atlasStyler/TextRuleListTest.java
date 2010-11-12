@@ -400,10 +400,11 @@ public class TextRuleListTest {
 
 		as.importStyle(style);
 
-		TextRuleList textRulesList = as.getRlf().createTextRulesList(false);
+		assertTrue(as.getRuleLists().get(1) instanceof TextRuleList);
+		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(1);
 
 		assertEquals(
-				"3 testrules are expected since we one sime default and one language specific default with two label attributes",
+				"3 rules in the TextRulesList are expected since we have a general default and one language specific default with TWO label attributes",
 				3, as.getStyle().featureTypeStyles().get(1).rules().size());
 
 		assertEquals(2, textRulesList.countClasses());

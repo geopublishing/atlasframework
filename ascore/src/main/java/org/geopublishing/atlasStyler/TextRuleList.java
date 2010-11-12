@@ -131,12 +131,12 @@ public class TextRuleList extends AbstractRuleList {
 
 	/** Stores all {@link TextSymbolizer}s for all classes **/
 	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
-
-	/**
-	 * This defines whether all {@link TextSymbolizer} rules shall be disabled.
-	 * By default, a new Style doesn't have labels activated
-	 */
-	boolean enabled = false;
+//
+//	/**
+//	 * This defines whether all {@link TextSymbolizer} rules shall be disabled.
+//	 * By default, a new Style doesn't have labels activated
+//	 */
+//	boolean enabled = false;
 
 	private List<String> classesRuleNames = new ArrayList<String>();
 
@@ -760,12 +760,12 @@ public class TextRuleList extends AbstractRuleList {
 
 	}
 
-	/**
-	 * Are all {@link TextSymbolizer} classes disabled/enabled.
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
+//	/**
+//	 * Are all {@link TextSymbolizer} classes disabled/enabled.
+//	 */
+//	public boolean isEnabled() {
+//		return enabled;
+//	}
 
 	private void removeAllClassesButFirst() {
 		TextSymbolizer backupS = getClassSymbolizer(0);
