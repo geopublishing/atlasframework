@@ -55,8 +55,7 @@ public class AtlasMenuItem extends JMenuItem {
 	 * @param atlasConfig
 	 * @param child
 	 *            Object present as {@link JMenuItem}
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public AtlasMenuItem(Object child, AtlasViewerGUI atlasViewer) {
 
@@ -91,8 +90,8 @@ public class AtlasMenuItem extends JMenuItem {
 				setIcon(Icons.ICON_VIDEO_BIG);
 			else if (dpe instanceof DpLayerRaster)
 				setIcon(Icons.ICON_RASTER_BIG);
-//			else if (dpe instanceof DpLayerRasterPyramid)
-//				setIcon(Icons.ICON_RASTER_BIG);
+			// else if (dpe instanceof DpLayerRasterPyramid)
+			// setIcon(Icons.ICON_RASTER_BIG);
 			else if (dpe instanceof DpLayerVector) {
 				DpLayerVector dplv = (DpLayerVector) dpe;
 				setIcon(dplv.getType().getIconBig());
@@ -152,7 +151,9 @@ public class AtlasMenuItem extends JMenuItem {
 					ACTIONCMD_MAPPOOL_PREFIX.length());
 
 			// If this map
-			if (atlasViewer.getMap().getId().equals(mapId)) {
+			if (atlasViewer.getMap() != null
+					&& atlasViewer.getMap().getId() != null
+					&& atlasViewer.getMap().getId().equals(mapId)) {
 				setForeground(Color.lightGray);
 				super.paintComponent(g);
 				return;
