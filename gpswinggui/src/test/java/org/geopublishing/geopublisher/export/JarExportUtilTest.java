@@ -42,6 +42,7 @@ import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geotools.data.DataUtilities;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
@@ -256,6 +257,21 @@ public class JarExportUtilTest {
 
 		jeu.export(null);
 
+		String[] files = atlasExportTesttDir.list();
+		assertTrue((files[0].equals("JWS") && files[1].equals("DISK"))
+				|| (files[1].equals("JWS") && files[0].equals("DISK")));
+
+		File atlasDISKDir = new File(atlasExportTesttDir, "DISK");
+		File exeFile = new File(atlasDISKDir, "atlas.exe");
+
+		assertTrue(exeFile.delete());
+		assertFalse(exeFile + " must not exist after it's deletion",
+				exeFile.exists());
+
+		jeu.createJSmooth(atlasDISKDir);
+
+		assertTrue(exeFile + " must exist after creation", exeFile.exists());
+
 		// Temp dir created
 		assertExitsTempFilesCount(jeu.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 0);
 
@@ -379,6 +395,7 @@ public class JarExportUtilTest {
 	}
 
 	@Test
+	@Ignore
 	public void testJSmooth() throws Exception {
 
 		assertNotNull(atlasExportTesttDir);

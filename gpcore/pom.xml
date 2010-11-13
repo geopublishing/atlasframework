@@ -53,7 +53,7 @@
 								</for>
 
 								<native2ascii encoding="UTF8" src="src/main/resources"
-	includes="**/*.propertiesNative" dest="src/main/resources" ext=".properties" />
+									includes="**/*.propertiesNative" dest="src/main/resources" ext=".properties" />
 
 								<for param="file">
 									<path>
@@ -185,19 +185,28 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-imagepyramid</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--			<type>jar</type>-->
-<!--		</dependency>-->
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>ascore</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>org.geotools</groupId>-->
-<!--			<artifactId>gt-imagemosaic</artifactId>-->
-<!--			<version>${geotools.version}</version>-->
-<!--			<type>jar</type>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagepyramid</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
+
+		<!-- <dependency> -->
+		<!-- <groupId>org.geotools</groupId> -->
+		<!-- <artifactId>gt-imagemosaic</artifactId> -->
+		<!-- <version>${geotools.version}</version> -->
+		<!-- <type>jar</type> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 </project>
