@@ -136,7 +136,7 @@
 //				ICON_SYMBOLOGY, getSymbologyTab(), null);
 //
 //		// Only allow labeling, if there is at least one attribute field
-//		if (ASUtil.getValueFieldNames(
+//		if (FeatureUtil.getValueFieldNames(
 //				atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
 //			addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Labels"),
 //					ICON_LABELS,
@@ -205,7 +205,7 @@
 //
 //			// Unique values are only available if we have any fields other than
 //			// geometry
-//			if (ASUtil.getValueFieldNames(
+//			if (FeatureUtil.getValueFieldNames(
 //					atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
 //				cbmodel.addElement(AtlasStyler
 //						.R("StylerSelection.categories_unique_values"));

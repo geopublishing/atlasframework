@@ -61,6 +61,7 @@ import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.Symbolizer;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
@@ -184,7 +185,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 	 */
 	private AttributesJComboBox getJComboBoxValueField() {
 		AttributesJComboBox jComboBoxValueAttribute = new AttributesJComboBox(
-				atlasStyler, ASUtil.getValueFieldNames(rulesList
+				atlasStyler, FeatureUtil.getValueFieldNames(rulesList
 						.getStyledFeatures().getSchema()));
 
 		jComboBoxValueAttribute.setSelectedItem(rulesList

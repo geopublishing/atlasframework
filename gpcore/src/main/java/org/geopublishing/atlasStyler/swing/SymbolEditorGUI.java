@@ -73,8 +73,6 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	protected static final String PROPERTY_SYMBOL_CHANGED = "SYMBOL_CHANGED";
 	protected static final String PROPERTY_LAYERS_CHANGED = "LAYERS_CHANGED";
 
-	
-
 	private static final String DIALOG_TITLE = AtlasStyler
 			.R("SymbolEditor.Title");
 
@@ -218,8 +216,10 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		BufferedImage image;
 
 		try {
-			image = renderer.createImageForRule(rule, FeatureUtil
-					.createFeatureType(Point.class), SYMBOL_SIZE, bg);
+			image = renderer
+					.createImageForRule(rule,
+							FeatureUtil.createFeatureType(Point.class),
+							SYMBOL_SIZE, bg);
 		} catch (Exception e) {
 			LOGGER.warn(e.getMessage());
 			image = new BufferedImage(SYMBOL_SIZE.width, SYMBOL_SIZE.height,
@@ -258,15 +258,15 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	private JPanel getJPanelPreview() {
 		if (jPanelPreview == null) {
-			jLabelPreviewIcon = new JLabel(new ImageIcon(singleSymbolRuleList
-					.getImage(new Dimension(SYMBOL_SIZE.width,
-							SYMBOL_SIZE.height))));
+			jLabelPreviewIcon = new JLabel(new ImageIcon(
+					singleSymbolRuleList.getImage(new Dimension(
+							SYMBOL_SIZE.width, SYMBOL_SIZE.height))));
 
 			SymbolEditorGUI.this
 					.addPropertyChangeListener(listenerUpdatePreview);
 
-			jPanelPreview = new JPanel(new MigLayout(), AtlasStyler
-					.R("SymbolSelector.Preview.BorderTitle"));
+			jPanelPreview = new JPanel(new MigLayout(),
+					AtlasStyler.R("SymbolSelector.Preview.BorderTitle"));
 			jPanelPreview.add(jLabelPreviewIcon, "center");
 
 		}
@@ -280,8 +280,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	private JPanel getJPanelLayers() {
 		JPanel jPanelLayers;
-		jPanelLayers = new JPanel(new MigLayout(), AtlasStyler
-				.R("SymbolEditor.SymbolLayers"));
+		jPanelLayers = new JPanel(new MigLayout(),
+				AtlasStyler.R("SymbolEditor.SymbolLayers"));
 		jPanelLayers.add(new JScrollPane(getJTableLayers()), "wrap, top, w "
 				+ (SYMBOL_SIZE.width + 30) + ", h " + (SYMBOL_SIZE.height * 3)); // ,"top, wrap, growy, shrinkx"
 		// jPanelLayers.add(new JScrollPane(getJTableLayers()),"wrap");
@@ -295,7 +295,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	}
 
 	private Symbolizer guiIsUpToDateForThisSymbolizer = null;
-	
+
 	/**
 	 * This method initializes jPanel2
 	 * 
@@ -310,63 +310,61 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 			addPropertyChangeListener(new PropertyChangeListener() {
 
-
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if ((evt.getPropertyName().equals(PROPERTY_LAYER_SELECTION))
-//							|| (evt.getPropertyName()
-//									.equals(PROPERTY_LAYERS_CHANGED))
-									) 
-						
+					// || (evt.getPropertyName()
+					// .equals(PROPERTY_LAYERS_CHANGED))
+					)
+
 					{
 
 						if (selectedSymbolizer == null) {
 							jPanelProperties.removeAll();
-							jPanelProperties.add(new JLabel(AtlasStyler
-									.R("SymbolEditor.SelectALayer")),
+							jPanelProperties.add(
+									new JLabel(AtlasStyler
+											.R("SymbolEditor.SelectALayer")),
 									BorderLayout.CENTER);
 						} else {
-							
-							// Check, that the selected symbolizer really changed.. otherwise we are updating the GUI too often
-							if (selectedSymbolizer == guiIsUpToDateForThisSymbolizer) return; 
+
+							// Check, that the selected symbolizer really
+							// changed.. otherwise we are updating the GUI too
+							// often
+							if (selectedSymbolizer == guiIsUpToDateForThisSymbolizer)
+								return;
 
 							GeometryDescriptor ruleGeometry = singleSymbolRuleList
 									.getGeometryDescriptor();
 
-//							JTable tableLayers = getJTableLayers();
-//							int selectedRow = tableLayers.getSelectedRow();
+							// JTable tableLayers = getJTableLayers();
+							// int selectedRow = tableLayers.getSelectedRow();
 
 							JComponent symbolEditGUI = null;
 
+							switch (FeatureUtil.getGeometryForm(ruleGeometry)) {
+							case POINT:
+								Graphic graphic = ((PointSymbolizer) selectedSymbolizer)
+										.getGraphic();
+								symbolEditGUI = new GraphicEditGUI(graphic,
+										FeatureUtil
+												.createFeatureType(Point.class));
+								break;
+							case LINE:
+								symbolEditGUI = new LineSymbolEditGUI(
+										((org.geotools.styling.LineSymbolizer) selectedSymbolizer));
+								break;
+							case POLYGON:
+								symbolEditGUI = new PolygonSymbolEditGUI(
+										((PolygonSymbolizer) selectedSymbolizer));
+								break;
+							default:
+								throw new IllegalStateException(
+										"unrecognized type");
+							}
 
-								switch (FeatureUtil
-										.getGeometryForm(ruleGeometry)) {
-								case POINT:
-									Graphic graphic = ((PointSymbolizer) selectedSymbolizer)
-											.getGraphic();
-									symbolEditGUI = new GraphicEditGUI_Mig(
-											graphic,
-											FeatureUtil
-													.createFeatureType(Point.class));
-									break;
-								case LINE:
-									symbolEditGUI = new LineSymbolEditGUI(
-											((org.geotools.styling.LineSymbolizer) selectedSymbolizer));
-									break;
-								case POLYGON:
-									symbolEditGUI = new PolygonSymbolEditGUI(
-											((PolygonSymbolizer) selectedSymbolizer));
-									break;
-								default:
-									throw new IllegalStateException(
-											"unrecognized type");
-								}
-
-								symbolEditGUI
-										.addPropertyChangeListener(propagateL);
-//								LOGGER.debug("Adding propagateL to "
-//										+ symbolEditGUI);
-
+							symbolEditGUI.addPropertyChangeListener(propagateL);
+							// LOGGER.debug("Adding propagateL to "
+							// + symbolEditGUI);
 
 							/**
 							 * Update the jPanelProperties (if we have a GUI)
@@ -378,11 +376,11 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 							}
 						}
-						
+
 						// Re-Layout the GUI
 						pack();
 						jPanelProperties.repaint();
-						
+
 						guiIsUpToDateForThisSymbolizer = selectedSymbolizer;
 
 					}
@@ -405,8 +403,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			jTableLayers.setRowHeight(SYMBOL_SIZE.height + 2);
 
 			jTableLayers.getColumnModel().getColumn(0).setMaxWidth(20);
-			jTableLayers.getColumnModel().getColumn(1).setMaxWidth(
-					SYMBOL_SIZE.width + 2);
+			jTableLayers.getColumnModel().getColumn(1)
+					.setMaxWidth(SYMBOL_SIZE.width + 2);
 
 			jTableLayers.setDefaultRenderer(BufferedImage.class,
 					new TableCellRenderer() {
@@ -436,20 +434,19 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
 					if (evt.getPropertyName().equals(PROPERTY_LAYERS_CHANGED)) {
-						
+
 						int selectedRow = getJTableLayers().getSelectedRow();
 						getLayersTableModel().fireTableDataChanged();
 						getJTableLayers().getSelectionModel()
 								.addSelectionInterval(selectedRow, selectedRow);
-						
+
 					} else if ((evt.getPropertyName()
-									.equals(PROPERTY_SYMBOL_CHANGED)))
-					{
+							.equals(PROPERTY_SYMBOL_CHANGED))) {
 
 						for (int i = 0; i < getLayersTableModel().getRowCount(); i++) {
 							getLayersTableModel().fireTableCellUpdated(i, 1);
 						}
-						
+
 					}
 				}
 
@@ -534,8 +531,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 								.getSymbolizers();
 
 						ImageIcon imageIcon = new ImageIcon(getSymbolImage(
-								symbolizers.get(rowIndex), jTableLayers
-										.getBackground()));
+								symbolizers.get(rowIndex),
+								jTableLayers.getBackground()));
 
 						return imageIcon;
 
@@ -617,7 +614,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 						SymbolEditorGUI.this.firePropertyChange(
 								PROPERTY_LAYERS_CHANGED, null, null);
-												
+
 					}
 				}
 
@@ -652,8 +649,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	private JButton getJButtonLayerDown() {
 		if (jButtonLayerDown == null) {
-			jButtonLayerDown = new SmallButton(new AbstractAction("", Icons
-					.getDownArrowIcon()) {
+			jButtonLayerDown = new SmallButton(new AbstractAction("",
+					Icons.getDownArrowIcon()) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -670,13 +667,6 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 							jTableLayers.getSelectionModel()
 									.addSelectionInterval(0,
 											jTableLayers.getSelectedRow() + 1);
-							//
-							// // Clear the cache of all GUIs, as they are
-							// // chached with
-							// // their RowIndex as key (Sadly a
-							// // PointSymbolizer
-							// // doesn't have a name or title)
-							// editPropertiesGUICache.clear();
 
 							SymbolEditorGUI.this.firePropertyChange(
 									PROPERTY_LAYERS_CHANGED, null, null);
@@ -720,8 +710,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	private JButton getJButtonLayerUp() {
 		if (jButtonLayerUp == null) {
-			jButtonLayerUp = new SmallButton(new AbstractAction("", Icons
-					.getUpArrowIcon()) {
+			jButtonLayerUp = new SmallButton(new AbstractAction("",
+					Icons.getUpArrowIcon()) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -817,8 +807,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 	@Override
 	public void dispose() {
-		
-		if (isDisposed) return;
+
+		if (isDisposed)
+			return;
 
 		// Remove the listener that updated the preview and sends the events on
 		// to the next layer

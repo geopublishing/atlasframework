@@ -23,7 +23,7 @@ import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerUtil;
 
-public abstract class FeatureRuleList extends AbstractRuleList {
+public abstract class FeatureRuleList extends AbstractRulesList {
 
 	public static final String METAINFO_KVP_EQUALS_CHAR = "#";
 

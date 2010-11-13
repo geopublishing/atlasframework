@@ -40,7 +40,7 @@ import skrueger.geotools.LegendIconFeatureRenderer;
 import skrueger.i8n.Translation;
 
 public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
-		AbstractRuleList implements Copyable<SingleRuleList<SymbolizerType>> {
+		AbstractRulesList implements Copyable<SingleRuleList<SymbolizerType>> {
 	final static protected Logger LOGGER = ASUtil
 			.createLogger(SingleRuleList.class);
 
@@ -194,7 +194,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	@Override
 	public String getAtlasMetaInfoForFTSName() {
-		return getTypeID().toString();
+		return getType().toString();
 	}
 
 	/**

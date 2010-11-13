@@ -60,7 +60,7 @@ import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ColorButton;
 
-public class GraphicEditGUI_Mig extends AbstractEditGUI {
+public class GraphicEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	enum MARKTYPE {
@@ -114,8 +114,6 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 		}
 	};
 
-	
-
 	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://www.geopublishing.org/openmapsymbols/svg";
 
 	public static final String SVG_MIMETYPE = "image/svg+xml";
@@ -130,15 +128,15 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 	private JPanel jPanelStroke = null;
 
-	private JLabel jLabelStrokeColor = new JLabel();
+	private final JLabel jLabelStrokeColor = new JLabel();
 
 	private ColorButton jButtonStrokeColor = null;
 
-	private JLabel jLabelStrokeWidth = new JLabel();
+	private final JLabel jLabelStrokeWidth = new JLabel();
 
 	private JComboBox jComboBoxStrokeWidth = null;
 
-	private JLabel jLabelStrokeOpacity = new JLabel();
+	private final JLabel jLabelStrokeOpacity = new JLabel();
 
 	private JComboBox jComboBoxStrokeOpacity = null;
 
@@ -164,8 +162,8 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 	private JComboBox jComboBoxFillOpacity = null;
 
-	private final JLabel jLabelRotation = new JLabel(AtlasStyler
-			.R("RotationLabel"));
+	private final JLabel jLabelRotation = new JLabel(
+			AtlasStyler.R("RotationLabel"));
 
 	private JComboBox jComboBoxGraphicRotation = null;
 
@@ -177,21 +175,21 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 	Fill rememberFill;
 
-	private JCheckBox jCheckBoxDisplacement = null;
-
-	private JPanel jPanelDisplacement = null;
-
-	private JLabel jLabelDisplacementX = null;
-
-	private JComboBox jComboBoxDisplacementX = null;
-
-	private JLabel jLabelDisplacementY = null;
-
-	private JComboBox jComboBoxDisplacementY = null;
+	// private JCheckBox jCheckBoxDisplacement = null;
+	//
+	// private JPanel jPanelDisplacement = null;
+	//
+	// private JLabel jLabelDisplacementX = null;
+	//
+	// private JComboBox jComboBoxDisplacementX = null;
+	//
+	// private JLabel jLabelDisplacementY = null;
+	//
+	// private JComboBox jComboBoxDisplacementY = null;
 
 	private JPanel jPanelExternalGraphic = null;
 
-	private JLabel jLabelEG = new JLabel();
+	private final JLabel jLabelEG = new JLabel();
 
 	private JButton jButtonExtGraphic;
 
@@ -209,7 +207,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 	 **/
 	protected Mark backupMark = null;
 
-	private SimpleFeatureType graphicDefaultGeometry;
+	private final SimpleFeatureType graphicDefaultGeometry;
 
 	/**
 	 * This is the default constructor
@@ -219,7 +217,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 	 *            Optionally defines how the graphic will be used, so that it
 	 *            can make a good preview.
 	 */
-	public GraphicEditGUI_Mig(final Graphic graphic_,
+	public GraphicEditGUI(final Graphic graphic_,
 			SimpleFeatureType graphicDefaultGeometry) {
 
 		/**
@@ -245,10 +243,9 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 							.toWellKnownName()));
 		} else if (countGraphicalSymbols > 1) {
 			// We are loosing graphical symbols :-(
-			LOGGER
-					.warn("The Graphic "
-							+ graphic
-							+ " contains more than one graphical symbols. Only the first one will be kept.");
+			LOGGER.warn("The Graphic "
+					+ graphic
+					+ " contains more than one graphical symbols. Only the first one will be kept.");
 			GraphicalSymbol firstGraphicalSymbol = graphic.graphicalSymbols()
 					.get(0);
 			graphic.graphicalSymbols().clear();
@@ -290,8 +287,8 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 	 */
 	private JComboBox getJComboBoxMarkType() {
 		if (jComboBoxMarkType == null) {
-			jComboBoxMarkType = new JComboBox(new DefaultComboBoxModel(MARKTYPE
-					.values()));
+			jComboBoxMarkType = new JComboBox(new DefaultComboBoxModel(
+					MARKTYPE.values()));
 
 			// This renderer will use the labels from the localization
 			jComboBoxMarkType.setRenderer(new DefaultListCellRenderer() {
@@ -402,8 +399,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 							updateToMarkMode();
 						}
 
-						firePropertyChange(PROPERTY_UPDATED, null,
-								item);
+						firePropertyChange(PROPERTY_UPDATED, null, item);
 					}
 				}
 
@@ -529,7 +525,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 						}
 
 						Color newColor = AVSwingUtil.showColorChooser(
-								GraphicEditGUI_Mig.this, AtlasStyler
+								GraphicEditGUI.this, AtlasStyler
 										.R("Stroke.ColorChooserDialog.Title"),
 								oldColor);
 
@@ -545,7 +541,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 
 							jButtonStrokeColor.setColor(newColor);
 
-							GraphicEditGUI_Mig.this.firePropertyChange(
+							GraphicEditGUI.this.firePropertyChange(
 									PROPERTY_UPDATED, null, null);
 
 						}
@@ -835,8 +831,9 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 					color = Color.decode(substring);
 
 					Color newColor = AVSwingUtil.showColorChooser(
-							GraphicEditGUI_Mig.this, AtlasStyler
-									.R("Fill.ColorChooserDialog.Title"), color);
+							GraphicEditGUI.this,
+							AtlasStyler.R("Fill.ColorChooserDialog.Title"),
+							color);
 
 					if (newColor != null) {
 						Expression colorExpression = StylingUtil.STYLE_BUILDER
@@ -844,7 +841,7 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 						graphic.getMarks()[0].getFill().setColor(
 								colorExpression);
 
-						GraphicEditGUI_Mig.this.firePropertyChange(
+						GraphicEditGUI.this.firePropertyChange(
 								PROPERTY_UPDATED, null, null);
 
 						jButtonFillColor.setColor(newColor);
@@ -1285,9 +1282,9 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 			try {
 				URL url = externalGraphic.getLocation();
 
-				icon = svgFactory.getIcon(null, FilterUtil.FILTER_FAC2
-						.literal(url.toExternalForm()), externalGraphic
-						.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
+				icon = svgFactory.getIcon(null,
+						FilterUtil.FILTER_FAC2.literal(url.toExternalForm()),
+						externalGraphic.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
 				// if (renderedImage != null)
 				// icon = new ImageIcon(renderedImage);
 			} catch (Exception e) {
@@ -1317,10 +1314,10 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 		try {
 			if (selectExternalGraphicDialog == null) {
 
-				selectExternalGraphicDialog = new SVGSelector(SwingUtil
-						.getParentWindow(GraphicEditGUI_Mig.this),
-						graphicDefaultGeometry.getGeometryDescriptor(), graphic
-								.getExternalGraphics());
+				selectExternalGraphicDialog = new SVGSelector(
+						SwingUtil.getParentWindow(GraphicEditGUI.this),
+						graphicDefaultGeometry.getGeometryDescriptor(),
+						graphic.getExternalGraphics());
 
 				// selectExternalGraphicDialog = new SVGSelector(SwingUtil
 				// .getParentWindow(GraphicEditGUI4.this), Utilities
@@ -1346,23 +1343,21 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 											LOGGER.info("EG Location = "
 													+ egs[0].getLocation());
 										} catch (Exception e) {
-											LOGGER
-													.error(
-															"The ExternalGraphic is not valid. Removing it",
-															e);
+											LOGGER.error(
+													"The ExternalGraphic is not valid. Removing it",
+													e);
 											graphic.setExternalGraphics(null);
-											ExceptionDialog
-													.show(
-															SwingUtil
-																	.getParentWindowComponent(GraphicEditGUI_Mig.this),
-															e);
+											ExceptionDialog.show(
+													SwingUtil
+															.getParentWindowComponent(GraphicEditGUI.this),
+													e);
 										}
 										graphic.setExternalGraphics(egs);
 									} else {
 										graphic.setExternalGraphics(null);
 									}
 
-									GraphicEditGUI_Mig.this.firePropertyChange(
+									GraphicEditGUI.this.firePropertyChange(
 											AbstractEditGUI.PROPERTY_UPDATED,
 											null, null);
 
@@ -1376,8 +1371,10 @@ public class GraphicEditGUI_Mig extends AbstractEditGUI {
 			selectExternalGraphicDialog.setVisible(true);
 
 		} catch (Exception e1) {
-			ExceptionDialog.show(SwingUtil
-					.getParentWindowComponent(GraphicEditGUI_Mig.this), e1);
+			ExceptionDialog
+					.show(SwingUtil
+							.getParentWindowComponent(GraphicEditGUI.this),
+							e1);
 		}
 
 	}

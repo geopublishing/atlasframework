@@ -39,6 +39,7 @@ import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
@@ -133,7 +134,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		}
 	}
 
-	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm) {
 		super(styledFeatures, geometryForm);
 	}
 
@@ -318,7 +320,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	@Override
 	public String getAtlasMetaInfoForFTSName() {
-		final String metaInfoString = getTypeID().toString();
+		final String metaInfoString = getType().toString();
 
 		return metaInfoString;
 	}
@@ -371,7 +373,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	public String getPropertyFieldName() {
 		if (propertyFieldName == null) {
-			final List<String> valueFieldNames = ASUtil
+			final List<String> valueFieldNames = FeatureUtil
 					.getValueFieldNames(getStyledFeatures().getSchema());
 			if (valueFieldNames.size() > 0)
 				propertyFieldName = valueFieldNames.get(0);

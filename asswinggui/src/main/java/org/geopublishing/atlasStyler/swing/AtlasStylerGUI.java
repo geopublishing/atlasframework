@@ -111,7 +111,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	private StylerMapView stylerMapView = null;
 
-	final private HashMap<String, StyledFS> stledObjCache = new HashMap<String, StyledFS>();
+	final private HashMap<String, StyledFS> styledObjCache = new HashMap<String, StyledFS>();
 
 	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
 			getStylerMapView().getMapManager());
@@ -342,8 +342,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							String id = event.getLayer().getTitle();
 							LOGGER.debug("layer id=" + id + " removed");
 
-							askToSaveSld(stledObjCache.get(id));
-							stledObjCache.remove(id);
+							askToSaveSld(styledObjCache.get(id));
+							styledObjCache.remove(id);
 
 							// Dispose the datastore when removing the layer
 							DataStore openDs = openDatastores.get(id);
@@ -610,7 +610,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			}
 		}
 
-		stledObjCache.put(styledFS.getId(), styledFS);
+		styledObjCache.put(styledFS.getId(), styledFS);
 		return getMapManager().addStyledLayer(styledFS);
 	}
 

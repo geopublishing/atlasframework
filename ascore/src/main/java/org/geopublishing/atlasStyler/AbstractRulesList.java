@@ -10,41 +10,208 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler;
 
+import java.net.URL;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+
+import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
+import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.lang.LangUtil;
 
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)
  * styling {@link Rule}s is presented in AtlasStyler as a
- * {@link AbstractRuleList}
+ * {@link AbstractRulesList}
  * 
  * @author stefan
  * 
  */
-public abstract class AbstractRuleList {
+public abstract class AbstractRulesList {
 
-	public AbstractRuleList(GeometryForm geometryForm) {
+	public AbstractRulesList(GeometryForm geometryForm) {
 		this.geometryForm = geometryForm;
 	}
+
+	private final int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
+	private final int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;
 
 	/**
 	 * These enum names must not be changed anymore. We use them with
 	 * .tostring().equals(...)
 	 * 
+	 * TODO 2013: QUANTITIES_SIZED_LINE, QUANTITIES_SIZED_POINT,
+	 * UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POINT,
+	 * UNIQUE_VALUE_COMBINATIONS_POLYGONE
+	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public enum RulesListType {
-		QUANTITIES_COLORIZED_LINE, QUANTITIES_COLORIZED_POINT, QUANTITIES_COLORIZED_POLYGON, QUANTITIES_SIZED_LINE, QUANTITIES_SIZED_POINT, SINGLE_SYMBOL_LINE, SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POLYGON, TEXT_LABEL, UNIQUE_VALUE_COMBINATIONS_LINE, UNIQUE_VALUE_COMBINATIONS_POINT, UNIQUE_VALUE_COMBINATIONS_POLYGONE, UNIQUE_VALUE_LINE, UNIQUE_VALUE_POINT, UNIQUE_VALUE_POLYGON
+
+		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/single_point_symbol.png",
+				"StylerSelection.single_symbol_centroids"),
+
+		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
+				"StylerSelection.single_symbol_centroids"),
+
+		QUANTITIES_COLORIZED_LINE("/images/line_graduated_colors.png",
+				"StylerSelection.quantities_colored"),
+
+		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
+				"StylerSelection.quantities_colored"),
+
+		QUANTITIES_COLORIZED_POINT_FOR_POLYGON(
+				"/images/point_graduated_colors.png",
+				"StylerSelection.quantities_colored_centroids"),
+
+		QUANTITIES_COLORIZED_POLYGON("/images/polygon_graduated_colors.png",
+				"StylerSelection.quantities_colored"),
+
+		UNIQUE_VALUE_LINE("/images/line_unique_values.png",
+				"StylerSelection.categories_unique_values"),
+
+		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
+				"StylerSelection.categories_unique_values"),
+
+		UNIQUE_VALUE_POINT_FOR_POLYGON("/images/point_unique_values.png",
+				"StylerSelection.categories_unique_values_centroids"),
+
+		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
+				"StylerSelection.categories_unique_values_centroids"),
+
+		TEXT_LABEL("/images/text_labelling.png", "StylerSelection.textLabeling");
+
+		private final String imgResLocation;
+		private final String i8nKey;
+		private ImageIcon imageIcon;
+
+		RulesListType(String imgResLocation, String i8nKey) {
+			this.imgResLocation = imgResLocation;
+			this.i8nKey = i8nKey;
+		}
+
+		/**
+		 * @return a localized title for this {@link RulesListType}
+		 */
+		public String getTitle() {
+			return AtlasStyler.R(i8nKey);
+		}
+
+		/**
+		 * @return An example image for this {@link RulesListType}
+		 */
+		public ImageIcon getImage() {
+			if (imageIcon == null) {
+				URL resource = getClass().getResource(imgResLocation);
+				if (resource != null) {
+					imageIcon = new ImageIcon(resource);
+				}
+			}
+			return imageIcon;
+		}
+
+		/**
+		 * @return the RulesListTypes that make sense to create them for a given
+		 *         {@link GeometryForm}. If paramter schema is empty, the list
+		 *         does not filter against available attributes.
+		 */
+		RulesListType[] rlts;
+
+		public static RulesListType[] valuesFor(GeometryForm gf,
+				SimpleFeatureType schema) {
+
+			boolean hasText = true;
+			boolean hasNumeric = true;
+			if (schema != null) {
+				hasText = FeatureUtil.getValueFieldNames(schema).size()
+						- FeatureUtil.getNumericalFieldNames(schema).size() > 0;
+				hasNumeric = FeatureUtil.getNumericalFieldNames(schema).size() > 0;
+			}
+
+			if (gf == GeometryForm.POINT) {
+				RulesListType[] rtls = new RulesListType[] { SINGLE_SYMBOL_POINT };
+				if (hasText)
+					rtls = LangUtil.extendArray(rtls, TEXT_LABEL,
+							UNIQUE_VALUE_POINT);
+				if (hasNumeric)
+					rtls = LangUtil.extendArray(rtls,
+							QUANTITIES_COLORIZED_POINT);
+				return rtls;
+			}
+
+			if (gf == GeometryForm.LINE) {
+
+				RulesListType[] rtls = new RulesListType[] { SINGLE_SYMBOL_LINE };
+
+				if (hasText)
+					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_LINE,
+							TEXT_LABEL);
+				if (hasNumeric)
+					rtls = LangUtil
+							.extendArray(rtls, QUANTITIES_COLORIZED_LINE);
+				return rtls;
+
+			}
+
+			if (gf == GeometryForm.POLYGON) {
+
+				RulesListType[] rtls = new RulesListType[] {
+						SINGLE_SYMBOL_POLYGON, SINGLE_SYMBOL_POINT_FOR_POLYGON, };
+
+				if (hasText)
+					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_POLYGON,
+							UNIQUE_VALUE_POINT_FOR_POLYGON, TEXT_LABEL);
+				if (hasNumeric)
+					rtls = LangUtil.extendArray(rtls,
+							QUANTITIES_COLORIZED_POLYGON,
+							QUANTITIES_COLORIZED_POINT_FOR_POLYGON);
+				return rtls;
+
+			}
+
+			if (gf == GeometryForm.ANY) {
+
+				RulesListType[] rtls = new RulesListType[] {
+						SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_LINE,
+						SINGLE_SYMBOL_POLYGON };
+
+				if (hasText)
+					rtls = LangUtil
+							.extendArray(rtls, UNIQUE_VALUE_POLYGON,
+									UNIQUE_VALUE_POLYGON, UNIQUE_VALUE_LINE,
+									TEXT_LABEL);
+				if (hasNumeric)
+					rtls = LangUtil.extendArray(rtls,
+							QUANTITIES_COLORIZED_POLYGON,
+							QUANTITIES_COLORIZED_POINT,
+							QUANTITIES_COLORIZED_LINE);
+				return rtls;
+
+			}
+			// if (gf == GeometryForm.NONE) {
+			return new RulesListType[0];
+			// }
+		}
+
+		public String getImageResLocation() {
+			return imgResLocation;
+		}
 	}
 
 	RuleChangedEvent lastOpressedEvent = null;
@@ -90,7 +257,7 @@ public abstract class AbstractRuleList {
 
 	/**
 	 * Tells all {@link RuleChangeListener} that the {@link Rule}s represented
-	 * by this {@link AbstractRuleList} implementation have changed.
+	 * by this {@link AbstractRulesList} implementation have changed.
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
@@ -127,7 +294,7 @@ public abstract class AbstractRuleList {
 	 * If <code>false</code>, all rules in this filter will always evaluate to
 	 * false.
 	 */
-	private boolean enabled;
+	private boolean enabled = true;
 
 	/**
 	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
@@ -166,7 +333,7 @@ public abstract class AbstractRuleList {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public abstract RulesListType getTypeID();
+	public abstract RulesListType getType();
 
 	/**
 	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s

@@ -10,10 +10,14 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Window;
+import java.util.HashMap;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -22,13 +26,15 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRuleList;
+import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 
+import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.swing.JPanel;
 
 /**
@@ -36,11 +42,16 @@ import schmitzm.swing.JPanel;
  * side.
  * 
  */
-public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
+public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
+	/**
+	 * Caches the GUIs for the {@link RulesListsList}s
+	 */
+	private final HashMap<AbstractRulesList, JComponent> cachedRulesListGuis = new HashMap<AbstractRulesList, JComponent>();
+
 	private final JPanel jPanelRuleListEditor = new JPanel(new MigLayout(
-			"wrap 1"));
+			"wrap 1, fill"));
 
 	public final Icon ICON_SYMBOLOGY = new ImageIcon(
 			AtlasStylerPane.class.getResource("/images/symbology.png"));
@@ -50,30 +61,23 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 
 	private final AtlasStyler atlasStyler;
 
-	// final private JLabel jLabelRuleListeTypeImage = new JLabel();
-
-	// private JComboBox jComboBoxRuleListType = null;
-
 	/**
 	 * height and size of the little Images explaining the classification
 	 * options.
 	 */
-	private int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
-	private int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;
-
 	// ClosableSubwindows ?
 	private JComponent lastOpenEditorGUI;
 
-	private RulesListTablePanel rulesListsListTablePanel;
+	private RulesListsListTablePanel rulesListsListTablePanel;
 
-	private ListSelectionListener listenToSelectionInTable = new ListSelectionListener() {
+	private final ListSelectionListener listenToSelectionInTable = new ListSelectionListener() {
 
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			int selectedRow = getRulesListsListTablePanel().getRulesListTable()
 					.getSelectedRow();
 			if (selectedRow >= 0) {
-				AbstractRuleList abstractRuleList = atlasStyler.getRuleLists()
+				AbstractRulesList abstractRuleList = atlasStyler.getRuleLists()
 						.get(selectedRow);
 				changeEditorComponent(abstractRuleList);
 			} else {
@@ -86,17 +90,22 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 	};
 
 	public AtlasStylerPane(AtlasStyler atlasStyler) {
-
 		this.atlasStyler = atlasStyler;
-		//
-		// jLabelRuleListeTypeImage.setSize(IMAGE_WIDTH_SYMBOLIZATIONICON,
-		// IMAGE_HEIGHT_SYMBOLIZATIONICON);
+		initialize();
 
 		atlasStyler.setQuite(true);
-		initialize();
+
+		// Create all GUIs and cache them.
+		{
+			for (AbstractRulesList ruleList : atlasStyler.getRuleLists()) {
+				JComponent createEditorComponent = createEditorComponent(ruleList);
+			}
+		}
+
 		getRulesListsListTablePanel().getRulesListTable().getSelectionModel()
 				.addListSelectionListener(listenToSelectionInTable);
 		atlasStyler.setQuite(false);
+
 	}
 
 	public void changeEditorComponent(JComponent newComponent) {
@@ -106,10 +115,31 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 		invalidate();
 		// repaint();
 		validate();
+		Window owner = schmitzm.swing.SwingUtil.getParentWindow(this);
+		if (owner != null)
+			schmitzm.swing.SwingUtil.getParentWindow(this).pack();
 	};
 
-	public void changeEditorComponent(AbstractRuleList ruleList) {
-		JComponent newEditorGui = new JLabel();
+	/**
+	 * SHows the cached GUI for a {@link AbstractRulesList}. If not cached, a
+	 * new instance will be cached.
+	 */
+	public void changeEditorComponent(AbstractRulesList ruleList) {
+
+		JComponent newEditorGui = cachedRulesListGuis.get(ruleList);
+		if (newEditorGui == null) {
+			newEditorGui = createEditorComponent(ruleList);
+		}
+
+		changeEditorComponent(newEditorGui);
+	};
+
+	/**
+	 * Creates a new GUI for a {@link AbstractRulesList} and caches it.
+	 */
+	public JComponent createEditorComponent(AbstractRulesList ruleList) {
+
+		JComponent newEditorGui = createStatusLabel();
 		if (ruleList instanceof SingleRuleList)
 			newEditorGui = new SingleSymbolGUI((SingleRuleList<?>) ruleList);
 		else if (ruleList instanceof UniqueValuesRuleList)
@@ -122,52 +152,46 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 			newEditorGui = new TextRuleListGUI((TextRuleList) ruleList,
 					atlasStyler);
 
-		changeEditorComponent(newEditorGui);
+		cachedRulesListGuis.put(ruleList, newEditorGui);
+
+		return newEditorGui;
 	};
+
+	private JComponent createStatusLabel() {
+		String statusText = "<html>";
+
+		if (FeatureUtil.getValueFieldNames(
+				atlasStyler.getStyledFeatures().getSchema()).size() == 0) {
+			statusText += AtlasStyler
+					.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
+					+ "<br/>";
+		}
+		statusText += "</html>";
+
+		return new JLabel(statusText);
+	}
 
 	/**
 	 * Adds the tabs to the {@link JTabbedPane}
 	 */
 	private void initialize() {
 
-		setLayout(new MigLayout());
+		setOneTouchExpandable(true);
+		setDividerLocation(200);
 
-		add(getRulesListsListTablePanel());
-		// add(new JScrollPane(getRulesListTable()));
+		// setLayout(new MigLayout("top"));
 
-		// add(getButtonsPanel(), "wrap");
+		// add(getRulesListsListTablePanel(), "width 200:200:400, top, growx");
+		setLeftComponent(getRulesListsListTablePanel());
 
-		add(jPanelRuleListEditor, "width :500:700");
+		// add(jPanelRuleListEditor, "width 400:650:900, top, growx 200");
+		setRightComponent(jPanelRuleListEditor);
 
-		// addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Symbology"),
-		// ICON_SYMBOLOGY, getSymbologyTab(), null);
-		//
-		// // Only allow labeling, if there is at least one attribute field
-		// if (ASUtil.getValueFieldNames(
-		// atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
-		//
-		// addTab(AtlasStyler.R("AtlasStylerGUI.TabbedPane.Labels"),
-		// ICON_LABELS,
-		// new TextRuleListGUI(atlasStyler.getTextRulesList(),
-		// atlasStyler), null);
-		// } else {
-		// AVSwingUtil.showMessageDialog(this, AtlasStyler
-		// .R("TextRuleListGUI.notAvailableBecauseNoAttribsExist"));
-		// }
 	}
 
-	//
-	// private JPanel getButtonsPanel() {
-	// JPanel buttonsPanel = new JPanel();
-	//
-	// buttonsPanel.add(getAddButton())
-	//
-	// return buttonsPanel;
-	// }
-
-	private RulesListTablePanel getRulesListsListTablePanel() {
+	private RulesListsListTablePanel getRulesListsListTablePanel() {
 		if (rulesListsListTablePanel == null) {
-			rulesListsListTablePanel = new RulesListTablePanel(atlasStyler);
+			rulesListsListTablePanel = new RulesListsListTablePanel(atlasStyler);
 		}
 		return rulesListsListTablePanel;
 	}
@@ -231,7 +255,7 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 	//
 	// // Unique values are only available if we have any fields other than
 	// // geometry
-	// if (ASUtil.getValueFieldNames(
+	// if (FeatureUtil.getValueFieldNames(
 	// atlasStyler.getStyledFeatures().getSchema()).size() > 0) {
 	// cbmodel.addElement(AtlasStyler
 	// .R("StylerSelection.categories_unique_values"));
@@ -533,9 +557,11 @@ public class AtlasStylerPane extends JPanel implements ClosableSubwindows {
 
 	public void dispose() {
 
-		if (lastOpenEditorGUI != null
-				&& lastOpenEditorGUI instanceof ClosableSubwindows)
-			((ClosableSubwindows) lastOpenEditorGUI).dispose();
+		for (JComponent comp : cachedRulesListGuis.values()) {
+			if (comp != null && comp instanceof ClosableSubwindows)
+				((ClosableSubwindows) comp).dispose();
+		}
+		cachedRulesListGuis.clear();
 	}
 
 }

@@ -26,7 +26,7 @@ public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.UNIQUE_VALUE_POINT;
 	}
 

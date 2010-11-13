@@ -46,15 +46,13 @@ import com.vividsolutions.jts.geom.Polygon;
 public class GraphicEditGUIinDialog extends JDialog {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	
-
 	private JPanel jContentPane = null;
 
 	private JPanel jPanel1 = null;
 
 	private JButton jButtonOk = null;
 
-	private GraphicEditGUI_Mig jPanelEditGUI;
+	private GraphicEditGUI jPanelEditGUI;
 
 	private JButton jButtonCancel = null;
 
@@ -166,8 +164,8 @@ public class GraphicEditGUIinDialog extends JDialog {
 	private JPanel getJPanelEditGUI() {
 		if (jPanelEditGUI == null) {
 
-			jPanelEditGUI = new GraphicEditGUI_Mig(graphicFill, FeatureUtil
-					.createFeatureType(Polygon.class));
+			jPanelEditGUI = new GraphicEditGUI(graphicFill,
+					FeatureUtil.createFeatureType(Polygon.class));
 
 			// Update the Preview if the Icon is changed ... will change
 			// with clone?!

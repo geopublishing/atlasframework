@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
+import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;
@@ -82,7 +82,7 @@ public class AtlasStyler {
 	/**
 	 * List of rulelists
 	 */
-	private final RulesList ruleLists = new RulesList();
+	private final RulesListsList ruleLists = new RulesListsList();
 
 	/** All {@link AtlasStyler} related files will be saved blow this path */
 	private static File applicationPreferencesDir;
@@ -285,7 +285,7 @@ public class AtlasStyler {
 	 */
 	boolean automaticPreview = ASProps.getInt(ASProps.Keys.automaticPreview, 1) == 1;
 
-	private Double avgNN = null;
+	private final Double avgNN = null;
 
 	/**
 	 * *Backup of the {@link Style} as it was before the AtlasStyle touched it.
@@ -299,7 +299,7 @@ public class AtlasStyler {
 	 */
 	private List<Font> fonts = new ArrayList<Font>();
 
-	private AbstractRuleList lastChangedRuleList;
+	private AbstractRulesList lastChangedRuleList;
 
 	/**
 	 * This listener is attached to all rule lists and propagates any events as
@@ -312,7 +312,7 @@ public class AtlasStyler {
 			styleCached = null;
 
 			// Only the lastChangedRule will be used to create the Style
-			final AbstractRuleList someRuleList = e.getSourceRL();
+			final AbstractRulesList someRuleList = e.getSourceRL();
 
 			if (!(someRuleList instanceof TextRuleList)) {
 				lastChangedRuleList = someRuleList;
@@ -500,7 +500,7 @@ public class AtlasStyler {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private void fireStyleChangedEvents(final AbstractRuleList ruleList) {
+	private void fireStyleChangedEvents(final AbstractRulesList ruleList) {
 		if (!(ruleList instanceof TextRuleList)) {
 			lastChangedRuleList = ruleList;
 		}
@@ -592,7 +592,7 @@ public class AtlasStyler {
 	 * @param newRl
 	 *            newly selected RuleList
 	 */
-	void askToTransferTemplates(AbstractRuleList oldRl, FeatureRuleList newRl) {
+	void askToTransferTemplates(AbstractRulesList oldRl, FeatureRuleList newRl) {
 		if (oldRl == null || newRl == null || oldRl == newRl)
 			return;
 		if (oldRl.getGeometryForm() != newRl.getGeometryForm())
@@ -658,7 +658,7 @@ public class AtlasStyler {
 	 * @param newRl
 	 *            newly selected RuleList
 	 */
-	void askToTransferTemplates(AbstractRuleList oldRl, SingleRuleList newRl) {
+	void askToTransferTemplates(AbstractRulesList oldRl, SingleRuleList newRl) {
 
 		if (oldRl == null || oldRl == newRl)
 			return;
@@ -715,11 +715,11 @@ public class AtlasStyler {
 	}
 
 	/***************************************************************************
-	 * @return The last {@link AbstractRuleList} where change has been observed
+	 * @return The last {@link AbstractRulesList} where change has been observed
 	 *         via the {@link RuleChangeListener}. Never return the labeling
 	 *         TextRulesList. {@link #listenerFireStyleChange}
 	 */
-	public AbstractRuleList getLastChangedRuleList() {
+	public AbstractRulesList getLastChangedRuleList() {
 		return lastChangedRuleList;
 	}
 
@@ -796,7 +796,7 @@ public class AtlasStyler {
 			}
 
 			// TODO handle textRuleLists special at the end?
-			for (AbstractRuleList ruleList : getRuleLists()) {
+			for (AbstractRulesList ruleList : getRuleLists()) {
 				styleCached.featureTypeStyles().add(ruleList.getFTS());
 			}
 
@@ -880,7 +880,7 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * Tries to interpret a {@link Style} as {@link AbstractRuleList}s. Only
+	 * Tries to interpret a {@link Style} as {@link AbstractRulesList}s. Only
 	 * {@link FeatureTypeStyle}s with parameter <code>name</code> starting with
 	 * {@link RulesListType.SINGLE_SYMBOL_POINT} can be interpreted.
 	 * 
@@ -918,7 +918,7 @@ public class AtlasStyler {
 			try {
 				setQuite(true); // Quite the AtlasStyler!
 
-				AbstractRuleList importedThisAbstractRuleList = rlf.importFts(
+				AbstractRulesList importedThisAbstractRuleList = rlf.importFts(
 						fts, false);
 				if (importedThisAbstractRuleList != null) {
 
@@ -1076,7 +1076,7 @@ public class AtlasStyler {
 	}
 
 	public void setLastChangedRuleList(
-			final AbstractRuleList lastChangedRuleList) {
+			final AbstractRulesList lastChangedRuleList) {
 		this.lastChangedRuleList = lastChangedRuleList;
 		if (lastChangedRuleList != null) {
 			LOGGER.info("Changing LCRL manually to "
@@ -1117,15 +1117,18 @@ public class AtlasStyler {
 		return rlf;
 	}
 
-	public RulesList getRuleLists() {
+	public RulesListsList getRuleLists() {
 		return ruleLists;
 	}
 
-	public void addRulesList(AbstractRuleList importedThisAbstractRuleList) {
-		getRuleLists().add(importedThisAbstractRuleList);
+	/**
+	 * Adds an {@link AbstractRulesList} and add the listener to it!
+	 */
+	public void addRulesList(AbstractRulesList rulelist) {
+		getRuleLists().add(rulelist);
 
-		importedThisAbstractRuleList.addListener(listenerFireStyleChange);
-		fireStyleChangedEvents(importedThisAbstractRuleList);
+		rulelist.addListener(listenerFireStyleChange);
+		fireStyleChangedEvents(rulelist);
 
 	}
 

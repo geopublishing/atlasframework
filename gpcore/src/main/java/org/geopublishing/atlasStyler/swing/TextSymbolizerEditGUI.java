@@ -38,7 +38,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRuleList;
+import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
@@ -69,9 +69,7 @@ import schmitzm.swing.SwingUtil;
 import skrueger.swing.ColorButton;
 
 /**
- * TODO The preView features are not beeing closed/disposed securely
- * 
- * @author stefan
+ * TODO The preView features are not being closed/disposed securely
  * 
  */
 public class TextSymbolizerEditGUI extends AbstractEditGUI {
@@ -196,7 +194,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		final Style style = StylingUtil.STYLE_BUILDER.createStyle();
 
 		// We use the actual styling defined as the default
-		final AbstractRuleList lastChangedRuleList = atlasStyler
+		final AbstractRulesList lastChangedRuleList = atlasStyler
 				.getLastChangedRuleList();
 		if (lastChangedRuleList != null) {
 			style.featureTypeStyles().add(lastChangedRuleList.getFTS());
@@ -606,7 +604,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	private JComboBox getJComboBoxLabelField2() {
 		if (jComboBoxLabelField2 == null) {
 
-			final List<String> valueFieldNamesPrefereStrings = ASUtil
+			final List<String> valueFieldNamesPrefereStrings = FeatureUtil
 					.getValueFieldNamesPrefereStrings(rulesList
 							.getStyledFeatures().getSchema(), true);
 
@@ -876,7 +874,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			 */
 
 			jComboBoxLabelField = new AttributesJComboBox(atlasStyler,
-					ASUtil.getValueFieldNamesPrefereStrings(rulesList
+					FeatureUtil.getValueFieldNamesPrefereStrings(rulesList
 							.getStyledFeatures().getSchema(), true));
 			jComboBoxLabelField.addItemListener(new ItemListener() {
 

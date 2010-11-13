@@ -24,7 +24,7 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.QUANTITIES_COLORIZED_POLYGON;
 	}
 

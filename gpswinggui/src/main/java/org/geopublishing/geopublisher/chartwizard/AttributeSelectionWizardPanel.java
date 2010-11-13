@@ -27,7 +27,6 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.FeatureSource;
@@ -45,14 +44,14 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 
 	private JLabel descriptionPanel;
 
-	private HashMap<Integer, AttributesJComboBox> attributJComboBoxes = new HashMap<Integer, AttributesJComboBox>();
+	private final HashMap<Integer, AttributesJComboBox> attributJComboBoxes = new HashMap<Integer, AttributesJComboBox>();
 
 	// private List<String> numericalAttNames;
 
-	private HashMap<Integer, JCheckBox> normalizeJCheckboxs = new HashMap<Integer, JCheckBox>();
-	private HashMap<Integer, JLabel> lables = new HashMap<Integer, JLabel>();
+	private final HashMap<Integer, JCheckBox> normalizeJCheckboxs = new HashMap<Integer, JCheckBox>();
+	private final HashMap<Integer, JLabel> lables = new HashMap<Integer, JLabel>();
 
-	private HashMap<Integer, JPanel> settingsPanels = new HashMap<Integer, JPanel>();
+	private final HashMap<Integer, JPanel> settingsPanels = new HashMap<Integer, JPanel>();
 
 	private ChartType lastChartType;
 
@@ -320,8 +319,8 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 			 */
 			final ChartType chartType = (ChartType) getWizardData(ChartWizard.CHARTTYPE);
 			if (idx == 0 && chartType.isCategoryAllowedForDomainAxis()) {
-				dataArray = ASUtil
-						.getValueFieldNames(featureSource.getSchema());
+				dataArray = FeatureUtil.getValueFieldNames(featureSource
+						.getSchema());
 			} else {
 				dataArray = FeatureUtil.getNumericalFieldNames(featureSource
 						.getSchema());
@@ -364,7 +363,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 						Object backupSelection = getAttribJComboBoxFor(idx - 1)
 								.getSelectedItem();
 						getAttribJComboBoxFor(idx - 1).setModel(
-								new DefaultComboBoxModel(ASUtil
+								new DefaultComboBoxModel(FeatureUtil
 										.getValueFieldNames(featureSource
 												.getSchema())));
 						getAttribJComboBoxFor(idx - 1).setSelectedItem(
@@ -374,7 +373,7 @@ public class AttributeSelectionWizardPanel extends WizardPage {
 						// LOGGER.debug("adding the null to " + (idx - 1));
 						Object backupSelection = getAttribJComboBoxFor(idx - 1)
 								.getSelectedItem();
-						Vector<String> dataArray = ASUtil
+						Vector<String> dataArray = FeatureUtil
 								.getValueFieldNames(featureSource.getSchema());
 						dataArray.insertElementAt(null, 0);
 						getAttribJComboBoxFor(idx - 1).setModel(

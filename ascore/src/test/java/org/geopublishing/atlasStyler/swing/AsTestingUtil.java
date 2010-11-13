@@ -1,7 +1,9 @@
 package org.geopublishing.atlasStyler.swing;
 
+import java.io.IOException;
 import java.net.URL;
 
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.styling.Style;
 
 import schmitzm.geotools.styling.StylingUtil;
@@ -9,13 +11,16 @@ import schmitzm.swing.TestingUtil;
 
 public class AsTestingUtil extends TestingUtil {
 
-	public enum TestSld {
+	/**
+	 * Provides access to SLDs
+	 */
+	public enum TestDatasetsSld {
 		textRulesDefaultLocalizedPre16("/oldLocalizedDefaultRule_pre16.sld"), textRulesPre15(
 				"/oldTextRuleClasses_Pre15.sld");
 
 		private final String resLoc;
 
-		TestSld(String resLoc) {
+		TestDatasetsSld(String resLoc) {
 			this.resLoc = resLoc;
 		}
 
@@ -31,6 +36,15 @@ public class AsTestingUtil extends TestingUtil {
 			return AsTestingUtil.class.getResource(resLoc);
 		}
 
+	}
+
+	/**
+	 * Provides an AtlasStyler linked with a StyledFS from the
+	 * {@link TestDatasetsVector}.
+	 */
+	public static AtlasStyler getAtlasStyler(TestDatasetsVector testdata)
+			throws IOException {
+		return new AtlasStyler(testdata.getStyledFS());
 	}
 
 }

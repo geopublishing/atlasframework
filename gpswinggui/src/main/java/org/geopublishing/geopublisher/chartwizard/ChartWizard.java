@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.data.FeatureSource;
 import org.netbeans.api.wizard.WizardDisplayer;
 import org.netbeans.spi.wizard.Wizard;
@@ -205,7 +204,7 @@ public class ChartWizard extends WizardBranchController {
 		 * We cache the total number if attributes and numerical attributes
 		 */
 		initialProperties.put(NUMBER_OF_ATTRIBS,
-				ASUtil.getValueFieldNames(featureSource, false, true).size());
+				FeatureUtil.getValueFieldNames(featureSource, false, true).size());
 		initialProperties.put(NUMBER_OF_NUMERIC_ATTRIBS, FeatureUtil
 				.getNumericalFieldNames(featureSource.getSchema(), false)
 				.size());

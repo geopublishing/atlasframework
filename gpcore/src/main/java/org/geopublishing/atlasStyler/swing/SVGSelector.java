@@ -753,11 +753,11 @@ public class SVGSelector extends JDialog {
 						/** ExternalGraphic to local Graphic * */
 						ExternalGraphic egLocal = ASUtil.SB
 								.createExternalGraphic(urlLocal,
-										GraphicEditGUI_Mig.SVG_MIMETYPE);
+										GraphicEditGUI.SVG_MIMETYPE);
 
 						/** ExternalGraphic to online Graphic * */
 						ExternalGraphic eg = ASUtil.SB.createExternalGraphic(
-								url, GraphicEditGUI_Mig.SVG_MIMETYPE);
+								url, GraphicEditGUI.SVG_MIMETYPE);
 
 						final SingleRuleList symbolRuleList;
 

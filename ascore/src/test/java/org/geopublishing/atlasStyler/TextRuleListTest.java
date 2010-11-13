@@ -24,9 +24,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
-import skrueger.geotools.StyledFS;
 
 public class TextRuleListTest {
 
@@ -35,10 +33,7 @@ public class TextRuleListTest {
 			CQLException {
 
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 
 		System.out.println("\n now testing with only the default filter");
 		trl.addDefaultClass();
@@ -91,10 +86,7 @@ public class TextRuleListTest {
 	public void testLanguageDefaultFilters() throws IOException, CQLException {
 
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -146,10 +138,7 @@ public class TextRuleListTest {
 	@Test
 	public void testLanguageDefaultClasses() throws IOException {
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -196,10 +185,7 @@ public class TextRuleListTest {
 	public void testLanguageClasses() throws IOException, CQLException,
 			TransformerException {
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -246,10 +232,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl2 = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 		trl2.importRules(trl.getRules());
 
 		FeatureTypeStyle fts2 = StylingUtil.STYLE_BUILDER
@@ -258,10 +241,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl3 = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 		trl3.importRules(trl2.getRules());
 
 		FeatureTypeStyle fts3 = StylingUtil.STYLE_BUILDER
@@ -290,10 +270,7 @@ public class TextRuleListTest {
 	public void testGetRuleAndReimport() throws IOException, CQLException,
 			TransformerException {
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 
 		trl.setEnabled(true);
 		trl.addDefaultClass();
@@ -310,10 +287,7 @@ public class TextRuleListTest {
 
 		// and Parse
 		TextRuleList trl2 = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 		trl2.importRules(trl.getRules());
 
 		System.out.println("after reimport  "
@@ -334,10 +308,7 @@ public class TextRuleListTest {
 	@Test
 	public void testExistsClass() throws IOException, CQLException {
 		TextRuleList trl = new TextRuleList(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)),
-				false);
+				TestDatasetsVector.arabicInHeader.getStyledFS(), false);
 		trl.setEnabled(true);
 		trl.addDefaultClass();
 		trl.addDefaultClass("de");
@@ -361,13 +332,11 @@ public class TextRuleListTest {
 	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
 	 */
 	public void testOldTextRuleParsedCorrectly() throws IOException {
-		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesPre15
+		org.geotools.styling.Style style = AsTestingUtil.TestDatasetsSld.textRulesPre15
 				.getStyle();
 
 		AtlasStyler as = new AtlasStyler(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
+				TestDatasetsVector.arabicInHeader.getStyledFS());
 
 		as.importStyle(style);
 
@@ -390,13 +359,11 @@ public class TextRuleListTest {
 	 */
 	public void testOldTextRuleDefaultLocalizedParsedCorrectly()
 			throws IOException {
-		org.geotools.styling.Style style = AsTestingUtil.TestSld.textRulesDefaultLocalizedPre16
+		org.geotools.styling.Style style = AsTestingUtil.TestDatasetsSld.textRulesDefaultLocalizedPre16
 				.getStyle();
 
 		AtlasStyler as = new AtlasStyler(
-				new StyledFS(
-						TestingUtil
-								.getTestFeatureSource(TestDatasetsVector.arabicInHeader)));
+				TestDatasetsVector.arabicInHeader.getStyledFS());
 
 		as.importStyle(style);
 

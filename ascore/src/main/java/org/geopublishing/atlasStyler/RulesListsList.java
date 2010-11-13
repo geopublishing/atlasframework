@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import org.geotools.util.WeakHashSet;
 
-public class RulesList extends ArrayList<AbstractRuleList> {
+public class RulesListsList extends ArrayList<AbstractRulesList> {
 
 	WeakHashSet<PropertyChangeListener> listeners = new WeakHashSet<PropertyChangeListener>(
 			PropertyChangeListener.class);
@@ -30,63 +30,71 @@ public class RulesList extends ArrayList<AbstractRuleList> {
 	}
 
 	@Override
-	public AbstractRuleList set(int index, AbstractRuleList element) {
+	public AbstractRulesList set(int index, AbstractRulesList element) {
+		AbstractRulesList r = super.set(index, element);
 		fireChangeListener();
-		return super.set(index, element);
+		return r;
 	}
 
 	@Override
-	public boolean add(AbstractRuleList e) {
+	public boolean add(AbstractRulesList e) {
+		boolean r = super.add(e);
 		fireChangeListener();
-		return super.add(e);
+		return r;
 	}
 
 	@Override
-	public void add(int index, AbstractRuleList element) {
-		fireChangeListener();
+	public void add(int index, AbstractRulesList element) {
 		super.add(index, element);
+		fireChangeListener();
 	}
 
 	@Override
-	public AbstractRuleList remove(int index) {
+	public AbstractRulesList remove(int index) {
+		AbstractRulesList r = super.remove(index);
 		fireChangeListener();
-		return super.remove(index);
+		return r;
 	}
 
 	@Override
 	public boolean remove(Object o) {
+		boolean r = super.remove(o);
 		fireChangeListener();
-		return super.remove(o);
+		return r;
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends AbstractRuleList> c) {
+	public boolean addAll(Collection<? extends AbstractRulesList> c) {
+		boolean addAll = super.addAll(c);
 		fireChangeListener();
-		return super.addAll(c);
+		return addAll;
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends AbstractRuleList> c) {
+	public boolean addAll(int index, Collection<? extends AbstractRulesList> c) {
+		boolean addAll = super.addAll(index, c);
 		fireChangeListener();
-		return super.addAll(index, c);
+		return addAll;
 	}
 
 	@Override
 	protected void removeRange(int fromIndex, int toIndex) {
-		fireChangeListener();
 		super.removeRange(fromIndex, toIndex);
+		fireChangeListener();
 	}
 
 	@Override
 	public boolean removeAll(Collection<?> c) {
+		boolean r = super.removeAll(c);
 		fireChangeListener();
-		return super.removeAll(c);
+		return r;
 	}
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
+		boolean r = super.retainAll(c);
 		fireChangeListener();
-		return super.retainAll(c);
+		return r;
 	}
 
 }

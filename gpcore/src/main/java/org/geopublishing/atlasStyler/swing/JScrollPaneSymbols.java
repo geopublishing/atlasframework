@@ -37,7 +37,7 @@ import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRuleList;
+import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleRuleList;
 
@@ -136,7 +136,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 					if ((e.getClickCount() == 2)
 							&& (e.getButton() == MouseEvent.BUTTON1)) {
-						final AbstractRuleList rl = (AbstractRuleList) jListSymbols
+						final AbstractRulesList rl = (AbstractRulesList) jListSymbols
 								.getModel().getElementAt(i);
 
 						// SwingUtilities.invokeLater(new Runnable() {

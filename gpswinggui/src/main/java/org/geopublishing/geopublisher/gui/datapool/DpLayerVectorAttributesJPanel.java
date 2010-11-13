@@ -92,7 +92,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 		if (schema == null)
 			return;
 
-		atts = ASUtil.getValueFieldNames(schema).size();
+		atts = FeatureUtil.getValueFieldNames(schema).size();
 
 		final List<String> numericalFieldNames = FeatureUtil
 				.getNumericalFieldNames(schema);

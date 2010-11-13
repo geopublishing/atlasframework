@@ -176,7 +176,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.SINGLE_SYMBOL_POINT;
 	}
 

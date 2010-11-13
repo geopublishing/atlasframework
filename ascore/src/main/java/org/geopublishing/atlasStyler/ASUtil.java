@@ -27,12 +27,9 @@ import java.io.Reader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -53,7 +50,6 @@ import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;
-import org.geotools.data.FeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Fill;
@@ -68,7 +64,6 @@ import org.geotools.styling.Stroke;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
 import org.geotools.styling.Symbolizer;
-import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryDescriptor;
@@ -623,7 +618,8 @@ public class ASUtil {
 		return rl;
 	}
 
-	public static SingleRuleList<? extends Symbolizer> getDefaultTemplate(final GeometryForm geomForm) {
+	public static SingleRuleList<? extends Symbolizer> getDefaultTemplate(
+			final GeometryForm geomForm) {
 		if (geomForm == GeometryForm.POINT) {
 			return getDefaultPointTemplate();
 		} else if (geomForm == GeometryForm.LINE) {
@@ -880,129 +876,6 @@ public class ASUtil {
 			final SimpleFeatureType featureType) {
 		return getSymbolizerImage(symbolizer,
 				AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
-	}
-
-	/**
-	 * @return A {@link List} of {@link String}s representing VALUE field, e.g.
-	 *         fields that are not of any geometry type.
-	 * 
-	 * @param featureSource
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public static Vector<String> getValueFieldNames(
-			final FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
-			final boolean empty, boolean validOnly) {
-
-		return getValueFieldNames(featureSource.getSchema(), empty, validOnly);
-	}
-
-	/**
-	 * Returns a {@link Vector} of Attribute LocalNames, excluding any Geometry
-	 * columns
-	 */
-	public static Vector<String> getValueFieldNames(
-			final SimpleFeatureType schema) {
-		return getValueFieldNames(schema, false, true);
-	}
-
-	/**
-	 * @return A {@link List} of {@link String}s representing VALUE field, e.g.
-	 *         fields that are not of any geometry type.
-	 * 
-	 * @param featureSource
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public static Vector<String> getValueFieldNames(
-			final SimpleFeatureType featureType, final boolean empty,
-			boolean validOnly) {
-
-		final Vector<String> fieldNames = new Vector<String>();
-
-		final List<AttributeDescriptor> attributeDescs = featureType
-				.getAttributeDescriptors();
-
-		for (final AttributeDescriptor ad : attributeDescs) {
-
-			/** Ignore geometry columns **/
-			if (ad instanceof GeometryDescriptor)
-				continue;
-
-			/** Ignore names that do contain non ascii charaters **/
-			if (validOnly) {
-				// Only "normal" characters, digits and '_' allowed
-				if (!ad.getLocalName().matches("\\w+"))
-					continue;
-			}
-
-			fieldNames.add(ad.getLocalName());
-
-		}
-
-		if (empty)
-			fieldNames.add(0, "");
-
-		return fieldNames;
-	}
-
-	/**
-	 * Returns an list of simple attribute names, ordered by: numerical
-	 * attributes first. * @param validOnly if <code>true</code>, the list is
-	 * filtered for attribute names that do not contain any special characters
-	 */
-	public static Vector<String> getValueFieldNamesPrefereNumerical(
-			final SimpleFeatureType schema, final boolean empty,
-			boolean validOnly) {
-		final Vector<String> result = new Vector<String>();
-
-		if (empty)
-			result.add("");
-
-		final Vector<String> numericalFieldNames = FeatureUtil
-				.getNumericalFieldNames(schema, false, validOnly);
-		result.addAll(numericalFieldNames);
-		final Vector<String> valueFieldNames = getValueFieldNames(schema,
-				false, validOnly);
-		for (final String vaString : valueFieldNames) {
-			if (!result.contains(vaString)) {
-				result.add(vaString);
-			}
-		}
-
-		return result;
-	}
-
-	/**
-	 * Returns an list of simple attribute names, ordered by: text attributes
-	 * first. The list is filtered for attribute names that do not contain any
-	 * special characters.
-	 */
-	public static Vector<String> getValueFieldNamesPrefereStrings(
-			final SimpleFeatureType schema, final boolean empty) {
-		return getValueFieldNamesPrefereStrings(schema, empty, true);
-	}
-
-	/**
-	 * Returns an list of simple attribute names, ordered by: text attributes
-	 * first
-	 * 
-	 * @param validOnly
-	 *            if <code>true</code>, the list is filtered for attribute names
-	 *            that do not contain any special characters
-	 */
-	public static Vector<String> getValueFieldNamesPrefereStrings(
-			final SimpleFeatureType schema, final boolean empty,
-			boolean validOnly) {
-
-		final Vector<String> result = getValueFieldNamesPrefereNumerical(
-				schema, false, validOnly);
-		Collections.reverse(result);
-
-		if (empty)
-			result.add(0, "");
-
-		return result;
 	}
 
 	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(
@@ -1382,7 +1255,5 @@ public class ASUtil {
 		}
 		model.setSelectedItem(stringVal);
 	}
-	
-	
 
 }

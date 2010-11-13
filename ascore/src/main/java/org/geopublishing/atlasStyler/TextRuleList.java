@@ -42,7 +42,7 @@ import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
 
-public class TextRuleList extends AbstractRuleList {
+public class TextRuleList extends AbstractRulesList {
 
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
 
@@ -52,7 +52,7 @@ public class TextRuleList extends AbstractRuleList {
 	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
 			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
 			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
-	
+
 	/**
 	 * A Filter to mark that one class/rule has been disabled
 	 **/
@@ -112,16 +112,16 @@ public class TextRuleList extends AbstractRuleList {
 	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
 
 	/** Stores whether the class specific {@link TextSymbolizer}s are enabled **/
-	private List<Boolean> classesEnabled = new ArrayList<Boolean>();
+	private final List<Boolean> classesEnabled = new ArrayList<Boolean>();
 
 	/**
 	 * Stores whether the class is only valid for a special language. If
 	 * <code>null</code>, a class is not language-specific
 	 **/
-	private List<String> classesLanguages = new ArrayList<String>();
+	private final List<String> classesLanguages = new ArrayList<String>();
 
 	/** Stores all {@link Filter}s for all classes **/
-	private List<Filter> classesFilters = new ArrayList<Filter>();
+	private final List<Filter> classesFilters = new ArrayList<Filter>();
 
 	/** Stores all maxScale parameters for the classes **/
 	List<Double> classesMaxScales = new ArrayList<Double>();
@@ -131,18 +131,20 @@ public class TextRuleList extends AbstractRuleList {
 
 	/** Stores all {@link TextSymbolizer}s for all classes **/
 	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
-//
-//	/**
-//	 * This defines whether all {@link TextSymbolizer} rules shall be disabled.
-//	 * By default, a new Style doesn't have labels activated
-//	 */
-//	boolean enabled = false;
+	//
+	// /**
+	// * This defines whether all {@link TextSymbolizer} rules shall be
+	// disabled.
+	// * By default, a new Style doesn't have labels activated
+	// */
+	// boolean enabled = false;
 
 	private List<String> classesRuleNames = new ArrayList<String>();
 
 	/**
 	 * @deprecated move the selIdx out of this class
 	 */
+	@Deprecated
 	private int selIdx = 0;
 
 	final private StyledFeaturesInterface<?> styledFeatures;
@@ -153,10 +155,12 @@ public class TextRuleList extends AbstractRuleList {
 		this.styledFeatures = styledFeatures;
 	}
 
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
+			boolean withDefaults) {
 		super(GeometryForm.ANY);
 		this.styledFeatures = styledFeatures;
-		if (withDefaults) addDefaultClass();
+		if (withDefaults)
+			addDefaultClass();
 	}
 
 	/**
@@ -341,7 +345,7 @@ public class TextRuleList extends AbstractRuleList {
 		// TODO better default font!! with multiple families
 		Font sldFont = ASUtil.SB
 				.createFont("Times New Roman", false, false, 11);
-		List<String> valueFieldNamesPrefereStrings = ASUtil
+		List<String> valueFieldNamesPrefereStrings = FeatureUtil
 				.getValueFieldNamesPrefereStrings(getStyledFeatures()
 						.getSchema(), false);
 
@@ -401,6 +405,7 @@ public class TextRuleList extends AbstractRuleList {
 	/**
 	 * @deprecated move the selIdx out of this class
 	 */
+	@Deprecated
 	public String getRuleName() {
 		return classesRuleNames.get(selIdx);
 	}
@@ -514,6 +519,7 @@ public class TextRuleList extends AbstractRuleList {
 	 * @deprecated move the selIdx out of this class
 	 */
 
+	@Deprecated
 	public int getSelIdx() {
 		return selIdx;
 	}
@@ -527,6 +533,7 @@ public class TextRuleList extends AbstractRuleList {
 	 * @see #getSelIdx()
 	 * @deprecated move the selIdx out of this class
 	 */
+	@Deprecated
 	public TextSymbolizer getSymbolizer() {
 		return getClassSymbolizer(selIdx);
 	}
@@ -536,11 +543,11 @@ public class TextRuleList extends AbstractRuleList {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.TEXT_LABEL;
 	}
 
-	public void importClassesFromStyle(AbstractRuleList symbRL, Component owner) {
+	public void importClassesFromStyle(AbstractRulesList symbRL, Component owner) {
 
 		pushQuite();
 
@@ -760,12 +767,12 @@ public class TextRuleList extends AbstractRuleList {
 
 	}
 
-//	/**
-//	 * Are all {@link TextSymbolizer} classes disabled/enabled.
-//	 */
-//	public boolean isEnabled() {
-//		return enabled;
-//	}
+	// /**
+	// * Are all {@link TextSymbolizer} classes disabled/enabled.
+	// */
+	// public boolean isEnabled() {
+	// return enabled;
+	// }
 
 	private void removeAllClassesButFirst() {
 		TextSymbolizer backupS = getClassSymbolizer(0);
@@ -913,7 +920,7 @@ public class TextRuleList extends AbstractRuleList {
 			Function envFunction = (Function) ((BinaryComparisonAbstract) envEqualsLang)
 					.getExpression2();
 
-			Expression langExp = (Expression) ((BinaryComparisonAbstract) envEqualsLang)
+			Expression langExp = ((BinaryComparisonAbstract) envEqualsLang)
 					.getExpression1();
 
 			if (!envFunction.getName().equals("env"))
@@ -1050,6 +1057,7 @@ public class TextRuleList extends AbstractRuleList {
 	/**
 	 * @deprecated move the selIdx out of this class
 	 */
+	@Deprecated
 	public void setSelIdx(int selIdx) {
 		this.selIdx = selIdx;
 	}
@@ -1101,6 +1109,17 @@ public class TextRuleList extends AbstractRuleList {
 		if (index > classesSymbolizers.size() - 1)
 			return null;
 		return classesSymbolizers.get(index);
+	}
+
+	/**
+	 * @return <code>true</code> is at least one DEFAULT rule exists.
+	 */
+	public boolean hasDefault() {
+		for (String s : getRuleNames()) {
+			if (s != null && s.startsWith(DEFAULT_CLASS_RULENAME))
+				return true;
+		}
+		return false;
 	}
 
 }

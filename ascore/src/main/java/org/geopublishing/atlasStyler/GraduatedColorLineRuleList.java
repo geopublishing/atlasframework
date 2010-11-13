@@ -24,7 +24,7 @@ public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.QUANTITIES_COLORIZED_LINE;
 	}
 

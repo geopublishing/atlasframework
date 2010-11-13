@@ -139,7 +139,7 @@ public class SinglePolygonSymbolRuleList extends
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.SINGLE_SYMBOL_POLYGON;
 	}
 

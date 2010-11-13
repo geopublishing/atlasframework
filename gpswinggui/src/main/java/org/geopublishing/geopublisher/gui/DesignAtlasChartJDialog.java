@@ -53,7 +53,6 @@ import javax.swing.event.DocumentListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -636,7 +635,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 			final List<String> fieldNames;
 
 			if (chartStyle.getType().isCategoryAllowedForDomainAxis()) {
-				fieldNames = ASUtil.getValueFieldNames(schema);
+				fieldNames = FeatureUtil.getValueFieldNames(schema);
 			} else
 				fieldNames = FeatureUtil.getNumericalFieldNames(schema);
 			final AttributesJComboBox attribComboBox = new AttributesJComboBox(

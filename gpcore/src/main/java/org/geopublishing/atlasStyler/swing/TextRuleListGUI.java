@@ -31,9 +31,11 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRuleList;
+import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
@@ -88,6 +90,17 @@ public class TextRuleListGUI extends JPanel {
 
 	private ThinButton jButtonClassLangCopy;
 
+	private final RuleChangeListener listenerEnableDisableGUIwhenRLenabledDisabled = new RuleChangeListener() {
+
+		@Override
+		public void changed(RuleChangedEvent e) {
+			// If the enabled/disabled sate of the RL changed, change the
+			// GUI
+			if (rulesList.isEnabled() != TextRuleListGUI.this.isEnabled())
+				TextRuleListGUI.this.setEnabled(rulesList.isEnabled());
+		}
+	};
+
 	/**
 	 * This is the default constructor
 	 */
@@ -95,7 +108,6 @@ public class TextRuleListGUI extends JPanel {
 			final AtlasStyler atlasStyler) {
 		this.rulesList = rulesList;
 		this.atlasStyler = atlasStyler;
-//		rulesList.addDefaultClass();
 
 		// Create components
 		initialize();
@@ -113,6 +125,8 @@ public class TextRuleListGUI extends JPanel {
 		});
 		jButtonClassFromSymbols.setEnabled(!(atlasStyler
 				.getLastChangedRuleList() instanceof SingleRuleList));
+
+		rulesList.addListener(listenerEnableDisableGUIwhenRLenabledDisabled);
 
 	}
 
@@ -153,7 +167,7 @@ public class TextRuleListGUI extends JPanel {
 	 */
 	private void initialize() {
 		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top", "grow"));
-		this.add(getJCheckBoxEnabled(), "top");
+		// this.add(getJCheckBoxEnabled(), "top");
 		this.add(getJPanelClass());
 	}
 
@@ -231,7 +245,11 @@ public class TextRuleListGUI extends JPanel {
 			jComboBoxClass.setModel(new DefaultComboBoxModel(rulesList
 					.getRuleNames().toArray()));
 
-			jComboBoxClass.setSelectedIndex(0);
+			TextRuleList rulesList2 = rulesList;
+
+			// Select the first one if there are any classes.
+			if (jComboBoxClass.getModel().getSize() > 0)
+				jComboBoxClass.setSelectedIndex(0);
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxClass, false);
 
@@ -414,7 +432,7 @@ public class TextRuleListGUI extends JPanel {
 							// Can not happen anymore...
 							AVSwingUtil
 									.showMessageDialog(TextRuleListGUI.this,
-											"Class could could not be created. Maybe the class alreay exits?"); 
+											"Class could could not be created. Maybe the class alreay exits?");
 							return;
 						} else
 							rulesList.setSelIdx(newIdx);
@@ -531,7 +549,7 @@ public class TextRuleListGUI extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					AbstractRuleList symbRL = atlasStyler
+					AbstractRulesList symbRL = atlasStyler
 							.getLastChangedRuleList();
 
 					rulesList.importClassesFromStyle(symbRL,

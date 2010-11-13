@@ -2,26 +2,32 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.geopublishing.atlasStyler.AbstractRuleList;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.RulesListsList;
+
+import schmitzm.swing.SwingUtil;
 
 public class RulesListTable extends JTable {
 
 	private static final int COLIDX_NAME = 0;
 	public static final int COLIDX_ENABLED = 1;
-	private ArrayList<AbstractRuleList> rulesList;
+	private final RulesListsList rulesList;
 	private final AtlasStyler atlasStyler;
 
-	private PropertyChangeListener updateOnRulesListsListChanges = new PropertyChangeListener() {
+	private final PropertyChangeListener updateOnRulesListsListChanges = new PropertyChangeListener() {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			((DefaultTableModel) getModel()).fireTableStructureChanged();
+
+			int rc = rulesList.size();
+			if (rc > 0) {
+				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
+			}
 		}
 	};
 
@@ -30,7 +36,9 @@ public class RulesListTable extends JTable {
 		rulesList = atlasStyler.getRuleLists();
 		setModel(new RulesListTableModel());
 
-		atlasStyler.getRuleLists().addListener(updateOnRulesListsListChanges);
+		rulesList.addListener(updateOnRulesListsListChanges);
+
+		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 25, 40);
 	}
 
 	class RulesListTableModel extends DefaultTableModel {
@@ -50,9 +58,9 @@ public class RulesListTable extends JTable {
 
 			switch (column) {
 			case COLIDX_NAME:
-				return "name"; // i8n
+				return "type"; // i8n
 			case COLIDX_ENABLED:
-				return "enabled"; // i8n
+				return "on"; // i8n
 			default:
 				return super.getColumnName(column);
 			}

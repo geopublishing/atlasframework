@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
-import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
+import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
@@ -124,7 +124,7 @@ public class QuantitiesRuleListTest {
 		AtlasStyler as = new AtlasStyler(
 				TestingUtil.TestDatasetsVector.arabicInHeader.getFeatureSource());
 
-		as.importStyle(AsTestingUtil.TestSld.textRulesDefaultLocalizedPre16
+		as.importStyle(AsTestingUtil.TestDatasetsSld.textRulesDefaultLocalizedPre16
 				.getStyle());
 
 		assertTrue(as.getLastChangedRuleList() instanceof QuantitiesRuleList);
@@ -160,7 +160,7 @@ public class QuantitiesRuleListTest {
 				.get(0));
 
 		assertEquals(RulesListType.QUANTITIES_COLORIZED_POLYGON,
-				colorRl.getTypeID());
+				colorRl.getType());
 		assertEquals("SURFACE", colorRl.getValue_field_name());
 		assertEquals(null, colorRl.getNormalizer_field_name());
 		assertEquals("[ SURFACE IS NULL ]", colorRl.getNoDataFilter()

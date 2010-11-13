@@ -77,7 +77,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	 */
 	@Override
 	public String getAtlasMetaInfoForFTSName() {
-		String metaInfoString = getTypeID().toString();
+		String metaInfoString = getType().toString();
 
 		metaInfoString = extendMetaInfoString(metaInfoString);
 
@@ -306,7 +306,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	public void parseMetaInfoString(String metaInfoString,
 			FeatureTypeStyle importFTS) {
 
-		metaInfoString = metaInfoString.substring(getTypeID().toString()
+		metaInfoString = metaInfoString.substring(getType().toString()
 				.length());
 
 		super.parseMetaInfoString(metaInfoString);

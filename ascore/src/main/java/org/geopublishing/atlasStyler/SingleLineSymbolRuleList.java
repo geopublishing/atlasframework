@@ -106,7 +106,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	}
 
 	@Override
-	public RulesListType getTypeID() {
+	public RulesListType getType() {
 		return RulesListType.SINGLE_SYMBOL_LINE;
 	}
 

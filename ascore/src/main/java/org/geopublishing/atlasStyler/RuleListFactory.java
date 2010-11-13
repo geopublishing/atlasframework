@@ -6,7 +6,7 @@ import java.util.TreeSet;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRuleList.RulesListType;
+import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.GeometryAttributeType;
 import org.geotools.styling.Description;
@@ -21,7 +21,7 @@ import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
 
 /**
- * Creates instances of {@link AbstractRuleList} implementations.
+ * Creates instances of {@link AbstractRulesList} implementations.
  */
 public class RuleListFactory {
 
@@ -84,12 +84,49 @@ public class RuleListFactory {
 		case ANY:
 			LOGGER.warn("returns a GraduatedColorPolygonRuleList for GeometryForm ANY");
 		case POLYGON:
-			return createGraduatedColorPolygonRuleList(withDefaults);
+			return createGraduatedColorPolygonRulesList(withDefaults);
 
 		case NONE:
 		default:
 			throw new RuntimeException("Unrecognized GeometryForm or NONE");
 		}
+	}
+
+	public AbstractRulesList createRulesList(RulesListType rlType,
+			boolean withDefaults) {
+
+		switch (rlType) {
+		case QUANTITIES_COLORIZED_LINE:
+			return createGraduatedColorLineRulesList(withDefaults);
+		case QUANTITIES_COLORIZED_POINT:
+		case QUANTITIES_COLORIZED_POINT_FOR_POLYGON:
+			return createGraduatedColorPointRulesList(withDefaults);
+		case QUANTITIES_COLORIZED_POLYGON:
+			return createGraduatedColorPolygonRulesList(withDefaults);
+
+		case SINGLE_SYMBOL_LINE:
+			return createSingleLineSymbolRulesList(withDefaults);
+		case SINGLE_SYMBOL_POINT:
+		case SINGLE_SYMBOL_POINT_FOR_POLYGON:
+			return createSinglePointSymbolRulesList(withDefaults);
+		case SINGLE_SYMBOL_POLYGON:
+			return createSinglePolygonSymbolRulesList(withDefaults);
+
+		case UNIQUE_VALUE_LINE:
+			return createUniqueValuesLineRulesList(withDefaults);
+		case UNIQUE_VALUE_POINT:
+		case UNIQUE_VALUE_POINT_FOR_POLYGON:
+			return createUniqueValuesPointRulesList(withDefaults);
+		case UNIQUE_VALUE_POLYGON:
+			return createUniqueValuesPolygonRulesList(withDefaults);
+
+		case TEXT_LABEL:
+			return createTextRulesList(withDefaults);
+
+		default:
+			throw new IllegalArgumentException("RulesListType not recognized");
+		}
+
 	}
 
 	public SingleRuleList createSingleRulesList(
@@ -232,8 +269,8 @@ public class RuleListFactory {
 		return uniqueValuesPolygonRuleList;
 	}
 
-	public AbstractRuleList importFts(FeatureTypeStyle fts, boolean withDefaults)
-			throws AtlasParsingException {
+	public AbstractRulesList importFts(FeatureTypeStyle fts,
+			boolean withDefaults) throws AtlasParsingException {
 
 		// final int anzRules = fts.rules().size();
 		// LOGGER.info("Importing: '" + metaInfoString
@@ -246,7 +283,7 @@ public class RuleListFactory {
 		}
 
 		// Singles
-		AbstractRuleList importedThisAbstractRuleList = importSingleRuleList(fts);
+		AbstractRulesList importedThisAbstractRuleList = importSingleRuleList(fts);
 		if (importedThisAbstractRuleList != null)
 			return importedThisAbstractRuleList;
 
@@ -302,12 +339,25 @@ public class RuleListFactory {
 	 * Importing everything that starts with TEXT, most likely a
 	 * RulesListType.TEXT_LABEL
 	 */
-	private AbstractRuleList importTextRulesList(FeatureTypeStyle fts) {
+	private AbstractRulesList importTextRulesList(FeatureTypeStyle fts) {
 		if (!fts.getName().startsWith(RulesListType.TEXT_LABEL.toString()))
 			return null;
 
 		final TextRuleList textRulesList = createTextRulesList(false);
+
 		textRulesList.importRules(fts.rules());
+
+		if (!textRulesList.hasDefault()) {
+			LOGGER.info("Imported a TextRuleList without a DEFAULT class.");
+
+			int addDefaultClass = textRulesList.addDefaultClass();
+			if (textRulesList.isEnabled()) {
+				LOGGER.info("Added the default CLASS as disabled.");
+				textRulesList.setClassEnabled(addDefaultClass, false);
+			} else {
+				LOGGER.info("Added the default CLASS as enabled.");
+			}
+		}
 		return textRulesList;
 
 	}
@@ -320,7 +370,7 @@ public class RuleListFactory {
 		return textRulesList;
 	}
 
-	public GraduatedColorRuleList createGraduatedColorPolygonRuleList(
+	public GraduatedColorRuleList createGraduatedColorPolygonRulesList(
 			boolean withDefaults) {
 		GraduatedColorPolygonRuleList graduatedColorPolygonRuleList = new GraduatedColorPolygonRuleList(
 				styledFS);
@@ -341,7 +391,7 @@ public class RuleListFactory {
 		return graduatedColorPointRuleList;
 	}
 
-	private AbstractRuleList importGraduatedColorRulesList(FeatureTypeStyle fts) {
+	private AbstractRulesList importGraduatedColorRulesList(FeatureTypeStyle fts) {
 		String metaInfoString = fts.getName();
 
 		/***************************************************************
@@ -378,7 +428,7 @@ public class RuleListFactory {
 				.startsWith(RulesListType.QUANTITIES_COLORIZED_POLYGON
 						.toString())) {
 
-			quantitiesRuleList = createGraduatedColorPolygonRuleList(false);
+			quantitiesRuleList = createGraduatedColorPolygonRulesList(false);
 		}
 
 		else {
@@ -456,7 +506,7 @@ public class RuleListFactory {
 
 	}
 
-	private AbstractRuleList importUniqueValuesRulesList(FeatureTypeStyle fts) {
+	private AbstractRulesList importUniqueValuesRulesList(FeatureTypeStyle fts) {
 		final String metaInfoString = fts.getName();
 		/***************************************************************
 		 * Importing everything that starts with QUANTITIES

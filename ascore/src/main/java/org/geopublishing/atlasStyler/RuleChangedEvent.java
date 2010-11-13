@@ -13,7 +13,7 @@ package org.geopublishing.atlasStyler;
 import org.apache.log4j.Logger;
 
 /**
- * This event communicated the change of some {@link AbstractRuleList}.
+ * This event communicated the change of some {@link AbstractRulesList}.
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
@@ -21,18 +21,18 @@ import org.apache.log4j.Logger;
 public class RuleChangedEvent {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
-	private final AbstractRuleList sourceRL;
+	private final AbstractRulesList sourceRL;
 
 	private final String reason;
 	
 	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RuleList";
 
-	public RuleChangedEvent(String reason, final AbstractRuleList sourceRL) {
+	public RuleChangedEvent(String reason, final AbstractRulesList sourceRL) {
 		this.reason = reason;
 		this.sourceRL = sourceRL;
 	}
 
-	public AbstractRuleList getSourceRL() {
+	public AbstractRulesList getSourceRL() {
 		return sourceRL;
 	}
 
