@@ -17,6 +17,7 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
+import org.geotools.styling.Style;
 import org.geotools.styling.TextSymbolizer;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
@@ -332,8 +333,7 @@ public class TextRuleListTest {
 	 * Test whether textRules created with version prior to 1.5 are still correctly parsed
 	 */
 	public void testOldTextRuleParsedCorrectly() throws IOException {
-		org.geotools.styling.Style style = AsTestingUtil.TestDatasetsSld.textRulesPre15
-				.getStyle();
+		Style style = AsTestingUtil.TestDatasetsSld.textRulesPre15.getStyle();
 
 		AtlasStyler as = new AtlasStyler(
 				TestDatasetsVector.arabicInHeader.getStyledFS());
@@ -343,8 +343,8 @@ public class TextRuleListTest {
 		TextRuleList textRulesList = as.getRlf().createTextRulesList(true);
 
 		assertEquals(1, textRulesList.countClasses());
-		assertFalse(textRulesList.isEnabled());
 		assertTrue(textRulesList.isClassEnabled(0));
+		assertTrue(textRulesList.isEnabled());
 
 		assertNull(textRulesList.getClassLang(0));
 		assertEquals(TextRuleList.DEFAULT_FILTER_ALL_OTHERS,
