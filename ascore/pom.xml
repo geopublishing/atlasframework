@@ -163,35 +163,33 @@
 
 	<profiles>
 
-<!--		<profile>-->
-<!---->
-<!--			<id>w2uero</id>-->
-<!--			<build>-->
-<!--				<plugins>-->
-<!--					<plugin>-->
-<!--						<groupId>org.codehaus.mojo</groupId>-->
-<!--						<artifactId>exec-maven-plugin</artifactId>-->
-<!--						<version>1.1.1</version>-->
-<!--						<executions>-->
-<!--							<execution>-->
-<!--								<phase>compile</phase>-->
-<!--								<goals>-->
-<!--									<goal>java</goal>-->
-<!--								</goals>-->
-<!--								<configuration>-->
-<!--									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>-->
-<!--									<arguments>-->
-<!--										<argument>asdlocales/resourceProviderOperator.cfg</argument>-->
-<!--									</arguments>-->
-<!--								</configuration>-->
-<!--							</execution>-->
-<!--						</executions>-->
-<!--					</plugin>-->
-<!--				</plugins>-->
-<!--			</build>-->
-<!--			-->
-<!--		</profile>-->
-		
+		<profile>
+			<id>resourceOperationRemove</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<configuration>
+									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>
+									<arguments>
+										<argument>src/main/resources/locales/resourceProviderOperator.cfg</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
 	</profiles>
 
 </project>
