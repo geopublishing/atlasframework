@@ -64,7 +64,7 @@ public class AtlasStylerTest {
 		assertNotNull(as2);
 
 		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon),
-				null, null, null);
+				null, null, null, false);
 		assertNotNull(as3);
 	}
 
@@ -82,9 +82,9 @@ public class AtlasStylerTest {
 				.createUniqueValuesPolygonRulesList(true);
 		as.addRulesList(uniqueRL1);
 
+		uniqueRL1.addDefaultRule();
 		uniqueRL1.setPropertyFieldName(propName, true);
 
-		uniqueRL1.setWithDefaultSymbol(true);
 		Set<Object> allNew = uniqueRL1
 				.getAllUniqueValuesThatAreNotYetIncluded();
 
@@ -101,7 +101,7 @@ public class AtlasStylerTest {
 		assertEquals(numFeatures + 1, uniqueRL1.getSymbols().size());
 
 		// Now disable the Default Symbols and expect one rule less
-		uniqueRL1.setWithDefaultSymbol(false);
+		uniqueRL1.setDefaultRuleEnabled(false);
 		assertEquals(numFeatures, uniqueRL1.getValues().size());
 		assertEquals(numFeatures, uniqueRL1.getLabels().size());
 		assertEquals(numFeatures, uniqueRL1.getSymbols().size());
@@ -114,7 +114,8 @@ public class AtlasStylerTest {
 
 		as = null;
 		// Create a new AtlasStyler
-		AtlasStyler as2 = new AtlasStyler(styledFeatures, style1, null, null);
+		AtlasStyler as2 = new AtlasStyler(styledFeatures, style1, null, null,
+				null);
 		assertEquals(1, as2.getRuleLists().size());
 		UniqueValuesPolygonRuleList uniqueRL2 = (UniqueValuesPolygonRuleList) as2
 				.getRuleLists().get(0);

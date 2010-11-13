@@ -75,9 +75,8 @@ public class AVDialogManager {
 														StyleChangedEvent e) {
 													styledRaster.setStyle(e
 															.getStyle());
-													mapLayerLegend
-															.updateStyle(e
-																	.getStyle());
+													mapLayerLegend.updateStyle(e
+															.getStyle());
 
 													// Because events from this
 													// Dialog might also have
@@ -254,8 +253,7 @@ public class AVDialogManager {
 								 */
 								final AtlasStyler atlasStyler = new AtlasStyler(
 										styledFeatures, mapLayer.getStyle(),
-										mapLayer, null);
-								
+										mapLayer, null, true);
 
 								final MapLayerLegend mapLayerLegend = mapLegend
 										.getLayerLegendForId(styledFeatures

@@ -255,11 +255,28 @@ public class ASUtil {
 			final StyledLayerInterface<?> styledLayer) {
 		final Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
 
-		if (!(styledLayer instanceof StyledFeaturesInterface<?>))
+		if (!(styledLayer instanceof StyledFeaturesInterface<?>)) {
+			// Not compatible with AtlasStyler, but if it is no
+			// StyledFeaturesInterface, we are not in AtlasStyler. TODO: Is this
+			// a nice solution?
 			return loadStyle;
+		}
 
-		return new AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
-				loadStyle, null, null).getStyle();
+		// This method may not instantiate AtlasStyler with the styledLayer! It
+		// would be recursive!
+
+		StyledFeaturesInterface styledFs = (StyledFeaturesInterface) styledLayer;
+
+		// final Style compatibleStyle = new
+		// AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
+		// loadStyle, null, null).getStyle();
+		SingleRuleList<? extends Symbolizer> singleRulesList = new RuleListFactory(
+				styledFs).createSingleRulesList(true);
+
+		Style defaultStyle = StylingUtil.STYLE_BUILDER.createStyle();
+		defaultStyle.featureTypeStyles().add(singleRulesList.getFTS());
+
+		return defaultStyle;
 	}
 
 	public static Symbolizer createDefaultSymbolizer(

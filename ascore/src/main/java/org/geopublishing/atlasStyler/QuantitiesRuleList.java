@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
@@ -105,7 +106,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private String value_field_name;
 
-	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm) {
 		super(styledFeatures, geometryForm);
 		Collection<String> numericalFieldNames = FeatureUtil
 				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
@@ -433,12 +435,12 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		if (getValue_field_name() == null)
 			return classDigitsDecimalFormat;
 
-//		Class<?> binding = getStyledFeatures().getSchema()
-//				.getDescriptor(getValue_field_name()).getType().getBinding();
-//		if (binding == Integer.class || binding == Byte.class
-//				|| binding == Long.class) {
-//			return classDigitsIntegerFormat;
-//		}
 		return classDigitsDecimalFormat;
 	}
+
+	public void importFts(FeatureTypeStyle fts) {
+		throw new NotImplementedException(
+				"This method has not been implemented. Please email the developer how you got here.");
+	}
+
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.Vector;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -184,6 +185,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			return false;
 		}
 
+		// Just to ensure internal data structure integrity
 		test();
 
 		getSymbols().add(getTemplate().copy());
@@ -193,6 +195,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		fireEvents(new RuleChangedEvent("Added value: '" + uniqueValue + "'",
 				this));
 
+		// Just to ensure internal data structure integrity
 		test();
 
 		return true;
@@ -281,6 +284,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 *         rule.
 	 */
 	public int getAllOthersRuleIdx() {
+		// Just to ensure internal data structure integrity
 		test();
 		return getValues().indexOf(ALLOTHERS_IDENTIFICATION_VALUE);
 	}
@@ -371,6 +375,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		return getValues().size();
 	}
 
+	/**
+	 * Returns the name of the field that provides the labeling attribute.
+	 * Returns the first usable attribute if non has been selected before.
+	 */
 	public String getPropertyFieldName() {
 		if (propertyFieldName == null) {
 			final List<String> valueFieldNames = FeatureUtil
@@ -393,12 +401,13 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	@Override
 	public List<Rule> getRules() {
 
+		// Just to ensure internal data structure integrity
 		test();
 
 		List<Rule> rules = new ArrayList<Rule>();
 		int ruleCount = 0;
 
-		final PropertyName propertyFieldName2 = ASUtil.ff2
+		final PropertyName propertyName = ASUtil.ff2
 				.property(getPropertyFieldName());
 
 		for (final Object uniqueValue : getValues()) {
@@ -413,7 +422,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 				for (final Object uV : getValues()) {
 					if (!uV.equals(ALLOTHERS_IDENTIFICATION_VALUE)) {
-						filter = ASUtil.ff2.equals(propertyFieldName2,
+						filter = ASUtil.ff2.equals(propertyName,
 								ASUtil.ff2.literal(uV));
 
 						filters.add(filter);
@@ -441,12 +450,17 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					 </code>
 					 */
 					// filters.add(Utilities.allwaysFalseFilter);
-					filter = ASUtil.ff2.equals(propertyFieldName2,
+					// TODO, what are we doing there?
+					LOGGER.warn("What is going on here?");
+					filter = ASUtil.ff2.equals(propertyName,
 							ASUtil.ff2.literal("-9090909090"));
 					filters.add(filter);
 				}
 				// LOGGER.debug("filters size = "+filters.size());
-				final Or allor = ASUtil.ff2.or(filters);
+
+				final Or allor = FilterUtil.correctOrForValidation(ASUtil.ff2
+						.or(filters));
+
 				filter = ASUtil.ff2.not(allor);
 				/**
 				 * If we have at least one other filter, it look like this:
@@ -465,7 +479,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				 * 
 				 */
 			} else {
-				filter = ASUtil.ff2.equals(propertyFieldName2, value);
+				filter = ASUtil.ff2.equals(propertyName, value);
 				// Exclude the NODATA values
 				filter = ff2.and(ff2.not(getNoDataFilter()), filter);
 			}
@@ -490,8 +504,11 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 			rule.setMaxScaleDenominator(maxScaleDenominator);
 
-			rule.setFilter(filter);
 			rule.setTitle(getLabels().get(ruleCount));
+
+			// Adding the filter to the Rule.
+			filter = addRuleListEnabledDisabledFilter(filter);
+			rule.setFilter(filter);
 
 			rules.add(rule);
 			ruleCount++;
@@ -527,6 +544,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	 */
 	private void removeValue(final Object value) {
 
+		// Just to ensure internal data structure integrity
 		test();
 
 		final int idx = getValues().indexOf(value);
@@ -540,6 +558,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					+ value + "'");
 		}
 
+		// Just to ensure internal data structure integrity
 		test();
 
 		fireEvents(new RuleChangedEvent("Removed value " + value, this));
@@ -608,6 +627,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				+ getPropertyFieldName() + ". Other rules have been removed.",
 				this));
 
+		// Just to ensure internal data structure integrity
 		test();
 	}
 
@@ -616,7 +636,15 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		this.symbols = symbols;
 	}
 
-	public void setWithDefaultSymbol(final boolean withDefaultSymbol) {
+	public void addDefaultRule() {
+		setDefaultRuleEnabled(true);
+	}
+
+	public void removeDefaultRule() {
+		setDefaultRuleEnabled(false);
+	}
+
+	public void setDefaultRuleEnabled(final boolean withDefaultSymbol) {
 
 		pushQuite();
 
@@ -650,7 +678,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	}
 
 	/**
-	 * A helper method to debug
+	 * A helper method to debug and ensure internal data structure integrity.
 	 */
 	void test() {
 		// A Test!
@@ -664,6 +692,73 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 					+ LangUtil.stringConcatWithSep(" ", getValues()));
 			throw new RuntimeException(
 					"UniquevaluesRuleList is not in balance!");
+		}
+	}
+
+	public void importFts(FeatureTypeStyle fts) {
+
+		String metaInfoString = fts.getName();
+		pushQuite();
+		try {
+
+			parseMetaInfoString(metaInfoString, fts);
+
+			/***********************************************************
+			 * Parsing information in the RULEs
+			 * 
+			 * title, unique values, symbols=>singleRuleLists, template?
+			 */
+			int countRules = 0;
+			setDefaultRuleEnabled(false);
+			for (final Rule r : fts.rules()) {
+
+				if (r.getName() != null
+						&& r.getName().toString()
+								.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+					// This rule defines the NoDataSymbol
+					importNoDataRule(r);
+					continue;
+				}
+
+				test();
+
+				// Interpret Filter!
+				Filter filter = r.getFilter();
+
+				filter = parseRuleListEnabledDisabledFilter(filter);
+
+				final String[] strings = UniqueValuesRuleList
+						.interpretFilter(filter);
+
+				setPropertyFieldName(strings[0], false);
+
+				final Symbolizer[] symbolizers = r.getSymbolizers();
+
+				final SingleRuleList<? extends Symbolizer> singleRLprototype = getDefaultTemplate();
+
+				// Forget bout generics here!!!
+				final SingleRuleList<?> symbolRL = singleRLprototype.copy();
+
+				symbolRL.getSymbolizers().clear();
+				for (final Symbolizer symb : symbolizers) {
+					final Vector symbolizers2 = symbolRL.getSymbolizers();
+					symbolizers2.add(symb);
+				}
+				symbolRL.reverseSymbolizers();
+
+				// Finally set all three values into the RL
+				getLabels().add(r.getDescription().getTitle().toString());
+				getSymbols().add(symbolRL);
+				getValues().add(strings[1]);
+
+				test();
+
+				countRules++;
+			}
+
+			LOGGER.debug("Imported " + countRules + " UNIQUE rules ");
+		} finally {
+			popQuite();
 		}
 	}
 

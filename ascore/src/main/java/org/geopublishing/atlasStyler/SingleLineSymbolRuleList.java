@@ -25,7 +25,6 @@ import com.vividsolutions.jts.geom.LineString;
 
 public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
-
 	protected org.apache.log4j.Logger LOGGER = ASUtil.createLogger(this);
 
 	public SingleLineSymbolRuleList(String title) {
@@ -38,8 +37,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public void addNewDefaultLayer() {
-		addSymbolizer(ASUtil
-				.createDefaultSymbolizer(getGeometryDescriptor()));
+		addSymbolizer(ASUtil.createDefaultSymbolizer(getGeometryDescriptor()));
 	}
 
 	/**
@@ -48,12 +46,12 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	 * @param copyListeners
 	 *            If <code>true</code> the listeners are copied also.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public SingleRuleList clone(boolean copyListeners) {
-		SingleLineSymbolRuleList clone = new SingleLineSymbolRuleList(getTitle());
+		SingleLineSymbolRuleList clone = new SingleLineSymbolRuleList(
+				getTitle());
 		copyTo(clone);
 		return clone;
 	}
@@ -121,8 +119,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	 * given color paramter. Any other occurence of the original color will also
 	 * be replaced.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public void setColor(Color newColor) {

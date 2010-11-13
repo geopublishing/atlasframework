@@ -28,7 +28,6 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.TextSymbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Function;
@@ -43,39 +42,6 @@ import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
 
 public class TextRuleList extends AbstractRulesList {
-
-	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
-
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
-
-	/**
-	 * A Filter to mark that one class/rule has been disabled
-	 **/
-	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility. Will be removed in
-	 * 2.0
-	 **/
-	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("1"));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility. Will be removed in
-	 * 2.0
-	 **/
-	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("2"));
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
@@ -131,13 +97,6 @@ public class TextRuleList extends AbstractRulesList {
 
 	/** Stores all {@link TextSymbolizer}s for all classes **/
 	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
-	//
-	// /**
-	// * This defines whether all {@link TextSymbolizer} rules shall be
-	// disabled.
-	// * By default, a new Style doesn't have labels activated
-	// */
-	// boolean enabled = false;
 
 	private List<String> classesRuleNames = new ArrayList<String>();
 
@@ -173,13 +132,6 @@ public class TextRuleList extends AbstractRulesList {
 		pushQuite();
 
 		try {
-
-			// int idx = classesSymbolizers.size();
-			// setClassSymbolizer(idx, defaultTextSymbolizer);
-			// setClassFilter(idx, FILTER_DEFAULT_ALL_OTHERS_ID);
-			// setClassEnabled(idx, true);
-			// setClassLang(idx, lang);
-
 			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
 				LOGGER.debug("Not adding a default class for " + lang
 						+ " because an equal class already exits!");
@@ -276,7 +228,7 @@ public class TextRuleList extends AbstractRulesList {
 	 * 
 	 * @see #parseAndRemoveEnabledDisabledFilters(Filter, int)
 	 */
-	protected Filter addEnabledDisabledFilters(Filter filter, int idx) {
+	protected Filter addClassEnabledDisabledFilters(Filter filter, int idx) {
 
 		filter = addLanguageFilter(filter, idx);
 
@@ -287,12 +239,6 @@ public class TextRuleList extends AbstractRulesList {
 			filter = ff.and(classDisabledFilter, filter);
 		}
 
-		// Are all classes enabled?
-		if (isEnabled()) {
-			filter = ff.and(RL_ENABLED_FILTER, filter);
-		} else {
-			filter = ff.and(RL_DISABLED_FILTER, filter);
-		}
 		return filter;
 	}
 
@@ -417,6 +363,8 @@ public class TextRuleList extends AbstractRulesList {
 	@Override
 	public List<Rule> getRules() {
 
+		LOGGER.debug("Enabled Textrule = " + isEnabled());
+
 		ArrayList<Rule> rules = new ArrayList<Rule>();
 
 		for (int i = 0; i < classesSymbolizers.size(); i++) {
@@ -482,8 +430,11 @@ public class TextRuleList extends AbstractRulesList {
 				}
 
 				Filter secondNotEmpty = ASUtil.ff2.not(secondLabelNodataFilter);
-				rule.setFilter(addEnabledDisabledFilters(
-						ASUtil.ff.and(secondNotEmpty, filter), i));
+				filter = ASUtil.ff.and(secondNotEmpty, filter);
+				filter = addClassEnabledDisabledFilters(filter, i);
+				filter = addRuleListEnabledDisabledFilter(filter);
+				rule.setFilter(filter);
+
 				rules.add(rule);
 
 				// Not the fallbackrule in case that the second attribute IS
@@ -491,16 +442,20 @@ public class TextRuleList extends AbstractRulesList {
 				DuplicatingStyleVisitor duplicatingRuleVisitor = new DuplicatingStyleVisitor();
 				duplicatingRuleVisitor.visit(rule);
 				Rule fallbackRule = (Rule) duplicatingRuleVisitor.getCopy();
-				fallbackRule.setName("DONTIMPORT");
-				fallbackRule.setFilter(addEnabledDisabledFilters(
-						ASUtil.ff.and(secondLabelNodataFilter, filter), i));
+				fallbackRule.setName(RULENAME_DONTIMPORT);
+				filter = ASUtil.ff.and(secondLabelNodataFilter, filter);
+				filter = addClassEnabledDisabledFilters(filter, i);
+				filter = addRuleListEnabledDisabledFilter(filter);
+				fallbackRule.setFilter(filter);
 				final TextSymbolizer ts2 = (TextSymbolizer) fallbackRule
 						.symbolizers().get(0);
 				StylingUtil.setDoublePropertyName(ts2, firstPropertyName, null);
 				rules.add(fallbackRule);
 			} else {
 				// No second labeling property set
-				rule.setFilter(addEnabledDisabledFilters(filter, i));
+				filter = addClassEnabledDisabledFilters(filter, i);
+				filter = addRuleListEnabledDisabledFilter(filter);
+				rule.setFilter(filter);
 				rules.add(rule);
 			}
 
@@ -712,14 +667,15 @@ public class TextRuleList extends AbstractRulesList {
 
 				Filter filter = rule.getFilter();
 				try {
+					filter = parseAndRemoveEnabledDisabledFilters(filter, idx);
+
 					// When using two label properties, we have two rules for
 					// one
 					// label class. So we drop it.
 					String ruleName = rule.getName();
-					if (ruleName != null && ruleName.equals("DONTIMPORT"))
+					if (ruleName != null
+							&& ruleName.equals(RULENAME_DONTIMPORT))
 						continue;
-
-					filter = parseAndRemoveEnabledDisabledFilters(filter, idx);
 
 					if (ruleName.startsWith(DEFAULT_CLASS_RULENAME)
 							|| filter.equals(oldClassesEnabledFilter)
@@ -826,7 +782,7 @@ public class TextRuleList extends AbstractRulesList {
 
 	/**
 	 * Interprets the filters added by
-	 * {@link #addEnabledDisabledFilters(Filter, int)}
+	 * {@link #addClassEnabledDisabledFilters(Filter, int)}
 	 * 
 	 * @param idx
 	 *            the index of the label class (0=default)
@@ -837,31 +793,7 @@ public class TextRuleList extends AbstractRulesList {
 
 		final Filter fullFilter = filter;
 
-		/**
-		 * Interpreting whether all classes at once are disabled/enabled.
-		 */
-		try {
-			List<?> andChildren = ((AndImpl) filter).getChildren();
-			if (andChildren.get(0).equals(RL_DISABLED_FILTER)) {
-				setEnabled(false);
-			} else if (andChildren.get(0).equals(oldAllClassesDisabledFilter)) {
-				setEnabled(false);
-			} else if (andChildren.get(0).equals(RL_ENABLED_FILTER)) {
-				setEnabled(true);
-			} else if (andChildren.get(0).equals(OldAllClassesEnabledFilter)) {
-				setEnabled(true);
-			} else
-				throw new RuntimeException(andChildren.get(0).toString() + "\n"
-						+ fullFilter.toString());
-
-			filter = (Filter) andChildren.get(1);
-
-		} catch (Exception e) {
-			setEnabled(true);
-			LOGGER.warn(
-					"Couldn't interpret whether this TextRulesList is completely disabled or enabled. Assuming it is enabled.",
-					e);
-		}
+		filter = parseRuleListEnabledDisabledFilter(filter);
 
 		/**
 		 * Interpreting whether the class is disable/enables
@@ -926,26 +858,12 @@ public class TextRuleList extends AbstractRulesList {
 			if (!envFunction.getName().equals("env"))
 				throw new RuntimeException();
 
-			// if (langExp.toString().equals(XMapPane.ENV_LANG_DEFAULT)){
-			// setClassLang(idx, null);
-			// } else {
 			setClassLang(idx, langExp.toString());
-			// }
 
 			filter = (Filter) andChildren.get(1);
 
 		} catch (Exception e) {
 			setClassLang(idx, null);
-			//
-			// if (filter instanceof BinaryComparisonAbstract) {
-			// // All good, this is an old filter created with AS pre 1.5
-			// } else if (filter instanceof NotImpl) {
-			// // All good, this is the default filter without a language.
-			// } else {
-			// LOGGER.warn(
-			// "Couldn't interpret whether this TextRulesList CLASS is language-specific or not. Assuming it is not.",
-			// e);
-			// }
 		}
 		return filter;
 	}
@@ -1044,14 +962,9 @@ public class TextRuleList extends AbstractRulesList {
 				"a text symbolizer class enablement has been set to " + b, this));
 	}
 
-	// public void setClassesFilters(List<Filter> filterRules) {
-	// this.classesFilters = filterRules;
-	// fireEvents(new RuleChangedEvent("setFilterRules", this));
-	// }
-
 	public void setRuleNames(List<String> ruleNames) {
 		this.classesRuleNames = ruleNames;
-		// No Event needed! Its just a name...
+		// No Event needs to be fired! Its just a name...
 	}
 
 	/**

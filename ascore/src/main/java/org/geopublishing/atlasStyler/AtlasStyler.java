@@ -80,7 +80,8 @@ public class AtlasStyler {
 	}
 
 	/**
-	 * List of rulelists
+	 * List of {@link AbstractRulesList}s that {@link AtlasStyler} is combining
+	 * to one {@link Style}.
 	 */
 	private final RulesListsList ruleLists = new RulesListsList();
 
@@ -362,13 +363,18 @@ public class AtlasStyler {
 	private final RuleListFactory rlf;
 
 	/**
+	 * A list of all exceptions/problems that occurred during import.
+	 */
+	final private List<Exception> importErrorLog = new ArrayList<Exception>();
+
+	/**
 	 * Create an AtlasStyler object for any {@link FeatureSource} and import the
 	 * given {@link Style}.
 	 */
 	public AtlasStyler(
 			FeatureSource<SimpleFeatureType, SimpleFeature> featureSource,
 			Style style) {
-		this(new StyledFS(featureSource), style, null, null);
+		this(new StyledFS(featureSource), style, null, null, null);
 	}
 
 	/**
@@ -376,7 +382,7 @@ public class AtlasStyler {
 	 * {@link StyledFeaturesInterface}
 	 */
 	public AtlasStyler(StyledFeaturesInterface<?> styledFeatures) {
-		this(styledFeatures, null, null, null);
+		this(styledFeatures, null, null, null, null);
 	}
 
 	/***************************************************************************
@@ -391,10 +397,13 @@ public class AtlasStyler {
 	 *            may be <code>null</code>
 	 * @param mapLayer
 	 *            may be <code>null</code>
+	 * @param withDefaults
+	 *            If <code>true</code>, and no RuleList can be imported, a
+	 *            default Rulelist will be added.
 	 */
 	public AtlasStyler(final StyledFeaturesInterface<?> styledFeatures,
 			Style loadStyle, final MapLayer mapLayer,
-			HashMap<String, Object> params) {
+			HashMap<String, Object> params, Boolean withDefaults) {
 		this.styledFeatures = styledFeatures;
 		this.rlf = new RuleListFactory(styledFeatures);
 
@@ -410,8 +419,7 @@ public class AtlasStyler {
 
 		// Calculating the averge distance to the next neightbou. this costs
 		// time!// TODO in another thread
-		// with GUI!// TODO in another thread
-		// with GUI! O check attributeMetaDataMap for that?!
+		// with GUI!// use attributeMetaDataMap to cache that?!
 		// avgNN = FeatureUtil.calcAvgNN(styledFeatures);
 
 		setTitle(styledFeatures.getTitle());
@@ -424,9 +432,14 @@ public class AtlasStyler {
 			if (styledFeatures.getStyle() != null) {
 				importStyle(styledFeatures.getStyle());
 			} else {
-				importStyle(ASUtil.createDefaultStyle(styledFeatures));
-			}
 
+				if (withDefaults != null && withDefaults == true) {
+					final SingleRuleList<? extends Symbolizer> defaultRl = rlf
+							.createSingleRulesList(true);
+					LOGGER.debug("Added default rulelist: " + defaultRl);
+					addRulesList(defaultRl);
+				}
+			}
 		}
 		setAttributeMetaDataMap(styledFeatures.getAttributeMetaDataMap());
 
@@ -449,8 +462,6 @@ public class AtlasStyler {
 	/**
 	 * Adds a {@link StyleChangeListener} to the {@link AtlasStyler} which gets
 	 * called whenever the {@link Style} has changed.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void addListener(final StyleChangeListener listener) {
 		listeners.add(listener);
@@ -472,11 +483,9 @@ public class AtlasStyler {
 	/**
 	 * Disposes the {@link AtlasStyler}. Tries to help the Java GC by removing
 	 * dependencies.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void dispose() {
-		styleCached = null;
+		reset();
 		listeners.clear();
 	}
 
@@ -485,8 +494,6 @@ public class AtlasStyler {
 	 * {@link Style}
 	 * 
 	 * Use this for {@link TextRuleList}
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void fireStyleChangedEvents() {
 		fireStyleChangedEvents(false);
@@ -764,11 +771,9 @@ public class AtlasStyler {
 					+ ReleaseUtil.getVersion(ASUtil.class));
 
 			if (getRuleLists().size() == 0) {
-				LOGGER.warn("Returning empty style, rulesList empty");
-				styleCached
-						.getDescription()
-						.setTitle(
-								"AS:Returning empty style because atlasStyler has no rules");
+				final String msfg = "AS:Returning empty style because atlasStyler has no rules!";
+				LOGGER.error(msfg);
+				styleCached.getDescription().setTitle(msfg);
 				return styleCached;
 			}
 
@@ -928,13 +933,15 @@ public class AtlasStyler {
 							.addListener(listenerFireStyleChange);
 					fireStyleChangedEvents(importedThisAbstractRuleList);
 				} else
-					throw new AtlasParsingException("importFts retuned null");
+					throw new AtlasParsingException("Importing fts " + fts
+							+ " retuned null. No more information available.");
 
 			} catch (final Exception importError) {
 				LOGGER.warn(
 						"Import error: " + importError.getLocalizedMessage(),
 						importError);
-				// TODO Inform about import failure
+
+				getImportErrorLog().add(importError);
 			} finally {
 				setQuite(false);
 			}
@@ -1008,7 +1015,7 @@ public class AtlasStyler {
 
 	/**
 	 * Before loading a style we have to forget everything we might have
-	 * imported before.have
+	 * imported before. Does not remove the listeners!
 	 */
 	public void reset() {
 
@@ -1117,19 +1124,30 @@ public class AtlasStyler {
 		return rlf;
 	}
 
+	/**
+	 * List of {@link AbstractRulesList}s that {@link AtlasStyler} is combining
+	 * to one {@link Style}.
+	 */
 	public RulesListsList getRuleLists() {
 		return ruleLists;
 	}
 
 	/**
-	 * Adds an {@link AbstractRulesList} and add the listener to it!
+	 * Adds an {@link AbstractRulesList} to the {@link #ruleLists} and adds a
+	 * listener to it.
 	 */
 	public void addRulesList(AbstractRulesList rulelist) {
 		getRuleLists().add(rulelist);
 
 		rulelist.addListener(listenerFireStyleChange);
 		fireStyleChangedEvents(rulelist);
+	}
 
+	/**
+	 * A list of all exceptions/problems that occurred during import.
+	 */
+	public List<Exception> getImportErrorLog() {
+		return importErrorLog;
 	}
 
 }

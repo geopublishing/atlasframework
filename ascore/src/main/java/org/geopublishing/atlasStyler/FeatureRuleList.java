@@ -31,7 +31,7 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 
 	/**
 	 * When importing {@link Rule}s, rules with this name are interpreted as the
-	 * "NODATA" rule.
+	 * "NODATA" rules. Usually there is only one.
 	 */
 	public static final String NODATA_RULE_NAME = "NODATA_RULE";
 
@@ -57,7 +57,7 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 	 * {@link #getNoDataSymbol()} and will propagate any template changes to
 	 * this rule list.
 	 */
-	private RuleChangeListener listenToNoDataRLChangesAndPropageToFeatureRL = new RuleChangeListener() {
+	private final RuleChangeListener listenToNoDataRLChangesAndPropageToFeatureRL = new RuleChangeListener() {
 
 		@Override
 		public void changed(RuleChangedEvent e) {
@@ -72,8 +72,9 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 
 	private SingleRuleList<? extends Symbolizer> template;
 
-	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
-		super( geometryForm);
+	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm) {
+		super(geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
 
@@ -168,8 +169,9 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 		// Symbolizer symbolizer =
 		// style.featureTypeStyles().get(0).rules().get(0).symbolizers().get(0);
 
-		SingleRuleList<? extends Symbolizer> rl = ASUtil.getDefaultNoDataSymbol(getGeometryForm(),
-				opacity, color, color);
+		SingleRuleList<? extends Symbolizer> rl = ASUtil
+				.getDefaultNoDataSymbol(getGeometryForm(), opacity, color,
+						color);
 		// rl.copyTo(getNoDataSymbol());
 
 		noDataSymbol = rl;

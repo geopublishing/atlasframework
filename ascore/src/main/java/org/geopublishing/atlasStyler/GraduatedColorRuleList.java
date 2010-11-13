@@ -13,6 +13,7 @@ package org.geopublishing.atlasStyler;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
@@ -27,6 +28,7 @@ import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.geotools.styling.StylingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
@@ -58,7 +60,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	 * {@link #getTemplate()} and will propagate any template changes to this
 	 * {@link GraduatedColorRuleList}
 	 */
-	private RuleChangeListener listenToTemplateRLChangesAndPropageToGraduateColorsRL = new RuleChangeListener() {
+	private final RuleChangeListener listenToTemplateRLChangesAndPropageToGraduateColorsRL = new RuleChangeListener() {
 
 		@Override
 		public void changed(RuleChangedEvent e) {
@@ -67,7 +69,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		}
 	};
 
-	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
+	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm) {
 		super(styledFeatures, geometryForm);
 	}
 
@@ -181,7 +184,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		 * Hence, to comply with SLD validity, if there is only one element in
 		 * the <code>ors</code> list, we remove the or around it.
 		 */
-		return FilterUtil.correctOrForValidation( ff2.or(ors) );
+		return FilterUtil.correctOrForValidation(ff2.or(ors));
 	}
 
 	@Override
@@ -204,6 +207,9 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		Literal upperRange = null;
 		Filter filter = null;
 
+		/**
+		 * One Rule for every Class:
+		 */
 		for (int i = 0; i < getNumClasses(); i++) {
 			Rule rule;
 
@@ -243,6 +249,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 			if (getNoDataFilter() != Filter.EXCLUDE)
 				filter = ff2.and(ff2.not(getNoDataFilter()), filter);
 
+			// Add the general on/off switch as the last AND filter
+			filter = addRuleListEnabledDisabledFilter(filter);
 			rule.setFilter(filter);
 
 			rule.setTitle(getRuleTitles().get(i));
@@ -306,8 +314,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	public void parseMetaInfoString(String metaInfoString,
 			FeatureTypeStyle importFTS) {
 
-		metaInfoString = metaInfoString.substring(getType().toString()
-				.length());
+		metaInfoString = metaInfoString
+				.substring(getType().toString().length());
 
 		super.parseMetaInfoString(metaInfoString);
 
@@ -372,6 +380,83 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		this.brewerPalette = newPalette;
 		setColors(null);
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
+	}
+
+	/**
+	 * Import the informations stored in a {@link FeatureTypeStyle} as a
+	 * {@link GraduatedColorRuleList}.
+	 */
+	@Override
+	public void importFts(FeatureTypeStyle fts) {
+		pushQuite();
+		String metaInfoString = fts.getName();
+		try {
+
+			// This also imports the template from the first rule.
+			this.parseMetaInfoString(metaInfoString, fts);
+
+			/***********************************************************
+			 * Parsing information in the RULEs
+			 * 
+			 * title, class limits
+			 */
+			int countRules = 0;
+			final TreeSet<Double> classLimits = new TreeSet<Double>();
+			double[] ds = null;
+			for (final Rule r : fts.rules()) {
+
+				if (r.getName().toString()
+						.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+					// This rule defines the NoDataSymbol
+					this.importNoDataRule(r);
+					continue;
+				}
+
+				// set Title
+				this.getRuleTitles().put(countRules,
+						r.getDescription().getTitle().toString());
+
+				// Class Limits
+				Filter filter = r.getFilter();
+
+				// Reving and preceeding Enabled/Disabled filter
+				filter = parseRuleListEnabledDisabledFilter(filter);
+
+				ds = interpretBetweenFilter(filter);
+				classLimits.add(ds[0]);
+
+				countRules++;
+			}
+			if (ds != null) {
+				// The last limit is only added if there have been
+				// any rules
+				classLimits.add(ds[1]);
+			}
+			setClassLimits(classLimits, false);
+
+			/**
+			 * Now determine the colors stored inside the symbolizers.
+			 */
+			for (int ri = 0; ri < countRules; ri++) {
+				// Import the dominant color from the symbolizers
+				// (they can differ from the palette colors, because
+				// they might have been changed manually.
+				for (final Symbolizer s : fts.rules().get(ri).getSymbolizers()) {
+
+					final Color c = StylingUtil.getSymbolizerColor(s);
+
+					if (c != null) {
+						// LOGGER.debug("Rule " + ri + " has color " + c);
+						this.getColors()[ri] = c;
+						break;
+					}
+				}
+
+			}
+
+		} finally {
+			this.popQuite();
+		}
 	}
 
 }

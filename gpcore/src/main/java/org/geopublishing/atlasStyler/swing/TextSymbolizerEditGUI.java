@@ -1050,13 +1050,14 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		bounds.expandBy(bounds.getSpan(0) * 1.5, bounds.getSpan(1));
 		previewMapPane.setMaxExtend(bounds);
 		previewMapPane.zoomToLayer(0, true);
+		previewMapPane.zoomTowards(previewMapPane.getMapArea().centre(), .1);
 
 		rulesList.addListener(ruleChangedUpadteThePreview);
 
 		// mapPane.setMinimumSize(new Dimension(300, 40));
 		previewMapPane.setMinimumSize(new Dimension(300, 120));
 
-		// A mouse listener to toggel anti-aliasing
+		// A mouse listener to toggle anti-aliasing of the preview pane
 		previewMapPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

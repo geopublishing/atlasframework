@@ -47,7 +47,7 @@ public class TextRuleListTest {
 					Filter filter = trl.getClassFilter(0);
 					trl.setClassEnabled(0, classEnable);
 
-					Filter filterAdded = trl.addEnabledDisabledFilters(
+					Filter filterAdded = trl.addClassEnabledDisabledFilters(
 							trl.getClassFilter(0), 0);
 					Filter filterRemoved = trl
 							.parseAndRemoveEnabledDisabledFilters(filterAdded,
@@ -406,4 +406,5 @@ public class TextRuleListTest {
 		assertEquals(TextRuleList.DEFAULT_CLASS_RULENAME,
 				textRulesList.getRuleName(0));
 	}
+
 }

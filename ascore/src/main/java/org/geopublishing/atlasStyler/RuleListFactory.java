@@ -1,22 +1,14 @@
 package org.geopublishing.atlasStyler;
 
-import java.awt.Color;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.GeometryAttributeType;
-import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
-import org.opengis.util.InternationalString;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.i8n.Translation;
 
@@ -49,6 +41,9 @@ public class RuleListFactory {
 				withDefaults);
 	}
 
+	/**
+	 * Uses the styledFeature's {@link GeometryForm}
+	 */
 	public UniqueValuesRuleList createUniqueValuesRulesList(boolean withDefaults) {
 		return createUniqueValuesRulesList(styledFS.getGeometryForm(),
 				withDefaults);
@@ -129,7 +124,7 @@ public class RuleListFactory {
 
 	}
 
-	public SingleRuleList createSingleRulesList(
+	public SingleRuleList<? extends Symbolizer> createSingleRulesList(
 			final GeometryForm geometryForm, boolean withDefaults) {
 		switch (geometryForm) {
 		case LINE:
@@ -139,9 +134,17 @@ public class RuleListFactory {
 		case POLYGON:
 			return createSinglePolygonSymbolRulesList(withDefaults);
 		default:
-			throw new IllegalArgumentException("Can create for type "
+			throw new IllegalArgumentException("Can't create for type "
 					+ geometryForm);
 		}
+	}
+
+	/**
+	 * Uses the styledFeature's {@link GeometryForm}
+	 */
+	public SingleRuleList<? extends Symbolizer> createSingleRulesList(
+			boolean withDefaults) {
+		return createSingleRulesList(styledFS.getGeometryForm(), withDefaults);
 	}
 
 	public SingleLineSymbolRuleList createSingleLineSymbolRulesList(
@@ -272,14 +275,11 @@ public class RuleListFactory {
 	public AbstractRulesList importFts(FeatureTypeStyle fts,
 			boolean withDefaults) throws AtlasParsingException {
 
-		// final int anzRules = fts.rules().size();
-		// LOGGER.info("Importing: '" + metaInfoString
-		// + "', has #Rules = " + anzRules);
-
 		final String metaInfoString = fts.getName();
 		if ((metaInfoString == null)) {
-			throw new AtlasParsingException(
-					"'featureStyleName' is empty! This FeatureTypeStyle can't be imported. It has not been created with AtlasStyler.");
+			throw new AtlasParsingException(ASUtil.R(
+					"AtlasStyler.ImportError.FTSParsing.ftsNameNull",
+					fts.toString()));
 		}
 
 		// Singles
@@ -302,37 +302,9 @@ public class RuleListFactory {
 		if (importedThisAbstractRuleList != null)
 			return importedThisAbstractRuleList;
 
-		throw new AtlasParsingException(
-				"This FeatureTypeStyle could not be imported. metaInfoString = "
-						+ metaInfoString);
-
-		//
-		// else {
-		// LOGGER.info("Importing a FTS failed because the name field (our metadata) could not be interpreted: '"
-		// + metaInfoString);
-		//
-		// /**
-		// * Adding default layers to all SingleRules
-		// */
-		// switch (FeatureUtil.getGeometryForm(styledFS.getSchema())) {
-		// case LINE:
-		// getSingleLineSymbolRulesList().addNewDefaultLayer();
-		// break;
-		// case POINT:
-		// getSinglePointSymbolRulesList().addNewDefaultLayer();
-		// break;
-		// case POLYGON:
-		// getSinglePolygonSymbolRulesList().addNewDefaultLayer();
-		// break;
-		//
-		// // TODO NONE AND ANY!
-		//
-		// }
-		//
-		// continue;
-		// }
-		// countImportedFeatureTypeStyles++;
-
+		throw new AtlasParsingException(ASUtil.R(
+				"AtlasStyler.ImportError.FTSParsing.ftsNameUnparsable",
+				metaInfoString));
 	}
 
 	/***************************************************************
@@ -391,16 +363,17 @@ public class RuleListFactory {
 		return graduatedColorPointRuleList;
 	}
 
-	private AbstractRulesList importGraduatedColorRulesList(FeatureTypeStyle fts) {
+	private GraduatedColorRuleList importGraduatedColorRulesList(
+			FeatureTypeStyle fts) {
 		String metaInfoString = fts.getName();
 
 		/***************************************************************
 		 * Importing everything that starts with QUANTITIES
 		 */
-		if (!metaInfoString.startsWith("QUANTITIES"))
+		if (!metaInfoString.startsWith("QUANTITIES_COLORIZED"))
 			return null;
 
-		QuantitiesRuleList<Double> quantitiesRuleList = null;
+		GraduatedColorRuleList quantitiesRuleList = null;
 
 		/***********************************************************
 		 * Importing a QUANTITIES_COLORIZED_POINT RuleList
@@ -436,73 +409,9 @@ public class RuleListFactory {
 					+ ", but is not recognized!");
 		}
 
-		quantitiesRuleList.pushQuite();
-		try {
+		quantitiesRuleList.importFts(fts);
 
-			// This also imports the template from the first rule.
-			quantitiesRuleList.parseMetaInfoString(metaInfoString, fts);
-
-			/***********************************************************
-			 * Parsing information in the RULEs
-			 * 
-			 * title, class limits
-			 */
-			int countRules = 0;
-			final TreeSet<Double> classLimits = new TreeSet<Double>();
-			double[] ds = null;
-			for (final Rule r : fts.rules()) {
-
-				if (r.getName().toString()
-						.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
-					// This rule defines the NoDataSymbol
-					quantitiesRuleList.importNoDataRule(r);
-					continue;
-				}
-
-				// set Title
-				quantitiesRuleList.getRuleTitles().put(countRules,
-						r.getDescription().getTitle().toString());
-
-				// Class Limits
-				ds = QuantitiesRuleList.interpretBetweenFilter(r.getFilter());
-				classLimits.add(ds[0]);
-
-				countRules++;
-			}
-			if (ds != null) {
-				// The last limit is only added if there have been
-				// any
-				// rules
-				classLimits.add(ds[1]);
-			}
-			quantitiesRuleList.setClassLimits(classLimits, false);
-
-			/**
-			 * Now determine the colors stored inside the symbolizers.
-			 */
-			for (int ri = 0; ri < countRules; ri++) {
-				// Import the dominant color from the symbolizers
-				// (they can differ from the palette colors, because
-				// they might have been changed manually.
-				for (final Symbolizer s : fts.rules().get(ri).getSymbolizers()) {
-
-					final Color c = StylingUtil.getSymbolizerColor(s);
-
-					if (c != null) {
-						// System.out.println("Rule " + ri
-						// + " has color " + c);
-						quantitiesRuleList.getColors()[ri] = c;
-						break;
-					}
-				}
-
-			}
-
-			return quantitiesRuleList;
-
-		} finally {
-			quantitiesRuleList.popQuite();
-		}
+		return quantitiesRuleList;
 
 	}
 
@@ -532,68 +441,7 @@ public class RuleListFactory {
 						+ ", but is not recognized!");
 			}
 
-			uniqueRuleList.pushQuite();
-			try {
-
-				uniqueRuleList.parseMetaInfoString(metaInfoString, fts);
-
-				/***********************************************************
-				 * Parsing information in the RULEs
-				 * 
-				 * title, unique values, symbols=>singleRuleLists, template?
-				 */
-				int countRules = 0;
-				uniqueRuleList.setWithDefaultSymbol(false);
-				for (final Rule r : fts.rules()) {
-
-					if (r.getName() != null
-							&& r.getName()
-									.toString()
-									.startsWith(
-											FeatureRuleList.NODATA_RULE_NAME)) {
-						// This rule defines the NoDataSymbol
-						uniqueRuleList.importNoDataRule(r);
-						continue;
-					}
-
-					uniqueRuleList.test();
-
-					// Interpret Filter!
-					final String[] strings = UniqueValuesRuleList
-							.interpretFilter(r.getFilter());
-
-					uniqueRuleList.setPropertyFieldName(strings[0], false);
-
-					final Symbolizer[] symbolizers = r.getSymbolizers();
-
-					final SingleRuleList<? extends Symbolizer> singleRLprototype = uniqueRuleList
-							.getDefaultTemplate();
-
-					// Forget bout generics here!!!
-					final SingleRuleList<?> symbolRL = singleRLprototype.copy();
-
-					symbolRL.getSymbolizers().clear();
-					for (final Symbolizer symb : symbolizers) {
-						final Vector symbolizers2 = symbolRL.getSymbolizers();
-						symbolizers2.add(symb);
-					}
-					symbolRL.reverseSymbolizers();
-
-					// Finally set all three values into the RL
-					uniqueRuleList.getLabels().add(
-							r.getDescription().getTitle().toString());
-					uniqueRuleList.getSymbols().add(symbolRL);
-					uniqueRuleList.getValues().add(strings[1]);
-
-					uniqueRuleList.test();
-
-					countRules++;
-				}
-
-				LOGGER.debug("Imported " + countRules + " UNIQUE rules ");
-			} finally {
-				uniqueRuleList.popQuite();
-			}
+			uniqueRuleList.importFts(fts);
 
 			return uniqueRuleList;
 		}
@@ -611,8 +459,6 @@ public class RuleListFactory {
 		 */
 		if (metaInfoString.startsWith("SINGLE")) {
 			final Rule rule = fts.rules().get(0);
-
-			final List<? extends Symbolizer> symbs = rule.symbolizers();
 
 			SingleRuleList<? extends Symbolizer> singleRuleList = null;
 
@@ -641,416 +487,10 @@ public class RuleListFactory {
 						+ metaInfoString + ", but can not be recognized!");
 			}
 
-			singleRuleList
-					.setMaxScaleDenominator(rule.getMaxScaleDenominator());
-			singleRuleList
-					.setMinScaleDenominator(rule.getMinScaleDenominator());
-
-			singleRuleList.pushQuite();
-			try {
-
-				// singleRuleList.setStyleTitle(importStyle.getTitle());
-				// singleRuleList.setStyleAbstract(importStyle.getAbstract());
-
-				// not needed: singleRuleList.getSymbolizers().clear();
-
-				/**
-				 * This stuff is the same for all three SINGLE_RULES types
-				 */
-				singleRuleList.addSymbolizers(symbs);
-				singleRuleList.reverseSymbolizers();
-
-				// We had some stupid AbstractMethodException here...
-				try {
-					final Description description = rule.getDescription();
-					final InternationalString title2 = description.getTitle();
-					singleRuleList.setTitle(title2.toString());
-				} catch (final NullPointerException e) {
-					LOGGER.warn("The title style to import has been null!");
-					singleRuleList.setTitle("");
-				} catch (final Exception e) {
-					LOGGER.error(
-							"The title style to import could not been set!", e);
-					singleRuleList.setTitle("");
-				}
-
-				return singleRuleList;
-
-			} finally {
-				singleRuleList.popQuite();
-			}
+			singleRuleList.importRule(rule);
+			return singleRuleList;
 		}
-
 		return null;
-
 	}
-
-	//
-	// try {
-	// setQuite(true); // Quite the AtlasStyler!
-	//
-	// final String metaInfoString = fts.getName();
-	//
-	// final int anzRules = fts.rules().size();
-	// // LOGGER.info("Importing: '" + metaInfoString
-	// // + "', has #Rules = " + anzRules);
-	//
-	// if ((metaInfoString == null)) {
-	// LOGGER.warn("This FeatureTypeStyle can't be proppery imported! It has not been created with AtlasStyler");
-	// continue;
-	// }
-	//
-	// /***************************************************************
-	// * Importing everything that starts with SINGLE
-	// */
-	// if (metaInfoString.startsWith("SINGLE")) {
-	// final Rule rule = fts.rules().get(0);
-	//
-	// final List<? extends Symbolizer> symbs = rule.symbolizers();
-	//
-	// SingleRuleList<? extends Symbolizer> singleRuleList = null;
-	//
-	// /***********************************************************
-	// * Importing a SINGLE_SYMBOL_POINT RuleList
-	// */
-	// if (metaInfoString
-	// .startsWith(RulesListType.SINGLE_SYMBOL_POINT
-	// .toString())) {
-	// singleRuleList = getSinglePointSymbolRulesList();
-	// } else
-	// /***********************************************************
-	// * Importing a SINGLE_SYMBOL_LINE RuleList
-	// */
-	// if (metaInfoString
-	// .startsWith(RulesListType.SINGLE_SYMBOL_LINE
-	// .toString())) {
-	// singleRuleList = getSingleLineSymbolRulesList();
-	// }
-	// /***********************************************************
-	// * Importing a SINGLE_SYMBOL_POLYGON RuleList
-	// */
-	// else if (metaInfoString
-	// .startsWith(RulesListType.SINGLE_SYMBOL_POLYGON
-	// .toString())) {
-	// singleRuleList = getSinglePolygonSymbolRulesList();
-	// } else {
-	// throw new RuntimeException("metaInfoString = "
-	// + metaInfoString + ", but is not recognized!");
-	// }
-	//
-	// singleRuleList.setMaxScaleDenominator(rule
-	// .getMaxScaleDenominator());
-	// singleRuleList.setMinScaleDenominator(rule
-	// .getMinScaleDenominator());
-	//
-	// singleRuleList.pushQuite();
-	// try {
-	//
-	// // singleRuleList.setStyleTitle(importStyle.getTitle());
-	// // singleRuleList.setStyleAbstract(importStyle.getAbstract());
-	//
-	// singleRuleList.getSymbolizers().clear();
-	//
-	// /**
-	// * This stuff is the same for all three SINGLE_RULES
-	// * types
-	// */
-	// singleRuleList.addSymbolizers(symbs);
-	//
-	// singleRuleList.reverseSymbolizers();
-	//
-	// // We had some stupid AbstractMethodException here...
-	// try {
-	// final Description description = rule
-	// .getDescription();
-	// final InternationalString title2 = description
-	// .getTitle();
-	// singleRuleList.setTitle(title2.toString());
-	// } catch (final NullPointerException e) {
-	// LOGGER.warn("The title style to import has been null!");
-	// singleRuleList.setTitle("");
-	// } catch (final Exception e) {
-	// LOGGER.error(
-	// "The title style to import could not been set!",
-	// e);
-	// singleRuleList.setTitle("");
-	// }
-	//
-	// importedThisAbstractRuleList = singleRuleList;
-	//
-	// } finally {
-	// singleRuleList.popQuite();
-	// }
-	// }
-	//
-	// /***************************************************************
-	// * Importing everything that starts with QUANTITIES
-	// */
-	// else if (metaInfoString.startsWith("UNIQUE")) {
-	//
-	// UniqueValuesRuleList uniqueRuleList = null;
-	//
-	// /***********************************************************
-	// * Importing a UNIQUE_VALUE_POINT RuleList
-	// */
-	// if (metaInfoString
-	// .startsWith(RulesListType.UNIQUE_VALUE_POINT
-	// .toString())) {
-	//
-	// uniqueRuleList = createUniqueValuesPointRulesList();
-	//
-	// } else if (metaInfoString
-	// .startsWith(RulesListType.UNIQUE_VALUE_LINE
-	// .toString())) {
-	//
-	// uniqueRuleList = createUniqueValuesLineRulesList();
-	// } else if (metaInfoString
-	// .startsWith(RulesListType.UNIQUE_VALUE_POLYGON
-	// .toString())) {
-	//
-	// uniqueRuleList = createUniqueValuesPolygonRulesList();
-	// } else {
-	// throw new RuntimeException("metaInfoString = "
-	// + metaInfoString + ", but is not recognized!");
-	// }
-	//
-	// uniqueRuleList.pushQuite();
-	// try {
-	//
-	// uniqueRuleList.parseMetaInfoString(metaInfoString, fts);
-	//
-	// /***********************************************************
-	// * Parsing information in the RULEs
-	// *
-	// * title, unique values, symbols=>singleRuleLists,
-	// * template?
-	// */
-	// int countRules = 0;
-	// uniqueRuleList.setWithDefaultSymbol(false);
-	// for (final Rule r : fts.rules()) {
-	//
-	// if (r.getName() != null
-	// && r.getName()
-	// .toString()
-	// .startsWith(
-	// FeatureRuleList.NODATA_RULE_NAME)) {
-	// // This rule defines the NoDataSymbol
-	// uniqueRuleList.importNoDataRule(r);
-	// continue;
-	// }
-	//
-	// uniqueRuleList.test();
-	//
-	// // Interpret Filter!
-	// final String[] strings = UniqueValuesRuleList
-	// .interpretFilter(r.getFilter());
-	//
-	// uniqueRuleList.setPropertyFieldName(strings[0],
-	// false);
-	//
-	// final Symbolizer[] symbolizers = r.getSymbolizers();
-	//
-	// final SingleRuleList<? extends Symbolizer> singleRLprototype =
-	// uniqueRuleList
-	// .getDefaultTemplate();
-	//
-	// // Forget bout generics here!!!
-	// final SingleRuleList<?> symbolRL = singleRLprototype
-	// .copy();
-	//
-	// symbolRL.getSymbolizers().clear();
-	// for (final Symbolizer symb : symbolizers) {
-	// final Vector symbolizers2 = symbolRL
-	// .getSymbolizers();
-	// symbolizers2.add(symb);
-	// }
-	// symbolRL.reverseSymbolizers();
-	//
-	// // Finally set all three values into the RL
-	// uniqueRuleList.getLabels().add(
-	// r.getDescription().getTitle().toString());
-	// uniqueRuleList.getSymbols().add(symbolRL);
-	// uniqueRuleList.getValues().add(strings[1]);
-	//
-	// uniqueRuleList.test();
-	//
-	// countRules++;
-	// }
-	//
-	// LOGGER.debug("Imported " + countRules
-	// + " UNIQUE rules ");
-	// } finally {
-	// uniqueRuleList.popQuite();
-	// }
-	//
-	// importedThisAbstractRuleList = uniqueRuleList;
-	// }
-	//
-	// /***************************************************************
-	// * Importing everything that starts with QUANTITIES
-	// */
-	// else if (metaInfoString.startsWith("QUANTITIES")) {
-	//
-	// QuantitiesRuleList<Double> quantitiesRuleList = null;
-	//
-	// /***********************************************************
-	// * Importing a QUANTITIES_COLORIZED_POINT RuleList
-	// */
-	// if (metaInfoString
-	// .startsWith(RulesListType.QUANTITIES_COLORIZED_POINT
-	// .toString())) {
-	//
-	// quantitiesRuleList = createGraduatedColorPointRulesList(boolean
-	// withDefaults);
-	//
-	// }
-	//
-	// /***********************************************************
-	// * Importing a QUANTITIES_COLORIZED_LINE RuleList
-	// */
-	// else if (metaInfoString
-	// .startsWith(RulesListType.QUANTITIES_COLORIZED_LINE
-	// .toString())) {
-	//
-	// quantitiesRuleList = createGraduatedColorLineRulesList(boolean
-	// withDefaults);
-	// }
-	//
-	// /***********************************************************
-	// * Importing a QUANTITIES_COLORIZED_POLYGON RuleList
-	// */
-	// else if (metaInfoString
-	// .startsWith(RulesListType.QUANTITIES_COLORIZED_POLYGON
-	// .toString())) {
-	//
-	// quantitiesRuleList = createGraduatedColorPolygonRuleList(boolean
-	// withDefaults);
-	// }
-	//
-	// else {
-	// throw new RuntimeException("metaInfoString = "
-	// + metaInfoString + ", but is not recognized!");
-	// }
-	//
-	// quantitiesRuleList.pushQuite();
-	// try {
-	//
-	// // This also imports the template from the first rule.
-	// quantitiesRuleList.parseMetaInfoString(metaInfoString,
-	// fts);
-	//
-	// /***********************************************************
-	// * Parsing information in the RULEs
-	// *
-	// * title, class limits
-	// */
-	// int countRules = 0;
-	// final TreeSet<Double> classLimits = new TreeSet<Double>();
-	// double[] ds = null;
-	// for (final Rule r : fts.rules()) {
-	//
-	// if (r.getName()
-	// .toString()
-	// .startsWith(
-	// FeatureRuleList.NODATA_RULE_NAME)) {
-	// // This rule defines the NoDataSymbol
-	// quantitiesRuleList.importNoDataRule(r);
-	// continue;
-	// }
-	//
-	// // set Title
-	// quantitiesRuleList.getRuleTitles().put(countRules,
-	// r.getDescription().getTitle().toString());
-	//
-	// // Class Limits
-	// ds = QuantitiesRuleList.interpretBetweenFilter(r
-	// .getFilter());
-	// classLimits.add(ds[0]);
-	//
-	// countRules++;
-	// }
-	// if (ds != null) {
-	// // The last limit is only added if there have been
-	// // any
-	// // rules
-	// classLimits.add(ds[1]);
-	// }
-	// quantitiesRuleList.setClassLimits(classLimits, false);
-	//
-	// /**
-	// * Now determine the colors stored inside the
-	// * symbolizers.
-	// */
-	// for (int ri = 0; ri < countRules; ri++) {
-	// // Import the dominant color from the symbolizers
-	// // (they can differ from the palette colors, because
-	// // they might have been changed manually.
-	// for (final Symbolizer s : fts.rules().get(ri)
-	// .getSymbolizers()) {
-	//
-	// final Color c = StylingUtil
-	// .getSymbolizerColor(s);
-	//
-	// if (c != null) {
-	// // System.out.println("Rule " + ri
-	// // + " has color " + c);
-	// quantitiesRuleList.getColors()[ri] = c;
-	// break;
-	// }
-	// }
-	//
-	// }
-	//
-	// importedThisAbstractRuleList = quantitiesRuleList;
-	//
-	// } finally {
-	// quantitiesRuleList.popQuite();
-	// }
-	// }
-	//
-	// /***************************************************************
-	// * Importing everything that starts with TEXT, most likely a
-	// * RulesListType.TEXT_LABEL
-	// */
-	// else if (metaInfoString.startsWith(RulesListType.TEXT_LABEL
-	// .toString())) {
-	// final TextRuleList textRulesList = getTextRulesList();
-	// textRulesList.importRules(fts.rules());
-	// }
-	//
-	// else {
-	// LOGGER.info("Importing a FTS failed because the name field (our metadata) could not be interpreted: '"
-	// + metaInfoString);
-	//
-	// /**
-	// * Adding default layers to all SingleRules
-	// */
-	// switch (FeatureUtil.getGeometryForm(styledFeatures
-	// .getSchema())) {
-	// case LINE:
-	// getSingleLineSymbolRulesList().addNewDefaultLayer();
-	// break;
-	// case POINT:
-	// getSinglePointSymbolRulesList().addNewDefaultLayer();
-	// break;
-	// case POLYGON:
-	// getSinglePolygonSymbolRulesList().addNewDefaultLayer();
-	// break;
-	//
-	// // TODO NONE AND ANY!
-	//
-	// }
-	//
-	// continue;
-	// }
-	// // countImportedFeatureTypeStyles++;
-	// } catch (final Exception importError) {
-	// LOGGER.warn(
-	// "Import error: " + importError.getLocalizedMessage(),
-	// importError);
-	// // TODO Inform about import failure
-	// } finally {
-	// setQuite(false);
-	// }
 
 }

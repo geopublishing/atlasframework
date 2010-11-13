@@ -75,6 +75,9 @@ public class JNLPSwingUtil extends JNLPUtil {
 					+ SwingUtilities.isEventDispatchThread() + ") ");
 			ds.loadPart(parts, serviceListener);
 
+		} catch (javax.jnlp.UnavailableServiceException sue) {
+			// Ignore
+			LOGGER.warn(sue.getMessage());
 		} catch (Exception e1) {
 			LOGGER.error("Ex while downloading from JNLP Dowbnload Service", e1);
 		} finally {

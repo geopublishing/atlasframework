@@ -39,11 +39,13 @@ public class AtlasStylerDialog extends StylerDialog {
 			final DpLayerVectorFeatureSource dpLayer,
 			final AtlasMapLegend atlasMapLegend, final MapLayer mapLayer,
 			final LayerStyle layerStyle) {
-		super(owner, new AtlasStyler(dpLayer, layerStyle != null ? layerStyle
-				.getStyle() : dpLayer.getStyle(), 
-//				atlasMapLegend,
-				mapLayer, getParamMap(dpLayer)));
-		
+		super(owner,
+				new AtlasStyler(dpLayer,
+						layerStyle != null ? layerStyle.getStyle()
+								: dpLayer.getStyle(),
+						// atlasMapLegend,
+						mapLayer, getParamMap(dpLayer), true));
+
 		getAtlasStyler().setOwner(this);
 		this.dpLayer = dpLayer;
 
@@ -51,9 +53,9 @@ public class AtlasStylerDialog extends StylerDialog {
 
 		AtlasMapLayerLegend atlasLayerLegend = (AtlasMapLayerLegend) atlasMapLegend
 				.getLayerLegendForId(dpLayer.getId());
-		
+
 		this.map = atlasLayerLegend.getMap();
-		
+
 		this.atlasMapLegend = atlasMapLegend;
 
 		// This listener informs the MapLayerLegend,
@@ -100,18 +102,21 @@ public class AtlasStylerDialog extends StylerDialog {
 		}
 		map.getMinimizedInLegendMap().put(dpLayer.getId(), false);
 
-		
 		/**
 		 * Position left outside of the actual parent frame
 		 */
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.WEST);
-		
+		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
+				SwingUtil.WEST);
+
 	}
 
-	private static HashMap<String, Object> getParamMap(DpLayerVectorFeatureSource dpLayer_) {
+	private static HashMap<String, Object> getParamMap(
+			DpLayerVectorFeatureSource dpLayer_) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put(AtlasStyler.PARAM_LANGUAGES_LIST_STRING, dpLayer_.getAtlasConfig().getLanguages());
-		params.put(AtlasStyler.PARAM_FONTS_LIST_FONT, dpLayer_.getAtlasConfig().getFonts());
+		params.put(AtlasStyler.PARAM_LANGUAGES_LIST_STRING, dpLayer_
+				.getAtlasConfig().getLanguages());
+		params.put(AtlasStyler.PARAM_FONTS_LIST_FONT, dpLayer_.getAtlasConfig()
+				.getFonts());
 		return params;
 	}
 
@@ -152,6 +157,5 @@ public class AtlasStylerDialog extends StylerDialog {
 			layerStyle.setStyle(mapLayer.getStyle());
 		}
 	}
-	
 
 }

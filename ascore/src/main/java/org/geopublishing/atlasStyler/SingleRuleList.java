@@ -25,6 +25,7 @@ import java.util.Vector;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
+import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.Rule;
@@ -32,7 +33,10 @@ import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.type.GeometryDescriptor;
+import org.opengis.filter.Filter;
+import org.opengis.util.InternationalString;
 
+import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import skrueger.geotools.Copyable;
@@ -68,7 +72,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	private boolean visibleInLegend = true;
 
-
 	/**
 	 * @param title
 	 *            label for the rule
@@ -85,28 +88,28 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *            label for the rule
 	 */
 	public SingleRuleList(Translation title, GeometryForm geometryForm) {
-		super( geometryForm);
+		super(geometryForm);
 		setTitle(title);
 	}
+
 	/**
 	 * Creates a new Symbolizer and adds it to the layers. This fires an event
 	 * to all {@link RuleChangeListener}s.
 	 */
 	public abstract void addNewDefaultLayer();
 
-//	/**
-//	 * Adds a symbolizer to the {@link SingleRuleList}
-//	 * 
-//	 * @param symbolizer
-//	 *            The symbolizer to add.
-//	 */
-//	public boolean addSymbolizer(SymbolizerType symbolizer) {
-//		boolean add = layers.add(symbolizer);
-//		if (add)
-//			fireEvents(new RuleChangedEvent("Added a Symbolizer", this));
-//		return add;
-//	}
-	
+	// /**
+	// * Adds a symbolizer to the {@link SingleRuleList}
+	// *
+	// * @param symbolizer
+	// * The symbolizer to add.
+	// */
+	// public boolean addSymbolizer(SymbolizerType symbolizer) {
+	// boolean add = layers.add(symbolizer);
+	// if (add)
+	// fireEvents(new RuleChangedEvent("Added a Symbolizer", this));
+	// return add;
+	// }
 
 	/**
 	 * Adds a symbolizer to the {@link SingleRuleList}
@@ -275,7 +278,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			symbolizers.add(ps);
 		}
 		Collections.reverse(symbolizers);
-		
+
 		// TODO Add support for NODATA
 
 		Rule rule = ASUtil.SB.createRule(symbolizers
@@ -287,10 +290,23 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		/** Saving the legend label * */
 		rule.setTitle(getTitle());
 
+		addFilters(rule);
+
 		ArrayList<Rule> rList = new ArrayList<Rule>();
 		rList.add(rule);
 
 		return rList;
+	}
+
+	private void addFilters(Rule rule) {
+		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
+
+		// The order is important! This is parsed the reverse way. The last
+		// thing added to the filter equals the first level in the XML.
+		filter = addRuleListEnabledDisabledFilter(filter);
+
+		rule.setFilter(filter);
+
 	}
 
 	/**
@@ -382,7 +398,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
-			// Transforming http://en.geopublishing.org/openmapsymbols/point/Circle.sld to Circle
+			// Transforming
+			// http://en.geopublishing.org/openmapsymbols/point/Circle.sld to
+			// Circle
 			String fileName = new File(url.getFile()).getName();
 			String fileNameWithoutSLD = fileName.substring(0,
 					fileName.lastIndexOf('.'));
@@ -461,8 +479,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			return;
 		Style style = ASUtil.SB.createStyle(layers.get(0));
 		style.featureTypeStyles().get(0).rules().get(0).symbolizers().clear();
-		style.featureTypeStyles().get(0).rules().get(0).symbolizers().addAll(
-				layers);
+		style.featureTypeStyles().get(0).rules().get(0).symbolizers()
+				.addAll(layers);
 
 		style.getDescription().setTitle(getStyleTitle());
 		style.getDescription().setAbstract(getStyleAbstract());
@@ -612,6 +630,43 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			this.visibleInLegend = visibleInLegend;
 			fireEvents(new RuleChangedEvent("visiblility in legend changed",
 					this));
+		}
+	}
+
+	/**
+	 * This stuff is the same for all three SINGLE_RULES types.
+	 */
+	public void importRule(Rule rule) {
+		pushQuite();
+
+		setMaxScaleDenominator(rule.getMaxScaleDenominator());
+		setMinScaleDenominator(rule.getMinScaleDenominator());
+
+		try {
+
+			final List<? extends Symbolizer> symbs = rule.symbolizers();
+			addSymbolizers(symbs);
+			reverseSymbolizers();
+
+			// We had some stupid AbstractMethodException here...
+			try {
+				final Description description = rule.getDescription();
+				final InternationalString title2 = description.getTitle();
+				setTitle(title2.toString());
+			} catch (final NullPointerException e) {
+				LOGGER.warn("The title style to import has been null!");
+				setTitle("");
+			} catch (final Exception e) {
+				LOGGER.error("The title style to import could not been set!", e);
+				setTitle("");
+			}
+
+			// Analyse the filters...
+			Filter filter = rule.getFilter();
+			filter = parseRuleListEnabledDisabledFilter(filter);
+
+		} finally {
+			popQuite();
 		}
 	}
 

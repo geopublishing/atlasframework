@@ -212,7 +212,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 				 */
 				rulesList.pushQuite();
 				rulesList.removeValues(rulesList.getValues());
-				rulesList.setWithDefaultSymbol(true);
+				rulesList.setDefaultRuleEnabled(true);
 				rulesList.setPropertyFieldName((String) e.getItem(), true);
 				rulesList.popQuite();
 			}
@@ -1144,7 +1144,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 			public void actionPerformed(ActionEvent e) {
 
 				rulesList.pushQuite();
-				rulesList.setWithDefaultSymbol(jCheckBoxWithDefault
+				rulesList.setDefaultRuleEnabled(jCheckBoxWithDefault
 						.isSelected());
 
 				/**

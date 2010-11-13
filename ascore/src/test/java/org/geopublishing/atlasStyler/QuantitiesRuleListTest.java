@@ -87,7 +87,8 @@ public class QuantitiesRuleListTest {
 	 * Creates an QuantileClassifier and runs it on data that just has the same
 	 * values. So no classes can be calculated. Then we set it to the rulelist,
 	 * and we expect the RL it to deal with it nicely.
-	 * @throws TransformerException 
+	 * 
+	 * @throws TransformerException
 	 */
 	@Test
 	public void testQuantilesWhereTheyCannotBeCreated() throws SchemaException,
@@ -114,7 +115,7 @@ public class QuantitiesRuleListTest {
 		assertEquals(1 + 1, rules.size());
 		assertEquals("111.0", rules.get(0).getDescription().getTitle()
 				.toString());
-		
+
 		assertTrue(StylingUtil.validates(ruleList.getFTS()));
 
 	}
@@ -122,7 +123,8 @@ public class QuantitiesRuleListTest {
 	@Test
 	public void testImportSld_14() throws IOException, TransformerException {
 		AtlasStyler as = new AtlasStyler(
-				TestingUtil.TestDatasetsVector.arabicInHeader.getFeatureSource());
+				TestingUtil.TestDatasetsVector.arabicInHeader
+						.getFeatureSource());
 
 		as.importStyle(AsTestingUtil.TestDatasetsSld.textRulesDefaultLocalizedPre16
 				.getStyle());
@@ -163,9 +165,10 @@ public class QuantitiesRuleListTest {
 				colorRl.getType());
 		assertEquals("SURFACE", colorRl.getValue_field_name());
 		assertEquals(null, colorRl.getNormalizer_field_name());
-		assertEquals("[ SURFACE IS NULL ]", colorRl.getNoDataFilter()
-				.toString());
-		
+		// Just [ SURFACE IS NULL ] is not a valid OR, so its doubled
+		assertEquals("[[ SURFACE IS NULL ] OR [ SURFACE IS NULL ]]", colorRl
+				.getNoDataFilter().toString());
+
 		assertTrue(StylingUtil.validates(colorRl.getFTS()));
 
 	}

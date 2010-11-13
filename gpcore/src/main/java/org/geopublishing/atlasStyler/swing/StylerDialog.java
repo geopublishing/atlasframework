@@ -11,6 +11,7 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,6 +91,9 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * @throws IOException
 	 */
 	private void initialize() {
+		// setLayout(new MigLayout("width :800:850"));
+		setMaximumSize(new Dimension(850, 400));
+		setPreferredSize(new Dimension(850, 400));
 
 		final SimpleFeatureType schema = atlasStyler.getStyledFeatures()
 				.getSchema();
@@ -117,22 +121,27 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			jContentPane = new JPanel(new MigLayout("gap 1, inset 1, wrap 1","[grow]","[grow]"));
-			jContentPane.add(tabbedPane, ""); // The textSymbolizer pane is making the big height
+			jContentPane = new JPanel(new MigLayout("gap 1, inset 1, wrap 1",
+					"[grow]", "[grow, growprio 2000][]"));
+			jContentPane.add(tabbedPane, "growx, growy 2000"); // The
+																// textSymbolizer
+			// pane is
+			// making the big height
 
-			jContentPane.add(getJCheckboxPreviewl(), "split 4, left");
-			jContentPane.add(getJButtonUpdatePreview(), "left");
+			jContentPane.add(getJCheckboxPreviewl(),
+					"shrinky, bottom, split 4, left");
+			jContentPane.add(getJButtonUpdatePreview(), "bottom, left");
 
-			jContentPane.add(getJButtonOk(), "tag ok");
-			jContentPane.add(getJButtonCancel(), "tag cancel");
+			jContentPane.add(getJButtonOk(), "bottom, tag ok");
+			jContentPane.add(getJButtonCancel(), "bottom, tag cancel");
 		}
 		return jContentPane;
 	}
 
 	private JButton getJButtonUpdatePreview() {
 		if (jButtonUpdatePreview == null) {
-			jButtonUpdatePreview = new JButton(new AbstractAction(AtlasStyler
-					.R("AtlasStylerGUI.UpdatePreview.Button")) {
+			jButtonUpdatePreview = new JButton(new AbstractAction(
+					AtlasStyler.R("AtlasStylerGUI.UpdatePreview.Button")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -158,20 +167,22 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	private JCheckBox getJCheckboxPreviewl() {
 		if (jCheckboxPreview == null) {
-			jCheckboxPreview = new JCheckBox(new AbstractAction(AtlasStyler
-					.R("AtlasStylerGUI.UpdatePreviewAutomatically.CheckBox")) {
+			jCheckboxPreview = new JCheckBox(
+					new AbstractAction(
+							AtlasStyler
+									.R("AtlasStylerGUI.UpdatePreviewAutomatically.CheckBox")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					atlasStyler.setAutomaticPreview(jCheckboxPreview
-							.isSelected());
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							atlasStyler.setAutomaticPreview(jCheckboxPreview
+									.isSelected());
 
-					// Fire it directly when the checkbox has been
-					// activated
-					if (jCheckboxPreview.isSelected())
-						atlasStyler.fireStyleChangedEvents();
-				}
-			});
+							// Fire it directly when the checkbox has been
+							// activated
+							if (jCheckboxPreview.isSelected())
+								atlasStyler.fireStyleChangedEvents();
+						}
+					});
 
 			jCheckboxPreview.setSelected(atlasStyler.isAutomaticPreview());
 			jCheckboxPreview
@@ -203,8 +214,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * Pressing Cancel or CLosing the Window fires a PROPERTY_CANCEL_AND_CLOSE
 	 * Property Change Event and disposes the Dialog.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	public void cancel() {
@@ -245,12 +255,13 @@ public class StylerDialog extends CancellableDialogAdapter {
 	public AtlasStyler getAtlasStyler() {
 		return atlasStyler;
 	}
-	
+
 	@Override
 	public void dispose() {
-		if (isDisposed)return;
-		tabbedPane.dispose();		
+		if (isDisposed)
+			return;
+		tabbedPane.dispose();
 		super.dispose();
 	}
-	
+
 }

@@ -19,11 +19,15 @@ import java.util.Stack;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
+import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
+import org.opengis.filter.PropertyIsEqualTo;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -38,10 +42,112 @@ import schmitzm.lang.LangUtil;
  * 
  */
 public abstract class AbstractRulesList {
+	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
+
+	/**
+	 * If used as a {@link Rule}'s name, the rule should not be imported, but
+	 * rather just be ignored.
+	 */
+	static final String RULENAME_DONTIMPORT = "DONTIMPORT";
+
+	/**
+	 * Returns <code>ff.and(RL_ENABLED_FILTER, filter)</code> or
+	 * <code>ff.and(RL_DISABLED_FILTER, filter)</code>.<Br/>
+	 * 
+	 * @see #parseRuleListEnabledDisabledFilter(Filter)
+	 * 
+	 */
+	protected Filter addRuleListEnabledDisabledFilter(Filter filter) {
+		// Are all classes enabled?
+		if (isEnabled()) {
+			filter = ff.and(RL_ENABLED_FILTER, filter);
+		} else {
+			filter = ff.and(RL_DISABLED_FILTER, filter);
+		}
+
+		return filter;
+	}
+
+	/**
+	 * Returns a shorter filter. The method tries to identify
+	 * #RL_DISABLED_FILTER or #RL_ENABLED_FILTER and sets the #enabled variable.
+	 * It should always be parsed as the first FilterParser (FilterParsers eat
+	 * the filter).
+	 * 
+	 * @see #addRuleListEnabledDisabledFilter(Filter)
+	 */
+	protected Filter parseRuleListEnabledDisabledFilter(Filter filter) {
+
+		if (!(filter instanceof AndImpl)) {
+			setEnabled(true);
+			LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
+					+ filter);
+			return filter;
+		} else
+			try {
+				AndImpl andImpl = (AndImpl) filter;
+				List<?> andChildren = andImpl.getChildren();
+				final Object child0 = andChildren.get(0);
+				if (child0.equals(RL_DISABLED_FILTER)) {
+					setEnabled(false);
+				} else if (child0.equals(oldAllClassesDisabledFilter)) {
+					setEnabled(false);
+				} else if (child0.equals(RL_ENABLED_FILTER)) {
+					setEnabled(true);
+				} else if (child0.equals(OldAllClassesEnabledFilter)) {
+					setEnabled(true);
+				} else
+					throw new RuntimeException(child0.toString() + "\n"
+							+ filter);
+
+				// Returning just the right part of the filter
+				filter = (Filter) andChildren.get(1);
+
+			} catch (Exception e) {
+				setEnabled(true);
+				LOGGER.error(
+						"Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled.",
+						e);
+			}
+
+		return filter;
+
+	}
+
+	/**
+	 * A Filter to mark that not ALL classes have been disabled by the
+	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
+	 * is not used anymore and only for backward compatibility. Will be removed
+	 * in 2.0
+	 **/
+	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
+			.equals(ff.literal("1"), ff.literal("1"));
+
+	/**
+	 * A Filter to mark that not ALL classes have been disabled by the
+	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
+	 * is not used anymore and only for backward compatibility. Will be removed
+	 * in 2.0
+	 **/
+	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
+			.equals(ff.literal("1"), ff.literal("2"));
+
+	/**
+	 * A Filter to mark that one class/rule has been disabled
+	 **/
+	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
+			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
 
 	public AbstractRulesList(GeometryForm geometryForm) {
 		this.geometryForm = geometryForm;
 	}
+
+	/**
+	 * A Filter to mark that one class/rule is enabled
+	 **/
+	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
 
 	private final int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
 	private final int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;

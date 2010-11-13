@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
-import java.awt.Window;
 import java.util.HashMap;
 
 import javax.swing.Icon;
@@ -113,11 +112,11 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 		jPanelRuleListEditor.add(newComponent, "top, grow");
 		lastOpenEditorGUI = newComponent;
 		invalidate();
-		// repaint();
 		validate();
-		Window owner = schmitzm.swing.SwingUtil.getParentWindow(this);
-		if (owner != null)
-			schmitzm.swing.SwingUtil.getParentWindow(this).pack();
+		repaint();
+		// Window owner = schmitzm.swing.SwingUtil.getParentWindow(this);
+		// if (owner != null)
+		// schmitzm.swing.SwingUtil.getParentWindow(this).pack();
 	};
 
 	/**
@@ -139,7 +138,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	 */
 	public JComponent createEditorComponent(AbstractRulesList ruleList) {
 
-		JComponent newEditorGui = createStatusLabel();
+		JComponent newEditorGui = new JLabel();
 		if (ruleList instanceof SingleRuleList)
 			newEditorGui = new SingleSymbolGUI((SingleRuleList<?>) ruleList);
 		else if (ruleList instanceof UniqueValuesRuleList)
@@ -166,6 +165,14 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 					.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
 					+ "<br/>";
 		}
+
+		// Go through the AtlasStyler import errors:
+		for (Exception e : atlasStyler.getImportErrorLog()) {
+			statusText += "<p>";
+			statusText += e.getLocalizedMessage();
+			statusText += "</p>";
+		}
+
 		statusText += "</html>";
 
 		return new JLabel(statusText);
@@ -175,17 +182,17 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	 * Adds the tabs to the {@link JTabbedPane}
 	 */
 	private void initialize() {
-
 		setOneTouchExpandable(true);
 		setDividerLocation(200);
 
-		// setLayout(new MigLayout("top"));
+		// setLayout(new MigLayout("top", "[grow]", "[grow]"));
 
 		// add(getRulesListsListTablePanel(), "width 200:200:400, top, growx");
 		setLeftComponent(getRulesListsListTablePanel());
 
 		// add(jPanelRuleListEditor, "width 400:650:900, top, growx 200");
 		setRightComponent(jPanelRuleListEditor);
+		changeEditorComponent(createStatusLabel());
 
 	}
 
