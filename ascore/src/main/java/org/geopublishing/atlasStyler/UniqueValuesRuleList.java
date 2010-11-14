@@ -507,7 +507,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			rule.setTitle(getLabels().get(ruleCount));
 
 			// Adding the filter to the Rule.
-			filter = addRuleListEnabledDisabledFilter(filter);
+			filter = addAbstractRlSettings(filter);
 			rule.setFilter(filter);
 
 			rules.add(rule);
@@ -726,7 +726,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			// Interpret Filter!
 			Filter filter = r.getFilter();
 
-			filter = parseRuleListEnabledDisabledFilter(filter);
+			filter = parseAbstractRlSettings(filter);
 
 			final String[] strings = UniqueValuesRuleList
 					.interpretFilter(filter);

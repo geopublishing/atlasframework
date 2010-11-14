@@ -57,7 +57,7 @@ import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasFeatureLayerFilterDialog;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.ValueMarker;
@@ -246,7 +246,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	private JButton getJButtonAttribTable() {
 		JButton button = new JButton(new AbstractAction(AtlasStyler
 				.R("QuantitiesClassificationGUI.Data.ShowAttribTableButton"),
-				BasicMapLayerLegendPaneUI.ICON_TABLE) {
+				Icons.ICON_TABLE) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

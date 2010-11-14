@@ -83,9 +83,9 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 	 * @param attrMetaDataMap
 	 *            the attribute meta data for the features
 	 * @param initGUI
-	 *            determines, whether {@link #initGUI()} is called. If {@code
-	 *            false}, the constructor of the derived class must ensure that
-	 *            {@link #initGUI()} is called.
+	 *            determines, whether {@link #initGUI()} is called. If
+	 *            {@code false}, the constructor of the derived class must
+	 *            ensure that {@link #initGUI()} is called.
 	 * @param layerName
 	 *            Translated name of the layer
 	 * @throws IOException
@@ -134,17 +134,15 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 	public FeatureCollectionFilterPanel getFilterPanel() {
 		if (filterPanel == null) {
 
-			filterPanel = new FeatureCollectionFilterPanel(
-					FILTER_PARSER,
-					styedFeatures
-							.getFeatureCollection(), false,
+			filterPanel = new FeatureCollectionFilterPanel(FILTER_PARSER,
+					styedFeatures.getFeatureCollection(), false,
 					new AttributeMetaDataAttributeTypeFilter(attrMetaDataMap)) {
 
 				@Override
 				protected void initGUI() {
-					
+
 					super.initGUI();
-					
+
 					// Changing a few things to get the AttributeMetaData into
 					// the
 					// Table
@@ -233,9 +231,12 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 							.setPreferredWidth(200);
 					this.attributeTable.getColumnModel().getColumn(4)
 							.setPreferredWidth(60);
-					
-					SwingUtil.setMinimumHeight(this.attributeTable, 250); // has no effect :-(
-					
+
+					SwingUtil.setMinimumHeight(this.attributeTable, 250); // has
+																			// no
+																			// effect
+																			// :-(
+
 				}
 
 				@Override
@@ -256,20 +257,8 @@ public class AtlasFeatureLayerFilterDialog extends FeatureLayerFilterDialog {
 	 * with a new one.
 	 */
 	protected void initGUI(final String layerNameTranslated) {
-		// getFilterPanel().setAttributeFilter(
-		// );
 
 		super.initGUI();
-		// replace attribute-table with a new one which shows the attribute
-		// description from the meta data
-		// remove(filterPanel);
-
-		// add(filterPanel, BorderLayout.CENTER);
-
-		// only the visible attributes are shown in attribute table
-		// and filter preview
-		// getFilterPanel().setAttributeFilter(
-		// new AttributeMetaDataAttributeTypeFilter(attrMetaDataMap));
 
 		if (layerNameTranslated != null) {
 			String windowTitle = AtlasViewerGUI.R(

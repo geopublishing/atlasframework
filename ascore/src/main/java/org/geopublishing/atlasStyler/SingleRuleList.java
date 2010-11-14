@@ -317,7 +317,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 		// The order is important! This is parsed the reverse way. The last
 		// thing added to the filter equals the first level in the XML.
-		filter = addRuleListEnabledDisabledFilter(filter);
+		filter = addAbstractRlSettings(filter);
 
 		rule.setFilter(filter);
 
@@ -681,7 +681,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 			// Analyse the filters...
 			Filter filter = rule.getFilter();
-			filter = parseRuleListEnabledDisabledFilter(filter);
+			filter = parseAbstractRlSettings(filter);
 
 		} finally {
 			popQuite();

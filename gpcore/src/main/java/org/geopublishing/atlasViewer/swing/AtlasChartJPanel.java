@@ -33,7 +33,6 @@ import javax.swing.JToolBar;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.jfree.chart.JFreeChart;
@@ -445,7 +444,7 @@ public class AtlasChartJPanel extends JPanel implements
 				final JButton openTable = new JButton();
 				openTable.setAction(new AbstractAction(AtlasViewerGUI
 						.R("LayerToolMenu.table"),
-						BasicMapLayerLegendPaneUI.ICON_TABLE) {
+						Icons.ICON_TABLE) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {

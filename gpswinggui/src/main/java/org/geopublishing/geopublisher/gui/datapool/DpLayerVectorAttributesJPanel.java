@@ -41,7 +41,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefil
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
@@ -212,7 +212,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 			{
 				final JButton openTable = new SmallButton(new AbstractAction(
 						AtlasViewerGUI.R("LayerToolMenu.table"),
-						BasicMapLayerLegendPaneUI.ICON_TABLE) {
+						Icons.ICON_TABLE) {
 
 					@Override
 					public void actionPerformed(final ActionEvent e) {

@@ -20,7 +20,7 @@ import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -41,7 +41,7 @@ public class DataPoolDeleteAction extends AbstractAction {
 
 	public DataPoolDeleteAction(DataPoolJTable dpTable, Component owner) {
 		super(GeopublisherGUI.R("DataPoolWindow_Action_DeleteDPE_label"),
-				BasicMapLayerLegendPaneUI.ICON_REMOVE);
+				Icons.ICON_REMOVE);
 
 		this.dpTable = dpTable;
 		this.owner = owner;

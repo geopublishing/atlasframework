@@ -71,6 +71,7 @@ import javax.swing.plaf.basic.BasicGraphicsUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLayerLegend;
 import org.jdesktop.swingx.JXCollapsiblePane;
 import org.jdesktop.swingx.JXHyperlink;
@@ -89,51 +90,6 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 
 	static final Logger LOGGER = Logger
 			.getLogger(BasicMapLayerLegendPaneUI.class);
-
-	public static final ImageIcon ICON_EXPORT = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/export.png"));
-
-	public static final ImageIcon ICON_VISIBLE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/visible.png"));
-
-	public static final ImageIcon ICON_HALFVISIBLE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/visible_half.png"));
-
-	public static final ImageIcon ICON_NOTVISIBLE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/not_visible.png"));
-
-	public static final ImageIcon ICON_REMOVE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/remove.png"));
-
-	private static final ImageIcon ICON_INFO = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/info.png"));
-
-	public static final ImageIcon ICON_TOOL = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/tool.png"));
-
-	public static final ImageIcon ICON_UPARROW = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/up_arrow.png"));
-
-	public static final ImageIcon ICON_DOWNARROW = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/down_arrow.png"));
-
-	public static final ImageIcon ICON_RASTER = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/raster.png"));
-
-	public static final ImageIcon ICON_VECTOR = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/vector.png"));
-
-	public static final ImageIcon ICON_FILTER = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/filter.png"));
-
-	public static final ImageIcon ICON_REMOVE_FILTER = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/filter_remove.png"));
-
-	public static final ImageIcon ICON_STYLE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/style.png"));
-
-	public static final ImageIcon ICON_TABLE = new ImageIcon(
-			BasicMapLayerLegendPaneUI.class.getResource("/icons/table.png"));
 
 	// TODO REDUCE STUPID CODE!
 	public int controlEyeWidth;
@@ -219,9 +175,9 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 		LookAndFeel.installColorsAndFont(mapLayerLegend, "TaskPane.background",
 				"TaskPane.foreground", "TaskPane.font");
 
-		LookAndFeel.installColorsAndFont((JComponent) mapLayerLegend
-				.getContentPane(), "TaskPane.background",
-				"TaskPane.foreground", "TaskPane.font");
+		LookAndFeel.installColorsAndFont(
+				(JComponent) mapLayerLegend.getContentPane(),
+				"TaskPane.background", "TaskPane.foreground", "TaskPane.font");
 	}
 
 	/**
@@ -579,8 +535,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 	 *            {@link MouseEvent}
 	 * @return inside?
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private boolean insideClick(MouseEvent evt, int x, int y, int w, int h) {
 
@@ -1084,7 +1039,8 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 					controlEyeWidth, controlEyeWidth);
 
 			if (layerLegend.getInfoURL() != null) {
-				ICON_INFO.paintIcon(layerLegend, g, controlInfoX, controlInfoY);
+				Icons.ICON_INFO.paintIcon(layerLegend, g, controlInfoX,
+						controlInfoY);
 			}
 
 			paintToolControls(layerLegend, g, controlToolX, controlToolY,
@@ -1110,7 +1066,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 		 */
 		public void paintToolControls(JXTaskPane group, Graphics g, int x,
 				int y, int width, int height) {
-			ICON_TOOL.paintIcon(group, g, x, y);
+			Icons.ICON_TOOL.paintIcon(group, g, x, y);
 		}
 
 		/**
@@ -1127,9 +1083,9 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			if (mapLayerLegend.isLayerVisible()) {
 
 				if (mapLayerLegend.isTransparent())
-					icon = ICON_HALFVISIBLE;
+					icon = Icons.ICON_HALFVISIBLE;
 				else
-					icon = ICON_VISIBLE;
+					icon = Icons.ICON_VISIBLE;
 
 				icon.paintIcon(mapLayerLegend, g, x, y);
 
@@ -1137,11 +1093,12 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				 * Paint a filter symbol above if the layer is filtered
 				 */
 				if (mapLayerLegend.isFiltered()) {
-					ICON_FILTER.paintIcon(mapLayerLegend, g, x + 3, y - 2);
+					Icons.ICON_FILTER
+							.paintIcon(mapLayerLegend, g, x + 3, y - 2);
 				}
 
 			} else {
-				ICON_NOTVISIBLE.paintIcon(mapLayerLegend, g, x, y);
+				Icons.ICON_NOTVISIBLE.paintIcon(mapLayerLegend, g, x, y);
 			}
 
 		}
@@ -1234,8 +1191,8 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 			int chevronX = x + width / 2 - chevron.getIconWidth() / 2;
 			int chevronY = y + (height / 2 - chevron.getIconHeight());
 			chevron.paintIcon(group, g, chevronX, chevronY);
-			chevron.paintIcon(group, g, chevronX, chevronY
-					+ chevron.getIconHeight() + 1);
+			chevron.paintIcon(group, g, chevronX,
+					chevronY + chevron.getIconHeight() + 1);
 		}
 
 		/**

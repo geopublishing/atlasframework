@@ -26,7 +26,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -83,7 +83,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				JMenuItem attributeTableJMenuItem = new JMenuItem(
 						new AbstractAction(
 								AtlasViewerGUI.R("LayerToolMenu.table"),
-								BasicMapLayerLegendPaneUI.ICON_TABLE) {
+								Icons.ICON_TABLE) {
 
 							@Override
 							public void actionPerformed(ActionEvent e) {

@@ -422,30 +422,28 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 			jComboBoxValueField
 					.setSelectedItem(rulesList.getValue_field_name());
 
-			jComboBoxValueField
-					.addItemListener(new java.awt.event.ItemListener() {
-						@Override
-						public void itemStateChanged(
-								final java.awt.event.ItemEvent e) {
-							if (e.getStateChange() == ItemEvent.SELECTED) {
+			jComboBoxValueField.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(final java.awt.event.ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-								final String valueField = (String) e.getItem();
+						final String valueField = (String) e.getItem();
 
-								getJComboBoxNormalizationField()
-										.setModel(
-												classifier
-														.createNormalizationFieldsComboBoxModel());
+						getJComboBoxNormalizationField()
+								.setModel(
+										classifier
+												.createNormalizationFieldsComboBoxModel());
 
-								LOGGER.debug("Set valuefield to " + valueField);
-								classifier.setValue_field_name(valueField);
-								//
-								// // When the valueField has been changed by
-								// the
-								// // user, throw away the ruleTitles
-								// rulesList.getRuleTitles().clear();
-							}
-						}
-					});
+						LOGGER.debug("Set valuefield to " + valueField);
+						classifier.setValue_field_name(valueField);
+						//
+						// // When the valueField has been changed by
+						// the
+						// // user, throw away the ruleTitles
+						// rulesList.getRuleTitles().clear();
+					}
+				}
+			});
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxValueField, false);
 		}

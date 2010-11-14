@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -49,7 +49,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 								mpTable.convertRowIndexToModel(mpTable
 										.getSelectedRow()))
 								.getMissingHTMLLanguages().size()),
-				BasicMapLayerLegendPaneUI.ICON_REMOVE);
+				Icons.ICON_REMOVE);
 
 		owner = mpTable;
 		final MapPool mapPool = mpTable.getMapPool();
@@ -64,7 +64,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 		super(GeopublisherGUI.R("MapPoolWindow_Action_DeleteAllMapHTML_label",
 				map_.getAc().getLanguages().size()
 						- map_.getMissingHTMLLanguages().size()),
-				BasicMapLayerLegendPaneUI.ICON_REMOVE);
+				Icons.ICON_REMOVE);
 
 		ace = (AtlasConfigEditable) map_.getAc();
 		map = map_;

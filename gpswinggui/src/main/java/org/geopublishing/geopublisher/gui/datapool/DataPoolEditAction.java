@@ -17,7 +17,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -34,7 +34,7 @@ public class DataPoolEditAction extends AbstractAction {
 
 	public DataPoolEditAction(DataPoolJTable dpTable, Component owner) {
 		super(GeopublisherGUI.R("DataPoolWindow_Action_EditDPE_label"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL);
+				Icons.ICON_TOOL);
 		this.dpTable = dpTable;
 		this.owner = owner;
 
@@ -42,7 +42,7 @@ public class DataPoolEditAction extends AbstractAction {
 
 	public DataPoolEditAction(Component owner, DpEntry<? extends ChartStyle> dpe) {
 		super(GeopublisherGUI.R("DataPoolWindow_Action_EditDPE_label"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL);
+				Icons.ICON_TOOL);
 		this.owner = owner;
 		this.dpe = dpe;
 	}

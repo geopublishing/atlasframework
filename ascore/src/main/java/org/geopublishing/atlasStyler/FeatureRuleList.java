@@ -129,8 +129,12 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 	}
 
 	/**
-	 * Will remove all other {@link Symbolizer}s and add the symbolizers of the
-	 * given rule to the {@link noDataSymbol}.
+	 * Uses the Symbolizers of the {@link Rule} to create a NoDataSymbol of type
+	 * {@link SingleRuleList}. The label for NODATA is stored in the rule's
+	 * title field.<br/>
+	 * This does not import any NODATA values. In Geopublisher the NODATA values
+	 * are stored in the atlas.xml. But it would maybe be a good idea to import
+	 * them here?!
 	 */
 	public void importNoDataRule(Rule r) {
 		getNoDataSymbol().getSymbolizers().clear();
@@ -141,6 +145,15 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 				.equals(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
 			getNoDataSymbol().setVisibleInLegend(false);
 		}
+
+		Filter filter = parseAbstractRlSettings(r.getFilter());
+
+		// Stub on how to parse the NODAT values...
+		// Or ors = (Or) filter;
+		// for (Filter ndf : ors.getChildren()) {
+		// if (ndf instanceof IsNullImpl) {
+		// }
+		// }
 	}
 
 	/***************************************************************************

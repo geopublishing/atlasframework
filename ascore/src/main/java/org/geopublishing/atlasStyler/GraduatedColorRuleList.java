@@ -174,17 +174,13 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				}
 		}
 
-		/**
-		 * Problem: If <or><isNull></or> is used, the filter works in Geotools,
-		 * BUT it is not valid: <br/>
-		 * <code>org.xml.sax.SAXParseException: cvc-complex-type.2.4.b: The content of element 'ogc:Or' is not
-		 * complete. One of '{"http://www.opengis.net/ogc":comparisonOps,
-		 * "http://www.opengis.net/ogc":spatialOps, "http://www.opengis.net/ogc":logicOps}' is expected.</code>
-		 * <br/>
-		 * Hence, to comply with SLD validity, if there is only one element in
-		 * the <code>ors</code> list, we remove the or around it.
-		 */
-		return FilterUtil.correctOrForValidation(ff2.or(ors));
+		Filter filter = FilterUtil.correctOrForValidation(ff2.or(ors));
+
+		// The NODATA rule also need to be enabled/disabled accoring to the
+		// general stat eof the RuleList
+		filter = addAbstractRlSettings(filter);
+
+		return filter;
 	}
 
 	@Override
@@ -250,7 +246,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				filter = ff2.and(ff2.not(getNoDataFilter()), filter);
 
 			// Add the general on/off switch as the last AND filter
-			filter = addRuleListEnabledDisabledFilter(filter);
+			filter = addAbstractRlSettings(filter);
 			rule.setFilter(filter);
 
 			rule.setTitle(getRuleTitles().get(i));
@@ -409,7 +405,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 			Filter filter = r.getFilter();
 
 			// Reving and preceeding Enabled/Disabled filter
-			filter = parseRuleListEnabledDisabledFilter(filter);
+			filter = parseAbstractRlSettings(filter);
 
 			ds = interpretBetweenFilter(filter);
 			classLimits.add(ds[0]);

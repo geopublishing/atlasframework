@@ -20,7 +20,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.group.EditGroupJDialog;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -64,7 +64,7 @@ public class GroupTreeEditAction extends AbstractAction {
 	public GroupTreeEditAction(EditGroupsDnDJTreePanel editGroupsPanel,
 			TreeNode treeNode) {
 		super(GeopublisherGUI.R("GroupTree.Action.Edit"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL);
+				Icons.ICON_TOOL);
 		this.editGroupsPanel = editGroupsPanel;
 		this.owner = editGroupsPanel;
 		this.node = treeNode;

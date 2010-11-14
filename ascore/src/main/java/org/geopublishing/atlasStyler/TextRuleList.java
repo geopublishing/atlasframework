@@ -433,7 +433,7 @@ public class TextRuleList extends AbstractRulesList {
 				Filter secondNotEmpty = ASUtil.ff2.not(secondLabelNodataFilter);
 				filter = ASUtil.ff.and(secondNotEmpty, filter);
 				filter = addClassEnabledDisabledFilters(filter, i);
-				filter = addRuleListEnabledDisabledFilter(filter);
+				filter = addAbstractRlSettings(filter);
 				rule.setFilter(filter);
 
 				rules.add(rule);
@@ -446,7 +446,7 @@ public class TextRuleList extends AbstractRulesList {
 				fallbackRule.setName(RULENAME_DONTIMPORT);
 				filter = ASUtil.ff.and(secondLabelNodataFilter, filter);
 				filter = addClassEnabledDisabledFilters(filter, i);
-				filter = addRuleListEnabledDisabledFilter(filter);
+				filter = addAbstractRlSettings(filter);
 				fallbackRule.setFilter(filter);
 				final TextSymbolizer ts2 = (TextSymbolizer) fallbackRule
 						.symbolizers().get(0);
@@ -455,7 +455,7 @@ public class TextRuleList extends AbstractRulesList {
 			} else {
 				// No second labeling property set
 				filter = addClassEnabledDisabledFilters(filter, i);
-				filter = addRuleListEnabledDisabledFilter(filter);
+				filter = addAbstractRlSettings(filter);
 				rule.setFilter(filter);
 				rules.add(rule);
 			}
@@ -795,7 +795,7 @@ public class TextRuleList extends AbstractRulesList {
 
 		final Filter fullFilter = filter;
 
-		filter = parseRuleListEnabledDisabledFilter(filter);
+		filter = parseAbstractRlSettings(filter);
 
 		/**
 		 * Interpreting whether the class is disable/enables

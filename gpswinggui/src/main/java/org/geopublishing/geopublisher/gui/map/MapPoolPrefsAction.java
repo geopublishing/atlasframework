@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -36,7 +36,7 @@ public class MapPoolPrefsAction extends AbstractAction {
 
 	public MapPoolPrefsAction(Component owner, Map map, MapPool mapPool) {
 		super(GeopublisherGUI.R("MapPoolWindow.Button_EditMap_label"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL);
+				Icons.ICON_TOOL);
 		this.owner = owner;
 		this.map = map;
 		this.mapPool = mapPool;
@@ -45,7 +45,7 @@ public class MapPoolPrefsAction extends AbstractAction {
 
 	public MapPoolPrefsAction(MapPoolJTable mapPoolJTable) {
 		super(GeopublisherGUI.R("MapPoolWindow.Button_EditMap_label"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL);
+				Icons.ICON_TOOL);
 		this.mapPoolJTable = mapPoolJTable;
 		this.mapPool = mapPoolJTable.getMapPool();
 

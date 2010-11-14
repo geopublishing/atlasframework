@@ -13,11 +13,26 @@ import org.geotools.styling.Style;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.opengis.filter.Filter;
+import org.opengis.filter.PropertyIsEqualTo;
 
+import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 
 public class AbstractRulesListTest {
+
+	PropertyIsEqualTo f1 = FilterUtil.FILTER_FAC2.equals(
+			FilterUtil.FILTER_FAC2.literal(3),
+			FilterUtil.FILTER_FAC2.literal(3));
+
+	PropertyIsEqualTo f2 = FilterUtil.FILTER_FAC2.equals(
+			FilterUtil.FILTER_FAC2.literal(3),
+			FilterUtil.FILTER_FAC2.literal(3));
+
+	PropertyIsEqualTo f3 = FilterUtil.FILTER_FAC2.equals(
+			FilterUtil.FILTER_FAC2.literal(3),
+			FilterUtil.FILTER_FAC2.literal(3));
 
 	@Before
 	public void setUp() throws Exception {
@@ -32,16 +47,20 @@ public class AbstractRulesListTest {
 		AtlasStyler as = AsTestingUtil
 				.getAtlasStyler(TestDatasetsVector.polygonSnow);
 
-		testRuleLists(as, false, "S", false, "U", false, "G", false, "T");
-		testRuleLists(as, true, "single", true, "unique", true, "gradcolors",
-				true, "textLabeling");
-		testRuleLists(as, true, "S", true, "U", true, "G", false, "T");
-		testRuleLists(as, false, "S", false, "U", false, "G", true, "T");
+		testRuleLists(as, false, "S", f1, false, "U", f1, false, "G", f3,
+				false, "T", f1);
+		testRuleLists(as, true, "single", f1, true, "unique", f3, true,
+				"gradcolors", f3, true, "textLabeling", f1);
+		testRuleLists(as, true, "S", null, true, "U", null, true, "G", null,
+				false, "T", null);
+		testRuleLists(as, false, "S", null, false, "U", null, false, "G", f2,
+				true, "T", f3);
 	}
 
 	private void testRuleLists(AtlasStyler as, boolean sEnabled, String sTitle,
-			boolean uEnabled, String uTitle, boolean gEnabled, String gTitle,
-			boolean tEnabled, String tTitle) throws IOException,
+			Filter sFilter, boolean uEnabled, String uTitle, Filter uFilter,
+			boolean gEnabled, String gTitle, Filter gFilter, boolean tEnabled,
+			String tTitle, Filter tFilter) throws IOException,
 			FileNotFoundException {
 
 		as.reset();
@@ -50,6 +69,9 @@ public class AbstractRulesListTest {
 		{
 			SingleRuleList<?> singleRulesList = as.getRlf()
 					.createSingleRulesList(true);
+
+			// RL_FILTER_APPLIED_STR
+
 			UniqueValuesRuleList uniqueRulesList = as.getRlf()
 					.createUniqueValuesRulesList(true);
 			// GraduatedColorRuleList needs al least one rule to store the
@@ -81,6 +103,12 @@ public class AbstractRulesListTest {
 			gradColorsRulesList.setTitle(gTitle);
 			textRulesList.setTitle(tTitle);
 
+			// Set filters
+			singleRulesList.setRlFilter(sFilter);
+			uniqueRulesList.setRlFilter(uFilter);
+			gradColorsRulesList.setRlFilter(gFilter);
+			textRulesList.setRlFilter(tFilter);
+
 			// Ruleliste add to AS
 			as.addRulesList(singleRulesList);
 			as.addRulesList(uniqueRulesList);
@@ -93,6 +121,7 @@ public class AbstractRulesListTest {
 		File tf = File.createTempFile("junit", ".sld");
 		boolean saveStyleToSld = StylingUtil.saveStyleToSld(as.getStyle(), tf);
 		assertTrue(saveStyleToSld);
+		StylingUtil.validates(as.getStyle());
 
 		// New AtlasStyler, load the Styles
 		as = new AtlasStyler(TestDatasetsVector.polygonSnow.getFeatureSource());
@@ -119,6 +148,11 @@ public class AbstractRulesListTest {
 		assertEquals(uTitle, uniqueRulesList.getTitle());
 		assertEquals(gTitle, gradColorsRulesList.getTitle());
 
-	}
+		// Filters
+		assertEquals(sFilter, singleRulesList.getRlFilter());
+		assertEquals(gFilter, gradColorsRulesList.getRlFilter());
+		assertEquals(uFilter, uniqueRulesList.getRlFilter());
+		assertEquals(tFilter, textRulesList.getRlFilter());
 
+	}
 }

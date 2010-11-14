@@ -62,8 +62,8 @@ import org.geopublishing.atlasViewer.swing.AtlasChartJDialog;
 import org.geopublishing.atlasViewer.swing.AtlasChartJPanel;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLegend;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.chart.GeneralChartSettingsJPanel;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
@@ -294,7 +294,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 		JButton attributes = new JButton(new AbstractAction(
 				AtlasViewerGUI.R("LayerToolMenu.table"),
-				BasicMapLayerLegendPaneUI.ICON_TABLE) {
+				Icons.ICON_TABLE) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {

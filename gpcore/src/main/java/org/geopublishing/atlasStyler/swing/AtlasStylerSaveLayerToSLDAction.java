@@ -26,7 +26,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
@@ -43,7 +43,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 	public AtlasStylerSaveLayerToSLDAction(Component owner, StyledFS styledShp) {
 		super(AtlasStyler.R("AtlasStylerGUI.saveToSLDFile"),
-				BasicMapLayerLegendPaneUI.ICON_EXPORT);
+				Icons.ICON_EXPORT);
 		this.owner = owner;
 		this.styledShp = styledShp;
 

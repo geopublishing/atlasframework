@@ -171,6 +171,10 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 	protected boolean transparentToggled = false;
 
+	private URL cachedInfoUrl;
+
+	private long lastTimeUrlCached;
+
 	/**
 	 * The {@link MapLayerLegend} represents one {@link MapLayer} in the legend.
 	 * It can be Dragged'n'Dropped.
@@ -481,15 +485,16 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	/**
 	 * Returns <code>null</code> or the {@link URL} to an HTML page with info
 	 * about this {@link StyledLayerInterface}.
-	 * 
-	 * @deprecated TODO this method is called too often from
-	 *             BasicMapLayerLegendPaneUI. Needs a cache
 	 */
-	@Deprecated
 	public URL getInfoURL() {
-		if (styledLayer != null)
-			return styledLayer.getInfoURL();
-		return null;
+		if (cachedInfoUrl == null
+				|| System.currentTimeMillis() - lastTimeUrlCached > 200) {
+			lastTimeUrlCached = System.currentTimeMillis();
+			if (styledLayer != null)
+				cachedInfoUrl = styledLayer.getInfoURL();
+
+		}
+		return cachedInfoUrl;
 	}
 
 	/**
@@ -527,8 +532,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		if (isFilterable()) {
 
 			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-					.R("LayerToolMenu.filter"),
-					BasicMapLayerLegendPaneUI.ICON_FILTER) {
+					.R("LayerToolMenu.filter"), Icons.ICON_FILTER) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -538,18 +542,20 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 			}));
 
 			final JMenuItem removeFilterMenuItem = new JMenuItem();
-			removeFilterMenuItem.setAction(new AbstractAction(AtlasViewerGUI
-					.R("LayerToolMenu.remove_filter"),
-					BasicMapLayerLegendPaneUI.ICON_REMOVE_FILTER) {
+			removeFilterMenuItem
+					.setAction(new AbstractAction(AtlasViewerGUI
+							.R("LayerToolMenu.remove_filter"),
+							Icons.ICON_REMOVE_FILTER) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					removeFilter();
-					removeFilterMenuItem.setEnabled(false);
-					MapLayerLegend.this.repaint(); // Update the eye-Icon
-				}
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							removeFilter();
+							removeFilterMenuItem.setEnabled(false);
+							MapLayerLegend.this.repaint(); // Update the
+															// eye-Icon
+						}
 
-			});
+					});
 
 			removeFilterMenuItem.setEnabled(isFiltered());
 			toolPopup.add(removeFilterMenuItem);
@@ -564,8 +570,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				&& !(styledLayer instanceof StyledRasterInterface)) {
 
 			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-					.R("LayerToolMenu.style"),
-					BasicMapLayerLegendPaneUI.ICON_STYLE) {
+					.R("LayerToolMenu.style"), Icons.ICON_STYLE) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -585,8 +590,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		if (isTableViewable()) {
 
 			final AbstractAction showTableAction = new AbstractAction(
-					AtlasViewerGUI.R("LayerToolMenu.table"),
-					BasicMapLayerLegendPaneUI.ICON_TABLE) {
+					AtlasViewerGUI.R("LayerToolMenu.table"), Icons.ICON_TABLE) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -608,8 +612,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 * Button to remove the layer from the MapContext
 		 */
 		toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-				.R("LayerToolMenu.remove"),
-				BasicMapLayerLegendPaneUI.ICON_REMOVE) {
+				.R("LayerToolMenu.remove"), Icons.ICON_REMOVE) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -638,8 +641,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 */
 		if (isExportable()) {
 			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-					.R("LayerToolMenu.export"),
-					BasicMapLayerLegendPaneUI.ICON_EXPORT) {
+					.R("LayerToolMenu.export"), Icons.ICON_EXPORT) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -756,39 +758,6 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * {@link FeatureCollection}
 	 */
 	public void openFilterDialog() {
-
-		// /****************************************************************************
-		// * // This filter dialog is only availably for layers that
-		// #isFilterable
-		// * /
-		// ****************************************************************************/
-		// final Frame owner = SwingUtil.getParentFrame(this);
-		//
-		// FeatureLayerFilterDialog fDialog = new
-		// FeatureLayerFilterDialog(owner,
-		// mapLegend.getGeoMapPane().getMapPane(), getMapLayer());
-		//
-		// // }
-		//
-		// /**
-		// * If there is a filter applied to the mapLayer, load it into the
-		// * FilterDialog
-		// */
-		// if (isFiltered()) {
-		// final Filter filter = getMapLayer().getQuery().getFilter();
-		// if (filter instanceof FeatureOperationTreeFilter) {
-		// final FeatureOperationTreeFilter fotf = (FeatureOperationTreeFilter)
-		// filter;
-		// final String rule = fotf.getRule();
-		// if (rule != "1")
-		// fDialog.setFilterRule(rule);
-		// }
-		// }
-		//
-		// // Opens the modal dialog
-		// fDialog.setVisible(true);
-		// fDialog.requestFocus();
-
 		AtlasFeatureLayerFilterDialog fDialog = new AtlasFeatureLayerFilterDialog(
 				this, (StyledFeaturesInterface<?>) styledLayer, mapLegend
 						.getGeoMapPane().getMapPane(), getMapLayer());

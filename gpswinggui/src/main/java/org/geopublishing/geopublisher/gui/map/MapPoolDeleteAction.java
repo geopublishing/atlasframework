@@ -21,7 +21,7 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
+import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.ExceptionDialog;
@@ -33,7 +33,7 @@ public class MapPoolDeleteAction extends AbstractAction {
 
 	public MapPoolDeleteAction(MapPoolJTable mapPoolJTable) {
 		super(GeopublisherGUI.R("MapPool.Action.DeleteMap"),
-				BasicMapLayerLegendPaneUI.ICON_REMOVE);
+				Icons.ICON_REMOVE);
 
 		this.mapPoolJTable = mapPoolJTable;
 		this.mapPool = mapPoolJTable.getMapPool();

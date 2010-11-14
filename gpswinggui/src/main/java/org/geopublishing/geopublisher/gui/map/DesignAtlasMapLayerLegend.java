@@ -38,7 +38,6 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLayerLegend;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.DesignAtlasStylerDialog;
 import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
@@ -239,7 +238,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		 */
 		menu.add(new AbstractAction(GeopublisherGUI
 				.R("DataPoolWindow_Action_EditDPE_label"),
-				BasicMapLayerLegendPaneUI.ICON_TOOL) {
+				Icons.ICON_TOOL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -294,7 +293,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 		if (countExisting > 0) {
 			menu.add(new AbstractAction(GeopublisherGUI.R(
 					"DataPoolWindow_Action_DeleteAllDPEHTML_label",
-					countExisting), BasicMapLayerLegendPaneUI.ICON_REMOVE) {
+					countExisting), Icons.ICON_REMOVE) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {

@@ -26,6 +26,7 @@ import org.geotools.styling.Style;
 import org.geotools.util.SimpleInternationalString;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.filter.And;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.PropertyIsEqualTo;
@@ -45,6 +46,18 @@ import schmitzm.lang.LangUtil;
 public abstract class AbstractRulesList {
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
 
+	// ** Do not change the value, it is needed to recognize SLD **//
+	private static final String ALL_LABEL_CLASSES_ENABLED = "ALL_LABEL_CLASSES_ENABLED";
+
+	// ** Do not change the value, it is needed to recognize SLD **//
+	private static final String RL_FILTER_APPLIED_STR = "RL_FILTER_APPLIED";
+	/**
+	 * A Filter to mark that one class/rule is enabled
+	 **/
+	public static final PropertyIsEqualTo RL_FILTER_APPLIED_FILTER = ff.equals(
+			ff.literal(RL_FILTER_APPLIED_STR),
+			ff.literal(RL_FILTER_APPLIED_STR));
+
 	private String title = this.getClass().getSimpleName().toString();
 
 	/**
@@ -58,8 +71,8 @@ public abstract class AbstractRulesList {
 	 * A Filter to mark that one class/rule is enabled
 	 **/
 	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
+			ff.literal(ALL_LABEL_CLASSES_ENABLED),
+			ff.literal(ALL_LABEL_CLASSES_ENABLED));
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
@@ -87,14 +100,81 @@ public abstract class AbstractRulesList {
 	 */
 	static final String RULENAME_DONTIMPORT = "DONTIMPORT";
 
+	protected Filter addAbstractRlSettings(Filter filter) {
+
+		filter = addRuleListFilterAppliedFilter(filter);
+
+		filter = addRuleListEnabledDisabledFilter(filter);
+
+		return filter;
+	}
+
+	/**
+	 * If a rlFilter is defined, it is returned here, wrapped in a recognizable
+	 * AND structure. @see {@link #parseRuleListFilterAppliedFilter(Filter)}
+	 */
+	Filter addRuleListFilterAppliedFilter(Filter filter) {
+
+		if (getRlFilter() != null && getRlFilter() != Filter.INCLUDE) {
+
+			And markerAndFilter = ff.and(RL_FILTER_APPLIED_FILTER,
+					getRlFilter());
+
+			filter = ff.and(markerAndFilter, filter);
+		}
+
+		return filter;
+	}
+
+	/**
+	 * Tries to determine, whether this filter contains a layer filter. @see
+	 * {@link #addRuleListFilterAppliedFilter}
+	 */
+	Filter parseRuleListFilterAppliedFilter(Filter filter) {
+		if (filter instanceof And) {
+			And and1 = (And) filter;
+
+			if (and1.getChildren().get(0) instanceof And) {
+				And and2 = (And) and1.getChildren().get(0);
+				if (and2.getChildren().get(0).equals(RL_FILTER_APPLIED_FILTER)) {
+
+					// Import the rule list filter
+					setRlFilter(and2.getChildren().get(1));
+
+					// return the rest
+					return and1.getChildren().get(1);
+				}
+			}
+		}
+		return filter;
+	}
+
+	private Filter rlFilter = null;
+
+	/**
+	 * Gets a filter that is applied to the whole AbstractRulesList. If will be
+	 * added to all filters of all rules. May be <code>null</code>.
+	 */
+	public Filter getRlFilter() {
+		return rlFilter;
+	}
+
+	/**
+	 * Sets a filter that is applied to the whole AbstractRulesList. If will be
+	 * added to all filters of all rules.
+	 */
+	public void setRlFilter(Filter rlFilter) {
+		this.rlFilter = rlFilter;
+	}
+
 	/**
 	 * Returns <code>ff.and(RL_ENABLED_FILTER, filter)</code> or
 	 * <code>ff.and(RL_DISABLED_FILTER, filter)</code>.<Br/>
 	 * 
-	 * @see #parseRuleListEnabledDisabledFilter(Filter)
+	 * @see #parseAbstractRlSettings(Filter)
 	 * 
 	 */
-	protected Filter addRuleListEnabledDisabledFilter(Filter filter) {
+	private Filter addRuleListEnabledDisabledFilter(Filter filter) {
 		// Are all classes enabled?
 		if (isEnabled()) {
 			filter = ff.and(RL_ENABLED_FILTER, filter);
@@ -105,16 +185,21 @@ public abstract class AbstractRulesList {
 		return filter;
 	}
 
+	protected Filter parseAbstractRlSettings(Filter filter) {
+		filter = parseRuleListEnabledDisabledFilter(filter);
+		filter = parseRuleListFilterAppliedFilter(filter);
+		return filter;
+	}
+
 	/**
 	 * Returns a shorter filter. The method tries to identify
 	 * #RL_DISABLED_FILTER or #RL_ENABLED_FILTER and sets the #enabled variable.
 	 * It should always be parsed as the first FilterParser (FilterParsers eat
 	 * the filter).
 	 * 
-	 * @see #addRuleListEnabledDisabledFilter(Filter)
+	 * @see #addAbstractRlSettings(Filter)
 	 */
-	protected Filter parseRuleListEnabledDisabledFilter(Filter filter) {
-
+	private Filter parseRuleListEnabledDisabledFilter(Filter filter) {
 		if (!(filter instanceof AndImpl)) {
 			setEnabled(true);
 			LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
@@ -148,7 +233,6 @@ public abstract class AbstractRulesList {
 			}
 
 		return filter;
-
 	}
 
 	public AbstractRulesList(GeometryForm geometryForm) {

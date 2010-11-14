@@ -27,7 +27,6 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
 import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.map.MapContext;
@@ -187,7 +186,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 
 			menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.style"),
-					BasicMapLayerLegendPaneUI.ICON_STYLE) {
+					Icons.ICON_STYLE) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
