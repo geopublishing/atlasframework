@@ -55,7 +55,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
-	private Logger LOGGER = ASUtil.createLogger(this);
+	private final Logger LOGGER = ASUtil.createLogger(this);
 
 	@Override
 	protected String getDesc() {
@@ -107,7 +107,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 			throw new RuntimeException(e);
 		}
 
-		rescan(true);
+		rescan(false);
 	}
 
 	/**
@@ -123,9 +123,9 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 		if (reset) {
 			getJListSymbols().setModel(new DefaultListModel());
+			imageCache.clear();
+			symbolPreviewComponentsCache.clear();
 		}
-		weakImageCache.clear();
-		weakSymbolPreviewComponentsCache.clear();
 
 		AtlasSwingWorker<Void> symbolLoader = getWorker();
 		symbolLoader.executeModalNoEx();

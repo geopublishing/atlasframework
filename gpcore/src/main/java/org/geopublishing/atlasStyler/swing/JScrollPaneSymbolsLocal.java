@@ -357,13 +357,13 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 								+ symbolRuleList.getStyleName()
 								+ symbolRuleList.getStyleTitle()
 								+ symbolRuleList.getStyleAbstract();
-						if (weakImageCache.get(key) == null) {
+						if (imageCache.get(key) == null) {
 							/**
 							 * Render the image now
 							 */
 							// LOGGER.debug("Rendering an Image for the cache.
 							// key = "+key );
-							weakImageCache.put(key,
+							imageCache.put(key,
 									symbolRuleList.getImage(SYMBOL_SIZE));
 						}
 

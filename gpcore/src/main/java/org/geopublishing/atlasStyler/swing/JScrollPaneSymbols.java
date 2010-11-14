@@ -20,8 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -36,7 +35,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -62,9 +60,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 	public static final String PROPERTY_SYMBOL_SELECTED = "SYMBOL_SELECTED";
 
-	private Logger LOGGER = ASUtil.createLogger(this);
-
-	final static protected Map<String, BufferedImage> weakImageCache = new WeakHashMap<String, BufferedImage>();
+	private final Logger LOGGER = Logger.getLogger(JScrollPaneSymbols.class);
 
 	private volatile JList jListSymbols;
 
@@ -78,7 +74,14 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 		initialize();
 	}
 
-	static WeakHashMap<String, JPanel> weakSymbolPreviewComponentsCache = new WeakHashMap<String, JPanel>();
+	/**
+	 * static caches for images
+	 */
+	final static protected HashMap<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
+	/**
+	 * static caches for images
+	 */
+	final static protected HashMap<String, JPanel> symbolPreviewComponentsCache = new HashMap<String, JPanel>();
 
 	private void initialize() {
 		setViewportView(getJListSymbols());
@@ -224,13 +227,16 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 	}
 
 	/**
-	 * Renders the preview of the symbol and from the url and put the result in a cache.
-	 * @param rl SingleRuleList to render
-	 * @param key 
+	 * Renders the preview of the symbol and from the url and put the result in
+	 * a cache.
+	 * 
+	 * @param rl
+	 *            SingleRuleList to render
+	 * @param key
 	 */
 	JPanel getOrCreateComponent(SingleRuleList rl, String key) {
 
-		JPanel fullCell = weakSymbolPreviewComponentsCache.get(key);
+		JPanel fullCell = symbolPreviewComponentsCache.get(key);
 		if (fullCell == null) {
 
 			fullCell = new JPanel(new BorderLayout());
@@ -238,13 +244,13 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 			fullCell.setBackground(Color.white);
 
-			BufferedImage symbolImage = weakImageCache.get(key);
+			BufferedImage symbolImage = imageCache.get(key);
 			// LOGGER.info("Looking for "+key);
 			if (symbolImage == null) {
-//				LOGGER.info("A symbol for " + key
-//						+ " was not found in cache.");
+				// LOGGER.info("A symbol for " + key
+				// + " was not found in cache.");
 				symbolImage = rl.getImage(SYMBOL_SIZE);
-				weakImageCache.put(key, symbolImage);
+				imageCache.put(key, symbolImage);
 			}
 			ImageIcon image = new ImageIcon(symbolImage);
 
@@ -266,7 +272,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 			JLabel description = new JLabel(rl.getStyleAbstract());
 			infos.add(description, BorderLayout.CENTER);
 			description.setFont(description.getFont().deriveFont(8f));
-			weakSymbolPreviewComponentsCache.put(key, fullCell);
+			symbolPreviewComponentsCache.put(key, fullCell);
 			fullCell.add(infos, BorderLayout.CENTER);
 		}
 		return fullCell;
