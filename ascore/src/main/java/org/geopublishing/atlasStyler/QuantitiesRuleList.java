@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
@@ -297,6 +296,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return
 	 **************************************************************************/
 
+	@Override
 	abstract public void parseMetaInfoString(String metaInfoString,
 			FeatureTypeStyle fts);
 
@@ -436,11 +436,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 			return classDigitsDecimalFormat;
 
 		return classDigitsDecimalFormat;
-	}
-
-	public void importFts(FeatureTypeStyle fts) {
-		throw new NotImplementedException(
-				"This method has not been implemented. Please email the developer how you got here.");
 	}
 
 }

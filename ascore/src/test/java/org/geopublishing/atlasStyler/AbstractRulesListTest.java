@@ -32,22 +32,24 @@ public class AbstractRulesListTest {
 		AtlasStyler as = AsTestingUtil
 				.getAtlasStyler(TestDatasetsVector.polygonSnow);
 
-		testEnabledOnRuleLists(as, false, false, false, false);
-		testEnabledOnRuleLists(as, true, true, true, true);
-		testEnabledOnRuleLists(as, true, true, true, false);
-		testEnabledOnRuleLists(as, false, false, false, true);
+		testRuleLists(as, false, "S", false, "U", false, "G", false, "T");
+		testRuleLists(as, true, "single", true, "unique", true, "gradcolors",
+				true, "textLabeling");
+		testRuleLists(as, true, "S", true, "U", true, "G", false, "T");
+		testRuleLists(as, false, "S", false, "U", false, "G", true, "T");
 	}
 
-	private void testEnabledOnRuleLists(AtlasStyler as, boolean sEnabled,
-			boolean uEnabled, boolean gEnabled, boolean tEnabled)
-			throws IOException, FileNotFoundException {
+	private void testRuleLists(AtlasStyler as, boolean sEnabled, String sTitle,
+			boolean uEnabled, String uTitle, boolean gEnabled, String gTitle,
+			boolean tEnabled, String tTitle) throws IOException,
+			FileNotFoundException {
 
 		as.reset();
 		assertEquals(0, as.getRuleLists().size());
 
 		{
-			SingleRuleList singleRulesList = as.getRlf().createSingleRulesList(
-					true);
+			SingleRuleList<?> singleRulesList = as.getRlf()
+					.createSingleRulesList(true);
 			UniqueValuesRuleList uniqueRulesList = as.getRlf()
 					.createUniqueValuesRulesList(true);
 			// GraduatedColorRuleList needs al least one rule to store the
@@ -67,11 +69,19 @@ public class AbstractRulesListTest {
 
 			TextRuleList textRulesList = as.getRlf().createTextRulesList(true);
 
+			// Enabled/Disabled setzen
 			singleRulesList.setEnabled(sEnabled);
 			uniqueRulesList.setEnabled(uEnabled);
 			gradColorsRulesList.setEnabled(gEnabled);
 			textRulesList.setEnabled(tEnabled);
-			//
+
+			// Set title
+			singleRulesList.setTitle(sTitle);
+			uniqueRulesList.setTitle(uTitle);
+			gradColorsRulesList.setTitle(gTitle);
+			textRulesList.setTitle(tTitle);
+
+			// Ruleliste add to AS
 			as.addRulesList(singleRulesList);
 			as.addRulesList(uniqueRulesList);
 			as.addRulesList(gradColorsRulesList);
@@ -97,10 +107,18 @@ public class AbstractRulesListTest {
 				.getRuleLists().get(2);
 		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(3);
 
+		// Compre on/off
 		assertEquals(sEnabled, singleRulesList.isEnabled());
 		assertEquals(tEnabled, textRulesList.isEnabled());
 		assertEquals(gEnabled, gradColorsRulesList.isEnabled());
 		assertEquals(uEnabled, uniqueRulesList.isEnabled());
+
+		// Compare Titles
+		assertEquals(sTitle, singleRulesList.getTitle());
+		assertEquals(tTitle, textRulesList.getTitle());
+		assertEquals(uTitle, uniqueRulesList.getTitle());
+		assertEquals(gTitle, gradColorsRulesList.getTitle());
+
 	}
 
 }

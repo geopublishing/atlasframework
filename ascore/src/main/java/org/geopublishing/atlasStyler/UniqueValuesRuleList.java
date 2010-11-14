@@ -529,9 +529,9 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		return getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE);
 	}
 
+	@Override
 	public void parseMetaInfoString(final String metaInfoString,
 			final FeatureTypeStyle fts) {
-		// TODO Do we have metainfo?
 	}
 
 	/**
@@ -695,71 +695,72 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		}
 	}
 
-	public void importFts(FeatureTypeStyle fts) {
+	@Override
+	public void importRules(List<Rule> rules) {
 
-		String metaInfoString = fts.getName();
-		pushQuite();
-		try {
+		// String metaInfoString = fts.getName();
+		// pushQuite();
+		// try {
+		//
+		// parseMetaInfoString(metaInfoString, fts);
+		//
+		// /***********************************************************
+		// * Parsing information in the RULEs
+		// *
+		// * title, unique values, symbols=>singleRuleLists, template?
+		// */
+		int countRules = 0;
+		setDefaultRuleEnabled(false);
+		for (final Rule r : rules) {
 
-			parseMetaInfoString(metaInfoString, fts);
-
-			/***********************************************************
-			 * Parsing information in the RULEs
-			 * 
-			 * title, unique values, symbols=>singleRuleLists, template?
-			 */
-			int countRules = 0;
-			setDefaultRuleEnabled(false);
-			for (final Rule r : fts.rules()) {
-
-				if (r.getName() != null
-						&& r.getName().toString()
-								.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
-					// This rule defines the NoDataSymbol
-					importNoDataRule(r);
-					continue;
-				}
-
-				test();
-
-				// Interpret Filter!
-				Filter filter = r.getFilter();
-
-				filter = parseRuleListEnabledDisabledFilter(filter);
-
-				final String[] strings = UniqueValuesRuleList
-						.interpretFilter(filter);
-
-				setPropertyFieldName(strings[0], false);
-
-				final Symbolizer[] symbolizers = r.getSymbolizers();
-
-				final SingleRuleList<? extends Symbolizer> singleRLprototype = getDefaultTemplate();
-
-				// Forget bout generics here!!!
-				final SingleRuleList<?> symbolRL = singleRLprototype.copy();
-
-				symbolRL.getSymbolizers().clear();
-				for (final Symbolizer symb : symbolizers) {
-					final Vector symbolizers2 = symbolRL.getSymbolizers();
-					symbolizers2.add(symb);
-				}
-				symbolRL.reverseSymbolizers();
-
-				// Finally set all three values into the RL
-				getLabels().add(r.getDescription().getTitle().toString());
-				getSymbols().add(symbolRL);
-				getValues().add(strings[1]);
-
-				test();
-
-				countRules++;
+			if (r.getName() != null
+					&& r.getName().toString()
+							.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+				// This rule defines the NoDataSymbol
+				importNoDataRule(r);
+				continue;
 			}
 
-			LOGGER.debug("Imported " + countRules + " UNIQUE rules ");
-		} finally {
-			popQuite();
+			test();
+
+			// Interpret Filter!
+			Filter filter = r.getFilter();
+
+			filter = parseRuleListEnabledDisabledFilter(filter);
+
+			final String[] strings = UniqueValuesRuleList
+					.interpretFilter(filter);
+
+			setPropertyFieldName(strings[0], false);
+
+			final Symbolizer[] symbolizers = r.getSymbolizers();
+
+			final SingleRuleList<? extends Symbolizer> singleRLprototype = getDefaultTemplate();
+
+			// Forget bout generics here!!!
+			final SingleRuleList<?> symbolRL = singleRLprototype.copy();
+
+			symbolRL.getSymbolizers().clear();
+			for (final Symbolizer symb : symbolizers) {
+				final Vector symbolizers2 = symbolRL.getSymbolizers();
+				symbolizers2.add(symb);
+			}
+			symbolRL.reverseSymbolizers();
+
+			// Finally set all three values into the RL
+			getLabels().add(r.getDescription().getTitle().toString());
+			getSymbols().add(symbolRL);
+			getValues().add(strings[1]);
+
+			test();
+
+			countRules++;
 		}
+
+		LOGGER.debug("Imported " + countRules + " UNIQUE rules ");
+		// } finally {
+		// popQuite();
+		// }
 	}
 
 }

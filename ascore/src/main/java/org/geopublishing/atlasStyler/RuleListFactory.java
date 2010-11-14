@@ -5,7 +5,6 @@ import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.GeometryAttributeType;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -315,9 +314,9 @@ public class RuleListFactory {
 		if (!fts.getName().startsWith(RulesListType.TEXT_LABEL.toString()))
 			return null;
 
-		final TextRuleList textRulesList = createTextRulesList(false);
+		TextRuleList textRulesList = createTextRulesList(false);
 
-		textRulesList.importRules(fts.rules());
+		textRulesList.importFts(fts);
 
 		if (!textRulesList.hasDefault()) {
 			LOGGER.info("Imported a TextRuleList without a DEFAULT class.");
@@ -458,7 +457,6 @@ public class RuleListFactory {
 		 * Importing everything that starts with SINGLE
 		 */
 		if (metaInfoString.startsWith("SINGLE")) {
-			final Rule rule = fts.rules().get(0);
 
 			SingleRuleList<? extends Symbolizer> singleRuleList = null;
 
@@ -487,7 +485,7 @@ public class RuleListFactory {
 						+ metaInfoString + ", but can not be recognized!");
 			}
 
-			singleRuleList.importRule(rule);
+			singleRuleList.importFts(fts);
 			return singleRuleList;
 		}
 		return null;

@@ -91,11 +91,9 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 	 */
 	@Override
 	public FeatureTypeStyle getFTS() {
-		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle(
-				styledFeatures.getSchema().getTypeName(),
-				getRules().toArray(new Rule[] {}));
-		ftstyle.setName(getAtlasMetaInfoForFTSName());
-		return ftstyle;
+		FeatureTypeStyle fts = super.getFTS();
+		fts.featureTypeNames().add(styledFeatures.getSchema().getName());
+		return fts;
 	}
 
 	/**

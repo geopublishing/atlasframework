@@ -23,6 +23,7 @@ import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Style;
+import org.geotools.util.SimpleInternationalString;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -43,6 +44,9 @@ import schmitzm.lang.LangUtil;
  */
 public abstract class AbstractRulesList {
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
+
+	private String title = this.getClass().getSimpleName().toString();
+
 	/**
 	 * A Filter to mark that one class/rule has been disabled. Sorry,
 	 * AtlasStyler specifc, but used in Sl #createLegendSwing method
@@ -407,6 +411,33 @@ public abstract class AbstractRulesList {
 	private boolean enabled = true;
 
 	/**
+	 * Imports the information stored in the FTS and then calls
+	 * importRules(fts.rules());
+	 */
+	public void importFts(FeatureTypeStyle fts) {
+		pushQuite();
+		try {
+			// This also imports the template from the first rule.
+			String metaInfoString = fts.getName();
+			parseMetaInfoString(metaInfoString, fts);
+
+			try {
+				setTitle(fts.getDescription().getTitle().toString());
+			} catch (Exception e) {
+				setTitle(getType().toString());
+			}
+			importRules(fts.rules());
+		} finally {
+			this.popQuite();
+		}
+	}
+
+	abstract void parseMetaInfoString(String metaInfoString,
+			FeatureTypeStyle fts);
+
+	abstract void importRules(List<Rule> rules);
+
+	/**
 	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
 	 *         RuleList. This method implemented here doesn't set the
 	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
@@ -416,6 +447,7 @@ public abstract class AbstractRulesList {
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
 				rules.toArray(new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
+		ftstyle.getDescription().setTitle(new SimpleInternationalString(title));
 		return ftstyle;
 	}
 
@@ -533,6 +565,14 @@ public abstract class AbstractRulesList {
 	 */
 	public boolean isEnabled() {
 		return enabled;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
 	}
 
 }

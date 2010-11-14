@@ -382,80 +382,65 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
 	}
 
-	/**
-	 * Import the informations stored in a {@link FeatureTypeStyle} as a
-	 * {@link GraduatedColorRuleList}.
-	 */
 	@Override
-	public void importFts(FeatureTypeStyle fts) {
-		pushQuite();
-		String metaInfoString = fts.getName();
-		try {
+	void importRules(List<Rule> rules) {
+		/***********************************************************
+		 * Parsing information in the RULEs
+		 * 
+		 * title, class limits
+		 */
+		int countRules = 0;
+		final TreeSet<Double> classLimits = new TreeSet<Double>();
+		double[] ds = null;
+		for (final Rule r : rules) {
 
-			// This also imports the template from the first rule.
-			this.parseMetaInfoString(metaInfoString, fts);
+			if (r.getName().toString()
+					.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+				// This rule defines the NoDataSymbol
+				this.importNoDataRule(r);
+				continue;
+			}
 
-			/***********************************************************
-			 * Parsing information in the RULEs
-			 * 
-			 * title, class limits
-			 */
-			int countRules = 0;
-			final TreeSet<Double> classLimits = new TreeSet<Double>();
-			double[] ds = null;
-			for (final Rule r : fts.rules()) {
+			// set Title
+			this.getRuleTitles().put(countRules,
+					r.getDescription().getTitle().toString());
 
-				if (r.getName().toString()
-						.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
-					// This rule defines the NoDataSymbol
-					this.importNoDataRule(r);
-					continue;
+			// Class Limits
+			Filter filter = r.getFilter();
+
+			// Reving and preceeding Enabled/Disabled filter
+			filter = parseRuleListEnabledDisabledFilter(filter);
+
+			ds = interpretBetweenFilter(filter);
+			classLimits.add(ds[0]);
+
+			countRules++;
+		}
+		if (ds != null) {
+			// The last limit is only added if there have been
+			// any rules
+			classLimits.add(ds[1]);
+		}
+		setClassLimits(classLimits, false);
+
+		/**
+		 * Now determine the colors stored inside the symbolizers.
+		 */
+		for (int ri = 0; ri < countRules; ri++) {
+			// Import the dominant color from the symbolizers
+			// (they can differ from the palette colors, because
+			// they might have been changed manually.
+			for (final Symbolizer s : rules.get(ri).getSymbolizers()) {
+
+				final Color c = StylingUtil.getSymbolizerColor(s);
+
+				if (c != null) {
+					// LOGGER.debug("Rule " + ri + " has color " + c);
+					this.getColors()[ri] = c;
+					break;
 				}
-
-				// set Title
-				this.getRuleTitles().put(countRules,
-						r.getDescription().getTitle().toString());
-
-				// Class Limits
-				Filter filter = r.getFilter();
-
-				// Reving and preceeding Enabled/Disabled filter
-				filter = parseRuleListEnabledDisabledFilter(filter);
-
-				ds = interpretBetweenFilter(filter);
-				classLimits.add(ds[0]);
-
-				countRules++;
-			}
-			if (ds != null) {
-				// The last limit is only added if there have been
-				// any rules
-				classLimits.add(ds[1]);
-			}
-			setClassLimits(classLimits, false);
-
-			/**
-			 * Now determine the colors stored inside the symbolizers.
-			 */
-			for (int ri = 0; ri < countRules; ri++) {
-				// Import the dominant color from the symbolizers
-				// (they can differ from the palette colors, because
-				// they might have been changed manually.
-				for (final Symbolizer s : fts.rules().get(ri).getSymbolizers()) {
-
-					final Color c = StylingUtil.getSymbolizerColor(s);
-
-					if (c != null) {
-						// LOGGER.debug("Rule " + ri + " has color " + c);
-						this.getColors()[ri] = c;
-						break;
-					}
-				}
-
 			}
 
-		} finally {
-			this.popQuite();
 		}
 	}
 

@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geotools.filter.AndImpl;
 import org.geotools.filter.BinaryComparisonAbstract;
+import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Font;
 import org.geotools.styling.LabelPlacement;
 import org.geotools.styling.PointPlacement;
@@ -657,6 +658,7 @@ public class TextRuleList extends AbstractRulesList {
 	 * Parses a list of {@link Rule}s and configures this {@link TextRuleList}
 	 * with it.
 	 */
+	@Override
 	public void importRules(List<Rule> rules) {
 
 		pushQuite();
@@ -1033,6 +1035,11 @@ public class TextRuleList extends AbstractRulesList {
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
+		// Does nothing
 	}
 
 }

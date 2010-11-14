@@ -65,7 +65,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	private String styleTitle;
 
-	private String title = "title missing";
+	private String ruleTitle = "title missing";
 
 	/**
 	 * This boolean defines whether the entry shall be shown the legend. <b>This
@@ -199,6 +199,10 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	@Override
 	public String getAtlasMetaInfoForFTSName() {
 		return getType().toString();
+	}
+
+	@Override
+	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
 
 	/**
@@ -364,11 +368,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * @return The title of the first and only {@link Rule}. This is used as the
 	 *         label for this rule in the legend.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public String getTitle() {
-		return title;
+	public String getRuleTitle() {
+		return ruleTitle;
 	}
 
 	/**
@@ -556,7 +558,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			// Update the title and fire an event
 			this.styleAbstract = styleAbstract;
 			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ title, this));
+					+ ruleTitle, this));
 		}
 
 	}
@@ -596,27 +598,25 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * Set the title of the first and only {@link Rule}. This is used as the
 	 * label for this rule in the legend.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void setTitle(String title) {
+	public void setRuleTitle(String ruleTitle) {
 
-		if (title == null || title.equals("")) {
+		if (ruleTitle == null || ruleTitle.equals("")) {
 			// LOGGER.warn("rule title may not be empty");
-			title = "title missing";
+			ruleTitle = "title missing";
 		}
 
 		// Is the new title really different from the old one?
 		boolean change = true;
-		if (this.title == null && title == null)
-			change = false;
-		if (this.title != null && title != null && this.title.equals(title))
+		if (this.ruleTitle != null && ruleTitle != null
+				&& this.ruleTitle.equals(ruleTitle))
 			change = false;
 
 		if (change) {
 			// Update the title and fire an event
-			this.title = title;
+			this.ruleTitle = ruleTitle;
 			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ title, this));
+					+ ruleTitle, this));
 		}
 	}
 
@@ -646,8 +646,16 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * This stuff is the same for all three SINGLE_RULES types.
 	 */
-	public void importRule(Rule rule) {
+	@Override
+	public void importRules(List<Rule> rules) {
 		pushQuite();
+
+		if (rules.size() > 1) {
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+					+ " with " + rules.size() + " rules, strange!");
+		}
+
+		Rule rule = rules.get(0);
 
 		setMaxScaleDenominator(rule.getMaxScaleDenominator());
 		setMinScaleDenominator(rule.getMinScaleDenominator());
@@ -678,6 +686,10 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		} finally {
 			popQuite();
 		}
+	}
+
+	public void setRuleTitle(Translation translation) {
+		setRuleTitle(translation.toOneLine());
 	}
 
 }

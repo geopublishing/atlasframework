@@ -306,7 +306,8 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 								if (evt.getPropertyName()
 										.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-									singleSymbolRuleList.setTitle(translation);
+									singleSymbolRuleList
+											.setRuleTitle(translation);
 									jLabelTranslationEdit.setText(translation
 											.toString());
 								}

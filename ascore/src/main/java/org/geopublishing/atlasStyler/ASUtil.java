@@ -896,14 +896,14 @@ public class ASUtil {
 	}
 
 	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(
-			final FeatureTypeStyle importFTS) {
+			final FeatureTypeStyle fts) {
 
 		SingleLineSymbolRuleList tempRL = new SingleLineSymbolRuleList(
-				importFTS.getName());
+				fts.getName());
 
 		try {
 
-			final Rule rule0 = importFTS.rules().get(0);
+			final Rule rule0 = fts.rules().get(0);
 
 			for (final Symbolizer ps : rule0.getSymbolizers()) {
 				tempRL.addSymbolizer(ps);
