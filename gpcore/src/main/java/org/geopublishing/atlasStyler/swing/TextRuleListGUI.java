@@ -34,11 +34,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
-import org.geopublishing.atlasStyler.RuleChangeListener;
-import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasStyler.StyleChangeListener;
-import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DefaultQuery;
@@ -63,7 +58,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
  * 
  * @author SK
  */
-public class TextRuleListGUI extends JPanel {
+public class TextRuleListGUI extends AbstractRuleListGui {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	private JCheckBox jCheckBoxEnabled = null;
@@ -90,43 +85,40 @@ public class TextRuleListGUI extends JPanel {
 
 	private ThinButton jButtonClassLangCopy;
 
-	private final RuleChangeListener listenerEnableDisableGUIwhenRLenabledDisabled = new RuleChangeListener() {
-
-		@Override
-		public void changed(RuleChangedEvent e) {
-			// If the enabled/disabled sate of the RL changed, change the
-			// GUI
-			if (rulesList.isEnabled() != TextRuleListGUI.this.isEnabled())
-				TextRuleListGUI.this.setEnabled(rulesList.isEnabled());
-		}
-	};
-
 	/**
 	 * This is the default constructor
 	 */
 	public TextRuleListGUI(final TextRuleList rulesList,
 			final AtlasStyler atlasStyler) {
-		this.rulesList = rulesList;
+		super(rulesList);
 		this.atlasStyler = atlasStyler;
+		this.rulesList = rulesList;
+		// listenerEnableDisableGUIwhenRLenabledDisabled = new
+		// RuleChangeListener_GuiEnabledDisabled(
+		// TextRuleListGUI.this, rulesList);
 
 		// Create components
 		initialize();
-		// Set the componets according to the presentation oin the Style
+
+		// Put the model values into the GUI
 		updateGUI();
 
-		atlasStyler.addListener(new StyleChangeListener() {
+		// atlasStyler.addListener(new StyleChangeListener() {
+		//
+		// @Override
+		// public void changed(StyleChangedEvent e) {
+		// jButtonClassFromSymbols.setEnabled(!(atlasStyler
+		// .getLastChangedRuleList() instanceof SingleRuleList));
+		// }
+		//
+		// });
+		// jButtonClassFromSymbols.setEnabled(!(atlasStyler
+		// .getLastChangedRuleList() instanceof SingleRuleList));
 
-			@Override
-			public void changed(StyleChangedEvent e) {
-				jButtonClassFromSymbols.setEnabled(!(atlasStyler
-						.getLastChangedRuleList() instanceof SingleRuleList));
-			}
+		// TODO new import dialog!
+		jButtonClassFromSymbols.setEnabled(true);
 
-		});
-		jButtonClassFromSymbols.setEnabled(!(atlasStyler
-				.getLastChangedRuleList() instanceof SingleRuleList));
-
-		rulesList.addListener(listenerEnableDisableGUIwhenRLenabledDisabled);
+		// rulesList.addListener(listenerEnableDisableGUIwhenRLenabledDisabled);
 
 	}
 

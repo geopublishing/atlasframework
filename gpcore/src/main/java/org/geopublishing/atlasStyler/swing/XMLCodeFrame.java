@@ -14,9 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,16 +23,15 @@ import javax.swing.JTextPane;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.data.FeatureSource;
 import org.geotools.map.event.MapLayerListEvent;
-import org.geotools.map.event.MapLayerListListener;
-import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.map.event.MapLayerListAdapter;
+import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledLayerInterface;
@@ -55,7 +51,7 @@ public class XMLCodeFrame extends AtlasDialog {
 		this.mapContextManagerInterface = mapContextManagerInterface;
 
 		this.mapContextManagerInterface
-				.addMapLayerListListener(new MapLayerListListener() {
+				.addMapLayerListListener(new MapLayerListAdapter() {
 
 					@Override
 					public void layerAdded(MapLayerListEvent arg0) {
@@ -69,7 +65,7 @@ public class XMLCodeFrame extends AtlasDialog {
 
 						getTabbedPane().add(layername, textScrollPane);
 
-//						LOGGER.debug("Adding Layname  = " + layername);
+						// LOGGER.debug("Adding Layname  = " + layername);
 
 						names2xml.put(layername, textScrollPane);
 
@@ -81,10 +77,10 @@ public class XMLCodeFrame extends AtlasDialog {
 					public void layerChanged(MapLayerListEvent arg0) {
 						String layername = arg0.getLayer().getFeatureSource()
 								.getName().getLocalPart();
-						
-						JTextPane textPane = (JTextPane) names2xml.get(
-								layername).getViewport().getView();
-						
+
+						JTextPane textPane = (JTextPane) names2xml
+								.get(layername).getViewport().getView();
+
 						Style style2show = arg0.getLayer().getStyle();
 
 						setStyleXMLforLayer(style2show, textPane);
@@ -96,20 +92,15 @@ public class XMLCodeFrame extends AtlasDialog {
 					}
 
 					@Override
-					public void layerMoved(MapLayerListEvent arg0) {
-					}
-
-					@Override
 					public void layerRemoved(MapLayerListEvent arg0) {
 						String layername = arg0.getLayer().getFeatureSource()
 								.getName().getLocalPart();
 
-//						LOGGER.debug("Removing Tab " + layername
-//								+ " from JTabbedPane");
+						// LOGGER.debug("Removing Tab " + layername
+						// + " from JTabbedPane");
 
 						names2xml.remove(layername);
 
-						
 						getTabbedPane().removeAll();
 						tabbedPane = null;
 
@@ -117,16 +108,21 @@ public class XMLCodeFrame extends AtlasDialog {
 
 							for (String title : names2xml.keySet()) {
 								getTabbedPane()
-								.add(title, names2xml.get(title));
+										.add(title, names2xml.get(title));
 							}
-							
+
 						}
-						
+
+						updateGuiTabs();
+
+					}
+
+					private void updateGuiTabs() {
 						XMLCodeFrame.this.getContentPane().removeAll();
 						XMLCodeFrame.this.getContentPane().add(getTabbedPane());
 						XMLCodeFrame.this.invalidate();
+						XMLCodeFrame.this.validate();
 						XMLCodeFrame.this.repaint();
-
 					}
 				});
 
@@ -147,39 +143,16 @@ public class XMLCodeFrame extends AtlasDialog {
 	}
 
 	protected void setStyleXMLforLayer(Style style2show, JTextPane textPane) {
-		Charset charset = Charset.forName(ASProps.get(ASProps.Keys.charsetName,
-				"UTF-8"));
-
-		StringWriter w = null;
-		final SLDTransformer aTransformer = new SLDTransformer();
-		if (charset != null) {
-			aTransformer.setEncoding(charset);
-		}
-		aTransformer.setIndentation(2);
-		String xml;
 		try {
-			xml = aTransformer.transform(style2show);
-			w = new StringWriter();
-			w.write(xml);
-			w.close();
-			w.getBuffer();
-			textPane.setText(w.getBuffer().toString());
+			String sldString = StylingUtil.sldToString(style2show);
+			textPane.setText(sldString);
 		} catch (TransformerException e) {
 			StringBuffer stackTrace = new StringBuffer();
 			for (StackTraceElement ste : e.getStackTrace()) {
 				stackTrace.append(ste.toString());
 			}
 			textPane.setText(stackTrace.toString());
-		} catch (IOException e) {
-			StringBuffer stackTrace = new StringBuffer();
-			for (StackTraceElement ste : e.getStackTrace()) {
-				stackTrace.append(ste.toString());
-			}
-			textPane.setText(stackTrace.toString());
 		}
-
-//		LOGGER.info("Updated XML Pane");
-
 	}
 
 	protected JTabbedPane getTabbedPane() {

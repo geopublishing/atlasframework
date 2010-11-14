@@ -850,7 +850,6 @@ public class MapLegend extends JXTaskPaneContainer implements
 			});
 		} else {
 			SwingUtil.checkOnEDT();
-			;
 			revalidate();
 			repaint();
 			getGeoMapPane().refreshMap();

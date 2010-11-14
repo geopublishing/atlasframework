@@ -79,7 +79,7 @@ import skrueger.swing.SmallButton;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
 
-public class GraduatedColorQuantitiesGUI extends JPanel implements
+public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 		ClosableSubwindows, Disposable {
 
 	private static final Dimension ICON_SIZE = new Dimension(25, 25);
@@ -117,7 +117,7 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 
 	private NumClassesJComboBox jComboBoxNumClasses;
 
-	private MapLayerListener listenToFilterChangesAndRecalcStatistics = new MapLayerAdapter() {
+	private final MapLayerListener listenToFilterChangesAndRecalcStatistics = new MapLayerAdapter() {
 
 		@Override
 		public void layerChanged(MapLayerEvent event) {
@@ -133,6 +133,8 @@ public class GraduatedColorQuantitiesGUI extends JPanel implements
 	 */
 	public GraduatedColorQuantitiesGUI(final GraduatedColorRuleList ruleList,
 			final AtlasStyler atlasStyler) {
+
+		super(ruleList);
 
 		ruleList.pushQuite();
 

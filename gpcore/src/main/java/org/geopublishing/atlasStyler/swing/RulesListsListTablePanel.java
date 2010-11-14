@@ -83,6 +83,8 @@ public class RulesListsListTablePanel extends JPanel {
 						}
 
 						// Reslect the ruleslists
+						getRulesListTable().getSelectionModel()
+								.clearSelection();
 						for (int sr : selectedRows) {
 							getRulesListTable().getSelectionModel()
 									.addSelectionInterval(sr + 1, sr + 1);
@@ -101,7 +103,7 @@ public class RulesListsListTablePanel extends JPanel {
 								return;
 							ListSelectionModel lsm = ((ListSelectionModel) e
 									.getSource());
-							if ((lsm.getMinSelectionIndex() > 0)
+							if ((lsm.getMinSelectionIndex() < 0)
 									|| (lsm.getMinSelectionIndex() >= getRulesListTable()
 											.getModel().getRowCount() - 1)) {
 								jButtonLayerDown.setEnabled(false);
@@ -178,6 +180,8 @@ public class RulesListsListTablePanel extends JPanel {
 						}
 
 						// Reslect the ruleslists
+						getRulesListTable().getSelectionModel()
+								.clearSelection();
 						for (int sr : selectedRows) {
 							getRulesListTable().getSelectionModel()
 									.addSelectionInterval(sr - 1, sr - 1);

@@ -43,7 +43,40 @@ import schmitzm.lang.LangUtil;
  */
 public abstract class AbstractRulesList {
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
+	/**
+	 * A Filter to mark that one class/rule has been disabled. Sorry,
+	 * AtlasStyler specifc, but used in Sl #createLegendSwing method
+	 **/
+	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
+			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
 
+	/**
+	 * A Filter to mark that one class/rule is enabled
+	 **/
+	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
+			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
+
+	/**
+	 * A Filter to mark that not ALL classes have been disabled by the
+	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
+	 * is not used anymore and only for backward compatibility. Will be removed
+	 * in 2.0
+	 **/
+	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
+			.equals(ff.literal("1"), ff.literal("1"));
+
+	/**
+	 * A Filter to mark that not ALL classes have been disabled by the
+	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
+	 * is not used anymore and only for backward compatibility. Will be removed
+	 * in 2.0
+	 **/
+	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
+			.equals(ff.literal("1"), ff.literal("2"));
+
+	private final int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
+	private final int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;
 	/**
 	 * If used as a {@link Rule}'s name, the rule should not be imported, but
 	 * rather just be ignored.
@@ -114,43 +147,9 @@ public abstract class AbstractRulesList {
 
 	}
 
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
-	 * is not used anymore and only for backward compatibility. Will be removed
-	 * in 2.0
-	 **/
-	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("1"));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
-	 * is not used anymore and only for backward compatibility. Will be removed
-	 * in 2.0
-	 **/
-	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("2"));
-
-	/**
-	 * A Filter to mark that one class/rule has been disabled
-	 **/
-	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
-
 	public AbstractRulesList(GeometryForm geometryForm) {
 		this.geometryForm = geometryForm;
 	}
-
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"),
-			ff.literal("ALL_LABEL_CLASSES_ENABLED"));
-
-	private final int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
-	private final int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;
 
 	/**
 	 * These enum names must not be changed anymore. We use them with
@@ -164,43 +163,48 @@ public abstract class AbstractRulesList {
 	 */
 	public enum RulesListType {
 
+		// POINTs
+
+		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
+				"StylerSelection.single_symbol"),
+
 		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
 				"StylerSelection.single_symbol"),
 
-		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
+		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
 				"StylerSelection.single_symbol"),
 
 		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/single_point_symbol.png",
 				"StylerSelection.single_symbol_centroids"),
 
-		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
-				"StylerSelection.single_symbol_centroids"),
+		// Quant Colored
+		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
+				"StylerSelection.quantities_colored"),
 
 		QUANTITIES_COLORIZED_LINE("/images/line_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
-		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
+		QUANTITIES_COLORIZED_POLYGON("/images/polygon_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
 		QUANTITIES_COLORIZED_POINT_FOR_POLYGON(
 				"/images/point_graduated_colors.png",
 				"StylerSelection.quantities_colored_centroids"),
 
-		QUANTITIES_COLORIZED_POLYGON("/images/polygon_graduated_colors.png",
-				"StylerSelection.quantities_colored"),
+		// UUNIQUE VALUES
+		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
+				"StylerSelection.categories_unique_values"),
 
 		UNIQUE_VALUE_LINE("/images/line_unique_values.png",
 				"StylerSelection.categories_unique_values"),
 
-		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
+		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
 				"StylerSelection.categories_unique_values"),
 
 		UNIQUE_VALUE_POINT_FOR_POLYGON("/images/point_unique_values.png",
 				"StylerSelection.categories_unique_values_centroids"),
 
-		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
-				"StylerSelection.categories_unique_values_centroids"),
-
+		// TEST
 		TEXT_LABEL("/images/text_labelling.png", "StylerSelection.textLabeling");
 
 		private final String imgResLocation;

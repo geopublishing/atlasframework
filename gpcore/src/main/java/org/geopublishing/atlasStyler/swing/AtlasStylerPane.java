@@ -103,6 +103,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 
 		getRulesListsListTablePanel().getRulesListTable().getSelectionModel()
 				.addListSelectionListener(listenToSelectionInTable);
+		// getRulesListsListTablePanel().getRulesListTable().getModel().addTableModelListener(listenToChangeInModelLike);
 		atlasStyler.setQuite(false);
 
 	}

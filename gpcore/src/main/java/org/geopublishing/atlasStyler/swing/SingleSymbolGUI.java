@@ -30,13 +30,13 @@ import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Symbolizer;
 
-import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
 
-public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
+public class SingleSymbolGUI extends AbstractRuleListGui implements
+		ClosableSubwindows {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	private EditSymbolButton jButtonSymbolSelector = null;
@@ -50,12 +50,12 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 	 * @param openWindows
 	 */
 	public SingleSymbolGUI(final SingleRuleList<?> singleSymbolRuleList) {
+		super(singleSymbolRuleList);
 		if (singleSymbolRuleList == null)
-			throw new IllegalStateException("A GUI can not be created if no RuleList is provided.");
+			throw new IllegalStateException(
+					"A GUI can not be created if no RuleList is provided.");
 		this.singleSymbolRuleList = singleSymbolRuleList;
 		initialize();
-//		singleSymbolRuleList.fireEvents(new RuleChangedEvent("GUI selected",
-//				singleSymbolRuleList));
 	}
 
 	/**
@@ -78,12 +78,12 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 	 * @return void
 	 */
 	private void initialize() {
-		JLabel jLabelSymbol = new JLabel(AtlasStyler
-				.R("SingleSymbolGUI.Symbol.Label"));
+		JLabel jLabelSymbol = new JLabel(
+				AtlasStyler.R("SingleSymbolGUI.Symbol.Label"));
 		jLabelSymbol.setToolTipText(AtlasStyler.R("SingleSymbolGUI.Symbol.TT"));
 
-		JLabel jLabelHeading = new JLabel(AtlasStyler
-				.R("SingleSymbolGUI.Heading.Label"));
+		JLabel jLabelHeading = new JLabel(
+				AtlasStyler.R("SingleSymbolGUI.Heading.Label"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 
@@ -92,8 +92,8 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 		this.add(jLabelSymbol);
 		this.add(getJButtonSymbol(), "wrap");
 
-		JLabel jLabelTranslation = new JLabel(AtlasStyler
-				.R("SingleSymbolGUI.Label.Label"));
+		JLabel jLabelTranslation = new JLabel(
+				AtlasStyler.R("SingleSymbolGUI.Label.Label"));
 		jLabelTranslation.setToolTipText(AtlasStyler
 				.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
@@ -110,154 +110,154 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 			jButtonSymbolSelector = new EditSymbolButton(singleSymbolRuleList);
 			jButtonSymbolSelector.setToolTipText(AtlasStyler
 					.R("SingleSymbolGUI.Symbol.TT"));
-//
-//			singleSymbolRuleList
-//					.addListener(listenToChangesInTheRulesToUpdateButton);
-//
-//			ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
-//			jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
-//
-//				private SymbolSelectorGUI symbolSelectorDialog;
-//
-//				public void actionPerformed(ActionEvent e) {
-//					if (symbolSelectorDialog == null) {
-//						final SingleRuleList<?> backup = singleSymbolRuleList
-//								.clone(false);
-//
-//						symbolSelectorDialog = new SymbolSelectorGUI(
-//								SingleSymbolGUI.this, null,
-//								// AtlasStyler.R("SymbolSelector.Title.OneForAll"),
-//								singleSymbolRuleList);
-//
-//						symbolSelectorDialog
-//								.addPropertyChangeListener(new PropertyChangeListener() {
-//
-//									public void propertyChange(
-//											PropertyChangeEvent evt) {
-//
-//										/**
-//										 * Listen for CANCEL to copy back the
-//										 * backuped values
-//										 */
-//										if (evt
-//												.getPropertyName()
-//												.equals(
-//														SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-//
-//											backup.copyTo(singleSymbolRuleList);
-//										}
-//
-//										/** Listen for CLOSE* */
-//										if (evt
-//												.getPropertyName()
-//												.equals(
-//														SymbolSelectorGUI.PROPERTY_CLOSED)) {
-//											jButtonSymbolSelector
-//													.setSelected(false);
-//
-//											symbolSelectorDialog.dispose();
-//											symbolSelectorDialog = null;
-//										}
-//									}
-//
-//								});
-//
-//						SwingUtil.setRelativeFramePosition(
-//								symbolSelectorDialog, SingleSymbolGUI.this, .5,
-//								.5);
-//					}
-//
-//					symbolSelectorDialog.setVisible(jButtonSymbolSelector
-//							.isSelected());
-//					
-//					
-//				}
-//
-//			});
+			//
+			// singleSymbolRuleList
+			// .addListener(listenToChangesInTheRulesToUpdateButton);
+			//
+			// ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
+			// jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
+			//
+			// private SymbolSelectorGUI symbolSelectorDialog;
+			//
+			// public void actionPerformed(ActionEvent e) {
+			// if (symbolSelectorDialog == null) {
+			// final SingleRuleList<?> backup = singleSymbolRuleList
+			// .clone(false);
+			//
+			// symbolSelectorDialog = new SymbolSelectorGUI(
+			// SingleSymbolGUI.this, null,
+			// // AtlasStyler.R("SymbolSelector.Title.OneForAll"),
+			// singleSymbolRuleList);
+			//
+			// symbolSelectorDialog
+			// .addPropertyChangeListener(new PropertyChangeListener() {
+			//
+			// public void propertyChange(
+			// PropertyChangeEvent evt) {
+			//
+			// /**
+			// * Listen for CANCEL to copy back the
+			// * backuped values
+			// */
+			// if (evt
+			// .getPropertyName()
+			// .equals(
+			// SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
+			//
+			// backup.copyTo(singleSymbolRuleList);
+			// }
+			//
+			// /** Listen for CLOSE* */
+			// if (evt
+			// .getPropertyName()
+			// .equals(
+			// SymbolSelectorGUI.PROPERTY_CLOSED)) {
+			// jButtonSymbolSelector
+			// .setSelected(false);
+			//
+			// symbolSelectorDialog.dispose();
+			// symbolSelectorDialog = null;
+			// }
+			// }
+			//
+			// });
+			//
+			// SwingUtil.setRelativeFramePosition(
+			// symbolSelectorDialog, SingleSymbolGUI.this, .5,
+			// .5);
+			// }
+			//
+			// symbolSelectorDialog.setVisible(jButtonSymbolSelector
+			// .isSelected());
+			//
+			//
+			// }
+			//
+			// });
 
 		}
 		return jButtonSymbolSelector;
 	}
 
-//
-//	/**
-//	 * This method initializes jButton
-//	 * 
-//	 * @return javax.swing.JButton
-//	 */
-//	private JToggleButton getJButtonSymbol() {
-//		if (jButtonSymbolSelector == null) {
-//			jButtonSymbolSelector = new JToggleButton();
-//			jButtonSymbolSelector.setToolTipText(AtlasStyler
-//					.R("SingleSymbolGUI.Symbol.TT"));
-//
-//			singleSymbolRuleList
-//					.addListener(listenToChangesInTheRulesToUpdateButton);
-//
-//			ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
-//			jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
-//
-//				private SymbolSelectorGUI symbolSelectorDialog;
-//
-//				public void actionPerformed(ActionEvent e) {
-//					if (symbolSelectorDialog == null) {
-//						final SingleRuleList<?> backup = singleSymbolRuleList
-//								.clone(false);
-//
-//						symbolSelectorDialog = new SymbolSelectorGUI(
-//								SingleSymbolGUI.this, null,
-//								// AtlasStyler.R("SymbolSelector.Title.OneForAll"),
-//								singleSymbolRuleList);
-//
-//						symbolSelectorDialog
-//								.addPropertyChangeListener(new PropertyChangeListener() {
-//
-//									public void propertyChange(
-//											PropertyChangeEvent evt) {
-//
-//										/**
-//										 * Listen for CANCEL to copy back the
-//										 * backuped values
-//										 */
-//										if (evt
-//												.getPropertyName()
-//												.equals(
-//														SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-//
-//											backup.copyTo(singleSymbolRuleList);
-//										}
-//
-//										/** Listen for CLOSE* */
-//										if (evt
-//												.getPropertyName()
-//												.equals(
-//														SymbolSelectorGUI.PROPERTY_CLOSED)) {
-//											jButtonSymbolSelector
-//													.setSelected(false);
-//
-//											symbolSelectorDialog.dispose();
-//											symbolSelectorDialog = null;
-//										}
-//									}
-//
-//								});
-//
-//						SwingUtil.setRelativeFramePosition(
-//								symbolSelectorDialog, SingleSymbolGUI.this, .5,
-//								.5);
-//					}
-//
-//					symbolSelectorDialog.setVisible(jButtonSymbolSelector
-//							.isSelected());
-//					
-//					
-//				}
-//
-//			});
-//
-//		}
-//		return jButtonSymbolSelector;
-//	}
+	//
+	// /**
+	// * This method initializes jButton
+	// *
+	// * @return javax.swing.JButton
+	// */
+	// private JToggleButton getJButtonSymbol() {
+	// if (jButtonSymbolSelector == null) {
+	// jButtonSymbolSelector = new JToggleButton();
+	// jButtonSymbolSelector.setToolTipText(AtlasStyler
+	// .R("SingleSymbolGUI.Symbol.TT"));
+	//
+	// singleSymbolRuleList
+	// .addListener(listenToChangesInTheRulesToUpdateButton);
+	//
+	// ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
+	// jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
+	//
+	// private SymbolSelectorGUI symbolSelectorDialog;
+	//
+	// public void actionPerformed(ActionEvent e) {
+	// if (symbolSelectorDialog == null) {
+	// final SingleRuleList<?> backup = singleSymbolRuleList
+	// .clone(false);
+	//
+	// symbolSelectorDialog = new SymbolSelectorGUI(
+	// SingleSymbolGUI.this, null,
+	// // AtlasStyler.R("SymbolSelector.Title.OneForAll"),
+	// singleSymbolRuleList);
+	//
+	// symbolSelectorDialog
+	// .addPropertyChangeListener(new PropertyChangeListener() {
+	//
+	// public void propertyChange(
+	// PropertyChangeEvent evt) {
+	//
+	// /**
+	// * Listen for CANCEL to copy back the
+	// * backuped values
+	// */
+	// if (evt
+	// .getPropertyName()
+	// .equals(
+	// SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
+	//
+	// backup.copyTo(singleSymbolRuleList);
+	// }
+	//
+	// /** Listen for CLOSE* */
+	// if (evt
+	// .getPropertyName()
+	// .equals(
+	// SymbolSelectorGUI.PROPERTY_CLOSED)) {
+	// jButtonSymbolSelector
+	// .setSelected(false);
+	//
+	// symbolSelectorDialog.dispose();
+	// symbolSelectorDialog = null;
+	// }
+	// }
+	//
+	// });
+	//
+	// SwingUtil.setRelativeFramePosition(
+	// symbolSelectorDialog, SingleSymbolGUI.this, .5,
+	// .5);
+	// }
+	//
+	// symbolSelectorDialog.setVisible(jButtonSymbolSelector
+	// .isSelected());
+	//
+	//
+	// }
+	//
+	// });
+	//
+	// }
+	// return jButtonSymbolSelector;
+	// }
 
 	/**
 	 * This method initializes jPanel11
@@ -295,33 +295,25 @@ public class SingleSymbolGUI extends JPanel implements ClosableSubwindows {
 
 						ask = new TranslationAskJDialog(SingleSymbolGUI.this,
 								transLabel);
-						ask
-								.addPropertyChangeListener(new PropertyChangeListener() {
+						ask.addPropertyChangeListener(new PropertyChangeListener() {
 
-									@Override
-									public void propertyChange(
-											PropertyChangeEvent evt) {
-										if (evt
-												.getPropertyName()
-												.equals(
-														TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
-											ask = null;
-										}
-										if (evt
-												.getPropertyName()
-												.equals(
-														TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
+							@Override
+							public void propertyChange(PropertyChangeEvent evt) {
+								if (evt.getPropertyName()
+										.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
+									ask = null;
+								}
+								if (evt.getPropertyName()
+										.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-											singleSymbolRuleList
-													.setTitle(translation);
-											jLabelTranslationEdit
-													.setText(translation
-															.toString());
-										}
-										ask = null;
-									}
+									singleSymbolRuleList.setTitle(translation);
+									jLabelTranslationEdit.setText(translation
+											.toString());
+								}
+								ask = null;
+							}
 
-								});
+						});
 
 					}
 					SwingUtil.setRelativeFramePosition(ask,

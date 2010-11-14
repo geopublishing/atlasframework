@@ -51,9 +51,9 @@ import skrueger.i8n.Translation;
  * This helper class is helping to create nice legend images, {@link JComponent}
  * s etc.
  */
-public class LegendHelper {
+public class SldLegendUtil {
 	static final private Logger LOGGER = ASUtil
-			.createLogger(LegendHelper.class);
+			.createLogger(SldLegendUtil.class);
 
 	/** Determine height of the icons depending on the Font used **/
 	protected static final Font FONT = new JLabel().getFont();
@@ -272,7 +272,7 @@ public class LegendHelper {
 
 				LayerStyle ls = dpLayer.getLayerStyleByID(lsID);
 
-				JComponent oneStyleLegend = LegendHelper.createLegend(dpLayer,
+				JComponent oneStyleLegend = SldLegendUtil.createLegend(dpLayer,
 						ls);
 
 				legendPanel.addTab(ls.getTitle() != null ? ls.getTitle()
@@ -415,7 +415,7 @@ public class LegendHelper {
 //			});
 
 			add(comboBox, BorderLayout.NORTH);
-			add(LegendHelper.createLegend(dpLayer, dpLayer
+			add(SldLegendUtil.createLegend(dpLayer, dpLayer
 					.getLayerStyleByID(selectedStyleId)), BorderLayout.CENTER);
 
 		}

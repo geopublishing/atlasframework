@@ -103,7 +103,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 	private JPanel jPanel = null;
 
-	private SingleRuleList<?> singleSymbolRuleList;
+	private final SingleRuleList<?> singleSymbolRuleList;
 
 	private JTabbedPane jTabbedPane = null;
 
@@ -117,7 +117,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private SingleRuleList<?> lastSelectedRuleList;
 
-	private RuleChangeListener listenToRuleChangesAndUpdatePreview = new RuleChangeListener() {
+	private final RuleChangeListener listenToRuleChangesAndUpdatePreview = new RuleChangeListener() {
 
 		@Override
 		public void changed(RuleChangedEvent e) {

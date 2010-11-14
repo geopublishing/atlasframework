@@ -42,7 +42,6 @@ import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModel;
 import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
 import skrueger.swing.AtlasDialog;
-import skrueger.swing.OkButton;
 import skrueger.swing.SmallButton;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
@@ -59,8 +58,8 @@ public class AtlasChartJDialog extends AtlasDialog {
 	protected volatile AtlasChartJPanel chartPanel;
 
 	/**
-	 * A reference to the {@link AtlasMapLegend} of the {@link XMapPane} that shows
-	 * the geometries for the data-points.
+	 * A reference to the {@link AtlasMapLegend} of the {@link XMapPane} that
+	 * shows the geometries for the data-points.
 	 **/
 	private final AtlasMapLegend mapLegend;
 
@@ -68,7 +67,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 	 * A reference to the {@link SelectableXMapPane} that shows the geometries
 	 * for the data-points.
 	 **/
-	private SelectableXMapPane mapPane;
+	private final SelectableXMapPane mapPane;
 
 	/**
 	 * The {@link StyledFeaturesInterface} this {@link ChartStyle} is based on
@@ -80,7 +79,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 	 * class. In {@link #dispose()}, the reverence are nulled and any
 	 * {@link WeakHashMap} forgets about the listeners.
 	 */
-	private HashSet<ChartSelectionSynchronizer> listenersWeInserted = new HashSet<ChartSelectionSynchronizer>();
+	private final HashSet<ChartSelectionSynchronizer> listenersWeInserted = new HashSet<ChartSelectionSynchronizer>();
 
 	public AtlasChartJDialog(final Component owner,
 			final ChartStyle chartStyle, final AtlasMapLegend mapLegend,
@@ -97,8 +96,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 		// setIconImage(BasicTaskPaneUI.ICON_TABLE.getImage());
 
 		this.mapPane = mapLegend != null ? (mapLegend.getGeoMapPane() != null ? mapLegend
-				.getGeoMapPane().getMapPane()
-				: null)
+				.getGeoMapPane().getMapPane() : null)
 				: null;
 
 		// Filter filter = (mapLayer != null && mapLayer.getQuery() != null) ?
@@ -123,11 +121,11 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 			if (getChartStyle() instanceof FeatureChartStyle) {
 				final FeatureChartStyle fschart = (FeatureChartStyle) getChartStyle();
-				
+
 				// Check if normalization is enabled, and then configure the
 				// visualization of unit strings accordingly.
 				// If the first attribute is normalized, all are!
-				// This check is also done in updateChart method. 
+				// This check is also done in updateChart method.
 				{
 					boolean visible = !fschart.isAttributeNormalized(0);
 					for (int axisIdx = 0; axisIdx < fschart.getAxisCount(); axisIdx++) {
@@ -136,9 +134,9 @@ public class AtlasChartJDialog extends AtlasDialog {
 				}
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
-						AtlasChartJDialog.this, AtlasViewerGUI
-								.R("dialog.title.wait"), AtlasViewerGUI
-								.R("dialog.title.wait"));
+						AtlasChartJDialog.this,
+						AtlasViewerGUI.R("dialog.title.wait"),
+						AtlasViewerGUI.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
@@ -168,8 +166,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 			}
 
 			final StyledLayerSelectionModel<?> anySelectionModel = mapLegend != null ? mapLegend
-					.getRememberSelection(getStyledLayer().getId())
-					: null;
+					.getRememberSelection(getStyledLayer().getId()) : null;
 
 			if ((anySelectionModel instanceof StyledFeatureLayerSelectionModel)) {
 				final StyledFeatureLayerSelectionModel selectionModel = (StyledFeatureLayerSelectionModel) anySelectionModel;
@@ -183,13 +180,14 @@ public class AtlasChartJDialog extends AtlasDialog {
 					final ChartSelectionSynchronizer synchronizer = new ChartSelectionSynchronizer(
 							selectionModel, dsm);
 
-
-					// Add the synchronizer as a listener 
+					// Add the synchronizer as a listener
 					selectionModel
 							.addSelectionListener((StyledLayerSelectionModelSynchronizer) synchronizer);
 					dsm.addSelectionListener(synchronizer);
-					
-					// Keep a reference to the listener, as they may be stored in a WeakHashMap. We remove all listeners in the #dispose() method.  
+
+					// Keep a reference to the listener, as they may be stored
+					// in a WeakHashMap. We remove all listeners in the
+					// #dispose() method.
 					listenersWeInserted.add(synchronizer);
 
 					selectionModel.refreshSelection();
@@ -229,14 +227,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 		JPanel buttons = new JPanel(new MigLayout("fillx", "[100%]"));
 
 		{
-			buttons.add(new OkButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					close();
-				}
-
-			}), "right, tag ok");
+			buttons.add(getOkButton(), "right, tag ok");
 		}
 
 		return buttons;
@@ -311,13 +302,13 @@ public class AtlasChartJDialog extends AtlasDialog {
 		if (isDisposed)
 			return;
 
-		// Remove all references to synchronizers we added. This makes the WeakHashMap will forget about them.
+		// Remove all references to synchronizers we added. This makes the
+		// WeakHashMap will forget about them.
 		for (ChartSelectionSynchronizer d : listenersWeInserted) {
 			d.setEnabled(false);
 			d = null;
 		}
 		listenersWeInserted.clear();
-		
 
 		if (chartPanel != null)
 			chartPanel.dispose();

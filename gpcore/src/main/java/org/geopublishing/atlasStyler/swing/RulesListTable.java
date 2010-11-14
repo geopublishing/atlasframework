@@ -22,14 +22,23 @@ public class RulesListTable extends JTable {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			((DefaultTableModel) getModel()).fireTableStructureChanged();
-
-			int rc = rulesList.size();
-			if (rc > 0) {
-				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
-			}
+			changeTableModel();
 		}
+
 	};
+
+	private void changeTableModel() {
+		((DefaultTableModel) getModel()).fireTableStructureChanged();
+
+		int rc = rulesList.size();
+		if (rc > 0) {
+			// Default selcet the last one.. nice then it has just been added
+			if (getSelectionModel().isSelectionEmpty())
+				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
+		}
+
+		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 25, 40);
+	}
 
 	public RulesListTable(AtlasStyler atlasStyler) {
 		this.atlasStyler = atlasStyler;
@@ -38,7 +47,7 @@ public class RulesListTable extends JTable {
 
 		rulesList.addListener(updateOnRulesListsListChanges);
 
-		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 25, 40);
+		changeTableModel();
 	}
 
 	class RulesListTableModel extends DefaultTableModel {

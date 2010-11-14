@@ -72,7 +72,8 @@ import skrueger.swing.TranslationAskJDialog;
 import skrueger.swing.TranslationEditJPanel;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 
-public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
+public class UniqueValuesGUI extends AbstractRuleListGui implements
+		ClosableSubwindows {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	/**
@@ -145,9 +146,10 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 
 	public static final Dimension ICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
-	public UniqueValuesGUI(UniqueValuesRuleList catRuleList,
+	public UniqueValuesGUI(UniqueValuesRuleList ruleListe,
 			AtlasStyler atlasStyler) {
-		this.rulesList = catRuleList;
+		super(ruleListe);
+		this.rulesList = ruleListe;
 		this.atlasStyler = atlasStyler;
 		initialize();
 		rulesList.fireEvents(new RuleChangedEvent("GUI opened", rulesList));
@@ -470,7 +472,7 @@ public class UniqueValuesGUI extends JPanel implements ClosableSubwindows {
 												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
 														added));
 					} catch (CancellationException ce) {
-//						findUniques.cancel(true);
+						// findUniques.cancel(true);
 						return;
 					} catch (Exception ee) {
 						ExceptionDialog.show(ee);

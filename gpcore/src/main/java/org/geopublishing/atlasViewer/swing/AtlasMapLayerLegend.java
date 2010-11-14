@@ -155,7 +155,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		 * additional styles, we render a DropDown component.
 		 */
 		removeAll();
-		add(LegendHelper.createAdditionalStylesPane(mapLayer, availableStyles,
+		add(SldLegendUtil.createAdditionalStylesPane(mapLayer, availableStyles,
 				(DpLayer<?, ? extends ChartStyle>) styledLayer, map,
 				atlasMapLegend));
 

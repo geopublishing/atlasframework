@@ -3,7 +3,6 @@ package org.geopublishing.geopublisher.gui;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collection;
@@ -31,7 +30,6 @@ import schmitzm.io.IOUtil;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.AtlasDialog;
-import skrueger.swing.OkButton;
 
 /**
  * This dialog allows to manage the additional fonts usde in the atlas.
@@ -40,7 +38,7 @@ public class ManageFontsDialog extends AtlasDialog {
 
 	private final AtlasConfigEditable ace;
 	private JList userFontsList;
-	private Timer scanFontFolderTimer;
+	private final Timer scanFontFolderTimer;
 
 	/**
 	 * This dialog is initialized modal and visible
@@ -61,22 +59,23 @@ public class ManageFontsDialog extends AtlasDialog {
 		initGui();
 		pack();
 		setModal(true);
-//		setVisible(true);
+		// setVisible(true);
 	}
 
 	private void initGui() {
 		setLayout(new MigLayout("wrap 1", "[,,400]"));
 
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.explanation.html",
-				AtlasStyler.getDefaultFontFamilies().length, IOUtil.escapePath(ace.getFontsDir()))));
+				AtlasStyler.getDefaultFontFamilies().length,
+				IOUtil.escapePath(ace.getFontsDir()))));
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.defaults.explanation")));
 		add(new JScrollPane(getDefaultFontsList()), "grow");
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.userfonts.explanation")));
 
 		add(new JScrollPane(getUserFontsList()), "grow");
 
-		add(new JButton(new AbstractAction(GpSwingUtil
-				.R("ManageFontsDialog.reloadFontFolder.label")) {
+		add(new JButton(new AbstractAction(
+				GpSwingUtil.R("ManageFontsDialog.reloadFontFolder.label")) {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -84,19 +83,16 @@ public class ManageFontsDialog extends AtlasDialog {
 			}
 		}), "span 2, split 2");
 
-		OkButton okButton = new OkButton();
-		okButton.addActionListener(new ActionListener() {
+		add(getOkButton(), "tag ok");
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				scanFontFolderTimer.cancel();
-				ace.getFonts().clear();
-				ace.getFonts().addAll(Arrays.asList(fontsInFolder));
-				ace.registerFonts();
-				dispose();
-			}
-		});
-		add(okButton, "tag ok");
+	@Override
+	public boolean close() {
+		scanFontFolderTimer.cancel();
+		ace.getFonts().clear();
+		ace.getFonts().addAll(Arrays.asList(fontsInFolder));
+		ace.registerFonts();
+		return super.close();
 	}
 
 	private JList getDefaultFontsList() {
@@ -115,8 +111,8 @@ public class ManageFontsDialog extends AtlasDialog {
 				if (listCellRendererComponent instanceof JLabel) {
 					JLabel jlabel = (JLabel) listCellRendererComponent;
 					List<Literal> literals = (List<Literal>) value;
-					String text = LangUtil.stringConcatWithSep(" => ", literals
-							.toArray());
+					String text = LangUtil.stringConcatWithSep(" => ",
+							literals.toArray());
 					jlabel.setText(text);
 				}
 

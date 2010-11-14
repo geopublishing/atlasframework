@@ -223,7 +223,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		setScrollOnExpand(false);
 		setAnimated(false);
 
-		add(LegendHelper.createLegend(styledLayer));
+		add(SldLegendUtil.createLegend(styledLayer));
 
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		Style style2 = styledLayer.getStyle();
