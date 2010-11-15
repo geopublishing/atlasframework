@@ -166,8 +166,9 @@ public class QuantitiesRuleListTest {
 		assertEquals("SURFACE", colorRl.getValue_field_name());
 		assertEquals(null, colorRl.getNormalizer_field_name());
 		// Just [ SURFACE IS NULL ] is not a valid OR, so its doubled
-		assertEquals("[[ SURFACE IS NULL ] OR [ SURFACE IS NULL ]]", colorRl
-				.getNoDataFilter().toString());
+		assertEquals(
+				"[[ ALL_LABEL_CLASSES_ENABLED = ALL_LABEL_CLASSES_ENABLED ] AND [[ SURFACE IS NULL ] OR [ SURFACE IS NULL ]]]",
+				colorRl.getNoDataFilter().toString());
 
 		assertTrue(StylingUtil.validates(colorRl.getFTS()));
 
