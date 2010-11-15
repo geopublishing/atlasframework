@@ -24,8 +24,9 @@ public class RuleChangedEvent {
 	private final AbstractRulesList sourceRL;
 
 	private final String reason;
-	
+
 	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RuleList";
+	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RuleList";
 
 	public RuleChangedEvent(String reason, final AbstractRulesList sourceRL) {
 		this.reason = reason;
@@ -38,7 +39,15 @@ public class RuleChangedEvent {
 
 	@Override
 	public String toString() {
-		return ""+reason+" from RL: "+sourceRL.toString();
+		return "" + getReason() + " from RL: " + sourceRL.toString();
+	}
+
+	/**
+	 * A constant STRING, @see RULE_CHANGE_EVENT_ENABLED_STRING or
+	 * RULE_CHANGE_EVENT_FILTER_STRING
+	 */
+	public String getReason() {
+		return reason;
 	}
 
 }

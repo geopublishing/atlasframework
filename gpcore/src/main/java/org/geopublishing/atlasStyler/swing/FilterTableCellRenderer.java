@@ -22,6 +22,8 @@ public class FilterTableCellRenderer extends DefaultTableCellRenderer {
 		ImageIcon icon = Icons.ICON_FILTER;
 		proto.setIcon(icon);
 
+		proto.setToolTipText("Click to change filter!"); // i8n
+
 		Filter filter = (Filter) value;
 		proto.setEnabled((filter != null && filter != Filter.INCLUDE));
 

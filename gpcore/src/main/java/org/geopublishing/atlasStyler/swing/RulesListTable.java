@@ -1,13 +1,19 @@
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.opengis.filter.Filter;
 
@@ -22,6 +28,18 @@ public class RulesListTable extends JTable {
 
 	private final RulesListsList rulesList;
 	private final AtlasStyler atlasStyler;
+
+	protected RuleChangeListener listenForRulesListChangesWhichShowInTheTable = new RuleChangeListener() {
+
+		@Override
+		public void changed(RuleChangedEvent e) {
+			if (e.getReason() != null
+					&& e.getReason().equals(
+							RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING)) {
+				((DefaultTableModel) getModel()).fireTableDataChanged();
+			}
+		}
+	};
 
 	private final PropertyChangeListener updateOnRulesListsListChanges = new PropertyChangeListener() {
 
@@ -45,6 +63,16 @@ public class RulesListTable extends JTable {
 		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 18, 20);
 		SwingUtil.setColumnLook(this, COLIDX_FILTER,
 				new FilterTableCellRenderer(), 17, 18, 20);
+
+		setDefaultEditor(Filter.class, new FilterTableCellEditor(
+				RulesListTable.this, atlasStyler.getStyledFeatures()));
+
+		// Re-add the weak listener that listens for filter changes created
+		// external, e.g. by popup menu insert
+		for (AbstractRulesList rl : rulesList) {
+			rl.addListener(listenForRulesListChangesWhichShowInTheTable);
+		}
+
 	}
 
 	public RulesListTable(AtlasStyler atlasStyler) {
@@ -55,6 +83,40 @@ public class RulesListTable extends JTable {
 		rulesList.addListener(updateOnRulesListsListChanges);
 
 		changeTableModel();
+
+		addMouseListener(new PopupListener());
+	}
+
+	class PopupListener extends MouseAdapter {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			showPopup(e);
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			showPopup(e);
+		}
+
+		private void showPopup(MouseEvent e) {
+			if (e.isPopupTrigger()) {
+				final Component component = e.getComponent();
+
+				int columnAtPoint = RulesListTable.this.columnAtPoint(e
+						.getPoint());
+				int rowAtPoint = RulesListTable.this.rowAtPoint(e.getPoint());
+
+				int colInModel = RulesListTable.this
+						.convertColumnIndexToModel(columnAtPoint);
+				int rowInModel = RulesListTable.this
+						.convertRowIndexToModel(rowAtPoint);
+
+				AbstractRulesList ruleList = rulesList.get(rowInModel);
+				RuleListPopup popup = new RuleListPopup(ruleList);
+				popup.show(component, e.getX(), e.getY());
+			}
+		}
 	}
 
 	class RulesListTableModel extends DefaultTableModel {

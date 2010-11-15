@@ -153,18 +153,30 @@ public abstract class AbstractRulesList {
 
 	/**
 	 * Gets a filter that is applied to the whole AbstractRulesList. If will be
-	 * added to all filters of all rules. May be <code>null</code>.
+	 * added to all filters of all rules. Returns <code>null</code> for
+	 * Filter.INCLUDE
 	 */
 	public Filter getRlFilter() {
+		if (rlFilter == Filter.INCLUDE)
+			return null;
 		return rlFilter;
 	}
 
 	/**
 	 * Sets a filter that is applied to the whole AbstractRulesList. If will be
-	 * added to all filters of all rules.
+	 * added to all filters of all rules. When changed, a
+	 * {@link RuleChangedEvent} is fired. <code>Filter.INCLUDE</code> is changed
+	 * to <code>null</code>
 	 */
 	public void setRlFilter(Filter rlFilter) {
+		if (rlFilter == this.rlFilter)
+			return;
 		this.rlFilter = rlFilter;
+		if (this.rlFilter == Filter.INCLUDE)
+			this.rlFilter = null;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING, this));
+
 	}
 
 	/**
