@@ -60,46 +60,6 @@ public class AVSwingUtil extends AVUtil {
 	static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
 
 	/**
-	 * Convenience method to ask a simple Yes/No question. It can be started
-	 * from any Thread and will always show on the EDT.
-	 */
-	public static boolean askYesNo(final Component owner, final String question) {
-
-		if (!SwingUtilities.isEventDispatchThread()) {
-			try {
-				final AtomicBoolean r = new AtomicBoolean();
-				SwingUtilities.invokeAndWait(new Runnable() {
-
-					@Override
-					public void run() {
-						final int result = JOptionPane.showConfirmDialog(owner,
-								question,
-								AVUtil.R("GeneralQuestionDialogTitle"),
-								JOptionPane.YES_NO_OPTION,
-								JOptionPane.QUESTION_MESSAGE, null);
-						r.set(result == JOptionPane.YES_OPTION);
-					}
-				});
-
-				return r.get();
-			} catch (InterruptedException e) {
-				LOGGER.error(e);
-			} catch (InvocationTargetException e) {
-				LOGGER.error(e);
-			}
-			return false;
-		} else {
-			int result = JOptionPane.showConfirmDialog(owner, question,
-					AVUtil.R("GeneralQuestionDialogTitle"),
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-					null);
-
-			return result == JOptionPane.YES_OPTION;
-		}
-
-	}
-
-	/**
 	 * We use a single JColorChooser in the whole application to share the list
 	 * of "last used colors"
 	 */

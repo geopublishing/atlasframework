@@ -20,12 +20,13 @@ import javax.swing.AbstractAction;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
+
+import schmitzm.swing.SwingUtil;
 
 
 /**
@@ -79,7 +80,7 @@ public class MapPoolDeleteAllHTMLAction extends AbstractAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 
-		if (!AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
+		if (!SwingUtil.askYesNo(owner, GeopublisherGUI.R(
 				"MapPoolWindow_Action_DeleteAllMapHTML_Question", ace
 						.getLanguages().size()
 						- map.getMissingHTMLLanguages().size())))

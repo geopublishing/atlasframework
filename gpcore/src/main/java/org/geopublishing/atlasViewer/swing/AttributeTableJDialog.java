@@ -46,7 +46,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 	static final Logger LOGGER = Logger.getLogger(AttributeTableJDialog.class);
 	
 	/** If a table will contain more than that many cells, the user will be warned **/
-	private static final int WARN_CELLS = 15000;
+	public static final int WARN_CELLS = 15000;
 
 	private StyledFeatureCollectionTableModel model;
 
@@ -92,7 +92,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 				* styledObj.getAttributeMetaDataMap().sortedValuesVisibleOnly()
 						.size();
 		if (numCells > WARN_CELLS) {
-			if (AVSwingUtil.askYesNo(owner, AtlasViewerGUI.R(
+			if (SwingUtil.askYesNo(owner, SwingUtil.R(
 					"AttributeTable.dialog.warnToManyCells", numCells)) == false){
 				dispose();
 				return;

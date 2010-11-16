@@ -380,7 +380,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					"Not yet implemented. Please contact the authors.");
 		}
 
-		if (!AVSwingUtil.askYesNo(
+		if (!SwingUtil.askYesNo(
 				AtlasStylerGUI.this,
 				AtlasStyler.R("AtlasStylerGUI.saveToSLDFileQuestion",
 						styledFS.getTitle(), IOUtil.escapePath(sldFile))))

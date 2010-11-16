@@ -259,7 +259,7 @@ public class GpSwingUtil extends GpUtil {
 			final String question = GpUtil
 					.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
 
-			if (AVSwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n"
+			if (SwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n"
 					+ question)) {
 				deleteDpEntry(owner, ace, dpe, false);
 			}

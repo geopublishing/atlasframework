@@ -1,17 +1,13 @@
 package org.geopublishing.atlasStyler;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.PolygonSymbolizer;
-import org.geotools.styling.Style;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;

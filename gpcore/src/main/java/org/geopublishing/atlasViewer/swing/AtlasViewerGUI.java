@@ -748,7 +748,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		ArrayList<String> partsToDownload = JNLPUtil
 				.countPartsToDownload(atlasConfig.getDataPool());
 		if (partsToDownload.size() > 0) {
-			boolean dlNow = AVSwingUtil.askYesNo(getJFrame(),
+			boolean dlNow = SwingUtil.askYesNo(getJFrame(),
 					AVUtil.R("DownloadAllDataAtOnceQuestionAtAtlasStart"));
 			if (dlNow == true) {
 				// The actionperformed will start a SwingWorker

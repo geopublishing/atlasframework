@@ -49,7 +49,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayer;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.Icons;
@@ -599,7 +598,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						/**
 						 * Ask the user to store the value for this map
 						 */
-						if (!AVSwingUtil
+						if (!SwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
@@ -613,7 +612,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						/**
 						 * Ask the user to store the value for all maps
 						 */
-						if (!AVSwingUtil
+						if (!SwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
@@ -646,7 +645,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						/**
 						 * Ask the user to store the value for this map
 						 */
-						if (!AVSwingUtil
+						if (!SwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI
@@ -660,7 +659,7 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 						/**
 						 * Ask the user to store the value for all maps
 						 */
-						if (!AVSwingUtil
+						if (!SwingUtil
 								.askYesNo(
 										DesignMapViewJDialog.this,
 										GeopublisherGUI

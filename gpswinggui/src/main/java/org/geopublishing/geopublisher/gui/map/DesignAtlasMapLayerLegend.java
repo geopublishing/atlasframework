@@ -34,7 +34,6 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLayerLegend;
@@ -300,7 +299,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 					Window owner = SwingUtil
 							.getParentWindow(DesignAtlasMapLayerLegend.this);
 
-					AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
+					SwingUtil.askYesNo(owner, GeopublisherGUI.R(
 							"DataPoolWindow_Action_DeleteAllDPEHTML_Question",
 							countExisting));
 

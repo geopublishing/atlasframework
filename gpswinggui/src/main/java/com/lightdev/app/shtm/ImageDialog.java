@@ -61,11 +61,11 @@ import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLDocument;
 
 import org.apache.commons.io.FileUtils;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 
 import com.sun.demo.ExampleFileFilter;
 
@@ -509,7 +509,7 @@ class ImageDialog extends DialogShell implements ActionListener,
 					File destFile = new File(imgDir, newName);
 
 					if (destFile.exists()) {
-						if (!AVSwingUtil
+						if (!SwingUtil
 								.askYesNo(
 										ImageDialog.this,
 										GeopublisherGUI

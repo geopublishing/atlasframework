@@ -39,7 +39,6 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.map.Map;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -193,7 +192,7 @@ public class ManageChartsForMapDialog extends CancellableDialogAdapter {
 
 		if (newlyCreatedCharts.size() > 0
 				&& mapsUsingTheDpe.size() > 1
-				&& AVSwingUtil
+				&& SwingUtil
 						.askYesNo(
 								ManageChartsForMapDialog.this,
 								GeopublisherGUI

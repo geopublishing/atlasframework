@@ -25,6 +25,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.io.IOUtil;
+import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFS;
 
 /**
@@ -68,7 +69,7 @@ public abstract class ImportWizardResultProducer implements
 
 		if (sldFile.exists()) {
 
-			boolean askYesNo = AVSwingUtil.askYesNo(
+			boolean askYesNo = SwingUtil.askYesNo(
 					owner,
 					ASUtil.R("ImportWizard.ImportExistingSLDQuestion",
 							IOUtil.escapePath(sldFileName),

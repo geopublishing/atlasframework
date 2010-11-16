@@ -65,7 +65,7 @@ public class DataPoolDeleteAction extends AbstractAction {
 				.getSelectedRow());
 		DpEntry<?> dpe = dataPool.get(modelIndex);
 
-		// if (AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
+		// if (SwingUtil.askYesNo(owner, GeopublisherGUI.R(
 		// "Action_DeleteDPE_reallyDeleteQuestion", dpe.getTitle()
 		// .toString(), dpe.getFilename())) == false)
 		// return;

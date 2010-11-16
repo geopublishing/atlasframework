@@ -22,10 +22,11 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
+
+import schmitzm.swing.SwingUtil;
 
 
 public class DataPoolDeleteAllHTMLAction extends AbstractAction {
@@ -64,7 +65,7 @@ public class DataPoolDeleteAllHTMLAction extends AbstractAction {
 		if (!(dpe instanceof DpLayer))
 			return;
 
-		AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(
+		SwingUtil.askYesNo(owner, GeopublisherGUI.R(
 				"DataPoolWindow_Action_DeleteAllDPEHTML_Question",
 				countExistingFiles));
 

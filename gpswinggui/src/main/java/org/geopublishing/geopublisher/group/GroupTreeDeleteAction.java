@@ -22,10 +22,11 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.Group;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+
+import schmitzm.swing.SwingUtil;
 
 
 /**
@@ -140,7 +141,7 @@ public class GroupTreeDeleteAction extends AbstractAction {
 		} else {
 			questionKey = "GroupTree.Action.DeleteDpRef.Question";
 		}
-		if (!AVSwingUtil.askYesNo(owner, GeopublisherGUI.R(questionKey, deleteNode
+		if (!SwingUtil.askYesNo(owner, GeopublisherGUI.R(questionKey, deleteNode
 				.toString())))
 			return false;
 

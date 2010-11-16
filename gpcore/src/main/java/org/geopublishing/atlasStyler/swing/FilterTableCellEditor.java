@@ -16,14 +16,19 @@ import org.opengis.filter.Filter;
 import schmitzm.geotools.gui.GeotoolsGUIUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class FilterTableCellEditor extends AbstractCellEditor implements
 		TableCellEditor {
 	JButton button;
 	AtlasFeatureLayerFilterDialog dialog;
+	private final StyledFeaturesInterface<?> sf;
+	private final Component owner;
 
 	public FilterTableCellEditor(final Component owner,
-			StyledFeaturesInterface<?> sf) {
+			final StyledFeaturesInterface<?> sf) {
+		this.owner = owner;
+		this.sf = sf;
 		button = new JButton(new AbstractAction("", Icons.ICON_FILTER) {
 
 			@Override
@@ -38,16 +43,6 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 		});
 		// button.addActionListener(this);
 		button.setBorderPainted(false);
-
-		// Set up the dialog that the button brings up.
-		// colorChooser = new JColorChooser();
-		// dialog = JColorChooser.createDialog(button, "Pick a Color", true, //
-		// modal
-		// colorChooser, this, // OK button handler
-		// null); // no CANCEL button handler
-		dialog = new AtlasFeatureLayerFilterDialog(null, sf);
-		dialog.setFilterRule("");
-		// dialog.addListener(this);
 	}
 
 	// Implement the one CellEditor method that AbstractCellEditor doesn't.
@@ -61,6 +56,8 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 
 		Filter filter = (Filter) value;
 
+		dialog = getOrCreateFilterTableDialog(sf);
+
 		if (filter != null)
 			dialog.setFilterRule(filter.toString());
 		else
@@ -69,6 +66,25 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 		dialog.setTitle(GeotoolsGUIUtil.R(
 				"FilterTableCellEditor.FilterDialogTitle", ""));
 		return button;
+	}
+
+	private AtlasFeatureLayerFilterDialog getOrCreateFilterTableDialog(
+			final StyledFeaturesInterface<?> sf) {
+		if (dialog == null) {
+
+			new AtlasSwingWorker<AtlasFeatureLayerFilterDialog>(owner) {
+
+				@Override
+				protected AtlasFeatureLayerFilterDialog doInBackground()
+						throws Exception {
+					dialog = new AtlasFeatureLayerFilterDialog(null, sf);
+					dialog.setFilterRule("");
+					return dialog;
+				}
+			}.executeModalNoEx();
+
+		}
+		return dialog;
 	}
 
 	// @Override

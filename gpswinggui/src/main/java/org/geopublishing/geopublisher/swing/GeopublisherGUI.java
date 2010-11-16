@@ -632,7 +632,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			}
 
 			// If we can't save the atlas cancel.
-			if (!AVSwingUtil.askYesNo(getJFrame(),
+			if (!SwingUtil.askYesNo(getJFrame(),
 					GeopublisherGUI.R("PreviewAtlas.AskToSave")))
 				return;
 
@@ -796,7 +796,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		// Wenn der Name einer nicht existierenden Datei angegeben wurde, dann
 		// fragen ob wir das als Ordner estellen sollen
 		if (!atlasDir.exists()) {
-			if (!AVSwingUtil.askYesNo(
+			if (!SwingUtil.askYesNo(
 					getJFrame(),
 					R("CreateAtlas.Dialog.CreateFolderQuestion",
 							IOUtil.escapePath(atlasDir))))
@@ -811,7 +811,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		if (atlasDir.list().length > 0) {
-			if (!AVSwingUtil
+			if (!SwingUtil
 					.askYesNo(
 							getJFrame(),
 							R("CreateAtlas.Dialog.ConfimDelete",

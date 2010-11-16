@@ -20,11 +20,11 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.ExceptionDialog;
+import schmitzm.swing.SwingUtil;
 
 public class MapPoolDeleteAction extends AbstractAction {
 
@@ -45,7 +45,7 @@ public class MapPoolDeleteAction extends AbstractAction {
 		final Map map2delete = mapPool.get(mapPoolJTable
 				.convertRowIndexToModel(idx));
 
-		if (!AVSwingUtil.askYesNo(mapPoolJTable, GeopublisherGUI.R(
+		if (!SwingUtil.askYesNo(mapPoolJTable, GeopublisherGUI.R(
 				"MapPool.Action.DeleteMap.Question", map2delete.getTitle()))) {
 			return;
 		}
