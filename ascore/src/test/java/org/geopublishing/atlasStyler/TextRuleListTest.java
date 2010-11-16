@@ -380,7 +380,7 @@ public class TextRuleListTest {
 		// The first rule has two label properties:
 		{
 			TextSymbolizer cSymb0 = textRulesList.getClassSymbolizer(0);
-			assertEquals("CNTRY_NAME",
+			assertEquals("NOM_AGENCE",
 					StylingUtil.getFirstPropertyName(null, cSymb0).toString());
 			assertEquals("SURFACE",
 					StylingUtil.getSecondPropertyName(null, cSymb0).toString());
