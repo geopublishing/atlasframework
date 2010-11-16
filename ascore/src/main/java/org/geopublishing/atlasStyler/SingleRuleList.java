@@ -230,8 +230,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		return getImage(AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
-	// TODO Doppelt mit public static BufferedImage
-	// getSymbolizerImage(Symbolizer symb, int width, ???
 	/**
 	 * Return a {@link BufferedImage} that represent the symbol.
 	 * 

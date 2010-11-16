@@ -664,7 +664,12 @@ public abstract class AbstractRulesList {
 	}
 
 	public void setTitle(String title) {
+		if (title == this.title)
+			return;
 		this.title = title;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_TITLE_STRING, this));
+
 	}
 
 	public String getTitle() {

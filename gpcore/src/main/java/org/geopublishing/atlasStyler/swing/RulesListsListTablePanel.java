@@ -36,6 +36,7 @@ public class RulesListsListTablePanel extends JPanel {
 		this.atlasStyler = atlasStyler;
 
 		add(new JScrollPane(getRulesListTable()), "growy, wrap");
+		getRulesListTable().getSelectionModel().clearSelection();
 		add(getAddButton(), "split 4, align left, growx");
 		add(getRemoveButton(), "align left, gapx");
 		add(getUpButton(), "align right");

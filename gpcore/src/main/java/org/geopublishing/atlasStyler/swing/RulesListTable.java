@@ -55,7 +55,7 @@ public class RulesListTable extends JTable {
 
 		int rc = rulesList.size();
 		if (rc > 0) {
-			// Default selcet the last one.. nice then it has just been added
+			// Default selcet the last one.. nice when it has just been added
 			if (getSelectionModel().isSelectionEmpty())
 				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
 		}

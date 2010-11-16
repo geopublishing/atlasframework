@@ -27,6 +27,7 @@ public class RuleChangedEvent {
 
 	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RuleList";
 	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RuleList";
+	public static final String RULE_CHANGE_EVENT_TITLE_STRING = "Title of rl has changed";
 
 	public RuleChangedEvent(String reason, final AbstractRulesList sourceRL) {
 		this.reason = reason;
