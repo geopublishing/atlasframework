@@ -407,6 +407,10 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			Style[] styles = StylingUtil.loadSLD(url);
 			// LOGGER.debug("Anzahl Styles in URL " + styles.length);
 
+			if (styles == null || styles.length == 0 || styles [0] == null)
+				throw new RuntimeException("Symbol von " + url
+						+ " konnte nicht geladen werden.");
+
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
@@ -439,6 +443,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 			return true;
 
+		} catch (RuntimeException e) {
+			LOGGER.error("Error reading URL " + url, e);
+			throw e;
 		} finally {
 			pushQuite();
 		}
