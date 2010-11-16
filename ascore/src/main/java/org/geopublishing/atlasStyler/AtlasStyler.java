@@ -817,6 +817,21 @@ public class AtlasStyler {
 			} finally {
 				Logger.getRootLogger().setLevel(level);
 			}
+
+			styleCached = StylingUtil.correctPropertyNames(styleCached,
+					getStyledFeatures().getSchema());
+
+			// Just for debugging
+			level = Logger.getRootLogger().getLevel();
+			try {
+				Logger.getRootLogger().setLevel(Level.OFF);
+				StylingUtil.saveStyleToSld(styleCached, new File(
+						"/home/stefan/Desktop/update_fixed.sld"));
+			} catch (final Throwable e) {
+			} finally {
+				Logger.getRootLogger().setLevel(level);
+			}
+
 		}
 		return styleCached;
 		//

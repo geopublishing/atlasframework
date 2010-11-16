@@ -132,6 +132,9 @@ public class RuleListFactory {
 			return createSinglePointSymbolRulesList(withDefaults);
 		case POLYGON:
 			return createSinglePolygonSymbolRulesList(withDefaults);
+		case ANY:
+			LOGGER.warn("Returned a polygon Single rule list for geometry type ANY");
+			return createSinglePolygonSymbolRulesList(withDefaults);
 		default:
 			throw new IllegalArgumentException("Can't create for type "
 					+ geometryForm);

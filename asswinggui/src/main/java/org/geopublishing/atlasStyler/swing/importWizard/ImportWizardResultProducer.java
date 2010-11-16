@@ -157,6 +157,10 @@ public abstract class ImportWizardResultProducer implements
 						"ImportWizard.SummaryText.TypeOfGeometry",
 						geometryFormString)));
 
+		//i8n
+		summaryPanel.add(new JLabel("Name of geometry column "
+				+ dbSfs.getSchema().getGeometryDescriptor().getName()));
+
 		// i8n
 		summaryPanel.add(new JLabel("CRS: "
 				+ dbSfs.getSchema().getCoordinateReferenceSystem().getName()
