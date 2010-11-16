@@ -12,8 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.util.HashMap;
 
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
@@ -52,11 +50,11 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	private final JPanel jPanelRuleListEditor = new JPanel(new MigLayout(
 			"wrap 1, fill"));
 
-	public final Icon ICON_SYMBOLOGY = new ImageIcon(
-			AtlasStylerPane.class.getResource("/images/symbology.png"));
-
-	public final Icon ICON_LABELS = new ImageIcon(
-			AtlasStylerPane.class.getResource("/images/labels.png"));
+	// public final Icon ICON_SYMBOLOGY = new ImageIcon(
+	// AtlasStylerPane.class.getResource("/images/symbology.png"));
+	//
+	// public final Icon ICON_LABELS = new ImageIcon(
+	// AtlasStylerPane.class.getResource("/images/labels.png"));
 
 	private final AtlasStyler atlasStyler;
 
@@ -173,6 +171,8 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 			statusText += e.getLocalizedMessage();
 			statusText += "</p>";
 		}
+
+		statusText += "<p><em>Select a RuleList from the left, or add a new RuleList.</em></p>";
 
 		statusText += "</html>";
 
