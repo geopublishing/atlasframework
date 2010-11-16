@@ -20,6 +20,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class FilterTableCellEditor extends AbstractCellEditor implements
 		TableCellEditor {
+	protected static final int WARN_CELLS = 15000;
 	JButton button;
 	AtlasFeatureLayerFilterDialog dialog;
 	private final StyledFeaturesInterface<?> sf;
@@ -58,6 +59,9 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 
 		dialog = getOrCreateFilterTableDialog(sf);
 
+		if (dialog == null)
+			return null;
+
 		if (filter != null)
 			dialog.setFilterRule(filter.toString());
 		else
@@ -77,6 +81,21 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 				@Override
 				protected AtlasFeatureLayerFilterDialog doInBackground()
 						throws Exception {
+
+					// make a check on howmany feateurs we have an print a
+					// warning if too
+					// many
+					int numCells = sf.getFeatureCollectionFiltered().size()
+							* sf.getAttributeMetaDataMap()
+									.sortedValuesVisibleOnly().size();
+					if (numCells > WARN_CELLS) {
+						if (SwingUtil.askYesNo(owner, SwingUtil.R(
+								"AttributeTable.dialog.warnToManyCells",
+								numCells)) == false) {
+							return null;
+						}
+					}
+
 					dialog = new AtlasFeatureLayerFilterDialog(null, sf);
 					dialog.setFilterRule("");
 					return dialog;
