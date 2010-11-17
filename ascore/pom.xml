@@ -150,7 +150,8 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
+							<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI
+							</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -160,11 +161,12 @@
 
 	</build>
 
-
 	<profiles>
-
 		<profile>
 			<id>resourceOperationRemove</id>
+			<!-- When this profile is activated (e.g with "mavn install -P resourceOperationRemove" 
+				the build will remove any lines in the resource bundes that are tagged with 
+				REMOVEME_ -->
 			<build>
 				<plugins>
 					<plugin>
@@ -180,7 +182,8 @@
 								<configuration>
 									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>
 									<arguments>
-										<argument>src/main/resources/locales/resourceProviderOperator.cfg</argument>
+										<argument>-b</argument>
+										<argument>locales.AtlasStylerTranslation</argument>
 									</arguments>
 								</configuration>
 							</execution>
@@ -189,7 +192,6 @@
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 
 </project>

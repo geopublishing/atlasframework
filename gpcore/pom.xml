@@ -209,4 +209,38 @@
 		<!-- </dependency> -->
 
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>resourceOperationRemove</id>
+			<!-- When this profile is activated (e.g with "mavn install -P resourceOperationRemove" 
+				the build will remove any lines in the resource bundes that are tagged with 
+				REMOVEME_ -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2</version>
+						<executions>
+							<execution>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<configuration>
+									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>
+									<arguments>
+										<argument>-b</argument>
+										<argument>locales.AtlasViewerTranslation;locales.GeopublisherTranslation</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 </project>
