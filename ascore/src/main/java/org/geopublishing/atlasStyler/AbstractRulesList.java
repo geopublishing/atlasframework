@@ -305,7 +305,7 @@ public abstract class AbstractRulesList {
 				"StylerSelection.categories_unique_values_centroids"),
 
 		// TEST
-		TEXT_LABEL("/images/text_labelling.png", "StylerSelection.textLabeling");
+		TEXT_LABEL("/images/text_labeling.png", "StylerSelection.textLabeling");
 
 		private final String imgResLocation;
 		private final String i8nKey;

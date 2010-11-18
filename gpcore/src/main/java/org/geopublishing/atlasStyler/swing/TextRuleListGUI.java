@@ -604,7 +604,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 						DefaultQuery query = new DefaultQuery(rulesList
 								.getStyledFeatures().getSchema().getTypeName(),
 								filter, 100, null,
-								"sample features for the labelling preview in AtlasStyler");
+								"sample features for the labeling preview in AtlasStyler");
 						query.setCoordinateSystem(rulesList.getStyledFeatures()
 								.getCrs());
 
