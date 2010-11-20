@@ -114,8 +114,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	private final ArrayList<String> labels = new ArrayList<String>();
 
-	private double maxScaleDenominator = Double.MAX_VALUE;
-
 	private BrewerPalette palette = ColorBrewer.instance().getPalettes()[0];
 
 	private String propertyFieldName = null;
@@ -502,8 +500,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			Rule rule = ASUtil.SB.createRule(symbolizersArray);
 			// rules[ruleCount].setSymbolizers(symbolizersArray);
 
-			rule.setMaxScaleDenominator(maxScaleDenominator);
-
 			rule.setTitle(getLabels().get(ruleCount));
 
 			// Adding the filter to the Rule.
@@ -591,9 +587,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		this.palette = palette;
 	}
 
-	public void setMaxScaleDenominator(double maxScaleDenominator) {
-		this.maxScaleDenominator = maxScaleDenominator;
-	}
 
 	/**
 	 * Set the first field used for the categorization.

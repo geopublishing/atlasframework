@@ -55,10 +55,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	protected Vector<SymbolizerType> layers = new Vector<SymbolizerType>();
 
-	private double maxScaleDenominator = Double.MAX_VALUE;
-
-	private double minScaleDenominator = Double.MIN_VALUE;
-
 	private String styleAbstract;
 
 	private String styleName;
@@ -98,19 +94,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * to all {@link RuleChangeListener}s.
 	 */
 	public abstract void addNewDefaultLayer();
-
-	// /**
-	// * Adds a symbolizer to the {@link SingleRuleList}
-	// *
-	// * @param symbolizer
-	// * The symbolizer to add.
-	// */
-	// public boolean addSymbolizer(SymbolizerType symbolizer) {
-	// boolean add = layers.add(symbolizer);
-	// if (add)
-	// fireEvents(new RuleChangedEvent("Added a Symbolizer", this));
-	// return add;
-	// }
 
 	/**
 	 * Adds a symbolizer to the {@link SingleRuleList}
@@ -249,14 +232,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/** Returns a description or the type of the {@link Symbolizer} */
 	public abstract String getLayerTypeDesc(int idx);
 
-	public double getMaxScaleDenominator() {
-		return maxScaleDenominator;
-	}
-
-	public double getMinScaleDenominator() {
-		return minScaleDenominator;
-	}
-
 	/** returns the Rotation if it makes sense or null* */
 	abstract public Double getRotation();
 
@@ -287,8 +262,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		Rule rule = ASUtil.SB.createRule(symbolizers
 				.toArray(new Symbolizer[symbolizers.size()]));
 
-		rule.setMaxScaleDenominator(getMaxScaleDenominator());
-		rule.setMinScaleDenominator(getMinScaleDenominator());
+		applyScaleDominators(rule);
 
 		/** Saving the legend label * */
 		rule.setTitle(getTitle());
@@ -526,17 +500,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	abstract public void setColor(Color newColor);
 
-	public void setMaxScaleDenominator(double maxScaleDenominator) {
-		this.maxScaleDenominator = maxScaleDenominator;
-		fireEvents(new RuleChangedEvent("maxScale changed", this));
-	}
-
-	public void setMinScaleDenominator(double minScaleDenominator) {
-		this.minScaleDenominator = minScaleDenominator;
-		// TODO test for real change
-		fireEvents(new RuleChangedEvent("minScale changed", this));
-	}
-
 	/**
 	 * Sets the rotation of any subelement where it makes sense. This fires an
 	 * event to all {@link RuleChangeListener}s.
@@ -668,9 +631,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		}
 
 		Rule rule = rules.get(0);
-
-		setMaxScaleDenominator(rule.getMaxScaleDenominator());
-		setMinScaleDenominator(rule.getMinScaleDenominator());
 
 		try {
 

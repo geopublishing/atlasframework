@@ -24,7 +24,9 @@ public class RulesListTable extends JTable {
 	private static final int COLIDX_TITLE = 0;
 	private static final int COLIDX_TYPE = 1;
 	public static final int COLIDX_ENABLED = 2;
-	public static final int COLIDX_FILTER = 3;
+	public static final int COLIDX_MINSCALE = 3;
+	public static final int COLIDX_MAXSCALE = 4;
+	public static final int COLIDX_FILTER = 5;
 
 	private final RulesListsList rulesList;
 	private final AtlasStyler atlasStyler;
@@ -128,7 +130,7 @@ public class RulesListTable extends JTable {
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return 6;
 		}
 
 		@Override
@@ -139,6 +141,10 @@ public class RulesListTable extends JTable {
 				return "name"; // i8n
 			case COLIDX_TYPE:
 				return "type"; // i8n
+			case COLIDX_MINSCALE:
+				return "min-scale"; // i8n
+			case COLIDX_MAXSCALE:
+				return "max-scale"; // i8n
 			case COLIDX_FILTER:
 				return "filter"; // i8n
 			case COLIDX_ENABLED:
@@ -156,6 +162,10 @@ public class RulesListTable extends JTable {
 				return rulesList.get(row).getType();
 			case COLIDX_TITLE:
 				return rulesList.get(row).getTitle();
+			case COLIDX_MINSCALE:
+				return rulesList.get(row).getMinScaleDenominator();
+			case COLIDX_MAXSCALE:
+				return rulesList.get(row).getMaxScaleDenominator();
 			case COLIDX_FILTER:
 				return rulesList.get(row).getRlFilter();
 			case COLIDX_ENABLED:
@@ -170,6 +180,8 @@ public class RulesListTable extends JTable {
 			switch (column) {
 			case COLIDX_ENABLED:
 			case COLIDX_FILTER:
+			case COLIDX_MINSCALE:
+			case COLIDX_MAXSCALE:
 			case COLIDX_TITLE:
 				return true;
 			default:
@@ -187,6 +199,9 @@ public class RulesListTable extends JTable {
 				return RulesListType.class;
 			case COLIDX_FILTER:
 				return Filter.class;
+			case COLIDX_MINSCALE:
+			case COLIDX_MAXSCALE:
+				return Double.class;
 			case COLIDX_ENABLED:
 				return Boolean.class;
 			default:
@@ -199,6 +214,12 @@ public class RulesListTable extends JTable {
 			switch (column) {
 			case COLIDX_TITLE:
 				rulesList.get(row).setTitle(aValue.toString());
+				return;
+			case COLIDX_MINSCALE:
+				rulesList.get(row).setMinScaleDenominator((Double) aValue);
+				return;
+			case COLIDX_MAXSCALE:
+				rulesList.get(row).setMaxScaleDenominator((Double) aValue);
 				return;
 			case COLIDX_FILTER:
 				rulesList.get(row).setRlFilter((Filter) aValue);

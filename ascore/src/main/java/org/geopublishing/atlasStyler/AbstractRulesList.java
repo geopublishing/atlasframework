@@ -162,6 +162,32 @@ public abstract class AbstractRulesList {
 		return rlFilter;
 	}
 
+	double maxScaleDenominator = Double.MAX_VALUE;
+
+	double minScaleDenominator = Double.MIN_VALUE;
+
+	public double getMaxScaleDenominator() {
+		return maxScaleDenominator;
+	}
+
+	public double getMinScaleDenominator() {
+		return minScaleDenominator;
+	}
+
+	public void setMaxScaleDenominator(double maxScaleDenominator) {
+		if (this.maxScaleDenominator == maxScaleDenominator)
+			return;
+		this.maxScaleDenominator = maxScaleDenominator;
+		fireEvents(new RuleChangedEvent("maxScale changed", this));
+	}
+
+	public void setMinScaleDenominator(double minScaleDenominator) {
+		if (this.minScaleDenominator == minScaleDenominator)
+			return;
+		this.minScaleDenominator = minScaleDenominator;
+		fireEvents(new RuleChangedEvent("minScale changed", this));
+	}
+
 	/**
 	 * Sets a filter that is applied to the whole AbstractRulesList. If will be
 	 * added to all filters of all rules. When changed, a
@@ -522,10 +548,23 @@ public abstract class AbstractRulesList {
 			} catch (Exception e) {
 				setTitle(getType().toString());
 			}
+			importMinMaxDenominators(fts);
 			importRules(fts.rules());
 		} finally {
 			this.popQuite();
 		}
+	}
+
+	/**
+	 * Imports the min/max scale of the first rule found. is ca
+	 */
+	private void importMinMaxDenominators(FeatureTypeStyle fts) {
+		List<Rule> rs = fts.rules();
+		if (rs.size() > 0) {
+			setMinScaleDenominator(rs.get(0).getMinScaleDenominator());
+			setMaxScaleDenominator(rs.get(0).getMaxScaleDenominator());
+		}
+
 	}
 
 	abstract void parseMetaInfoString(String metaInfoString,
@@ -539,7 +578,7 @@ public abstract class AbstractRulesList {
 	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
 	 */
 	public FeatureTypeStyle getFTS() {
-		List<Rule> rules = getRules();
+		List<Rule> rules = applyScaleDominators(getRules());
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
 				rules.toArray(new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
@@ -557,9 +596,31 @@ public abstract class AbstractRulesList {
 	}
 
 	/**
-	 * @return Returns the SLD {@link Rule}s that it represents.
+	 * @return Returns the SLD {@link Rule}s that it represents. The min- and
+	 *         max-Scale Denominators are applied to all Rules.
 	 */
 	public abstract List<Rule> getRules();
+
+	/**
+	 * Sets the min/max Scale denomintors . Should be applied to every rule
+	 * created by this RulesLists.
+	 */
+	protected Rule applyScaleDominators(Rule rule) {
+		rule.setMaxScaleDenominator(getMaxScaleDenominator());
+		rule.setMinScaleDenominator(getMinScaleDenominator());
+		return rule;
+	}
+
+	/**
+	 * Sets the min/max Scale denomintors . Should be applied to every rule
+	 * created by this RulesLists.
+	 */
+	protected List<Rule> applyScaleDominators(List<Rule> rules) {
+		for (Rule r : rules) {
+			applyScaleDominators(r);
+		}
+		return rules;
+	}
 
 	/**
 	 * When importing a {@link Style}, the {@link AtlasStyler} recognizes its

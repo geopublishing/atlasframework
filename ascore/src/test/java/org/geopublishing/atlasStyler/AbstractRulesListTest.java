@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Random;
 import java.util.TreeSet;
 
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
@@ -33,6 +34,8 @@ public class AbstractRulesListTest {
 	PropertyIsEqualTo f3 = FilterUtil.FILTER_FAC2.equals(
 			FilterUtil.FILTER_FAC2.literal(3),
 			FilterUtil.FILTER_FAC2.literal(3));
+
+	Random rand = new Random();
 
 	@Before
 	public void setUp() throws Exception {
@@ -63,12 +66,24 @@ public class AbstractRulesListTest {
 			String tTitle, Filter tFilter) throws IOException,
 			FileNotFoundException {
 
+		// Create random min/max values to apply and test
+		double sMin = rand.nextDouble();
+		double sMax = rand.nextDouble();
+		double gMin = rand.nextDouble();
+		double gMax = rand.nextDouble();
+		double uMin = rand.nextDouble();
+		double uMax = rand.nextDouble();
+		double tMin = rand.nextDouble();
+		double tMax = rand.nextDouble();
+
 		as.reset();
 		assertEquals(0, as.getRuleLists().size());
 
 		{
 			SingleRuleList<?> singleRulesList = as.getRlf()
 					.createSingleRulesList(true);
+			singleRulesList.setMinScaleDenominator(sMin);
+			singleRulesList.setMaxScaleDenominator(sMax);
 
 			// RL_FILTER_APPLIED_STR
 
@@ -78,6 +93,9 @@ public class AbstractRulesListTest {
 			// enabled/disabled information
 			assertEquals(-1, uniqueRulesList.getAllOthersRuleIdx());
 			uniqueRulesList.addDefaultRule();
+			uniqueRulesList.setMinScaleDenominator(uMin);
+			uniqueRulesList.setMaxScaleDenominator(uMax);
+
 			assertEquals(0, uniqueRulesList.getAllOthersRuleIdx());
 
 			GraduatedColorRuleList gradColorsRulesList = as.getRlf()
@@ -88,8 +106,12 @@ public class AbstractRulesListTest {
 			classLimits.add(1.);
 			classLimits.add(2.);
 			gradColorsRulesList.setClassLimits(classLimits);
+			gradColorsRulesList.setMinScaleDenominator(gMin);
+			gradColorsRulesList.setMaxScaleDenominator(gMax);
 
 			TextRuleList textRulesList = as.getRlf().createTextRulesList(true);
+			textRulesList.setMinScaleDenominator(tMin);
+			textRulesList.setMaxScaleDenominator(tMax);
 
 			// Enabled/Disabled setzen
 			singleRulesList.setEnabled(sEnabled);
@@ -136,7 +158,7 @@ public class AbstractRulesListTest {
 				.getRuleLists().get(2);
 		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(3);
 
-		// Compre on/off
+		// Compare on/off
 		assertEquals(sEnabled, singleRulesList.isEnabled());
 		assertEquals(tEnabled, textRulesList.isEnabled());
 		assertEquals(gEnabled, gradColorsRulesList.isEnabled());
@@ -153,6 +175,26 @@ public class AbstractRulesListTest {
 		assertEquals(gFilter, gradColorsRulesList.getRlFilter());
 		assertEquals(uFilter, uniqueRulesList.getRlFilter());
 		assertEquals(tFilter, textRulesList.getRlFilter());
+
+		// Min/Max scales
+		assertEquals(sMin, singleRulesList.getMinScaleDenominator(), 0.00001);
+		assertEquals(sMax, singleRulesList.getMaxScaleDenominator(), 0.00001);
+		assertEquals(gMin, gradColorsRulesList.getMinScaleDenominator(),
+				0.00001);
+		assertEquals(gMax, gradColorsRulesList.getMaxScaleDenominator(),
+				0.00001);
+//		assertEquals(gMin, gradColorsRulesList.getTemplate().getMinScaleDenominator(),
+//				0.00001);
+//		assertEquals(gMax, gradColorsRulesList.getTemplate().getMaxScaleDenominator(),
+//				0.00001);
+		
+		assertEquals(uMin, uniqueRulesList.getMinScaleDenominator(), 0.00001);
+		assertEquals(uMax, uniqueRulesList.getMaxScaleDenominator(), 0.00001);
+//		assertEquals(uMin, uniqueRulesList.getTemplate().getMinScaleDenominator(), 0.00001);
+//		assertEquals(uMax, uniqueRulesList.getTemplate().getMaxScaleDenominator(), 0.00001);
+		
+		assertEquals(tMin, textRulesList.getMinScaleDenominator(), 0.00001);
+		assertEquals(tMax, textRulesList.getMaxScaleDenominator(), 0.00001);
 
 	}
 }

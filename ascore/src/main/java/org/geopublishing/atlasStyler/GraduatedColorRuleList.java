@@ -273,12 +273,13 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					noDataRule
 							.setName(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND);
 
-				// Use the min/max scale denominators from the template alsofor
-				// the nodata values.. no matter what it's template has
-				noDataRule.setMinScaleDenominator(getTemplate()
-						.getMinScaleDenominator());
-				noDataRule.setMaxScaleDenominator(getTemplate()
-						.getMaxScaleDenominator());
+//				
+//				// Use the min/max scale denominators from the template also for
+//				// the nodata values.. no matter what it's template has
+//				noDataRule.setMinScaleDenominator(getTemplate()
+//						.getMinScaleDenominator());
+//				noDataRule.setMaxScaleDenominator(getTemplate()
+//						.getMaxScaleDenominator());
 
 				noDataRule.setFilter(getNoDataFilter());
 				rules.add(noDataRule);
