@@ -279,8 +279,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 					+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
 		}
 
-		System.out.println(rule.getName());
-
 		return rList;
 	}
 
@@ -407,7 +405,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 				for (Symbolizer s : symbolizers) {
 					addSymbolizer(s);
 				}
-				// System.out.println("SingleRuleList loaded "+symbolizers.length+"
+				// log.debug("SingleRuleList loaded "+symbolizers.length+"
 				// symbolizers from URL "+url.getFile());
 			} catch (Exception e) {
 				LOGGER.warn("Error loading " + url + ": "

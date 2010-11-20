@@ -594,7 +594,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			// final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
 			// .getResource("av_log4j.xml");
 
-			// System.out.println("Configuring log4j from " + log4jURL);
+			// log.debug("Configuring log4j from " + log4jURL);
 			// DOMConfigurator.configure(log4jURL);
 
 			AVUtil.initAtlasLogging();

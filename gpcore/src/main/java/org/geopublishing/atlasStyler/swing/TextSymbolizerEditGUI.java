@@ -1171,7 +1171,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					getJComboBoxLabelField().setSelectedItem(pn1.toString());
 				else
 					getJComboBoxLabelField().setSelectedItem("-");
-				// System.out.println("pn1:" + pn1);
+				// log.debug("pn1:" + pn1);
 			}
 
 			/***********************************************************************
@@ -1184,7 +1184,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					getJComboBoxLabelField2().setSelectedItem(pn2.toString());
 				} else
 					getJComboBoxLabelField2().setSelectedItem("-");
-				// System.out.println("pn2:" + pn2);
+				// log.debug("pn2:" + pn2);
 			}
 
 			/***********************************************************************

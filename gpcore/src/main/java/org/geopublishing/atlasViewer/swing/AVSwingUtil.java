@@ -249,7 +249,7 @@ public class AVSwingUtil extends AVUtil {
 		// localTempFile.deleteOnExit();
 		// String msg = "downloaded to " + localTempFile;
 		// Log.debug(msg);
-		// System.out.println(msg);
+		// log.debug(msg);
 		// return true;
 		// }
 		//

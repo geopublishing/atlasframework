@@ -214,7 +214,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 					.get(ShpFileType.SHP)));
 
 			if (qixFile == null) {
-				System.out.println("why is the QIX url null?");
+				log.warn("why is the QIX url null?");
 			}
 
 			if (qixFile == null || !qixFile.exists()

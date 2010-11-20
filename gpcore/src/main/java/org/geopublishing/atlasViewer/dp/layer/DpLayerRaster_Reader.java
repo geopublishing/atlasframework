@@ -304,7 +304,7 @@ public class DpLayerRaster_Reader extends
 
 				// Object object = gc.getProperties().get("GC_NODATA");
 				// gc.getSampleDimension(0).getNoDataValues();
-				// System.out.println(object);
+				// log.debug(object);
 			}
 
 			return gc;

@@ -193,7 +193,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		try {
 			String code = crs.getName().getCode();
 			if (code.equals("unnamed")) {
-				// System.out.println("sd");
+				// log.debug("sd");
 			}
 			return code;
 		} catch (Exception e) {
