@@ -115,7 +115,7 @@ public class RulesListTable extends JTable {
 						.convertRowIndexToModel(rowAtPoint);
 
 				AbstractRulesList ruleList = rulesList.get(rowInModel);
-				RuleListPopup popup = new RuleListPopup(ruleList);
+				RulesListPopup popup = new RulesListPopup(ruleList);
 				popup.show(component, e.getX(), e.getY());
 			}
 		}

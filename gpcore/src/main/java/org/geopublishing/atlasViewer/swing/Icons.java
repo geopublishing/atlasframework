@@ -214,6 +214,16 @@ public class Icons {
 	public static final ImageIcon ICON_FONTS_SMALL = new ImageIcon(
 			Icons.class.getResource("/icons/small/fonts.png"));
 
+	//TODO icons
+	public static final Icon ICON_MINSCALE_SMALL = new ImageIcon(
+			Icons.class.getResource("/icons/small/fonts.png"));
+	//TODO icons
+	public static final Icon ICON_MAXSCALE_SMALL = new ImageIcon(
+			Icons.class.getResource("/icons/small/fonts.png"));
+	//TODO icons
+	public static final Icon ICON_MINMAXSCALE_SMALL = new ImageIcon(
+			Icons.class.getResource("/icons/small/fonts.png"));
+
 	private static ImageIcon upArrow;
 
 	private static ImageIcon downArrow;

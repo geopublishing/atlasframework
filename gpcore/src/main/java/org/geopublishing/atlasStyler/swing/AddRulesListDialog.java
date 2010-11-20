@@ -119,13 +119,19 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 
 	@Override
 	public boolean close() {
-		if (jComboBoxRuleListType.getSelectedIndex() >= 0) {
-			AbstractRulesList rulelist = atlasStyler.getRlf().createRulesList(
-					(RulesListType) jComboBoxRuleListType.getSelectedItem(),
-					true);
-			atlasStyler.addRulesList(rulelist);
-		}
-		return super.close();
+		if (super.close()) {
+			if (jComboBoxRuleListType.getSelectedIndex() >= 0) {
+				AbstractRulesList rulelist = atlasStyler
+						.getRlf()
+						.createRulesList(
+								(RulesListType) jComboBoxRuleListType
+										.getSelectedItem(),
+								true);
+				atlasStyler.addRulesList(rulelist);
+			}
+			return true;
+		} else
+			return false;
 	}
 
 }
