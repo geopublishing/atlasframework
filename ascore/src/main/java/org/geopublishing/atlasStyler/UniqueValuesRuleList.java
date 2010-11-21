@@ -25,6 +25,7 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
+import org.geotools.feature.visitor.CalcResult;
 import org.geotools.feature.visitor.UniqueVisitor;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
@@ -300,12 +301,17 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		try {
 			getStyledFeatures().getFeatureCollectionFiltered().accepts(
 					uniqueVisitor, null);
-			final Set<Object> vals = uniqueVisitor.getResult().toSet();
+			CalcResult result = uniqueVisitor.getResult();
+			final Set<Object> uniques = new TreeSet<Object>();
+
+			if (result == null)
+				return uniques;
+			
+			final Set<Object> vals = result.toSet();
 
 			// now filter the null values and the ones that are already part of
 			// the
 			// list
-			final Set<Object> uniques = new TreeSet<Object>();
 			for (final Object o : vals) {
 				if (o == null)
 					continue;
@@ -586,7 +592,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	public void setBrewerPalette(final BrewerPalette palette) {
 		this.palette = palette;
 	}
-
 
 	/**
 	 * Set the first field used for the categorization.
