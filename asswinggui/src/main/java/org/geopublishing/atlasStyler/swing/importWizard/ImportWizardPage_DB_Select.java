@@ -24,8 +24,8 @@ import org.netbeans.spi.wizard.WizardPage;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.io.DbServerList;
-import skrueger.geotools.io.DbServerSettings;
 import skrueger.geotools.io.DbSettingsJComboBox;
+import skrueger.geotools.io.GtDbServerSettings;
 import skrueger.swing.SmallButton;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 
@@ -64,7 +64,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	protected String validateContents(final Component component,
 			final Object event) {
 
-		final DbServerSettings dbServer = (DbServerSettings) getDbJComboBox()
+		final GtDbServerSettings dbServer = (GtDbServerSettings) getDbJComboBox()
 				.getSelectedItem();
 
 		if (dbServer == null)
@@ -166,7 +166,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					DbServerSettings db = (DbServerSettings) getDbJComboBox()
+					GtDbServerSettings db = (GtDbServerSettings) getDbJComboBox()
 							.getSelectedItem();
 
 					DbServerList oldList = getDbJComboBox().getDbList();
@@ -206,7 +206,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					DbServerSettings db = (DbServerSettings) getDbJComboBox()
+					GtDbServerSettings db = (GtDbServerSettings) getDbJComboBox()
 							.getSelectedItem();
 
 					createOrEditDb(db);
@@ -229,8 +229,8 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 		return dbEditJButton;
 	}
 
-	private void createOrEditDb(DbServerSettings dbServer) {
-		DbServerSettings newOrEditedDbServer = DbServerSettings.createOrEdit(
+	private void createOrEditDb(GtDbServerSettings dbServer) {
+		GtDbServerSettings newOrEditedDbServer = GtDbServerSettings.createOrEdit(
 				ImportWizardPage_DB_Select.this, dbServer);
 
 		if (newOrEditedDbServer == null)
@@ -303,7 +303,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					DbServerSettings val = (DbServerSettings) dbJComboBox
+					GtDbServerSettings val = (GtDbServerSettings) dbJComboBox
 							.getSelectedItem();
 					putWizardData(ImportWizard.IMPORT_DB, val);
 

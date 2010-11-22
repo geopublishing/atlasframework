@@ -24,7 +24,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import skrueger.geotools.StyledFS;
-import skrueger.geotools.io.DbServerSettings;
+import skrueger.geotools.io.GtDbServerSettings;
 
 public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 		implements WizardResultProducer {
@@ -52,7 +52,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 				this.progress = progress;
 
 				// Read stuff from the wizard map
-				final DbServerSettings dbServer = (DbServerSettings) wizardData
+				final GtDbServerSettings dbServer = (GtDbServerSettings) wizardData
 						.get(ImportWizard.IMPORT_DB);
 
 				final String typeName = (String) wizardData

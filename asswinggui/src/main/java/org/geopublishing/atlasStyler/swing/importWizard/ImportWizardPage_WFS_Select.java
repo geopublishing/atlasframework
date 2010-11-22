@@ -23,8 +23,8 @@ import org.netbeans.spi.wizard.WizardPage;
 
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
+import skrueger.geotools.io.GtWfsServerSettings;
 import skrueger.geotools.io.WfsServerList;
-import skrueger.geotools.io.WfsServerSettings;
 import skrueger.geotools.io.WfsSettingsJComboBox;
 import skrueger.swing.SmallButton;
 import skrueger.swing.swingworker.AtlasSwingWorker;
@@ -64,7 +64,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 	protected String validateContents(final Component component,
 			final Object event) {
 
-		final WfsServerSettings wfsServer = (WfsServerSettings) getWfsUrlJComboBox()
+		final GtWfsServerSettings wfsServer = (GtWfsServerSettings) getWfsUrlJComboBox()
 				.getSelectedItem();
 
 		if (wfsServer == null)
@@ -75,7 +75,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 		try {
 			url.openStream().close();
 		} catch (Exception e) {
-			LOGGER.info("Can't connect to Server: ",e);
+			LOGGER.info("Can't connect to Server: ", e);
 			return validationImportSourceTypeFailedMsg_CantRead;
 		}
 
@@ -161,7 +161,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					WfsServerSettings wfs = (WfsServerSettings) getWfsUrlJComboBox()
+					GtWfsServerSettings wfs = (GtWfsServerSettings) getWfsUrlJComboBox()
 							.getSelectedItem();
 
 					WfsServerList list = getWfsUrlJComboBox().getWfsList();
@@ -201,7 +201,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					WfsServerSettings wfs = (WfsServerSettings) getWfsUrlJComboBox()
+					GtWfsServerSettings wfs = (GtWfsServerSettings) getWfsUrlJComboBox()
 							.getSelectedItem();
 
 					createOrEditWfs(wfs);
@@ -224,9 +224,9 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 		return wfsEditJButton;
 	}
 
-	private void createOrEditWfs(WfsServerSettings wfs) {
+	private void createOrEditWfs(GtWfsServerSettings wfs) {
 
-		WfsServerSettings newOrEditedDbServer = WfsServerSettings.createOrEdit(
+		GtWfsServerSettings newOrEditedDbServer = GtWfsServerSettings.createOrEdit(
 				ImportWizardPage_WFS_Select.this, wfs);
 
 		if (newOrEditedDbServer == null)
@@ -280,9 +280,8 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 	private WfsSettingsJComboBox getWfsUrlJComboBox() {
 		if (wfsJComboBox == null) {
 
-			wfsJComboBox = new WfsSettingsJComboBox(
-					WfsServerList.parsePropertiesString(ASProps
-							.get(ASProps.Keys.wfsList)));
+			wfsJComboBox = new WfsSettingsJComboBox(new WfsServerList(
+					ASProps.get(ASProps.Keys.wfsList)));
 
 			SwingUtil.addMouseWheelForCombobox(wfsJComboBox);
 
@@ -299,7 +298,7 @@ public class ImportWizardPage_WFS_Select extends WizardPage {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					WfsServerSettings val = (WfsServerSettings) wfsJComboBox
+					GtWfsServerSettings val = (GtWfsServerSettings) wfsJComboBox
 							.getSelectedItem();
 					putWizardData(ImportWizard.IMPORT_WFS_URL, val);
 

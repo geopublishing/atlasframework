@@ -27,7 +27,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import schmitzm.geotools.JTSUtil;
 import schmitzm.geotools.io.GeoImportUtil;
 import skrueger.geotools.StyledFS;
-import skrueger.geotools.io.WfsServerSettings;
+import skrueger.geotools.io.GtWfsServerSettings;
 
 public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 		implements WizardResultProducer {
@@ -53,7 +53,7 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 				this.progress = progress;
 
 				// Read stuff from the wizard map
-				final WfsServerSettings wfsServer = (WfsServerSettings) wizardData
+				final GtWfsServerSettings wfsServer = (GtWfsServerSettings) wizardData
 						.get(ImportWizard.IMPORT_WFS_URL);
 				final String typeName = (String) wizardData
 						.get(ImportWizard.IMPORT_WFS_LAYERNAME);
