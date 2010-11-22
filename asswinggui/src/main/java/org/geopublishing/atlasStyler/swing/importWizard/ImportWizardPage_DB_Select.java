@@ -285,7 +285,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 		if (dbJComboBox == null) {
 
 			dbJComboBox = new DbSettingsJComboBox(
-					DbServerList.parsePropertiesString(ASProps
+					new DbServerList(ASProps
 							.get(ASProps.Keys.dbList)));
 			
 			SwingUtil.addMouseWheelForCombobox(dbJComboBox);
