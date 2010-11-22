@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
@@ -88,7 +87,6 @@ import org.w3c.dom.Element;
 
 import schmitzm.io.FileInputStream;
 import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
@@ -105,10 +103,8 @@ import sun.tools.jar.Main;
  * The JWS folder may be served by any www. Linking to the <code>.jnlp</code>
  * file will start the atlas using JavaWebStart
  */
-public class JarExportUtil {
-
-	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = AVUtil.ATLAS_TEMP_FILE_BASE_ID
-			+ "_EXPORT_" + System.currentTimeMillis();
+public class JarExportUtil extends AbstractAtlasExporter {
+	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	/** Subfolder in the export atlas directory for the JWS version of the atlas **/
 	public static final String JWS = "JWS";
@@ -133,53 +129,11 @@ public class JarExportUtil {
 	boolean libsFromLocal = true;
 
 	/**
-	 * Resource location of the splashscreen image that will be used for
-	 * JavaWebStart and <code>start.bat</code>, <code>atlas.exe</code> if the
-	 * didn't define one or the user-defined one can't be found.
-	 */
-	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
-
-	/**
-	 * Resource location of the <code>license.html</code> with the license of
-	 * AtlasViewer.</code>
-	 */
-	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
-
-	/**
 	 * The name of the JAR file which contains general atlas resources like
 	 * atlas.xml, HTML-pages, etc…
 	 */
 	public final static String ARJAR_FILENAME = "atlas_resources.jar";
 
-	/**
-	 * Files next to atlas.gpa will be copied to the folders without putting
-	 * them in a JAR. This can be useful for example for PDF files that should
-	 * be referencable from within the atlas, but also reside uncompressed on
-	 * the CD root directory.
-	 */
-	private static final FilenameFilter filterForRootLevelFiles = new FilenameFilter() {
-
-		@Override
-		public boolean accept(final File dir, final String name) {
-
-			// This is a list of files expected in ad that shall not be copied
-			if (dir.isDirectory() && name.equalsIgnoreCase(".cvs"))
-				return false;
-			if (dir.isFile() && name.equalsIgnoreCase("build.xml"))
-				return false;
-			if (dir.isFile() && name.equalsIgnoreCase("pom.xml"))
-				return false;
-			if (dir.isDirectory() && name.equalsIgnoreCase(".svn"))
-				return false;
-			if (name.equalsIgnoreCase(AtlasConfigEditable.ATLAS_GPA_FILENAME))
-				return false;
-			if (name.equalsIgnoreCase(AVProps.PROPERTIESFILE_RESOURCE_NAME))
-				return false;
-			if (name.equalsIgnoreCase(AtlasConfig.ATLASDATA_DIRNAME))
-				return false;
-			return true;
-		}
-	};
 
 	/**
 	 * The filename of the JNLP file which can be used to start the atlas from
@@ -187,7 +141,6 @@ public class JarExportUtil {
 	 */
 	public static final String JNLP_FILENAME = "atlasViewer.jnlp";
 
-	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	private static final String LIB_DIR = ".";
 
@@ -200,36 +153,24 @@ public class JarExportUtil {
 	 **/
 	public static final String DISK_SUB_DIR = "atlasdata/";
 
-	private static final String version = ReleaseUtil
-			.getVersionMaj(AVUtil.class)
-			+ "."
-			+ ReleaseUtil.getVersionMin(AVUtil.class);
-
-	/**
-	 * Are we exporting froma SNAPSHOT relases, then the exported atlas need
-	 * -SNAPSHOT jars also
-	 **/
-	private static final String snapshot = ReleaseUtil.getVersionInfo(
-			GpUtil.class).contains("SNAPSHOT") ? "-SNAPSHOT" : "";
-
 	private static final String postfixJar = ".jar";
 
 	/**
 	 * Filename of the gpcore jar
 	 */
-	public static final String GPCORE_JARNAME = "gpcore-" + version + snapshot
+	public static final String GPCORE_JARNAME = "gpcore-" + getVersion() + getSnapshot()
 			+ postfixJar;
 
 	/**
 	 * Filename of the gpnatives jar
 	 */
-	public static final String GPNATIVES_JARNAME = "gpnatives-" + version
-			+ snapshot + postfixJar;
+	public static final String GPNATIVES_JARNAME = "gpnatives-" + getVersion()
+			+ getSnapshot() + postfixJar;
 
 	/**
 	 * Filename of the ascore jar
 	 */
-	public static final String ASCORE_JARNAME = "ascore-" + version + snapshot
+	public static final String ASCORE_JARNAME = "ascore-" + getVersion() + getSnapshot()
 			+ postfixJar;
 
 	/**
@@ -422,17 +363,8 @@ public class JarExportUtil {
 
 	}
 
-	private volatile boolean aborted = false;
-
-	private final AtlasConfigEditable ace;
-
 	/** Shall the local JRE be copied to the DISK folder? **/
 	private final Boolean copyJRE;
-
-	/** Internal counting for the percentage bar **/
-	private int currSteps = 0;
-
-	private ResultProgressHandle progress;
 
 	private File targetDirJWS, targetDirDISK;
 
@@ -449,10 +381,6 @@ public class JarExportUtil {
 	/** Is export to JWS requested? **/
 	private final Boolean toJws;
 
-	/** Internal counting for the percentage bar **/
-	private int totalSteps = 1;
-
-	private List<DpEntry<? extends ChartStyle>> unusedDpes;
 
 	/**
 	 * Initialized lazilly and caches where the JARs from the classpath come
@@ -463,11 +391,6 @@ public class JarExportUtil {
 	/** Automatically create a ZIP if eported to DISK **/
 	private boolean zipDiskAfterExport = false;
 
-	/**
-	 * Allows to tell the exporter to NOT delte all temp directories. This is
-	 * usefull if atlases are exported parallel
-	 */
-	private boolean keepTempFiles = false;
 
 	/**
 	 * It set to a value not <code>null</code>, the jnlp base url stored in the
@@ -499,7 +422,7 @@ public class JarExportUtil {
 	public JarExportUtil(final AtlasConfigEditable ace_,
 			final File exportDirectory, final Boolean toDisk,
 			final Boolean toJws, final Boolean copyJRE) throws IOException {
-		ace = ace_;
+		super(ace_);
 		this.toDisk = toDisk;
 		this.toJws = toJws;
 		this.copyJRE = copyJRE;
@@ -539,15 +462,11 @@ public class JarExportUtil {
 
 	}
 
-	/**
-	 * Can be called from external to abort the export process
-	 */
-	public void abort() {
-		aborted = true;
-	}
-
 	private void addAtlasXMLToJar(final File targetJar,
-			final AtlasConfigEditable ace) throws Exception {
+			final AtlasConfigEditable ace) throws AtlasExportException {
+		
+		try {
+			
 
 		// Prepare a temporary atlas.xml
 		File randomTempDir = new File(IOUtil.getTempDir(), "GPtempExport"
@@ -573,6 +492,9 @@ public class JarExportUtil {
 		// jar
 		if (!exportAtlasXml.delete()) {
 			LOGGER.warn("could not delete temporary atlas.xml file at " + adDir);
+		}
+		} catch (Exception e) {
+			throw new AtlasExportException ("addAtlasXMLToJar failed",e);
 		}
 	}
 
@@ -652,17 +574,6 @@ public class JarExportUtil {
 
 	}
 
-	/**
-	 * Monitors the isRunning method of {@link #progress}. If it has been
-	 * canceled throws an {@link AtlasExportCancelledException}.
-	 * 
-	 * @throws AtlasExportCancelledException
-	 */
-	private void checkAbort() throws AtlasCancelException {
-		// if (progress != null && !progress.isRunning())
-		if (aborted)
-			throw new AtlasCancelException();
-	}
 
 	/**
 	 * Copies and signs all required dependencies and native libs to the temp
@@ -955,16 +866,16 @@ public class JarExportUtil {
 
 		String path = null;
 		if (jarName.contains(GPCORE_JARNAME)) {
-			path = "org/geopublishing/geopublisher/gpcore/" + version
-					+ snapshot;
+			path = "org/geopublishing/geopublisher/gpcore/" + getVersion()
+					+ getSnapshot();
 		}
 
 		if (jarName.contains(ASCORE_JARNAME)) {
-			path = "org/geopublishing/atlasStyler/ascore/" + version + snapshot;
+			path = "org/geopublishing/atlasStyler/ascore/" + getVersion() + getSnapshot();
 		}
 		//
 		if (jarName.contains(GPNATIVES_JARNAME)) {
-			path = "org/geopublishing/gpnatives/" + version + snapshot;
+			path = "org/geopublishing/gpnatives/" + getVersion() + getSnapshot();
 		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
@@ -1676,45 +1587,6 @@ public class JarExportUtil {
 	}
 
 	/**
-	 * This approach could be problematic if there are more than one exports
-	 * running at a time.
-	 */
-	public void deleteOldTempExportDirs() {
-
-		/**
-		 * On the command line -t can be specified to NOT delte any temp files.
-		 * This needed in version 1.6 to run exports in parallel.<br/>
-		 * TODO Temp file management must be improved, so that every instacne
-		 * just deletes its own temp files after execution.
-		 */
-		// if (isKeepTempFiles())
-		// return;
-
-		/**
-		 * Delete any old/parallel export directories
-		 */
-		// final IOFileFilter oldDirs = FileFilterUtils
-		// .makeDirectoryOnly(FileFilterUtils
-		// .prefixFileFilter(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID ));
-		// final String[] list = IOUtil.getTempDir().list(oldDirs);
-		// for (final String deleteOldTempDirName : list) {
-		// try {
-		// FileUtils.deleteDirectory(new File(IOUtil.getTempDir(),
-		// deleteOldTempDirName));
-		// } catch (final Exception e) {
-		// ExceptionDialog.show(null, e);
-		// }
-		// }
-
-		AVUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
-				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
-	}
-
-	public boolean isKeepTempFiles() {
-		return keepTempFiles;
-	}
-
-	/**
 	 * Exports the given {@link AtlasConfig} to two folders: One for
 	 * CD/USB-STick, one to be run via JavaWebStart
 	 * 
@@ -1733,7 +1605,7 @@ public class JarExportUtil {
 		/**
 		 * One for ever DPEntry
 		 */
-		totalSteps += ace.getDataPool().size() - getUnusedDpes().size();
+		totalSteps += ace.getUsedDpes().size();
 
 		/**
 		 * One for every Library and every Native libs
@@ -2213,31 +2085,6 @@ public class JarExportUtil {
 		return manifestTempFile;
 	}
 
-	public List<DpEntry<? extends ChartStyle>> getUnusedDpes() {
-		if (unusedDpes == null) {
-			unusedDpes = ace.getUnusedDpes();
-		}
-		return unusedDpes;
-	}
-
-	/**
-	 * Promote export progress to GUI.
-	 */
-	protected void info(final String msg) {
-		if (progress != null) {
-
-			if (currSteps < totalSteps) {
-				currSteps++;
-			} else {
-				currSteps++;
-				totalSteps = currSteps + 3;
-				LOGGER.warn("overcounting " + currSteps + " to " + totalSteps);
-			}
-			progress.setProgress(msg, currSteps, totalSteps);
-		} else {
-			LOGGER.info(msg);
-		}
-	}
 
 	/**
 	 * Signs the Jar. keys and everything else is defined in the properties
@@ -2440,9 +2287,6 @@ public class JarExportUtil {
 		this.zipDiskAfterExport = zipDiskAfterExport;
 	}
 
-	public void setKeepTempFiles(boolean deleteTempFiles) {
-		this.keepTempFiles = deleteTempFiles;
-	}
 
 	/**
 	 * It set to a value not <code>null</code>, the jnlp base url stored in the

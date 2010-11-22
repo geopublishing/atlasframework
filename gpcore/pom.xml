@@ -16,10 +16,7 @@
 	</parent>
 
 	<build>
-
 		<plugins>
-
-
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.3</version>
@@ -136,6 +133,13 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+			<version>0.5-SNAPSHOT</version>
+			<groupId>org.geopublishing</groupId>
+			<artifactId>gsrcj</artifactId>
+		</dependency>
+
 		<!-- For i8n correction -->
 		<dependency>
 			<groupId>com.sun</groupId>

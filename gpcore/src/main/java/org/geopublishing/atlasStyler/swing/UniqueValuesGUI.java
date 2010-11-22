@@ -146,10 +146,10 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 
 	public static final Dimension ICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
-	public UniqueValuesGUI(UniqueValuesRuleList ruleListe,
+	public UniqueValuesGUI(UniqueValuesRuleList rl,
 			AtlasStyler atlasStyler) {
-		super(ruleListe);
-		this.rulesList = ruleListe;
+		super(rl);
+		this.rulesList = rl;
 		this.atlasStyler = atlasStyler;
 		initialize();
 		rulesList.fireEvents(new RuleChangedEvent("GUI opened", rulesList));

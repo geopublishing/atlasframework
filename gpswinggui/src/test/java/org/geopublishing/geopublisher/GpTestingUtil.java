@@ -28,7 +28,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -77,7 +76,7 @@ public class GpTestingUtil extends TestingUtil{
 		}
 	}
 
-	public static AtlasConfigEditable getAtlasConfigE(String atlasDir)
+	static AtlasConfigEditable getAtlasConfigE(String atlasDir)
 			throws FactoryException, TransformException, AtlasException,
 			SAXException, IOException, ParserConfigurationException {
 

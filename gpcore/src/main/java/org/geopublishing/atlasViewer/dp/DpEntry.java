@@ -291,7 +291,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
-	 * //TODO what will happen if we have an online source one day?
+	 * //TODO what will happen if we have an online source one day? Should probably be the datastore name ?
 	 * 
 	 * @return Filename as String
 	 */
