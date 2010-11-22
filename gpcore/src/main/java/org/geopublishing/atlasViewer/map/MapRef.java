@@ -81,7 +81,7 @@ public class MapRef extends DefaultMutableTreeNode implements
 	public Map getTarget() {
 		Map mapTarget = getMapPool().get(targetId);
 		if (mapTarget == null)
-			LOGGER.warn("targetMap is null for " + this);
+			LOGGER.warn("targetMap is null for targetId " + targetId);
 
 		return mapTarget;
 	}
