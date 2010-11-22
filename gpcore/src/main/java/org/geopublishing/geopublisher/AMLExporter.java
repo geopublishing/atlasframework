@@ -430,7 +430,7 @@ public class AMLExporter {
 		atlas.appendChild(exportMapPool(document));
 
 		// The <aml:group> tag
-		atlas.appendChild(exportGroup(document, getAce().getFirstGroup()));
+		atlas.appendChild(exportGroup(document, getAce().getRootGroup()));
 
 		// The <aml:fonts> tag
 		atlas.appendChild(exportFonts(document));

@@ -44,7 +44,7 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 
 		add(new JLabel(R("EditDpEntryGUI.usage.Menu.border")), "gapy unrel");
 
-		MenuusageTable menuUt = new MenuusageTable(dpe, ace.getFirstGroup());
+		MenuusageTable menuUt = new MenuusageTable(dpe, ace.getRootGroup());
 		add(new JScrollPane(menuUt), "height 150");
 
 		if (menuUt.getModel().getRowCount() == 0

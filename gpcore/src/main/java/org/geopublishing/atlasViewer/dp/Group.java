@@ -176,7 +176,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 */
 	public static void findReferencesTo(AtlasConfig ac, Object dpeOrMap,
 			List<AtlasRefInterface<?>> references, boolean delete) {
-		findReferencesTo(ac.getFirstGroup(), dpeOrMap, references, delete);
+		findReferencesTo(ac.getRootGroup(), dpeOrMap, references, delete);
 	}
 
 	/**
@@ -184,9 +184,11 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 * 
 	 * @param dpeOrMap
 	 * @param references
-	 *            A List<DatapoolRef>
+	 *            A List<DatapoolRef> that will be filled with all "hit". If
+	 *            <code>delete</code> is <code>true</code>, returns a list of
+	 *            the deleted references.
 	 * @param delete
-	 *            if true, than all references will be deleted
+	 *            if <code>true</code> all references found will be deleted
 	 */
 	public static void findReferencesTo(Group g, Object dpeOrMap,
 			List<AtlasRefInterface<?>> references, boolean delete) {
@@ -218,6 +220,7 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 						LOGGER.debug("removing ref " + item.toString()
 								+ " from group. targetid = " + id);
 						g.remove(childIndex);
+						references.add(testref);
 					} else {
 						references.add(testref);
 					}
@@ -436,18 +439,21 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 	 */
 	public List<? extends Group> getGroupsUsing(
 			DpEntry<? extends ChartStyle> dpe) {
-		
+
 		HashSet<Group> collectGroups = new HashSet<Group>();
 		findReferencesTo(this, dpe, collectGroups);
 		return new ArrayList(collectGroups);
 	}
 
 	/**
-	 * Search the Group tree and add all Groups containing a reference to a specific {@link DpEntry}.
+	 * Search the Group tree and add all Groups containing a reference to a
+	 * specific {@link DpEntry}.
+	 * 
 	 * @param collectGroups
 	 *            A List<Group> that will contain the results.
 	 */
-	public void findReferencesTo(Group g, DpEntry<? extends ChartStyle> dpe, Set<Group> collectGroups) {
+	public void findReferencesTo(Group g, DpEntry<? extends ChartStyle> dpe,
+			Set<Group> collectGroups) {
 
 		final Enumeration<DefaultMutableTreeNode> children = g.children();
 

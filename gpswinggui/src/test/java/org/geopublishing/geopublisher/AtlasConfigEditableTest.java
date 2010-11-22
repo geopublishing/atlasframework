@@ -38,16 +38,16 @@ public class AtlasConfigEditableTest {
 		// tree yet
 		assertEquals(countMaps, ace.getUsedMaps().size());
 
-		ace.getFirstGroup().add(new MapRef(newMap, ace.getMapPool()));
+		ace.getRootGroup().add(new MapRef(newMap, ace.getMapPool()));
 
 		// Should be +1 as the new map is now added to the group tree
 		assertEquals(countMaps + 1, ace.getUsedMaps().size());
 
 		// Should still be +1 as the added map was already part of the group
 		// tree
-		ace.getFirstGroup().add(newMap);
+		ace.getRootGroup().add(newMap);
 
-		ace.getFirstGroup().removeAllChildren();
+		ace.getRootGroup().removeAllChildren();
 		// Should still be 1 as one map is always exported
 		assertEquals(1, ace.getUsedMaps().size());
 	}

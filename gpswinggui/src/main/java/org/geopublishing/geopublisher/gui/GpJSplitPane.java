@@ -100,7 +100,7 @@ public class GpJSplitPane extends JSplitPane {
 						.R("MapPoolJTable.Border.Title")));
 		rightSide.setTopComponent(editMapPoolPanel);
 
-		editGroups = new EditGroupsDnDJTreePanel(ace.getFirstGroup());
+		editGroups = new EditGroupsDnDJTreePanel(ace.getRootGroup());
 		editGroups.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
 				.R("EditGroupsDnDJTreePanel.Border.Title")));
 		rightSide.setBottomComponent(editGroups);

@@ -120,8 +120,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 * references to {@link DpEntry}s or sub groups *
 	 */
 	@Override
-	public final Group getFirstGroup() {
-		Group fg = super.getFirstGroup();
+	public final Group getRootGroup() {
+		Group fg = super.getRootGroup();
 
 		// /**
 		// * Fill the description of the first group and tell the user, that it

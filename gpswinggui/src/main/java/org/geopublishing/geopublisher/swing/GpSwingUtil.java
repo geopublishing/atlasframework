@@ -104,7 +104,7 @@ public class GpSwingUtil extends GpUtil {
 		// ****************************************************************************
 		// Go through all group tree count the references to this DatapoolEntry
 		// ****************************************************************************
-		Group group = ace.getFirstGroup();
+		Group group = ace.getRootGroup();
 		Group.findReferencesTo(group, dpe, references, false);
 
 		if (askUserToVerify) {

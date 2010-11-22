@@ -176,7 +176,7 @@ public class AtlasConfig implements Disposable {
 	 * subgroup called "menubar" will be parsed as {@link JMenuBar} in the
 	 * AtlasViewer.
 	 */
-	private Group firstGroup = new Group(this, true);
+	private Group rootGroup = new Group(this, true);
 
 	private String resourceBasename = ATLASDATA_DIRNAME + "/" + DATA_DIRNAME
 			+ "/";
@@ -287,17 +287,17 @@ public class AtlasConfig implements Disposable {
 	 * Returns the root/first group of the "groups-tree" which contains
 	 * references to {@link DpEntry}s or sub groups *
 	 */
-	public Group getFirstGroup() {
-		return firstGroup;
+	public Group getRootGroup() {
+		return rootGroup;
 	}
 
 	/**
 	 * Sets the root/first group of the "groups-tree" which can contain
 	 * references to {@link DpEntry}s or sub groups *
 	 */
-	public void setFirstGroup(Group firstGroup) {
-		this.firstGroup = firstGroup;
-		this.firstGroup.setAtlasRoot(true);
+	public void setRootGroup(Group rootGroup) {
+		this.rootGroup = rootGroup;
+		this.rootGroup.setAtlasRoot(true);
 	}
 
 	/**

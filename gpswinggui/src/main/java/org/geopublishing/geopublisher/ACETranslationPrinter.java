@@ -181,7 +181,7 @@ public class ACETranslationPrinter {
 		 * Groups/ Menus
 		 */
 		printWayH1(R("EditGroupsDnDJTreePanel.Border.Title"));
-		printGroup(ace.getFirstGroup(),
+		printGroup(ace.getRootGroup(),
 				R("EditGroupsDnDJTreePanel.Border.Title"));
 
 		return txt.toString();

@@ -51,7 +51,7 @@ public class MapPoolDeleteAction extends AbstractAction {
 		}
 
 		// Delete references to this map in the Groups
-		Group.findReferencesTo(mapPoolJTable.getAce().getFirstGroup(),
+		Group.findReferencesTo(mapPoolJTable.getAce().getRootGroup(),
 				map2delete, new LinkedList<AtlasRefInterface<?>>(), true);
 
 		Map removed = mapPool.remove(map2delete.getId());

@@ -412,7 +412,7 @@ public class AMLImport {
 			final Group firstGroup = AMLImport.parseGroup(rootGroupNode, ac);
 			// LOGGER.debug("Setting first group = "
 			// + firstGroup.getTitle().toOneLine());
-			ac.setFirstGroup(firstGroup);
+			ac.setRootGroup(firstGroup);
 		} else
 			LOGGER.info("No <aml:group> defined in the atlas.xml, but group is optional");
 

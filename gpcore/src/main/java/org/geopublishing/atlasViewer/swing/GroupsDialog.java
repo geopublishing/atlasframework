@@ -72,7 +72,7 @@ public class GroupsDialog extends JDialog {
 	private JTree getJTree() {
 		if (tree == null) {
 			tree = new JTree();
-			tree.setModel(new DefaultTreeModel(ac.getFirstGroup()));
+			tree.setModel(new DefaultTreeModel(ac.getRootGroup()));
 
 			// Only allow single selections
 			tree.getSelectionModel().setSelectionMode(

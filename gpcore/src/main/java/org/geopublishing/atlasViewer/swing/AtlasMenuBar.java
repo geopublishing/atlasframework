@@ -60,7 +60,7 @@ public class AtlasMenuBar extends JMenuBar {
 	public AtlasMenuBar(AtlasViewerGUI atlasViewer) {
 		this.atlasViewer = atlasViewer;
 
-		Group firstGroup = atlasViewer.getAtlasConfig().getFirstGroup();
+		Group firstGroup = atlasViewer.getAtlasConfig().getRootGroup();
 
 		// Parse the Groups and represent them as MenuEntrys
 		group2Menus(this, firstGroup);
