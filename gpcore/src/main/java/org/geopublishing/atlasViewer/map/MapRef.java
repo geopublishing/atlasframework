@@ -16,7 +16,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 
-
 /**
  * A {@link MapRef} is a reference to a {@link Map} in {@link MapPool} A
  * {@link MapRef} can be added to a {@link JTree}, because it extends
@@ -51,7 +50,8 @@ public class MapRef extends DefaultMutableTreeNode implements
 	public String toString() {
 		if (getTarget() != null)
 			return getTarget().getTitle().toString();
-		else return super.toString();
+		else
+			return super.toString();
 	}
 
 	/*
@@ -79,7 +79,11 @@ public class MapRef extends DefaultMutableTreeNode implements
 	 */
 	@Override
 	public Map getTarget() {
-		return getMapPool().get(targetId);
+		Map mapTarget = getMapPool().get(targetId);
+		if (mapTarget == null)
+			LOGGER.warn("targetMap is null for " + this);
+
+		return mapTarget;
 	}
 
 	/*
