@@ -4,6 +4,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
@@ -20,6 +21,7 @@ public class AtlasGeoserverExporterTest {
 	}
 
 	@Test
+	@Ignore
 	public void testExport() throws Exception {
 		AtlasConfigEditable ace = GpTestingUtil.TestAtlas.small.getAce();
 		GsServerSettings settings = new GsServerSettings();
