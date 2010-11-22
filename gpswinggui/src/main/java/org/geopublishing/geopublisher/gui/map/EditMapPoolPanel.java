@@ -44,7 +44,7 @@ public class EditMapPoolPanel extends JPanel {
 	final static private Logger LOGGER = Logger
 			.getLogger(EditMapPoolPanel.class);
 
-	private final DraggableMapPoolJTable mapPoolJTable;
+	private DraggableMapPoolJTable mapPoolJTable;
 
 	private final MapPool mapPool;
 
@@ -81,10 +81,8 @@ public class EditMapPoolPanel extends JPanel {
 				.R("DataPoolWindow.FilterTable.TT"));
 		add(getFilterTextField(), "growx, top");
 
-		mapPoolJTable = new DraggableMapPoolJTable(ace);
-
 		// The constructor adds itself to the textfield
-		new FilterTableKeyListener(mapPoolJTable, getFilterTextField(), 1, 2, 3);
+		new FilterTableKeyListener(getMapPoolJTable(), getFilterTextField(), 1, 2, 3);
 
 		add(new JScrollPane(getMapPoolJTable()), "grow 2000");
 		add(getBottomPanel(), "shrinky, growx 1000");
@@ -130,6 +128,9 @@ public class EditMapPoolPanel extends JPanel {
 	 *         this {@link JPanel}
 	 */
 	public DraggableMapPoolJTable getMapPoolJTable() {
+		if (mapPoolJTable == null) {
+			mapPoolJTable = new DraggableMapPoolJTable(ace);
+		}
 		return mapPoolJTable;
 	}
 

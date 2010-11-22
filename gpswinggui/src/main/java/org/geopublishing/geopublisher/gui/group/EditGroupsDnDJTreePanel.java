@@ -162,9 +162,9 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 					 * If a Map of Dpe is clicked, select it in the pools
 					 */
 					{
+						MapRef mapRef = (MapRef) clickedNode;
 						if (clickedNode instanceof MapRef) {
-							final Map targetMap = ((MapRef) clickedNode)
-									.getTarget();
+							final Map targetMap = mapRef.getTarget();
 
 							// Select the Entry in the table
 							GeopublisherGUI.getInstance().getJFrame()
