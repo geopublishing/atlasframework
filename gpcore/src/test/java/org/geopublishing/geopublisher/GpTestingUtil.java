@@ -62,27 +62,13 @@ public class GpTestingUtil extends TestingUtil {
 		}
 
 		public AtlasConfigEditable getAce() {
-			// System.out.println("Start loading test atlas config ...");
+//			 System.out.println("Start loading test atlas config ...");
 			try {
-				URL url = getUrl();
-				File urlToFile = DataUtilities.urlToFile(url);
-				if (urlToFile != null){
-					// Load Atlas from directory
-					return getAtlasConfigE(urlToFile.getParent());
-				} else {
-					// Unzip to /tmp
-					File td = TestingUtil.getNewTempDir();
-					
-					File fileFromJarFileUrl = IOUtil.getFileFromJarFileUrl(url);
-
-					IOUtil.unzipArchive(fileFromJarFileUrl, td);
-					return getAtlasConfigE(new File(td,getReslocation()).getParent());
-				}
-			} catch (Throwable e) {
-				throw new RuntimeException("url = " + getUrl(), e);
+				return getAtlasConfigE(getFile().getParent());
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 			}
 		}
-
 
 		public URL getUrl() {
 			URL resourceUrl = GpUtil.class.getResource(getReslocation());
@@ -95,8 +81,29 @@ public class GpTestingUtil extends TestingUtil {
 			return resourceUrl;
 		}
 
+		/**
+		 * Returns a {@link File} to a <code>atlas.gpa</code>. If the atlas
+		 * comes from the classpath, it is copied to a temp directory.
+		 */
 		public File getFile() {
-			return DataUtilities.urlToFile(getUrl());
+			try {
+				URL url = getUrl();
+				File urlToFile = DataUtilities.urlToFile(url);
+				// Unzip to /tmp
+				File td = TestingUtil.getNewTempDir();
+				if (urlToFile != null) {
+					// // Load Atlas from directory
+
+					FileUtils.copyDirectory(urlToFile.getParentFile(), td);
+					return new File(td, "atlas.gpa");
+				} else {
+					File fileFromJarFileUrl = IOUtil.getFileFromJarFileUrl(url);
+					IOUtil.unzipArchive(fileFromJarFileUrl, td);
+					return new File(td, getReslocation());
+				}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
