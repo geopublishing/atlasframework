@@ -22,6 +22,7 @@ import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
@@ -49,6 +50,7 @@ public class CliOptionsTest {
 	}
 
 	@Test
+	@Ignore // bis das data dir auf das atlas dir gelinkt ist!
 	public void testConfigureGs() throws IOException {
 		if (!GsTestingUtil.isAvailable())
 			return;
