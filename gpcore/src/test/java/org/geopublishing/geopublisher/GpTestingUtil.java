@@ -28,6 +28,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -39,11 +40,13 @@ import schmitzm.io.IOUtil;
 import schmitzm.swing.TestingUtil;
 import skrueger.geotools.MapPaneToolBar;
 
-public class GpTestingUtil extends TestingUtil{
-	
+public class GpTestingUtil extends TestingUtil {
+
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {
-		// TODO Create atype "new" that creates a new atlas in tmp dir
+
+		// TODO Create a type "new" which creates a new empty atlas in tmp dir on getAce()
+
 		small("/atlases/ChartDemoAtlas/atlas.gpa"), rasters(
 				"/atlases/rastersAtlas/atlas.gpa");
 
