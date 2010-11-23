@@ -44,7 +44,8 @@ public class GpTestingUtil extends TestingUtil {
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {
 
-		// TODO Create a type "new" which creates a new empty atlas in tmp dir on getAce()
+		// TODO Create a type "new" which creates a new empty atlas in tmp dir
+		// on getAce()
 
 		small("/atlases/ChartDemoAtlas/atlas.gpa"), rasters(
 				"/atlases/rastersAtlas/atlas.gpa");
@@ -70,7 +71,11 @@ public class GpTestingUtil extends TestingUtil {
 		}
 
 		public URL getUrl() {
-			return GpTestingUtil.class.getResource(getReslocation());
+			URL resourceUrl = GpTestingUtil.class.getResource(getReslocation());
+			if (resourceUrl == null)
+				throw new RuntimeException("The test-resource " + getReslocation()
+						+ " could not be found in classpath");
+			return resourceUrl;
 		}
 
 		public File getFile() {
