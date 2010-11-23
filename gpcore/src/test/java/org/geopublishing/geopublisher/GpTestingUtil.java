@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.management.RuntimeErrorException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
@@ -63,18 +64,34 @@ public class GpTestingUtil extends TestingUtil {
 		public AtlasConfigEditable getAce() {
 			// System.out.println("Start loading test atlas config ...");
 			try {
-				return getAtlasConfigE(DataUtilities.urlToFile(getUrl())
-						.getParent());
-			} catch (Exception e) {
-				throw new RuntimeException(e);
+				URL url = getUrl();
+				File urlToFile = DataUtilities.urlToFile(url);
+				if (urlToFile != null){
+					// Load Atlas from directory
+					return getAtlasConfigE(urlToFile.getParent());
+				} else {
+					// Unzip to /tmp
+					File td = TestingUtil.getNewTempDir();
+					
+					File fileFromJarFileUrl = IOUtil.getFileFromJarFileUrl(url);
+
+					IOUtil.unzipArchive(fileFromJarFileUrl, td);
+					return getAtlasConfigE(new File(td,getReslocation()).getParent());
+				}
+			} catch (Throwable e) {
+				throw new RuntimeException("url = " + getUrl(), e);
 			}
 		}
 
+
 		public URL getUrl() {
-			URL resourceUrl = GpTestingUtil.class.getResource(getReslocation());
+			URL resourceUrl = GpUtil.class.getResource(getReslocation());
 			if (resourceUrl == null)
-				throw new RuntimeException("The test-resource " + getReslocation()
-						+ " could not be found in classpath");
+				throw new RuntimeException("The test-resource "
+						+ getReslocation() + " could not be found in classpath");
+			else
+				System.out.println("URL for " + getReslocation() + " is "
+						+ resourceLocation);
 			return resourceUrl;
 		}
 
