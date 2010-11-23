@@ -208,25 +208,26 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 			return;
 		}
 
-		int childIndex = -1;
+//		int childIndex = -1;
 		while (children.hasMoreElements()) {
 			Object item = children.nextElement();
-			childIndex++;
+//			childIndex++;
 
 			if (item instanceof AtlasRefInterface) {
 				final AtlasRefInterface<?> testref = (AtlasRefInterface<?>) item;
 				if (testref.getTargetId().equals(id)) {
-					if (delete) {
-						LOGGER.debug("removing ref " + item.toString()
-								+ " from group. targetid = " + id);
-						g.remove(childIndex);
-						references.add(testref);
-					} else {
-						references.add(testref);
-					}
+					references.add(testref);
 				}
 			} else if (item instanceof Group) {
 				findReferencesTo((Group) item, dpeOrMap, references, delete);
+			}
+		}
+
+		if (delete) {
+			for (AtlasRefInterface<?> ref : references) {
+				if (ref instanceof DefaultMutableTreeNode) {
+					((DefaultMutableTreeNode) ref).removeFromParent();
+				}
 			}
 		}
 	}
