@@ -140,6 +140,14 @@
 			<artifactId>gsrcj</artifactId>
 		</dependency>
 
+		<dependency>
+			<version>0.5-SNAPSHOT</version>
+			<groupId>org.geopublishing</groupId>
+			<artifactId>gsrcj</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- For i8n correction -->
 		<dependency>
 			<groupId>com.sun</groupId>

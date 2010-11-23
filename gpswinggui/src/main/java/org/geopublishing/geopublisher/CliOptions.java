@@ -19,9 +19,12 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.geopublisher.export.AtlasGeoserverExporter;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.netbeans.spi.wizard.ResultProgressHandle;
 
+import skrueger.geotools.io.GsServerSettings;
 import skrueger.versionnumber.ReleaseUtil;
 import skrueger.versionnumber.ReleaseUtil.License;
 
@@ -36,6 +39,9 @@ public class CliOptions extends Options {
 	public static final String FORCE = "f";
 	public static final String DISK = "d";
 	public static final String JWS = "j";
+	public static final String GS_URL = "gs";
+	public static final String GS_USER = "gsu";
+	public static final String GS_PASSWORD = "gsp";
 	static final String ZIPDISK = "z";
 	private static final String LICENSE = "l";
 	private static final String KEEPTEMP = "t";
@@ -48,7 +54,7 @@ public class CliOptions extends Options {
 
 		PARSEEXCEPTION(1), AWCPARAM_MISSING(2), AWCPARAM_ILLEGAL(3), EXPORTDIR_MISSING(
 				4), EXPORTDIR_ILLEGAL(5), EXPORTDIR_NOTEMPTYNOFORCE(6), EXPORT_FAILED(
-				7), NOHEAD(8), SAVEERROR(9);
+				7), NOHEAD(8), SAVEERROR(9), GS_EXPORTERROR(10);
 
 		private final int errCode;
 
@@ -89,13 +95,25 @@ public class CliOptions extends Options {
 				EXPORT,
 				"export",
 				true,
-				"exports an atlas to a given directory, combine this option with -f / -d and/or -j. The path may not contain spaces!");
+				"exports an atlas as a stand-alone application to a given directory, combine this option with -f / -d and/or -j. The path may not contain spaces!");
 		optExport.setArgName("dstDir");
 		addOption(optExport);
 
 		Option diskOption = new Option(DISK, "disk", false,
 				"Create DISK version of atlas when exporting.");
 		addOption(diskOption);
+
+		Option gsOption = new Option(GS_URL, "gsurl", true,
+				"URL of Geoserver to configure during export.");
+		addOption(gsOption);
+
+		Option gsUserOption = new Option(GS_USER, "gsuser", true,
+				"Geoserver username");
+		addOption(gsUserOption);
+
+		Option gsPwdOption = new Option(GS_PASSWORD, "gspassword", true,
+				"Geoserver password");
+		addOption(gsPwdOption);
 
 		addOption(new Option(ZIPDISK, "zipdisk", false,
 				"Zip the DISK folder after export."));
@@ -128,7 +146,6 @@ public class CliOptions extends Options {
 		// automatically generate the help statement
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.printHelp("geopublisher", this);
-
 	}
 
 	/**
@@ -198,29 +215,37 @@ public class CliOptions extends Options {
 
 			// export?
 			if (!commandLine.hasOption(CliOptions.EXPORT)
-					&& !commandLine.hasOption(CliOptions.SAVEANDEXIT)) {
+					&& !commandLine.hasOption(CliOptions.SAVEANDEXIT)
+					&& !commandLine.hasOption(CliOptions.GS_URL)) {
 				// Use the GUI
 				startGui = true;
 			} else if (commandLine.hasOption(CliOptions.EXPORT)) {
+
+				/**
+				 * Read the export Directory
+				 */
 				exportFile = new File(commandLine.getOptionValue(
 						CliOptions.EXPORT).trim());
 
-				if (!exportFile.isDirectory()) {
-					System.out.println("Not a valid export directory: "
-							+ exportFile);
-					exitAfterInterpret = true;
-					errorDuringInterpret = Errors.EXPORTDIR_ILLEGAL;
-				} else {
-
-					// Check export dir
-					if (exportFile.list().length > 0
-							&& !commandLine.hasOption(CliOptions.FORCE)) {
-						System.out
-								.println("Export directory is not empty. Use --force to delete any older atlases.");
+				if (exportFile != null) {
+					if (!exportFile.isDirectory()) {
+						System.out.println("Not a valid export directory: "
+								+ exportFile);
 						exitAfterInterpret = true;
-						errorDuringInterpret = Errors.EXPORTDIR_NOTEMPTYNOFORCE;
+						errorDuringInterpret = Errors.EXPORTDIR_ILLEGAL;
+					} else {
+
+						// Check export dir
+						if (exportFile.list().length > 0
+								&& !commandLine.hasOption(CliOptions.FORCE)) {
+							System.out
+									.println("Export directory is not empty. Use --force to delete any older atlases.");
+							exitAfterInterpret = true;
+							errorDuringInterpret = Errors.EXPORTDIR_NOTEMPTYNOFORCE;
+						}
 					}
 				}
+
 			}
 
 			if (startGui && GraphicsEnvironment.isHeadless()
@@ -282,9 +307,6 @@ public class CliOptions extends Options {
 				if (commandLine.hasOption(CliOptions.VERBOSE))
 					Logger.getRootLogger().setLevel(
 							org.apache.log4j.Level.DEBUG);
-				// else
-				// Logger.getRootLogger()
-				// .setLevel(org.apache.log4j.Level.WARN);
 
 				if (awcFile != null) {
 					final AtlasConfigEditable ace = new AMLImportEd()
@@ -305,40 +327,65 @@ public class CliOptions extends Options {
 							return Errors.SAVEERROR.errCode;
 						}
 
-					} else if (exportFile != null) {
+					} else {
+
 						// Export
-						try {
-							boolean toDisk = commandLine.hasOption(DISK);
-							boolean toJws = commandLine.hasOption(JWS);
+						if (exportFile != null) {
 
-							// If nothing is selected, all export modes are
-							// selected
-							if (!toDisk && !toJws)
-								toDisk = toJws = true;
+							try {
+								boolean toDisk = commandLine.hasOption(DISK);
+								boolean toJws = commandLine.hasOption(JWS);
 
-							JarExportUtil jeu = new JarExportUtil(ace,
-									exportFile, toDisk, toJws, false);
-							jeu.setZipDiskAfterExport(commandLine
-									.hasOption(ZIPDISK));
+								// If nothing is selected, all export modes are
+								// selected
+								if (!toDisk && !toJws)
+									toDisk = toJws = true;
 
-							// Is an extra JNLP base url specified?
-							if (commandLine.hasOption(JWSURL)) {
-								URL jwsUrl = new URL(
-										commandLine.getOptionValue(JWSURL));
-								jeu.setOverwriteJnlpBaseUrl(jwsUrl);
-								if (!toJws)
-									log.error("Paraeter -"
-											+ JWSURL
-											+ " ignored because not exporting to JWS.");
+								JarExportUtil jeu = new JarExportUtil(ace,
+										exportFile, toDisk, toJws, false);
+								jeu.setZipDiskAfterExport(commandLine
+										.hasOption(ZIPDISK));
+
+								// Is an extra JNLP base url specified?
+								if (commandLine.hasOption(JWSURL)) {
+									URL jwsUrl = new URL(
+											commandLine.getOptionValue(JWSURL));
+									jeu.setOverwriteJnlpBaseUrl(jwsUrl);
+									if (!toJws)
+										log.error("Paraeter -"
+												+ JWSURL
+												+ " ignored because not exporting to JWS.");
+								}
+
+								jeu.setKeepTempFiles(commandLine
+										.hasOption(KEEPTEMP));
+								jeu.export(null);
+							} catch (Exception e) {
+								errorDuringInterpret = Errors.EXPORT_FAILED;
+								log.error(Errors.EXPORT_FAILED.toString(), e);
+								return Errors.EXPORT_FAILED.errCode;
 							}
+						} // Export to disk or jws
 
-							jeu.setKeepTempFiles(commandLine
-									.hasOption(KEEPTEMP));
-							jeu.export(null);
-						} catch (Exception e) {
-							errorDuringInterpret = Errors.EXPORT_FAILED;
-							log.error(Errors.EXPORT_FAILED.toString(), e);
-							return Errors.EXPORT_FAILED.errCode;
+						if (commandLine.hasOption(GS_URL)) {
+							// Export to Geoserver
+							String gsUrl = commandLine.getOptionValue(GS_URL);
+							try {
+								GsServerSettings gsServer = new GsServerSettings();
+								gsServer.setUrl(gsUrl);
+								gsServer.setUsername(commandLine
+										.getOptionValue(GS_USER));
+								gsServer.setPassword(commandLine
+										.getOptionValue(GS_PASSWORD));
+								AtlasGeoserverExporter gse = new AtlasGeoserverExporter(
+										ace, gsServer);
+								ResultProgressHandle progress = null;
+								gse.export(progress);
+							} catch (Exception e) {
+								log.error("Problem with geoserver at url "
+										+ gsUrl);
+								return Errors.GS_EXPORTERROR.errCode;
+							}
 						}
 					}
 
@@ -359,8 +406,8 @@ public class CliOptions extends Options {
 	}
 
 	/**
-	 * Doens nothing, if there already is an {@link ConsoleAppender} registered
-	 * to the root logger.
+	 * Does nothing if there already is an {@link ConsoleAppender} registered to
+	 * the root logger. Otherwise adds a console Logger.
 	 */
 	private static void initLoggingForConsole() {
 		{
@@ -380,8 +427,4 @@ public class CliOptions extends Options {
 		}
 	}
 
-	private static void loadSaveAndExit(File awcFileToLoad) {
-		// TODO Auto-generated method stub
-
-	}
 }

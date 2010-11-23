@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.GsRest;
 import org.geopublishing.atlasViewer.AVProps;
@@ -79,13 +80,17 @@ public class AtlasGeoserverExporter extends AbstractAtlasExporter {
 				String relPath = "file:data/myatlas/" + dpe.getDataDirname()
 						+ "/" + dpe.getFilename();
 
-				String dsName = dpshp.getFilename();
+				// TODO Better id or "basename" method
+				String dsName = FilenameUtils.removeExtension(dpshp
+						.getFilename());
+//				dsName = dpshp.getFilename();
+
 				gsRest.createDatastoreShapefile(wsName, dsName, namespace,
 						relPath, dpe.getCharset().toString());
 
 				String ftName = dsName;
 				gsRest.createFeatureType(wsName, dsName, ftName);
-
+				
 				String stylename = wsName + "_" + dsName;
 
 				String sldString = StylingUtil.sldToString(dpshp.getStyle());
