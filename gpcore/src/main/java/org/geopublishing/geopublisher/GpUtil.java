@@ -68,11 +68,15 @@ public class GpUtil {
 			Logger.getRootLogger().setLevel(Level.toLevel(logLevelStr));
 		}
 
+		initBugReporting();
+	}
+
+	public static void initBugReporting() {
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 		ExceptionDialog.setSmtpMailer(bugReportMailer);
 
 		// Add application version number to Exception mails
-		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil
+		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
 				.getVersionInfo(GpUtil.class));
 	}
 

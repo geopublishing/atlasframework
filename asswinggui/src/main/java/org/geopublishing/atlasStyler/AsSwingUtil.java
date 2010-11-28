@@ -36,8 +36,9 @@ public class AsSwingUtil extends ASUtil {
 
 		// # TODO bugreport@wikisquare.de from properties
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
-		
+
 		// Add application version number to Exception mails
-		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
+		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
+				.getVersionInfo(GpUtil.class));
 	}
 }

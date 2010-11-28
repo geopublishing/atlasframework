@@ -536,7 +536,7 @@ public class AVUtil {
 		ExceptionDialog.setSmtpMailer(GpUtil.bugReportMailer);
 
 		// Add application version number to Exception mails
-		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil
+		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
 				.getVersionInfo(GpUtil.class));
 	}
 

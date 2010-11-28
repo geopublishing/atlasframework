@@ -13,8 +13,18 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
+import schmitzm.swing.ExceptionDialog;
 
 public class GpUtilTest {
+
+	@Test
+	public void testSendGPBugReport_WithAddInfos() {
+		new GpUtil();
+		assertEquals(0, ExceptionDialog.getAdditionalAppInfo().size());
+		for (Object o : ExceptionDialog.getAdditionalAppInfo()) {
+			System.out.println(o.toString());
+		}
+	}
 
 	@Test
 	public void testBuildXMLWithoutFiltering() {
