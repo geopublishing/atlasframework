@@ -19,8 +19,8 @@ public class GpUtilTest {
 
 	@Test
 	public void testSendGPBugReport_WithAddInfos() {
-		new GpUtil();
-		assertEquals(0, ExceptionDialog.getAdditionalAppInfo().size());
+		GpUtil.initBugReporting();
+		assertEquals(3, ExceptionDialog.getAdditionalAppInfo().size());
 		for (Object o : ExceptionDialog.getAdditionalAppInfo()) {
 			System.out.println(o.toString());
 		}
