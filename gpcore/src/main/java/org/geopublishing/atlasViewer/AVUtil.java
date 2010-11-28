@@ -533,9 +533,11 @@ public class AVUtil {
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
 
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
-		
+		ExceptionDialog.setSmtpMailer(GpUtil.bugReportMailer);
+
 		// Add application version number to Exception mails
-		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
+		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil
+				.getVersionInfo(GpUtil.class));
 	}
 
 	/**

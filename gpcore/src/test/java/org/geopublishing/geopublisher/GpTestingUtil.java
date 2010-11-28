@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import javax.management.RuntimeErrorException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
@@ -29,6 +28,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -62,7 +62,7 @@ public class GpTestingUtil extends TestingUtil {
 		}
 
 		public AtlasConfigEditable getAce() {
-//			 System.out.println("Start loading test atlas config ...");
+			// System.out.println("Start loading test atlas config ...");
 			try {
 				return getAtlasConfigE(getFile().getParent());
 			} catch (Exception e) {

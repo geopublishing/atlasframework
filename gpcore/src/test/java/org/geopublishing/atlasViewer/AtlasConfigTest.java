@@ -8,8 +8,8 @@ import java.net.URL;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
-import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
+import org.geopublishing.geopublisher.GpUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

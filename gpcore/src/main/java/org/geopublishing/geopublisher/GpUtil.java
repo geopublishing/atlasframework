@@ -30,6 +30,7 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import schmitzm.geotools.io.GeoExportUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.lang.ResourceProvider;
+import schmitzm.mail.Mailer;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.swing.formatter.MbDecimalFormatter;
 import skrueger.versionnumber.ReleaseUtil;
@@ -39,6 +40,13 @@ public class GpUtil {
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
 
 	/**
+	 * This Mailer can sends E-Mails to <code>bugreport@wikisquare.de</code> and
+	 * can not be used to send mails to any other address.
+	 */
+	public static final Mailer bugReportMailer = new Mailer("bugreport", "",
+			"", "www.wikisquare.de", "bugreport@wikisquare.de");
+
+	/**
 	 * Setting up the logger from a global XML configuration file. This method
 	 * might be called multiple times.<br/>
 	 * This method does not do anything if there are already appenders defined.
@@ -46,24 +54,26 @@ public class GpUtil {
 	public static void initGpLogging() throws FactoryConfigurationError {
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
-		
+
 		DOMConfigurator.configure(GPProps.class
 				.getResource("/geopublishing_log4j.xml"));
 
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("gpFileLogger"));
 
-		// Apply the LOG level configured in the user-specific application .properties file 
-		String logLevelStr = GPProps
-				.get(Keys.logLevel);
+		// Apply the LOG level configured in the user-specific application
+		// .properties file
+		String logLevelStr = GPProps.get(Keys.logLevel);
 		if (logLevelStr != null) {
 			Logger.getRootLogger().setLevel(Level.toLevel(logLevelStr));
 		}
 
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
-		
+		ExceptionDialog.setSmtpMailer(bugReportMailer);
+
 		// Add application version number to Exception mails
-		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
+		ExceptionDialog.setAdditionalAppInfo(ReleaseUtil
+				.getVersionInfo(GpUtil.class));
 	}
 
 	/**
