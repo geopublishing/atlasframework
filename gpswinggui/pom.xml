@@ -268,21 +268,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- <dependency> -->
-		<!-- <groupId>org.geotools</groupId> -->
-		<!-- <artifactId>gt-imagepyramid</artifactId> -->
-		<!-- <version>${geotools.version}</version> -->
-		<!-- <type>jar</type> -->
-		<!-- <scope>compile</scope> -->
-		<!-- </dependency> -->
-
-		<!-- <dependency> -->
-		<!-- <groupId>org.geotools</groupId> -->
-		<!-- <artifactId>gt-imagemosaic</artifactId> -->
-		<!-- <version>${geotools.version}</version> -->
-		<!-- <type>jar</type> -->
-		<!-- </dependency> -->
-
 		<dependency>
 			<groupId>net.java.wizard</groupId>
 			<artifactId>wizard</artifactId>
@@ -348,22 +333,13 @@
 		</dependency>
 
 		<dependency>
-<!--			 Test dependency -->
+<!--			 Test dependency, pulls ascore-tests -->
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			 Test dependency -->
-<!--			<groupId>org.geopublishing.atlasStyler</groupId>-->
-<!--			<artifactId>ascore</artifactId>-->
-<!--			<version>${project.version}</version>-->
-<!--			<type>test-jar</type>-->
-<!--			<scope>test</scope>-->
-<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.geotools</groupId>

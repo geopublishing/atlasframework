@@ -53,7 +53,7 @@ public class AtlasGeoserverExporter extends AbstractAtlasExporter {
 
 	private final GsServerSettings settings;
 	private final GsRest gsRest;
-	private String namespace;
+	private final String namespace;
 
 	public AtlasGeoserverExporter(final AtlasConfigEditable ace,
 			GsServerSettings settings) throws IOException {
@@ -83,14 +83,14 @@ public class AtlasGeoserverExporter extends AbstractAtlasExporter {
 				// TODO Better id or "basename" method
 				String dsName = FilenameUtils.removeExtension(dpshp
 						.getFilename());
-//				dsName = dpshp.getFilename();
+				// dsName = dpshp.getFilename();
 
 				gsRest.createDatastoreShapefile(wsName, dsName, namespace,
 						relPath, dpe.getCharset().toString());
 
 				String ftName = dsName;
 				gsRest.createFeatureType(wsName, dsName, ftName);
-				
+
 				String stylename = wsName + "_" + dsName;
 
 				String sldString = StylingUtil.sldToString(dpshp.getStyle());
