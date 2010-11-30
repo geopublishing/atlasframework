@@ -264,9 +264,11 @@ public class AMLExporter {
 
 					final Transformer xformer = tf.newTransformer();
 					xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-					xformer.setOutputProperty(
-							"{http://www.wikisquare.de/AtlasML.xsd}indent-amount",
-							"4");
+					
+//					// TODO ??? Try with AMLURI, makes more sense...
+//					xformer.setOutputProperty(
+//							"{"+AMLUtil.AMLSCHEMALOCATION+"}indent-amount",
+//							"4");
 					xformer.setOutputProperty(
 							"{http://xml.apache.org/xalan}indent-amount", "2");
 
@@ -319,8 +321,7 @@ public class AMLExporter {
 		// Create a DOM builder and parse the fragment
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
 				.newInstance();
-		Document document = null;
-		document = factory.newDocumentBuilder().newDocument();
+		Document document = factory.newDocumentBuilder().newDocument();
 
 		// XML root element
 		final Element atlas = document.createElementNS(AMLUtil.AMLURI, "atlas");
@@ -329,7 +330,7 @@ public class AMLExporter {
 		final Attr namespaces = document.createAttributeNS(
 				"http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
 		namespaces
-				.setValue("http://www.wikisquare.de/AtlasML http://localhost:"
+				.setValue(AMLUtil.AMLURI+" http://localhost:"
 						+ Webserver.DEFAULTPORT
 						+ "/skrueger/atlas/resource/AtlasML.xsd");
 		atlas.setAttributeNode(namespaces);

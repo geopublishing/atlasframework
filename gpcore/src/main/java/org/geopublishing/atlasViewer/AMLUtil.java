@@ -26,6 +26,7 @@ public class AMLUtil {
 	 * XML Schema name spaces of the AtlasMarkupLanguage (AML) and others
 	 */
 	public static final String AMLURI = "http://www.wikisquare.de/AtlasML";
+	public static final String AMLSCHEMALOCATION = "http://www.wikisquare.de/AtlasML.xsd";
 
 	public static final String SLDURI = "http://www.opengis.net/sld";
 
