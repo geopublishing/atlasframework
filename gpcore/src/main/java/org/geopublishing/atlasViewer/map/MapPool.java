@@ -44,7 +44,7 @@ public class MapPool extends TreeMap<String, Map> {
 	 */
 	protected String startMapID = null;
 
-	private WeakHashSet<PropertyChangeListener> listeners = new WeakHashSet<PropertyChangeListener>(
+	private final WeakHashSet<PropertyChangeListener> listeners = new WeakHashSet<PropertyChangeListener>(
 			PropertyChangeListener.class);
 
 	public enum EventTypes {
@@ -221,8 +221,8 @@ public class MapPool extends TreeMap<String, Map> {
 	 */
 	public void fireChangeEvents(Object source, EventTypes type, Map map) {
 
-		PropertyChangeEvent pce = new PropertyChangeEvent(source, type
-				.toString(), map, map);
+		PropertyChangeEvent pce = new PropertyChangeEvent(source,
+				type.toString(), map, map);
 
 		fireChangeEvents(pce);
 	}
@@ -269,5 +269,9 @@ public class MapPool extends TreeMap<String, Map> {
 		}
 
 		return maps;
+	}
+
+	public Map getStartMap() {
+		return get(getStartMapID());
 	}
 }
