@@ -19,12 +19,9 @@ import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
-import org.geopublishing.geopublisher.export.AtlasGeoserverExporter;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
-import org.netbeans.spi.wizard.ResultProgressHandle;
 
-import skrueger.geotools.io.GsServerSettings;
 import skrueger.versionnumber.ReleaseUtil;
 import skrueger.versionnumber.ReleaseUtil.License;
 
@@ -39,9 +36,9 @@ public class CliOptions extends Options {
 	public static final String FORCE = "f";
 	public static final String DISK = "d";
 	public static final String JWS = "j";
-	public static final String GS_URL = "gs";
-	public static final String GS_USER = "gsu";
-	public static final String GS_PASSWORD = "gsp";
+	// public static final String GS_URL = "gs";
+	// public static final String GS_USER = "gsu";
+	// public static final String GS_PASSWORD = "gsp";
 	static final String ZIPDISK = "z";
 	private static final String LICENSE = "l";
 	private static final String KEEPTEMP = "t";
@@ -103,17 +100,17 @@ public class CliOptions extends Options {
 				"Create DISK version of atlas when exporting.");
 		addOption(diskOption);
 
-		Option gsOption = new Option(GS_URL, "gsurl", true,
-				"URL of Geoserver to configure during export.");
-		addOption(gsOption);
-
-		Option gsUserOption = new Option(GS_USER, "gsuser", true,
-				"Geoserver username");
-		addOption(gsUserOption);
-
-		Option gsPwdOption = new Option(GS_PASSWORD, "gspassword", true,
-				"Geoserver password");
-		addOption(gsPwdOption);
+		// Option gsOption = new Option(GS_URL, "gsurl", true,
+		// "URL of Geoserver to configure during export.");
+		// addOption(gsOption);
+		//
+		// Option gsUserOption = new Option(GS_USER, "gsuser", true,
+		// "Geoserver username");
+		// addOption(gsUserOption);
+		//
+		// Option gsPwdOption = new Option(GS_PASSWORD, "gspassword", true,
+		// "Geoserver password");
+		// addOption(gsPwdOption);
 
 		addOption(new Option(ZIPDISK, "zipdisk", false,
 				"Zip the DISK folder after export."));
@@ -216,7 +213,8 @@ public class CliOptions extends Options {
 			// export?
 			if (!commandLine.hasOption(CliOptions.EXPORT)
 					&& !commandLine.hasOption(CliOptions.SAVEANDEXIT)
-					&& !commandLine.hasOption(CliOptions.GS_URL)) {
+			// && !commandLine.hasOption(CliOptions.GS_URL)
+			) {
 				// Use the GUI
 				startGui = true;
 			} else if (commandLine.hasOption(CliOptions.EXPORT)) {
@@ -367,26 +365,27 @@ public class CliOptions extends Options {
 							}
 						} // Export to disk or jws
 
-						if (commandLine.hasOption(GS_URL)) {
-							// Export to Geoserver
-							String gsUrl = commandLine.getOptionValue(GS_URL);
-							try {
-								GsServerSettings gsServer = new GsServerSettings();
-								gsServer.setUrl(gsUrl);
-								gsServer.setUsername(commandLine
-										.getOptionValue(GS_USER));
-								gsServer.setPassword(commandLine
-										.getOptionValue(GS_PASSWORD));
-								AtlasGeoserverExporter gse = new AtlasGeoserverExporter(
-										ace, gsServer);
-								ResultProgressHandle progress = null;
-								gse.export(progress);
-							} catch (Exception e) {
-								log.error("Problem with geoserver at url "
-										+ gsUrl);
-								return Errors.GS_EXPORTERROR.errCode;
-							}
-						}
+						// if (commandLine.hasOption(GS_URL)) {
+						// // Export to Geoserver
+						// String gsUrl = commandLine.getOptionValue(GS_URL);
+						// try {
+						// GsServerSettings gsServer = new GsServerSettings();
+						// gsServer.setUrl(gsUrl);
+						// gsServer.setUsername(commandLine
+						// .getOptionValue(GS_USER));
+						// gsServer.setPassword(commandLine
+						// .getOptionValue(GS_PASSWORD));
+						// AtlasGeoserverExporter gse = new
+						// AtlasGeoserverExporter(
+						// ace, gsServer);
+						// ResultProgressHandle progress = null;
+						// gse.export(progress);
+						// } catch (Exception e) {
+						// log.error("Problem with geoserver at url "
+						// + gsUrl);
+						// return Errors.GS_EXPORTERROR.errCode;
+						// }
+						// }
 					}
 
 				}
@@ -414,7 +413,7 @@ public class CliOptions extends Options {
 			Enumeration<Appender> allAppenders = Logger.getRootLogger()
 					.getAllAppenders();
 			while (allAppenders.hasMoreElements()) {
-				Appender app = (Appender) allAppenders.nextElement();
+				Appender app = allAppenders.nextElement();
 				if (app instanceof ConsoleAppender)
 					return;
 			}
