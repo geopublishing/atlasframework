@@ -283,15 +283,15 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-
-		<dependency>
-			<!-- Smooth runtime dependency -->
-			<groupId>com.wutka</groupId>
-			<artifactId>jox</artifactId>
-			<version>1.16</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+		
+<!--		<dependency>-->
+<!--			 Smooth runtime dependency -->
+<!--			<groupId>com.wutka</groupId>-->
+<!--			<artifactId>jox</artifactId>-->
+<!--			<version>1.16</version>-->
+<!--			<type>jar</type>-->
+<!--			<scope>compile</scope>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>gnu-regexp</groupId>
