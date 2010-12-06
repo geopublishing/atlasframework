@@ -71,7 +71,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	@Override
 	public FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject(
 			AtlasStatusDialogInterface statusDialog) {
-		LOGGER.info("Called new getGeoObject(AtlasStatusDialog statusDialog) for Shapefile!");
+		// LOGGER.info("Called new getGeoObject(AtlasStatusDialog statusDialog) for Shapefile!");
 		return getGeoObject(AVSwingUtil.getUrl(this, statusDialog));
 	}
 
@@ -241,24 +241,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 		if (charset == null) {
 
 			charset = GeoImportUtil.readCharset(getUrl());
-
-			// URL[] cpgUrls = GeoImportUtil.getCharsetUrls( getUrl());
-			// for (URL cpgUrl : cpgUrls) {
-			// try {
-			//
-			// String charsetName = IOUtil.readURLasString(cpgUrl);
-			//
-			// if (charsetName.equals(""))
-			// continue;
-			//
-			// charset = Charset.forName(charsetName);
-			// break;
-			//
-			// } catch (Exception e) {
-			// //
-			// LOGGER.warn("Reading .cpg file failed for "+getFilename()+". Using default. ");
-			// }
-			// }
 
 			return super.getCharset();
 		}

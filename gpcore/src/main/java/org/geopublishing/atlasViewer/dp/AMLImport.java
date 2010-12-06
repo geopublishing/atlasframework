@@ -446,7 +446,7 @@ public class AMLImport {
 				try {
 					Font font = Font.createFont(Font.TRUETYPE_FONT, is);
 					ac.getFonts().add(font);
-					LOGGER.debug("Registered a new TTF font: " + font.getName());
+					LOGGER.info("Registered a new TTF font: " + font.getName());
 				} catch (Exception e) {
 					Log.error("Couldn't load or register font " + relFontPath,
 							e);
@@ -1197,9 +1197,9 @@ public class AMLImport {
 
 		// Trigger caching the layer with a status-download-wait-GUI in case we
 		// are running on JavaWebStart
-		LOGGER.debug("getting the GeoObject with a StatusDialog "
-				+ statusDialog + " to parseAttributeMetadata for "
-				+ dplvfs.getTitle().toString());
+		// LOGGER.debug("getting the GeoObject with a StatusDialog "
+		// + statusDialog + " to parseAttributeMetadata for "
+		// + dplvfs.getTitle().toString());
 		dplvfs.getGeoObject(statusDialog);
 
 		String localname;

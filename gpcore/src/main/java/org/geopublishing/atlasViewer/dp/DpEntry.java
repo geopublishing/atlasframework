@@ -75,7 +75,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	/**
 	 * List of charts for this DpEntry
 	 */
-	private List<CHART_STYLE_IMPL> charts = new ArrayList<CHART_STYLE_IMPL>();
+	private final List<CHART_STYLE_IMPL> charts = new ArrayList<CHART_STYLE_IMPL>();
 
 	/**
 	 * Returns the list of charts for this layer. Never <code>null</code>.
@@ -291,7 +291,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
-	 * //TODO what will happen if we have an online source one day? Should probably be the datastore name ?
+	 * //TODO what will happen if we have an online source one day? Should
+	 * probably be the datastore name ?
 	 * 
 	 * @return Filename as String
 	 */
@@ -526,8 +527,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 								+ ") returned null! id=" + getId()));
 				return null;
 			} else {
-				LOGGER.debug("getAtlasConfig().getResource(" + location
-						+ ") return "+url.toExternalForm()+" , id=" + getId());
+				// LOGGER.debug("getAtlasConfig().getResource(" + location
+				// + ") return "+url.toExternalForm()+" , id=" + getId());
 			}
 
 			// Testing if we really can see it in the resources now...
