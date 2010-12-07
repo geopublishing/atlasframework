@@ -5,16 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.GsRest;
-import org.geopublishing.GsTestingUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.CliOptions.Errors;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
@@ -22,7 +17,6 @@ import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
@@ -49,38 +43,40 @@ public class CliOptionsTest {
 		// System.setErr(null);
 	}
 
-	@Test
-	@Ignore // bis das data dir auf das atlas dir gelinkt ist!
-	public void testConfigureGs() throws IOException {
-		if (!GsTestingUtil.isAvailable())
-			return;
-		TestAtlas small = TestAtlas.small;
-
-		String gsUser = GsTestingUtil.getUsername();
-		String gsUrl = GsTestingUtil.getUrl();
-		String gsPwd = GsTestingUtil.getPassword();
-
-		GsRest gsRest = new GsRest(gsUrl, gsUser, gsPwd);
-		AtlasConfigEditable ace = small.getAce();
-		boolean deleteWorkspace = gsRest.deleteWorkspace(ace.getBaseName(),
-				true);
-
-		String dsNameExpected = FilenameUtils.removeExtension(ace.getDataPool()
-				.get(1).getFilename());
-		List<String> layersUsingDatastore = gsRest.getLayersUsingDatastore(
-				ace.getBaseName(), dsNameExpected);
-		assertEquals(0, layersUsingDatastore.size());
-
-		int rv = CliOptions.performArgs(new String[] { "-a",
-				small.getFile().toString(), "-gs", gsUrl, "-gsu", gsUser,
-				"-gsp", gsPwd });
-
-		assertEquals(0, rv);
-
-		layersUsingDatastore = gsRest.getLayersUsingDatastore(
-				ace.getBaseName(), dsNameExpected);
-		assertEquals(1, layersUsingDatastore.size());
-	}
+	//
+	// @Test
+	// @Ignore
+	// // bis das data dir auf das atlas dir gelinkt ist!
+	// public void testConfigureGs() throws IOException {
+	// if (!GsTestingUtil.isAvailable())
+	// return;
+	// TestAtlas small = TestAtlas.small;
+	//
+	// String gsUser = GsTestingUtil.getUsername();
+	// String gsUrl = GsTestingUtil.getUrl();
+	// String gsPwd = GsTestingUtil.getPassword();
+	//
+	// GsRest gsRest = new GsRest(gsUrl, gsUser, gsPwd);
+	// AtlasConfigEditable ace = small.getAce();
+	// boolean deleteWorkspace = gsRest.deleteWorkspace(ace.getBaseName(),
+	// true);
+	//
+	// String dsNameExpected = FilenameUtils.removeExtension(ace.getDataPool()
+	// .get(1).getFilename());
+	// List<String> layersUsingDatastore = gsRest.getLayersUsingDataStore(
+	// ace.getBaseName(), dsNameExpected);
+	// assertEquals(0, layersUsingDatastore.size());
+	//
+	// int rv = CliOptions.performArgs(new String[] { "-a",
+	// small.getFile().toString(), "-gs", gsUrl, "-gsu", gsUser,
+	// "-gsp", gsPwd });
+	//
+	// assertEquals(0, rv);
+	//
+	// layersUsingDatastore = gsRest.getLayersUsingDatastore(
+	// ace.getBaseName(), dsNameExpected);
+	// assertEquals(1, layersUsingDatastore.size());
+	// }
 
 	@Test
 	public void testsLoadWithGUIandSaveAndExit() throws Throwable {
