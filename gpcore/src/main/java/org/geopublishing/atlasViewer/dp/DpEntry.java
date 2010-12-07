@@ -301,6 +301,13 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	}
 
 	/**
+	 * @return Filename as String without any extension (no dot at the end)
+	 */
+	public final String getBaseFilename() {
+		return filename.substring(0, filename.lastIndexOf("."));
+	}
+
+	/**
 	 * Set the {@link String} filename by giving a {@link File}. Only the last
 	 * part of the File url will be used.
 	 */
