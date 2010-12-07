@@ -114,7 +114,7 @@
 
 						<configuration>
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
-							
+
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
@@ -221,7 +221,8 @@
 	<dependencies>
 
 		<dependency>
-		<!-- 23.11.2010 Do we really need this here, it is already defined in gpcore?! -->
+			<!-- 23.11.2010 Do we really need this here, it is already defined in 
+				gpcore?! -->
 			<version>0.5-SNAPSHOT</version>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gsrcj</artifactId>
@@ -283,15 +284,15 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		
-<!--		<dependency>-->
-<!--			 Smooth runtime dependency -->
-<!--			<groupId>com.wutka</groupId>-->
-<!--			<artifactId>jox</artifactId>-->
-<!--			<version>1.16</version>-->
-<!--			<type>jar</type>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
+
+		<!-- <dependency> -->
+		<!-- Smooth runtime dependency -->
+		<!-- <groupId>com.wutka</groupId> -->
+		<!-- <artifactId>jox</artifactId> -->
+		<!-- <version>1.16</version> -->
+		<!-- <type>jar</type> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>gnu-regexp</groupId>
@@ -323,6 +324,14 @@
 			<version>${geotools.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
+			<exclusions>
+				<!-- We use miglayout 3.7.3, not 3.7 -->
+				<exclusion>
+					<groupId>com.miglayout</groupId>
+					<artifactId>miglayout</artifactId>
+					<classifier>swing</classifier>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -333,7 +342,7 @@
 		</dependency>
 
 		<dependency>
-<!--			 Test dependency, pulls ascore-tests -->
+			<!-- Test dependency, pulls ascore-tests -->
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
 			<version>${project.version}</version>
@@ -424,9 +433,11 @@
 
 
 	<repositories>
-	
-	<!-- These are actually already defined in the parent pom.xml AND pom_basic.xml - still it would not compile on hudson without the statement here since i split the porject into 7 single modules. -->
-	
+
+		<!-- These are actually already defined in the parent pom.xml AND pom_basic.xml 
+			- still it would not compile on hudson without the statement here since i 
+			split the porject into 7 single modules. -->
+
 		<repository>
 			<!-- Releases for geopublishing.org & more by www.wikisquare.de -->
 			<snapshots>
