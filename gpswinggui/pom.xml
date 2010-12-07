@@ -329,7 +329,6 @@
 				<exclusion>
 					<groupId>com.miglayout</groupId>
 					<artifactId>miglayout</artifactId>
-					<classifier>swing</classifier>
 				</exclusion>
 			</exclusions>
 		</dependency>
