@@ -133,14 +133,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>net.java.wizard</groupId>
-			<artifactId>wizard</artifactId>
-			<version>[0.998.1,1.1)</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-
 
 		<dependency>
 			<version>0.5-SNAPSHOT</version>
