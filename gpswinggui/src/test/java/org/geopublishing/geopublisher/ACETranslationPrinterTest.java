@@ -30,12 +30,12 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import schmitzm.io.IOUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 
 import com.lightdev.app.shtm.DocNameMissingException;
 import com.lightdev.app.shtm.DocumentPane;
-
-public class ACETranslationPrinterTest {
+public class ACETranslationPrinterTest extends TestingClass {
 
 	@Test
 	public void testPrint() throws DocNameMissingException, IOException,

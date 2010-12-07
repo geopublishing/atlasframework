@@ -33,10 +33,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFS;
-
-public class AtlasStylerTest {
+public class AtlasStylerTest extends TestingClass {
 
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 

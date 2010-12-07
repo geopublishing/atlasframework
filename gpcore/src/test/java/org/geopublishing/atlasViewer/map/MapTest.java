@@ -16,7 +16,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-public class MapTest {
+import schmitzm.junit.TestingClass;
+public class MapTest extends TestingClass {
 
 	@Test
 	public void testCopy() throws AtlasException, FactoryException,

@@ -5,7 +5,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AttributesJComboBoxTest {
+import schmitzm.junit.TestingClass;
+public class AttributesJComboBoxTest extends TestingClass {
 
 	@Before
 	public void setUp() throws Exception {

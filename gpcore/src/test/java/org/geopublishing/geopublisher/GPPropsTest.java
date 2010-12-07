@@ -2,8 +2,8 @@ package org.geopublishing.geopublisher;
 
 import org.junit.Test;
 
-
-public class GPPropsTest {
+import schmitzm.junit.TestingClass;
+public class GPPropsTest extends TestingClass {
 
 	@Test
 	public void testInit() {

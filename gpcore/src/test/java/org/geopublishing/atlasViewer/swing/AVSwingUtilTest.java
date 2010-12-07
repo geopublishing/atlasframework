@@ -12,9 +12,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class AVSwingUtilTest {
+public class AVSwingUtilTest extends TestingClass {
 
 	@Before
 	public void setUp() throws Exception {

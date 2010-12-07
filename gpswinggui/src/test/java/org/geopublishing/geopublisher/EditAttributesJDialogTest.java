@@ -17,9 +17,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.type.Name;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class EditAttributesJDialogTest {
+public class EditAttributesJDialogTest extends TestingClass {
 
 //	static DpLayerRasterPyramid pyr;
 	private static DpLayerVectorFeatureSource dplv;

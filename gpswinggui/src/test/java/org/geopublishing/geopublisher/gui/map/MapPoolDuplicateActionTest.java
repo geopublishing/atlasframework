@@ -20,9 +20,9 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class MapPoolDuplicateActionTest {
+public class MapPoolDuplicateActionTest extends TestingClass {
 
 	@Test
 	public void testDuplicateMap() throws AtlasException, FactoryException,

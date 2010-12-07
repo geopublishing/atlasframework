@@ -5,9 +5,9 @@ import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class StylerDialogTest {
+public class StylerDialogTest extends TestingClass {
 	private static TextRuleList tr;
 
 	@Test

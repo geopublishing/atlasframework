@@ -20,7 +20,8 @@ import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.junit.Test;
 
-public class GraduatedColorRuleListTest {
+import schmitzm.junit.TestingClass;
+public class GraduatedColorRuleListTest extends TestingClass {
 
 	@Test
 	public void testGraduatedColorRuleList() throws IOException,

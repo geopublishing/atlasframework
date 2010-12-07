@@ -2,7 +2,8 @@ package org.geopublishing.atlasViewer.swing;
 
 import org.junit.Test;
 
-public class IconsTest {
+import schmitzm.junit.TestingClass;
+public class IconsTest extends TestingClass {
 
 	@Test
 	/**

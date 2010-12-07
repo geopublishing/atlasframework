@@ -14,9 +14,9 @@ import org.junit.Test;
 
 import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class ManageChartsForMapDialogTest {
+public class ManageChartsForMapDialogTest extends TestingClass {
 
 	@Test
 	public void testManageChartsForMapDialog() throws Throwable {

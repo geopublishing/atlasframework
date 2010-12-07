@@ -16,8 +16,8 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import schmitzm.jfree.chart.style.ChartStyle;
-
-public class DpEntryTest {
+import schmitzm.junit.TestingClass;
+public class DpEntryTest extends TestingClass {
 
 	@Test
 	public void testGetQuality() throws AtlasException, FactoryException,

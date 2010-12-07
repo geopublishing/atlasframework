@@ -5,9 +5,9 @@ import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class ManageFontsDialogTest {
+public class ManageFontsDialogTest extends TestingClass {
 
 	@Test
 	public void testJustOpenGUI() throws Throwable {

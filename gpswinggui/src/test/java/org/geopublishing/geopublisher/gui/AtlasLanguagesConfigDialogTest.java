@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class AtlasLanguagesConfigDialogTest {
+public class AtlasLanguagesConfigDialogTest extends TestingClass {
 
 	private ArrayList<String> orig;
 

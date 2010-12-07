@@ -13,9 +13,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.ExceptionDialog;
-
-public class GpUtilTest {
+public class GpUtilTest extends TestingClass {
 
 	@Test
 	public void testSendGPBugReport_WithAddInfos() {

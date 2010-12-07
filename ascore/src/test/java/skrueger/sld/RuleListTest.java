@@ -28,11 +28,11 @@ import org.junit.Test;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
-
-public class RuleListTest {
+public class RuleListTest extends TestingClass {
 	protected org.apache.log4j.Logger LOGGER = ASUtil.createLogger(this);
 
 	@Test

@@ -11,9 +11,9 @@ import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class GroupTest {
+public class GroupTest extends TestingClass {
 
 	@Test
 	public void testRemoveMapFromMappoolMustRemoveMapRefFromGroups2()

@@ -3,9 +3,9 @@ package org.geopublishing.atlasStyler.swing;
 import org.junit.Test;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class JScrollPaneSymbolsOnlineTest {
+public class JScrollPaneSymbolsOnlineTest extends TestingClass {
 
 	@Test
 	public void testJScrollPaneSymbols() throws Throwable {

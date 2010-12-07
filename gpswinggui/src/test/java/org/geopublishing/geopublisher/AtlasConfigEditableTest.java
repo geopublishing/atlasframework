@@ -17,7 +17,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-public class AtlasConfigEditableTest {
+import schmitzm.junit.TestingClass;
+public class AtlasConfigEditableTest extends TestingClass {
 
 	@Test
 	public void testGetUsedMaps() throws AtlasException, FactoryException,

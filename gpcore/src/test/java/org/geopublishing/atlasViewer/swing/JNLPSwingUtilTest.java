@@ -6,10 +6,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import skrueger.swing.swingworker.AtlasStatusDialog;
-
-public class JNLPSwingUtilTest {
+public class JNLPSwingUtilTest extends TestingClass {
 
 	@Before
 	public void setUp() throws Exception {

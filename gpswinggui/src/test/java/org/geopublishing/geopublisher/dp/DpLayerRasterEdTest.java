@@ -28,9 +28,9 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import rachel.loader.JarResourceLoader;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class DpLayerRasterEdTest {
+public class DpLayerRasterEdTest extends TestingClass {
 
 	static AtlasConfigEditable ace;
 	private static final String RASTER_AAIGRID_SLDTRANSPARENT_ID_IN_RASTERATLAS = "raster_00993740883";

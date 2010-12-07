@@ -2,9 +2,9 @@ package org.geopublishing.atlasStyler.swing;
 
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class SelectPostgisLayerJDialogTest {
+public class SelectPostgisLayerJDialogTest extends TestingClass {
 
 	@Test
 	public void testGui() throws Throwable {

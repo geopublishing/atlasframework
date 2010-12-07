@@ -14,9 +14,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class ASUtilTest {
+public class ASUtilTest extends TestingClass {
 
 	@Test
 	public void testGetDefaultNoDataSymbol() {

@@ -5,10 +5,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
-
-public class AddRulesListDialogTest {
+public class AddRulesListDialogTest extends TestingClass {
 
 	@Before
 	public void setUp() throws Exception {

@@ -25,9 +25,9 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
-
-public class TextRuleListTest {
+public class TextRuleListTest extends TestingClass {
 
 	@Test
 	public void testParseAndRemoveEnabledDisabledFilters() throws IOException,

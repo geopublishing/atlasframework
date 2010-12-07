@@ -11,13 +11,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.geotools.gui.ScalePanel;
-
-/**
- * These tests sets some parameters on a ACE, saves and loads it, and compares
- * the values. The idea of this test is to ensure that saving and loading
- * from/to AtlasMarkup XML language works.
- */
-public class AMLImportTest {
+import schmitzm.junit.TestingClass;
+public class AMLImportTest extends TestingClass {
 
 	@Test
 	@Ignore

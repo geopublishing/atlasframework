@@ -15,10 +15,10 @@ import org.geopublishing.atlasStyler.TextRuleList;
 import org.junit.Before;
 import org.junit.Test;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
-
-public class TextSymbolizerEditGUITest {
+public class TextSymbolizerEditGUITest extends TestingClass {
 	private static StyledFS STYLED_FS;
 	private static TextRuleList tr;
 	private static AtlasStyler atlasStyler;

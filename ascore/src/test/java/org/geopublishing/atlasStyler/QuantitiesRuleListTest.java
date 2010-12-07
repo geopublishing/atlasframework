@@ -28,12 +28,12 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import skrueger.geotools.StyledFeatureCollection;
 
 import com.vividsolutions.jts.geom.Point;
-
-public class QuantitiesRuleListTest {
+public class QuantitiesRuleListTest extends TestingClass {
 	FeatureCollection<SimpleFeatureType, SimpleFeature> features;
 
 	@Before

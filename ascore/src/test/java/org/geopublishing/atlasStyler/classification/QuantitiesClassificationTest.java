@@ -39,12 +39,12 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
-
-public class QuantitiesClassificationTest {
+public class QuantitiesClassificationTest extends TestingClass {
 
 	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 

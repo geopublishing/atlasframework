@@ -20,10 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import schmitzm.io.IOUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.lang.LangUtil;
 import schmitzm.swing.TestingUtil;
 
-public class CliOptionsTest {
+public class CliOptionsTest extends TestingClass {
 	// private final ByteArrayOutputStream outContent = new
 	// ByteArrayOutputStream();
 	// private final ByteArrayOutputStream errContent = new

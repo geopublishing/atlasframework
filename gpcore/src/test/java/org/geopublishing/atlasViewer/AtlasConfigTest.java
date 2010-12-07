@@ -14,7 +14,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AtlasConfigTest {
+import schmitzm.junit.TestingClass;
+public class AtlasConfigTest extends TestingClass {
 	private AtlasConfigEditable ace;
 
 	@Before

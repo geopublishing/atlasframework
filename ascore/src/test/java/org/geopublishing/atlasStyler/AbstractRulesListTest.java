@@ -19,9 +19,9 @@ import org.opengis.filter.PropertyIsEqualTo;
 
 import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
-
-public class AbstractRulesListTest {
+public class AbstractRulesListTest extends TestingClass {
 
 	PropertyIsEqualTo f1 = FilterUtil.FILTER_FAC2.equals(
 			FilterUtil.FILTER_FAC2.literal(3),

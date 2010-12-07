@@ -23,9 +23,9 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
+import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
-
-public class DpLayerVectorFeatureSourceShapefileEdTest {
+public class DpLayerVectorFeatureSourceShapefileEdTest extends TestingClass {
 
 	@Test
 	public void testImportArabicInHeader() throws AtlasException,

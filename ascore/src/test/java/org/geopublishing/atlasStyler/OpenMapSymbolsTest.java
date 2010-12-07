@@ -6,7 +6,8 @@ import java.net.URL;
 
 import org.junit.Test;
 
-public class OpenMapSymbolsTest {
+import schmitzm.junit.TestingClass;
+public class OpenMapSymbolsTest extends TestingClass {
 
 	@Test
 	public void testUrlsAreConnectable() throws MalformedURLException,
