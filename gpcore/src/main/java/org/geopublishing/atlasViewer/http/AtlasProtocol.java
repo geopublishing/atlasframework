@@ -101,8 +101,8 @@ public enum AtlasProtocol {
 		} catch (RuntimeException e) {
 			LOGGER.info("Trying again with .. infront. This is a workaround when referencing root level files");
 			String newUrlString = url.toString();
-			newUrlString = newUrlString.replaceFirst("../..", "../../..");
-			newUrlString = newUrlString.replaceFirst("..\\..", "..\\..\\..");
+			newUrlString = newUrlString.replaceFirst("atlasdata/", "");
+			newUrlString = newUrlString.replaceFirst("atlasdata\\", "");
 			try {
 				url = new URL(newUrlString);
 				AVSwingUtil.launchPDFViewer(owner, url, title);
