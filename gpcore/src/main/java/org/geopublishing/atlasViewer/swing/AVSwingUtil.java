@@ -54,7 +54,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class AVSwingUtil extends AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
-	
+
 	public final static float HEADING_FONT_SIZE = 14;
 
 	static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
@@ -389,6 +389,7 @@ public class AVSwingUtil extends AVUtil {
 				String urlString = url.toExternalForm();
 				String replaced = urlString.substring(4);
 				replaced = replaced.replace("atlas_resources.jar!/", "");
+				replaced = replaced.replace("atlasdata/", "");
 				url = new URL(replaced);
 			}
 
