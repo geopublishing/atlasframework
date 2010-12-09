@@ -63,6 +63,7 @@ public class HTMLInfoJPane extends JEditorPane {
 					 */
 					String evDesc = ev.getDescription();
 
+					String before = evDesc;
 					if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
 						/**
 						 * If the atlas data is coming from JWS, and this evDesc
@@ -71,11 +72,22 @@ public class HTMLInfoJPane extends JEditorPane {
 						 * expected next to the <code>atlas.xml</code> in the
 						 * <code>ad</code> directory. In JWS, the
 						 */
-						String before = evDesc;
 						evDesc.replace("../../..", "../..");
 						evDesc.replace("..\\..\\..", "..\\..");
 						LOGGER.info("The URL to the PDF has been changed from "
 								+ before + " to " + evDesc + " bacause of JWS.");
+					} else {
+						// // If we are started from DISK, AND the PDF URL
+						// starts
+						// // with "../../.." it is supposed to reference a root
+						// // PDF, which lies one level higher.
+						//
+						// evDesc.replace("../../..", "../../../..");
+						// evDesc.replace("..\\..\\..", "..\\..\\..\\..");
+						// LOGGER.info("The URL to the PDF has been changed from "
+						// + before + " to " + evDesc
+						// + " bacause of DISK.");
+
 					}
 
 					if (AtlasProtocol.PDF.test(evDesc)) {

@@ -12,6 +12,7 @@ package org.geopublishing.atlasViewer.http;
 
 import java.awt.Component;
 import java.awt.Window;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.SwingUtilities;
@@ -95,7 +96,22 @@ public enum AtlasProtocol {
 	 * Opens the PDF
 	 */
 	public void performPDF(Component owner, URL url, String title) {
-		AVSwingUtil.launchPDFViewer(owner, url, title);
+		try {
+			AVSwingUtil.launchPDFViewer(owner, url, title);
+		} catch (RuntimeException e) {
+			LOGGER.info("Trying again with .. infront. This is a workaround when referencing root level files");
+			String newUrlString = url.toString();
+			newUrlString = newUrlString.replaceFirst("../..", "../../..");
+			newUrlString = newUrlString.replaceFirst("..\\..", "..\\..\\..");
+			try {
+				url = new URL(newUrlString);
+				AVSwingUtil.launchPDFViewer(owner, url, title);
+			} catch (MalformedURLException e1) {
+				LOGGER.error("Failed to create new workaround URL from "
+						+ newUrlString, e1);
+				throw e;
+			}
+		}
 	}
 
 	/**
@@ -114,20 +130,22 @@ public enum AtlasProtocol {
 
 		});
 	}
-//
-//	/**
-//	 * Make the AtlasViewer open the map with the given id.
-//	 * 
-//	 * @param owner
-//	 *            A Component linking to the parent GUI.
-//	 * @param url
-//	 *            <code>map://1232123123</code>
-//	 * @param atlasConfig
-//	 */
-//	public void performMap(Component owner, String href, AtlasConfig atlasConfig) {
-//		String mapId = AtlasProtocol.MAP.cutOff(href);
-//		performMap(owner, mapId, atlasConfig);
-//	}
+
+	//
+	// /**
+	// * Make the AtlasViewer open the map with the given id.
+	// *
+	// * @param owner
+	// * A Component linking to the parent GUI.
+	// * @param url
+	// * <code>map://1232123123</code>
+	// * @param atlasConfig
+	// */
+	// public void performMap(Component owner, String href, AtlasConfig
+	// atlasConfig) {
+	// String mapId = AtlasProtocol.MAP.cutOff(href);
+	// performMap(owner, mapId, atlasConfig);
+	// }
 
 	/**
 	 * Make the AtlasViewer open the map with the given id.
@@ -144,8 +162,8 @@ public enum AtlasProtocol {
 		Map map = atlasConfig.getMapPool().get(mapId);
 		if (map == null) {
 			LOGGER.error(mapId + " is not a known mapID.");
-			AVSwingUtil.showMessageDialog(owner, AVUtil.R(
-					"AtlasMapLink.TargetMapIDCantBeFound", mapId));
+			AVSwingUtil.showMessageDialog(owner,
+					AVUtil.R("AtlasMapLink.TargetMapIDCantBeFound", mapId));
 			return;
 		}
 
@@ -155,8 +173,8 @@ public enum AtlasProtocol {
 		 */
 		if (!AtlasViewerGUI.isRunning()) {
 			AVSwingUtil.showMessageDialog(owner, AVUtil.R(
-					"AtlasMapLink.NotOpeningBecauseNoAtlasViewerOpen", map
-							.getTitle()));
+					"AtlasMapLink.NotOpeningBecauseNoAtlasViewerOpen",
+					map.getTitle()));
 			return;
 		}
 
