@@ -12,7 +12,6 @@ package org.geopublishing.atlasViewer.http;
 
 import java.awt.Component;
 import java.awt.Window;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.SwingUtilities;
@@ -96,22 +95,7 @@ public enum AtlasProtocol {
 	 * Opens the PDF
 	 */
 	public void performPDF(Component owner, URL url, String title) {
-		try {
-			AVSwingUtil.launchPDFViewer(owner, url, title);
-		} catch (RuntimeException e) {
-			LOGGER.info("Trying again with .. infront. This is a workaround when referencing root level files");
-			String newUrlString = url.toString();
-			newUrlString = newUrlString.replaceFirst("atlasdata/", "");
-			newUrlString = newUrlString.replaceFirst("atlasdata\\", "");
-			try {
-				url = new URL(newUrlString);
-				AVSwingUtil.launchPDFViewer(owner, url, title);
-			} catch (MalformedURLException e1) {
-				LOGGER.error("Failed to create new workaround URL from "
-						+ newUrlString, e1);
-				throw e;
-			}
-		}
+		AVSwingUtil.launchPDFViewer(owner, url, title);
 	}
 
 	/**
