@@ -102,17 +102,6 @@ Technical details:
 
 	<target name="add-deb-to-repo" depends="create-deb" description="Imports the .deb into the repository using a tool called 'reprepro'.">
 
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww if not already mounted">
-			<arg value="-o" />
-			<arg value="uid=107" />
-			<arg value="-o" />
-			<arg value="gid=117" />
-
-			<arg value="gpwww:/var/www/www.geopublishing.org/htdocs/" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
-
 		<!-- DEBIAN -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
@@ -153,16 +142,6 @@ Technical details:
 
 
 	<target name="clean-repository" description="Delete all packages stored in the repository.">
-
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww">
-			<arg value="-o" />
-			<arg value="uid=107" />
-			<arg value="-o" />
-			<arg value="gid=117" />
-
-			<arg value="gpwww:/var/www/www.geopublishing.org/htdocs/" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
 
 		<mkdir dir="${REPO.DIR}" />
 		<delete dir="${REPO.DIR}/db" verbose="true" description="resetting the repository" />

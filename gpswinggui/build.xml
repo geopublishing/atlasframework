@@ -37,16 +37,6 @@
 			<replacefilter token="@VERSION@" value="${mvn.project.version}" />
 		</replace>
 
-		<exec executable="/usr/bin/sshfs" failifexecutionfails="false" failonerror="false" description="mounting gpwww if not already mounted">
-			<arg value="-o" />
-			<arg value="uid=107" />
-			<arg value="-o" />
-			<arg value="gid=117" />
-
-			<arg value="gpwww:/var/www/www.geopublishing.org/htdocs/" />
-			<arg value="/var/www/www.geopublishing.org/htdocs" />
-		</exec>
-
 		<echo message="Mounted FUSE" />
 
 		<!-- Hier wird auch eine .htaccess Datei kopiert -->
