@@ -44,10 +44,19 @@ import schmitzm.lang.LangUtil;
 import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
+
 public class QuantitiesClassificationTest extends TestingClass {
 
+	/**
+	 * Uses TestingUtil.TestDatasetsVector.countryShp.getFeatureSource() and
+	 * disposes afterwards
+	 **/
 	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
+	/**
+	 * Uses TestingUtil.TestDatasetsVector.polygonSnow.getFeatureSource() and
+	 * disposes afterwards
+	 **/
 	private FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_snowPolygon;
 
 	@Before
@@ -55,7 +64,8 @@ public class QuantitiesClassificationTest extends TestingClass {
 		featureSource_polygon = TestingUtil.TestDatasetsVector.countryShp
 				.getFeatureSource();
 
-		featureSource_snowPolygon = TestDatasetsVector.polygonSnow.getFeatureSource();
+		featureSource_snowPolygon = TestDatasetsVector.polygonSnow
+				.getFeatureSource();
 	}
 
 	@After
@@ -90,10 +100,10 @@ public class QuantitiesClassificationTest extends TestingClass {
 					|| actual[i] < expected[i] - 0.00000001) {
 				String msg = (i + 1) + "th class limit not as expected:"
 						+ expected[i] + "   vs.  " + actual[i];
-				System.err.println(msg);
-				System.out.println("expected = "
+				log.error(msg);
+				log.error("expected = "
 						+ LangUtil.stringConcatWithSep(" , ", expected));
-				System.out.println("actual   = "
+				log.error("actual   = "
 						+ LangUtil.stringConcatWithSep(" , ", actual));
 				return false;
 			}
