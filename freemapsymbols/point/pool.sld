@@ -17,7 +17,7 @@
         </sld:Geometry>
         <sld:Graphic>
           <sld:ExternalGraphic>
-            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.geopublishing.org/openmapsymbols/svg/osm/sports/pool.svg"/>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://freemapsymbols.org/svg/osm/sports/pool.svg"/>
             <sld:Format>image/svg+xml</sld:Format>
           </sld:ExternalGraphic>
           <sld:Opacity>
