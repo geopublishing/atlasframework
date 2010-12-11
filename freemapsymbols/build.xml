@@ -13,7 +13,7 @@
   
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPFMSE.  See the
   GNU General Public License for more details.
   
   You should have received a copy of the GNU General Public License (license.txt)
@@ -22,43 +22,49 @@
   or try this link: http://www.gnu.org/licenses/gpl.html
   
 -->
-<project name="OpenMapSymbols" default="rsync_symbols" basedir=".">
-
+<project name="freemapsymbols.org" default="update_htdocs_local" basedir=".">
 
 	<!-- Where are the local OpenSymbols stored. This folder is copied over to geopublishing.org  -->
-	<property name="OS.location" value="${basedir}" />
-	<!-- <property name="OS.location" value="/home/stefan/EigeneDateien/code.svn/atlas/trunk/openmapsymbols" /> -->
+	<property name="FMS.location" value="${basedir}" />
+	<!-- <property name="FMS.location" value="/home/stefan/EigeneDateien/code.svn/atlas/trunk/openmapsymbols" /> -->
+	<property name="FMS.htdocs" value="/var/www/freemapsymbols.org/htdocs" />
 
-	<!-- ================================= 
-          target: rsync_symbols              
-         ================================= -->
-	<target name="rsync_symbols">
-		<echo message="Rsync the local symbols from ${OS.location} to PRODI" />
 
-		<delete file="${OS.location}/line/index" />
-		<delete file="${OS.location}/point/index" />
-		<delete file="${OS.location}/polygon/index" />
-		<touch file="${OS.location}/point/index" />
-		<touch file="${OS.location}/line/index" />
-		<touch file="${OS.location}/polygon/index" />
+	<target name="createIndex" description="Update index files in ${FMS.location}">
 
-		<exec executable="/usr/bin/find" dir="${OS.location}/point" output="${OS.location}/point/index">
+		<delete file="${FMS.location}/line/index" />
+		<delete file="${FMS.location}/point/index" />
+		<delete file="${FMS.location}/polygon/index" />
+		<touch file="${FMS.location}/point/index" />
+		<touch file="${FMS.location}/line/index" />
+		<touch file="${FMS.location}/polygon/index" />
+
+		<exec executable="/usr/bin/find" dir="${FMS.location}/point" output="${FMS.location}/point/index">
 			<arg line='. -iname "*.sld"' />
 		</exec>
-		<exec executable="/usr/bin/find" dir="${OS.location}/line" output="${OS.location}/line/index">
+		<exec executable="/usr/bin/find" dir="${FMS.location}/line" output="${FMS.location}/line/index">
 			<arg line='. -iname "*.sld"' />
 		</exec>
-		<exec executable="/usr/bin/find" dir="${OS.location}/polygon" output="${OS.location}/polygon/index">
+		<exec executable="/usr/bin/find" dir="${FMS.location}/polygon" output="${FMS.location}/polygon/index">
 			<arg line='. -iname "*.sld"' />
 		</exec>
 
 		<!-- Set permissions that allow a web-server to serve these files -->
 		<chmod perm="ugo+rx">
-			<fileset dir="${OS.location}" />
+			<fileset dir="${FMS.location}" />
 		</chmod>
+	</target>
+
+	<!-- ================================= 
+          target: rsync_symbols              
+         ================================= -->
+	<target name="update_htdocs_local"
+	        depends="createIndex"
+	        description="Copy/rsync symbols from ${FMS.location} to ${FMS.htdocs}"
+	>
 
 		<exec executable="/usr/bin/rsync">
-			<arg line='-rmcv --delete --exclude=".*" --exclude="*~" --exclude="*.bak" ${OS.location}/. prodi:gp/openmapsymbols ' />
+			<arg line='-rmcv --delete --exclude=".*" --exclude="*~" --exclude="*.bak" ${FMS.location}/. ${FMS.htdocs} ' />
 		</exec>
 
 	</target>
