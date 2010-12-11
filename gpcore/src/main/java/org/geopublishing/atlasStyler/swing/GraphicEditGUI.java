@@ -114,7 +114,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 		}
 	};
 
-	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://www.geopublishing.org/openmapsymbols/svg";
+	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://http://freemapsymbols.org/svg";
 
 	public static final String SVG_MIMETYPE = "image/svg+xml";
 

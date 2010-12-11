@@ -389,7 +389,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			}
 
 			// Transforming
-			// http://freemapsymbols.org/openmapsymbols/point/Circle.sld to
+			// http://freemapsymbols.org/point/Circle.sld to
 			// Circle
 			String fileName = new File(url.getFile()).getName();
 			String fileNameWithoutSLD = fileName.substring(0,

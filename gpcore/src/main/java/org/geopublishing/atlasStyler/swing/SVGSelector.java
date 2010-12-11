@@ -568,8 +568,8 @@ public class SVGSelector extends JDialog {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Transform
-					// http://www.geopublishing.org/openmapsymbols/svg/health/
-					// To: http://www.geopublishing.org/openmapsymbols/svg/
+					// http://http://freemapsymbols.org/svg/health/
+					// To: http://http://freemapsymbols.org/svg/
 					String string = folderUrl.toExternalForm();
 					String newUrl = string
 							.substring(0, string.lastIndexOf("/"));
