@@ -35,7 +35,7 @@ import javax.swing.JPopupMenu;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.OpenMapSymbols;
+import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
@@ -101,7 +101,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	public JScrollPaneSymbolsOnline(GeometryForm geoForm) {
 		this.geoForm = geoForm;
 		try {
-			url = new URL(OpenMapSymbols.BASE_URL
+			url = new URL(FreeMapSymbols.BASE_URL
 					+ geoForm.toString().toLowerCase());
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
@@ -140,7 +140,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 */
 	private AtlasSwingWorker<Void> getWorker() {
 		final AtlasStatusDialog sd = new AtlasStatusDialog(
-				JScrollPaneSymbolsOnline.this, OpenMapSymbols.BASE_URL,
+				JScrollPaneSymbolsOnline.this, FreeMapSymbols.BASE_URL,
 				"Updating Online Symbol list"); // i8n TODO
 		AtlasSwingWorker<Void> swingWorker = new AtlasSwingWorker<Void>(sd) {
 

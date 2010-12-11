@@ -7,14 +7,14 @@ import java.net.URL;
 import org.junit.Test;
 
 import schmitzm.junit.TestingClass;
-public class OpenMapSymbolsTest extends TestingClass {
+public class FreeMapSymbolsTest extends TestingClass {
 
 	@Test
 	public void testUrlsAreConnectable() throws MalformedURLException,
 			IOException {
-		new URL(OpenMapSymbols.LINE_URL).openStream().close();
-		new URL(OpenMapSymbols.POINT_URL).openStream().close();
-		new URL(OpenMapSymbols.POLYGON_URL).openStream().close();
+		new URL(FreeMapSymbols.LINE_URL).openStream().close();
+		new URL(FreeMapSymbols.POINT_URL).openStream().close();
+		new URL(FreeMapSymbols.POLYGON_URL).openStream().close();
 	}
 
 }
