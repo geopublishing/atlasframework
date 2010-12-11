@@ -13,7 +13,7 @@ package org.geopublishing.atlasStyler;
 import org.apache.log4j.Logger;
 
 public class FreeMapSymbols {
-	static public final String BASE_URL = "http://freemapsymbols/";
+	static public final String BASE_URL = "http://freemapsymbols.org/";
 
 	static public final String LINE_URL = BASE_URL + "line";
 	protected static Logger LOGGER = ASUtil.createLogger(FreeMapSymbols.class);
