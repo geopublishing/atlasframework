@@ -64,7 +64,7 @@
 	>
 
 		<exec executable="/usr/bin/rsync">
-			<arg line='-rmcv --delete --exclude=".*" --exclude="*~" --exclude="*.bak" ${FMS.location}/. ${FMS.htdocs} ' />
+			<arg line='-rmcv --delete --exclude=".*" --exclude="*.html" --exclude="build.xml" --exclude="*~" --exclude="*.bak" ${FMS.location}/. ${FMS.htdocs} ' />
 		</exec>
 
 	</target>
