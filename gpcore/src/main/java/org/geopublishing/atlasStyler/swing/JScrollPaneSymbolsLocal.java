@@ -15,7 +15,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +25,6 @@ import java.util.concurrent.ExecutionException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -37,15 +35,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
-import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
-import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
-import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.io.IOUtil;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
@@ -62,8 +57,6 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 	protected final File dir;
 
-	private final GeometryDescriptor attType;
-
 	/**
 	 * 
 	 * @param attType
@@ -72,11 +65,11 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public JScrollPaneSymbolsLocal(GeometryDescriptor attType) {
-		this.attType = attType;
-		dir = AtlasStyler.getSymbolsDir(attType);
+	public JScrollPaneSymbolsLocal(GeometryForm geoForm) {
+		super(geoForm);
+		dir = AtlasStyler.getSymbolsDir(geoForm);
 
-		rescan(true);
+		rescan(false);
 	}
 
 	@Override
@@ -102,7 +95,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 							+ ".sld";
 					File symbolFile = new File(AtlasStyler
 							.getSymbolsDir(singleLocalRulesList
-									.getGeometryDescriptor()), symbolFileName);
+									.getGeometryForm()), symbolFileName);
 
 					String newName = ASUtil.askForString(
 							JScrollPaneSymbolsLocal.this,
@@ -121,7 +114,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 					File newSymbolFile = new File(AtlasStyler
 							.getSymbolsDir(singleLocalRulesList
-									.getGeometryDescriptor()), newName);
+									.getGeometryForm()), newName);
 					try {
 						FileUtils.moveFile(symbolFile, newSymbolFile);
 					} catch (IOException e1) {
@@ -165,7 +158,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 							+ ".sld";
 					File symbolFile = new File(AtlasStyler
 							.getSymbolsDir(singleLocalRulesList
-									.getGeometryDescriptor()), symbolFileName);
+									.getGeometryForm()), symbolFileName);
 
 					int res = JOptionPane.showConfirmDialog(
 							JScrollPaneSymbolsLocal.this,
@@ -190,7 +183,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 						// Delete the entry from the JListSymbols
 						((DefaultListModel) getJListSymbols().getModel())
 								.remove(index);
-						rescan(true);
+						// rescan(true);
 					}
 
 				}
@@ -224,9 +217,10 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private AtlasSwingWorker<List<SingleRuleList<?>>> getWorker() {
+	@Override
+	protected AtlasSwingWorker<List<SingleRuleList<?>>> getWorker() {
 
-		AtlasStatusDialog pw = new AtlasStatusDialog(
+		final AtlasStatusDialog sd = new AtlasStatusDialog(
 				JScrollPaneSymbolsLocal.this,
 				AtlasStyler.R("LocalSymbolsSelector.process.loading_title"),
 				AtlasStyler
@@ -234,7 +228,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 		// SwingWorkers may never be reused. Create it fresh!
 		AtlasSwingWorker<List<SingleRuleList<?>>> swingWorker = new AtlasSwingWorker<List<SingleRuleList<?>>>(
-				pw) {
+				sd) {
 			final DefaultListModel model = (DefaultListModel) getJListSymbols()
 					.getModel();
 
@@ -290,13 +284,12 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 				doLayout();
 				repaint();
 				setVisible(true);
-				// pw.complete();
-				// pw.dispose();
 			}
 
 			@Override
 			protected List<SingleRuleList<?>> doInBackground() throws Exception {
-				LOGGER.debug("Seaching for local symbols on SwingWoker");
+				LOGGER.info("Seaching for local symbols on SwingWoker in "
+						+ IOUtil.escapePath(dir));
 
 				/**
 				 * Create RulesLists and render the images
@@ -329,54 +322,49 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 				 */
 				for (final String s : symbolPathsList) {
 
-					/***********************************************************
-					 * Checking if a Style with the same name already exists
-					 */
-					final SingleRuleList symbolRuleList;
-
-					switch (FeatureUtil.getGeometryForm(attType)) {
-					case POINT:
-						symbolRuleList = new SinglePointSymbolRuleList("");
-						break;
-					case LINE:
-						symbolRuleList = new SingleLineSymbolRuleList("");
-						break;
-					case POLYGON:
-						symbolRuleList = new SinglePolygonSymbolRuleList("");
-						break;
-					default:
-						throw new IllegalStateException("unrecognized type");
-					}
-
 					// LOGGER.debug("s="+s);
 					final File file = new File(dir, s);
-					// LOGGER.debug("fiel="+file.toString());
-					final URI toURI = file.toURI();
-					// LOGGER.debug("URI = "+toURI.toURL());
-					final URL toURL = toURI.toURL();
-					// LOGGER.debug("URL="+toURL);
-					boolean b = symbolRuleList.loadURL(toURL);
-					if (b) {
-						String key = JScrollPaneSymbolsLocal.this.getClass()
-								.getSimpleName()
-								+ symbolRuleList.getStyleName()
-								+ symbolRuleList.getStyleTitle()
-								+ symbolRuleList.getStyleAbstract();
-						if (imageCache.get(key) == null) {
-							/**
-							 * Render the image now
-							 */
-							// LOGGER.debug("Rendering an Image for the cache.
-							// key = "+key );
-							imageCache.put(key,
-									symbolRuleList.getImage(SYMBOL_SIZE));
-						}
 
-						entriesForTheList.add(symbolRuleList);
-					} else {
-						// Load failed
-						LOGGER.warn("Loading " + s + " failed");
-					}
+					URL url = DataUtilities.fileToURL(file);
+					// LOGGER.debug("fiel="+file.toString());
+					// final URI toURI = file.toURI();
+					// LOGGER.debug("URI = "+toURI.toURL());
+					// final URL toURL = toURI.toURL();
+					// LOGGER.debug("URL="+toURL);
+					//
+					// final SingleRuleList symbolRuleList = RuleListFactory
+					// .createSingleRulesList(new Translation(),
+					// geometryForm, false);
+					//
+					// boolean b = symbolRuleList.loadURL(url);
+					// if (b) {
+					// String key = JScrollPaneSymbolsLocal.this.getClass()
+					// .getSimpleName()
+					// + symbolRuleList.getStyleName()
+					// + symbolRuleList.getStyleTitle()
+					// + symbolRuleList.getStyleAbstract();
+					// if (imageCache.get(key) == null) {
+					// /**
+					// * Render the image now
+					// */
+					// // LOGGER.debug("Rendering an Image for the cache.
+					// // key = "+key );
+					// imageCache.put(key,
+					// symbolRuleList.getImage(SYMBOL_SIZE));
+					// }
+					//
+					// // This newly parsed (local) SLD file will be added to
+					// // the GUI
+					// entriesForTheList.add(symbolRuleList);
+					// } else {
+					// // Load failed
+					// LOGGER.warn("Loading " + s + " failed");
+					// }
+
+					String newNameWithOUtSLD = nameWithoutSld(url);
+					sd.setDescription(newNameWithOUtSLD);
+
+					cacheUrl(entriesForTheList, url);
 				}
 
 				return entriesForTheList;
@@ -396,27 +384,29 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 		return Icons.ICON_LOCAL;
 	}
 
-	/**
-	 * Rescanns the folder for symbols in background. Symbols that have been
-	 * removed are not beeing removed.
-	 * 
-	 * @param reset
-	 *            If <code>true</code> the {@link JList} of symbols will be
-	 *            cleard first.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @param pw
-	 */
-	public synchronized void rescan(boolean reset) {
-		if (reset)
-			((DefaultListModel) getJListSymbols().getModel()).clear();
-
-		getWorker().executeModalNoEx();
-	}
+	//
+	// /**
+	// * Rescans the folder for symbols in background. Symbols that have been
+	// * removed are not being removed.
+	// *
+	// * @param reset
+	// * If <code>true</code> the {@link JList} of symbols will be
+	// * cleard first.
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// Tzeggai</a>
+	// * @param pw
+	// */
+	// public synchronized void rescan(boolean reset) {
+	// if (reset)
+	// ((DefaultListModel) getJListSymbols().getModel()).clear();
+	//
+	// getWorker().executeModalNoEx();
+	// }
 
 	@Override
 	protected String getToolTip() {
-		File symbolsDir = AtlasStyler.getSymbolsDir(attType);
+		File symbolsDir = AtlasStyler.getSymbolsDir(geometryForm);
 		// Be more windows friendly
 		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT",
 				IOUtil.escapePath(symbolsDir));

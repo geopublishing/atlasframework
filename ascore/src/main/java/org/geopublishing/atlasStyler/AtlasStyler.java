@@ -33,7 +33,6 @@ import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.FilterUtil;
@@ -106,6 +105,10 @@ public class AtlasStyler {
 
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_POLYGON = "polygon";
+
+	// TODO ??
+	/** These DIRNAMEs describe paths to application files on the local machines */
+	final static String DIRNAME_ANY = "any";
 
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_TEMPLATES = "templates";
@@ -249,19 +252,19 @@ public class AtlasStyler {
 		return dir;
 	}
 
-	public static File getSymbolsDir(final GeometryDescriptor defaultGeometry) {
+	public static File getSymbolsDir(final GeometryForm defaultGeometry) {
 
-		switch (FeatureUtil.getGeometryForm(defaultGeometry)) {
+		switch (defaultGeometry) {
 		case LINE:
 			return getLineSymbolsDir();
 		case POINT:
 			return getPointSymbolsDir();
 		case POLYGON:
 			return getPolygonSymbolsDir();
+		case ANY:
 		}
 
-		final String msg = "GeometryAttributeType not recognized = "
-				+ defaultGeometry;
+		final String msg = "GeometryForm not recognized = " + defaultGeometry;
 		LOGGER.error(msg);
 		throw new IllegalArgumentException(msg);
 	}
@@ -435,7 +438,8 @@ public class AtlasStyler {
 
 				if (withDefaults != null && withDefaults == true) {
 					final SingleRuleList<? extends Symbolizer> defaultRl = rlf
-							.createSingleRulesList(true);
+							.createSingleRulesList(
+									getRuleTitleFor(styledFeatures), true);
 					LOGGER.debug("Added default rulelist: " + defaultRl);
 					addRulesList(defaultRl);
 				}
@@ -744,7 +748,7 @@ public class AtlasStyler {
 	 * 
 	 * @return never <code>null</code> and never ""
 	 */
-	public static Translation getRuleTileFor(StyledFeaturesInterface<?> sf) {
+	public static Translation getRuleTitleFor(StyledFeaturesInterface<?> sf) {
 
 		if (!I8NUtil.isEmpty(sf.getTitle()))
 			return sf.getTitle();

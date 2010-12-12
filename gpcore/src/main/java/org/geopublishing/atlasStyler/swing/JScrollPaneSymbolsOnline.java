@@ -19,31 +19,23 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
-import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
-import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
-import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
-import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
@@ -70,7 +62,6 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	// private final GeometryDescriptor attType;
 
 	private URL url;
-	private final GeometryForm geoForm;
 
 	/**
 	 * Construct a {@link JScrollPaneSymbolsOnline}, listing all .sld symbols
@@ -89,7 +80,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 	/**
 	 * Construct a {@link JScrollPaneSymbolsOnline}, listing all .sld symbols
-	 * from http://freemapsymbols.org. filtered for a special geoemtry type
+	 * from http://freemapsymbols.org. filtered for a special geometry type
 	 * (point, line, polygon)
 	 * 
 	 * @param attType
@@ -99,7 +90,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public JScrollPaneSymbolsOnline(GeometryForm geoForm) {
-		this.geoForm = geoForm;
+		super(geoForm);
 		try {
 			url = new URL(FreeMapSymbols.BASE_URL
 					+ geoForm.toString().toLowerCase());
@@ -110,26 +101,27 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 		rescan(false);
 	}
 
-	/**
-	 * Rescanns the online folder for symbols in background. Symbols that have
-	 * been removed are not beeing removed.
-	 * 
-	 * @param reset
-	 *            Shall the {@link JList} be cleared before rescan
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void rescan(boolean reset) {
-
-		if (reset) {
-			getJListSymbols().setModel(new DefaultListModel());
-			imageCache.clear();
-			symbolPreviewComponentsCache.clear();
-		}
-
-		AtlasSwingWorker<Void> symbolLoader = getWorker();
-		symbolLoader.executeModalNoEx();
-	}
+	// /**
+	// * Rescans the online folder for symbols in background. Symbols that have
+	// * been removed are not beeing removed.
+	// *
+	// * @param reset
+	// * Shall the {@link JList} be cleared before rescan
+	// *
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// Tzeggai</a>
+	// */
+	// public void rescan(boolean reset) {
+	//
+	// if (reset) {
+	// getJListSymbols().setModel(new DefaultListModel());
+	// imageCache.clear();
+	// symbolPreviewComponentsCache.clear();
+	// }
+	//
+	// AtlasSwingWorker<Void> symbolLoader = getWorker();
+	// symbolLoader.executeModalNoEx();
+	// }
 
 	long lastTimeJScrollPaneUpdate = System.currentTimeMillis();
 
@@ -138,21 +130,20 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private AtlasSwingWorker<Void> getWorker() {
+	@Override
+	protected AtlasSwingWorker<List<SingleRuleList<?>>> getWorker() {
 		final AtlasStatusDialog sd = new AtlasStatusDialog(
 				JScrollPaneSymbolsOnline.this, FreeMapSymbols.BASE_URL,
 				"Updating Online Symbol list"); // i8n TODO
-		AtlasSwingWorker<Void> swingWorker = new AtlasSwingWorker<Void>(sd) {
+		AtlasSwingWorker<List<SingleRuleList<?>>> swingWorker = new AtlasSwingWorker<List<SingleRuleList<?>>>(
+				sd) {
 
 			@Override
-			protected Void doInBackground() {
+			protected List<SingleRuleList<?>> doInBackground() {
+
+				LOGGER.info("Seaching for online Symbols at " + url);
+				List<SingleRuleList<?>> entriesForTheList = new ArrayList<SingleRuleList<?>>();
 				try {
-
-					LOGGER.info("Seaching for online Symbols at " + url);
-
-					// String a = url.toExternalForm();
-					// a += "/index";
-					// URL index = new URL(a);
 
 					URL index = DataUtilities.extendURL(url, "index");
 
@@ -170,7 +161,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 							// Thats what happens on Windows: lastPartInURI =
 							// "C:/"
 							// + lastPartInURI;
-							// Ich work arroundthat.. not very ellegant!
+							// work arround.. not very ellegant!
 							// LOGGER.debug("lastpartinURI " + lastPartInURI);
 							if (lastPartInURI.matches(".[A-Z]:.+")) {
 								lastPartInURI = lastPartInURI.substring(3);
@@ -186,83 +177,15 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 							symbolURLs.add(new URL(urlStr));
 						}
 
-						List<SingleRuleList<Symbolizer>> newElements = new ArrayList<SingleRuleList<Symbolizer>>();
-
-						final DefaultListModel model = (DefaultListModel) getJListSymbols()
-								.getModel();
 						/**
-						 * Add every symbol as a SymbolButton
+						 * Load every symbol from the URL into a SingleRuleList
 						 */
 						for (final URL url : symbolURLs) {
-
-							/*******************************************************
-							 * Checking if a Style with the same name allready
-							 * exists
-							 */
-							// Name without .sld
-							final String newNameWithOUtSLD = url.getFile()
-									.substring(0, url.getFile().length() - 4);
-
-							Enumeration<?> name2 = model.elements();
-							while (name2.hasMoreElements()) {
-								String styleName = ((SingleRuleList) name2
-										.nextElement()).getStyleName();
-								if (styleName.equals(newNameWithOUtSLD)) {
-									// A Symbol with the same StyleName already
-									// exits
-									continue;
-								}
-							}
-
-							final SingleRuleList symbolRuleList;
-
-							switch (geoForm) {
-							case POINT:
-								symbolRuleList = new SinglePointSymbolRuleList(
-										"");
-								break;
-							case LINE:
-								symbolRuleList = new SingleLineSymbolRuleList(
-										"");
-								break;
-							case ANY:
-							case POLYGON:
-								symbolRuleList = new SinglePolygonSymbolRuleList(
-										"");
-								break;
-
-							case NONE:
-							default:
-								throw new IllegalStateException(
-										"unrecognized type");
-							}
-
-							boolean b = symbolRuleList.loadURL(url);
-							// TODO collect updates with timer
-							if (b) {
-
-								String key = JScrollPaneSymbolsOnline.this
-										.getClass().getSimpleName()
-										+ symbolRuleList.getStyleName()
-										+ symbolRuleList.getStyleTitle()
-										+ symbolRuleList.getStyleAbstract();
-
-								JPanel fullCell = getOrCreateComponent(
-										symbolRuleList, key);
-
-								newElements.add(symbolRuleList);
-								sd.setDescription(newNameWithOUtSLD);
-
-							} else {
-								// Load failed
-								LOGGER.warn("Loading " + url + " failed");
-							}
+							String newNameWithOUtSLD = nameWithoutSld(url);
+							sd.setDescription(newNameWithOUtSLD);
+							cacheUrl(entriesForTheList, url);
 						}
 
-						// Add the collected images
-						for (SingleRuleList<Symbolizer> newElement : newElements) {
-							model.addElement(newElement);
-						}
 						updateJScrollPane();
 
 					} catch (IOException e) {
@@ -285,10 +208,10 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 							}
 					}
 
-					return null;
+					return entriesForTheList;
 				} catch (MalformedURLException e1) {
 					ExceptionDialog.show(e1);
-					return null;
+					return entriesForTheList;
 				}
 
 			}

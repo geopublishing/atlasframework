@@ -21,6 +21,7 @@ import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
+
 public class AbstractRulesListTest extends TestingClass {
 
 	PropertyIsEqualTo f1 = FilterUtil.FILTER_FAC2.equals(
@@ -80,8 +81,11 @@ public class AbstractRulesListTest extends TestingClass {
 		assertEquals(0, as.getRuleLists().size());
 
 		{
-			SingleRuleList<?> singleRulesList = as.getRlf()
-					.createSingleRulesList(true);
+			SingleRuleList<?> singleRulesList = as
+					.getRlf()
+					.createSingleRulesList(
+							AtlasStyler.getRuleTitleFor(as.getStyledFeatures()),
+							true);
 			singleRulesList.setMinScaleDenominator(sMin);
 			singleRulesList.setMaxScaleDenominator(sMax);
 
@@ -183,16 +187,20 @@ public class AbstractRulesListTest extends TestingClass {
 				0.00001);
 		assertEquals(gMax, gradColorsRulesList.getMaxScaleDenominator(),
 				0.00001);
-//		assertEquals(gMin, gradColorsRulesList.getTemplate().getMinScaleDenominator(),
-//				0.00001);
-//		assertEquals(gMax, gradColorsRulesList.getTemplate().getMaxScaleDenominator(),
-//				0.00001);
-		
+		// assertEquals(gMin,
+		// gradColorsRulesList.getTemplate().getMinScaleDenominator(),
+		// 0.00001);
+		// assertEquals(gMax,
+		// gradColorsRulesList.getTemplate().getMaxScaleDenominator(),
+		// 0.00001);
+
 		assertEquals(uMin, uniqueRulesList.getMinScaleDenominator(), 0.00001);
 		assertEquals(uMax, uniqueRulesList.getMaxScaleDenominator(), 0.00001);
-//		assertEquals(uMin, uniqueRulesList.getTemplate().getMinScaleDenominator(), 0.00001);
-//		assertEquals(uMax, uniqueRulesList.getTemplate().getMaxScaleDenominator(), 0.00001);
-		
+		// assertEquals(uMin,
+		// uniqueRulesList.getTemplate().getMinScaleDenominator(), 0.00001);
+		// assertEquals(uMax,
+		// uniqueRulesList.getTemplate().getMaxScaleDenominator(), 0.00001);
+
 		assertEquals(tMin, textRulesList.getMinScaleDenominator(), 0.00001);
 		assertEquals(tMax, textRulesList.getMaxScaleDenominator(), 0.00001);
 

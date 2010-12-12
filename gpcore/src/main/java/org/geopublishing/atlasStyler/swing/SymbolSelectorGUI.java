@@ -557,7 +557,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 					}
 
 					File dir = AtlasStyler.getSymbolsDir(singleSymbolRuleList
-							.getGeometryDescriptor());
+							.getGeometryForm());
 					JFileChooser chooser = new JFileChooser(dir);
 					chooser.setDialogTitle(AtlasStyler
 							.R("SymbolSelector.SaveToFileDialog.Title"));
@@ -721,7 +721,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			 */
 			{
 				symbolsLocal = new JScrollPaneSymbolsLocal(
-						singleSymbolRuleList.getGeometryDescriptor());
+						singleSymbolRuleList.getGeometryForm());
 				symbolsLocal.addPropertyChangeListener(listener);
 
 				JPanel symbolsLocalPanel = new JPanel(new MigLayout(

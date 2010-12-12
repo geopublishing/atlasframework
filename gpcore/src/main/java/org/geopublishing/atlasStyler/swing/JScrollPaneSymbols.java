@@ -20,7 +20,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -37,8 +39,11 @@ import javax.swing.ListCellRenderer;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.RuleListFactory;
 import org.geopublishing.atlasStyler.SingleRuleList;
 
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import skrueger.i8n.Translation;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
@@ -50,6 +55,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
  */
 public abstract class JScrollPaneSymbols extends JScrollPane {
 
+	final GeometryForm geometryForm;
 	/**
 	 * The size of one cell in the table
 	 */
@@ -68,16 +74,17 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 	protected MouseEvent mouseCLickEvent;
 
-	public JScrollPaneSymbols() {
-		super();
-
+	public JScrollPaneSymbols(GeometryForm geoForm) {
+		geometryForm = geoForm;
 		initialize();
 	}
 
 	/**
 	 * static caches for images
 	 */
-	final static protected HashMap<String, BufferedImage> imageCache = new HashMap<String, BufferedImage>();
+	// final static protected HashMap<String, BufferedImage> imageCache = new
+	// HashMap<String, BufferedImage>();
+
 	/**
 	 * static caches for images
 	 */
@@ -244,14 +251,15 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 			fullCell.setBackground(Color.white);
 
-			BufferedImage symbolImage = imageCache.get(key);
-			// LOGGER.info("Looking for "+key);
-			if (symbolImage == null) {
-				// LOGGER.info("A symbol for " + key
-				// + " was not found in cache.");
-				symbolImage = rl.getImage(SYMBOL_SIZE);
-				imageCache.put(key, symbolImage);
-			}
+			BufferedImage symbolImage;
+			// BufferedImage symbolImage = imageCache.get(key);
+			// // LOGGER.info("Looking for "+key);
+			// if (symbolImage == null) {
+			// LOGGER.info("A symbol for " + key
+			// + " was not found in cache.");
+			symbolImage = rl.getImage(SYMBOL_SIZE);
+			// imageCache.put(key, symbolImage);
+			// }
 			ImageIcon image = new ImageIcon(symbolImage);
 
 			fullCell.add(new JLabel(image), BorderLayout.WEST);
@@ -279,4 +287,106 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 	}
 
+	/**
+	 * The String KEY is {@link #getToolTip()}.toString + geomForm.toString
+	 */
+	final static HashMap<String, List<SingleRuleList<?>>> cachedRuleLists = new HashMap<String, List<SingleRuleList<?>>>();
+
+	/**
+	 * Rescans the online or local folder for symbols in background.
+	 * 
+	 * @param reset
+	 *            Shall all cahces {@link JList} be cleared before rescan.
+	 *            Otherwise caches will be used to speed up the list.
+	 */
+	public void rescan(boolean reset) {
+		final String key = getRuleListCacheKey();
+
+		if (reset) {
+			getJListSymbols().setModel(new DefaultListModel());
+			// imageCache.clear();
+			symbolPreviewComponentsCache.clear();
+			cachedRuleLists.remove(key);
+		}
+
+		if (cachedRuleLists.get(key) == null) {
+			cachedRuleLists.put(key, getWorker().executeModalNoEx());
+		}
+
+		// Add new or cached RuleLists to the GUI model
+		addNewRuleListsToModel();
+	}
+
+	/**
+	 * Key used for {@link #cachedRuleLists}
+	 */
+	private String getRuleListCacheKey() {
+		return getToolTip() + geometryForm.toString();
+	}
+
+	/**
+	 * Adds the List of RulesLists to the {@link JScrollPane} model.
+	 */
+	protected void addNewRuleListsToModel() {
+
+		final DefaultListModel model = (DefaultListModel) getJListSymbols()
+				.getModel();
+
+		model.clear();
+
+		// final Enumeration<?> name2 = model.elements();
+		// while (name2.hasMoreElements()) {
+		// final String styleName = ((SingleRuleList) name2.nextElement())
+		// .getStyleName();
+		// if (styleName.equals(newNameWithOUtSLD)) {
+		// // A Symbol with the same StyleName already
+		// // exits
+		// continue;
+		// }
+		// }
+
+		for (SingleRuleList rl : cachedRuleLists.get(getRuleListCacheKey())) {
+			model.addElement(rl);
+		}
+
+	}
+
+	static String nameWithoutSld(URL url) {
+
+		/*******************************************************
+		 * Checking if a Style with the same name allready exists
+		 */
+		// Name without .sld
+		final String newNameWithOUtSLD = url.getFile().substring(0,
+				url.getFile().length() - 4);
+
+		return newNameWithOUtSLD;
+	}
+
+	abstract protected AtlasSwingWorker<List<SingleRuleList<?>>> getWorker();
+
+	protected void cacheUrl(List<SingleRuleList<?>> entriesForTheList, URL url) {
+		final SingleRuleList symbolRuleList = RuleListFactory
+				.createSingleRulesList(new Translation(), geometryForm, false);
+
+		boolean b = symbolRuleList.loadURL(url);
+		if (b) {
+
+			String key = this.getClass().getSimpleName()
+					+ symbolRuleList.getStyleName()
+					+ symbolRuleList.getStyleTitle()
+					+ symbolRuleList.getStyleAbstract();
+
+			// here we render the SLD to an image. This can create additional
+			// URL request (slow!) when external graphics are being used.
+			getOrCreateComponent(symbolRuleList, key);
+
+			// Ad the ruleList to the lists of RLs to add the the model
+			entriesForTheList.add(symbolRuleList);
+
+		} else {
+			// Load failed
+			LOGGER.warn("Loading " + url + " failed");
+		}
+	}
 }

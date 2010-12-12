@@ -271,7 +271,8 @@ public class ASUtil {
 		// AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
 		// loadStyle, null, null).getStyle();
 		SingleRuleList<? extends Symbolizer> singleRulesList = new RuleListFactory(
-				styledFs).createSingleRulesList(true);
+				styledFs).createSingleRulesList(
+				AtlasStyler.getRuleTitleFor(styledFs), true);
 
 		Style defaultStyle = StylingUtil.STYLE_BUILDER.createStyle();
 		defaultStyle.featureTypeStyles().add(singleRulesList.getFTS());
