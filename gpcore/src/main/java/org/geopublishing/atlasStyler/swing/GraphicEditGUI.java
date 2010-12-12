@@ -42,6 +42,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.MARKTYPE;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.renderer.style.SVGGraphicFactory;
 import org.geotools.styling.ExternalGraphic;
@@ -49,11 +50,11 @@ import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.Mark;
 import org.geotools.styling.Stroke;
-import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.expression.Expression;
 import org.opengis.style.GraphicalSymbol;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
@@ -62,57 +63,6 @@ import skrueger.swing.ColorButton;
 
 public class GraphicEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = ASUtil.createLogger(this);
-
-	enum MARKTYPE {
-		circle, square, triangle, star, cross, external_graphic, internal_graphic, shape_vertline, shape_horline, shape_slash, shape_backslash, shape_dot, shape_plus, shape_times;
-
-		public static MARKTYPE readWellKnownName(String s) {
-			final String ss = s.toLowerCase();
-
-			if (ss.equals("shape://backslash"))
-				return shape_backslash;
-			if (ss.equals("shape://slash"))
-				return shape_slash;
-			if (ss.equals("shape://dot"))
-				return shape_dot;
-			if (ss.equals("shape://times"))
-				return shape_times;
-			if (ss.equals("shape://plus"))
-				return shape_plus;
-			if (ss.equals("shape://vertline"))
-				return shape_vertline;
-			if (ss.equals("shape://horline"))
-				return shape_horline;
-
-			if (ss.equals("hatch"))
-				return shape_slash;
-
-			return MARKTYPE.valueOf(s);
-		}
-
-		public String toWellKnownName() {
-
-			switch (this) {
-			case shape_backslash:
-				return "shape://backslash";
-			case shape_slash:
-				return "shape://slash";
-			case shape_dot:
-				return "shape://dot";
-			case shape_times:
-				return "shape://times";
-			case shape_plus:
-				return "shape://plus";
-			case shape_vertline:
-				return "shape://vertline";
-			case shape_horline:
-				return "shape://horline";
-			default:
-				return super.toString();
-			}
-
-		}
-	};
 
 	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://http://freemapsymbols.org/svg";
 
@@ -207,18 +157,18 @@ public class GraphicEditGUI extends AbstractEditGUI {
 	 **/
 	protected Mark backupMark = null;
 
-	private final SimpleFeatureType graphicDefaultGeometry;
+	private final GeometryForm geometryForm;
 
 	/**
 	 * This is the default constructor
 	 * 
 	 * @param graphic
-	 * @param graphicDefaultGeometry
+	 * @param geomForm
 	 *            Optionally defines how the graphic will be used, so that it
 	 *            can make a good preview.
 	 */
-	public GraphicEditGUI(final Graphic graphic_,
-			SimpleFeatureType graphicDefaultGeometry) {
+	public GraphicEditGUI(final Graphic graphic_, GeometryForm geomForm) {
+		this.geometryForm = geomForm;
 
 		/**
 		 * Ensure that graphic is not <code>null</code>
@@ -251,8 +201,6 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			graphic.graphicalSymbols().clear();
 			graphic.graphicalSymbols().add(firstGraphicalSymbol);
 		}
-
-		this.graphicDefaultGeometry = graphicDefaultGeometry;
 
 		initialize();
 	}
@@ -1316,8 +1264,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 
 				selectExternalGraphicDialog = new SVGSelector(
 						SwingUtil.getParentWindow(GraphicEditGUI.this),
-						graphicDefaultGeometry.getGeometryDescriptor(),
-						graphic.getExternalGraphics());
+						geometryForm, graphic.getExternalGraphics());
 
 				// selectExternalGraphicDialog = new SVGSelector(SwingUtil
 				// .getParentWindow(GraphicEditGUI4.this), Utilities
@@ -1373,8 +1320,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 		} catch (Exception e1) {
 			ExceptionDialog
 					.show(SwingUtil
-							.getParentWindowComponent(GraphicEditGUI.this),
-							e1);
+							.getParentWindowComponent(GraphicEditGUI.this), e1);
 		}
 
 	}

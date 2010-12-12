@@ -326,40 +326,6 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 					final File file = new File(dir, s);
 
 					URL url = DataUtilities.fileToURL(file);
-					// LOGGER.debug("fiel="+file.toString());
-					// final URI toURI = file.toURI();
-					// LOGGER.debug("URI = "+toURI.toURL());
-					// final URL toURL = toURI.toURL();
-					// LOGGER.debug("URL="+toURL);
-					//
-					// final SingleRuleList symbolRuleList = RuleListFactory
-					// .createSingleRulesList(new Translation(),
-					// geometryForm, false);
-					//
-					// boolean b = symbolRuleList.loadURL(url);
-					// if (b) {
-					// String key = JScrollPaneSymbolsLocal.this.getClass()
-					// .getSimpleName()
-					// + symbolRuleList.getStyleName()
-					// + symbolRuleList.getStyleTitle()
-					// + symbolRuleList.getStyleAbstract();
-					// if (imageCache.get(key) == null) {
-					// /**
-					// * Render the image now
-					// */
-					// // LOGGER.debug("Rendering an Image for the cache.
-					// // key = "+key );
-					// imageCache.put(key,
-					// symbolRuleList.getImage(SYMBOL_SIZE));
-					// }
-					//
-					// // This newly parsed (local) SLD file will be added to
-					// // the GUI
-					// entriesForTheList.add(symbolRuleList);
-					// } else {
-					// // Load failed
-					// LOGGER.warn("Loading " + s + " failed");
-					// }
 
 					String newNameWithOUtSLD = nameWithoutSld(url);
 					sd.setDescription(newNameWithOUtSLD);
@@ -383,26 +349,6 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	public Icon getIcon() {
 		return Icons.ICON_LOCAL;
 	}
-
-	//
-	// /**
-	// * Rescans the folder for symbols in background. Symbols that have been
-	// * removed are not being removed.
-	// *
-	// * @param reset
-	// * If <code>true</code> the {@link JList} of symbols will be
-	// * cleard first.
-	// *
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// Tzeggai</a>
-	// * @param pw
-	// */
-	// public synchronized void rescan(boolean reset) {
-	// if (reset)
-	// ((DefaultListModel) getJListSymbols().getModel()).clear();
-	//
-	// getWorker().executeModalNoEx();
-	// }
 
 	@Override
 	protected String getToolTip() {

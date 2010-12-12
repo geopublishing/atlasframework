@@ -18,24 +18,26 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,52 +46,46 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.WindowConstants;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.data.DataUtilities;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Mark;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
-import org.geotools.swing.ProgressWindow;
-import org.geotools.util.SoftValueHashMap;
-import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
+import skrueger.swing.CancellableDialogAdapter;
 import skrueger.swing.OkButton;
+import skrueger.swing.swingworker.AtlasSwingWorker;
 
 // TODO Convert to AtlasDialog and add a local Database of SVG symbols
-public class SVGSelector extends JDialog {
+public class SVGSelector extends CancellableDialogAdapter {
 	static private final Logger LOGGER = ASUtil.createLogger(SVGSelector.class);
-
-	String SVG_PATH_BASE = "/openmapsymbols/svg/";
-
-	final public String GEOPUBLISHINGORG_BASE_URL_FOR_SVG = "http://de.geopublishing.org"
-			+ SVG_PATH_BASE;
 
 	protected static final Dimension SVGICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
-	protected static final String PROPERTY_UPDATED = "Property Updated sdfd";
+	protected static final String PROPERTY_UPDATED = "Property Updated event ID";
 
 	private JPanel jContentPane = null;
 
@@ -111,20 +107,28 @@ public class SVGSelector extends JDialog {
 
 	private JScrollPane jScrollPane1 = null;
 
-	protected URL folderUrl;
+	protected URL url;
 
 	private JList jList = null;
 
-	private final GeometryDescriptor attType;
+	private final GeometryForm geometryForm;
 
 	private JButton jButtonUp = null;
 
-	final static protected Map weakImageCache = new SoftValueHashMap();
+	/**
+	 * String KEY is folderUrl.getFile() + rl.getStyleName()
+	 */
+	final static protected WeakHashMap<String, BufferedImage> weakImageCache = new WeakHashMap<String, BufferedImage>();
 
-	private ExternalGraphic[] backup;
+	private final ExternalGraphic[] backup;
 
-	protected JLabel notOnlineLabel = new JLabel(AtlasStyler
-			.R("SVGSelector.notOnlineErrorLabel"));
+	protected JLabel notOnlineLabel = new JLabel(
+			AtlasStyler.R("SVGSelector.notOnlineErrorLabel"));
+
+	/**
+	 * The String KEY is URL.toString
+	 */
+	final static HashMap<String, List<Object>> cachedRuleLists = new HashMap<String, List<Object>>();
 
 	/**
 	 * @throws MalformedURLException
@@ -132,13 +136,13 @@ public class SVGSelector extends JDialog {
 	 * @param preSelection
 	 *            Which SVG is preselected. May be <code>null</code>
 	 */
-	public SVGSelector(Window owner, GeometryDescriptor attType,
+	public SVGSelector(Window owner, GeometryForm geomForm,
 			ExternalGraphic[] preSelection) throws MalformedURLException {
-		super(owner);
-		this.attType = attType;
+		super(owner, "SVG selection/auswahl"); // TODO i8n
+		this.geometryForm = geomForm;
 		backup = preSelection;
 
-		folderUrl = null;
+		url = null;
 
 		try {
 			if (preSelection != null && preSelection.length > 0) {
@@ -146,10 +150,9 @@ public class SVGSelector extends JDialog {
 				String preselectedFolderUrl = location.toExternalForm()
 						.substring(0,
 								location.toExternalForm().lastIndexOf("/") + 1);
-				if ((preselectedFolderUrl
-						.startsWith(GEOPUBLISHINGORG_BASE_URL_FOR_SVG) && (preselectedFolderUrl
+				if ((preselectedFolderUrl.startsWith(FreeMapSymbols.SVG_URL) && (preselectedFolderUrl
 						.endsWith("/")))) {
-					folderUrl = new URL(preselectedFolderUrl);
+					url = new URL(preselectedFolderUrl);
 				} else {
 					LOGGER.info(SVGSelector.class.getSimpleName()
 							+ " ignores the preselected URL = "
@@ -158,35 +161,36 @@ public class SVGSelector extends JDialog {
 			}
 		} finally {
 			// URL to start with by default
-			if (folderUrl == null) {
-				folderUrl = new URL(GEOPUBLISHINGORG_BASE_URL_FOR_SVG);
+			if (url == null) {
+				url = new URL(FreeMapSymbols.SVG_URL);
 			}
 		}
 
 		initialize();
 
-		rescan();
+		rescan(false);
 
-		// Cancel any selection if the window is closed
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				cancel();
-			}
-
-		});
+		// // Cancel any selection if the window is closed
+		// setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		// addWindowListener(new WindowAdapter() {
+		//
+		// @Override
+		// public void windowClosing(WindowEvent e) {
+		// cancel();
+		// }
+		//
+		// });
 	}
 
-	protected void cancel() {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				SVGSelector.this.firePropertyChange(
-						SVGSelector.PROPERTY_UPDATED, null, backup);
-			}
-		});
+	@Override
+	public void cancel() {
+		// SwingUtilities.invokeLater(new Runnable() {
+		// @Override
+		// public void run() {
+		SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null,
+				backup);
+		// }
+		// });
 	}
 
 	/**
@@ -320,7 +324,7 @@ public class SVGSelector extends JDialog {
 		if (jTextFieldURL == null) {
 			jTextFieldURL = new JTextField();
 			jTextFieldURL.setEditable(false);
-			jTextFieldURL.setText(folderUrl.getFile());
+			jTextFieldURL.setText(url.getFile());
 		}
 		return jTextFieldURL;
 	}
@@ -333,10 +337,20 @@ public class SVGSelector extends JDialog {
 	private JButton getJButtoneSelfURL() {
 		if (jButtonSelfURL == null) {
 			jButtonSelfURL = new JButton();
-			jButtonSelfURL.setText(AtlasStyler
-					.R("ExternalGraphicsSelector.button.manual_URL"));
 			jButtonSelfURL.setToolTipText(AtlasStyler
 					.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
+
+			jButtonSelfURL.setAction(new AbstractAction(AtlasStyler
+					.R("ExternalGraphicsSelector.button.manual_URL")) {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane
+							.showMessageDialog(
+									SVGSelector.this,
+									"This button will allow to browse any external URL for SVGs. (in the future/on request)");
+				}
+			});
 		}
 		return jButtonSelfURL;
 	}
@@ -364,6 +378,9 @@ public class SVGSelector extends JDialog {
 			jList = new JList();
 			jList.setModel(new DefaultListModel());
 
+			jList.setToolTipText("Double click with left mouse-button.");//
+			// i8n
+
 			// The JList has to react on click
 			jList.addMouseListener(new MouseAdapter() {
 
@@ -382,7 +399,7 @@ public class SVGSelector extends JDialog {
 							 */
 							final ExternalGraphic[] egs;
 
-							if (FeatureUtil.getGeometryForm(attType) == GeometryForm.POLYGON) {
+							if (geometryForm == GeometryForm.POLYGON) {
 								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
 								PolygonSymbolizer symbolizer = rl
 										.getSymbolizers().get(0);
@@ -404,7 +421,7 @@ public class SVGSelector extends JDialog {
 							 */
 							final ExternalGraphic[] egs;
 
-							if (FeatureUtil.getGeometryForm(attType) == GeometryForm.POINT) {
+							if (geometryForm == GeometryForm.POINT) {
 								final SinglePointSymbolRuleList rl = (SinglePointSymbolRuleList) value;
 								PointSymbolizer symbolizer = rl
 										.getSymbolizers().get(0);
@@ -470,8 +487,7 @@ public class SVGSelector extends JDialog {
 
 						BufferedImage symbolImage;
 
-						symbolImage = (BufferedImage) weakImageCache
-								.get(folderUrl.getFile() + rl.getStyleName());
+						symbolImage = weakImageCache.get(getKey(rl));
 						// LOGGER.debug("Looking for key =
 						// "+folderUrl.getFile()+rl.getStyleName() );
 						if (symbolImage == null) {
@@ -481,8 +497,7 @@ public class SVGSelector extends JDialog {
 							symbolImage = rl.getImage(SVGICON_SIZE);
 							// LOGGER.debug("Rendering an Image on the EDT. key
 							// = "+folderUrl.getFile()+rl.getStyleName() );
-							weakImageCache.put(folderUrl.getFile()
-									+ rl.getStyleName(), symbolImage);
+							weakImageCache.put(getKey(rl), symbolImage);
 						}
 
 						fullCell.add(new JLabel(new ImageIcon(symbolImage)),
@@ -492,10 +507,9 @@ public class SVGSelector extends JDialog {
 						styleAuthor.setText(rl.getStyleTitle());
 						description.setText(rl.getStyleAbstract());
 
-						fullCell.setToolTipText("ExternalGraphic URL: " 
-								+ folderUrl.toString()
-								+ rl.getStyleName()
-								+ ".svg"); 
+						fullCell.setToolTipText("Double-click to use ExternalGraphic "
+								+ IOUtil.escapePath(url.toString()
+										+ rl.getStyleName() + ".svg"));
 
 					} else if (value instanceof URL) {
 						/**
@@ -509,8 +523,8 @@ public class SVGSelector extends JDialog {
 
 						URL dirUrl = (URL) value;
 						String string = dirUrl.getFile();
-						String dirName = string.substring(0, string
-								.lastIndexOf("/"));
+						String dirName = string.substring(0,
+								string.lastIndexOf("/"));
 						dirName = dirName.substring(
 								dirName.lastIndexOf("/") + 1, dirName.length());
 
@@ -520,33 +534,51 @@ public class SVGSelector extends JDialog {
 								.setText("double click to enter this folder"); // i8n
 					}
 
+					if (isSelected) {
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.YELLOW, Color.BLACK));
+
+						// fullCell.setBackground(Color.yellow);
+					} else {
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.WHITE, Color.GRAY));
+						// fullCell.setBackground(Color.white);
+					}
+
 					return fullCell;
 				}
 
+			});
+
+			// The JList has to react to movement
+			jList.addMouseMotionListener(new MouseMotionAdapter() {
+
+				@Override
+				public void mouseMoved(MouseEvent me) {
+					Point p = new Point(me.getPoint());
+					jList.setSelectedIndex(jList.locationToIndex(p));
+				}
 			});
 		}
 		return jList;
 	}
 
-	protected void changeURL(URL url2) {
-		folderUrl = url2;
+	String getKey(SingleRuleList rl) {
+		return url.getFile() + rl.getStyleName();
+	}
 
-		LOGGER.debug("Changing URL to " + folderUrl.getFile());
+	public void changeURL(URL newUrl) {
+		url = newUrl;
 
-		SwingUtilities.invokeLater(new Runnable() {
+		LOGGER.debug("Changing URL to " + url.getFile());
 
-			@Override
-			public void run() {
-				setVisible(false);
-				jList = null;
-				rescan();
-				jScrollPane1.setViewportView(getJList());
-				jTextFieldURL.setText(folderUrl.getFile());
+		jList = null;
+		rescan(false);
+		jScrollPane1.setViewportView(getJList());
+		jTextFieldURL.setText(url.getFile());
 
-				jButtonUp
-						.setEnabled(!folderUrl.getFile().equals(SVG_PATH_BASE));
-			}
-		});
+		jButtonUp.setEnabled(!url.toString().equals(
+				FreeMapSymbols.SVG_URL + "/"));
 
 	}
 
@@ -560,7 +592,8 @@ public class SVGSelector extends JDialog {
 			jButtonUp = new JButton();
 			jButtonUp.setIcon(Icons.ICON_DIR_UP_SMALL);
 			jButtonUp.setMargin(new Insets(0, 0, 0, 0));
-			jButtonUp.setEnabled(!folderUrl.getFile().equals(SVG_PATH_BASE));
+			jButtonUp.setEnabled(!url.toString().equals(
+					FreeMapSymbols.SVG_URL + "/"));
 
 			// This button is only enabled if we are not on the root level
 			jButtonUp.addActionListener(new AbstractAction() {
@@ -570,9 +603,8 @@ public class SVGSelector extends JDialog {
 					// Transform
 					// http://http://freemapsymbols.org/svg/health/
 					// To: http://http://freemapsymbols.org/svg/
-					String string = folderUrl.toExternalForm();
-					String newUrl = string
-							.substring(0, string.lastIndexOf("/"));
+					String string = url.toExternalForm();
+					String newUrl = string.substring(0, string.lastIndexOf("/"));
 					newUrl = newUrl.substring(0, newUrl.lastIndexOf("/") + 1);
 					try {
 						URL url2 = new URL(newUrl);
@@ -595,117 +627,44 @@ public class SVGSelector extends JDialog {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private SwingWorker<Object, Object> getWorker(final ProgressWindow pw) {
-		SwingWorker<Object, Object> swingWorker = new SwingWorker<Object, Object>() {
-			final DefaultListModel model = (DefaultListModel) getJList()
-					.getModel();
-
-			/**
-			 * Create RulesLists and render the images
-			 */
-			List<Object> entriesForTheList = new ArrayList<Object>();
+	private AtlasSwingWorker<List<Object>> getWorker() {
+		AtlasSwingWorker<List<Object>> swingWorker = new AtlasSwingWorker<List<Object>>(
+				SVGSelector.this) {
 
 			@Override
-			protected void done() {
-				try {
-					get();
-				} catch (Exception e) {
-					LOGGER.error(e);
-				}
+			protected List<Object> doInBackground() throws Exception {
 
-				if ((entriesForTheList.size() == 0) && (model.size() == 0)) {
-					/*
-					 * We are not rescanning and we are probably not online
-					 */
-					getJScrollPane1().setViewportView(notOnlineLabel);
-				} else {
-
-					/**
-					 * Finally add the RulesLists to the GUI
-					 */
-					for (Object o : entriesForTheList) {
-						model.addElement(o);
-					}
-
-					getJScrollPane1().setViewportView(
-							SVGSelector.this.getJList());
-
-				}
-				SVGSelector.this.doLayout();
-				SVGSelector.this.repaint();
-				pw.complete();
-				pw.dispose();
-				setVisible(true);
-
-				super.done();
-			}
-
-			@Override
-			protected Object doInBackground() throws Exception {
-
+				List<Object> entriesForTheList = new ArrayList<Object>();
 				LOGGER.debug("Seaching for online Symbols");
 
-				URL index = folderUrl;
+				URL index = url;
 
 				BufferedReader in = null;
 				try {
-					in = new BufferedReader(new InputStreamReader(index
-							.openStream()));
+					in = new BufferedReader(new InputStreamReader(
+							index.openStream()));
+
+					// Parsing the APACHE OUTPUT
 
 					// Sorting them alphabetically by using a set
-					SortedSet<String> sortedSymbolURLStrings = new TreeSet<String>();
-					String oneLIne;
+					SortedSet<URL> sortedSymbolUrls = new TreeSet(
+							new Comparator<URL>() {
 
-					while ((oneLIne = in.readLine()) != null) {
+								@Override
+								public int compare(URL o1, URL o2) {
+									return o1.toExternalForm().compareTo(
+											o2.toExternalForm());
+								}
+							});
+					String line;
 
-						Pattern svgFilePattern = Pattern
-								.compile("\"[^\"]*\\.svg\"");
-						Matcher matcher = svgFilePattern.matcher(oneLIne);
-						if (matcher.find()) {
-							String svgName = matcher.group();
+					while ((line = in.readLine()) != null) {
 
-							String svgName2 = svgName.substring(1, svgName
-									.length() - 1);
-
-							String string = folderUrl.toExternalForm()
-									+ svgName2;
-							sortedSymbolURLStrings.add(new URL(string)
-									.toString());
-						} else {
-							/**
-							 * This hits lines that point to a directory, but
-							 * not to the parent link.
-							 */
-							Pattern dirPattern = Pattern
-									.compile("\"[^\"/]*/\"");
-							matcher = dirPattern.matcher(oneLIne);
-							if (matcher.find()) {
-								String dirName = matcher.group();
-
-								String dirName2 = dirName.substring(1, dirName
-										.length() - 1);
-
-								String string = folderUrl.toExternalForm()
-										+ dirName2;
-
-								final URL newFolderUrl = new URL(string);
-
-								entriesForTheList.add(newFolderUrl);
-							}
-
-						}
-
+						parseSldFileanmeFromApacheOutput(entriesForTheList,
+								sortedSymbolUrls, line);
 					}
 
-					/**
-					 * The sorted String are converted to URLs
-					 */
-					List<URL> symbolURLs = new ArrayList<URL>();
-					for (String urlStr : sortedSymbolURLStrings) {
-						symbolURLs.add(new URL(urlStr));
-					}
-
-					for (final URL url : symbolURLs) {
+					for (final URL url : sortedSymbolUrls) {
 
 						String path = url.getFile();
 
@@ -714,29 +673,29 @@ public class SVGSelector extends JDialog {
 						 * exists
 						 */
 						// Name without .sld
-						String newNameWithOutEnding = path.substring(0, path
-								.length() - 4);
+						String newNameWithOutEnding = path.substring(0,
+								path.length() - 4);
 						newNameWithOutEnding = newNameWithOutEnding
 								.substring(newNameWithOutEnding
 										.lastIndexOf("/") + 1);
 
-						/**
-						 * Chacking if the same SVG is already included. Can
-						 * happen if we rescan or somehting like that
-						 */
-						Enumeration<?> name2 = model.elements();
-						while (name2.hasMoreElements()) {
-							Object nextElement = name2.nextElement();
-							if (nextElement instanceof URL)
-								continue;
-							String styleName = ((SingleRuleList) nextElement)
-									.getStyleName();
-							if (styleName.equals(newNameWithOutEnding)) {
-								// A Symbol with the same StyleName allready
-								// exits
-								continue;
-							}
-						}
+						// /**
+						// * Chacking if the same SVG is already included. Can
+						// * happen if we rescan or somehting like that
+						// */
+						// Enumeration<?> name2 = model.elements();
+						// while (name2.hasMoreElements()) {
+						// Object nextElement = name2.nextElement();
+						// if (nextElement instanceof URL)
+						// continue;
+						// String styleName = ((SingleRuleList) nextElement)
+						// .getStyleName();
+						// if (styleName.equals(newNameWithOutEnding)) {
+						// // A Symbol with the same StyleName allready
+						// // exits
+						// continue;
+						// }
+						// }
 
 						/*******************************************************
 						 * Now we create the URL that points to a local,
@@ -761,7 +720,7 @@ public class SVGSelector extends JDialog {
 
 						final SingleRuleList symbolRuleList;
 
-						if (FeatureUtil.getGeometryForm(attType) == GeometryForm.POINT) {
+						if (geometryForm == GeometryForm.POINT) {
 							symbolRuleList = new SinglePointSymbolRuleList("");
 
 							symbolRuleList.addNewDefaultLayer();
@@ -781,7 +740,7 @@ public class SVGSelector extends JDialog {
 							symb.getGraphic().setExternalGraphics(
 									new ExternalGraphic[] { eg, egLocal });
 
-						} else if (FeatureUtil.getGeometryForm(attType) == GeometryForm.LINE) {
+						} else if (geometryForm == GeometryForm.LINE) {
 							symbolRuleList = new SingleLineSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
 							// TODO line .. naja.. klappt bestimmt auch nicht
@@ -795,10 +754,13 @@ public class SVGSelector extends JDialog {
 								symb.getFill().setGraphicFill(
 										ASUtil.createDefaultGraphic());
 							}
-							symb.getFill().getGraphicFill().setMarks(
-									Mark.MARKS_EMPTY);
-							symb.getFill().getGraphicFill().setSize(
-									ASUtil.ff.literal(SVGICON_SIZE.height)); // TODO
+							symb.getFill().getGraphicFill()
+									.setMarks(Mark.MARKS_EMPTY);
+							symb.getFill()
+									.getGraphicFill()
+									.setSize(
+											ASUtil.ff
+													.literal(SVGICON_SIZE.height)); // TODO
 							// height
 							// vs.
 							// width
@@ -806,8 +768,7 @@ public class SVGSelector extends JDialog {
 							// wie
 							// oben
 
-							symb
-									.getFill()
+							symb.getFill()
 									.getGraphicFill()
 									.setExternalGraphics(
 											new ExternalGraphic[] { eg, egLocal });
@@ -816,7 +777,7 @@ public class SVGSelector extends JDialog {
 
 						symbolRuleList.setStyleName(newNameWithOutEnding);
 
-						String key = folderUrl.getFile()
+						String key = url.getFile()
 								+ symbolRuleList.getStyleName();
 						if (weakImageCache.get(key) == null) {
 							/**
@@ -825,8 +786,8 @@ public class SVGSelector extends JDialog {
 							// LOGGER.debug("Rendering an Image for the cache.
 							// key = "+key );
 							try {
-								weakImageCache.put(key, symbolRuleList
-										.getImage());
+								weakImageCache.put(key,
+										symbolRuleList.getImage());
 							} catch (Exception e) {
 								ExceptionDialog.show(SVGSelector.this, e);
 							}
@@ -850,21 +811,103 @@ public class SVGSelector extends JDialog {
 				// */
 				// Collections.sort(Arrays.asList(symbolPaths));
 
-				return null;
+				return entriesForTheList;
 			}
 
 		};
 		return swingWorker;
 	}
 
-	private void rescan() {
-		ProgressWindow pw = new ProgressWindow(this);
-		pw.started();
-		pw.setTitle(AtlasStyler
-				.R("ExternalGraphicsSelector.process.loading_title"));
-		pw.setDescription(AtlasStyler
-				.R("ExternalGraphicsSelector.process.loading_description"));
-		getWorker(pw).execute();
+	/**
+	 * @param reset
+	 *            if <code>false</code> uses cached values when possible
+	 */
+	private void rescan(boolean reset) {
+		// getWorker().execute();
+
+		final String key = url.toString();
+
+		if (reset) {
+			getJList().setModel(new DefaultListModel());
+			// imageCache.clear();
+			// symbolPreviewComponentsCache.clear();
+			cachedRuleLists.remove(key);
+		}
+
+		if (cachedRuleLists.get(key) == null) {
+			cachedRuleLists.put(key, getWorker().executeModalNoEx());
+		}
+
+		// Add new or cached RuleLists to the GUI model
+		addNewRuleListsToModel();
+
+	}
+
+	private void addNewRuleListsToModel() {
+		final DefaultListModel model = (DefaultListModel) getJList().getModel();
+		model.clear();
+
+		List<Object> entriesForTheList;
+		entriesForTheList = cachedRuleLists.get(url.toString());
+
+		try {
+			if ((entriesForTheList.size() == 0) && (model.size() == 0)) {
+				/*
+				 * We are not rescanning and we are probably not online
+				 */
+				getJScrollPane1().setViewportView(notOnlineLabel);
+			} else {
+				/*
+				 * Add the RulesLists to the GUI
+				 */
+				for (Object o : entriesForTheList) {
+					model.addElement(o);
+				}
+
+				getJScrollPane1().setViewportView(SVGSelector.this.getJList());
+
+			}
+			SVGSelector.this.doLayout();
+			SVGSelector.this.repaint();
+
+		} catch (Exception e) {
+			ExceptionDialog.show(SVGSelector.this, e);
+		}
+	}
+
+	// final static Pattern svgFilePattern =
+
+	final static Pattern dirPattern = Pattern.compile("\"[^\"/]*/\"");
+	final static Pattern svgFilePattern = Pattern.compile("\"[^\"]*.svg\"");
+
+	void parseSldFileanmeFromApacheOutput(List<Object> entriesForTheList,
+			Set<URL> sortedSymbolURLStrings, String line)
+			throws MalformedURLException {
+
+		Matcher matcher = svgFilePattern.matcher(line);
+		if (matcher.find()) {
+			String svgName = matcher.group();
+			String svgName2 = svgName.substring(1, svgName.length() - 1);
+
+			sortedSymbolURLStrings.add(DataUtilities.extendURL(url, svgName2));
+		} else {
+			/**
+			 * This hits lines that point to a directory, but not to the parent
+			 * link.
+			 */
+			matcher = dirPattern.matcher(line);
+			if (matcher.find()) {
+				String dirName = matcher.group();
+				String dirName2 = dirName.substring(1, dirName.length() - 1);
+
+				entriesForTheList.add(DataUtilities.extendURL(url, dirName2));
+			}
+
+			else {
+				// Ignore.. probably HTML
+			}
+
+		}
 	}
 
 	/**

@@ -30,7 +30,6 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.WindowConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -54,6 +53,7 @@ import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.LegendIconFeatureRenderer;
@@ -140,7 +140,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 */
 	public SymbolEditorGUI(Component owner,
 			SingleRuleList<? extends Symbolizer> singleSymbolRuleList) {
-		super(owner);
+		super(owner, DIALOG_TITLE);
+
 		this.singleSymbolRuleList = (SingleRuleList<Symbolizer>) singleSymbolRuleList;
 
 		backup = singleSymbolRuleList.clone(false);
@@ -154,16 +155,6 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 * @return void
 	 */
 	private void initialize() {
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		// addWindowListener(new WindowAdapter() {
-		//
-		// @Override
-		// public void windowClosing(WindowEvent e) {
-		// cancel();
-		// }
-		//
-		// });
-		this.setTitle(DIALOG_TITLE);
 		this.setContentPane(getJContentPane());
 		this.pack();
 
@@ -346,8 +337,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 								Graphic graphic = ((PointSymbolizer) selectedSymbolizer)
 										.getGraphic();
 								symbolEditGUI = new GraphicEditGUI(graphic,
-										FeatureUtil
-												.createFeatureType(Point.class));
+										GeometryForm.POINT);
 								break;
 							case LINE:
 								symbolEditGUI = new LineSymbolEditGUI(

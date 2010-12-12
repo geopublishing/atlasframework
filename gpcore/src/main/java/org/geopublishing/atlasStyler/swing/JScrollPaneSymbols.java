@@ -117,7 +117,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 							+ rl.getStyleTitle() + rl.getStyleAbstract();
 
 					JPanel fullCell = getOrCreateComponent(rl, key);
-					if (cellHasFocus) {
+					if (isSelected) {
 						fullCell.setBorder(BorderFactory.createEtchedBorder(
 								Color.YELLOW, Color.BLACK));
 
@@ -149,16 +149,6 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 						final AbstractRulesList rl = (AbstractRulesList) jListSymbols
 								.getModel().getElementAt(i);
 
-						// SwingUtilities.invokeLater(new Runnable() {
-						// @Override
-						// public void run() {
-						// JScrollPaneSymbols.this
-						// .firePropertyChange(
-						// JScrollPaneSymbols.PROPERTY_SYMBOL_SELECTED,
-						// null, rl);
-						// }
-						// });
-
 						new AtlasSwingWorker<Void>(JScrollPaneSymbols.this) {
 
 							@Override
@@ -188,7 +178,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 			});
 
-			// The JList has to react on click
+			// The JList has to react to movement
 			jListSymbols.addMouseMotionListener(new MouseMotionAdapter() {
 
 				@Override
@@ -196,6 +186,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 					Point p = new Point(me.getPoint());
 					jListSymbols.setSelectedIndex(jListSymbols
 							.locationToIndex(p));
+					jListSymbols.repaint();
 				}
 			});
 
@@ -334,6 +325,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 		model.clear();
 
+		// Check for existance?! Not needed since we use clear
 		// final Enumeration<?> name2 = model.elements();
 		// while (name2.hasMoreElements()) {
 		// final String styleName = ((SingleRuleList) name2.nextElement())

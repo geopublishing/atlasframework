@@ -20,4 +20,6 @@ public class FreeMapSymbols {
 	static public final String POINT_URL = BASE_URL + "point";
 	static public final String POLYGON_URL = BASE_URL + "polygon";
 
+	public static final String SVG_URL = BASE_URL + "svg";
+
 }

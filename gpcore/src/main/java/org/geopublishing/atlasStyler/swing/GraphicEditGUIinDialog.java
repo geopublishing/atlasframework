@@ -35,13 +35,11 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 
-import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
-
-import com.vividsolutions.jts.geom.Polygon;
 
 public class GraphicEditGUIinDialog extends JDialog {
 	protected Logger LOGGER = ASUtil.createLogger(this);
@@ -165,7 +163,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 		if (jPanelEditGUI == null) {
 
 			jPanelEditGUI = new GraphicEditGUI(graphicFill,
-					FeatureUtil.createFeatureType(Polygon.class));
+					GeometryForm.POLYGON);
 
 			// Update the Preview if the Icon is changed ... will change
 			// with clone?!
