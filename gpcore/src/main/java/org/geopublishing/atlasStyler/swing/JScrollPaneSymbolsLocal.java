@@ -314,15 +314,20 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 				});
 
-				/**
-				 * Sort the file list, so we have a sorted list of symbols
-				 */
-				Collections.sort(Arrays.asList(symbolPaths));
+				// i8n
+				if (symbolPaths == null)
+					throw new RuntimeException(
+							"Error reading "
+									+ IOUtil.escapePath(dir)
+									+ ". Please check permissions or broken link? Access to local symbols is broken.");
+
+				final List<String> symbolPathsList = Arrays.asList(symbolPaths);
+				Collections.sort(symbolPathsList);
 
 				/**
 				 * Add every symbol as a SymbolButton
 				 */
-				for (final String s : symbolPaths) {
+				for (final String s : symbolPathsList) {
 
 					/***********************************************************
 					 * Checking if a Style with the same name already exists
