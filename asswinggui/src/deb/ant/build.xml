@@ -23,20 +23,51 @@
 -->
 
 <project basedir="${mvn.basedir}/src/deb/ant">
-	<property name="SNAPSHOT" value="-testing" description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty." />
-	<property name="PROGNAME" value="atlasstyler${SNAPSHOT}" description="the name of the program / the .deb name without any versions" />
+	<property name="SNAPSHOT"
+	          value="-testing"
+	          description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty."
+	/>
+	<property name="PROGNAME"
+	          value="atlasstyler${SNAPSHOT}"
+	          description="the name of the program / the .deb name without any versions"
+	/>
 	<property name="FOLDERINZIPNAME" value="AtlasStyler-${mvn.project.version}" />
-	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
-	<taskdef name="desktopEntry" classname="com.googlecode.ant_deb_task.DesktopEntry" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
-	<property name="FULLZIP" value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip" description="Path to the -full.zip file that has been created by maven-assembly process." />
-	<property name="TARGET.DEB.DIR" value="${mvn.basedir}/target/deb" description="Subfolder in maven target directory where all files are created." />
-	<property name="REPO.DIR" value="/var/www/www.geopublishing.org/htdocs/repository" description="Path the the linux repository directory on the server" />
-	<property name="version.upstream" value="${mvn.project.version}.${mvn.buildNumber}" description="The upstream version of the .deb package, containing the svn revision" />
+	<taskdef name="deb"
+	         classname="com.googlecode.ant_deb_task.Deb"
+	         classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
+	/>
+	<taskdef name="desktopEntry"
+	         classname="com.googlecode.ant_deb_task.DesktopEntry"
+	         classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
+	/>
+	<property name="FULLZIP"
+	          value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip"
+	          description="Path to the -full.zip file that has been created by maven-assembly process."
+	/>
+	<property name="TARGET.DEB.DIR"
+	          value="${mvn.basedir}/target/deb"
+	          description="Subfolder in maven target directory where all files are created."
+	/>
+	<property name="REPO.DIR"
+	          value="/var/www/www.geopublishing.org/htdocs/repository"
+	          description="Path the the linux repository directory on the server"
+	/>
+	<property name="version.upstream"
+	          value="${mvn.project.version}.${mvn.buildNumber}"
+	          description="The upstream version of the .deb package, containing the svn revision"
+	/>
 	<property name="TARGETDEB" value="${TARGET.DEB.DIR}/dist/${PROGNAME}_${version.upstream}-1_all.deb" />
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
-		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop" name="${PROGNAME}" comment="Create OGC SLD/SE styling files" description="A dialog based tool to create SLD files." exec="/usr/bin/${PROGNAME}" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
+		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop"
+		              name="${PROGNAME}"
+		              comment="Create OGC SLD/SE styling files"
+		              description="A dialog based tool to create SLD files."
+		              exec="/usr/bin/${PROGNAME}"
+		              icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm"
+		              categories="Education;Science;Geography;Geoscience;Java"
+		/>
 	</target>
 
 
@@ -45,18 +76,27 @@
 
 		<echo message="Basedir is ${basedir} , targetDebDir = ${TARGET.DEB.DIR} " />
 
-		<unzip src="${FULLZIP}" dest="${TARGET.DEB.DIR}/build" description="uncompress the .zip that we are repacking as a .deb" />
+		<unzip src="${FULLZIP}"
+		       dest="${TARGET.DEB.DIR}/build"
+		       description="uncompress the .zip that we are repacking as a .deb"
+		/>
 
 		<echo message="Upstream-Version is ${version.upstream}" />
 		<echo message="Icon should be at ${mvn.basedir}/src/deb/logos/${PROGNAME}.xpm" />
 
-		<deb todir="${TARGET.DEB.DIR}/dist" package="${PROGNAME}" section="science" recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc" depends="sun-java6-jre | openjdk-6-jre | icedtea6" priority="extra">
+		<deb todir="${TARGET.DEB.DIR}/dist"
+		     package="${PROGNAME}"
+		     section="science"
+		     recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc"
+		     depends="sun-java6-jre | openjdk-6-jre | icedtea6"
+		     priority="extra"
+		>
 			<version upstream="${version.upstream}" />
 
 			<maintainer name="Stefan A. Tzeggai" email="tzeggai@wikisquare.de" />
 
 			<description synopsis="A GUI tool to publish maps as online and offline atlases based on OGC standards.">
-This is the testing version of AtlasStyler. Use very carefully and please report problems.				
+This is the testing version of AtlasStyler. Use carefully and please report problems.				
 				
 Geopublisher is an atlas authoring system which allows easy publication of geo-data, documents, images, videos, and statistics in form of digital multimedia atlases. These atlases can be understood as minimal, pre-configured end-user GIS which offer selected functionality only where its meaningful.
 Geopublisher provides tools for quality assurance and multilingual meta-data management. No in-depth knowledge of HTML, SLD or XML is required to create an atlas. Atlases can be directly published on CD, DVD, memory stick, external hard-drive or the Internet. The software is platform-independent and Open-Source.
@@ -100,55 +140,70 @@ Technical details:
 	</target>
 
 
-	<target name="add-deb-to-repo" depends="create-deb" description="Imports the .deb into the repository using a tool called 'reprepro'.">
+	<target name="add-deb-to-repo"
+	        depends="create-deb"
+	        description="Imports the .deb into the repository using a tool called 'reprepro'."
+	>
 
 		<!-- DEBIAN -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for etch to the repo">
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for etch to the repo at ${REPO.DIR}">
 			<arg line='-b ${REPO.DIR} includedeb etch ${TARGETDEB}' />
 		</exec>
 
 
 		<!-- UBUNTU -->
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
+		<exec executable="/usr/bin/reprepro"
+		      failonerror="true"
+		      description="Import the .deb for hardy to the repo at ${REPO.DIR}"
+		>
 			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for jaunty to the repo">
+		<exec executable="/usr/bin/reprepro"
+		      failonerror="true"
+		      description="Import the .deb for jaunty to the repo at ${REPO.DIR}"
+		>
 			<arg line='-b ${REPO.DIR} includedeb jaunty ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for karmic to the repo">
+		<exec executable="/usr/bin/reprepro"
+		      failonerror="true"
+		      description="Import the .deb for karmic to the repo at ${REPO.DIR}"
+		>
 			<arg line='-b ${REPO.DIR} includedeb karmic ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lucid to the repo">
+		<exec executable="/usr/bin/reprepro"
+		      failonerror="true"
+		      description="Import the .deb for lucid to the repo at ${REPO.DIR}"
+		>
 			<arg line='-b ${REPO.DIR} includedeb lucid ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for maverick to the repo">
+		<exec executable="/usr/bin/reprepro"
+		      failonerror="true"
+		      description="Import the .deb for maverick to the repo at ${REPO.DIR}"
+		>
 			<arg line='-b ${REPO.DIR} includedeb maverick ${TARGETDEB}' />
 		</exec>
 
-		<!-- MAEMO, not working -->
+		<!-- MAEMO, not working
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for freemantle to the repo">
 			<arg line='-b ${REPO.DIR} includedeb freemantle ${TARGETDEB}' />
 		</exec>
+		 -->
 
 	</target>
 
-
 	<target name="clean-repository" description="Delete all packages stored in the repository.">
-
 		<mkdir dir="${REPO.DIR}" />
 		<delete dir="${REPO.DIR}/db" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/dists" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/pool" verbose="true" description="resetting the repository" />
-
 	</target>
 
 </project>
-
