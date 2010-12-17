@@ -33,20 +33,20 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
  * 
  * @author stefan
  */
-public class QuantitiesClassification extends org.geopublishing.atlasStyler.classification.QuantitiesClassification {
+public class QuantitiesClassification extends
+		org.geopublishing.atlasStyler.classification.QuantitiesClassification {
 
 	protected Logger LOGGER = ASUtil.createLogger(this);
-	
+
 	volatile private AtlasSwingWorker<TreeSet<Double>> calculateStatisticsWorker;
-	private Component owner;
-	
+	private final Component owner;
+
 	public QuantitiesClassification(Component owner,
 			StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name, final String normalizer_field_name) {
 		super(styledFeatures, value_field_name, normalizer_field_name);
 		this.owner = owner;
 	}
-
 
 	/**
 	 * @param featureSource
@@ -71,7 +71,7 @@ public class QuantitiesClassification extends org.geopublishing.atlasStyler.clas
 
 	@Override
 	public void calculateClassLimitsWithWorker() {
-		classLimits = new TreeSet<Double>();
+		breaks = new TreeSet<Double>();
 
 		/**
 		 * Do we have all necessary information to calculate ClassLimits?
@@ -114,7 +114,7 @@ public class QuantitiesClassification extends org.geopublishing.atlasStyler.clas
 		} catch (CancellationException e) {
 			setQuite(stackQuites.pop());
 		} catch (ExecutionException exception) {
-//			ExceptionDialog.show(owner, exception);
+			// ExceptionDialog.show(owner, exception);
 			setQuite(stackQuites.pop());
 		} finally {
 		}

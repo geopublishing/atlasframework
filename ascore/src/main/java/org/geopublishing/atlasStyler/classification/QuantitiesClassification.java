@@ -107,18 +107,17 @@ public class QuantitiesClassification extends FeatureClassification {
 		return newClassLimits;
 	}
 
-	/**
-	 * If the classification contains 5 classes, then we have to save 5+1
-	 * breaks.
-	 */
-	protected volatile TreeSet<Double> breaks = null;
-
 	volatile private boolean cancelCalculation;
 
 	/** The type of classification that is used. Quantiles by default * */
 	public METHOD classificationMethod = DEFAULT_METHOD;
 
-	protected volatile TreeSet<Double> classLimits;
+	/**
+	 * If the classification contains 5 classes, then we have to save 5+1
+	 * breaks.
+	 */
+	protected volatile TreeSet<Double> breaks = null;
+	// protected volatile TreeSet<Double> classLimits;
 
 	final String handle = "statisticsQuery";
 
@@ -207,11 +206,11 @@ public class QuantitiesClassification extends FeatureClassification {
 
 		switch (classificationMethod) {
 		case EI:
-			return classLimits = getEqualIntervalLimits();
+			return getEqualIntervalLimits();
 
 		case QUANTILES:
 		default:
-			return classLimits = getQuantileLimits();
+			return getQuantileLimits();
 		}
 	}
 
@@ -220,7 +219,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	 */
 	@Deprecated
 	public void calculateClassLimitsWithWorker() {
-		classLimits = new TreeSet<Double>();
+		breaks = new TreeSet<Double>();
 
 		/**
 		 * Do we have all necessary information to calculate ClassLimits?
@@ -340,7 +339,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	public TreeSet<Double> getClassLimits() {
-		return classLimits;
+		return breaks;
 	}
 
 	/**
@@ -470,6 +469,7 @@ public class QuantitiesClassification extends FeatureClassification {
 					"value field and the normalizer field may not be equal.");
 
 		stats = staticStatsCache.get(getKey());
+		// stats = null;
 
 		if (stats == null) {
 			// Old style.. asking for ALL attributes
@@ -582,7 +582,8 @@ public class QuantitiesClassification extends FeatureClassification {
 	 */
 	private String getKey() {
 		return "ID=" + getStyledFeatures().getId() + " VALUE="
-				+ value_field_name + " NORM=" + normalizer_field_name;
+				+ value_field_name + " NORM=" + normalizer_field_name
+				+ " FILTER=" + getStyledFeatures().getFilter();
 	}
 
 	/**
@@ -628,7 +629,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		// classLimits_.add(classLimits_.first());
 		// }
 
-		this.classLimits = classLimits_;
+		this.breaks = classLimits_;
 		this.numClasses = classLimits_.size() - 1;
 
 		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));

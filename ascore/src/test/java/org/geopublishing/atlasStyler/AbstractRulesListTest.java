@@ -1,6 +1,8 @@
 package org.geopublishing.atlasStyler;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -12,9 +14,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
+import javax.xml.transform.TransformerException;
+
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.data.FeatureSource;
+import org.geotools.styling.PointSymbolizer;
+import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Style;
 import org.junit.After;
 import org.junit.Before;
@@ -31,6 +37,9 @@ import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
+
+import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 
 public class AbstractRulesListTest extends TestingClass {
 
@@ -237,6 +246,70 @@ public class AbstractRulesListTest extends TestingClass {
 		assertTrue(rlts.contains(RulesListType.SINGLE_SYMBOL_LINE));
 		assertTrue(rlts.contains(RulesListType.QUANTITIES_COLORIZED_LINE));
 		assertTrue(rlts.contains(RulesListType.UNIQUE_VALUE_LINE));
+	}
+
+	@Test
+	public void testClone_SinglePointSymbolRuleList() throws IOException,
+			TransformerException, CloneNotSupportedException {
+
+		// Create Symbolizer
+		Style style = FeatureUtil.createDefaultStyle(FeatureUtil
+				.createFeatureType(Point.class).getGeometryDescriptor());
+		PointSymbolizer symb = (PointSymbolizer) style.featureTypeStyles()
+				.get(0).rules().get(0).symbolizers().get(0);
+		assertNotNull(symb);
+
+		// Add it to RuleList
+		SinglePointSymbolRuleList list = new SinglePointSymbolRuleList("");
+		list.addSymbolizer(symb);
+
+		// Clone
+		SinglePointSymbolRuleList clonedList = list.clone(false);
+
+		PointSymbolizer psCloned = clonedList.getSymbolizers().get(0);
+		assertNotNull(psCloned);
+
+		PointSymbolizer ps = list.getSymbolizers().get(0);
+		assertNotNull(ps);
+
+		assertNotSame(ps, psCloned);
+	}
+
+	@Test
+	public void testClone_SinglePolygonSymbolRuleList() throws IOException,
+			TransformerException, CloneNotSupportedException {
+
+		// Create Symbolizer
+		Style style = FeatureUtil.createDefaultStyle(FeatureUtil
+				.createFeatureType(Polygon.class).getGeometryDescriptor());
+		PolygonSymbolizer symb = (PolygonSymbolizer) style.featureTypeStyles()
+				.get(0).rules().get(0).getSymbolizers()[0];
+		assertNotNull(symb);
+
+		// Add it to RuleList
+		SinglePolygonSymbolRuleList list = new SinglePolygonSymbolRuleList("");
+		list.addSymbolizer(symb);
+
+		// Clone
+		SinglePolygonSymbolRuleList clonedList = list.clone(false);
+
+		PolygonSymbolizer psCloned = clonedList.getSymbolizers().get(0);
+		assertNotNull(psCloned);
+
+		PolygonSymbolizer ps = list.getSymbolizers().get(0);
+		assertNotNull(ps);
+
+		assertNotSame(ps, psCloned);
+	}
+
+	@Test
+	public void testSaveToStyle() throws IOException, TransformerException {
+
+		Style style = FeatureUtil.createDefaultStyle(FeatureUtil
+				.createFeatureType(Point.class).getGeometryDescriptor());
+		File tempF = File.createTempFile("sld", "junit");
+		System.out.println(tempF);
+		StylingUtil.saveStyleToSld(style, tempF);
 	}
 
 }
