@@ -6,20 +6,30 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.TreeSet;
 
+import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
+import org.geotools.data.FeatureSource;
 import org.geotools.styling.Style;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsEqualTo;
 
 import schmitzm.geotools.FilterUtil;
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.junit.TestingClass;
+import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 
 public class AbstractRulesListTest extends TestingClass {
@@ -205,4 +215,28 @@ public class AbstractRulesListTest extends TestingClass {
 		assertEquals(tMax, textRulesList.getMaxScaleDenominator(), 0.00001);
 
 	}
+
+	@Test
+	public void testValuesFor() throws IOException {
+		FeatureSource<SimpleFeatureType, SimpleFeature> fs = TestingUtil.TestDatasetsVector.lineBrokenQuix
+				.getFeatureSource();
+
+		final SimpleFeatureType schema = fs.getSchema();
+
+		final Collection<String> numAttrs = FeatureUtil.getNumericalFieldNames(
+				schema, false);
+		final Collection<String> valueAttrs = FeatureUtil
+				.getValueFieldNames(schema);
+		assertEquals(0, numAttrs.size() - valueAttrs.size());
+
+		assertEquals(GeometryForm.LINE, FeatureUtil.getGeometryForm(schema));
+
+		List<RulesListType> rlts = Arrays
+				.asList(AbstractRulesList.RulesListType.valuesFor(
+						FeatureUtil.getGeometryForm(schema), schema));
+		assertTrue(rlts.contains(RulesListType.SINGLE_SYMBOL_LINE));
+		assertTrue(rlts.contains(RulesListType.QUANTITIES_COLORIZED_LINE));
+		assertTrue(rlts.contains(RulesListType.UNIQUE_VALUE_LINE));
+	}
+
 }

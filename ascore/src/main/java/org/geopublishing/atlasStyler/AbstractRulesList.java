@@ -382,7 +382,7 @@ public abstract class AbstractRulesList {
 
 			if (gf == GeometryForm.POINT) {
 				RulesListType[] rtls = new RulesListType[] { SINGLE_SYMBOL_POINT };
-				if (hasText)
+				if (hasText || hasNumeric)
 					rtls = LangUtil.extendArray(rtls, TEXT_LABEL,
 							UNIQUE_VALUE_POINT);
 				if (hasNumeric)
@@ -395,7 +395,7 @@ public abstract class AbstractRulesList {
 
 				RulesListType[] rtls = new RulesListType[] { SINGLE_SYMBOL_LINE };
 
-				if (hasText)
+				if (hasText || hasNumeric)
 					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_LINE,
 							TEXT_LABEL);
 				if (hasNumeric)
@@ -410,7 +410,7 @@ public abstract class AbstractRulesList {
 				RulesListType[] rtls = new RulesListType[] {
 						SINGLE_SYMBOL_POLYGON, SINGLE_SYMBOL_POINT_FOR_POLYGON, };
 
-				if (hasText)
+				if (hasText || hasNumeric)
 					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_POLYGON,
 							UNIQUE_VALUE_POINT_FOR_POLYGON, TEXT_LABEL);
 				if (hasNumeric)
@@ -427,7 +427,7 @@ public abstract class AbstractRulesList {
 						SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_LINE,
 						SINGLE_SYMBOL_POLYGON };
 
-				if (hasText)
+				if (hasText || hasNumeric)
 					rtls = LangUtil
 							.extendArray(rtls, UNIQUE_VALUE_POLYGON,
 									UNIQUE_VALUE_POLYGON, UNIQUE_VALUE_LINE,

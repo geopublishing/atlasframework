@@ -11,10 +11,16 @@ import javax.swing.JList;
 
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geotools.feature.FeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.SwingUtil;
 
+/**
+ * A {@link JComboBox} which offers a selection of RulesList. Only RLs that
+ * "make sense" for the given {@link FeatureType} are presented.
+ * 
+ */
 public class RulesListJComboBox extends JComboBox {
 
 	private final DefaultComboBoxModel model;
@@ -39,19 +45,6 @@ public class RulesListJComboBox extends JComboBox {
 						list, value, index, isSelected, cellHasFocus);
 
 				RulesListType rlt = (RulesListType) value;
-				// // proto.setText("<html>" + rlt.getTitle() + "</html>");
-				//
-				// proto.setText(proto.getText() + " " +
-				// rlt.getImageResLocation());
-				//
-				// JPanel label = new JPanel(new MigLayout(
-				// "gapx 0, gapy 0, wrap 2", "[grow]"));
-				//
-				// label.add(proto, "gapy 0");
-				// label.add(new JLabel(rlt.getImage()),
-				// "gapx 0, gapy 0, align right");
-				//
-				// return label;
 
 				proto.setText("<html>" + rlt.getTitle() + "</html>");
 
