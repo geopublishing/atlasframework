@@ -34,6 +34,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.lang.LimitedHashMap;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
 
@@ -144,6 +145,9 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	private DefaultComboBoxModel valueAttribsComboBoxModel;
 
+	private final LimitedHashMap<String, DynamicBin1D> staticStatsCache = new LimitedHashMap<String, DynamicBin1D>(
+			20);
+
 	/**
 	 * @param featureSource
 	 *            The featuresource to use for the statistics
@@ -194,7 +198,6 @@ public class QuantitiesClassification extends FeatureClassification {
 		 */
 		if (getMethod() == METHOD.MANUAL) {
 			LOGGER.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
-			// getStatistics();
 			return getClassLimits();
 		}
 		if (value_field_name == null)
@@ -397,20 +400,8 @@ public class QuantitiesClassification extends FeatureClassification {
 		return normalizer_field_name;
 	}
 
-	// ms-01.en
-
 	@Override
 	public int getNumClasses() {
-		// if (numClasses <= 0 && breaks != null) {
-		// LOGGER
-		// .debug("getNumCLasses() sets numClasses to ( breaks.size()-1 = "
-		// + (breaks.size() - 1)
-		// + " ) because would return "
-		// + numClasses + " otherwise");
-		// numClasses = breaks.size() - 1;
-		// }
-
-		// return breaks.size() - 1;
 		return numClasses;
 	}
 
@@ -477,6 +468,8 @@ public class QuantitiesClassification extends FeatureClassification {
 		if (normalizer_field_name == value_field_name)
 			throw new RuntimeException(
 					"value field and the normalizer field may not be equal.");
+
+		stats = staticStatsCache.get(getKey());
 
 		if (stats == null) {
 			// Old style.. asking for ALL attributes
@@ -573,12 +566,23 @@ public class QuantitiesClassification extends FeatureClassification {
 
 				stats = stats_local;
 
+				staticStatsCache.put(getKey(), stats);
+
 			} finally {
 				features.close(iterator);
 			}
 		}
 
 		return stats;
+	}
+
+	/**
+	 * @return A combination of StyledFeatures, Value_Field and Norm_Field. This
+	 *         String is the Key for the {@link #staticStatsCache}.
+	 */
+	private String getKey() {
+		return "ID=" + getStyledFeatures().getId() + " VALUE="
+				+ value_field_name + " NORM=" + normalizer_field_name;
 	}
 
 	/**

@@ -86,16 +86,32 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					Map<Object, Object> params = new HashMap<Object, Object>();
 					params.put("url", urlToShape);
 
+					final File fixFile = IOUtil.changeFileExt(openFile, "fix");
+					if (fixFile.canWrite()) {
+						if (fixFile.delete())
+							log.info("Deleted existing " + fixFile
+									+ ", so that it will be regenerated.");
+					}
+
+					final File qixFile = IOUtil.changeFileExt(openFile, "qix");
+					if (qixFile.canWrite()) {
+						if (qixFile.delete()) {
+							log.info("Deleted existing " + fixFile
+									+ ", so that it will be regenerated.");
+						}
+					}
+
 					/*
 					 * Test whether we have write permissions to create any .fix
 					 * file
 					 */
-					if (!IOUtil.changeFileExt(openFile, "fix").canWrite()) {
-						// If the file is not writable, we max not try to create
-						// an
-						// index. Even if the file already exists, it could be
-						// that
-						// the index has to be regenerated.
+					if (!IOUtil.canWriteOrCreate(qixFile)
+							|| !IOUtil.canWriteOrCreate(fixFile)) {
+						// If the file is not writable, we shall not try to
+						// create
+						// an index. Even if the file already exists, it could
+						// be
+						// that the index has to be regenerated.
 						params.put(
 								ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
 								Boolean.FALSE);

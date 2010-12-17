@@ -22,13 +22,15 @@ public abstract class FeatureClassification extends Classification {
 	protected Logger LOGGER = ASUtil.createLogger(this);
 
 	private StyledFeaturesInterface<?> styledFeatures;
-	
-	public FeatureClassification(
-			StyledFeaturesInterface<?> styledFeatures) {
-				this.setStyledFeatures(styledFeatures);
+
+	public FeatureClassification(StyledFeaturesInterface<?> styledFeatures) {
+		this.setStyledFeatures(styledFeatures);
 	}
-	
-	/** Remember to apply the associated Filter whenever you access the {@link FeatureCollection} **/
+
+	/**
+	 * Remember to apply the associated Filter whenever you access the
+	 * {@link FeatureCollection}
+	 **/
 	public StyledFeaturesInterface<?> getStyledFeatures() {
 		return styledFeatures;
 	}
