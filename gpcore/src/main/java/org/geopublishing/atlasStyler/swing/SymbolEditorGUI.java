@@ -57,9 +57,7 @@ import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.LegendIconFeatureRenderer;
-import skrueger.swing.CancelButton;
 import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
 import skrueger.swing.SmallButton;
 
 import com.vividsolutions.jts.geom.Point;
@@ -93,10 +91,6 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	private JButton jButtonLayerDown = null;
 
 	private JButton jButtonLayerUp = null;
-
-	private JButton jButtonOk = null;
-
-	private JButton jButtonCancel = null;
 
 	private JLabel jLabelPreviewIcon = null;
 
@@ -757,43 +751,44 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		return jButtonLayerUp;
 	}
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonOk() {
-		if (jButtonOk == null) {
-			jButtonOk = new OkButton(new AbstractAction() {
+	//
+	// /**
+	// * This method initializes jButton
+	// *
+	// * @return javax.swing.JButton
+	// */
+	// private JButton getJButtonOk() {
+	// if (jButtonOk == null) {
+	// jButtonOk = new OkButton(new AbstractAction() {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	// okClose();
+	// }
+	//
+	// });
+	// }
+	// return jButtonOk;
+	// }
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					okClose();
-				}
-
-			});
-		}
-		return jButtonOk;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonCancel() {
-		if (jButtonCancel == null) {
-			jButtonCancel = new CancelButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					cancelClose();
-				}
-
-			});
-		}
-		return jButtonCancel;
-	}
+	// /**
+	// * This method initializes jButton
+	// *
+	// * @return javax.swing.JButton
+	// */
+	// private JButton getJButtonCancel() {
+	// if (jButtonCancel == null) {
+	// jButtonCancel = new CancelButton(new AbstractAction() {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	// cancelClose();
+	// }
+	//
+	// });
+	// }
+	// return jButtonCancel;
+	// }
 
 	@Override
 	public void dispose() {
@@ -818,9 +813,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelButtons() {
-		schmitzm.swing.JPanel jPanelButtons = new JPanel(new MigLayout());
-		jPanelButtons.add(getJButtonOk(), "tag ok");
-		jPanelButtons.add(getJButtonCancel(), "tag cancel");
+		JPanel jPanelButtons = new JPanel(new MigLayout("", ""));
+		jPanelButtons.add(getOkButton(), "tag ok");
+		jPanelButtons.add(getCancelButton(), "tag cancel");
 		return jPanelButtons;
 	}
 

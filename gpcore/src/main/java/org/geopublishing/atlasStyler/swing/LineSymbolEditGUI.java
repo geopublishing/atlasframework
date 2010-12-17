@@ -53,9 +53,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -74,6 +71,8 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
@@ -100,25 +99,30 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 	private JPanel jPanelStroke;
 
-	private JLabel jLabelStrokeColor;
+	private final JLabel jLabelStrokeColor = new JLabel(
+			AtlasStyler.R("ColorLabel"));
 
-	private JLabel jLabelStrokeWidth;
+	private final JLabel jLabelStrokeWidth = new JLabel(
+			AtlasStyler.R("WidthLabel"));
 
-	private JLabel jLabelStrokeOpacity;
+	private final JLabel jLabelStrokeOpacity = new JLabel(
+			AtlasStyler.R("OpacityLabel"));
 
 	private ColorButton jButtonStrokeColor;
 
 	private JComboBox jComboBoxStrokeWidth;
 
-	private JComboBox jComboBoxStrokeOpacity;
+	private OpacityJComboBox jComboBoxStrokeOpacity;
 
-	private JPanel jPanelLineStyle = null;
+	// private JPanel jPanelLineStyle = null;
 
-	private JLabel jLabelLineJoin = null;
+	private final JLabel jLabelLineJoin = new JLabel(
+			AtlasStyler.R("LinejoinLabel"));
 
 	private JComboBox jComboBoxLinejoin = null;
 
-	private JLabel jLabelLinecap = null;
+	private final JLabel jLabelLinecap = new JLabel(
+			AtlasStyler.R("LinecapLabel"));
 
 	private JComboBox jComboBoxLineCap = null;
 
@@ -139,25 +143,11 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	}
 
 	private void initialize() {
-		GridBagConstraints gridBagConstraints12 = new GridBagConstraints();
-		gridBagConstraints12.gridx = 1;
-		gridBagConstraints12.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints12.gridy = 1;
-		GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-		gridBagConstraints1.gridx = 0;
-		gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-		gridBagConstraints1.insets = new Insets(5, 0, 5, 0);
-		gridBagConstraints1.gridwidth = 2;
-		gridBagConstraints1.gridy = 2;
-		GridBagConstraints gridBagConstraints = new GridBagConstraints();
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.gridwidth = 2;
-		gridBagConstraints.gridy = 0;
-		this.setSize(310, 280);
-		this.setLayout(new GridBagLayout());
-		this.add(getJPanelStroke(), gridBagConstraints);
-		this.add(getJPanelLineStyle(), gridBagConstraints1);
-		this.add(getJPanelDashArray(), gridBagConstraints12);
+		// this.setSize(310, 280);
+		this.setLayout(new MigLayout("wrap 1"));
+		this.add(getJPanelStroke(), "sgx");
+		// this.add(getJPanelLineStyle(), "sgx");
+		this.add(getJPanelDashArray(), "sgx");
 	}
 
 	/**
@@ -167,50 +157,24 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	 */
 	private JPanel getJPanelStroke() {
 		if (jPanelStroke == null) {
-			GridBagConstraints gridBagConstraints9 = new GridBagConstraints();
-			gridBagConstraints9.fill = GridBagConstraints.NONE;
-			gridBagConstraints9.gridy = 0;
-			gridBagConstraints9.weightx = 1.0;
-			gridBagConstraints9.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints9.gridx = 5;
-			GridBagConstraints gridBagConstraints8 = new GridBagConstraints();
-			gridBagConstraints8.gridx = 4;
-			gridBagConstraints8.insets = new Insets(0, 15, 0, 0);
-			gridBagConstraints8.gridy = 0;
-			jLabelStrokeOpacity = new JLabel();
-			jLabelStrokeOpacity.setText(AtlasStyler.R("OpacityLabel"));
-			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
-			gridBagConstraints7.fill = GridBagConstraints.NONE;
-			gridBagConstraints7.gridy = 0;
-			gridBagConstraints7.weightx = 1.0;
-			gridBagConstraints7.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints7.gridx = 3;
-			GridBagConstraints gridBagConstraints6 = new GridBagConstraints();
-			gridBagConstraints6.gridx = 2;
-			gridBagConstraints6.insets = new Insets(0, 15, 0, 0);
-			gridBagConstraints6.gridy = 0;
-			jLabelStrokeWidth = new JLabel();
-			jLabelStrokeWidth.setText(AtlasStyler.R("WidthLabel"));
-			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
-			gridBagConstraints5.gridx = 1;
-			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
-			gridBagConstraints5.gridy = 0;
-			GridBagConstraints gridBagConstraints4 = new GridBagConstraints();
-			gridBagConstraints4.gridx = 0;
-			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints4.gridy = 0;
-			jLabelStrokeColor = new JLabel();
-			jLabelStrokeColor.setText(AtlasStyler.R("ColorLabel"));
-			jPanelStroke = new JPanel();
-			jPanelStroke.setLayout(new GridBagLayout());
-			// jPanelStroke.setBorder(BorderFactory.createTitledBorder(""
-			// + "Stroke"));
-			jPanelStroke.add(jLabelStrokeColor, gridBagConstraints4);
-			jPanelStroke.add(getJButtonStrokeColor(), gridBagConstraints5);
-			jPanelStroke.add(jLabelStrokeWidth, gridBagConstraints6);
-			jPanelStroke.add(getJComboBoxStrokeWidth(), gridBagConstraints7);
-			jPanelStroke.add(jLabelStrokeOpacity, gridBagConstraints8);
-			jPanelStroke.add(getJComboBoxStrokeOpacity(), gridBagConstraints9);
+			jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+					.R("LineSymbolEdit.LineStyle.Title")));
+
+			jPanelStroke.add(jLabelStrokeColor, "split 6");
+			jPanelStroke.add(getJButtonStrokeColor(), "");
+			jPanelStroke.add(jLabelStrokeWidth, "gap unrel");
+			jPanelStroke.add(getJComboBoxStrokeWidth(), "");
+			jPanelStroke.add(jLabelStrokeOpacity, "gap unrel");
+			jPanelStroke.add(getJComboBoxStrokeOpacity(), "");
+
+			// wraps here
+			jPanelStroke.add(jLabelLineJoin, "split 5");
+			jPanelStroke.add(getJComboBoxLineJoin(), "");
+			jPanelStroke.add(new JLabel(), "growx 100");
+			jPanelStroke.add(jLabelLinecap, "");
+			jPanelStroke.add(getJComboBoxLineCap(), "");
+
 		}
 		return jPanelStroke;
 	}
@@ -225,16 +189,16 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jButtonStrokeColor = new ColorButton(new AbstractAction() {
 
 				@Override
-				public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(final ActionEvent e) {
 					Color color = null;
 
-					String substring = symbolizer.getStroke().getColor()
+					final String substring = symbolizer.getStroke().getColor()
 							.toString();
 					color = Color.decode(substring);
 
-					Color newColor = AVSwingUtil.showColorChooser(
-							LineSymbolEditGUI.this, AtlasStyler
-									.R("Stroke.ColorChooserDialog.Title"),
+					final Color newColor = AVSwingUtil.showColorChooser(
+							LineSymbolEditGUI.this,
+							AtlasStyler.R("Stroke.ColorChooserDialog.Title"),
 							color);
 
 					if (newColor != null) {
@@ -253,7 +217,8 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			if (symbolizer.getStroke().getColor() != null) {
+			if (symbolizer.getStroke() != null
+					&& symbolizer.getStroke().getColor() != null) {
 				jButtonStrokeColor.setColor(symbolizer.getStroke().getColor());
 			} else {
 				jButtonStrokeColor.setEnabled(false);
@@ -283,7 +248,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
 						symbolizer.getStroke().setWidth(
@@ -308,22 +273,22 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	 */
 	private JComboBox getJComboBoxStrokeOpacity() {
 		if (jComboBoxStrokeOpacity == null) {
-			jComboBoxStrokeOpacity = new JComboBox();
+			jComboBoxStrokeOpacity = new OpacityJComboBox();
 			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(
 					OPACITY_VALUES));
 
-			ASUtil.selectOrInsert(jComboBoxStrokeOpacity, symbolizer
-					.getStroke().getOpacity());
-
-			// else {
-			// jComboBoxStrokeOpacity.setEnabled(false);
-			// jLabelStrokeOpacity.setEnabled(false);
-			// }
+			if (symbolizer.getStroke() != null
+					&& symbolizer.getStroke().getOpacity() != null) {
+				Expression opacity = symbolizer.getStroke().getOpacity();
+				ASUtil.selectOrInsert(jComboBoxStrokeOpacity, opacity);
+			} else {
+				// set default?
+			}
 
 			jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
 						symbolizer.getStroke().setOpacity(
@@ -340,53 +305,28 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 		return jComboBoxStrokeOpacity;
 	}
 
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanelLineStyle() {
-		if (jPanelLineStyle == null) {
-			GridBagConstraints gridBagConstraints11 = new GridBagConstraints();
-			gridBagConstraints11.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints11.gridy = 0;
-			gridBagConstraints11.weightx = 1.0;
-			gridBagConstraints11.anchor = GridBagConstraints.WEST;
-			gridBagConstraints11.insets = new Insets(0, 5, 5, 5);
-			gridBagConstraints11.gridx = 3;
-			GridBagConstraints gridBagConstraints10 = new GridBagConstraints();
-			gridBagConstraints10.gridx = 2;
-			gridBagConstraints10.anchor = GridBagConstraints.EAST;
-			gridBagConstraints10.gridy = 0;
-			gridBagConstraints10.insets = new Insets(0, 5, 5, 5);
-			jLabelLinecap = new JLabel();
-			jLabelLinecap.setText(AtlasStyler.R("LinecapLabel"));
-			GridBagConstraints gridBagConstraints3 = new GridBagConstraints();
-			gridBagConstraints3.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints3.gridy = 0;
-			gridBagConstraints3.weightx = 1.0;
-			gridBagConstraints3.anchor = GridBagConstraints.WEST;
-			gridBagConstraints3.insets = new Insets(0, 5, 5, 5);
-			gridBagConstraints3.gridx = 1;
-			GridBagConstraints gridBagConstraints2 = new GridBagConstraints();
-			gridBagConstraints2.gridx = 0;
-			gridBagConstraints2.anchor = GridBagConstraints.EAST;
-			gridBagConstraints2.gridy = 0;
-			gridBagConstraints2.insets = new Insets(0, 5, 5, 5);
-			jLabelLineJoin = new JLabel();
-			jLabelLineJoin.setText(AtlasStyler.R("LinejoinLabel"));
-			jPanelLineStyle = new JPanel();
-			jPanelLineStyle.setLayout(new GridBagLayout());
-			jPanelLineStyle.setBorder(BorderFactory
-					.createTitledBorder(AtlasStyler
-							.R("LineSymbolEdit.LineStyle.Title")));
-			jPanelLineStyle.add(jLabelLineJoin, gridBagConstraints2);
-			jPanelLineStyle.add(getJComboBoxLineJoin(), gridBagConstraints3);
-			jPanelLineStyle.add(jLabelLinecap, gridBagConstraints10);
-			jPanelLineStyle.add(getJComboBoxLineCap(), gridBagConstraints11);
-		}
-		return jPanelLineStyle;
-	}
+	// /**
+	// * This method initializes jPanel
+	// *
+	// * @return javax.swing.JPanel
+	// */
+	// private JPanel getJPanelLineStyle() {
+	// if (jPanelLineStyle == null) {
+	// jLabelLinecap = new JLabel(AtlasStyler.R("LinecapLabel"));
+	// jLabelLineJoin = new JLabel(AtlasStyler.R("LinejoinLabel"));
+	// jPanelLineStyle = new JPanel(new MigLayout("", "grow"));
+	// jPanelLineStyle.setBorder(BorderFactory
+	// .createTitledBorder(AtlasStyler
+	// .R("LineSymbolEdit.LineStyle.Title")));
+	//
+	// jPanelLineStyle.add(jLabelLineJoin, "split 5");
+	// jPanelLineStyle.add(getJComboBoxLineJoin(), "");
+	// jPanelLineStyle.add(new JLabel(), "growx 100");
+	// jPanelLineStyle.add(jLabelLinecap, "");
+	// jPanelLineStyle.add(getJComboBoxLineCap(), "");
+	// }
+	// return jPanelLineStyle;
+	// }
 
 	/**
 	 * This method initializes jComboBox
@@ -396,26 +336,31 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	private JComboBox getJComboBoxLineJoin() {
 		if (jComboBoxLinejoin == null) {
 			jComboBoxLinejoin = new JComboBox(LINEJOIN_VALUES);
-			
+
 			/** Preset when started * */
 			String preset;
 			try {
-				Expression lineJoin = symbolizer.getStroke().getLineJoin();
+				final Expression lineJoin = symbolizer.getStroke()
+						.getLineJoin();
 				preset = ((Literal) lineJoin).toString();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				preset = LINEJOIN_VALUES[0];
 				symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(preset));
 			}
-			
-			// The combobox conatins the original Strings as used inside SLD, but the renderer puts nicer expressions there
+
+			// The combobox conatins the original Strings as used inside SLD,
+			// but the renderer puts nicer expressions there
 			jComboBoxLinejoin.setRenderer(new DefaultListCellRenderer() {
-				
+
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value,
-						int index, boolean isSelected, boolean cellHasFocus) {
-					Component p = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				public Component getListCellRendererComponent(final JList list,
+						final Object value, final int index,
+						final boolean isSelected, final boolean cellHasFocus) {
+					final Component p = super.getListCellRendererComponent(
+							list, value, index, isSelected, cellHasFocus);
 					if (p instanceof JLabel)
-						((JLabel)p).setText(ASUtil.R("AtlasStyler.LineJoin.Values."+value));
+						((JLabel) p).setText(ASUtil
+								.R("AtlasStyler.LineJoin.Values." + value));
 					return p;
 				}
 			});
@@ -424,10 +369,10 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxLinejoin.addItemListener(new ItemListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						Object itemStringValue = e.getItem();
+						final Object itemStringValue = e.getItem();
 						symbolizer.getStroke().setLineJoin(
 								ASUtil.ff2.literal(itemStringValue));
 
@@ -436,7 +381,6 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				}
 
 			});
-		
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
 
@@ -456,24 +400,27 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			/** Preset when started * */
 			String preset;
 			try {
-				Expression lineCap = symbolizer.getStroke().getLineCap();
+				final Expression lineCap = symbolizer.getStroke().getLineCap();
 				preset = ((Literal) lineCap).toString();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				preset = LINECAP_VALUES[0];
 				symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(preset));
 			}
 			jComboBoxLineCap.setSelectedItem(preset);
-			
-			
-			// The combobox conatins the original Strings as used inside SLD, but the renderer puts nicer expressions there
+
+			// The combobox conatins the original Strings as used inside SLD,
+			// but the renderer puts nicer expressions there
 			jComboBoxLineCap.setRenderer(new DefaultListCellRenderer() {
-				
+
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value,
-						int index, boolean isSelected, boolean cellHasFocus) {
-					Component p = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+				public Component getListCellRendererComponent(final JList list,
+						final Object value, final int index,
+						final boolean isSelected, final boolean cellHasFocus) {
+					final Component p = super.getListCellRendererComponent(
+							list, value, index, isSelected, cellHasFocus);
 					if (p instanceof JLabel)
-						((JLabel)p).setText(ASUtil.R("AtlasStyler.LineCap.Values."+value));
+						((JLabel) p).setText(ASUtil
+								.R("AtlasStyler.LineCap.Values." + value));
 					return p;
 				}
 			});
@@ -482,10 +429,10 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxLineCap.addItemListener(new ItemListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						Object itemStringValue = e.getItem();
+						final Object itemStringValue = e.getItem();
 						symbolizer.getStroke().setLineCap(
 								ASUtil.ff2.literal(itemStringValue));
 
@@ -494,7 +441,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				}
 
 			});
-		
+
 			SwingUtil.addMouseWheelForCombobox(jComboBoxLineCap);
 		}
 		return jComboBoxLineCap;
@@ -507,43 +454,24 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	 */
 	private JPanel getJPanelDashArray() {
 		if (jPanelDashArray == null) {
-			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
-			gridBagConstraints16.fill = GridBagConstraints.VERTICAL;
-			gridBagConstraints16.gridy = 0;
-			gridBagConstraints16.weightx = 1.0;
-			gridBagConstraints16.anchor = GridBagConstraints.WEST;
-			gridBagConstraints16.gridx = 3;
-			GridBagConstraints gridBagConstraints15 = new GridBagConstraints();
-			gridBagConstraints15.gridx = 2;
-			gridBagConstraints15.insets = new Insets(0, 15, 0, 5);
-			gridBagConstraints15.anchor = GridBagConstraints.EAST;
-			gridBagConstraints15.gridy = 0;
-			jLabelDashOffset = new JLabel();
-			jLabelDashOffset.setText(AtlasStyler
-					.R("LineSymbolEdit.DashedLine.DashOffset"));
-			GridBagConstraints gridBagConstraints14 = new GridBagConstraints();
-			gridBagConstraints14.gridx = 0;
-			gridBagConstraints14.gridy = 0;
-			jLabelDashPattern = new JLabel();
-			jLabelDashPattern.setText(AtlasStyler
-					.R("LineSymbolEdit.DashedLine.DashPattern"));
-			GridBagConstraints gridBagConstraints13 = new GridBagConstraints();
-			gridBagConstraints13.fill = GridBagConstraints.HORIZONTAL;
-			gridBagConstraints13.gridy = 0;
-			gridBagConstraints13.weightx = 1.0;
-			gridBagConstraints13.anchor = GridBagConstraints.WEST;
-			gridBagConstraints13.insets = new Insets(0, 5, 0, 0);
-			gridBagConstraints13.gridx = 1;
-			jPanelDashArray = new JPanel();
-			jPanelDashArray.setLayout(new GridBagLayout());
+			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
+			jLabelDashOffset = new JLabel(
+					AtlasStyler.R("LineSymbolEdit.DashedLine.DashOffset"));
+			jLabelDashPattern = new JLabel(
+					AtlasStyler.R("LineSymbolEdit.DashedLine.DashPattern"));
 			jPanelDashArray.setBorder(BorderFactory
 					.createTitledBorder(AtlasStyler
 							.R("LineSymbolEdit.DashedLine.Title")));
+			final JLabel lineExplanation = new JLabel(
+					AtlasStyler.R("LineSymbolEditGUI.dashPattern_tooltip"));
+
+			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
+
+			jPanelDashArray.add(jLabelDashPattern, "split 4");
 			jPanelDashArray.add(getJTextFieldDashPattern(),
-					gridBagConstraints13);
-			jPanelDashArray.add(jLabelDashPattern, gridBagConstraints14);
-			jPanelDashArray.add(jLabelDashOffset, gridBagConstraints15);
-			jPanelDashArray.add(getJComboBoxDashOffset(), gridBagConstraints16);
+					"grow x, width ::200");
+			jPanelDashArray.add(jLabelDashOffset, "gap unrel");
+			jPanelDashArray.add(getJComboBoxDashOffset(), "");
 		}
 		return jPanelDashArray;
 	}
@@ -562,11 +490,11 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jTextFieldDashPattern.addKeyListener(new KeyListener() {
 
 				@Override
-				public void keyPressed(KeyEvent e) {
+				public void keyPressed(final KeyEvent e) {
 				}
 
 				@Override
-				public void keyReleased(KeyEvent e) {
+				public void keyReleased(final KeyEvent e) {
 					if ((e.getKeyCode() == KeyEvent.VK_ENTER)
 							|| (e.getKeyCode() == KeyEvent.VK_TAB)) {
 						updateDashFromtextfield();
@@ -574,7 +502,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				}
 
 				@Override
-				public void keyTyped(KeyEvent e) {
+				public void keyTyped(final KeyEvent e) {
 				}
 
 			});
@@ -582,11 +510,11 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jTextFieldDashPattern.addFocusListener(new FocusListener() {
 
 				@Override
-				public void focusGained(FocusEvent e) {
+				public void focusGained(final FocusEvent e) {
 				}
 
 				@Override
-				public void focusLost(FocusEvent e) {
+				public void focusLost(final FocusEvent e) {
 					updateDashFromtextfield();
 				}
 
@@ -599,22 +527,22 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	}
 
 	private void updateDashFromtextfield() {
-		String text = jTextFieldDashPattern.getText();
+		final String text = jTextFieldDashPattern.getText();
 		if ((text == null) || (text.trim().equals(""))) {
 			symbolizer.getStroke().setDashArray(null);
 			firePropertyChange(PROPERTY_UPDATED, null, null);
 			return;
 		}
 
-		String[] strings = text.split(" ");
-		float[] dashArrays = new float[strings.length];
+		final String[] strings = text.split(" ");
+		final float[] dashArrays = new float[strings.length];
 		int count = 0;
-		for (String s : strings) {
+		for (final String s : strings) {
 			try {
-				float f = Float.valueOf(s);
+				final float f = Float.valueOf(s);
 				dashArrays[count] = f;
 				count++;
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				updateTextFieldDashPattern();
 				JOptionPane
 						.showMessageDialog(
@@ -629,10 +557,10 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	}
 
 	private void updateTextFieldDashPattern() {
-		float[] dashArrays = symbolizer.getStroke().getDashArray();
+		final float[] dashArrays = symbolizer.getStroke().getDashArray();
 		String text = "";
 		if (dashArrays != null)
-			for (float f : dashArrays) {
+			for (final float f : dashArrays) {
 				text += f + " ";
 			}
 		getJTextFieldDashPattern().setText(text);
@@ -651,7 +579,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 			jComboBoxDashOffset.addItemListener(new ItemListener() {
 
 				@Override
-				public void itemStateChanged(ItemEvent e) {
+				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
 						symbolizer.getStroke().setDashOffset(
