@@ -81,8 +81,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	private FeatureSource<SimpleFeatureType, SimpleFeature> getGeoObject(
 			URL localUrl) {
 
-		// URL localUrl = getUrl();
-
 		if (localUrl == null) {
 			final AtlasException atlasException = new AtlasException(
 					"Could not find ID:" + getId() + " / Title:'" + getTitle()
@@ -145,17 +143,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 										+ getFilename());
 					}
 					featureSource = dataStore.getFeatureSource(getTypeName());
-					// crs =
-					// featureSource.getSchema().getCoordinateReferenceSystem();
-					// if (deletePrj) {
-					// try {
-					// DataUtilities.urlToFile(
-					// DataUtilities.changeUrlExt(getUrl(),"prj") ).delete();
-					// }
-					// catch (Exception e) {
-					// ExceptionDialog.show("Deleting a temporary", e);
-					// }
-					// }
+
 					crs = featureSource.getSchema()
 							.getCoordinateReferenceSystem();
 				}
@@ -214,7 +202,7 @@ public class DpLayerVectorFeatureSourceShapefile extends
 					.get(ShpFileType.SHP)));
 
 			if (qixFile == null) {
-				log.warn("why is the QIX url null?");
+				log.warn("Why is the QIX url null?");
 			}
 
 			if (qixFile == null || !qixFile.exists()
@@ -244,8 +232,6 @@ public class DpLayerVectorFeatureSourceShapefile extends
 
 			return super.getCharset();
 		}
-
-		// LOGGER.debug("charset of "+getId()+" is "+charset);
 
 		return charset;
 	}

@@ -255,8 +255,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 							.getFeatureSource();
 
 					// TODO !??!
-					copyImportExport(targetDir, fs,
-							charset, crs, status);
+					copyImportExport(targetDir, fs, charset, crs, status);
 
 				} else {
 					/*******************************************************************
@@ -272,11 +271,19 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					final URL grxURL = IOUtil.changeUrlExt(urlToShape, "grx");
 					IOUtil.copyURLNoException(grxURL, targetDir, true);
 
-					final URL fixURL = IOUtil.changeUrlExt(urlToShape, "fix");
-					IOUtil.copyURLNoException(fixURL, targetDir, true);
-
-					final URL qixURL = IOUtil.changeUrlExt(urlToShape, "qix");
-					IOUtil.copyURLNoException(qixURL, targetDir, true);
+					/*
+					 * Do not copy the .qix or .fix, but rather recreate it
+					 * after // import. This avoids the * "WARNUNG: Old qix file
+					 * format; // this file format is deprecated; It is strongly
+					 * // recommended to regenerate it in new format." -bug
+					 */
+					// final URL qixURL = IOUtil.changeUrlExt(urlToShape,
+					// "qix");
+					// IOUtil.copyURLNoException(qixURL, targetDir, true);
+					//
+					// final URL fixURL = IOUtil.changeUrlExt(urlToShape,
+					// "fix");
+					// IOUtil.copyURLNoException(fixURL, targetDir, true);
 
 					final URL dbfURL = IOUtil.changeUrlExt(urlToShape, "dbf");
 					IOUtil.copyURLNoException(dbfURL, targetDir, true);
@@ -344,7 +351,7 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 
 		// Output Shapefile will have charset in UTF-8
 		if (charset != null)
-			outputFs.setStringCharset(charset );
+			outputFs.setStringCharset(charset);
 
 		if (forceCrs != null)
 			outputFs.forceSchemaCRS(forceCrs);
