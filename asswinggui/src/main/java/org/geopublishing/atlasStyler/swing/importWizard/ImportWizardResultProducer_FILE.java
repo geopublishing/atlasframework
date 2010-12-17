@@ -1,6 +1,5 @@
 package org.geopublishing.atlasStyler.swing.importWizard;
 
-import java.awt.Component;
 import java.io.File;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -9,14 +8,17 @@ import java.util.Map;
 
 import javax.swing.JScrollPane;
 
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
+import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
+import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
@@ -28,11 +30,13 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.io.GeoImportUtil;
 import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.StyledFS;
 
 public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 		implements WizardResultProducer {
+
+	final static Logger log = Logger
+			.getLogger(ImportWizardResultProducer_FILE.class);
 
 	public ImportWizardResultProducer_FILE() {
 		super();
@@ -149,6 +153,34 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 						dataStore.forceSchemaCRS(GeoImportUtil.getDefaultCRS());
 					}
 
+					/**
+					 * Check for broken/old .qix index file and try to recreate
+					 * it.
+					 */
+					if (GeoImportUtil.isOldBrokenQix(dataStore)) {
+						try {
+							log.info(IOUtil.escapePath(urlToShape)
+									+ " has a broken .qix file. Trying to recreate the quad tree...");
+							IndexedShapefileDataStore idxShpDs = (IndexedShapefileDataStore) dataStore;
+							// idxShpDs.dispose();
+							// dataStore = (ShapefileDataStore) DataStoreFinder
+							// .getDataStore(params);
+							// idxShpDs = (IndexedShapefileDataStore) dataStore;
+							try {
+								idxShpDs.createSpatialIndex();
+							} catch (Exception e) {
+								throw new IllegalStateException(
+										"The Shapefile has a broken .qix file and a new one can not be created. Please delete or fix the .qix file manually.",
+										e);
+							}
+							throw new AtlasImportException(
+									"The Shapefile had a broken .qix file which has now been repaired. Please reimport the Shapefile.");
+
+						} finally {
+							dataStore.dispose();
+						}
+					}
+
 					// After optionally forcing the CRS we get the FS
 					FeatureSource<SimpleFeatureType, SimpleFeature> fs = dataStore
 							.getFeatureSource(dataStore.getTypeNames()[0]);
@@ -199,120 +231,135 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 		return result;
 	}
-
-	/**
-	 * Basic method to add a Shapefile to the legend/map
-	 * 
-	 * @param openFile
-	 *            the file to open. May be a ZIP that contains a Shape.
-	 */
-	public static boolean addShapeLayer(Component owner, File openFile,
-			AtlasStylerGUI asg) {
-		try {
-			URL urlToShape;
-
-			if (openFile.getName().toLowerCase().endsWith("zip")) {
-				urlToShape = GeoImportUtil.uncompressShapeZip(openFile);
-			} else {
-				urlToShape = DataUtilities.fileToURL(openFile);
-			}
-
-			Map<Object, Object> params = new HashMap<Object, Object>();
-			params.put("url", urlToShape);
-
-			/*
-			 * Test whether we have write permissions to create any .fix file
-			 */
-			if (!IOUtil.changeFileExt(openFile, "fix").canWrite()) {
-				// If the file is not writable, we max not try to create an
-				// index. Even if the file already exists, it could be that
-				// the index has to be regenerated.
-				params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
-						Boolean.FALSE);
-			}
-
-			ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
-					.getDataStore(params);
-
-			if (dataStore == null)
-				return false;
-
-			try {
-
-				Charset stringCharset = GeoImportUtil.readCharset(urlToShape);
-				dataStore.setStringCharset(stringCharset);
-
-				// test for any .prj file
-				CoordinateReferenceSystem prjCRS = null;
-				File prjFile = IOUtil.changeFileExt(openFile, "prj");
-				if (prjFile.exists()) {
-					try {
-						prjCRS = GeoImportUtil.readProjectionFile(prjFile);
-					} catch (Exception e) {
-						prjCRS = null;
-						if (!AVSwingUtil
-								.askOKCancel(
-										owner,
-										AtlasStyler
-												.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
-														e.getMessage(),
-														prjFile.getName(),
-														GeoImportUtil
-																.getDefaultCRS()
-																.getName())))
-							dataStore.dispose();
-						return false;
-					}
-				} else {
-					if (!AVSwingUtil
-							.askOKCancel(
-									owner,
-									AtlasStyler
-											.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
-													prjFile.getName(),
-													GeoImportUtil
-															.getDefaultCRS()
-															.getName())))
-						dataStore.dispose();
-					return false;
-				}
-
-				if (prjCRS == null) {
-					dataStore.forceSchemaCRS(GeoImportUtil.getDefaultCRS());
-				}
-
-				// After optionally forcing the CRS we get the FS
-				FeatureSource<SimpleFeatureType, SimpleFeature> fs = dataStore
-						.getFeatureSource(dataStore.getTypeNames()[0]);
-
-				File sldFile = IOUtil.changeFileExt(openFile, "sld");
-
-				// Handle if .SLD exists instead
-				if (!sldFile.exists()
-						&& IOUtil.changeFileExt(openFile, "SLD").exists()) {
-					AVSwingUtil.showMessageDialog(owner,
-							"Change the file ending to .sld and try again!"); // i8n
-					return false;
-				}
-
-				StyledFS styledFS = new StyledFS(fs, sldFile,
-						urlToShape.toString());
-
-				asg.addOpenDatastore(styledFS.getId(), dataStore);
-
-				return asg.addLayer(styledFS);
-
-			} catch (Exception e) {
-				dataStore.dispose();
-				throw e;
-			}
-
-		} catch (Exception e2) {
-			// LOGGER.info(e2);
-			ExceptionDialog.show(owner, e2);
-			return false;
-		}
-
-	}
+	//
+	// /**
+	// * Basic method to add a Shapefile to the legend/map
+	// *
+	// * @param openFile
+	// * the file to open. May be a ZIP that contains a Shape.
+	// */
+	// public static boolean addShapeLayer(Component owner, File openFile,
+	// AtlasStylerGUI asg) {
+	// try {
+	// URL urlToShape;
+	//
+	// if (openFile.getName().toLowerCase().endsWith("zip")) {
+	// urlToShape = GeoImportUtil.uncompressShapeZip(openFile);
+	// } else {
+	// urlToShape = DataUtilities.fileToURL(openFile);
+	// }
+	//
+	// Map<Object, Object> params = new HashMap<Object, Object>();
+	// params.put("url", urlToShape);
+	//
+	// /*
+	// * Test whether we have write permissions to create any .fix file
+	// */
+	// if (!IOUtil.changeFileExt(openFile, "fix").canWrite()) {
+	// // If the file is not writable, we max not try to create an
+	// // index. Even if the file already exists, it could be that
+	// // the index has to be regenerated.
+	// params.put(ShapefileDataStoreFactory.CREATE_SPATIAL_INDEX.key,
+	// Boolean.FALSE);
+	// }
+	//
+	// ShapefileDataStore dataStore = (ShapefileDataStore) DataStoreFinder
+	// .getDataStore(params);
+	//
+	// if (dataStore == null)
+	// return false;
+	//
+	// try {
+	//
+	// Charset stringCharset = GeoImportUtil.readCharset(urlToShape);
+	// dataStore.setStringCharset(stringCharset);
+	//
+	// // test for any .prj file
+	// CoordinateReferenceSystem prjCRS = null;
+	// File prjFile = IOUtil.changeFileExt(openFile, "prj");
+	// if (prjFile.exists()) {
+	// try {
+	// prjCRS = GeoImportUtil.readProjectionFile(prjFile);
+	// } catch (Exception e) {
+	// prjCRS = null;
+	// if (!AVSwingUtil
+	// .askOKCancel(
+	// owner,
+	// AtlasStyler
+	// .R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
+	// e.getMessage(),
+	// prjFile.getName(),
+	// GeoImportUtil
+	// .getDefaultCRS()
+	// .getName())))
+	// dataStore.dispose();
+	// return false;
+	// }
+	// } else {
+	// if (!AVSwingUtil
+	// .askOKCancel(
+	// owner,
+	// AtlasStyler
+	// .R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
+	// prjFile.getName(),
+	// GeoImportUtil
+	// .getDefaultCRS()
+	// .getName())))
+	// dataStore.dispose();
+	// return false;
+	// }
+	//
+	// if (prjCRS == null) {
+	// dataStore.forceSchemaCRS(GeoImportUtil.getDefaultCRS());
+	// }
+	//
+	// /**
+	// * Check for broken/old .qix index file and try to recreate it.
+	// */
+	// if (GeoImportUtil.isOldBrokenQix(dataStore)) {
+	// try {
+	// log.info(IOUtil.escapePath(urlToShape)
+	// + " has a broken .qix file. Trying to recreate the quad tree...");
+	// ((IndexedShapefileDataStore) dataStore)
+	// .createSpatialIndex();
+	// } catch (Exception e) {
+	// throw new IllegalStateException(
+	// "The Shapefile has a broken .qix file and a new one can not be created. Please delte or fix the .qix file manually.");
+	// }
+	// }
+	//
+	// // After optionally forcing the CRS we get the FS
+	// FeatureSource<SimpleFeatureType, SimpleFeature> fs = dataStore
+	// .getFeatureSource(dataStore.getTypeNames()[0]);
+	//
+	// File sldFile = IOUtil.changeFileExt(openFile, "sld");
+	//
+	// // Handle if .SLD exists instead
+	// if (!sldFile.exists()
+	// && IOUtil.changeFileExt(openFile, "SLD").exists()) {
+	// AVSwingUtil.showMessageDialog(owner,
+	// "Change the file ending to .sld and try again!"); // i8n
+	// return false;
+	// }
+	//
+	// StyledFS styledFS = new StyledFS(fs, sldFile,
+	// urlToShape.toString());
+	//
+	// asg.addOpenDatastore(styledFS.getId(), dataStore);
+	//
+	// return asg.addLayer(styledFS);
+	//
+	// } catch (Exception e) {
+	// dataStore.dispose();
+	// throw e;
+	// }
+	//
+	// } catch (Exception e2) {
+	// // LOGGER.info(e2);
+	// ExceptionDialog.show(owner, e2);
+	// return false;
+	// }
+	//
+	// }
 
 }

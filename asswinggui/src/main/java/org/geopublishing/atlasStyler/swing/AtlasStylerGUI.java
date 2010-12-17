@@ -56,7 +56,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
-import org.geopublishing.atlasStyler.swing.importWizard.ImportWizardResultProducer_FILE;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -116,7 +115,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
 			getStylerMapView().getMapManager());
 
-	private HashMap<String, DataStore> openDatastores = new HashMap<String, DataStore>();
+	private final HashMap<String, DataStore> openDatastores = new HashMap<String, DataStore>();
 
 	/**
 	 * This is the default constructor
@@ -228,7 +227,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					});
 			fileMenu.add(mi);
 		}
-		
 
 		/**
 		 * MenuItem to create a new language
@@ -239,15 +237,18 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String resPath = IOUtil.escapePath( System.getProperty("user.home")
-						+ File.separator + ".Geopublishing" );
+				String resPath = IOUtil.escapePath(System
+						.getProperty("user.home")
+						+ File.separator
+						+ ".Geopublishing");
 				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
 						AtlasStylerGUI.this, true, AsSwingUtil.R(
 								"TranslateSoftwareDialog.Explanation.Html",
 								resPath, SystemUtils.IS_OS_WINDOWS ? "bat"
 										: "sh"));
 				manLanguagesFrame.setRootPath(new File(resPath));
-				manLanguagesFrame.setTitle(ASUtil.R("TranslateSoftwareDialog.Title"));
+				manLanguagesFrame.setTitle(ASUtil
+						.R("TranslateSoftwareDialog.Title"));
 				manLanguagesFrame.setPreferredSize(new Dimension(780, 450));
 				manLanguagesFrame.setVisible(true);
 			}
@@ -655,25 +656,26 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				public void run() {
 					AtlasStylerGUI asg = new AtlasStylerGUI();
 
-					// TODO Switch to Apache Commons-CLI
+					// // TODO Switch to Apache Commons-CLI
 					if (args.length != 0) {
-						for (String param : args) {
-
-							if ((param.startsWith("\""))
-									&& (param.endsWith("\""))) {
-								param = param.substring(1, param.length() - 1);
-							}
-
-							File fileParamter = new File(param);
-
-							if (fileParamter.exists()) {
-								LOGGER.info("Opening command line argument "
-										+ param + " as file.");
-								ImportWizardResultProducer_FILE.addShapeLayer(
-										asg, fileParamter, asg);
-							}
-						}
-
+						LOGGER.warn("Sorry, command line arguments are ignored in this version. Please contact geopublishing.org if you need this function.");
+						// for (String param : args) {
+						//
+						// if ((param.startsWith("\""))
+						// && (param.endsWith("\""))) {
+						// param = param.substring(1, param.length() - 1);
+						// }
+						//
+						// File fileParamter = new File(param);
+						//
+						// if (fileParamter.exists()) {
+						// LOGGER.info("Opening command line argument "
+						// + param + " as file.");
+						// new ImportWizardResultProducer_FILE()..addLayer(
+						// asg, fileParamter, asg);
+						// }
+						// }
+						//
 					}
 					asg.setVisible(true);
 				}
