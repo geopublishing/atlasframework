@@ -74,6 +74,9 @@ import skrueger.swing.ColorButton;
  * 
  */
 public class TextSymbolizerEditGUI extends AbstractEditGUI {
+	private static final JLabel LinePlacementPerpendicularGap = new JLabel(
+			AtlasStyler.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
+
 	/**
 	 * The “font-style” SvgParameter element gives the style to use for a font.
 	 * The allowed values are “normal”, “italic”, and “oblique”.
@@ -991,11 +994,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 		// PerpendicularOffset JCombobox
 		{
-			jPanelLinePlacement
-					.add(new JLabel(
-							AtlasStyler
-									.R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
-							"split 2, gap right rel");
+			jPanelLinePlacement.add(LinePlacementPerpendicularGap,
+					"split 2, gap right rel");
 			jPanelLinePlacement.add(
 					getJComboBoxLinePlacementPerpendicularGap(),
 					"left, gap right unrel");
@@ -1060,6 +1060,14 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 															.isSelected())
 													.toString());
 
+							LinePlacementPerpendicularGap
+									.setEnabled(!getJCheckBoxLinePlacementVendorOptionFollowLine()
+											.isSelected());
+							getJComboBoxLinePlacementPerpendicularGap()
+									.setEnabled(
+											!getJCheckBoxLinePlacementVendorOptionFollowLine()
+													.isSelected());
+
 							rulesList.fireEvents(new RuleChangedEvent(
 									"line placement folloLine changed ",
 									rulesList));
@@ -1116,37 +1124,48 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		return jCheckBoxVendorOptionLabelAllGroup;
 	}
 
+	JComboBox jComboBoxLinePlacementPerpendicularGap;
+
 	private JComboBox getJComboBoxLinePlacementPerpendicularGap() {
-		JComboBox jComboBoxLinePlacementPerpendicularGap;
-		jComboBoxLinePlacementPerpendicularGap = new JComboBox(
-				new DefaultComboBoxModel(POINTDISPLACEMENT_VALUES));
-		jComboBoxLinePlacementPerpendicularGap
-				.setRenderer(POINTDISPLACEMENT_VALUES_RENDERER);
+		if (jComboBoxLinePlacementPerpendicularGap == null) {
 
-		jComboBoxLinePlacementPerpendicularGap
-				.addItemListener(new ItemListener() {
+			jComboBoxLinePlacementPerpendicularGap = new JComboBox(
+					new DefaultComboBoxModel(POINTDISPLACEMENT_VALUES));
+			jComboBoxLinePlacementPerpendicularGap
+					.setRenderer(POINTDISPLACEMENT_VALUES_RENDERER);
 
-					@Override
-					public void itemStateChanged(ItemEvent e) {
-						if (e.getStateChange() == ItemEvent.SELECTED) {
+			jComboBoxLinePlacementPerpendicularGap
+					.setEditable(!getJCheckBoxLinePlacementVendorOptionFollowLine()
+							.isSelected());
+			LinePlacementPerpendicularGap
+					.setEnabled(!getJCheckBoxLinePlacementVendorOptionFollowLine()
+							.isSelected());
 
-							// Avoid nulls and fill with default if needed
-							final LinePlacement lPlacement = (LinePlacement) rulesList
-									.getSymbolizer().getLabelPlacement();
+			jComboBoxLinePlacementPerpendicularGap
+					.addItemListener(new ItemListener() {
 
-							lPlacement.setPerpendicularOffset(ASUtil.ff2
-									.literal(e.getItem()));
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+							if (e.getStateChange() == ItemEvent.SELECTED) {
 
-							rulesList
-									.fireEvents(new RuleChangedEvent(
-											"line placement PerpendicularOffset changed",
-											rulesList));
+								// Avoid nulls and fill with default if needed
+								final LinePlacement lPlacement = (LinePlacement) rulesList
+										.getSymbolizer().getLabelPlacement();
+
+								lPlacement.setPerpendicularOffset(ASUtil.ff2
+										.literal(e.getItem()));
+
+								rulesList
+										.fireEvents(new RuleChangedEvent(
+												"line placement PerpendicularOffset changed",
+												rulesList));
+							}
 						}
-					}
-				});
+					});
 
-		SwingUtil
-				.addMouseWheelForCombobox(jComboBoxLinePlacementPerpendicularGap);
+			SwingUtil
+					.addMouseWheelForCombobox(jComboBoxLinePlacementPerpendicularGap);
+		}
 		return jComboBoxLinePlacementPerpendicularGap;
 	}
 
@@ -1366,6 +1385,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 			if (group != null)
 				jCheckBoxGroup.setSelected(Boolean.valueOf(group));
+
+			getJCheckBoxVendorOptionLabelAllGroup().setEnabled(
+					jCheckBoxGroup.isSelected());
 
 			jCheckBoxGroup.addItemListener(new ItemListener() {
 
