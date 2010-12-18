@@ -16,8 +16,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import schmitzm.junit.TestingClass;
+import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
 import skrueger.geotools.StyledFS;
+
 public class TextSymbolizerEditGUITest extends TestingClass {
 	private static StyledFS STYLED_FS;
 	private static TextRuleList tr;
@@ -27,7 +29,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 	public void befire() throws IOException {
 		STYLED_FS = TestDatasetsVector.countryShp.getStyledFS();
 		tr = new TextRuleList(STYLED_FS, true);
-//		tr.addDefaultClass();
+		// tr.addDefaultClass();
 		atlasStyler = new AtlasStyler(STYLED_FS);
 
 	}
@@ -49,10 +51,40 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 		atlasStyler.setFonts(fonts);
 
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
-				tr, atlasStyler, TestDatasetsVector.countryShp.getFeatureCollection());
+				tr, atlasStyler,
+				TestDatasetsVector.countryShp.getFeatureCollection());
 		JComboBox jComboBoxFont = textSymbolizerEditGUI.getJComboBoxFont();
 		assertEquals("default number of fonts is 5", 5,
 				jComboBoxFont.getItemCount());
+	}
+
+	@Test
+	public void testTextSymbolizerEditGUIPolygon() throws Throwable {
+		if (!TestingUtil.isInteractive())
+			return;
+
+		TextRuleList tRl = atlasStyler.getRlf().createTextRulesList(true);
+
+		TextSymbolizerEditGUI tsGui = new TextSymbolizerEditGUI(tRl,
+				atlasStyler, null);
+
+		TestingUtil.testGui(tsGui, 1);
+	}
+
+	@Test
+	public void testTextSymbolizerEditGUILine() throws Throwable {
+		if (!TestingUtil.isInteractive())
+			return;
+
+		STYLED_FS = TestDatasetsVector.lineBrokenQuix.getStyledFS();
+		atlasStyler = new AtlasStyler(STYLED_FS);
+
+		TextRuleList tRl = atlasStyler.getRlf().createTextRulesList(true);
+
+		TextSymbolizerEditGUI tsGui = new TextSymbolizerEditGUI(tRl,
+				atlasStyler, null);
+
+		TestingUtil.testGui(tsGui, 500);
 	}
 
 }

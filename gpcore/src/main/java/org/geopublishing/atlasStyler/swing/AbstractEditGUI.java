@@ -30,6 +30,11 @@ public abstract class AbstractEditGUI extends JPanel {
 	final public static Float[] HALO_RADIUS_VALUES = new Float[] { 0.f, .5f,
 			1f, 1.5f, 2.f, 2.5f, 3.f, 4f, 5f };
 
+	/** Values used or JCOmboBoxes oering a SpaceAround setting **/
+	final public static Integer[] SPACE_AROUND_VALUES = new Integer[] { 0, 1,
+			2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60,
+			65, 70, 75, 80, 85, 90, 95, 100 };
+
 	/** A renderer designed to visualize the Halo Radius values properly **/
 	final public static DefaultListCellRenderer HALO_RADIUS_VALUES_RENDERER = new DefaultListCellRenderer() {
 

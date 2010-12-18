@@ -1129,7 +1129,7 @@ public class ASUtil {
 		final int indexOf = model.getIndexOf(doubleVal);
 
 		if (indexOf < 0) {
-			LOGGER.info("The float expression " + doubleVal
+			LOGGER.info("The Double expression " + doubleVal
 					+ " had to be inserted into the ComboBox");
 
 			final int size = model.getSize();
@@ -1151,6 +1151,38 @@ public class ASUtil {
 			}
 		}
 		model.setSelectedItem(doubleVal);
+	}
+
+	public static void selectOrInsert(final JComboBox comboBox,
+			Integer integerVal) {
+
+		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
+				.getModel());
+		final int indexOf = model.getIndexOf(integerVal);
+
+		if (indexOf < 0) {
+			LOGGER.info("The integer expression " + integerVal
+					+ " had to be inserted into the ComboBox");
+
+			final int size = model.getSize();
+			final Set<Integer> integers = new TreeSet<Integer>();
+			integers.add(integerVal);
+
+			for (int i = 0; i < size; i++) {
+				final Integer elementAt = (Integer) model.getElementAt(i);
+				if (elementAt != null) {
+					integers.add(elementAt);
+				} else {
+					LOGGER.warn("A null in the JComboBoxmodel has been ignored");
+				}
+			}
+			model.removeAllElements();
+
+			for (final Integer f : integers) {
+				model.addElement(f);
+			}
+		}
+		model.setSelectedItem(integerVal);
 	}
 
 	public static void selectOrInsert(final JComboBox comboBox,

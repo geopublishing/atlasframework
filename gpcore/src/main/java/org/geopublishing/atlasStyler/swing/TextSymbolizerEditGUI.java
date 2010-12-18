@@ -26,6 +26,7 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -151,11 +152,16 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		final Style style = createPreviewStyle();
 
 		// There is always only one layer in the preview
-		final MapLayer mapLayer = previewMapPane.getMapContext().getLayer(0);
+		final MapContext mapContext = previewMapPane.getMapContext();
+
+		// Is preview disabled?
+		if (mapContext.getLayerCount() == 0)
+			return;
+
+		final MapLayer mapLayer = mapContext.getLayer(0);
 
 		// This is un-nice but needed to reflect all changes automatically
-		previewMapPane.getLocalRenderer().setContext(
-				previewMapPane.getMapContext());
+		previewMapPane.getLocalRenderer().setContext(mapContext);
 
 		// We **have to** make a copy of the Style, otherwise the changes to
 		// the font are only reflected after zooming
@@ -165,6 +171,10 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	}
 
 	private final TextRuleList rulesList;
+
+	private JComboBox jComboBoxSpaceAround;
+
+	private JCheckBox jCheckBoxGroup;
 
 	/**
 	 * This is the default constructor. It takes the {@link TextRuleList} that
@@ -817,6 +827,25 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				jPanelLabelDefinition.add(priorityLabel);
 				jPanelLabelDefinition.add(getComboBoxPriorityField(), "sgx1");
 			}
+
+			{
+				jPanelLabelDefinition
+						.add(new JLabel(AtlasStyler.R("groupTextLabels")),
+								"split 2");
+				jPanelLabelDefinition.add(getJCheckBoxGroup());
+
+				{
+					// <VendorOption name="labelAllGroup">true</VendorOption>
+					// jPanelLabelDefinition
+					// .add(new JLabel(),
+					// "right, split 2, gap right rel");
+					jPanelLabelDefinition.add(
+							getJCheckBoxVendorOptionLabelAllGroup(),
+							"left, gap right unrel");
+				}
+
+			}
+
 		}
 
 		return jPanelLabelDefinition;
@@ -918,7 +947,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * A {@link JPanel} to define Line placement settings
 	 */
 	private JPanel getJPanelLinePlacement() {
-		JPanel jPanelPlacement = new JPanel(new MigLayout(
+		JPanel jPanelLinePlacement = new JPanel(new MigLayout(
 				"nogrid, fillx, gap 1, inset 1"),
 				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
 		{
@@ -949,17 +978,142 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			}
 		}
 
+		// TODO InitialGap JCombobox
+		// {
+		// jPanelLinePlacement
+		// .add(new JLabel(
+		// AtlasStyler
+		// .R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
+		// "right, split 2, gap right rel");
+		// jPanelLinePlacement.add(getJComboBoxLinePlacementPerpendicularGap(),
+		// "left, gap right unrel");
+		// }
+
 		// PerpendicularOffset JCombobox
 		{
-			jPanelPlacement
+			jPanelLinePlacement
 					.add(new JLabel(
 							AtlasStyler
 									.R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
-							"right, split 2, gap right rel");
-			jPanelPlacement.add(getJComboBoxLinePlacementPerpendicularGap(),
+							"split 2, gap right rel");
+			jPanelLinePlacement.add(
+					getJComboBoxLinePlacementPerpendicularGap(),
 					"left, gap right unrel");
 		}
-		return jPanelPlacement;
+
+		{
+			// <VendorOption name="followLine">true</VendorOption>
+			jPanelLinePlacement
+					.add(new JLabel(
+							AtlasStyler
+									.R("TextRuleListGUI.LinePlacement.VendorOptionFollowLine")),
+							"right, split 2, gap right rel");
+			jPanelLinePlacement.add(
+					getJCheckBoxLinePlacementVendorOptionFollowLine(),
+					"left, gap right unrel");
+		}
+
+		// TODO InitialGap JCombobox
+		// {
+		// jPanelLinePlacement
+		// .add(new JLabel(
+		// AtlasStyler
+		// .R("TextRuleListGUI.LinePlacement.PerpendicularGap")),
+		// "right, split 2, gap right rel");
+		// jPanelLinePlacement.add(getJComboBoxLinePlacementPerpendicularGap(),
+		// "left, gap right unrel");
+		// }
+		return jPanelLinePlacement;
+	}
+
+	JCheckBox jComboBoxLinePlacementVendorOptionFollowLine;
+
+	private JCheckBox jCheckBoxVendorOptionLabelAllGroup;
+
+	private JCheckBox getJCheckBoxLinePlacementVendorOptionFollowLine() {
+
+		if (jComboBoxLinePlacementVendorOptionFollowLine == null) {
+
+			jComboBoxLinePlacementVendorOptionFollowLine = new JCheckBox();
+			// Avoid nulls and fill with default if needed
+			boolean followB = false;
+
+			String follow = rulesList.getSymbolizer().getOptions()
+					.get("followLine");
+			if (follow != null) {
+				followB = Boolean.valueOf(follow);
+			}
+			jComboBoxLinePlacementVendorOptionFollowLine.setSelected(followB);
+
+			jComboBoxLinePlacementVendorOptionFollowLine
+					.addItemListener(new ItemListener() {
+
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+
+							rulesList
+									.getSymbolizer()
+									.getOptions()
+									.put("followLine",
+											Boolean.valueOf(
+													jComboBoxLinePlacementVendorOptionFollowLine
+															.isSelected())
+													.toString());
+
+							rulesList.fireEvents(new RuleChangedEvent(
+									"line placement folloLine changed ",
+									rulesList));
+						}
+					});
+
+		}
+		return jComboBoxLinePlacementVendorOptionFollowLine;
+	}
+
+	private JCheckBox getJCheckBoxVendorOptionLabelAllGroup() {
+
+		if (jCheckBoxVendorOptionLabelAllGroup == null) {
+
+			jCheckBoxVendorOptionLabelAllGroup = new JCheckBox(
+					AtlasStyler
+							.R("TextRuleListGUI.VendorOptionLabelAllGroup_ExpensiveGrouping"));
+
+			jCheckBoxVendorOptionLabelAllGroup.setEnabled(jCheckBoxGroup
+					.isSelected());
+
+			// Avoid nulls and fill with default if needed
+			boolean followB = false;
+
+			String follow = rulesList.getSymbolizer().getOptions()
+					.get("labelAllGroup");
+			if (follow != null) {
+				followB = Boolean.valueOf(follow);
+			}
+			jCheckBoxVendorOptionLabelAllGroup.setSelected(followB);
+
+			jCheckBoxVendorOptionLabelAllGroup
+					.addItemListener(new ItemListener() {
+
+						@Override
+						public void itemStateChanged(ItemEvent e) {
+
+							rulesList
+									.getSymbolizer()
+									.getOptions()
+									.put("labelAllGroup",
+											Boolean.valueOf(
+													jCheckBoxVendorOptionLabelAllGroup
+															.isSelected())
+													.toString());
+
+							rulesList.fireEvents(new RuleChangedEvent(
+									"line placement folloLine changed ",
+									rulesList));
+						}
+					});
+
+		}
+		return jCheckBoxVendorOptionLabelAllGroup;
 	}
 
 	private JComboBox getJComboBoxLinePlacementPerpendicularGap() {
@@ -1032,8 +1186,11 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	 * 
 	 * @param features
 	 */
-	private XMapPane getPreviewMapPane(
+	private JPanel getPreviewMapPane(
 			FeatureCollection<SimpleFeatureType, SimpleFeature> features) {
+
+		if (features == null)
+			return new JPanel();
 
 		MapContext context = new DefaultMapContext();
 		context.addLayer(features, createPreviewStyle());
@@ -1107,23 +1264,26 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		JPanel jPanelFont = new JPanel(
 				new MigLayout("gap 1, inset 1", "[grow]"));
 		{
-
 			jPanelFont.add(new JLabel(AtlasStyler
 					.R("TextRulesList.Textstyle.FontFamily")));
-			jPanelFont.add(getJComboBoxFont(), "span 2");
-			jPanelFont.add(new JLabel(AtlasStyler.R("SizeLabel")));
-			jPanelFont.add(getJComboBoxSize(), "wrap");
-
-			jPanelFont.add(new JLabel(AtlasStyler
-					.R("TextRulesList.Textstyle.FontStyle")));
-			jPanelFont.add(getJComboBoxStyle());
-
-			jPanelFont.add(new JLabel(AtlasStyler.R("ColorLabel")));
-			jPanelFont.add(getJButtonColor());
+			jPanelFont.add(getJComboBoxFont(), "");
+			jPanelFont.add(new JLabel(AtlasStyler.R("SizeLabel")), "");
+			jPanelFont.add(getJComboBoxSize(), "");
 
 			jPanelFont.add(new JLabel(AtlasStyler
 					.R("TextRulesList.Textstyle.FontWeight")));
 			jPanelFont.add(getJComboBoxWeight(), "wrap");
+
+			jPanelFont.add(new JLabel(AtlasStyler
+					.R("TextRulesList.Textstyle.FontStyle")));
+			jPanelFont.add(getJComboBoxStyle(), "");
+
+			jPanelFont.add(new JLabel(AtlasStyler.R("ColorLabel")));
+			jPanelFont.add(getJButtonColor());
+
+			jPanelFont.add(new JLabel(ASUtil
+					.R("TextRulesList.Textstyle.Halo.Opacity.label")));
+			jPanelFont.add(getJComboBoxHaloOpacity(), "wrap");
 
 			jPanelFont.add(new JLabel(ASUtil
 					.R("TextRulesList.Textstyle.Halo.Radius.label")));
@@ -1131,9 +1291,10 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			jPanelFont.add(new JLabel(ASUtil
 					.R("TextRulesList.Textstyle.Halo.Color.label")));
 			jPanelFont.add(getJButtonColorHalo());
-			jPanelFont.add(new JLabel(ASUtil
-					.R("TextRulesList.Textstyle.Halo.Opacity.label")));
-			jPanelFont.add(getJComboBoxHaloOpacity());
+
+			jPanelFont.add(new JLabel(AtlasStyler.R("spaceAroundTextLabel")),
+					"");
+			jPanelFont.add(getJComboBoxSpaceAround(), "wrap");
 
 		}
 		this.add(jPanelFont, "growx");
@@ -1148,6 +1309,86 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			this.add(getJPanelPointPlacement(), "growx");
 			break;
 		}
+
+	}
+
+	private JComboBox getJComboBoxSpaceAround() {
+		if (jComboBoxSpaceAround == null) {
+			jComboBoxSpaceAround = new JComboBox();
+			jComboBoxSpaceAround.setModel(new DefaultComboBoxModel(
+					SPACE_AROUND_VALUES));
+
+			/**
+			 * Selecting the imported size in the JComboBox
+			 */
+			final String space = rulesList.getSymbolizer().getOptions()
+					.get(TextSymbolizer.SPACE_AROUND_KEY);
+
+			if (space != null)
+				ASUtil.selectOrInsert(jComboBoxSpaceAround,
+						Integer.valueOf(space));
+
+			jComboBoxSpaceAround.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						Number size = (Number) jComboBoxSpaceAround
+								.getSelectedItem();
+						// Literal sizeLiteral = ASUtil.ff2.literal(size);
+						rulesList
+								.getSymbolizer()
+								.getOptions()
+								.put(TextSymbolizer.SPACE_AROUND_KEY,
+										String.valueOf(size));
+						rulesList.fireEvents(new RuleChangedEvent(
+								"spaceAround = " + size, rulesList));
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxSpaceAround);
+		}
+		return jComboBoxSpaceAround;
+
+	}
+
+	private JCheckBox getJCheckBoxGroup() {
+		if (jCheckBoxGroup == null) {
+			jCheckBoxGroup = new JCheckBox();
+
+			/**
+			 * Selecting the imported size in the JComboBox
+			 */
+			final String group = rulesList.getSymbolizer().getOptions()
+					.get(TextSymbolizer.GROUP_KEY);
+
+			if (group != null)
+				jCheckBoxGroup.setSelected(Boolean.valueOf(group));
+
+			jCheckBoxGroup.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					rulesList
+							.getSymbolizer()
+							.getOptions()
+							.put(TextSymbolizer.GROUP_KEY,
+									Boolean.valueOf(jCheckBoxGroup.isSelected())
+											.toString());
+
+					jCheckBoxVendorOptionLabelAllGroup
+							.setEnabled(jCheckBoxGroup.isSelected());
+
+					rulesList.fireEvents(new RuleChangedEvent("group = "
+							+ jCheckBoxGroup.isSelected(), rulesList));
+				}
+
+			});
+
+		}
+		return jCheckBoxGroup;
 
 	}
 
