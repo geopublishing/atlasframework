@@ -112,7 +112,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 
 			SwingUtil.setRelativeFramePosition(UniqueValuesAddGUI.this, owner,
 					SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
-//			setVisible(true);
+			// setVisible(true);
 
 		} catch (CancellationException e) {
 			dispose();
@@ -326,9 +326,9 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 				public void actionPerformed(ActionEvent e) {
 					rulesList.pushQuite();
 					for (Object obj : getJListValues().getSelectedValues()) {
-						String str = (String) obj;
+
 						try {
-							rulesList.addUniqueValue(str);
+							rulesList.addUniqueValue(obj);
 						} catch (IllegalArgumentException e2) {
 							ExceptionDialog.show(SwingUtil
 									.getParentWindow(UniqueValuesAddGUI.this),
