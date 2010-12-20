@@ -182,15 +182,15 @@ public abstract class AbstractRulesList {
 
 	public void setMaxScaleDenominator(double maxScaleDenominator) {
 		// May not be smaller than 0
-		if (maxScaleDenominator < 0)
-			maxScaleDenominator = 0;
+		if (maxScaleDenominator < 0.)
+			maxScaleDenominator = 0.;
 
 		if (maxScaleDenominator > MAX_SCALEDENOMINATOR)
 			maxScaleDenominator = MAX_SCALEDENOMINATOR;
 
 		// "Push" the MaxScaleDenominator when moving up
 		if (maxScaleDenominator < minScaleDenominator)
-			minScaleDenominator = maxScaleDenominator - 1;
+			minScaleDenominator = maxScaleDenominator - 1.;
 
 		if (this.maxScaleDenominator == maxScaleDenominator)
 			return;
@@ -203,15 +203,15 @@ public abstract class AbstractRulesList {
 	public void setMinScaleDenominator(double minScaleDenominator) {
 
 		// May not be smaller than 0
-		if (minScaleDenominator < 0)
-			minScaleDenominator = 0;
+		if (minScaleDenominator < 0.)
+			minScaleDenominator = 0.;
 
 		if (minScaleDenominator > MAX_SCALEDENOMINATOR)
 			minScaleDenominator = MAX_SCALEDENOMINATOR;
 
 		// "Push" the MaxScaleDenominator when moving up
 		if (minScaleDenominator > maxScaleDenominator)
-			maxScaleDenominator = minScaleDenominator + 1;
+			maxScaleDenominator = minScaleDenominator + 1.;
 
 		if (this.minScaleDenominator == minScaleDenominator)
 			return;
