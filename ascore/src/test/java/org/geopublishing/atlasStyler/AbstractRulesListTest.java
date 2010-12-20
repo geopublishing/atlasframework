@@ -87,14 +87,14 @@ public class AbstractRulesListTest extends TestingClass {
 			FileNotFoundException {
 
 		// Create random min/max values to apply and test
-		double sMin = rand.nextDouble();
-		double sMax = rand.nextDouble();
-		double gMin = rand.nextDouble();
-		double gMax = rand.nextDouble();
-		double uMin = rand.nextDouble();
-		double uMax = rand.nextDouble();
-		double tMin = rand.nextDouble();
-		double tMax = rand.nextDouble();
+		double sMin = 5000;
+		double sMax = 10000;
+		double gMin = 10000;
+		double gMax = 15000;
+		double uMin = 16000;
+		double uMax = 16000 + 5000;
+		double tMin = 0;
+		double tMax = 33333333.;
 
 		as.reset();
 		assertEquals(0, as.getRuleLists().size());
