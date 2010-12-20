@@ -100,6 +100,12 @@ public abstract class AbstractRulesList {
 	 */
 	static final String RULENAME_DONTIMPORT = "DONTIMPORT";
 
+	/**
+	 * To simplifly the usage, any ScaleDenominator above this value will be
+	 * interpreted as Infinite.
+	 */
+	public static final double MAX_SCALEDENOMINATOR = 1E20;
+
 	protected Filter addAbstractRlSettings(Filter filter) {
 
 		filter = addRuleListFilterAppliedFilter(filter);
@@ -164,7 +170,7 @@ public abstract class AbstractRulesList {
 
 	double maxScaleDenominator = Double.MAX_VALUE;
 
-	double minScaleDenominator = Double.MIN_VALUE;
+	double minScaleDenominator = 0.0;
 
 	public double getMaxScaleDenominator() {
 		return maxScaleDenominator;
@@ -175,17 +181,44 @@ public abstract class AbstractRulesList {
 	}
 
 	public void setMaxScaleDenominator(double maxScaleDenominator) {
+		// May not be smaller than 0
+		if (maxScaleDenominator < 0)
+			maxScaleDenominator = 0;
+
+		if (maxScaleDenominator > MAX_SCALEDENOMINATOR)
+			maxScaleDenominator = MAX_SCALEDENOMINATOR;
+
+		// "Push" the MaxScaleDenominator when moving up
+		if (maxScaleDenominator < minScaleDenominator)
+			minScaleDenominator = maxScaleDenominator - 1;
+
 		if (this.maxScaleDenominator == maxScaleDenominator)
 			return;
+
 		this.maxScaleDenominator = maxScaleDenominator;
-		fireEvents(new RuleChangedEvent("maxScale changed", this));
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
 	}
 
 	public void setMinScaleDenominator(double minScaleDenominator) {
+
+		// May not be smaller than 0
+		if (minScaleDenominator < 0)
+			minScaleDenominator = 0;
+
+		if (minScaleDenominator > MAX_SCALEDENOMINATOR)
+			minScaleDenominator = MAX_SCALEDENOMINATOR;
+
+		// "Push" the MaxScaleDenominator when moving up
+		if (minScaleDenominator > maxScaleDenominator)
+			maxScaleDenominator = minScaleDenominator + 1;
+
 		if (this.minScaleDenominator == minScaleDenominator)
 			return;
+
 		this.minScaleDenominator = minScaleDenominator;
-		fireEvents(new RuleChangedEvent("minScale changed", this));
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
 	}
 
 	/**

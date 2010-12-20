@@ -8,6 +8,7 @@ import org.junit.Test;
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
+
 public class AtlasStylerPaneTest extends TestingClass {
 
 	private AtlasStyler atlasStylerPolygon;
@@ -27,8 +28,8 @@ public class AtlasStylerPaneTest extends TestingClass {
 		if (!TestingUtil.isInteractive())
 			return;
 
-		StylerDialog asd = new StylerDialog(null, atlasStylerPolygon);
-		TestingUtil.testGui(asd, 40);
+		StylerDialog asd = new StylerDialog(null, atlasStylerPolygon, null);
+		TestingUtil.testGui(asd, 10);
 
 	}
 }

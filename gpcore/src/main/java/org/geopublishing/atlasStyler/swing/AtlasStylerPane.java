@@ -86,8 +86,11 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 		}
 	};
 
-	public AtlasStylerPane(AtlasStyler atlasStyler) {
-		this.atlasStyler = atlasStyler;
+	private final StylerDialog asd;
+
+	public AtlasStylerPane(StylerDialog stylerDialog) {
+		this.asd = stylerDialog;
+		this.atlasStyler = stylerDialog.getAtlasStyler();
 		initialize();
 
 		atlasStyler.setQuite(true);
@@ -199,7 +202,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 
 	private RulesListsListTablePanel getRulesListsListTablePanel() {
 		if (rulesListsListTablePanel == null) {
-			rulesListsListTablePanel = new RulesListsListTablePanel(atlasStyler);
+			rulesListsListTablePanel = new RulesListsListTablePanel(asd);
 		}
 		return rulesListsListTablePanel;
 	}

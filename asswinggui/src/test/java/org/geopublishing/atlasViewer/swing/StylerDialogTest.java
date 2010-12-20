@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
+
 public class StylerDialogTest extends TestingClass {
 	private static TextRuleList tr;
 
@@ -19,7 +20,7 @@ public class StylerDialogTest extends TestingClass {
 		if (!TestingUtil.isInteractive())
 			return;
 
-		StylerDialog stylerDialog = new StylerDialog(null, as);
+		StylerDialog stylerDialog = new StylerDialog(null, as, null);
 		TestingUtil.testGui(stylerDialog);
 	}
 

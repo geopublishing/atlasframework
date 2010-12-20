@@ -25,7 +25,8 @@ public class FilterTableCellRenderer extends DefaultTableCellRenderer {
 		proto.setToolTipText("Click to change filter!"); // i8n
 
 		Filter filter = (Filter) value;
-		proto.setEnabled((filter != null && filter != Filter.INCLUDE));
+		proto.setEnabled((filter != null && filter != Filter.INCLUDE && (Boolean) table
+				.getModel().getValueAt(row, RulesListTable.COLIDX_ENABLED)));
 
 		return proto;
 	}

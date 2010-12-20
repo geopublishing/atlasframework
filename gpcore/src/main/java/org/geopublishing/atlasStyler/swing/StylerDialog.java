@@ -15,6 +15,8 @@ import java.awt.Dimension;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import javax.swing.AbstractAction;
@@ -31,8 +33,13 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.Style;
+import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import schmitzm.geotools.gui.XMapPane;
+import schmitzm.geotools.gui.XMapPaneEvent;
+import schmitzm.geotools.map.event.JMapPaneListener;
+import schmitzm.geotools.map.event.ScaleChangedEvent;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
@@ -58,6 +65,32 @@ public class StylerDialog extends CancellableDialogAdapter {
 	private JCheckBox jCheckboxPreview;
 
 	private JButton jButtonUpdatePreview;
+	/**
+	 * Listens to scaleChanges in the preview {@link XMapPane} and passes the
+	 * listeners to
+	 */
+	private final JMapPaneListener scaleChangeListenerInPreviewXMapPanePassedToInternalListeners = new JMapPaneListener() {
+
+		@Override
+		public void performMapPaneEvent(XMapPaneEvent e) {
+			if (e instanceof ScaleChangedEvent) {
+				fireStyleChangeInPreviewEvents(((ScaleChangedEvent) e));
+			}
+
+		}
+	};
+
+	/**
+	 * Stores the listener WEAKLY, keep a reference!
+	 */
+	public void addScaleChangeListener(PropertyChangeListener listener) {
+		scaleChangeListeners.add(listener);
+	}
+
+	protected WeakHashSet<PropertyChangeListener> scaleChangeListeners = new WeakHashSet<PropertyChangeListener>(
+			PropertyChangeListener.class);
+
+	private final XMapPane previewMapPane;
 
 	/**
 	 * Creates an AtlasStyler {@link JDialog} which allows to create a
@@ -67,13 +100,17 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * @param owner
 	 *            <code>null</code> or a {@link Window} component that shall be
 	 *            used as a parent window for the {@link StylerDialog}.
-	 * @param featureSource
+	 * @param previewMapPane
+	 *            a preview {@link XMapPane} or <code>null</code>.
 	 */
-	public StylerDialog(Component owner, AtlasStyler atlasStyler) {
+	public StylerDialog(Component owner, AtlasStyler atlasStyler,
+			XMapPane previewMapPane) {
 		super(SwingUtil.getParentWindow(owner));
 		this.atlasStyler = atlasStyler;
+		this.previewMapPane = previewMapPane;
 		atlasStyler.setOwner(this);
-		this.tabbedPane = new AtlasStylerPane(atlasStyler);
+		// TODO VERY UGLY CAST!
+		this.tabbedPane = new AtlasStylerPane(this);
 		initialize();
 
 		pack();
@@ -83,6 +120,24 @@ public class StylerDialog extends CancellableDialogAdapter {
 		 */
 		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
 				SwingUtil.WEST);
+
+		if (previewMapPane != null) {
+			// Add a listener to the
+			previewMapPane
+					.addMapPaneListener(scaleChangeListenerInPreviewXMapPanePassedToInternalListeners);
+		}
+
+	}
+
+	public void fireStyleChangeInPreviewEvents(ScaleChangedEvent sce) {
+
+		Double newDenominator = sce.getNewScaleDenominator();
+
+		LOGGER.info("new scale in preview XMapPane  = " + newDenominator);
+		for (PropertyChangeListener l : scaleChangeListeners) {
+			l.propertyChange(new PropertyChangeEvent(sce,
+					"scale change in preview", null, newDenominator));
+		}
 	}
 
 	/**
@@ -261,7 +316,23 @@ public class StylerDialog extends CancellableDialogAdapter {
 		if (isDisposed)
 			return;
 		tabbedPane.dispose();
+		if (previewMapPane != null) {
+			// Not really needed, but anyways..
+			previewMapPane
+					.removeMapPaneListener(scaleChangeListenerInPreviewXMapPanePassedToInternalListeners);
+		}
 		super.dispose();
+	}
+
+	/**
+	 * @return An {@link XMapPane} (or better an interface that has getScale,
+	 *         addScaleChangelIstener and setSCale) which is a preview for what
+	 *         is happening in
+	 */
+	public XMapPane getPreviewMapPane() {
+		if (previewMapPane == null)
+			return null;
+		return previewMapPane;
 	}
 
 }

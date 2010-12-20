@@ -774,7 +774,8 @@ public class MapLegend extends JXTaskPaneContainer implements
 					if ((layerMaxRes != null)
 							&& (layerMaxRes != Double.MAX_VALUE)
 							&& (layerMaxRes != Double.MIN_VALUE)
-							&& (layerMaxRes < bestRes)) {
+							&& (layerMaxRes != Double.MIN_NORMAL)
+							&& (layerMaxRes != 0) && (layerMaxRes < bestRes)) {
 						bestRes = layerMaxRes;
 					}
 				}

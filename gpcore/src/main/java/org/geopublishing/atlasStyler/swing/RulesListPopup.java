@@ -1,6 +1,7 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.event.ActionEvent;
+import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -10,21 +11,32 @@ import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.opengis.filter.Filter;
 
+import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.geotools.styling.StylingUtil;
+import skrueger.geotools.StyledFeaturesInterface;
+import skrueger.swing.swingworker.AtlasStatusDialog;
+import skrueger.swing.swingworker.AtlasSwingWorker;
+
 public class RulesListPopup extends JPopupMenu {
 
 	static Filter filterCopied = null;
 	static final Double[] scalesCopied = new Double[2];
+	private final StylerDialog asd;
 
-	public RulesListPopup(final AbstractRulesList rulesList) {
+	public RulesListPopup(final AbstractRulesList rulesList, StylerDialog asd) {
+		this.asd = asd;
 		JMenuItem header = new JMenuItem(rulesList.getTitle());
 		header.setEnabled(false);
 		add(header);
-		addSeparator();
 
-		addFilterMenuItems(rulesList);
+		addSeparator();
 		addScaleMenuItems(rulesList);
 
-		add("Copy SLD/XML (not yet)");
+		addSeparator();
+		addFilterMenuItems(rulesList);
+
+		addSeparator();
+		add("Copy SLD/XML to clipboard (not yet)");
 	}
 
 	private void addFilterMenuItems(final AbstractRulesList rulesList) {
@@ -66,9 +78,59 @@ public class RulesListPopup extends JPopupMenu {
 	}
 
 	private void addScaleMenuItems(final AbstractRulesList rulesList) {
-		// Copy Filter
+		if (asd.getPreviewMapPane() != null) {
+
+			final double previewScaleDenominator = asd.getPreviewMapPane()
+					.getScaleDenominator();
+			add(new AbstractAction("<html>Use preview scale ("
+					+ NumberFormat.getNumberInstance().format(
+							previewScaleDenominator)
+					+ ") for <em>MIN</em></html>") {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rulesList.setMinScaleDenominator(previewScaleDenominator);
+				}
+			});
+
+			add(new AbstractAction("<html>Use preview scale ("
+					+ NumberFormat.getNumberInstance().format(
+							previewScaleDenominator)
+					+ ") for <em>MAX</em></html>") {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rulesList.setMaxScaleDenominator(previewScaleDenominator);
+				}
+			});
+		}
+
 		final Double minScale = rulesList.getMinScaleDenominator();
 		final Double maxScale = rulesList.getMaxScaleDenominator();
+
+		add(new AbstractAction("<html>Zoom preview to <em>MIN scale</em> ("
+				+ NumberFormat.getNumberInstance().format(
+						rulesList.getMinScaleDenominator()) + ")+1</html>") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (asd.getPreviewMapPane() != null)
+					asd.getPreviewMapPane().zoomToScaleDenominator(
+							rulesList.getMinScaleDenominator() + 1);
+			}
+		});
+		add(new AbstractAction("<html>Zoom preview to <em>MAX scale</em> ("
+				+ NumberFormat.getNumberInstance().format(
+						rulesList.getMaxScaleDenominator()) + ")-1</html>") {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (asd.getPreviewMapPane() != null)
+					asd.getPreviewMapPane().zoomToScaleDenominator(
+							rulesList.getMaxScaleDenominator() - 1);
+			}
+		});
+
 		add(new AbstractAction("Copy min/max scale",
 				Icons.ICON_MINMAXSCALE_SMALL) {
 
@@ -100,11 +162,48 @@ public class RulesListPopup extends JPopupMenu {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
-					rulesList.setMinScaleDenominator(Double.MIN_VALUE);
+					rulesList.setMinScaleDenominator(0.0);
 					rulesList.setMaxScaleDenominator(Double.MAX_VALUE);
 				}
 			});
 		}
-	}
 
+		add(new AbstractAction("Guess max-scale", Icons.ICON_MINMAXSCALE_SMALL) {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+
+				// try {
+
+				final StyledFeaturesInterface<?> styledFeatures = asd
+						.getAtlasStyler().getStyledFeatures();
+
+				AtlasStatusDialog waitDialog = new AtlasStatusDialog(
+						RulesListPopup.this);
+				new AtlasSwingWorker<Void>(waitDialog) {
+
+					@Override
+					protected Void doInBackground() throws Exception {
+						Double calcAvgNN = FeatureUtil
+								.calcAvgNN(styledFeatures);
+
+						double maxScaleDenominator = StylingUtil
+								.getMaxScaleDenominator(calcAvgNN,
+										styledFeatures.getGeometryForm());
+
+						rulesList.setMinScaleDenominator(0.);
+						rulesList.setMaxScaleDenominator(maxScaleDenominator);
+
+						return null;
+					}
+				}.executeModalNoEx();
+
+				// } catch (IOException e1) {
+				// ExceptionDialog.show(RulesListPopup.this, e1);
+				// }
+
+			}
+		});
+
+	}
 }

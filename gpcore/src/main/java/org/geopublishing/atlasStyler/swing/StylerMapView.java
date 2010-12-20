@@ -108,8 +108,11 @@ public class StylerMapView extends MapView {
 		 */
 		getGeoMapPane().getMapPane().setAntiAliasing(
 				ASProps.getInt(ASProps.Keys.antialiasingMaps, 1) == 1);
-		
+
 		getGeoMapPane().getMapPane().setShowExceptions(true);
+
+		// In AtlasStyler we show the OGC ScalDenominator
+		getGeoMapPane().getScalePane().setOgcScaleDenominatorVisible(true);
 	}
 
 	/**

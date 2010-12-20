@@ -44,7 +44,9 @@ public class AtlasStylerDialog extends StylerDialog {
 						layerStyle != null ? layerStyle.getStyle()
 								: dpLayer.getStyle(),
 						// atlasMapLegend,
-						mapLayer, getParamMap(dpLayer), true));
+						mapLayer, getParamMap(dpLayer), true),
+				atlasMapLegend == null ? null : atlasMapLegend.getGeoMapPane()
+						.getMapPane());
 
 		getAtlasStyler().setOwner(this);
 		this.dpLayer = dpLayer;
@@ -60,24 +62,25 @@ public class AtlasStylerDialog extends StylerDialog {
 
 		// This listener informs the MapLayerLegend,
 		// resulting in a new legend and repained JMapPane
-		getAtlasStyler().addListener(new StyleChangeListener() {
+		if (atlasMapLegend != null)
+			getAtlasStyler().addListener(new StyleChangeListener() {
 
-			@Override
-			public void changed(StyleChangedEvent e) {
-				Style style = getAtlasStyler().getStyle();
-				if (layerStyle == null) {
-					// The edited Style was a default Style
-					dpLayer.setStyle(style);
-				} else {
-					// The edited Style came from a LayerStyle
-					layerStyle.setStyle(style);
+				@Override
+				public void changed(StyleChangedEvent e) {
+					Style style = getAtlasStyler().getStyle();
+					if (layerStyle == null) {
+						// The edited Style was a default Style
+						dpLayer.setStyle(style);
+					} else {
+						// The edited Style came from a LayerStyle
+						layerStyle.setStyle(style);
+					}
+
+					atlasMapLegend.getLayerLegendForId(dpLayer.getId())
+							.updateStyle(style);
 				}
 
-				atlasMapLegend.getLayerLegendForId(dpLayer.getId())
-						.updateStyle(style);
-			}
-
-		});
+			});
 
 		this.mapLayer = mapLayer;
 

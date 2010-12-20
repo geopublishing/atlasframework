@@ -1,12 +1,16 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -23,24 +27,72 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import schmitzm.swing.JPanel;
 import skrueger.swing.SmallButton;
 
+/**
+ * This {@link JPanel} contains the {@link RulesListTable} and some
+ * labels/buttons arround it.
+ */
 public class RulesListsListTablePanel extends JPanel {
 	private SmallButton addButton;
+
 	private final AtlasStyler atlasStyler;
+
 	private SmallButton jButtonLayerDown;
+
 	private SmallButton jButtonLayerUp;
+
 	private SmallButton removeButton;
+
 	private RulesListTable rulesListTable;
 
-	public RulesListsListTablePanel(AtlasStyler atlasStyler) {
-		super(new MigLayout("", "grow", "[grow][]"));
-		this.atlasStyler = atlasStyler;
+	private final StylerDialog asd;
 
-		add(new JScrollPane(getRulesListTable()), "growy, wrap");
+	JLabel popupMenuExplanationJLabel = new JLabel(
+			AtlasStyler.R("RulesListsListTablePanel.Explanation"));
+
+	JLabel scaleInPreviewJPanel = new JLabel(
+			AtlasStyler
+					.R("RulesListsListTablePanel.OGCScaleDenominatorInPreview"));
+	private final JLabel scaleInPreviewValueJLabel = new JLabel();
+	private final PropertyChangeListener updatePreviewScaleLabelListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			updateScaleInPreviewJLabel();
+		}
+	};
+
+	public RulesListsListTablePanel(StylerDialog asd) {
+		super(new MigLayout("", "grow", "[grow][]"));
+		this.asd = asd;
+		this.atlasStyler = asd.getAtlasStyler();
+
+		add(popupMenuExplanationJLabel, "growy, sgx, wrap");
+
+		add(new JScrollPane(getRulesListTable()), "growy, sgx, wrap");
 		getRulesListTable().getSelectionModel().clearSelection();
-		add(getAddButton(), "split 4, align left, growx");
+
+		if (asd.getPreviewMapPane() != null) {
+			add(scaleInPreviewJPanel, "split 2, growy");
+			add(scaleInPreviewValueJLabel, "growy, wrap");
+			asd.addScaleChangeListener(updatePreviewScaleLabelListener);
+			updateScaleInPreviewJLabel();
+		}
+
+		add(getAddButton(), "sgx, split 4, align left, growx");
 		add(getRemoveButton(), "align left, gapx");
 		add(getUpButton(), "align right");
 		add(getDownButton(), "align right");
+	}
+
+	private void updateScaleInPreviewJLabel() {
+		if (asd.getPreviewMapPane() == null)
+			return;
+
+		final String formated = NumberFormat.getNumberInstance().format(
+				asd.getPreviewMapPane().getScaleDenominator());
+
+		scaleInPreviewValueJLabel.setText(formated);
+
 	}
 
 	private JButton getAddButton() {
@@ -151,7 +203,7 @@ public class RulesListsListTablePanel extends JPanel {
 
 	public RulesListTable getRulesListTable() {
 		if (rulesListTable == null) {
-			rulesListTable = new RulesListTable(atlasStyler);
+			rulesListTable = new RulesListTable(asd);
 		}
 		return rulesListTable;
 	}

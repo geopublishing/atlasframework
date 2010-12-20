@@ -20,7 +20,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class FilterTableCellEditor extends AbstractCellEditor implements
 		TableCellEditor {
-	protected static final int WARN_CELLS = 15000;
+	protected static final int WARN_CELLS = 30000;
 	JButton button;
 	AtlasFeatureLayerFilterDialog dialog;
 	private final StyledFeaturesInterface<?> sf;
@@ -68,7 +68,10 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 			dialog.setFilterRule(null);
 
 		dialog.setTitle(GeotoolsGUIUtil.R(
-				"FilterTableCellEditor.FilterDialogTitle", ""));
+				"FilterTableCellEditor.FilterDialogTitle", table.getModel()
+						.getValueAt(row, RulesListTable.COLIDX_TITLE),
+				table.getModel().getValueAt(row, RulesListTable.COLIDX_TYPE),
+				sf.getTitle()));
 		return button;
 	}
 
@@ -106,8 +109,4 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 		return dialog;
 	}
 
-	// @Override
-	// public void changed(Filter newFilter) {
-	// ruleList.setRlFilter(newFilter);
-	// }
 }

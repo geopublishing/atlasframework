@@ -277,7 +277,9 @@ public class AVDialogManager {
 
 										});
 
-								return new StylerDialog(owner, atlasStyler);
+								return new StylerDialog(owner, atlasStyler,
+										mapLegend == null ? null : mapLegend
+												.getGeoMapPane().getMapPane());
 							}
 
 						}));

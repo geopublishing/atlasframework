@@ -168,7 +168,8 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		}
 
 		this.atlasConfig = atlasConfig;
-		getGeoMapPane().getScalePane().getScaleLabel().setVisible(false);
+		getGeoMapPane().getScalePane().setPixelEqualsLabelVisible(false);
+		getGeoMapPane().getScalePane().setOgcScaleDenominatorVisible(false);
 
 		getGeoMapPane().getMapPane()
 				.setAntiAliasing(

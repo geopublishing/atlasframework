@@ -790,17 +790,21 @@ public class AtlasStyler {
 				GeometryForm geom = FeatureUtil.getGeometryForm(styledFeatures
 						.getSchema());
 
-				if (lastChangedRuleList instanceof SingleRuleList) {
-					SingleRuleList srl = (SingleRuleList) lastChangedRuleList;
-					srl.setMaxScaleDenominator(StylingUtil
-							.getMaxScaleDenominator(avgNN, geom));
-				} else if (lastChangedRuleList instanceof UniqueValuesRuleList) {
-					UniqueValuesRuleList srl = (UniqueValuesRuleList) lastChangedRuleList;
-					srl.setMaxScaleDenominator(StylingUtil
-							.getMaxScaleDenominator(avgNN, geom));
-				} else if (lastChangedRuleList instanceof QuantitiesRuleList) {
-					QuantitiesRuleList srl = (QuantitiesRuleList) lastChangedRuleList;
-				}
+				lastChangedRuleList.setMaxScaleDenominator(StylingUtil
+						.getMaxScaleDenominator(avgNN, geom));
+				// if (lastChangedRuleList instanceof SingleRuleList) {
+				// SingleRuleList srl = (SingleRuleList) lastChangedRuleList;
+				// } else if (lastChangedRuleList instanceof
+				// UniqueValuesRuleList) {
+				// UniqueValuesRuleList srl = (UniqueValuesRuleList)
+				// lastChangedRuleList;
+				// srl.setMaxScaleDenominator(StylingUtil
+				// .getMaxScaleDenominator(avgNN, geom));
+				// } else if (lastChangedRuleList instanceof QuantitiesRuleList)
+				// {
+				// QuantitiesRuleList srl = (QuantitiesRuleList)
+				// lastChangedRuleList;
+				// }
 
 			}
 

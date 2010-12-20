@@ -1,13 +1,21 @@
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
@@ -15,15 +23,18 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.RulesListsList;
+import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.opengis.filter.Filter;
 
+import schmitzm.geotools.gui.XMapPane;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 
 public class RulesListTable extends JTable {
 
-	private static final int COLIDX_TITLE = 0;
-	private static final int COLIDX_TYPE = 1;
-	public static final int COLIDX_ENABLED = 2;
+	public static final int COLIDX_ENABLED = 0;
+	static final int COLIDX_TITLE = 1;
+	static final int COLIDX_TYPE = 2;
 	public static final int COLIDX_MINSCALE = 3;
 	public static final int COLIDX_MAXSCALE = 4;
 	public static final int COLIDX_FILTER = 5;
@@ -31,23 +42,73 @@ public class RulesListTable extends JTable {
 	private final RulesListsList rulesList;
 	private final AtlasStyler atlasStyler;
 
+	/**
+	 * Listen to changes in the rulelist that affect this table view
+	 */
 	protected RuleChangeListener listenForRulesListChangesWhichShowInTheTable = new RuleChangeListener() {
 
 		@Override
 		public void changed(RuleChangedEvent e) {
-			if (e.getReason() != null
-					&& e.getReason().equals(
-							RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING)) {
+			if (RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING.equals(e
+					.getReason())) {
+				((DefaultTableModel) getModel()).fireTableDataChanged();
+			} else if (RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING
+					.equals(e.getReason())) {
 				((DefaultTableModel) getModel()).fireTableDataChanged();
 			}
 		}
 	};
+
+	/**
+	 * The ScaleDenominator shown in any preview {@link XMapPane} outside of
+	 * this {@link AtlasStylerDialog}
+	 */
+	private Double scaleDenominator;
+
+	protected PropertyChangeListener listenForScaleChangesInthePreviewPaneAndRepaintTable = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			setScaleInPreview((Double) evt.getNewValue());
+
+		}
+
+	};
+
+	private void setScaleInPreview(Double newScale) {
+		if (newScale == scaleDenominator)
+			return;
+
+		scaleDenominator = newScale;
+
+		((DefaultTableModel) getModel()).fireTableDataChanged();
+	}
 
 	private final PropertyChangeListener updateOnRulesListsListChanges = new PropertyChangeListener() {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
 			changeTableModel();
+		}
+
+	};
+	private final StylerDialog asd;
+	private final TableCellRenderer ruleListLabelRenderer = new DefaultTableCellRenderer() {
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+
+			JLabel proto = (JLabel) super.getTableCellRendererComponent(table,
+					value, isSelected, hasFocus, row, column);
+
+			if (!(Boolean) table.getModel().getValueAt(row,
+					RulesListTable.COLIDX_ENABLED)) {
+				proto.setForeground(Color.gray);
+			} else
+				proto.setForeground(Color.BLACK);
+
+			return proto;
 		}
 
 	};
@@ -61,6 +122,15 @@ public class RulesListTable extends JTable {
 			if (getSelectionModel().isSelectionEmpty())
 				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
 		}
+
+		SwingUtil.setColumnLook(this, COLIDX_TITLE, ruleListLabelRenderer,
+				null, null, null);
+		SwingUtil.setColumnLook(this, COLIDX_TYPE, ruleListLabelRenderer, null,
+				null, null);
+		SwingUtil.setColumnLook(this, COLIDX_MINSCALE, new ScaleCellRenderer(
+				true), 40, null, null);
+		SwingUtil.setColumnLook(this, COLIDX_MAXSCALE, new ScaleCellRenderer(
+				false), 40, null, null);
 
 		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 18, 20);
 		SwingUtil.setColumnLook(this, COLIDX_FILTER,
@@ -77,8 +147,16 @@ public class RulesListTable extends JTable {
 
 	}
 
-	public RulesListTable(AtlasStyler atlasStyler) {
-		this.atlasStyler = atlasStyler;
+	public RulesListTable(StylerDialog asd) {
+
+		this.asd = asd;
+
+		asd.addScaleChangeListener(listenForScaleChangesInthePreviewPaneAndRepaintTable);
+
+		if (asd.getPreviewMapPane() != null)
+			scaleDenominator = asd.getPreviewMapPane().getScaleDenominator();
+
+		this.atlasStyler = asd.getAtlasStyler();
 		rulesList = atlasStyler.getRuleLists();
 		setModel(new RulesListTableModel());
 
@@ -87,37 +165,148 @@ public class RulesListTable extends JTable {
 		changeTableModel();
 
 		addMouseListener(new PopupListener());
-	}
 
-	class PopupListener extends MouseAdapter {
+		addMouseWheelListener(new MouseWheelListener() {
 
-		@Override
-		public void mousePressed(MouseEvent e) {
-			showPopup(e);
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			showPopup(e);
-		}
-
-		private void showPopup(MouseEvent e) {
-			if (e.isPopupTrigger()) {
-				final Component component = e.getComponent();
-
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
 				int columnAtPoint = RulesListTable.this.columnAtPoint(e
 						.getPoint());
 				int rowAtPoint = RulesListTable.this.rowAtPoint(e.getPoint());
-
 				int colInModel = RulesListTable.this
 						.convertColumnIndexToModel(columnAtPoint);
 				int rowInModel = RulesListTable.this
 						.convertRowIndexToModel(rowAtPoint);
 
 				AbstractRulesList ruleList = rulesList.get(rowInModel);
-				RulesListPopup popup = new RulesListPopup(ruleList);
-				popup.show(component, e.getX(), e.getY());
+
+				final int i = e.getWheelRotation() * -1;
+
+				if (colInModel == COLIDX_MINSCALE) {
+					double tenPercent = ruleList.getMinScaleDenominator() * 0.1;
+					if (tenPercent < 5000)
+						tenPercent = 5000;
+					double newValue = ruleList.getMinScaleDenominator() + i
+							* tenPercent;
+
+					// Nicht größer Unendlich erlauben
+					if (i > 0
+							&& ruleList.getMinScaleDenominator() >= AbstractRulesList.MAX_SCALEDENOMINATOR) {
+						return;
+					}
+
+					newValue = LangUtil.round(newValue, -3);
+					ruleList.setMinScaleDenominator(newValue);
+				}
+
+				if (colInModel == COLIDX_MAXSCALE) {
+					double tenPercent = ruleList.getMaxScaleDenominator() * 0.1;
+					if (tenPercent < 5000)
+						tenPercent = 5000;
+					double newValue = ruleList.getMaxScaleDenominator() + i
+							* tenPercent;
+
+					// Nicht größer Unendlich erlauben
+					if (i > 0
+							&& ruleList.getMaxScaleDenominator() >= AbstractRulesList.MAX_SCALEDENOMINATOR) {
+						return;
+					}
+
+					// newValue = LangUtil.round(newValue, -3);
+					ruleList.setMaxScaleDenominator(newValue);
+				}
+
 			}
+		});
+	}
+
+	/**
+	 * Renderer for a table cell that presents a Min- or MaxScaleDenominator.
+	 */
+	class ScaleCellRenderer extends DefaultTableCellRenderer {
+
+		private final boolean isMin;
+
+		/**
+		 * @param min
+		 *            if <code>true</code> this renders a minScaleDenominator,
+		 *            otherwise a maxScaleDenominator
+		 */
+		public ScaleCellRenderer(boolean min) {
+			this.isMin = min;
+		}
+
+		@Override
+		public JLabel getTableCellRendererComponent(JTable table, Object value,
+				boolean isSelected, boolean hasFocus, int row, int column) {
+
+			JLabel proto = (JLabel) new DefaultTableCellRenderer()
+					.getTableCellRendererComponent(table, value, isSelected,
+							hasFocus, row, column);
+
+			proto.setHorizontalAlignment(SwingConstants.RIGHT);
+			proto.setVerticalAlignment(SwingConstants.TOP);
+
+			if (value != null
+					&& ((Number) value).doubleValue() >= AbstractRulesList.MAX_SCALEDENOMINATOR)
+				proto.setText("<html>&#8734;</html>");
+			else
+				proto.setText(NumberFormat.getIntegerInstance().format(value));
+
+			if (isMin && scaleDenominator != null
+					&& scaleDenominator < (Double) value) {
+				proto.setBackground(Color.red);
+			} else if (!isMin && scaleDenominator != null
+					&& scaleDenominator > (Double) value) {
+				proto.setBackground(Color.red);
+			}
+
+			// Use gray font if the rulelist is disabled
+			if (!(Boolean) table.getModel().getValueAt(row, COLIDX_ENABLED)) {
+				proto.setForeground(Color.GRAY);
+			}
+
+			return proto;
+		}
+	}
+
+	class PopupListener extends MouseAdapter {
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (!showPopup(e)) {
+			}
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (!showPopup(e)) {
+
+			}
+		}
+
+		private boolean showPopup(MouseEvent e) {
+			if (e.isPopupTrigger()) {
+				final Component component = e.getComponent();
+
+				// int columnAtPoint = RulesListTable.this.columnAtPoint(e
+				// .getPoint());
+				int rowAtPoint = RulesListTable.this.rowAtPoint(e.getPoint());
+
+				// int colInModel = RulesListTable.this
+				// .convertColumnIndexToModel(columnAtPoint);
+				int rowInModel = RulesListTable.this
+						.convertRowIndexToModel(rowAtPoint);
+
+				getSelectionModel()
+						.setSelectionInterval(rowInModel, rowInModel);
+
+				AbstractRulesList ruleList = rulesList.get(rowInModel);
+				RulesListPopup popup = new RulesListPopup(ruleList, asd);
+				popup.show(component, e.getX(), e.getY());
+				return true;
+			}
+			return false;
 		}
 	}
 
@@ -158,10 +347,10 @@ public class RulesListTable extends JTable {
 		public Object getValueAt(int row, int column) {
 
 			switch (column) {
-			case COLIDX_TYPE:
-				return rulesList.get(row).getType();
 			case COLIDX_TITLE:
 				return rulesList.get(row).getTitle();
+			case COLIDX_TYPE:
+				return rulesList.get(row).getType();
 			case COLIDX_MINSCALE:
 				return rulesList.get(row).getMinScaleDenominator();
 			case COLIDX_MAXSCALE:
