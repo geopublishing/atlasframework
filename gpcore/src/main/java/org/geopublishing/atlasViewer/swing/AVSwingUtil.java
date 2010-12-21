@@ -227,7 +227,7 @@ public class AVSwingUtil extends AVUtil {
 		// ****************************************************************************
 		if (cachedLocalCopiedFiles.containsKey(url)) {
 			File fileInTemp = cachedLocalCopiedFiles.get(url);
-			if (fileInTemp.exists()) {
+			if (fileInTemp.exists() && fileInTemp.length() > 0) {
 				return fileInTemp;
 			} else {
 				// If the local copy has been deleted, forget about it.
