@@ -51,11 +51,15 @@ public class RulesListTable extends JTable {
 		public void changed(RuleChangedEvent e) {
 			if (RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING.equals(e
 					.getReason())) {
-				((DefaultTableModel) getModel()).fireTableDataChanged();
+				// ((DefaultTableModel) getModel()).fireTableDataChanged();
+				repaint();
 			} else if (RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING
 					.equals(e.getReason())) {
-				((DefaultTableModel) getModel()).fireTableDataChanged();
-			}
+				// ((DefaultTableModel) getModel()).fireTableDataChanged();
+				repaint();
+			} else if (RuleChangedEvent.RULE_CHANGE_EVENT_ENABLED_STRING
+					.equals(e.getReason()))
+				repaint();
 		}
 	};
 
@@ -81,7 +85,8 @@ public class RulesListTable extends JTable {
 
 		scaleDenominator = newScale;
 
-		((DefaultTableModel) getModel()).fireTableDataChanged();
+		// ((DefaultTableModel) getModel()).fireTableDataChanged();
+		repaint();
 	}
 
 	private final PropertyChangeListener updateOnRulesListsListChanges = new PropertyChangeListener() {

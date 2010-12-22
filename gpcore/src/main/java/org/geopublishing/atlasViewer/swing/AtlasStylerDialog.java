@@ -24,6 +24,7 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
 import schmitzm.swing.SwingUtil;
+import skrueger.i8n.Translation;
 
 public class AtlasStylerDialog extends StylerDialog {
 
@@ -84,15 +85,19 @@ public class AtlasStylerDialog extends StylerDialog {
 
 		this.mapLayer = mapLayer;
 
+		// If we have a layerstyle, use it's title in the title of the dialog
+		// and the AtlasStyler object.
 		if (layerStyle != null) {
-
 			/***********************************************************************
 			 * We create the AtlasStyler. It will automatically load the Style
 			 * visible in the MapLayer ATM.
 			 */
-			setTitle(AtlasStyler.R("AtlasStylerDialog.Title.LayerXStyleY",
-					dpLayer.getTitle().toString(), layerStyle.getTitle()
-							.toString()));
+			String titleWithAdditionalStyleName = AtlasStyler.R(
+					"AtlasStylerDialog.Title.LayerXStyleY", dpLayer.getTitle()
+							.toString(), layerStyle.getTitle().toString());
+			getAtlasStyler().setTitle(
+					new Translation(titleWithAdditionalStyleName));
+			setTitle(titleWithAdditionalStyleName);
 		}
 
 		/**

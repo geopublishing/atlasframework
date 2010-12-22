@@ -78,8 +78,9 @@ public class RulesListsListTablePanel extends JPanel {
 			updateScaleInPreviewJLabel();
 		}
 
-		add(getAddButton(), "sgx, split 4, align left, growx");
+		add(getAddButton(), "split 5, align left");
 		add(getRemoveButton(), "align left, gapx");
+		add(new JLabel(), "growx");
 		add(getUpButton(), "align right");
 		add(getDownButton(), "align right");
 	}

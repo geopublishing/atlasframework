@@ -31,8 +31,11 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 	private JPanel imagelabel;
 
 	public AddRulesListDialog(Component owner, AtlasStyler atlasStyler) {
-		super(owner, ASUtil.R("AddRulesListDialog.title", atlasStyler
-				.getStyledFeatures().getTitle()));
+		super(owner, ASUtil.R("AddRulesListDialog.title",
+				atlasStyler.getTitle()));
+
+		// Just copy the title of StylerDialog now..
+		// atlasStyler.getStyledFeatures().getTitle()
 		this.owner = owner;
 		this.atlasStyler = atlasStyler;
 
@@ -94,7 +97,7 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 		add(jComboBoxRuleListType, "span 2, growx");
 
 		add(getOkButton(), "gapy unrel, span 2, split 2, tag ok, bottom");
-		add(getCancelButton(), "tag ok, bottom");
+		add(getCancelButton(), "tag cancel, bottom");
 
 		setModal(true);
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
