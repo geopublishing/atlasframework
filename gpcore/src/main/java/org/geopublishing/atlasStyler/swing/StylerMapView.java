@@ -111,7 +111,8 @@ public class StylerMapView extends MapView {
 
 		getGeoMapPane().getMapPane().setShowExceptions(true);
 
-		// In AtlasStyler we show the OGC ScalDenominator
+		// In AtlasStyler we show the OGC ScalDenominator only
+		getGeoMapPane().getScalePane().setPixelEqualsLabelVisible(false);
 		getGeoMapPane().getScalePane().setOgcScaleDenominatorVisible(true);
 	}
 

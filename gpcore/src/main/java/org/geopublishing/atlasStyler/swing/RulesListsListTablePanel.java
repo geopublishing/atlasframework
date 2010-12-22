@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -24,6 +25,7 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasViewer.swing.Icons;
 
+import schmitzm.swing.ButtonGroup;
 import schmitzm.swing.JPanel;
 import skrueger.swing.SmallButton;
 
@@ -49,10 +51,6 @@ public class RulesListsListTablePanel extends JPanel {
 	JLabel popupMenuExplanationJLabel = new JLabel(
 			AtlasStyler.R("RulesListsListTablePanel.Explanation"));
 
-	JLabel scaleInPreviewJPanel = new JLabel(
-			AtlasStyler
-					.R("RulesListsListTablePanel.OGCScaleDenominatorInPreview"));
-	private final JLabel scaleInPreviewValueJLabel = new JLabel();
 	private final PropertyChangeListener updatePreviewScaleLabelListener = new PropertyChangeListener() {
 
 		@Override
@@ -61,18 +59,22 @@ public class RulesListsListTablePanel extends JPanel {
 		}
 	};
 
-	public RulesListsListTablePanel(StylerDialog asd) {
+	private final JLabel scaleInPreviewValueJLabel = new JLabel();
+
+	private JPanel modeButtons;
+
+	public RulesListsListTablePanel(final StylerDialog asd) {
 		super(new MigLayout("", "grow", "[grow][]"));
 		this.asd = asd;
 		this.atlasStyler = asd.getAtlasStyler();
 
+		add(getModeButtons(asd), "growy, sgx, wrap");
 		add(popupMenuExplanationJLabel, "growy, sgx, wrap");
 
 		add(new JScrollPane(getRulesListTable()), "growy, sgx, wrap");
 		getRulesListTable().getSelectionModel().clearSelection();
 
 		if (asd.getPreviewMapPane() != null) {
-			add(scaleInPreviewJPanel, "split 2, growy");
 			add(scaleInPreviewValueJLabel, "growy, wrap");
 			asd.addScaleChangeListener(updatePreviewScaleLabelListener);
 			updateScaleInPreviewJLabel();
@@ -85,14 +87,65 @@ public class RulesListsListTablePanel extends JPanel {
 		add(getDownButton(), "align right");
 	}
 
+	private JPanel getModeButtons(final StylerDialog asd) {
+		if (modeButtons == null) {
+
+			modeButtons = new JPanel(new MigLayout());
+
+			modeButtons.add(new JLabel("Bedienungsmodus:"));
+
+			final JRadioButton easyButton = new JRadioButton(
+					new AbstractAction("easy") {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							asd.setEasy(true);
+							popupMenuExplanationJLabel.setVisible(false);
+							getRulesListTable().updateColumnsLook();
+							getRulesListTable().updateColumnsLook();
+							getUpButton().setVisible(false);
+							getDownButton().setVisible(false);
+						}
+					});
+
+			modeButtons.add(easyButton);
+			final JRadioButton expertButton = new JRadioButton(
+					new AbstractAction("expert") {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							asd.setEasy(false);
+							popupMenuExplanationJLabel.setVisible(true);
+							getRulesListTable().updateColumnsLook();
+							getRulesListTable().updateColumnsLook();
+							getUpButton().setVisible(true);
+							getDownButton().setVisible(true);
+						}
+					});
+			modeButtons.add(expertButton);
+
+			ButtonGroup bg = new ButtonGroup();
+			bg.add(easyButton);
+			bg.add(expertButton);
+
+			easyButton.doClick();
+		}
+
+		return modeButtons;
+	}
+
 	private void updateScaleInPreviewJLabel() {
 		if (asd.getPreviewMapPane() == null)
 			return;
 
-		final String formated = NumberFormat.getNumberInstance().format(
+		final String formated = NumberFormat.getIntegerInstance().format(
 				asd.getPreviewMapPane().getScaleDenominator());
 
-		scaleInPreviewValueJLabel.setText(formated);
+		String label = AtlasStyler.R(
+				"RulesListsListTablePanel.OGCScaleDenominatorInPreview",
+				formated);
+
+		scaleInPreviewValueJLabel.setText(label);
 
 	}
 

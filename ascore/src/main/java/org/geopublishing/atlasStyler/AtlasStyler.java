@@ -315,6 +315,18 @@ public class AtlasStyler {
 		public void changed(final RuleChangedEvent e) {
 			styleCached = null;
 
+			// SPEED OPTIMIZATION: Here we check whether the RuleChangedEvent is
+			// a min/max change. Next we check if a preview pane is set..
+			// TODO not finished SPEED OPTIMIZATION
+			if (RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING.equals(e
+					.getReason())) {
+				Object ov = e.getOldValue();
+				Object nv = e.getNewValue();
+				// if (getPreviewScale() != null) {
+				//
+				// }
+			}
+
 			// Only the lastChangedRule will be used to create the Style
 			final AbstractRulesList someRuleList = e.getSourceRL();
 

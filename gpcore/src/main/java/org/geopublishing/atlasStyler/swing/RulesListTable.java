@@ -128,18 +128,7 @@ public class RulesListTable extends JTable {
 				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
 		}
 
-		SwingUtil.setColumnLook(this, COLIDX_TITLE, ruleListLabelRenderer,
-				null, null, null);
-		SwingUtil.setColumnLook(this, COLIDX_TYPE, ruleListLabelRenderer, null,
-				null, null);
-		SwingUtil.setColumnLook(this, COLIDX_MINSCALE, new ScaleCellRenderer(
-				true), 40, null, null);
-		SwingUtil.setColumnLook(this, COLIDX_MAXSCALE, new ScaleCellRenderer(
-				false), 40, null, null);
-
-		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 18, 20);
-		SwingUtil.setColumnLook(this, COLIDX_FILTER,
-				new FilterTableCellRenderer(), 17, 18, 20);
+		updateColumnsLook();
 
 		setDefaultEditor(Filter.class, new FilterTableCellEditor(
 				RulesListTable.this, atlasStyler.getStyledFeatures()));
@@ -355,7 +344,8 @@ public class RulesListTable extends JTable {
 			case COLIDX_TITLE:
 				return rulesList.get(row).getTitle();
 			case COLIDX_TYPE:
-				return rulesList.get(row).getType();
+				return "<html>" + rulesList.get(row).getType().getTitle()
+						+ "</html>";
 			case COLIDX_MINSCALE:
 				return rulesList.get(row).getMinScaleDenominator();
 			case COLIDX_MAXSCALE:
@@ -428,4 +418,30 @@ public class RulesListTable extends JTable {
 
 	}
 
+	/**
+	 * Configures how the columns should be rendered. This method checks for the
+	 * "isEasy" flag and hides columns.
+	 */
+	public void updateColumnsLook() {
+
+		boolean easy = asd.isEasy();
+		SwingUtil.setColumnLook(this, COLIDX_ENABLED, null, 17, 19, 19);
+
+		SwingUtil.setColumnLook(this, COLIDX_TITLE, ruleListLabelRenderer,
+				easy ? 0 : 10, easy ? 0 : 40, easy ? 0 : 120);
+
+		SwingUtil.setColumnLook(this, COLIDX_TYPE, ruleListLabelRenderer, 40,
+				50, null);
+
+		SwingUtil.setColumnLook(this, COLIDX_MINSCALE, new ScaleCellRenderer(
+				true), easy ? 0 : 10, easy ? 0 : 40, easy ? 0 : 120);
+
+		SwingUtil.setColumnLook(this, COLIDX_MAXSCALE, new ScaleCellRenderer(
+				false), easy ? 0 : 10, easy ? 0 : 40, easy ? 0 : 120);
+
+		SwingUtil.setColumnLook(this, COLIDX_FILTER,
+				new FilterTableCellRenderer(), easy ? 0 : 17, easy ? 0 : 19,
+				easy ? 0 : 19);
+
+	}
 }

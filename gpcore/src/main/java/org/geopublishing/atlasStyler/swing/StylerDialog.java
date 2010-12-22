@@ -93,6 +93,11 @@ public class StylerDialog extends CancellableDialogAdapter {
 	private final XMapPane previewMapPane;
 
 	/**
+	 * If <code>true</code> the GUI hides the more compilcated parts.
+	 */
+	private boolean easy;
+
+	/**
 	 * Creates an AtlasStyler {@link JDialog} which allows to create a
 	 * SymbologyEncoding(SE) and StyledLayerDescriptor(SLD) for a
 	 * {@link FeatureSource}.
@@ -332,6 +337,17 @@ public class StylerDialog extends CancellableDialogAdapter {
 		if (previewMapPane == null)
 			return null;
 		return previewMapPane;
+	}
+
+	/**
+	 * If <code>true</code> the GUI hides the more compilcated parts.
+	 */
+	public void setEasy(boolean easy) {
+		this.easy = easy;
+	}
+
+	public boolean isEasy() {
+		return easy;
 	}
 
 }

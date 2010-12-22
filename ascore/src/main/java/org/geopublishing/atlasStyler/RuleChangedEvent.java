@@ -25,6 +25,18 @@ public class RuleChangedEvent {
 
 	private final String reason;
 
+	/**
+	 * <code>null</code> or the new value where it makes sense (e.g. min Max
+	 * Scale change)
+	 */
+	private Object newValue;
+
+	/**
+	 * <code>null</code> or the old value where it makes sense (e.g. min Max
+	 * Scale change)
+	 */
+	private Object oldValue;
+
 	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RulesList";
 	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RulesList";
 	public static final String RULE_CHANGE_EVENT_TITLE_STRING = "Title of rl has changed";
@@ -51,6 +63,30 @@ public class RuleChangedEvent {
 	 */
 	public String getReason() {
 		return reason;
+	}
+
+	/**
+	 * @return may return <code>null</code> or the old value where it makes
+	 *         sense (e.g. min Max Scale change)
+	 */
+	public Object getOldValue() {
+		return oldValue;
+	}
+
+	/**
+	 * @return may return <code>null</code> or the new value where it makes
+	 *         sense (e.g. min Max Scale change)
+	 */
+	public Object getNewValue() {
+		return newValue;
+	}
+
+	public void setOldValue(Object oldValue) {
+		this.oldValue = oldValue;
+	}
+
+	public void setNewValue(Object newValue) {
+		this.newValue = newValue;
 	}
 
 }

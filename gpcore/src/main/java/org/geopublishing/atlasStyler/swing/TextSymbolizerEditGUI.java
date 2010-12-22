@@ -832,20 +832,15 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			}
 
 			{
-				jPanelLabelDefinition
-						.add(new JLabel(AtlasStyler.R("groupTextLabels")),
-								"split 2");
+				jPanelLabelDefinition.add(new JLabel(AtlasStyler
+						.R("groupTextLabels"))
+				// ,"split 2"
+						);
 				jPanelLabelDefinition.add(getJCheckBoxGroup());
-
-				{
-					// <VendorOption name="labelAllGroup">true</VendorOption>
-					// jPanelLabelDefinition
-					// .add(new JLabel(),
-					// "right, split 2, gap right rel");
-					jPanelLabelDefinition.add(
-							getJCheckBoxVendorOptionLabelAllGroup(),
-							"left, gap right unrel");
-				}
+				//
+				// jPanelLabelDefinition.add(
+				// getJCheckBoxVendorOptionLabelAllGroup(),
+				// "left, gap right unrel");
 
 			}
 
