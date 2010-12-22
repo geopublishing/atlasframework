@@ -139,7 +139,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * This {@link java.util.Map} holds a {@link List} of {@link LayerStyle}-IDs
 	 * for every {@link DpLayer} (referred to by its ID) *
 	 */
-	private java.util.Map<String, ArrayList<String>> additionalStyles = new HashMap<String, ArrayList<String>>();
+	private final java.util.Map<String, ArrayList<String>> additionalStyles = new HashMap<String, ArrayList<String>>();
 
 	/** This {@link java.util.Map} links LayerIDs to {@link LayerStyle} - IDs * */
 	volatile private java.util.Map<String, String> selectedStyleID = new HashMap<String, String>();
@@ -513,14 +513,16 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		return additionalStyles;
 	}
 
-	/**
-	 * This {@link java.util.Map} holds a {@link List} of {@link LayerStyle}-IDs
-	 * for every {@link DpLayer} (refered to by its ID) *
-	 */
-	public void setAdditionalStyles(
-			final java.util.Map<String, ArrayList<String>> additionalStyles) {
-		this.additionalStyles = additionalStyles;
-	}
+	//
+	// /**
+	// * This {@link java.util.Map} holds a {@link List} of {@link
+	// LayerStyle}-IDs
+	// * for every {@link DpLayer} (refered to by its ID) *
+	// */
+	// public void setAdditionalStyles(
+	// final java.util.Map<String, ArrayList<String>> additionalStyles) {
+	// this.additionalStyles = additionalStyles;
+	// }
 
 	/**
 	 * Tell the map, which user defined style to use
@@ -532,8 +534,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void setSelectedStyleID(final String layerID, final String styleID) {
-		// LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
-		// + styleID+" MAP="+this);
+		LOGGER.debug("setSelectedStyleID for layerID " + layerID + " => "
+				+ styleID + " MAP=" + this);
 		selectedStyleID.put(layerID, styleID);
 	}
 
@@ -573,18 +575,21 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		if (lsID == null)
 			return null;
 
-		for (final DpRef<DpLayer<?, ? extends ChartStyle>> dpr : getLayers()) {
-			if (dpr.getTargetId().equals(layerID)) {
-				final DpLayer<?, ? extends ChartStyle> target = dpr.getTarget();
-
-				if (target instanceof DpLayer) {
-					final DpLayer<?, ? extends ChartStyle> dpl = target;
-					return dpl.getLayerStyleByID(lsID);
-				}
-
-			}
-		}
-		return null;
+		// for (final DpRef<DpLayer<?, ? extends ChartStyle>> dpr : getLayers())
+		// {
+		// if (dpr.getTargetId().equals(layerID)) {
+		// final DpLayer<?, ? extends ChartStyle> target = dpr.getTarget();
+		//
+		// if (target instanceof DpLayer) {
+		// final DpLayer<?, ? extends ChartStyle> dpl = target;
+		final DpEntry<? extends ChartStyle> dpEntry = ac.getDataPool().get(
+				layerID);
+		return ((DpLayer) dpEntry).getLayerStyleByID(lsID);
+		// }
+		//
+		// }
+		// }
+		// return null;
 	}
 
 	public java.util.Map<String, String> getSelectedStyleIDs() {

@@ -437,8 +437,11 @@ public class ClickInfoPanel extends JPanel {
 
 									final BufferedImage img = ImageIO
 											.read(imgURL);
-									valueComponent = new JLabel(new ImageIcon(
-											img));
+									final ImageIcon imageIcon = new ImageIcon(
+											img);
+									valueComponent = new JLabel(imageIcon);
+									valueComponent
+											.setAlignmentX(JLabel.LEFT_ALIGNMENT);
 								} catch (final Exception e1) {
 									LOGGER.warn(e1);
 

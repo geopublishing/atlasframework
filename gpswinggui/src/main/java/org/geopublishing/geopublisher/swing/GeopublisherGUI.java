@@ -163,21 +163,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		return getInstance(false);
 	}
 
-	// /**
-	// * Creates and returns a single instance of Geopublisher, evaluating any
-	// * arguments passed on the command line.
-	// */
-	// public static GeopublisherGUI getInstance(final String[] args) {
-	// if (instance != null) {
-	// LOGGER.error(
-	// "Geopublisher instance is requested with arguments but it exists already!",
-	// new RuntimeException());
-	// instance = null;
-	// }
-	// instance = new GeopublisherGUI();
-	// return instance;
-	// }
-
 	/**
 	 * Start routine for the {@link GeopublisherGUI}
 	 * 

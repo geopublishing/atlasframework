@@ -135,12 +135,14 @@ public class AtlasMenuItem extends JMenuItem {
 
 			// If the layer is already part of the active map, disable it in the
 			// menu.
-			for (MapLayer layer : atlasViewer.getMapView().getGeoMapPane()
-					.getMapContext().getLayers()) {
-				if (layer.getTitle().equals(dpId)) {
-					setForeground(Color.gray);
-					super.paintComponent(g);
-					return;
+			if (atlasViewer.getMapView() != null) {
+				for (MapLayer layer : atlasViewer.getMapView().getGeoMapPane()
+						.getMapContext().getLayers()) {
+					if (layer.getTitle().equals(dpId)) {
+						setForeground(Color.gray);
+						super.paintComponent(g);
+						return;
+					}
 				}
 			}
 		}

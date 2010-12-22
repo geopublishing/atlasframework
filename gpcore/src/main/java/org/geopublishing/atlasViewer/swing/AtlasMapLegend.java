@@ -87,7 +87,7 @@ public class AtlasMapLegend extends MapLegend {
 		this.map = map;
 		this.ac = ac;
 	}
-	
+
 	/**
 	 * One task of this is method, to check whether the layer is marked as
 	 * <code>hideInLegend</code> or <code>minimizeInLegend</code>. This
@@ -111,8 +111,7 @@ public class AtlasMapLegend extends MapLegend {
 	 *         {@link DesignAtlasMapLegend} to create DesignLayerPaneGroup
 	 *         objects.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	@Override
 	protected MapLayerLegend createMapLayerLegend(MapLayer mapLayer,
@@ -144,45 +143,47 @@ public class AtlasMapLegend extends MapLegend {
 		}
 		return super.getTitleFor(styledObj);
 	}
-//
-//	/**
-//	 * This method overrides the updateLegendIcon method in {@link MapLegend}.
-//	 * This difference in this method is, that there can actually exist multiple
-//	 * styles for one layer.
-//	 * 
-//	 * @param styledObj
-//	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-//	 *         Tzeggai</a>
-//	 */
-//	@Override
-//	public void updateLegendIcon(StyledLayerInterface<?> styledObj) {
-//
-//		final String id = styledObj.getId();
-//
-//		java.util.Map<String, ArrayList<String>> additionalStyles = getMap()
-//				.getAdditionalStyles();
-//		final ArrayList<String> availableStyles = additionalStyles.get(id);
-//
-//		if (availableStyles == null || availableStyles.size() == 0) {
-//			super.updateLegendIcon(styledObj);
-//			return;
-//		}
-//
-//		/**
-//		 * Once we are here, we can be sure that we do have at least one
-//		 * additional style!<br/>
-//		 * If there is only one additional (active) style for this layer (in
-//		 * this map), we do not render a JTabbedPane. The Title of the only
-//		 * additional style is not displayed. If there are more than 5
-//		 * additional styles, we render a DropDown component.
-//		 */
-//
-//		Component legendPanel = createAdditionalStylesPane(getMapLayerFor(id),
-//				availableStyles, (DpLayer) styledObj);
-//		// rememberLegend.put(styledObj.getId(), legendPanel);
-//		rememberId2MapLayerLegend.remove(styledObj.getId());
-//
-//	}
+
+	//
+	// /**
+	// * This method overrides the updateLegendIcon method in {@link MapLegend}.
+	// * This difference in this method is, that there can actually exist
+	// multiple
+	// * styles for one layer.
+	// *
+	// * @param styledObj
+	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
+	// * Tzeggai</a>
+	// */
+	// @Override
+	// public void updateLegendIcon(StyledLayerInterface<?> styledObj) {
+	//
+	// final String id = styledObj.getId();
+	//
+	// java.util.Map<String, ArrayList<String>> additionalStyles = getMap()
+	// .getAdditionalStyles();
+	// final ArrayList<String> availableStyles = additionalStyles.get(id);
+	//
+	// if (availableStyles == null || availableStyles.size() == 0) {
+	// super.updateLegendIcon(styledObj);
+	// return;
+	// }
+	//
+	// /**
+	// * Once we are here, we can be sure that we do have at least one
+	// * additional style!<br/>
+	// * If there is only one additional (active) style for this layer (in
+	// * this map), we do not render a JTabbedPane. The Title of the only
+	// * additional style is not displayed. If there are more than 5
+	// * additional styles, we render a DropDown component.
+	// */
+	//
+	// Component legendPanel = createAdditionalStylesPane(getMapLayerFor(id),
+	// availableStyles, (DpLayer) styledObj);
+	// // rememberLegend.put(styledObj.getId(), legendPanel);
+	// rememberId2MapLayerLegend.remove(styledObj.getId());
+	//
+	// }
 
 	/**
 	 * Returns a localized title for this layer. If the layer supports
@@ -340,8 +341,7 @@ public class AtlasMapLegend extends MapLegend {
 		getMapPaneToolBar().addSeparator(SEPERATOR3, new JToolBar.Separator());
 
 		final JButton chartButton = new AtlasMapToolBarChartButton(
-				getMapContext(), getMap(), 
-				rememberId2StyledLayer, this);
+				getMapContext(), getMap(), rememberId2StyledLayer, this);
 		getMapPaneToolBar().addJComponent(chartButton,
 				MapPaneToolBar.ACTION_CHARTS, true);
 		// Look.. this true is important - otherwise
@@ -366,8 +366,8 @@ public class AtlasMapLegend extends MapLegend {
 		 * Adds the search button to the MapPaneToolBar
 		 */
 		MapPaneToolBarAction searchAction = new MapPaneToolBarAction(
-				AtlasMapView.ACTION_SEARCH, getMapPaneToolBar(), AtlasViewerGUI
-						.R("AtlasMapView.SearchButton.Label"),
+				AtlasMapView.ACTION_SEARCH, getMapPaneToolBar(),
+				AtlasViewerGUI.R("AtlasMapView.SearchButton.Label"),
 				Icons.ICON_SEARCH) {
 
 			private SearchMapDialog searchMapDialog;
@@ -380,8 +380,7 @@ public class AtlasMapLegend extends MapLegend {
 					// so do nothing at all (ISDSS)
 					if (getMap() == null) {
 						ExceptionDialog
-								.show(
-										AtlasMapLegend.this,
+								.show(AtlasMapLegend.this,
 										null,
 										AtlasViewerGUI
 												.R("AtlasMapView.errmess.Title"),
@@ -401,8 +400,8 @@ public class AtlasMapLegend extends MapLegend {
 				}
 			}
 		};
-		searchAction.putValue(Action.SHORT_DESCRIPTION, AtlasViewerGUI
-				.R("AtlasMapView.SearchButton.tt"));
+		searchAction.putValue(Action.SHORT_DESCRIPTION,
+				AtlasViewerGUI.R("AtlasMapView.SearchButton.tt"));
 		getMapPaneToolBar().addAction(searchAction, true);
 		// Look.. this true is important - otherwise
 		// the MapPaneButtons are not recreated
@@ -410,7 +409,7 @@ public class AtlasMapLegend extends MapLegend {
 		getMapPaneToolBar().setButtonEnabled(AtlasMapView.ACTION_SEARCH,
 				getMap() != null, true);
 
-		//		
+		//
 
 	}
 
@@ -514,6 +513,7 @@ public class AtlasMapLegend extends MapLegend {
 
 	@Override
 	public boolean insertStyledLayer(StyledLayerInterface<?> styledObj, int idx) {
+
 		boolean result = super.insertStyledLayer(styledObj, idx);
 		if (result) {
 			String id = styledObj.getId();
@@ -522,14 +522,18 @@ public class AtlasMapLegend extends MapLegend {
 			mapLayer.setVisible(!getMap().getHiddenFor(styledObj.getId()));
 
 			if (styledObj instanceof StyledFeaturesInterface<?>) {
+
 				/**
 				 * Efficiency: Ignore layer on selection if there are no visible
 				 * attributes!
 				 */
-				AttributeMetadataMap amd = ((StyledFeaturesInterface<?>) styledObj)
+				final StyledFeaturesInterface styledFeatures = (StyledFeaturesInterface) styledObj;
+
+				AttributeMetadataMap amd = styledFeatures
 						.getAttributeMetaDataMap();
-				final int counteVisibleAtts = amd.sortedValuesVisibleOnly().size();
-				
+				final int counteVisibleAtts = amd.sortedValuesVisibleOnly()
+						.size();
+
 				if (!getMap().isSelectableFor(styledObj.getId())
 						|| counteVisibleAtts <= 0) {
 					getGeoMapPane().getMapPane().setMapLayerSelectable(
@@ -546,7 +550,21 @@ public class AtlasMapLegend extends MapLegend {
 							.add(fcs.getID());
 
 				showOrHideChartButton();
-				
+
+				// TODO TODO
+				// // Activate all additional Styles if this layer has never
+				// been
+				// // configured for this map
+				// if (getMap().getAdditionalStyles().get(styledObj.getId()) ==
+				// null
+				// && dplvfs.getLayerStyles().size() > 0) {
+				// ArrayList<String> x = new ArrayList<String>();
+				// for (LayerStyle ls : dplvfs.getLayerStyles()) {
+				// x.add(ls.getID());
+				// }
+				// getMap().getAdditionalStyles().put(styledObj.getId(), x);
+				// }
+
 			}
 		}
 		return result;

@@ -105,11 +105,10 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 */
 	public StylerDialog(Component owner, AtlasStyler atlasStyler,
 			XMapPane previewMapPane) {
-		super(SwingUtil.getParentWindow(owner));
+		super(owner);
 		this.atlasStyler = atlasStyler;
 		this.previewMapPane = previewMapPane;
 		atlasStyler.setOwner(this);
-		// TODO VERY UGLY CAST!
 		this.tabbedPane = new AtlasStylerPane(this);
 		initialize();
 

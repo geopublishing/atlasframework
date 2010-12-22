@@ -55,6 +55,8 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
+import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.exceptions.AtlasRecoverableException;
 import org.geopublishing.atlasViewer.http.FileWebResourceLoader;
@@ -434,6 +436,34 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 							@Override
 							protected Boolean doInBackground() throws Exception {
+
+								// If there exist additional styles for this
+								// layer, aktivate them all
+
+								if (dpe instanceof DpLayerVectorFeatureSource)
+								// Add all it's Charts to the Map by default:
+								{
+									DpLayerVectorFeatureSource dplvfs = (DpLayerVectorFeatureSource) dpe;
+
+									// Activate all additional Styles if this
+									// layer has never
+									// been configured for this map
+									final java.util.Map<String, ArrayList<String>> mapAadditionalStyles = getMap()
+											.getAdditionalStyles();
+									if (mapAadditionalStyles
+											.get(dplvfs.getId()) == null
+											&& dplvfs.getLayerStyles().size() > 0) {
+										ArrayList<String> x = new ArrayList<String>();
+										for (LayerStyle ls : dplvfs
+												.getLayerStyles()) {
+											x.add(ls.getID());
+										}
+										getMap().getAdditionalStyles().put(
+												dplvfs.getId(), x);
+									}
+
+								}
+
 								// Calling the mapView to add the Layer
 								return getMapView().addStyledLayer(
 										(StyledLayerInterface<?>) dpe);
