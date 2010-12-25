@@ -22,6 +22,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.log4j.Logger;
 
+import schmitzm.lang.LangUtil;
+
 /**
  * TODO Das ist zu speuiell. das muss in unique... umbeannt werden
  * 
@@ -35,7 +37,7 @@ public class SingleRuleListCellRenderer extends DefaultTableCellRenderer {
 	 */
 	private static final Dimension CELL_IMAGE_SIZE = new Dimension(25, 25);
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,

@@ -29,7 +29,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -39,6 +38,7 @@ import org.geotools.styling.Style;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerInterface;
@@ -52,7 +52,7 @@ import skrueger.i8n.Translation;
  * s etc.
  */
 public class SldLegendUtil {
-	static final private Logger LOGGER = ASUtil
+	static final private Logger LOGGER = LangUtil
 			.createLogger(SldLegendUtil.class);
 
 	/** Determine height of the icons depending on the Font used **/
@@ -329,7 +329,7 @@ public class SldLegendUtil {
 
 
 	public static class JComboBoxForAddStylesPanel extends JPanel {
-		protected Logger LOGGER = ASUtil
+		protected Logger LOGGER = LangUtil
 				.createLogger(JComboBoxForAddStylesPanel.class);
 
 		/** The actual {@link JComboBox} **/

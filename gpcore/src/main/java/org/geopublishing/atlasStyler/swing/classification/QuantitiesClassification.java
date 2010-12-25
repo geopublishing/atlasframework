@@ -17,8 +17,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
@@ -36,7 +36,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 public class QuantitiesClassification extends
 		org.geopublishing.atlasStyler.classification.QuantitiesClassification {
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	volatile private AtlasSwingWorker<TreeSet<Double>> calculateStatisticsWorker;
 	private final Component owner;

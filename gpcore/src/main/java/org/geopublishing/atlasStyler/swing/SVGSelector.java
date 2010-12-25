@@ -72,6 +72,7 @@ import org.geotools.styling.PolygonSymbolizer;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
@@ -81,7 +82,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 // TODO Convert to AtlasDialog and add a local Database of SVG symbols
 public class SVGSelector extends CancellableDialogAdapter {
-	static private final Logger LOGGER = ASUtil.createLogger(SVGSelector.class);
+	static private final Logger LOGGER = LangUtil.createLogger(SVGSelector.class);
 
 	protected static final Dimension SVGICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
 

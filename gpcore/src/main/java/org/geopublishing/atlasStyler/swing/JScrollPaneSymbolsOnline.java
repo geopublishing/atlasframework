@@ -29,7 +29,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -40,6 +39,7 @@ import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.swingworker.AtlasStatusDialog;
@@ -47,7 +47,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
-	private final Logger LOGGER = ASUtil.createLogger(this);
+	private final Logger LOGGER = LangUtil.createLogger(this);
 
 	@Override
 	protected String getDesc() {

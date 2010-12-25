@@ -74,7 +74,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesGUI extends AbstractRuleListGui implements
 		ClosableSubwindows {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	/**
 	 * Listen for changes in the RuleList. Must be kept as a reference in
@@ -988,7 +988,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	class UniqueValuesSingleRuleListCellRenderer extends
 			DefaultTableCellRenderer {
 
-		protected Logger LOGGER = ASUtil.createLogger(this);
+		protected Logger LOGGER = LangUtil.createLogger(this);
 
 		@Override
 		public Component getTableCellRendererComponent(JTable table,

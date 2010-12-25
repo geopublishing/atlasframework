@@ -30,6 +30,7 @@ import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Symbolizer;
 
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.TranslationAskJDialog;
@@ -37,7 +38,7 @@ import skrueger.swing.TranslationEditJPanel;
 
 public class SingleSymbolGUI extends AbstractRuleListGui implements
 		ClosableSubwindows {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private EditSymbolButton jButtonSymbolSelector = null;
 

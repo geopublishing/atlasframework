@@ -39,6 +39,7 @@ import org.opengis.util.InternationalString;
 import schmitzm.geotools.FilterUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.Copyable;
 import skrueger.geotools.LegendIconFeatureRenderer;
 import skrueger.geotools.StyledLayerUtil;
@@ -46,7 +47,7 @@ import skrueger.i8n.Translation;
 
 public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		AbstractRulesList implements Copyable<SingleRuleList<SymbolizerType>> {
-	final static protected Logger LOGGER = ASUtil
+	final static protected Logger LOGGER = LangUtil
 			.createLogger(SingleRuleList.class);
 
 	/**

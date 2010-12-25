@@ -13,18 +13,18 @@ package org.geopublishing.atlasViewer.dp.layer;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geotools.styling.Style;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.i8n.Translation;
 
 public class LayerStyle {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private String filename;
 

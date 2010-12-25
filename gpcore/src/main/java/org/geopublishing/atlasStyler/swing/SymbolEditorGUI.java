@@ -38,7 +38,6 @@ import javax.swing.table.TableCellRenderer;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
@@ -54,6 +53,7 @@ import org.opengis.feature.type.GeometryDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.LegendIconFeatureRenderer;
@@ -64,7 +64,7 @@ import com.vividsolutions.jts.geom.Point;
 
 public class SymbolEditorGUI extends CancellableDialogAdapter {
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	protected static final String PROPERTY_LAYER_SELECTION = "LAYER_SELECTION";
 

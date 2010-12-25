@@ -19,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
@@ -40,6 +39,7 @@ import schmitzm.geotools.gui.GeoMapPane;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
 import schmitzm.jfree.feature.style.FeatureChartStyle;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.AttributeMetadataMap;
 import skrueger.geotools.MapPaneToolBar;
@@ -63,7 +63,7 @@ import skrueger.i8n.I8NUtil;
  * 
  */
 public class AtlasMapLegend extends MapLegend {
-	static final private Logger LOGGER = ASUtil
+	static final private Logger LOGGER = LangUtil
 			.createLogger(AtlasMapLegend.class);
 
 	private final Map map;

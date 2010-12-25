@@ -22,12 +22,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.AttributeMetadataInterface;
@@ -45,7 +45,7 @@ import skrueger.i8n.Translation;
  * @author Stefan A. Tzeggai
  */
 public class AttributesJComboBox extends JComboBox {
-	static final private Logger LOGGER = ASUtil
+	static final private Logger LOGGER = LangUtil
 			.createLogger(AttributesJComboBox.class);
 
 	private List<String> numericalAttribs;

@@ -18,7 +18,6 @@ import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geotools.map.event.MapLayerListEvent;
@@ -28,13 +27,14 @@ import schmitzm.geotools.gui.SelectableXMapPane;
 import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.geotools.map.event.ObjectSelectionEvent;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.MapPaneToolBar;
 import skrueger.geotools.MapView;
 
 public class StylerMapView extends MapView {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private MapLegend layerManager;
 

@@ -22,7 +22,6 @@ import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.GraduatedColorRuleList;
@@ -32,6 +31,7 @@ import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 
 /**
@@ -40,7 +40,7 @@ import schmitzm.swing.JPanel;
  * 
  */
 public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	/**
 	 * Caches the GUIs for the {@link RulesListsList}s

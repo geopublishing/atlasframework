@@ -493,7 +493,7 @@ public abstract class AbstractRulesList {
 	final WeakHashSet<RuleChangeListener> listeners = new WeakHashSet<RuleChangeListener>(
 			RuleChangeListener.class);
 
-	final protected Logger LOGGER = ASUtil.createLogger(this);
+	final protected Logger LOGGER = LangUtil.createLogger(this);
 
 	/**
 	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will

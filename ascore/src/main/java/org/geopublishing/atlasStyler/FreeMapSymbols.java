@@ -12,11 +12,13 @@ package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
 
+import schmitzm.lang.LangUtil;
+
 public class FreeMapSymbols {
 	static public final String BASE_URL = "http://freemapsymbols.org/";
 
 	static public final String LINE_URL = BASE_URL + "line";
-	protected static Logger LOGGER = ASUtil.createLogger(FreeMapSymbols.class);
+	protected static Logger LOGGER = LangUtil.createLogger(FreeMapSymbols.class);
 	static public final String POINT_URL = BASE_URL + "point";
 	static public final String POLYGON_URL = BASE_URL + "polygon";
 

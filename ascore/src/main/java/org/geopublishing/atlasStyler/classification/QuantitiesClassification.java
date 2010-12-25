@@ -34,6 +34,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.FeatureUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.lang.LimitedHashMap;
 import skrueger.AttributeMetadataImpl;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -128,7 +129,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	 */
 	private Integer limitsDigits = null;
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private String normalizer_field_name;
 

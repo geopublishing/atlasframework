@@ -32,13 +32,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.MapContextManagerInterface;
 import skrueger.geotools.StyledLayerInterface;
 import skrueger.swing.AtlasDialog;
 
 public class XMLCodeFrame extends AtlasDialog {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 	private final MapContextManagerInterface mapContextManagerInterface;
 
 	Map<String, JScrollPane> names2xml = new HashMap<String, JScrollPane>();

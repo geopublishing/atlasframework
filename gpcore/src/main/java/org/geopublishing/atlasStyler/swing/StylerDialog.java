@@ -29,7 +29,6 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.Style;
@@ -40,6 +39,7 @@ import schmitzm.geotools.gui.XMapPane;
 import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.geotools.map.event.ScaleChangedEvent;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
@@ -54,7 +54,7 @@ import skrueger.swing.OkButton;
  * 
  */
 public class StylerDialog extends CancellableDialogAdapter {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private JPanel jContentPane = null;
 

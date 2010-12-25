@@ -25,13 +25,14 @@ import org.opengis.feature.type.GeometryDescriptor;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.i8n.Translation;
 
 import com.vividsolutions.jts.geom.Polygon;
 
 public class SinglePolygonSymbolRuleList extends
 		SingleRuleList<PolygonSymbolizer> {
-	protected final static Logger LOGGER = ASUtil
+	protected final static Logger LOGGER = LangUtil
 			.createLogger(SinglePolygonSymbolRuleList.class);
 
 	public SinglePolygonSymbolRuleList(String title) {

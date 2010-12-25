@@ -22,7 +22,7 @@ public abstract class Classification {
 
 	private Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
 
-	// protected Logger LOGGER = ASUtil.createLogger(this);
+	// protected Logger LOGGER = LangUtil.createLogger(this);
 	protected Logger LOGGER = Logger.getLogger(Classification.class);
 
 	/**

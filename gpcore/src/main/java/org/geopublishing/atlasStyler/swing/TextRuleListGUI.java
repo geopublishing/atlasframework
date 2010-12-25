@@ -54,12 +54,12 @@ import skrueger.swing.ThinButton;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 
 /**
- * This GUI defines all the buttons to define the {@link TextSymbolizer}
- * 
- * @author SK
+ * This GUI presents a TextRulesList. A TextRulesList consists of multiple
+ * {@link TextSymbolizer}s
  */
 public class TextRuleListGUI extends AbstractRuleListGui {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private JCheckBox jCheckBoxEnabled = null;
 
@@ -93,33 +93,17 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 		super(rulesList);
 		this.atlasStyler = atlasStyler;
 		this.rulesList = rulesList;
-		// listenerEnableDisableGUIwhenRLenabledDisabled = new
-		// RuleChangeListener_GuiEnabledDisabled(
-		// TextRuleListGUI.this, rulesList);
 
 		// Create components
-		initialize();
+		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top", "grow"));
+		// this.add(getJCheckBoxEnabled(), "top");
+		this.add(getJPanelClass());
 
 		// Put the model values into the GUI
 		updateGUI();
 
-		// atlasStyler.addListener(new StyleChangeListener() {
-		//
-		// @Override
-		// public void changed(StyleChangedEvent e) {
-		// jButtonClassFromSymbols.setEnabled(!(atlasStyler
-		// .getLastChangedRuleList() instanceof SingleRuleList));
-		// }
-		//
-		// });
-		// jButtonClassFromSymbols.setEnabled(!(atlasStyler
-		// .getLastChangedRuleList() instanceof SingleRuleList));
-
 		// TODO new import dialog!
 		jButtonClassFromSymbols.setEnabled(true);
-
-		// rulesList.addListener(listenerEnableDisableGUIwhenRLenabledDisabled);
-
 	}
 
 	/**
@@ -147,20 +131,8 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 		// Change the state of the class enabled CB
 		jCheckBoxClassEnabled.setSelected(rulesList.isClassEnabled(rulesList
 				.getSelIdx()));
-		reactToClassEnabledChange();
-	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @param features
-	 * 
-	 * @return void
-	 */
-	private void initialize() {
-		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top", "grow"));
-		// this.add(getJCheckBoxEnabled(), "top");
-		this.add(getJPanelClass());
+		reactToClassEnabledChange();
 	}
 
 	/**
@@ -318,6 +290,9 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 		return jCheckBoxClassEnabled;
 	}
 
+	/**
+	 * If this {@link TextRuleList} is enabled, enable the GUI components.
+	 */
 	private void reactToClassEnabledChange() {
 		getJPanelEditTextSymbolizer().setEnabled(
 				getJCheckBoxClassEnabled().isSelected()
@@ -333,9 +308,6 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 		if (jButtonClassAdd == null) {
 			jButtonClassAdd = new ThinButton(
 					AtlasStyler.R("TextRulesList.Labelclass.Action.Add"));
-			// jButtonClassAdd.setFont(jButtonClassAdd.getFont().deriveFont(
-			// AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-			// AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
 			jButtonClassAdd.setToolTipText(AtlasStyler
 					.R("TextRulesList.Labelclass.Action.Add.TT"));
 			jButtonClassAdd.setEnabled(false);
@@ -379,9 +351,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	}
 
 	private void fireClassChanged() {
-		// rulesList.pushQuite();
 		updateGUI();
-		// rulesList.popQuite(null);
 	}
 
 	/**
@@ -435,8 +405,6 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 						getJComboBoxClass().setSelectedIndex(
 								rulesList.getSelIdx());
-
-						// updateGUI();
 					}
 				}
 
@@ -640,8 +608,6 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 						} finally {
 							mfeatures.close(mfeatures.iterator());
 						}
-						// features = mfc;
-
 						return mfc;
 
 					} catch (IOException e) {
@@ -664,50 +630,5 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 		}
 		return features;
 	}
-
-	//
-	// /**
-	// * This method initializes jButton
-	// *
-	// * @return javax.swing.JButton
-	// */
-	// private JButton getJButton() {
-	// if (jButtonPlacement == null) {
-	// jButtonPlacement = new JButton();
-	// jButtonPlacement.setFont(jButtonPlacement.getFont().deriveFont(
-	// AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-	// AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
-	//
-	// LabelPlacement labelPlacement =
-	// rulesList.getSymbolizers().get(0).getLabelPlacement();
-	// PointPlacement pPlacement;
-	// LinePlacement linePlacement;
-	//
-	// linePlacement.set
-	//
-	// AnchorPoint ap = StylingUtil.STYLE_BUILDER.createAnchorPoint(10., 10.);
-	// pPlacement.setAnchorPoint(ap);
-	//
-	// jButtonPlacement.setEnabled(false);
-	// }
-	// return jButtonPlacement;
-	// }
-
-	// /**
-	// * This method initializes jButton
-	// *
-	// * @return javax.swing.JButton
-	// */
-	// private JButton getJButtonScaleRange() {
-	// if (jButtonScaleRange == null) {
-	// jButtonScaleRange = new JButton(AtlasStyler
-	// .R("TextRulesList.Button.ScaleRange"));
-	// jButtonScaleRange.setFont(jButtonScaleRange.getFont().deriveFont(
-	// AtlasStylerTabbedPane.BUTTON_FONT_STYLE,
-	// AtlasStylerTabbedPane.BUTTON_FONT_SIZE));
-	// jButtonScaleRange.setEnabled(false);
-	// }
-	// return jButtonScaleRange;
-	// }
 
 }

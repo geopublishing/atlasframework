@@ -66,6 +66,7 @@ import org.geotools.styling.Style;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.Translation;
@@ -85,7 +86,7 @@ import skrueger.swing.TranslationEditJPanel;
  * 
  */
 public class ManageLayerStylesDialog extends JDialog {
-	protected static Logger LOGGER = ASUtil
+	protected static Logger LOGGER = LangUtil
 			.createLogger(ManageLayerStylesDialog.class);
 
 	PropertyChangeListener dpListenerToUpdateTableModel;

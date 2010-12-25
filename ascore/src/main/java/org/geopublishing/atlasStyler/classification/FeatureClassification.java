@@ -11,15 +11,15 @@
 package org.geopublishing.atlasStyler.classification;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.feature.FeatureCollection;
 
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public abstract class FeatureClassification extends Classification {
 	static public final int MAX_NUMBER_OF_COLORS_ALLOWED = 11;
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private StyledFeaturesInterface<?> styledFeatures;
 

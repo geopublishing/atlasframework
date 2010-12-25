@@ -12,6 +12,8 @@ package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
 
+import schmitzm.lang.LangUtil;
+
 /**
  * This event communicated the change of some {@link AbstractRulesList}.
  * 
@@ -19,7 +21,7 @@ import org.apache.log4j.Logger;
  * 
  */
 public class RuleChangedEvent {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private final AbstractRulesList sourceRL;
 
@@ -40,8 +42,8 @@ public class RuleChangedEvent {
 	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RulesList";
 	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RulesList";
 	public static final String RULE_CHANGE_EVENT_TITLE_STRING = "Title of rl has changed";
-
 	public static final String RULE_CHANGE_EVENT_MINMAXSCALE_STRING = "min- or max-scale changed for this RulesList";
+	public static final String RULE_PLACEMENT_CHANGED_STRING = "label placement changed";
 
 	public RuleChangedEvent(String reason, final AbstractRulesList sourceRL) {
 		this.reason = reason;

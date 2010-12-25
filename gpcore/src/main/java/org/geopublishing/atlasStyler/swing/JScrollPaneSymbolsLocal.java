@@ -42,6 +42,7 @@ import org.geotools.feature.GeometryAttributeType;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 
@@ -53,7 +54,7 @@ import skrueger.swing.swingworker.AtlasSwingWorker;
  * 
  */
 public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	protected final File dir;
 

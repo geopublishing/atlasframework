@@ -49,6 +49,7 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.AtlasDialog;
@@ -57,7 +58,7 @@ import skrueger.swing.ColorButton;
 import skrueger.swing.OkButton;
 
 public class SymbolSelectorGUI extends AtlasDialog {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public static final String PROPERTY_CANCEL_CHANGES = "CANCEL CHANGES";
 

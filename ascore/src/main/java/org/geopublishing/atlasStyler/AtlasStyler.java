@@ -123,7 +123,7 @@ public class AtlasStyler {
 	 */
 	private static List<String> languages = new LinkedList<String>();
 
-	private final static Logger LOGGER = ASUtil.createLogger(AtlasStyler.class);
+	private final static Logger LOGGER = LangUtil.createLogger(AtlasStyler.class);
 
 	/**
 	 * Key for a parameter of type List<Font> of additional Fonts that are

@@ -83,6 +83,7 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ColorButton;
 
@@ -93,7 +94,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	private static final String[] LINECAP_VALUES = new String[] { "butt",
 			"round", "square" };
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private final LineSymbolizer symbolizer;
 

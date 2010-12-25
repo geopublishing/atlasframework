@@ -14,11 +14,12 @@ import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFeaturesInterface;
 
 public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
 		super(styledFeatures,GeometryForm.LINE);

@@ -40,6 +40,7 @@ import org.geotools.styling.Stroke;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.JPanel;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.ColorButton;
@@ -81,7 +82,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 	private JPanel jPanelStroke = null;
 
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	/**
 	 * Remembers GUI settings so that clicking is more fun..

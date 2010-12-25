@@ -40,7 +40,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -55,6 +54,7 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 import org.geotools.styling.Style;
 
+import schmitzm.lang.LangUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
 import skrueger.swing.TranslationAskJDialog;
@@ -70,7 +70,7 @@ import skrueger.swing.TranslationEditJPanel;
  * 
  */
 public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	
 

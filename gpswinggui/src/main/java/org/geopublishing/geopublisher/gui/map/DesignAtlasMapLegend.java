@@ -15,7 +15,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -35,11 +34,12 @@ import schmitzm.geotools.gui.XMapPaneEvent;
 import schmitzm.geotools.map.event.FeatureSelectedEvent;
 import schmitzm.geotools.map.event.JMapPaneListener;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.MapPaneToolBar;
 import skrueger.geotools.StyledLayerInterface;
 
 public class DesignAtlasMapLegend extends AtlasMapLegend {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private final AtlasConfigEditable ace;
 

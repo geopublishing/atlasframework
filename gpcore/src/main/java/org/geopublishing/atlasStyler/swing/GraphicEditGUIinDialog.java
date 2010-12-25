@@ -30,19 +30,19 @@ import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.swing.CancelButton;
 import skrueger.swing.OkButton;
 
 public class GraphicEditGUIinDialog extends JDialog {
-	protected Logger LOGGER = ASUtil.createLogger(this);
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private JPanel jContentPane = null;
 

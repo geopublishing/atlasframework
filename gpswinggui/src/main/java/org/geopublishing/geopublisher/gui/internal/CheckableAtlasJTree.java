@@ -14,7 +14,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -31,7 +30,7 @@ import skrueger.swing.checkboxtree.NamedVector;
 
 public class CheckableAtlasJTree extends JTree {
 	
-	protected final static Logger LOGGER = ASUtil
+	protected final static Logger LOGGER = LangUtil
 	.createLogger(CheckableAtlasJTree.class);
 
 

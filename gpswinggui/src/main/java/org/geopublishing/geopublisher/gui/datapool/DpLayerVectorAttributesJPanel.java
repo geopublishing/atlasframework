@@ -35,7 +35,6 @@ import javax.swing.JList;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
@@ -50,6 +49,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.JPanel;
 import skrueger.geotools.AttributeMetadataMap;
@@ -61,7 +61,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 
 	private static final long serialVersionUID = 3815347428081593615L;
 
-	protected final static Logger LOGGER = ASUtil
+	protected final static Logger LOGGER = LangUtil
 	.createLogger(DpLayerVectorAttributesJPanel.class);
 
 	private Charset backupCRS;

@@ -18,7 +18,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
@@ -36,6 +35,7 @@ import org.opengis.filter.Filter;
 
 import schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import schmitzm.jfree.chart.style.ChartStyle;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFeatureCollectionInterface;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.geotools.StyledLayerInterface;
@@ -53,8 +53,8 @@ import skrueger.geotools.StyledRasterInterface;
  */
 public class AtlasMapLayerLegend extends MapLayerLegend {
 
-	static final private Logger LOGGER = ASUtil
-			.createLogger(AtlasMapLayerLegend.class);
+	final private Logger LOGGER = LangUtil
+			.createLogger(this);
 
 	protected final DpLayer<?, ? extends ChartStyle> dpLayer;
 

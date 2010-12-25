@@ -307,26 +307,6 @@ public class ASUtil {
 				.getBinding());
 	}
 
-	/**
-	 * Erzeugt einen Log4j-Logger fuer ein Objekt. Als Identifier fuer den
-	 * Logger wird der Klassenname des Objekts verwendet.
-	 * 
-	 * @param object
-	 *            ein Objekt
-	 * @return Logger mit dem Namen "NULL", falls das uebergebene Objekt
-	 *         {@code null} ist
-	 * 
-	 * @author Martin Schmitz
-	 * @see xulu
-	 */
-	public static Logger createLogger(final Object object) {
-		if (object == null)
-			return Logger.getLogger("");
-		if (object instanceof Class)
-			return Logger.getLogger(((Class<?>) object).getName());
-		return Logger.getLogger(object.getClass().getName());
-	}
-
 	private static BrewerPalette getArthursPalette() throws IOException {
 
 		if (arthursPalette == null) {
