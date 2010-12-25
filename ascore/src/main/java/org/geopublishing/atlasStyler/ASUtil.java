@@ -435,7 +435,6 @@ public class ASUtil {
 				}
 
 			}
-			// replaceStrokeSize(stroke, oldColor, newColor)m.getStroke()
 		}
 
 		// TODO external graphics sizes
@@ -472,8 +471,6 @@ public class ASUtil {
 				maxSize = size;
 			}
 		}
-
-		// maxSize = getBiggestSize(stroke.getGraphicFill(), maxSize);
 
 		return maxSize;
 	}
@@ -682,23 +679,6 @@ public class ASUtil {
 		return getSymbolizerImage(symb, size, featureType);
 	}
 
-	//
-	// /**
-	// *
-	// http://www.velocityreviews.com/forums/t146956-popupmenu-for-a-cell-in-a-
-	// * jtable.html
-	// *
-	// * @param string
-	// *
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Tzeggai</a>
-	// */
-	// public static void setClipboardContents(final String string) {
-	// final StringSelection selection = new StringSelection(string);
-	// Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection,
-	// selection);
-	// }
-
 	/**
 	 * @return an image using the AtlasStyler's default size
 	 */
@@ -802,56 +782,6 @@ public class ASUtil {
 		return list.toArray(new String[0]);
 	}
 
-	//
-	// /**
-	// * Returns a default {@link SingleRuleList} symbol for NODATA values. If
-	// * {@link AtlasStyler} is running in multilanguage mode, it tries to find
-	// a
-	// * default legend label automatically for all languages.
-	// */
-	// public static SingleRuleList getDefaultNoDataSymbol(GeometryForm form) {
-	// final SingleRuleList rl;
-	// switch (form) {
-	// case POINT:
-	// rl = new SinglePointSymbolRuleList("");
-	// // A white circle is the default NODATA symbol for points
-	// rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null, SB
-	// .createMark("circle", Color.white), null)));
-	// break;
-	// case POLYGON:
-	// rl = new SinglePolygonSymbolRuleList("");
-	// // A 50% white fill is the default NODATA symbol for polygons
-	// rl.addSymbolizer(SB.createPolygonSymbolizer(SB
-	// .createStroke(Color.LIGHT_GRAY), SB
-	// .createFill(Color.WHITE)));
-	// break;
-	// default:
-	// case LINE:
-	// rl = new SingleLineSymbolRuleList("");
-	// // A white line is the default NODATA symbol for lines
-	// rl.addSymbolizer(SB.createLineSymbolizer(Color.white));
-	// break;
-	// }
-	//
-	// // Find suitable default labels
-	// if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-	//
-	// Translation nodT = new Translation();
-	// for (String lang : AtlasStyler.getLanguages()) {
-	//
-	// // Try to find a default for every language
-	// String localized = R(new Locale(lang),
-	// "NoDataLegendEntry.Default");
-	// nodT.put(lang, localized);
-	// }
-	//
-	// rl.setTitle(nodT);
-	// } else
-	// rl.setTitle(R("NoDataLegendEntry.Default"));
-	// return rl;
-	// }
-	//
-
 	public static BufferedImage getSymbolizerImage(final Symbolizer symb,
 			final Dimension size, final SimpleFeatureType featureType) {
 		// TODO Caching?
@@ -947,19 +877,13 @@ public class ASUtil {
 					+ " while importing the template RL. Using default");
 			LOGGER.error(e);
 			tempRL = getDefaultPolygonTemplate();
-
 		}
-
 		return tempRL;
 	}
 
 	/**
 	 * http://www.velocityreviews.com/forums/t146956-popupmenu-for-a-cell-in-a-
 	 * jtable.html
-	 * 
-	 * @param requestor
-	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static boolean isClipboardContainingText(final Object requestor) {
 		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
@@ -1041,10 +965,6 @@ public class ASUtil {
 					// + newSize);
 					m.setSize(ASUtil.ff2.literal(newSize));
 				}
-
-				// replaceFillSize(m.getFill(), factor);
-
-				// replaceStrokeSize(stroke, oldColor, newColor)m.getStroke()
 			}
 		}
 	}

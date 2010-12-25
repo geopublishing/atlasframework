@@ -281,9 +281,7 @@ public class RulesListsListTablePanel extends JPanel {
 							if (sr > 0) {
 								AbstractRulesList rl = rll.remove(sr);
 								rll.add(sr - 1, rl);
-
 							}
-
 						}
 
 						// Reslect the ruleslists
@@ -293,7 +291,6 @@ public class RulesListsListTablePanel extends JPanel {
 							getRulesListTable().getSelectionModel()
 									.addSelectionInterval(sr - 1, sr - 1);
 						}
-
 					}
 				}
 

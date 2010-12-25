@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
@@ -275,7 +276,6 @@ public class RulesListTable extends JTable {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			if (!showPopup(e)) {
-
 			}
 		}
 
@@ -321,17 +321,17 @@ public class RulesListTable extends JTable {
 
 			switch (column) {
 			case COLIDX_TITLE:
-				return "name"; // i8n
+				return ASUtil.R("RulesListTable.Column.Name");
 			case COLIDX_TYPE:
-				return "type"; // i8n
+				return ASUtil.R("RulesListTable.Column.Type");
 			case COLIDX_MINSCALE:
-				return "min-scale"; // i8n
+				return ASUtil.R("RulesListTable.Column.MinScale");
 			case COLIDX_MAXSCALE:
-				return "max-scale"; // i8n
+				return ASUtil.R("RulesListTable.Column.MaxScale");
 			case COLIDX_FILTER:
-				return "filter"; // i8n
+				return ASUtil.R("RulesListTable.Column.Filter");
 			case COLIDX_ENABLED:
-				return "on"; // i8n
+				return ASUtil.R("RulesListTable.Column.Enabled");
 			default:
 				return super.getColumnName(column);
 			}
