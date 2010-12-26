@@ -508,9 +508,10 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		target.setStylerInLegend(isStylerInLegend());
 		target.setTableInLegend(isTableVisibleInLegend());
 
-		DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
-		dsv.visit(getStyle());
-		target.setStyle((Style) dsv.getCopy());
+//		DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
+//		dsv.visit(getStyle());
+//		target.setStyle((Style) dsv.getCopy());
+		target.setStyle( StylingUtil.clone(getStyle()));
 
 		return target;
 	}

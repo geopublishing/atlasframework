@@ -44,7 +44,7 @@ public class GpUtil {
 	 * can not be used to send mails to any other address.
 	 */
 	public static final Mailer bugReportMailer = new Mailer("bugreport", "",
-			"", "www.wikisquare.de", "bugreport@wikisquare.de");
+			"", "mail.wikisquare.de", "bugreport@wikisquare.de");
 
 	/**
 	 * Setting up the logger from a global XML configuration file. This method
