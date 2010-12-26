@@ -213,20 +213,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		fileMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 
-		{ // Exit
-			JMenuItem mi = new JMenuItem(
-					new AbstractAction(
-							AtlasViewerGUI
-									.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
-							Icons.ICON_EXIT_SMALL) {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							exitAS(0);
-						}
-					});
-			fileMenu.add(mi);
-		}
 
 		/**
 		 * MenuItem to create a new language
@@ -254,6 +240,33 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			}
 		});
 		fileMenu.add(manageLanguageJMenuitem);
+		
+		AbstractAction optionsButton = new AbstractAction(
+				AtlasStyler.R("Options.ButtonLabel")) {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ASOptionsDialog(AtlasStylerGUI.this, AtlasStylerGUI.this);
+			}
+		};
+
+		fileMenu.add(optionsButton);
+
+		{ // Exit
+			JMenuItem mi = new JMenuItem(
+					new AbstractAction(
+							AtlasViewerGUI
+									.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
+							Icons.ICON_EXIT_SMALL) {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							exitAS(0);
+						}
+					});
+			fileMenu.add(mi);
+		}
+
 
 		return jMenuBar;
 	}
@@ -427,16 +440,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		jToolBar.add(getJTButtonShowXML());
 		jToolBar.add(getJTButtonExportAsSLD());
 
-		JButton optionsButton = new JButton(new AbstractAction(
-				AtlasStyler.R("Options.ButtonLabel")) {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new ASOptionsDialog(AtlasStylerGUI.this, AtlasStylerGUI.this);
-			}
-		});
-
-		jToolBar.add(optionsButton);
 		return jToolBar;
 	}
 
