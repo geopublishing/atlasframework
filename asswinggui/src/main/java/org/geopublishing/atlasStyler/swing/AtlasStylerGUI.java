@@ -76,6 +76,7 @@ import org.geotools.styling.StyledLayerDescriptor;
 import schmitzm.geotools.map.event.MapLayerListAdapter;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.io.IOUtil;
+import schmitzm.lang.LangUtil;
 import schmitzm.lang.ResourceProvider;
 import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.ResourceProviderManagerFrame;
@@ -105,7 +106,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	private static final long serialVersionUID = 1231321321258008431L;
 
-	final static private Logger LOGGER = AsSwingUtil
+	final static private Logger LOGGER = LangUtil
 			.createLogger(AtlasStylerGUI.class);
 
 	private StylerMapView stylerMapView = null;
@@ -213,7 +214,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		fileMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 
-
 		/**
 		 * MenuItem to create a new language
 		 */
@@ -240,7 +240,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			}
 		});
 		fileMenu.add(manageLanguageJMenuitem);
-		
+
 		AbstractAction optionsButton = new AbstractAction(
 				AtlasStyler.R("Options.ButtonLabel")) {
 
@@ -266,7 +266,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					});
 			fileMenu.add(mi);
 		}
-
 
 		return jMenuBar;
 	}

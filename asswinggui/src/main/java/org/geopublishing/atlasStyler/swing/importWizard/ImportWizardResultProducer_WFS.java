@@ -8,7 +8,6 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.Query;
@@ -26,13 +25,14 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import schmitzm.geotools.JTSUtil;
 import schmitzm.geotools.io.GeoImportUtil;
+import schmitzm.lang.LangUtil;
 import skrueger.geotools.StyledFS;
 import skrueger.geotools.io.GtWfsServerSettings;
 
 public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 		implements WizardResultProducer {
-	protected final static Logger LOGGER = ASUtil
-	.createLogger(ImportWizardResultProducer_WFS.class);
+	protected final static Logger LOGGER = LangUtil
+			.createLogger(ImportWizardResultProducer_WFS.class);
 
 	public ImportWizardResultProducer_WFS() {
 		super();
@@ -94,8 +94,7 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 
 						{
 							ReferencedEnvelope bounds = wfsFS.getBounds();
-							LOGGER.debug("Layout Boudns as passed"
-									+ bounds);
+							LOGGER.debug("Layout Boudns as passed" + bounds);
 
 							ReferencedEnvelope transformEnvelope = JTSUtil
 									.transformEnvelope(
