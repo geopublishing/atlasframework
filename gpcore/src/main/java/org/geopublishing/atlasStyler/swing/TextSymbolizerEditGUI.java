@@ -1589,6 +1589,6 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 		// We **have to** make a copy of the Style, otherwise the changes to
 		// the font are only reflected after zooming
-		mapLayer.setStyle(StylingUtil.clone(style));
+		mapLayer.setStyle(StylingUtil.copy(style));
 	}
 }

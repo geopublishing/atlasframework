@@ -511,7 +511,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 //		DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
 //		dsv.visit(getStyle());
 //		target.setStyle((Style) dsv.getCopy());
-		target.setStyle( StylingUtil.clone(getStyle()));
+		target.setStyle( StylingUtil.copy(getStyle()));
 
 		return target;
 	}

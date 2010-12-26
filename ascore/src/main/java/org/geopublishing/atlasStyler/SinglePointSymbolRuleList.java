@@ -75,7 +75,7 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 		clone.getSymbolizers().clear();
 		for (PointSymbolizer ps : getSymbolizers()) {
 
-			Symbolizer clonedSymbolizer = StylingUtil.clone(ps);
+			Symbolizer clonedSymbolizer = StylingUtil.copy(ps);
 			clone.addSymbolizer(clonedSymbolizer);
 		}
 		if (copyListeners) {

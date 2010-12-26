@@ -934,12 +934,12 @@ public class AtlasStyler {
 
 		// Backup
 		if (backupStyle == null) {
-			backupStyle = StylingUtil.clone(importStyle);
+			backupStyle = StylingUtil.copy(importStyle);
 		}
 
 		// Makes a copy of the style before importing it. otherwise we might get
 		// the same object and not recognize changes later...
-		importStyle = StylingUtil.clone(importStyle);
+		importStyle = StylingUtil.copy(importStyle);
 
 		// Forget all RuleLists we might have imported before
 

@@ -284,7 +284,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 				TestDatasetsVector.polygonSnow.getUrl(), "sld");
 
 		Style snowStyleOriginal = StylingUtil.loadSLD(sldUrl)[0];
-		Style snowStyle = StylingUtil.clone(snowStyleOriginal);
+		Style snowStyle = StylingUtil.copy(snowStyleOriginal);
 		assertFalse(StylingUtil.isStyleDifferent(snowStyleOriginal, snowStyle));
 
 		List<Color> beforeColors = new ArrayList<Color>();

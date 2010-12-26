@@ -71,7 +71,7 @@ public class SinglePolygonSymbolRuleList extends
 
 		for (PolygonSymbolizer ps : layers) {
 
-			Symbolizer clonedSymbolizer = StylingUtil.clone(ps);
+			Symbolizer clonedSymbolizer = StylingUtil.copy(ps);
 			clone.addSymbolizer(clonedSymbolizer);
 		}
 
