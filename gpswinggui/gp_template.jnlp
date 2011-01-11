@@ -11,6 +11,8 @@
 	  <desktop/>
 	  <menu submenu="Geopublishing"/>
 	</shortcut>    
+	
+    <offline-allowed/>
   </information>
   
   <security>

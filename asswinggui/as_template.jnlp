@@ -13,7 +13,9 @@
 	  <menu submenu="Geopublishing"/>
 	</shortcut>    
     
+    <offline-allowed/>
   </information>
+  
   <security>
     <all-permissions/>
   </security>
