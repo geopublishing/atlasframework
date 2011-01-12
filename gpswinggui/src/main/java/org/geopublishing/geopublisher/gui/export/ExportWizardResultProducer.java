@@ -72,7 +72,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final Boolean isDisk = (Boolean) wizardData
 				.get(ExportWizard.DISK_CHECKBOX);
 		final boolean isDiskZip = (Boolean) wizardData
-				.get(ExportWizard.DISK_CHECKBOX);
+				.get(ExportWizard.DISKZIP_CHECKBOX);
 		final String exportDir = (String) wizardData
 				.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);

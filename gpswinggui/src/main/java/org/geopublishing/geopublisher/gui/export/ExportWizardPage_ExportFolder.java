@@ -28,7 +28,7 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-
+import schmitzm.swing.ExceptionDialog;
 
 public class ExportWizardPage_ExportFolder extends WizardPage {
 	/*
@@ -39,13 +39,13 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 	private final String validationFolderFailedMsg_NotWritable = GeopublisherGUI
 			.R("ExportWizard.Folder.ValidationError.NotWritable");
 
-	JLabel explanationJLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.Folder.Explanation"));
+	JLabel explanationJLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.Folder.Explanation"));
 
 	private JButton folderChooserJButton;
 	JTextField folderJTextField;
-	final private JLabel folderTextFieldJLabel = new JLabel(GeopublisherGUI
-			.R("ExportWizard.Folder.FolderTextBoxLabel"));
+	final private JLabel folderTextFieldJLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.Folder.FolderTextBoxLabel"));
 
 	public ExportWizardPage_ExportFolder() {
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
@@ -82,7 +82,22 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 		final File folder = new File(absPath);
 
 		if (!folder.exists()) {
-			return validationFolderFailedMsg_NotExits;
+
+			// Teste, ob der Ordner angelegt werden kann:
+			if (folder.mkdirs()) {
+
+				if (!folder.delete()) {
+					ExceptionDialog
+							.show(this,
+									new IllegalStateException(
+											"Directory '"
+													+ folder.getAbsolutePath()
+													+ "' just created could not be deleted. Please report by mail including the full name of the folder!"));
+				} else
+					return null;
+			} else
+				return validationFolderFailedMsg_NotExits;
+
 		}
 
 		if (!folder.canWrite() || !folder.canRead()) {
@@ -106,7 +121,8 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 					dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 					dc.setAcceptAllFileFilterUsed(false);
 
-					dc.setDialogTitle(GeopublisherGUI.R("Export.Dialog.WhereTo"));
+					dc.setDialogTitle(GeopublisherGUI
+							.R("Export.Dialog.WhereTo"));
 					dc.setMultiSelectionEnabled(false);
 
 					if ((dc.showSaveDialog(ExportWizardPage_ExportFolder.this) != JFileChooser.APPROVE_OPTION)
@@ -126,8 +142,8 @@ public class ExportWizardPage_ExportFolder extends WizardPage {
 					 * Radically store the path into the properties now - it
 					 * really sucks to select that path all the time
 					 */
-					GPProps.set(Keys.LastExportFolder, exportJWSandDISKdir
-							.getAbsolutePath());
+					GPProps.set(Keys.LastExportFolder,
+							exportJWSandDISKdir.getAbsolutePath());
 					GPProps.store();
 
 				}

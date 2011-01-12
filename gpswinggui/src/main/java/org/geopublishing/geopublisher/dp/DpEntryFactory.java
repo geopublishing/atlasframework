@@ -25,7 +25,6 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
 import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
 
-
 /**
  * This class tries to instantiate a subclass of {@link DpEntry} for an
  * arbitrary imported file.
@@ -36,24 +35,27 @@ import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSou
 
 public class DpEntryFactory {
 	static final Logger LOGGER = Logger.getLogger(DpEntryFactory.class);
-	
+
 	public static final FileFilter FILEFILTER_ALL_DPE_IMPORTABLE = new FileFilter() {
-		
+
 		@Override
 		public String getDescription() {
-			return "All importable"; //i8n
+			return "All importable"; // i8n
 		}
-		
+
 		@Override
 		public boolean accept(File f) {
-			if (DpLayerRasterReaderTester.FILEFILTER.accept(f)) return true;
-			if (DpLayerVectorFeatureSourceTester.FILEFILTER.accept(f)) return true;
-			if (DpMediaPDFTester.FILEFILTER.accept(f)) return true;
+			if (DpLayerRasterReaderTester.FILEFILTER.accept(f))
+				return true;
+			if (DpLayerVectorFeatureSourceTester.FILEFILTER.accept(f))
+				return true;
+			if (DpMediaPDFTester.FILEFILTER.accept(f))
+				return true;
 			return false;
 		}
 	};
 
-	public static List<DpEntryTesterInterface> testers = new LinkedList<DpEntryTesterInterface>();
+	public final static List<DpEntryTesterInterface> testers = new LinkedList<DpEntryTesterInterface>();
 
 	static {
 		testers.add(new DpLayerVectorFeatureSourceTester());

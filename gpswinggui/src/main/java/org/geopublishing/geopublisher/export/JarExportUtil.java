@@ -134,13 +134,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 */
 	public final static String ARJAR_FILENAME = "atlas_resources.jar";
 
-
 	/**
 	 * The filename of the JNLP file which can be used to start the atlas from
 	 * the Internet.
 	 */
 	public static final String JNLP_FILENAME = "atlasViewer.jnlp";
-
 
 	private static final String LIB_DIR = ".";
 
@@ -158,8 +156,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	/**
 	 * Filename of the gpcore jar
 	 */
-	public static final String GPCORE_JARNAME = "gpcore-" + getVersion() + getSnapshot()
-			+ postfixJar;
+	public static final String GPCORE_JARNAME = "gpcore-" + getVersion()
+			+ getSnapshot() + postfixJar;
 
 	/**
 	 * Filename of the gpnatives jar
@@ -170,8 +168,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	/**
 	 * Filename of the ascore jar
 	 */
-	public static final String ASCORE_JARNAME = "ascore-" + getVersion() + getSnapshot()
-			+ postfixJar;
+	public static final String ASCORE_JARNAME = "ascore-" + getVersion()
+			+ getSnapshot() + postfixJar;
 
 	/**
 	 * Filename of the schmitzm jar. TODO Very fucking ugly
@@ -306,10 +304,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 							+ "<br/>");
 
 			// ZIP
-			final String zipname = ace.getBaseName() + ".zip";
-			fileWriter.write("Download offline version: ");
-			fileWriter.write("<a href='" + zipname + "'> " + zipname
-					+ "</a><br/>");
+			if (zipDiskAfterExport && toDisk) {
+				final String zipname = ace.getBaseName() + ".zip";
+				fileWriter.write("Download offline version: ");
+				fileWriter.write("<a href='" + zipname + "'> " + zipname
+						+ "</a><br/>");
+			}
 
 			// JWS
 			fileWriter.write("Start atlas via JWS:");
@@ -381,7 +381,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	/** Is export to JWS requested? **/
 	private final Boolean toJws;
 
-
 	/**
 	 * Initialized lazilly and caches where the JARs from the classpath come
 	 * from
@@ -390,7 +389,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 	/** Automatically create a ZIP if eported to DISK **/
 	private boolean zipDiskAfterExport = false;
-
 
 	/**
 	 * It set to a value not <code>null</code>, the jnlp base url stored in the
@@ -464,37 +462,38 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 	private void addAtlasXMLToJar(final File targetJar,
 			final AtlasConfigEditable ace) throws AtlasExportException {
-		
+
 		try {
-			
 
-		// Prepare a temporary atlas.xml
-		File randomTempDir = new File(IOUtil.getTempDir(), "GPtempExport"
-				+ System.currentTimeMillis());
-		final File adDir = new File(randomTempDir,
-				AtlasConfig.ATLASDATA_DIRNAME);
-		FileUtils.deleteDirectory(adDir);
-		adDir.mkdirs();
-		final File exportAtlasXml = new File(adDir,
-				AtlasConfig.ATLAS_XML_FILENAME);
+			// Prepare a temporary atlas.xml
+			File randomTempDir = new File(IOUtil.getTempDir(), "GPtempExport"
+					+ System.currentTimeMillis());
+			final File adDir = new File(randomTempDir,
+					AtlasConfig.ATLASDATA_DIRNAME);
+			FileUtils.deleteDirectory(adDir);
+			adDir.mkdirs();
+			final File exportAtlasXml = new File(adDir,
+					AtlasConfig.ATLAS_XML_FILENAME);
 
-		// Configure the AML exporter
-		final AMLExporter amlExporter = new AMLExporter(ace);
-		amlExporter.setExportMode(true);
-		amlExporter.setAtlasXml(exportAtlasXml);
+			// Configure the AML exporter
+			final AMLExporter amlExporter = new AMLExporter(ace);
+			amlExporter.setExportMode(true);
+			amlExporter.setAtlasXml(exportAtlasXml);
 
-		amlExporter.saveAtlasConfigEditable();
+			amlExporter.saveAtlasConfigEditable();
 
-		addToJar(targetJar, randomTempDir, AtlasConfig.ATLASDATA_DIRNAME + "/"
-				+ AtlasConfig.ATLAS_XML_FILENAME);
+			addToJar(targetJar, randomTempDir, AtlasConfig.ATLASDATA_DIRNAME
+					+ "/" + AtlasConfig.ATLAS_XML_FILENAME);
 
-		// Remove the created temporary atlas.xml, it has been copied into the
-		// jar
-		if (!exportAtlasXml.delete()) {
-			LOGGER.warn("could not delete temporary atlas.xml file at " + adDir);
-		}
+			// Remove the created temporary atlas.xml, it has been copied into
+			// the
+			// jar
+			if (!exportAtlasXml.delete()) {
+				LOGGER.warn("could not delete temporary atlas.xml file at "
+						+ adDir);
+			}
 		} catch (Exception e) {
-			throw new AtlasExportException ("addAtlasXMLToJar failed",e);
+			throw new AtlasExportException("addAtlasXMLToJar failed", e);
 		}
 	}
 
@@ -573,7 +572,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 
 	}
-
 
 	/**
 	 * Copies and signs all required dependencies and native libs to the temp
@@ -871,11 +869,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 
 		if (jarName.contains(ASCORE_JARNAME)) {
-			path = "org/geopublishing/atlasStyler/ascore/" + getVersion() + getSnapshot();
+			path = "org/geopublishing/atlasStyler/ascore/" + getVersion()
+					+ getSnapshot();
 		}
 		//
 		if (jarName.contains(GPNATIVES_JARNAME)) {
-			path = "org/geopublishing/gpnatives/" + getVersion() + getSnapshot();
+			path = "org/geopublishing/gpnatives/" + getVersion()
+					+ getSnapshot();
 		}
 
 		if (jarName.contains(SCHMITZM_JARNAME)) {
@@ -2085,7 +2085,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		return manifestTempFile;
 	}
 
-
 	/**
 	 * Signs the Jar. keys and everything else is defined in the properties
 	 * files
@@ -2286,7 +2285,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	public void setZipDiskAfterExport(boolean zipDiskAfterExport) {
 		this.zipDiskAfterExport = zipDiskAfterExport;
 	}
-
 
 	/**
 	 * It set to a value not <code>null</code>, the jnlp base url stored in the
