@@ -1769,7 +1769,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				LOGGER.info("Not exporting defaultcrs.prj beacuse it doesn't exist or is too small");
 			}
 
-			copyAndSignLibs(targetJar, ace);
+			if (toDisk)
+				copyAndSignLibs(targetJar, ace);
 
 			// File[] listOfIndexJars = new File[] { targetJar };
 			// Creating a JAR for every DpEntry
