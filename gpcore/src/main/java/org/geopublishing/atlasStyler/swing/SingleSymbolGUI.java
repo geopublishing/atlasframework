@@ -111,154 +111,9 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 			jButtonSymbolSelector = new EditSymbolButton(singleSymbolRuleList);
 			jButtonSymbolSelector.setToolTipText(AtlasStyler
 					.R("SingleSymbolGUI.Symbol.TT"));
-			//
-			// singleSymbolRuleList
-			// .addListener(listenToChangesInTheRulesToUpdateButton);
-			//
-			// ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
-			// jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
-			//
-			// private SymbolSelectorGUI symbolSelectorDialog;
-			//
-			// public void actionPerformed(ActionEvent e) {
-			// if (symbolSelectorDialog == null) {
-			// final SingleRuleList<?> backup = singleSymbolRuleList
-			// .clone(false);
-			//
-			// symbolSelectorDialog = new SymbolSelectorGUI(
-			// SingleSymbolGUI.this, null,
-			// // AtlasStyler.R("SymbolSelector.Title.OneForAll"),
-			// singleSymbolRuleList);
-			//
-			// symbolSelectorDialog
-			// .addPropertyChangeListener(new PropertyChangeListener() {
-			//
-			// public void propertyChange(
-			// PropertyChangeEvent evt) {
-			//
-			// /**
-			// * Listen for CANCEL to copy back the
-			// * backuped values
-			// */
-			// if (evt
-			// .getPropertyName()
-			// .equals(
-			// SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-			//
-			// backup.copyTo(singleSymbolRuleList);
-			// }
-			//
-			// /** Listen for CLOSE* */
-			// if (evt
-			// .getPropertyName()
-			// .equals(
-			// SymbolSelectorGUI.PROPERTY_CLOSED)) {
-			// jButtonSymbolSelector
-			// .setSelected(false);
-			//
-			// symbolSelectorDialog.dispose();
-			// symbolSelectorDialog = null;
-			// }
-			// }
-			//
-			// });
-			//
-			// SwingUtil.setRelativeFramePosition(
-			// symbolSelectorDialog, SingleSymbolGUI.this, .5,
-			// .5);
-			// }
-			//
-			// symbolSelectorDialog.setVisible(jButtonSymbolSelector
-			// .isSelected());
-			//
-			//
-			// }
-			//
-			// });
-
 		}
 		return jButtonSymbolSelector;
 	}
-
-	//
-	// /**
-	// * This method initializes jButton
-	// *
-	// * @return javax.swing.JButton
-	// */
-	// private JToggleButton getJButtonSymbol() {
-	// if (jButtonSymbolSelector == null) {
-	// jButtonSymbolSelector = new JToggleButton();
-	// jButtonSymbolSelector.setToolTipText(AtlasStyler
-	// .R("SingleSymbolGUI.Symbol.TT"));
-	//
-	// singleSymbolRuleList
-	// .addListener(listenToChangesInTheRulesToUpdateButton);
-	//
-	// ImageIcon icon = new ImageIcon(singleSymbolRuleList.getImage());
-	// jButtonSymbolSelector.setAction(new AbstractAction("", icon) {
-	//
-	// private SymbolSelectorGUI symbolSelectorDialog;
-	//
-	// public void actionPerformed(ActionEvent e) {
-	// if (symbolSelectorDialog == null) {
-	// final SingleRuleList<?> backup = singleSymbolRuleList
-	// .clone(false);
-	//
-	// symbolSelectorDialog = new SymbolSelectorGUI(
-	// SingleSymbolGUI.this, null,
-	// // AtlasStyler.R("SymbolSelector.Title.OneForAll"),
-	// singleSymbolRuleList);
-	//
-	// symbolSelectorDialog
-	// .addPropertyChangeListener(new PropertyChangeListener() {
-	//
-	// public void propertyChange(
-	// PropertyChangeEvent evt) {
-	//
-	// /**
-	// * Listen for CANCEL to copy back the
-	// * backuped values
-	// */
-	// if (evt
-	// .getPropertyName()
-	// .equals(
-	// SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-	//
-	// backup.copyTo(singleSymbolRuleList);
-	// }
-	//
-	// /** Listen for CLOSE* */
-	// if (evt
-	// .getPropertyName()
-	// .equals(
-	// SymbolSelectorGUI.PROPERTY_CLOSED)) {
-	// jButtonSymbolSelector
-	// .setSelected(false);
-	//
-	// symbolSelectorDialog.dispose();
-	// symbolSelectorDialog = null;
-	// }
-	// }
-	//
-	// });
-	//
-	// SwingUtil.setRelativeFramePosition(
-	// symbolSelectorDialog, SingleSymbolGUI.this, .5,
-	// .5);
-	// }
-	//
-	// symbolSelectorDialog.setVisible(jButtonSymbolSelector
-	// .isSelected());
-	//
-	//
-	// }
-	//
-	// });
-	//
-	// }
-	// return jButtonSymbolSelector;
-	// }
 
 	/**
 	 * This method initializes jPanel11
@@ -280,7 +135,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String oldTitle = singleSymbolRuleList.getTitle();
+				String oldTitle = singleSymbolRuleList.getRuleTitle();
 
 				if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 					/*******************************************************
@@ -329,7 +184,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 					String newTitle = ASUtil.askForString(SingleSymbolGUI.this,
 							oldTitle, null);
 					if (newTitle != null) {
-						singleSymbolRuleList.setTitle(newTitle);
+						singleSymbolRuleList.setRuleTitle(newTitle);
 						jLabelTranslationEdit.setText(newTitle);
 					}
 				}
@@ -338,7 +193,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 
 		Translation translation = new Translation();
 		try {
-			String firstTitle = singleSymbolRuleList.getTitle();
+			String firstTitle = singleSymbolRuleList.getRuleTitle();
 			translation.fromOneLine(firstTitle);
 			jLabelTranslationEdit.setText(translation.toString());
 		} catch (Exception e) {

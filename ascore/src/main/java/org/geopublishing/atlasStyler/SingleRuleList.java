@@ -266,7 +266,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		applyScaleDominators(rule);
 
 		/** Saving the legend label * */
-		rule.setTitle(getTitle());
+		rule.setTitle(getRuleTitle());
 
 		addFilters(rule);
 
@@ -577,7 +577,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 		if (ruleTitle == null || ruleTitle.equals("")) {
 			// LOGGER.warn("rule title may not be empty");
-			ruleTitle = "title missing";
+			ruleTitle = "title missing"; // i8n
 		}
 
 		// Is the new title really different from the old one?
@@ -641,13 +641,13 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			try {
 				final Description description = rule.getDescription();
 				final InternationalString title2 = description.getTitle();
-				setTitle(title2.toString());
+				setRuleTitle(title2.toString());
 			} catch (final NullPointerException e) {
 				LOGGER.warn("The title style to import has been null!");
-				setTitle("");
+				setRuleTitle("");
 			} catch (final Exception e) {
 				LOGGER.error("The title style to import could not been set!", e);
-				setTitle("");
+				setRuleTitle("");
 			}
 
 			// Analyse the filters...

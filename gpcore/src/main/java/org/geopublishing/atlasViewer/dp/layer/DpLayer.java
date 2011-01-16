@@ -23,7 +23,6 @@ import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
-import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.jfree.ui.Layer;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
