@@ -93,7 +93,7 @@ public class RulesListsListTablePanel extends JPanel {
 
 			modeButtons = new JPanel(new MigLayout());
 
-			modeButtons.add(new JLabel("Bedienungsmodus:"));
+			modeButtons.add(new JLabel("Bedienungsmodus:")); // i8n
 
 			final JRadioButton easyButton = new JRadioButton(
 					new AbstractAction("easy") { // i8n
@@ -154,17 +154,18 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getAddButton() {
 		if (addButton == null) {
-			addButton = new SmallButton(new AbstractAction("add") { // i8n
+			addButton = new SmallButton(new AbstractAction(
+					AtlasStyler.R("RulesListsList.Action.AddRulesList")) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-							AddRulesListDialog addRulesListDialog = new AddRulesListDialog(
-									RulesListsListTablePanel.this, atlasStyler);
-							addRulesListDialog.setVisible(true);
-						}
+					AddRulesListDialog addRulesListDialog = new AddRulesListDialog(
+							RulesListsListTablePanel.this, atlasStyler);
+					addRulesListDialog.setVisible(true);
+				}
 
-					});
+			});
 		}
 		return addButton;
 	}
@@ -234,33 +235,34 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new SmallButton(new AbstractAction("remove") { // i8n
+			removeButton = new SmallButton(new AbstractAction(
+					AtlasStyler.R("RulesListsList.Action.RemoveRulesLists")) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							int[] selectedRows = getRulesListTable()
-									.getSelectedRows();
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int[] selectedRows = getRulesListTable().getSelectedRows();
 
-							List<Integer> idxList = new ArrayList<Integer>();
-							for (int i : selectedRows) {
-								if (i >= 0)
-									idxList.add(i);
-							}
-							Collections.sort(idxList);
-							Collections.reverse(idxList);
+					List<Integer> idxList = new ArrayList<Integer>();
+					for (int i : selectedRows) {
+						if (i >= 0)
+							idxList.add(i);
+					}
+					Collections.sort(idxList);
+					Collections.reverse(idxList);
 
-							if (!SwingUtil.askYesNo(
+					if (!SwingUtil
+							.askYesNo(
 									RulesListsListTablePanel.this,
-									"Do you really want to delete "
-											+ idxList.size() + " RulesLists?") // i8n
-							)
-								return;
+									AtlasStyler
+											.R("RulesListsList.Action.RemoveRulesLists.Ask",
+													idxList.size())))
+						return;
 
-							for (int idx : idxList) {
-								atlasStyler.getRuleLists().remove(idx);
-							}
-						}
-					});
+					for (int idx : idxList) {
+						atlasStyler.getRuleLists().remove(idx);
+					}
+				}
+			});
 		}
 		return removeButton;
 	}
