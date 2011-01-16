@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
@@ -154,6 +156,8 @@ public class RulesListTable extends JTable {
 		this.atlasStyler = asd.getAtlasStyler();
 		rulesList = atlasStyler.getRuleLists();
 		setModel(new RulesListTableModel());
+
+		setRowSorter(new TableRowSorter<TableModel>(getModel()));
 
 		rulesList.addListener(updateOnRulesListsListChanges);
 

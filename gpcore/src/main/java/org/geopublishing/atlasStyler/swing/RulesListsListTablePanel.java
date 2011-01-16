@@ -22,7 +22,6 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 import schmitzm.swing.ButtonGroup;
@@ -35,15 +34,16 @@ import skrueger.swing.SmallButton;
  * labels/buttons arround it.
  */
 public class RulesListsListTablePanel extends JPanel {
-	private SmallButton addButton;
 
 	private final AtlasStyler atlasStyler;
+
+	private SmallButton addButton;
+
+	private SmallButton removeButton;
 
 	private SmallButton jButtonLayerDown;
 
 	private SmallButton jButtonLayerUp;
-
-	private SmallButton removeButton;
 
 	private RulesListTable rulesListTable;
 
@@ -149,7 +149,6 @@ public class RulesListsListTablePanel extends JPanel {
 				formated);
 
 		scaleInPreviewValueJLabel.setText(label);
-
 	}
 
 	private JButton getAddButton() {
@@ -178,19 +177,23 @@ public class RulesListsListTablePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (getRulesListTable().getSelectedRow() >= 0) {
-						RulesListsList rll = atlasStyler.getRuleLists();
-
 						int[] selectedRows = getRulesListTable()
 								.getSelectedRows();
-						ArrayUtils.reverse(selectedRows);
-						for (int sr : selectedRows) {
 
-							if (sr < rll.size() - 1) {
-								AbstractRulesList rl = rll.remove(sr);
-								rll.add(sr + 1, rl);
+						ArrayUtils.reverse(selectedRows);
+
+						atlasStyler.getRuleLists().pushQuite();
+						try {
+							for (int sr : selectedRows) {
+								if (sr < atlasStyler.getRuleLists().size() - 1) {
+									AbstractRulesList rl = atlasStyler
+											.getRuleLists().remove(sr);
+									atlasStyler.getRuleLists().add(sr + 1, rl);
+								}
 
 							}
-
+						} finally {
+							atlasStyler.getRuleLists().popQuite();
 						}
 
 						// Reslect the ruleslists
@@ -258,8 +261,13 @@ public class RulesListsListTablePanel extends JPanel {
 													idxList.size())))
 						return;
 
-					for (int idx : idxList) {
-						atlasStyler.getRuleLists().remove(idx);
+					atlasStyler.getRuleLists().pushQuite();
+					try {
+						for (int idx : idxList) {
+							atlasStyler.getRuleLists().remove(idx);
+						}
+					} finally {
+						atlasStyler.getRuleLists().popQuite();
 					}
 				}
 			});
@@ -286,14 +294,19 @@ public class RulesListsListTablePanel extends JPanel {
 						int[] selectedRows = getRulesListTable()
 								.getSelectedRows();
 						// ArrayUtils.reverse(selectedRows);
-						for (int sr : selectedRows) {
+						atlasStyler.getRuleLists().pushQuite();
+						try {
+							for (int sr : selectedRows) {
 
-							RulesListsList rll = atlasStyler.getRuleLists();
+								if (sr > 0) {
+									AbstractRulesList rl = atlasStyler
+											.getRuleLists().remove(sr);
+									atlasStyler.getRuleLists().add(sr - 1, rl);
+								}
 
-							if (sr > 0) {
-								AbstractRulesList rl = rll.remove(sr);
-								rll.add(sr - 1, rl);
 							}
+						} finally {
+							atlasStyler.getRuleLists().popQuite();
 						}
 
 						// Reslect the ruleslists

@@ -13,8 +13,11 @@ package org.geopublishing.atlasStyler;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -82,7 +85,7 @@ public class AtlasStyler {
 	 * List of {@link AbstractRulesList}s that {@link AtlasStyler} is combining
 	 * to one {@link Style}.
 	 */
-	private final RulesListsList ruleLists = new RulesListsList();
+	private RulesListsList ruleLists;
 
 	/** All {@link AtlasStyler} related files will be saved blow this path */
 	private static File applicationPreferencesDir;
@@ -123,7 +126,8 @@ public class AtlasStyler {
 	 */
 	private static List<String> languages = new LinkedList<String>();
 
-	private final static Logger LOGGER = LangUtil.createLogger(AtlasStyler.class);
+	private final static Logger LOGGER = LangUtil
+			.createLogger(AtlasStyler.class);
 
 	/**
 	 * Key for a parameter of type List<Font> of additional Fonts that are
@@ -306,6 +310,19 @@ public class AtlasStyler {
 	private AbstractRulesList lastChangedRuleList;
 
 	/**
+	 * THis listener is attached to the one {@link RulesListsList}. If a new
+	 * {@link RulesListsList} is added, moved or removed, it triggers an event.
+	 */
+	private final PropertyChangeListener rulesListsListListener = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+			styleCached = null;
+			fireStyleChangedEvents();
+		}
+	};
+
+	/**
 	 * This listener is attached to all rule lists and propagates any events as
 	 * {@link StyleChangedEvent}s to the listeners of the {@link AtlasStyler} *
 	 */
@@ -320,14 +337,13 @@ public class AtlasStyler {
 			// TODO not finished SPEED OPTIMIZATION
 			if (RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING.equals(e
 					.getReason())) {
-				Object ov = e.getOldValue();
-				Object nv = e.getNewValue();
+				// Object ov = e.getOldValue();
+				// Object nv = e.getNewValue();
 				// if (getPreviewScale() != null) {
 				//
 				// }
 			}
 
-			// Only the lastChangedRule will be used to create the Style
 			final AbstractRulesList someRuleList = e.getSourceRL();
 
 			if (!(someRuleList instanceof TextRuleList)) {
@@ -517,7 +533,7 @@ public class AtlasStyler {
 
 	/**
 	 * Explicitly informs all {@link StyleChangeListener}s about changed in the
-	 * {@link Style} due to the gicen parameter <code>ruleList</code>
+	 * {@link Style} due to the given parameter <code>ruleList</code>
 	 * 
 	 * Sets the parameter ruleList as the lastChangedRuleList
 	 * 
@@ -804,28 +820,13 @@ public class AtlasStyler {
 
 				lastChangedRuleList.setMaxScaleDenominator(StylingUtil
 						.getMaxScaleDenominator(avgNN, geom));
-				// if (lastChangedRuleList instanceof SingleRuleList) {
-				// SingleRuleList srl = (SingleRuleList) lastChangedRuleList;
-				// } else if (lastChangedRuleList instanceof
-				// UniqueValuesRuleList) {
-				// UniqueValuesRuleList srl = (UniqueValuesRuleList)
-				// lastChangedRuleList;
-				// srl.setMaxScaleDenominator(StylingUtil
-				// .getMaxScaleDenominator(avgNN, geom));
-				// } else if (lastChangedRuleList instanceof QuantitiesRuleList)
-				// {
-				// QuantitiesRuleList srl = (QuantitiesRuleList)
-				// lastChangedRuleList;
-				// }
 
 			}
 
 			// TODO handle textRuleLists special at the end?
-			for (AbstractRulesList ruleList : getRuleLists()) {
+			for (AbstractRulesList ruleList : getRuleListsReverse()) {
 				styleCached.featureTypeStyles().add(ruleList.getFTS());
 			}
-
-			// styleCached.featureTypeStyles().add(createTextRulesList().getFTS());
 
 			// Just for debugging
 			Level level = Logger.getRootLogger().getLevel();
@@ -854,61 +855,6 @@ public class AtlasStyler {
 
 		}
 		return styleCached;
-		//
-		// // Create an empty Style without any FeatureTypeStlyes
-		// styleCached = ASUtil.SB.createStyle();
-		//
-		// styleCached.setName("AtlasStyler "
-		// + ReleaseUtil.getVersionInfo(ASUtil.class));
-		//
-		// if (lastChangedRuleList == null) {
-		//
-		// LOGGER.warn("Returning empty style because no lastChangedRuleList==null");
-		//
-		// styleCached.getDescription()
-		// .setTitle(
-		// "AS:Returning empty style because no lastChangedRuleList==null");
-		// return styleCached;
-		// }
-		//
-		// if (avgNN != null) {
-		//
-		// /**
-		// * Applying automatic MaxScaleDenominators
-		// */
-		// GeometryForm geom = FeatureUtil.getGeometryForm(styledFeatures
-		// .getSchema());
-		//
-		// if (lastChangedRuleList instanceof SingleRuleList) {
-		// SingleRuleList srl = (SingleRuleList) lastChangedRuleList;
-		// srl.setMaxScaleDenominator(StylingUtil
-		// .getMaxScaleDenominator(avgNN, geom));
-		// } else if (lastChangedRuleList instanceof UniqueValuesRuleList) {
-		// UniqueValuesRuleList srl = (UniqueValuesRuleList)
-		// lastChangedRuleList;
-		// srl.setMaxScaleDenominator(StylingUtil
-		// .getMaxScaleDenominator(avgNN, geom));
-		// } else if (lastChangedRuleList instanceof QuantitiesRuleList) {
-		// QuantitiesRuleList srl = (QuantitiesRuleList) lastChangedRuleList;
-		// }
-		//
-		// }
-		//
-		// styleCached.featureTypeStyles().add(getLastChangedRuleList().getFTS());
-		//
-		// styleCached.featureTypeStyles().add(createTextRulesList().getFTS());
-		//
-		// // Just for debugging
-		// Level level = Logger.getRootLogger().getLevel();
-		// try {
-		// Logger.getRootLogger().setLevel(Level.OFF);
-		// StylingUtil.saveStyleToSld(styleCached, new File(
-		// "/home/stefan/Desktop/update.sld"));
-		// } catch (final Throwable e) {
-		// } finally {
-		// Logger.getRootLogger().setLevel(level);
-		// }
-		// }
 	}
 
 	public StyledFeaturesInterface<?> getStyledFeatures() {
@@ -1164,6 +1110,10 @@ public class AtlasStyler {
 	 * to one {@link Style}.
 	 */
 	public RulesListsList getRuleLists() {
+		if (ruleLists == null) {
+			ruleLists = new RulesListsList();
+			ruleLists.addListener(rulesListsListListener);
+		}
 		return ruleLists;
 	}
 
@@ -1172,10 +1122,9 @@ public class AtlasStyler {
 	 * listener to it.
 	 */
 	public void addRulesList(AbstractRulesList rulelist) {
-		getRuleLists().add(rulelist);
-
 		rulelist.addListener(listenerFireStyleChange);
-		fireStyleChangedEvents(rulelist);
+		getRuleLists().add(0, rulelist);
+		// fireStyleChangedEvents(rulelist);
 	}
 
 	/**
@@ -1183,6 +1132,20 @@ public class AtlasStyler {
 	 */
 	public List<Exception> getImportErrorLog() {
 		return importErrorLog;
+	}
+
+	/**
+	 * Returns a new {@link ArrayList} with a reversed order of the RulesLists.
+	 * Changed to this {@link List} will not change the order of the RuleLists.
+	 * Changes to the ruleLists will change the RuleLists.
+	 */
+	private List<AbstractRulesList> getRuleListsReverse() {
+
+		ArrayList<AbstractRulesList> arrayList = new ArrayList<AbstractRulesList>();
+
+		arrayList.addAll(getRuleLists());
+		Collections.reverse(arrayList);
+		return arrayList;
 	}
 
 }
