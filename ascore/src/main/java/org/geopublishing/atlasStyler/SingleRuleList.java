@@ -42,7 +42,6 @@ import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.lang.LangUtil;
 import skrueger.geotools.Copyable;
 import skrueger.geotools.LegendIconFeatureRenderer;
-import skrueger.geotools.StyledLayerUtil;
 import skrueger.i8n.Translation;
 
 public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
@@ -272,13 +271,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 		ArrayList<Rule> rList = new ArrayList<Rule>();
 		rList.add(rule);
-
-		// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
-		// Legend, so schmitzm will ignore the layer
-		if (!isEnabled()) {
-			rule.setName(rule.getName() + "_"
-					+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
-		}
 
 		return rList;
 	}

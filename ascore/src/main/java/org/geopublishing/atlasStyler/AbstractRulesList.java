@@ -34,6 +34,7 @@ import org.opengis.filter.PropertyIsEqualTo;
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import schmitzm.lang.LangUtil;
+import skrueger.geotools.StyledLayerUtil;
 
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)
@@ -612,11 +613,35 @@ public abstract class AbstractRulesList {
 	 */
 	public FeatureTypeStyle getFTS() {
 		List<Rule> rules = applyScaleDominators(getRules());
+		rules = applyHideDisabledRulesLists(rules);
 		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
 				rules.toArray(new Rule[] {}));
 		ftstyle.setName(getAtlasMetaInfoForFTSName());
 		ftstyle.getDescription().setTitle(new SimpleInternationalString(title));
 		return ftstyle;
+	}
+
+	private List<Rule> applyHideDisabledRulesLists(List<Rule> rules) {
+		for (Rule r : rules) {
+
+			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
+			// Legend, so schmitzm will ignore the layer
+			if (!isEnabled()) {
+
+				// Do not add it again if it is already added:
+				if (r.getName() != null
+						&& r.getName().contains(
+								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
+					continue;
+
+				// Add the HIDEME marker
+				r.setName(r.getName() + "_"
+						+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
+			}
+		}
+
+		return rules;
+
 	}
 
 	/**
@@ -651,7 +676,18 @@ public abstract class AbstractRulesList {
 	protected List<Rule> applyScaleDominators(List<Rule> rules) {
 		for (Rule r : rules) {
 			applyScaleDominators(r);
+
+			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
+			// Legend, so schmitzm will ignore the layer
+			if (!isEnabled()) {
+				if (r.getName() != null
+						&& !r.getName().contains(
+								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
+					r.setName(r.getName() + "_"
+							+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
+			}
 		}
+
 		return rules;
 	}
 

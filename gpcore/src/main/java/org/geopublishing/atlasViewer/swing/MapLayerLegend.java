@@ -670,15 +670,10 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 *         filtered with {@link FeatureLayerFilterDialog}
 	 */
 	public boolean isFilterable() {
-		//
-		// final boolean hasFeatures = FeatureUtil
-		// .getLayerSourceObject(getMapLayer()) instanceof FeatureCollection;
-
 		return styledLayer instanceof StyledFeaturesInterface<?>
 				&& ((StyledFeaturesInterface<?>) styledLayer)
 						.getAttributeMetaDataMap().sortedValuesVisibleOnly()
 						.size() > 0;
-		// return hasFeatures && hasVisibleAttributes;
 	}
 
 	/**
@@ -707,7 +702,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	}
 
 	/**
-	 * Is the {@link MapLayer} asociated with this {@link MapLayerLegend}
+	 * Is the {@link MapLayer} associated with this {@link MapLayerLegend}
 	 * visible?
 	 */
 	public boolean isLayerVisible() {
