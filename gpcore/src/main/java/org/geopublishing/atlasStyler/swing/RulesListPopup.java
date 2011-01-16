@@ -5,14 +5,20 @@ import java.text.NumberFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasStyler.AbstractRulesList;
+import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
 
 import schmitzm.geotools.feature.FeatureUtil;
 import schmitzm.geotools.styling.StylingUtil;
+import schmitzm.lang.LangUtil;
+import schmitzm.swing.ExceptionDialog;
 import skrueger.geotools.StyledFeaturesInterface;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
@@ -29,14 +35,42 @@ public class RulesListPopup extends JPopupMenu {
 		header.setEnabled(false);
 		add(header);
 
-		addSeparator();
-		addScaleMenuItems(rulesList);
+		if (!asd.isEasy()) {
+			addSeparator();
+			addScaleMenuItems(rulesList);
 
-		addSeparator();
-		addFilterMenuItems(rulesList);
+			addSeparator();
+			addFilterMenuItems(rulesList);
 
-		addSeparator();
-		add("Copy SLD/XML to clipboard (not yet)");
+			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.OGC_SINGLELANGUAGE) {
+				// Only in AtlasStyler do we offer to access the XML directly.
+				addSeparator();
+				addXMLMenuItems(rulesList);
+			}
+		}
+	}
+
+	private void addXMLMenuItems(final AbstractRulesList rulesList) {
+
+		add(new AbstractAction(AtlasStyler.R("RulesListPopup.copyXML"),
+				Icons.ICON_XML) {
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				// Copy XML to ClipBoard
+				FeatureTypeStyle fts = rulesList.getFTS();
+				try {
+					String xmlString = StylingUtil.toXMLString(fts);
+					LangUtil.copyToClipboard(xmlString);
+					JOptionPane.showMessageDialog(RulesListPopup.this,
+							AtlasStyler.R("RulesListPopup.copyXML.done",
+									xmlString.length()));
+				} catch (Exception ee) {
+					ExceptionDialog.show(RulesListPopup.this, ee);
+				}
+			}
+		});
+
 	}
 
 	private void addFilterMenuItems(final AbstractRulesList rulesList) {

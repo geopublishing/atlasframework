@@ -293,8 +293,6 @@ public class AtlasStyler {
 	 */
 	boolean automaticPreview = ASProps.getInt(ASProps.Keys.automaticPreview, 1) == 1;
 
-	private final Double avgNN = null;
-
 	/**
 	 * *Backup of the {@link Style} as it was before the AtlasStyle touched it.
 	 * Used when {@link #cancel()} is called.
@@ -346,9 +344,7 @@ public class AtlasStyler {
 
 			final AbstractRulesList someRuleList = e.getSourceRL();
 
-			if (!(someRuleList instanceof TextRuleList)) {
-				lastChangedRuleList = someRuleList;
-			}
+			lastChangedRuleList = someRuleList;
 
 			fireStyleChangedEvents();
 		}
@@ -448,11 +444,6 @@ public class AtlasStyler {
 
 		setFonts((List<Font>) params.get(PARAM_FONTS_LIST_FONT));
 
-		// Calculating the averge distance to the next neightbou. this costs
-		// time!// TODO in another thread
-		// with GUI!// use attributeMetaDataMap to cache that?!
-		// avgNN = FeatureUtil.calcAvgNN(styledFeatures);
-
 		setTitle(styledFeatures.getTitle());
 		if (loadStyle != null) {
 			// Correct propertynames against the Schema
@@ -540,9 +531,7 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private void fireStyleChangedEvents(final AbstractRulesList ruleList) {
-		if (!(ruleList instanceof TextRuleList)) {
-			lastChangedRuleList = ruleList;
-		}
+		lastChangedRuleList = ruleList;
 
 		fireStyleChangedEvents();
 	}
@@ -807,20 +796,6 @@ public class AtlasStyler {
 				LOGGER.error(msfg);
 				styleCached.getDescription().setTitle(msfg);
 				return styleCached;
-			}
-
-			// TODO Somewhere else!
-			if (avgNN != null) {
-
-				/**
-				 * Applying automatic MaxScaleDenominators
-				 */
-				GeometryForm geom = FeatureUtil.getGeometryForm(styledFeatures
-						.getSchema());
-
-				lastChangedRuleList.setMaxScaleDenominator(StylingUtil
-						.getMaxScaleDenominator(avgNN, geom));
-
 			}
 
 			// TODO handle textRuleLists special at the end?
