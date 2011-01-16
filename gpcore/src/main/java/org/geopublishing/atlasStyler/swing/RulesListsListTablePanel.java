@@ -27,6 +27,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
 
 import schmitzm.swing.ButtonGroup;
 import schmitzm.swing.JPanel;
+import schmitzm.swing.SwingUtil;
 import skrueger.swing.SmallButton;
 
 /**
@@ -95,7 +96,7 @@ public class RulesListsListTablePanel extends JPanel {
 			modeButtons.add(new JLabel("Bedienungsmodus:"));
 
 			final JRadioButton easyButton = new JRadioButton(
-					new AbstractAction("easy") {
+					new AbstractAction("easy") { // i8n
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -103,14 +104,15 @@ public class RulesListsListTablePanel extends JPanel {
 							popupMenuExplanationJLabel.setVisible(false);
 							getRulesListTable().updateColumnsLook();
 							getRulesListTable().updateColumnsLook();
-							getUpButton().setVisible(false);
-							getDownButton().setVisible(false);
+							// getUpButton().setVisible(false);
+							// getDownButton().setVisible(false);
+							scaleInPreviewValueJLabel.setVisible(false);
 						}
 					});
 
 			modeButtons.add(easyButton);
 			final JRadioButton expertButton = new JRadioButton(
-					new AbstractAction("expert") {
+					new AbstractAction("expert") { // I8n
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -118,8 +120,9 @@ public class RulesListsListTablePanel extends JPanel {
 							popupMenuExplanationJLabel.setVisible(true);
 							getRulesListTable().updateColumnsLook();
 							getRulesListTable().updateColumnsLook();
-							getUpButton().setVisible(true);
-							getDownButton().setVisible(true);
+							scaleInPreviewValueJLabel.setVisible(true);
+							// getUpButton().setVisible(true);
+							// getDownButton().setVisible(true);
 						}
 					});
 			modeButtons.add(expertButton);
@@ -151,17 +154,17 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getAddButton() {
 		if (addButton == null) {
-			addButton = new SmallButton(new AbstractAction("add") {
+			addButton = new SmallButton(new AbstractAction("add") { // i8n
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
+						@Override
+						public void actionPerformed(ActionEvent e) {
 
-					AddRulesListDialog addRulesListDialog = new AddRulesListDialog(
-							RulesListsListTablePanel.this, atlasStyler);
-					addRulesListDialog.setVisible(true);
-				}
+							AddRulesListDialog addRulesListDialog = new AddRulesListDialog(
+									RulesListsListTablePanel.this, atlasStyler);
+							addRulesListDialog.setVisible(true);
+						}
 
-			});
+					});
 		}
 		return addButton;
 	}
@@ -231,26 +234,33 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new SmallButton(new AbstractAction("remove") {
+			removeButton = new SmallButton(new AbstractAction("remove") { // i8n
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int[] selectedRows = getRulesListTable().getSelectedRows();
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int[] selectedRows = getRulesListTable()
+									.getSelectedRows();
 
-					// TODO Ask the user
+							List<Integer> idxList = new ArrayList<Integer>();
+							for (int i : selectedRows) {
+								if (i >= 0)
+									idxList.add(i);
+							}
+							Collections.sort(idxList);
+							Collections.reverse(idxList);
 
-					List<Integer> idxList = new ArrayList<Integer>();
-					for (int i : selectedRows) {
-						if (i >= 0)
-							idxList.add(i);
-					}
-					Collections.sort(idxList);
-					Collections.reverse(idxList);
-					for (int idx : idxList) {
-						atlasStyler.getRuleLists().remove(idx);
-					}
-				}
-			});
+							if (!SwingUtil.askYesNo(
+									RulesListsListTablePanel.this,
+									"Do you really want to delete "
+											+ idxList.size() + " RulesLists?") // i8n
+							)
+								return;
+
+							for (int idx : idxList) {
+								atlasStyler.getRuleLists().remove(idx);
+							}
+						}
+					});
 		}
 		return removeButton;
 	}
