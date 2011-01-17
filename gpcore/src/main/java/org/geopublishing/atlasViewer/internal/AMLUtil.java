@@ -101,6 +101,13 @@ public class AMLUtil {
 	public static final String ATT_jnlpBaseUrl = "jnlpBaseUrl";
 
 	/**
+	 * Where to position the map logo.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String ATT_maplogoPosition = "mapLogoPosition";
+
+	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 
 	 * @throws CQLException
@@ -123,7 +130,7 @@ public class AMLUtil {
 
 		LOGGER.debug("old = \n" + old + " converted to \n" + filterString);
 
-//		Filter filter = new CQLFilterParser().parseFilter(filterString);
+		// Filter filter = new CQLFilterParser().parseFilter(filterString);
 		// Filter cqlFilter = CQL.toFilter(filterString);
 		// cqlFilter.evaluate(null);
 

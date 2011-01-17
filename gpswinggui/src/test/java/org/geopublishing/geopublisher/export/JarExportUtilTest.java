@@ -48,6 +48,7 @@ import org.junit.Test;
 import schmitzm.io.IOUtil;
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
+
 public class JarExportUtilTest extends TestingClass {
 	static private final Logger LOGGER = Logger
 			.getLogger(JarExportUtilTest.class);
@@ -162,7 +163,7 @@ public class JarExportUtilTest extends TestingClass {
 				.getResource(JarExportUtil.LICENSEHTML_RESOURCE_NAME));
 
 		assertNotNull(GpUtil.class
-				.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK));
+				.getResource(AtlasConfigEditable.SPLASHSCREEN_RESOURCE_NAME_FALLBACK));
 
 		assertNotNull(GpUtil.class
 				.getResource(JarExportUtil.JSMOOTH_SKEL_AD_RESOURCE1));

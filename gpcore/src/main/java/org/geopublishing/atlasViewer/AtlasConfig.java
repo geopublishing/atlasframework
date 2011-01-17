@@ -37,6 +37,7 @@ import org.geopublishing.geopublisher.GpUtil;
 import rachel.ResourceLoader;
 import rachel.loader.ResourceLoaderManager;
 import schmitzm.jfree.chart.style.ChartStyle;
+import skrueger.geotools.LogoPosition;
 import skrueger.i8n.I8NUtil;
 import skrueger.i8n.Translation;
 import skrueger.swing.Disposable;
@@ -85,7 +86,7 @@ public class AtlasConfig implements Disposable {
 	 * Resource name of the map emblem that will be shown hovering above the map
 	 * in the lower right corner *
 	 */
-	public static final String MAPICON_RESOURCE_NAME = "ad/map_logo.png";
+	public static final String MAPLOGO_RESOURCE_NAME = "ad/map_logo.png";
 
 	/**
 	 * Resource name of the icon that will be used for the About-Dialog and
@@ -169,7 +170,7 @@ public class AtlasConfig implements Disposable {
 	 * List of LanguageCodes that this Atlas is supposed to "speak". Consistency
 	 * with all description-fields will be checked during export.
 	 */
-	private List<String> languages = new LinkedList<String>();
+	private final List<String> languages = new LinkedList<String>();
 
 	/**
 	 * Root-group of the "Topics-tree", defined by < aml:group > tags The
@@ -515,8 +516,6 @@ public class AtlasConfig implements Disposable {
 		if (jnlpBaseUrl == null) {
 			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
 		}
-		
-
 
 		if (!jnlpBaseUrl.endsWith("/"))
 			jnlpBaseUrl += "/";
@@ -544,6 +543,25 @@ public class AtlasConfig implements Disposable {
 					bn.length() - 1);
 		}
 		return basename;
+	}
+
+	/**
+	 * Where on the map shall the maplogo be displayed.
+	 */
+	protected LogoPosition maplogoPosition = LogoPosition.BOTTOMRIGHT;
+
+	/**
+	 * Where to position the map logo on the map image
+	 */
+	public LogoPosition getMaplogoPosition() {
+		return maplogoPosition;
+	}
+
+	/**
+	 * Where to position the map logo on the map image
+	 */
+	public void setMaplogoPosition(LogoPosition pos) {
+		maplogoPosition = pos;
 	}
 
 }

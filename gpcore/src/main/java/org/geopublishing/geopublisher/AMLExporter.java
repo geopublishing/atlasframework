@@ -264,11 +264,11 @@ public class AMLExporter {
 
 					final Transformer xformer = tf.newTransformer();
 					xformer.setOutputProperty(OutputKeys.INDENT, "yes");
-					
-//					// TODO ??? Try with AMLURI, makes more sense...
-//					xformer.setOutputProperty(
-//							"{"+AMLUtil.AMLSCHEMALOCATION+"}indent-amount",
-//							"4");
+
+					// // TODO ??? Try with AMLURI, makes more sense...
+					// xformer.setOutputProperty(
+					// "{"+AMLUtil.AMLSCHEMALOCATION+"}indent-amount",
+					// "4");
 					xformer.setOutputProperty(
 							"{http://xml.apache.org/xalan}indent-amount", "2");
 
@@ -329,10 +329,9 @@ public class AMLExporter {
 		// Linking this XML to the AtlasML Schema
 		final Attr namespaces = document.createAttributeNS(
 				"http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
-		namespaces
-				.setValue(AMLUtil.AMLURI+" http://localhost:"
-						+ Webserver.DEFAULTPORT
-						+ "/skrueger/atlas/resource/AtlasML.xsd");
+		namespaces.setValue(AMLUtil.AMLURI + " http://localhost:"
+				+ Webserver.DEFAULTPORT
+				+ "/skrueger/atlas/resource/AtlasML.xsd");
 		atlas.setAttributeNode(namespaces);
 
 		// Storing the version this atlas.xml is being created with inside the
@@ -345,6 +344,10 @@ public class AMLExporter {
 				String.valueOf(ReleaseUtil.getVersionBuild(AVUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_jnlpBaseUrl,
 				String.valueOf(getAce().getJnlpBaseUrl()));
+
+		// Store the position of the maplogo, since 1.7
+		atlas.setAttribute(AMLUtil.ATT_maplogoPosition,
+				String.valueOf(getAce().getMaplogoPosition()));
 
 		// <aml:name, desc, creator, copyright
 		atlas.appendChild(exportTranslation(document, "name", getAce()
@@ -963,8 +966,8 @@ public class AMLExporter {
 
 				if (chartStyle instanceof FeatureChartStyle) {
 					FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY
-							.writeStyleToFile((FeatureChartStyle) chartStyle,
-									"chartStyle", chartFile);
+							.writeStyleToFile(chartStyle, "chartStyle",
+									chartFile);
 				} else {
 					ChartStyleUtil.CHART_STYLE_FACTORY.writeStyleToFile(
 							chartStyle, "chartStyle", chartFile);

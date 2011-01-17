@@ -17,7 +17,7 @@ import skrueger.versionnumber.ReleaseUtil;
 abstract public class AbstractAtlasExporter implements AtlasExporter {
 
 	final static Logger LOGGER = Logger.getLogger(AbstractAtlasExporter.class);
-	
+
 	/** Internal counting for the percentage bar **/
 	int currSteps = 0;
 
@@ -42,7 +42,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 			LOGGER.info(msg);
 		}
 	}
-	
+
 	ResultProgressHandle progress;
 
 	private static final String version = ReleaseUtil
@@ -92,13 +92,6 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	 * AtlasViewer.</code>
 	 */
 	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
-
-	/**
-	 * Resource location of the splashscreen image that will be used for
-	 * JavaWebStart and <code>start.bat</code>, <code>atlas.exe</code> if the
-	 * didn't define one or the user-defined one can't be found.
-	 */
-	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
 
 	private volatile boolean aborted = false;
 

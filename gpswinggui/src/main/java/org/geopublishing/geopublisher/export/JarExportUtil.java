@@ -1703,10 +1703,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				 * ask the user if he wants to use the default one.
 				 */
 				if (ace.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME) == null) {
-					FileUtils.copyURLToFile(GpUtil.class
-							.getResource(SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
-							new File(ace.getAtlasDir(),
-									AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
+					FileUtils
+							.copyURLToFile(
+									GpUtil.class
+											.getResource(AtlasConfigEditable.SPLASHSCREEN_RESOURCE_NAME_FALLBACK),
+									new File(
+											ace.getAtlasDir(),
+											AtlasConfig.SPLASHSCREEN_RESOURCE_NAME));
 					addToJar(targetJar, ace.getAtlasDir(),
 							AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 					// }
@@ -1746,13 +1749,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			try {
 				LOGGER.debug("Adding optional stuff to " + targetJar.getName());
 				addToJar(targetJar, ace.getAtlasDir(),
-						AtlasConfig.MAPICON_RESOURCE_NAME);
+						AtlasConfig.MAPLOGO_RESOURCE_NAME);
 			} catch (final Exception e1) {
 				if (!GraphicsEnvironment.isHeadless()) {
 					final String msg = GpUtil.R(
 							"Export.NoMapiconExists_NoProblem",
 							ace.getAtlasDir()
-									+ AtlasConfig.MAPICON_RESOURCE_NAME);
+									+ AtlasConfig.MAPLOGO_RESOURCE_NAME);
 					JOptionPane.showMessageDialog(null, msg);
 				}
 			}

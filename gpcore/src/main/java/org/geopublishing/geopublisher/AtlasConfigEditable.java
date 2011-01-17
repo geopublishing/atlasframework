@@ -58,9 +58,17 @@ import skrueger.i8n.Translation;
  */
 public class AtlasConfigEditable extends AtlasConfig {
 
-	private FileResourceLoader fileResLoader;
+	/**
+	 * Resource location of the splashscreen image that will be used for
+	 * JavaWebStart and <code>start.bat</code>, <code>atlas.exe</code> if the
+	 * didn't define one or the user-defined one can't be found.
+	 */
+	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
+	public static final String MAPLOGO_RESOURCE_NAME_FALLBACK = "/export/default_maplogo.png";
 
-	private FileWebResourceLoader fileWebResLoader;
+	private final FileResourceLoader fileResLoader;
+
+	private final FileWebResourceLoader fileWebResLoader;
 
 	private boolean isDisposed = false;
 
@@ -113,7 +121,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	final static private Logger LOGGER = Logger
 			.getLogger(AtlasConfigEditable.class);
 
-	private List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
+	private final List<PropertyChangeListener> listeners = new ArrayList<PropertyChangeListener>();
 
 	/**
 	 * Returns the root/first group of the "groups-tree" which contains
@@ -661,7 +669,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 	/**
 	 * Uncaches all cached information and will result in the GP to continue
-	 * with some IO stuff. This will NOT reload the <code>atlas.xml</code>.  
+	 * with some IO stuff. This will NOT reload the <code>atlas.xml</code>.
 	 */
 	public void uncacheAndReread() {
 
@@ -740,6 +748,5 @@ public class AtlasConfigEditable extends AtlasConfig {
 	public void setBaseName(String basename) {
 		this.basename = basename;
 	}
-
 
 }

@@ -31,6 +31,7 @@ import org.geopublishing.geopublisher.gui.map.DesignAtlasMapLegend;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.EditMapJDialog;
 import org.geopublishing.geopublisher.gui.map.ManageChartsForMapDialog;
+import org.geopublishing.geopublisher.swing.AtlasIconsDialog;
 import org.geotools.map.MapLayer;
 
 import schmitzm.jfree.chart.style.ChartStyle;
@@ -66,6 +67,29 @@ public class GPDialogManager {
 							@Override
 							public EditDpEntryGUI create() {
 								return new EditDpEntryGUI(owner, key);
+							}
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
+		}
+	};
+
+	/** DialogManager for AtlasIconsDialog **/
+	final static public DialogManager<AtlasConfigEditable, AtlasIconsDialog> dm_AtlasIcons = new DialogManager<AtlasConfigEditable, AtlasIconsDialog>() {
+
+		@Override
+		public AtlasIconsDialog getInstanceFor(final AtlasConfigEditable key,
+				final Component owner, final Object... constArgs) {
+			try {
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
+
+							@Override
+							public AtlasIconsDialog create() {
+								return new AtlasIconsDialog(owner, key);
 							}
 
 						}));
@@ -130,22 +154,6 @@ public class GPDialogManager {
 
 	/** A DialogManager for DesignMapViewJDialogs **/
 	final static public CancellableDialogManager<Map, DesignMapViewJDialog> dm_MapComposer = new CancellableDialogManager<Map, DesignMapViewJDialog>() {
-
-		// public boolean closeAllInstancesReferencing(DpEntry<?> dpe) {
-		// for (DesignMapViewJDialog d :
-		// GPDialogManager.dm_MapComposer.getAllInstances()) {
-		// List<DpRef<?>> dpes = d.getMap().getDpes();
-		// for (DpRef<?> dpr : dpes) {
-		// if (dpr.getTarget().equals(dpe)) {
-		// if (!d.close()) return false;
-		// break;
-		// }
-		// }
-		// }
-		//
-		// return true;
-		// }
-
 		@Override
 		public DesignMapViewJDialog getInstanceFor(final Map key,
 				final Component owner, final Object... constArgs) {

@@ -72,6 +72,7 @@ import schmitzm.lang.LangUtil;
 import skrueger.AttributeMetadataImpl;
 import skrueger.RasterLegendData;
 import skrueger.geotools.AttributeMetadataMap;
+import skrueger.geotools.LogoPosition;
 import skrueger.i8n.Translation;
 import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
@@ -294,6 +295,13 @@ public class AMLImport {
 		if (atlasNode.getAttributes().getNamedItem(AMLUtil.ATT_jnlpBaseUrl) != null) {
 			ac.setJnlpBaseUrl(atlasNode.getAttributes()
 					.getNamedItem(AMLUtil.ATT_jnlpBaseUrl).getTextContent());
+		}
+
+		// Read the mapLogoPosition attribute (since 1.7)
+		if (atlasNode.getAttributes().getNamedItem(AMLUtil.ATT_maplogoPosition) != null) {
+			ac.setMaplogoPosition(LogoPosition.valueOf(atlasNode
+					.getAttributes().getNamedItem(AMLUtil.ATT_maplogoPosition)
+					.getTextContent()));
 		}
 
 		// parsing name, desc, creator and copyright

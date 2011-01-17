@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.swing;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +26,9 @@ import java.util.Locale;
 import java.util.concurrent.CancellationException;
 
 import javax.jnlp.SingleInstanceListener;
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -65,7 +53,6 @@ import org.geopublishing.geopublisher.CliOptions;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
-import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.gui.AtlasLanguagesConfigDialog;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
@@ -84,7 +71,6 @@ import schmitzm.swing.ExceptionDialog;
 import schmitzm.swing.SwingUtil;
 import skrueger.i8n.SwitchLanguageDialog;
 import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
 import skrueger.swing.swingworker.AtlasStatusDialog;
 import skrueger.swing.swingworker.AtlasSwingWorker;
 import skrueger.versionnumber.ReleaseUtil;
@@ -102,6 +88,7 @@ import com.lightdev.app.shtm.SHTMLPanelImpl;
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 	static {
+		GpUtil.initGpLogging();
 		// Enable translations added by the user to the .Geopublishing directory
 		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 	}
@@ -169,7 +156,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @throws ParseException
 	 */
 	public static void main(final String[] args) {
-
 		// try {
 		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		// } catch (ClassNotFoundException e) {
@@ -452,121 +438,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		} else if (cmd.equals(ActionCmds.showImagesInfo.toString())) {
 
-			// TODO much nicer
+			GPDialogManager.dm_AtlasIcons.getInstanceFor(getAce(), getJFrame());
 
-			final JDialog d = new JDialog(getJFrame(),
-					GpUtil.R("PersonalizeImages_MenuEntryLabel"));
-
-			final StringBuffer msg = new StringBuffer();
-			msg.append("<html>");
-			msg.append("<h2>" + GpUtil.R("PersonalizeImagesExplanationText")
-					+ "</h2>");
-			msg.append("<ul>");
-
-			// Where to find the autorun.inf icon image
-			msg.append("<li>"
-					+ GpUtil.R("PersonalizeImagesExplanationText_AutorunIcon")
-					+ "<br><i>");
-			// msg.append(new File(ace.getAtlasDir(),
-			// AtlasConfig.AUTORUNICON_RESOURCE_NAME).toString()
-			// + "</i>");
-
-			// Where to find the JWS icon image
-			msg.append("<li>"
-					+ GpUtil.R("PersonalizeImagesExplanationText_JWSIcon")
-					+ "<br><i>");
-			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
-					AtlasConfig.JWSICON_RESOURCE_NAME)) + "</i>");
-
-			// Where to find the splashscreen image
-			msg.append("<li>"
-					+ GpUtil.R("PersonalizeImagesExplanationText_Splashscreen")
-					+ "<br><i>");
-			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
-					AtlasConfig.SPLASHSCREEN_RESOURCE_NAME)) + "</i>");
-
-			// Where to find the flying logo image
-			msg.append("<li>"
-					+ GpUtil.R("PersonalizeImagesExplanationText_FlyingLogo")
-					+ "<br><i>");
-			msg.append(IOUtil.escapePath(new File(ace.getAtlasDir(),
-					AtlasConfig.MAPICON_RESOURCE_NAME)) + "</i>");
-
-			msg.append("</ul>");
-			msg.append("</html>");
-			final JLabel infoLabel = new JLabel(msg.toString());
-
-			final JPanel cp = new JPanel(new BorderLayout());
-			cp.add(infoLabel, BorderLayout.NORTH);
-
-			final Box previewLabel = Box.createVerticalBox();
-
-			final URL urlJWSIconFallback = GpUtil.class
-					.getResource(AtlasConfig.JWSICON_RESOURCE_NAME_FALLBACK);
-
-			final URL urlJWSIcon = GpUtil.class
-					.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
-
-			final JLabel previewJWSIcon = new JLabel("JWS: icon.gif",
-					new ImageIcon(AVUtil.exists(urlJWSIcon) ? urlJWSIcon
-							: urlJWSIconFallback), SwingConstants.CENTER);
-			previewJWSIcon.setBorder(BorderFactory
-					.createTitledBorder("Java Web Start icon"));
-			previewLabel.add(previewJWSIcon);
-			cp.add(previewLabel, BorderLayout.CENTER);
-
-			// URL urlSplashscreenFallback = AtlasConfig.getResLoMan()
-			// .getResourceAsUrl(
-			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			// URL urlSplashscreen = AtlasConfig.getResLoMan().getResourceAsUrl(
-			// AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-			final URL urlSplashscreenFallback = GpUtil.class
-					.getResource(JarExportUtil.SPLASHSCREEN_RESOURCE_NAME_FALLBACK);
-			final URL urlSplashscreen = GpUtil.class
-					.getResource(AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
-
-			URL iconUrl = AVUtil.exists(urlSplashscreen) ? urlSplashscreen
-					: urlSplashscreenFallback;
-			ImageIcon previewSplashscreenIcon = new ImageIcon(iconUrl);
-			final JLabel previewSplashscreen = new JLabel(
-					"JWS: splashscreen.png", previewSplashscreenIcon,
-					SwingConstants.CENTER);
-			previewSplashscreen.setBorder(BorderFactory
-					.createTitledBorder("Java Web Start splashscreen"));
-			previewLabel.add(previewSplashscreen);
-			cp.add(previewLabel, BorderLayout.CENTER);
-
-			final JPanel buttonsPanel = new JPanel(new FlowLayout());
-
-			/**
-			 * A Button to open the ad-foder
-			 */
-			buttonsPanel.add(new JButton(new AbstractAction(GpUtil
-					.R("PersonalizeImages_OpenADFolderButton_label")) {
-
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					SwingUtil.openOSFolder(ace.getAd());
-				}
-
-			}));
-
-			/**
-			 * A Button to close the window
-			 */
-			buttonsPanel.add(new CancelButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					d.dispose();
-				}
-
-			}));
-			cp.add(buttonsPanel, BorderLayout.SOUTH);
-
-			d.setContentPane(cp);
-			d.pack();
-			d.setVisible(true);
 		}
 
 		else if (cmd.equals(ActionCmds.newAtlas.toString())) {

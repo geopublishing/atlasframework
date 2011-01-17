@@ -7,15 +7,14 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import schmitzm.geotools.gui.ScalePanel;
 import schmitzm.junit.TestingClass;
+import skrueger.geotools.LogoPosition;
+
 public class AMLImportTest extends TestingClass {
 
-	@Test
-	@Ignore
 	public void testSaveAndLoad() throws Exception {
 		AtlasConfigEditable ace = GpTestingUtil
 				.getAtlasConfigE(TestAtlas.small);
@@ -30,14 +29,20 @@ public class AMLImportTest extends TestingClass {
 	}
 
 	@Test
-	public void testImportExport_MetricNotVisible() throws Exception {
+	public void testImportExport_MetricNotVisible_MapPosition()
+			throws Exception {
 		AtlasConfigEditable ace = GpTestingUtil
 				.getAtlasConfigE(TestAtlas.small);
 
 		Map map1_0 = ace.getMapPool().get(0);
 		map1_0.setScaleUnits(ScalePanel.ScaleUnits.METRIC);
 		map1_0.setScaleVisible(false);
+
+		ace.setMaplogoPosition(LogoPosition.TOPLEFT);
+
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
+
+		assertEquals(LogoPosition.TOPLEFT, ace2.getMaplogoPosition());
 
 		Map map2_0 = ace2.getMapPool().get(0);
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
@@ -47,7 +52,11 @@ public class AMLImportTest extends TestingClass {
 		map1_0.setScaleUnits(ScalePanel.ScaleUnits.US);
 		map1_0.setScaleVisible(true);
 		map1_0.setPreviewMapExtendInGeopublisher(true);
+
+		ace.setMaplogoPosition(LogoPosition.BOTTOMLEFT);
 		ace2 = GpTestingUtil.saveAndLoad(ace);
+		assertEquals(LogoPosition.BOTTOMLEFT, ace2.getMaplogoPosition());
+
 		map2_0 = ace2.getMapPool().get(0);
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
 		assertEquals(map1_0.isScaleVisible(), map2_0.isScaleVisible());

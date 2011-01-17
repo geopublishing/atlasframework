@@ -208,18 +208,19 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		// final URL mapIconURL = AtlasConfig.getResLoMan().getResourceAsUrl(
 		// AtlasConfig.MAPICON_RESOURCE_NAME);
 		final URL mapIconURL = atlasConfig
-				.getResource(AtlasConfig.MAPICON_RESOURCE_NAME);
+				.getResource(AtlasConfig.MAPLOGO_RESOURCE_NAME);
 
 		if (mapIconURL != null) {
 			try {
 				BufferedImage mapImageIcon = ImageIO.read(mapIconURL);
-				getGeoMapPane().getMapPane().setMapImage(mapImageIcon);
+				getGeoMapPane().getMapPane().setMapImage(mapImageIcon,
+						atlasConfig.getMaplogoPosition());
 			} catch (IOException e) {
 				LOGGER.error(e);
 			}
 
 		} else {
-			LOGGER.info("No " + AtlasConfig.MAPICON_RESOURCE_NAME
+			LOGGER.info("No " + AtlasConfig.MAPLOGO_RESOURCE_NAME
 					+ " found. Not displaying any icon on top of the map");
 		}
 

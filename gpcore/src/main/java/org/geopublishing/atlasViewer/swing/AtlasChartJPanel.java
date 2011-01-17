@@ -135,7 +135,7 @@ public class AtlasChartJPanel extends JPanel implements
 		// map
 		// **********************************************************************
 		final URL mapIconURL = mapLegend.getMap().getAc().getResLoMan().getResourceAsUrl(
-				AtlasConfig.MAPICON_RESOURCE_NAME);
+				AtlasConfig.MAPLOGO_RESOURCE_NAME);
 		if (mapIconURL != null) {
 			try {
 				mapImageIcon = ImageIO.read(mapIconURL);
