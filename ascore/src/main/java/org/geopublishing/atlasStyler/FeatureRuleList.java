@@ -139,16 +139,17 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 	public void importNoDataRule(Rule r) {
 		getNoDataSymbol().getSymbolizers().clear();
 		getNoDataSymbol().addSymbolizers(r.symbolizers());
-		getNoDataSymbol().setTitle(r.getDescription().getTitle().toString());
+		getNoDataSymbol()
+				.setRuleTitle(r.getDescription().getTitle().toString());
+		getNoDataSymbol().setTitle("NODATARULE");
 
 		if (r.getName().toString()
 				.equals(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND)) {
 			getNoDataSymbol().setVisibleInLegend(false);
 		}
 
-		Filter filter = parseAbstractRlSettings(r.getFilter());
-
 		// Stub on how to parse the NODAT values...
+		// Filter filter = parseAbstractRlSettings(r.getFilter());
 		// Or ors = (Or) filter;
 		// for (Filter ndf : ors.getChildren()) {
 		// if (ndf instanceof IsNullImpl) {

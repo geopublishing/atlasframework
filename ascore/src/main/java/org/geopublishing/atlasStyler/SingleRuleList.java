@@ -172,6 +172,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		to.setStyleName(getStyleName());
 		to.setStyleTitle(getStyleTitle());
 
+		to.setTitle(getTitle());
+		to.setRuleTitle(getRuleTitle());
+
 		to.setMinScaleDenominator(getMinScaleDenominator());
 		to.setMaxScaleDenominator(getMaxScaleDenominator());
 
@@ -569,7 +572,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 		if (ruleTitle == null || ruleTitle.equals("")) {
 			// LOGGER.warn("rule title may not be empty");
-			ruleTitle = "title missing"; // i8n
+			ruleTitle = ""; // i8n
 		}
 
 		// Is the new title really different from the old one?

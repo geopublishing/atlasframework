@@ -216,17 +216,17 @@ public class Icons {
 
 	// TODO icons
 	public static final Icon ICON_MINSCALE_SMALL = new ImageIcon(
-			Icons.class.getResource("/icons/small/fonts.png"));
+			Icons.class.getResource("/icons/small/minscale.png"));
 	// TODO icons
 	public static final Icon ICON_MAXSCALE_SMALL = new ImageIcon(
-			Icons.class.getResource("/icons/small/fonts.png"));
+			Icons.class.getResource("/icons/small/maxscale.png"));
 	// TODO icons
 	public static final Icon ICON_MINMAXSCALE_SMALL = new ImageIcon(
-			Icons.class.getResource("/icons/small/fonts.png"));
+			Icons.class.getResource("/icons/small/minmaxscale.png"));
 
 	// TODO icons
 	public static final Icon ICON_XML = new ImageIcon(
-			Icons.class.getResource("/icons/small/fonts.png"));
+			Icons.class.getResource("/icons/small/xml.png"));
 
 	private static ImageIcon upArrow;
 

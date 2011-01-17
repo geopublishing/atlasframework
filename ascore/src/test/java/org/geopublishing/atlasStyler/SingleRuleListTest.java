@@ -56,5 +56,9 @@ public class SingleRuleListTest extends TestingClass {
 		assertEquals(singleRulesList.getRuleTitle(), srl.getRuleTitle());
 		assertEquals("RuleTitle", srl.getRuleTitle());
 
+		// test whether copy copies the titles correctly
+		assertEquals("RulesListTitle", ((SingleRuleList) srl.copy()).getTitle());
+		assertEquals("RuleTitle", ((SingleRuleList) srl.copy()).getRuleTitle());
+
 	}
 }

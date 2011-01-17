@@ -812,10 +812,9 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 			final SingleRuleList<? extends Symbolizer> noDataSymbol = rulesList
 					.getNoDataSymbol();
-			// final String noDataLegendString = noDataRule.getTitle();
 
 			final SmallButton noDataLabelButton = new SmallButton(
-					new Translation(noDataSymbol.getTitle()) + ":",
+					new Translation(noDataSymbol.getRuleTitle()) + ":",
 					AtlasStyler.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
@@ -828,7 +827,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 						// entries label
 
 						final Translation translation = new Translation(
-								noDataSymbol.getTitle());
+								noDataSymbol.getRuleTitle());
 
 						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
 								AtlasStyler
@@ -853,7 +852,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 									noDataLabelButton.setText(translation
 											.toString() + ":");
-									noDataSymbol.setTitle(translation
+									noDataSymbol.setTitle("NODATARULE");
+									noDataSymbol.setRuleTitle(translation
 											.toOneLine());
 
 									rulesList
@@ -861,8 +861,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 											.fireEvents(
 													new RuleChangedEvent(
 															"nodata legend label changed",
-															rulesList
-																	.getNoDataSymbol()));
+															noDataSymbol));
 
 								}
 
@@ -874,12 +873,12 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 					} else {
 						final String newNodataTitle = ASUtil.askForString(
 								GraduatedColorQuantitiesGUI.this, noDataSymbol
-										.getTitle(), AtlasStyler
+										.getRuleTitle(), AtlasStyler
 										.R("translate_label_for_NODATA_values"));
 
 						if (newNodataTitle != null) {
 							noDataLabelButton.setText(newNodataTitle + ":");
-							noDataSymbol.setTitle(newNodataTitle);
+							noDataSymbol.setRuleTitle(newNodataTitle);
 
 							rulesList.getNoDataSymbol().fireEvents(
 									new RuleChangedEvent(

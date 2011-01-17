@@ -119,7 +119,7 @@ public class RulesListPopup extends JPopupMenu {
 			add(new AbstractAction("<html>Use preview scale ("
 					+ NumberFormat.getIntegerInstance().format(
 							previewScaleDenominator)
-					+ ") for <em>MIN</em></html>") {
+					+ ") for <em>MIN</em></html>", Icons.ICON_MINSCALE_SMALL) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -130,7 +130,7 @@ public class RulesListPopup extends JPopupMenu {
 			add(new AbstractAction("<html>Use preview scale ("
 					+ NumberFormat.getIntegerInstance().format(
 							previewScaleDenominator)
-					+ ") for <em>MAX</em></html>") {
+					+ ") for <em>MAX</em></html>", Icons.ICON_MAXSCALE_SMALL) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -143,7 +143,8 @@ public class RulesListPopup extends JPopupMenu {
 		final Double maxScale = rulesList.getMaxScaleDenominator();
 
 		add(new AbstractAction(
-				"<html>Zoom preview to <em>MIN scale</em>+1</html>") {
+				"<html>Zoom preview to <em>MIN scale</em>+1</html>",
+				Icons.ICON_MINSCALE_SMALL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -153,7 +154,8 @@ public class RulesListPopup extends JPopupMenu {
 			}
 		});
 		add(new AbstractAction(
-				"<html>Zoom preview to <em>MAX scale</em>-1</html>") {
+				"<html>Zoom preview to <em>MAX scale</em>-1</html>",
+				Icons.ICON_MAXSCALE_SMALL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
