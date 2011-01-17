@@ -531,7 +531,8 @@ public class AtlasStyler {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private void fireStyleChangedEvents(final AbstractRulesList ruleList) {
-		lastChangedRuleList = ruleList;
+		if (!(ruleList instanceof TextRuleList))
+			lastChangedRuleList = ruleList;
 
 		fireStyleChangedEvents();
 	}
@@ -1040,7 +1041,10 @@ public class AtlasStyler {
 
 	public void setLastChangedRuleList(
 			final AbstractRulesList lastChangedRuleList) {
-		this.lastChangedRuleList = lastChangedRuleList;
+
+		if (!(lastChangedRuleList instanceof TextRuleList))
+			this.lastChangedRuleList = lastChangedRuleList;
+
 		if (lastChangedRuleList != null) {
 			LOGGER.info("Changing LCRL manually to "
 					+ lastChangedRuleList.getClass().getSimpleName());

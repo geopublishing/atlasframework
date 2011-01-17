@@ -36,10 +36,14 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 			public void actionPerformed(ActionEvent e) {
 				SwingUtil.setRelativeFramePosition(dialog, owner,
 						SwingUtil.BOUNDS_INNER, SwingUtil.NORTH);
+
 				dialog.setModal(true);
 				dialog.setVisible(true);
+				if (dialog.isCancelled())
+					fireEditingCanceled();
+				else
+					fireEditingStopped(); // Make the renderer reappear.
 
-				fireEditingStopped(); // Make the renderer reappear.
 			}
 		});
 		// button.addActionListener(this);
@@ -72,6 +76,7 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 						.getValueAt(row, RulesListTable.COLIDX_TITLE),
 				table.getModel().getValueAt(row, RulesListTable.COLIDX_TYPE),
 				sf.getTitle()));
+		button.doClick();
 		return button;
 	}
 
