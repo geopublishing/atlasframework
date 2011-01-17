@@ -27,6 +27,7 @@ import org.opengis.filter.Filter;
 import schmitzm.geotools.styling.StylingUtil;
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil.TestDatasetsVector;
+
 public class TextRuleListTest extends TestingClass {
 
 	@Test
@@ -372,7 +373,7 @@ public class TextRuleListTest extends TestingClass {
 
 		assertEquals(
 				"3 rules in the TextRulesList are expected since we have a general default and one language specific default with TWO label attributes",
-				3, as.getStyle().featureTypeStyles().get(1).rules().size());
+				3, as.getStyle().featureTypeStyles().get(0).rules().size());
 
 		assertEquals(2, textRulesList.countClasses());
 		assertEquals(0, textRulesList.getDefaultLanguages().size());
