@@ -1127,4 +1127,17 @@ public class AtlasStyler {
 		return arrayList;
 	}
 
+	/**
+	 * Creates a copy of any given RulesList
+	 */
+	public AbstractRulesList copyRulesList(AbstractRulesList rl) {
+		FeatureTypeStyle fts = rl.getFTS();
+		try {
+			return getRlf().importFts(fts, false);
+		} catch (AtlasParsingException e) {
+			LOGGER.warn("Trying to copy RL=" + rl + " failed.", e);
+			return null;
+		}
+	}
+
 }

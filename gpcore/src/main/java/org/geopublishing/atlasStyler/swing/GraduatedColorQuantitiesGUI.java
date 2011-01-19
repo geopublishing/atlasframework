@@ -814,7 +814,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 					.getNoDataSymbol();
 
 			final SmallButton noDataLabelButton = new SmallButton(
-					new Translation(noDataSymbol.getRuleTitle()) + ":",
+					new Translation(noDataSymbol.getLabel()) + ":",
 					AtlasStyler.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
@@ -827,7 +827,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 						// entries label
 
 						final Translation translation = new Translation(
-								noDataSymbol.getRuleTitle());
+								noDataSymbol.getLabel());
 
 						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
 								AtlasStyler
@@ -853,8 +853,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 									noDataLabelButton.setText(translation
 											.toString() + ":");
 									noDataSymbol.setTitle("NODATARULE");
-									noDataSymbol.setRuleTitle(translation
-											.toOneLine());
+									noDataSymbol.setRuleTitle(translation);
 
 									rulesList
 											.getNoDataSymbol()
@@ -873,12 +872,12 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 					} else {
 						final String newNodataTitle = ASUtil.askForString(
 								GraduatedColorQuantitiesGUI.this, noDataSymbol
-										.getRuleTitle(), AtlasStyler
+										.getLabel(), AtlasStyler
 										.R("translate_label_for_NODATA_values"));
 
 						if (newNodataTitle != null) {
 							noDataLabelButton.setText(newNodataTitle + ":");
-							noDataSymbol.setRuleTitle(newNodataTitle);
+							noDataSymbol.setLabel(newNodataTitle);
 
 							rulesList.getNoDataSymbol().fireEvents(
 									new RuleChangedEvent(

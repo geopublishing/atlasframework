@@ -135,7 +135,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String oldTitle = singleSymbolRuleList.getRuleTitle();
+				String oldTitle = singleSymbolRuleList.getLabel();
 
 				if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 					/*******************************************************
@@ -184,7 +184,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 					String newTitle = ASUtil.askForString(SingleSymbolGUI.this,
 							oldTitle, null);
 					if (newTitle != null) {
-						singleSymbolRuleList.setRuleTitle(newTitle);
+						singleSymbolRuleList.setLabel(newTitle);
 						jLabelTranslationEdit.setText(newTitle);
 					}
 				}
@@ -193,7 +193,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 
 		Translation translation = new Translation();
 		try {
-			String firstTitle = singleSymbolRuleList.getRuleTitle();
+			String firstTitle = singleSymbolRuleList.getLabel();
 			translation.fromOneLine(firstTitle);
 			jLabelTranslationEdit.setText(translation.toString());
 		} catch (Exception e) {

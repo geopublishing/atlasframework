@@ -61,7 +61,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	private String styleTitle;
 
-	private String ruleTitle = "title missing";
+	private String label = "title missing";
 
 	/**
 	 * This boolean defines whether the entry shall be shown the legend. <b>This
@@ -70,23 +70,23 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	private boolean visibleInLegend = true;
 
 	/**
-	 * @param title
+	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(String title, GeometryForm geometryForm) {
+	public SingleRuleList(String label, GeometryForm geometryForm) {
 		super(geometryForm);
 		pushQuite();
-		setTitle(title);
+		setLabel(label);
 		popQuite();
 	}
 
 	/**
-	 * @param title
+	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(Translation title, GeometryForm geometryForm) {
+	public SingleRuleList(Translation label, GeometryForm geometryForm) {
 		super(geometryForm);
-		setTitle(title);
+		setRuleTitle(label);
 	}
 
 	/**
@@ -173,7 +173,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		to.setStyleTitle(getStyleTitle());
 
 		to.setTitle(getTitle());
-		to.setRuleTitle(getRuleTitle());
+		to.setLabel(getLabel());
 
 		to.setMinScaleDenominator(getMinScaleDenominator());
 		to.setMaxScaleDenominator(getMaxScaleDenominator());
@@ -268,7 +268,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		applyScaleDominators(rule);
 
 		/** Saving the legend label * */
-		rule.setTitle(getRuleTitle());
+		rule.setTitle(getLabel());
 
 		addFilters(rule);
 
@@ -290,12 +290,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * *************************************************************************
-	 * ABSTRACT METHODS
-	 * *************************************************************************
-	 */
-
-	/**
 	 * @return Returns the biggest Size used if any Size is used. If no size
 	 *         used returns 0.
 	 */
@@ -313,10 +307,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * The Title is used for the author
-	 * 
-	 * @return
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * The Title is used for the author of the Style.
 	 */
 	public String getStyleTitle() {
 		return styleTitle;
@@ -325,7 +316,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	/**
 	 * @return A {@link Vector} of {@link PointSymbolizer}s that paint the
 	 *         symbols. The are painted in reverse order.
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public Vector<SymbolizerType> getSymbolizers() {
 		return layers;
@@ -333,10 +323,11 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	/**
 	 * @return The title of the first and only {@link Rule}. This is used as the
-	 *         label for this rule in the legend.
+	 *         label for this rule in the legend. This max return a
+	 *         "oneLineCoded" {@link Translation} if running in GP.
 	 */
-	public String getRuleTitle() {
-		return ruleTitle;
+	public String getLabel() {
+		return label;
 	}
 
 	/**
@@ -527,7 +518,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			// Update the title and fire an event
 			this.styleAbstract = styleAbstract;
 			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ ruleTitle, this));
+					+ label, this));
 		}
 
 	}
@@ -568,35 +559,24 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * label for this rule in the legend.
 	 * 
 	 */
-	public void setRuleTitle(String ruleTitle) {
+	public void setLabel(String label) {
 
-		if (ruleTitle == null || ruleTitle.equals("")) {
+		if (label == null || label.equals("")) {
 			// LOGGER.warn("rule title may not be empty");
-			ruleTitle = ""; // i8n
+			label = ""; // i8n
 		}
 
 		// Is the new title really different from the old one?
 		boolean change = true;
-		if (this.ruleTitle != null && ruleTitle != null
-				&& this.ruleTitle.equals(ruleTitle))
+		if (this.label != null && label != null && this.label.equals(label))
 			change = false;
 
 		if (change) {
 			// Update the title and fire an event
-			this.ruleTitle = ruleTitle;
+			this.label = label;
 			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ ruleTitle, this));
+					+ label, this));
 		}
-	}
-
-	/**
-	 * Set the title of the first and only {@link Rule}. This is used as the
-	 * label for this rule in the legend.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setTitle(Translation translation) {
-		setTitle(translation.toOneLine());
 	}
 
 	/**
@@ -636,13 +616,13 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			try {
 				final Description description = rule.getDescription();
 				final InternationalString title2 = description.getTitle();
-				setRuleTitle(title2.toString());
+				setLabel(title2.toString());
 			} catch (final NullPointerException e) {
 				LOGGER.warn("The title style to import has been null!");
-				setRuleTitle("");
+				setLabel("");
 			} catch (final Exception e) {
 				LOGGER.error("The title style to import could not been set!", e);
-				setRuleTitle("");
+				setLabel("");
 			}
 
 			// Analyse the filters...
@@ -655,7 +635,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	public void setRuleTitle(Translation translation) {
-		setRuleTitle(translation.toOneLine());
+		setLabel(translation.toOneLine());
 	}
 
 }

@@ -34,7 +34,7 @@ public class SingleRuleListTest extends TestingClass {
 		SingleRuleList<?> singleRulesList = as.getRlf().createSingleRulesList(
 				AtlasStyler.getRuleTitleFor(as.getStyledFeatures()), false);
 
-		singleRulesList.setRuleTitle("RuleTitle");
+		singleRulesList.setLabel("RuleTitle");
 		singleRulesList.setTitle("RulesListTitle");
 
 		as.addRulesList(singleRulesList);
@@ -53,12 +53,12 @@ public class SingleRuleListTest extends TestingClass {
 		assertEquals(singleRulesList.getTitle(), srl.getTitle());
 		assertEquals("RulesListTitle", srl.getTitle());
 
-		assertEquals(singleRulesList.getRuleTitle(), srl.getRuleTitle());
-		assertEquals("RuleTitle", srl.getRuleTitle());
+		assertEquals(singleRulesList.getLabel(), srl.getLabel());
+		assertEquals("RuleTitle", srl.getLabel());
 
 		// test whether copy copies the titles correctly
 		assertEquals("RulesListTitle", ((SingleRuleList) srl.copy()).getTitle());
-		assertEquals("RuleTitle", ((SingleRuleList) srl.copy()).getRuleTitle());
+		assertEquals("RuleTitle", ((SingleRuleList) srl.copy()).getLabel());
 
 	}
 }

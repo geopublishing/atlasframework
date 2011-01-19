@@ -64,6 +64,8 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JPanel modeButtons;
 
+	private SmallButton duplicateButton;
+
 	public RulesListsListTablePanel(final StylerDialog asd) {
 		super(new MigLayout("", "grow", "[grow][]"));
 		this.asd = asd;
@@ -81,7 +83,8 @@ public class RulesListsListTablePanel extends JPanel {
 			updateScaleInPreviewJLabel();
 		}
 
-		add(getAddButton(), "split 5, align left");
+		add(getAddButton(), "split 6, align left");
+		add(getDuplicateButton(), "align left");
 		add(getRemoveButton(), "align left, gapx");
 		add(new JLabel(), "growx");
 		add(getUpButton(), "align right");
@@ -271,8 +274,74 @@ public class RulesListsListTablePanel extends JPanel {
 					}
 				}
 			});
+
+			// Enable/Disable the button depending on active selections in the
+			// list
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							removeButton.setEnabled(e.getFirstIndex() >= 0);
+						}
+					});
+			removeButton.setEnabled(getRulesListTable().getSelectedRow() >= 0);
 		}
 		return removeButton;
+	}
+
+	private JButton getDuplicateButton() {
+		if (duplicateButton == null) {
+			duplicateButton = new SmallButton(
+					new AbstractAction(AtlasStyler
+							.R("RulesListsList.Action.DuplicateRulesLists")) {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							int[] selectedRows = getRulesListTable()
+									.getSelectedRows();
+
+							List<Integer> idxList = new ArrayList<Integer>();
+							for (int i : selectedRows) {
+								if (i >= 0)
+									idxList.add(i);
+							}
+
+							atlasStyler.getRuleLists().pushQuite();
+							try {
+								for (int idx : idxList) {
+									AbstractRulesList rl = atlasStyler
+											.getRuleLists().get(idx);
+									AbstractRulesList duplicate = atlasStyler
+											.copyRulesList(rl);
+									duplicate.setTitle("Copy" + rl.getTitle());
+
+									atlasStyler.getRuleLists().add(duplicate);
+								}
+							} finally {
+								atlasStyler.getRuleLists().popQuite();
+							}
+						}
+					});
+
+			// Enable/Disable the button depending on active selections in the
+			// list
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							duplicateButton.setEnabled(e.getFirstIndex() >= 0);
+						}
+					});
+			duplicateButton
+					.setEnabled(getRulesListTable().getSelectedRow() >= 0);
+		}
+		return duplicateButton;
 	}
 
 	public RulesListTable getRulesListTable() {

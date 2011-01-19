@@ -19,7 +19,8 @@ import skrueger.i8n.Translation;
  */
 public class RuleListFactory {
 
-	private static final Logger LOGGER = LangUtil.createLogger(AtlasStyler.class);
+	private static final Logger LOGGER = LangUtil
+			.createLogger(AtlasStyler.class);
 
 	private final StyledFeaturesInterface<?> styledFS;
 

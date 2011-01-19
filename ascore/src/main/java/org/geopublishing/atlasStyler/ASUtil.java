@@ -575,6 +575,8 @@ public class ASUtil {
 			break;
 		}
 
+		rl.setTitle("NODATA");
+
 		// Find suitable default labels
 		if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
@@ -587,9 +589,9 @@ public class ASUtil {
 				nodT.put(lang, localized);
 			}
 
-			rl.setTitle(nodT);
+			rl.setRuleTitle(nodT);
 		} else
-			rl.setTitle(R("NoDataLegendEntry.Default"));
+			rl.setLabel(R("NoDataLegendEntry.Default"));
 		return rl;
 	}
 

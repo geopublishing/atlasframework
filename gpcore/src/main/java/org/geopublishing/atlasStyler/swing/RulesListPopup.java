@@ -8,9 +8,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
@@ -31,8 +31,12 @@ public class RulesListPopup extends JPopupMenu {
 
 	public RulesListPopup(final AbstractRulesList rulesList, StylerDialog asd) {
 		this.asd = asd;
+
+		// Write the name if the layer as a header of the menu:
 		JMenuItem header = new JMenuItem(rulesList.getTitle());
+
 		header.setEnabled(false);
+
 		add(header);
 
 		if (!asd.isEasy()) {
@@ -42,11 +46,12 @@ public class RulesListPopup extends JPopupMenu {
 			addSeparator();
 			addFilterMenuItems(rulesList);
 
-			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.OGC_SINGLELANGUAGE) {
-				// Only in AtlasStyler do we offer to access the XML directly.
-				addSeparator();
-				addXMLMenuItems(rulesList);
-			}
+			// if (AtlasStyler.getLanguageMode() ==
+			// LANGUAGE_MODE.OGC_SINGLELANGUAGE) {
+			// Only in AtlasStyler do we offer to access the XML directly.
+			addSeparator();
+			addXMLMenuItems(rulesList);
+			// }
 		}
 	}
 
@@ -78,8 +83,8 @@ public class RulesListPopup extends JPopupMenu {
 		final Filter rlFilter = rulesList.getRlFilter();
 		if (rlFilter != null) {
 
-			add(new AbstractAction("Copy filter", Icons.ICON_FILTER) {
-				// i8n
+			add(new AbstractAction(ASUtil.R("RulesListPopup.CopyFilter"),
+					Icons.ICON_FILTER) {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
@@ -90,8 +95,9 @@ public class RulesListPopup extends JPopupMenu {
 
 		// Insert Filter
 		if (filterCopied != null) {
-			add(new AbstractAction("<html>Insert filter into <em>"
-					+ rulesList.getTitle() + "</em></thml>", Icons.ICON_FILTER) { // i8n
+			add(new AbstractAction(ASUtil.R(
+					"RulesListPopup.InsertFilterIntoRulesList",
+					rulesList.getTitle()), Icons.ICON_FILTER) {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
@@ -101,7 +107,8 @@ public class RulesListPopup extends JPopupMenu {
 		}
 
 		if (rlFilter != null) {
-			add(new AbstractAction("remove filter", Icons.ICON_REMOVE_FILTER) {
+			add(new AbstractAction(ASUtil.R("RulesListPopup.RemoveFilter"),
+					Icons.ICON_REMOVE_FILTER) {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
@@ -116,10 +123,12 @@ public class RulesListPopup extends JPopupMenu {
 
 			final double previewScaleDenominator = asd.getPreviewMapPane()
 					.getScaleDenominator();
-			add(new AbstractAction("<html>Use preview scale ("
-					+ NumberFormat.getIntegerInstance().format(
-							previewScaleDenominator)
-					+ ") for <em>MIN</em></html>", Icons.ICON_MINSCALE_SMALL) {
+			final String pScaleFormatted = NumberFormat.getIntegerInstance()
+					.format(previewScaleDenominator);
+
+			add(new AbstractAction(ASUtil.R(
+					"RulesListPopup.UseScaleOfPreviewForMin", pScaleFormatted),
+					Icons.ICON_MINSCALE_SMALL) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -127,10 +136,9 @@ public class RulesListPopup extends JPopupMenu {
 				}
 			});
 
-			add(new AbstractAction("<html>Use preview scale ("
-					+ NumberFormat.getIntegerInstance().format(
-							previewScaleDenominator)
-					+ ") for <em>MAX</em></html>", Icons.ICON_MAXSCALE_SMALL) {
+			add(new AbstractAction(ASUtil.R(
+					"RulesListPopup.UseScaleOfPreviewForMax", pScaleFormatted),
+					Icons.ICON_MAXSCALE_SMALL) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -142,19 +150,21 @@ public class RulesListPopup extends JPopupMenu {
 		final Double minScale = rulesList.getMinScaleDenominator();
 		final Double maxScale = rulesList.getMaxScaleDenominator();
 
-		add(new AbstractAction(
-				"<html>Zoom preview to <em>MIN scale</em>+1</html>",
-				Icons.ICON_MINSCALE_SMALL) {
+		if (minScale > 0)
+			add(new AbstractAction(
+					ASUtil.R("RulesListPopup.ZoomPreviewToMinPlus1"),
+					Icons.ICON_MINSCALE_SMALL) {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (asd.getPreviewMapPane() != null)
-					asd.getPreviewMapPane().zoomToScaleDenominator(
-							rulesList.getMinScaleDenominator() + 1);
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (asd.getPreviewMapPane() != null)
+						asd.getPreviewMapPane().zoomToScaleDenominator(
+								rulesList.getMinScaleDenominator() + 1);
+				}
+			});
+
 		add(new AbstractAction(
-				"<html>Zoom preview to <em>MAX scale</em>-1</html>",
+				ASUtil.R("RulesListPopup.ZoomPreviewToMaxMinus1"),
 				Icons.ICON_MAXSCALE_SMALL) {
 
 			@Override
@@ -165,10 +175,8 @@ public class RulesListPopup extends JPopupMenu {
 			}
 		});
 
-		add(new AbstractAction("Copy min/max scale",
+		add(new AbstractAction(ASUtil.R("RulesListPopup.CopyMinMaxScale"),
 				Icons.ICON_MINMAXSCALE_SMALL) {
-
-			// i8n
 
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -178,9 +186,9 @@ public class RulesListPopup extends JPopupMenu {
 		});
 
 		if (scalesCopied[0] != null && scalesCopied[1] != null) {
-			add(new AbstractAction("<html>Insert min/max scales into <em>"
-					+ rulesList.getTitle() + "</em></thml>",
-					Icons.ICON_MINMAXSCALE_SMALL) { // i8n
+			add(new AbstractAction(ASUtil.R(
+					"RulesListPopup.InsertMinMaxScaleIntoRulesList",
+					rulesList.getTitle()), Icons.ICON_MINMAXSCALE_SMALL) {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
@@ -191,7 +199,8 @@ public class RulesListPopup extends JPopupMenu {
 		}
 
 		if (minScale != null) {
-			add(new AbstractAction("Reset min/max scales",
+			add(new AbstractAction(
+					ASUtil.R("RulesListPopup.ResetMinMaxScaleToZeroAndInfinite"),
 					Icons.ICON_MINMAXSCALE_SMALL) {
 
 				@Override
@@ -202,42 +211,40 @@ public class RulesListPopup extends JPopupMenu {
 			});
 		}
 
-		add(new AbstractAction("Guess max-scale", Icons.ICON_MINMAXSCALE_SMALL) {
+		if (!asd.isEasy())
+			add(new AbstractAction(ASUtil.R("RulesListPopup.GuessMaxScale"),
+					Icons.ICON_MINMAXSCALE_SMALL) {
 
-			@Override
-			public void actionPerformed(final ActionEvent e) {
+				@Override
+				public void actionPerformed(final ActionEvent e) {
 
-				// try {
+					// try {
 
-				final StyledFeaturesInterface<?> styledFeatures = asd
-						.getAtlasStyler().getStyledFeatures();
+					final StyledFeaturesInterface<?> styledFeatures = asd
+							.getAtlasStyler().getStyledFeatures();
 
-				AtlasStatusDialog waitDialog = new AtlasStatusDialog(
-						RulesListPopup.this);
-				new AtlasSwingWorker<Void>(waitDialog) {
+					AtlasStatusDialog waitDialog = new AtlasStatusDialog(
+							RulesListPopup.this);
+					new AtlasSwingWorker<Void>(waitDialog) {
 
-					@Override
-					protected Void doInBackground() throws Exception {
-						Double calcAvgNN = FeatureUtil
-								.calcAvgNN(styledFeatures);
+						@Override
+						protected Void doInBackground() throws Exception {
+							Double calcAvgNN = FeatureUtil
+									.calcAvgNN(styledFeatures);
 
-						double maxScaleDenominator = StylingUtil
-								.getMaxScaleDenominator(calcAvgNN,
-										styledFeatures.getGeometryForm());
+							double maxScaleDenominator = StylingUtil
+									.getMaxScaleDenominator(calcAvgNN,
+											styledFeatures.getGeometryForm());
 
-						rulesList.setMinScaleDenominator(0.);
-						rulesList.setMaxScaleDenominator(maxScaleDenominator);
+							rulesList.setMinScaleDenominator(0.);
+							rulesList
+									.setMaxScaleDenominator(maxScaleDenominator);
 
-						return null;
-					}
-				}.executeModalNoEx();
+							return null;
+						}
+					}.executeModalNoEx();
 
-				// } catch (IOException e1) {
-				// ExceptionDialog.show(RulesListPopup.this, e1);
-				// }
-
-			}
-		});
-
+				}
+			});
 	}
 }

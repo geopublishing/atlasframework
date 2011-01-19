@@ -140,7 +140,7 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 		getNoDataSymbol().getSymbolizers().clear();
 		getNoDataSymbol().addSymbolizers(r.symbolizers());
 		getNoDataSymbol()
-				.setRuleTitle(r.getDescription().getTitle().toString());
+				.setLabel(r.getDescription().getTitle().toString());
 		getNoDataSymbol().setTitle("NODATARULE");
 
 		if (r.getName().toString()
