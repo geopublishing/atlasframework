@@ -24,6 +24,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -62,6 +63,9 @@ import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
+import org.geopublishing.gpsync.AtlasWorkingCopy;
+import org.geopublishing.gpsync.GpDiff;
+import org.geopublishing.gpsync.GpSync;
 
 import schmitzm.io.IOUtil;
 import schmitzm.swing.ExceptionDialog;
@@ -220,7 +224,7 @@ public class GpFrame extends JFrame {
 	private JMenu getFileMenu() {
 		JMenuItem menuItem;
 
-		AtlasConfigEditable ace = gp.getAce();
+		final AtlasConfigEditable ace = gp.getAce();
 
 		JMenu fileMenu = new JMenu(R("MenuBar.FileMenu"));
 
@@ -288,6 +292,39 @@ public class GpFrame extends JFrame {
 			fileMenu.add(new GpMenuItem(R("MenuBar.FileMenu.ImportWizard"),
 					null, ActionCmds.importWizard, null, KeyStroke
 							.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK, true)));
+		}
+
+		// TODO MJ
+		if (ace != null) {
+			fileMenu.add(new AbstractAction("gpsync TEST") {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						GpSync gpSync = new GpSync(ace.getAtlasDir());
+						gpSync.getAcs();
+
+						new URL("http://wgp/gphost/" + ace.getBaseName())
+								.openStream();
+						AtlasWorkingCopy atlasFingerprintRemote = new AtlasWorkingCopy(
+								null);
+						GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
+						File createZip = gpSync.createZip(gpDiff);
+
+						// REMOTE!
+						// GpSync gpSync = new GpSync(ace.getAtlasDir());
+						// send( gpSync.getAcs().toText() );
+						//
+						// gpSync.applyZip(zipFile);
+						//
+						// UPLOAD!
+						// show message, zip erstellt mit 100 kb
+
+					} catch (Exception ee) {
+						ExceptionDialog.show(GpFrame.this, ee);
+					}
+				}
+			});
 		}
 
 		// ******************************************************************
