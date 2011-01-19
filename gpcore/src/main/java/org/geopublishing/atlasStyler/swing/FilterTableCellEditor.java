@@ -7,12 +7,14 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
 import org.geopublishing.atlasViewer.swing.AtlasFeatureLayerFilterDialog;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.opengis.filter.Filter;
 
+import schmitzm.geotools.gui.FilterChangeListener;
 import schmitzm.geotools.gui.GeotoolsGUIUtil;
 import schmitzm.swing.SwingUtil;
 import skrueger.geotools.StyledFeaturesInterface;
@@ -25,6 +27,7 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 	AtlasFeatureLayerFilterDialog dialog;
 	private final StyledFeaturesInterface<?> sf;
 	private final Component owner;
+	private Filter backupValueBeforeLastEdit;
 
 	public FilterTableCellEditor(final Component owner,
 			final StyledFeaturesInterface<?> sf) {
@@ -39,11 +42,13 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 
 				dialog.setModal(true);
 				dialog.setVisible(true);
-				if (dialog.isCancelled())
-					fireEditingCanceled();
-				else
-					fireEditingStopped(); // Make the renderer reappear.
-
+				if (!dialog.isCancelled()) {
+					stopCellEditing();
+				} else {
+					dialog.setFilterRule(backupValueBeforeLastEdit != null ? backupValueBeforeLastEdit
+							.toString() : null);
+				}
+				cancelCellEditing();
 			}
 		});
 		// button.addActionListener(this);
@@ -60,6 +65,7 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 			boolean isSelected, int row, int column) {
 
 		Filter filter = (Filter) value;
+		backupValueBeforeLastEdit = filter;
 
 		dialog = getOrCreateFilterTableDialog(sf);
 
@@ -76,42 +82,60 @@ public class FilterTableCellEditor extends AbstractCellEditor implements
 						.getValueAt(row, RulesListTable.COLIDX_TITLE),
 				table.getModel().getValueAt(row, RulesListTable.COLIDX_TYPE),
 				sf.getTitle()));
-		button.doClick();
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				button.doClick();
+			}
+		});
+
 		return button;
 	}
 
 	private AtlasFeatureLayerFilterDialog getOrCreateFilterTableDialog(
 			final StyledFeaturesInterface<?> sf) {
-		if (dialog == null) {
+		// if (dialog == null) {
 
-			new AtlasSwingWorker<AtlasFeatureLayerFilterDialog>(owner) {
+		new AtlasSwingWorker<AtlasFeatureLayerFilterDialog>(owner) {
 
-				@Override
-				protected AtlasFeatureLayerFilterDialog doInBackground()
-						throws Exception {
+			@Override
+			protected AtlasFeatureLayerFilterDialog doInBackground()
+					throws Exception {
 
-					// make a check on howmany feateurs we have an print a
-					// warning if too
-					// many
-					int numCells = sf.getFeatureCollectionFiltered().size()
-							* sf.getAttributeMetaDataMap()
-									.sortedValuesVisibleOnly().size();
-					if (numCells > WARN_CELLS) {
-						if (SwingUtil.askYesNo(owner, SwingUtil.R(
-								"AttributeTable.dialog.warnToManyCells",
-								numCells)) == false) {
-							return null;
-						}
+				// make a check on howmany feateurs we have an print a
+				// warning if too
+				// many
+				int numCells = sf.getFeatureCollectionFiltered().size()
+						* sf.getAttributeMetaDataMap()
+								.sortedValuesVisibleOnly().size();
+				if (numCells > WARN_CELLS) {
+					if (SwingUtil
+							.askYesNo(owner, SwingUtil.R(
+									"AttributeTable.dialog.warnTooManyCells",
+									numCells)) == false) {
+						return null;
 					}
-
-					dialog = new AtlasFeatureLayerFilterDialog(null, sf);
-					dialog.setFilterRule("");
-					return dialog;
 				}
-			}.executeModalNoEx();
 
-		}
+				dialog = new AtlasFeatureLayerFilterDialog(null, sf);
+
+				dialog.addListener(listener);
+				dialog.setFilterRule("");
+				return dialog;
+			}
+		}.executeModalNoEx();
+
+		// }
 		return dialog;
 	}
 
+	FilterChangeListener listener = new FilterChangeListener() {
+
+		@Override
+		public void changed(Filter newFilter) {
+			fireEditingStopped();
+		}
+	};
 }

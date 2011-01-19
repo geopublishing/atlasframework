@@ -93,7 +93,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 						.size();
 		if (numCells > WARN_CELLS) {
 			if (SwingUtil.askYesNo(owner, SwingUtil.R(
-					"AttributeTable.dialog.warnToManyCells", numCells)) == false){
+					"AttributeTable.dialog.warnTooManyCells", numCells)) == false){
 				dispose();
 				return;
 			}
