@@ -23,6 +23,7 @@ import java.util.List;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
@@ -46,19 +47,19 @@ public class DpeImportUtil {
 		final List<String> langs = dpe.getAtlasConfig().getLanguages();
 		if (dpe.getTitle().isEmpty())
 			dpe.setTitle(new Translation(langs, dpe.getFilename()));
-//		if (dpe.getDesc().isEmpty())
-//			dpe.setDesc(new Translation());
-//		if (dpe.getKeywords().isEmpty())
-//			dpe.setKeywords(new Translation());
+		// if (dpe.getDesc().isEmpty())
+		// dpe.setDesc(new Translation());
+		// if (dpe.getKeywords().isEmpty())
+		// dpe.setKeywords(new Translation());
 
 		TranslationAskJDialog translationAskJDialog = new TranslationAskJDialog(
-				owner, new TranslationEditJPanel(GpUtil
-						.R("EditDPEDialog.TranslateTitle"), dpe.getTitle(),
-						langs), new TranslationEditJPanel(GpUtil
-						.R("EditDPEDialog.TranslateDescription"),
-						dpe.getDesc(), langs), new TranslationEditJPanel(GpUtil
-						.R("EditDPEDialog.TranslateKeywords"), dpe
-						.getKeywords(), langs));
+				owner, new TranslationEditJPanel(
+						GpUtil.R("EditDPEDialog.TranslateTitle"),
+						dpe.getTitle(), langs), new TranslationEditJPanel(
+						GpUtil.R("EditDPEDialog.TranslateDescription"),
+						dpe.getDesc(), langs), new TranslationEditJPanel(
+						GpUtil.R("EditDPEDialog.TranslateKeywords"),
+						dpe.getKeywords(), langs));
 
 		translationAskJDialog.setModal(true);
 		translationAskJDialog.setVisible(true);
@@ -81,7 +82,7 @@ public class DpeImportUtil {
 			DpeImportUtil.askTranslationsBeforeCopy(dpe, owner);
 
 			final AtlasStatusDialog atlasStatusDialog = new AtlasStatusDialog(
-					owner, GpUtil.R("dialog.title.wait"), GpUtil.R(
+					owner, AtlasViewerGUI.R("dialog.title.wait"), GpUtil.R(
 							"ImportingDPE.StatusMessage", dpe.getTitle()
 									.toString()));
 
@@ -94,12 +95,12 @@ public class DpeImportUtil {
 						targetDir.mkdirs();
 
 						AVSwingUtil.copyHTMLInfoFiles(statusDialog,
-								DataUtilities.urlToFile(sourceUrl), dpe
-										.getAtlasConfig(), targetDir, null);
+								DataUtilities.urlToFile(sourceUrl),
+								dpe.getAtlasConfig(), targetDir, null);
 
 						if (!targetDir.exists())
 							throw new IOException("Couldn't create "
-									+ IOUtil.escapePath( targetDir));
+									+ IOUtil.escapePath(targetDir));
 
 						dped.copyFiles(sourceUrl, owner, targetDir,
 								atlasStatusDialog);
@@ -152,8 +153,8 @@ public class DpeImportUtil {
 	 *         registered fo deletion when the JRE stops.
 	 */
 	public static File copyFileReplaceCommata(File source) throws IOException {
-		return copyFileReplaceCommata(new FileInputStream(source), source
-				.getName());
+		return copyFileReplaceCommata(new FileInputStream(source),
+				source.getName());
 	}
 
 	/**
@@ -165,8 +166,8 @@ public class DpeImportUtil {
 	 *         registered fo deletion when the JRE stops.
 	 */
 	public static File copyFileReplaceCommata(URL source) throws IOException {
-		return copyFileReplaceCommata(source.openStream(), new File(source
-				.getFile()).getName());
+		return copyFileReplaceCommata(source.openStream(),
+				new File(source.getFile()).getName());
 	}
 
 	/**
