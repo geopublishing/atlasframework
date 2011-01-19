@@ -135,7 +135,8 @@ public class HTMLInfoJPane extends JEditorPane {
 						String targetPath = AtlasProtocol.BROWSER
 								.cutOff(evDesc);
 
-						if (targetPath.startsWith("http://")) {
+						if (targetPath.startsWith("http://")
+								|| targetPath.startsWith("https://")) {
 							/**
 							 * We open an external URL like: http://www.bahn.de
 							 */

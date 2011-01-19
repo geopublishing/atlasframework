@@ -115,22 +115,6 @@ public enum AtlasProtocol {
 		});
 	}
 
-	//
-	// /**
-	// * Make the AtlasViewer open the map with the given id.
-	// *
-	// * @param owner
-	// * A Component linking to the parent GUI.
-	// * @param url
-	// * <code>map://1232123123</code>
-	// * @param atlasConfig
-	// */
-	// public void performMap(Component owner, String href, AtlasConfig
-	// atlasConfig) {
-	// String mapId = AtlasProtocol.MAP.cutOff(href);
-	// performMap(owner, mapId, atlasConfig);
-	// }
-
 	/**
 	 * Make the AtlasViewer open the map with the given id.
 	 * 

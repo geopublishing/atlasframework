@@ -254,7 +254,6 @@ public class DpLayerVectorFeatureSourceShapefileEd extends
 					FeatureSource<SimpleFeatureType, SimpleFeature> fs = store
 							.getFeatureSource();
 
-					// TODO !??!
 					copyImportExport(targetDir, fs, charset, crs, status);
 
 				} else {

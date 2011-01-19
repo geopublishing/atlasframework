@@ -37,14 +37,15 @@ import schmitzm.swing.SwingUtil;
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
 public class GpJSplitPane extends JSplitPane {
-	private Logger LOGGER = Logger.getLogger(GpJSplitPane.class);
+	private final Logger LOGGER = Logger.getLogger(GpJSplitPane.class);
 
 	/** This {@link GpJSplitPane} visualizes this {@link AtlasConfigEditable} */
-	private AtlasConfigEditable ace;
+	private final AtlasConfigEditable ace;
 
 	private EditDataPoolPanel editDatapoolPanel;
 
-	private JSplitPane rightSide;
+	private final JSplitPane rightSide = new JSplitPane(
+			JSplitPane.VERTICAL_SPLIT);
 
 	private EditGroupsDnDJTreePanel editGroups;
 
@@ -73,8 +74,7 @@ public class GpJSplitPane extends JSplitPane {
 	 * after the supported languages have changed, because the menu is language
 	 * sensitive.
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private void initialize() {
 		setOneTouchExpandable(true);
@@ -82,23 +82,14 @@ public class GpJSplitPane extends JSplitPane {
 		// ****************************************************************************
 		// The left side contains the datapool,
 		// ****************************************************************************
-		editDatapoolPanel = new EditDataPoolPanel(ace);
-		editDatapoolPanel.setBorder(BorderFactory
-				.createTitledBorder(GeopublisherGUI
-						.R("DataPoolJTable.Border.Title")));
-		setLeftComponent(editDatapoolPanel);
+		setLeftComponent(getEditDatapoolPanel());
 
 		// ****************************************************************************
 		// right side contains the map-pool and the groups
 		// ****************************************************************************
-		rightSide = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		rightSide.setOneTouchExpandable(true);
 
-		editMapPoolPanel = new EditMapPoolPanel(ace);
-		editMapPoolPanel.setBorder(BorderFactory
-				.createTitledBorder(GeopublisherGUI
-						.R("MapPoolJTable.Border.Title")));
-		rightSide.setTopComponent(editMapPoolPanel);
+		rightSide.setTopComponent(getEditMapPoolPanel());
 
 		editGroups = new EditGroupsDnDJTreePanel(ace.getRootGroup());
 		editGroups.setBorder(BorderFactory.createTitledBorder(GeopublisherGUI
@@ -116,6 +107,33 @@ public class GpJSplitPane extends JSplitPane {
 				GPProps.Keys.gpWindowLeftDividerLocation, 400));
 		setRightDividerLocation(GPProps.getInt(
 				GPProps.Keys.gpWindowRightDividerLocation, 350));
+	}
+
+	/**
+	 * Access the lazily created {@link EditMapPoolPanel}.
+	 */
+	public EditMapPoolPanel getEditMapPoolPanel() {
+		if (editMapPoolPanel == null) {
+
+			editMapPoolPanel = new EditMapPoolPanel(ace);
+			editMapPoolPanel.setBorder(BorderFactory
+					.createTitledBorder(GeopublisherGUI
+							.R("MapPoolJTable.Border.Title")));
+		}
+		return editMapPoolPanel;
+	}
+
+	/**
+	 * Access the lazily created {@link EditDataPoolPanel}.
+	 */
+	public EditDataPoolPanel getEditDatapoolPanel() {
+		if (editDatapoolPanel == null) {
+			editDatapoolPanel = new EditDataPoolPanel(ace);
+			editDatapoolPanel.setBorder(BorderFactory
+					.createTitledBorder(GeopublisherGUI
+							.R("DataPoolJTable.Border.Title")));
+		}
+		return editDatapoolPanel;
 	}
 
 	public int getLeftDividerLocation() {
@@ -139,7 +157,7 @@ public class GpJSplitPane extends JSplitPane {
 	 *         the {@link DataPool}
 	 */
 	public DataPoolJTable getDatapoolJTable() {
-		return editDatapoolPanel.getDatapoolJTable();
+		return getEditDatapoolPanel().getDatapoolJTable();
 	}
 
 	/**
@@ -147,18 +165,20 @@ public class GpJSplitPane extends JSplitPane {
 	 *         the {@link DataPool}
 	 */
 	public MapPoolJTable getMappoolJTable() {
-		return editMapPoolPanel.getMapPoolJTable();
+		return getEditMapPoolPanel().getMapPoolJTable();
 	}
-	
+
 	public DnDJTree getGroupJTable() {
 		return editGroups.getJTree();
 	}
 
 	public void dispose() {
-		if (editDatapoolPanel != null && editDatapoolPanel.getDatapoolJTable() != null) {
+		if (editDatapoolPanel != null
+				&& editDatapoolPanel.getDatapoolJTable() != null) {
 			editDatapoolPanel.getDatapoolJTable().dispose();
 		}
-		if (editMapPoolPanel != null && editMapPoolPanel.getMapPoolJTable() != null) {
+		if (editMapPoolPanel != null
+				&& editMapPoolPanel.getMapPoolJTable() != null) {
 			editMapPoolPanel.getMapPoolJTable().dispose();
 		}
 	}
