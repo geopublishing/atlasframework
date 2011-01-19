@@ -1041,39 +1041,28 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			if (langCode.equals(Translation.getActiveLang()))
 				continue;
 
-			/**
-			 * Lookup a country where they speak the language, so we can print
-			 * the language in local tounge.
-			 */
-			Locale locale = I8NUtil.getFirstLocaleForLang(langCode);
+			JMenuItem langMenuItem = new AtlasMenuItem(new AbstractAction(
+					I8NUtil.getMultilanguageString(langCode)) {
 
-			JMenuItem langMenuItem = new AtlasMenuItem(
-					new AbstractAction(
-							AtlasViewerGUI
-									.R("AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
-											locale.getDisplayLanguage(locale),
-											locale.getDisplayLanguage(),
-											langCode)) {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					try {
+						Translation.setActiveLang(e.getActionCommand());
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							try {
-								Translation.setActiveLang(e.getActionCommand());
+						// To force the recreation of the Menus, we have
+						// to null some of the elements
+						// updateMenu();
 
-								// To force the recreation of the Menus, we have
-								// to null some of the elements
-								// updateMenu();
+						// Update the GUI
+						updateLangMenu();
 
-								// Update the GUI
-								updateLangMenu();
+						setMap(map, true);
+					} catch (Throwable ex) {
+						ExceptionDialog.show(getJFrame(), ex);
+					}
+				}
 
-								setMap(map, true);
-							} catch (Throwable ex) {
-								ExceptionDialog.show(getJFrame(), ex);
-							}
-						}
-
-					});
+			});
 			langMenuItem.setActionCommand(langCode);
 			getLanguageSubMenu().add(langMenuItem);
 		}

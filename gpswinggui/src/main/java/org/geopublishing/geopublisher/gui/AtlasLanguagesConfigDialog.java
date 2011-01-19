@@ -18,7 +18,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -38,6 +37,7 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import schmitzm.swing.SwingUtil;
+import skrueger.i8n.I8NUtil;
 import skrueger.i8n.LanguagesComboBox;
 import skrueger.i8n.Translation;
 import skrueger.swing.CancelButton;
@@ -82,23 +82,6 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 	 */
 	private void updateComboBox() {
 		languageCombo.updateModel(null, aceLanguages);
-//		availLangs.clear();
-
-//		for (String l1 : I8NUtil.getLanguageCodes()) {
-//			if (!aceLanguages.contains(l1)) {
-//				Locale locale = new Locale(l1);
-//				availLangs.add(locale.getDisplayLanguage() + " / "
-//						+ locale.getDisplayLanguage(locale) + " " + l1);
-//			} else {
-//				// System.out.println("Wird ausgelassen: " + l1);
-//			}
-//		}
-//
-//		Collections.sort(availLangs);
-//
-//		languageCombo.setModel(new DefaultComboBoxModel(availLangs));
-//		languageCombo.setSelectedIndex(-1);
-//		languageCombo.repaint();
 	}
 
 	private void initialize() {
@@ -118,10 +101,22 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 
 			@Override
 			public Object getValueAt(int row, int column) {
-				Locale locale = new Locale(aceLanguages.get(row));
-				return locale.getDisplayLanguage() + " / "
-						+ locale.getDisplayLanguage(locale) + " "
-						+ aceLanguages.get(row);
+
+				final String lc = aceLanguages.get(row);
+				//
+				// if (I8NUtil.isValidISOLangCode(lc)) {
+				// Locale locale = new Locale(lc);
+				// return locale.getDisplayLanguage() + " / "
+				// + locale.getDisplayLanguage(locale) + " "
+				// + aceLanguages.get(row);
+				// } else if (I8NUtil.isPropertiesLanguage(lc)) {
+				// PropertiesLocale pl = I8NUtil.propLocales.get(lc);
+				// return pl.getDisplayLanguage() + " / "
+				// + pl.getDisplayLanguage(lc) + " " + lc;
+				// }
+
+				return I8NUtil.getMultilanguageString(lc);
+
 			}
 
 			@Override
@@ -197,8 +192,7 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				addLangButton
-						.setEnabled(languageCombo.getSelectedIndex() != -1);
+				addLangButton.setEnabled(languageCombo.getSelectedIndex() != -1);
 			}
 
 		});
@@ -224,11 +218,10 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (aceLanguages.size() < 1) {
-					AVSwingUtil
-							.showMessageDialog(
-									AtlasLanguagesConfigDialog.this,
-									GeopublisherGUI
-											.R("LanguageSelectionDialog.ErrorMsg.YouNeedMinimumOneLanguage"));
+					AVSwingUtil.showMessageDialog(
+							AtlasLanguagesConfigDialog.this,
+							GeopublisherGUI
+									.R("LanguageSelectionDialog.ErrorMsg.YouNeedMinimumOneLanguage"));
 					cancelClose();
 				} else {
 					okClose();

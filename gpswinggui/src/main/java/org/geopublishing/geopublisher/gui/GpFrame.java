@@ -330,7 +330,8 @@ public class GpFrame extends JFrame {
 
 				fileMenu.add(new JSeparator());
 
-				fileMenu.add(new AbstractAction(lastAtalsFolder.getAbsolutePath()) {
+				fileMenu.add(new AbstractAction(lastAtalsFolder
+						.getAbsolutePath()) {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
@@ -446,8 +447,8 @@ public class GpFrame extends JFrame {
 		// Remember the State of the Windows
 		GPProps.set(GPProps.Keys.windowMaximized, getExtendedState());
 
-		GPProps.set(GPProps.Keys.gpWindowWidth, (Integer) getSize().width);
-		GPProps.set(GPProps.Keys.gpWindowHeight, (Integer) getSize().height);
+		GPProps.set(GPProps.Keys.gpWindowWidth, getSize().width);
+		GPProps.set(GPProps.Keys.gpWindowHeight, getSize().height);
 
 		if (getContentPane() instanceof GpJSplitPane) {
 			// getContentPane() is a JPanel until an atlas is loaded.
@@ -455,9 +456,9 @@ public class GpFrame extends JFrame {
 			GpJSplitPane gpSplit = (GpJSplitPane) getContentPane();
 
 			GPProps.set(GPProps.Keys.gpWindowLeftDividerLocation,
-					(Integer) gpSplit.getLeftDividerLocation());
+					gpSplit.getLeftDividerLocation());
 			GPProps.set(GPProps.Keys.gpWindowRightDividerLocation,
-					(Integer) gpSplit.getRightDividerLocation());
+					gpSplit.getRightDividerLocation());
 		}
 		GPProps.store();
 	}
@@ -520,8 +521,10 @@ public class GpFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String resPath = IOUtil.escapePath( System.getProperty("user.home")
-						+ File.separator + ".Geopublishing" );
+				String resPath = IOUtil.escapePath(System
+						.getProperty("user.home")
+						+ File.separator
+						+ ".Geopublishing");
 				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
 						GpFrame.this, true, GpSwingUtil.R(
 								"TranslateSoftwareDialog.Explanation.Html",
@@ -741,21 +744,16 @@ public class GpFrame extends JFrame {
 			 * Lookup a country where they speak the language, so we can print
 			 * the language in local tounge.
 			 */
-			Locale locale = I8NUtil.getFirstLocaleForLang(code);
 
-			JMenuItem langMenuItem = new JMenuItem(
-					new AbstractAction(
-							AtlasViewerGUI
-									.R("AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
-											locale.getDisplayLanguage(locale),
-											locale.getDisplayLanguage(), code)) {
+			JMenuItem langMenuItem = new JMenuItem(new AbstractAction(
+					I8NUtil.getMultilanguageString(code)) {
 
-						public void actionPerformed(ActionEvent e) {
-							String actionCommand = e.getActionCommand();
-							Translation.setActiveLang(actionCommand, false);
-						}
+				public void actionPerformed(ActionEvent e) {
+					String actionCommand = e.getActionCommand();
+					Translation.setActiveLang(actionCommand, false);
+				}
 
-					});
+			});
 
 			langMenuItem.setActionCommand(code);
 			languageSubMenu.add(langMenuItem);
@@ -793,12 +791,8 @@ public class GpFrame extends JFrame {
 				continue;
 
 			JMenuItem langMenuItem = new JMenuItem(
-					new AbstractAction(
-							AtlasViewerGUI
-									.R("AtlasViewer.FileMenu.LanguageSubMenu.Menuitem.switch_language_to",
-											locale.getDisplayLanguage(locale),
-											locale.getDisplayLanguage(),
-											locale.getLanguage())) {
+					new AbstractAction(I8NUtil.getMultilanguageString(locale
+							.getDisplayLanguage())) {
 
 						public void actionPerformed(ActionEvent e) {
 							String langCode = e.getActionCommand();

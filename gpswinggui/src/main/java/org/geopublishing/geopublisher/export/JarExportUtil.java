@@ -11,7 +11,6 @@
 package org.geopublishing.geopublisher.export;
 
 import java.awt.Font;
-import java.awt.GraphicsEnvironment;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -41,7 +40,6 @@ import java.util.regex.Pattern;
 
 import javax.jnlp.BasicService;
 import javax.jnlp.ServiceManager;
-import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -1751,13 +1749,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				addToJar(targetJar, ace.getAtlasDir(),
 						AtlasConfig.MAPLOGO_RESOURCE_NAME);
 			} catch (final Exception e1) {
-				if (!GraphicsEnvironment.isHeadless()) {
-					final String msg = GpUtil.R(
-							"Export.NoMapiconExists_NoProblem",
-							ace.getAtlasDir()
-									+ AtlasConfig.MAPLOGO_RESOURCE_NAME);
-					JOptionPane.showMessageDialog(null, msg);
-				}
 			}
 
 			/*

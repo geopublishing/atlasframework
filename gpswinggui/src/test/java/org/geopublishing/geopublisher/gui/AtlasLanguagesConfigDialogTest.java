@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import schmitzm.junit.TestingClass;
 import schmitzm.swing.TestingUtil;
+
 public class AtlasLanguagesConfigDialogTest extends TestingClass {
 
 	private ArrayList<String> orig;
@@ -24,7 +25,7 @@ public class AtlasLanguagesConfigDialogTest extends TestingClass {
 		if (TestingUtil.INTERACTIVE) {
 			AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
 					null, orig);
-			TestingUtil.testGui(languageSelectionDialog, 5);
+			TestingUtil.testGui(languageSelectionDialog, 50);
 		}
 	}
 
