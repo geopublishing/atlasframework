@@ -306,7 +306,7 @@ public class GpFrame extends JFrame {
 
 						new URL("http://wgp/gphost/" + ace.getBaseName())
 								.openStream();
-						AtlasWorkingCopy atlasFingerprintRemote = new AtlasWorkingCopy(
+						AtlasFingerPrint atlasFingerprintRemote = new AtlasFingerPrint(
 								null);
 						GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
 						File createZip = gpSync.createZip(gpDiff);
