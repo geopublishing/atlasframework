@@ -295,37 +295,37 @@ public class GpFrame extends JFrame {
 		}
 
 		// TODO MJ
-		if (ace != null) {
-			fileMenu.add(new AbstractAction("gpsync TEST") {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						GpSync gpSync = new GpSync(ace.getAtlasDir());
-						gpSync.getAcs();
-
-						new URL("http://wgp/gphost/" + ace.getBaseName())
-								.openStream();
-						AtlasFingerPrint atlasFingerprintRemote = new AtlasFingerPrint(
-								null);
-						GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
-						File createZip = gpSync.createZip(gpDiff);
-
-						// REMOTE!
-						// GpSync gpSync = new GpSync(ace.getAtlasDir());
-						// send( gpSync.getAcs().toText() );
-						//
-						// gpSync.applyZip(zipFile);
-						//
-						// UPLOAD!
-						// show message, zip erstellt mit 100 kb
-
-					} catch (Exception ee) {
-						ExceptionDialog.show(GpFrame.this, ee);
-					}
-				}
-			});
-		}
+//		if (ace != null) {
+//			fileMenu.add(new AbstractAction("gpsync TEST") {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					try {
+//						GpSync gpSync = new GpSync(ace.getAtlasDir());
+//						gpSync.getAcs();
+//
+//						new URL("http://wgp/gphost/" + ace.getBaseName())
+//								.openStream();
+//						AtlasFingerPrint atlasFingerprintRemote = new AtlasFingerPrint(
+//								null);
+//						GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
+//						File createZip = gpSync.createZip(gpDiff);
+//
+//						// REMOTE!
+//						// GpSync gpSync = new GpSync(ace.getAtlasDir());
+//						// send( gpSync.getAcs().toText() );
+//						//
+//						// gpSync.applyZip(zipFile);
+//						//
+//						// UPLOAD!
+//						// show message, zip erstellt mit 100 kb
+//
+//					} catch (Exception ee) {
+//						ExceptionDialog.show(GpFrame.this, ee);
+//					}
+//				}
+//			});
+//		}
 
 		// ******************************************************************
 		// "Export Atlas as JARs" Menu Item - exportJarsMenuItem
