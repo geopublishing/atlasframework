@@ -343,37 +343,48 @@ public class GpFrame extends JFrame {
 
 		}
 		// TODO MJ
-//		if (ace != null) {
-//			fileMenu.add(new AbstractAction("gpsync TEST") {
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					try {
-//						GpSync gpSync = new GpSync(ace.getAtlasDir());
-//						gpSync.getAcs();
-//
-//						new URL("http://wgp/gphost/" + ace.getBaseName())
-//								.openStream();
-//						AtlasFingerPrint atlasFingerprintRemote = new AtlasFingerPrint(
-//								null);
-//						GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
-//						File createZip = gpSync.createZip(gpDiff);
-//
-//						// REMOTE!
-//						// GpSync gpSync = new GpSync(ace.getAtlasDir());
-//						// send( gpSync.getAcs().toText() );
-//						//
-//						// gpSync.applyZip(zipFile);
-//						//
-//						// UPLOAD!
-//						// show message, zip erstellt mit 100 kb
-//
-//					} catch (Exception ee) {
-//						ExceptionDialog.show(GpFrame.this, ee);
-//					}
-//				}
-//			});
-//		}
+
+		// try {
+		// FTPClient ftpClient = new FTPClient();
+		// ftpClient.setRemoteHost("ftp.geopublishing.org");
+		// ftpClient.connect();
+		// ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
+		// } catch (Exception e) {
+		// // TODO: handle exception
+		// }
+
+		// if (ace != null) {
+		// fileMenu.add(new AbstractAction("gpsync TEST") {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		// try {
+		// GpSync gpSync = new GpSync(ace.getAtlasDir());
+		// gpSync.getAcs();
+		// g9e8o7p6u5b4l3i2s1h0er
+		//
+		// new URL("http://wgp/gphost/" + ace.getBaseName())
+		// .openStream();
+		// AtlasFingerPrint atlasFingerprintRemote = new AtlasFingerPrint(
+		// null);
+		// GpDiff gpDiff = gpSync.compare(atlasFingerprintRemote);
+		// File createZip = gpSync.createZip(gpDiff);
+		//
+		// // REMOTE!
+		// // GpSync gpSync = new GpSync(ace.getAtlasDir());
+		// // send( gpSync.getAcs().toText() );
+		// //
+		// // gpSync.applyZip(zipFile);
+		// //
+		// // UPLOAD!
+		// // show message, zip erstellt mit 100 kb
+		//
+		// } catch (Exception ee) {
+		// ExceptionDialog.show(GpFrame.this, ee);
+		// }
+		// }
+		// });
+		// }
 		// ******************************************************************
 		// "Exit" Menu Item - exitMenuItem
 		// ******************************************************************
