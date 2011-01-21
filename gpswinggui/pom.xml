@@ -433,6 +433,13 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.enterprisedt</groupId>
+			<artifactId>edtFTPj</artifactId>
+			<version>1.5.3</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 
 
