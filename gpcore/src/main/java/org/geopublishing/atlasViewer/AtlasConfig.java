@@ -442,8 +442,8 @@ public class AtlasConfig implements Disposable {
 	}
 
 	/**
-	 * Determines if this is an atlas dir by looking if a ./ad/atlas.xml file
-	 * exists
+	 * Determines if this is an atlas dir by looking if a
+	 * <code>./ad/atlas.xml</code> file exists
 	 * 
 	 * @param atlasDir
 	 *            A {@link File} folder to check
