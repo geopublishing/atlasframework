@@ -390,7 +390,9 @@ public class GpFrame extends JFrame {
 								incomingAfp.delete();
 							}
 						} // createZip with null as gpDiff
-						gpDiff = gpSync.compare(null);
+						else {
+							gpDiff = gpSync.compare(null);
+						}
 						File createZip = gpSync.createZip(gpDiff);
 						FileInputStream fis = new FileInputStream(createZip);
 						try {
