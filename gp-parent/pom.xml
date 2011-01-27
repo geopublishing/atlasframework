@@ -210,7 +210,7 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 
 		<!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
@@ -233,6 +233,23 @@
 			<version>1.0b3</version>
 			<type>jar</type>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+<!--			Logging with log4j. Die MVN dependency fuer 1.2.15 ist defekt.-->
+<!--			downgraded-->
+<!--			to 1.2.14 http://jira.codehaus.org/browse/MEV-649-->
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
 		</dependency>
 	</dependencies>
 
