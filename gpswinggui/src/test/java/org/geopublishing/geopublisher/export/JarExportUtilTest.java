@@ -321,12 +321,12 @@ public class JarExportUtilTest extends TestingClass {
 		// + JarExportUtil.ASSWINGGUI_JARNAME).exists());
 
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
-				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME)
+				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME3)
 				.exists());
 		assertFalse(
 				"The libs are not exported anymore, but rahter referenced online",
 				new File(atlasExportTesttDir, "JWS/"
-						+ JarExportUtil.SCHMITZM_JARNAME).exists());
+						+ JarExportUtil.SCHMITZM_JARNAME3).exists());
 
 		File file = new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ARJAR_FILENAME);

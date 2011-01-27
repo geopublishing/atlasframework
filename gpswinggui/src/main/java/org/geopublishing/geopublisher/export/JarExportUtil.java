@@ -171,15 +171,21 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	/**
 	 * Filename of the schmitzm jar. TODO Very fucking ugly
 	 */
-	public static final String SCHMITZM_JARNAME = "schmitzm-library-2.4-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.5-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.5-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.5-SNAPSHOT.jar";
+	public static final String GPSYNC_JARNAME = "gpsync-1.0-SNAPSHOT.jar";
 
 	/**
 	 * List of JARs that are all created from the one geopublihing.org POM file
 	 * and therefore are not part of the dependencies.
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(
-			Arrays.asList(new String[] { SCHMITZM_JARNAME, ASCORE_JARNAME,
+			Arrays.asList(new String[] { 
+					SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3, 
+					ASCORE_JARNAME,
 					// ASSWINGGUI_JARNAME,
+					GPSYNC_JARNAME, 
 					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
@@ -875,9 +881,14 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					+ getSnapshot();
 		}
 
-		if (jarName.contains(SCHMITZM_JARNAME)) {
-			path = "de/schmitzm/schmitzm-library/2.4-SNAPSHOT";
-		}
+		if (jarName.contains(SCHMITZM_JARNAME1)) 
+			path = "de/schmitzm/schmitzm-core/2.5-SNAPSHOT";
+		if (jarName.contains(SCHMITZM_JARNAME2)) 
+			path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
+		if (jarName.contains(SCHMITZM_JARNAME3)) 
+			path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
+		if (jarName.contains(GPSYNC_JARNAME)) 
+			path = "org/geopublishing/gpsync/1.0-SNAPSHOT";
 
 		/*
 		 * ./gt-data-2.6.1.jar and other geotool jars
@@ -2050,7 +2061,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
 				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
-				+ SCHMITZM_JARNAME;
+				+ SCHMITZM_JARNAME1 + " " +SCHMITZM_JARNAME2+ SCHMITZM_JARNAME3;
 
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 
