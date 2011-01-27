@@ -10,10 +10,10 @@
 
 	<parent>
 		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
+		<artifactId>gp-parent</artifactId>
 		<version>1.7-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 
 	<properties>
 		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>

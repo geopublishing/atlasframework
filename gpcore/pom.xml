@@ -8,12 +8,12 @@
 	<name>gpcore</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 
-	<parent>
+		<parent>
 		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
+		<artifactId>gp-parent</artifactId>
 		<version>1.7-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
+
 
 	<build>
 		<plugins>

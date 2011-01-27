@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geopublishing</groupId>
@@ -15,21 +14,16 @@
 		<url>http://wald.intevation.org/tracker/?group_id=37</url>
 	</issueManagement>
 
-	<parent>
-		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework-basics</artifactId>
-		<version>1.7-SNAPSHOT</version>
-		<relativePath>pom_basic.xml</relativePath>
-	</parent>
-
 	<modules>
+		<module>gp-parent</module>
 		<module>ascore</module>
 		<module>gpnatives</module>
 		<module>gpcore</module>
 		<module>asswinggui</module>
 		<module>gpswinggui</module>
 		<module>gpdoc</module>
-	</modules>
+    <module>gp-parent</module>
+  </modules>
 	
 	<profiles>
 		<profile>
