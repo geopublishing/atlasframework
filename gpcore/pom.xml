@@ -247,10 +247,10 @@
 									<goal>java</goal>
 								</goals>
 								<configuration>
-									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>
+									<mainClass>de.schmitzm.lang.ResourceProviderOperator</mainClass>
 									<arguments>
 										<argument>-s</argument>
-										<argument>${project.build.directory}/../src/main/resources</argument>
+										<argument>${basedir}/src/main/resources</argument>
 										<argument>-b</argument>
 										<argument>locales.AtlasViewerTranslation;locales.GeopublisherTranslation</argument>
 									</arguments>
