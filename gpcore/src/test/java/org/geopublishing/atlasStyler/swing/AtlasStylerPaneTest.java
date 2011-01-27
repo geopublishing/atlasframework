@@ -29,7 +29,7 @@ public class AtlasStylerPaneTest extends TestingClass {
 			return;
 
 		StylerDialog asd = new StylerDialog(null, atlasStylerPolygon, null);
-		TestingUtil.testGui(asd, 10);
+		TestingUtil.testGui(asd);
 
 	}
 }

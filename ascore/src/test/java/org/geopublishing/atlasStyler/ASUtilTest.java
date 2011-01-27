@@ -40,7 +40,7 @@ public class ASUtilTest extends TestingClass {
 		PolygonSymbolizer ps = StylingUtil.STYLE_BUILDER.createPolygonSymbolizer();
 		FeatureSource<SimpleFeatureType, SimpleFeature> pfs = GTTestingUtil.TestDatasetsVector.kreise.getFeatureSource();
 		BufferedImage symbolizerImage = ASUtil.getSymbolizerImage(ps, pfs.getSchema());
-		TestingUtil.testGui(new JLabel(new ImageIcon(symbolizerImage)), 10);
+		TestingUtil.testGui(new JLabel(new ImageIcon(symbolizerImage)));
 	}
 
 }

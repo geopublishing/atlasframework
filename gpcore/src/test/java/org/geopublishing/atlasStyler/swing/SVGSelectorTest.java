@@ -42,6 +42,6 @@ public class SVGSelectorTest extends TestingClass {
 		SVGSelector svgSelector = new SVGSelector(null, GeometryForm.POLYGON,
 				null);
 		svgSelector.changeURL(new URL(FreeMapSymbols.SVG_URL + "/" + "osm"));
-		TestingUtil.testGui(svgSelector, 10);
+		TestingUtil.testGui(svgSelector);
 	}
 }

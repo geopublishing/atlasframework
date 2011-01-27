@@ -28,6 +28,6 @@ public class AddRulesListDialogTest extends TestingClass {
 
 		AddRulesListDialog addRulesListDialog = new AddRulesListDialog(null, as);
 
-		TestingUtil.testGui(addRulesListDialog, 100);
+		TestingUtil.testGui(addRulesListDialog);
 	}
 }

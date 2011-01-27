@@ -10,15 +10,15 @@ public class JScrollPaneSymbolsOnlineTest extends TestingClass {
 	@Test
 	public void testJScrollPaneSymbols() throws Throwable {
 
-		if (TestingUtil.isInteractive()) {
+		if (isInteractive()) {
 			TestingUtil.testGui(
-					new JScrollPaneSymbolsOnline(GeometryForm.POINT), 10);
+					new JScrollPaneSymbolsOnline(GeometryForm.POINT));
 
 			TestingUtil.testGui(
-					new JScrollPaneSymbolsOnline(GeometryForm.LINE), 10);
+					new JScrollPaneSymbolsOnline(GeometryForm.LINE));
 
 			TestingUtil.testGui(new JScrollPaneSymbolsOnline(
-					GeometryForm.POLYGON), 10);
+					GeometryForm.POLYGON));
 		}
 
 	}

@@ -34,7 +34,7 @@ public class PolygonSymbolEditGUITest extends TestingClass {
 		// polygonSymbolEditGUI.getJCheckBoxFillGraphic().doClick();
 		// assertTrue(polygonSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());
 
-		TestingUtil.testGui(polygonSymbolEditGUI, 20);
+		TestingUtil.testGui(polygonSymbolEditGUI);
 
 		// // Mark createMark = StylingUtil.STYLE_BUILDER.createMark("circle");
 		// // Graphic circleGraphic =

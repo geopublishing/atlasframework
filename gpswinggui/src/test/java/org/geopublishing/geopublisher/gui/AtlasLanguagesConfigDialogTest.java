@@ -25,7 +25,7 @@ public class AtlasLanguagesConfigDialogTest extends TestingClass {
 		if (TestingUtil.INTERACTIVE) {
 			AtlasLanguagesConfigDialog languageSelectionDialog = new AtlasLanguagesConfigDialog(
 					null, orig);
-			TestingUtil.testGui(languageSelectionDialog, 50);
+			TestingUtil.testGui(languageSelectionDialog);
 		}
 	}
 

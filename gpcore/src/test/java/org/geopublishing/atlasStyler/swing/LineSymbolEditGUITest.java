@@ -33,7 +33,7 @@ public class LineSymbolEditGUITest extends TestingClass {
 		// lineSymbolEditGUI.getJCheckBoxFillGraphic().doClick();
 		// assertTrue(lineSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());
 
-		TestingUtil.testGui(lineSymbolEditGUI, 20);
+		TestingUtil.testGui(lineSymbolEditGUI);
 
 		// // Mark createMark = StylingUtil.STYLE_BUILDER.createMark("circle");
 		// // Graphic circleGraphic =

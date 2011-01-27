@@ -8,12 +8,12 @@ public class SelectPostgisLayerJDialogTest extends TestingClass {
 
 	@Test
 	public void testGui() throws Throwable {
-		if (!TestingUtil.isInteractive())
+		if (isInteractive())
 			return;
 
 		SelectPostgisLayerJDialog selectPostgisLayerJDialog = new SelectPostgisLayerJDialog(
 				null);
-		TestingUtil.testGui(selectPostgisLayerJDialog, -1);
+		TestingUtil.testGui(selectPostgisLayerJDialog);
 		System.out.println(selectPostgisLayerJDialog.getPassword());
 	}
 
