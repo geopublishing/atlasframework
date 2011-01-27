@@ -14,7 +14,6 @@
 		<version>1.7-SNAPSHOT</version>
 	</parent>
 
-
 	<properties>
 		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
 	</properties>
@@ -84,11 +83,8 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
-
 	</build>
-
 
 	<profiles>
 		<profile>
@@ -216,16 +212,36 @@
 		</profile>
 	</profiles>
 
-
-
 	<dependencies>
-
+	
 		<dependency>
-			<!-- 23.11.2010 Do we really need this here, it is already defined in 
-				gpcore?! -->
 			<version>0.5-SNAPSHOT</version>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gsrcj</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-jfree-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-core</artifactId>
+			<version>${schmitzm.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
