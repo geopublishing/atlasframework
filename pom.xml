@@ -22,7 +22,6 @@
 		<module>asswinggui</module>
 		<module>gpswinggui</module>
 		<module>gpdoc</module>
-    <module>gp-parent</module>
   </modules>
 	
 	<profiles>
