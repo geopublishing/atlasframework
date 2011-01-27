@@ -12,8 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil.TestDatasetsVector;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
+import de.schmitzm.testing.TestingClass;
 
 public class SingleRuleListTest extends TestingClass {
 

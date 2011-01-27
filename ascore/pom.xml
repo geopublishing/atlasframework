@@ -16,6 +16,23 @@
 	</parent>
 
 	<dependencies>
+			<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<!-- Test dependency -->
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+	
 
 		<!-- For i8n correction -->
 		<dependency>
@@ -180,10 +197,10 @@
 									<goal>java</goal>
 								</goals>
 								<configuration>
-									<mainClass>schmitzm.lang.ResourceProviderOperator</mainClass>
+									<mainClass>de.schmitzm.lang.ResourceProviderOperator</mainClass>
 									<arguments>
 										<argument>-s</argument>
-										<argument>${project.build.directory}/../src/main/resources</argument>
+										<argument>${basedir}/src/main/resources</argument>
 										<argument>-b</argument>
 										<argument>locales.AtlasStylerTranslation</argument>
 									</arguments>

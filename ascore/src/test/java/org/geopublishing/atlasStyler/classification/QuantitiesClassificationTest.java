@@ -38,12 +38,12 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.TestingUtil;
-import schmitzm.swing.TestingUtil.TestDatasetsVector;
-import skrueger.geotools.StyledFS;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.testing.TestingClass;
 
 public class QuantitiesClassificationTest extends TestingClass {
 
@@ -61,7 +61,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 
 	@Before
 	public void setup() throws IOException {
-		featureSource_polygon = TestingUtil.TestDatasetsVector.countryShp
+		featureSource_polygon = GTTestingUtil.TestDatasetsVector.countryShp
 				.getFeatureSource();
 
 		featureSource_snowPolygon = TestDatasetsVector.polygonSnow

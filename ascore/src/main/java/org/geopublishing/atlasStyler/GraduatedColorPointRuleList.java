@@ -13,9 +13,9 @@ package org.geopublishing.atlasStyler;
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
 
 public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);

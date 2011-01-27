@@ -6,8 +6,9 @@ import java.net.URL;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.styling.Style;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
+import de.schmitzm.testing.TestingUtil;
 
 public class AsTestingUtil extends TestingUtil {
 

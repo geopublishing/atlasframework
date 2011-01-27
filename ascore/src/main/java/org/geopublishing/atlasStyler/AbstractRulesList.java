@@ -31,10 +31,10 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.PropertyIsEqualTo;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledLayerUtil;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * Any styling or other cartographic pattern that can be expressed as (SLD)

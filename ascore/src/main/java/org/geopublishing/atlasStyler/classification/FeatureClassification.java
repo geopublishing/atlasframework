@@ -13,8 +13,8 @@ package org.geopublishing.atlasStyler.classification;
 import org.apache.log4j.Logger;
 import org.geotools.feature.FeatureCollection;
 
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
 
 public abstract class FeatureClassification extends Classification {
 	static public final int MAX_NUMBER_OF_COLORS_ALLOWED = 11;

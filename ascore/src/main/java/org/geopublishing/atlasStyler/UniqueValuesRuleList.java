@@ -40,13 +40,13 @@ import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
 public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	/**

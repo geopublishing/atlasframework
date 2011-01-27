@@ -6,7 +6,7 @@ import java.net.URL;
 
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
+import de.schmitzm.testing.TestingClass;
 public class FreeMapSymbolsTest extends TestingClass {
 
 	@Test

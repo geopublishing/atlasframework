@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.testing.TestingClass;
 public class UniqueValuesRuleListTest extends TestingClass {
 
 	@Before
@@ -25,7 +25,7 @@ public class UniqueValuesRuleListTest extends TestingClass {
 	public void testUniqueValues() throws IOException {
 
 		AtlasStyler atlasStyler = new AtlasStyler(
-				TestingUtil.TestDatasetsVector.kreise.getFeatureSource());
+				GTTestingUtil.TestDatasetsVector.kreise.getFeatureSource());
 		final UniqueValuesRuleList rl = atlasStyler.getRlf()
 				.createUniqueValuesPolygonRulesList(true);
 

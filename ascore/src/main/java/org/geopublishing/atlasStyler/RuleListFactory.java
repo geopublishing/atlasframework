@@ -7,10 +7,10 @@ import org.geotools.feature.GeometryAttributeType;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Symbolizer;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * Creates instances of {@link AbstractRulesList} implementations. <br/>

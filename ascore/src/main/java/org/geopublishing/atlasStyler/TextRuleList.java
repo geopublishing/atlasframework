@@ -34,13 +34,13 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Function;
 import org.opengis.filter.expression.PropertyName;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.styling.StylingUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
 
 public class TextRuleList extends AbstractRulesList {
 

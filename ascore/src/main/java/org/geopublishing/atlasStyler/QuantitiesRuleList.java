@@ -27,11 +27,11 @@ import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsBetween;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
 
 abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		FeatureRuleList {

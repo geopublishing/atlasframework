@@ -12,7 +12,7 @@ package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.lang.LangUtil;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * This event communicated the change of some {@link AbstractRulesList}.

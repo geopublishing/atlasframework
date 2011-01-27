@@ -19,12 +19,12 @@ import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Expression;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import skrueger.i8n.Translation;
-
 import com.vividsolutions.jts.geom.Point;
+
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
 
 public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 

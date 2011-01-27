@@ -30,16 +30,16 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.filter.PropertyIsEqualTo;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
-import schmitzm.swing.TestingUtil.TestDatasetsVector;
-
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
+
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
+import de.schmitzm.testing.TestingClass;
 
 public class AbstractRulesListTest extends TestingClass {
 
@@ -227,7 +227,7 @@ public class AbstractRulesListTest extends TestingClass {
 
 	@Test
 	public void testValuesFor() throws IOException {
-		FeatureSource<SimpleFeatureType, SimpleFeature> fs = TestingUtil.TestDatasetsVector.lineBrokenQuix
+		FeatureSource<SimpleFeatureType, SimpleFeature> fs = GTTestingUtil.TestDatasetsVector.lineBrokenQuix
 				.getFeatureSource();
 
 		final SimpleFeatureType schema = fs.getSchema();

@@ -20,7 +20,7 @@ import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
+import de.schmitzm.testing.TestingClass;
 public class GraduatedColorRuleListTest extends TestingClass {
 
 	@Test

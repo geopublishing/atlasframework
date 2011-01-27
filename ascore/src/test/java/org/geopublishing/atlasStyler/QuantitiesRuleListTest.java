@@ -27,12 +27,12 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
-import skrueger.geotools.StyledFeatureCollection;
-
 import com.vividsolutions.jts.geom.Point;
+
+import de.schmitzm.geotools.styling.StyledFeatureCollection;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.testing.TestingClass;
 
 public class QuantitiesRuleListTest extends TestingClass {
 	FeatureCollection<SimpleFeatureType, SimpleFeature> features;
@@ -124,7 +124,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 	@Test
 	public void testImportSld_14() throws IOException, TransformerException {
 		AtlasStyler as = new AtlasStyler(
-				TestingUtil.TestDatasetsVector.arabicInHeader
+				GTTestingUtil.TestDatasetsVector.arabicInHeader
 						.getFeatureSource());
 
 		as.importStyle(AsTestingUtil.TestDatasetsSld.textRulesDefaultLocalizedPre16

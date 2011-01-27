@@ -12,7 +12,7 @@ package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.lang.LangUtil;
+import de.schmitzm.lang.LangUtil;
 
 public class FreeMapSymbols {
 	static public final String BASE_URL = "http://freemapsymbols.org/";

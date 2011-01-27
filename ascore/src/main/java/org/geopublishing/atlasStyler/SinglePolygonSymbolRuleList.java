@@ -22,13 +22,13 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.i8n.Translation;
-
 import com.vividsolutions.jts.geom.Polygon;
+
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
 
 public class SinglePolygonSymbolRuleList extends
 		SingleRuleList<PolygonSymbolizer> {

@@ -18,10 +18,10 @@ import org.geotools.styling.Symbolizer;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerUtil;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public abstract class FeatureRuleList extends AbstractRulesList {
 

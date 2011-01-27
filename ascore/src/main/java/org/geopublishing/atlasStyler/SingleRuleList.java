@@ -36,13 +36,13 @@ import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.Filter;
 import org.opengis.util.InternationalString;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.Copyable;
-import skrueger.geotools.LegendIconFeatureRenderer;
-import skrueger.i8n.Translation;
+import de.schmitzm.data.Copyable;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.LegendIconFeatureRenderer;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
 
 public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		AbstractRulesList implements Copyable<SingleRuleList<SymbolizerType>> {

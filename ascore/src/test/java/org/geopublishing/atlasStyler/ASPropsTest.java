@@ -2,7 +2,7 @@ package org.geopublishing.atlasStyler;
 
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
+import de.schmitzm.testing.TestingClass;
 public class ASPropsTest extends TestingClass {
 
 	@Test

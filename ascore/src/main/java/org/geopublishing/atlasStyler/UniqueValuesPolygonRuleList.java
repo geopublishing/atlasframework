@@ -13,8 +13,8 @@ package org.geopublishing.atlasStyler;
 import org.apache.log4j.Logger;
 import org.geotools.styling.FeatureTypeStyle;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 
 public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
 	private Logger LOGGER = Logger.getLogger(UniqueValuesPolygonRuleList.class);

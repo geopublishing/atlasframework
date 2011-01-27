@@ -38,22 +38,22 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.expression.Literal;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.AttributeMetadataImplMap;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.versionnumber.ReleaseUtil;
-
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Polygon;
+
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImplMap;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * The {@link AtlasStyler} is a class to create SLD documents for a
@@ -768,7 +768,7 @@ public class AtlasStyler {
 	 */
 	public static Translation getRuleTitleFor(StyledFeaturesInterface<?> sf) {
 
-		if (!I8NUtil.isEmpty(sf.getTitle()))
+		if (!I18NUtil.isEmpty(sf.getTitle()))
 			return sf.getTitle();
 
 		// Fallback, use URL filename
@@ -1030,7 +1030,7 @@ public class AtlasStyler {
 
 		for (String code : langs) {
 			code = code.trim();
-			if (I8NUtil.isValidISOLangCode(code)) {
+			if (I18NUtil.isValidISOLangCode(code)) {
 				languages.add(code);
 			} else
 				throw new IllegalArgumentException("The ISO Language code '"

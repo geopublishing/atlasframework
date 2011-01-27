@@ -26,11 +26,11 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
 
 /**
  * 

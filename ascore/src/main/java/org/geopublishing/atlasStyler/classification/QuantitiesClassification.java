@@ -33,11 +33,11 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.lang.LimitedHashMap;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.lang.LimitedHashMap;
 
 /**
  * A quantitative classification. The inveralls are defined by upper and lower

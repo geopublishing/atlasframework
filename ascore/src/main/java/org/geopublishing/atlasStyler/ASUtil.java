@@ -72,18 +72,18 @@ import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.LegendIconFeatureRenderer;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.LegendIconFeatureRenderer;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class ASUtil {
 

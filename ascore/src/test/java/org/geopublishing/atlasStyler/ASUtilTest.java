@@ -12,10 +12,11 @@ import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 public class ASUtilTest extends TestingClass {
 
 	@Test
@@ -37,7 +38,7 @@ public class ASUtilTest extends TestingClass {
 	public void testGetSymbolizerImage() throws Throwable
 	{
 		PolygonSymbolizer ps = StylingUtil.STYLE_BUILDER.createPolygonSymbolizer();
-		FeatureSource<SimpleFeatureType, SimpleFeature> pfs = TestingUtil.TestDatasetsVector.kreise.getFeatureSource();
+		FeatureSource<SimpleFeatureType, SimpleFeature> pfs = GTTestingUtil.TestDatasetsVector.kreise.getFeatureSource();
 		BufferedImage symbolizerImage = ASUtil.getSymbolizerImage(ps, pfs.getSchema());
 		TestingUtil.testGui(new JLabel(new ImageIcon(symbolizerImage)), 10);
 	}

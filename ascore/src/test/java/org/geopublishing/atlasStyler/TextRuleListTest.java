@@ -24,9 +24,9 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil.TestDatasetsVector;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
+import de.schmitzm.testing.TestingClass;
 
 public class TextRuleListTest extends TestingClass {
 

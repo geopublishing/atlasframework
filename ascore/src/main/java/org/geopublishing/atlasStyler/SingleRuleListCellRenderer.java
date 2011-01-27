@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.lang.LangUtil;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * TODO Das ist zu speuiell. das muss in unique... umbeannt werden
