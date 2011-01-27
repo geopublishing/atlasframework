@@ -30,7 +30,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.map.MapLayer;
 
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.i18n.I18NUtil;
 
 public class AtlasMenuItem extends JMenuItem {
 	final static private Logger LOGGER = Logger.getLogger(AtlasMenuItem.class);
@@ -69,7 +69,7 @@ public class AtlasMenuItem extends JMenuItem {
 			setText(string);
 			setIcon(Icons.ICON_MAP_BIG);
 
-			if (!I8NUtil.isEmpty(map.getDesc()))
+			if (!I18NUtil.isEmpty(map.getDesc()))
 				setToolTipText(map.getDesc().toString());
 			setActionCommand(ACTIONCMD_MAPPOOL_PREFIX + map.getId());
 		}
@@ -78,7 +78,7 @@ public class AtlasMenuItem extends JMenuItem {
 			DpEntry dpe = dpr.getTarget();
 			String string = dpe.getTitle().toString();
 			setText(string);
-			if (!I8NUtil.isEmpty(dpe.getDesc()))
+			if (!I18NUtil.isEmpty(dpe.getDesc()))
 				setToolTipText(dpe.getDesc().toString());
 
 			setActionCommand(ACTIONCMD_DATAPOOL_PREFIX + dpe.getId());

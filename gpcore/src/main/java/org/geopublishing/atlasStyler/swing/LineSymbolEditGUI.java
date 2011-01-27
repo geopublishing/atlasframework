@@ -82,10 +82,10 @@ import org.geotools.styling.LineSymbolizer;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.ColorButton;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class LineSymbolEditGUI extends AbstractEditGUI {
 	private static final String[] LINEJOIN_VALUES = new String[] { "mitre",
@@ -220,7 +220,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			if (symbolizer.getStroke() != null
 					&& symbolizer.getStroke().getColor() != null) {
-				jButtonStrokeColor.setColor(symbolizer.getStroke().getColor());
+				jButtonStrokeColor.setColor(StylingUtil.getColorFromExpression(symbolizer.getStroke().getColor()));
 			} else {
 				jButtonStrokeColor.setEnabled(false);
 				jLabelStrokeColor.setEnabled(false);

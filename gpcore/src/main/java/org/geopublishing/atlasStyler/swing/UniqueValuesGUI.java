@@ -61,16 +61,16 @@ import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.Symbolizer;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.ThinButton;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.ThinButton;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesGUI extends AbstractRuleListGui implements
 		ClosableSubwindows {

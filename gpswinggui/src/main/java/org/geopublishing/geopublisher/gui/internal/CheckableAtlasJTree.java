@@ -21,12 +21,12 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import skrueger.swing.checkboxtree.CheckBoxNode;
-import skrueger.swing.checkboxtree.CheckBoxNodeEditor;
-import skrueger.swing.checkboxtree.CheckBoxNodeRenderer;
-import skrueger.swing.checkboxtree.NamedVector;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.checkboxtree.CheckBoxNode;
+import de.schmitzm.swing.checkboxtree.CheckBoxNodeEditor;
+import de.schmitzm.swing.checkboxtree.CheckBoxNodeRenderer;
+import de.schmitzm.swing.checkboxtree.NamedVector;
 
 public class CheckableAtlasJTree extends JTree {
 	

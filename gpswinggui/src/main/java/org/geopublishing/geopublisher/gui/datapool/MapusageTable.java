@@ -17,8 +17,8 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A table listsing the maps a {@link DpEntry} is used in.

@@ -54,21 +54,21 @@ import org.geotools.map.MapLayer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.map.event.FeatureSelectedEvent;
-import schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
-import schmitzm.geotools.map.event.ObjectSelectionEvent;
-import schmitzm.io.IOUtil;
-import schmitzm.swing.SpringUtilities;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.RasterLegendData;
-import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
+import de.schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
+import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.SpringUtilities;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JPanel} shows information about a mouse-click into the
@@ -539,7 +539,7 @@ public class ClickInfoPanel extends JPanel {
 												};
 											});
 
-									if (!I8NUtil.isEmpty(map.getDesc()
+									if (!I18NUtil.isEmpty(map.getDesc()
 											.toString()))
 										valueComponent.setToolTipText(map
 												.getDesc().toString());
@@ -772,7 +772,7 @@ public class ClickInfoPanel extends JPanel {
 						// Setting the ToolTipTexts for the two Components
 						// **********************************************************
 						final Translation desc = col.getDesc();
-						if (!I8NUtil.isEmpty(desc)) {
+						if (!I18NUtil.isEmpty(desc)) {
 							valueComponent.setToolTipText(desc.toString());
 							key.setToolTipText(desc.toString());
 						}

@@ -36,11 +36,11 @@ import org.geopublishing.geopublisher.GpUtil;
 
 import rachel.ResourceLoader;
 import rachel.loader.ResourceLoaderManager;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.LogoPosition;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.Disposable;
+import de.schmitzm.geotools.LogoPosition;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.Disposable;
 
 /**
  * The whole configuration for one Atlas project
@@ -257,7 +257,7 @@ public class AtlasConfig implements Disposable {
 
 		for (String code : langs) {
 			code = code.trim();
-			if (I8NUtil.isValidISOLangCode(code)) {
+			if (I18NUtil.isValidISOLangCode(code)) {
 				LOGGER.debug("Atlas " + getTitle() + " set up to support "
 						+ code);
 				languages.add(code);

@@ -54,11 +54,11 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 import org.geotools.styling.Style;
 
-import schmitzm.lang.LangUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 /**
  * This {@link JDialog} allows to manage the additional {@link Style}s available

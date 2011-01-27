@@ -12,12 +12,12 @@ import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 
-import schmitzm.swing.ManualInputOption;
-import schmitzm.swing.ManualInputOption.PasswordViewable;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.input.ManualInputOption;
+import de.schmitzm.swing.input.ManualInputOption.PasswordViewable;
 
 /**
  * This dloag asks the user for all paramters needed to add a PostGIS layer to

@@ -38,18 +38,18 @@ import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.feature.CQLFilterParser;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.io.GeoImportUtil.SHP_POSTFIXES;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.AttributeMetadataImplMap;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.StyledFeatureSourceInterface;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImplMap;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.CQLFilterParser;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil.SHP_POSTFIXES;
+import de.schmitzm.geotools.styling.StyledFeatureSourceInterface;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
 
 public abstract class DpLayerVectorFeatureSource
 		extends

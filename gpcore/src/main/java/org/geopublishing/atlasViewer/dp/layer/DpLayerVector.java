@@ -16,10 +16,10 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.StyledFeaturesInterface;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This {@link DpEntry} represents a vector layer. Type <code>E</code>

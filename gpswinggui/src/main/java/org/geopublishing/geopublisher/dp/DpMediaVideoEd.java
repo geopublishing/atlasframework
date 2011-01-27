@@ -22,8 +22,8 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
 
-import schmitzm.io.IOUtil;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 
 /**

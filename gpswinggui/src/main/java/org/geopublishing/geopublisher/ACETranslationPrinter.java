@@ -19,11 +19,11 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
 
 public class ACETranslationPrinter {
 	String ERROR = "ERROR ";

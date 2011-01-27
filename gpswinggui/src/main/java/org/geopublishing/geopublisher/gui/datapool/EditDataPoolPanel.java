@@ -30,9 +30,9 @@ import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import schmitzm.swing.JPanel;
-import skrueger.swing.FilterTableKeyListener;
-import skrueger.swing.SmallButton;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.event.FilterTableKeyListener;
 
 /**
  * This panel allows to manage the {@link DataPool}.

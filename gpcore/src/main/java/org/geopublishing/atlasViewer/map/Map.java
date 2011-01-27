@@ -34,20 +34,20 @@ import org.geotools.map.MapContext;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.gui.GeotoolsGUIUtil;
-import schmitzm.geotools.gui.GridPanel;
-import schmitzm.geotools.gui.GridPanelFormatter;
-import schmitzm.geotools.gui.ScalePane;
-import schmitzm.geotools.gui.ScalePanel.ScaleUnits;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.Copyable;
-import skrueger.geotools.MapView;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.data.Copyable;
+import de.schmitzm.geotools.gui.GeotoolsGUIUtil;
+import de.schmitzm.geotools.gui.GridPanel;
+import de.schmitzm.geotools.gui.GridPanelFormatter;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.gui.ScalePane;
+import de.schmitzm.geotools.gui.ScalePanel.ScaleUnits;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * A {@link Map} is a collection of references to {@link DpEntry} and HTML info
@@ -356,10 +356,10 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	@Override
 	final public String toString() {
 		String returnStr = "";
-		if (!I8NUtil.isEmpty(title))
+		if (!I18NUtil.isEmpty(title))
 			return returnStr += title.toString() + ", ";
 		returnStr += ", ID=" + getId();
-		if (!I8NUtil.isEmpty(desc))
+		if (!I18NUtil.isEmpty(desc))
 			returnStr += ", Desc=" + getDesc();
 		return returnStr;
 	}
@@ -639,10 +639,10 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 
 			final List<String> languages = ac.getLanguages();
 
-			final double qmTitle = I8NUtil.qmTranslation(languages, getTitle());
-			final double qmDesc = I8NUtil.qmTranslation(languages, getDesc());
+			final double qmTitle = I18NUtil.qmTranslation(languages, getTitle());
+			final double qmDesc = I18NUtil.qmTranslation(languages, getDesc());
 
-			// final double qmKeywords = I8NUtil.qmTranslation(languages,
+			// final double qmKeywords = I18NUtil.qmTranslation(languages,
 			// getKeywords());
 			double qmKeywords = 1;
 

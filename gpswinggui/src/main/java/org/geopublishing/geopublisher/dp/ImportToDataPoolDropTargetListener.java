@@ -34,7 +34,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
 import org.geopublishing.geopublisher.gui.internal.AtlasDropTargetListener;
 
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * A {@link DropTargetListener} that listens for anything that can be imported

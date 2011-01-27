@@ -23,11 +23,11 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.JTSUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.io.GtWfsServerSettings;
+import de.schmitzm.geotools.JTSUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GtWfsServerSettings;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.lang.LangUtil;
 
 public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 		implements WizardResultProducer {

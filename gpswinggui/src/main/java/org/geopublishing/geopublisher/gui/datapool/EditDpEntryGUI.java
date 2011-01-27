@@ -26,13 +26,13 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancellableTabbedDialogAdapter;
-import skrueger.swing.TranslationEditJPanel;
-import skrueger.swing.TranslationsAskJPanel;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.CancellableTabbedDialogAdapter;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationEditJPanel;
+import de.schmitzm.swing.TranslationsAskJPanel;
 
 /**
  * Allows to edit all {@link Translation}s of this {@link DpEntry} and some more

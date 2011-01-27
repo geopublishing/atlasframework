@@ -38,15 +38,15 @@ import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.Stroke;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.ColorButton;
-
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
+
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 public class PolygonSymbolEditGUI extends AbstractEditGUI {
 	private JButton jButtonFillGraphic = null;
@@ -157,7 +157,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			Fill f = symbolizer.getFill();
 			if (f != null) {
-				jButtonFillColor.setColor(f.getColor());
+				jButtonFillColor.setColor(StylingUtil.getColorFromExpression(f.getColor()));
 			} else {
 				jButtonFillColor.setColor((Color) null);
 				jPanelFill.setEnabled(false);
@@ -297,7 +297,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 			Stroke s = symbolizer.getStroke();
 			if (s != null) {
-				jButtonStrokeColor.setColor(s.getColor());
+				jButtonStrokeColor.setColor(StylingUtil.getColorFromExpression(s.getColor()));
 			} else {
 				jButtonStrokeColor.setEnabled(false);
 			}
@@ -335,7 +335,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 						fill.setGraphicFill(null);
 
 						symbolizer.setFill(fill);
-						getJButtonFillColor().setColor(fill.getColor());
+						getJButtonFillColor().setColor(StylingUtil.getColorFromExpression(fill.getColor()));
 						getJComboBoxFillOpacity()
 								.getModel()
 								.setSelectedItem(

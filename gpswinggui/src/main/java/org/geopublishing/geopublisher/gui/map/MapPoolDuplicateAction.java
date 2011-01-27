@@ -28,9 +28,9 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.ExceptionDialog;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class MapPoolDuplicateAction extends AbstractAction {
 	final static private Logger LOGGER = Logger

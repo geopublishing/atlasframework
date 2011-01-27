@@ -63,16 +63,16 @@ import org.geopublishing.geopublisher.gui.map.ManageLayerStylesForMapDialog;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.styling.Style;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.OkButton;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 /**
  * This {@link JDialog} allows to manage additional styles for a {@link DpLayer}

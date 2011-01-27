@@ -37,15 +37,15 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.map.event.FeatureSelectedEvent;
-import schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
-import schmitzm.geotools.map.event.ObjectSelectionEvent;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapContextManagerInterface;
-
 import com.vividsolutions.jts.geom.Point;
+
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
+import de.schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
+import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This Dialog wraps a {@link ClickInfoPanel} that shows information when the

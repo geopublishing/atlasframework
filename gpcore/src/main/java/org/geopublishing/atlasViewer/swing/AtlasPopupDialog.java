@@ -44,8 +44,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.OkButton;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A {@link JDialog} showing some HTML-Info.

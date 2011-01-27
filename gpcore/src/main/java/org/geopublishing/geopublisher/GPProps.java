@@ -20,7 +20,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * Singleton and delegation pattern to the {@link Geopublisher}'s

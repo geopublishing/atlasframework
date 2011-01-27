@@ -37,11 +37,11 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataInterface;
-import skrueger.swing.CancellableDialogAdapter;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  */

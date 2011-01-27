@@ -32,8 +32,8 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapContext;
 
-import skrueger.geotools.MapView;
-import skrueger.geotools.StyledLayerInterface;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 
 /**
  * This is the {@link MapView} used in the {@link GeopublisherGUI} to preview the

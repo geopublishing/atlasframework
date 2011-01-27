@@ -40,27 +40,27 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.identity.Identifier;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.GeotoolsGUIUtil;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.jfree.chart.SelectableChartPanel;
-import schmitzm.jfree.chart.SelectableChartPanel.WindowSelectionMode;
-import schmitzm.jfree.chart.selection.DatasetSelectionChangeEvent;
-import schmitzm.jfree.chart.selection.DatasetSelectionListener;
-import schmitzm.jfree.feature.FeatureChartPanel;
-import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
-import schmitzm.jfree.feature.style.FeatureChartUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.MapPaneToolBar;
-import skrueger.geotools.MapView;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.selection.ChartSelectionSynchronizer;
-import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
-import skrueger.swing.Disposable;
-import skrueger.swing.SmallButton;
-import skrueger.swing.SmallToggleButton;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.GeotoolsGUIUtil;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.selection.ChartSelectionSynchronizer;
+import de.schmitzm.geotools.selection.StyledFeatureLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModelSynchronizer;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.jfree.chart.SelectableChartPanel;
+import de.schmitzm.jfree.chart.SelectableChartPanel.WindowSelectionMode;
+import de.schmitzm.jfree.chart.selection.DatasetSelectionChangeEvent;
+import de.schmitzm.jfree.chart.selection.DatasetSelectionListener;
+import de.schmitzm.jfree.feature.FeatureChartPanel;
+import de.schmitzm.jfree.feature.FeatureDatasetSelectionModel;
+import de.schmitzm.jfree.feature.style.FeatureChartUtil;
+import de.schmitzm.swing.Disposable;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SmallToggleButton;
 
 /**
  * Provides a JPanel that show charts. This static class manages all instances

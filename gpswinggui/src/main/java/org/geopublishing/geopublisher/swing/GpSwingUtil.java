@@ -42,13 +42,13 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.I8NUtil;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class GpSwingUtil extends GpUtil {
 
@@ -476,7 +476,7 @@ public class GpSwingUtil extends GpUtil {
 
 					FileWriter fw = new FileWriter(htmlFile);
 					fw.write(GpUtil.R("DPLayer.HTMLInfo.DefaultHTMLFile",
-							I8NUtil.getFirstLocaleForLang(lang)
+							I18NUtil.getFirstLocaleForLang(lang)
 									.getDisplayLanguage(), dpl.getTitle()));
 
 					fw.flush();
@@ -527,7 +527,7 @@ public class GpSwingUtil extends GpUtil {
 					 */
 
 					FileWriter fw = new FileWriter(htmlFile);
-					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I8NUtil
+					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I18NUtil
 							.getFirstLocaleForLang(lang).getDisplayLanguage(),
 							map.getTitle()));
 

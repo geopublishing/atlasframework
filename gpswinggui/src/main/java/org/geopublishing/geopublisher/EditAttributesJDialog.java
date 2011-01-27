@@ -27,15 +27,15 @@ import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.geopublisher.gui.datapool.layer.AttribTranslationJTable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.Checkable;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.Checkable;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This dialog allows to edit title, description and visibility of the columns.

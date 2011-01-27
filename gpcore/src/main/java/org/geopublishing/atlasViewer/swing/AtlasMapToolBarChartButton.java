@@ -24,9 +24,9 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.swing.SmallButton;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.SmallButton;
 
 /**
  * This {@link JButton} opens a {@link JPopupMenu} that lists all available

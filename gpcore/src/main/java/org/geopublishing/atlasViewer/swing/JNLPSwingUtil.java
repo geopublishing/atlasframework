@@ -22,10 +22,10 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.JNLPUtil;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart

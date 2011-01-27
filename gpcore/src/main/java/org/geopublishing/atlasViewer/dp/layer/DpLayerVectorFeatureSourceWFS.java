@@ -17,7 +17,7 @@ import org.geotools.data.FeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
 
 public class DpLayerVectorFeatureSourceWFS extends DpLayerVectorFeatureSource {
 

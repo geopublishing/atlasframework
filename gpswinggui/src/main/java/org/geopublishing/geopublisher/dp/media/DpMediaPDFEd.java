@@ -24,8 +24,8 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.dp.DpeImportUtil;
 import org.geotools.data.DataUtilities;
 
-import schmitzm.io.IOUtil;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 
 /**

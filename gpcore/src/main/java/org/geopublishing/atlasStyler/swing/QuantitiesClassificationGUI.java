@@ -56,7 +56,6 @@ import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
-import org.geopublishing.atlasViewer.swing.AtlasFeatureLayerFilterDialog;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
@@ -66,14 +65,15 @@ import org.jfree.data.statistics.HistogramDataset;
 import org.jfree.ui.RectangleAnchor;
 import org.jfree.ui.TextAnchor;
 
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.swing.AtlasDialog;
 import cern.colt.list.DoubleArrayList;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JDialog} presents the user with descriptive statistics and a
@@ -569,7 +569,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			// AttributeMetadata amdValue = ASUtil.getAttributeMetadataFor(
 			// atlasStyler, classifier.getValue_field_name());
 			if (amdValue != null
-					&& (!I8NUtil.isEmpty(amdValue.getTitle().toString()))) {
+					&& (!I18NUtil.isEmpty(amdValue.getTitle().toString()))) {
 				label_xachsis = amdValue.getTitle().toString();
 			} else
 				label_xachsis = classifier.getValue_field_name();
@@ -581,7 +581,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 						.getAttributeMetaDataMap().get(
 								classifier.getNormalizer_field_name());
 				if (amdNorm != null
-						&& (!I8NUtil.isEmpty(amdNorm.getTitle().toString()))) {
+						&& (!I18NUtil.isEmpty(amdNorm.getTitle().toString()))) {
 					label_xachsis += "/" + amdNorm.getTitle().toString();
 				} else
 					label_xachsis += "/"

@@ -13,12 +13,12 @@ import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.Cancellable;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.Cancellable;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 

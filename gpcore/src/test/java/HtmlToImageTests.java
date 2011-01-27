@@ -7,7 +7,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.testing.TestingUtil;
 
 public class HtmlToImageTests {
 

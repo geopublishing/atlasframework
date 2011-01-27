@@ -16,7 +16,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import schmitzm.junit.TestingClass;
+import de.schmitzm.testing.TestingClass;
 public class MapTest extends TestingClass {
 
 	@Test

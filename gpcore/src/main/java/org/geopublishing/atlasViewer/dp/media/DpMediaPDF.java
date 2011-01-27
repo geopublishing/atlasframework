@@ -18,7 +18,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class DpMediaPDF extends DpMedia<ChartStyle> {
 	static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);

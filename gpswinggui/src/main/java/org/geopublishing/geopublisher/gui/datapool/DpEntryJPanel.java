@@ -33,13 +33,13 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.Cancellable;
-import skrueger.swing.SmallButton;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.Cancellable;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class DpEntryJPanel extends JPanel implements Cancellable {
 

@@ -25,11 +25,11 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.DataUtilities;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
-import schmitzm.io.IOUtil;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 		DpEditableInterface {

@@ -30,9 +30,9 @@ import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.JPanel;
 
 /**
  * {@link JTabbedPane} offers a RulesListTable and a GUI to edit it on the right

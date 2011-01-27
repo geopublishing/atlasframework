@@ -9,9 +9,9 @@ import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 
-import schmitzm.geotools.gui.ScalePanel;
-import schmitzm.junit.TestingClass;
-import skrueger.geotools.LogoPosition;
+import de.schmitzm.geotools.LogoPosition;
+import de.schmitzm.geotools.gui.ScalePanel;
+import de.schmitzm.testing.TestingClass;
 
 public class AMLImportTest extends TestingClass {
 

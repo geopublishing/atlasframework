@@ -28,8 +28,8 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import rachel.loader.JarResourceLoader;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 public class DpLayerRasterEdTest extends TestingClass {
 
 	static AtlasConfigEditable ace;
@@ -44,7 +44,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 	 */
 	public static void checkMapLayer_GEOTIFF_RGB(DefaultMapLayer mlayer)
 			throws Throwable {
-		BufferedImage bi = TestingUtil.visualize(mlayer);
+		BufferedImage bi = GpTestingUtil.visualize(mlayer);
 
 		assertTrue("Some specific color at 50/50",
 				TestingUtil.checkPixel(bi, 50, 50, 126, 221, 42, 255));
@@ -59,7 +59,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 
 	public static void checkMapLayer_GEOTIFF_WITH_SLD(DefaultMapLayer mlayer)
 			throws Throwable {
-		BufferedImage bi = TestingUtil.visualize(mlayer);
+		BufferedImage bi = GpTestingUtil.visualize(mlayer);
 
 		assertTrue("Some specific color at 50/50",
 				TestingUtil.checkPixel(bi, 50, 50, 161, 125, 74, 255));
@@ -82,7 +82,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 	 */
 	public void checkMapLayer_RASTER_AAIGRIDSLDTRANSP(DefaultMapLayer mlayer)
 			throws Throwable {
-		BufferedImage bi = TestingUtil.visualize(mlayer);
+		BufferedImage bi = GpTestingUtil.visualize(mlayer);
 
 		assertTrue("Some blue color at 20/30",
 				TestingUtil.checkPixel(bi, 20, 30, 129, 180, 217, 255));

@@ -21,10 +21,10 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.io.GtDbServerSettings;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.io.GtDbServerSettings;
+import de.schmitzm.geotools.styling.StyledFS;
 
 public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 		implements WizardResultProducer {

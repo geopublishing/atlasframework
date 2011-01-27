@@ -26,8 +26,8 @@ import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class DataPoolEditHTMLAction extends AbstractAction {
 
@@ -64,7 +64,7 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 		AtlasConfigEditable ace = dpTable.getAce();
 		for (String l : ace.getLanguages()) {
 			tabTitles.add(GeopublisherGUI.R("DPLayer.HTMLInfo.LanguageTabTitle",
-					I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
+					I18NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(dpTable, ace, infoFiles, tabTitles,

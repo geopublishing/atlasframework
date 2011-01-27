@@ -22,20 +22,21 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.jfree.chart.style.ChartLabelStyle;
-import schmitzm.jfree.chart.style.ChartPlotStyle;
-import schmitzm.jfree.chart.style.ChartRendererStyle;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.chart.style.ChartType;
-import schmitzm.jfree.feature.style.FeatureBasicChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartUtil;
-import schmitzm.jfree.feature.style.FeatureScatterChartStyle;
-import schmitzm.jfree.table.style.TableChartAxisStyle;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartLabelStyle;
+import de.schmitzm.jfree.chart.style.ChartPlotStyle;
+import de.schmitzm.jfree.chart.style.ChartRendererStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartType;
+import de.schmitzm.jfree.feature.style.FeatureBasicChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartUtil;
+import de.schmitzm.jfree.feature.style.FeatureScatterChartStyle;
+import de.schmitzm.jfree.table.AggregationFunction;
+import de.schmitzm.jfree.table.style.TableChartAxisStyle;
 
 /**
  * The WizardResultProducer generates the final return value of this Wizard: An
@@ -129,7 +130,7 @@ public class ChartWizardResultProducer implements
 			// amdm, attrName);
 			AttributeMetadataInterface attribMetadata = amdm.get(attrName);
 
-			if (I8NUtil.isEmpty(attribMetadata.getTitle())) {
+			if (I18NUtil.isEmpty(attribMetadata.getTitle())) {
 				attribMetadata.setTitle(new Translation(
 						(List<String>) (wizardData.get(ChartWizard.LANGUAGES)),
 						attrName));
@@ -150,7 +151,7 @@ public class ChartWizardResultProducer implements
 				// For BAR charts mean is the default aggregation function
 				if (chartType == ChartType.BAR) {
 					chartStyle.setAttributeAggregation(index,
-							schmitzm.jfree.table.AggregationFunction.AVG);
+							AggregationFunction.AVG);
 				}
 
 				if (index == 1) {

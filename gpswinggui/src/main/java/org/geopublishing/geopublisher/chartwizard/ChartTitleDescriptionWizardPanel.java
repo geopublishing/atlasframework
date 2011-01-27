@@ -28,12 +28,12 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.jfree.JFreeChartUtil;
-import schmitzm.jfree.chart.style.ChartType;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.JFreeChartUtil;
+import de.schmitzm.jfree.chart.style.ChartType;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 /**
  * This {@link WizardPage} allows to define Title and Description/sub-title of
@@ -207,7 +207,7 @@ public class ChartTitleDescriptionWizardPanel extends WizardPage {
 	protected String validateContents(final Component component,
 			final Object event) {
 
-		if (I8NUtil.isEmpty(titleTranslationEditPanel.getTranslation()))
+		if (I18NUtil.isEmpty(titleTranslationEditPanel.getTranslation()))
 			return validationTitleFailedMsg;
 
 		// if (I8NUtil.isEmpty(descTranslationEditPanel.getTranslation()))

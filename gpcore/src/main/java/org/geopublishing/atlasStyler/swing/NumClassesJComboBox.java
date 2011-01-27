@@ -20,7 +20,7 @@ import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * An extension to a {@link JComboBox} that allows to change the number of

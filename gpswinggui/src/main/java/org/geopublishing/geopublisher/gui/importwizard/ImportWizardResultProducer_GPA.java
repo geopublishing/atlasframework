@@ -28,8 +28,8 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This ResultProducer is importing from a loaded {@link AtlasConfig} instance

@@ -23,7 +23,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.operation.TransformException;
 
-import schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
 
 public class AtlasMapLayer extends DefaultMapLayer {
 

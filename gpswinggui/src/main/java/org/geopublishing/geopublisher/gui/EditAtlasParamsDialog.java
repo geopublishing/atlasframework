@@ -31,8 +31,8 @@ import javax.swing.JDialog;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 /**
  * A {@link JDialog} that allows to translate the basic atlas parameters for a

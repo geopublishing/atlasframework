@@ -16,8 +16,8 @@ import java.io.File;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
-import schmitzm.io.IOUtil;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.SwingUtil;
 
 public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 

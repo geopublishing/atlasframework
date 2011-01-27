@@ -61,8 +61,8 @@ import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JTable} displays the content of the {@link MapPool}. It can be

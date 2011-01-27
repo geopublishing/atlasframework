@@ -66,21 +66,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import schmitzm.geotools.io.GeoExportUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.chart.style.ChartStyleUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.RasterLegendData;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-import skrueger.versionnumber.ReleaseUtil;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.io.GeoExportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyleUtil;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * This class can export the Atlas-objects to AtlasMarkupLanguage (AtlasML)

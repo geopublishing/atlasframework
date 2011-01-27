@@ -27,9 +27,9 @@ import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
 public class RulesListTable extends JTable {
 

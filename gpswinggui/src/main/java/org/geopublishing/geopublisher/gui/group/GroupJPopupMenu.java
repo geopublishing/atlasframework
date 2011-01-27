@@ -31,7 +31,7 @@ import org.geopublishing.geopublisher.gui.datapool.DataPoolEditAction;
 import org.geopublishing.geopublisher.gui.map.MapPoolPrefsAction;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This class provides the right-mouse button context-menu available in the

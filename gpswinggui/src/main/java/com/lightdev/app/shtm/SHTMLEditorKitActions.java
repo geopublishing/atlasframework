@@ -53,8 +53,6 @@ import javax.swing.text.html.CSS;
 import javax.swing.text.html.HTML;
 import javax.swing.undo.CannotRedoException;
 
-import schmitzm.swing.SwingUtil;
-
 import com.lightdev.app.shtm.SHTMLPanelImpl.FontFamilyPicker;
 import com.lightdev.app.shtm.SHTMLPanelImpl.FontSizePicker;
 import com.sun.demo.ElementTreePanel;
@@ -63,6 +61,7 @@ import com.sun.demo.ExampleFileFilter;
 import de.calcom.cclib.text.FindReplaceDialog;
 import de.calcom.cclib.text.FindReplaceEvent;
 import de.calcom.cclib.text.FindReplaceListener;
+import de.schmitzm.swing.SwingUtil;
 
 public class SHTMLEditorKitActions {
 

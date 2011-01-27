@@ -25,26 +25,26 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.jfree.chart.JFreeChart;
 
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.jfree.JFreeChartUtil;
-import schmitzm.jfree.chart.selection.DatasetSelectionModel;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.feature.FeatureDatasetSelectionModel;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.selection.ChartSelectionSynchronizer;
-import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.SmallButton;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.selection.ChartSelectionSynchronizer;
+import de.schmitzm.geotools.selection.StyledFeatureLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModelSynchronizer;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.jfree.JFreeChartUtil;
+import de.schmitzm.jfree.chart.selection.DatasetSelectionModel;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.feature.FeatureDatasetSelectionModel;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartUtil;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class AtlasChartJDialog extends AtlasDialog {
 

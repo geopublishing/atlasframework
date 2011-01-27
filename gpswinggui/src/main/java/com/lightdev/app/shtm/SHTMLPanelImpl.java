@@ -84,10 +84,10 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.StyleSheet;
 import javax.swing.undo.UndoManager;
 
-import skrueger.i8n.Translation;
-
 import com.lightdev.app.shtm.SHTMLEditorKitActions.SetStyleAction;
 import com.lightdev.app.shtm.SHTMLEditorKitActions.SetTagAction;
+
+import de.schmitzm.i18n.Translation;
 
 /**
  * Main component of application SimplyHTML.

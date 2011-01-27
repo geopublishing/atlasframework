@@ -15,13 +15,13 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class RulesListPopup extends JPopupMenu {
 

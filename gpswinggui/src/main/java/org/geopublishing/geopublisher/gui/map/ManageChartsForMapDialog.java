@@ -48,10 +48,10 @@ import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancellableDialogAdapter;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This dialog allows to manage which charts are available in a map. It's not

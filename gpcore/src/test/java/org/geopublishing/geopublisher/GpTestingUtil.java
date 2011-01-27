@@ -34,13 +34,14 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import schmitzm.geotools.GTUtil;
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.io.IOUtil;
-import schmitzm.swing.TestingUtil;
-import skrueger.geotools.MapPaneToolBar;
+import de.schmitzm.geotools.GTUtil;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.testing.TestingUtil;
 
-public class GpTestingUtil extends TestingUtil {
+public class GpTestingUtil extends GTTestingUtil {
 
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {

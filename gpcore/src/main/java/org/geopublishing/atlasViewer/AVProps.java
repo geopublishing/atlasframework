@@ -26,7 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * Singleton and delegation pattern to the {@link AtlasViewerGUI}'s properties

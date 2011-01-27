@@ -23,8 +23,8 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 public class MapPoolDeleteAction extends AbstractAction {
 

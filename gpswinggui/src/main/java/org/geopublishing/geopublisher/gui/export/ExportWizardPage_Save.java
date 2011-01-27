@@ -28,7 +28,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class ExportWizardPage_Save extends WizardPage {
 

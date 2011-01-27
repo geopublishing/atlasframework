@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import schmitzm.io.IOUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.testing.TestingClass;
 public class GpUtilTest extends TestingClass {
 
 	@Test

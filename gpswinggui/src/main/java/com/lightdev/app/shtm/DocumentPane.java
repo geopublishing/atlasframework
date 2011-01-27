@@ -53,8 +53,8 @@ import javax.swing.text.html.StyleSheet;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * GUI representation of a document.

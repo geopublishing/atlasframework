@@ -23,8 +23,8 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
 
 public class AtlasStylerDialog extends StylerDialog {
 

@@ -21,13 +21,13 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.io.DbServerList;
-import skrueger.geotools.io.DbSettingsJComboBox;
-import skrueger.geotools.io.GtDbServerSettings;
-import skrueger.swing.SmallButton;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.io.DbServerList;
+import de.schmitzm.geotools.io.DbSettingsJComboBox;
+import de.schmitzm.geotools.io.GtDbServerSettings;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_DB_Select extends WizardPage {
 

@@ -43,9 +43,9 @@ package org.geopublishing.geopublisher.gui.map;
 //
 //import org.geopublishing.atlasViewer.swing.internal.AtlasListCellRenderer;
 //import org.geopublishing.atlasViewer.swing.internal.JPanelX;
-//import skrueger.atlas.map.Map;
-//import skrueger.atlas.map.MapPool;
-//import skrueger.atlas.resource.icons.Icons;
+//import de.schmitzm.atlas.map.Map;
+//import de.schmitzm.atlas.map.MapPool;
+//import de.schmitzm.atlas.resource.icons.Icons;
 //
 //public class MapPoolJList extends JList {
 //	private DefaultListModel listModel;

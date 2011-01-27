@@ -19,9 +19,9 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.JPanel;
-import skrueger.swing.Cancellable;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.Cancellable;
+import de.schmitzm.swing.JPanel;
 
 public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 

@@ -23,15 +23,15 @@ import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
 
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPaneEvent;
-import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.ObjectSelectionEvent;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.MapPaneToolBar;
-import skrueger.geotools.MapView;
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPaneEvent;
+import de.schmitzm.geotools.map.event.JMapPaneListener;
+import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
 public class StylerMapView extends MapView {
 	protected Logger LOGGER = LangUtil.createLogger(this);

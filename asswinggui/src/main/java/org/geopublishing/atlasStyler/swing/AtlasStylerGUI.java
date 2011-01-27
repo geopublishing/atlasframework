@@ -73,21 +73,21 @@ import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
 
-import schmitzm.geotools.map.event.MapLayerListAdapter;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.ResourceProviderManagerFrame;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.StyledFeatureSourceInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.i8n.Translation;
-import skrueger.versionnumber.ReleaseUtil;
-import skrueger.versionnumber.ReleaseUtil.License;
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.map.event.MapLayerListAdapter;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StyledFeatureSourceInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ResourceProviderManagerFrame;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
+import de.schmitzm.versionnumber.ReleaseUtil.License;
 
 /**
  * This is the main GUI for the AtlasStyler standalone. It looks like a

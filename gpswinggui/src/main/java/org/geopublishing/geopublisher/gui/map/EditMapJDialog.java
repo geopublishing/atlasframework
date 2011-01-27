@@ -36,12 +36,12 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancellableTabbedDialogAdapter;
-import skrueger.swing.TranslationEditJPanel;
-import skrueger.swing.TranslationsAskJPanel;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancellableTabbedDialogAdapter;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationEditJPanel;
+import de.schmitzm.swing.TranslationsAskJPanel;
 
 public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 

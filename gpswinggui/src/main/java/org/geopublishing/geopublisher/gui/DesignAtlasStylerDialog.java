@@ -22,9 +22,9 @@ import org.geopublishing.geopublisher.gui.map.DesignAtlasMapLegend;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapLayer;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 

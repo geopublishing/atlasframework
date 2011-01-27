@@ -26,7 +26,7 @@ import javax.swing.table.TableCellRenderer;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A {@link TableCellRenderer} that renders a sub-table listing the available

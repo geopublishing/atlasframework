@@ -37,8 +37,8 @@ import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This class is using the values collected during the {@link ExportWizard} to

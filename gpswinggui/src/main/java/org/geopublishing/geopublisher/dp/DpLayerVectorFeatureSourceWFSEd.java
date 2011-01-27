@@ -25,7 +25,7 @@ import org.geotools.data.FeatureSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 
 public class DpLayerVectorFeatureSourceWFSEd extends

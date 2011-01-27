@@ -35,21 +35,21 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.TextSymbolizer;
 
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.MapPaneToolBar;
-import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.labelsearch.LabelSearch;
-import skrueger.geotools.labelsearch.SearchMapDialog;
-import skrueger.geotools.selection.StyledLayerSelectionModel;
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.gui.MapPaneToolBar.MapPaneToolBarAction;
+import de.schmitzm.geotools.labelsearch.LabelSearch;
+import de.schmitzm.geotools.labelsearch.SearchMapDialog;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModel;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This extends the {@link MapLegend}. Adding functionality to it, that only
@@ -204,7 +204,7 @@ public class AtlasMapLegend extends MapLegend {
 			return super.getTitleFor(layer);
 		}
 
-		if (I8NUtil.isEmpty(selectedStyle.getTitle()))
+		if (I18NUtil.isEmpty(selectedStyle.getTitle()))
 			super.getTitleFor(layer);
 
 		final ArrayList<String> availableStyles = getMap()

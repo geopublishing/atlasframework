@@ -37,13 +37,13 @@ import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 

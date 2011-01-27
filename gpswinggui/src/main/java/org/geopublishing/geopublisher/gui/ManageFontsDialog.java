@@ -26,10 +26,10 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.opengis.filter.expression.Literal;
 
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.AtlasDialog;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This dialog allows to manage the additional fonts usde in the atlas.

@@ -34,12 +34,12 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancelButton;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class GraphicEditGUIinDialog extends JDialog {
 	protected Logger LOGGER = LangUtil.createLogger(this);

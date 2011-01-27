@@ -19,7 +19,7 @@ import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
-import skrueger.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 
 
 /**

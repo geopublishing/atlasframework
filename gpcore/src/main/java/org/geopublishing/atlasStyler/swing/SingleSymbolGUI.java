@@ -30,11 +30,11 @@ import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Symbolizer;
 
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 public class SingleSymbolGUI extends AbstractRuleListGui implements
 		ClosableSubwindows {

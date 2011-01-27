@@ -21,13 +21,13 @@ import org.geotools.data.wfs.WFSDataStore;
 import org.geotools.data.wfs.WFSDataStoreFactory;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.io.GtWfsServerSettings;
-import skrueger.geotools.io.WfsServerList;
-import skrueger.geotools.io.WfsSettingsJComboBox;
-import skrueger.swing.SmallButton;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.io.GtWfsServerSettings;
+import de.schmitzm.geotools.io.WfsServerList;
+import de.schmitzm.geotools.io.WfsSettingsJComboBox;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_WFS_Select extends WizardPage {
 

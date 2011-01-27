@@ -4,7 +4,7 @@ import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 
-import schmitzm.swing.JPanel;
+import de.schmitzm.swing.JPanel;
 
 /**
  * Parent of a Swing GUIs that are placed on the right side of

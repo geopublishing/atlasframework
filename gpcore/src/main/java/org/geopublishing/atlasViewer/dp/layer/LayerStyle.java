@@ -17,11 +17,11 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geotools.styling.Style;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 public class LayerStyle {
 	protected Logger LOGGER = LangUtil.createLogger(this);

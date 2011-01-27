@@ -13,7 +13,7 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * A table listsing the menu (groups) a {@link DpEntry} is used in.

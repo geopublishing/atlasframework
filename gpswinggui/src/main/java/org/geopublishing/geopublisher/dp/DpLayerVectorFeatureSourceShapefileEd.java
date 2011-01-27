@@ -52,16 +52,16 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.feature.AttributeModificationRule;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.feature.AttributeModificationRule;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {

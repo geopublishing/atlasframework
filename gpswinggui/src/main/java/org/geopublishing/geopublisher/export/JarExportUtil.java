@@ -14,6 +14,7 @@ import java.awt.Font;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -78,19 +79,17 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
-import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import schmitzm.io.FileInputStream;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.versionnumber.ReleaseUtil;
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * This class exports an {@link AtlasConfigEditable} into a DISK and/or JWS
@@ -1484,7 +1483,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			codebase = overwriteJnlpUrl.toString();
 			if (!codebase.endsWith("/"))
 				codebase += "/";
-			Log.info("Export JNLP base URL changed to " + codebase);
+			LOGGER.info("Export JNLP base URL changed to " + codebase);
 		}
 
 		return codebase;
@@ -2128,7 +2127,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		try {
 			JarSigner.main(args);
-			Log.debug("Signing " + jarFile + " OK.\n");
+			LOGGER.debug("Signing " + jarFile + " OK.\n");
 		} catch (final Throwable e) {
 			LOGGER.error(e);
 			throw new AtlasExportException("Exception while signing\n "

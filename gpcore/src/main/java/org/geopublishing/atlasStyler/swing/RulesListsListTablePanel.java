@@ -24,10 +24,10 @@ import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.Icons;
 
-import schmitzm.swing.ButtonGroup;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.SmallButton;
+import de.schmitzm.swing.ButtonGroup;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JPanel} contains the {@link RulesListTable} and some

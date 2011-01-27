@@ -27,7 +27,7 @@ import org.geopublishing.geopublisher.gui.map.EditMapPoolPanel;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A {@link JSplitPane} that represents the {@link AtlasConfigEditable}. It is

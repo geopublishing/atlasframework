@@ -51,16 +51,16 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.LegendIconFeatureRenderer;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.SmallButton;
-
 import com.vividsolutions.jts.geom.Point;
+
+import de.schmitzm.geotools.LegendIconFeatureRenderer;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class SymbolEditorGUI extends CancellableDialogAdapter {
 

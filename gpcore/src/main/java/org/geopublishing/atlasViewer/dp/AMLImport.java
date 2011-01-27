@@ -48,7 +48,6 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.feature.NameImpl;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.jfree.util.Log;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.w3c.dom.Document;
@@ -60,24 +59,25 @@ import org.xml.sax.SAXParseException;
 
 import rachel.ResourceManager;
 import rachel.loader.ResourceLoaderManager;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.GridPanelFormatter;
-import schmitzm.geotools.gui.ScalePanel.ScaleUnits;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.chart.style.ChartStyleUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.RasterLegendData;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.LogoPosition;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.geotools.LogoPosition;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.GridPanelFormatter;
+import de.schmitzm.geotools.gui.ScalePanel.ScaleUnits;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyleUtil;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 public class AMLImport {
 
@@ -113,7 +113,7 @@ public class AMLImport {
 		if (statusDialog != null)
 			statusDialog.warningOccurred(topic, null, msg);
 		else
-			Log.warn(topic + ":" + msg);
+			LOGGER.warn(topic + ":" + msg);
 	}
 
 	/**
@@ -456,7 +456,7 @@ public class AMLImport {
 					ac.getFonts().add(font);
 					LOGGER.info("Registered a new TTF font: " + font.getName());
 				} catch (Exception e) {
-					Log.error("Couldn't load or register font " + relFontPath,
+					LOGGER.error("Couldn't load or register font " + relFontPath,
 							e);
 				}
 		}
@@ -729,7 +729,7 @@ public class AMLImport {
 
 		final DpLayerRaster<?, ChartStyle> dpe;
 		// if (ac.getProperties().getBoolean(Keys.rasterReader, true)) {
-		Log.info("Using new raster reader for " + id);
+		LOGGER.info("Using new raster reader for " + id);
 		dpe = new DpLayerRaster_Reader(ac);
 		// } else {
 		// Log.info("Using old gridCoverage " + id);

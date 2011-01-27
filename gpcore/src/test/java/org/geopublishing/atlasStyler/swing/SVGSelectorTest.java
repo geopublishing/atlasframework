@@ -10,9 +10,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 
 public class SVGSelectorTest extends TestingClass {
 

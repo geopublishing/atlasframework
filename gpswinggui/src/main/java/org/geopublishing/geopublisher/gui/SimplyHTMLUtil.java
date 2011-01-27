@@ -27,13 +27,13 @@ import javax.swing.WindowConstants;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-
 import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLEditorKitActions;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
 import com.lightdev.app.shtm.SHTMLPanelMultipleDocImpl;
+
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * TODO DOKU

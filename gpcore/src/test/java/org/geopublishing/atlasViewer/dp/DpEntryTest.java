@@ -15,8 +15,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.junit.TestingClass;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.testing.TestingClass;
 public class DpEntryTest extends TestingClass {
 
 	@Test

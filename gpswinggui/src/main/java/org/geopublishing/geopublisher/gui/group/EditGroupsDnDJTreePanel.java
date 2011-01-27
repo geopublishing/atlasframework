@@ -36,7 +36,7 @@ import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This JPanel shows the {@link Group}s tree. New children can be added by

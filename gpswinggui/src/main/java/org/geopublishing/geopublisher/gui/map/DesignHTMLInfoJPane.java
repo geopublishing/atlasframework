@@ -25,8 +25,8 @@ import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
 
 /**
  * Extends an {@link HTMLInfoJPane} allows Drag'n'Drop to insert HTML Infomation
@@ -66,7 +66,7 @@ public class DesignHTMLInfoJPane extends HTMLInfoJPane {
 			setEditable(false);
 			setContentType("text/html");
 			
-			setText(GeopublisherGUI.R("DesignHTMLPanel.NoHTML.Message", I8NUtil
+			setText(GeopublisherGUI.R("DesignHTMLPanel.NoHTML.Message", I18NUtil
 					.getFirstLocaleForLang(Translation.getActiveLang())
 					.getDisplayLanguage()));
 		} else

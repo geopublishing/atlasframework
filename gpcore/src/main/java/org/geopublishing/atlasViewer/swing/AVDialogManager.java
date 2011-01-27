@@ -25,12 +25,12 @@ import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledRasterInterface;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.DialogManager;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.DialogManager;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This class manages all {@link DialogManager}s used in Geopublisher. It hold

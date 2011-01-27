@@ -13,8 +13,8 @@ package org.geopublishing.atlasViewer.dp.layer;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geotools.coverage.grid.GridCoverage2D;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.RasterLegendData;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This class represents any {@link GridCoverage2D} that is read from one file.

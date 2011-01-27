@@ -56,21 +56,20 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.io.DefaultFileFilter;
 import org.geotools.resources.CRSUtilities;
-import org.jfree.util.Log;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * Collection of Atlas related static methods.
@@ -342,7 +341,7 @@ public class AVUtil {
 		final ArrayList<String> result = new ArrayList<String>();
 		for (final String l : ac.getLanguages()) {
 			final String t = trans.get(l);
-			if (I8NUtil.isEmpty(t)) {
+			if (I18NUtil.isEmpty(t)) {
 				result.add(l);
 			}
 		}
@@ -428,7 +427,7 @@ public class AVUtil {
 			String titleValue = attMeta.getTitle().get(lang);
 
 			/* Instead on an empty title, we use the raw attribute name */
-			if (I8NUtil.isEmpty(titleValue))
+			if (I18NUtil.isEmpty(titleValue))
 				titleValue = attName;
 
 			legendTitleTranslation.put(lang, titleValue);
@@ -474,7 +473,7 @@ public class AVUtil {
 			String titleValue = attMeta.getTitle().get(lang);
 
 			/* Instead on an empty title, we use the raw attribute name */
-			if (I8NUtil.isEmpty(titleValue))
+			if (I18NUtil.isEmpty(titleValue))
 				titleValue = attName;
 
 			legendTitleTranslation.put(lang, titleValue);
@@ -553,6 +552,9 @@ public class AVUtil {
 	public static void cleanupTempDir(String deleteDirectlyPrefix,
 			String deleteOldPrefix) {
 
+		/**
+		 * Files oder than DAYS days old will be deleted.
+		 */
 		int DAYS = 3;
 
 		int count = 0;
@@ -585,7 +587,7 @@ public class AVUtil {
 
 					long diff = System.currentTimeMillis() - ff.lastModified();
 					if (diff < 1000 * 60 * 60 * 24 * DAYS) {
-						Log.debug("Not deleting " + IOUtil.escapePath(ff)
+						LOGGER.debug("Not deleting " + IOUtil.escapePath(ff)
 								+ " since it is only " + (diff / 1000 / 60)
 								+ " minutes old.");
 						continue;

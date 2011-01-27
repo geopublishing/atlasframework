@@ -8,8 +8,8 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
 
-import schmitzm.swing.ExceptionDialog;
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 public class AsSwingUtil extends ASUtil {
 

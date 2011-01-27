@@ -70,15 +70,15 @@ import org.geotools.styling.Mark;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 // TODO Convert to AtlasDialog and add a local Database of SVG symbols
 public class SVGSelector extends CancellableDialogAdapter {

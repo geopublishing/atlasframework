@@ -33,12 +33,12 @@ import org.geotools.referencing.CRS;
 import org.opengis.metadata.Identifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.GTUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.GTUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A {@link JPanel} that allows to enter/input the default CRS for the Atlas.

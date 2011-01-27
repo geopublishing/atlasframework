@@ -36,16 +36,16 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Style;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.geotools.StyledRasterInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.JPanel;
 
 /**
  * This helper class is helping to create nice legend images, {@link JComponent}
@@ -161,9 +161,9 @@ public class SldLegendUtil {
 			return createLegend(styledLayer);
 
 		Translation desc = null;
-		if (!I8NUtil.isEmpty(layerStyle.getDesc())) {
+		if (!I18NUtil.isEmpty(layerStyle.getDesc())) {
 			desc = layerStyle.getDesc();
-		} else if (!I8NUtil.isEmpty(styledLayer.getDesc())) {
+		} else if (!I18NUtil.isEmpty(styledLayer.getDesc())) {
 			desc = styledLayer.getDesc();
 		}
 

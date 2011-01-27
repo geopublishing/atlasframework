@@ -40,11 +40,11 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.GeometryAttributeType;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A special {@link JScrollPane} that does threaded filling of the GUI with SLD

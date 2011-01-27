@@ -34,11 +34,11 @@ import org.geotools.data.shapefile.indexed.ShapeFileIndexer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * This extension of the {@link DpLayerVectorFeatureSource} is specialized to

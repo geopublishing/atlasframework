@@ -135,6 +135,21 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-jfree-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-jfree-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<version>0.5-SNAPSHOT</version>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gsrcj</artifactId>

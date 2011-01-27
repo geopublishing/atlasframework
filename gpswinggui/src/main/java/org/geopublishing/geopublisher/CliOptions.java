@@ -22,8 +22,8 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import skrueger.versionnumber.ReleaseUtil;
-import skrueger.versionnumber.ReleaseUtil.License;
+import de.schmitzm.versionnumber.ReleaseUtil;
+import de.schmitzm.versionnumber.ReleaseUtil.License;
 
 /**
  * This class manages all the command line options of Geopublisher.

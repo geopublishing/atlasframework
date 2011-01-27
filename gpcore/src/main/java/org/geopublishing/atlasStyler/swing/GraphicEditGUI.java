@@ -53,14 +53,14 @@ import org.geotools.styling.Stroke;
 import org.opengis.filter.expression.Expression;
 import org.opengis.style.GraphicalSymbol;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.ColorButton;
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 public class GraphicEditGUI extends AbstractEditGUI {
 	protected Logger LOGGER = LangUtil.createLogger(this);
@@ -385,7 +385,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 
 				Stroke s = someMark.getStroke();
 				if (s != null) {
-					jButtonStrokeColor.setColor(s.getColor());
+					jButtonStrokeColor.setColor( StylingUtil.getColorFromExpression(s.getColor()));
 				} else {
 					getJButtonStrokeColor().setEnabled(false);
 					jLabelStrokeColor.setEnabled(false);
@@ -804,7 +804,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			if (mark_mode) {
 				Fill f = graphic.getMarks()[0].getFill();
 				if (f != null) {
-					jButtonFillColor.setColor(f.getColor());
+					jButtonFillColor.setColor( StylingUtil.getColorFromExpression(f.getColor()));
 				} else {
 					jButtonFillColor.setEnabled(false);
 					jLabelFillColor.setEnabled(false);

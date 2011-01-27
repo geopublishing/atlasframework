@@ -12,7 +12,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 abstract public class AbstractAtlasExporter implements AtlasExporter {
 

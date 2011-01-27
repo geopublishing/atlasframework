@@ -22,7 +22,7 @@ import javax.swing.table.TableModel;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
 
-import skrueger.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
 
 /**
  * A renderer that visually represents the quality percentage value (0-100). It

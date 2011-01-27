@@ -23,11 +23,11 @@ import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.data.DataUtilities;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.GEOTIFF_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.IMAGE_POSTFIXES;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.GEOTIFF_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.IMAGE_POSTFIXES;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * A tester class that can determine, if a file is importable as a

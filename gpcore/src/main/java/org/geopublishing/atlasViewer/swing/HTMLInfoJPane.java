@@ -31,8 +31,8 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
 
-import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * A panel that displays HTML Info about a given {@link Map} The HTML will be

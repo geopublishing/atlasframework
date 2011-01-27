@@ -46,26 +46,26 @@ import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerListListener;
 import org.geotools.styling.Style;
 
-import schmitzm.geotools.JTSUtil;
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPaneEvent;
-import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.ObjectSelectionEvent;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.AttributeMetadataImpl;
-import skrueger.RasterLegendData;
-import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.MapPaneToolBar;
-import skrueger.geotools.MapPaneToolBar.MapPaneToolBarAction;
-import skrueger.geotools.MapPaneToolSelectedListener;
-import skrueger.geotools.MapView;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.geotools.JTSUtil;
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.gui.MapPaneToolBar.MapPaneToolBarAction;
+import de.schmitzm.geotools.gui.MapPaneToolSelectedListener;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPaneEvent;
+import de.schmitzm.geotools.map.event.JMapPaneListener;
+import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * This {@link AtlasMapView} is used in {@link AtlasViewerGUI} to show a

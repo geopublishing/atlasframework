@@ -33,14 +33,14 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.gui.FeatureLayerFilterDialog;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFeatureCollectionInterface;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.geotools.StyledRasterInterface;
+import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
+import de.schmitzm.geotools.styling.StyledFeatureCollectionInterface;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * An extension to an ordinary {@link MapLayerLegend}. The difference is, that

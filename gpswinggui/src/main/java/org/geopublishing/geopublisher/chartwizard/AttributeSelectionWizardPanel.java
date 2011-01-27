@@ -34,9 +34,9 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.jfree.chart.style.ChartType;
-import skrueger.geotools.AttributeMetadataMap;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.jfree.chart.style.ChartType;
 
 public class AttributeSelectionWizardPanel extends WizardPage {
 	final static protected Logger LOGGER = Logger

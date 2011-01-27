@@ -25,7 +25,7 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geotools.util.WeakHashSet;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This Class holds all {@link Map}s defined for this {@link AtlasConfig} by

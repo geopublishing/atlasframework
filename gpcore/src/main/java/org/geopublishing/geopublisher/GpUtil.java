@@ -27,13 +27,13 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.GPProps.Keys;
 
-import schmitzm.geotools.io.GeoExportUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.mail.Mailer;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.swing.formatter.MbDecimalFormatter;
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.geotools.io.GeoExportUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.net.mail.Mailer;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.formatter.MbDecimalFormatter;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 public class GpUtil {
 

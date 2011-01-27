@@ -14,7 +14,7 @@ import java.awt.Window;
 
 import org.geotools.util.WeakHashSet;
 
-import skrueger.swing.Disposable;
+import de.schmitzm.swing.Disposable;
 
 public interface ClosableSubwindows extends Disposable {
 

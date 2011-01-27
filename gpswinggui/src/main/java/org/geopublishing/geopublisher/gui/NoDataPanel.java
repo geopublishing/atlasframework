@@ -21,10 +21,10 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.swing.JPanel;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.swing.SmallButton;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
 
 /**
  * This {@link JPanel} displays a short list of NODATA-Values for an attribute

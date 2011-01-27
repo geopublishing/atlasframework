@@ -58,9 +58,9 @@ import org.geopublishing.geopublisher.gui.TableRowHeightAdjustment;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JTable} displays the content of the {@link DataPool}. It can be

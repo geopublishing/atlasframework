@@ -35,7 +35,7 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.swing.internal.AtlasJMenu;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This extension of a {@link JMenuBar} holds all the logic of an atlas

@@ -28,9 +28,10 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.io.IOUtil;
-import skrueger.geotools.StyledFS;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.SwingUtil;
 
 public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 		implements WizardResultProducer {
@@ -68,7 +69,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					long startTime = System.currentTimeMillis();
 					progress.setBusy(importFile.getName());
 
-					schmitzm.swing.SwingUtil.checkNotOnEDT();
+					SwingUtil.checkNotOnEDT();
 
 					// boolean added = addShapeLayer(asg, new File(
 					// selectedFilePath), asg);

@@ -7,7 +7,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import skrueger.geotools.LogoPosition;
+import de.schmitzm.geotools.LogoPosition;
 
 public class LogopositionCombobox extends JComboBox {
 	public LogopositionCombobox() {

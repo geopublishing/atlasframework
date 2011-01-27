@@ -35,17 +35,17 @@ import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.gui.XMapPaneEvent;
-import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.geotools.map.event.ScaleChangedEvent;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.gui.XMapPaneEvent;
+import de.schmitzm.geotools.map.event.JMapPaneListener;
+import de.schmitzm.geotools.map.event.ScaleChangedEvent;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link JDialog} can be used to edit a {@link Style}.

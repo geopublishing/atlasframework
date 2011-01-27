@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasRefInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * A {@link DpRef} is a reference to any Element in the {@link DpEntry} It can

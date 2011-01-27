@@ -45,9 +45,9 @@ import javax.swing.filechooser.FileFilter;
 
 import org.geopublishing.atlasViewer.AVProps;
 
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 public class AtlasScreenScreenshotsDialog extends JDialog {
 

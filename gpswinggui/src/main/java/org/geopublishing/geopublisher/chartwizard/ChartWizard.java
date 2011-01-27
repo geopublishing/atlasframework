@@ -25,12 +25,12 @@ import org.netbeans.spi.wizard.WizardPage;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.jfree.chart.style.ChartType;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartType;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
 
 /**
  * Static class that creates a chart-definition-wizard for a given

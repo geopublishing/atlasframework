@@ -26,7 +26,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.group.EditGroupsDnDJTreePanel;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 
 /**

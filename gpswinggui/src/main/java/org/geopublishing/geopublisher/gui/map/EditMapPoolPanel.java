@@ -31,8 +31,8 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import skrueger.swing.FilterTableKeyListener;
-import skrueger.swing.SmallButton;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.event.FilterTableKeyListener;
 
 /**
  * This {@link JPanel} allows editing

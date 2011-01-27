@@ -12,10 +12,10 @@ import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Test;
 
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 public class ManageChartsForMapDialogTest extends TestingClass {
 
 	@Test

@@ -29,12 +29,12 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.jfree.chart.ChartPanel;
 
-import schmitzm.jfree.chart.style.ChartLabelStyle;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.JPanel;
-import skrueger.i8n.Translation;
-import skrueger.swing.ColorButton;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartLabelStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 public class GeneralChartSettingsJPanel extends JPanel {
 	

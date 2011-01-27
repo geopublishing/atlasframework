@@ -47,14 +47,14 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.swing.Cancellable;
-import skrueger.swing.SmallButton;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.Cancellable;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
 
 public class DpLayerVectorAttributesJPanel extends JPanel implements
 		Cancellable {

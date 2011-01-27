@@ -34,13 +34,13 @@ import org.geopublishing.geopublisher.gui.map.ManageChartsForMapDialog;
 import org.geopublishing.geopublisher.swing.AtlasIconsDialog;
 import org.geotools.map.MapLayer;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.CancellableDialogManager;
-import skrueger.swing.DialogManager;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.CancellableDialogManager;
+import de.schmitzm.swing.DialogManager;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This class manages all {@link DialogManager}s used in Geopublisher. It hold

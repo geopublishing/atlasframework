@@ -6,9 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
-import skrueger.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 public class JNLPSwingUtilTest extends TestingClass {
 
 	@Before

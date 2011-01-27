@@ -19,7 +19,7 @@ import javax.swing.JList;
 
 import org.geopublishing.atlasStyler.ASUtil;
 
-import schmitzm.swing.JPanel;
+import de.schmitzm.swing.JPanel;
 
 public abstract class AbstractEditGUI extends JPanel {
 

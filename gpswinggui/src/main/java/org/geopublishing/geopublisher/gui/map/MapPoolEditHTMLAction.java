@@ -26,7 +26,7 @@ import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.i18n.I18NUtil;
 
 public class MapPoolEditHTMLAction extends AbstractAction {
 
@@ -67,7 +67,7 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 		ArrayList<String> tabTitles = new ArrayList<String>();
 		for (String l : ace.getLanguages()) {
 			tabTitles.add(GeopublisherGUI.R("Map.HTMLInfo.LanguageTabTitle",
-					I8NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
+					I18NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
 		SimplyHTMLUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,

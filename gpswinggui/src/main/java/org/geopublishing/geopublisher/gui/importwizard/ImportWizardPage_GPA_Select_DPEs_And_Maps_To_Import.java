@@ -22,10 +22,10 @@ import org.geopublishing.geopublisher.gui.internal.CheckableAtlasJTree;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.swing.SmallButton;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ImportWizardPage_GPA_Select_DPEs_And_Maps_To_Import extends
 		WizardPage {

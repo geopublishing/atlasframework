@@ -16,11 +16,11 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geotools.map.MapLayer;
 import org.opengis.feature.simple.SimpleFeature;
 
-import schmitzm.geotools.gui.SelectableXMapPane;
-import skrueger.geotools.labelsearch.LabelSearch;
-import skrueger.geotools.labelsearch.SearchResult;
-import skrueger.geotools.labelsearch.SearchResultFeature;
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.labelsearch.LabelSearch;
+import de.schmitzm.geotools.labelsearch.SearchResult;
+import de.schmitzm.geotools.labelsearch.SearchResultFeature;
+import de.schmitzm.i18n.I18NUtil;
 
 public class AtlasLabelSearch extends LabelSearch {
 	final static private Logger LOGGER = Logger
@@ -39,7 +39,7 @@ public class AtlasLabelSearch extends LabelSearch {
 		DpEntry dpEntry = dp.get(dpeID);
 
 		String title = "";
-		if (!I8NUtil.isEmpty(dpEntry.getTitle())) {
+		if (!I18NUtil.isEmpty(dpEntry.getTitle())) {
 			title = dpEntry.getTitle().toString();
 		}
 

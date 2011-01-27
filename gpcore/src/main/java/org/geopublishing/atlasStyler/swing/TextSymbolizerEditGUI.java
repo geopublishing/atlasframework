@@ -60,14 +60,14 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.ColorButton;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * TODO The preview-features are not closed/disposed securely
@@ -1453,7 +1453,9 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			String fontWeight = symbolizer.getFont().getWeight().toString();
 			ASUtil.selectOrInsert(getJComboBoxWeight(), fontWeight.toString());
 
-			getJButtonColor().setColor(symbolizer.getFill().getColor());
+			getJButtonColor().setColor(
+					StylingUtil.getColorFromExpression(symbolizer.getFill()
+							.getColor()));
 
 			/***********************************************************************
 			 * Halo fill
@@ -1474,7 +1476,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				}
 
 				getJButtonColorHalo().setColor(
-						symbolizer.getHalo().getFill().getColor());
+						StylingUtil.getColorFromExpression(symbolizer.getHalo()
+								.getFill().getColor()));
 
 				float opacity = Float.valueOf(symbolizer.getHalo().getFill()
 						.getOpacity().toString());

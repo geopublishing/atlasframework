@@ -42,13 +42,13 @@ package org.geopublishing.geopublisher.gui.datapool;
 //
 //import schmitzm.swing.SpringUtilities;
 //import schmitzm.swing.SwingUtil;
-//import skrueger.atlas.AtlasConfig;
-//import skrueger.atlas.exceptions.AtlasUserinputException;
-//import skrueger.creator.AtlasConfigEditable;
-//import skrueger.i8n.I8NUtil;
-//import skrueger.swing.CancelButton;
-//import skrueger.swing.OkButton;
-//import skrueger.swing.TranslationEditJPanel;
+//import de.schmitzm.atlas.AtlasConfig;
+//import de.schmitzm.atlas.exceptions.AtlasUserinputException;
+//import de.schmitzm.creator.AtlasConfigEditable;
+//import de.schmitzm.i8n.I8NUtil;
+//import de.schmitzm.swing.CancelButton;
+//import de.schmitzm.swing.OkButton;
+//import de.schmitzm.swing.TranslationEditJPanel;
 //
 ///**
 // * Shows a little GUI with settings and translations for the atlas in general

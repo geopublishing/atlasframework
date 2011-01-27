@@ -74,29 +74,29 @@ import org.opengis.geometry.DirectPosition;
 import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.FilterUtil;
-import schmitzm.geotools.JTSUtil;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.GridPanelFormatter;
-import schmitzm.geotools.gui.ScalePanel;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.gui.XMapPane;
-import schmitzm.geotools.gui.XMapPaneAction_Zoom;
-import schmitzm.geotools.gui.XMapPaneTool;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import schmitzm.swing.event.MouseInputType;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
-import skrueger.swing.SmallButton;
-
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+
+import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.JTSUtil;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.GridPanelFormatter;
+import de.schmitzm.geotools.gui.ScalePanel;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.gui.XMapPane;
+import de.schmitzm.geotools.gui.XMapPaneAction_Zoom;
+import de.schmitzm.geotools.gui.XMapPaneTool;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.event.MouseInputType;
 
 /**
  * Puts a {@link DesignMapView} into a {@link JDialog}. The static {@link Map}

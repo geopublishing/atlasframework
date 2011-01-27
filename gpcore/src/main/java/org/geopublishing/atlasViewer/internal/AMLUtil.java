@@ -14,8 +14,8 @@ import org.apache.log4j.Logger;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.gui.ScalePane;
-import schmitzm.geotools.gui.ScalePanel;
+import de.schmitzm.geotools.gui.ScalePane;
+import de.schmitzm.geotools.gui.ScalePanel;
 
 /**
  * A utility class with constants for parsing and storing AML.

@@ -22,7 +22,7 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.http.Webserver;
 
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 public class AMLImportEd extends AMLImport {
 	final static private Logger LOGGER = Logger.getLogger(AMLImportEd.class);

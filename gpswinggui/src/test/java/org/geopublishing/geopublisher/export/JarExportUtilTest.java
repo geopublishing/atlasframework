@@ -45,9 +45,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import schmitzm.io.IOUtil;
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 
 public class JarExportUtilTest extends TestingClass {
 	static private final Logger LOGGER = Logger

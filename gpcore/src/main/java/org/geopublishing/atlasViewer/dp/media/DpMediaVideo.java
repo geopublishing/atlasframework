@@ -19,8 +19,8 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class DpMediaVideo extends DpMedia<ChartStyle> implements ActionListener {
 	static Logger LOGGER = Logger.getLogger(DpMediaVideo.class);

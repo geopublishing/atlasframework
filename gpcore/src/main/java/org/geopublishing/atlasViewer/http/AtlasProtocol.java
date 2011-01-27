@@ -27,7 +27,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.HTMLBrowserWindow;
 
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * Defines the different AtlasViewer-specific protocol types... See

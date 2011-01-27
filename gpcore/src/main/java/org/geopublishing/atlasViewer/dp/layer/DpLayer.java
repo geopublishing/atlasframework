@@ -23,19 +23,18 @@ import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
-import org.jfree.ui.Layer;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 /**
  * This abstract {@link Class} unites all methods and fields common to all
@@ -374,7 +373,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 			lsQM = 0.;
 			final List<String> languages = getAtlasConfig().getLanguages();
 			for (final LayerStyle ls : getLayerStyles()) {
-				lsQM += (I8NUtil.qmTranslation(languages, ls.getTitle()) * 4. + I8NUtil
+				lsQM += (I18NUtil.qmTranslation(languages, ls.getTitle()) * 4. + I18NUtil
 						.qmTranslation(languages, ls.getDesc()) * 2.) / 6.;
 			}
 			lsQM = lsQM / getLayerStyles().size();

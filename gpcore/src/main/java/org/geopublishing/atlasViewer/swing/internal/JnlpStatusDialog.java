@@ -18,7 +18,7 @@ import javax.jnlp.DownloadServiceListener;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
-import schmitzm.swing.StatusDialog;
+import de.schmitzm.swing.StatusDialog;
 
 /**
  * An extension of {@link StatusDialog} that also implements a

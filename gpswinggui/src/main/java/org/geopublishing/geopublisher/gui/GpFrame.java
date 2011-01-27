@@ -24,8 +24,8 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.OutputStream;
-import java.net.URL;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -71,16 +71,14 @@ import org.geopublishing.gpsync.GpSync;
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPTransferType;
 
-import schmitzm.io.FileInputStream;
-import schmitzm.io.FileOutputStream;
-import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.ResourceProviderManagerFrame;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.HeapBar;
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.HeapBar;
+import de.schmitzm.swing.ResourceProviderManagerFrame;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 public class GpFrame extends JFrame {
 	private static final Logger log = Logger.getLogger(GpFrame.class);
@@ -822,7 +820,7 @@ public class GpFrame extends JFrame {
 			 */
 
 			JMenuItem langMenuItem = new JMenuItem(new AbstractAction(
-					I8NUtil.getMultilanguageString(code)) {
+					I18NUtil.getMultilanguageString(code)) {
 
 				public void actionPerformed(ActionEvent e) {
 					String actionCommand = e.getActionCommand();
@@ -867,7 +865,7 @@ public class GpFrame extends JFrame {
 				continue;
 
 			JMenuItem langMenuItem = new JMenuItem(
-					new AbstractAction(I8NUtil.getMultilanguageString(locale
+					new AbstractAction(I18NUtil.getMultilanguageString(locale
 							.getDisplayLanguage())) {
 
 						public void actionPerformed(ActionEvent e) {

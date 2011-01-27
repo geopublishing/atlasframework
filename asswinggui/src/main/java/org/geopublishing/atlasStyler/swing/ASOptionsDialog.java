@@ -27,10 +27,10 @@ import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class ASOptionsDialog extends CancellableDialogAdapter {
 	final JCheckBox overideLocaleCB = new JCheckBox();

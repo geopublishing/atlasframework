@@ -27,19 +27,19 @@ package org.geopublishing.atlasViewer.swing;
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.versionnumber.ReleaseUtil;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
- * 
- * @author SK
- */
-public class AtlasAboutDialog extends javax.swing.JDialog {
+ * A Dialog showing an about message that can be editoed for an atlas.
+ * */
+public class AtlasAboutDialog extends JDialog {
 
 	private final AtlasConfig atlasConfig;
 
@@ -55,10 +55,11 @@ public class AtlasAboutDialog extends javax.swing.JDialog {
 			jLabel2.setText(null);
 			jLabel3.setText("<html><h1>" + atlasConfig.getTitle()
 					+ "</h1><br/><font size='-2' color='gray'>AtlasViewer "
-					+ ReleaseUtil.getVersionInfo(AVUtil.class) + "</font></html>");
+					+ ReleaseUtil.getVersionInfo(AVUtil.class)
+					+ "</font></html>");
 			jButton1.setText(AtlasViewerGUI.R("HtmlBrowserWindow.button.close"));
-			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About", atlasConfig
-					.getTitle()));
+			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About",
+					atlasConfig.getTitle()));
 			html.setContentType("text/html");
 			html.setPreferredSize(new Dimension(450, 300));
 			html.setEditable(false);

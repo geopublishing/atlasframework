@@ -30,25 +30,24 @@ import org.geotools.gce.geotiff.GeoTiffReader;
 import org.geotools.gce.image.WorldImageReader;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.styling.Style;
-import org.jfree.util.Log;
 import org.opengis.parameter.GeneralParameterValue;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.grid.GridUtil;
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.GEOTIFF_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.IMAGE_POSTFIXES;
-import schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.RasterLegendData;
-import skrueger.geotools.StyledGridCoverageReaderInterface;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.geotools.ZoomRestrictableGridInterface;
-import skrueger.i8n.Translation;
-
 import com.vividsolutions.jts.geom.Envelope;
+
+import de.schmitzm.geotools.ZoomRestrictableGridInterface;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.grid.GridUtil;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.geotools.io.GeoImportUtil.ARCASCII_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.GEOTIFF_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.IMAGE_POSTFIXES;
+import de.schmitzm.geotools.io.GeoImportUtil.WORLD_POSTFIXES;
+import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * This class represents any {@link GridCoverage2D} that is read from one file.
@@ -217,7 +216,7 @@ public class DpLayerRaster_Reader extends
 
 					}
 
-					Log.info("Changed the URL from " + url + " to " + inTemp);
+					LOGGER.info("Changed the URL from " + url + " to " + inTemp);
 					url = DataUtilities.fileToURL(inTemp);
 				}
 

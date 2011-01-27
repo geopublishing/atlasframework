@@ -72,18 +72,19 @@ import org.jdesktop.swingx.plaf.windows.WindowsClassicLookAndFeelAddons;
 import org.jdesktop.swingx.plaf.windows.WindowsLookAndFeelAddons;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.feature.FeatureOperationTreeFilter;
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.FeatureLayerFilterDialog;
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapContextManagerInterface;
-import skrueger.geotools.StyledFS;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.geotools.StyledRasterInterface;
+import de.schmitzm.geotools.MapContextManagerInterface;
+import de.schmitzm.geotools.feature.FeatureOperationTreeFilter;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
+import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * All information about a {@link MapLayer} is presented here. The class name is

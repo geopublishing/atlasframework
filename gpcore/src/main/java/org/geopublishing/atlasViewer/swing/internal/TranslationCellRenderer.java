@@ -19,8 +19,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * Renders a tablecell with a small {@link JTable} presenting all translations

@@ -28,10 +28,10 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.geotools.StyledFS;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 	static private final Logger LOGGER = Logger

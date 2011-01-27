@@ -26,14 +26,14 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This extension of a {@link JComboBox} is specialized on the visualization of
@@ -153,13 +153,13 @@ public class AttributesJComboBox extends JComboBox {
 
 					final String metaTitle = attributeMetadataFor.getTitle()
 							.toString();
-					if (!I8NUtil.isEmpty(metaTitle))
+					if (!I18NUtil.isEmpty(metaTitle))
 						prototype.setText("<html>" + metaTitle);
 					else
 						prototype.setText("<html>" + prototype.getText());
 
 					final Translation metaDesc = attributeMetadataFor.getDesc();
-					if (!I8NUtil.isEmpty(metaDesc))
+					if (!I18NUtil.isEmpty(metaDesc))
 						prototype.setToolTipText(metaDesc.toString());
 				} else
 					prototype.setText("<html>" + prototype.getText());

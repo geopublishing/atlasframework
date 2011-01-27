@@ -70,20 +70,20 @@ import rachel.http.loader.WebResourceManager;
 import rachel.loader.ClassResourceLoader;
 import rachel.loader.FileResourceLoader;
 import rachel.loader.ResourceLoaderManager;
-import schmitzm.geotools.GTUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapView;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.SwitchLanguageDialog;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
-import skrueger.versionnumber.ReleaseUtil;
-import skrueger.versionnumber.ReleaseUtil.License;
+import de.schmitzm.geotools.GTUtil;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.SwitchLanguageDialog;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.versionnumber.ReleaseUtil;
+import de.schmitzm.versionnumber.ReleaseUtil.License;
 
 /**
  * {@link AtlasViewerGUI} main class
@@ -1042,7 +1042,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				continue;
 
 			JMenuItem langMenuItem = new AtlasMenuItem(new AbstractAction(
-					I8NUtil.getMultilanguageString(langCode)) {
+					I18NUtil.getMultilanguageString(langCode)) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {

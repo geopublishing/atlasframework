@@ -19,7 +19,7 @@ import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class GroupTreeCellRenderer extends DefaultTreeCellRenderer {
 

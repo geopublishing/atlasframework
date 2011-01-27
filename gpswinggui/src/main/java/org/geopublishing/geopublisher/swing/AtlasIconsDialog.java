@@ -28,12 +28,12 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.LogoPosition;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.SmallButton;
+import de.schmitzm.geotools.LogoPosition;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This dialog allows to configure the images and icons used in the atlas.

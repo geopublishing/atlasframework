@@ -29,8 +29,8 @@ import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.WeakHashSet;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * Stores {@link DpEntry}s by their IDs. Offers to add

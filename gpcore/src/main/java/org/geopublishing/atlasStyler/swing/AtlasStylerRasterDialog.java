@@ -37,14 +37,14 @@ import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Style;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 
-import schmitzm.geotools.gui.ColorMapPanel;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.swing.JPanel;
-import skrueger.RasterLegendData;
-import skrueger.geotools.StyledRasterInterface;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.gui.ColorMapPanel;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.OkButton;
 
 /**
  * A very basic SLD Editor for rasters.

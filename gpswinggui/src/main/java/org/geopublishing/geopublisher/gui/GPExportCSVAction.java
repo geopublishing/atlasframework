@@ -23,7 +23,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 public class GPExportCSVAction extends AbstractAction {
 

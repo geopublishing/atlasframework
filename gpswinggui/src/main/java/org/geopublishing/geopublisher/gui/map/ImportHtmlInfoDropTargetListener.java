@@ -29,8 +29,8 @@ import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.AtlasDropTargetListener;
 
-import schmitzm.io.IOUtil;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This {@link AtlasDropTargetListener} manages the import of new HTML pages

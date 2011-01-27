@@ -34,9 +34,9 @@ import org.geotools.data.DataStoreFinder;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.ShapefileDataStore;
 
-import schmitzm.geotools.io.GeoImportUtil;
-import schmitzm.jfree.feature.style.FeatureChartStyle;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * This is not a JUNit test case.. its a class determining whether this can be

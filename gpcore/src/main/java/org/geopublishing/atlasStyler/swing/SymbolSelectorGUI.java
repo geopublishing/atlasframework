@@ -47,15 +47,15 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.lang.LangUtil;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.CancelButton;
-import skrueger.swing.ColorButton;
-import skrueger.swing.OkButton;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 public class SymbolSelectorGUI extends AtlasDialog {
 	protected Logger LOGGER = LangUtil.createLogger(this);

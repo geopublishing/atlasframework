@@ -38,14 +38,14 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.AtlasDialog;
-import skrueger.swing.CancelButton;
-import skrueger.swing.OkButton;
-import skrueger.swing.ThinButton;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.ThinButton;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesAddGUI extends AtlasDialog {
 	private static final Logger log = Logger

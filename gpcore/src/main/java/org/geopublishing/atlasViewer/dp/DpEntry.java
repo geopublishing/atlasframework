@@ -30,9 +30,9 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
 import rachel.ResourceManager;
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		Comparable<DpEntry<? extends ChartStyle>>, Serializable,
@@ -417,9 +417,9 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 			if (getCharts().size() > 0) {
 				averageChartQuality = getAverageChartQuality();
 			}
-			quality = (I8NUtil.qmTranslation(languages, getTitle()) * 4.
-					+ I8NUtil.qmTranslation(languages, getDesc()) * 2.
-					+ I8NUtil.qmTranslation(languages, getKeywords()) * 1. + averageChartQuality * 3.) / 10.;
+			quality = (I18NUtil.qmTranslation(languages, getTitle()) * 4.
+					+ I18NUtil.qmTranslation(languages, getDesc()) * 2.
+					+ I18NUtil.qmTranslation(languages, getKeywords()) * 1. + averageChartQuality * 3.) / 10.;
 		}
 		return quality;
 	}
@@ -446,8 +446,8 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 */
 	public Double getChartQuality(ChartStyle Chart) {
 		final List<String> languages = getAtlasConfig().getLanguages();
-		final Double result = (I8NUtil.qmTranslation(languages, Chart
-				.getTitleStyle().getLabelTranslation()) * 4 + I8NUtil
+		final Double result = (I18NUtil.qmTranslation(languages, Chart
+				.getTitleStyle().getLabelTranslation()) * 4 + I18NUtil
 				.qmTranslation(languages, Chart.getDescStyle()
 						.getLabelTranslation()) * 2) / 6;
 		return result;

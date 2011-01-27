@@ -67,17 +67,17 @@ import org.geotools.map.event.MapLayerEvent;
 import org.geotools.map.event.MapLayerListener;
 import org.geotools.styling.Symbolizer;
 
-import schmitzm.geotools.map.event.MapLayerAdapter;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.JPanel;
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.i8n.Translation;
-import skrueger.swing.Disposable;
-import skrueger.swing.SmallButton;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.map.event.MapLayerAdapter;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.Disposable;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 		ClosableSubwindows, Disposable {

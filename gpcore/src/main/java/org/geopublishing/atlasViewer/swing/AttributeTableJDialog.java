@@ -19,21 +19,21 @@ import org.apache.log4j.Logger;
 import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerEvent;
 
-import schmitzm.geotools.feature.AttributeTypeFilter;
-import schmitzm.geotools.gui.FeatureTablePane;
-import schmitzm.geotools.gui.SelectableFeatureTablePane;
-import schmitzm.geotools.gui.SelectableXMapPane;
-import schmitzm.geotools.map.event.MapLayerAdapter;
-import schmitzm.swing.SortableJTable;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.StyledFeatureCollectionTableModel;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.geotools.StyledLayerInterface;
-import skrueger.geotools.selection.StyledFeatureLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModel;
-import skrueger.geotools.selection.StyledLayerSelectionModelSynchronizer;
-import skrueger.geotools.selection.TableSelectionSynchronizer;
-import skrueger.swing.AtlasDialog;
+import de.schmitzm.geotools.feature.AttributeTypeFilter;
+import de.schmitzm.geotools.gui.FeatureTablePane;
+import de.schmitzm.geotools.gui.SelectableFeatureTablePane;
+import de.schmitzm.geotools.gui.SelectableXMapPane;
+import de.schmitzm.geotools.map.event.MapLayerAdapter;
+import de.schmitzm.geotools.selection.StyledFeatureLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModel;
+import de.schmitzm.geotools.selection.StyledLayerSelectionModelSynchronizer;
+import de.schmitzm.geotools.selection.TableSelectionSynchronizer;
+import de.schmitzm.geotools.styling.StyledFeatureCollectionTableModel;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.swing.AtlasDialog;
+import de.schmitzm.swing.SortableJTable;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A dialog to show the attribute table of a vector layer. This class implements

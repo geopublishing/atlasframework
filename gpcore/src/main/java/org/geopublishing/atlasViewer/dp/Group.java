@@ -31,9 +31,9 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
 import org.geopublishing.geopublisher.GpUtil;
 
-import schmitzm.jfree.chart.style.ChartStyle;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 
 /**
  * A {@link Group} is an rather abstract container to organize the information
@@ -386,8 +386,8 @@ public class Group extends DefaultMutableTreeNode implements Transferable,
 		Double result;
 
 		List<String> languages = getAc().getLanguages();
-		result = (I8NUtil.qmTranslation(languages, getTitle()) * 4.
-				+ I8NUtil.qmTranslation(languages, getDesc()) * 2. + I8NUtil
+		result = (I18NUtil.qmTranslation(languages, getTitle()) * 4.
+				+ I18NUtil.qmTranslation(languages, getDesc()) * 2. + I18NUtil
 				.qmTranslation(languages, getKeywords()) * 1.) / 7.;
 
 		return result;

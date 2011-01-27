@@ -18,7 +18,7 @@ import rachel.http.loader.WebResourceLoader;
 import rachel.http.resource.InputStreamResource;
 import rachel.http.resource.WebResource;
 import rachel.loader.FileResourceLoader;
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * Allows to serve HTML directly from the filesystem

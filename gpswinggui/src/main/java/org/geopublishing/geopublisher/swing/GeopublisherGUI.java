@@ -61,22 +61,22 @@ import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.export.ExportWizard;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
-import org.jfree.util.Log;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
-import schmitzm.io.IOUtil;
-import schmitzm.lang.ResourceProvider;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.SwitchLanguageDialog;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
-import skrueger.versionnumber.ReleaseUtil;
 
 import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
+
+import de.schmitzm.i18n.SwitchLanguageDialog;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.ResourceProvider;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * The mighty mighty {@link GeopublisherGUI} is a tool that generates runnable
@@ -226,8 +226,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
 
 		GpUtil.initGpLogging();
-
-		Log.error("test");
 
 		System.setProperty("file.encoding", "UTF-8");
 

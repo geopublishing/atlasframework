@@ -36,13 +36,13 @@ import javax.swing.table.DefaultTableModel;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.I8NUtil;
-import skrueger.i8n.LanguagesComboBox;
-import skrueger.i8n.Translation;
-import skrueger.swing.CancelButton;
-import skrueger.swing.CancellableDialogAdapter;
-import skrueger.swing.OkButton;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.i18n.LanguagesComboBox;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.OkButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A modal dialog that allows to DEFINE the languages for the atlas.
@@ -115,7 +115,7 @@ public class AtlasLanguagesConfigDialog extends CancellableDialogAdapter {
 				// + pl.getDisplayLanguage(lc) + " " + lc;
 				// }
 
-				return I8NUtil.getMultilanguageString(lc);
+				return I18NUtil.getMultilanguageString(lc);
 
 			}
 

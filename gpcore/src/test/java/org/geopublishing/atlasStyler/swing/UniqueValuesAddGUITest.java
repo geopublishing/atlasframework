@@ -6,8 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.testing.TestingClass;
+import de.schmitzm.testing.TestingUtil;
 public class UniqueValuesAddGUITest extends TestingClass {
 
 	@Before
@@ -26,7 +27,7 @@ public class UniqueValuesAddGUITest extends TestingClass {
 		// .createUniqueValuesRuleList();
 
 		final UniqueValuesRuleList rl = new RuleListFactory(
-				TestingUtil.TestDatasetsVector.kreise.getStyledFS())
+				GTTestingUtil.TestDatasetsVector.kreise.getStyledFS())
 				.createUniqueValuesRulesList(true);
 
 		if (TestingUtil.INTERACTIVE) {

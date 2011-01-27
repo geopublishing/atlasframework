@@ -28,15 +28,15 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.DesignAtlasChartJDialog;
 import org.geotools.map.MapLayer;
 
-import schmitzm.geotools.gui.FeatureLayerFilterDialog;
-import schmitzm.geotools.gui.GeoMapPane;
-import schmitzm.geotools.gui.XMapPaneEvent;
-import schmitzm.geotools.map.event.FeatureSelectedEvent;
-import schmitzm.geotools.map.event.JMapPaneListener;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.MapPaneToolBar;
-import skrueger.geotools.StyledLayerInterface;
+import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
+import de.schmitzm.geotools.gui.GeoMapPane;
+import de.schmitzm.geotools.gui.MapPaneToolBar;
+import de.schmitzm.geotools.gui.XMapPaneEvent;
+import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
+import de.schmitzm.geotools.map.event.JMapPaneListener;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
 
 public class DesignAtlasMapLegend extends AtlasMapLegend {
 	protected Logger LOGGER = LangUtil.createLogger(this);

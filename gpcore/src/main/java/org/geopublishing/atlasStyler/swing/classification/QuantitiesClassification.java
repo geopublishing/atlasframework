@@ -18,10 +18,10 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 
-import schmitzm.lang.LangUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A quantitative classification. The inveralls are defined by upper and lower

@@ -22,11 +22,11 @@ import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.io.IOUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.StyledFS;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This class is using the values collected during the {@link ImportWizard} to

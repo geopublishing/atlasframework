@@ -13,8 +13,8 @@ import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geotools.feature.FeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import schmitzm.swing.SwingUtil;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * A {@link JComboBox} which offers a selection of RulesList. Only RLs that

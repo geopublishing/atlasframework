@@ -23,8 +23,8 @@
 //import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 //
 //import schmitzm.swing.JPanel;
-//import skrueger.swing.Cancellable;
-//import skrueger.swing.ColorButton;
+//import de.schmitzm.swing.Cancellable;
+//import de.schmitzm.swing.ColorButton;
 //
 //public class DpLayerRasterPyramidJPanel extends JPanel implements Cancellable {
 //	private final DpLayerRasterPyramid backup;

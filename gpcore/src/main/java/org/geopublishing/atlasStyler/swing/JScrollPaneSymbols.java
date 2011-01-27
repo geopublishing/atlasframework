@@ -42,9 +42,9 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.RuleListFactory;
 import org.geopublishing.atlasStyler.SingleRuleList;
 
-import schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import skrueger.i8n.Translation;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
  * A GUI class that unites the different types of SymbolLists we have: symbols

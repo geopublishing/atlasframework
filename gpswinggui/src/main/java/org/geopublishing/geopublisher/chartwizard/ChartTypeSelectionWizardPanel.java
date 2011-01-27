@@ -26,9 +26,9 @@ import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.jfree.chart.style.ChartType;
-import schmitzm.swing.SwingUtil;
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.jfree.chart.style.ChartType;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This {@link WizardPage} allows to choose the basic type of diagram.
@@ -129,7 +129,7 @@ public class ChartTypeSelectionWizardPanel extends WizardPage {
 									isSelected, cellHasFocus);
 
 					ChartType ct = (ChartType) value;
-					if (I8NUtil.isEmpty(ct.getTitle())) {
+					if (I18NUtil.isEmpty(ct.getTitle())) {
 						protoType.setText(ct.toString());
 					} else
 						protoType.setText(ct.getTitle());

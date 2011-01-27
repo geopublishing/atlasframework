@@ -23,8 +23,7 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
-import schmitzm.junit.TestingClass;
-import schmitzm.swing.TestingUtil;
+import de.schmitzm.testing.TestingClass;
 public class DpLayerVectorFeatureSourceShapefileEdTest extends TestingClass {
 
 	@Test
@@ -35,7 +34,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest extends TestingClass {
 		// URL url = DpLayerVectorFeatureSourceShapefileEdTest.class
 		// .getResource("/arabicShapefiles/arabicwitharabicinheader.shp");
 		// assertNotNull(url);
-		URL url = TestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
+		URL url = GpTestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
 
 		List<String> illegalAtts = DpLayerVectorFeatureSourceShapefileEd
 				.checkAttributeNames(url);
@@ -50,9 +49,9 @@ public class DpLayerVectorFeatureSourceShapefileEdTest extends TestingClass {
 			ParserConfigurationException, URISyntaxException {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
-		URL url = TestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
+		URL url = GpTestingUtil.TestDatasetsVector.arabicInHeader.getUrl();
 		
-		url = TestingUtil.copyShapefileToTemp(url);
+		url = GpTestingUtil.copyShapefileToTemp(url);
 
 		System.out.println(url);
 		DpLayerVectorFeatureSourceShapefileEd dpl = new DpLayerVectorFeatureSourceShapefileEd(

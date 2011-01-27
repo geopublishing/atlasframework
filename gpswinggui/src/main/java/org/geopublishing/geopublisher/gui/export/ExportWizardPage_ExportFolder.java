@@ -28,7 +28,7 @@ import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.ExceptionDialog;
 
 public class ExportWizardPage_ExportFolder extends WizardPage {
 	/*

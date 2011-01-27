@@ -52,14 +52,14 @@ import org.geotools.swing.utils.MapLayerUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import schmitzm.geotools.feature.FeatureUtil;
-import schmitzm.geotools.gui.FeatureLayerFilterDialog;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.MapView;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.geotools.StyledRasterInterface;
-import skrueger.i8n.I8NUtil;
+import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
+import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.i18n.I18NUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * This extension of the basic {@link MapLayerLegend} introduces menu items and
@@ -265,7 +265,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 				for (String l : ace.getLanguages()) {
 					tabTitles.add(GeopublisherGUI.R(
-							"EditLayerHTML.Tabs.Titles", I8NUtil
+							"EditLayerHTML.Tabs.Titles", I18NUtil
 									.getFirstLocaleForLang(l)
 									.getDisplayLanguage()));
 				}

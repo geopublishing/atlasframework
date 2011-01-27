@@ -29,7 +29,7 @@ import org.geopublishing.atlasViewer.swing.RJLTransferable;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
-import skrueger.i8n.Translation;
+import de.schmitzm.i18n.Translation;
 
 /**
  * A {@link DraggableMapPoolJTable} is a {@link MapPoolJList} with the ability

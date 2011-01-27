@@ -44,10 +44,10 @@ import org.geotools.styling.Style;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
-import schmitzm.geotools.styling.StylingUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import skrueger.i8n.Translation;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * An extension of the AtlasConfig for use within Geopublisher. One purpose is,
@@ -136,7 +136,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		// is
 		// * never visible in the atlas.
 		// */
-		// if (fg != null && I8NUtil.isEmpty(fg.getTitle())) {
+		// if (fg != null && I18NUtil.isEmpty(fg.getTitle())) {
 		// List<String> activeLang = new ArrayList<String>();
 		// activeLang.add(Translation.getActiveLang());
 		// fg.setTitle(new Translation(activeLang, GpUtil

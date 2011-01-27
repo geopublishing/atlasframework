@@ -43,14 +43,14 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
 
-import schmitzm.swing.SwingUtil;
-import skrueger.AttributeMetadataImpl;
-import skrueger.AttributeMetadataInterface;
-import skrueger.geotools.AttributeMetadataMap;
-import skrueger.geotools.StyledLayerUtil;
-import skrueger.i8n.Translation;
-import skrueger.swing.TranslationAskJDialog;
-import skrueger.swing.TranslationEditJPanel;
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
+import de.schmitzm.geotools.data.amd.AttributeMetadataMap;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.TranslationAskJDialog;
+import de.schmitzm.swing.TranslationEditJPanel;
 
 /**
  * This {@link JTable} has a model based on an {@link AttributeMetadataMap}

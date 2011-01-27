@@ -28,7 +28,7 @@ import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardBranchController;
 import org.netbeans.spi.wizard.WizardPage;
 
-import schmitzm.lang.LangUtil;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * This {@link Wizard} provides an easy way for the Geopublisher user to export

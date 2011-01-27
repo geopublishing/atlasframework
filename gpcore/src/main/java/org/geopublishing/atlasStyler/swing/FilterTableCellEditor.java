@@ -10,15 +10,15 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
-import org.geopublishing.atlasViewer.swing.AtlasFeatureLayerFilterDialog;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.opengis.filter.Filter;
 
-import schmitzm.geotools.gui.FilterChangeListener;
-import schmitzm.geotools.gui.GeotoolsGUIUtil;
-import schmitzm.swing.SwingUtil;
-import skrueger.geotools.StyledFeaturesInterface;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
+import de.schmitzm.geotools.gui.FilterChangeListener;
+import de.schmitzm.geotools.gui.GeotoolsGUIUtil;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class FilterTableCellEditor extends AbstractCellEditor implements
 		TableCellEditor {

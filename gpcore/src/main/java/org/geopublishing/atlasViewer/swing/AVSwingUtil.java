@@ -41,16 +41,15 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geotools.data.DataUtilities;
 import org.jdesktop.swingx.color.EyeDropperColorChooserPanel;
-import org.jfree.util.Log;
 
-import schmitzm.geotools.GTUtil;
-import schmitzm.io.IOUtil;
-import schmitzm.jfree.chart.style.ChartStyle;
-import schmitzm.swing.ExceptionDialog;
-import schmitzm.swing.SwingUtil;
-import skrueger.swing.swingworker.AtlasStatusDialog;
-import skrueger.swing.swingworker.AtlasStatusDialogInterface;
-import skrueger.swing.swingworker.AtlasSwingWorker;
+import de.schmitzm.geotools.GTUtil;
+import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
+import de.schmitzm.swing.swingworker.AtlasStatusDialog;
+import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class AVSwingUtil extends AVUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
@@ -262,7 +261,7 @@ public class AVSwingUtil extends AVUtil {
 				FileUtils.copyURLToFile(url, localTempFile);
 				localTempFile.deleteOnExit();
 				String msg = "downloaded to " + localTempFile;
-				Log.debug(msg);
+				LOGGER.debug(msg);
 				return null;
 			}
 		}.executeModalNoEx();
