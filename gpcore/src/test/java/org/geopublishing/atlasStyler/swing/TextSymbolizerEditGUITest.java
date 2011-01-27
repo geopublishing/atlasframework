@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.TextRuleList;
@@ -26,7 +25,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 	private static AtlasStyler atlasStyler;
 
 	@Before
-	public void befire() throws IOException {
+	public void before() throws IOException {
 		STYLED_FS = TestDatasetsVector.countryShp.getStyledFS();
 		tr = new TextRuleList(STYLED_FS, true);
 		// tr.addDefaultClass();
@@ -47,7 +46,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 	@Test
 	public void testGetFontComboBox2() throws IOException {
 		List<Font> fonts = new ArrayList<Font>();
-		Font f = new JLabel().getFont().deriveFont(3);
+//		Font f = new JLabel().getFont().deriveFont(3);
 		atlasStyler.setFonts(fonts);
 
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(
@@ -60,7 +59,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 
 	@Test
 	public void testTextSymbolizerEditGUIPolygon() throws Throwable {
-		if (!TestingUtil.isInteractive())
+		if (isInteractive())
 			return;
 
 		TextRuleList tRl = atlasStyler.getRlf().createTextRulesList(true);
@@ -68,7 +67,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 		TextSymbolizerEditGUI tsGui = new TextSymbolizerEditGUI(tRl,
 				atlasStyler, null);
 
-		TestingUtil.testGui(tsGui, 1);
+		TestingUtil.testGui(tsGui);
 	}
 
 	@Test
@@ -84,7 +83,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 		TextSymbolizerEditGUI tsGui = new TextSymbolizerEditGUI(tRl,
 				atlasStyler, null);
 
-		TestingUtil.testGui(tsGui, 500);
+		TestingUtil.testGui(tsGui, 1);
 	}
 
 }
