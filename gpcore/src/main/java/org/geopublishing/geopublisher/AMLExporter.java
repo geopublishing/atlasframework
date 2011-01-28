@@ -455,7 +455,7 @@ public class AMLExporter {
 		File fontsDir = getAce().getFontsDir();
 
 		Collection<File> listFiles = FileUtils.listFiles(fontsDir,
-				GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
+				GpUtil.FontsFilesFilter, IOUtil.BlacklistedFoldersFilter);
 		for (File f : listFiles) {
 
 			// Test whether the font is readable

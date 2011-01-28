@@ -46,6 +46,7 @@ import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.swing.ExceptionDialog;
 
@@ -600,7 +601,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		long size = 0;
 
 		Collection<File> files = FileUtils.listFiles(directory,
-				GpUtil.BlacklistesFilesFilter, GpUtil.BlacklistedFoldersFilter);
+				IOUtil.BlacklistesFilesFilter, IOUtil.BlacklistedFoldersFilter);
 		if (files == null) { // null if security restricted
 			return 0L;
 		}

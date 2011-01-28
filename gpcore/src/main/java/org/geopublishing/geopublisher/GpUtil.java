@@ -17,7 +17,6 @@ import java.util.Set;
 
 import javax.xml.parsers.FactoryConfigurationError;
 
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -79,43 +78,6 @@ public class GpUtil {
 		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
 				.getVersionInfo(GpUtil.class));
 	}
-
-	/**
-	 * This {@link IOFileFilter} returns <code>false</code> for files that
-	 * should be omitted during export and when calculating the size of a
-	 * {@link DpEntry} folder.
-	 */
-	public static final IOFileFilter BlacklistesFilesFilter = new IOFileFilter() {
-
-		@Override
-		public boolean accept(File file) {
-			if (file.getName().equals("Thumbs.db"))
-				return false;
-			if (file.getName().endsWith("~"))
-				return false;
-			if (file.getName().toLowerCase().endsWith("bak"))
-				return false;
-			if (file.getName().equals("build.xml"))
-				return false;
-			if (file.getName().equals("pom.xml"))
-				return false;
-			return true;
-		}
-
-		@Override
-		public boolean accept(File dir, String name) {
-			return accept(new File(dir, name));
-		}
-	};
-
-	/**
-	 * This filter omits SVN and CSV sub-folders.<br/>
-	 * This {@link IOFileFilter} returns <code>false</code> for folder that
-	 * should be omitted during export and when calculating the size of a
-	 * {@link DpEntry} folder or chen copying folders in general.
-	 */
-	public static final IOFileFilter BlacklistedFoldersFilter = FileFilterUtils
-			.makeCVSAware(FileFilterUtils.makeSVNAware(null));
 
 	/**
 	 * This {@link IOFileFilter} only return .ttf files
