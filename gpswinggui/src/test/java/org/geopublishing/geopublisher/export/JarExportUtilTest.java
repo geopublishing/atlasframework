@@ -25,6 +25,9 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import net.charabia.jsmoothgen.application.JSmoothModelBean;
+import net.charabia.jsmoothgen.application.JSmoothModelPersistency;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
@@ -68,6 +71,21 @@ public class JarExportUtilTest extends TestingClass {
 	public void tearDown() throws Exception {
 		atlasConfig.dispose();
 		FileUtils.deleteDirectory(atlasExportTesttDir);
+	}
+
+	/**
+	 * Strangely fails on my mashine, but not on hudson... 
+	 */
+	@Test
+	public void testWutksBug() throws IOException {
+		final File destinationProjectFile = new File(
+				TestingUtil.getNewTempDir(), "atlas.jsmooth");
+		FileUtils.copyURLToFile(GpUtil.class
+				.getResource(JarExportUtil.JSMOOTH_PROJEKT_RESOURCE),
+				destinationProjectFile);
+
+		final JSmoothModelBean model = JSmoothModelPersistency
+				.load(destinationProjectFile);
 	}
 
 	@Test
