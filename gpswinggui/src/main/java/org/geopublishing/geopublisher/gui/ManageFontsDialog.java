@@ -147,7 +147,7 @@ public class ManageFontsDialog extends AtlasDialog {
 		fontNamesInFolder = new String[0];
 
 		Collection<File> listTtfFiles = FileUtils.listFiles(ace.getFontsDir(),
-				GpUtil.FontsFilesFilter, GpUtil.BlacklistedFoldersFilter);
+				GpUtil.FontsFilesFilter, IOUtil.BlacklistedFoldersFilter);
 		for (File f : listTtfFiles) {
 
 			String relPath = f.getAbsolutePath().substring(

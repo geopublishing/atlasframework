@@ -578,7 +578,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 * Counts the size of a directory recursively (sum of the length of all
 	 * files). It omits the blacklisted filed via
 	 * {@link GpUtil#BlacklistedFoldersFilter} and
-	 * {@link GpUtil#BlacklistesFilesFilter}.
+	 * {@link GpUtil#BlacklistedFilesFilter}.
 	 * 
 	 * @param directory
 	 *            directory to inspect, must not be <code>null</code>
@@ -601,7 +601,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		long size = 0;
 
 		Collection<File> files = FileUtils.listFiles(directory,
-				IOUtil.BlacklistesFilesFilter, IOUtil.BlacklistedFoldersFilter);
+				IOUtil.BlacklistedFilesFilter, IOUtil.BlacklistedFoldersFilter);
 		if (files == null) { // null if security restricted
 			return 0L;
 		}

@@ -181,11 +181,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * and therefore are not part of the dependencies.
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(
-			Arrays.asList(new String[] { 
-//					SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3, 
+			Arrays.asList(new String[] {
+					// SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3,
 					ASCORE_JARNAME,
 					// ASSWINGGUI_JARNAME,
-//					GPSYNC_JARNAME, 
+					// GPSYNC_JARNAME,
 					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
@@ -536,8 +536,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		Collection<String> listRelFileNames = new ArrayList<String>();
 		if (testWhat.isDirectory()) {
 			final Collection<File> listFiles = FileUtils.listFiles(testWhat,
-					GpUtil.BlacklistesFilesFilter,
-					GpUtil.BlacklistedFoldersFilter);
+					IOUtil.BlacklistedFilesFilter,
+					IOUtil.BlacklistedFoldersFilter);
 			for (File f : listFiles) {
 				String relFileName = f.getAbsolutePath().substring(
 						baseDir.getAbsolutePath().length() + 1);
@@ -881,13 +881,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					+ getSnapshot();
 		}
 
-		if (jarName.contains(SCHMITZM_JARNAME1)) 
+		if (jarName.contains(SCHMITZM_JARNAME1))
 			path = "de/schmitzm/schmitzm-core/2.5-SNAPSHOT";
-//		if (jarName.contains(SCHMITZM_JARNAME2)) 
-//			path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
-//		if (jarName.contains(SCHMITZM_JARNAME3)) 
-//			path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
-		if (jarName.contains(GPSYNC_JARNAME)) 
+		// if (jarName.contains(SCHMITZM_JARNAME2))
+		// path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
+		// if (jarName.contains(SCHMITZM_JARNAME3))
+		// path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
+		if (jarName.contains(GPSYNC_JARNAME))
 			path = "org/geopublishing/gpsync/1.0-SNAPSHOT";
 
 		/*
@@ -1098,8 +1098,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 				final Collection<File> listFiles = FileUtils.listFiles(
 						new File(absolutePath, relpath),
-						GpUtil.BlacklistesFilesFilter,
-						GpUtil.BlacklistedFoldersFilter);
+						IOUtil.BlacklistedFilesFilter,
+						IOUtil.BlacklistedFoldersFilter);
 				for (final File intoJarSource : listFiles) {
 
 					String act = intoJarSource.getPath();
@@ -1672,7 +1672,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 					Collection<File> listFiles = FileUtils.listFiles(fontsDir,
 							GpUtil.FontsFilesFilter,
-							GpUtil.BlacklistedFoldersFilter);
+							IOUtil.BlacklistedFoldersFilter);
 					for (File f : listFiles) {
 						try {
 							Font createFont = Font.createFont(
@@ -1872,9 +1872,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				FileUtils.deleteDirectory(targetDirJWS);
 			}
 			throw cancel;
-//		} catch (Exception e) {
-//			throw new AtlasExportException("error during creation of atlas.exe", e);
-		}finally {
+			// } catch (Exception e) {
+			// throw new
+			// AtlasExportException("error during creation of atlas.exe", e);
+		} finally {
 			// Whatever happened, we have to delete the temp dir
 			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
 			deleteOldTempExportDirs();
@@ -1913,8 +1914,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			targetDirJWS.setReadable(true, false);
 
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-					GpUtil.BlacklistedFoldersFilter,
-					GpUtil.BlacklistesFilesFilter);
+					IOUtil.BlacklistedFoldersFilter,
+					IOUtil.BlacklistedFilesFilter);
 			while (iterateFiles.hasNext()) {
 				File next = iterateFiles.next();
 				// next.setWritable(false, false);
@@ -1929,8 +1930,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			targetDirDISK.setReadable(true, false);
 
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirDISK,
-					GpUtil.BlacklistedFoldersFilter,
-					GpUtil.BlacklistesFilesFilter);
+					IOUtil.BlacklistedFoldersFilter,
+					IOUtil.BlacklistedFilesFilter);
 			while (iterateFiles.hasNext()) {
 				File next = iterateFiles.next();
 				next.setReadable(true, false);
@@ -2063,7 +2064,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
 				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
-				+ SCHMITZM_JARNAME1 + " " +SCHMITZM_JARNAME2+ SCHMITZM_JARNAME3;
+				+ SCHMITZM_JARNAME1 + " " + SCHMITZM_JARNAME2
+				+ SCHMITZM_JARNAME3;
 
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 
