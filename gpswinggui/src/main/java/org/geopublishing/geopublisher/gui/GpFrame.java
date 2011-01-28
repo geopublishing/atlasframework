@@ -24,8 +24,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -64,12 +62,6 @@ import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
-import org.geopublishing.gpsync.AtlasFingerPrint;
-import org.geopublishing.gpsync.GpDiff;
-import org.geopublishing.gpsync.GpSync;
-
-import com.enterprisedt.net.ftp.FTPClient;
-import com.enterprisedt.net.ftp.FTPTransferType;
 
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.Translation;
@@ -349,75 +341,6 @@ public class GpFrame extends JFrame {
 
 			}
 
-		}
-		// TODO MJ
-
-		if (ace != null) {
-
-			fileMenu.add(new AbstractAction("gpsync TEST") {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					try {
-						FTPClient ftpClient = new FTPClient();
-						ftpClient.setRemoteHost("ftp.geopublishing.org");
-						ftpClient.connect();
-						ftpClient.login("geopublisher",
-								"g9e8o7p6u5b4l3i2s1h0er");
-						GpSync gpSync = new GpSync(gp.getAce().getAtlasDir(),
-								gp.getAce().getBaseName());
-						String[] filesInDir = ftpClient.dir();
-						boolean fileFound = false;
-						for (String bla : filesInDir) { // new utility class?
-							if (bla.equals(gpSync.getAtlasname() + ".txt"))
-								fileFound = true;
-						}
-						GpDiff gpDiff = null;
-						if (fileFound) {
-							File incomingAfp = File.createTempFile(
-									gpSync.getAtlasname(), ".txt");
-							FileOutputStream AfpOut = new FileOutputStream(
-									incomingAfp);
-							try {
-								ftpClient.setType(FTPTransferType.BINARY);
-								ftpClient.get(AfpOut, gpSync.getAtlasname()
-										+ ".txt12");
-								AtlasFingerPrint afpRemote = new AtlasFingerPrint(
-										incomingAfp, true);
-								gpDiff = gpSync.compare(afpRemote);
-							} finally {
-								AfpOut.close();
-								incomingAfp.delete();
-							}
-						} // createZip with null as gpDiff
-						else {
-							gpDiff = gpSync.compare(null);
-						}
-						File createZip = gpSync.createZip(gpDiff);
-						FileInputStream fis = new FileInputStream(createZip);
-						try {
-							ftpClient.setType(FTPTransferType.BINARY);
-							ftpClient.put(fis, gpSync.getAtlasname() + ".zip");
-						} finally {
-							fis.close();
-							createZip.delete();
-							ftpClient.quit();
-						}
-
-						// REMOTE!
-						// GpSync gpSync = new GpSync(ace.getAtlasDir());
-						// send( gpSync.getAcs().toText() );
-						//
-						// gpSync.applyZip(zipFile);
-						//
-						// UPLOAD!
-						// show message, zip erstellt mit 100 kb
-
-					} catch (Exception ee) {
-						ExceptionDialog.show(GpFrame.this, ee);
-					}
-				}
-			});
 		}
 		// ******************************************************************
 		// "Exit" Menu Item - exitMenuItem
