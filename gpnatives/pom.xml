@@ -10,9 +10,8 @@
 
 	<parent>
 		<groupId>org.geopublishing</groupId>
-		<artifactId>gp-atlas-framework</artifactId>
+		<artifactId>gp-parent</artifactId>
 		<version>1.7-SNAPSHOT</version>
-		<relativePath>../pom_basic.xml</relativePath>
 	</parent>
 
 	<build>
