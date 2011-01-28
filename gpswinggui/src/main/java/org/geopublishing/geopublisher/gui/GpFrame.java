@@ -228,7 +228,7 @@ public class GpFrame extends JFrame {
 	private JMenu getFileMenu() {
 		JMenuItem menuItem;
 
-		AtlasConfigEditable ace = gp.getAce();
+		final AtlasConfigEditable ace = gp.getAce();
 
 		JMenu fileMenu = new JMenu(R("MenuBar.FileMenu"));
 
@@ -353,6 +353,7 @@ public class GpFrame extends JFrame {
 		// TODO MJ
 
 		if (ace != null) {
+
 			fileMenu.add(new AbstractAction("gpsync TEST") {
 
 				@Override
@@ -363,22 +364,23 @@ public class GpFrame extends JFrame {
 						ftpClient.connect();
 						ftpClient.login("geopublisher",
 								"g9e8o7p6u5b4l3i2s1h0er");
-						GpSync gpSync = new GpSync(gp.getAce().getAtlasDir());
+						GpSync gpSync = new GpSync(gp.getAce().getAtlasDir(),
+								gp.getAce().getBaseName());
 						String[] filesInDir = ftpClient.dir();
 						boolean fileFound = false;
 						for (String bla : filesInDir) { // new utility class?
-							if (bla.equals(gpSync.getAwcFileName() + ".txt"))
+							if (bla.equals(gpSync.getAtlasname() + ".txt"))
 								fileFound = true;
 						}
 						GpDiff gpDiff = null;
 						if (fileFound) {
 							File incomingAfp = File.createTempFile(
-									gpSync.getAwcFileName(), ".txt");
+									gpSync.getAtlasname(), ".txt");
 							FileOutputStream AfpOut = new FileOutputStream(
 									incomingAfp);
 							try {
 								ftpClient.setType(FTPTransferType.BINARY);
-								ftpClient.get(AfpOut, gpSync.getAwcFileName()
+								ftpClient.get(AfpOut, gpSync.getAtlasname()
 										+ ".txt12");
 								AtlasFingerPrint afpRemote = new AtlasFingerPrint(
 										incomingAfp, true);
@@ -395,7 +397,7 @@ public class GpFrame extends JFrame {
 						FileInputStream fis = new FileInputStream(createZip);
 						try {
 							ftpClient.setType(FTPTransferType.BINARY);
-							ftpClient.put(fis, gpSync.getAwcFileName() + ".zip");
+							ftpClient.put(fis, gpSync.getAtlasname() + ".zip");
 						} finally {
 							fis.close();
 							createZip.delete();
