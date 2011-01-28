@@ -295,7 +295,9 @@
 
 		<dependency>
 			<groupId>net.charabia</groupId>
+<!--			<groupId>jsmoothgen</groupId>-->
 			<artifactId>jsmoothgen</artifactId>
+<!--			<version>0.9.9.7</version>-->
 			<version>0.9.9-7</version>
 			<type>jar</type>
 			<scope>compile</scope>

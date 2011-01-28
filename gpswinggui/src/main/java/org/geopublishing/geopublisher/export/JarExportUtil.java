@@ -182,10 +182,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(
 			Arrays.asList(new String[] { 
-					SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3, 
+//					SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3, 
 					ASCORE_JARNAME,
 					// ASSWINGGUI_JARNAME,
-					GPSYNC_JARNAME, 
+//					GPSYNC_JARNAME, 
 					GPCORE_JARNAME, GPNATIVES_JARNAME }));
 
 	/**
@@ -883,10 +883,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		if (jarName.contains(SCHMITZM_JARNAME1)) 
 			path = "de/schmitzm/schmitzm-core/2.5-SNAPSHOT";
-		if (jarName.contains(SCHMITZM_JARNAME2)) 
-			path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
-		if (jarName.contains(SCHMITZM_JARNAME3)) 
-			path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
+//		if (jarName.contains(SCHMITZM_JARNAME2)) 
+//			path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
+//		if (jarName.contains(SCHMITZM_JARNAME3)) 
+//			path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
 		if (jarName.contains(GPSYNC_JARNAME)) 
 			path = "org/geopublishing/gpsync/1.0-SNAPSHOT";
 
@@ -1872,7 +1872,9 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				FileUtils.deleteDirectory(targetDirJWS);
 			}
 			throw cancel;
-		} finally {
+//		} catch (Exception e) {
+//			throw new AtlasExportException("error during creation of atlas.exe", e);
+		}finally {
 			// Whatever happened, we have to delete the temp dir
 			info(GpUtil.R("Export.Finally.Cleanup.Msg"));
 			deleteOldTempExportDirs();
