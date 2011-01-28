@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.export;
 
-import java.awt.Font;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -1675,8 +1674,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 							IOUtil.BlacklistedFoldersFilter);
 					for (File f : listFiles) {
 						try {
-							Font createFont = Font.createFont(
-									Font.TRUETYPE_FONT, f);
+							// Font createFont = Font.createFont(
+							// Font.TRUETYPE_FONT, f);
 
 							String relPath = f.getAbsolutePath().substring(
 									fontsDir.getAbsolutePath().length() + 1);

@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.gpsync.AtlasFingerPrint;
+import org.geopublishing.gpsync.AtlasFingerprint;
 import org.geopublishing.gpsync.GpDiff;
 import org.geopublishing.gpsync.GpSync;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -49,7 +49,7 @@ public class GpFtpAtlasExport implements AtlasExporter {
 			try {
 				ftpClient.setType(FTPTransferType.BINARY);
 				ftpClient.get(AfpOut, gpSync.getAtlasname() + ".txt");
-				AtlasFingerPrint afpRemote = new AtlasFingerPrint(incomingAfp,
+				AtlasFingerprint afpRemote = new AtlasFingerprint(incomingAfp,
 						true);
 				gpDiff = gpSync.compare(afpRemote);
 			} finally {
