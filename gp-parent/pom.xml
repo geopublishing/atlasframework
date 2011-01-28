@@ -8,7 +8,8 @@
 	<name>gp-parent</name>
 	<version>1.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>General settings and descriptions of all Geopublishing modules</description>
+	<description>General settings and descriptions of all Geopublishing
+		modules</description>
 	<issueManagement>
 		<system>gforge</system>
 		<url>http://wald.intevation.org/tracker/?group_id=37</url>
@@ -72,8 +73,8 @@
 
 		<!-- Explicitly setting the final name! Do not remove -->
 		<finalName>${project.artifactId}-${project.version}</finalName>
-
 		<resources>
+			
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
@@ -236,7 +237,7 @@
 		</dependency>
 
 		<dependency>
-		<!-- not needed if not traversed -->
+			<!-- not needed if not traversed -->
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -245,9 +246,9 @@
 		</dependency>
 
 		<dependency>
-<!--			Logging with log4j. Die MVN dependency fuer 1.2.15 ist defekt.-->
-<!--			downgraded-->
-<!--			to 1.2.14 http://jira.codehaus.org/browse/MEV-649-->
+			<!-- Logging with log4j. Die MVN dependency fuer 1.2.15 ist defekt. -->
+			<!-- downgraded -->
+			<!-- to 1.2.14 http://jira.codehaus.org/browse/MEV-649 -->
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>1.2.14</version>
@@ -261,7 +262,8 @@
 				<enabled>false</enabled>
 			</snapshots>
 			<id>releases.artifactory.wikisquare.de</id>
-			<name>Releases for geopublishing.org - powered by wikisquare.de</name>
+			<name>Releases for geopublishing.org - powered by wikisquare.de
+			</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-releases</url>
 		</repository>
 
@@ -272,8 +274,10 @@
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<id>snapshots.artifactory.wikisquare.de</id>
-			<name>Snapshots for geopublishing.org - powered by wikisquare.de</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots</url>
+			<name>Snapshots for geopublishing.org - powered by wikisquare.de
+			</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots
+			</url>
 		</repository>
 	</repositories>
 
@@ -281,13 +285,15 @@
 		<snapshotRepository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-snapshots</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local</url>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 		<repository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-releases</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local</url>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
