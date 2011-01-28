@@ -71,14 +71,6 @@ public class GpFtpAtlasExport implements AtlasExporter {
 			ftpClient.quit();
 		}
 
-		// REMOTE!
-		// GpSync gpSync = new GpSync(ace.getAtlasDir());
-		// send( gpSync.getAcs().toText() );
-		//
-		// gpSync.applyZip(zipFile);
-		//
-		// UPLOAD!
-		// show message, zip erstellt mit 100 kb
 	}
 
 }
