@@ -18,10 +18,13 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.geopublishing.gpsync.GpDiff;
 import org.geopublishing.gpsync.GpSync;
+import org.jfree.util.Log;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPTransferType;
+
+import de.schmitzm.swing.formatter.MbDecimalFormatter;
 
 /**
  * Uploads a full or differential ZIP of an atlas to ftp://ftp.geopublishing.org
@@ -46,55 +49,61 @@ public class GpFtpAtlasExport implements AtlasExporter {
 	public void export(ResultProgressHandle progress) throws Exception {
 
 		GpSync gpSync = new GpSync(ace.getAtlasDir(), ace.getBaseName());
-		GpDiff gpDiff = gpSync.compare(requestFingerprint());
+
+		LOGGER.info("Contacting geopublishing.org");
+		progress.setBusy("Contacting geopublishing.org");// i8n
+
+		final AtlasFingerprint requestedFingerprint = requestFingerprint(progress);
+		if (requestedFingerprint == null) {
+			Log.info("GpFtf sync: this is a new atlas.");
+		} else
+			progress.setBusy("Comparing atlases");// i8n
+		GpDiff gpDiff = gpSync.compare(requestedFingerprint);
+
+		if (gpDiff.isSame()) {
+			progress.finished("Atlases are the same. Nothing to upload"); // i8n
+			return;
+		}
+
+		// long sizeMb = calcSize(gpDiff) / 1024 / 1024;
+
+		progress.setBusy("Creating zip"); // i8n
+		File zipFile = gpSync.createZip(gpDiff);
+
+		long zipSizeMb = zipFile.length() / 1024 / 1024;
+		progress.setBusy("Uploading "
+				+ new MbDecimalFormatter().format(zipSizeMb) + " delete "
+				+ gpDiff.getFilesToDelete().size() + "files"); // i8n
 
 		FTPClient ftpClient = new FTPClient();
-		ftpClient.setRemoteHost(FTP_GEOPUBLISHING_ORG);
-		ftpClient.connect();
-		ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
 		try { // quit ftp connection
-
-			// byte[] filesInDir = ftpClient.dir();
-			// gpSync.getAtlasname() + ".txt";
-
-			// boolean fileFound = ArrayUtils.contains(filesInDir, valueToFind)
-			// for (String bla : filesInDir) { // new utility class?
-			// if (bla.equals(gpSync.getAtlasname() + ".txt"))
-			// fileFound = true;
-			// }
-
-			// GpDiff gpDiff = null;
-			// if (fileFound) {
-			// File incomingAfp = File.createTempFile(gpSync.getAtlasname(),
-			// ".txt");
-			// FileOutputStream AfpOut = new FileOutputStream(incomingAfp);
-			// try {
-			// ftpClient.setType(FTPTransferType.BINARY);
-			// ftpClient.get(AfpOut, gpSync.getAtlasname() + ".txt");
-			// AtlasFingerprint afpRemote = new AtlasFingerprint(
-			// incomingAfp, true);
-			// gpDiff = gpSync.compare(afpRemote);
-			// } finally {
-			// AfpOut.close();
-			// incomingAfp.delete();
-			// }
-			// } // createZip with null as gpDiff
-			// else {
-			// gpDiff = gpSync.compare(null);
-			// }
-			File createZip = gpSync.createZip(gpDiff);
-			FileInputStream fis = new FileInputStream(createZip);
+			ftpClient.setRemoteHost(FTP_GEOPUBLISHING_ORG);
+			ftpClient.connect();
+			ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
+			FileInputStream fis = new FileInputStream(zipFile);
 			try {
 				ftpClient.setType(FTPTransferType.BINARY);
 				ftpClient.put(fis, gpSync.getAtlasname() + ".zip");
 			} finally {
 				fis.close();
-				createZip.delete();
+				zipFile.delete();
 			}
 		} finally {
 			ftpClient.quit();
 		}
+		progress.setBusy("Connection cosed. "); // i8n
 
+	}
+
+	/**
+	 * Size of diff to upload uncompressed...
+	 */
+	private long calcSize(GpDiff gpDiff) {
+		long size = 0l;
+		for (String fp : gpDiff.getDiffFilePaths()) {
+			size += new File(ace.getAtlasDir(), fp).length();
+		}
+		return size;
 	}
 
 	/**
@@ -137,27 +146,36 @@ public class GpFtpAtlasExport implements AtlasExporter {
 	 * Initiates a URL request to the gp-hoster servlet and requests a
 	 * fingerprint for this atlas.
 	 * 
+	 * @param progress
+	 * 
 	 * @MOVE GpHoster REST API module one day
 	 */
-	AtlasFingerprint requestFingerprint() {
-		InputStream afp2Url;
-		final String path = GEOPUBLISHING_ORG + "/" + ace.getBaseName()
+	AtlasFingerprint requestFingerprint(ResultProgressHandle progress) {
+		InputStream afp2Is;
+		final String path = GEOPUBLISHING_ORG + ace.getBaseName()
 				+ ".fingerprint";
 		try {
-			afp2Url = new URL(path).openStream();
-			String afp2Txt = convertStreamToString(afp2Url);
-			// if status 404 then return null;
+			LOGGER.debug("Connecting " + path);
+			String afp2Txt;
+			afp2Is = new URL(path).openStream();
+			try {
+				LOGGER.debug("  connecting success!");
+				afp2Txt = convertStreamToString(afp2Is);
+			} finally {
+				afp2Is.close();
+			}
 			if (afp2Txt.contains("ERROR"))
 				return null;
-
 			final AtlasFingerprint afpRemote = new AtlasFingerprint(afp2Txt);
+
 			return afpRemote;
 		} catch (MalformedURLException e) {
 			throw new RuntimeException("Could not get atlas fingerprint from "
 					+ path, e);
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException("Could not get atlas fingerprint from "
-					+ path, e);
+			// if status 404 then return null;
+			// throw new
+			return null;
 		} catch (IOException e) {
 			LOGGER.debug("Could not get atlas fingerprint from " + path, e);
 			return null;
