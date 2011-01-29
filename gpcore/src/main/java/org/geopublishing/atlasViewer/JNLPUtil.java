@@ -124,7 +124,7 @@ public class JNLPUtil {
 				// + " is cached = "
 				// + JNLPUtil.getJNLPDownloadService().isPartCached(
 				// dpe.getId()));
-				
+
 				if (!JNLPUtil.getJNLPDownloadService()
 						.isPartCached(dpe.getId())) {
 					haveToDownload.add(dpe.getId());
@@ -197,6 +197,7 @@ public class JNLPUtil {
 			String protocol = atlasXmlRes.getProtocol();
 
 			if (protocol.startsWith("file")) {
+				LOGGER.info("resourceAsUrl " + atlasXmlRes + " is not from JWS");
 				return isAtlasDataFromJWS = Boolean.FALSE;
 			}
 
