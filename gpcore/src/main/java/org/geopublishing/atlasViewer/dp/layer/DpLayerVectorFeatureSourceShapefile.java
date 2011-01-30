@@ -12,6 +12,7 @@ package org.geopublishing.atlasViewer.dp.layer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.io.GeoImportUtil;
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.feature.style.FeatureChartStyle;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
@@ -95,6 +97,8 @@ public class DpLayerVectorFeatureSourceShapefile extends
 				// First access to the FeatureStore
 
 				if (dataStore == null) {
+
+					checkSizeZero();
 
 					checkIndex();
 
@@ -177,6 +181,20 @@ public class DpLayerVectorFeatureSourceShapefile extends
 			setBrokenException(e);
 			return null;
 		}
+	}
+
+	/**
+	 * Reading a borken 0-bytes Shapefile can hang the reader. So we check
+	 * beforehand.
+	 * 
+	 * @throws IOException
+	 */
+	private void checkSizeZero() throws IOException {
+		ShpFiles shpFiles = new ShpFiles(getUrl());
+		final String shp = shpFiles.get(ShpFileType.SHP);
+		File shpFile = IOUtil.urlToFile(new URL(shp));
+		if (shpFile.length() == 0l)
+			throw new IOException("zero size: " + shp);
 	}
 
 	/**

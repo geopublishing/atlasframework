@@ -66,7 +66,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * A list of (optional) additional {@link LayerStyle}s available for this
 	 * {@link DpLayer}.
 	 */
-	private List<LayerStyle> layerStyles = new ArrayList<LayerStyle>();
+	private final List<LayerStyle> layerStyles = new ArrayList<LayerStyle>();
 
 	/** Caching the maximum envelope of this {@link DpLayer} */
 	protected Envelope envelope = null;
@@ -301,7 +301,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 */
 	public void addLayerStyle(LayerStyle newLayerStyle) {
 		try {
-			LOGGER.debug("addLayerStyle "+newLayerStyle);
+			LOGGER.debug("addLayerStyle " + newLayerStyle);
 			URL testUrl = IOUtil.extendURL(IOUtil.getParentUrl(getUrl()),
 					newLayerStyle.getFilename());
 			testUrl.openStream();
@@ -349,9 +349,9 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		Double result;
 
 		Double simpleQM = super.getQuality();
-		
+
 		// TODO NPE when reloading atlas!
-		
+
 		int countLanguages = getAtlasConfig().getLanguages().size();
 		int existing = countLanguages - getMissingHTMLLanguages().size();
 		double htmlQM = (double) existing / (double) countLanguages;
@@ -506,10 +506,10 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 		target.setStylerInLegend(isStylerInLegend());
 		target.setTableInLegend(isTableVisibleInLegend());
 
-//		DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
-//		dsv.visit(getStyle());
-//		target.setStyle((Style) dsv.getCopy());
-		target.setStyle( StylingUtil.copy(getStyle()));
+		// DuplicatingStyleVisitor dsv = new DuplicatingStyleVisitor();
+		// dsv.visit(getStyle());
+		// target.setStyle((Style) dsv.getCopy());
+		target.setStyle(StylingUtil.copy(getStyle()));
 
 		return target;
 	}

@@ -435,30 +435,38 @@ public class AMLImport {
 	}
 
 	protected void parseFonts(AtlasConfig ac, Node rootFontsNode) {
-		final NodeList childNodes = rootFontsNode.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node childNode = childNodes.item(i);
-			if (!AMLUtil.TAG_FONT.equals(childNode.getLocalName()))
-				continue;
 
-			String relFontPath = childNode.getAttributes()
-					.getNamedItem(AMLUtil.ATT_FONT_FILENAME).getTextContent();
+		try {
 
-			String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME + "/"
-					+ AtlasConfig.FONTS_DIRNAME + "/" + relFontPath;
-			InputStream is = ac.getResourceAsStream(resourceLocation);
-			if (is == null) {
-				warn("Fonts", "The font " + relFontPath
-						+ " could not be found at " + resourceLocation);
-			} else
-				try {
-					Font font = Font.createFont(Font.TRUETYPE_FONT, is);
-					ac.getFonts().add(font);
-					LOGGER.info("Registered a new TTF font: " + font.getName());
-				} catch (Exception e) {
-					LOGGER.error("Couldn't load or register font " + relFontPath,
-							e);
-				}
+			final NodeList childNodes = rootFontsNode.getChildNodes();
+			for (int i = 0; i < childNodes.getLength(); i++) {
+				Node childNode = childNodes.item(i);
+				if (!AMLUtil.TAG_FONT.equals(childNode.getLocalName()))
+					continue;
+
+				String relFontPath = childNode.getAttributes()
+						.getNamedItem(AMLUtil.ATT_FONT_FILENAME)
+						.getTextContent();
+
+				String resourceLocation = AtlasConfig.ATLASDATA_DIRNAME + "/"
+						+ AtlasConfig.FONTS_DIRNAME + "/" + relFontPath;
+				InputStream is = ac.getResourceAsStream(resourceLocation);
+				if (is == null) {
+					warn("Fonts", "The font " + relFontPath
+							+ " could not be found at " + resourceLocation);
+				} else
+					try {
+						Font font = Font.createFont(Font.TRUETYPE_FONT, is);
+						ac.getFonts().add(font);
+						LOGGER.info("Registered a new TTF font: "
+								+ font.getName());
+					} catch (Exception e) {
+						LOGGER.error("Couldn't load or register font "
+								+ relFontPath, e);
+					}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Failed to parseFonts", e);
 		}
 	}
 
@@ -1649,13 +1657,14 @@ public class AMLImport {
 								.getDataPool().get(layerID);
 
 						boolean foundIt = false;
-						for (ChartStyle chart : dpl.getCharts()) {
-							if (chart.getID().equals(styleId)) {
-								availChartsIDs.add(styleId);
-								foundIt = true;
-								break;
+						if (dpl != null)
+							for (ChartStyle chart : dpl.getCharts()) {
+								if (chart.getID().equals(styleId)) {
+									availChartsIDs.add(styleId);
+									foundIt = true;
+									break;
+								}
 							}
-						}
 
 						if (!AtlasViewerGUI.isRunning() && !foundIt) {
 							String msg = "Map '"
