@@ -28,6 +28,7 @@ import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
+import org.geopublishing.geopublisher.export.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -50,157 +51,164 @@ import de.schmitzm.swing.SwingUtil;
  */
 public class ExportWizardResultProducer implements WizardResultProducer {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ExportWizardResultProducer.class);
+    private static final Logger LOGGER = Logger
+            .getLogger(ExportWizardResultProducer.class);
 
-	@Override
-	public boolean cancel(Map settings) {
-		return true;
-	}
+    @Override
+    public boolean cancel(Map settings) {
+        return true;
+    }
 
-	@Override
-	public Object finish(Map wizardData) throws WizardException {
+    @Override
+    public Object finish(Map wizardData) throws WizardException {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
-				.get(ExportWizard.ACE);
-		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
-				false))
-			return null; // TODO what should be return here?
+        final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
+                .get(ExportWizard.ACE);
+        if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
+                false))
+            return null; // TODO what should be return here?
 
-		final Boolean isJws = (Boolean) wizardData
-				.get(ExportWizard.JWS_CHECKBOX);
-		final Boolean isDisk = (Boolean) wizardData
-				.get(ExportWizard.DISK_CHECKBOX);
-		final boolean isDiskZip = (Boolean) wizardData
-				.get(ExportWizard.DISKZIP_CHECKBOX);
-		final String exportDir = (String) wizardData
-				.get(ExportWizard.EXPORTFOLDER);
-		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
+        final Boolean isJws = (Boolean) wizardData
+                .get(ExportWizard.JWS_CHECKBOX);
+        final Boolean isFtp = (Boolean) wizardData
+                .get(ExportWizard.FTP_CHECKBOX);
+        final Boolean isDisk = (Boolean) wizardData
+                .get(ExportWizard.DISK_CHECKBOX);
+        final boolean isDiskZip = (Boolean) wizardData
+                .get(ExportWizard.DISKZIP_CHECKBOX);
+        final String exportDir = (String) wizardData
+                .get(ExportWizard.EXPORTFOLDER);
+        final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
 
-		/**
-		 * Store stuff to the geopublisher.properties
-		 */
-		{
-			if (isJws) {
-				// GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
-				// .get(ExportWizard.JNLPURL));
-				ace.setJnlpBaseUrl((String) wizardData
-						.get(ExportWizard.JNLPURL));
-			}
+        /**
+         * Store stuff to the geopublisher.properties
+         */
+        {
+            if (isJws) {
+                // GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
+                // .get(ExportWizard.JNLPURL));
+                ace.setJnlpBaseUrl((String) wizardData
+                        .get(ExportWizard.JNLPURL));
+            }
 
-			GPProps.set(Keys.LastExportFolder, exportDir);
+            GPProps.set(Keys.LastExportFolder, exportDir);
+            GPProps.set(Keys.LastExportFtp, isFtp);
 
-			GPProps.set(Keys.LastExportDisk, isDisk);
-			GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
-			GPProps.set(Keys.LastExportJWS, isJws);
+            GPProps.set(Keys.LastExportDisk, isDisk);
+            GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
+            GPProps.set(Keys.LastExportJWS, isJws);
 
-			GPProps.store();
-		}
+            GPProps.store();
+        }
 
-		/**
-		 * Start the export as a DeferredWizardResult
-		 */
-		DeferredWizardResult result = new DeferredWizardResult(true) {
+        /**
+         * Start the export as a DeferredWizardResult
+         */
+        DeferredWizardResult result = new DeferredWizardResult(true) {
 
-			private JarExportUtil jarExportUtil;
-			private ResultProgressHandle progress;
+            private JarExportUtil jarExportUtil;
+            private ResultProgressHandle progress;
+            private GpFtpAtlasExport gpFtpAtlasExport;
 
-			/**
-			 * If the user aborts the export, we tell it to JarExportUtil
-			 * instance
-			 */
-			@Override
-			public void abort() {
-				jarExportUtil.abort();
-				progress.finished(getAbortSummary());
-			};
+            /**
+             * If the user aborts the export, we tell it to JarExportUtil
+             * instance
+             */
+            @Override
+            public void abort() {
+                jarExportUtil.abort();
+                progress.finished(getAbortSummary());
+            };
 
-			@Override
-			public void start(Map wizardData, ResultProgressHandle progress) {
-				this.progress = progress;
+            @Override
+            public void start(Map wizardData, ResultProgressHandle progress) {
+                this.progress = progress;
 
-				try {
-					jarExportUtil = new JarExportUtil(ace, new File(exportDir),
-							isDisk, isJws, copyJRE);
-					jarExportUtil.setZipDiskAfterExport(isDiskZip);
-					jarExportUtil.export(progress);
-				} catch (AtlasCancelException e) {
-					LOGGER.info("Export aborted by user:", e);
-					progress.finished(getAbortSummary());
-					return;
-				} catch (Exception e) {
-					LOGGER.error("Export failed!", e);
-					progress.failed(e.getMessage(), false);
-					progress.finished(getErrorPanel(e));
-					ExceptionDialog.show(null, e);
-					return;
-				}
+                try {
+                    jarExportUtil = new JarExportUtil(ace, new File(exportDir),
+                            isDisk, isJws, copyJRE);
+                    jarExportUtil.setZipDiskAfterExport(isDiskZip);
+                    jarExportUtil.export(progress);
+                    gpFtpAtlasExport = new GpFtpAtlasExport(ace);
+                    gpFtpAtlasExport.export(progress);
 
-				/*
-				 * Only gets here if the Export was successful
-				 */
-				Summary summary = Summary.create(getSummaryJPanel(), new File(
-						exportDir));
+                } catch (AtlasCancelException e) {
+                    LOGGER.info("Export aborted by user:", e);
+                    progress.finished(getAbortSummary());
+                    return;
+                } catch (Exception e) {
+                    LOGGER.error("Export failed!", e);
+                    progress.failed(e.getMessage(), false);
+                    progress.finished(getErrorPanel(e));
+                    ExceptionDialog.show(null, e);
+                    return;
+                }
 
-				progress.finished(summary);
+                /*
+                 * Only gets here if the Export was successful
+                 */
+                Summary summary = Summary.create(getSummaryJPanel(), new File(
+                        exportDir));
 
-			}
+                progress.finished(summary);
 
-			private JPanel getErrorPanel(Exception e) {
-				JPanel panel = new JPanel(new MigLayout("wrap 1"));
+            }
 
-				panel.add(new JTextArea(e.getLocalizedMessage()));
+            private JPanel getErrorPanel(Exception e) {
+                JPanel panel = new JPanel(new MigLayout("wrap 1"));
 
-				return panel;
-			}
+                panel.add(new JTextArea(e.getLocalizedMessage()));
 
-			/**
-			 * Generates the last WizardPage
-			 */
-			private JPanel getSummaryJPanel() {
-				JPanel panel = new JPanel(new MigLayout("wrap 1"));
+                return panel;
+            }
 
-				String exportJWSandDISKdirRepresentation = exportDir;
-				if (SystemUtils.IS_OS_WINDOWS) {
-					// Otherwise all Windows paths are missing the slashes
-					exportJWSandDISKdirRepresentation = exportJWSandDISKdirRepresentation
-							.replace("\\", "\\\\");
-				}
+            /**
+             * Generates the last WizardPage
+             */
+            private JPanel getSummaryJPanel() {
+                JPanel panel = new JPanel(new MigLayout("wrap 1"));
 
-				panel.add(new JLabel(GeopublisherGUI.R(
-						"Export.Dialog.Finished.Msg",
-						exportJWSandDISKdirRepresentation)));
+                String exportJWSandDISKdirRepresentation = exportDir;
+                if (SystemUtils.IS_OS_WINDOWS) {
+                    // Otherwise all Windows paths are missing the slashes
+                    exportJWSandDISKdirRepresentation = exportJWSandDISKdirRepresentation
+                            .replace("\\", "\\\\");
+                }
 
-				final JButton openFolderButton = new JButton(
-						GeopublisherGUI
-								.R("ExportWizard.Result.OpenFolderButton.Label"));
-				openFolderButton.addActionListener(new ActionListener() {
+                panel.add(new JLabel(GeopublisherGUI.R(
+                        "Export.Dialog.Finished.Msg",
+                        exportJWSandDISKdirRepresentation)));
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						SwingUtil.openOSFolder(new File(exportDir));
-						openFolderButton.setEnabled(false);
+                final JButton openFolderButton = new JButton(
+                        GeopublisherGUI
+                                .R("ExportWizard.Result.OpenFolderButton.Label"));
+                openFolderButton.addActionListener(new ActionListener() {
 
-						// TODO Here it would be nice to close the Wizard... but
-						// how??
-					}
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        SwingUtil.openOSFolder(new File(exportDir));
+                        openFolderButton.setEnabled(false);
 
-				});
+                        // TODO Here it would be nice to close the Wizard... but
+                        // how??
+                    }
 
-				panel.add(openFolderButton, "align center");
+                });
 
-				return panel;
-			}
-		};
+                panel.add(openFolderButton, "align center");
 
-		return result;
-	}
+                return panel;
+            }
+        };
 
-	protected Summary getAbortSummary() {
-		JPanel aborted = new JPanel(new MigLayout());
-		aborted.add(new JLabel(
-				"The export has been aborted by the user. The temporary folder have been deleted."));
+        return result;
+    }
 
-		return Summary.create(aborted, "abort");
-	}
+    protected Summary getAbortSummary() {
+        JPanel aborted = new JPanel(new MigLayout());
+        aborted.add(new JLabel(
+                "The export has been aborted by the user. The temporary folder have been deleted."));
+
+        return Summary.create(aborted, "abort");
+    }
 }
