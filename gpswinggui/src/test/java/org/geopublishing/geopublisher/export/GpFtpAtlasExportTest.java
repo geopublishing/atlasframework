@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class GpFtpAtlasExportTest extends TestingClass {
@@ -43,6 +44,9 @@ public class GpFtpAtlasExportTest extends TestingClass {
 				.requestFingerprint(null);
 		System.out.println(requestFingerprint);
 		gpFtpAtlasExport.export(progress);
+
+		// wait a minute for gphoster to locate the zip
+		Thread.sleep(LangUtil.MIN_MILLIS * 2);
 
 		requestFingerprint = gpFtpAtlasExport.requestFingerprint(null);
 		assertNotNull("After the upload the atlas must have a fingerprint",
