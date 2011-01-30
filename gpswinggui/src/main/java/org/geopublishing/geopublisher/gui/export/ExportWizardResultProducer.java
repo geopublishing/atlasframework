@@ -91,7 +91,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
                         .get(ExportWizard.JNLPURL));
             }
 
-            GPProps.set(Keys.LastExportFolder, exportDir);
+            if (exportDir != null)
+                GPProps.set(Keys.LastExportFolder, exportDir);
             GPProps.set(Keys.LastExportFtp, isFtp);
 
             GPProps.set(Keys.LastExportDisk, isDisk);
@@ -123,25 +124,35 @@ public class ExportWizardResultProducer implements WizardResultProducer {
             @Override
             public void start(Map wizardData, ResultProgressHandle progress) {
                 this.progress = progress;
+                if (isFtp) {
+                    try {
+                        gpFtpAtlasExport = new GpFtpAtlasExport(ace);
+                        gpFtpAtlasExport.export(progress);
+                    } catch (Exception e) {
+                        LOGGER.error("Ftp Export failed!", e);
+                        return;
+                    }
 
-                try {
-                    jarExportUtil = new JarExportUtil(ace, new File(exportDir),
-                            isDisk, isJws, copyJRE);
-                    jarExportUtil.setZipDiskAfterExport(isDiskZip);
-                    jarExportUtil.export(progress);
-                    gpFtpAtlasExport = new GpFtpAtlasExport(ace);
-                    gpFtpAtlasExport.export(progress);
+                }
+                if (isDisk || isJws) {
 
-                } catch (AtlasCancelException e) {
-                    LOGGER.info("Export aborted by user:", e);
-                    progress.finished(getAbortSummary());
-                    return;
-                } catch (Exception e) {
-                    LOGGER.error("Export failed!", e);
-                    progress.failed(e.getMessage(), false);
-                    progress.finished(getErrorPanel(e));
-                    ExceptionDialog.show(null, e);
-                    return;
+                    try {
+                        jarExportUtil = new JarExportUtil(ace, new File(
+                                exportDir), isDisk, isJws, copyJRE);
+                        jarExportUtil.setZipDiskAfterExport(isDiskZip);
+                        jarExportUtil.export(progress);
+
+                    } catch (AtlasCancelException e) {
+                        LOGGER.info("Export aborted by user:", e);
+                        progress.finished(getAbortSummary());
+                        return;
+                    } catch (Exception e) {
+                        LOGGER.error("Export failed!", e);
+                        progress.failed(e.getMessage(), false);
+                        progress.finished(getErrorPanel(e));
+                        ExceptionDialog.show(null, e);
+                        return;
+                    }
                 }
 
                 /*

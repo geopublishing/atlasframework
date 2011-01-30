@@ -53,9 +53,11 @@ public class ExportWizardPage_DiskJwsSelection extends WizardPage {
     @Override
     protected String validateContents(final Component component,
             final Object event) {
-        if (!getJwsJCheckbox().isSelected() && !getDiskJCheckbox().isSelected()
-                && !getFtpJCheckbox().isSelected())
+        if ((!getJwsJCheckbox().isSelected())
+                && (!getDiskJCheckbox().isSelected())
+                && (!getFtpJCheckbox().isSelected())) {
             return validationJwsOrDiskFailedMsg;
+        }
         return null;
     }
 

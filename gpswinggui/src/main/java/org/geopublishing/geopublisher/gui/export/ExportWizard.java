@@ -161,6 +161,9 @@ public class ExportWizard extends WizardBranchController {
         if (isJws != null && isJws)
             path = LangUtil.extendArray(path,
                     ExportWizardPage_JNLPDefinition.class);
+        if (isFtp != null && isFtp) {
+            path = LangUtil.extendArray(path, ExportWizardPage_FtpExport.class);
+        }
 
         // LOGGER.debug("getWizardForStep " + step + " returns " + path);
         return WizardPage.createWizard(path, FINISHER);
