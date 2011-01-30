@@ -28,6 +28,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.data.DataUtilities;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -83,7 +84,7 @@ public class GpTestingUtil extends GTTestingUtil {
 
 		/**
 		 * Returns a {@link File} to a <code>atlas.gpa</code>. If the atlas
-		 * comes from the classpath, it is copied to a temp directory.
+		 * comes from the classpath, it is copied to a temp directory first.
 		 */
 		public File getFile() {
 			try {
