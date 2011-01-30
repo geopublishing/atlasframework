@@ -70,10 +70,10 @@ public class GpFtpAtlasExport implements AtlasExporter {
 		progress.setBusy("Creating zip"); // i8n
 		File zipFile = gpSync.createZip(gpDiff);
 
-		long zipSizeMb = zipFile.length() / 1024 / 1024;
-		progress.setBusy("Uploading "
-				+ new MbDecimalFormatter().format(zipSizeMb) + " delete "
-				+ gpDiff.getFilesToDelete().size() + "files"); // i8n
+		long zipSizeMb = zipFile.length();
+		progress.setBusy("Uploading " + gpDiff.getDiffFilePaths().size()
+				+ " files (" + new MbDecimalFormatter().format(zipSizeMb)
+				+ "), delete " + gpDiff.getFilesToDelete().size() + "files"); // i8n
 
 		FTPClient ftpClient = new FTPClient();
 		try { // quit ftp connection
