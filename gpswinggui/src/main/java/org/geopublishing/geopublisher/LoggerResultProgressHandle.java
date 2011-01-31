@@ -3,14 +3,12 @@ package org.geopublishing.geopublisher;
 import java.awt.Container;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
 /**
  * This implementation of a {@link ResultProgressHandle} will pipe all output to
  * the logger. If not {@link Logger} is given, it outputs to sysout
  */
-@Ignore
 public class LoggerResultProgressHandle implements ResultProgressHandle {
 
 	public LoggerResultProgressHandle() {
