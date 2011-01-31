@@ -1,24 +1,29 @@
 package org.geopublishing.geopublisher.gui.export;
 
 import java.awt.Component;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-public class ExportWizardPage_FtpExport extends WizardPage {
+import de.schmitzm.io.IOUtil;
 
+public class ExportWizardPage_FtpExport extends WizardPage {
+    final static protected Logger LOGGER = Logger
+            .getLogger(ExportWizardPage_FtpExport.class);
     private JTextField UrlJTextField;
+    private final String validationFtpFailedMsg = GeopublisherGUI
+            .R("ExportWizard.Ftp.ValidationError");
     JLabel explanationJLabel = new JLabel(
             GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
 
     public ExportWizardPage_FtpExport() {
-        final AtlasConfigEditable ace = (AtlasConfigEditable) super
-                .getWizardData(ExportWizard.ACE);
         initGui();
     }
 
@@ -48,8 +53,15 @@ public class ExportWizardPage_FtpExport extends WizardPage {
     @Override
     protected String validateContents(final Component component,
             final Object event) {
-
+        boolean urlExists = false;;
+        try {
+            urlExists = IOUtil
+                    .urlExists(new URL("http://www.geopublishing.org"));
+        } catch (MalformedURLException e) {
+            LOGGER.error("", e);
+        }
+        if (!urlExists)
+            return validationFtpFailedMsg;
         return null;
     }
-
 }
