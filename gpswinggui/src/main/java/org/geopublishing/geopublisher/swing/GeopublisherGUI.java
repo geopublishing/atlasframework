@@ -134,9 +134,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 */
 	public static GeopublisherGUI getInstance(boolean askToOpenLastAtlas) {
 		if (instance == null) {
-			LOGGER.error(
-					"GeopublisherGUI instance is requested without arguments and it doesn't exists yet!",
-					new RuntimeException());
+			// LOGGER.error(
+			// "GeopublisherGUI instance is requested without arguments and it doesn't exists yet!",
+			// new RuntimeException());
 			instance = new GeopublisherGUI(askToOpenLastAtlas);
 		}
 		return instance;

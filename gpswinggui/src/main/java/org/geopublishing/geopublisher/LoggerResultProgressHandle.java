@@ -11,12 +11,12 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
  * the logger. If not {@link Logger} is given, it outputs to sysout
  */
 @Ignore
-public class TestResultProgressHandle implements ResultProgressHandle {
+public class LoggerResultProgressHandle implements ResultProgressHandle {
 
-	public TestResultProgressHandle() {
+	public LoggerResultProgressHandle() {
 	}
 
-	public TestResultProgressHandle(Logger logger) {
+	public LoggerResultProgressHandle(Logger logger) {
 		this.logger = logger;
 	}
 

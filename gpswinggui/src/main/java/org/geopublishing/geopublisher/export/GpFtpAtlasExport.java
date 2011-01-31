@@ -1,20 +1,18 @@
 package org.geopublishing.geopublisher.export;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.LoggerResultProgressHandle;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.geopublishing.gpsync.GpDiff;
 import org.geopublishing.gpsync.GpSync;
@@ -24,29 +22,30 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import com.enterprisedt.net.ftp.FTPClient;
 import com.enterprisedt.net.ftp.FTPTransferType;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.formatter.MbDecimalFormatter;
 
 /**
  * Uploads a full or differential ZIP of an atlas to ftp://ftp.geopublishing.org
  */
-public class GpFtpAtlasExport implements AtlasExporter {
+public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 	Logger LOGGER = Logger.getLogger(GpFtpAtlasExport.class);
 
 	public static final String FTP_GEOPUBLISHING_ORG = "ftp.geopublishing.org";
 	public static final String GEOPUBLISHING_ORG = "http://gisbert.wikisquare.de:8088/gp-hoster-jsf/";
 
-	/**
-	 * AtlasConfig zu export
-	 */
-	private final AtlasConfigEditable ace;
+	public GpFtpAtlasExport(AtlasConfigEditable ace,
+			ResultProgressHandle progress) {
+		super(ace, progress);
+	}
 
 	public GpFtpAtlasExport(AtlasConfigEditable ace) {
-		this.ace = ace;
+		super(ace, new LoggerResultProgressHandle());
 	}
 
 	@Override
-	public void export(ResultProgressHandle progress) throws Exception {
+	public void export() throws Exception {
 
 		GpSync gpSync = new GpSync(ace.getAtlasDir(), ace.getBaseName());
 
@@ -59,6 +58,7 @@ public class GpFtpAtlasExport implements AtlasExporter {
 		} else
 			progress.setBusy("Comparing atlases");// i8n
 		GpDiff gpDiff = gpSync.compare(requestedFingerprint);
+		checkAbort();
 
 		if (gpDiff.isSame()) {
 			progress.finished("Atlases are the same. Nothing to upload"); // i8n
@@ -69,13 +69,14 @@ public class GpFtpAtlasExport implements AtlasExporter {
 
 		progress.setBusy("Creating zip"); // i8n
 		File zipFile = gpSync.createZip(gpDiff);
+		checkAbort();
 
 		long zipSizeMb = zipFile.length();
 		progress.setBusy("Uploading " + gpDiff.getDiffFilePaths().size()
 				+ " files (" + new MbDecimalFormatter().format(zipSizeMb)
 				+ "), delete " + gpDiff.getFilesToDelete().size() + "files"); // i8n
 
-		FTPClient ftpClient = new FTPClient();
+		final FTPClient ftpClient = new FTPClient();
 		try { // quit ftp connection
 			ftpClient.setRemoteHost(FTP_GEOPUBLISHING_ORG);
 			ftpClient.connect();
@@ -83,15 +84,40 @@ public class GpFtpAtlasExport implements AtlasExporter {
 			FileInputStream fis = new FileInputStream(zipFile);
 			try {
 				ftpClient.setType(FTPTransferType.BINARY);
-				ftpClient.put(fis, gpSync.getAtlasname() + ".zip");
+
+				// Start a Timer-Thread to look for cancel requests
+				final Timer timer = new Timer();
+				timer.schedule(new TimerTask() {
+
+					@Override
+					public void run() {
+						if (cancel.get() == true) {
+							ftpClient.cancelTransfer();
+							timer.cancel();
+						}
+					}
+				}, 300, 300);
+
+				final String zipFilename = gpSync.getAtlasname() + ".zip";
+				Log.info("FTP Upload " + zipFilename + " started");
+				ftpClient.put(fis, zipFilename);
+				if (cancel.get() == true) {
+					Log.info("FTP Upload " + zipFilename
+							+ " cancelled, deleting zip on ftp");
+					ftpClient.delete(gpSync.getAtlasname() + ".zip");
+					Log.debug("deleting " + zipFilename + " on ftp finished");
+				} else
+					Log.info("FTP Upload " + zipFilename + " finished");
+				checkAbort();
+
 			} finally {
 				fis.close();
 				zipFile.delete();
 			}
 		} finally {
 			ftpClient.quit();
+			progress.setBusy("Connection cosed. "); // i8n
 		}
-		progress.setBusy("Connection cosed. "); // i8n
 
 	}
 
@@ -106,41 +132,42 @@ public class GpFtpAtlasExport implements AtlasExporter {
 		return size;
 	}
 
-	/**
-	 * Read a (not too big) Inputtream directly into a String.
-	 * 
-	 * @param is
-	 *            {@link InputStream} to read from
-	 * 
-	 * @deprecated use schmitzm
-	 */
-	@Deprecated
-	public String convertStreamToString(InputStream is) throws IOException {
-		/*
-		 * To convert the InputStream to String we use the Reader.read(char[]
-		 * buffer) method. We iterate until the Reader return -1 which means
-		 * there's no more data to read. We use the StringWriter class to
-		 * produce the string.
-		 */
-		if (is != null) {
-			Writer writer = new StringWriter();
-
-			char[] buffer = new char[1024];
-			try {
-				Reader reader = new BufferedReader(new InputStreamReader(is,
-						"UTF-8"));
-				int n;
-				while ((n = reader.read(buffer)) != -1) {
-					writer.write(buffer, 0, n);
-				}
-			} finally {
-				is.close();
-			}
-			return writer.toString();
-		} else {
-			return "";
-		}
-	}
+	//
+	// /**
+	// * Read a (not too big) Inputtream directly into a String.
+	// *
+	// * @param is
+	// * {@link InputStream} to read from
+	// *
+	// * @deprecated use schmitzm
+	// */
+	// @Deprecated
+	// public String convertStreamToString(InputStream is) throws IOException {
+	// /*
+	// * To convert the InputStream to String we use the Reader.read(char[]
+	// * buffer) method. We iterate until the Reader return -1 which means
+	// * there's no more data to read. We use the StringWriter class to
+	// * produce the string.
+	// */
+	// if (is != null) {
+	// Writer writer = new StringWriter();
+	//
+	// char[] buffer = new char[1024];
+	// try {
+	// Reader reader = new BufferedReader(new InputStreamReader(is,
+	// "UTF-8"));
+	// int n;
+	// while ((n = reader.read(buffer)) != -1) {
+	// writer.write(buffer, 0, n);
+	// }
+	// } finally {
+	// is.close();
+	// }
+	// return writer.toString();
+	// } else {
+	// return "";
+	// }
+	// }
 
 	/**
 	 * Initiates a URL request to the gp-hoster servlet and requests a
@@ -160,7 +187,7 @@ public class GpFtpAtlasExport implements AtlasExporter {
 			afp2Is = new URL(path).openStream();
 			try {
 				LOGGER.debug("  connecting success!");
-				afp2Txt = convertStreamToString(afp2Is);
+				afp2Txt = IOUtil.convertStreamToString(afp2Is);
 			} finally {
 				afp2Is.close();
 			}

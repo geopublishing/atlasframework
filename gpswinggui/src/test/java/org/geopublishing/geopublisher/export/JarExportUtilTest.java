@@ -74,7 +74,7 @@ public class JarExportUtilTest extends TestingClass {
 	}
 
 	/**
-	 * Strangely fails on my mashine, but not on hudson... 
+	 * Strangely fails on my mashine, but not on hudson...
 	 */
 	@Test
 	public void testWutksBug() throws IOException {
@@ -112,7 +112,7 @@ public class JarExportUtilTest extends TestingClass {
 		// LOGGER.info("Signer Passwort = " + passwort);
 		assertNotNull(passwort);
 
-		jeu.export(null);
+		jeu.export();
 
 		assertTrue("File autorun.inf exists in DISK folder",
 				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
@@ -274,7 +274,7 @@ public class JarExportUtilTest extends TestingClass {
 		// LOGGER.info("Signer Passwort = " + passwort);
 		assertNotNull(passwort);
 
-		jeu.export(null);
+		jeu.export();
 
 		String[] files = atlasExportTesttDir.list();
 		assertTrue((files[0].equals("JWS") && files[1].equals("DISK"))
@@ -428,7 +428,7 @@ public class JarExportUtilTest extends TestingClass {
 		FileUtils.deleteDirectory(atlasExportTesttDir);
 		assertTrue(atlasExportTesttDir.mkdir());
 
-		jeu.export(null);
+		jeu.export();
 
 		String[] files = atlasExportTesttDir.list();
 		assertTrue((files[0].equals("JWS") && files[1].equals("DISK"))

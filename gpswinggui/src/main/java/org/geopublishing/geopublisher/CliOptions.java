@@ -340,7 +340,7 @@ public class CliOptions extends Options {
 									toDisk = toJws = true;
 
 								JarExportUtil jeu = new JarExportUtil(ace,
-										exportFile, toDisk, toJws, false);
+										null, exportFile, toDisk, toJws, false);
 								jeu.setZipDiskAfterExport(commandLine
 										.hasOption(ZIPDISK));
 
@@ -357,7 +357,7 @@ public class CliOptions extends Options {
 
 								jeu.setKeepTempFiles(commandLine
 										.hasOption(KEEPTEMP));
-								jeu.export(null);
+								jeu.export();
 							} catch (Exception e) {
 								errorDuringInterpret = Errors.EXPORT_FAILED;
 								log.error(Errors.EXPORT_FAILED.toString(), e);

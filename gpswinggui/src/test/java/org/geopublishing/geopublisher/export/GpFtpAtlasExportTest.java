@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
-import org.geopublishing.geopublisher.TestResultProgressHandle;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.junit.After;
 import org.junit.Before;
@@ -42,7 +41,7 @@ public class GpFtpAtlasExportTest extends TestingClass {
 				.requestFingerprint(null);
 		System.out.println(requestFingerprint);
 
-		gpFtpAtlasExport.export(new TestResultProgressHandle());
+		gpFtpAtlasExport.export();
 
 		// wait a minute for gphoster to locate the zip
 		Thread.sleep(LangUtil.MIN_MILLIS * 2);

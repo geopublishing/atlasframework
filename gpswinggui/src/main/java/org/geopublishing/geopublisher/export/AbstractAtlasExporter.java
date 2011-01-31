@@ -2,6 +2,7 @@ package org.geopublishing.geopublisher.export;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
@@ -17,6 +18,31 @@ import de.schmitzm.versionnumber.ReleaseUtil;
 abstract public class AbstractAtlasExporter implements AtlasExporter {
 
 	final static Logger LOGGER = Logger.getLogger(AbstractAtlasExporter.class);
+
+	/**
+	 * Used to trigger canellation of the export. Export should idikate that
+	 * it's cleaning up the mess and return.
+	 */
+	public AtomicBoolean cancel = new AtomicBoolean(false);
+
+	ResultProgressHandle progress;
+
+	/**
+	 * Monitors the isRunning method of {@link #progress}. If it has been
+	 * canceled throws an {@link AtlasExportCancelledException}.
+	 * 
+	 * User <code>jarExportUtil.cancel.set(true);</code> to request the thread
+	 * to cancel.
+	 * 
+	 * @throws AtlasExportCancelledException
+	 */
+	protected void checkAbort() throws AtlasCancelException {
+		// if (progress != null && !progress.isRunning())
+		if (cancel.get() == true) {
+			progress.setBusy("Cancelled..."); // i8n
+			throw new AtlasCancelException();
+		}
+	}
 
 	/** Internal counting for the percentage bar **/
 	int currSteps = 0;
@@ -42,8 +68,6 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 			LOGGER.info(msg);
 		}
 	}
-
-	ResultProgressHandle progress;
 
 	private static final String version = ReleaseUtil
 			.getVersionMaj(AVUtil.class)
@@ -93,8 +117,6 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	 */
 	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
 
-	private volatile boolean aborted = false;
-
 	protected final AtlasConfigEditable ace;
 
 	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = AVUtil.ATLAS_TEMP_FILE_BASE_ID
@@ -106,27 +128,10 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	 */
 	private boolean keepTempFiles = false;
 
-	public AbstractAtlasExporter(AtlasConfigEditable ace) {
+	public AbstractAtlasExporter(AtlasConfigEditable ace,
+			ResultProgressHandle progress) {
+		this.progress = progress;
 		this.ace = ace;
-	}
-
-	/**
-	 * Can be called from external to abort the export process
-	 */
-	public void abort() {
-		aborted = true;
-	}
-
-	/**
-	 * Monitors the isRunning method of {@link #progress}. If it has been
-	 * canceled throws an {@link AtlasExportCancelledException}.
-	 * 
-	 * @throws AtlasExportCancelledException
-	 */
-	void checkAbort() throws AtlasCancelException {
-		// if (progress != null && !progress.isRunning())
-		if (aborted)
-			throw new AtlasCancelException();
 	}
 
 	/**

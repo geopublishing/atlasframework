@@ -75,6 +75,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
+import org.geopublishing.geopublisher.LoggerResultProgressHandle;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.data.DataUtilities;
@@ -420,9 +421,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * @throws IOException
 	 */
 	public JarExportUtil(final AtlasConfigEditable ace_,
-			final File exportDirectory, final Boolean toDisk,
-			final Boolean toJws, final Boolean copyJRE) throws IOException {
-		super(ace_);
+			ResultProgressHandle progress, final File exportDirectory,
+			final Boolean toDisk, final Boolean toJws, final Boolean copyJRE)
+			throws IOException {
+		super(ace_, progress);
 		this.toDisk = toDisk;
 		this.toJws = toJws;
 		this.copyJRE = copyJRE;
@@ -460,6 +462,33 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			targetDirJWS.mkdirs();
 		}
 
+	}
+
+	/**
+	 * Initializes an {@link JarExportUtil} object to do the real work. The
+	 * constructor already creates a temp dir that start with
+	 * ATLAS_TEMP_FILE_EXPORTINSTANCE_ID.
+	 * 
+	 * @param ace
+	 *            Instance of {@link AtlasConfigEditable} to export.
+	 * @param exportDirectory
+	 *            A {@link File} denoting the main export folder where DISK and
+	 *            JWS will be created.
+	 * @param toDisk
+	 *            export the DISK version?
+	 * @param toJws
+	 *            export the JWS version?
+	 * @param copyJRE
+	 *            If {@link #toDisk} is <code>true</code>, this controls whether
+	 *            the locally installed JRE should be copied to DISK/jre. May be
+	 *            <code>null</code>.
+	 * @throws IOException
+	 */
+	public JarExportUtil(final AtlasConfigEditable ace_,
+			final File exportDirectory, final Boolean toDisk,
+			final Boolean toJws, final Boolean copyJRE) throws IOException {
+		this(ace_, new LoggerResultProgressHandle(), exportDirectory, toDisk,
+				toJws, copyJRE);
 	}
 
 	private void addAtlasXMLToJar(final File targetJar,
@@ -1600,9 +1629,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * @throws Exception
 	 * 
 	 */
-	public void export(final ResultProgressHandle progress) throws Exception {
-
-		this.progress = progress;
+	public void export() throws Exception {
 
 		totalSteps = 10;
 

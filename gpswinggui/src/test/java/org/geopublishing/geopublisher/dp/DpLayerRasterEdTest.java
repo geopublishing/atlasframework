@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
 import rachel.loader.JarResourceLoader;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
+
 public class DpLayerRasterEdTest extends TestingClass {
 
 	static AtlasConfigEditable ace;
@@ -97,7 +98,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 
 		JarExportUtil jeu = new JarExportUtil(ace, atlasExportTesttDir, true,
 				false, false);
-		jeu.export(null);
+		jeu.export();
 	}
 
 	private AtlasConfig loadAtlas() throws IOException {
