@@ -4,11 +4,16 @@ import java.awt.Component;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.apache.log4j.Logger;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.export.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -22,9 +27,20 @@ public class ExportWizardPage_FtpExport extends WizardPage {
             .R("ExportWizard.Ftp.ValidationError");
     JLabel explanationJLabel = new JLabel(
             GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
+    JCheckBox firstSyncJCheckBox;
+    private final AtlasConfigEditable ace;
 
     public ExportWizardPage_FtpExport() {
+        ace = GeopublisherGUI.getInstance().getAce();
         initGui();
+    }
+
+    private boolean checkFirstExport() {
+        final String path = GpFtpAtlasExport.GEOPUBLISHING_ORG
+                + ace.getBaseName() + ".fingerprint";
+        boolean isFirstExport = !urlIsOnline(path);
+        return isFirstExport;
+
     }
 
     public static String getDescription() {
@@ -34,9 +50,20 @@ public class ExportWizardPage_FtpExport extends WizardPage {
     private void initGui() {
         setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
         setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
+        setLayout(new MigLayout("wrap 1"));
         add(explanationJLabel);
+        add(getFirstSyncJCheckBox());
         add(getUrlJTextField());
         getUrlJTextField().setText("http://geopublishing.org");
+    }
+
+    private JCheckBox getFirstSyncJCheckBox() {
+        if (firstSyncJCheckBox == null) {
+            firstSyncJCheckBox = new JCheckBox("Create new User");
+            firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
+            firstSyncJCheckBox.setSelected(checkFirstExport());
+        }
+        return firstSyncJCheckBox;
     }
 
     private JTextField getUrlJTextField() {
@@ -54,14 +81,19 @@ public class ExportWizardPage_FtpExport extends WizardPage {
     protected String validateContents(final Component component,
             final Object event) {
         boolean urlExists = false;;
-        try {
-            urlExists = IOUtil
-                    .urlExists(new URL("http://www.geopublishing.org"));
-        } catch (MalformedURLException e) {
-            LOGGER.error("", e);
-        }
+        urlExists = urlIsOnline("http://www.geopublishing.org");
         if (!urlExists)
             return validationFtpFailedMsg;
         return null;
+    }
+
+    private boolean urlIsOnline(String path) {
+        boolean urlExists = false;
+        try {
+            urlExists = IOUtil.urlExists(new URL(path));
+        } catch (MalformedURLException e) {
+            LOGGER.error("", e);
+        }
+        return urlExists;
     }
 }

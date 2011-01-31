@@ -70,6 +70,9 @@ public class ExportWizard extends WizardBranchController {
 
     public static final String JNLPURL = "jnlpCodebase";
 
+    /** Used to identify whether a Sync to FTP is a first one **/
+    final public static String FTP_FIRST = "firstSync?";
+
     /**
      * This constructor also defines the default (first) steps of the wizard
      * until it branches.
@@ -150,6 +153,7 @@ public class ExportWizard extends WizardBranchController {
         Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
         Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
         Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
+        Boolean isFirstSync = (Boolean) wizardData.get(ExportWizard.FTP_FIRST);
 
         Class[] path = new Class[] {};
 
@@ -163,7 +167,12 @@ public class ExportWizard extends WizardBranchController {
                     ExportWizardPage_JNLPDefinition.class);
         if (isFtp != null && isFtp) {
             path = LangUtil.extendArray(path, ExportWizardPage_FtpExport.class);
+            if (isFirstSync != null && isFirstSync)
+                path = LangUtil.extendArray(path,
+                        ExportWizardPage_FirstSync.class);
         }
+        // if (isFirstSync != null && isFirstSync) {
+        // }
 
         // LOGGER.debug("getWizardForStep " + step + " returns " + path);
         return WizardPage.createWizard(path, FINISHER);
