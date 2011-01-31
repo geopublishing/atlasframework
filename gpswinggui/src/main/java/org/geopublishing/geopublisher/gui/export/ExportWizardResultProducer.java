@@ -13,6 +13,8 @@ package org.geopublishing.geopublisher.gui.export;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -25,6 +27,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasCancelException;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
@@ -197,7 +200,12 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        SwingUtil.openOSFolder(new File(exportDir));
+                        try {
+                            AVSwingUtil.lauchHTMLviewer(null,
+                                    new URL(exportDir));
+                        } catch (MalformedURLException e1) {
+                            SwingUtil.openOSFolder(new File(exportDir));
+                        }
                         openFolderButton.setEnabled(false);
 
                         // TODO Here it would be nice to close the Wizard... but
