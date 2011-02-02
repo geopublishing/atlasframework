@@ -60,8 +60,8 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 				currSteps++;
 			} else {
 				currSteps++;
-				totalSteps = currSteps + 3;
-				LOGGER.warn("overcounting " + currSteps + " to " + totalSteps);
+				totalSteps = currSteps + 10;
+				LOGGER.debug("overcounting " + currSteps + " to " + totalSteps);
 			}
 			progress.setProgress(msg, currSteps, totalSteps);
 		} else {
