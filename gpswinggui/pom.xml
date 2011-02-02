@@ -213,7 +213,7 @@
 	</profiles>
 
 	<dependencies>
-	
+
 		<dependency>
 			<version>0.5-SNAPSHOT</version>
 			<groupId>org.geopublishing</groupId>
@@ -295,22 +295,22 @@
 
 		<dependency>
 			<groupId>net.charabia</groupId>
-<!--			<groupId>jsmoothgen</groupId>-->
+			<!-- <groupId>jsmoothgen</groupId> -->
 			<artifactId>jsmoothgen</artifactId>
-<!--			<version>0.9.9.7</version>-->
+			<!-- <version>0.9.9.7</version> -->
 			<version>0.9.9-7</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- <dependency> -->
-		<!-- Smooth runtime dependency -->
-		<!-- <groupId>com.wutka</groupId> -->
-		<!-- <artifactId>jox</artifactId> -->
-		<!-- <version>1.16</version> -->
-		<!-- <type>jar</type> -->
-		<!-- <scope>compile</scope> -->
-		<!-- </dependency> -->
+		<dependency>
+			<!-- Smooth runtime dependency -->
+			<groupId>com.wutka</groupId>
+			<artifactId>jox</artifactId>
+			<version>1.16</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>gnu-regexp</groupId>
@@ -399,13 +399,13 @@
 			<scope>compile</scope>
 		</dependency>
 
-<!--		<dependency>-->
-<!--			<groupId>log4j</groupId>-->
-<!--			<artifactId>log4j</artifactId>-->
-<!--			<version>1.2.14</version>-->
-<!--			<type>jar</type>-->
-<!--			<scope>compile</scope>-->
-<!--		</dependency>-->
+		<!-- <dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.14</version> -->
+		<!-- <type>jar</type> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>javax.jnlp</groupId>
