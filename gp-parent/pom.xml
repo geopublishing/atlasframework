@@ -32,6 +32,16 @@
 		<schmitzm.version>2.5-SNAPSHOT</schmitzm.version>
 	</properties>
 
+<!---->
+	<!-- <parent> -->
+	<!-- All Geopublisher projects pull the version of GeoTools and schmitzm 
+		from schmitzm -->
+	<!-- <groupId>de.schmitzm</groupId> -->
+	<!-- <artifactId>schmitzm-parent</artifactId> -->
+	<!-- <version>2.5-SNAPSHOT</version> -->
+	<!-- <relativePath>../schmitzm-parent/pom.xml</relativePath> -->
+	<!-- </parent> -->
+
 	<organization>
 		<name>geopublishing.org</name>
 		<url>http://www.geopublishing.org</url>
@@ -64,9 +74,11 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk</connection>
+		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk
+		</connection>
 		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
-		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/gp-atlas-framework</developerConnection>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/gp-atlas-framework
+		</developerConnection>
 	</scm>
 
 	<build>
@@ -74,7 +86,7 @@
 		<!-- Explicitly setting the final name! Do not remove -->
 		<finalName>${project.artifactId}-${project.version}</finalName>
 		<resources>
-			
+
 			<resource>
 				<filtering>false</filtering>
 				<directory>src/main/resources</directory>
