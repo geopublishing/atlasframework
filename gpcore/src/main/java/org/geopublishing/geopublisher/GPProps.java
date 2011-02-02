@@ -53,7 +53,7 @@ public abstract class GPProps {
          * Height of the {@link DesignMapViewJDialog}
          **/
         mapComposerHeight, /** Width of the {@link DesignMapViewJDialog} **/
-        mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, signingkeystorePassword, startJVMWithXmx, /**
+        mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, sigp, startJVMWithXmx, /**
          * 
          * 
          * GP starts maximized
@@ -365,8 +365,8 @@ public abstract class GPProps {
                 virginProps.getProperty(Keys.NativeLibs.toString()));
         set(Keys.signingAlias,
                 virginProps.getProperty(Keys.signingAlias.toString()));
-        set(Keys.signingkeystorePassword,
-                virginProps.getProperty(Keys.signingkeystorePassword.toString()));
+        set(Keys.sigp,
+                virginProps.getProperty(Keys.sigp.toString()));
         set(Keys.MinimumJavaVersion,
                 virginProps.getProperty(Keys.MinimumJavaVersion.toString()));
         set(Keys.JWSStartScript,

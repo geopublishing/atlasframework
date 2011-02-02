@@ -523,6 +523,13 @@ public class AVUtil {
 	 * configuration if there are already appenders defined.
 	 */
 	public static void initAtlasLogging() throws FactoryConfigurationError {
+		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
+		ExceptionDialog.setSmtpMailer(GpUtil.bugReportMailer);
+
+		// Add application version number to Exception mails
+		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
+				.getVersionInfo(GpUtil.class));
+
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
 		DOMConfigurator.configure(GPProps.class
@@ -531,12 +538,6 @@ public class AVUtil {
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
 
-		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
-		ExceptionDialog.setSmtpMailer(GpUtil.bugReportMailer);
-
-		// Add application version number to Exception mails
-		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
-				.getVersionInfo(GpUtil.class));
 	}
 
 	/**

@@ -11,13 +11,12 @@
 #Geopublisher is part of the Geopublishing Framework hosted at:
 #http://wald.intevation.org/projects/atlas-framework/
 ##########
-startJVMWithXmx=256
+startJVMWithXmx=512
 windowMaximized=0
 NativeLibs=libmlib_jai.so mlib_jai_mmx.dll mlib_jai_util.dll mlib_jai.dll libgdal.so
 compressJARs=1
-signingkeystorePassword=wasser
+sigp=wasser
 signingAlias=IMPETUS
-# TODO bugreport@wikisquare.de
-bugReportEmail=skpublic@wikisquare.de
+bugReportEmail=bugreport@geopublishing.org
 MinimumJavaVersion=1.6.0_22
 JWSStartScript=<script src\="http\://java.com/js/deployJava.js"></script>\n<script>\n var url \= "__JNLPURL__";\n deployJava.createWebStartLaunchButton(url, "__MINJAVAVERSION__");\n</script>

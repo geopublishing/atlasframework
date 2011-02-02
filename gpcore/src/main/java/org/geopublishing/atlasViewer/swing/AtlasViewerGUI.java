@@ -76,6 +76,7 @@ import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.SwitchLanguageDialog;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.ResourceProvider;
 import de.schmitzm.swing.ExceptionDialog;
@@ -862,8 +863,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 									atlasDir));
 
 				} else {
-					final String msg = "A non existing directory was passed on command line. Will be ignored!\n"
-							+ atlasDir.getAbsolutePath();
+					final String msg = "Parameter '"
+							+ IOUtil.escapePath(atlasDir.getAbsolutePath())
+							+ " is not a valid atlas-working-copy.";
 					LOGGER.warn(msg);
 					JOptionPane.showMessageDialog(null, msg);
 				}
