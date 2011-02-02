@@ -188,11 +188,16 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	 * beforehand.
 	 */
 	private void checkSizeZero() throws IOException {
+
+		// TODO This only works for unpacked, local files in Geopublisher. Not
+		// in atlas, where they are an URL.
+
 		ShpFiles shpFiles = new ShpFiles(getUrl());
 		final String shp = shpFiles.get(ShpFileType.SHP);
-		File shpFile = IOUtil.urlToFile(new URL(shp));
+		final URL shpUrl = new URL(shp);
+		File shpFile = IOUtil.urlToFile(shpUrl);
 		if (shpFile != null && shpFile.length() == 0l)
-			throw new IOException("zero size: " + shp);
+			throw new IOException("zero size of shapefile: " + shpFile);
 	}
 
 	/**
