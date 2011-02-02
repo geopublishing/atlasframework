@@ -38,7 +38,6 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataUtilities;
-import org.geotools.feature.GeometryAttributeType;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.io.IOUtil;

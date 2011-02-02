@@ -34,7 +34,6 @@ import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataUtilities;
-import org.geotools.feature.GeometryAttributeType;
 import org.opengis.feature.type.GeometryDescriptor;
 
 import de.schmitzm.geotools.feature.FeatureUtil;

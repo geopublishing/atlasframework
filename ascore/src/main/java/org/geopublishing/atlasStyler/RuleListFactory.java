@@ -3,7 +3,6 @@ package org.geopublishing.atlasStyler;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
-import org.geotools.feature.GeometryAttributeType;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Symbolizer;
 

@@ -11,7 +11,7 @@ import javax.swing.JList;
 
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geotools.feature.FeatureType;
+import org.opengis.feature.type.FeatureType;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.swing.SwingUtil;
