@@ -184,16 +184,14 @@ public class DpLayerVectorFeatureSourceShapefile extends
 	}
 
 	/**
-	 * Reading a borken 0-bytes Shapefile can hang the reader. So we check
+	 * Reading a broken 0-bytes Shapefile can hang the reader. So we check
 	 * beforehand.
-	 * 
-	 * @throws IOException
 	 */
 	private void checkSizeZero() throws IOException {
 		ShpFiles shpFiles = new ShpFiles(getUrl());
 		final String shp = shpFiles.get(ShpFileType.SHP);
 		File shpFile = IOUtil.urlToFile(new URL(shp));
-		if (shpFile.length() == 0l)
+		if (shpFile != null && shpFile.length() == 0l)
 			throw new IOException("zero size: " + shp);
 	}
 

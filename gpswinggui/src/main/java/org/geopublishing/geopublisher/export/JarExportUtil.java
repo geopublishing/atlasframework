@@ -169,11 +169,19 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			+ getSnapshot() + postfixJar;
 
 	/**
-	 * Filename of the schmitzm jar. TODO Very fucking ugly
+	 * UGLY: During the export, the location of the required JARs is determined
+	 * by looking at the classpath string. When running from with Eclipse or a
+	 * Maven-Multimodule project, some projects are not in the classpath as
+	 * jars, but rather do their relative paths appear in the classpath-string.
+	 * This is a list of jar-names -> maven-groupIds to find the needed JARs in
+	 * the local maven repository. This on the other hand expects you to
+	 * "mvn install" the JARs there whenever important changes happened to them.
 	 */
 	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.5-SNAPSHOT.jar";
 	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.5-SNAPSHOT.jar";
 	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.5-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.5-SNAPSHOT.jar";
+	public static final String GSRCJ_JARNAME = "gsrcj-0.5-SNAPSHOT.jar";
 	public static final String GPSYNC_JARNAME = "gpsync-1.0-SNAPSHOT.jar";
 
 	/**
@@ -182,7 +190,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(
 			Arrays.asList(new String[] {
-					// SCHMITZM_JARNAME1, SCHMITZM_JARNAME2, SCHMITZM_JARNAME3,
+					// SCHMITZM_JARNAME1, SCHMITZM_JARNAME2,
+					// SCHMITZM_JARNAME3,SCHMITZM_JARNAME4, GSRCJ_JARNAME
 					ASCORE_JARNAME,
 					// ASSWINGGUI_JARNAME,
 					// GPSYNC_JARNAME,
@@ -909,12 +918,20 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					+ getSnapshot();
 		}
 
+		/**
+		 * Look in the local maven repository for projects, that appear in tthe
+		 * classpath-string as relative paths.
+		 */
 		if (jarName.contains(SCHMITZM_JARNAME1))
 			path = "de/schmitzm/schmitzm-core/2.5-SNAPSHOT";
-		// if (jarName.contains(SCHMITZM_JARNAME2))
-		// path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
-		// if (jarName.contains(SCHMITZM_JARNAME3))
-		// path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
+		if (jarName.contains(SCHMITZM_JARNAME2))
+			path = "de/schmitzm/schmitzm-gt/2.5-SNAPSHOT";
+		if (jarName.contains(SCHMITZM_JARNAME3))
+			path = "de/schmitzm/schmitzm-jfree-gt/2.5-SNAPSHOT";
+		if (jarName.contains(SCHMITZM_JARNAME4))
+			path = "de/schmitzm/schmitzm-jfree/2.5-SNAPSHOT";
+		if (jarName.contains(GSRCJ_JARNAME))
+			path = "org/geopublishing/gsrcj/0.5-SNAPSHOT";
 		if (jarName.contains(GPSYNC_JARNAME))
 			path = "org/geopublishing/gpsync/1.0-SNAPSHOT";
 
@@ -2091,7 +2108,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
 				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
 				+ SCHMITZM_JARNAME1 + " " + SCHMITZM_JARNAME2
-				+ SCHMITZM_JARNAME3;
+				+ SCHMITZM_JARNAME3 + " " + SCHMITZM_JARNAME4;
 
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 
@@ -2154,7 +2171,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		command.add(keyStoreURL.toString());
 		command.add("-storepass");
-		command.add(GPProps.get(Keys.signingkeystorePassword));
+		command.add(GPProps.get(Keys.sigp));
 		command.add(jarFile.getAbsolutePath());
 		command.add(GPProps.get(Keys.signingAlias));
 

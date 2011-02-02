@@ -108,7 +108,7 @@ public class JarExportUtilTest extends TestingClass {
 		JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
 				true, true, false);
 
-		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		String passwort = GPProps.get(GPProps.Keys.sigp);
 		// LOGGER.info("Signer Passwort = " + passwort);
 		assertNotNull(passwort);
 
@@ -270,7 +270,7 @@ public class JarExportUtilTest extends TestingClass {
 		// Temp dir created
 		assertExitsTempFilesCount(jeu.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
 
-		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		String passwort = GPProps.get(GPProps.Keys.sigp);
 		// LOGGER.info("Signer Passwort = " + passwort);
 		assertNotNull(passwort);
 
@@ -396,7 +396,7 @@ public class JarExportUtilTest extends TestingClass {
 		dpeJarFileExpected.delete();
 		assertFalse(dpeJarFileExpected.exists());
 
-		String passwort = GPProps.get(GPProps.Keys.signingkeystorePassword);
+		String passwort = GPProps.get(GPProps.Keys.sigp);
 		assertNotNull(passwort);
 
 		DpEntry dpEntry = (DpEntry) atlasConfig.getDataPool().values()
