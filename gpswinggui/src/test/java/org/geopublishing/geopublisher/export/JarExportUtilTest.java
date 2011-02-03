@@ -373,11 +373,6 @@ public class JarExportUtilTest extends TestingClass {
 					p.getInputStream()));
 			BufferedReader error = new BufferedReader(new InputStreamReader(
 					p.getErrorStream()));
-			String line;
-			while ((line = input.readLine()) != null) {
-				System.err.println(line);
-			}
-			input.close();
 
 			new Timer().schedule(new TimerTask() {
 
