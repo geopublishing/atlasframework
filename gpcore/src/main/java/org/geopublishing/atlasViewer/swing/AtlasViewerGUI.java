@@ -772,13 +772,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			}
 		});
 
-		/**
-		 * If there are parts to download from JNLP, ask the user if he wants to
-		 * do it now
-		 */
-		ArrayList<String> partsToDownload = JNLPUtil
-				.countPartsToDownload(atlasConfig.getDataPool());
-		if (partsToDownload.size() > 0) {
+		if (!isPreviewMode()
+				&& JNLPUtil.countPartsToDownload(atlasConfig.getDataPool())
+						.size() > 0) {
 			boolean dlNow = SwingUtil.askYesNo(getJFrame(),
 					AVUtil.R("DownloadAllDataAtOnceQuestionAtAtlasStart"));
 			if (dlNow == true) {

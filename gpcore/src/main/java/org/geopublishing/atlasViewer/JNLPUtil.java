@@ -26,6 +26,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 import org.geopublishing.atlasViewer.map.Map;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 
 /**
  * A utility class with static methods that deal with JNLP / JavaWebStart
@@ -117,6 +118,12 @@ public class JNLPUtil {
 		ArrayList<String> haveToDownload = new ArrayList<String>();
 
 		try {
+
+			if (AtlasViewerGUI.getInstance().isPreviewMode()) {
+				// When Geopublisher is started via JWS, all data is on disk,
+				// even though it is not in JWS cache.
+				return haveToDownload;
+			}
 
 			for (DpEntry<?> dpe : dataPool.values()) {
 				// LOGGER.debug("Checking if part "
