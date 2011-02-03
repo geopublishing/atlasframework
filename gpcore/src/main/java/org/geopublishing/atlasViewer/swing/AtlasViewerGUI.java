@@ -26,6 +26,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
@@ -46,6 +48,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.io.DirectoryWalker.CancelException;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
@@ -64,6 +67,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
+import org.jfree.util.Log;
 
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
@@ -297,6 +301,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * hashMap to remember which {@link URL}s have already been stored locally.
 	 */
 	private static HashMap<URL, File> cachedLocalCopiedFiles = new HashMap<URL, File>();
+
+	/**
+	 * If set to <code>true</code> by the -t command line, the AtlasViewer will
+	 * exist shortly after loading all layers.
+	 */
+	private static boolean TESTMODE;
 
 	/**
 	 * Loads a new {@link Map} into the mainPanel / contentPane of the
@@ -612,27 +622,20 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * 
 	 */
 	public static void main(String[] args) {
+		AVUtil.initAtlasLogging();
+		// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
+		// "av_log4j.xml");
+
+		// final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
+		// .getResource("av_log4j.xml");
+
+		// log.debug("Configuring log4j from " + log4jURL);
+		// DOMConfigurator.configure(log4jURL);
 
 		DpEntry.cleanupTemp();
 
 		// Setup the ResLoMan
 		setupResLoMan(args);
-
-		try {
-			// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
-			// "av_log4j.xml");
-
-			// final URL log4jURL = AtlasViewerGUI.class.getClassLoader()
-			// .getResource("av_log4j.xml");
-
-			// log.debug("Configuring log4j from " + log4jURL);
-			// DOMConfigurator.configure(log4jURL);
-
-			AVUtil.initAtlasLogging();
-
-		} catch (Throwable e) {
-			ExceptionDialog.show(null, e);
-		}
 
 		// Pure logging:
 		LOGGER.debug("Classpath entries:");
@@ -642,6 +645,19 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		AtlasViewerGUI.getInstance().importAcAndStartGui();
+
+		if (TESTMODE) {
+			new Timer().schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					Log.info("Automatically closing "
+							+ AtlasViewerGUI.class.getSimpleName()
+							+ " (TESTMODE activated)");
+					AtlasViewerGUI.getInstance().exitAV(0);
+				}
+			}, 4000);
+		}
 
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6476706
 		// System.exit(0);
@@ -800,6 +816,8 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	public static void setupResLoMan(String[] args) {
 		Boolean resourcesComeFromFilesystem = false;
 
+		args = checkTestModeArgument(args);
+
 		try {
 
 			if (args == null)
@@ -863,7 +881,10 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 							+ IOUtil.escapePath(atlasDir.getAbsolutePath())
 							+ " is not a valid atlas-working-copy.";
 					LOGGER.warn(msg);
-					JOptionPane.showMessageDialog(null, msg);
+					if (!TESTMODE)
+						JOptionPane.showMessageDialog(null, msg);
+					else
+						throw new RuntimeException(msg);
 				}
 			}
 		} finally {
@@ -883,6 +904,36 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 			}
 		}
 
+	}
+
+	/**
+	 * Checks whether -t test mode switch has been passed. Will return an args
+	 * array with -t removed if found.
+	 */
+	static String[] checkTestModeArgument(String[] args) {
+		if (ArrayUtils.contains(args, "-t")) {
+			setTestMode(true);
+			return (String[]) ArrayUtils.remove(args,
+					ArrayUtils.indexOf(args, "-t"));
+		}
+		return args;
+	}
+
+	/**
+	 * If set to true by the -t command line, the AtlasViewer will exist shortly
+	 * after loading all layers.
+	 */
+	private static void setTestMode(boolean testMode) {
+		TESTMODE = testMode;
+		ExceptionDialog.setThrowRuntimeExceptionsBack(TESTMODE);
+	}
+
+	/**
+	 * If set to true by the -t command line, the AtlasViewer will exist shortly
+	 * after loading all layers.
+	 */
+	public static boolean isTestMode() {
+		return TESTMODE;
 	}
 
 	/**
@@ -1131,4 +1182,5 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	public boolean isPreviewMode() {
 		return previewMode;
 	}
+
 }

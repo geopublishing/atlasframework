@@ -13,7 +13,6 @@ package org.geopublishing.geopublisher.export;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -52,6 +51,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.io.IOUtil;
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
 
@@ -333,21 +333,34 @@ public class JarExportUtilTest extends TestingClass {
 		assertTrue(new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.GPCORE_JARNAME).exists());
 
-		// asswinggui is not needed for exported atlases
-		// assertTrue(new File(atlasExportTesttDir, "DISK/"
-		// + JarExportUtil.DISK_SUB_DIR + JarExportUtil.ASSWINGGUI_JARNAME)
-		// .exists());
-		//
-		// assertTrue(new File(atlasExportTesttDir, "JWS/"
-		// + JarExportUtil.ASSWINGGUI_JARNAME).exists());
-
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME3)
 				.exists());
+
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.SCHMITZM_JARNAME1).exists());
+
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.SCHMITZM_JARNAME1).exists());
+
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.SCHMITZM_JARNAME2).exists());
+
 		assertFalse(
 				"The libs are not exported anymore, but rahter referenced online",
 				new File(atlasExportTesttDir, "JWS/"
 						+ JarExportUtil.SCHMITZM_JARNAME3).exists());
+
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.SCHMITZM_JARNAME4).exists());
 
 		File file = new File(atlasExportTesttDir, "JWS/"
 				+ JarExportUtil.ARJAR_FILENAME);
@@ -365,12 +378,11 @@ public class JarExportUtilTest extends TestingClass {
 			log.info("Launching an exported atlas via java -jar ");
 
 			String[] cmd = { "/usr/bin/java", "-jar",
-					fileArDiskJar.getAbsolutePath() };
+					fileArDiskJar.getAbsolutePath(), "--test" };
 
+			long startTime = System.currentTimeMillis();
 			final Process p = Runtime.getRuntime().exec(cmd);
 
-			BufferedReader input = new BufferedReader(new InputStreamReader(
-					p.getInputStream()));
 			BufferedReader error = new BufferedReader(new InputStreamReader(
 					p.getErrorStream()));
 
@@ -381,16 +393,35 @@ public class JarExportUtilTest extends TestingClass {
 					log.info("Timer destroying AtlasViewer process");
 					p.destroy();
 				}
-			}, 7000);
+			}, 14000);
 
-			final String errorRead = error.readLine();
-			assertNull("Not null of AtlasViewer error stream: '" + errorRead
-					+ "'", errorRead);
+			// Wait 5seconds for the atlas to open and close again
+			LangUtil.sleepExceptionless(7000);
+			//
+			// String errorRead = error.readLine();
+			// while (errorRead != null) {
+			// assertFalse(
+			// "AtlasViewer error stream (4s after start) contains the word Exception: '"
+			// + errorRead + "'", errorRead.toLowerCase()
+			// .contains("exception"));
+			// assertFalse(
+			// "AtlasViewer error stream (4s after start)  contains the word Error: '"
+			// + errorRead + "'", errorRead.toLowerCase()
+			// .contains("error"));
+			// errorRead = error.readLine();
+			// }
 
 			final int errorcode = p.waitFor();
 			log.info("p.waitfor finished with code: " + errorcode);
 			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
 					errorcode);
+			final long duration = (System.currentTimeMillis() - startTime) / 1000;
+			assertTrue(
+					"Test atlas existed "
+							+ duration
+							+ "s after start. That is too late. It should be killed with -t after 4+1 seconds",
+					duration >= 13);
+
 		}
 
 	}
