@@ -747,6 +747,12 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 	// TODO Store in AML
 	public void setBaseName(String basename) {
+		if (basename != null) {
+			basename = basename.toLowerCase();
+			if (basename.contains("_"))
+				throw new IllegalArgumentException(
+						"atlas basename may not contain _ characters. Use - instead.");
+		}
 		this.basename = basename;
 	}
 
