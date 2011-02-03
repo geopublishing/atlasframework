@@ -16,11 +16,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +36,7 @@ import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpTestingUtil;
@@ -383,45 +382,47 @@ public class JarExportUtilTest extends TestingClass {
 			long startTime = System.currentTimeMillis();
 			final Process p = Runtime.getRuntime().exec(cmd);
 
-			BufferedReader error = new BufferedReader(new InputStreamReader(
-					p.getErrorStream()));
+			final Timer timer = new Timer();
+			try {
 
-			new Timer().schedule(new TimerTask() {
+				timer.schedule(new TimerTask() {
 
-				@Override
-				public void run() {
-					log.info("Timer destroying AtlasViewer process");
-					p.destroy();
-				}
-			}, 14000);
+					@Override
+					public void run() {
+						log.info("Timer destroying AtlasViewer process");
+						p.destroy();
+						fail("Atlas window of process "
+								+ p
+								+ " didn't return in 20s... It should return after "
+								+ AtlasViewerGUI.TESTMODE_WAITTOKILL
+								+ "ms due to -t switch.");
+					}
+				}, 20000);
 
-			// Wait 5seconds for the atlas to open and close again
-			LangUtil.sleepExceptionless(7000);
-			//
-			// String errorRead = error.readLine();
-			// while (errorRead != null) {
-			// assertFalse(
-			// "AtlasViewer error stream (4s after start) contains the word Exception: '"
-			// + errorRead + "'", errorRead.toLowerCase()
-			// .contains("exception"));
-			// assertFalse(
-			// "AtlasViewer error stream (4s after start)  contains the word Error: '"
-			// + errorRead + "'", errorRead.toLowerCase()
-			// .contains("error"));
-			// errorRead = error.readLine();
-			// }
+				// Wait 5seconds for the atlas to open and close again
+				LangUtil.sleepExceptionless(7000);
+				// String errorRead = error.readLine();
+				// while (errorRead != null) {
+				// assertFalse(
+				// "AtlasViewer error stream (4s after start) contains the word Exception: '"
+				// + errorRead + "'", errorRead.toLowerCase()
+				// .contains("exception"));
+				// assertFalse(
+				// "AtlasViewer error stream (4s after start)  contains the word Error: '"
+				// + errorRead + "'", errorRead.toLowerCase()
+				// .contains("error"));
+				// errorRead = error.readLine();
+				// }
 
-			final int errorcode = p.waitFor();
-			log.info("p.waitfor finished with code: " + errorcode);
-			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
-					errorcode);
-			final long duration = (System.currentTimeMillis() - startTime) / 1000;
-			assertTrue(
-					"Test atlas existed "
-							+ duration
-							+ "s after start. That is too late. It should be killed with -t after 4+1 seconds",
-					duration >= 13);
+				final int errorcode = p.waitFor();
+				log.info("p.waitfor finished with code: " + errorcode);
+				assertEquals(
+						"Test atlas didn't start or didn't exit normally. Errorcode=",
+						0, errorcode);
 
+			} finally {
+				timer.cancel();
+			}
 		}
 
 	}

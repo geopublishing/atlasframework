@@ -97,6 +97,8 @@ import de.schmitzm.versionnumber.ReleaseUtil.License;
  */
 
 public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
+	public static final int TESTMODE_WAITTOKILL = 10000;
+
 	public static Logger LOGGER = Logger.getLogger(AtlasViewerGUI.class);
 
 	static {
@@ -646,17 +648,18 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 		AtlasViewerGUI.getInstance().importAcAndStartGui();
 
-		if (TESTMODE) {
+		if (isTestMode()) {
 			new Timer().schedule(new TimerTask() {
 
 				@Override
 				public void run() {
 					Log.info("Automatically closing "
 							+ AtlasViewerGUI.class.getSimpleName()
-							+ " (TESTMODE activated)");
+							+ " (TESTMODE activated) after "
+							+ TESTMODE_WAITTOKILL + "ms NOW");
 					AtlasViewerGUI.getInstance().exitAV(0);
 				}
-			}, 4000);
+			}, TESTMODE_WAITTOKILL);
 		}
 
 		// http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6476706
@@ -926,6 +929,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	private static void setTestMode(boolean testMode) {
 		TESTMODE = testMode;
 		ExceptionDialog.setThrowRuntimeExceptionsBack(TESTMODE);
+		LOGGER.info("TESTMODE.. will exit in " + TESTMODE_WAITTOKILL + "ms");
 	}
 
 	/**
