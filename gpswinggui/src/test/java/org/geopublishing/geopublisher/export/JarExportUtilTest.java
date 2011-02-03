@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import net.charabia.jsmoothgen.application.JSmoothModelBean;
 import net.charabia.jsmoothgen.application.JSmoothModelPersistency;
@@ -361,7 +363,7 @@ public class JarExportUtilTest extends TestingClass {
 			String[] cmd = { "/usr/bin/java", "-jar",
 					fileArDiskJar.getAbsolutePath() };
 
-			Process p = Runtime.getRuntime().exec(cmd);
+			final Process p = Runtime.getRuntime().exec(cmd);
 
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
@@ -372,6 +374,14 @@ public class JarExportUtilTest extends TestingClass {
 				System.err.println(line);
 			}
 			input.close();
+
+			new Timer().schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					p.destroy();
+				}
+			}, 7000);
 
 			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
 					p.waitFor());
