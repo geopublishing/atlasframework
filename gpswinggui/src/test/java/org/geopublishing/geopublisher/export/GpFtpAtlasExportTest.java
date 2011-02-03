@@ -58,7 +58,7 @@ public class GpFtpAtlasExportTest extends TestingClass {
 			// wait a minute for gphoster to locate the zip
 			Thread.sleep(LangUtil.MIN_MILLIS * 2);
 
-			requestFingerprint = gpFtpAtlasExport.requestFingerprint(ace, null);
+			requestFingerprint = GpFtpAtlasExport.requestFingerprint(ace, null);
 			assertNotNull(
 					"After the upload the atlas should have a fingerprint",
 					requestFingerprint);
