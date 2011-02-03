@@ -87,6 +87,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 			ftpClient.setRemoteHost(FTP_GEOPUBLISHING_ORG);
 			ftpClient.setTimeout(5000);
 			ftpClient.connect();
+			// TODO Generate programatically!?
 			ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
 			FileInputStream fis = new FileInputStream(zipFile);
 			try {
@@ -123,7 +124,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 			}
 		} finally {
 			ftpClient.quit();
-			progress.setBusy("Connection cosed. "); // i8n
+			progress.setBusy("FTP connection cosed"); // i8n
 		}
 
 	}
@@ -138,43 +139,6 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		}
 		return size;
 	}
-
-	//
-	// /**
-	// * Read a (not too big) Inputtream directly into a String.
-	// *
-	// * @param is
-	// * {@link InputStream} to read from
-	// *
-	// * @deprecated use schmitzm
-	// */
-	// @Deprecated
-	// public String convertStreamToString(InputStream is) throws IOException {
-	// /*
-	// * To convert the InputStream to String we use the Reader.read(char[]
-	// * buffer) method. We iterate until the Reader return -1 which means
-	// * there's no more data to read. We use the StringWriter class to
-	// * produce the string.
-	// */
-	// if (is != null) {
-	// Writer writer = new StringWriter();
-	//
-	// char[] buffer = new char[1024];
-	// try {
-	// Reader reader = new BufferedReader(new InputStreamReader(is,
-	// "UTF-8"));
-	// int n;
-	// while ((n = reader.read(buffer)) != -1) {
-	// writer.write(buffer, 0, n);
-	// }
-	// } finally {
-	// is.close();
-	// }
-	// return writer.toString();
-	// } else {
-	// return "";
-	// }
-	// }
 
 	/**
 	 * Initiates a URL request to the gp-hoster servlet and requests a
