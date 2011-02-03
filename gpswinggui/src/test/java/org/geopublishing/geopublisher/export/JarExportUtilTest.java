@@ -13,6 +13,7 @@ package org.geopublishing.geopublisher.export;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -360,6 +361,9 @@ public class JarExportUtilTest extends TestingClass {
 
 		// Test start atlas..
 		if (TestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
+
+			log.info("Launching an exported atlas via java -jar ");
+
 			String[] cmd = { "/usr/bin/java", "-jar",
 					fileArDiskJar.getAbsolutePath() };
 
@@ -379,12 +383,19 @@ public class JarExportUtilTest extends TestingClass {
 
 				@Override
 				public void run() {
+					log.info("Timer destroying AtlasViewer process");
 					p.destroy();
 				}
 			}, 7000);
 
+			final String errorRead = error.readLine();
+			assertNull("Not null of AtlasViewer error stream?!", errorRead);
+
+			final int errorcode = p.waitFor();
+			log.info("p.waitfor finished with code: " + errorcode);
 			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
-					p.waitFor());
+					errorcode);
+
 		}
 
 	}
