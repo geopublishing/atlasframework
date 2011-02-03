@@ -378,7 +378,7 @@ public class JarExportUtilTest extends TestingClass {
 			log.info("Launching an exported atlas via java -jar ");
 
 			String[] cmd = { "/usr/bin/java", "-jar",
-					fileArDiskJar.getAbsolutePath(), "--test" };
+					fileArDiskJar.getAbsolutePath(), "-t" };
 
 			long startTime = System.currentTimeMillis();
 			final Process p = Runtime.getRuntime().exec(cmd);
