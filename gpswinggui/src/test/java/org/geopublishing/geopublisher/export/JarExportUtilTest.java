@@ -384,13 +384,13 @@ public class JarExportUtilTest extends TestingClass {
 			}, 7000);
 
 			final String errorRead = error.readLine();
-			assertNull("Not null of AtlasViewer error stream?!", errorRead);
+			assertNull("Not null of AtlasViewer error stream: '" + errorRead
+					+ "'", errorRead);
 
 			final int errorcode = p.waitFor();
 			log.info("p.waitfor finished with code: " + errorcode);
 			assertEquals("Test atlas didn't start or didn't exit normally.", 0,
 					errorcode);
-
 		}
 
 	}
