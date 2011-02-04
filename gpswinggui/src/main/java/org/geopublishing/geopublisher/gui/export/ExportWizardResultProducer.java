@@ -31,8 +31,8 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
-import org.geopublishing.geopublisher.export.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.export.JarExportUtil;
+import org.geopublishing.geopublisher.export.gphoster.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.netbeans.spi.wizard.DeferredWizardResult;
@@ -135,7 +135,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 				try {
 					if (isFtp) {
-						gpFtpAtlasExport = new GpFtpAtlasExport(ace, progress);
+						// gpFtpAtlasExport = new GpFtpAtlasExport(ace,
+						// progress);
 						gpFtpAtlasExport.export();
 					}
 					if (isDisk || isJws) {

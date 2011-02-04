@@ -12,13 +12,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
-import org.geopublishing.geopublisher.export.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
-
-import com.enterprisedt.net.ftp.FTPClient;
-
-import de.schmitzm.io.IOUtil;
 
 public class ExportWizardPage_FtpExport extends WizardPage {
 	final static protected Logger LOGGER = Logger
@@ -40,13 +35,14 @@ public class ExportWizardPage_FtpExport extends WizardPage {
 		initGui();
 	}
 
-	private boolean checkFirstExport() {
-		final String path = GpFtpAtlasExport.GEOPUBLISHING_ORG
-				+ ace.getBaseName() + ".fingerprint";
-		boolean isFirstExport = !IOUtil.urlExists(path);
-		return isFirstExport;
-
-	}
+	//
+	// private boolean checkFirstExport() {
+	// final String path = GpFtpAtlasExport.GEOPUBLISHING_ORG
+	// + ace.getBaseName() + ".fingerprint";
+	// boolean isFirstExport = !IOUtil.urlExists(path);
+	// return isFirstExport;
+	//
+	// }
 
 	public static String getDescription() {
 		return GeopublisherGUI.R("ExportWizard.Ftp");
@@ -66,7 +62,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
 		if (firstSyncJCheckBox == null) {
 			firstSyncJCheckBox = new JCheckBox("Create new User");
 			firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
-			firstSyncJCheckBox.setSelected(checkFirstExport());
+			// firstSyncJCheckBox.setSelected(checkFirstExport());
 		}
 		return firstSyncJCheckBox;
 	}
@@ -91,26 +87,29 @@ public class ExportWizardPage_FtpExport extends WizardPage {
 		// Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 		try {
-			// Check online in general
-			if (!IOUtil.urlExists("http://www.denic.de/"))
-				return validationFtpFailedMsg_Offline;
 
-			try {
-				// Check FTP
-				final FTPClient ftpClient = new FTPClient();
-				ftpClient.setTimeout(5000);
-				ftpClient.setRemoteHost(GpFtpAtlasExport.FTP_GEOPUBLISHING_ORG);
-				ftpClient.connect();
-				ftpClient.quit();
-			} catch (Exception e) {
-				if (!IOUtil
-						.urlExists(GpFtpAtlasExport.FTP_GEOPUBLISHING_ORG_URL))
-					return validationFtpFailedMsg_GpFtpDown;
-			}
+			// TODO Michael JNAIK MJ Hier nur noch GpHosterLCient fragen, ob der
+			// dienst erreicba ist.#checkService())
 
-			// Check GpHoster Servlet
-			if (!IOUtil.urlExists(GpFtpAtlasExport.GEOPUBLISHING_ORG))
-				return validationFtpFailedMsg_GpHosterDown;
+			// // Check online in general
+			// if (!IOUtil.urlExists("http://www.denic.de/"))
+			// return validationFtpFailedMsg_Offline;
+			//
+			// try {
+			// // Check FTP
+			// final FTPClient ftpClient = new FTPClient();
+			// ftpClient.setTimeout(5000);
+			// ftpClient.setRemoteHost(GpFtpAtlasExport.FTP_GEOPUBLISHING_ORG);
+			// ftpClient.connect();
+			// ftpClient.quit();
+			// } catch (Exception e) {
+			// return validationFtpFailedMsg_GpFtpDown;
+			// }
+			//
+			// // Check GpHoster Servlet
+			// if (!IOUtil.urlExists(GpFtpAtlasExport.GEOPUBLISHING_ORG
+			// + "index.html"))
+			// return validationFtpFailedMsg_GpHosterDown;
 			return null;
 		} finally {
 			this.setCursor(Cursor.getDefaultCursor());

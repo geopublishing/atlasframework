@@ -25,7 +25,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	 */
 	public AtomicBoolean cancel = new AtomicBoolean(false);
 
-	ResultProgressHandle progress;
+	protected ResultProgressHandle progress;
 
 	/**
 	 * Monitors the isRunning method of {@link #progress}. If it has been
