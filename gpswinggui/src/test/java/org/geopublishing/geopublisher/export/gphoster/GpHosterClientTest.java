@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class GpHosterClientTest {
@@ -16,8 +17,8 @@ public class GpHosterClientTest {
 	@Before
 	public void setUp() throws Exception {
 		// gphc = new GpHosterClient("http://localhost:8080/gp-hoster-jsf/");
-		gphc = new GpHosterClient("http://localhost:8080/gp-hoster-jsf/");
-		// gphc = new GpHosterClient();
+		// gphc = new GpHosterClient("http://localhost:8080/gp-hoster-jsf/");
+		gphc = new GpHosterClient();
 	}
 
 	@After
@@ -25,6 +26,7 @@ public class GpHosterClientTest {
 	}
 
 	@Test
+	@Ignore
 	public void testUserExists() throws IOException {
 		if (gphc.checkService() != SERVICE_STATUS.OK)
 			return;
@@ -33,6 +35,7 @@ public class GpHosterClientTest {
 	}
 
 	@Test
+	@Ignore
 	public void testUserCreate() throws IOException {
 		if (gphc.checkService() != SERVICE_STATUS.OK)
 			return;
@@ -47,6 +50,7 @@ public class GpHosterClientTest {
 	}
 
 	@Test
+	@Ignore
 	public void testAtlasBasenameFree() throws IOException {
 		assertTrue(gphc.atlasBasenameFree("33234534"));
 	}
