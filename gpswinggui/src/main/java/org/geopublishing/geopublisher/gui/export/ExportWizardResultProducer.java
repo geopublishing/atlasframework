@@ -83,6 +83,10 @@ public class ExportWizardResultProducer implements WizardResultProducer {
         final String exportDir = (String) wizardData
                 .get(ExportWizard.EXPORTFOLDER);
         final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
+        final String username = (String) wizardData
+                .get(ExportWizardFTPBrancher.USERNAME);
+        final String password = (String) wizardData
+                .get(ExportWizardFTPBrancher.PASSWORD);
 
         /**
          * Store stuff to the geopublisher.properties
@@ -102,6 +106,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
             GPProps.set(Keys.LastExportDisk, isDisk);
             GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
             GPProps.set(Keys.LastExportJWS, isJws);
+            GPProps.set(Keys.Username, username);
+            GPProps.set(Keys.Password, password);
 
             GPProps.store();
         }
