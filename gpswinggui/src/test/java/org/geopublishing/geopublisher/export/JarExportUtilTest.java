@@ -31,7 +31,6 @@ import net.charabia.jsmoothgen.application.JSmoothModelPersistency;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -236,7 +235,7 @@ public class JarExportUtilTest extends TestingClass {
 		assertExitsTempFilesCount(
 				jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
 
-		AVUtil.cleanupTempDir(jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
+		IOUtil.cleanupTempDir(jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
 				null);
 
 		// Temp dir still exists, because this is just the export of one layer.

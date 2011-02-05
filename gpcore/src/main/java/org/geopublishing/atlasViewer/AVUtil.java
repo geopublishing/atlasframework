@@ -13,7 +13,6 @@ package org.geopublishing.atlasViewer;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -45,7 +44,6 @@ import javax.xml.parsers.FactoryConfigurationError;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -54,7 +52,6 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
-import org.geotools.io.DefaultFileFilter;
 import org.geotools.resources.CRSUtilities;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -538,81 +535,6 @@ public class AVUtil {
 		Logger.getRootLogger().addAppender(
 				Logger.getLogger("dummy").getAppender("avFileLogger"));
 
-	}
-
-	/**
-	 * 
-	 * @param deleteDirectlyPrefix
-	 *            Deletes any files+directories in the temp directory starting
-	 *            with this String directly.
-	 * @param deleteOldPrefix
-	 *            Deltes any files/directories starting with this string, if
-	 *            they have not been modified within 3 days. May be
-	 *            <code>null</code>.
-	 */
-	public static void cleanupTempDir(String deleteDirectlyPrefix,
-			String deleteOldPrefix) {
-
-		/**
-		 * Files oder than DAYS days old will be deleted.
-		 */
-		int DAYS = 3;
-
-		int count = 0;
-
-		try {
-			// This file is never created
-			File tmp = File.createTempFile("willneverbecreated",
-					"willneverbecreated");
-
-			File tmpDir = tmp.getParentFile();
-			DefaultFileFilter f = new DefaultFileFilter(deleteDirectlyPrefix
-					+ "*");
-			File[] listFiles = tmpDir.listFiles((FileFilter) f);
-			for (File ff : listFiles) {
-				LOGGER.debug("Going to delete temporary instance file/directory created by this Java instance: "
-						+ IOUtil.escapePath(ff));
-
-				boolean b = FileUtils.deleteQuietly(ff);
-				if (!b) {
-					LOGGER.warn("Couldn't delete instance temp file "
-							+ IOUtil.escapePath(ff));
-				} else
-					count++;
-			}
-
-			if (deleteOldPrefix != null) {
-				f = new DefaultFileFilter(deleteOldPrefix + "*");
-				listFiles = tmpDir.listFiles((FileFilter) f);
-				for (File ff : listFiles) {
-
-					long diff = System.currentTimeMillis() - ff.lastModified();
-					if (diff < 1000 * 60 * 60 * 24 * DAYS) {
-						LOGGER.debug("Not deleting " + IOUtil.escapePath(ff)
-								+ " since it is only " + (diff / 1000 / 60)
-								+ " minutes old.");
-						continue;
-					}
-
-					LOGGER.debug("Going to delete orphaned temporary file/directory "
-							+ IOUtil.escapePath(ff));
-
-					boolean b = ff.delete();
-					if (!b) {
-						LOGGER.warn("Couldn't delete orphaned temp file "
-								+ IOUtil.escapePath(ff));
-					} else
-						count++;
-				}
-			}
-
-		} catch (Exception e) {
-			// ExceptionDialog.show(null, e);
-			LOGGER.error(e);
-		} finally {
-			LOGGER.info(count
-					+ " temporary files and directories have been deleted.");
-		}
 	}
 
 }

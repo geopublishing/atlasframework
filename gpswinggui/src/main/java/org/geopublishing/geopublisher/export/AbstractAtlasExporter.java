@@ -13,6 +13,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.netbeans.spi.wizard.ResultProgressHandle;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.versionnumber.ReleaseUtil;
 
 abstract public class AbstractAtlasExporter implements AtlasExporter {
@@ -165,7 +166,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		// }
 		// }
 
-		AVUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
+		IOUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
 				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
 	}
 

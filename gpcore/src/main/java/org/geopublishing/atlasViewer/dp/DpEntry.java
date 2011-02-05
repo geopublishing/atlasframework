@@ -32,6 +32,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import rachel.ResourceManager;
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
@@ -390,7 +391,7 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 */
 	public static void cleanupTemp() {
 
-		AVUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
+		IOUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
 				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
 
 	}
