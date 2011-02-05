@@ -150,52 +150,43 @@ Technical details:
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for etch to the repo at ${REPO.DIR}">
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for etch to the repo">
 			<arg line='-b ${REPO.DIR} includedeb etch ${TARGETDEB}' />
+		</exec>
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for sid to the repo">
+			<arg line='-b ${REPO.DIR} includedeb sid ${TARGETDEB}' />
 		</exec>
 
 
 		<!-- UBUNTU -->
-		<exec executable="/usr/bin/reprepro"
-		      failonerror="true"
-		      description="Import the .deb for hardy to the repo at ${REPO.DIR}"
-		>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
 			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro"
-		      failonerror="true"
-		      description="Import the .deb for jaunty to the repo at ${REPO.DIR}"
-		>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for jaunty to the repo">
 			<arg line='-b ${REPO.DIR} includedeb jaunty ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro"
-		      failonerror="true"
-		      description="Import the .deb for karmic to the repo at ${REPO.DIR}"
-		>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for karmic to the repo">
 			<arg line='-b ${REPO.DIR} includedeb karmic ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro"
-		      failonerror="true"
-		      description="Import the .deb for lucid to the repo at ${REPO.DIR}"
-		>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lucid to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lucid ${TARGETDEB}' />
 		</exec>
 
-		<exec executable="/usr/bin/reprepro"
-		      failonerror="true"
-		      description="Import the .deb for maverick to the repo at ${REPO.DIR}"
-		>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for maverick to the repo">
 			<arg line='-b ${REPO.DIR} includedeb maverick ${TARGETDEB}' />
 		</exec>
 
-		<!-- MAEMO, not working
+
+		<!-- MAEMO -->
+		<!--
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for freemantle to the repo">
 			<arg line='-b ${REPO.DIR} includedeb freemantle ${TARGETDEB}' />
 		</exec>
-		 -->
+		-->
 
 	</target>
 
