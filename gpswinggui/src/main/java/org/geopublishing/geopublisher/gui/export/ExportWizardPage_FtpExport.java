@@ -24,6 +24,9 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 public class ExportWizardPage_FtpExport extends WizardPage {
     final static protected Logger LOGGER = Logger
             .getLogger(ExportWizardPage_FtpExport.class);
+    private static final String validationFtpFailedUserNotFound = GeopublisherGUI
+            .R("ExportWizard.Ftp.ValidationError_UserNotFound",
+                    GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
     private final String validationFtpFailedMsg_Offline = GeopublisherGUI
             .R("ExportWizard.Ftp.ValidationError_Offline");
     private final String validationFtpFailedMsg_GpFtpDown = GeopublisherGUI
@@ -37,7 +40,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
     private JTextField UserJTextField;
     private Password PWJTextField;
     private Boolean isNewAtlasUpload;
-    private final GpHosterClient gphc = new GpHosterClient();
+    private final GpHosterClient gphc;
     JLabel userNameLabel = new JLabel(
             GeopublisherGUI.R("ExportWizard.FtpExport.Username"));
     private final String validationFtpFailedUsername = GeopublisherGUI
@@ -46,6 +49,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
             .R("ExportWizard.Ftp.ValidationError_Password");
 
     public ExportWizardPage_FtpExport() {
+        gphc = ExportWizardFTPBrancher.gphc;
         ace = GeopublisherGUI.getInstance().getAce();
         initGui();
     }
@@ -71,13 +75,15 @@ public class ExportWizardPage_FtpExport extends WizardPage {
                     GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
                     false, GPProps.get(GPProps.Keys.Password));
             PWJTextField.setName(ExportWizardFTPBrancher.PASSWORD);
+            gphc.setPassword(PWJTextField.getValue().toString());
         }
         return PWJTextField;
     }
 
     private JCheckBox getFirstSyncJCheckBox() {
         if (firstSyncJCheckBox == null) {
-            firstSyncJCheckBox = new JCheckBox("Create new User");
+            firstSyncJCheckBox = new JCheckBox(
+                    GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
             firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
             firstSyncJCheckBox.setSelected(isFirstSync(ace));
         }
@@ -89,6 +95,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
             UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
                     ""));
             UserJTextField.setName(ExportWizardFTPBrancher.USERNAME);
+            gphc.setUserName(UserJTextField.getText());
         }
         return UserJTextField;
     }
@@ -105,10 +112,10 @@ public class ExportWizardPage_FtpExport extends WizardPage {
         if (getUserJTextField().getText().isEmpty()) {
             return validationFtpFailedUsername;
         }
+
         if (!(getPWJTextField().getValue().length > 0)) {
             return validationFtpFailedPassword;
         }
-
         try {
             SERVICE_STATUS service = gphc.checkService();
             if (!service.equals(SERVICE_STATUS.OK)) {

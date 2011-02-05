@@ -2,6 +2,7 @@ package org.geopublishing.geopublisher.gui.export;
 
 import java.util.Map;
 
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.netbeans.spi.wizard.Wizard;
 import org.netbeans.spi.wizard.WizardBranchController;
 import org.netbeans.spi.wizard.WizardPage;
@@ -15,6 +16,8 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
     public static String set_Email;
     public static final String USERNAME = "username?";
     public static final String PASSWORD = "password?";
+    public static final String MAKE_PUBLIC = "public?";
+    public static GpHosterClient gphc = new GpHosterClient();
 
     protected ExportWizardFTPBrancher() {
         super(new WizardPage[] {new ExportWizardPage_FtpExport()});

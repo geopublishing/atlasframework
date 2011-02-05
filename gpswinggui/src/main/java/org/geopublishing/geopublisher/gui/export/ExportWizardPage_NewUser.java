@@ -8,6 +8,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -22,8 +23,10 @@ public class ExportWizardPage_NewUser extends WizardPage {
             .R("ExportWizard.Ftp.New_User.ValidationError_AGB");
     private final String validationFtpFailedNoEmail = GeopublisherGUI
             .R("ExportWizard.Ftp.New_User.ValidationError_Email");
+    private final GpHosterClient gphc;
 
     public ExportWizardPage_NewUser() {
+        gphc = ExportWizardFTPBrancher.gphc;
         initGui();
     }
 
