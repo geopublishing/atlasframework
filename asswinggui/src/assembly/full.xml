@@ -26,6 +26,7 @@
 			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 			<includes>
 				<include>start_AtlasStyler.sh</include>
+				<include>start_AtlasStyler.command</include>
 			</includes>
 			<fileMode>0755</fileMode>
 		</fileSet>

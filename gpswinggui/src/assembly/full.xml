@@ -26,6 +26,7 @@
 			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
 			<includes>
 				<include>start_Geopublisher.sh</include>
+				<include>start_Geopublisher.command</include>
 			</includes>
 			<fileMode>0755</fileMode>
 		</fileSet>

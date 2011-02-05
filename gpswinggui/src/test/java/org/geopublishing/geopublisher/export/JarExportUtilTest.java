@@ -299,10 +299,23 @@ public class JarExportUtilTest extends TestingClass {
 				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
 						.contains("autorun.inf"));
 
-		assertTrue("Datei start.sh exists in DISK exists ", new File(
-				atlasExportTesttDir, "DISK/start.sh").exists());
-		assertTrue("Datei start.sh exists in DISK is executable", new File(
-				atlasExportTesttDir, "DISK/start.sh").canExecute());
+		// STart script for LINUX exists and is executable
+		assertTrue("Datei " + JarExportUtil.START_SCRIPT_LINUX
+				+ " exists in DISK exists ", new File(atlasExportTesttDir,
+				"DISK/" + JarExportUtil.START_SCRIPT_LINUX).exists());
+		assertTrue("Datei " + JarExportUtil.START_SCRIPT_LINUX
+				+ " exists in DISK is executable",
+				new File(atlasExportTesttDir, "DISK/"
+						+ JarExportUtil.START_SCRIPT_LINUX).canExecute());
+
+		// STart script for MAC exists and is executable
+		assertTrue("Datei " + JarExportUtil.START_SCRIPT_MAC
+				+ " exists in DISK exists ", new File(atlasExportTesttDir,
+				"DISK/" + JarExportUtil.START_SCRIPT_MAC).exists());
+		assertTrue("Datei " + JarExportUtil.START_SCRIPT_MAC
+				+ " exists in DISK is executable",
+				new File(atlasExportTesttDir, "DISK/"
+						+ JarExportUtil.START_SCRIPT_MAC).canExecute());
 
 		assertTrue("Datei autorun.inf exists in DISK folder",
 				Arrays.asList(new File(atlasExportTesttDir, "DISK").list())
@@ -378,7 +391,7 @@ public class JarExportUtilTest extends TestingClass {
 			String[] cmd = { "/usr/bin/java", "-jar",
 					fileArDiskJar.getAbsolutePath(), "-t" };
 
-			long startTime = System.currentTimeMillis();
+			// long startTime = System.currentTimeMillis();
 			final Process p = Runtime.getRuntime().exec(cmd);
 
 			final Timer timer = new Timer();

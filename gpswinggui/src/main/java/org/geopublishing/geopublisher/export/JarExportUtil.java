@@ -95,12 +95,16 @@ import de.schmitzm.versionnumber.ReleaseUtil;
  * This class exports an {@link AtlasConfigEditable} into a DISK and/or JWS
  * folder. The DISK folder can be burned to CDROM and will autostart the Atlas
  * under windows. <br>
- * The exported DISK directory also contains a <code>start.bat</code> and a
- * <code>atlas.exe</code> to launch the atlas if autostart is disabled.<br>
+ * The exported DISK directory also contains a <code>atlas.exe</code> to launch
+ * the atlas if autostart is disabled.<br>
  * The JWS folder may be served by any www. Linking to the <code>.jnlp</code>
  * file will start the atlas using JavaWebStart
  */
 public class JarExportUtil extends AbstractAtlasExporter {
+	static final String AUTORUN_INF = "autorun.inf";
+	static final String START_SCRIPT_LINUX = "start.sh";
+	static final String START_SCRIPT_MAC = "start.command";
+
 	final static private Logger LOGGER = Logger.getLogger(JarExportUtil.class);
 
 	/** Subfolder in the export atlas directory for the JWS version of the atlas **/
@@ -221,11 +225,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			final File targetJar) throws AtlasExportException {
 		try {
 
-			final File startSHFile = new File(targetJar.getParentFile(),
-					"start.sh");
 			// ******************************************************************
 			// start.sh for Linux (the
 			// ******************************************************************
+			final File startSHFile = new File(targetJar.getParentFile(),
+					START_SCRIPT_LINUX);
 			FileWriter fileWriter = new FileWriter(startSHFile);
 			final Integer xmx = GPProps.getInt(GPProps.Keys.startJVMWithXmx,
 					256);
@@ -242,36 +246,32 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					+ targetJar.getName() + "\n");
 			fileWriter.close();
 
-			// //
 			// ******************************************************************
-			// // start.bat for Windows
-			// //
+			// Start.command for mac is a copy if start.sh
 			// ******************************************************************
-			// fileWriter = new FileWriter(new File(targetJar.getParentFile(),
-			// "start.bat"));
-			// fileWriter.write("@echo off\r\n");
-			// fileWriter.write("atlas.exe\r\n");
-			// fileWriter.close();
+			final File startCOMMANDFile = new File(targetJar.getParentFile(),
+					START_SCRIPT_MAC);
+			FileUtils.copyFile(startSHFile, startCOMMANDFile);
 
-			/******************************************************************
-			 * // autorun.inf for windows [autorun] OPEN=SETUP.EXE /AUTORUN
-			 * ICON=SETUP.EXE,1
-			 * 
-			 * shell\configure=&Konfigurieren...
-			 * shell\configure\command=SETUP.EXE
-			 * 
-			 * shell\install=&Installieren... shell\install\command=SETUP.EXE //
-			 ******************************************************************/
-			fileWriter = new FileWriter(new File(targetJar.getParentFile(),
-					"autorun.inf"));
+		} catch (final IOException e) {
+			throw new AtlasExportException("Error creating " + START_SCRIPT_MAC
+					+ " or " + START_SCRIPT_LINUX, e);
+		}
+
+		try {
+			// ******************************************************************
+			// autorun.inf for windows [autorun]
+			// ******************************************************************
+			FileWriter fileWriter = new FileWriter(new File(
+					targetJar.getParentFile(), AUTORUN_INF));
 			fileWriter.write("[autorun]\n");
 			fileWriter.write("icon=atlas.exe,1\n");
 			fileWriter.write("open=atlas.exe\n");
 			fileWriter.close();
 
 		} catch (final IOException e) {
-			throw new AtlasExportException(
-					"Error creating the autorun.inf file", e);
+			throw new AtlasExportException("Error creating the " + AUTORUN_INF
+					+ " file", e);
 		}
 	}
 
@@ -1979,7 +1979,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				File next = iterateFiles.next();
 				next.setReadable(true, false);
 			}
-			new File(targetDirDISK, "start.sh").setExecutable(true, false);
+
+			// Linux .sh script must be +x
+			new File(targetDirDISK, START_SCRIPT_LINUX).setExecutable(true,
+					false);
+			// MacOS .command script must be +x
+			new File(targetDirDISK, START_SCRIPT_MAC)
+					.setExecutable(true, false);
 
 		}
 	}
@@ -2207,14 +2213,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			/**
 			 * Exclusively for DISK to real main folder
 			 */
-			// FileUtils.moveFileToDirectory(new File(getTempDir(),
-			// "start.bat"),
-			// targetDirDISK, true);
-			FileUtils.moveFileToDirectory(new File(getTempDir(), "start.sh"),
-					targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(),
+					START_SCRIPT_LINUX), targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(),
+					START_SCRIPT_MAC), targetDirDISK, true);
 
-			FileUtils.moveFileToDirectory(
-					new File(getTempDir(), "autorun.inf"), targetDirDISK, true);
+			FileUtils.moveFileToDirectory(new File(getTempDir(), AUTORUN_INF),
+					targetDirDISK, true);
 			// Icon.gif is used (and deleted afterwards) by JSmooth
 			FileUtils.copyFileToDirectory(new File(getTempDir(), "icon.gif"),
 					targetDirDISK, true);
