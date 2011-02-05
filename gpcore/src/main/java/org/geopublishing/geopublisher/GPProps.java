@@ -56,11 +56,12 @@ public abstract class GPProps {
         mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, sigp, startJVMWithXmx, /**
          * 
          * 
+         * 
          * GP starts maximized
          **/
         windowMaximized, logLevel
         // , rasterReader
-        , LastExportFtp
+        , LastExportFtp, Username, Password
     }
 
     /** E.G. ".AtlasStyler" or ".Geopublisher" **/
@@ -365,8 +366,7 @@ public abstract class GPProps {
                 virginProps.getProperty(Keys.NativeLibs.toString()));
         set(Keys.signingAlias,
                 virginProps.getProperty(Keys.signingAlias.toString()));
-        set(Keys.sigp,
-                virginProps.getProperty(Keys.sigp.toString()));
+        set(Keys.sigp, virginProps.getProperty(Keys.sigp.toString()));
         set(Keys.MinimumJavaVersion,
                 virginProps.getProperty(Keys.MinimumJavaVersion.toString()));
         set(Keys.JWSStartScript,

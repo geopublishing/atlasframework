@@ -44,159 +44,147 @@ import de.schmitzm.lang.LangUtil;
  * @author Stefan A. Tzeggai
  */
 public class ExportWizard extends WizardBranchController {
-	final static protected Logger LOGGER = Logger.getLogger(ExportWizard.class);
+    final static protected Logger LOGGER = Logger.getLogger(ExportWizard.class);
 
-	private static final ExportWizardResultProducer FINISHER = new ExportWizardResultProducer();
+    public static final ExportWizardResultProducer FINISHER = new ExportWizardResultProducer();
 
-	/** Used for a all-the-same look of the panels **/
-	final public static Dimension DEFAULT_WPANEL_SIZE = new Dimension(470, 370);
+    /** Used for a all-the-same look of the panels **/
+    final public static Dimension DEFAULT_WPANEL_SIZE = new Dimension(470, 370);
 
-	final public static String SAVE_AUTOMATICALLY = "saveAtlas";
-	final public static String ACE = "ace";
+    final public static String SAVE_AUTOMATICALLY = "saveAtlas";
+    final public static String ACE = "ace";
 
-	/** Used to identify the JWS check-box in the wizard-data **/
-	final public static String JWS_CHECKBOX = "exportJWS?";
-	/** Used to identify the DISK check-box in the wizard-data **/
-	final public static String DISK_CHECKBOX = "exportDISK?";
-	/** Used to identify the FTP check-box in the wizard-data **/
-	final public static String FTP_CHECKBOX = "exportFTP?";
+    /** Used to identify the JWS check-box in the wizard-data **/
+    final public static String JWS_CHECKBOX = "exportJWS?";
+    /** Used to identify the DISK check-box in the wizard-data **/
+    final public static String DISK_CHECKBOX = "exportDISK?";
+    /** Used to identify the FTP check-box in the wizard-data **/
+    final public static String FTP_CHECKBOX = "exportFTP?";
 
-	/** Used to identify the DISK ZIP check-box in the wizard-data **/
-	public static final String DISKZIP_CHECKBOX = "zipDISK";
+    /** Used to identify the DISK ZIP check-box in the wizard-data **/
+    public static final String DISKZIP_CHECKBOX = "zipDISK";
 
-	public static final String COPYJRE = "copyJRE";
+    public static final String COPYJRE = "copyJRE";
 
-	public static final String EXPORTFOLDER = "exportFolderAbsolutePath";
+    public static final String EXPORTFOLDER = "exportFolderAbsolutePath";
 
-	public static final String JNLPURL = "jnlpCodebase";
+    public static final String JNLPURL = "jnlpCodebase";
 
-	/** Used to identify whether a Sync to FTP is a first one **/
-	final public static String FTP_FIRST = "firstSync?";
+    /** Used to identify whether a Sync to FTP is a first one **/
+    final public static String FTP_FIRST = "firstSync?";
 
-	private final Boolean isNewAtlasUpload = null;
+    // public static Boolean isNewAtlasUpload = null;
 
-	/**
-	 * This constructor also defines the default (first) steps of the wizard
-	 * until it branches.
-	 */
-	protected ExportWizard() {
-		super(new WizardPage[] { new ExportWizardPage_Save(),
-				new ExportWizardPage_DiskJwsSelection() });
-	}
+    /** Second BranchController to hold and manage Export Information **/
+    Wizard ftpbranch = new ExportWizardFTPBrancher().createWizard();
 
-	/**
-	 * @return whether all required meta-data has been supplied that is need for
-	 *         a successful export. (Title, Desc, Creator/Vendor in ALL
-	 *         languages)
-	 */
-	private static boolean checkForRequiredMetadata(Component owner,
-			AtlasConfigEditable ace) {
-		for (String lang : ace.getLanguages()) {
-			if (ace.getTitle().get(lang) == null
-					|| ace.getTitle().get(lang).equals("")
-					|| ace.getDesc().get(lang) == null
-					|| ace.getDesc().get(lang).equals("")
-					|| ace.getCreator().get(lang) == null
-					|| ace.getCreator().get(lang).equals("")) {
-				AVSwingUtil.showMessageDialog(owner,
-						GeopublisherGUI.R("Export.Error.MissingMetaData"));
-				return false;
-			}
-		}
+    /**
+     * This constructor also defines the default (first) steps of the wizard
+     * until it branches.
+     */
+    protected ExportWizard() {
+        super(new WizardPage[] {new ExportWizardPage_Save(),
+                new ExportWizardPage_DiskJwsSelection()});
+    }
 
-		return true;
-	}
+    /**
+     * @return whether all required meta-data has been supplied that is need for
+     *         a successful export. (Title, Desc, Creator/Vendor in ALL
+     *         languages)
+     */
+    private static boolean checkForRequiredMetadata(Component owner,
+            AtlasConfigEditable ace) {
+        for (String lang : ace.getLanguages()) {
+            if (ace.getTitle().get(lang) == null
+                    || ace.getTitle().get(lang).equals("")
+                    || ace.getDesc().get(lang) == null
+                    || ace.getDesc().get(lang).equals("")
+                    || ace.getCreator().get(lang) == null
+                    || ace.getCreator().get(lang).equals("")) {
+                AVSwingUtil.showMessageDialog(owner,
+                        GeopublisherGUI.R("Export.Error.MissingMetaData"));
+                return false;
+            }
+        }
 
-	/**
-	 * Exports an {@link AtlasConfigEditable} and returns a {@link File}
-	 * pointing to the export directory or <code>null</code>.
-	 * 
-	 * return a {@link File} or a {@link JPanel}
-	 */
-	public static Object showWizard(Component owner,
-			AtlasConfigEditable atlasConfigEditable) {
+        return true;
+    }
 
-		while (!checkForRequiredMetadata(owner, atlasConfigEditable)) {
-			EditAtlasParamsDialog editAtlasParamsDialog = new EditAtlasParamsDialog(
-					owner, atlasConfigEditable);
-			editAtlasParamsDialog.setVisible(true);
-			if (editAtlasParamsDialog.isCancelled())
-				return null;
-		}
+    /**
+     * Exports an {@link AtlasConfigEditable} and returns a {@link File}
+     * pointing to the export directory or <code>null</code>.
+     * 
+     * return a {@link File} or a {@link JPanel}
+     */
+    public static Object showWizard(Component owner,
+            AtlasConfigEditable atlasConfigEditable) {
 
-		ExportWizard chartStartWizard = new ExportWizard(); // It's a special
-		// WizardBranchControler
-		Wizard wiz = chartStartWizard.createWizard();
+        while (!checkForRequiredMetadata(owner, atlasConfigEditable)) {
+            EditAtlasParamsDialog editAtlasParamsDialog = new EditAtlasParamsDialog(
+                    owner, atlasConfigEditable);
+            editAtlasParamsDialog.setVisible(true);
+            if (editAtlasParamsDialog.isCancelled())
+                return null;
+        }
 
-		/**
-		 * This wizard shall start with featureSource and attributeMetaDataMap
-		 * set in the initialProperties map:
-		 */
-		Map<Object, Object> initialProperties = new HashMap<Object, Object>();
-		initialProperties.put(ACE, atlasConfigEditable);
+        ExportWizard chartStartWizard = new ExportWizard(); // It's a special
+        // WizardBranchControler
+        Wizard wiz = chartStartWizard.createWizard();
 
-		// Find a nice position for the window
-		// Window parent = SwingUtil.getParentWindow(owner);
-		// parent.getBounds()
+        /**
+         * This wizard shall start with featureSource and attributeMetaDataMap
+         * set in the initialProperties map:
+         */
+        Map<Object, Object> initialProperties = new HashMap<Object, Object>();
+        initialProperties.put(ACE, atlasConfigEditable);
 
-		final Object showWizard = WizardDisplayer.showWizard(wiz, null, null,
-				initialProperties);
+        // Find a nice position for the window
+        // Window parent = SwingUtil.getParentWindow(owner);
+        // parent.getBounds()
 
-		return showWizard;
-	}
+        final Object showWizard = WizardDisplayer.showWizard(wiz, null, null,
+                initialProperties);
 
-	/**
-	 * It's being called all the time, so the Wizard can figure out which is the
-	 * next step.
-	 */
-	@Override
-	public Wizard getWizardForStep(String step, Map wizardData) {
+        return showWizard;
+    }
 
-		Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
-		Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
-		Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
-		AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
-				.get(ExportWizard.ACE);
-		// Boolean isFirstSync = (Boolean)
-		// wizardData.get(ExportWizard.FTP_FIRST);
+    /**
+     * It's being called all the time, so the Wizard can figure out which is the
+     * next step.
+     */
+    @Override
+    public Wizard getWizardForStep(String step, Map wizardData) {
 
-		Class[] path = new Class[] {};
+        Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
+        Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
+        Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
+        // AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
+        // .get(ExportWizard.ACE);
+        // Boolean isFirstSync = (Boolean)
+        // wizardData.get(ExportWizard.FTP_FIRST);
 
-		if (isDisk != null && isDisk || isJws != null && isJws)
-			path = LangUtil.extendArray(path,
-					ExportWizardPage_ExportFolder.class);
-		if (isDisk != null && isDisk)
-			path = LangUtil.extendArray(path, ExportWizardPage_JRECopy.class);
-		if (isJws != null && isJws)
-			path = LangUtil.extendArray(path,
-					ExportWizardPage_JNLPDefinition.class);
-		if (isFtp != null && isFtp) {
-			path = LangUtil.extendArray(path, ExportWizardPage_FtpExport.class);
+        Class[] path = new Class[] {};
 
-			if (isFirstSync(ace)) {
-				path = LangUtil.extendArray(path,
-						ExportWizardPage_FirstSync.class);
-				LOGGER.info("addedd");
-			} else
-				LOGGER.info("not addedd");
-		}
-		// if (isFirstSync != null && isFirstSync) {
-		// }
+        if (isDisk != null && isDisk || isJws != null && isJws)
+            path = LangUtil.extendArray(path,
+                    ExportWizardPage_ExportFolder.class);
+        if (isDisk != null && isDisk)
+            path = LangUtil.extendArray(path, ExportWizardPage_JRECopy.class);
+        if (isJws != null && isJws)
+            path = LangUtil.extendArray(path,
+                    ExportWizardPage_JNLPDefinition.class);
+        if (isFtp != null && isFtp) {
+            return ftpbranch;
+            // path = LangUtil.extendArray(path,
+            // ExportWizardPage_FtpExport.class);
+            //
+            // if (isFirstSync != null && isFirstSync) {
+            // path = LangUtil.extendArray(path,
+            // ExportWizardPage_FirstSync.class);
+            // }
+        }
+        // LOGGER.debug("getWizardForStep " + step + " returns " + path);
+        return WizardPage.createWizard(path, FINISHER);
+    }
 
-		// LOGGER.debug("getWizardForStep " + step + " returns " + path);
-		return WizardPage.createWizard(path, FINISHER);
-	}
-
-	private boolean isFirstSync(AtlasConfigEditable ace) {
-		if (isNewAtlasUpload == null) {
-			// if (GpFtpAtlasExport.requestFingerprint(ace,
-			// new LoggerResultProgressHandle()) != null)
-			// isNewAtlasUpload = false;
-			// else
-			// isNewAtlasUpload = true;
-
-			// TODO MJ Use GpHosterClient
-		}
-		return isNewAtlasUpload;
-	}
 }
