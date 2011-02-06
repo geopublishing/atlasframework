@@ -395,6 +395,7 @@ public class GpFrame extends JFrame {
 	 * {@link AtlasConfigEditable} that should be displayed.
 	 */
 	public void updateAce() {
+
 		JPanel contentPane = new JPanel(new BorderLayout());
 
 		// need a new menu, a new splitpane and a new status bar

@@ -1,8 +1,10 @@
 package org.geopublishing.geopublisher.gui.export;
 
 import java.awt.Component;
-import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -18,155 +20,188 @@ import org.geopublishing.geopublisher.export.gphoster.SERVICE_STATUS;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
+import de.schmitzm.swing.input.ManualInputOption;
 import de.schmitzm.swing.input.ManualInputOption.Password;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
-    final static protected Logger LOGGER = Logger
-            .getLogger(ExportWizardPage_GpHoster_FtpExport.class);
-    private static final String validationFtpFailedUserNotFound = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_UserNotFound",
-                    GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
-    private final String validationFtpFailedMsg_Offline = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_Offline");
-    private final String validationFtpFailedMsg_GpFtpDown = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_GpFtpDown");
-    private final String validationFtpFailedMsg_GpHosterDown = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_GpHosterDown");
-    JLabel explanationJLabel = new JLabel(
-            GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
-    JCheckBox firstSyncJCheckBox;
-    private final AtlasConfigEditable ace;
-    private JTextField UserJTextField;
-    private Password PWJTextField;
-    private Boolean isNewAtlasUpload;
-    private final GpHosterClient gphc;
-    JLabel userNameLabel = new JLabel(
-            GeopublisherGUI.R("ExportWizard.FtpExport.Username"));
-    private final String validationFtpFailedUsername = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_Username");
-    private final String validationFtpFailedPassword = GeopublisherGUI
-            .R("ExportWizard.Ftp.ValidationError_Password");
+	final static protected Logger LOGGER = Logger
+			.getLogger(ExportWizardPage_GpHoster_FtpExport.class);
+	private static final String validationFtpFailedUserNotFound = GeopublisherGUI
+			.R("ExportWizard.Ftp.ValidationError_UserNotFound",
+					GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
+	JLabel explanationJLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
+	JCheckBox firstSyncJCheckBox;
+	private JTextField UserJTextField;
+	private Password PWJTextField;
+	// private Boolean isNewAtlasUpload;
+	private AtomicBoolean isNewAtlasUpload;
+	// private final GpHosterClient gphc;
+	JLabel userNameLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.FtpExport.Username"));
+	private final String validationFtpFailedUsername = GeopublisherGUI
+			.R("ExportWizard.Ftp.ValidationError_Username");
+	private final String validationFtpFailedPassword = GeopublisherGUI
+			.R("ExportWizard.Ftp.ValidationError_Password");
 
-    public ExportWizardPage_GpHoster_FtpExport() {
-        gphc = ExportWizard.GPHC;
-        ace = GeopublisherGUI.getInstance().getAce();
-        initGui();
-    }
+	public ExportWizardPage_GpHoster_FtpExport() {
+		// ace = (GeopublisherGUI.getInstance().getAce();
+		initGui();
+	}
 
-    public static String getDescription() {
-        return GeopublisherGUI.R("ExportWizard.Ftp");
-    }
+	public static String getDescription() {
+		return GeopublisherGUI.R("ExportWizard.Ftp");
+	}
 
-    private void initGui() {
-        setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
-        setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
-        setLayout(new MigLayout("wrap 2"));
-        add(explanationJLabel, "span 2");
-        add(getFirstSyncJCheckBox(), "wrap");
-        add(userNameLabel, "wrap");
-        add(getUserJTextField(), "growx, wrap");
-        add(getPWJTextField(), "growx");
-    }
+	private void initGui() {
+		// setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
+		// setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
+		setLayout(new MigLayout("wrap 2"));
+		add(explanationJLabel, "span 2");
+		add(getFirstSyncJCheckBox(), "wrap");
+		add(userNameLabel, "wrap");
+		add(getUserJTextField(), "growx, wrap");
+		add(getPWJTextField(), "growx");
+	}
 
-    private Password getPWJTextField() {
-        if (PWJTextField == null) {
-            PWJTextField = new Password(
-                    GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
-                    false, GPProps.get(GPProps.Keys.Password));
-            PWJTextField.setName(ExportWizard.PASSWORD);
-            gphc.setPassword(PWJTextField.getValue().toString());
-        }
-        return PWJTextField;
-    }
+	private Password getPWJTextField() {
+		if (PWJTextField == null) {
+			PWJTextField = new ManualInputOption.PasswordViewable(
+					GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
+					false, GPProps.get(GPProps.Keys.Password));
+			PWJTextField.setName(ExportWizard.PASSWORD);
+			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
+			// .setPassword(PWJTextField.getValue().toString());
+		}
+		return PWJTextField;
+	}
 
-    private JCheckBox getFirstSyncJCheckBox() {
-        if (firstSyncJCheckBox == null) {
-            firstSyncJCheckBox = new JCheckBox(
-                    GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
-            firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
-            // firstSyncJCheckBox.setSelected(isFirstSync(ace));
-        }
-        return firstSyncJCheckBox;
-    }
+	private JCheckBox getFirstSyncJCheckBox() {
+		if (firstSyncJCheckBox == null) {
+			firstSyncJCheckBox = new JCheckBox(
+					GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
+			firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
+		}
+		return firstSyncJCheckBox;
+	}
 
-    private JTextField getUserJTextField() {
-        if (UserJTextField == null) {
-            UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
-                    ""));
-            UserJTextField.setName(ExportWizard.USERNAME);
-            gphc.setUserName(UserJTextField.getText());
-        }
-        return UserJTextField;
-    }
+	@Override
+	protected void renderingPage() {
+		getFirstSyncJCheckBox()
+				.setSelected(
+						isFirstSync((AtlasConfigEditable) getWizardData(ExportWizard.ACE)));
+		getUserJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
+		getPWJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
 
-    @Override
-    protected String validateContents(final Component component,
-            final Object event) {
+	}
 
-        // this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        // SwingUtil.getParentWindow(component).setCursor(
-        // Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        if (getFirstSyncJCheckBox().isSelected())
-            return null;
-        if (getUserJTextField().getText().isEmpty()) {
-            return validationFtpFailedUsername;
-        }
+	private JTextField getUserJTextField() {
+		if (UserJTextField == null) {
+			UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
+					""));
+			UserJTextField.setName(ExportWizard.USERNAME);
+			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
+			// .setUserName(UserJTextField.getText());
 
-        if (!(getPWJTextField().getValue().length > 0)) {
-            return validationFtpFailedPassword;
-        }
-        try {
-            SERVICE_STATUS service = gphc.checkService();
-            if (!service.equals(SERVICE_STATUS.OK)) {
-                if (service.equals(SERVICE_STATUS.GPHOSTER_FTP_DOWN))
-                    return validationFtpFailedMsg_GpFtpDown;
-                if (service.equals(SERVICE_STATUS.SYSTEM_OFFLINE))
-                    return validationFtpFailedMsg_Offline;
-                if (service.equals(SERVICE_STATUS.GPHOSTER_REST_DOWN))
-                    return validationFtpFailedMsg_GpHosterDown;
-            } else {
-                if (!gphc.userExists(getUserJTextField().getText()))
-                    return validationFtpFailedUserNotFound;
-            }
-        } catch (IOException e) {
-            LOGGER.error("IOException in gphc.userExists!", e);
-        } finally {
-            this.setCursor(Cursor.getDefaultCursor());
-        }
-        return null;
-    }
+			getFirstSyncJCheckBox().addActionListener(new ActionListener() {
 
-    private boolean isFirstSync(final AtlasConfigEditable ace) {
-        AtlasSwingWorker<Boolean> isfirstSync = new AtlasSwingWorker<Boolean>(
-                (Component) null, "checking for first Sync") {
-            @Override
-            protected Boolean doInBackground() throws Exception {
-                if (isNewAtlasUpload == null) {
-                    if (gphc.checkService().equals(SERVICE_STATUS.OK)) {
-                        try {
-                            isNewAtlasUpload = gphc.atlasBasenameFree(ace
-                                    .getBaseName());
-                        } catch (IOException e) {
-                            LOGGER.error("isFirstSync failed", e);
-                        }
-                    }
-                }
-                return isNewAtlasUpload;
-            }
-        };
-        isfirstSync.executeModalNoEx();
-        return isNewAtlasUpload;
-        // if (isNewAtlasUpload == null) {
-        // if (gphc.checkService().equals(SERVICE_STATUS.OK)) {
-        // try {
-        // isNewAtlasUpload = gphc
-        // .atlasBasenameFree(ace.getBaseName());
-        // } catch (IOException e) {
-        // LOGGER.error("isFirstSync failed", e);
-        // }
-        // }
-        // }
-        // return isNewAtlasUpload;
-    }
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					getUserJTextField().setEnabled(
+							!getFirstSyncJCheckBox().isSelected());
+					getPWJTextField().setEnabled(
+							!getFirstSyncJCheckBox().isSelected());
+				}
+			});
+		}
+		return UserJTextField;
+	}
+
+	@Override
+	protected String validateContents(final Component component,
+			final Object event) {
+
+		// this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		// SwingUtil.getParentWindow(component).setCursor(
+		// Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		if (getFirstSyncJCheckBox().isSelected())
+			return null;
+		if (getUserJTextField().getText().isEmpty()) {
+			return validationFtpFailedUsername;
+		}
+
+		if (!(getPWJTextField().getValue().length > 0)) {
+			return validationFtpFailedPassword;
+		}
+
+		// wird vorher gecheckt
+		// try {
+		// SERVICE_STATUS service = ((GpHosterClient)
+		// getWizardData(ExportWizard.GPHC))
+		// .checkService();
+		// if (!service.equals(SERVICE_STATUS.OK)) {
+		// if (service.equals(SERVICE_STATUS.GPHOSTER_FTP_DOWN))
+		// return validationFtpFailedMsg_GpFtpDown;
+		// if (service.equals(SERVICE_STATUS.SYSTEM_OFFLINE))
+		// return validationFtpFailedMsg_Offline;
+		// if (service.equals(SERVICE_STATUS.GPHOSTER_REST_DOWN))
+		// return validationFtpFailedMsg_GpHosterDown;
+		// } else {
+		// if (!((GpHosterClient) getWizardData(ExportWizard.GPHC))
+		// .userExists(getUserJTextField().getText()))
+		// return validationFtpFailedUserNotFound;
+		// }
+		// } catch (IOException e) {
+		// LOGGER.error("IOException in gphc.userExists!", e);
+		// } finally {
+		// this.setCursor(Cursor.getDefaultCursor());
+		// }
+		return null;
+	}
+
+	private boolean isFirstSync(final AtlasConfigEditable ace) {
+
+		if (ace == null)
+			return false;
+
+		if (isNewAtlasUpload == null) {
+
+			AtlasSwingWorker<Void> worker = new AtlasSwingWorker<Void>(
+					(Component) null, "checking for first Sync") {
+				@Override
+				protected Void doInBackground() throws Exception {
+					if (isNewAtlasUpload == null) {
+						if (((GpHosterClient) getWizardData(ExportWizard.GPHC))
+								.checkService().equals(SERVICE_STATUS.OK)) {
+							try {
+								LOGGER.debug("Checking online whether "
+										+ ace.getBaseName() + " is free");
+								final boolean askGpHosterOnline = ((GpHosterClient) getWizardData(ExportWizard.GPHC))
+										.atlasBasenameFree(ace.getBaseName());
+								isNewAtlasUpload = new AtomicBoolean(
+										askGpHosterOnline);
+							} catch (IOException e) {
+								LOGGER.error("isFirstSync failed", e);
+							}
+						}
+					}
+					return null;
+				}
+			};
+			worker.executeModalNoEx();
+		}
+		return isNewAtlasUpload != null ? isNewAtlasUpload.get() : true;
+		// if (isNewAtlasUpload == null) {
+		// if (gphc.checkService().equals(SERVICE_STATUS.OK)) {
+		// try {
+		// isNewAtlasUpload = gphc
+		// .atlasBasenameFree(ace.getBaseName());
+		// } catch (IOException e) {
+		// LOGGER.error("isFirstSync failed", e);
+		// }
+		// }
+		// }
+		// return isNewAtlasUpload;
+	}
 }

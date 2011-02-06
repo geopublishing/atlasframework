@@ -68,7 +68,6 @@ public class Brancher extends WizardBranchController {
 			WizardResultProducer.NO_OP);
 
 	// Now make another branching wizard for our second set of steps
-	Wizard secondBranch = new Brancher2().createWizard();
 
 	public static void main(String[] args) {
 		Brancher brancher = new Brancher();
@@ -83,14 +82,14 @@ public class Brancher extends WizardBranchController {
 
 	@Override
 	public Wizard getWizardForStep(String step, Map data) {
-//		log.debug("Get Wizard For Step " + step + " with " + data);
+		// log.debug("Get Wizard For Step " + step + " with " + data);
 		// The class name is the default ID for instantiated WizardPages
 		if ("multibranchdemo.Brancher$B".equals(step)) {
 			if (Boolean.TRUE.equals(data.get("foo"))) { // check some data in
 				// the map to decide
 				return c1;
 			} else {
-				return secondBranch;
+				return new Brancher2().createWizard();
 			}
 		}
 		return null;

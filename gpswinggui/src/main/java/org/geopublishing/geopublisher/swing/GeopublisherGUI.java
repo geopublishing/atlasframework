@@ -282,6 +282,15 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		});
 	}
 
+	/**
+	 * Creates a mew GeopublsherGUI with a loaded atlas
+	 */
+	public GeopublisherGUI(AtlasConfigEditable ace) {
+		this(false);
+		loadAce(ace);
+
+	}
+
 	/***************************************************************************
 	 * The {@link #actionPerformed(ActionEvent)} method centralizes all
 	 * {@link javax.swing.Action}s that are performed in this Class
@@ -917,40 +926,43 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 				return ace;
 			}
-
 		};
 		try {
-			ace = aceLoader.executeModal();
-
-			/*******************************************************
-			 * Matching available and installed languages
-			 */
-			final Locale locale = Locale.getDefault();
-			if (ace.getLanguages().contains(locale.getLanguage())) {
-				Translation.setActiveLang(locale.getLanguage());
-			} else {
-				// a modal dialog popup
-				SwitchLanguageDialog switchLanguageDialog = new SwitchLanguageDialog(
-						getJFrame(), ace.getLanguages(), false);
-				switchLanguageDialog.setVisible(true);
-			}
-
-			GpSwingUtil.validate(ace, getJFrame());
-
-			ace.getMapPool().addChangeListener(
-					listenToMapPoolChangesAndClosePreviewAtlas);
-
-			ace.getDataPool().addChangeListener(
-					listenToDataPoolChangesAndCloseAtlasViewerPreview);
-
+			loadAce(aceLoader.executeModal());
 		} catch (final CancellationException ex) {
 			ace = null;
-		} catch (final Exception ex) {
-			ExceptionDialog.show(getJFrame(), ex);
-			ace = null;
-		} finally {
 			getJFrame().updateAce();
+		} catch (final Exception ex) {
+			ace = null;
+			getJFrame().updateAce();
+			ExceptionDialog.show(getJFrame(), ex);
 		}
+	}
+
+	public void loadAce(AtlasConfigEditable ace2) {
+		this.ace = ace2;
+		/*******************************************************
+		 * Matching available and installed languages
+		 */
+		final Locale locale = Locale.getDefault();
+		if (ace.getLanguages().contains(locale.getLanguage())) {
+			Translation.setActiveLang(locale.getLanguage());
+		} else {
+			// a modal dialog popup
+			SwitchLanguageDialog switchLanguageDialog = new SwitchLanguageDialog(
+					getJFrame(), ace.getLanguages(), false);
+			switchLanguageDialog.setVisible(true);
+		}
+
+		GpSwingUtil.validate(ace, getJFrame());
+
+		ace.getMapPool().addChangeListener(
+				listenToMapPoolChangesAndClosePreviewAtlas);
+
+		ace.getDataPool().addChangeListener(
+				listenToDataPoolChangesAndCloseAtlasViewerPreview);
+
+		getJFrame().updateAce();
 	}
 
 	@Override
