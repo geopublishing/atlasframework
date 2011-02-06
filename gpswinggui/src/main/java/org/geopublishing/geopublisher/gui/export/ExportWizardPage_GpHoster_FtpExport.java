@@ -49,7 +49,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
             .R("ExportWizard.Ftp.ValidationError_Password");
 
     public ExportWizardPage_GpHoster_FtpExport() {
-        gphc = ExportWizardFTPBrancher.gphc;
+        gphc = ExportWizard.GPHC;
         ace = GeopublisherGUI.getInstance().getAce();
         initGui();
     }
@@ -74,7 +74,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
             PWJTextField = new Password(
                     GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
                     false, GPProps.get(GPProps.Keys.Password));
-            PWJTextField.setName(ExportWizardFTPBrancher.PASSWORD);
+            PWJTextField.setName(ExportWizard.PASSWORD);
             gphc.setPassword(PWJTextField.getValue().toString());
         }
         return PWJTextField;
@@ -94,7 +94,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
         if (UserJTextField == null) {
             UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
                     ""));
-            UserJTextField.setName(ExportWizardFTPBrancher.USERNAME);
+            UserJTextField.setName(ExportWizard.USERNAME);
             gphc.setUserName(UserJTextField.getText());
         }
         return UserJTextField;

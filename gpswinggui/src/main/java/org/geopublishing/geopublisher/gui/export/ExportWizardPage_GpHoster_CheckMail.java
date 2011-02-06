@@ -15,8 +15,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
     private final String validationFtpFailedPassword = GeopublisherGUI
             .R("ExportWizard.Ftp.ValidationError_Password");
     JLabel explanationJLabel = new JLabel(GeopublisherGUI.R(
-            "ExportWizard.Ftp.CheckMail.Explanation",
-            ExportWizardFTPBrancher.set_Email));
+            "ExportWizard.Ftp.CheckMail.Explanation", ExportWizard.set_Email));
 
     private Password PWField;
 
@@ -41,7 +40,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
         if (PWField == null) {
             PWField = new Password(
                     GeopublisherGUI.R("ExportWizard.FtpExport.Password"));
-            PWField.setName(ExportWizardFTPBrancher.PASSWORD);
+            PWField.setName(ExportWizard.PASSWORD);
         }
         return PWField;
     }

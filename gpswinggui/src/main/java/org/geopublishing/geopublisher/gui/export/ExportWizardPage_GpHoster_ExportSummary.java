@@ -16,7 +16,7 @@ public class ExportWizardPage_GpHoster_ExportSummary extends WizardPage {
     private JCheckBox makePublicCheckBox;
 
     public ExportWizardPage_GpHoster_ExportSummary() {
-        gphc = ExportWizardFTPBrancher.gphc;
+        gphc = ExportWizard.GPHC;
         initGui();
     }
 
@@ -40,7 +40,7 @@ public class ExportWizardPage_GpHoster_ExportSummary extends WizardPage {
         if (makePublicCheckBox == null) {
             makePublicCheckBox = new JCheckBox(
                     GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
-            makePublicCheckBox.setName(ExportWizardFTPBrancher.MAKE_PUBLIC);
+            makePublicCheckBox.setName(ExportWizard.MAKE_PUBLIC);
         }
         return makePublicCheckBox;
     }

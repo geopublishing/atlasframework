@@ -26,7 +26,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
     private final GpHosterClient gphc;
 
     public ExportWizardPage_GpHoster_NewUser() {
-        gphc = ExportWizardFTPBrancher.gphc;
+        gphc = ExportWizard.GPHC;
         initGui();
     }
 
@@ -43,7 +43,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
     private JCheckBox getAcceptAgb() {
         if (acceptAgb == null) {
             acceptAgb = new JCheckBox();
-            acceptAgb.setName(ExportWizardFTPBrancher.AGB_ACCEPTED);
+            acceptAgb.setName(ExportWizard.AGB_ACCEPTED);
         }
         return acceptAgb;
     }
@@ -51,7 +51,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
     private JTextField getEMailField() {
         if (eMailField == null) {
             eMailField = new JTextField();
-            eMailField.setName(ExportWizardFTPBrancher.EMAIL_SET);
+            eMailField.setName(ExportWizard.EMAIL_SET);
         }
         return eMailField;
     }
@@ -64,6 +64,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
         if (eMailField != null && eMailField.getText().isEmpty()) {
             return validationFtpFailedNoEmail;
         }
+        gphc.setUserName(eMailField.getText());
         return null;
     }
 

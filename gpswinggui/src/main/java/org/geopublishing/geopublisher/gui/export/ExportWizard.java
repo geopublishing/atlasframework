@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.api.wizard.WizardDisplayer;
@@ -75,10 +76,18 @@ public class ExportWizard extends WizardBranchController {
     public static String set_Email;
     public static final String USERNAME = "username?";
     public static final String PASSWORD = "password?";
+
+    /**
+     * Decides wheter the user wants to make his Atlas public, or not.
+     * 
+     * @see ExportWizardPage_GpHoster_ExportSummary
+     */
     public static final String MAKE_PUBLIC = "public?";
 
     /** Used to identify whether a Sync to FTP is a first one **/
     public static final String FTP_FIRST = "firstSync?";
+
+    public static final GpHosterClient GPHC = new GpHosterClient();
 
     // public static Boolean isNewAtlasUpload = null;
 

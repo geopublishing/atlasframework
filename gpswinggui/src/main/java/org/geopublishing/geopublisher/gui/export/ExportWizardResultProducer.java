@@ -68,6 +68,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
         final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
                 .get(ExportWizard.ACE);
+        final GpHosterClient gphc = ExportWizard.GPHC;
         if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
                 false))
             return null; // TODO what should be return here?
@@ -83,10 +84,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
         final String exportDir = (String) wizardData
                 .get(ExportWizard.EXPORTFOLDER);
         final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
-        final String username = (String) wizardData
-                .get(ExportWizardFTPBrancher.USERNAME);
-        final String password = (String) wizardData
-                .get(ExportWizardFTPBrancher.PASSWORD);
+        final String username = gphc.getUserName();
+        final String password = gphc.getPassword();
 
         /**
          * Store stuff to the geopublisher.properties
@@ -120,7 +119,6 @@ public class ExportWizardResultProducer implements WizardResultProducer {
             private JarExportUtil jarExportUtil;
             private ResultProgressHandle progress;
             private GpFtpAtlasExport gpFtpAtlasExport;
-            private final GpHosterClient gphc = new GpHosterClient();
 
             /**
              * If the user aborts the export, we tell it to JarExportUtil
