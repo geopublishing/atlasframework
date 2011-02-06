@@ -20,7 +20,7 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
     public static GpHosterClient gphc = new GpHosterClient();
 
     protected ExportWizardFTPBrancher() {
-        super(new WizardPage[] {new ExportWizardPage_FtpExport()});
+        super(new WizardPage[] {new ExportWizardPage_GpHoster_FtpExport()});
     }
 
     @Override
@@ -30,11 +30,11 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
         set_Email = (String) settings.get(EMAIL_SET);
 
         if (isFirstSync != null && isFirstSync) {
-            path = LangUtil.extendArray(path, ExportWizardPage_NewUser.class);
-            path = LangUtil.extendArray(path, ExportWizardPage_CheckMail.class);
-            path = LangUtil.extendArray(path, ExportWizardPage_Export.class);
+            path = LangUtil.extendArray(path, ExportWizardPage_GpHoster_NewUser.class);
+            path = LangUtil.extendArray(path, ExportWizardPage_GpHoster_CheckMail.class);
+            path = LangUtil.extendArray(path, ExportWizardPage_GpHoster_ExportSummary.class);
         } else {
-            path = LangUtil.extendArray(path, ExportWizardPage_Export.class);
+            path = LangUtil.extendArray(path, ExportWizardPage_GpHoster_ExportSummary.class);
         }
         return WizardPage.createWizard(path, ExportWizard.FINISHER);
     }

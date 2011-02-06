@@ -12,7 +12,7 @@ import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-public class ExportWizardPage_NewUser extends WizardPage {
+public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
     JLabel explanationJLabel = new JLabel(
             GeopublisherGUI.R("ExportWizard.Ftp.New_User.Explanation"));
     JLabel agb = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.New_User.AGB"));
@@ -25,7 +25,7 @@ public class ExportWizardPage_NewUser extends WizardPage {
             .R("ExportWizard.Ftp.New_User.ValidationError_Email");
     private final GpHosterClient gphc;
 
-    public ExportWizardPage_NewUser() {
+    public ExportWizardPage_GpHoster_NewUser() {
         gphc = ExportWizardFTPBrancher.gphc;
         initGui();
     }
@@ -52,7 +52,6 @@ public class ExportWizardPage_NewUser extends WizardPage {
         if (eMailField == null) {
             eMailField = new JTextField();
             eMailField.setName(ExportWizardFTPBrancher.EMAIL_SET);
-
         }
         return eMailField;
     }

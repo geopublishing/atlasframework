@@ -70,13 +70,17 @@ public class ExportWizard extends WizardBranchController {
 
     public static final String JNLPURL = "jnlpCodebase";
 
+    public static final String AGB_ACCEPTED = "agb_accepted?";
+    public static final String EMAIL_SET = "email_set?";
+    public static String set_Email;
+    public static final String USERNAME = "username?";
+    public static final String PASSWORD = "password?";
+    public static final String MAKE_PUBLIC = "public?";
+
     /** Used to identify whether a Sync to FTP is a first one **/
-    final public static String FTP_FIRST = "firstSync?";
+    public static final String FTP_FIRST = "firstSync?";
 
     // public static Boolean isNewAtlasUpload = null;
-
-    /** Second BranchController to hold and manage Export Information **/
-    Wizard ftpbranch = new ExportWizardFTPBrancher().createWizard();
 
     /**
      * This constructor also defines the default (first) steps of the wizard
@@ -158,10 +162,9 @@ public class ExportWizard extends WizardBranchController {
         Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
         Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
         Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
+        Boolean isFirstSync = (Boolean) wizardData.get(ExportWizard.FTP_FIRST);
         // AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
         // .get(ExportWizard.ACE);
-        // Boolean isFirstSync = (Boolean)
-        // wizardData.get(ExportWizard.FTP_FIRST);
 
         Class[] path = new Class[] {};
 
@@ -174,14 +177,19 @@ public class ExportWizard extends WizardBranchController {
             path = LangUtil.extendArray(path,
                     ExportWizardPage_JNLPDefinition.class);
         if (isFtp != null && isFtp) {
-            return ftpbranch;
-            // path = LangUtil.extendArray(path,
-            // ExportWizardPage_FtpExport.class);
-            //
-            // if (isFirstSync != null && isFirstSync) {
-            // path = LangUtil.extendArray(path,
-            // ExportWizardPage_FirstSync.class);
-            // }
+            path = LangUtil.extendArray(path,
+                    ExportWizardPage_GpHoster_FtpExport.class);
+            if (isFirstSync != null && isFirstSync) {
+                path = LangUtil.extendArray(path,
+                        ExportWizardPage_GpHoster_NewUser.class);
+                path = LangUtil.extendArray(path,
+                        ExportWizardPage_GpHoster_CheckMail.class);
+                path = LangUtil.extendArray(path,
+                        ExportWizardPage_GpHoster_ExportSummary.class);
+            } else {
+                path = LangUtil.extendArray(path,
+                        ExportWizardPage_GpHoster_ExportSummary.class);
+            }
         }
         // LOGGER.debug("getWizardForStep " + step + " returns " + path);
         return WizardPage.createWizard(path, FINISHER);

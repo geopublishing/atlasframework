@@ -9,13 +9,13 @@ import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-public class ExportWizardPage_Export extends WizardPage {
+public class ExportWizardPage_GpHoster_ExportSummary extends WizardPage {
 
     private final GpHosterClient gphc;
     private JLabel explanationLabel;
     private JCheckBox makePublicCheckBox;
 
-    public ExportWizardPage_Export() {
+    public ExportWizardPage_GpHoster_ExportSummary() {
         gphc = ExportWizardFTPBrancher.gphc;
         initGui();
     }

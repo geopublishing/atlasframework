@@ -21,9 +21,9 @@ import org.netbeans.spi.wizard.WizardPage;
 import de.schmitzm.swing.input.ManualInputOption.Password;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class ExportWizardPage_FtpExport extends WizardPage {
+public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
     final static protected Logger LOGGER = Logger
-            .getLogger(ExportWizardPage_FtpExport.class);
+            .getLogger(ExportWizardPage_GpHoster_FtpExport.class);
     private static final String validationFtpFailedUserNotFound = GeopublisherGUI
             .R("ExportWizard.Ftp.ValidationError_UserNotFound",
                     GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
@@ -48,7 +48,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
     private final String validationFtpFailedPassword = GeopublisherGUI
             .R("ExportWizard.Ftp.ValidationError_Password");
 
-    public ExportWizardPage_FtpExport() {
+    public ExportWizardPage_GpHoster_FtpExport() {
         gphc = ExportWizardFTPBrancher.gphc;
         ace = GeopublisherGUI.getInstance().getAce();
         initGui();
@@ -85,7 +85,7 @@ public class ExportWizardPage_FtpExport extends WizardPage {
             firstSyncJCheckBox = new JCheckBox(
                     GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
             firstSyncJCheckBox.setName(ExportWizard.FTP_FIRST);
-            firstSyncJCheckBox.setSelected(isFirstSync(ace));
+            // firstSyncJCheckBox.setSelected(isFirstSync(ace));
         }
         return firstSyncJCheckBox;
     }
@@ -125,11 +125,16 @@ public class ExportWizardPage_FtpExport extends WizardPage {
                     return validationFtpFailedMsg_Offline;
                 if (service.equals(SERVICE_STATUS.GPHOSTER_REST_DOWN))
                     return validationFtpFailedMsg_GpHosterDown;
+            } else {
+                if (!gphc.userExists(getUserJTextField().getText()))
+                    return validationFtpFailedUserNotFound;
             }
-            return null;
+        } catch (IOException e) {
+            LOGGER.error("IOException in gphc.userExists!", e);
         } finally {
             this.setCursor(Cursor.getDefaultCursor());
         }
+        return null;
     }
 
     private boolean isFirstSync(final AtlasConfigEditable ace) {

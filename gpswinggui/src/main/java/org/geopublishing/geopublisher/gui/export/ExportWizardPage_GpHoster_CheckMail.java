@@ -11,7 +11,7 @@ import org.netbeans.spi.wizard.WizardPage;
 
 import de.schmitzm.swing.input.ManualInputOption.Password;
 
-public class ExportWizardPage_CheckMail extends WizardPage {
+public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
     private final String validationFtpFailedPassword = GeopublisherGUI
             .R("ExportWizard.Ftp.ValidationError_Password");
     JLabel explanationJLabel = new JLabel(GeopublisherGUI.R(
@@ -24,7 +24,7 @@ public class ExportWizardPage_CheckMail extends WizardPage {
         return GeopublisherGUI.R("ExportWizard.Ftp.CheckMail");
     }
 
-    public ExportWizardPage_CheckMail() {
+    public ExportWizardPage_GpHoster_CheckMail() {
         // send mail
         initGui();
     }
