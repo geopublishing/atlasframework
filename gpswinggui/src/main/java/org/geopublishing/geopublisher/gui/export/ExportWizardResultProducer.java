@@ -88,8 +88,12 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final GpHosterClient gphc = (GpHosterClient) wizardData
 				.get(ExportWizard.GPHC);
 
-		final String username = gphc.getUserName();
-		final String password = gphc.getPassword();
+		String username = gphc.getUserName();
+		if (username == null)
+			username = (String) wizardData.get(ExportWizard.GPH_USERNAME);
+		String password = gphc.getPassword();
+		if (password == null)
+			password = (String) wizardData.get(ExportWizard.GPH_PASSWORD);
 
 		/**
 		 * Store stuff to the geopublisher.properties

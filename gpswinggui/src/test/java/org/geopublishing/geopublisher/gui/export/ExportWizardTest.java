@@ -9,7 +9,6 @@ import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -32,7 +31,7 @@ public class ExportWizardTest extends TestingClass {
 	 * DO NOt COMMIT UNIGNORED => WILL HANG HUDSON
 	 */
 	@Test
-	@Ignore
+	// @Ignore
 	public void testExportWizard() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {

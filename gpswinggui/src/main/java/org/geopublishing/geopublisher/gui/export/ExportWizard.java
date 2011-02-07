@@ -75,10 +75,9 @@ public class ExportWizard extends WizardBranchController {
 	public static final String JNLPURL = "jnlpCodebase";
 
 	public static final String AGB_ACCEPTED = "agb_accepted?";
-	public static final String EMAIL_SET = "email_set?";
-	public static String set_Email;
-	public static final String USERNAME = "username?";
-	public static final String PASSWORD = "password?";
+	public static final String GPH_EMAIL_FIelD = "email_set?";
+	public static final String GPH_USERNAME = "username";
+	public static final String GPH_PASSWORD = "password";
 
 	/**
 	 * Decides wheter the user wants to make his Atlas public, or not.

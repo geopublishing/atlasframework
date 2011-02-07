@@ -70,7 +70,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 			PWJTextField = new ManualInputOption.PasswordViewable(
 					GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
 					false, GPProps.get(GPProps.Keys.Password));
-			PWJTextField.setName(ExportWizard.PASSWORD);
+			PWJTextField.setName(ExportWizard.GPH_PASSWORD);
 			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
 			// .setPassword(PWJTextField.getValue().toString());
 		}
@@ -100,7 +100,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		if (UserJTextField == null) {
 			UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
 					""));
-			UserJTextField.setName(ExportWizard.USERNAME);
+			UserJTextField.setName(ExportWizard.GPH_USERNAME);
 			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
 			// .setUserName(UserJTextField.getText());
 
@@ -135,28 +135,12 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 			return validationFtpFailedPassword;
 		}
 
-		// wird vorher gecheckt
-		// try {
-		// SERVICE_STATUS service = ((GpHosterClient)
-		// getWizardData(ExportWizard.GPHC))
-		// .checkService();
-		// if (!service.equals(SERVICE_STATUS.OK)) {
-		// if (service.equals(SERVICE_STATUS.GPHOSTER_FTP_DOWN))
-		// return validationFtpFailedMsg_GpFtpDown;
-		// if (service.equals(SERVICE_STATUS.SYSTEM_OFFLINE))
-		// return validationFtpFailedMsg_Offline;
-		// if (service.equals(SERVICE_STATUS.GPHOSTER_REST_DOWN))
-		// return validationFtpFailedMsg_GpHosterDown;
-		// } else {
-		// if (!((GpHosterClient) getWizardData(ExportWizard.GPHC))
-		// .userExists(getUserJTextField().getText()))
-		// return validationFtpFailedUserNotFound;
-		// }
-		// } catch (IOException e) {
-		// LOGGER.error("IOException in gphc.userExists!", e);
-		// } finally {
-		// this.setCursor(Cursor.getDefaultCursor());
-		// }
+		// Because Schmitzm Password input component is not properly handled by
+		// the wizard, we put the password into the wizardmap manually
+		if (getPWJTextField().getValue() != null)
+			putWizardData(ExportWizard.GPH_PASSWORD, getPWJTextField()
+					.getValue().toString());
+
 		return null;
 	}
 

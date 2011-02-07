@@ -8,7 +8,6 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
@@ -49,7 +48,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 	private JTextField getEMailField() {
 		if (eMailField == null) {
 			eMailField = new JTextField();
-			eMailField.setName(ExportWizard.EMAIL_SET);
+			eMailField.setName(ExportWizard.GPH_EMAIL_FIelD);
 		}
 		return eMailField;
 	}
@@ -58,9 +57,10 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 	protected String validateContents(Component component, Object event) {
 		// mmm.. should be read from the wiazrd map, sinve the texfield has a
 		// name
-		GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
-		if (eMailField != null)
-			gphc.setUserName(eMailField.getText());
+		// GpHosterClient gphc = (GpHosterClient)
+		// getWizardData(ExportWizard.GPHC);
+		// if (eMailField != null)
+		// gphc.setUserName(eMailField.getText());
 
 		if (acceptAgb != null && !acceptAgb.isSelected()) {
 			return validationFtpFailedAgbNotAccepted;
