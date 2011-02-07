@@ -42,7 +42,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 
 		GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
 		String name = (String) getWizardData(ExportWizard.GPH_USERNAME);
-		String email = (String) getWizardData(ExportWizard.GPH_EMAIL_FIelD);
+		String email = (String) getWizardData(ExportWizard.GPH_EMAIL_FIELD);
 		try {
 			createdUserWithSuccess = gphc.userCreate(email, email);
 

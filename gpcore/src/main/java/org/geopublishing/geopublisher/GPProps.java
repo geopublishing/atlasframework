@@ -61,7 +61,7 @@ public abstract class GPProps {
          **/
         windowMaximized, logLevel
         // , rasterReader
-        , LastExportFtp, Username, Password
+        , LastExportFtp, GPH_Username, GPH_Password
     }
 
     /** E.G. ".AtlasStyler" or ".Geopublisher" **/

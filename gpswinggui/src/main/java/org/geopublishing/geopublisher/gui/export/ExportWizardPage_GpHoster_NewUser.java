@@ -48,7 +48,7 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 	private JTextField getEMailField() {
 		if (eMailField == null) {
 			eMailField = new JTextField();
-			eMailField.setName(ExportWizard.GPH_EMAIL_FIelD);
+			eMailField.setName(ExportWizard.GPH_EMAIL_FIELD);
 		}
 		return eMailField;
 	}

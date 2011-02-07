@@ -21,7 +21,6 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import de.schmitzm.swing.input.ManualInputOption;
-import de.schmitzm.swing.input.ManualInputOption.Password;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
@@ -34,7 +33,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 			GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
 	JCheckBox firstSyncJCheckBox;
 	private JTextField UserJTextField;
-	private Password PWJTextField;
+	private ManualInputOption.PasswordViewable passwordViewableInputOption;
 	// private Boolean isNewAtlasUpload;
 	private AtomicBoolean isNewAtlasUpload;
 	// private final GpHosterClient gphc;
@@ -65,16 +64,22 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		add(getPWJTextField(), "growx");
 	}
 
-	private Password getPWJTextField() {
-		if (PWJTextField == null) {
-			PWJTextField = new ManualInputOption.PasswordViewable(
+	private ManualInputOption.PasswordViewable getPWJTextField() {
+		if (passwordViewableInputOption == null) {
+			passwordViewableInputOption = new ManualInputOption.PasswordViewable(
 					GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
-					false, GPProps.get(GPProps.Keys.Password));
-			PWJTextField.setName(ExportWizard.GPH_PASSWORD);
-			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
-			// .setPassword(PWJTextField.getValue().toString());
+					false, GPProps.get(GPProps.Keys.GPH_Password));
+			passwordViewableInputOption.setName(ExportWizard.GPH_PASSWORD);
+
+			// When the value of this textfield is automatically set from the
+			// properties, and the field is not chenged yb the user, the Wizard
+			// will NOT put it's value into the wizardMap. So we do it here:
+			if (GPProps.get(GPProps.Keys.GPH_Password) != null)
+				putWizardData(ExportWizard.GPH_PASSWORD,
+						GPProps.get(GPProps.Keys.GPH_Password));
+
 		}
-		return PWJTextField;
+		return passwordViewableInputOption;
 	}
 
 	private JCheckBox getFirstSyncJCheckBox() {
@@ -91,6 +96,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		getFirstSyncJCheckBox()
 				.setSelected(
 						isFirstSync((AtlasConfigEditable) getWizardData(ExportWizard.ACE)));
+
 		getUserJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
 		getPWJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
 
@@ -98,11 +104,18 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 	private JTextField getUserJTextField() {
 		if (UserJTextField == null) {
-			UserJTextField = new JTextField(GPProps.get(GPProps.Keys.Username,
-					""));
+			UserJTextField = new JTextField(
+					GPProps.get(GPProps.Keys.GPH_Username));
 			UserJTextField.setName(ExportWizard.GPH_USERNAME);
-			// ((GpHosterClient) getWizardData(ExportWizard.GPHC))
-			// .setUserName(UserJTextField.getText());
+
+			if (GPProps.get(GPProps.Keys.GPH_Username) != null) {
+				putWizardData(ExportWizard.GPH_USERNAME,
+						GPProps.get(GPProps.Keys.GPH_Username));
+			}
+
+			// When the value of this textfield is automatically set from the
+			// properties, and the field is not chenged yb the user, the Wizard
+			// will NOT put it's value into the wizardMap. So we do it here:
 
 			getFirstSyncJCheckBox().addActionListener(new ActionListener() {
 
@@ -137,9 +150,10 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 		// Because Schmitzm Password input component is not properly handled by
 		// the wizard, we put the password into the wizardmap manually
-		if (getPWJTextField().getValue() != null)
-			putWizardData(ExportWizard.GPH_PASSWORD, getPWJTextField()
-					.getValue().toString());
+		if (getPWJTextField().getValue() != null) {
+			final String pwdKlartext = new String(getPWJTextField().getValue());
+			putWizardData(ExportWizard.GPH_PASSWORD, pwdKlartext);
+		}
 
 		return null;
 	}

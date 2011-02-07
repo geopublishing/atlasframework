@@ -88,12 +88,11 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final GpHosterClient gphc = (GpHosterClient) wizardData
 				.get(ExportWizard.GPHC);
 
-		String username = gphc.getUserName();
-		if (username == null)
-			username = (String) wizardData.get(ExportWizard.GPH_USERNAME);
-		String password = gphc.getPassword();
-		if (password == null)
-			password = (String) wizardData.get(ExportWizard.GPH_PASSWORD);
+		gphc.setUserName((String) wizardData.get(ExportWizard.GPH_USERNAME));
+		if ((String) wizardData.get(ExportWizard.GPH_EMAIL_FIELD) != null)
+			gphc.setUserName((String) wizardData
+					.get(ExportWizard.GPH_EMAIL_FIELD));
+		gphc.setPassword((String) wizardData.get(ExportWizard.GPH_PASSWORD));
 
 		/**
 		 * Store stuff to the geopublisher.properties
@@ -113,8 +112,10 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			GPProps.set(Keys.LastExportDisk, isDisk);
 			GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
 			GPProps.set(Keys.LastExportJWS, isJws);
-			GPProps.set(Keys.Username, username);
-			GPProps.set(Keys.Password, password);
+			if (gphc.getUserName() != null)
+				GPProps.set(Keys.GPH_Username, gphc.getUserName());
+			if (gphc.getPassword() != null)
+				GPProps.set(Keys.GPH_Password, gphc.getPassword());
 
 			GPProps.store();
 		}
