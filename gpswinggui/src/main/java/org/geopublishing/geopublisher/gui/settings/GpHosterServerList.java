@@ -9,6 +9,12 @@ public class GpHosterServerList extends
 
 	public GpHosterServerList(String propertiesString) {
 		super(propertiesString);
+
+		if (size() == 0) {
+			// Whenever this list is empty after parsing the properties list, we
+			// add the default GpHoster
+			add(GpHosterServerSettings.DEFAULT);
+		}
 	}
 
 	@Override

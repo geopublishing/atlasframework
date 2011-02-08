@@ -39,12 +39,12 @@ public class GpHosterClient {
 
 	// TODO Make switchable!
 
-	public static final String GPHOSTER_REST_URL = "http://hoster.geopublishing.org:8088/gp-hoster-jsf/";
+	public static final String DEFAULT_GPHOSTER_REST_URL = "http://hoster.geopublishing.org:8088/gp-hoster-jsf/";
 	// public static final String GPHOSTER_REST_URL =
 	// "http://localhost:8080/gp-hoster-jsf/";
-	public static final String GPHOSTER_FTP_HOSTNAME = "ftp.geopublishing.org";
-	public static final String GPHOSTER_FTP_URL = "ftp://"
-			+ GPHOSTER_FTP_HOSTNAME;
+	public static final String DEFAULT_GPHOSTER_FTP_HOSTNAME = "ftp.geopublishing.org";
+	public static final String DEFAULt_GPHOSTER_FTP_URL = "ftp://"
+			+ DEFAULT_GPHOSTER_FTP_HOSTNAME;
 
 	private final String restUrl;
 
@@ -64,7 +64,7 @@ public class GpHosterClient {
 	 * USes the default URL of the Geopublishing Server
 	 */
 	public GpHosterClient() {
-		this.restUrl = GPHOSTER_REST_URL;
+		this.restUrl = DEFAULT_GPHOSTER_REST_URL;
 	}
 
 	public void setUserName(String userName) {
@@ -329,14 +329,14 @@ public class GpHosterClient {
 				// Check FTP
 				final FTPClient ftpClient = new FTPClient();
 				ftpClient.setTimeout(5000);
-				ftpClient.setRemoteHost(GPHOSTER_FTP_HOSTNAME);
+				ftpClient.setRemoteHost(DEFAULT_GPHOSTER_FTP_HOSTNAME);
 				ftpClient.connect();
 				ftpClient.quit();
 			} catch (Exception e) {
 				return serviceStatus = SERVICE_STATUS.GPHOSTER_FTP_DOWN;
 			}
 
-			if (!IOUtil.urlExists(GPHOSTER_REST_URL + "index.html"))
+			if (!IOUtil.urlExists(DEFAULT_GPHOSTER_REST_URL + "index.html"))
 				return serviceStatus = SERVICE_STATUS.GPHOSTER_REST_DOWN;
 
 			serviceStatus = SERVICE_STATUS.OK;

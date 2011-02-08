@@ -89,11 +89,9 @@ import de.schmitzm.geotools.gui.XMapPaneAction_Zoom;
 import de.schmitzm.geotools.gui.XMapPaneTool;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
-import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
-import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SmallButton;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.event.MouseInputType;
@@ -1173,29 +1171,33 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	}
 
 	private JPanel getButtons() {
-		final JPanel panel = new JPanel(new MigLayout());
+		final JPanel panel = new JPanel(new MigLayout("flowy, debug", "[]",
+				"fill"));
 
-		final JButton okButton = new OkButton(new AbstractAction() {
+		final JButton okButton = getOkButton();
 
-			public void actionPerformed(final ActionEvent e) {
-				okClose();
-			}
+		// new OkButton(new AbstractAction() {
+		//
+		// public void actionPerformed(final ActionEvent e) {
+		// okClose();
+		// }
+		//
+		// });
 
-		});
-
-		final JButton cancelButton = new CancelButton(new AbstractAction() {
-
-			public void actionPerformed(final ActionEvent e) {
-				cancelClose();
-			}
-
-		});
+		final JButton cancelButton = getCancelButton();
+		// final JButton cancelButton = new CancelButton(new AbstractAction() {
+		//
+		// public void actionPerformed(final ActionEvent e) {
+		// cancelClose();
+		// }
+		//
+		// });
 
 		/**
 		 * Adding all the buttons
 		 */
-		panel.add(cancelButton, "gapx, right, tag cancel");
-		panel.add(okButton, "right, tag ok");
+		panel.add(cancelButton, "bottom, tag cancel");
+		panel.add(okButton, "bottom, tag ok");
 		return panel;
 	}
 
@@ -1295,8 +1297,9 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	}
 
 	/**
-	 * Returns the original map object that is beeing edited. This is the version we are playing with.
-	 **/	
+	 * Returns the original map object that is beeing edited. This is the
+	 * version we are playing with.
+	 **/
 	public Map getMap() {
 		return map;
 	}

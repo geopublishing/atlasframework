@@ -263,6 +263,8 @@ public abstract class GPProps {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void resetProperties(final Component guiOwner) {
+
+		// prepare the error message (just in case)
 		final String msg = GpUtil
 				.R("GpProps.could_not_find_default_properties_in_file");
 

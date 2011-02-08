@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.gui.settings.GpHostingOptionsTab;
 
 import de.schmitzm.geotools.io.AbstractServerSettings;
@@ -13,6 +14,15 @@ import de.schmitzm.swing.input.ManualInputOption.Text;
 import de.schmitzm.swing.input.MultipleOptionPane;
 
 public class GpHosterServerSettings extends AbstractServerSettings {
+
+	public static final GpHosterServerSettings DEFAULT = new GpHosterServerSettings();
+	static {
+		DEFAULT.setTitle("geopublishing.org");
+		DEFAULT.setUrlGpHosterRest(GpHosterClient.DEFAULT_GPHOSTER_REST_URL);
+		DEFAULT.setFtpHostname(GpHosterClient.DEFAULT_GPHOSTER_FTP_HOSTNAME);
+		DEFAULT.setUsername(null);
+		DEFAULT.setPassword(null);
+	}
 
 	Logger LOGGER = Logger.getLogger(GpHosterServerSettings.class);
 
@@ -143,7 +153,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 		// i8n
 		Text ftphostInput = new ManualInputOption.Text("FTP Hostname", true,
-				dbServer.getUrlGpHosterRest());
+				dbServer.getFtpHostname());
 
 		// i8n
 		Text userInput = new ManualInputOption.Text("Username", false,
