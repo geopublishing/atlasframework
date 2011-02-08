@@ -21,8 +21,8 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.netbeans.spi.wizard.WizardPage;
 
-import de.schmitzm.geotools.io.DbServerList;
-import de.schmitzm.geotools.io.DbSettingsJComboBox;
+import de.schmitzm.geotools.io.DbServerListJComboBox;
+import de.schmitzm.geotools.io.GtDbServerList;
 import de.schmitzm.geotools.io.GtDbServerSettings;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SmallButton;
@@ -42,7 +42,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	private final String validationImportSourceTypeFailedMsg_CantRead = AsSwingUtil
 			.R("ImportWizard.DB.ServerSelection.ValidationError.CantRead");
 
-	DbSettingsJComboBox dbJComboBox;
+	DbServerListJComboBox dbJComboBox;
 
 	private SmallButton dbAddJButton;
 
@@ -68,10 +68,10 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 				.getSelectedItem();
 
 		if (dbServer == null)
-			return "Must select a DB";
+			return "Must select a DB"; // i8n
 
 		if (!dbServer.isWellDefined())
-			return "Server not well defined.";
+			return "Server not well defined.";// i8n
 
 		AtlasSwingWorker<String[]> dbGetTypeNames = new AtlasSwingWorker<String[]>(
 				ImportWizardPage_DB_Select.this) {
@@ -135,7 +135,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 			if (e.getMessage() != null
 					&& (e.getMessage().contains("password") || e.getMessage()
 							.contains("authent"))) {
-				return ("Password and/or username rejected.");
+				return ("Password and/or username rejected.");// i8n
 			}
 
 			return validationImportSourceTypeFailedMsg_CantRead;
@@ -157,7 +157,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	}
 
 	/**
-	 * A Button to add a new DB
+	 * A Button to delete a DB configuration
 	 */
 	private JButton getDeleteDbJButton() {
 		if (dbDelJButton == null) {
@@ -169,7 +169,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 					GtDbServerSettings db = (GtDbServerSettings) getDbJComboBox()
 							.getSelectedItem();
 
-					DbServerList oldList = getDbJComboBox().getDbList();
+					GtDbServerList oldList = getDbJComboBox().getDbList();
 
 					oldList.remove(db);
 
@@ -201,7 +201,7 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	 */
 	private JButton getEditDbJButton() {
 		if (dbEditJButton == null) {
-			AbstractAction a = new AbstractAction("Edit") {
+			AbstractAction a = new AbstractAction("Edit") {// i8n
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -230,14 +230,14 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 	}
 
 	private void createOrEditDb(GtDbServerSettings dbServer) {
-		GtDbServerSettings newOrEditedDbServer = GtDbServerSettings.createOrEdit(
-				ImportWizardPage_DB_Select.this, dbServer);
+		GtDbServerSettings newOrEditedDbServer = GtDbServerSettings
+				.createOrEdit(ImportWizardPage_DB_Select.this, dbServer);
 
 		if (newOrEditedDbServer == null)
 			return;
 
 		try {
-			DbServerList dbList = getDbJComboBox().getDbList();
+			GtDbServerList dbList = getDbJComboBox().getDbList();
 			if (dbServer == null) {
 				dbList.add(newOrEditedDbServer);
 			}
@@ -281,13 +281,12 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 		return dbAddJButton;
 	}
 
-	private DbSettingsJComboBox getDbJComboBox() {
+	private DbServerListJComboBox getDbJComboBox() {
 		if (dbJComboBox == null) {
 
-			dbJComboBox = new DbSettingsJComboBox(
-					new DbServerList(ASProps
-							.get(ASProps.Keys.dbList)));
-			
+			dbJComboBox = new DbServerListJComboBox(new GtDbServerList(
+					ASProps.get(ASProps.Keys.dbList)));
+
 			SwingUtil.addMouseWheelForCombobox(dbJComboBox);
 
 			dbJComboBox.setName(ImportWizard.IMPORT_DB);

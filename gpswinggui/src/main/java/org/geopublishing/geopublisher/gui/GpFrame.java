@@ -59,6 +59,7 @@ import org.geopublishing.geopublisher.gui.group.DnDJTree;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.MapPoolJTable;
+import org.geopublishing.geopublisher.gui.settings.GpOptionsDialog;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI.ActionCmds;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -470,6 +471,16 @@ public class GpFrame extends JFrame {
 	private JMenu getOptionsMenu() {
 		final AtlasConfigEditable ace = gp.getAce();
 		JMenu optionsMenu = new JMenu(R("MenuBar.OptionsMenu"));
+
+		final JMenuItem optionsMenuItem = new JMenuItem(new AbstractAction(
+				"Einstellungen") {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new GpOptionsDialog(GpFrame.this, GeopublisherGUI.getInstance());
+			}
+		});
+		optionsMenu.add(optionsMenuItem);
 
 		if (ace != null) {
 			// Option to re-read all the information that is NOT stored in the

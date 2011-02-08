@@ -66,34 +66,33 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			JTabbedPane tabbedPane = getTabbedPane();
 
 			/** A tab for name, desc and keywords... **/
-			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.labels.tab"),
-					null, createTranslationsTab(dpe), null, tabbedPane
-							.getTabCount());
+			tabbedPane.insertTab(
+					GeopublisherGUI.R("EditDpEntryGUI.labels.tab"), null,
+					createTranslationsTab(dpe), null, tabbedPane.getTabCount());
 
 			/** A tab with general settings **/
-			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.general.tab"),
-					null, new DpEntryJPanel(dpe), null, tabbedPane
-							.getTabCount());
-			
+			tabbedPane.insertTab(
+					GeopublisherGUI.R("EditDpEntryGUI.general.tab"), null,
+					new DpEntryJPanel(dpe), null, tabbedPane.getTabCount());
 
 			/** A tab with general settings **/
 			tabbedPane.insertTab(GeopublisherGUI.R("EditDpEntryGUI.usage.tab"),
-					null, new DpEntryUsageJPanel(dpe), null, tabbedPane
-							.getTabCount());
+					null, new DpEntryUsageJPanel(dpe), null,
+					tabbedPane.getTabCount());
 
 			/** A tab with DpEntryType specific stuff **/
 			{
 				Component typeSpecific = null;
 				if (dpe instanceof DpLayerRaster)
 					typeSpecific = createRasterTab((DpLayerRaster) dpe);
-//				else if (dpe instanceof DpLayerRasterPyramid)
-//					typeSpecific = new DpLayerRasterPyramidJPanel(
-//							(DpLayerRasterPyramid) dpe);
+				// else if (dpe instanceof DpLayerRasterPyramid)
+				// typeSpecific = new DpLayerRasterPyramidJPanel(
+				// (DpLayerRasterPyramid) dpe);
 
 				if (typeSpecific != null)
 					tabbedPane.insertTab(dpe.getType().getLine2(), null,
-							typeSpecific, dpe.getType().getDesc(), tabbedPane
-									.getTabCount());
+							typeSpecific, dpe.getType().getDesc(),
+							tabbedPane.getTabCount());
 			}
 
 			/** A tab with Table related settings **/
@@ -114,38 +113,37 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 
 			setContentPane(contentPane);
 			pack();
-			SwingUtil.setRelativeFramePosition(this, owner, .5,.5);
+			SwingUtil.setRelativeFramePosition(this, owner, .5, .5);
 		}
 
 	}
 
-
 	private JPanel createRasterTab(final DpLayerRaster dpRaster) {
 		final JPanel rasterTab = new JPanel(new MigLayout());
-		{
-			JPanel noDataValuesPanel = new JPanel(new MigLayout("width 100%"));
-			noDataValuesPanel.setBorder(BorderFactory
-					.createTitledBorder(GeopublisherGUI
-							.R("EditDpEntryGUI.raster.nodata.border")));
+		JPanel noDataValuesPanel = new JPanel(new MigLayout("width 100%"));
+		noDataValuesPanel.setBorder(BorderFactory
+				.createTitledBorder(GeopublisherGUI
+						.R("EditDpEntryGUI.raster.nodata.border")));
 
-			noDataValuesPanel.add(new JLabel(GeopublisherGUI
-					.R("EditDpEntryGUI.raster.nodata.explanation")), "span 2");
+		noDataValuesPanel.add(
+				new JLabel(GeopublisherGUI
+						.R("EditDpEntryGUI.raster.nodata.explanation")),
+				"span 2");
 
-			final JPanel noDataValuePanel = new JPanel(new MigLayout());
-//MS-01.sc: DpLayerRaster modified to use a GridReader instead of GridCoverage2D
-//			--> no data values can not be resolved like from GridCoverage2D
-//			--> code temporary removed
-//			final GridCoverage2D geoObject = dpRaster.getGeoObject();
-//			final double[] noDataValues = geoObject.getSampleDimension(0)
-//					.getNoDataValues();
-			final double[] noDataValues = null;
-//MS-01.ec
+		final JPanel noDataValuePanel = new JPanel(new MigLayout());
+		// MS-01.sc: DpLayerRaster modified to use a GridReader instead of
+		// GridCoverage2D
+		// --> no data values can not be resolved like from GridCoverage2D
+		// --> code temporary removed
+		// final GridCoverage2D geoObject = dpRaster.getGeoObject();
+		// final double[] noDataValues = geoObject.getSampleDimension(0)
+		// .getNoDataValues();
+		final double[] noDataValues = null;
+		// MS-01.ec
 
-			noDataValuePanel.add(new JLabel(GeopublisherGUI
-					.R("EditDpEntryGUI.raster.nodata.label")
-					+ noDataValues));
-			rasterTab.add(noDataValuePanel, "growx");
-		}
+		noDataValuePanel.add(new JLabel(GeopublisherGUI
+				.R("EditDpEntryGUI.raster.nodata.label") + noDataValues));
+		rasterTab.add(noDataValuePanel, "growx");
 
 		return rasterTab;
 	}
@@ -164,14 +162,14 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 				dpe.setKeywords(new Translation());
 
 			final TranslationEditJPanel a = new TranslationEditJPanel(
-					GeopublisherGUI.R("EditDPEDialog.TranslateTitle"), dpe
-							.getTitle(), langs);
+					GeopublisherGUI.R("EditDPEDialog.TranslateTitle"),
+					dpe.getTitle(), langs);
 			final TranslationEditJPanel b = new TranslationEditJPanel(
-					GeopublisherGUI.R("EditDPEDialog.TranslateDescription"), dpe
-							.getDesc(), langs);
+					GeopublisherGUI.R("EditDPEDialog.TranslateDescription"),
+					dpe.getDesc(), langs);
 			final TranslationEditJPanel c = new TranslationEditJPanel(
-					GeopublisherGUI.R("EditDPEDialog.TranslateKeywords"), dpe
-							.getKeywords(), langs);
+					GeopublisherGUI.R("EditDPEDialog.TranslateKeywords"),
+					dpe.getKeywords(), langs);
 
 			dpeTranslationTab = new TranslationsAskJPanel(a, b, c);
 		}
@@ -185,7 +183,10 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			/**
 			 * Inform the DataPool about the changes
 			 */
-			dpe.getAtlasConfig().getDataPool().fireChangeEvents(org.geopublishing.atlasViewer.dp.DataPool.EventTypes.changeDpe);
+			dpe.getAtlasConfig()
+					.getDataPool()
+					.fireChangeEvents(
+							org.geopublishing.atlasViewer.dp.DataPool.EventTypes.changeDpe);
 
 			return true;
 		}

@@ -1,4 +1,5 @@
 /*******************************************************************************
+
  * Copyright (c) 2010 Stefan A. Tzeggai.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Public License v2.0
@@ -35,354 +36,370 @@ import de.schmitzm.swing.ExceptionDialog;
  */
 public abstract class GPProps {
 
-    /**
-     * List of all legal keys in the
-     * 
-     * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-     * 
-     */
-    public enum Keys {
-        antialiasingMaps, bugReportEmail, compressJARs, gpWindowHeight, gpWindowLeftDividerLocation, gpWindowRightDividerLocation, gpWindowWidth, JarCmd, JWSStartScript,
-        /** Remember the last file we imported **/
-        LAST_IMPORTED_FILE,
-        /** Remember the GP Atlas folder we imported stuff from the last time **/
-        LAST_IMPORTED_GPA, LastExportDisk,
+	/**
+	 * List of all legal keys in the
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * 
+	 */
+	public enum Keys {
+		antialiasingMaps, bugReportEmail, compressJARs, gpWindowHeight, gpWindowLeftDividerLocation, gpWindowRightDividerLocation, gpWindowWidth, JarCmd, JWSStartScript,
+		/** Remember the last file we imported **/
+		LAST_IMPORTED_FILE,
+		/** Remember the GP Atlas folder we imported stuff from the last time **/
+		LAST_IMPORTED_GPA, LastExportDisk,
 
-        LastExportDiskZipped, LastExportFolder, LastExportJWS, LastOpenAtlasFolder,
-        /**
-         * Height of the {@link DesignMapViewJDialog}
-         **/
-        mapComposerHeight, /** Width of the {@link DesignMapViewJDialog} **/
-        mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, sigp, startJVMWithXmx, /**
-         * 
-         * 
-         * 
-         * GP starts maximized
-         **/
-        windowMaximized, logLevel
-        // , rasterReader
-        , LastExportFtp, GPH_Username, GPH_Password
-    }
+		LastExportDiskZipped, LastExportFolder, LastExportJWS, LastOpenAtlasFolder,
+		/**
+		 * Height of the {@link DesignMapViewJDialog}
+		 **/
+		mapComposerHeight, /** Width of the {@link DesignMapViewJDialog} **/
+		mapComposerWidth, MinimumJavaVersion, NativeLibs, signingAlias, sigp, startJVMWithXmx,
+		/** GP starts maximized **/
+		windowMaximized, logLevel
+		// , rasterReader
+		, LastExportFtp, GPH_Username, GPH_Password,
+		/**
+		 * Of all GpHostingServers defined in the properties, which one (index)
+		 * to use
+		 **/
+		lastGpHosterServerIdx,
+		/**
+		 * "Behind" this key we store a list of GpHoster servers that can be
+		 * selected.
+		 **/
+		gpHosterServerList
+	}
 
-    /** E.G. ".AtlasStyler" or ".Geopublisher" **/
-    private static String appDirname;
+	/** E.G. ".AtlasStyler" or ".Geopublisher" **/
+	private static String appDirname;
 
-    private static final String DEFAULTS_POSTFIX = ".defaults";
+	private static final String DEFAULTS_POSTFIX = ".defaults";
 
-    private static FileOutputStream FOS = null;
+	private static FileOutputStream FOS = null;
 
-    private static boolean haveToCloseFOS = false;
+	private static boolean haveToCloseFOS = false;
 
-    private static final Logger LOGGER = Logger.getLogger(GPProps.class);
+	private static final Logger LOGGER = Logger.getLogger(GPProps.class);
 
-    /** This stores the properties */
-    private static final Properties properties = new Properties();
+	/** This stores the properties */
+	private static final Properties properties = new Properties();
 
-    public static final String PROPERTIES_FILENAME = "geopublisher.properties";
+	/**
+	 * Should be used for backups / reverts only. DO not request you keys via
+	 * this instance.
+	 */
+	public static Properties getProperties() {
+		return properties;
+	}
 
-    public static final String PROPERTIES_FOLDER = ".Geopublisher";
+	public static final String PROPERTIES_FILENAME = "geopublisher.properties";
 
-    private static File propertiesFile = null;
+	public static final String PROPERTIES_FOLDER = ".Geopublisher";
 
-    /**
-     * Name of the file that is stored on the local mashine in an applicatin
-     * preferences directory
-     */
-    private static String propertiesFilename;
+	private static File propertiesFile = null;
 
-    /**
-     * Statically initializes this Properties Helper Class with a application-
-     * and filename
-     */
-    static {
-        init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
-    }
+	/**
+	 * Name of the file that is stored on the local mashine in an applicatin
+	 * preferences directory
+	 */
+	private static String propertiesFilename;
 
-    /**
-     * Returns the value as an {@link Integer}. If conversion fails, the default
-     * value is returned
-     */
-    public static String get(final Keys key) {
-        return get(key.toString());
+	/**
+	 * Statically initializes this Properties Helper Class with a application-
+	 * and filename
+	 */
+	static {
+		init(PROPERTIES_FILENAME, PROPERTIES_FOLDER);
+	}
 
-    }
+	/**
+	 * Returns the value as an {@link Integer}. If conversion fails, the default
+	 * value is returned
+	 */
+	public static String get(final Keys key) {
+		return get(key.toString());
 
-    public static String get(final Keys key, final String def) {
-        return get(key.toString(), def);
-    }
+	}
 
-    /** ****************** GET ****************************** */
-    /**
-     * Get a value from the underlying {@link Properties}
-     */
-    private static final String get(final String key) {
-        return properties.getProperty(key);
-    }
+	public static String get(final Keys key, final String def) {
+		return get(key.toString(), def);
+	}
 
-    /**
-     * Returns the value as an boolean. If not yet defined of <code>null</code>,
-     * the default value is returned.
-     */
-    private static final String get(final String key, final String defaultValue) {
-        return properties.getProperty(key, defaultValue);
-    }
+	/** ****************** GET ****************************** */
+	/**
+	 * Get a value from the underlying {@link Properties}
+	 */
+	private static final String get(final String key) {
+		return properties.getProperty(key);
+	}
 
-    /**
-     * Returns the value as an boolean. If not yet defined of <code>null</code>,
-     * <code>false</code> is returned.
-     */
-    public static boolean getBoolean(final Keys key) {
-        return Boolean.valueOf(get(key));
-    }
+	/**
+	 * Returns the value as an boolean. If not yet defined of <code>null</code>,
+	 * the default value is returned.
+	 */
+	private static final String get(final String key, final String defaultValue) {
+		return properties.getProperty(key, defaultValue);
+	}
 
-    /**
-     * Returns the value as an {@link Integer}. If conversion fails, the default
-     * value is returned
-     */
-    public static boolean getBoolean(Keys key, boolean defaultValue) {
-        if (get(key) == null)
-            return defaultValue;
-        return getBoolean(key);
-    }
+	/**
+	 * Returns the value as an boolean. If not yet defined of <code>null</code>,
+	 * <code>false</code> is returned.
+	 */
+	public static boolean getBoolean(final Keys key) {
+		return Boolean.valueOf(get(key));
+	}
 
-    public static Integer getInt(final Keys key, final Integer def) {
-        return getInt(key.toString(), def);
-    }
+	/**
+	 * Returns the value as an {@link Integer}. If conversion fails, the default
+	 * value is returned
+	 */
+	public static boolean getBoolean(Keys key, boolean defaultValue) {
+		if (get(key) == null)
+			return defaultValue;
+		return getBoolean(key);
+	}
 
-    static final Integer getInt(final String key, final Integer defaultValue) {
-        try {
-            final String string = get(key);
-            if (string == null)
-                return defaultValue;
-            return Integer.valueOf(string.trim());
-        } catch (final Exception e) {
-            LOGGER.warn(
-                    "The property value saved for "
-                            + key
-                            + " can't be converted to Integer. Returning default value " // i8nlog
-                            + defaultValue, e);
-        }
-        return defaultValue;
-    }
+	public static Integer getInt(final Keys key, final Integer def) {
+		return getInt(key.toString(), def);
+	}
 
-    protected static File getPropertiesFile() {
+	static final Integer getInt(final String key, final Integer defaultValue) {
+		try {
+			final String string = get(key);
+			if (string == null)
+				return defaultValue;
+			return Integer.valueOf(string.trim());
+		} catch (final Exception e) {
+			LOGGER.warn(
+					"The property value saved for "
+							+ key
+							+ " can't be converted to Integer. Returning default value " // i8nlog
+							+ defaultValue, e);
+		}
+		return defaultValue;
+	}
 
-        if (propertiesFile == null) {
-            final File applicationPropertiesDirectory = new File(new File(
-                    System.getProperty("user.home")), appDirname);
-            if (!applicationPropertiesDirectory.exists()) {
-                applicationPropertiesDirectory.mkdirs();
-            }
+	protected static File getPropertiesFile() {
 
-            propertiesFile = new File(applicationPropertiesDirectory,
-                    propertiesFilename);
+		if (propertiesFile == null) {
+			final File applicationPropertiesDirectory = new File(new File(
+					System.getProperty("user.home")), appDirname);
+			if (!applicationPropertiesDirectory.exists()) {
+				applicationPropertiesDirectory.mkdirs();
+			}
 
-            if (!propertiesFile.exists()) {
-                resetProperties(null);
-            } else {
-                try {
-                    final FileInputStream inStream = new FileInputStream(
-                            propertiesFile);
-                    try {
+			propertiesFile = new File(applicationPropertiesDirectory,
+					propertiesFilename);
 
-                        properties.load(inStream);
-                    } finally {
-                        inStream.close();
-                    }
-                } catch (final Exception e) {
-                    LOGGER.error("Loading the properties - the second try", e);
-                    ExceptionDialog.show(null, e);
-                }
-            }
-        }
+			if (!propertiesFile.exists()) {
+				resetProperties(null);
+			} else {
+				try {
+					final FileInputStream inStream = new FileInputStream(
+							propertiesFile);
+					try {
 
-        return propertiesFile;
-    }
+						properties.load(inStream);
+					} finally {
+						inStream.close();
+					}
+				} catch (final Exception e) {
+					LOGGER.error("Loading the properties - the second try", e);
+					ExceptionDialog.show(null, e);
+				}
+			}
+		}
 
-    /**
-     * Initialize this helpercLass for a some application
-     * 
-     * @param propertiesFilename name or the Properties file, e.g.
-     *        "ac.properties"
-     * 
-     * @param appDirname Dirname in the User Home directory, e.g. ".ssh" or
-     *        ".AtlasSTyler"
-     * 
-     * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-     */
-    protected static void init(final String propertiesFilename,
-            final String appDirname) {
+		return propertiesFile;
+	}
 
-        // Setting up the logger from a XML configuration file. We do that gain
-        // in GPPros, as it outputs log messages first.
-        GpUtil.initGpLogging();
+	/**
+	 * Initialize this helpercLass for a some application
+	 * 
+	 * @param propertiesFilename
+	 *            name or the Properties file, e.g. "ac.properties"
+	 * 
+	 * @param appDirname
+	 *            Dirname in the User Home directory, e.g. ".ssh" or
+	 *            ".AtlasSTyler"
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	protected static void init(final String propertiesFilename,
+			final String appDirname) {
 
-        GPProps.propertiesFilename = propertiesFilename;
-        GPProps.appDirname = appDirname;
+		// Setting up the logger from a XML configuration file. We do that gain
+		// in GPPros, as it outputs log messages first.
+		GpUtil.initGpLogging();
 
-        try {
-            final FileInputStream inStream = new FileInputStream(
-                    getPropertiesFile());
-            try {
-                properties.load(inStream);
-            } finally {
-                inStream.close();
-            }
-        } catch (final Exception e) {
-            ExceptionDialog.show(null, e);
-        }
+		GPProps.propertiesFilename = propertiesFilename;
+		GPProps.appDirname = appDirname;
 
-        upgrade(); // TODO Schema version comparison... naja.. eigentlich egal
+		try {
+			final FileInputStream inStream = new FileInputStream(
+					getPropertiesFile());
+			try {
+				properties.load(inStream);
+			} finally {
+				inStream.close();
+			}
+		} catch (final Exception e) {
+			ExceptionDialog.show(null, e);
+		}
 
-    }
+		upgrade(); // TODO Schema version comparison... naja.. eigentlich egal
 
-    /**
-     * Deletes the .properties in the ApplicationPreferences directory creates a
-     * default geopublisher.properties from the one saved in the jar. The new
-     * .properties are automatically loaded.
-     * 
-     * @param guiOwner If not <code>null</code> a JDialog message will inform
-     *        the user.
-     * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-     */
-    public static void resetProperties(final Component guiOwner) {
-        final String msg = GpUtil
-                .R("GpProps.could_not_find_default_properties_in_file");
+	}
 
-        // Delete the old one
-        getPropertiesFile().delete();
+	/**
+	 * Deletes the .properties in the ApplicationPreferences directory creates a
+	 * default geopublisher.properties from the one saved in the jar. The new
+	 * .properties are automatically loaded.
+	 * 
+	 * @param guiOwner
+	 *            If not <code>null</code> a JDialog message will inform the
+	 *            user.
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public static void resetProperties(final Component guiOwner) {
+		final String msg = GpUtil
+				.R("GpProps.could_not_find_default_properties_in_file");
 
-        // Create the new one
-        // e.printStackTrace();
-        LOGGER.info("Resetting " + getPropertiesFile().getAbsolutePath());
-        // If we don't have a .properties file, we copy the one from the jar
-        URL inJar = null;
-        try {
-            inJar = GpUtil.class.getResource("/" + propertiesFilename
-                    + DEFAULTS_POSTFIX);
-            // LOGGER.debug("inJar = " + inJar);
+		// Delete the old one
+		getPropertiesFile().delete();
 
-            if (inJar == null)
-                throw new RuntimeException(msg);
+		// Create the new one
+		// e.printStackTrace();
+		LOGGER.info("Resetting " + getPropertiesFile().getAbsolutePath());
+		// If we don't have a .properties file, we copy the one from the jar
+		URL inJar = null;
+		try {
+			inJar = GpUtil.class.getResource("/" + propertiesFilename
+					+ DEFAULTS_POSTFIX);
+			// LOGGER.debug("inJar = " + inJar);
 
-            org.apache.commons.io.FileUtils.copyURLToFile(inJar,
-                    getPropertiesFile());
+			if (inJar == null)
+				throw new RuntimeException(msg);
 
-            /**
-             * After creating the new default file, we may not forget to read it
-             * ;-)
-             */
-            properties.load(new FileInputStream(getPropertiesFile()));
+			org.apache.commons.io.FileUtils.copyURLToFile(inJar,
+					getPropertiesFile());
 
-        } catch (final IOException e1) {
-            if (guiOwner != null) {
-                ExceptionDialog.show(guiOwner, e1);
-            } else {
-                LOGGER.debug(msg, e1);
-            }
-        }
+			/**
+			 * After creating the new default file, we may not forget to read it
+			 * ;-)
+			 */
+			properties.load(new FileInputStream(getPropertiesFile()));
 
-    }
+		} catch (final IOException e1) {
+			if (guiOwner != null) {
+				ExceptionDialog.show(guiOwner, e1);
+			} else {
+				LOGGER.debug(msg, e1);
+			}
+		}
 
-    /**
-     * Set the value in the underlying {@link Properties} and store it
-     */
-    public static final void set(final Keys key, final Boolean value) {
-        set(key, value.toString());
-        store();
-    }
+	}
 
-    /**
-     * Set the value as an integer and store the {@link Properties}
-     */
-    static public final void set(final Keys key, final Integer value) {
-        set(key, value.toString());
-    }
+	/**
+	 * Set the value in the underlying {@link Properties} and store it
+	 */
+	public static final void set(final Keys key, final Boolean value) {
+		set(key, value.toString());
+		store();
+	}
 
-    /**
-     * Set the value and store the {@link Properties}
-     */
-    public static final void set(final Keys key, final String value) {
-        set(key.toString(), value);
-        store();
-    }
+	/**
+	 * Set the value as an integer and store the {@link Properties}
+	 */
+	static public final void set(final Keys key, final Integer value) {
+		set(key, value.toString());
+	}
 
-    /**
-     * Set the value in the underlying {@link Properties} and store it
-     */
-    private static final void set(final String key, final String value) {
-        properties.setProperty(key, value);
-        store();
-    }
+	/**
+	 * Set the value and store the {@link Properties}
+	 */
+	public static final void set(final Keys key, final String value) {
+		set(key.toString(), value);
+		store();
+	}
 
-    /**
-     * Save the changes to the .properties file
-     */
-    public static void store() {
-        try {
-            FOS = new FileOutputStream(getPropertiesFile());
-            haveToCloseFOS = true;
+	/**
+	 * Set the value in the underlying {@link Properties} and store it
+	 */
+	private static final void set(final String key, final String value) {
+		properties.setProperty(key, value);
+		store();
+	}
 
-            properties.store(FOS,
-                    "This is the properties file for the Geopublisher");
-        } catch (final IOException e) {
-            LOGGER.error("Can't write to " + getPropertiesFile().toString(), e); // i8nlog
-            LOGGER.error(e);
-            ExceptionDialog.show(null, e);
-        } finally {
-            if (haveToCloseFOS) {
-                try {
-                    FOS.close();
-                    haveToCloseFOS = false;
-                } catch (final IOException e) {
-                    LOGGER.error(e);
-                    ExceptionDialog.show(null, e);
-                }
-            }
-        }
-    }
+	/**
+	 * Save the changes to the .properties file
+	 */
+	public static void store() {
+		try {
+			FOS = new FileOutputStream(getPropertiesFile());
+			haveToCloseFOS = true;
 
-    /**
-     * Copies more or less application dependent properties from the JAR to the
-     * .Geopublisher/geopublisher.properties...<br/>
-     * TODO should probably be seperated into a user and a system properties
-     * file...
-     * 
-     * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-     */
-    public static void upgrade() {
-        LOGGER.debug("upgrade from " + PROPERTIES_FILENAME);
+			properties.store(FOS,
+					"This is the properties file for the Geopublisher");
+		} catch (final IOException e) {
+			LOGGER.error("Can't write to " + getPropertiesFile().toString(), e); // i8nlog
+			LOGGER.error(e);
+			ExceptionDialog.show(null, e);
+		} finally {
+			if (haveToCloseFOS) {
+				try {
+					FOS.close();
+					haveToCloseFOS = false;
+				} catch (final IOException e) {
+					LOGGER.error(e);
+					ExceptionDialog.show(null, e);
+				}
+			}
+		}
+	}
 
-        final URL inJar = GpUtil.class.getResource("/" + propertiesFilename
-                + DEFAULTS_POSTFIX);
-        final Properties virginProps = new Properties();
-        try {
-            virginProps.load(inJar.openStream());
-        } catch (final IOException e) {
-            LOGGER.error(e);
-        }
+	/**
+	 * Copies more or less application dependent properties from the JAR to the
+	 * .Geopublisher/geopublisher.properties...<br/>
+	 * TODO should probably be seperated into a user and a system properties
+	 * file...
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public static void upgrade() {
+		LOGGER.debug("upgrade from " + PROPERTIES_FILENAME);
 
-        set(Keys.NativeLibs,
-                virginProps.getProperty(Keys.NativeLibs.toString()));
-        set(Keys.signingAlias,
-                virginProps.getProperty(Keys.signingAlias.toString()));
-        set(Keys.sigp, virginProps.getProperty(Keys.sigp.toString()));
-        set(Keys.MinimumJavaVersion,
-                virginProps.getProperty(Keys.MinimumJavaVersion.toString()));
-        set(Keys.JWSStartScript,
-                virginProps.getProperty(Keys.JWSStartScript.toString()));
-        set(Keys.bugReportEmail,
-                virginProps.getProperty(Keys.bugReportEmail.toString()));
-    }
+		final URL inJar = GpUtil.class.getResource("/" + propertiesFilename
+				+ DEFAULTS_POSTFIX);
+		final Properties virginProps = new Properties();
+		try {
+			virginProps.load(inJar.openStream());
+		} catch (final IOException e) {
+			LOGGER.error(e);
+		}
 
-    @Override
-    protected void finalize() throws Throwable {
-        synchronized (FOS) {
-            if (haveToCloseFOS) {
-                FOS.close();
-                haveToCloseFOS = false;
-            }
-        }
-    }
+		set(Keys.NativeLibs,
+				virginProps.getProperty(Keys.NativeLibs.toString()));
+		set(Keys.signingAlias,
+				virginProps.getProperty(Keys.signingAlias.toString()));
+		set(Keys.sigp, virginProps.getProperty(Keys.sigp.toString()));
+		set(Keys.MinimumJavaVersion,
+				virginProps.getProperty(Keys.MinimumJavaVersion.toString()));
+		set(Keys.JWSStartScript,
+				virginProps.getProperty(Keys.JWSStartScript.toString()));
+		set(Keys.bugReportEmail,
+				virginProps.getProperty(Keys.bugReportEmail.toString()));
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		synchronized (FOS) {
+			if (haveToCloseFOS) {
+				FOS.close();
+				haveToCloseFOS = false;
+			}
+		}
+	}
 
 }
