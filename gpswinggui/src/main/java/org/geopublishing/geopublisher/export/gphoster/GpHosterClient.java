@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.jfree.util.Log;
 
@@ -46,45 +47,57 @@ public class GpHosterClient {
 	public static final String DEFAULt_GPHOSTER_FTP_URL = "ftp://"
 			+ DEFAULT_GPHOSTER_FTP_HOSTNAME;
 
-	private final String restUrl;
+	// private final String restUrl;
+	private final GpHosterServerSettings server;
 
-	/**
-	 * 
-	 * @param url
-	 *            URL to the hoster servlet, e.g.
-	 *            http://localhost:8080/gp-hoster-jsf/
-	 */
-	public GpHosterClient(String url) {
-		if (!url.endsWith("/"))
-			url += "/";
-		this.restUrl = url;
+	// /**
+	// *
+	// * @param url
+	// * URL to the hoster servlet, e.g.
+	// * http://localhost:8080/gp-hoster-jsf/
+	// */
+	// public GpHosterClient(String url) {
+	// if (!url.endsWith("/"))
+	// url += "/";
+	// this.restUrl = url;
+	// }
+
+	// /**
+	// * USes the default URL of the Geopublishing Server
+	// */
+	// public GpHosterClient() {
+	// this.restUrl = DEFAULT_GPHOSTER_REST_URL;
+	// }
+
+	public GpHosterClient(GpHosterServerSettings serverDesc) {
+		if (serverDesc == null)
+			server = GpHosterServerSettings.DEFAULT;
+		else
+			server = serverDesc;
 	}
 
-	/**
-	 * USes the default URL of the Geopublishing Server
-	 */
 	public GpHosterClient() {
-		this.restUrl = DEFAULT_GPHOSTER_REST_URL;
+		this(null);
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		server.setUsername(userName);
 	}
 
 	public String getUserName() {
-		return userName;
+		return server.getUsername();
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		server.setPassword(password);
 	}
 
 	public String getPassword() {
-		return password;
+		return server.getPassword();
 	}
 
-	private String userName;
-	private String password;
+	// private String userName;
+	// private String password;
 	private SERVICE_STATUS serviceStatus;
 
 	public boolean userExists() throws IOException {
@@ -274,7 +287,7 @@ public class GpHosterClient {
 		boolean doOut = !METHOD.DELETE.toString().equals(method)
 				&& postDataReader != null;
 
-		String link = restUrl + urlAppend;
+		String link = server.getRestUrl() + urlAppend;
 		URL url = new URL(link);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setDoOutput(doOut);
@@ -329,19 +342,49 @@ public class GpHosterClient {
 				// Check FTP
 				final FTPClient ftpClient = new FTPClient();
 				ftpClient.setTimeout(5000);
-				ftpClient.setRemoteHost(DEFAULT_GPHOSTER_FTP_HOSTNAME);
+				ftpClient.setRemoteHost(server.getFtpHostname());
 				ftpClient.connect();
 				ftpClient.quit();
 			} catch (Exception e) {
 				return serviceStatus = SERVICE_STATUS.GPHOSTER_FTP_DOWN;
 			}
 
-			if (!IOUtil.urlExists(DEFAULT_GPHOSTER_REST_URL + "index.html"))
+			if (!IOUtil.urlExists(server.getRestUrl() + "index.html"))
 				return serviceStatus = SERVICE_STATUS.GPHOSTER_REST_DOWN;
 
 			serviceStatus = SERVICE_STATUS.OK;
 		}
 		return serviceStatus;
+	}
+
+	public String getFtpHostname() {
+		return server.getFtpHostname();
+	}
+
+	public void setFtpHostname(String ftphostname) {
+		server.setFtpHostname(ftphostname);
+	}
+
+	public GpHosterServerSettings getServerSettings() {
+		return server;
+	}
+
+	/**
+	 * Are the username and password set correct?
+	 * 
+	 * @throws IOException
+	 */
+	public boolean validateCredentials() throws IOException {
+		if (getUserName() == null)
+			return false;
+		if (getPassword() == null)
+			return false;
+		final boolean valid = SC_OK == sendRESTint(METHOD.GET.toString(),
+				EXISTS_USER_PATH + getUserName(), null, getUserName(),
+				getPassword());
+		Log.debug("Checking for validity of user/password: " + getUserName()
+				+ "/" + getPassword() + ": " + valid);
+		return valid;
 	}
 
 }

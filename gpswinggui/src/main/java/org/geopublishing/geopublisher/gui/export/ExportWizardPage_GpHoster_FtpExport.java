@@ -14,7 +14,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.export.gphoster.SERVICE_STATUS;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -26,9 +25,7 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 	final static protected Logger LOGGER = Logger
 			.getLogger(ExportWizardPage_GpHoster_FtpExport.class);
-	private static final String validationFtpFailedUserNotFound = GeopublisherGUI
-			.R("ExportWizard.Ftp.ValidationError_UserNotFound",
-					GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
+
 	JLabel explanationJLabel = new JLabel(
 			GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
 	JCheckBox firstSyncJCheckBox;
@@ -46,7 +43,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 	public ExportWizardPage_GpHoster_FtpExport() {
 		// ace = (GeopublisherGUI.getInstance().getAce();
-		initGui();
+
 	}
 
 	public static String getDescription() {
@@ -66,17 +63,17 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 	private ManualInputOption.PasswordViewable getPWJTextField() {
 		if (passwordViewableInputOption == null) {
+			GpHosterClient gphc = ((GpHosterClient) getWizardData(ExportWizard.GPHC));
 			passwordViewableInputOption = new ManualInputOption.PasswordViewable(
 					GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
-					false, GPProps.get(GPProps.Keys.GPH_Password));
+					false, gphc.getPassword());
 			passwordViewableInputOption.setName(ExportWizard.GPH_PASSWORD);
 
 			// When the value of this textfield is automatically set from the
 			// properties, and the field is not chenged yb the user, the Wizard
 			// will NOT put it's value into the wizardMap. So we do it here:
-			if (GPProps.get(GPProps.Keys.GPH_Password) != null)
-				putWizardData(ExportWizard.GPH_PASSWORD,
-						GPProps.get(GPProps.Keys.GPH_Password));
+			if (gphc.getPassword() != null)
+				putWizardData(ExportWizard.GPH_PASSWORD, gphc.getPassword());
 
 		}
 		return passwordViewableInputOption;
@@ -93,9 +90,11 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 	@Override
 	protected void renderingPage() {
-		getFirstSyncJCheckBox()
-				.setSelected(
-						isFirstSync((AtlasConfigEditable) getWizardData(ExportWizard.ACE)));
+		removeAll();
+		initGui();
+		// getFirstSyncJCheckBox()
+		// .setSelected(
+		// isFirstSync((AtlasConfigEditable) getWizardData(ExportWizard.ACE)));
 
 		getUserJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
 		getPWJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
@@ -104,13 +103,12 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 
 	private JTextField getUserJTextField() {
 		if (UserJTextField == null) {
-			UserJTextField = new JTextField(
-					GPProps.get(GPProps.Keys.GPH_Username));
+			GpHosterClient gphc = ((GpHosterClient) getWizardData(ExportWizard.GPHC));
+			UserJTextField = new JTextField(gphc.getUserName());
 			UserJTextField.setName(ExportWizard.GPH_USERNAME);
 
-			if (GPProps.get(GPProps.Keys.GPH_Username) != null) {
-				putWizardData(ExportWizard.GPH_USERNAME,
-						GPProps.get(GPProps.Keys.GPH_Username));
+			if (gphc.getUserName() != null) {
+				putWizardData(ExportWizard.GPH_USERNAME, gphc.getUserName());
 			}
 
 			// When the value of this textfield is automatically set from the

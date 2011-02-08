@@ -21,8 +21,12 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
+import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
+import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.api.wizard.WizardDisplayer;
 import org.netbeans.spi.wizard.Wizard;
@@ -82,7 +86,7 @@ public class ExportWizard extends WizardBranchController {
 	/**
 	 * Decides wheter the user wants to make his Atlas public, or not.
 	 * 
-	 * @see ExportWizardPage_GpHoster_ExportSummary
+	 * @see ExportWizardPage_GpHoster_ExportOptions
 	 */
 	public static final String MAKE_PUBLIC = "public?";
 
@@ -93,6 +97,8 @@ public class ExportWizard extends WizardBranchController {
 
 	// public static Boolean isNewAtlasUpload = null;
 
+	static Map<Object, Object> initialProperties = new HashMap<Object, Object>();
+
 	/**
 	 * This constructor also defines the default (first) steps of the wizard
 	 * until it branches.
@@ -101,6 +107,13 @@ public class ExportWizard extends WizardBranchController {
 		super(new WizardPage[] { new ExportWizardPage_Save(),
 				new ExportWizardPage_TargetPlattformsSelection() });
 
+		// Create the one and only instance of GpHoster!
+		// The settings to use are defined in the properties
+		GpHosterServerSettings gpss = new GpHosterServerList(
+				GPProps.get(Keys.gpHosterServerList)).get(GPProps.getInt(
+				Keys.lastGpHosterServerIdx, 0));
+		final GpHosterClient gphc = new GpHosterClient(gpss);
+		initialProperties.put(GPHC, gphc);
 	}
 
 	/**
@@ -151,9 +164,8 @@ public class ExportWizard extends WizardBranchController {
 		 * This wizard shall start with featureSource and attributeMetaDataMap
 		 * set in the initialProperties map:
 		 */
-		Map<Object, Object> initialProperties = new HashMap<Object, Object>();
+
 		initialProperties.put(ACE, atlasConfigEditable);
-		initialProperties.put(GPHC, new GpHosterClient());
 
 		// Find a nice position for the window
 		// Window parent = SwingUtil.getParentWindow(owner);

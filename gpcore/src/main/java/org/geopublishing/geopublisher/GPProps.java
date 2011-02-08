@@ -58,7 +58,8 @@ public abstract class GPProps {
 		/** GP starts maximized **/
 		windowMaximized, logLevel
 		// , rasterReader
-		, LastExportFtp, GPH_Username, GPH_Password,
+		, LastExportFtp,
+		// GPH_Username, GPH_Password,
 		/**
 		 * Of all GpHostingServers defined in the properties, which one (index)
 		 * to use

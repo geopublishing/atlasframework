@@ -38,10 +38,10 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
 			path = LangUtil.extendArray(path,
 					ExportWizardPage_GpHoster_CheckMail.class);
 			path = LangUtil.extendArray(path,
-					ExportWizardPage_GpHoster_ExportSummary.class);
+					ExportWizardPage_GpHoster_ExportOptions.class);
 		} else {
 			path = LangUtil.extendArray(path,
-					ExportWizardPage_GpHoster_ExportSummary.class);
+					ExportWizardPage_GpHoster_ExportOptions.class);
 		}
 
 		if (isDisk != null && isDisk || isJws != null && isJws)

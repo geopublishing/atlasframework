@@ -18,7 +18,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 	public static final GpHosterServerSettings DEFAULT = new GpHosterServerSettings();
 	static {
 		DEFAULT.setTitle("geopublishing.org");
-		DEFAULT.setUrlGpHosterRest(GpHosterClient.DEFAULT_GPHOSTER_REST_URL);
+		DEFAULT.setRestUrl(GpHosterClient.DEFAULT_GPHOSTER_REST_URL);
 		DEFAULT.setFtpHostname(GpHosterClient.DEFAULT_GPHOSTER_FTP_HOSTNAME);
 		DEFAULT.setUsername(null);
 		DEFAULT.setPassword(null);
@@ -26,12 +26,15 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 	Logger LOGGER = Logger.getLogger(GpHosterServerSettings.class);
 
-	public String getUrlGpHosterRest() {
-		return urlGpHosterRest;
+	/**
+	 * @return e.g."http://hoster.geopublishing.org:8088/gp-hoster-jsf/"
+	 */
+	public String getRestUrl() {
+		return restUrl;
 	}
 
-	public void setUrlGpHosterRest(String urlGpHosterRest) {
-		this.urlGpHosterRest = urlGpHosterRest;
+	public void setRestUrl(String urlGpHosterRest) {
+		this.restUrl = urlGpHosterRest;
 	}
 
 	public String getFtpHostname() {
@@ -61,7 +64,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 	/**
 	 * URL to where the REST interface of gp hoster is running
 	 */
-	String urlGpHosterRest;
+	String restUrl;
 
 	/**
 	 * Hostname (without any protocoll) of where the FTP is running.
@@ -85,7 +88,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 		serialized.append(getAlias());
 		serialized.append(DELIMITER);
 
-		serialized.append(getUrlGpHosterRest());
+		serialized.append(getRestUrl());
 		serialized.append(DELIMITER);
 
 		serialized.append(getFtpHostname());
@@ -113,7 +116,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 			int i = 0;
 			setAlias(split[i++]);
-			setUrlGpHosterRest(split[i++]);
+			setRestUrl(split[i++]);
 			setFtpHostname(split[i++]);
 			setTitle(split[i++]);
 			setUsername(StringUtils.stripToNull(split[i++]));
@@ -149,7 +152,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 		// i8n
 		Text hostInput = new ManualInputOption.Text("REST URL", true,
-				dbServer.getUrlGpHosterRest());
+				dbServer.getRestUrl());
 
 		// i8n
 		Text ftphostInput = new ManualInputOption.Text("FTP Hostname", true,
@@ -174,7 +177,7 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 				return dbServer;
 		} else {
 			dbServer.setTitle((String) input[0]);
-			dbServer.setUrlGpHosterRest((String) input[1]);
+			dbServer.setRestUrl((String) input[1]);
 			dbServer.setFtpHostname((String) input[2]);
 			dbServer.setUsername((String) input[3]);
 			dbServer.setPassword(String.valueOf((char[]) input[4]));
