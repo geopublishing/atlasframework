@@ -37,9 +37,11 @@ public class GpHosterClient {
 	private static final String MASTPASSWD = "32894013";
 	private static final int SC_OK = 200;
 
+	// TODO Make switchable!
+
+	public static final String GPHOSTER_REST_URL = "http://hoster.geopublishing.org:8088/gp-hoster-jsf/";
 	// public static final String GPHOSTER_REST_URL =
-	// "http://hoster.geopublishing.org:8088/gp-hoster-jsf/";
-	public static final String GPHOSTER_REST_URL = "http://localhost:8080/gp-hoster-jsf/";
+	// "http://localhost:8080/gp-hoster-jsf/";
 	public static final String GPHOSTER_FTP_HOSTNAME = "ftp.geopublishing.org";
 	public static final String GPHOSTER_FTP_URL = "ftp://"
 			+ GPHOSTER_FTP_HOSTNAME;
