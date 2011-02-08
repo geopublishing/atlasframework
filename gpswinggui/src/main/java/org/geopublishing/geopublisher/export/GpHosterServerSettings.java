@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
+import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.geopublisher.gui.settings.GpHostingOptionsTab;
 
 import de.schmitzm.geotools.io.AbstractServerSettings;
@@ -50,6 +51,11 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 	}
 
 	public void setUsername(String username) {
+		if (!checkString(username))
+			throw new IllegalArgumentException(username
+					+ " is not a legal username, " + DELIMITER + " and "
+					+ GpHosterServerSettings.DELIMITER
+					+ " are not allowed in usernames"); // i8n
 		this.username = username;
 	}
 
@@ -58,6 +64,11 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 	}
 
 	public void setPassword(String password) {
+		if (!checkString(password))
+			throw new IllegalArgumentException(password
+					+ " is not a legal password, " + DELIMITER + " and "
+					+ GpHosterServerSettings.DELIMITER
+					+ " are not allowed in passwords"); // i8n
 		this.password = password;
 	}
 
@@ -187,4 +198,13 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 	}
 
+	public static boolean checkString(String stringValue) {
+		if (stringValue == null)
+			return true;
+		if (stringValue.contains(DELIMITER))
+			return false;
+		if (stringValue.contains(GpHosterServerList.DELIMITER))
+			return false;
+		return true;
+	}
 }

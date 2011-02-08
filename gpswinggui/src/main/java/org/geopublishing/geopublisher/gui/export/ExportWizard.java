@@ -95,6 +95,8 @@ public class ExportWizard extends WizardBranchController {
 
 	public static final String GPHC = "GpHosterCLient instance key";
 
+	protected static final String RESULTPRODUCER_WORKING = "once the deferred export task has started, we put it in the wizardmap with this key. this allows for a button that cancels the export.";
+
 	// public static Boolean isNewAtlasUpload = null;
 
 	static Map<Object, Object> initialProperties = new HashMap<Object, Object>();
@@ -109,9 +111,16 @@ public class ExportWizard extends WizardBranchController {
 
 		// Create the one and only instance of GpHoster!
 		// The settings to use are defined in the properties
-		GpHosterServerSettings gpss = new GpHosterServerList(
-				GPProps.get(Keys.gpHosterServerList)).get(GPProps.getInt(
-				Keys.lastGpHosterServerIdx, 0));
+		GpHosterServerSettings gpss;
+		try {
+			gpss = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList))
+					.get(GPProps.getInt(Keys.lastGpHosterServerIdx, 0));
+		} catch (Exception e) {
+			LOGGER.error(
+					"Failed to read the selected GpHosterServer settigs from properties",
+					e);
+			gpss = GpHosterServerSettings.DEFAULT;
+		}
 		final GpHosterClient gphc = new GpHosterClient(gpss);
 		initialProperties.put(GPHC, gphc);
 	}
@@ -203,6 +212,11 @@ public class ExportWizard extends WizardBranchController {
 					ExportWizardPage_JNLPDefinition.class);
 		if (isFtp != null && isFtp)
 			return FTP_BRANCH;
+
+		// Last page:
+		path = (Class<WizardPage>[]) LangUtil.extendArray(path,
+				ExportWizardPage_WaitExporting.class);
+
 		// System.out.println(path.length + " "
 		// + LangUtil.stringConcatWithSep("->  ", path));
 		return WizardPage.createWizard(path, FINISHER);

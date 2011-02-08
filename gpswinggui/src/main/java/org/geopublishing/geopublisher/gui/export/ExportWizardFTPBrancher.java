@@ -53,6 +53,9 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
 			path = LangUtil.extendArray(path,
 					ExportWizardPage_JNLPDefinition.class);
 
+		// Last page:
+		path = LangUtil.extendArray(path, ExportWizardPage_WaitExporting.class);
+
 		return WizardPage.createWizard(path, ExportWizard.FINISHER);
 	}
 

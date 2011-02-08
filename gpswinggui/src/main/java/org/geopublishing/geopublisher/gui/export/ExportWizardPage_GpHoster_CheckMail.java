@@ -8,10 +8,11 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient.CREATE_USER_RESULT;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-import de.schmitzm.swing.input.ManualInputOption.Password;
+import de.schmitzm.swing.input.ManualInputOption.PasswordViewable;
 
 public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	private final String validationFtpFailedPassword = GeopublisherGUI
@@ -19,13 +20,13 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R(
 			"ExportWizard.Ftp.CheckMail.Explanation", "XXX"));
 
-	private Password PWField;
+	private PasswordViewable pwField;
 
 	/**
 	 * The user is created via a rest call when this page is rendered. Whether
 	 * this creation was successfull, is stored in this variable.
 	 */
-	private boolean createdUserWithSuccess = false;
+	private CREATE_USER_RESULT createdUserWithSuccess = CREATE_USER_RESULT.ERROR;
 	private IOException createdUserWithSuccessEx = null;
 
 	public static String getDescription() {
@@ -44,13 +45,17 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 		String name = (String) getWizardData(ExportWizard.GPH_USERNAME);
 		String email = (String) getWizardData(ExportWizard.GPH_EMAIL_FIELD);
 		try {
-			createdUserWithSuccess = gphc.userCreate(email, email);
+			createdUserWithSuccess = gphc.userCreate(name, email);
 
-			if (createdUserWithSuccess == false) {
+			if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR) {
 				removeAll();
 				add(new JLabel(
 						"Could not create user. Please create a user online at hosting.geopublishing.org"),
 						"");
+			} else if (createdUserWithSuccess == CREATE_USER_RESULT.EXITSALREADY_PWDSENT) {
+				add(new JLabel(
+						"User already existed. A password reminder has been sent."),
+						"", 0);
 			}
 
 		} catch (IOException e) {
@@ -72,19 +77,20 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 		add(getPWField(), "growx");
 	}
 
-	private Password getPWField() {
-		if (PWField == null) {
-			PWField = new Password(
+	private PasswordViewable getPWField() {
+		if (pwField == null) {
+			pwField = new PasswordViewable(
 					GeopublisherGUI.R("ExportWizard.FtpExport.Password"));
-			PWField.setName(ExportWizard.GPH_PASSWORD);
+			pwField.setName(ExportWizard.GPH_PASSWORD);
 		}
-		return PWField;
+		return pwField;
 	}
 
 	@Override
 	protected String validateContents(Component component, Object event) {
 
-		if (!createdUserWithSuccess || createdUserWithSuccessEx != null)
+		if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR
+				|| createdUserWithSuccessEx != null)
 			return "Service error. Account could not be created"; // i8n
 
 		if (getPWField().getValue() == null) {
@@ -94,8 +100,8 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 		// Because Schmitzm Password input component is not properly handled by
 		// the wizard, we put the password into the wizardmap manually
 		if (getPWField().getValue() != null)
-			putWizardData(ExportWizard.GPH_PASSWORD, getPWField().getValue()
-					.toString());
+			putWizardData(ExportWizard.GPH_PASSWORD,
+					String.valueOf(getPWField().getValue()));
 
 		return null;
 	}

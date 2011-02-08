@@ -131,9 +131,20 @@ public class GpHosterClient {
 		return userDelete(getUserName(), getPassword());
 	}
 
-	public boolean userCreate(String username, String email) throws IOException {
-		return SC_OK == sendRESTint(METHOD.GET.toString(), CREATE_USER_PATH
+	public enum CREATE_USER_RESULT {
+		CREATED_PWDSENT, ERROR, EXITSALREADY_PWDSENT
+	}
+
+	public CREATE_USER_RESULT userCreate(String username, String email)
+			throws IOException {
+		int code = sendRESTint(METHOD.GET.toString(), CREATE_USER_PATH
 				+ username + "?email=" + email, null, MASTUSER, MASTPASSWD);
+
+		if (code == SC_OK)
+			return CREATE_USER_RESULT.CREATED_PWDSENT;
+		if (code == 401)
+			return CREATE_USER_RESULT.EXITSALREADY_PWDSENT;
+		return CREATE_USER_RESULT.ERROR;
 	}
 
 	/**

@@ -25,6 +25,8 @@ import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
+
 public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 	private final String validationJwsOrDiskFailedMsg = GeopublisherGUI
 			.R("ExportWizard.JwsOrDisk.ValidationError");
@@ -60,10 +62,19 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 			return validationJwsOrDiskFailedMsg;
 		}
 
-		if (getFtpJCheckbox().isSelected()) {
-			// If FTP is selected, check for availability of service.
-			GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
-			return gphc.checkService().validationValue();
+		if (getFtpJCheckbox().isSelected() && component == getFtpJCheckbox()) {
+
+			String r = new AtlasSwingWorker<String>(this) {
+
+				@Override
+				protected String doInBackground() throws Exception {
+					// If FTP is selected, check for availability of service.
+					GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
+					return gphc.checkService().validationValue();
+				}
+			}.executeModalNoEx();
+			if (r != null)
+				return r;
 		}
 
 		return null;

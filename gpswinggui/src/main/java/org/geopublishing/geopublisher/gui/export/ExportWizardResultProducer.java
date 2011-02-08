@@ -121,7 +121,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		/**
 		 * Start the export as a DeferredWizardResult
 		 */
-		DeferredWizardResult result = new DeferredWizardResult(true) {
+		DeferredWizardResult result = new DeferredWizardResult(false, true) {
 
 			private JarExportUtil jarExportUtil;
 			private ResultProgressHandle progress;
@@ -137,9 +137,6 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					jarExportUtil.cancel.set(true);
 				if (gpFtpAtlasExport != null)
 					gpFtpAtlasExport.cancel.set(true);
-				progress.failed(
-						"The export has been aborted by the user. The temporary folder have been deleted.",
-						true);
 			};
 
 			@Override
@@ -168,20 +165,15 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					return;
 				}
 
-				/*
-				 * Only gets here if the Export was successful
-				 */
-				Summary summary = Summary.create(getSummaryJPanel(), new File(
-						exportDir));
-
-				progress.finished(summary);
+				progress.finished(Summary.create(getSummaryJPanel(), new File(
+						exportDir)));
 
 			}
 
 			private void exportFailed(ResultProgressHandle progress, Exception e) {
 				LOGGER.error("Export failed!", e);
 				progress.failed(e.getMessage(), false);
-				progress.finished(getErrorPanel(e));
+				// progress.finished(getErrorPanel(e));
 				ExceptionDialog.show(null, e);
 			}
 
@@ -237,14 +229,17 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			}
 		};
 
+		// HACK proper aborting:
+		wizardData.put(ExportWizard.RESULTPRODUCER_WORKING, result);
+
 		return result;
 	}
 
 	protected Summary getAbortSummary() {
 		JPanel aborted = new JPanel(new MigLayout());
 		aborted.add(new JLabel(
-				"The export has been aborted by the user. The temporary folder have been deleted."));
+				"<html>The export has been aborted by the user. Temporary files have been deleted.</html>")); // i8n
 
-		return Summary.create(aborted, "abort");
+		return Summary.create(aborted, null);
 	}
 }

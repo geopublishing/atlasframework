@@ -1,10 +1,12 @@
 package org.geopublishing.geopublisher.export.gphoster;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
+import org.geopublishing.geopublisher.export.gphoster.GpHosterClient.CREATE_USER_RESULT;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -40,9 +42,11 @@ public class GpHosterClientTest {
 			return;
 		final String testUsername = "testUser" + System.currentTimeMillis();
 		assertFalse(gphc.userExists(testUsername));
-		assertTrue(gphc.userCreate(testUsername, "tzeggai@wikisquare.de"));
+		assertEquals(CREATE_USER_RESULT.CREATED_PWDSENT,
+				gphc.userCreate(testUsername, "tzeggai@wikisquare.de"));
 		assertTrue(gphc.userExists(testUsername));
-		assertFalse("On the second try the username is not free anymore",
+		assertEquals("On the second try the username is not free anymore",
+				CREATE_USER_RESULT.EXITSALREADY_PWDSENT,
 				gphc.userCreate(testUsername, "tzeggai@wikisquare.de"));
 		// assertTrue(gphc.userDelete(testUsername, "???"));
 		// assertFalse(gphc.userExists(testUsername));

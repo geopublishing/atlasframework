@@ -128,6 +128,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 		// Save the new settings
 		GPProps.set(Keys.gpHosterServerList, getDbJComboBox().getDbList()
 				.toPropertiesString());
+		GPProps.set(Keys.lastGpHosterServerIdx, getDbJComboBox()
+				.getSelectedIndex());
 	}
 
 	private void createOrEditDb(GpHosterServerSettings dbServer) {

@@ -8,8 +8,11 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
+
+import de.schmitzm.net.mail.MailUtil;
 
 public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 	JLabel explanationJLabel = new JLabel(
@@ -18,23 +21,42 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 
 	JCheckBox acceptAgb;
 	JTextField eMailField;
+	JTextField usernameField;
 	private final String validationFtpFailedAgbNotAccepted = GeopublisherGUI
 			.R("ExportWizard.Ftp.New_User.ValidationError_AGB");
-	private final String validationFtpFailedNoEmail = GeopublisherGUI
+	private final String validationFtpFailedNoValidEmail = GeopublisherGUI
 			.R("ExportWizard.Ftp.New_User.ValidationError_Email");
+	private final String validationFtpFailedNoValidUsername = GeopublisherGUI
+			.R("ExportWizard.Ftp.New_User.ValidationError_Username");
 
 	public ExportWizardPage_GpHoster_NewUser() {
+	}
+
+	@Override
+	protected void renderingPage() {
+		removeAll();
 		initGui();
 	}
 
 	private void initGui() {
 		setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
-		setLayout(new MigLayout("wrap 1"));
-		add(explanationJLabel);
+		setLayout(new MigLayout("wrap 2"));
+		add(explanationJLabel, "span 2");
+		add(new JLabel("Username"), "sgx, right");
+		add(getUsernameField(), "growx");
+		add(new JLabel("Email"), "sgx, right");
 		add(getEMailField(), "growx");
 		add(getAcceptAgb());
 		add(agb);
+	}
+
+	private Component getUsernameField() {
+		if (usernameField == null) {
+			usernameField = new JTextField();
+			usernameField.setName(ExportWizard.GPH_USERNAME);
+		}
+		return usernameField;
 	}
 
 	private JCheckBox getAcceptAgb() {
@@ -66,8 +88,21 @@ public class ExportWizardPage_GpHoster_NewUser extends WizardPage {
 			return validationFtpFailedAgbNotAccepted;
 		}
 		if (eMailField != null && eMailField.getText().isEmpty()) {
-			return validationFtpFailedNoEmail;
+			return validationFtpFailedNoValidEmail;
 		}
+
+		if (eMailField != null) {
+			if (!MailUtil.EMAIL_ADDRESS_REGEX.matcher(eMailField.getText())
+					.find())
+				return validationFtpFailedNoValidEmail;
+		}
+		if (usernameField != null) {
+			if (!GpHosterServerSettings.checkString(usernameField.getText()))
+				return validationFtpFailedNoValidUsername;
+			if (usernameField.getText().length() < 2)
+				return validationFtpFailedNoValidUsername;
+		}
+
 		return null;
 	}
 

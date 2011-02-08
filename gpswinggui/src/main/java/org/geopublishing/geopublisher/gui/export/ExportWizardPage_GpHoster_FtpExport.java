@@ -29,17 +29,20 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 	JLabel explanationJLabel = new JLabel(
 			GeopublisherGUI.R("ExportWizard.Ftp.Explanation"));
 	JCheckBox firstSyncJCheckBox;
-	private JTextField UserJTextField;
+	private JTextField usernameJTextField;
 	private ManualInputOption.PasswordViewable passwordViewableInputOption;
 	// private Boolean isNewAtlasUpload;
 	private AtomicBoolean isNewAtlasUpload;
 	// private final GpHosterClient gphc;
 	JLabel userNameLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.FtpExport.Username"));
+			GeopublisherGUI.R("ExportWizard.FtpExport.Username") + ":");
 	private final String validationFtpFailedUsername = GeopublisherGUI
 			.R("ExportWizard.Ftp.ValidationError_Username");
 	private final String validationFtpFailedPassword = GeopublisherGUI
 			.R("ExportWizard.Ftp.ValidationError_Password");
+
+	private final JLabel passwordLabel = new JLabel(
+			GeopublisherGUI.R("ExportWizard.FtpExport.Password") + ":");
 
 	public ExportWizardPage_GpHoster_FtpExport() {
 		// ace = (GeopublisherGUI.getInstance().getAce();
@@ -55,9 +58,12 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		// setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		setLayout(new MigLayout("wrap 2"));
 		add(explanationJLabel, "span 2");
-		add(getFirstSyncJCheckBox(), "wrap");
-		add(userNameLabel, "wrap");
-		add(getUserJTextField(), "growx, wrap");
+
+		add(getCreateNewUserCheckbox(), "span 2");
+
+		add(userNameLabel, "sgx, right");
+		add(getUserJTextField(), "growx");
+		add(passwordLabel, "sgx, right");
 		add(getPWJTextField(), "growx");
 	}
 
@@ -65,8 +71,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		if (passwordViewableInputOption == null) {
 			GpHosterClient gphc = ((GpHosterClient) getWizardData(ExportWizard.GPHC));
 			passwordViewableInputOption = new ManualInputOption.PasswordViewable(
-					GeopublisherGUI.R("ExportWizard.FtpExport.Password"),
-					false, gphc.getPassword());
+					null, false, gphc.getPassword());
 			passwordViewableInputOption.setName(ExportWizard.GPH_PASSWORD);
 
 			// When the value of this textfield is automatically set from the
@@ -79,7 +84,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		return passwordViewableInputOption;
 	}
 
-	private JCheckBox getFirstSyncJCheckBox() {
+	private JCheckBox getCreateNewUserCheckbox() {
 		if (firstSyncJCheckBox == null) {
 			firstSyncJCheckBox = new JCheckBox(
 					GeopublisherGUI.R("ExportWizard.Ftp.CreateNewUser"));
@@ -96,16 +101,20 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		// .setSelected(
 		// isFirstSync((AtlasConfigEditable) getWizardData(ExportWizard.ACE)));
 
-		getUserJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
-		getPWJTextField().setEnabled(!getFirstSyncJCheckBox().isSelected());
+		userNameLabel.setEnabled(!getCreateNewUserCheckbox().isSelected());
+		passwordLabel.setEnabled(!getCreateNewUserCheckbox().isSelected());
+		getUserJTextField()
+				.setEnabled(!getCreateNewUserCheckbox().isSelected());
+		getPWJTextField().setEnabled(!getCreateNewUserCheckbox().isSelected());
 
 	}
 
 	private JTextField getUserJTextField() {
-		if (UserJTextField == null) {
+		if (usernameJTextField == null) {
 			GpHosterClient gphc = ((GpHosterClient) getWizardData(ExportWizard.GPHC));
-			UserJTextField = new JTextField(gphc.getUserName());
-			UserJTextField.setName(ExportWizard.GPH_USERNAME);
+
+			usernameJTextField = new JTextField(gphc.getUserName());
+			usernameJTextField.setName(ExportWizard.GPH_USERNAME);
 
 			if (gphc.getUserName() != null) {
 				putWizardData(ExportWizard.GPH_USERNAME, gphc.getUserName());
@@ -115,18 +124,22 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 			// properties, and the field is not chenged yb the user, the Wizard
 			// will NOT put it's value into the wizardMap. So we do it here:
 
-			getFirstSyncJCheckBox().addActionListener(new ActionListener() {
+			getCreateNewUserCheckbox().addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					getUserJTextField().setEnabled(
-							!getFirstSyncJCheckBox().isSelected());
+							!getCreateNewUserCheckbox().isSelected());
 					getPWJTextField().setEnabled(
-							!getFirstSyncJCheckBox().isSelected());
+							!getCreateNewUserCheckbox().isSelected());
+					userNameLabel.setEnabled(!getCreateNewUserCheckbox()
+							.isSelected());
+					passwordLabel.setEnabled(!getCreateNewUserCheckbox()
+							.isSelected());
 				}
 			});
 		}
-		return UserJTextField;
+		return usernameJTextField;
 	}
 
 	@Override
@@ -136,7 +149,7 @@ public class ExportWizardPage_GpHoster_FtpExport extends WizardPage {
 		// this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		// SwingUtil.getParentWindow(component).setCursor(
 		// Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		if (getFirstSyncJCheckBox().isSelected())
+		if (getCreateNewUserCheckbox().isSelected())
 			return null;
 		if (getUserJTextField().getText().isEmpty()) {
 			return validationFtpFailedUsername;
