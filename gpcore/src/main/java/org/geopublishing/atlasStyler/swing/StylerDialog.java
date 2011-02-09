@@ -151,8 +151,8 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 */
 	private void initialize() {
 		// setLayout(new MigLayout("width :800:850"));
-		setMaximumSize(new Dimension(850, 400));
-		setPreferredSize(new Dimension(850, 400));
+		setMaximumSize(new Dimension(980, 400));
+		setPreferredSize(new Dimension(980, 400));
 
 		final SimpleFeatureType schema = atlasStyler.getStyledFeatures()
 				.getSchema();

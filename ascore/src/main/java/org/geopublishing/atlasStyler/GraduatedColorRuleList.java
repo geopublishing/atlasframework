@@ -27,6 +27,7 @@ import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
 import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
@@ -273,13 +274,14 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					noDataRule
 							.setName(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND);
 
-//				
-//				// Use the min/max scale denominators from the template also for
-//				// the nodata values.. no matter what it's template has
-//				noDataRule.setMinScaleDenominator(getTemplate()
-//						.getMinScaleDenominator());
-//				noDataRule.setMaxScaleDenominator(getTemplate()
-//						.getMaxScaleDenominator());
+				//
+				// // Use the min/max scale denominators from the template also
+				// for
+				// // the nodata values.. no matter what it's template has
+				// noDataRule.setMinScaleDenominator(getTemplate()
+				// .getMinScaleDenominator());
+				// noDataRule.setMaxScaleDenominator(getTemplate()
+				// .getMaxScaleDenominator());
 
 				noDataRule.setFilter(getNoDataFilter());
 				rules.add(noDataRule);
@@ -400,7 +402,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 
 			// set Title
 			this.getRuleTitles().put(countRules,
-					r.getDescription().getTitle().toString());
+					GTUtil.descriptionTitle(r.getDescription()));
 
 			// Class Limits
 			Filter filter = r.getFilter();

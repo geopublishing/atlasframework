@@ -19,6 +19,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 
 import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
@@ -139,8 +140,7 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 	public void importNoDataRule(Rule r) {
 		getNoDataSymbol().getSymbolizers().clear();
 		getNoDataSymbol().addSymbolizers(r.symbolizers());
-		getNoDataSymbol()
-				.setLabel(r.getDescription().getTitle().toString());
+		getNoDataSymbol().setLabel(GTUtil.descriptionTitle(r.getDescription()));
 		getNoDataSymbol().setTitle("NODATARULE");
 
 		if (r.getName().toString()

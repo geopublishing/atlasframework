@@ -29,6 +29,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.Point;
 
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.styling.StyledFeatureCollection;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil;
@@ -114,8 +115,8 @@ public class QuantitiesRuleListTest extends TestingClass {
 		List<Rule> rules = ruleList.getRules();
 		// 1 NODATA rule and one rule that just fits the only value available
 		assertEquals(1 + 1, rules.size());
-		assertEquals("111.0", rules.get(0).getDescription().getTitle()
-				.toString());
+		assertEquals("111.0",
+				GTUtil.descriptionTitle(rules.get(0).getDescription()));
 
 		assertTrue(StylingUtil.validates(ruleList.getFTS()));
 

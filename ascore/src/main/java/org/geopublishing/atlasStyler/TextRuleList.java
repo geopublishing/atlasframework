@@ -35,6 +35,7 @@ import org.opengis.filter.expression.Function;
 import org.opengis.filter.expression.PropertyName;
 
 import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.gui.XMapPane;
@@ -636,7 +637,7 @@ public class TextRuleList extends AbstractRulesList {
 					// The title could be a Translation.. but we only want a
 					// string!
 					Translation t = new Translation();
-					t.fromOneLine(r.getDescription().getTitle().toString());
+					t.fromOneLine(GTUtil.descriptionTitle(r.getDescription()));
 					getRuleNames().add(t.toString());
 				}
 

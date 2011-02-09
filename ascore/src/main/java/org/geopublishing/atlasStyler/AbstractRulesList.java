@@ -31,6 +31,7 @@ import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory2;
 import org.opengis.filter.PropertyIsEqualTo;
 
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
@@ -577,11 +578,11 @@ public abstract class AbstractRulesList {
 			String metaInfoString = fts.getName();
 			parseMetaInfoString(metaInfoString, fts);
 
-			try {
-				setTitle(fts.getDescription().getTitle().toString());
-			} catch (Exception e) {
+			final String title = GTUtil.descriptionTitle(fts.getDescription());
+			if (title != null)
+				setTitle(title);
+			else
 				setTitle(getType().toString());
-			}
 			importMinMaxDenominators(fts);
 			importRules(fts.rules());
 		} finally {

@@ -41,6 +41,7 @@ import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
 import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -306,7 +307,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 			if (result == null)
 				return uniques;
-			
+
 			final Set<Object> vals = result.toSet();
 
 			// now filter the null values and the ones that are already part of
@@ -746,7 +747,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			symbolRL.reverseSymbolizers();
 
 			// Finally set all three values into the RL
-			getLabels().add(r.getDescription().getTitle().toString());
+			getLabels().add(GTUtil.descriptionTitle(r.getDescription()));
 			getSymbols().add(symbolRL);
 			getValues().add(strings[1]);
 
