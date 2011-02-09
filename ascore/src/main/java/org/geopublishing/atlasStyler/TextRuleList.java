@@ -365,7 +365,7 @@ public class TextRuleList extends AbstractRulesList {
 	@Override
 	public List<Rule> getRules() {
 
-		LOGGER.debug("Enabled Textrule = " + isEnabled());
+		// LOGGER.debug("Enabled Textrule = " + isEnabled());
 
 		ArrayList<Rule> rules = new ArrayList<Rule>();
 
