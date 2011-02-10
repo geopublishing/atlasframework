@@ -51,7 +51,8 @@ public class AtlasConfig implements Disposable {
 
 	/** Default JNLP base URL for new atlases **/
 	public static final String DEFAULTBASENAME = "myatlas";
-	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT = "http://atlas.geopublishing.org/atlases/"
+	private static final String ATLAS_BASE_URL = "http://atlas.geopublishing.org/atlases/";
+	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT = ATLAS_BASE_URL
 			+ DEFAULTBASENAME + "/";
 
 	private static final Logger LOGGER = Logger.getLogger(AtlasConfig.class);
@@ -81,6 +82,42 @@ public class AtlasConfig implements Disposable {
 	// * could be changed during runtime, like SLDs
 	// */
 	// boolean noCachingMode = false;
+
+	/**
+	 * The AtlasBasename ("abn") is a unique identifier for this atlas. It has
+	 * to follow certain restrictions, e.g. no spaces and ASCII only and
+	 * lowercase.
+	 */
+	public void setBaseName(String basename) {
+		if (!checkBasename(basename))
+			throw new IllegalArgumentException(
+					"atlas basename may not contain _ characters. Use - instead."); // i8n
+
+		this.basename = basename;
+	}
+
+	/**
+	 * Returns <code>true</code> if the basename would be accepted for a
+	 * {@link #setBaseName(String)} call.
+	 */
+	public static boolean checkBasename(String basename) {
+		if (basename != null) {
+			// Used in the Geoserver namespaces / stylenames
+			if (basename.contains("_"))
+				return false;
+			if (basename.contains(" "))
+				return false;
+			// URL dangerouse
+			if (basename.contains("?"))
+				return false;
+			// URL dangerouse
+			if (basename.contains("&"))
+				return false;
+			if (basename.matches("[^\\p{ASCII}]"))
+				return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Resource name of the map emblem that will be shown hovering above the map
@@ -189,7 +226,7 @@ public class AtlasConfig implements Disposable {
 	 * run at. Should always end with a /. Defaults to
 	 * <code>http://atlas.geopublishing.org/atlases/myatlas/</code>
 	 */
-	private String jnlpBaseUrl = HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
+	private String jnlpBaseUrl = null;
 
 	/**
 	 * The shortes unique name for the tlas.
@@ -514,12 +551,8 @@ public class AtlasConfig implements Disposable {
 	 */
 	public String getJnlpBaseUrl() {
 		if (jnlpBaseUrl == null) {
-			return HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT;
+			return ATLAS_BASE_URL + getBaseName() + "/";
 		}
-
-		if (!jnlpBaseUrl.endsWith("/"))
-			jnlpBaseUrl += "/";
-
 		return jnlpBaseUrl;
 	}
 
@@ -532,16 +565,16 @@ public class AtlasConfig implements Disposable {
 	}
 
 	/**
-	 * @return A ASCII only simple name for this atlas. Derived from
-	 *         getJnlpBaseUrl at the moment.
+	 * @return A ASCII only simple name for this atlas.
 	 */
 	public String getBaseName() {
-		if (basename == null) {
-			String bn = getJnlpBaseUrl();
-			return bn.substring(
-					bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
-					bn.length() - 1);
-		}
+		// if (basename == null) {
+		// String bn = getJnlpBaseUrl();
+		// return bn.substring(
+		// bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
+		// bn.length() - 1);
+
+		// }
 		return basename;
 	}
 

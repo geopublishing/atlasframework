@@ -93,6 +93,14 @@ public class AMLUtil {
 	public static final String ATT_FONT_FILENAME = "filename";
 
 	/**
+	 * A special identifier used e.g. for the Geoserver workspace or the .zip
+	 * filename of exported, compressed atlases.
+	 * 
+	 * @since 1.7
+	 */
+	public static final String ATT_atlasBasename = "atlasBasename";
+
+	/**
 	 * If the atlas is exported to the web, this the URL that it is supposed to
 	 * run at. E.g. http://www.geopublishing.org/atlases/myatlas/
 	 * 

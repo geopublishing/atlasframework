@@ -24,11 +24,19 @@
 
 package org.geopublishing.geopublisher.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
+import net.miginfocom.swing.MigLayout;
+
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import de.schmitzm.swing.TranslationAskJDialog;
@@ -62,11 +70,46 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 
 		setComponents(transName, transDesc, transCreator, transCopyright);
 
+		getContentPane().add(getBasenamePanel(), BorderLayout.NORTH);
+
 	}
 
+	private JPanel abnPanel;
+	private JTextField basenameTextfield;
+
+	/**
+	 * Asks for the atlasbasename
+	 * 
+	 * @since 1.7 a required ASCII id for each atlas
+	 */
+	private JPanel getBasenamePanel() {
+		if (abnPanel == null) {
+			abnPanel = new JPanel(new MigLayout("wrap 2"));
+			abnPanel.add(new JLabel(GpUtil.R("AtlasBasename.Explanation")),
+					"span 2");
+			abnPanel.add(new JLabel(GpUtil.R("AtlasBasename")), "");
+			abnPanel.add(getBasenameJTextfield(), "growx");
+		}
+		return abnPanel;
+	}
+
+	JTextField getBasenameJTextfield() {
+		if (basenameTextfield == null) {
+			basenameTextfield = new JTextField(ace.getBaseName());
+		}
+		return basenameTextfield;
+	}
+
+	@Override
 	public boolean okClose() {
+		if (!AtlasConfigEditable.checkBasename(getBasenameJTextfield()
+				.getText())) {
+			AVSwingUtil.showMessageDialog(this, "Not a valid atlas name."); // i8n
+			return false;
+		}
 		boolean result = super.okClose();
 		if (result) {
+			ace.setBaseName(getBasenameJTextfield().getText());
 			ace.fireChangeEvents();
 		}
 		return result;

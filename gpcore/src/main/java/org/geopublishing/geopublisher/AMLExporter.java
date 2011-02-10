@@ -342,6 +342,11 @@ public class AMLExporter {
 				String.valueOf(ReleaseUtil.getVersionMin(AVUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_buildVersion,
 				String.valueOf(ReleaseUtil.getVersionBuild(AVUtil.class)));
+
+		// Store the atlasBaseName attribute, since 1.7
+		atlas.setAttribute(AMLUtil.ATT_atlasBasename, getAce().getBaseName());
+
+		// Store the JWS export jnlp baseurl parameter, since 1.6
 		atlas.setAttribute(AMLUtil.ATT_jnlpBaseUrl,
 				String.valueOf(getAce().getJnlpBaseUrl()));
 

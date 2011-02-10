@@ -297,6 +297,21 @@ public class AMLImport {
 					.getNamedItem(AMLUtil.ATT_jnlpBaseUrl).getTextContent());
 		}
 
+		// Read the atlasBaseName attribute (since 1.7)
+		final Node atlasBasenameXMLItem = atlasNode.getAttributes()
+				.getNamedItem(AMLUtil.ATT_atlasBasename);
+		if (atlasBasenameXMLItem != null) {
+			ac.setBaseName(atlasNode.getAttributes()
+					.getNamedItem(AMLUtil.ATT_atlasBasename).getTextContent());
+		} else {
+			String bn = ac.getJnlpBaseUrl();
+			if (bn != null) {
+				// In v1.6 the basename was stored in the last part of the URL
+				ac.setBaseName(bn.substring(bn.substring(0, bn.length() - 1)
+						.lastIndexOf("/") + 1, bn.length() - 1));
+			}
+		}
+
 		// Read the mapLogoPosition attribute (since 1.7)
 		if (atlasNode.getAttributes().getNamedItem(AMLUtil.ATT_maplogoPosition) != null) {
 			ac.setMaplogoPosition(LogoPosition.valueOf(atlasNode

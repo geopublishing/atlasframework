@@ -3,6 +3,8 @@ package org.geopublishing.atlasViewer.dp;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Random;
+
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
@@ -22,10 +24,18 @@ public class AMLImportTest extends TestingClass {
 		assertNotNull(ace
 				.getResource("ad/data/vector_01367156967_join10/join10.shp"));
 
+		String bnx = "testbasename_" + new Random().nextLong();
+		ace.setBaseName(bnx);
+		final String jnlpx = "http://asd.asd.asd/atl/" + bnx + "x/";
+		ace.setJnlpBaseUrl(jnlpx);
+
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 
 		assertNotNull(ace2
 				.getResource("ad/data/vector_01367156967_join10/join10.shp"));
+
+		assertEquals(bnx, ace2.getBaseName());
+		assertEquals(jnlpx, ace2.getJnlpBaseUrl());
 	}
 
 	@Test
