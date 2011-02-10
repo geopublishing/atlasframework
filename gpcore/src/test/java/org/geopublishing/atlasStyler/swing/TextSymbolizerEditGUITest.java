@@ -46,7 +46,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 	@Test
 	public void testGetFontComboBox2() throws IOException {
 		List<Font> fonts = new ArrayList<Font>();
-//		Font f = new JLabel().getFont().deriveFont(3);
+		// Font f = new JLabel().getFont().deriveFont(3);
 		atlasStyler.setFonts(fonts);
 
 		TextSymbolizerEditGUI textSymbolizerEditGUI = new TextSymbolizerEditGUI(

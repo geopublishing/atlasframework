@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.swing;
 
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,6 +89,11 @@ import de.schmitzm.versionnumber.ReleaseUtil;
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 	static {
+		// Do not use bold font as default, its ugly!
+		Font oldLabelFont = UIManager.getFont("Label.font");
+		UIManager.put("Label.font", oldLabelFont.deriveFont(Font.PLAIN)
+				.deriveFont(14f));
+
 		GpUtil.initGpLogging();
 		// Enable translations added by the user to the .Geopublishing directory
 		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);

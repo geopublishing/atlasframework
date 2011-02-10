@@ -46,7 +46,7 @@ import org.opengis.filter.Filter;
 
 import de.schmitzm.i18n.LanguagesComboBox;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.AtlasDialog;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
@@ -191,8 +191,6 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 				jPanelClass.add(getJButtonClassCopyToLanguage());
 
 			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
-
-			// jPanelClass.add(getJPanelLabelDefinition(), "wrap");
 			jPanelClass.add(getJPanelEditTextSymbolizer());
 		}
 		return jPanelClass;
@@ -379,7 +377,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 							AVSwingUtil
 									.showMessageDialog(
 											TextRuleListGUI.this,
-											"Please choose one of the configured languages: "
+											"Please choose one of the configured languages: " // i8n
 													+ LangUtil
 															.stringConcatWithSep(
 																	",",
@@ -423,15 +421,25 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 							AtlasStyler.getLanguages(), rulesList
 									.getDefaultLanguages());
 
-					CancellableDialogAdapter d = new CancellableDialogAdapter(
-							TextRuleListGUI.this) {
+					AtlasDialog d = new AtlasDialog(
+							TextRuleListGUI.this,
+							ASUtil.R("TextSymbolizerClass.CreateALanguageDefault.DialogTitle")) {
 
 						@Override
 						protected void dialogInit() {
 							super.dialogInit();
-							setLayout(new MigLayout());
-							add(lcb);
-							add(getOkButton());
+							setContentPane(new JPanel());
+							getContentPane().setLayout(
+									new MigLayout("wrap 1, debug"));
+							getContentPane()
+									.add(new JLabel(
+											ASUtil.R("TextSymbolizerClass.CreateALanguageDefault.Explanation")),
+											"wrap");
+							getContentPane().add(lcb, "");
+							getContentPane().add(getOkButton(),
+									"split 2, tag ok");
+							getContentPane().add(getCancelButton(),
+									"tag cancel");
 							pack();
 							SwingUtil.setRelativeFramePosition(this,
 									TextRuleListGUI.this, 0.5, 0.5);
@@ -443,10 +451,6 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 							if (lcb.getSelectedIndex() == -1)
 								return false;
 							return super.close();
-						}
-
-						@Override
-						public void cancel() {
 						}
 
 					};

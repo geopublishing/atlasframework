@@ -24,7 +24,6 @@
 
 package org.geopublishing.geopublisher.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JDialog;
@@ -53,6 +52,7 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 
 	public EditAtlasParamsDialog(Component owner, AtlasConfigEditable ace) {
 		super(owner);
+		setTitle(GpUtil.R("AtlasParamsTranslationDialog.DialogTitle"));
 		this.ace = ace;
 
 		TranslationEditJPanel transName = new TranslationEditJPanel(
@@ -68,10 +68,10 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 				GeopublisherGUI.R("AtlasParamsTranslationDialog.Copyright"),
 				ace.getCopyright(), ace.getLanguages());
 
-		setComponents(transName, transDesc, transCreator, transCopyright);
+		setComponents(getBasenamePanel(), transName, transDesc, transCreator,
+				transCopyright);
 
-		getContentPane().add(getBasenamePanel(), BorderLayout.NORTH);
-
+		pack();
 	}
 
 	private JPanel abnPanel;
