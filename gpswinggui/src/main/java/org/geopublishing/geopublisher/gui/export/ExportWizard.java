@@ -128,12 +128,13 @@ public class ExportWizard extends WizardBranchController {
 	/**
 	 * @return whether all required meta-data has been supplied that is need for
 	 *         a successful export. (Title, Desc, Creator/Vendor in ALL
-	 *         languages)
+	 *         languages and AtlasBasename)
 	 */
 	private static boolean checkForRequiredMetadata(Component owner,
 			AtlasConfigEditable ace) {
+
 		for (String lang : ace.getLanguages()) {
-			if (ace.getTitle().get(lang) == null
+			if (ace.getBaseName() == null || ace.getTitle().get(lang) == null
 					|| ace.getTitle().get(lang).equals("")
 					|| ace.getDesc().get(lang) == null
 					|| ace.getDesc().get(lang).equals("")
@@ -144,7 +145,6 @@ public class ExportWizard extends WizardBranchController {
 				return false;
 			}
 		}
-
 		return true;
 	}
 

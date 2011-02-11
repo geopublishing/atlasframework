@@ -1,6 +1,5 @@
 package org.geopublishing.atlasViewer;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -15,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.schmitzm.testing.TestingClass;
+
 public class AtlasConfigTest extends TestingClass {
 	private AtlasConfigEditable ace;
 
@@ -43,19 +43,6 @@ public class AtlasConfigTest extends TestingClass {
 		assertNotNull(iconURL);
 
 		assertNotNull(new AtlasConfig().getIconURL());
-	}
-
-	@Test
-	public void testBasename() {
-		AtlasConfig ac = new AtlasConfig();
-		assertEquals("myatlas", ac.getBaseName());
-
-		ac.setJnlpBaseUrl("http://www.bahn.de/cool/");
-		assertEquals("cool", ac.getBaseName());
-
-		ac.setJnlpBaseUrl("http://www.bahn.de/cool");
-		assertEquals("cool", ac.getBaseName());
-
 	}
 
 }
