@@ -113,8 +113,10 @@ public class AMLExporter {
 					atlasBaseName.length() - 1);
 		}
 
-		if (atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME)) {
-			LOGGER.info("Not writing a build.xml for automatic publishing, because the basename is myatlas. Please change it.");
+		if (atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME)
+				|| atlasBaseName.equals("null")) {
+			LOGGER.info("Not writing a build.xml for automatic publishing, because the basename is "
+					+ atlasBaseName + ". Please change it.");
 			return null;
 		}
 

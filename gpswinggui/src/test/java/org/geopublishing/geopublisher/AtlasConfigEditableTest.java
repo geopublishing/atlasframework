@@ -1,7 +1,6 @@
 package org.geopublishing.geopublisher;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
 
@@ -18,15 +17,16 @@ import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import de.schmitzm.testing.TestingClass;
+
 public class AtlasConfigEditableTest extends TestingClass {
 
 	@Test
 	public void testGetUsedMaps() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+		AtlasConfigEditable ace = GpTestingUtil
+				.getAtlasConfigE(TestAtlas.small);
 
-		assertNotNull(ace.getJnlpBaseUrl());
 		assertEquals(AtlasConfig.HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT,
 				ace.getJnlpBaseUrl());
 
