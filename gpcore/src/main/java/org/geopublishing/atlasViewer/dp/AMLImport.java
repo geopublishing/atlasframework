@@ -304,11 +304,11 @@ public class AMLImport {
 			ac.setBaseName(atlasNode.getAttributes()
 					.getNamedItem(AMLUtil.ATT_atlasBasename).getTextContent());
 		} else {
-			String bn = ac.getJnlpBaseUrl();
-			if (bn != null) {
+			String burl = ac.getJnlpBaseUrl();
+			if (burl != null) {
 				// In v1.6 the basename was stored in the last part of the URL
-				ac.setBaseName(bn.substring(bn.substring(0, bn.length() - 1)
-						.lastIndexOf("/") + 1, bn.length() - 1));
+				ac.setBaseName(burl.substring(burl.substring(0, burl.length() - 1)
+						.lastIndexOf("/") + 1, burl.length() - 1));
 			}
 		}
 

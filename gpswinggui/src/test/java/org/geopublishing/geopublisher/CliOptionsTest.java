@@ -10,7 +10,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.CliOptions.Errors;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.export.JarExportUtil;
@@ -175,8 +174,8 @@ public class CliOptionsTest extends TestingClass {
 				"--" + CliOptions.ZIPDISK, "-e", expDir.toString(), "-d",
 				"--atlas", TestAtlas.small.getFile().toString() }));
 
-		assertTrue(ArrayUtils.contains(expDir.list(),
-				AtlasConfig.DEFAULTBASENAME + ".zip"));
+		assertTrue(ArrayUtils.contains(expDir.list(), TestAtlas.small.getAce()
+				.getBaseName() + ".zip"));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
 	}
