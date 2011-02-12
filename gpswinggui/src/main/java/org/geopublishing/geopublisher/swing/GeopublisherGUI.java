@@ -306,6 +306,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		final String cmd = e.getActionCommand();
 
 		if (cmd.equals(ActionCmds.editAtlasParams.toString())) {
+
 			if (ace == null)
 				return;
 

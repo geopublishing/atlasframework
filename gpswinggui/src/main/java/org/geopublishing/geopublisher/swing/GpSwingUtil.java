@@ -259,8 +259,7 @@ public class GpSwingUtil extends GpUtil {
 			final String question = GpUtil
 					.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
 
-			if (SwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n"
-					+ question)) {
+			if (SwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n" + question)) {
 				deleteDpEntry(owner, ace, dpe, false);
 			}
 		}
@@ -400,7 +399,6 @@ public class GpSwingUtil extends GpUtil {
 			final Component parentGUI, boolean confirm) {
 
 		SwingUtil.checkOnEDT();
-		;
 
 		AtlasSwingWorker<Boolean> swingWorker = new AtlasSwingWorker<Boolean>(
 				parentGUI) {

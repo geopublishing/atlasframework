@@ -107,17 +107,18 @@ public class AMLExporter {
 	 */
 	public File writeBuildxml(File targetDir, String atlasBaseName) {
 
-		// prepare the new content:
-		if (atlasBaseName.endsWith("/")) {
-			atlasBaseName = atlasBaseName.substring(0,
-					atlasBaseName.length() - 1);
-		}
-
-		if (atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME)
+		if (atlasBaseName == null
+				|| atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME)
 				|| atlasBaseName.equals("null")) {
 			LOGGER.info("Not writing a build.xml for automatic publishing, because the basename is "
 					+ atlasBaseName + ". Please change it.");
 			return null;
+		}
+
+		// prepare the new content:
+		if (atlasBaseName.endsWith("/")) {
+			atlasBaseName = atlasBaseName.substring(0,
+					atlasBaseName.length() - 1);
 		}
 
 		String resLoc = "/autoPublish/build.xml";

@@ -51,8 +51,7 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 	private final AtlasConfigEditable ace;
 
 	public EditAtlasParamsDialog(Component owner, AtlasConfigEditable ace) {
-		super(owner);
-		setTitle(GpUtil.R("AtlasParamsTranslationDialog.DialogTitle"));
+		super(owner, GpUtil.R("AtlasParamsTranslationDialog.DialogTitle"));
 		this.ace = ace;
 
 		TranslationEditJPanel transName = new TranslationEditJPanel(
