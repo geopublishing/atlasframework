@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapRef;
@@ -26,9 +25,6 @@ public class AtlasConfigEditableTest extends TestingClass {
 			ParserConfigurationException {
 		AtlasConfigEditable ace = GpTestingUtil
 				.getAtlasConfigE(TestAtlas.small);
-
-		assertEquals(AtlasConfig.HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT,
-				ace.getJnlpBaseUrl());
 
 		int countMaps = ace.getUsedMaps().size();
 
