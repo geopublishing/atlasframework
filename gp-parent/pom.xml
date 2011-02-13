@@ -32,16 +32,6 @@
 		<schmitzm.version>2.5-SNAPSHOT</schmitzm.version>
 	</properties>
 
-<!---->
-	<!-- <parent> -->
-	<!-- All Geopublisher projects pull the version of GeoTools and schmitzm 
-		from schmitzm -->
-	<!-- <groupId>de.schmitzm</groupId> -->
-	<!-- <artifactId>schmitzm-parent</artifactId> -->
-	<!-- <version>2.5-SNAPSHOT</version> -->
-	<!-- <relativePath>../schmitzm-parent/pom.xml</relativePath> -->
-	<!-- </parent> -->
-
 	<organization>
 		<name>geopublishing.org</name>
 		<url>http://www.geopublishing.org</url>
