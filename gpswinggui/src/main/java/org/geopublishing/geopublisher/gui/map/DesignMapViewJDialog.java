@@ -372,19 +372,19 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 		final JPanel cp = new JPanel(new BorderLayout());
 		cp.add(designMapView, BorderLayout.CENTER);
 
-		final JPanel controlPanel = new JPanel(new MigLayout());
+		final JPanel controlPanel = new JPanel(new MigLayout("gap 1, inset 1"));
 
-		controlPanel.add(createTabs(), "top");
-		controlPanel.add(getButtons(), "bottom, right");
+		controlPanel.add(createTabs(), "top, wrap");
+		controlPanel.add(getButtons(), "center");
 
 		cp.add(controlPanel, BorderLayout.SOUTH);
 
 		setContentPane(cp);
 
 		final Dimension DIALOG_SIZE = new Dimension(GPProps.getInt(
-				GPProps.Keys.mapComposerWidth, 800), GPProps.getInt(
+				GPProps.Keys.mapComposerWidth, 900), GPProps.getInt(
 				GPProps.Keys.mapComposerHeight, 600));
-		setMinimumSize(new Dimension(780, 580));
+		setMinimumSize(new Dimension(820, 580));
 		setPreferredSize(DIALOG_SIZE);
 		pack();
 
@@ -1171,33 +1171,13 @@ public class DesignMapViewJDialog extends CancellableDialogAdapter {
 	}
 
 	private JPanel getButtons() {
-		final JPanel panel = new JPanel(new MigLayout("flowy, debug", "[]",
-				"fill"));
-
-		final JButton okButton = getOkButton();
-
-		// new OkButton(new AbstractAction() {
-		//
-		// public void actionPerformed(final ActionEvent e) {
-		// okClose();
-		// }
-		//
-		// });
-
-		final JButton cancelButton = getCancelButton();
-		// final JButton cancelButton = new CancelButton(new AbstractAction() {
-		//
-		// public void actionPerformed(final ActionEvent e) {
-		// cancelClose();
-		// }
-		//
-		// });
+		final JPanel panel = new JPanel(new MigLayout("gap 0, inset 0"));
 
 		/**
 		 * Adding all the buttons
 		 */
-		panel.add(cancelButton, "bottom, tag cancel");
-		panel.add(okButton, "bottom, tag ok");
+		panel.add(getCancelButton(), "tag cancel");
+		panel.add(getOkButton(), "tag ok");
 		return panel;
 	}
 

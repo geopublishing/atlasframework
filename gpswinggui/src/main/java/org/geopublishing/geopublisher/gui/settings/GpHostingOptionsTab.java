@@ -33,19 +33,19 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	private final Map backupProperties = new HashMap();
 
 	public GpHostingOptionsTab(GeopublisherGUI gpg) {
-		super(new MigLayout("width 100%, wrap 1", "[100%]"));
+		super(new MigLayout("wrap 1, w ::400px"));
 		this.gpg = gpg;
 
 		// i8n
 		JLabel explanationJLabel = new JLabel(
 				"<html>This server setting defines which server to contact when Geopublisher is exporting to the Internet. Usually the geopublishing.org Server is the correct choice and should not be changed.</html>");
 		JLabel dbServerSelectionJLabel = new JLabel("GpHoster Server"); // i8n
+		add(explanationJLabel, "growx, push");
 
-		add(explanationJLabel);
-		add(dbServerSelectionJLabel, "split 2, gapy unrelated");
+		add(dbServerSelectionJLabel, "split 2, gapy unrelated, push");
 		add(getDbJComboBox(), "growx, w 200::, left");
 
-		add(getNewDbJButton(), "split 3, align right");
+		add(getNewDbJButton(), "split 3, align right, push");
 		add(getEditServerJButton(), "align right");
 		add(getDeleteDbJButton(), "align right");
 

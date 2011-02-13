@@ -21,15 +21,14 @@ public class GpOptionsDialog extends CancellableTabbedDialogAdapter {
 	public GpOptionsDialog(final Component parentWindow, GeopublisherGUI gpg) {
 		super(parentWindow, GpUtil.R("GpOptionsDialog.title"));
 		this.gpg = gpg;
-
 		initGUI();
-
-		pack();
 
 		SwingUtil.setRelativeFramePosition(this, parentWindow, 0.5, 0.5);
 
-		setModal(true);
 		setVisible(true);
+		pack();
+
+		setModal(true);
 	}
 
 	/**
@@ -47,29 +46,6 @@ public class GpOptionsDialog extends CancellableTabbedDialogAdapter {
 			getTabbedPane().insertTab(GpUtil.R("GpHostingSettings.title"),
 					null, new GpHostingOptionsTab(gpg), null,
 					getTabbedPane().getTabCount());
-
-			/**
-			 * Building the content pane
-			 */
-			// final JPanel contentPane = new JPanel(new MigLayout("wrap 1",
-			// "[100%]", "[grow 100][grow 10]"));
-			// contentPane.add(getTabbedPane());
-			// contentPane.add(buttons);
-			//
-			// setContentPane(contentPane);
-			// SwingUtil.setHeight(this, getHeight() + buttons.getHeight());
-			// SwingUtil.setMinimumHeight(this,
-			// getHeight() + buttons.getMinimumSize().getHeight());
-
-			// SwingUtil.setMinimumHeight(contentPane, getTabbedPane()
-			// .getPreferredSize().height
-			// + buttons.getPreferredSize().height);
-			// pack();
-
-			// SwingUtil.setMaximumHeight(contentPane, getTabbedPane()
-			// .getPreferredSize().height
-			// + buttons.getPreferredSize().height);
-			// pack();
 
 			SwingUtil.setRelativeFramePosition(this, gpg.getJFrame(), .5, .5);
 		}
