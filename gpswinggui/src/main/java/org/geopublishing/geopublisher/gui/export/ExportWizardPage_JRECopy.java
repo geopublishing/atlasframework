@@ -31,7 +31,7 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 
 	JLabel javaVersionLabel = new JLabel(GeopublisherGUI
 			.R("ExportWizard.JRE.JavaVersionLabel"));
-	private JLabel javaVersionJLabel;
+	private final static JLabel javaVersionJLabel = new JLabel(System.getProperty("java.version"));
 
 	JLabel osLabel = new JLabel(GeopublisherGUI.R("ExportWizard.JRE.OS"));
 	private JLabel osJLabel;
@@ -45,25 +45,17 @@ public class ExportWizardPage_JRECopy extends WizardPage {
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 
-		setLayout(new MigLayout("wrap 2", "[50%|50%]"));
+		setLayout(new MigLayout("wrap 4", "[50%|50%]"));
 
-		add(explanationJLabel, "span 2");
+		add(explanationJLabel, "span 4");
 
-		add(javaVersionLabel, "gapy unrelated");
-		add(getJavaVersionJLabel());
+		add(javaVersionLabel,"gapy unrelated" );
+		add(javaVersionJLabel );
 
-		add(osLabel);
+		add(osLabel, "gapx unrel");
 		add(getOSJLabel());
 
-		add(getCopyJRECheckBox(), "gapy unrelated, span 2");
-
-	}
-
-	private JLabel getJavaVersionJLabel() {
-		if (javaVersionJLabel == null) {
-			javaVersionJLabel = new JLabel(System.getProperty("java.version"));
-		}
-		return javaVersionJLabel;
+		add(getCopyJRECheckBox(), "span 4, center");
 	}
 
 	private JLabel getOSJLabel() {
