@@ -475,7 +475,7 @@ public abstract class DpLayerVectorFeatureSource
 							IOUtil.changeUrlExt(url, "shp.xml"),
 							IOUtil.changeFileExt(file, "shp.xml"));
 
-					publish("done");
+//					publish("done");
 
 					success = true;
 				} catch (Exception e) {

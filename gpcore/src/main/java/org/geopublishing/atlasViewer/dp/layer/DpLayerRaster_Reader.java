@@ -137,7 +137,7 @@ public class DpLayerRaster_Reader extends
 					AtlasConfig.exportURLtoFileNoEx(
 							IOUtil.changeUrlExt(url, "sld"),
 							IOUtil.changeFileExt(file, "sld"));
-					publish("done");
+//					publish("done");
 					success = true;
 				} catch (Exception e) {
 					done();
