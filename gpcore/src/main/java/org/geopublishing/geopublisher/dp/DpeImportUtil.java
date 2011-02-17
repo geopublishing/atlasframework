@@ -38,6 +38,10 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class DpeImportUtil {
 
+	/**
+	 * Before file(s) are being imported/copied into Geopublisher, we ask the
+	 * user for their descriptions.
+	 */
 	public static void askTranslationsBeforeCopy(DpEntry<?> dpe, Component owner) {
 
 		// ****************************************************************************
@@ -61,6 +65,7 @@ public class DpeImportUtil {
 						GpUtil.R("EditDPEDialog.TranslateKeywords"),
 						dpe.getKeywords(), langs));
 
+		translationAskJDialog.setTitle(dpe.getFilename());
 		translationAskJDialog.setModal(true);
 		translationAskJDialog.setVisible(true);
 
@@ -119,10 +124,9 @@ public class DpeImportUtil {
 		} else {
 			// We are not doing GUI
 			try {
-				doCopy(dped, sourceUrl, owner, targetDir, dpe,
-						null);
-//				targetDir.mkdirs();
-//				dped.copyFiles(sourceUrl, owner, targetDir, null);
+				doCopy(dped, sourceUrl, owner, targetDir, dpe, null);
+				// targetDir.mkdirs();
+				// dped.copyFiles(sourceUrl, owner, targetDir, null);
 			} catch (Exception e) {
 				if (e instanceof AtlasImportException)
 					throw (AtlasImportException) e;
@@ -133,24 +137,23 @@ public class DpeImportUtil {
 	}
 
 	private static void doCopy(final DpEditableInterface dped,
-			final URL sourceUrl, final Component owner,
-			final File targetDir, final DpEntry<?> dpe,
-			final AtlasStatusDialog atlasStatusDialog)
+			final URL sourceUrl, final Component owner, final File targetDir,
+			final DpEntry<?> dpe, final AtlasStatusDialog atlasStatusDialog)
 			throws IOException, Exception {
 		targetDir.mkdirs();
 
 		AVSwingUtil.copyHTMLInfoFiles(atlasStatusDialog,
-				DataUtilities.urlToFile(sourceUrl),
-				dpe.getAtlasConfig(), targetDir, null);
+				DataUtilities.urlToFile(sourceUrl), dpe.getAtlasConfig(),
+				targetDir, null);
 
 		if (!targetDir.exists())
 			throw new IOException("Couldn't create "
 					+ IOUtil.escapePath(targetDir));
 
 		// Calling the specific files for this DPEntry
-		dped.copyFiles(sourceUrl, owner, targetDir,
-				atlasStatusDialog);
+		dped.copyFiles(sourceUrl, owner, targetDir, atlasStatusDialog);
 	}
+
 	public static void copyFilesWithOrWithoutGUI(DpEditableInterface dped,
 			File sourceFile, Component owner, File targetDir) {
 		copyFilesWithOrWithoutGUI(dped, DataUtilities.fileToURL(sourceFile),
