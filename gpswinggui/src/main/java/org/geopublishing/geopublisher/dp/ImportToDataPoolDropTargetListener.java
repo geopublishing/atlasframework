@@ -18,7 +18,6 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetListener;
 import java.io.File;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,13 +79,9 @@ public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener 
 				Object transferData = tf
 						.getTransferData(DataFlavor.javaFileListFlavor);
 				for (File f : (Iterable<File>) transferData) {
-
-					URLConnection uc = f.toURI().toURL().openConnection();
-
-					LOGGER.debug("    " + f + ": " + uc.getContentType());
 					importFile(ace, f, owner);
 				}
-				LOGGER.info("Calling AtlasConfig to import the list..");
+				// LOGGER.debug("Calling AtlasConfig to import the list..");
 				dropTargetDropEvent.getDropTargetContext().dropComplete(true);
 				return;
 			} catch (Exception e) {
@@ -116,10 +111,9 @@ public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener 
 						importMany(ace, dropped, owner));
 				return;
 			} catch (Exception e) {
-				LOGGER
-						.error(
-								" DataFlavor.stringFlavor not successful, with Exception",
-								e);
+				LOGGER.error(
+						" DataFlavor.stringFlavor not successful, with Exception",
+						e);
 			}
 		}
 
@@ -148,8 +142,7 @@ public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener 
 
 				// Next: Try to make a File from the String
 				if (droppedString.startsWith("file:")) {
-					LOGGER
-							.debug("Filename with 'file:'. Interpreting it as URL...");
+					LOGGER.debug("Filename with 'file:'. Interpreting it as URL...");
 					String urlpath;
 					try {
 						urlpath = new URL(droppedString).toURI().getPath();
@@ -236,13 +229,13 @@ public class ImportToDataPoolDropTargetListener extends AtlasDropTargetListener 
 
 			LOGGER.debug("Adding a new DatapoolEntry to the Datapool...");
 			ace.add(newEntry);
-//
-//			/*
-//			 * It's better to save here
-//			 * 
-//			 * TODO We need a better logic here
-//			 */
-//			ace.save(Geopublisher.getInstance().getJFrame(), false);
+			//
+			// /*
+			// * It's better to save here
+			// *
+			// * TODO We need a better logic here
+			// */
+			// ace.save(Geopublisher.getInstance().getJFrame(), false);
 
 			return true;
 
