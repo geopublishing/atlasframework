@@ -36,8 +36,8 @@ import de.schmitzm.geotools.gui.MapView;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 
 /**
- * This is the {@link MapView} used in the {@link GeopublisherGUI} to preview the
- * {@link Map}s.<br>
+ * This is the {@link MapView} used in the {@link GeopublisherGUI} to preview
+ * the {@link Map}s.<br>
  * It allows the HTML folder to be changed and can be edited.<br>
  */
 public class DesignMapView extends AtlasMapView {
@@ -76,34 +76,35 @@ public class DesignMapView extends AtlasMapView {
 	@Override
 	public JComponent getSidePane() {
 
-		if (layerManager == null) {
+		if (getLayerManager() == null) {
 			JTabbedPane tabbedPane;
 			tabbedPane = new JTabbedPane();
-			
+
 			final DesignAtlasMapLegend designLayerPanel = new DesignAtlasMapLegend(
 					getGeoMapPane(), map, ace, getToolBar());
-			
+
 			layerManager = designLayerPanel;
 			JScrollPane scrollPane = new JScrollPane(designLayerPanel);
-			tabbedPane.addTab(AtlasViewerGUI
-					.R("AtlasMapView.tabbedPane.LayersTab_label"),
-					scrollPane);
-			
-			tabbedPane.setToolTipTextAt(0, AtlasViewerGUI
-					.R("AtlasMapView.tabbedPane.LayersTab_tt"));
+			tabbedPane
+					.addTab(AtlasViewerGUI
+							.R("AtlasMapView.tabbedPane.LayersTab_label"),
+							scrollPane);
+
+			tabbedPane.setToolTipTextAt(0,
+					AtlasViewerGUI.R("AtlasMapView.tabbedPane.LayersTab_tt"));
 
 			JScrollPane scrollpane2 = new JScrollPane(getDesignInfoPanel());
-			tabbedPane.addTab(AtlasViewerGUI
-					.R("AtlasMapView.tabbedPane.InfoTab_label"),
+			tabbedPane.addTab(
+					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_label"),
 					scrollpane2);
-			
-			tabbedPane.setToolTipTextAt(1, AtlasViewerGUI
-					.R("AtlasMapView.tabbedPane.InfoTab_tt"));
+
+			tabbedPane.setToolTipTextAt(1,
+					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 			add(tabbedPane, BorderLayout.CENTER);
 
 			leftSide = tabbedPane;
-			
+
 		}
 		return leftSide;
 	}
@@ -113,13 +114,13 @@ public class DesignMapView extends AtlasMapView {
 	 * {@link MapContext} of the preview map.
 	 */
 	public void updateMapLayersFromMapContext(Map map2) {
-		if (layerManager == null) {
+		if (getLayerManager() == null) {
 			return;
 		}
 
 		map2.clearLayerList();
 
-		List<StyledLayerInterface<?>> styledObjects = layerManager
+		List<StyledLayerInterface<?>> styledObjects = getLayerManager()
 				.getStyledObjects();
 
 		for (StyledLayerInterface<?> o : styledObjects) {
@@ -128,8 +129,7 @@ public class DesignMapView extends AtlasMapView {
 			String id = o.getId();
 			DpEntry<?> dpEntry = ace.getDataPool().get(id);
 			if (dpEntry == null) {
-				LOGGER
-						.warn("strange.. deleted from datapool while the mapview was open???");
+				LOGGER.warn("strange.. deleted from datapool while the mapview was open???");
 			} else {
 				map2.add(new DpRef(dpEntry));
 			}

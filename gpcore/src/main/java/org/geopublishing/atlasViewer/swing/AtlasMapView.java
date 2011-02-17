@@ -91,6 +91,10 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	/** The AtlasMapLegend that is filled when {@link #setMap(Map)} is called * */
 	protected AtlasMapLegend layerManager;
 
+	public MapContextManagerInterface getLayerManager() {
+		return layerManager;
+	}
+
 	/** The tabbed pane on the left... * */
 	protected JComponent leftSide;
 
@@ -305,7 +309,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 	@Override
 	public JComponent getSidePane() {
 
-		if (layerManager == null) {
+		if (getLayerManager() == null) {
 
 			final AtlasMapLegend atlasMapLegend = new AtlasMapLegend(
 					getGeoMapPane(), map, atlasConfig, getToolBar());

@@ -26,14 +26,17 @@ package org.geopublishing.geopublisher.gui.map;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.DropMode;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,6 +45,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.TransferHandler;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -51,16 +55,21 @@ import javax.swing.table.TableRowSorter;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
+import org.geopublishing.atlasViewer.swing.RJLTransferable;
+import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.MegaByteTableCellRenderer;
 import org.geopublishing.geopublisher.gui.QualityPercentageTableCellRenderer;
 import org.geopublishing.geopublisher.gui.TableModelWithToolTooltip;
 import org.geopublishing.geopublisher.gui.internal.DefaultTableCellRendererWithTooltip;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
@@ -109,6 +118,83 @@ public class MapPoolJTable extends JTable {
 		this.mapPool = ace.getMapPool();
 
 		init();
+
+		setDropMode(DropMode.ON);
+
+		setTransferHandler(new TransferHandler() {
+
+			@Override
+			public boolean canImport(TransferSupport support) {
+				// for the demo, we'll only support drops (not clipboard paste)
+				if (!support.isDrop()) {
+					return false;
+				}
+
+				// we only import Strings
+				if (!support
+						.isDataFlavorSupported(RJLTransferable.localObjectFlavor)) {
+					return false;
+				}
+
+				return true;
+			}
+
+			@Override
+			public boolean importData(TransferSupport support) {
+				// if we can't handle the import, say so
+				if (!canImport(support)) {
+					return false;
+				}
+
+				// fetch the drop location
+				JTable.DropLocation dl = (JTable.DropLocation) support
+						.getDropLocation();
+
+				int viewRowIndex = dl.getRow();
+
+				// fetch the data and bail if this fails
+				DnDAtlasObject data;
+				try {
+					data = (DnDAtlasObject) support.getTransferable()
+							.getTransferData(RJLTransferable.localObjectFlavor);
+				} catch (UnsupportedFlavorException e) {
+					return false;
+				} catch (IOException e) {
+					return false;
+				}
+
+				if (data.getObject() instanceof DpLayer) {
+					// TODO check sorting / rowIndex
+					int row = convertRowIndexToModel(viewRowIndex);
+					Map map = getMapPool().get(row);
+					DesignMapViewJDialog instanceFor = GPDialogManager.dm_MapComposer
+							.getInstanceFor(map, MapPoolJTable.this, map);
+
+					StyledLayerInterface<?> styledLayer = (StyledLayerInterface<?>) data
+							.getObject();
+					instanceFor.getDesignMapView().getLayerManager()
+							.insertStyledLayer(styledLayer, 0);
+					// map.add(new DpRef((DpLayer) data.getObject()));
+					// instanceFor.get
+					// map.fireChangedEvent
+
+				}
+
+				// String[] rowData = data.split(",");
+
+				// Rectangle rect = getCellRect(row, 0, false);
+				// if (rect != null) {
+				// scrollRectToVisible(rect);
+				// }
+
+				// demo stuff - remove for blog
+				// model.removeAllElements();
+				// model.insertElementAt(getNextString(count++), 0);
+				// end demo stuff
+
+				return true;
+			}
+		});
 
 		mapPool.addChangeListener(propertyChangeListener);
 	}
@@ -163,7 +249,6 @@ public class MapPoolJTable extends JTable {
 
 		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
-			
 
 			Map map = getMapPool().get(rowIndex);
 
