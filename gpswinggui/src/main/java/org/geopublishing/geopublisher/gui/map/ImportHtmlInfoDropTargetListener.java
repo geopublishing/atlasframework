@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -82,9 +81,6 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 						.getTransferData(DataFlavor.javaFileListFlavor);
 				for (Object o : (Iterable<File>) transferData) {
 					File f = (File) o;
-					URLConnection uc = f.toURI().toURL().openConnection();
-					LOGGER.debug(" Windows import    " + f + ": "
-							+ uc.getContentType());
 					String s = f.getAbsolutePath();
 					importHtmlFolder(s);
 				}
