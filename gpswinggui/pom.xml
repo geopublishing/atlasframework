@@ -343,7 +343,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 			<exclusions>
-				<!-- We use miglayout 3.7.3, not 3.7 -->
+				<!-- We use a newer miglayout via schmirtm, not 3.7 -->
 				<exclusion>
 					<groupId>com.miglayout</groupId>
 					<artifactId>miglayout</artifactId>

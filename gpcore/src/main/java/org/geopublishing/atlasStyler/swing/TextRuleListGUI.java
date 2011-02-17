@@ -44,9 +44,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 
-import de.schmitzm.i18n.LanguagesComboBox;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.swing.AtlasDialog;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
@@ -187,7 +185,8 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 			jPanelClass.add(getJButtonClassRename());
 
 			// Only in GP mode
-			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE)
+			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE
+					&& AtlasStyler.getLanguages().size() > 1)
 				jPanelClass.add(getJButtonClassCopyToLanguage());
 
 			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
@@ -377,12 +376,12 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 							AVSwingUtil
 									.showMessageDialog(
 											TextRuleListGUI.this,
-											"Please choose one of the configured languages: " // i8n
-													+ LangUtil
-															.stringConcatWithSep(
-																	",",
-																	AtlasStyler
-																			.getLanguages()));
+											ASUtil.R(
+													"TextSymbolizerClass.CreateALanguageDefault.ErrorNoSelection",
+													LangUtil.stringConcatWithSep(
+															",",
+															AtlasStyler
+																	.getLanguages())));
 							return;
 						}
 
@@ -406,6 +405,11 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 					}
 				}
 
+				/**
+				 * In Multi-language mode (GP) this dialog allows to create a
+				 * labeling class which onyl applies if the language is selected
+				 * in the viewer.
+				 */
 				private String askForLang() {
 
 					if (AtlasStyler.getLanguages().size() == rulesList
@@ -417,48 +421,14 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 					}
 
-					final LanguagesComboBox lcb = new LanguagesComboBox(
-							AtlasStyler.getLanguages(), rulesList
-									.getDefaultLanguages());
-
-					AtlasDialog d = new AtlasDialog(
-							TextRuleListGUI.this,
-							ASUtil.R("TextSymbolizerClass.CreateALanguageDefault.DialogTitle")) {
-
-						@Override
-						protected void dialogInit() {
-							super.dialogInit();
-							setContentPane(new JPanel());
-							getContentPane().setLayout(
-									new MigLayout("wrap 1, debug"));
-							getContentPane()
-									.add(new JLabel(
-											ASUtil.R("TextSymbolizerClass.CreateALanguageDefault.Explanation")),
-											"wrap");
-							getContentPane().add(lcb, "");
-							getContentPane().add(getOkButton(),
-									"split 2, tag ok");
-							getContentPane().add(getCancelButton(),
-									"tag cancel");
-							pack();
-							SwingUtil.setRelativeFramePosition(this,
-									TextRuleListGUI.this, 0.5, 0.5);
-
-						}
-
-						@Override
-						public boolean close() {
-							if (lcb.getSelectedIndex() == -1)
-								return false;
-							return super.close();
-						}
-
-					};
+					TextLabelingClassLanguageSelectorDialog d = new TextLabelingClassLanguageSelectorDialog(
+							TextRuleListGUI.this, rulesList);
 
 					d.setModal(true);
 					d.setVisible(true);
+					d.pack();
 
-					return lcb.getSelectedLanguage();
+					return d.getSelectedLanguage();
 				}
 			});
 		}
