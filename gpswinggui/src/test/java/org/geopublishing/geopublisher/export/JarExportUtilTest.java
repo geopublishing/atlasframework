@@ -384,7 +384,7 @@ public class JarExportUtilTest extends TestingClass {
 				+ "' must exist in the DISK folder", file.exists());
 
 		// Test start atlas..
-		if (TestingUtil.INTERACTIVE && SystemUtils.IS_OS_LINUX) {
+		if (hasGui() && SystemUtils.IS_OS_LINUX) {
 
 			log.info("Launching an exported atlas via java -jar ");
 
@@ -411,25 +411,13 @@ public class JarExportUtilTest extends TestingClass {
 					}
 				}, 20000);
 
-				// Wait 5seconds for the atlas to open and close again
-				LangUtil.sleepExceptionless(7000);
-				// String errorRead = error.readLine();
-				// while (errorRead != null) {
-				// assertFalse(
-				// "AtlasViewer error stream (4s after start) contains the word Exception: '"
-				// + errorRead + "'", errorRead.toLowerCase()
-				// .contains("exception"));
-				// assertFalse(
-				// "AtlasViewer error stream (4s after start)  contains the word Error: '"
-				// + errorRead + "'", errorRead.toLowerCase()
-				// .contains("error"));
-				// errorRead = error.readLine();
-				// }
+				// Wait 8seconds for the atlas to open and close again
+				LangUtil.sleepExceptionless(8000);
 
 				final int errorcode = p.waitFor();
 				log.info("p.waitfor finished with code: " + errorcode);
 				assertEquals(
-						"Test atlas didn't start or didn't exit normally. Errorcode=",
+						"Test-atlas exit-code indicates that it didn't start or didn't exit normally.",
 						0, errorcode);
 
 			} finally {

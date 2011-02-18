@@ -363,6 +363,8 @@ public class GpHosterClient {
 			if (!IOUtil.urlExists(server.getRestUrl() + "index.html"))
 				return serviceStatus = SERVICE_STATUS.GPHOSTER_REST_DOWN;
 
+			// TODO index.html is not enough, check a servlet
+
 			serviceStatus = SERVICE_STATUS.OK;
 		}
 		return serviceStatus;

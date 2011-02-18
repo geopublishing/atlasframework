@@ -40,6 +40,7 @@ public class GpHosterClientTest {
 	public void testUserCreate() throws IOException {
 		if (gphc.checkService() != SERVICE_STATUS.OK)
 			return;
+
 		final String testUsername = "testUser" + System.currentTimeMillis();
 		assertFalse(gphc.userExists(testUsername));
 		assertEquals(CREATE_USER_RESULT.CREATED_PWDSENT,
