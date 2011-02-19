@@ -283,9 +283,12 @@ public class RuleListFactory {
 		if (importedThisAbstractRuleList != null)
 			return importedThisAbstractRuleList;
 
-		throw new AtlasParsingException(ASUtil.R(
-				"AtlasStyler.ImportError.FTSParsing.ftsNameUnparsable",
-				metaInfoString));
+		LOGGER.info("Not importing unrecognizable metaInfoString="
+				+ metaInfoString);
+		return null;
+		// throw new AtlasParsingException(ASUtil.R(
+		// "AtlasStyler.ImportError.FTSParsing.ftsNameUnparsable",
+		// metaInfoString));
 	}
 
 	private GraduatedColorRuleList importGraduatedColorRulesList(

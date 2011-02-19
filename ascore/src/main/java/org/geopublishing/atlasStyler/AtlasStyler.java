@@ -889,9 +889,12 @@ public class AtlasStyler {
 					importedThisAbstractRuleList
 							.addListener(listenerFireStyleChange);
 					fireStyleChangedEvents(importedThisAbstractRuleList);
-				} else
-					throw new AtlasParsingException("Importing fts " + fts
-							+ " retuned null. No more information available.");
+				}
+				// else {
+
+				// }
+				// throw new AtlasParsingException("Importing fts " + fts
+				// + " retuned null. No more information available.");
 
 			} catch (final Exception importError) {
 				LOGGER.warn(
