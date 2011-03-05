@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
-import java.util.concurrent.CancellationException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -215,13 +214,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		}
 	}
 
-	/**
-	 * @deprecated TODO Das läuft jetzt nicht mehr mit worker!
-	 */
-	@Deprecated
-	public void calculateClassLimitsWithWorker() {
-		breaks = new TreeSet<Double>();
-
+	public void calculateClassLimitsBlockingQuite() {
 		/**
 		 * Do we have all necessary information to calculate ClassLimits?
 		 */
@@ -233,14 +226,18 @@ public class QuantitiesClassification extends FeatureClassification {
 		try {
 			newLimits = calculateClassLimitsBlocking();
 			setClassLimits(newLimits);
-			popQuite();
+			// } catch (InterruptedException e) {
+			// setQuite(stackQuites.pop());
+			// } catch (CancellationException e) {
+			// setQuite(stackQuites.pop());
+			// } catch (IOException exception) {
+			// setQuite(stackQuites.pop());
+		} catch (IOException e) {
+			LOGGER.error(e);
 		} catch (InterruptedException e) {
-			setQuite(stackQuites.pop());
-		} catch (CancellationException e) {
-			setQuite(stackQuites.pop());
-		} catch (IOException exception) {
-			setQuite(stackQuites.pop());
+			LOGGER.error(e);
 		} finally {
+			popQuite();
 		}
 
 	}
@@ -314,7 +311,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		if ((calcNewStats) && (recalcAutomatically)) {
 			LOGGER.debug("Starting to calculate new class-limits on another thread due to "
 					+ e.getType().toString());
-			calculateClassLimitsWithWorker();
+			calculateClassLimitsBlockingQuite();
 		}
 	}
 
@@ -615,7 +612,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		if (getMethod() == METHOD.MANUAL) {
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
 		} else
-			calculateClassLimitsWithWorker();
+			calculateClassLimitsBlockingQuite();
 	}
 
 	public void setCancelCalculation(final boolean cancelCalculation) {
