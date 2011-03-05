@@ -10,6 +10,7 @@ import org.geotools.util.WeakHashSet;
 
 public class RulesListsList extends ArrayList<AbstractRulesList> {
 
+	private static final long serialVersionUID = 6528595862508704400L;
 	WeakHashSet<PropertyChangeListener> listeners = new WeakHashSet<PropertyChangeListener>(
 			PropertyChangeListener.class);
 

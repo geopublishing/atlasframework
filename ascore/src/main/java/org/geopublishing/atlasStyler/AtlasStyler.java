@@ -1137,7 +1137,7 @@ public class AtlasStyler {
 		FeatureTypeStyle fts = rl.getFTS();
 		try {
 			return getRlf().importFts(fts, false);
-		} catch (AtlasParsingException e) {
+		} catch (AtlasStylerParsingException e) {
 			LOGGER.warn("Trying to copy RL=" + rl + " failed.", e);
 			return null;
 		}

@@ -141,6 +141,8 @@ public class ASUtil {
 		final JTextField tf = new JTextField(20);
 		final JDialog dialog = new JDialog(SwingUtil.getParentWindow(owner)) {
 
+			private static final long serialVersionUID = 6629175844460277695L;
+
 			/**
 			 * Since the registerKeyboardAction() method is part of the
 			 * JComponent class definition, you must define the Escape keystroke
@@ -630,6 +632,8 @@ public class ASUtil {
 	public static TableCellRenderer getDoubleCellRenderer() {
 		if (doubleTableCellRenderer == null)
 			doubleTableCellRenderer = new DefaultTableCellRenderer() {
+
+				private static final long serialVersionUID = -7498350601156304636L;
 
 				@Override
 				public Component getTableCellRendererComponent(

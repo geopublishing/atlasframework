@@ -32,6 +32,8 @@ import de.schmitzm.lang.LangUtil;
  */
 public class SingleRuleListCellRenderer extends DefaultTableCellRenderer {
 
+	private static final long serialVersionUID = -2877447060956109669L;
+
 	/**
 	 * Size of the image rendered in the table cell.
 	 */

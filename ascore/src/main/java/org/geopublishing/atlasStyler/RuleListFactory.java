@@ -254,11 +254,11 @@ public class RuleListFactory {
 	}
 
 	public AbstractRulesList importFts(FeatureTypeStyle fts,
-			boolean withDefaults) throws AtlasParsingException {
+			boolean withDefaults) throws AtlasStylerParsingException {
 
 		final String metaInfoString = fts.getName();
 		if ((metaInfoString == null)) {
-			throw new AtlasParsingException(ASUtil.R(
+			throw new AtlasStylerParsingException(ASUtil.R(
 					"AtlasStyler.ImportError.FTSParsing.ftsNameNull",
 					fts.toString()));
 		}
@@ -344,7 +344,7 @@ public class RuleListFactory {
 	}
 
 	private SingleRuleList<? extends Symbolizer> importSingleRuleList(
-			FeatureTypeStyle fts) throws AtlasParsingException {
+			FeatureTypeStyle fts) throws AtlasStylerParsingException {
 
 		final String metaInfoString = fts.getName();
 
@@ -379,7 +379,7 @@ public class RuleListFactory {
 				singleRuleList = createSinglePolygonSymbolRulesList(title,
 						false);
 			} else {
-				throw new AtlasParsingException("metaInfoString = "
+				throw new AtlasStylerParsingException("metaInfoString = "
 						+ metaInfoString + ", but can not be recognized!");
 			}
 
