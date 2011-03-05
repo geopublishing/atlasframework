@@ -69,7 +69,6 @@ public class QuantitiesClassification extends
 		this(owner, styledFeatures, value_field_name, null);
 	}
 
-	@Override
 	public void calculateClassLimitsWithWorker() {
 		breaks = new TreeSet<Double>();
 
