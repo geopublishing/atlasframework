@@ -263,6 +263,11 @@
 		<!-- <type>jar</type> -->
 		<!-- </dependency> -->
 
+		<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJSweet</artifactId>
+			<version>0.9.8</version>
+		</dependency>
 	</dependencies>
 
 	<profiles>

@@ -12,7 +12,6 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -73,7 +72,8 @@ import de.schmitzm.swing.TranslationEditJPanel;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> {
-	protected final static Logger LOGGER = LangUtil.createLogger(UniqueValuesGUI.class);
+	protected final static Logger LOGGER = LangUtil
+			.createLogger(UniqueValuesGUI.class);
 	/**
 	 * Listen for changes in the RulesList. Must be kept as a reference in
 	 * {@link UniqueValuesGUI} because the listeners are kept in a
@@ -133,8 +133,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 	protected final AtlasStylerVector atlasStyler;
 
-	public static final Dimension ICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
-
 	public UniqueValuesGUI(UniqueValuesRuleList rl,
 			AtlasStylerVector atlasStyler) {
 		super(rl);
@@ -163,7 +161,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	}
 
 	/**
-	 * This method initializes a AttributesJComboBox with attributes to use 
+	 * This method initializes a AttributesJComboBox with attributes to use
 	 */
 	private AttributesJComboBox getJComboBoxValueField() {
 		AttributesJComboBox jComboBoxValueAttribute = new AttributesJComboBox(
@@ -324,7 +322,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 			jButtonTemplate.setBorder(BorderFactory.createEtchedBorder());
 
 			ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()
-					.getImage(ICON_SIZE));
+					.getImage(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE));
 			jButtonTemplate.setAction(new AbstractAction("", imageIcon) {
 
 				@Override
@@ -386,7 +384,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 			rulesList.setTemplate((SingleRuleList) e.getSourceRL());
 
 			jButtonTemplate.setIcon(new ImageIcon(rulesList.getTemplate()
-					.getImage(ICON_SIZE)));
+					.getImage(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE)));
 		}
 
 	};
@@ -542,29 +540,32 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 */
 	private JButton getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
-			jButtonRemoveAll = new ThinButton(new AbstractAction(
-					AtlasStylerVector.R("UniqueValues.Button.RemoveAllValues")) {
+			jButtonRemoveAll = new ThinButton(
+					new AbstractAction(
+							AtlasStylerVector
+									.R("UniqueValues.Button.RemoveAllValues")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Ahhh.. this changes the original List! :-/
-					// List<String> vals = rulesList.getValues();
-					// vals.remove(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE);
-					// rulesList.removeValues(vals);
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							// Ahhh.. this changes the original List! :-/
+							// List<String> vals = rulesList.getValues();
+							// vals.remove(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE);
+							// rulesList.removeValues(vals);
 
-					List<Object> vals = rulesList.getValues();
-					List<Object> vals2 = new ArrayList<Object>();
-					for (Object s : vals) {
-						if (!s.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE))
-							vals2.add(s);
-					}
-					rulesList.removeValues(vals2);
+							List<Object> vals = rulesList.getValues();
+							List<Object> vals2 = new ArrayList<Object>();
+							for (Object s : vals) {
+								if (!s.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE))
+									vals2.add(s);
+							}
+							rulesList.removeValues(vals2);
 
-					LOGGER.debug("After remove all we have "
-							+ rulesList.getNumClasses() + " classes left");
-				}
+							LOGGER.debug("After remove all we have "
+									+ rulesList.getNumClasses()
+									+ " classes left");
+						}
 
-			});
+					});
 
 			if (rulesList.getValues().size() < 1) {
 				jButtonRemoveAll.setEnabled(false);
@@ -947,7 +948,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-			jTable.setRowHeight(ICON_SIZE.height + 2);
+			jTable.setRowHeight(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE.height + 2);
 			jTable.getColumnModel().getColumn(0).setMaxWidth(53);
 			// jTable.getColumnModel().getColumn(3).setMaxWidth(63); //TODO die
 			// Count column...
@@ -979,7 +980,8 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 			SingleRuleList<? extends Symbolizer> singleRL = (SingleRuleList<?>) value;
 
-			BufferedImage image = singleRL.getImage(ICON_SIZE);
+			BufferedImage image = singleRL
+					.getImage(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 
 			// JLabel tableCellRendererComponent = (JLabel) super
 			// .getTableCellRendererComponent(table, value, isSelected,
@@ -1170,7 +1172,8 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 * @return void
 	 */
 	private void initialize() {
-		JLabel jLabelHeading = new JLabel(AtlasStylerVector.R("UniqueValues.Heading"));
+		JLabel jLabelHeading = new JLabel(
+				AtlasStylerVector.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));

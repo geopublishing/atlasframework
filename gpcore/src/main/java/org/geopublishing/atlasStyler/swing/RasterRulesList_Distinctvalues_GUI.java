@@ -21,7 +21,6 @@ import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 import org.geopublishing.atlasStyler.swing.UniqueValuesGUI.UniqueValuesSingleRuleListCellRenderer;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.Symbolizer;
-import org.jdesktop.swingx.table.ColumnControlButton.ColumnVisibilityAction;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
@@ -29,7 +28,8 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
-public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<RasterRulesList_DistinctValues> {
+public class RasterRulesList_Distinctvalues_GUI extends
+		AbstractRulesListGui<RasterRulesList_DistinctValues> {
 
 	protected final static Logger LOGGER = LangUtil
 			.createLogger(RasterRulesList_Distinctvalues_GUI.class);
@@ -100,7 +100,8 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 				@Override
 				public Object getValueAt(int rowIndex, int columnIndex) {
 
-					ColorMapEntry colorMapEntry = getRulesList().getColorMap().getColorMapEntries()[rowIndex];
+					ColorMapEntry colorMapEntry = getRulesList().getColorMap()
+							.getColorMapEntries()[rowIndex];
 					if (columnIndex == COLIDX_COLOR) {
 						return colorMapEntry.getColor();
 					} else if (columnIndex == COLIDX_OPACITY) {
@@ -142,7 +143,8 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 			jTable.setDefaultRenderer(SingleRuleList.class,
 					new UniqueValuesSingleRuleListCellRenderer());
 
-			getRulesList().addListener(updateClassificationTableWhenRuleListChanges);
+			getRulesList().addListener(
+					updateClassificationTableWhenRuleListChanges);
 
 			/*******************************************************************
 			 * Listening to clicks on the JTable.. e.g. for translation and
@@ -168,8 +170,8 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 
 								final Translation translation = new Translation();
 
-								translation.fromOneLine(getRulesList().getLabels()
-										.get(row));
+								translation.fromOneLine(getRulesList()
+										.getLabels().get(row));
 
 								if (ask == null) {
 									TranslationEditJPanel transLabel;
@@ -188,9 +190,11 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 										// "all others rule" is eneabled and
 										// where it is positioned in the list!
 										int index = row;
-										if (RasterRulesList_Distinctvalues_GUI.this.getRulesList()
+										if (RasterRulesList_Distinctvalues_GUI.this
+												.getRulesList()
 												.isWithDefaultSymbol()) {
-											int allOthersRuleIdx = RasterRulesList_Distinctvalues_GUI.this.getRulesList()
+											int allOthersRuleIdx = RasterRulesList_Distinctvalues_GUI.this
+													.getRulesList()
 													.getAllOthersRuleIdx();
 
 											if (allOthersRuleIdx < row)
@@ -233,9 +237,10 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 											ask = null;
 											//
 											getRulesList()
-													.fireEvents(new RuleChangedEvent(
-															"Legend Label changed",
-															getRulesList()));
+													.fireEvents(
+															new RuleChangedEvent(
+																	"Legend Label changed",
+																	getRulesList()));
 										}
 
 									});
@@ -250,12 +255,15 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 								String newTitle = ASUtil
 										.askForString(
 												RasterRulesList_Distinctvalues_GUI.this,
-												getRulesList().getLabels().get(row),
-												null);
+												getRulesList().getLabels().get(
+														row), null);
 								if (newTitle != null) {
-									getRulesList().getLabels().set(row, newTitle);
-									getRulesList().fireEvents(new RuleChangedEvent(
-											"Legend Label changed", getRulesList()));
+									getRulesList().getLabels().set(row,
+											newTitle);
+									getRulesList().fireEvents(
+											new RuleChangedEvent(
+													"Legend Label changed",
+													getRulesList()));
 								}
 							}
 
@@ -277,8 +285,8 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 									SwingUtil
 											.getParentWindow(RasterRulesList_Distinctvalues_GUI.this),
 									"Change symbol for "
-											+ getRulesList().getLabels().get(row),
-									editSymbol);
+											+ getRulesList().getLabels().get(
+													row), editSymbol);
 
 							/***************************************************
 							 * Listen to a CANCEL to use the backup
@@ -310,11 +318,14 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 								public void changed(RuleChangedEvent e) {
 
 									/** Exchanging the Symbol * */
-									getRulesList().getSymbols().set(row, editSymbol);
+									getRulesList().getSymbols().set(row,
+											editSymbol);
 
 									// Fire an event?! TODO
-									getRulesList().fireEvents(new RuleChangedEvent(
-											"Editing a Symbol", getRulesList()));
+									getRulesList().fireEvents(
+											new RuleChangedEvent(
+													"Editing a Symbol",
+													getRulesList()));
 
 								}
 
@@ -333,10 +344,8 @@ public class RasterRulesList_Distinctvalues_GUI extends AbstractRulesListGui<Ras
 
 			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-			jTable.setRowHeight(ICON_SIZE.height + 2);
+			jTable.setRowHeight(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE.height + 2);
 			jTable.getColumnModel().getColumn(0).setMaxWidth(53);
-			// jTable.getColumnModel().getColumn(3).setMaxWidth(63); //TODO die
-			// Count column...
 		}
 		return jTable;
 	}
