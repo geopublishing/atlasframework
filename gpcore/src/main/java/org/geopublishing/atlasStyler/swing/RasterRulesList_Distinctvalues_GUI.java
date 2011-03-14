@@ -1,15 +1,27 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Arrays;
 import java.util.WeakHashMap;
 
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
+import net.miginfocom.swing.MigLayout;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
@@ -17,11 +29,12 @@ import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geotools.styling.ColorMapEntry;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.ThinButton;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
@@ -32,11 +45,136 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			.createLogger(RasterRulesList_Distinctvalues_GUI.class);
 	private JTable jTable;
 	private DefaultTableModel tableModel;
+	private ThinButton jButtonRemoveAll;
+	private ThinButton jButtonRemove;
 
 	public RasterRulesList_Distinctvalues_GUI(
 			RasterRulesList_DistinctValues rulesList,
 			AtlasStylerRaster atlasStyler) {
 		super(rulesList);
+		initialize();
+		rulesList.fireEvents(new RuleChangedEvent("GUI created for "
+				+ this.getClass().getSimpleName()
+				+ ", possibly setting some default values", rulesList));
+	}
+
+	private void initialize() {
+		JLabel jLabelHeading = new JLabel(
+				AtlasStylerVector.R("UniqueValues.Heading"));
+		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
+				AVSwingUtil.HEADING_FONT_SIZE));
+		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
+
+		this.add(jLabelHeading, "center");
+		this.add(getJPanelColorAndOpacity(), "grow x");
+
+		this.add(new JScrollPane(getJTable()), "grow x, height 50:150:600");
+
+		JPanel jPanelButtons = new JPanel(new MigLayout(
+				"ins n 0 n 0, gap 1, fillx"));
+		{
+			jPanelButtons.add(getJButtonAddAllValues());
+			jPanelButtons.add(getJButtonAddValues(), "gapx rel unrel");
+			jPanelButtons.add(getJButtonRemove());
+			jPanelButtons.add(getJButtonRemoveAll(), "gapx rel unrel");
+			jPanelButtons.add(getJButtonUp());
+			jPanelButtons.add(getJButtonDown(), "gapx rel");
+		}
+		this.add(jPanelButtons, "");
+	}
+
+	private Component getJButtonDown() {
+		return new JPanel();
+	}
+
+	private Component getJButtonUp() {
+		return new JPanel();
+	}
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonRemove() {
+		if (jButtonRemove == null) {
+			jButtonRemove = new ThinButton(new AbstractAction(
+					AtlasStylerVector.R("UniqueValues.Button.RemoveValue")) {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int[] selectedRows = getJTable().getSelectedRows();
+
+					// We remove from last to fist - so that indexes to not mix
+					// up
+					Arrays.sort(selectedRows);
+					ArrayUtils.reverse(selectedRows);
+
+					for (int rowIdx : selectedRows) {
+						rulesList.removeIdx(rowIdx);
+					}
+
+					// De-select anything afterwards
+					getJTable().getSelectionModel().clearSelection();
+				}
+
+			});
+
+			getJTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (getJTable().getSelectedRows().length == 0)
+								jButtonRemove.setEnabled(false);
+							else {
+								jButtonRemove.setEnabled(true);
+							}
+						}
+
+					});
+
+			/** Initializing with disabled button * */
+			jButtonRemove.setEnabled(false);
+
+		}
+		return jButtonRemove;
+	}
+
+	private Component getJButtonRemoveAll() {
+		if (jButtonRemoveAll == null) {
+			jButtonRemoveAll = new ThinButton(
+					new AbstractAction(
+							AtlasStylerVector
+									.R("UniqueValues.Button.RemoveAllValues")) {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							rulesList.removeAll();
+						}
+
+					});
+
+			if (rulesList.getValues().size() < 1) {
+				jButtonRemoveAll.setEnabled(false);
+			} else {
+				jButtonRemoveAll.setEnabled(true);
+			}
+		}
+		return jButtonRemoveAll;
+
+	}
+
+	private Component getJButtonAddValues() {
+		return new JPanel();
+	}
+
+	private Component getJButtonAddAllValues() {
+		return new JPanel();
+	}
+
+	private Component getJPanelColorAndOpacity() {
+		return new JPanel();
 	}
 
 	final static int COLIDX_COLOR = 0;
@@ -49,7 +187,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 * {@link UniqueValuesGUI} because the listeners are kept in a
 	 * {@link WeakHashMap}
 	 */
-	final RuleChangeListener updateClassificationTableWhenRuleListChanges = new RuleChangeListener() {
+	final RuleChangeListener updateTableWhenRuleListChanges = new RuleChangeListener() {
 
 		@Override
 		public void changed(RuleChangedEvent e) {
@@ -88,7 +226,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 						return Double.class;
 
 					if (columnIndex == COLIDX_LABEL) // Label
-						return String.class;
+						return Translation.class;
 
 					return null;
 				}
@@ -123,16 +261,14 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				@Override
 				public Object getValueAt(int rowIndex, int columnIndex) {
 
-					ColorMapEntry colorMapEntry = getRulesList().getColorMap()
-							.getColorMapEntries()[rowIndex];
 					if (columnIndex == COLIDX_COLOR) {
-						return colorMapEntry.getColor();
+						return rulesList.getColors().get(rowIndex);
 					} else if (columnIndex == COLIDX_OPACITY) {
-						return colorMapEntry.getOpacity();
+						return rulesList.getOpacities().get(rowIndex);
 					} else if (columnIndex == COLIDX_VALUE) {
-						return colorMapEntry.getQuantity();
+						return rulesList.getValues().get(rowIndex);
 					} else if (columnIndex == COLIDX_LABEL) {
-						return colorMapEntry.getLabel();
+						return rulesList.getLabels().get(rowIndex);
 					}
 					return super.getValueAt(rowIndex, columnIndex);
 				}
@@ -163,11 +299,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			jTable = new JTable(getTableModel());
 
 			/** Render nicely COLOR */
-			// jTable.setDefaultRenderer(SingleRuleList.class,
-			// new UniqueValuesSingleRuleListCellRenderer());
+			jTable.setDefaultRenderer(Color.class, new ColorTableCellRenderer());
 
-			getRulesList().addListener(
-					updateClassificationTableWhenRuleListChanges);
+			getRulesList().addListener(updateTableWhenRuleListChanges);
 
 			/*******************************************************************
 			 * Listening to clicks on the JTable.. e.g. for translation and
@@ -180,7 +314,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
-					if (e.getClickCount() == 2) {
+					if (e.getClickCount() == COLIDX_LABEL) {
 						int col = jTable.columnAtPoint(e.getPoint());
 						final int row = jTable.rowAtPoint(e.getPoint());
 
@@ -191,38 +325,25 @@ public class RasterRulesList_Distinctvalues_GUI extends
 							if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 								LOGGER.debug(AtlasStylerVector.getLanguages());
 
-								final Translation translation = new Translation();
-
-								translation.fromOneLine(getRulesList()
-										.getLabels().get(row));
+								final Translation translation = getRulesList()
+										.getLabels().get(row);
 
 								if (ask == null) {
 									TranslationEditJPanel transLabel;
-									if (val.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
-										/** We are in the default rule* */
-										transLabel = new TranslationEditJPanel(
-												AtlasStylerVector
-														.R("RasterRulesList_Distinctvalues_GUI.LabelForClass",
-																AtlasStylerVector
-																		.R("RasterRulesList_Distinctvalues_GUI.AllOthersSymbol.label")),
-												translation, AtlasStylerVector
-														.getLanguages());
-									} else {
 
-										// The index depends on the whether the
-										// "all others rule" is eneabled and
-										// where it is positioned in the list!
-										int index = row;
+									// The index depends on the whether the
+									// "all others rule" is eneabled and
+									// where it is positioned in the list!
+									int index = row;
 
-										transLabel = new TranslationEditJPanel(
-												AtlasStylerVector
-														.R("RasterRulesList_Distinctvalues_GUI.LabelForClass",
-																getRulesList()
-																		.getValues()
-																		.get(index)),
-												translation, AtlasStylerVector
-														.getLanguages());
-									}
+									transLabel = new TranslationEditJPanel(
+											AtlasStylerVector
+													.R("RasterRulesList_Distinctvalues_GUI.LabelForClass",
+															getRulesList()
+																	.getValues()
+																	.get(index)),
+											translation, AtlasStylerVector
+													.getLanguages());
 
 									ask = new TranslationAskJDialog(
 											RasterRulesList_Distinctvalues_GUI.this,
@@ -240,11 +361,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 													.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 												LOGGER.debug("Saving new ranslation in rulelist and fire event ");
 
-												getRulesList()
-														.getLabels()
-														.set(row,
-																translation
-																		.toOneLine());
+												getRulesList().getLabels().set(
+														row, translation);
 
 											}
 											ask = null;
@@ -268,11 +386,12 @@ public class RasterRulesList_Distinctvalues_GUI extends
 								String newTitle = ASUtil
 										.askForString(
 												RasterRulesList_Distinctvalues_GUI.this,
-												getRulesList().getLabels().get(
-														row), null);
+												getRulesList().getLabels()
+														.get(row).toString(),
+												null);
 								if (newTitle != null) {
 									getRulesList().getLabels().set(row,
-											newTitle);
+											new Translation(newTitle));
 									getRulesList().fireEvents(
 											new RuleChangedEvent(
 													"Legend Label changed",

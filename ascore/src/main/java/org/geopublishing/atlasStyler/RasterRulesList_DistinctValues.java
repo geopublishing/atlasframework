@@ -3,19 +3,19 @@ package org.geopublishing.atlasStyler;
 import java.util.ArrayList;
 import java.util.List;
 
-import jj2000.j2k.NotImplementedError;
-
+import org.geotools.styling.ColorMap;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
 import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
 
 public class RasterRulesList_DistinctValues extends RasterRulesList {
 
 	public RasterRulesList_DistinctValues(StyledRasterInterface styledRaster) {
-		super(styledRaster);
+		super(styledRaster, ColorMap.TYPE_VALUES);
 	}
 
 	@Override
@@ -30,19 +30,10 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 		Rule rule = rules.get(0);
 
 		try {
+			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+			ColorMap cm = rs.getColorMap();
 
-			setRs((RasterSymbolizer) rule.symbolizers().get(0));
-			//
-			// final Description description = rule.getDescription();
-			// final InternationalString title2 = description.getTitle();
-			// setLabel(title2.toString());
-			// } catch (final NullPointerException e) {
-			// LOGGER.warn("The title style to import has been null!");
-			// setLabel("");
-			// } catch (final Exception e) {
-			// LOGGER.error("The title style to import could not been set!", e);
-			// setLabel("");
-			// }
+			importValuesLabelsQuantitiesColors(cm);
 
 			// Analyse the filters...
 			Filter filter = rule.getFilter();
@@ -56,7 +47,9 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 	@Override
 	public List<Rule> getRules() {
 
-		RasterSymbolizer rs = null;
+		RasterSymbolizer rs = StylingUtil.STYLE_BUILDER
+				.createRasterSymbolizer();
+		rs.setColorMap(getColorMap());
 
 		Rule rule = ASUtil.SB.createRule(rs);
 
@@ -67,7 +60,9 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 		// addFilters(rule);
 
 		rule.symbolizers().clear();
-		rule.symbolizers().add(getRs());
+
+		rule.symbolizers().add(rs);
+
 		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
 
 		// The order is important! This is parsed the reverse way. The last
@@ -86,18 +81,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 	@Override
 	public RulesListType getType() {
 		return RulesListType.RASTER_COLORMAP_DISTINCTVALUES;
-	}
-
-	public List<String> getLabels() {
-		throw new NotImplementedError();
-	}
-
-	public List<String> getValues() {
-		throw new NotImplementedError();
-	}
-
-	public List<Double> getOpacity() {
-		throw new NotImplementedError();
 	}
 
 }

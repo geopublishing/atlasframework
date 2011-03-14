@@ -79,7 +79,8 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
-public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedColorRuleList> implements
+public class GraduatedColorQuantitiesGUI extends
+		AbstractRulesListGui<GraduatedColorRuleList> implements
 		ClosableSubwindows, Disposable {
 
 	private static final Dimension ICON_SIZE = new Dimension(25, 25);
@@ -266,7 +267,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 			jLabelNormalization.setToolTipText(AtlasStylerVector
 					.R("GraduatedColorQuantities.NormalizationAttribute.TT"));
 			JLabel jLabelValue = new JLabel(
-					AtlasStylerVector.R("GraduatedColorQuantities.ValueAttribute"));
+					AtlasStylerVector
+							.R("GraduatedColorQuantities.ValueAttribute"));
 			jLabelValue.setToolTipText(AtlasStylerVector
 					.R("GraduatedColorQuantities.ValueAttribute.TT"));
 			jPanel.add(jLabelValue, "");
@@ -286,8 +288,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 
 		JLabel jLabelParam = new JLabel(
 				AtlasStylerVector.R("ComboBox.NumberOfClasses"));
-		jLabelParam
-				.setToolTipText(AtlasStylerVector.R("ComboBox.NumberOfClasses.TT"));
+		jLabelParam.setToolTipText(AtlasStylerVector
+				.R("ComboBox.NumberOfClasses.TT"));
 
 		jLabelClassificationTypeDescription = new JLabel(AtlasStylerVector.R(
 				"GraduatedColorQuantities.classification.Method", classifier
@@ -301,9 +303,9 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 			@Override
 			public void classifierMethodChanged(
 					final ClassificationChangeEvent e) {
-				jLabelClassificationTypeDescription.setText(AtlasStylerVector.R(
-						"GraduatedColorQuantities.classification.Method",
-						classifier.getMethod().getDesc()));
+				jLabelClassificationTypeDescription.setText(AtlasStylerVector
+						.R("GraduatedColorQuantities.classification.Method",
+								classifier.getMethod().getDesc()));
 				jLabelClassificationTypeDescription.setToolTipText(classifier
 						.getMethod().getToolTip());
 			}
@@ -381,7 +383,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 
 				QuantitiesClassificationGUI quantGUI = new QuantitiesClassificationGUI(
 						jToggleButton_Classify, classifier, atlasStyler,
-						AtlasStylerVector.R("QuantitiesClassificationGUI.Title",
+						AtlasStylerVector.R(
+								"QuantitiesClassificationGUI.Title",
 								titleVariables));
 				quantGUI.addWindowListener(new WindowAdapter() {
 
@@ -585,7 +588,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 										AtlasStylerVector
 												.R("GraduatedColorsQuant.translate_label_for_classN",
 														(row + 1)),
-										translation, AtlasStylerVector.getLanguages());
+										translation, AtlasStylerVector
+												.getLanguages());
 
 								ask = new TranslationAskJDialog(
 										GraduatedColorQuantitiesGUI.this,
@@ -897,7 +901,8 @@ public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedC
 			if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 				final JCheckBox noDataShowInLegendCB = new JCheckBox(
-						AtlasStylerVector.R("NoDataValues.ShallAppearInLegend.Label"));
+						AtlasStylerVector
+								.R("NoDataValues.ShallAppearInLegend.Label"));
 				noDataShowInLegendCB.setToolTipText(AtlasStylerVector
 						.R("NoDataValues.ShallAppearInLegend.TT"));
 

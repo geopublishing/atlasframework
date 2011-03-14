@@ -138,7 +138,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		super(rl);
 		this.atlasStyler = atlasStyler;
 		initialize();
-		rulesList.fireEvents(new RuleChangedEvent("GUI opened", rulesList));
+		rulesList.fireEvents(new RuleChangedEvent("GUI created for "
+				+ this.getClass().getSimpleName()
+				+ ", possibly setting some default values", rulesList));
 	}
 
 	/**
