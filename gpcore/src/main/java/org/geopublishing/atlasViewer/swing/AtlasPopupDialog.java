@@ -42,6 +42,7 @@ import javax.swing.KeyStroke;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 
 import de.schmitzm.swing.OkButton;
@@ -58,7 +59,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 
 	JLabel titleJLabel;
 	JLabel logoJLabel;
-	HTMLInfoJPane htmlInfoJPane;
+	HTMLInfoPaneInterface htmlInfoJPane;
 	OkButton okButton;
 
 	/** Creates new form AtlasAboutDialog2 */
@@ -85,10 +86,11 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 
 		contentPane.add(getTitleJLabel(), "growx, push");
 		contentPane.add(getLogoJLabel(), "growy, right");
-		contentPane.add(new JScrollPane(getHtmlInfoJPane()),
-				"span 2, grow, pushy 200");
+		JComponent htmlComponent = getHtmlInfoJPane();
+		if ( !htmlInfoJPane.hasScrollPane() )
+		  htmlComponent = new JScrollPane(htmlComponent);
+		contentPane.add(htmlComponent,"span 2, grow, pushy 200");
 		contentPane.add(getOkButton(), "tag ok, span 2");
-
 		setContentPane(contentPane);
 
 		// try {
@@ -135,13 +137,13 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		return logoJLabel;
 	}
 
-	public HTMLInfoJPane getHtmlInfoJPane() {
+	public JComponent getHtmlInfoJPane() {
 		if (htmlInfoJPane == null) {
-			htmlInfoJPane = new HTMLInfoJPane(atlasConfig.getPopupHTMLURL(),
+			htmlInfoJPane = AVUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
 			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
 		}
-		return htmlInfoJPane;
+		return htmlInfoJPane.getComponent();
 	}
 
 	public OkButton getOkButton() {

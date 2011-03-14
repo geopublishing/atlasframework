@@ -27,6 +27,7 @@ package org.geopublishing.atlasViewer.swing;
 import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 
 import org.geopublishing.atlasViewer.AVUtil;
@@ -60,9 +61,10 @@ public class AtlasAboutDialog extends JDialog {
 			jButton1.setText(AtlasViewerGUI.R("HtmlBrowserWindow.button.close"));
 			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About",
 					atlasConfig.getTitle()));
-			html.setContentType("text/html");
-			html.setPreferredSize(new Dimension(450, 300));
-			html.setEditable(false);
+//MS: now done in HTMLInfoJPane
+//			html.setContentType("text/html");
+//          html.setEditable(false);
+			html.getComponent().setPreferredSize(new Dimension(450, 300));
 
 			Thread.sleep(300);
 
@@ -88,8 +90,7 @@ public class AtlasAboutDialog extends JDialog {
 		jLabel3 = new javax.swing.JLabel();
 		jPanel1 = new javax.swing.JPanel();
 		jButton1 = new javax.swing.JButton();
-		jScrollPane1 = new javax.swing.JScrollPane();
-		html = new HTMLInfoJPane(atlasConfig.getAboutHTMLURL(), atlasConfig);
+		html = AVUtil.createHTMLInfoPane(atlasConfig.getAboutHTMLURL(), atlasConfig);
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -151,9 +152,13 @@ public class AtlasAboutDialog extends JDialog {
 
 		getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_END);
 
-		jScrollPane1.setViewportView(html);
-
-		getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
+		JComponent htmlComponent = html.getComponent();
+		if ( !html.hasScrollPane() ) {
+		  javax.swing.JScrollPane jScrollPane1 = new javax.swing.JScrollPane();
+		  jScrollPane1.setViewportView(html.getComponent());
+		  htmlComponent = jScrollPane1;
+		}
+		getContentPane().add(htmlComponent, java.awt.BorderLayout.CENTER);
 
 		pack();
 	}// </editor-fold>
@@ -187,12 +192,11 @@ public class AtlasAboutDialog extends JDialog {
 
 	// GEN-BEGIN:variables
 	// Variables declaration - do not modify
-	private javax.swing.JEditorPane html;
+	private HTMLInfoPaneInterface html;
 	private javax.swing.JButton jButton1;
 	private javax.swing.JLabel jLabel2;
 	private javax.swing.JLabel jLabel3;
 	private javax.swing.JPanel jPanel1;
-	private javax.swing.JScrollPane jScrollPane1;
 	private javax.swing.JPanel top;
 	// End of variables declaration//GEN-END:variables
 

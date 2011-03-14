@@ -20,11 +20,14 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import javax.swing.JComponent;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
+import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.internal.AtlasDropTargetListener;
 
@@ -50,10 +53,10 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 
 	private final AtlasConfigEditable ace;
 
-	private final HTMLInfoJPane infoPanel;
+	private final HTMLInfoPaneInterface infoPanel;
 
 	public ImportHtmlInfoDropTargetListener(Window owner2, Map map_,
-			AtlasConfigEditable ace_, HTMLInfoJPane infoPanel) {
+			AtlasConfigEditable ace_, HTMLInfoPaneInterface infoPanel) {
 		this.map = map_;
 		this.owner = owner2;
 		this.ace = ace_;
@@ -199,7 +202,7 @@ public class ImportHtmlInfoDropTargetListener extends AtlasDropTargetListener {
 		}
 
 		infoPanel.showDocument(map.getInfoURL());
-		infoPanel.repaint();
+		infoPanel.getComponent().repaint();
 
 		return true;
 	}

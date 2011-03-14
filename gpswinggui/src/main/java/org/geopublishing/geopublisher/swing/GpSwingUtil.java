@@ -37,10 +37,12 @@ import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.geopublisher.AMLExporter;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.geopublishing.geopublisher.gui.map.DesignHTMLInfoPane;
 
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.io.IOUtil;
@@ -542,5 +544,19 @@ public class GpSwingUtil extends GpUtil {
 		}
 		return htmlFiles;
 	}
+
+    /**
+     * Factory method to create an design html viewport.
+     * @param map a Map
+     */
+    public static DesignHTMLInfoPane createDesignHTMLInfoPane(AtlasConfigEditable ace, Map map) {
+      // Note: although we now have 2 versions to display html...
+      //  a) JEditorPane -> HTMLInfoJPane
+      //  b) JWebBrowser -> HTMLInfoView
+      // ... we only have ONE version of DesignHTMLInfoPane, which
+      // uses (a) or (b) according to the factory method 
+      // AVUtil.createHTMLInfoPane(.)
+      return new DesignHTMLInfoPane(ace,map);
+    }
 
 }

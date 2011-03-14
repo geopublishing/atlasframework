@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -40,11 +41,28 @@ import de.schmitzm.swing.ExceptionDialog;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-public class HTMLInfoJPane extends JEditorPane {
+public class HTMLInfoJPane extends JEditorPane implements HTMLInfoPaneInterface {
 
 	final static private Logger LOGGER = Logger.getLogger(HTMLInfoJPane.class);
 
-	private final HyperlinkListener LISTENER = new HyperlinkListener() {
+	  /**
+	   * Returns {@code this}.
+	   */
+	  @Override
+	  public JComponent getComponent() {
+	    return this;
+	  }
+
+	  /**
+	   * Returns {@code false}, because {@link JEditorPane}
+	   * does not provide scrolling.
+	   */
+	  @Override
+	  public boolean hasScrollPane() {
+	    return false;
+	  }
+
+	  private final HyperlinkListener LISTENER = new HyperlinkListener() {
 
 		@Override
 		public void hyperlinkUpdate(HyperlinkEvent ev) {
@@ -201,6 +219,8 @@ public class HTMLInfoJPane extends JEditorPane {
 	 */
 	public HTMLInfoJPane(URL url, AtlasConfig ac) {
 		this.atlasConfig = ac;
+        setContentType("text/html");
+        setEditable(false);
 
 		showDocument(url);
 		addListener();
@@ -231,7 +251,6 @@ public class HTMLInfoJPane extends JEditorPane {
 	 * @param url
 	 */
 	public void showDocument(URL url) {
-
 		setEditable(false);
 		setContentType("text/html");
 
@@ -249,8 +268,16 @@ public class HTMLInfoJPane extends JEditorPane {
 		} catch (IOException ioex) {
 			LOGGER.error("*** failed to load URL: " + ioex.toString());
 		}
-
 	}
+
+	  /**
+	   * Loads a document in the html view. 
+	   * @param url source url
+	   */
+	  @Override
+	  public void showDocument(String content) {
+	    setText(content);
+	  }
 
 	/**
 	 * This page shall always be rendered with anti-aliasing.

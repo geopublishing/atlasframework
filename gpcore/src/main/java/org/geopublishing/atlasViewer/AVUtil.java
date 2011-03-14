@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Random;
 
 import javax.measure.unit.Unit;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -48,7 +49,11 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
+import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
+import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
@@ -537,4 +542,22 @@ public class AVUtil {
 
 	}
 
+	/**
+	 * Factory method to create an html viewport.
+	 * @param map a Map
+	 */
+	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
+	  return createHTMLInfoPane(map.getInfoURL(), map.getAc());
+	}
+
+    /**
+     * Factory method to create an html viewport.
+     * @param map a Map
+     */
+    public static HTMLInfoPaneInterface createHTMLInfoPane(URL url, AtlasConfig ac) {
+      // use an HTML view bases on JEditorPane
+      return new HTMLInfoJPane(url, ac);
+//      // use an HTML view bases on DJ project
+//      return new HTMLInfoJWebBrowser(url, ac);
+    }
 }

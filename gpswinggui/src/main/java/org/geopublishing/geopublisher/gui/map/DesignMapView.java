@@ -30,6 +30,7 @@ import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.map.MapContext;
 
 import de.schmitzm.geotools.gui.MapView;
@@ -45,7 +46,7 @@ public class DesignMapView extends AtlasMapView {
 
 	protected AtlasConfigEditable ace;
 
-	private DesignHTMLInfoJPane designInfoPanel;
+	private DesignHTMLInfoPane designInfoPanel;
 
 	/**
 	 * Opens a {@link DesignMapView} to edit/layout the {@link Map} Remembers
@@ -92,11 +93,14 @@ public class DesignMapView extends AtlasMapView {
 
 			tabbedPane.setToolTipTextAt(0,
 					AtlasViewerGUI.R("AtlasMapView.tabbedPane.LayersTab_tt"));
-
-			JScrollPane scrollpane2 = new JScrollPane(getDesignInfoPanel());
+			
+			DesignHTMLInfoPane html = getDesignInfoPanel(); 
+			JComponent htmlComponent = html.getComponent();
+			if ( !html.hasScrollPane() )
+			  htmlComponent = new JScrollPane(htmlComponent);
 			tabbedPane.addTab(
 					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_label"),
-					scrollpane2);
+					htmlComponent);
 
 			tabbedPane.setToolTipTextAt(1,
 					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
@@ -138,11 +142,11 @@ public class DesignMapView extends AtlasMapView {
 	}
 
 	/**
-	 * Lazily initializes the {@link DesignHTMLInfoJPane} for this map.
+	 * Lazily initializes the {@link DesignHTMLInfoPane} for this map.
 	 */
-	public DesignHTMLInfoJPane getDesignInfoPanel() {
+	public DesignHTMLInfoPane getDesignInfoPanel() {
 		if (designInfoPanel == null) {
-			designInfoPanel = new DesignHTMLInfoJPane(ace, map);
+			designInfoPanel = GpSwingUtil.createDesignHTMLInfoPane(ace, map);
 		}
 		return designInfoPanel;
 	}

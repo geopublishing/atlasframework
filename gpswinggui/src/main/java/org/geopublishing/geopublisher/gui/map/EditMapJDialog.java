@@ -24,6 +24,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -35,6 +36,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
@@ -93,8 +95,10 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 				.createTitledBorder("Map HTML description")); // i8n
 
 		// preview
-		final JScrollPane htmlPreview = new JScrollPane(
-				new DesignHTMLInfoJPane(ace, map));
+		DesignHTMLInfoPane html = GpSwingUtil.createDesignHTMLInfoPane(ace, map);
+		JComponent htmlPreview = html.getComponent();
+		if ( !html.hasScrollPane() )
+		    htmlPreview = new JScrollPane(htmlPreview);
 		htmlPanel.add(htmlPreview, "growx, wrap, height 255, w 100%");
 		SwingUtil.setPreferredHeight(htmlPanel, 270);
 

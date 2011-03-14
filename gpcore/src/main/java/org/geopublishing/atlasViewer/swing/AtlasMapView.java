@@ -32,6 +32,7 @@ import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -338,10 +339,13 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 						scrollPaneOfLayerPane);
 				tabbedPane.setToolTipTextAt(0, AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.LayersTab_tt"));
-				HTMLInfoJPane infoPanel = new HTMLInfoJPane(map);
+				HTMLInfoPaneInterface html = AVUtil.createHTMLInfoPane(map);
+				JComponent infoPanel = html.getComponent();
+				if ( !html.hasScrollPane() )
+				  infoPanel = new JScrollPane(infoPanel);
 				tabbedPane.addTab(AtlasViewerGUI
 						.R("AtlasMapView.tabbedPane.InfoTab_label"),
-						new JScrollPane(infoPanel));
+						infoPanel);
 				tabbedPane.setToolTipTextAt(1,
 						AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
