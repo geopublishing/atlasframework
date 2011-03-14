@@ -25,6 +25,7 @@ import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
+import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
 import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -105,7 +106,7 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 		//
 		// @SuppressWarnings("unused")
 		// DropTarget dt = new DropTarget(this, importByDropTargetListener);
-		getComponent().addMouseListener(new MouseAdapter() {
+		MouseListener popupMouseListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent evt) {
 
@@ -113,7 +114,7 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 				 * If the lines under the mouse is not selected, select it
 				 * first...
 				 */
-				if (SwingUtilities.isRightMouseButton(evt)) {
+				if (evt.isPopupTrigger()) {
 					JPopupMenu popupMenu = new JPopupMenu();
 
 					/**
@@ -133,8 +134,22 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 				}
 			}
 
-		});
-
+		};
+		getComponent().addMouseListener(popupMouseListener);
+		
+//        JPopupMenu popupMenu = new JPopupMenu();
+//        /** Edit HTML info files... */
+//        popupMenu.add(new MapPoolEditHTMLAction(map));
+//        /** Delete HTML info files... */
+//        popupMenu.add(new MapPoolDeleteAllHTMLAction(
+//                getComponent(), map));
+//        getComponent().setComponentPopupMenu(popupMenu);
+        
+//		// TEST
+//		if ( htmlPane instanceof HTMLInfoJWebBrowser ) {
+//          ((HTMLInfoJWebBrowser)htmlPane).getNativeComponent().addMouseListener(popupMouseListener);
+//        }
+        
 		/** As this is a WeakHashMapSet, we don't have to remove it... **/
 		ace.getMapPool().addChangeListener(listenForMapChanges);
 	}

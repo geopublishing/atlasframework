@@ -50,6 +50,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
 import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
@@ -559,8 +560,8 @@ public class AVUtil {
 	public static HTMLInfoPaneInterface createHTMLInfoPane(URL url,
 			AtlasConfig ac) {
 		// use an HTML view bases on JEditorPane
-		// return new HTMLInfoJPane(url, ac);
-		// // use an HTML view bases on DJ project
+		//return new HTMLInfoJPane(url, ac);
+		// use an HTML view bases on DJ project
 		return new HTMLInfoJWebBrowser(url, ac);
 	}
 }

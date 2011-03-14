@@ -68,6 +68,7 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 
 		this.atlasConfig = ac;
 		this.setBarsVisible(false);
+		this.setDefaultPopupMenuRegistered(false);
 		showDocument(url);
 		addWebBrowserListener(LISTENER);
 	}
@@ -143,12 +144,12 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 	}
 
 	private final WebBrowserListener LISTENER = new WebBrowserAdapter() {
-		@Override
-		public void commandReceived(WebBrowserEvent e, String command,
-				String[] args) {
-			LOGGER.debug("commandRecveived " + e + "  " + command + "  " + args);
-
-		}
+//		@Override
+//		public void commandReceived(WebBrowserEvent e, String command,
+//				String[] args) {
+//			LOGGER.debug("commandRecveived " + e + "  " + command + "  " + args);
+//
+//		}
 
 		private void blockLocationChange(WebBrowserNavigationEvent ev) {
 			ev.consume();
