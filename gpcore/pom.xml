@@ -112,26 +112,26 @@
 							<regenerateFile>true</regenerateFile>
 						</configuration>
 					</execution>
-					<execution>
-						<id>unpack native libs</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.geopublishing</groupId>
-									<artifactId>gpnatives</artifactId>
-									<version>${project.version}</version>
-									<!-- <classifier>${build.type}</classifier> -->
-									<type>jar</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/natives</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
+<!-- 					<execution> -->
+<!-- 						<id>unpack native libs</id> -->
+<!-- 						<phase>compile</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>unpack</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<artifactItems> -->
+<!-- 								<artifactItem> -->
+<!-- 									<groupId>org.geopublishing</groupId> -->
+<!-- 									<artifactId>gpnatives</artifactId> -->
+<!-- 									<version>${project.version}</version> -->
+<!-- 		vorher auskommentiert?									<classifier>${build.type}</classifier> -->
+<!-- 									<type>jar</type> -->
+<!-- 									<overWrite>true</overWrite> -->
+<!-- 									<outputDirectory>${project.build.directory}/natives</outputDirectory> -->
+<!-- 								</artifactItem> -->
+<!-- 							</artifactItems> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>
@@ -216,13 +216,13 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.geopublishing</groupId>
-			<artifactId>gpnatives</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-			<type>jar</type>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.geopublishing</groupId> -->
+<!-- 			<artifactId>gpnatives</artifactId> -->
+<!-- 			<version>${project.version}</version> -->
+<!-- 			<scope>compile</scope> -->
+<!-- 			<type>jar</type> -->
+<!-- 		</dependency> -->
 
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
