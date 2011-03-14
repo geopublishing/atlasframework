@@ -16,10 +16,10 @@
 
 
 	<properties>
-		<swt.artifactId>swt-gtk-linux</swt.artifactId>
+		<!-- <swt.artifactId>swt-gtk-linux</swt.artifactId> -->
 		<swt.version>3.6</swt.version>
-<!-- 		<swt.classifier>x86_64</swt.classifier> -->
-<!-- 		<os>linux</os> -->
+		<!-- <swt.classifier>x86_64</swt.classifier> -->
+		<!-- <os>linux</os> -->
 	</properties>
 
 	<build>
@@ -303,6 +303,7 @@
 		</dependency>
 
 	</dependencies>
+
 
 	<profiles>
 		<profile>

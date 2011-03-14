@@ -115,6 +115,44 @@
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
 								<mainClass>${mainClass}</mainClass>
+
+								<jarResources>
+									<jarResource>
+										<artifactId>swt-windows</artifactId>
+										<version>${swt.version}</version>
+										<classifier>x86</classifier>
+									</jarResource>
+
+									<jarResource>
+										<groupId>org.eclipse.swt</groupId>
+										<artifactId>swt-windows</artifactId>
+										<version>${swt.version}</version>
+										<classifier>x86_64</classifier>
+									</jarResource>
+
+
+									<jarResource>
+										<groupId>org.eclipse.swt</groupId>
+										<artifactId>swt-gtk-linux</artifactId>
+										<version>${swt.version}</version>
+										<classifier>x86</classifier>
+									</jarResource>
+
+									<jarResource>
+										<groupId>org.eclipse.swt</groupId>
+										<artifactId>swt-gtk-linux</artifactId>
+										<version>${swt.version}</version>
+										<classifier>x86_64</classifier>
+									</jarResource>
+
+									<jarResource>
+										<groupId>org.eclipse.swt</groupId>
+										<artifactId>swt-cocoa-macosx</artifactId>
+										<version>${swt.version}</version>
+										<classifier>x86</classifier>
+									</jarResource>
+								</jarResources>
+
 							</jnlp>
 
 							<sign>
