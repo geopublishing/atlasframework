@@ -41,7 +41,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -66,7 +66,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 	public static final String PROPERTY_CLOSED = "CLOSED";
 
-	private static final String DIALOG_TITLE = AtlasStyler
+	private static final String DIALOG_TITLE = AtlasStylerVector
 			.R("SymbolSelector.Title");
 
 	private static final Dimension DEFAULT_PREVIEW_ICON_SIZE = new Dimension(
@@ -196,7 +196,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JPanel getJPanelPreview() {
 		if (jPanelPreview == null) {
 			jPanelPreview = new JPanel(new MigLayout("align center, w 100"),
-					AtlasStyler.R("SymbolSelector.Preview.BorderTitle"));
+					AtlasStylerVector.R("SymbolSelector.Preview.BorderTitle"));
 			jLabelPreviewIcon.setOpaque(false);
 			jPanelPreview.add(jLabelPreviewIcon, "align center");
 			singleSymbolRuleList
@@ -214,9 +214,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
-			jLabelRotation = new JLabel(AtlasStyler.R("RotationLabel"));
-			jLabelSize = new JLabel(AtlasStyler.R("SizeLabel"));
-			jLabelColor = new JLabel(AtlasStyler.R("ColorLabel"));
+			jLabelRotation = new JLabel(AtlasStylerVector.R("RotationLabel"));
+			jLabelSize = new JLabel(AtlasStylerVector.R("SizeLabel"));
+			jLabelColor = new JLabel(AtlasStylerVector.R("ColorLabel"));
 			jPanelOptions = new JPanel(new MigLayout("wrap 2"));
 			jPanelOptions.setBorder(BorderFactory
 					.createEmptyBorder(5, 15, 5, 5));
@@ -253,7 +253,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 					Color newColor = AVSwingUtil.showColorChooser(
 							SymbolSelectorGUI.this,
-							AtlasStyler.R("SymbolSelector.Preview.ChooseColor"),
+							AtlasStylerVector.R("SymbolSelector.Preview.ChooseColor"),
 							color);
 
 					if (newColor != null) {
@@ -310,11 +310,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				 * This is about Stroke WIDTH
 				 */
 				jComboBoxSize.setModel(new DefaultComboBoxModel(
-						AbstractEditGUI.WIDTH_VALUES));
+						AbstractStyleEditGUI.WIDTH_VALUES));
 
 				// jComboBoxSize.setRenderer(AbstractEditGUI.WIDTH_VALUES_RENDERER);
 
-				if (!Arrays.asList(AbstractEditGUI.WIDTH_VALUES).contains(
+				if (!Arrays.asList(AbstractStyleEditGUI.WIDTH_VALUES).contains(
 						singleSymbolRuleList.getSizeBiggest())) {
 				}
 
@@ -323,9 +323,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				 * This is about Graphic Sizes
 				 */
 				jComboBoxSize.setModel(new DefaultComboBoxModel(
-						AbstractEditGUI.SIZE_VALUES));
+						AbstractStyleEditGUI.SIZE_VALUES));
 
-				if (!Arrays.asList(AbstractEditGUI.SIZE_VALUES).contains(
+				if (!Arrays.asList(AbstractStyleEditGUI.SIZE_VALUES).contains(
 						singleSymbolRuleList.getSizeBiggest())) {
 					// TODO Value not in list!
 				}
@@ -408,9 +408,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JComboBox getJComboBoxAngle() {
 		if (jComboBoxRotation == null) {
 			jComboBoxRotation = new JComboBox(new DefaultComboBoxModel(
-					AbstractEditGUI.ROTATION_VALUES));
+					AbstractStyleEditGUI.ROTATION_VALUES));
 			jComboBoxRotation
-					.setRenderer(AbstractEditGUI.ROTATION_VALUES_RENDERER);
+					.setRenderer(AbstractStyleEditGUI.ROTATION_VALUES_RENDERER);
 
 			ASUtil.selectOrInsert(jComboBoxRotation,
 					singleSymbolRuleList.getRotation());
@@ -515,7 +515,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JButton getJButtonProperties() {
 		if (jButtonProperties == null) {
 			jButtonProperties = new JButton(new AbstractAction(
-					AtlasStyler.R("SymbolSelector.EditSymbol")) {
+					AtlasStylerVector.R("SymbolSelector.EditSymbol")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -543,7 +543,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JButton getJButtonSave() {
 		if (jButtonSave == null) {
 			jButtonSave = new JButton(new AbstractAction(
-					AtlasStyler.R("SymbolSelector.SaveToFile")) {
+					AtlasStylerVector.R("SymbolSelector.SaveToFile")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -552,15 +552,15 @@ public class SymbolSelectorGUI extends AtlasDialog {
 						JOptionPane
 								.showMessageDialog(
 										SymbolSelectorGUI.this,
-										AtlasStyler
+										AtlasStylerVector
 												.R("SymbolSelector.SaveToFileDialog.Error.NothingToSave"));
 						return;
 					}
 
-					File dir = AtlasStyler.getSymbolsDir(singleSymbolRuleList
+					File dir = AtlasStylerVector.getSymbolsDir(singleSymbolRuleList
 							.getGeometryForm());
 					JFileChooser chooser = new JFileChooser(dir);
-					chooser.setDialogTitle(AtlasStyler
+					chooser.setDialogTitle(AtlasStylerVector
 							.R("SymbolSelector.SaveToFileDialog.Title"));
 					chooser.setDialogType(JFileChooser.SAVE_DIALOG);
 					chooser.addChoosableFileFilter(new FileNameExtensionFilter(
@@ -598,7 +598,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 							String newerAuthor = ASUtil.askForString(
 									SymbolSelectorGUI.this,
 									creatorName,
-									AtlasStyler
+									AtlasStylerVector
 											.R("SymbolSelector.SaveToFileDialog.Author"));
 							if (newerAuthor == null)
 								return;
@@ -609,7 +609,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 											SymbolSelectorGUI.this,
 											singleSymbolRuleList
 													.getStyleAbstract(),
-											AtlasStyler
+											AtlasStylerVector
 													.R("SymbolSelector.SaveToFileDialog.Desc"));
 							if (newerDesc == null)
 								return;
@@ -620,7 +620,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 							LOGGER.error("Error saving symbol " + styleName, e1);
 							JOptionPane.showMessageDialog(
 									SymbolSelectorGUI.this,
-									AtlasStyler
+									AtlasStylerVector
 											.R("SymbolSelector.SaveToFileDialog.Error.FailedToSave")
 											+ "\n" + e1.getLocalizedMessage());
 						}
@@ -630,7 +630,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				}
 
 			});
-			jButtonSave.setToolTipText(AtlasStyler
+			jButtonSave.setToolTipText(AtlasStylerVector
 					.R("SymbolSelector.SaveToFile.TT"));
 		}
 		return jButtonSave;
@@ -644,7 +644,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JButton getJButtonReset() {
 		if (jButtonReset == null) {
 			jButtonReset = new JButton();
-			jButtonReset.setText(AtlasStyler.R("SymbolSelector.Reset"));
+			jButtonReset.setText(AtlasStylerVector.R("SymbolSelector.Reset"));
 			jButtonReset.addActionListener(new ActionListener() {
 
 				@Override
@@ -661,7 +661,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			});
 
 			jButtonReset.setEnabled(false);
-			jButtonReset.setToolTipText(AtlasStyler
+			jButtonReset.setToolTipText(AtlasStylerVector
 					.R("SymbolSelector.Reset.TT"));
 		}
 		return jButtonReset;

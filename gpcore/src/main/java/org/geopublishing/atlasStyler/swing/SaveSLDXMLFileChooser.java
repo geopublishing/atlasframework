@@ -15,7 +15,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 
 
 /**
@@ -32,7 +32,7 @@ public class SaveSLDXMLFileChooser extends JFileChooser {
 
 		addChoosableFileFilter(new FileNameExtensionFilter("SLD", new String[] {
 				"sld", "xml" }));
-		setDialogTitle(AtlasStyler.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle")); 
+		setDialogTitle(AtlasStylerVector.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle")); 
 		setDialogType(JFileChooser.SAVE_DIALOG);
 	}
 

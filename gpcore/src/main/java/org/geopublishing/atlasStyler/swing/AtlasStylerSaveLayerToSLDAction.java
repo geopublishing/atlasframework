@@ -24,7 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
@@ -42,7 +42,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 	private final Component owner;
 
 	public AtlasStylerSaveLayerToSLDAction(Component owner, StyledFS styledShp) {
-		super(AtlasStyler.R("AtlasStylerGUI.saveToSLDFile"),
+		super(AtlasStylerVector.R("AtlasStylerGUI.saveToSLDFile"),
 				Icons.ICON_EXPORT);
 		this.owner = owner;
 		this.styledShp = styledShp;
@@ -62,7 +62,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 			AVSwingUtil.showMessageDialog(
 					owner,
-					AtlasStyler.R("StyledLayerSLDNotWritable.Msg",
+					AtlasStylerVector.R("StyledLayerSLDNotWritable.Msg",
 							IOUtil.escapePath(styledShp.getSldFile())));
 
 			File startWithFile = new File(System.getProperty("user.home"),
@@ -72,7 +72,7 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 					new String[] { "sld", "xml" }));
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
 
-			dc.setDialogTitle(AtlasStyler
+			dc.setDialogTitle(AtlasStylerVector
 					.R("StyledLayerSLDNotWritable.ChooseNewDialog.Title"));
 
 			dc.setSelectedFile(startWithFile);
@@ -110,11 +110,11 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 					styledShp.getSldFile());
 
 			if (backup)
-				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
+				AVSwingUtil.showMessageDialog(owner, AtlasStylerVector.R(
 						"AtlasStylerGUI.saveToSLDFileSuccessAndBackedUp",
 						IOUtil.escapePath(styledShp.getSldFile())));
 			else
-				AVSwingUtil.showMessageDialog(owner, AtlasStyler.R(
+				AVSwingUtil.showMessageDialog(owner, AtlasStylerVector.R(
 						"AtlasStylerGUI.saveToSLDFileSuccess",
 						IOUtil.escapePath(styledShp.getSldFile())));
 

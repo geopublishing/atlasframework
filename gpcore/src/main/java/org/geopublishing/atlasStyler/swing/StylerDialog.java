@@ -30,6 +30,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
@@ -154,20 +156,21 @@ public class StylerDialog extends CancellableDialogAdapter {
 		setMaximumSize(new Dimension(980, 400));
 		setPreferredSize(new Dimension(980, 400));
 
-		final SimpleFeatureType schema = atlasStyler.getStyledFeatures()
-				.getSchema();
+		if (isVector()) {
+			final SimpleFeatureType schema = getAtlasStylerVector().getStyledFeatures()
+					.getSchema();
 
-		String typeName = schema.getTypeName();
+			String typeName = schema.getTypeName();
 
-		// String typeName = atlasStyler.getFeatureSource().getDataStore()
-		// .getTypeNames()[0];
+			String geomTyp = schema.getGeometryDescriptor().getType()
+					.getBinding().getSimpleName();
 
-		String geomTyp = schema.getGeometryDescriptor().getType().getBinding()
-				.getSimpleName();
-
-		final Translation title = atlasStyler.getTitle();
-		setTitle("AtlasStyler for: " + title != null ? title.toString()
-				: typeName + "  (" + geomTyp + ")");
+			final Translation title = atlasStyler.getTitle();
+			setTitle("AtlasStyler for: " + title != null ? title.toString()
+					: typeName + "  (" + geomTyp + ")");
+		} else {
+			setTitle("Raster my baby!");
+		}
 
 		this.setContentPane(getJContentPane());
 
@@ -199,15 +202,17 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	private JButton getJButtonUpdatePreview() {
 		if (jButtonUpdatePreview == null) {
-			jButtonUpdatePreview = new JButton(new AbstractAction(
-					AtlasStyler.R("AtlasStylerGUI.UpdatePreview.Button")) {
+			jButtonUpdatePreview = new JButton(
+					new AbstractAction(
+							AtlasStylerVector
+									.R("AtlasStylerGUI.UpdatePreview.Button")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					atlasStyler.fireStyleChangedEvents(true);
-				}
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							atlasStyler.fireStyleChangedEvents(true);
+						}
 
-			});
+					});
 			jButtonUpdatePreview.setEnabled(!atlasStyler.isAutomaticPreview());
 			getJCheckboxPreviewl().getModel().addChangeListener(
 					new ChangeListener() {
@@ -228,7 +233,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 		if (jCheckboxPreview == null) {
 			jCheckboxPreview = new JCheckBox(
 					new AbstractAction(
-							AtlasStyler
+							AtlasStylerVector
 									.R("AtlasStylerGUI.UpdatePreviewAutomatically.CheckBox")) {
 
 						@Override
@@ -245,7 +250,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 			jCheckboxPreview.setSelected(atlasStyler.isAutomaticPreview());
 			jCheckboxPreview
-					.setToolTipText(AtlasStyler
+					.setToolTipText(AtlasStylerVector
 							.R("AtlasStylerGUI.UpdatePreviewAutomatically.CheckBox.TT"));
 		}
 		return jCheckboxPreview;
@@ -309,7 +314,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	}
 
 	/**
-	 * Returns the {@link AtlasStyler} backing this GUI
+	 * Returns the {@link AtlasStylerVector} backing this GUI
 	 */
 	public AtlasStyler getAtlasStyler() {
 		return atlasStyler;
@@ -340,7 +345,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 	}
 
 	/**
-	 * If <code>true</code> the GUI hides the more compilcated parts.
+	 * If <code>true</code> the GUI hides the more complicated parts.
 	 */
 	public void setEasy(boolean easy) {
 		this.easy = easy;
@@ -350,4 +355,22 @@ public class StylerDialog extends CancellableDialogAdapter {
 		return easy;
 	}
 
+	/**
+	 * Is this AtlasStylerDialog managing a Vector instance
+	 */
+	public boolean isVector() {
+		return getAtlasStyler() instanceof AtlasStylerVector;
+	}
+
+	public AtlasStylerVector getAtlasStylerVector() {
+		if (!isVector())
+			throw new IllegalStateException();
+		return (AtlasStylerVector) getAtlasStyler();
+	}
+
+	public AtlasStylerRaster getAtlasStylerRaster() {
+		if (isVector())
+			throw new IllegalStateException();
+		return (AtlasStylerRaster) getAtlasStyler();
+	}
 }

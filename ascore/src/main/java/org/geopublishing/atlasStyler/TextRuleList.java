@@ -518,7 +518,7 @@ public class TextRuleList extends AbstractRulesList {
 						JOptionPane
 								.showMessageDialog(
 										owner,
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.Error.NoClasses"));
 					}
 					return;
@@ -530,14 +530,14 @@ public class TextRuleList extends AbstractRulesList {
 						int res = JOptionPane
 								.showConfirmDialog(
 										owner,
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.AskOverwrite",
 														getRuleNames().size() - 1,
 														(uniqueRL.getValues()
 																.size() - (uniqueRL
 																.isWithDefaultSymbol() ? 1
 																: 0))),
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.AskOverwrite.Title"),
 										JOptionPane.YES_NO_OPTION);
 						if (res != JOptionPane.YES_OPTION)
@@ -586,7 +586,7 @@ public class TextRuleList extends AbstractRulesList {
 						JOptionPane
 								.showMessageDialog(
 										owner,
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.Error.NoClasses"));
 					}
 					return;
@@ -598,12 +598,12 @@ public class TextRuleList extends AbstractRulesList {
 						int res = JOptionPane
 								.showConfirmDialog(
 										owner,
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.AskOverwrite",
 														getRuleNames().size() - 1,
 														gradRL.getRules()
 																.size()),
-										AtlasStyler
+										AtlasStylerVector
 												.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.AskOverwrite.Title"),
 										JOptionPane.YES_NO_OPTION);
 
@@ -644,7 +644,7 @@ public class TextRuleList extends AbstractRulesList {
 				JOptionPane
 						.showMessageDialog(
 								owner,
-								AtlasStyler
+								AtlasStylerVector
 										.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.SuccesMsg",
 												getRuleNames().size() - 1));
 
@@ -1010,10 +1010,10 @@ public class TextRuleList extends AbstractRulesList {
 	public ArrayList<String> getDefaultLanguages() {
 		ArrayList<String> usedLangs = new ArrayList<String>();
 
-		if (AtlasStyler.languageMode == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
+		if (AtlasStylerVector.languageMode == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
 			return usedLangs;
 
-		for (String lang : AtlasStyler.getLanguages()) {
+		for (String lang : AtlasStylerVector.getLanguages()) {
 			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
 				usedLangs.add(lang);
 			}

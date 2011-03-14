@@ -41,7 +41,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.MARKTYPE;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.renderer.style.SVGGraphicFactory;
@@ -62,7 +62,7 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
-public class GraphicEditGUI extends AbstractEditGUI {
+public class GraphicEditGUI extends AbstractStyleEditGUI {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://http://freemapsymbols.org/svg";
@@ -114,7 +114,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 	private JComboBox jComboBoxFillOpacity = null;
 
 	private final JLabel jLabelRotation = new JLabel(
-			AtlasStyler.R("RotationLabel"));
+			AtlasStylerVector.R("RotationLabel"));
 
 	private JComboBox jComboBoxGraphicRotation = null;
 
@@ -214,7 +214,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 	private void initialize() {
 
 		setLayout(new MigLayout("wrap 2"));
-		this.add(new JLabel(AtlasStyler.R("GraphicEdit.Type")));
+		this.add(new JLabel(AtlasStylerVector.R("GraphicEdit.Type")));
 		this.add(getJComboBoxMarkType());
 		this.add(getJPanelGraphic(), "span 2");
 
@@ -250,7 +250,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 							.getListCellRendererComponent(list, value, index,
 									isSelected, cellHasFocus);
 
-					fromSuper.setText(AtlasStyler.R("Marktyp."
+					fromSuper.setText(AtlasStylerVector.R("Marktyp."
 							+ value.toString() + ".Label"));
 
 					return fromSuper;
@@ -415,7 +415,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints8.gridx = 4;
 			gridBagConstraints8.insets = new Insets(0, 15, 0, 0);
 			gridBagConstraints8.gridy = 0;
-			jLabelStrokeOpacity.setText(AtlasStyler.R("OpacityLabel"));
+			jLabelStrokeOpacity.setText(AtlasStylerVector.R("OpacityLabel"));
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = GridBagConstraints.NONE;
 			gridBagConstraints7.gridy = 0;
@@ -426,7 +426,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints6.gridx = 2;
 			gridBagConstraints6.insets = new Insets(0, 15, 0, 0);
 			gridBagConstraints6.gridy = 0;
-			jLabelStrokeWidth.setText(AtlasStyler.R("WidthLabel"));
+			jLabelStrokeWidth.setText(AtlasStylerVector.R("WidthLabel"));
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
@@ -435,10 +435,10 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
 			gridBagConstraints4.gridy = 0;
-			jLabelStrokeColor.setText(AtlasStyler.R("ColorLabel"));
+			jLabelStrokeColor.setText(AtlasStylerVector.R("ColorLabel"));
 			jPanelStroke = new JPanel();
 			jPanelStroke.setLayout(new GridBagLayout());
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 					.R("GraphicEdit.Stroke.Title")));
 			jPanelStroke.add(jLabelStrokeColor, gridBagConstraints4);
 			jPanelStroke.add(getJButtonStrokeColor(), gridBagConstraints5);
@@ -474,7 +474,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 						}
 
 						Color newColor = AVSwingUtil.showColorChooser(
-								GraphicEditGUI.this, AtlasStyler
+								GraphicEditGUI.this, AtlasStylerVector
 										.R("Stroke.ColorChooserDialog.Title"),
 								oldColor);
 
@@ -604,10 +604,10 @@ public class GraphicEditGUI extends AbstractEditGUI {
 		if (jPanel == null) {
 			jPanel = new JPanel(new MigLayout("wrap 2"));
 
-			jLabelOpacity = new JLabel(AtlasStyler.R("OpacityLabel"));
-			jLabelSize = new JLabel(AtlasStyler.R("SizeLabel"));
+			jLabelOpacity = new JLabel(AtlasStylerVector.R("OpacityLabel"));
+			jLabelSize = new JLabel(AtlasStylerVector.R("SizeLabel"));
 
-			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 					.R("GraphicEdit.Graphic.Title")));
 
 			JPanel generalSettingsPanel = new JPanel();
@@ -736,7 +736,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints17.anchor = GridBagConstraints.EAST;
 			gridBagConstraints17.gridy = 0;
 			jLabelFillOpacity = new JLabel();
-			jLabelFillOpacity.setText(AtlasStyler.R("OpacityLabel"));
+			jLabelFillOpacity.setText(AtlasStylerVector.R("OpacityLabel"));
 			GridBagConstraints gridBagConstraints16 = new GridBagConstraints();
 			gridBagConstraints16.fill = GridBagConstraints.NONE;
 			gridBagConstraints16.gridy = 0;
@@ -749,10 +749,10 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints15.insets = new Insets(5, 5, 5, 0);
 			gridBagConstraints15.gridy = 0;
 			jLabelFillColor = new JLabel();
-			jLabelFillColor.setText(AtlasStyler.R("ColorLabel"));
+			jLabelFillColor.setText(AtlasStylerVector.R("ColorLabel"));
 			jPanelFill = new JPanel();
 			jPanelFill.setLayout(new GridBagLayout());
-			jPanelFill.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			jPanelFill.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 					.R("GraphicEdit.Fill.Title")));
 			jPanelFill.add(jLabelFillColor, gridBagConstraints15);
 			jPanelFill.add(getJButtonFillColor(), gridBagConstraints16);
@@ -781,7 +781,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 
 					Color newColor = AVSwingUtil.showColorChooser(
 							GraphicEditGUI.this,
-							AtlasStyler.R("Fill.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Fill.ColorChooserDialog.Title"),
 							color);
 
 					if (newColor != null) {
@@ -1176,11 +1176,11 @@ public class GraphicEditGUI extends AbstractEditGUI {
 			gridBagConstraints31.gridx = 0;
 			gridBagConstraints31.gridy = 0;
 			gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
-			jLabelEG.setText(AtlasStyler.R("ExternalGraphicLabel"));
+			jLabelEG.setText(AtlasStylerVector.R("ExternalGraphicLabel"));
 			jPanelExternalGraphic = new JPanel();
 			jPanelExternalGraphic.setLayout(new GridBagLayout());
 			jPanelExternalGraphic.setBorder(BorderFactory
-					.createTitledBorder(AtlasStyler
+					.createTitledBorder(AtlasStylerVector
 							.R("GraphicEdit.ExternalGraphic.Title")));
 			jPanelExternalGraphic.add(jLabelEG, gridBagConstraints31);
 			jPanelExternalGraphic.add(getJButtonExtGraphic(),
@@ -1306,7 +1306,7 @@ public class GraphicEditGUI extends AbstractEditGUI {
 									}
 
 									GraphicEditGUI.this.firePropertyChange(
-											AbstractEditGUI.PROPERTY_UPDATED,
+											AbstractStyleEditGUI.PROPERTY_UPDATED,
 											null, null);
 
 									updateExternalGraphicButton();

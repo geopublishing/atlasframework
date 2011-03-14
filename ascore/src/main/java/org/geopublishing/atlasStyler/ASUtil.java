@@ -251,7 +251,7 @@ public class ASUtil {
 	}
 
 	/**
-	 * Creates a default Style that is compatible with {@link AtlasStyler}.
+	 * Creates a default Style that is compatible with {@link AtlasStylerVector}.
 	 */
 	public static Style createDefaultStyle(
 			final StyledLayerInterface<?> styledLayer) {
@@ -274,7 +274,7 @@ public class ASUtil {
 		// loadStyle, null, null).getStyle();
 		SingleRuleList<? extends Symbolizer> singleRulesList = new RuleListFactory(
 				styledFs).createSingleRulesList(
-				AtlasStyler.getRuleTitleFor(styledFs), true);
+				AtlasStylerVector.getRuleTitleFor(styledFs), true);
 
 		Style defaultStyle = StylingUtil.STYLE_BUILDER.createStyle();
 		defaultStyle.featureTypeStyles().add(singleRulesList.getFTS());
@@ -526,7 +526,7 @@ public class ASUtil {
 
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
-	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
+	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to find a
 	 * default legend label automatically for all languages.
 	 * 
 	 * @param colors
@@ -539,7 +539,7 @@ public class ASUtil {
 
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
-	 * {@link AtlasStyler} is running in multilanguage mode, it tries to find a
+	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to find a
 	 * default legend label automatically for all languages.
 	 * 
 	 * @param colors
@@ -583,7 +583,7 @@ public class ASUtil {
 		if (AtlasStyler.languageMode == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 			final Translation nodT = new Translation();
-			for (final String lang : AtlasStyler.getLanguages()) {
+			for (final String lang : AtlasStylerVector.getLanguages()) {
 
 				// Try to find a default for every language
 				final String localized = R(new Locale(lang),
@@ -674,7 +674,7 @@ public class ASUtil {
 			final Color color, final Color backgroundColor,
 			final SimpleFeatureType featuretype) {
 		return getGraphicImage(fillGraphic, color, backgroundColor, 1.,
-				AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE, featuretype);
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featuretype);
 	}
 
 	public static BufferedImage getFillImage(final Fill fill,
@@ -690,7 +690,7 @@ public class ASUtil {
 	 */
 	public static BufferedImage getFillImage(final Fill fill,
 			final SimpleFeatureType featureType) {
-		return getFillImage(fill, AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE,
+		return getFillImage(fill, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE,
 				featureType);
 	}
 
@@ -809,7 +809,7 @@ public class ASUtil {
 	public static BufferedImage getSymbolizerImage(final Symbolizer symbolizer,
 			final SimpleFeatureType featureType) {
 		return getSymbolizerImage(symbolizer,
-				AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
 	}
 
 	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(
@@ -900,7 +900,7 @@ public class ASUtil {
 	}
 
 	/**
-	 * Convenience method to access the {@link AtlasStyler}s translation
+	 * Convenience method to access the {@link AtlasStylerVector}s translation
 	 * resources for a specific {@link Locale}.
 	 * 
 	 * @param key
@@ -920,7 +920,7 @@ public class ASUtil {
 	}
 
 	/**
-	 * Convenience method to access the {@link AtlasStyler}s translation
+	 * Convenience method to access the {@link AtlasStylerVector}s translation
 	 * resources.
 	 * 
 	 * @param key

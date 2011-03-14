@@ -3,7 +3,7 @@ package org.geopublishing.atlasStyler.swing;
 import java.io.IOException;
 import java.net.URL;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geotools.styling.Style;
 
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -43,9 +43,9 @@ public class AsTestingUtil extends TestingUtil {
 	 * Provides an AtlasStyler linked with a StyledFS from the
 	 * {@link TestDatasetsVector}.
 	 */
-	public static AtlasStyler getAtlasStyler(TestDatasetsVector testdata)
+	public static AtlasStylerVector getAtlasStyler(TestDatasetsVector testdata)
 			throws IOException {
-		return new AtlasStyler(testdata.getStyledFS());
+		return new AtlasStylerVector(testdata.getStyledFS());
 	}
 
 }

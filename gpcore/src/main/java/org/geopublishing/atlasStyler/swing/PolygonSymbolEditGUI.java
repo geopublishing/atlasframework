@@ -32,7 +32,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
@@ -48,7 +48,7 @@ import de.schmitzm.swing.ColorButton;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
-public class PolygonSymbolEditGUI extends AbstractEditGUI {
+public class PolygonSymbolEditGUI extends AbstractStyleEditGUI {
 	private JButton jButtonFillGraphic = null;
 
 	private ColorButton jButtonStrokeColor;
@@ -68,13 +68,13 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 	private JComboBox jComboBoxStrokeWidth;
 
 	private final JLabel jLabelFillGraphic = new JLabel(
-			AtlasStyler.R("ExternalGraphicLabel"));
+			AtlasStylerVector.R("ExternalGraphicLabel"));
 
 	private final JLabel jLabelGraphicFillOpacity = new JLabel(
-			AtlasStyler.R("OpacityLabel"));
+			AtlasStylerVector.R("OpacityLabel"));
 
 	private final JLabel jLabelFillOpacity = new JLabel(
-			AtlasStyler.R("OpacityLabel"));
+			AtlasStylerVector.R("OpacityLabel"));
 
 	private JPanel jPanelFill = null;
 
@@ -136,7 +136,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 					// color); // i8nAC
 					Color newColor = AVSwingUtil.showColorChooser(
 							PolygonSymbolEditGUI.this,
-							AtlasStyler.R("Fill.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Fill.ColorChooserDialog.Title"),
 							color);
 
 					if (newColor != null && newColor != color) {
@@ -211,11 +211,11 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 								public void propertyChange(
 										PropertyChangeEvent evt) {
 									if (evt.getPropertyName().equals(
-											AbstractEditGUI.PROPERTY_UPDATED)) {
+											AbstractStyleEditGUI.PROPERTY_UPDATED)) {
 
 										PolygonSymbolEditGUI.this
 												.firePropertyChange(
-														AbstractEditGUI.PROPERTY_UPDATED,
+														AbstractStyleEditGUI.PROPERTY_UPDATED,
 														null, null);
 
 										// Update the Button Icon
@@ -275,7 +275,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 
 					Color newColor = AVSwingUtil.showColorChooser(
 							PolygonSymbolEditGUI.this,
-							AtlasStyler.R("Stroke.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Stroke.ColorChooserDialog.Title"),
 							color);
 
 					if (newColor != null) {
@@ -699,8 +699,8 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelFill() {
 		if (jPanelFill == null) {
 			jPanelFill = new JPanel(new MigLayout(),
-					AtlasStyler.R("GraphicEdit.Fill.Title"));
-			jPanelFill.add(new JLabel(AtlasStyler.R("ColorLabel")));
+					AtlasStylerVector.R("GraphicEdit.Fill.Title"));
+			jPanelFill.add(new JLabel(AtlasStylerVector.R("ColorLabel")));
 			jPanelFill.add(getJButtonFillColor());
 			jPanelFill.add(jLabelFillOpacity);
 			jPanelFill.add(getJComboBoxFillOpacity());
@@ -716,7 +716,7 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelFillGraphics() {
 		if (jPanelFillGraphics == null) {
 			jPanelFillGraphics = new JPanel(new MigLayout(),
-					AtlasStyler.R("PolygonSymbolEdit.Patternfill.Title"));
+					AtlasStylerVector.R("PolygonSymbolEdit.Patternfill.Title"));
 			jPanelFillGraphics.add(jLabelFillGraphic, "gap r rel");
 			jPanelFillGraphics.add(getJButtonFillGraphic(), "gap r unrel");
 			jPanelFillGraphics.add(jLabelGraphicFillOpacity, "gap r rel");
@@ -733,14 +733,14 @@ public class PolygonSymbolEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelStroke() {
 		if (jPanelStroke == null) {
 			jPanelStroke = new JPanel(new MigLayout("nogrid"),
-					AtlasStyler.R("PolygonSymbolEdit.Stroke.Title"));
+					AtlasStylerVector.R("PolygonSymbolEdit.Stroke.Title"));
 
 			JLabel jLabelStrokeOpacity = new JLabel(
-					AtlasStyler.R("OpacityLabel"));
+					AtlasStylerVector.R("OpacityLabel"));
 
-			JLabel jLabelStrokeWidth = new JLabel(AtlasStyler.R("WidthLabel"));
+			JLabel jLabelStrokeWidth = new JLabel(AtlasStylerVector.R("WidthLabel"));
 
-			jPanelStroke.add(new JLabel(AtlasStyler.R("ColorLabel")), "right");
+			jPanelStroke.add(new JLabel(AtlasStylerVector.R("ColorLabel")), "right");
 			jPanelStroke.add(getJButtonStrokeColor(), "left");
 			jPanelStroke.add(jLabelStrokeWidth, "right");
 			jPanelStroke.add(getJComboBoxStrokeWidth(), "left");

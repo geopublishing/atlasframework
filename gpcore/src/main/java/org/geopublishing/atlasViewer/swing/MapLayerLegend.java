@@ -568,7 +568,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// Create AtlasStyler Button
 		// ****************************************************************************
 		if (isStyleEditable()
-				&& !(styledLayer instanceof StyledRasterInterface)) {
+//				&& !(styledLayer instanceof StyledRasterInterface)
+				) {
 
 			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
 					.R("LayerToolMenu.style"), Icons.ICON_STYLE) {
@@ -771,9 +772,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 */
 	public StylerDialog openStylerDialog() {
 
-		if (!(styledLayer instanceof StyledFeaturesInterface))
+		if (!(styledLayer instanceof StyledLayerInterface))
 			throw new IllegalArgumentException(
-					"The AtlasStyler can only be opened for objects that implement StyledFeaturesInterface");
+					"The AtlasStyler can only be opened for objects that implement StyledLayerInterface");
 
 		// atlasStyler.importStyle(styledObj.getStyle());
 

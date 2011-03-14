@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -73,6 +73,8 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 					// boolean added = addShapeLayer(asg, new File(
 					// selectedFilePath), asg);
+					
+					//TODO Atlas Styler RASTER
 
 					URL urlToShape;
 
@@ -142,7 +144,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 							if (!AVSwingUtil
 									.askOKCancel(
 											asg,
-											AtlasStyler
+											AtlasStylerVector
 													.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
 															e.getMessage(),
 															prjFile.getName(),
@@ -156,7 +158,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 						if (!AVSwingUtil
 								.askOKCancel(
 										asg,
-										AtlasStyler
+										AtlasStylerVector
 												.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
 														prjFile.getName(),
 														GeoImportUtil

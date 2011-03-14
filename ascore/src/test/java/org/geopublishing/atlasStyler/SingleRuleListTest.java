@@ -28,11 +28,11 @@ public class SingleRuleListTest extends TestingClass {
 
 	@Test
 	public void testTitles() throws TransformerException, IOException {
-		AtlasStyler as = AsTestingUtil
+		AtlasStylerVector as = AsTestingUtil
 				.getAtlasStyler(TestDatasetsVector.polygonSnow);
 
 		SingleRuleList<?> singleRulesList = as.getRlf().createSingleRulesList(
-				AtlasStyler.getRuleTitleFor(as.getStyledFeatures()), false);
+				AtlasStylerVector.getRuleTitleFor(as.getStyledFeatures()), false);
 
 		singleRulesList.setLabel("RuleTitle");
 		singleRulesList.setTitle("RulesListTitle");

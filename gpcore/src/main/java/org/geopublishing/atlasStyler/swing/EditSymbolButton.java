@@ -8,7 +8,7 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 
@@ -23,10 +23,10 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 	/**
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the default size
-	 * {@link AtlasStyler#DEFAULT_SYMBOL_PREVIEW_SIZE}.
+	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public EditSymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList, AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(singleSymbolRuleList, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 				backup = template.copy();
 
 				final SymbolSelectorGUI gui = new SymbolSelectorGUI(
-		EditSymbolButton.this, AtlasStyler
+		EditSymbolButton.this, AtlasStylerVector
 								.R("SymbolSelector.ForTemplate.Title"),
 						template);
 

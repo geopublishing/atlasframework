@@ -21,6 +21,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.RulesListsList;
@@ -131,8 +132,13 @@ public class RulesListTable extends JTable {
 
 		updateColumnsLook();
 
-		setDefaultEditor(Filter.class, new FilterTableCellEditor(
-				RulesListTable.this, atlasStyler.getStyledFeatures()));
+		if (atlasStyler instanceof AtlasStylerVector) {
+			setDefaultEditor(
+					Filter.class,
+					new FilterTableCellEditor(RulesListTable.this,
+							((AtlasStylerVector) atlasStyler)
+									.getStyledFeatures()));
+		}
 
 		// Re-add the weak listener that listens for filter changes created
 		// external, e.g. by popup menu insert
@@ -313,7 +319,10 @@ public class RulesListTable extends JTable {
 
 		@Override
 		public int getColumnCount() {
-			return 6;
+			if (atlasStyler instanceof AtlasStylerVector) {
+				return 6;
+			} else
+				return 5;
 		}
 
 		@Override
@@ -439,9 +448,11 @@ public class RulesListTable extends JTable {
 		SwingUtil.setColumnLook(this, COLIDX_MAXSCALE, new ScaleCellRenderer(
 				false), easy ? 0 : 10, easy ? 0 : 40, easy ? 0 : 120);
 
-		SwingUtil.setColumnLook(this, COLIDX_FILTER,
-				new FilterTableCellRenderer(), easy ? 0 : 17, easy ? 0 : 19,
-				easy ? 0 : 19);
+		if (atlasStyler instanceof AtlasStylerVector) {
+			SwingUtil.setColumnLook(this, COLIDX_FILTER,
+					new FilterTableCellRenderer(), easy ? 0 : 17,
+					easy ? 0 : 19, easy ? 0 : 19);
+		}
 
 	}
 }

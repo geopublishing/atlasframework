@@ -19,7 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JToolBar;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -54,7 +54,7 @@ import de.schmitzm.swing.ExceptionDialog;
 /**
  * This extends the {@link MapLegend}. Adding functionality to it, that only
  * makes sense when we are really working with an {@link AtlasConfig}. The
- * {@link AtlasStyler} SLD editor for example, uses {@link MapLegend} because it
+ * {@link AtlasStylerVector} SLD editor for example, uses {@link MapLegend} because it
  * doesn't know anything about any {@link AtlasConfig}.<br>
  * One special function for example are the additional/multiple {@link Style}s
  * for one {@link StyledLayerInterface}.

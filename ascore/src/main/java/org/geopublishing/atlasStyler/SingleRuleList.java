@@ -213,7 +213,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @return {@link BufferedImage} representing this SinglesRulesList
 	 */
 	public BufferedImage getImage() {
-		return getImage(AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		return getImage(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
 	/**

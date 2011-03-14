@@ -1,6 +1,6 @@
 package org.geopublishing.atlasViewer.swing;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.junit.Test;
@@ -15,7 +15,7 @@ public class StylerDialogTest extends TestingClass {
 	@Test
 	public void testStylerDialog() throws Throwable {
 
-		AtlasStyler as = new AtlasStyler(
+		AtlasStylerVector as = new AtlasStylerVector(
 				GTTestingUtil.TestDatasetsVector.countryShp.getFeatureSource());
 
 		if (!TestingUtil.isInteractive())

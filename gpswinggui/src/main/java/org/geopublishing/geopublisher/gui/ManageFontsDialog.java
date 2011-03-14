@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.io.FileUtils;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
@@ -66,7 +66,7 @@ public class ManageFontsDialog extends AtlasDialog {
 		setLayout(new MigLayout("wrap 1", "[,,400]"));
 
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.explanation.html",
-				AtlasStyler.getDefaultFontFamilies().length,
+				AtlasStylerVector.getDefaultFontFamilies().length,
 				IOUtil.escapePath(ace.getFontsDir()))));
 		add(new JLabel(GpSwingUtil.R("ManageFontsDialog.defaults.explanation")));
 		add(new JScrollPane(getDefaultFontsList()), "grow");
@@ -96,7 +96,7 @@ public class ManageFontsDialog extends AtlasDialog {
 	}
 
 	private JList getDefaultFontsList() {
-		JList defaultFontsList = new JList(AtlasStyler.getDefaultFontFamilies());
+		JList defaultFontsList = new JList(AtlasStylerVector.getDefaultFontFamilies());
 
 		defaultFontsList.setCellRenderer(new DefaultListCellRenderer() {
 

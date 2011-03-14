@@ -29,7 +29,7 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasViewer.swing.internal.LayoutUtil;
@@ -49,6 +49,7 @@ import de.schmitzm.swing.OkButton;
 /**
  * A very basic SLD Editor for rasters.
  */
+@Deprecated 
 public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 
 	final private RasterSymbolizer rasterSymbolizer;
@@ -58,10 +59,10 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 	private JTable rasterLegendDataTable;
 	private DefaultTableModel rasterLegendDataTableModel;
 
-	final private RasterLegendData legendData;
 	private final Style workingStyle;
 	private final Style backupStyle;
 	private final RasterLegendData backupLegendData;
+	final private RasterLegendData legendData;
 	private final StyledRasterInterface<?> styledRaster;
 	private final List<String> languages;
 
@@ -227,12 +228,12 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 					ListSelectionModel.SINGLE_SELECTION);
 
 			getRasterLegendTableModel().addColumn(
-					AtlasStyler.R("RasterLegendPanel.Table.Column.Value"));
+					AtlasStylerVector.R("RasterLegendPanel.Table.Column.Value"));
 			rasterLegendDataTable
 					.getColumnModel()
 					.getColumn(0)
 					.setHeaderValue(
-							AtlasStyler
+							AtlasStylerVector
 									.R("RasterLegendPanel.Table.Column.Value"));
 
 			int idx = 0;
@@ -338,7 +339,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			// Delete a legend entry
 			// ****************************************************************************
 			JButton delete = new JButton(new AbstractAction(
-					AtlasStyler.R("RasterLegendPanel.Button.Remove")) {
+					AtlasStylerVector.R("RasterLegendPanel.Button.Remove")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -359,7 +360,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			// Switch the gaps boolean
 			// ****************************************************************************
 			JToggleButton gaps = new JToggleButton(new AbstractAction(
-					AtlasStyler.R("RasterLegendPanel.Button.GapsOnOff")) {
+					AtlasStylerVector.R("RasterLegendPanel.Button.GapsOnOff")) {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					legendData.setPaintGaps(!legendData.isPaintGaps());
@@ -372,7 +373,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 			// Add a legend entry
 			// ****************************************************************************
 			JButton add = new JButton(new AbstractAction(
-					AtlasStyler.R("RasterLegendPanel.Button.InsertNew")) {
+					AtlasStylerVector.R("RasterLegendPanel.Button.InsertNew")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -401,7 +402,7 @@ public class AtlasStylerRasterDialog extends CancellableDialogAdapter {
 					getRasterLegendDataTable()), BorderLayout.CENTER);
 			rasterLegendDataPanel.add(buttons, BorderLayout.SOUTH);
 			LayoutUtil.borderTitle(rasterLegendDataPanel,
-					AtlasStyler.R("RasterLegendPanel.Border.Title"));
+					AtlasStylerVector.R("RasterLegendPanel.Border.Title"));
 		}
 		return rasterLegendDataPanel;
 	}

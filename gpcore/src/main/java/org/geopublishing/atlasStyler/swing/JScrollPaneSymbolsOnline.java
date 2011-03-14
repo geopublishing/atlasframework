@@ -29,7 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
@@ -50,7 +50,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 	@Override
 	protected String getDesc() {
-		return AtlasStyler.R("SymbolSelector.Tabs.OnlineSymbols");
+		return AtlasStylerVector.R("SymbolSelector.Tabs.OnlineSymbols");
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 					} catch (IOException e) {
 						JLabel notOnlineLabel = new JLabel(
-								AtlasStyler
+								AtlasStylerVector
 										.R("JScrollPaneSymbolsOnline.notOnlineErrorLabel"));
 						JScrollPaneSymbolsOnline.this
 								.setViewportView(notOnlineLabel);
@@ -221,7 +221,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 	@Override
 	protected String getToolTip() {
-		return AtlasStyler.R("SymbolSelector.Tabs.OnlineSymbols.TT");
+		return AtlasStylerVector.R("SymbolSelector.Tabs.OnlineSymbols.TT");
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 			 * Rescan directory
 			 */
 			JMenuItem rescan = new JMenuItem(
-					AtlasStyler
+					AtlasStylerVector
 							.R("SymbolSelector.Tabs.OnlineSymbols.Action.Rescan"));
 			rescan.addActionListener(new ActionListener() {
 

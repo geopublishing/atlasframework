@@ -18,7 +18,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -35,10 +35,10 @@ public class SymbolButton extends JButton {
 	/**
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the default size
-	 * {@link AtlasStyler#DEFAULT_SYMBOL_PREVIEW_SIZE}.
+	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public SymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList, AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(singleSymbolRuleList, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
 	/**
@@ -59,10 +59,10 @@ public class SymbolButton extends JButton {
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link Symbolizer} applied to a given {@link SimpleFeatureType}. The
 	 * button image will have the default size
-	 * {@link AtlasStyler#DEFAULT_SYMBOL_PREVIEW_SIZE}.
+	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public SymbolButton(Symbolizer symbolizer, SimpleFeatureType featureType) {
-		this(symbolizer, featureType, AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(symbolizer, featureType, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
 	/**

@@ -23,7 +23,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -36,13 +36,12 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
-public class SingleSymbolGUI extends AbstractRuleListGui implements
+public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? extends Symbolizer>> implements
 		ClosableSubwindows {
-	protected Logger LOGGER = LangUtil.createLogger(this);
+	protected static final Logger LOGGER = LangUtil
+			.createLogger(SingleSymbolGUI.class);
 
 	private EditSymbolButton jButtonSymbolSelector = null;
-
-	private final SingleRuleList<? extends Symbolizer> singleSymbolRuleList;
 
 	/**
 	 * This is the default constructor
@@ -55,7 +54,6 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 		if (singleSymbolRuleList == null)
 			throw new IllegalStateException(
 					"A GUI can not be created if no RuleList is provided.");
-		this.singleSymbolRuleList = singleSymbolRuleList;
 		initialize();
 	}
 
@@ -67,7 +65,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 
 		@Override
 		public void changed(RuleChangedEvent e) {
-			jButtonSymbolSelector.setIcon(new ImageIcon(singleSymbolRuleList
+			jButtonSymbolSelector.setIcon(new ImageIcon(rulesList
 					.getImage()));
 		}
 
@@ -80,11 +78,12 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 	 */
 	private void initialize() {
 		JLabel jLabelSymbol = new JLabel(
-				AtlasStyler.R("SingleSymbolGUI.Symbol.Label"));
-		jLabelSymbol.setToolTipText(AtlasStyler.R("SingleSymbolGUI.Symbol.TT"));
+				AtlasStylerVector.R("SingleSymbolGUI.Symbol.Label"));
+		jLabelSymbol.setToolTipText(AtlasStylerVector
+				.R("SingleSymbolGUI.Symbol.TT"));
 
 		JLabel jLabelHeading = new JLabel(
-				AtlasStyler.R("SingleSymbolGUI.Heading.Label"));
+				AtlasStylerVector.R("SingleSymbolGUI.Heading.Label"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 
@@ -94,8 +93,8 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 		this.add(getJButtonSymbol(), "wrap");
 
 		JLabel jLabelTranslation = new JLabel(
-				AtlasStyler.R("SingleSymbolGUI.Label.Label"));
-		jLabelTranslation.setToolTipText(AtlasStyler
+				AtlasStylerVector.R("SingleSymbolGUI.Label.Label"));
+		jLabelTranslation.setToolTipText(AtlasStylerVector
 				.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
 		this.add(getjLabelTranslationEdit(), "wrap");
@@ -108,8 +107,8 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 	 */
 	private EditSymbolButton getJButtonSymbol() {
 		if (jButtonSymbolSelector == null) {
-			jButtonSymbolSelector = new EditSymbolButton(singleSymbolRuleList);
-			jButtonSymbolSelector.setToolTipText(AtlasStyler
+			jButtonSymbolSelector = new EditSymbolButton(rulesList);
+			jButtonSymbolSelector.setToolTipText(AtlasStylerVector
 					.R("SingleSymbolGUI.Symbol.TT"));
 		}
 		return jButtonSymbolSelector;
@@ -122,11 +121,11 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 	 */
 	private JButton getjLabelTranslationEdit() {
 		final JButton jLabelTranslationEdit = new JButton();
-		jLabelTranslationEdit.setToolTipText(AtlasStyler
+		jLabelTranslationEdit.setToolTipText(AtlasStylerVector
 				.R("SingleSymbolGUI.Label.TT"));
 
 		/*******************************************************************
-		 * The Translation JLabel can be editited
+		 * The Translation JLabel can be edited
 		 */
 		jLabelTranslationEdit.setAction(new AbstractAction() {
 
@@ -135,9 +134,9 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				String oldTitle = singleSymbolRuleList.getLabel();
+				String oldTitle = rulesList.getLabel();
 
-				if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+				if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 					/*******************************************************
 					 * AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE
 					 */
@@ -146,8 +145,9 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 
 					if (ask == null) {
 						TranslationEditJPanel transLabel = new TranslationEditJPanel(
-								AtlasStyler.R("SingleSymbolGUI.EnterLabel"),
-								translation, AtlasStyler.getLanguages());
+								AtlasStylerVector
+										.R("SingleSymbolGUI.EnterLabel"),
+								translation, AtlasStylerVector.getLanguages());
 
 						ask = new TranslationAskJDialog(SingleSymbolGUI.this,
 								transLabel);
@@ -162,7 +162,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 								if (evt.getPropertyName()
 										.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-									singleSymbolRuleList
+									rulesList
 											.setRuleTitle(translation);
 									jLabelTranslationEdit.setText(translation
 											.toString());
@@ -184,7 +184,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 					String newTitle = ASUtil.askForString(SingleSymbolGUI.this,
 							oldTitle, null);
 					if (newTitle != null) {
-						singleSymbolRuleList.setLabel(newTitle);
+						rulesList.setLabel(newTitle);
 						jLabelTranslationEdit.setText(newTitle);
 					}
 				}
@@ -193,7 +193,7 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 
 		Translation translation = new Translation();
 		try {
-			String firstTitle = singleSymbolRuleList.getLabel();
+			String firstTitle = rulesList.getLabel();
 			translation.fromOneLine(firstTitle);
 			jLabelTranslationEdit.setText(translation.toString());
 		} catch (Exception e) {
@@ -206,9 +206,10 @@ public class SingleSymbolGUI extends AbstractRuleListGui implements
 	@Override
 	public void dispose() {
 		// Not needed because its a weak listener list, but can't be bad:
-		singleSymbolRuleList
+		rulesList
 				.removeListener(listenToChangesInTheRulesToUpdateButton);
-
+		
+		super.dispose();
 	}
 
 }

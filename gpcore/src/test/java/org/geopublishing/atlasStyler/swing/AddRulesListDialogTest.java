@@ -1,6 +1,6 @@
 package org.geopublishing.atlasStyler.swing;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ public class AddRulesListDialogTest extends TestingClass {
 
 		if (!TestingUtil.isInteractive())
 			return;
-		AtlasStyler as = AsTestingUtil
+		AtlasStylerVector as = AsTestingUtil
 				.getAtlasStyler(TestDatasetsVector.countryShp);
 
 		AddRulesListDialog addRulesListDialog = new AddRulesListDialog(null, as);

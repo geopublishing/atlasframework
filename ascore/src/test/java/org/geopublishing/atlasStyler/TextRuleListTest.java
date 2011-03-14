@@ -336,7 +336,7 @@ public class TextRuleListTest extends TestingClass {
 	public void testOldTextRuleParsedCorrectly() throws IOException {
 		Style style = AsTestingUtil.TestDatasetsSld.textRulesPre15.getStyle();
 
-		AtlasStyler as = new AtlasStyler(
+		AtlasStylerVector as = new AtlasStylerVector(
 				TestDatasetsVector.arabicInHeader.getStyledFS());
 
 		as.importStyle(style);
@@ -363,7 +363,7 @@ public class TextRuleListTest extends TestingClass {
 		org.geotools.styling.Style style = AsTestingUtil.TestDatasetsSld.textRulesDefaultLocalizedPre16
 				.getStyle();
 
-		AtlasStyler as = new AtlasStyler(
+		AtlasStylerVector as = new AtlasStylerVector(
 				TestDatasetsVector.arabicInHeader.getStyledFS());
 
 		as.importStyle(style);

@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
@@ -57,7 +57,7 @@ public class RulesListPopup extends JPopupMenu {
 
 	private void addXMLMenuItems(final AbstractRulesList rulesList) {
 
-		add(new AbstractAction(AtlasStyler.R("RulesListPopup.copyXML"),
+		add(new AbstractAction(AtlasStylerVector.R("RulesListPopup.copyXML"),
 				Icons.ICON_XML) {
 
 			@Override
@@ -68,7 +68,7 @@ public class RulesListPopup extends JPopupMenu {
 					String xmlString = StylingUtil.toXMLString(fts);
 					LangUtil.copyToClipboard(xmlString);
 					JOptionPane.showMessageDialog(RulesListPopup.this,
-							AtlasStyler.R("RulesListPopup.copyXML.done",
+							AtlasStylerVector.R("RulesListPopup.copyXML.done",
 									xmlString.length()));
 				} catch (Exception ee) {
 					ExceptionDialog.show(RulesListPopup.this, ee);
@@ -211,7 +211,7 @@ public class RulesListPopup extends JPopupMenu {
 			});
 		}
 
-		if (!asd.isEasy())
+		if (!asd.isEasy() && asd.isVector())
 			add(new AbstractAction(ASUtil.R("RulesListPopup.GuessMaxScale"),
 					Icons.ICON_MINMAXSCALE_SMALL) {
 
@@ -221,7 +221,7 @@ public class RulesListPopup extends JPopupMenu {
 					// try {
 
 					final StyledFeaturesInterface<?> styledFeatures = asd
-							.getAtlasStyler().getStyledFeatures();
+							.getAtlasStylerVector().getStyledFeatures();
 
 					AtlasStatusDialog waitDialog = new AtlasStatusDialog(
 							RulesListPopup.this);

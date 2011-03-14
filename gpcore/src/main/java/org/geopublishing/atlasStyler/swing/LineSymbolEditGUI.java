@@ -76,7 +76,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.LineSymbolizer;
 import org.opengis.filter.expression.Expression;
@@ -87,7 +87,7 @@ import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ColorButton;
 import de.schmitzm.swing.SwingUtil;
 
-public class LineSymbolEditGUI extends AbstractEditGUI {
+public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private static final String[] LINEJOIN_VALUES = new String[] { "mitre",
 			"round", "bevel" };
 
@@ -101,13 +101,13 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	private JPanel jPanelStroke;
 
 	private final JLabel jLabelStrokeColor = new JLabel(
-			AtlasStyler.R("ColorLabel"));
+			AtlasStylerVector.R("ColorLabel"));
 
 	private final JLabel jLabelStrokeWidth = new JLabel(
-			AtlasStyler.R("WidthLabel"));
+			AtlasStylerVector.R("WidthLabel"));
 
 	private final JLabel jLabelStrokeOpacity = new JLabel(
-			AtlasStyler.R("OpacityLabel"));
+			AtlasStylerVector.R("OpacityLabel"));
 
 	private ColorButton jButtonStrokeColor;
 
@@ -118,12 +118,12 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	// private JPanel jPanelLineStyle = null;
 
 	private final JLabel jLabelLineJoin = new JLabel(
-			AtlasStyler.R("LinejoinLabel"));
+			AtlasStylerVector.R("LinejoinLabel"));
 
 	private JComboBox jComboBoxLinejoin = null;
 
 	private final JLabel jLabelLinecap = new JLabel(
-			AtlasStyler.R("LinecapLabel"));
+			AtlasStylerVector.R("LinecapLabel"));
 
 	private JComboBox jComboBoxLineCap = null;
 
@@ -159,7 +159,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelStroke() {
 		if (jPanelStroke == null) {
 			jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 					.R("LineSymbolEdit.LineStyle.Title")));
 
 			jPanelStroke.add(jLabelStrokeColor, "split 6");
@@ -199,7 +199,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 					final Color newColor = AVSwingUtil.showColorChooser(
 							LineSymbolEditGUI.this,
-							AtlasStyler.R("Stroke.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Stroke.ColorChooserDialog.Title"),
 							color);
 
 					if (newColor != null) {
@@ -457,14 +457,14 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 		if (jPanelDashArray == null) {
 			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
 			jLabelDashOffset = new JLabel(
-					AtlasStyler.R("LineSymbolEdit.DashedLine.DashOffset"));
+					AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashOffset"));
 			jLabelDashPattern = new JLabel(
-					AtlasStyler.R("LineSymbolEdit.DashedLine.DashPattern"));
+					AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashPattern"));
 			jPanelDashArray.setBorder(BorderFactory
-					.createTitledBorder(AtlasStyler
+					.createTitledBorder(AtlasStylerVector
 							.R("LineSymbolEdit.DashedLine.Title")));
 			final JLabel lineExplanation = new JLabel(
-					AtlasStyler.R("LineSymbolEditGUI.dashPattern_tooltip"));
+					AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
 			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
 
@@ -521,7 +521,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 
 			});
 
-			jTextFieldDashPattern.setToolTipText(AtlasStyler
+			jTextFieldDashPattern.setToolTipText(AtlasStylerVector
 					.R("LineSymbolEditGUI.dashPattern_tooltip"));
 		}
 		return jTextFieldDashPattern;
@@ -548,7 +548,7 @@ public class LineSymbolEditGUI extends AbstractEditGUI {
 				JOptionPane
 						.showMessageDialog(
 								LineSymbolEditGUI.this,
-								AtlasStyler
+								AtlasStylerVector
 										.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
 				return;
 			}

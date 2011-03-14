@@ -25,11 +25,10 @@ public class RulesListJComboBox extends JComboBox {
 
 	private final DefaultComboBoxModel model;
 
-	public RulesListJComboBox(GeometryForm gf, AtlasStyler as) {
+	public RulesListJComboBox(AtlasStyler as) {
 
 		SwingUtil.addMouseWheelForCombobox(this, false);
-		RulesListType[] valuesFor = RulesListType.valuesFor(gf, as
-				.getStyledFeatures().getSchema());
+		RulesListType[] valuesFor = RulesListType.valuesFor(as);
 		Arrays.sort(valuesFor);
 		model = new DefaultComboBoxModel(valuesFor);
 		setModel(model);

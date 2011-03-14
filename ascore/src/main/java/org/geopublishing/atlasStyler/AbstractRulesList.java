@@ -94,8 +94,6 @@ public abstract class AbstractRulesList {
 	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
 			.equals(ff.literal("1"), ff.literal("2"));
 
-	private final int IMAGE_WIDTH_SYMBOLIZATIONICON = 95;
-	private final int IMAGE_HEIGHT_SYMBOLIZATIONICON = 70;
 	/**
 	 * If used as a {@link Rule}'s name, the rule should not be imported, but
 	 * rather just be ignored.
@@ -109,11 +107,8 @@ public abstract class AbstractRulesList {
 	public static final double MAX_SCALEDENOMINATOR = 1E20;
 
 	protected Filter addAbstractRlSettings(Filter filter) {
-
 		filter = addRuleListFilterAppliedFilter(filter);
-
 		filter = addRuleListEnabledDisabledFilter(filter);
-
 		return filter;
 	}
 
@@ -324,8 +319,11 @@ public abstract class AbstractRulesList {
 	 */
 	public enum RulesListType {
 
-		// POINTs
+		// RASTER
+		RASTER_COLORMAP_DISTINCTVALUES("/images/raster_colormap1.png",
+				"StylerSelection.raster_colormap1"),
 
+		// POINTs
 		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
 				"StylerSelection.single_symbol"),
 
@@ -381,7 +379,7 @@ public abstract class AbstractRulesList {
 		 * @return a localized title for this {@link RulesListType}
 		 */
 		public String getTitle() {
-			return AtlasStyler.R(i8nKey);
+			return AtlasStylerVector.R(i8nKey);
 		}
 
 		/**
@@ -404,6 +402,13 @@ public abstract class AbstractRulesList {
 		 */
 		RulesListType[] rlts;
 
+		/**
+		 * Returns an Array of vector RulesLists available for the given Schema
+		 * 
+		 * @param gf
+		 * @param schema
+		 * @return
+		 */
 		public static RulesListType[] valuesFor(GeometryForm gf,
 				SimpleFeatureType schema) {
 
@@ -482,6 +487,22 @@ public abstract class AbstractRulesList {
 
 		public String getImageResLocation() {
 			return imgResLocation;
+		}
+
+		public static RulesListType[] valuesFor(AtlasStyler as) {
+			if (as instanceof AtlasStylerVector) {
+				AtlasStylerVector asv = (AtlasStylerVector) as;
+				return valuesFor(((AtlasStylerVector) as));
+			} else
+				return valuesFor((AtlasStylerRaster) as);
+		}
+
+		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
+			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES };
+		}
+		
+		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
+			return valuesFor(asv.getStyledFeatures().getGeometryForm(), asv.getStyledFeatures().getSchema());
 		}
 	}
 
@@ -693,10 +714,10 @@ public abstract class AbstractRulesList {
 	}
 
 	/**
-	 * When importing a {@link Style}, the {@link AtlasStyler} recognizes its
-	 * RuleLists by reading meta information from the {@link FeatureTypeStyle}s
-	 * name. That information starts with a basic identifier for the RuleList
-	 * type.
+	 * When importing a {@link Style}, the {@link AtlasStylerVector} recognizes
+	 * its RuleLists by reading meta information from the
+	 * {@link FeatureTypeStyle}s name. That information starts with a basic
+	 * identifier for the RuleList type.
 	 * 
 	 * @return An identifier string for that RuleList type.
 	 * 

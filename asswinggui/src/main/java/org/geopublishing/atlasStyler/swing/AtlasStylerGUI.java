@@ -54,7 +54,7 @@ import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
 import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
@@ -242,7 +242,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		fileMenu.add(manageLanguageJMenuitem);
 
 		AbstractAction optionsButton = new AbstractAction(
-				AtlasStyler.R("Options.ButtonLabel")) {
+				AtlasStylerVector.R("Options.ButtonLabel")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -395,7 +395,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		if (!SwingUtil.askYesNo(
 				AtlasStylerGUI.this,
-				AtlasStyler.R("AtlasStylerGUI.saveToSLDFileQuestion",
+				AtlasStylerVector.R("AtlasStylerGUI.saveToSLDFileQuestion",
 						styledFS.getTitle(), IOUtil.escapePath(sldFile))))
 			return;
 
@@ -424,7 +424,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		jToolBar.setFloatable(false);
 
 		AbstractAction importWiazrdAction = new AbstractAction(
-				AtlasStyler.R("MenuBar.FileMenu.ImportWizard")) {
+				AtlasStylerVector.R("MenuBar.FileMenu.ImportWizard")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -444,7 +444,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	public JToggleButton getJTButtonShowXML() {
 		final JToggleButton jButtonShowXML = new JToggleButton(
-				AtlasStyler.R("AtlasStylerGUI.toolbarButton.show_xml"));
+				AtlasStylerVector.R("AtlasStylerGUI.toolbarButton.show_xml"));
 		jButtonShowXML.setSelected(false);
 
 		jButtonShowXML.addActionListener(new AbstractAction() {
@@ -472,7 +472,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	private JButton getJTButtonExportAsSLD() {
 		final JButton jButtonExportAsSLD = new JButton(
-				AtlasStyler.R("AtlasStylerGUI.toolbarButton.exportSLD"));
+				AtlasStylerVector.R("AtlasStylerGUI.toolbarButton.exportSLD"));
 
 		jButtonExportAsSLD.addActionListener(new ActionListener() {
 
@@ -504,7 +504,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					if (exportSLDFile.exists()) {
 						if (!AVSwingUtil.askOKCancel(
 								AtlasStylerGUI.this,
-								AtlasStyler
+								AtlasStylerVector
 										.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
 												exportSLDFile.getName())))
 							return;

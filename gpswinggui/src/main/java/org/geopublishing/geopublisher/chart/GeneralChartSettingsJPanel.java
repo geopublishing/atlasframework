@@ -23,7 +23,7 @@ import javax.swing.JCheckBox;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -65,7 +65,7 @@ public class GeneralChartSettingsJPanel extends JPanel {
 	}
 
 	private JPanel getColorsPanel() {
-		JPanel colorsPanel = new JPanel(new MigLayout("wrap 2, align center"), AtlasStyler.R("colors.border.title"));
+		JPanel colorsPanel = new JPanel(new MigLayout("wrap 2, align center"), AtlasStylerVector.R("colors.border.title"));
 		colorsPanel.add(getTitleColorButton());
 		colorsPanel.add(getSubTitleColorButton());
 

@@ -34,6 +34,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DefaultQuery;
@@ -55,7 +56,7 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
  * This GUI presents a TextRulesList. A TextRulesList consists of multiple
  * {@link TextSymbolizer}s
  */
-public class TextRuleListGUI extends AbstractRuleListGui {
+public class TextRuleListGUI extends AbstractRulesListGui<TextRuleList> {
 
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
@@ -77,9 +78,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 	private TextSymbolizerEditGUI jPanelEditTextSymbolizer = null;
 
-	private final TextRuleList rulesList;
-
-	private final AtlasStyler atlasStyler;
+	private final AtlasStylerVector atlasStyler;
 
 	private ThinButton jButtonClassLangCopy;
 
@@ -87,10 +86,9 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	 * This is the default constructor
 	 */
 	public TextRuleListGUI(final TextRuleList rulesList,
-			final AtlasStyler atlasStyler) {
+			final AtlasStylerVector atlasStyler) {
 		super(rulesList);
 		this.atlasStyler = atlasStyler;
-		this.rulesList = rulesList;
 
 		// Create components
 		this.setLayout(new MigLayout("wrap 1, gap 1, inset 1, top", "grow"));
@@ -141,7 +139,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JCheckBox getJCheckBoxEnabled() {
 		if (jCheckBoxEnabled == null) {
 			jCheckBoxEnabled = new JCheckBox();
-			jCheckBoxEnabled.setAction(new AbstractAction(AtlasStyler
+			jCheckBoxEnabled.setAction(new AbstractAction(AtlasStylerVector
 					.R("TextRulesList.Labels.Checkbox")) {
 
 				@Override
@@ -175,7 +173,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 			jPanelClass = new JPanel(new MigLayout("nogrid, gap 1, inset 1"));
 
-			jPanelClass.add(new JLabel(AtlasStyler
+			jPanelClass.add(new JLabel(AtlasStylerVector
 					.R("TextRulesList.Labelclass") + ":"));
 			jPanelClass.add(getJComboBoxClass(), "w :200:240");
 			jPanelClass.add(getJCheckBoxClassEnabled(), "wrap");
@@ -186,7 +184,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 			// Only in GP mode
 			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE
-					&& AtlasStyler.getLanguages().size() > 1)
+					&& AtlasStylerVector.getLanguages().size() > 1)
 				jPanelClass.add(getJButtonClassCopyToLanguage());
 
 			jPanelClass.add(getJButtonClassFromSymbols(), "wrap");
@@ -267,7 +265,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JCheckBox getJCheckBoxClassEnabled() {
 		if (jCheckBoxClassEnabled == null) {
 			jCheckBoxClassEnabled = new JCheckBox(
-					AtlasStyler.R("TextRulesList.Labelclass.Checkbox"));
+					AtlasStylerVector.R("TextRulesList.Labelclass.Checkbox"));
 
 			jCheckBoxClassEnabled.setSelected(rulesList
 					.isClassEnabled(rulesList.getSelIdx()));
@@ -304,8 +302,8 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JButton getJButtonClassAdd() {
 		if (jButtonClassAdd == null) {
 			jButtonClassAdd = new ThinButton(
-					AtlasStyler.R("TextRulesList.Labelclass.Action.Add"));
-			jButtonClassAdd.setToolTipText(AtlasStyler
+					AtlasStylerVector.R("TextRulesList.Labelclass.Action.Add"));
+			jButtonClassAdd.setToolTipText(AtlasStylerVector
 					.R("TextRulesList.Labelclass.Action.Add.TT"));
 			jButtonClassAdd.setEnabled(false);
 		}
@@ -320,7 +318,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JButton getJButtonClassDelete() {
 		if (jButtonClassDelete == null) {
 			jButtonClassDelete = new ThinButton(
-					AtlasStyler.R("TextRulesList.Labelclass.Action.Delete"));
+					AtlasStylerVector.R("TextRulesList.Labelclass.Action.Delete"));
 
 			jButtonClassDelete.addActionListener(new ActionListener() {
 
@@ -341,7 +339,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 			});
 
-			jButtonClassDelete.setToolTipText(AtlasStyler
+			jButtonClassDelete.setToolTipText(AtlasStylerVector
 					.R("TextRulesList.Labelclass.Action.Delete.TT"));
 		}
 		return jButtonClassDelete;
@@ -371,7 +369,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 
 						lang = lang.toLowerCase();
 
-						if (!AtlasStyler.getLanguages().contains(lang)) {
+						if (!AtlasStylerVector.getLanguages().contains(lang)) {
 							// Can not happen anymore...
 							AVSwingUtil
 									.showMessageDialog(
@@ -380,7 +378,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 													"TextSymbolizerClass.CreateALanguageDefault.ErrorNoSelection",
 													LangUtil.stringConcatWithSep(
 															",",
-															AtlasStyler
+															AtlasStylerVector
 																	.getLanguages())));
 							return;
 						}
@@ -412,7 +410,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 				 */
 				private String askForLang() {
 
-					if (AtlasStyler.getLanguages().size() == rulesList
+					if (AtlasStylerVector.getLanguages().size() == rulesList
 							.getDefaultLanguages().size()) {
 						AVSwingUtil.showMessageDialog(
 								TextRuleListGUI.this,
@@ -442,7 +440,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JButton getJButtonClassRename() {
 		if (jButtonClassRename == null) {
 			jButtonClassRename = new ThinButton(
-					AtlasStyler.R("TextRulesList.Labelclass.Action.Rename"));
+					AtlasStylerVector.R("TextRulesList.Labelclass.Action.Rename"));
 			jButtonClassRename.addActionListener(new ActionListener() {
 
 				@Override
@@ -476,7 +474,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 	private JButton getJButtonClassFromSymbols() {
 		if (jButtonClassFromSymbols == null) {
 			jButtonClassFromSymbols = new ThinButton(
-					AtlasStyler
+					AtlasStylerVector
 							.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols"));
 
 			jButtonClassFromSymbols.addActionListener(new ActionListener() {
@@ -497,7 +495,7 @@ public class TextRuleListGUI extends AbstractRuleListGui {
 			});
 
 			jButtonClassFromSymbols
-					.setToolTipText(AtlasStyler
+					.setToolTipText(AtlasStylerVector
 							.R("TextRulesList.Labelclass.Action.LoadClassesFromSymbols.TT"));
 		}
 		return jButtonClassFromSymbols;

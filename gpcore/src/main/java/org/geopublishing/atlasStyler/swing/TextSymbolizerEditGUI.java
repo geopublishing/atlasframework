@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.TextRuleList;
@@ -73,7 +73,7 @@ import de.schmitzm.swing.SwingUtil;
  * TODO The preview-features are not closed/disposed securely
  * 
  */
-public class TextSymbolizerEditGUI extends AbstractEditGUI {
+public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 
 	/**
 	 * The “font-style” SvgParameter element gives the style to use for a font.
@@ -84,13 +84,13 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	public static final String[] FONT_WEIGHTS = { "normal", "bold" };
 
 	private static final JLabel LinePlacementPerpendicularGap = new JLabel(
-			AtlasStyler.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
+			AtlasStylerVector.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
 
 	/** The font sizes that can be selected. */
 	public static final Double[] SIZES = { 6., 7., 8., 9., 10., 11., 12., 14.,
 			16., 18., 20., 22., 24., 28., 36., 48., 72. };
 
-	final AtlasStyler atlasStyler;
+	final AtlasStylerVector atlasStyler;
 
 	private ColorButton jButtonColor;
 
@@ -170,13 +170,13 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 	/**
 	 * This is the default constructor. It takes the {@link TextRuleList} that
-	 * it will allow to edit, and an {@link AtlasStyler} so the preview can use
+	 * it will allow to edit, and an {@link AtlasStylerVector} so the preview can use
 	 * the other Style.
 	 * 
 	 * @param previewFeatures
 	 */
 	public TextSymbolizerEditGUI(TextRuleList rulesList,
-			AtlasStyler atlasStyler,
+			AtlasStylerVector atlasStyler,
 			FeatureCollection<SimpleFeatureType, SimpleFeature> previewFeatures) {
 		this.rulesList = rulesList;
 		this.atlasStyler = atlasStyler;
@@ -243,7 +243,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				}
 
 			});
-			jComboBoxPriorityField.setToolTipText(AtlasStyler
+			jComboBoxPriorityField.setToolTipText(AtlasStylerVector
 					.R("TextRuleListGUI.labelingPriorityField.TT"));
 		}
 
@@ -265,7 +265,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				public void actionPerformed(ActionEvent e) {
 					Color color = AVSwingUtil.showColorChooser(
 							TextSymbolizerEditGUI.this,
-							AtlasStyler.R("Text.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Text.ColorChooserDialog.Title"),
 							StylingUtil.getColorFromExpression(rulesList
 									.getSymbolizer().getFill().getColor()));
 					if (color != null) {
@@ -308,7 +308,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					Color color = AVSwingUtil.showColorChooser(
 
 							TextSymbolizerEditGUI.this,
-							AtlasStyler.R("Text.Halo.ColorChooserDialog.Title"),
+							AtlasStylerVector.R("Text.Halo.ColorChooserDialog.Title"),
 							StylingUtil.getColorFromExpression(rulesList
 									.getSymbolizer().getHalo().getFill()
 									.getColor()));
@@ -429,7 +429,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		if (jCheckBoxVendorOptionLabelAllGroup == null) {
 
 			jCheckBoxVendorOptionLabelAllGroup = new JCheckBox(
-					AtlasStyler
+					AtlasStylerVector
 							.R("TextRuleListGUI.VendorOptionLabelAllGroup_ExpensiveGrouping"));
 
 			jCheckBoxVendorOptionLabelAllGroup.setEnabled(jCheckBoxGroup
@@ -1092,7 +1092,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			jPanelLabelDefinition = new JPanel(new MigLayout(
 					"wrap 2, gap 1, inset 1"));
 			{
-				jPanelLabelDefinition.add(new JLabel(AtlasStyler
+				jPanelLabelDefinition.add(new JLabel(AtlasStylerVector
 						.R("TextRulesList.LabellingAttribute")));
 				jPanelLabelDefinition.add(getJComboBoxLabelField(), "sgx1");
 			}
@@ -1101,8 +1101,8 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				// Second label
 
 				JLabel comp = new JLabel(
-						AtlasStyler.R("TextRulesList.2ndLabellingAttribute"));
-				comp.setToolTipText(AtlasStyler
+						AtlasStylerVector.R("TextRulesList.2ndLabellingAttribute"));
+				comp.setToolTipText(AtlasStylerVector
 						.R("TextRulesList.2ndLabellingAttribute"));
 
 				jPanelLabelDefinition.add(comp);
@@ -1110,20 +1110,20 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 				jPanelLabelDefinition.add(getJComboBoxLabelField2(), "sgx1");
 
 				getJComboBoxLabelField2().setToolTipText(
-						AtlasStyler.R("TextRulesList.2ndLabellingAttribute"));
+						AtlasStylerVector.R("TextRulesList.2ndLabellingAttribute"));
 			}
 
 			{
 				final JLabel priorityLabel = new JLabel(
-						AtlasStyler.R("TextRuleListGUI.labelingPriorityField"));
-				priorityLabel.setToolTipText(AtlasStyler
+						AtlasStylerVector.R("TextRuleListGUI.labelingPriorityField"));
+				priorityLabel.setToolTipText(AtlasStylerVector
 						.R("TextRuleListGUI.labelingPriorityField.TT"));
 				jPanelLabelDefinition.add(priorityLabel);
 				jPanelLabelDefinition.add(getComboBoxPriorityField(), "sgx1");
 			}
 
 			{
-				jPanelLabelDefinition.add(new JLabel(AtlasStyler
+				jPanelLabelDefinition.add(new JLabel(AtlasStylerVector
 						.R("groupTextLabels"))
 				// ,"split 2"
 						);
@@ -1146,7 +1146,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelLinePlacement() {
 		JPanel jPanelLinePlacement = new JPanel(new MigLayout(
 				"nogrid, fillx, gap 1, inset 1"),
-				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
+				AtlasStylerVector.R("TextRulesList.Button.PlacementProperties"));
 		{
 
 			if (rulesList.getSymbolizer().getLabelPlacement() == null
@@ -1188,7 +1188,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 			// <VendorOption name="followLine">true</VendorOption>
 			jPanelLinePlacement
 					.add(new JLabel(
-							AtlasStyler
+							AtlasStylerVector
 									.R("TextRuleListGUI.LinePlacement.VendorOptionFollowLine")),
 							"right, split 2, gap right rel");
 			jPanelLinePlacement.add(
@@ -1205,23 +1205,23 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 	private JPanel getJPanelPointPlacement() {
 		JPanel jPanelPlacement = new JPanel(new MigLayout(
 				"wrap 3, fillx, gap 1, inset 1"),
-				AtlasStyler.R("TextRulesList.Button.PlacementProperties"));
+				AtlasStylerVector.R("TextRulesList.Button.PlacementProperties"));
 
 		jPanelPlacement.add(
-				new JLabel(AtlasStyler
+				new JLabel(AtlasStylerVector
 						.R("TextRuleListGUI.PointPlacement.Displacement")),
 				"right");
 		jPanelPlacement.add(getJComboBoxDisplacementX(), "split 2");
 		jPanelPlacement.add(getJComboBoxDisplacementY(), "left");
 
 		jPanelPlacement.add(
-				new JLabel(AtlasStyler
+				new JLabel(AtlasStylerVector
 						.R("TextRuleListGUI.PointPlacement.Anchor.Rotation")),
 				"split 2, right");
 		jPanelPlacement.add(getJComboBoxLabelRotation(), "right");
 
 		jPanelPlacement.add(
-				new JLabel(AtlasStyler
+				new JLabel(AtlasStylerVector
 						.R("TextRuleListGUI.PointPlacement.Anchor")), "right");
 		jPanelPlacement.add(getJComboBoxAnchorX(), "split 2");
 		jPanelPlacement.add(getJComboBoxAnchorY(), "left");
@@ -1313,21 +1313,21 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 		JPanel jPanelFont = new JPanel(
 				new MigLayout("gap 1, inset 1", "[grow]"));
 		{
-			jPanelFont.add(new JLabel(AtlasStyler
+			jPanelFont.add(new JLabel(AtlasStylerVector
 					.R("TextRulesList.Textstyle.FontFamily")));
 			jPanelFont.add(getJComboBoxFont(), "");
-			jPanelFont.add(new JLabel(AtlasStyler.R("SizeLabel")), "");
+			jPanelFont.add(new JLabel(AtlasStylerVector.R("SizeLabel")), "");
 			jPanelFont.add(getJComboBoxSize(), "");
 
-			jPanelFont.add(new JLabel(AtlasStyler
+			jPanelFont.add(new JLabel(AtlasStylerVector
 					.R("TextRulesList.Textstyle.FontWeight")));
 			jPanelFont.add(getJComboBoxWeight(), "wrap");
 
-			jPanelFont.add(new JLabel(AtlasStyler
+			jPanelFont.add(new JLabel(AtlasStylerVector
 					.R("TextRulesList.Textstyle.FontStyle")));
 			jPanelFont.add(getJComboBoxStyle(), "");
 
-			jPanelFont.add(new JLabel(AtlasStyler.R("ColorLabel")));
+			jPanelFont.add(new JLabel(AtlasStylerVector.R("ColorLabel")));
 			jPanelFont.add(getJButtonColor());
 
 			jPanelFont.add(new JLabel(ASUtil
@@ -1341,7 +1341,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 					.R("TextRulesList.Textstyle.Halo.Color.label")));
 			jPanelFont.add(getJButtonColorHalo());
 
-			jPanelFont.add(new JLabel(AtlasStyler.R("spaceAroundTextLabel")),
+			jPanelFont.add(new JLabel(AtlasStylerVector.R("spaceAroundTextLabel")),
 					"");
 			jPanelFont.add(getJComboBoxSpaceAround(), "wrap");
 
@@ -1420,7 +1420,7 @@ public class TextSymbolizerEditGUI extends AbstractEditGUI {
 
 				int idx = 0;
 				boolean selected = false;
-				for (List<Literal> ffs : AtlasStyler.getDefaultFontFamilies()) {
+				for (List<Literal> ffs : AtlasStylerVector.getDefaultFontFamilies()) {
 					for (Literal l : ffs) {
 						if (l.equals(selectedFontFamily)) {
 							getJComboBoxFont().setSelectedIndex(idx);

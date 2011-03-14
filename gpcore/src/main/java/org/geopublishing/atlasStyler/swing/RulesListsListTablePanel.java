@@ -22,6 +22,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 import de.schmitzm.swing.ButtonGroup;
@@ -50,7 +51,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private final StylerDialog asd;
 
 	JLabel popupMenuExplanationJLabel = new JLabel(
-			AtlasStyler.R("RulesListsListTablePanel.Explanation"));
+			AtlasStylerVector.R("RulesListsListTablePanel.Explanation"));
 
 	private final PropertyChangeListener updatePreviewScaleLabelListener = new PropertyChangeListener() {
 
@@ -147,7 +148,7 @@ public class RulesListsListTablePanel extends JPanel {
 		final String formated = NumberFormat.getIntegerInstance().format(
 				asd.getPreviewMapPane().getScaleDenominator());
 
-		String label = AtlasStyler.R(
+		String label = AtlasStylerVector.R(
 				"RulesListsListTablePanel.OGCScaleDenominatorInPreview",
 				formated);
 
@@ -157,7 +158,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private JButton getAddButton() {
 		if (addButton == null) {
 			addButton = new SmallButton(new AbstractAction(
-					AtlasStyler.R("RulesListsList.Action.AddRulesList")) {
+					AtlasStylerVector.R("RulesListsList.Action.AddRulesList")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -232,7 +233,7 @@ public class RulesListsListTablePanel extends JPanel {
 					});
 
 			jButtonLayerDown.setEnabled(false);
-			jButtonLayerDown.setToolTipText(AtlasStyler
+			jButtonLayerDown.setToolTipText(AtlasStylerVector
 					.R("RulesListsList.Action.MoveRulesListDown.TT"));
 
 		}
@@ -242,7 +243,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
 			removeButton = new SmallButton(new AbstractAction(
-					AtlasStyler.R("RulesListsList.Action.RemoveRulesLists")) {
+					AtlasStylerVector.R("RulesListsList.Action.RemoveRulesLists")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -259,7 +260,7 @@ public class RulesListsListTablePanel extends JPanel {
 					if (!SwingUtil
 							.askYesNo(
 									RulesListsListTablePanel.this,
-									AtlasStyler
+									AtlasStylerVector
 											.R("RulesListsList.Action.RemoveRulesLists.Ask",
 													idxList.size())))
 						return;
@@ -295,7 +296,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private JButton getDuplicateButton() {
 		if (duplicateButton == null) {
 			duplicateButton = new SmallButton(
-					new AbstractAction(AtlasStyler
+					new AbstractAction(AtlasStylerVector
 							.R("RulesListsList.Action.DuplicateRulesLists")) {
 
 						@Override
@@ -407,7 +408,7 @@ public class RulesListsListTablePanel extends JPanel {
 					});
 
 			jButtonLayerUp.setEnabled(false);
-			jButtonLayerUp.setToolTipText(AtlasStyler
+			jButtonLayerUp.setToolTipText(AtlasStylerVector
 					.R("RulesListsList.Action.MoveRulesListUp.TT"));
 
 		}

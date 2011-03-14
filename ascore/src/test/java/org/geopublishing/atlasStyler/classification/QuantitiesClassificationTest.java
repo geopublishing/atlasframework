@@ -23,7 +23,7 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
@@ -292,7 +292,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 
 		extractColors(snowStyleOriginal, beforeColors);
 
-		AtlasStyler atlasStyler = new AtlasStyler(featureSource_snowPolygon,
+		AtlasStylerVector atlasStyler = new AtlasStylerVector(featureSource_snowPolygon,
 				snowStyle);
 		Style afterImport = atlasStyler.getStyle();
 

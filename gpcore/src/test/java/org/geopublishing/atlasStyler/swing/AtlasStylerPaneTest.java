@@ -1,6 +1,6 @@
 package org.geopublishing.atlasStyler.swing;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import de.schmitzm.testing.TestingUtil;
 
 public class AtlasStylerPaneTest extends TestingClass {
 
-	private AtlasStyler atlasStylerPolygon;
+	private AtlasStylerVector atlasStylerPolygon;
 
 	@Before
 	public void setUp() throws Exception {
@@ -25,7 +25,7 @@ public class AtlasStylerPaneTest extends TestingClass {
 
 	@Test
 	public void testAtlasStylerPane() throws Throwable {
-		if (!TestingUtil.isInteractive())
+		if (!TestingUtil.hasGui())
 			return;
 
 		StylerDialog asd = new StylerDialog(null, atlasStylerPolygon, null);

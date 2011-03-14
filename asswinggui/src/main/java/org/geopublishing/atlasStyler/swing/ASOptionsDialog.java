@@ -25,7 +25,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.AsSwingUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 
 import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.CancellableDialogAdapter;
@@ -66,14 +66,14 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 	 */
 	private void initGUI() {
 
-		setTitle(AtlasStyler.R("Options.ButtonLabel"));
+		setTitle(AtlasStylerVector.R("Options.ButtonLabel"));
 
 		setLayout(new MigLayout("wrap 3"));
 
-		final JLabel langSelectionLabel = new JLabel(AtlasStyler
+		final JLabel langSelectionLabel = new JLabel(AtlasStylerVector
 				.R("Options.ForceLocaleSetting"));
 
-		final JLabel noteLocaleChangesNeedRestartLabel = new JLabel(AtlasStyler
+		final JLabel noteLocaleChangesNeedRestartLabel = new JLabel(AtlasStylerVector
 				.R("Options.ForceLocaleSettingNoteRestart"));
 		overideLocaleCB.setAction(new AbstractAction() {
 
@@ -89,7 +89,7 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 
 		// Fist line
 		add(overideLocaleCB);
-		add(new JLabel(AtlasStyler.R("Options.ForceLocaleCheckboxLabel")),
+		add(new JLabel(AtlasStylerVector.R("Options.ForceLocaleCheckboxLabel")),
 				"span 2");
 
 		// Second line
@@ -102,17 +102,17 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 		add(noteLocaleChangesNeedRestartLabel, "span 2");
 
 		// fourth line
-		add(new JLabel(AtlasStyler.R("Options.SystemLocaleInformation")),
+		add(new JLabel(AtlasStylerVector.R("Options.SystemLocaleInformation")),
 				"span 3");
 
 		// fifth line
 		add(new JLabel());
-		add(new JLabel(AtlasStyler.R(
+		add(new JLabel(AtlasStylerVector.R(
 				"Options.SystemLocaleInformationSystemLocale", Locale
 						.getDefault())), "span 2");
 
 		// Sixth line
-		add(new JLabel(AtlasStyler.R("Options.Performance")), "span 3");
+		add(new JLabel(AtlasStylerVector.R("Options.Performance")), "span 3");
 		
 		// 7th line
 		add(new JLabel());
@@ -160,7 +160,7 @@ public class ASOptionsDialog extends CancellableDialogAdapter {
 
 	private JCheckBox getJButtonAntiAliasing() {
 		final JCheckBox jCheckboxAntiAliasing = new JCheckBox(
-				AtlasStyler.R("Options.Performance.Antialiasing"));
+				AtlasStylerVector.R("Options.Performance.Antialiasing"));
 		jCheckboxAntiAliasing.setSelected(ASProps.getInt(
 				ASProps.Keys.antialiasingMaps, 1) != 0);
 

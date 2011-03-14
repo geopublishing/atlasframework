@@ -34,7 +34,7 @@ import javax.swing.SwingWorker;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataUtilities;
@@ -67,7 +67,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 	 */
 	public JScrollPaneSymbolsLocal(GeometryForm geoForm) {
 		super(geoForm);
-		dir = AtlasStyler.getSymbolsDir(geoForm);
+		dir = AtlasStylerVector.getSymbolsDir(geoForm);
 
 		rescan(false);
 	}
@@ -81,7 +81,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 			 * Rename a Symbol from disk
 			 */
 			JMenuItem rename = new JMenuItem(
-					AtlasStyler
+					AtlasStylerVector
 							.R("SymbolSelector.Tabs.LocalSymbols.Action.Rename"));
 			rename.addActionListener(new ActionListener() {
 
@@ -93,14 +93,14 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 							.getModel()).get(index);
 					String symbolFileName = singleLocalRulesList.getStyleName()
 							+ ".sld";
-					File symbolFile = new File(AtlasStyler
+					File symbolFile = new File(AtlasStylerVector
 							.getSymbolsDir(singleLocalRulesList
 									.getGeometryForm()), symbolFileName);
 
 					String newName = ASUtil.askForString(
 							JScrollPaneSymbolsLocal.this,
 							singleLocalRulesList.getStyleName(),
-							AtlasStyler
+							AtlasStylerVector
 									.R("SymbolSelector.Tabs.LocalSymbols.Action.Rename.AskForNewName"));
 					if ((newName == null)
 							|| (newName.trim().equals(""))
@@ -112,7 +112,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 						newName += ".sld";
 					}
 
-					File newSymbolFile = new File(AtlasStyler
+					File newSymbolFile = new File(AtlasStylerVector
 							.getSymbolsDir(singleLocalRulesList
 									.getGeometryForm()), newName);
 					try {
@@ -122,7 +122,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 						rescan(true);
 
-						String message = AtlasStyler
+						String message = AtlasStylerVector
 								.R("SymbolSelector.Tabs.LocalSymbols.Action.Rename.Error",
 										symbolFile.getAbsolutePath(),
 										newSymbolFile.getAbsolutePath());
@@ -144,7 +144,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 			 * Delete a Symbol on disk
 			 */
 			JMenuItem remove = new JMenuItem(
-					AtlasStyler
+					AtlasStylerVector
 							.R("SymbolSelector.Tabs.LocalSymbols.Action.Delete"));
 			remove.addActionListener(new ActionListener() {
 
@@ -156,13 +156,13 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 							.getModel()).get(index);
 					String symbolFileName = singleLocalRulesList.getStyleName()
 							+ ".sld";
-					File symbolFile = new File(AtlasStyler
+					File symbolFile = new File(AtlasStylerVector
 							.getSymbolsDir(singleLocalRulesList
 									.getGeometryForm()), symbolFileName);
 
 					int res = JOptionPane.showConfirmDialog(
 							JScrollPaneSymbolsLocal.this,
-							AtlasStyler
+							AtlasStylerVector
 									.R("SymbolSelector.Tabs.LocalSymbols.Action.Delete.Ask",
 											singleLocalRulesList.getStyleName(),
 											symbolFile.getName()), "",
@@ -172,7 +172,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 						return;
 
 					if (!symbolFile.delete()) {
-						String message = AtlasStyler
+						String message = AtlasStylerVector
 								.R("SymbolSelector.Tabs.LocalSymbols.Action.Delete.Error",
 										symbolFile.getName());
 						LOGGER.warn(message);
@@ -196,7 +196,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 			 * Rescan directory
 			 */
 			JMenuItem rescan = new JMenuItem(
-					AtlasStyler
+					AtlasStylerVector
 							.R("SymbolSelector.Tabs.LocalSymbols.Action.Rescan"));
 			rescan.addActionListener(new ActionListener() {
 
@@ -222,8 +222,8 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 		final AtlasStatusDialog sd = new AtlasStatusDialog(
 				JScrollPaneSymbolsLocal.this,
-				AtlasStyler.R("LocalSymbolsSelector.process.loading_title"),
-				AtlasStyler
+				AtlasStylerVector.R("LocalSymbolsSelector.process.loading_title"),
+				AtlasStylerVector
 						.R("LocalSymbolsSelector.process.loading_description"));
 
 		// SwingWorkers may never be reused. Create it fresh!
@@ -342,7 +342,7 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 	@Override
 	public String getDesc() {
-		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols");
+		return AtlasStylerVector.R("SymbolSelector.Tabs.LocalSymbols");
 	}
 
 	@Override
@@ -352,9 +352,9 @@ public class JScrollPaneSymbolsLocal extends JScrollPaneSymbols {
 
 	@Override
 	protected String getToolTip() {
-		File symbolsDir = AtlasStyler.getSymbolsDir(geometryForm);
+		File symbolsDir = AtlasStylerVector.getSymbolsDir(geometryForm);
 		// Be more windows friendly
-		return AtlasStyler.R("SymbolSelector.Tabs.LocalSymbols.TT",
+		return AtlasStylerVector.R("SymbolSelector.Tabs.LocalSymbols.TT",
 				IOUtil.escapePath(symbolsDir));
 	}
 }

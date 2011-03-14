@@ -177,26 +177,26 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	@Override
 	public JPopupMenu getToolMenu() {
 		JPopupMenu menu = super.getToolMenu();
-
-		// ****************************************************************************
-		// Create AtlasStylerRaster Button
-		// ****************************************************************************
-		if (styledLayer instanceof StyledRasterInterface<?>
-				&& isStyleEditable()) {
-
-			menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-					.R("LayerToolMenu.style"),
-					Icons.ICON_STYLE) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					AVDialogManager.dm_AtlasRasterStyler.getInstanceFor(
-							styledLayer, AtlasMapLayerLegend.this, map.getAc(),
-							AtlasMapLayerLegend.this);
-				}
-			}));
-		}
+//
+//		// ****************************************************************************
+//		// Create AtlasStylerRaster Button
+//		// ****************************************************************************
+//		if (styledLayer instanceof StyledRasterInterface<?>
+//				&& isStyleEditable()) {
+//
+//			menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+//					.R("LayerToolMenu.style"),
+//					Icons.ICON_STYLE) {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//
+//					AVDialogManager.dm_AtlasStyler.getInstanceFor(
+//							styledLayer, AtlasMapLayerLegend.this, styledLayer,
+//							AtlasMapLayerLegend.this);
+//				}
+//			}));
+//		}
 
 		return menu;
 	}

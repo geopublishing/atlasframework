@@ -12,6 +12,8 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -39,8 +41,7 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 		this.owner = owner;
 		this.atlasStyler = atlasStyler;
 
-		jComboBoxRuleListType = new RulesListJComboBox(atlasStyler
-				.getStyledFeatures().getGeometryForm(), atlasStyler);
+			jComboBoxRuleListType = new RulesListJComboBox(atlasStyler);
 
 		jComboBoxRuleListType.addActionListener(new ActionListener() {
 
@@ -79,18 +80,26 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 	private void initGui() {
 		setLayout(new MigLayout("wrap 2", "[grow 200][grow]"));
 
-		int countNumAttr = FeatureUtil.getNumericalFieldNames(
-				atlasStyler.getStyledFeatures().getSchema()).size();
+		if (atlasStyler instanceof AtlasStylerVector) {
 
-		int countTextAttr = FeatureUtil.getValueFieldNames(
-				atlasStyler.getStyledFeatures().getSchema()).size()
-				- countNumAttr;
+			AtlasStylerVector asv = (AtlasStylerVector) atlasStyler;
 
-		GeometryForm geomType = atlasStyler.getStyledFeatures()
-				.getGeometryForm();
+			int countNumAttr = FeatureUtil.getNumericalFieldNames(
+					asv.getStyledFeatures().getSchema()).size();
 
-		add(new JLabel(ASUtil.R("AddRulesListDialog.explanation", geomType,
-				countTextAttr, countNumAttr)), "top, grow, width ::500");
+			int countTextAttr = FeatureUtil.getValueFieldNames(
+					asv.getStyledFeatures().getSchema()).size()
+					- countNumAttr;
+
+			GeometryForm geomType = asv.getStyledFeatures().getGeometryForm();
+
+			add(new JLabel(ASUtil.R("AddRulesListDialog.explanation", geomType,
+					countTextAttr, countNumAttr)), "top, grow, width ::500");
+		} else {
+
+			AtlasStylerRaster asr = (AtlasStylerRaster) atlasStyler;
+			add(new JLabel("RASTER Styler TODO chenge text"));
+		}
 
 		add(getImageLabel(), "growx 10, width 100, height 80");
 

@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
@@ -38,7 +38,7 @@ import de.schmitzm.swing.SwingUtil;
 /**
  * This extension of a {@link JComboBox} is specialized on the visualization of
  * a selection of attribute. If {@link AttributeMetadataImpl} is stored in the
- * {@link AtlasStyler}, it's used for lables and tooltips.<br/>
+ * {@link AtlasStylerVector}, it's used for lables and tooltips.<br/>
  * {@link AttributesJComboBox} only sends {@link ItemEvent} of type SELECTED.
  * UNSELETED is ignored.<br/>
  * 
@@ -50,7 +50,7 @@ public class AttributesJComboBox extends JComboBox {
 
 	private List<String> numericalAttribs;
 
-	public AttributesJComboBox(final AtlasStyler atlasStyler,
+	public AttributesJComboBox(final AtlasStylerVector atlasStyler,
 			List<String> attributes) {
 		this(atlasStyler, new DefaultComboBoxModel(
 				attributes.toArray(new String[] {})));
@@ -77,7 +77,7 @@ public class AttributesJComboBox extends JComboBox {
 				attributes.toArray(new String[] {})));
 	}
 
-	public AttributesJComboBox(final AtlasStyler atlasStyler,
+	public AttributesJComboBox(final AtlasStylerVector atlasStyler,
 			ComboBoxModel comboBoxModel) {
 		this(atlasStyler.getStyledFeatures().getSchema(), atlasStyler
 				.getAttributeMetaDataMap(), comboBoxModel);

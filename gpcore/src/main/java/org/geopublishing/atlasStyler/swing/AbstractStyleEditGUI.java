@@ -18,11 +18,15 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AbstractRulesList;
 
 import de.schmitzm.swing.JPanel;
 
-public abstract class AbstractEditGUI extends JPanel {
-
+/**
+ * Parent-class covering all GUI {@link JPanel}s allowing to edit {@link AbstractRulesList}  
+ */
+public abstract class AbstractStyleEditGUI extends JPanel {
+	
 	final public static Float[] OPACITY_VALUES = new Float[] { 0.1f, .2f, .3f,
 			.4f, .5f, .6f, .7f, .8f, .9f, 1.f };
 
@@ -30,7 +34,7 @@ public abstract class AbstractEditGUI extends JPanel {
 	final public static Float[] HALO_RADIUS_VALUES = new Float[] { 0.f, .5f,
 			1f, 1.5f, 2.f, 2.5f, 3.f, 4f, 5f };
 
-	/** Values used or JCOmboBoxes oering a SpaceAround setting **/
+	/** Values used or JCOmboBoxes offering a "space-arround" setting **/
 	final public static Integer[] SPACE_AROUND_VALUES = new Integer[] { 0, 1,
 			2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60,
 			65, 70, 75, 80, 85, 90, 95, 100 };

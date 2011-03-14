@@ -150,8 +150,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		/**
 		 * Create a default title
 		 */
-		if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-			stringTitle = new Translation(AtlasStyler.getLanguages(),
+		if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+			stringTitle = new Translation(AtlasStylerVector.getLanguages(),
 					limitsLabel).toOneLine();
 		} else {
 			stringTitle = limitsLabel;

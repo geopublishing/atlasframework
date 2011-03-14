@@ -57,7 +57,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.SinglePointSymbolRuleList;
@@ -84,7 +84,7 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 public class SVGSelector extends CancellableDialogAdapter {
 	static private final Logger LOGGER = LangUtil.createLogger(SVGSelector.class);
 
-	protected static final Dimension SVGICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
+	protected static final Dimension SVGICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
 	protected static final String PROPERTY_UPDATED = "Property Updated event ID";
 
@@ -124,7 +124,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 	private final ExternalGraphic[] backup;
 
 	protected JLabel notOnlineLabel = new JLabel(
-			AtlasStyler.R("SVGSelector.notOnlineErrorLabel"));
+			AtlasStylerVector.R("SVGSelector.notOnlineErrorLabel"));
 
 	/**
 	 * The String KEY is URL.toString
@@ -264,7 +264,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 			gridBagConstraints5.gridy = 0;
 			jLabelExplanation = new JLabel();
 			jLabelExplanation
-					.setText(AtlasStyler.R("SVGSelector.Heading.HTML"));
+					.setText(AtlasStylerVector.R("SVGSelector.Heading.HTML"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelExplanation, gridBagConstraints5);
@@ -338,10 +338,10 @@ public class SVGSelector extends CancellableDialogAdapter {
 	private JButton getJButtoneSelfURL() {
 		if (jButtonSelfURL == null) {
 			jButtonSelfURL = new JButton();
-			jButtonSelfURL.setToolTipText(AtlasStyler
+			jButtonSelfURL.setToolTipText(AtlasStylerVector
 					.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
 
-			jButtonSelfURL.setAction(new AbstractAction(AtlasStyler
+			jButtonSelfURL.setAction(new AbstractAction(AtlasStylerVector
 					.R("ExternalGraphicsSelector.button.manual_URL")) {
 
 				@Override
@@ -616,7 +616,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 				}
 			});
 
-			jButtonUp.setToolTipText(AtlasStyler
+			jButtonUp.setToolTipText(AtlasStylerVector
 					.R("ExternalGraphicsSelector.button.directory_up_ToolTip"));
 
 		}

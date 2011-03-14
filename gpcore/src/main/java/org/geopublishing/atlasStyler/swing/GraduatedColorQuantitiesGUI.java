@@ -51,7 +51,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -79,7 +79,7 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
-public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
+public class GraduatedColorQuantitiesGUI extends AbstractRulesListGui<GraduatedColorRuleList> implements
 		ClosableSubwindows, Disposable {
 
 	private static final Dimension ICON_SIZE = new Dimension(25, 25);
@@ -99,8 +99,6 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 	private JLabel jLabelHeading = null;
 
-	protected final GraduatedColorRuleList rulesList;
-
 	private final QuantitiesClassification classifier;
 
 	protected SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
@@ -113,7 +111,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 	private JButton jButtonTemplate = null;
 
-	private final AtlasStyler atlasStyler;
+	private final AtlasStylerVector atlasStyler;
 
 	private NumClassesJComboBox jComboBoxNumClasses;
 
@@ -132,7 +130,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 	 * This is the default constructor
 	 */
 	public GraduatedColorQuantitiesGUI(final GraduatedColorRuleList ruleList,
-			final AtlasStyler atlasStyler) {
+			final AtlasStylerVector atlasStyler) {
 
 		super(ruleList);
 
@@ -140,7 +138,6 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 		try {
 
-			this.rulesList = ruleList;
 			this.atlasStyler = atlasStyler;
 
 			classifier = new QuantitiesClassification(
@@ -240,7 +237,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 	private void initialize() {
 		setLayout(new MigLayout("wrap 2, fillx", "grow", "grow"));
 		jLabelHeading = new JLabel(
-				AtlasStyler.R("GraduatedColorQuantities.Heading"));
+				AtlasStylerVector.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 
@@ -264,13 +261,13 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 			// .R("GraduatedColorQuantities.Attributes.BorderTitle")));
 
 			JLabel jLabelNormalization = new JLabel(
-					AtlasStyler
+					AtlasStylerVector
 							.R("GraduatedColorQuantities.NormalizationAttribute"));
-			jLabelNormalization.setToolTipText(AtlasStyler
+			jLabelNormalization.setToolTipText(AtlasStylerVector
 					.R("GraduatedColorQuantities.NormalizationAttribute.TT"));
 			JLabel jLabelValue = new JLabel(
-					AtlasStyler.R("GraduatedColorQuantities.ValueAttribute"));
-			jLabelValue.setToolTipText(AtlasStyler
+					AtlasStylerVector.R("GraduatedColorQuantities.ValueAttribute"));
+			jLabelValue.setToolTipText(AtlasStylerVector
 					.R("GraduatedColorQuantities.ValueAttribute.TT"));
 			jPanel.add(jLabelValue, "");
 			jPanel.add(getJComboBoxValueField(), "sgx1, growx");
@@ -288,11 +285,11 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 	private JPanel getJPanelClassification() {
 
 		JLabel jLabelParam = new JLabel(
-				AtlasStyler.R("ComboBox.NumberOfClasses"));
+				AtlasStylerVector.R("ComboBox.NumberOfClasses"));
 		jLabelParam
-				.setToolTipText(AtlasStyler.R("ComboBox.NumberOfClasses.TT"));
+				.setToolTipText(AtlasStylerVector.R("ComboBox.NumberOfClasses.TT"));
 
-		jLabelClassificationTypeDescription = new JLabel(AtlasStyler.R(
+		jLabelClassificationTypeDescription = new JLabel(AtlasStylerVector.R(
 				"GraduatedColorQuantities.classification.Method", classifier
 						.getMethod().getDesc()));
 
@@ -304,7 +301,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 			@Override
 			public void classifierMethodChanged(
 					final ClassificationChangeEvent e) {
-				jLabelClassificationTypeDescription.setText(AtlasStyler.R(
+				jLabelClassificationTypeDescription.setText(AtlasStylerVector.R(
 						"GraduatedColorQuantities.classification.Method",
 						classifier.getMethod().getDesc()));
 				jLabelClassificationTypeDescription.setToolTipText(classifier
@@ -315,7 +312,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 		JPanel jPanelClassification = new JPanel(
 				new MigLayout("inset 1, gap 1"),
-				AtlasStyler
+				AtlasStylerVector
 						.R("GraduatedColorQuantities.classification.BorderTitle"));
 		jPanelClassification.add(jLabelClassificationTypeDescription, "wrap");
 		jPanelClassification.add(jLabelParam, "split 3");
@@ -339,7 +336,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 	 */
 	private JToggleButton getClassifyJToggleButton() {
 		final JToggleButton jToggleButton_Classify = new JToggleButton();
-		jToggleButton_Classify.setAction(new AbstractAction(AtlasStyler
+		jToggleButton_Classify.setAction(new AbstractAction(AtlasStylerVector
 				.R("GraduatedColorQuantities.Classify.Button")) {
 
 			@Override
@@ -384,7 +381,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 				QuantitiesClassificationGUI quantGUI = new QuantitiesClassificationGUI(
 						jToggleButton_Classify, classifier, atlasStyler,
-						AtlasStyler.R("QuantitiesClassificationGUI.Title",
+						AtlasStylerVector.R("QuantitiesClassificationGUI.Title",
 								titleVariables));
 				quantGUI.addWindowListener(new WindowAdapter() {
 
@@ -404,7 +401,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 			}
 
 		});
-		jToggleButton_Classify.setToolTipText(AtlasStyler
+		jToggleButton_Classify.setToolTipText(AtlasStylerVector
 				.R("GraduatedColorQuantities.Classify.Button.TT"));
 		return jToggleButton_Classify;
 	}
@@ -540,9 +537,9 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 							JOptionPane.showMessageDialog(
 									SwingUtil
 											.getParentWindowComponent(GraduatedColorQuantitiesGUI.this),
-									AtlasStyler
+									AtlasStylerVector
 											.R("GraduatedColorQuantities.ClassesTable.ClickLimits.Message",
-													AtlasStyler
+													AtlasStylerVector
 															.R("GraduatedColorQuantities.Classify.Button")));
 							return;
 						}
@@ -558,7 +555,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 							final JPopupMenu toolPopup = new JPopupMenu();
 							toolPopup.add(new JMenuItem(
 									new AbstractAction(
-											AtlasStyler
+											AtlasStylerVector
 													.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
 
 										@Override
@@ -578,17 +575,17 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 						final String ruleTitle = rulesList.getRuleTitles().get(
 								row);
 
-						if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+						if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 							final Translation translation = new Translation(
 									ruleTitle);
 
 							if (ask == null) {
 
 								final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-										AtlasStyler
+										AtlasStylerVector
 												.R("GraduatedColorsQuant.translate_label_for_classN",
 														(row + 1)),
-										translation, AtlasStyler.getLanguages());
+										translation, AtlasStylerVector.getLanguages());
 
 								ask = new TranslationAskJDialog(
 										GraduatedColorQuantitiesGUI.this,
@@ -626,7 +623,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 							final String newTitle = ASUtil.askForString(
 									GraduatedColorQuantitiesGUI.this,
 									ruleTitle,
-									AtlasStyler
+									AtlasStylerVector
 											.R("GraduatedColorsQuant.translate_label_for_classN",
 													(row + 1)));
 
@@ -698,13 +695,13 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 				@Override
 				public String getColumnName(final int columnIndex) {
 					if (columnIndex == 0)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("GraduatedColorQuantities.Column.Color");
 					if (columnIndex == 1)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("GraduatedColorQuantities.Column.Limits");
 					if (columnIndex == 2)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("GraduatedColorQuantities.Column.Label");
 					return super.getColumnName(columnIndex);
 				}
@@ -761,7 +758,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 						String string = rulesList.getRuleTitles().get(rowIndex);
 
-						if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+						if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 							string = new Translation(string).toString();
 						}
 
@@ -786,12 +783,12 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 		final JPanel panel = new JPanel(new MigLayout("width 100%", "grow"));
 
 		jLabelTemplate = new JLabel(
-				AtlasStyler.R("GraduatedColorQuantities.Template"));
-		jLabelTemplate.setToolTipText(AtlasStyler
+				AtlasStylerVector.R("GraduatedColorQuantities.Template"));
+		jLabelTemplate.setToolTipText(AtlasStylerVector
 				.R("GraduatedColorQuantities.Template.TT"));
 
 		final JLabel jLabelColorPalette = new JLabel(
-				AtlasStyler.R("GraduatedColorQuantities.ColorRamp"));
+				AtlasStylerVector.R("GraduatedColorQuantities.ColorRamp"));
 
 		panel.add(jLabelColorPalette, "left");
 		panel.add(getJComboBoxColors(), "left");
@@ -815,13 +812,13 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 			final SmallButton noDataLabelButton = new SmallButton(
 					new Translation(noDataSymbol.getLabel()) + ":",
-					AtlasStyler.R("translate_label_for_NODATA_values.tt"));
+					AtlasStylerVector.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+					if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 						// Open a dialog that allows to edit the NODATA legend
 						// entries label
@@ -830,9 +827,9 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 								noDataSymbol.getLabel());
 
 						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-								AtlasStyler
+								AtlasStylerVector
 										.R("translate_label_for_NODATA_values"),
-								translation, AtlasStyler.getLanguages());
+								translation, AtlasStylerVector.getLanguages());
 						TranslationAskJDialog ask = new TranslationAskJDialog(
 								GraduatedColorQuantitiesGUI.this, transLabel);
 
@@ -872,7 +869,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 					} else {
 						final String newNodataTitle = ASUtil.askForString(
 								GraduatedColorQuantitiesGUI.this, noDataSymbol
-										.getLabel(), AtlasStyler
+										.getLabel(), AtlasStylerVector
 										.R("translate_label_for_NODATA_values"));
 
 						if (newNodataTitle != null) {
@@ -897,11 +894,11 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 			// If running in GP/Atlas context, the user may disable the NODATA
 			// values from appearing in the legend
-			if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+			if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 				final JCheckBox noDataShowInLegendCB = new JCheckBox(
-						AtlasStyler.R("NoDataValues.ShallAppearInLegend.Label"));
-				noDataShowInLegendCB.setToolTipText(AtlasStyler
+						AtlasStylerVector.R("NoDataValues.ShallAppearInLegend.Label"));
+				noDataShowInLegendCB.setToolTipText(AtlasStylerVector
 						.R("NoDataValues.ShallAppearInLegend.TT"));
 
 				// Initially set the value depending on the rules's name
@@ -952,7 +949,7 @@ public class GraduatedColorQuantitiesGUI extends AbstractRuleListGui implements
 
 		// button.setBorder( BorderFactory.createEmptyBorder(1,1,1,1));
 
-		button.setToolTipText(AtlasStyler
+		button.setToolTipText(AtlasStylerVector
 				.R("GraduatedColorQuantities.ColorRamp.RevertButton.TT"));
 
 		return button;

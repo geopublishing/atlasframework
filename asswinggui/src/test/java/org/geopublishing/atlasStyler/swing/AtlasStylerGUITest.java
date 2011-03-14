@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geotools.data.DataStore;
 import org.geotools.data.FeatureSource;
 import org.geotools.data.wfs.WFSDataStoreFactory;
@@ -51,7 +51,7 @@ public class AtlasStylerGUITest  {
 
 		StyledFS wfsSFS = new StyledFS(wfsFS);
 
-		AtlasStyler atlasStyler = new AtlasStyler(wfsSFS);
+		AtlasStylerVector atlasStyler = new AtlasStylerVector(wfsSFS);
 
 		atlasStyler.getRuleLists().add(atlasStyler.getRlf().createGraduatedColorRuleList(true));
 

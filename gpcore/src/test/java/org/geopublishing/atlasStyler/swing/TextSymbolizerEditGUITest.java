@@ -9,7 +9,7 @@ import java.util.List;
 
 import javax.swing.JComboBox;
 
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,14 +22,14 @@ import de.schmitzm.testing.TestingUtil;
 public class TextSymbolizerEditGUITest extends TestingClass {
 	private static StyledFS STYLED_FS;
 	private static TextRuleList tr;
-	private static AtlasStyler atlasStyler;
+	private static AtlasStylerVector atlasStyler;
 
 	@Before
 	public void before() throws IOException {
 		STYLED_FS = TestDatasetsVector.countryShp.getStyledFS();
 		tr = new TextRuleList(STYLED_FS, true);
 		// tr.addDefaultClass();
-		atlasStyler = new AtlasStyler(STYLED_FS);
+		atlasStyler = new AtlasStylerVector(STYLED_FS);
 
 	}
 
@@ -76,7 +76,7 @@ public class TextSymbolizerEditGUITest extends TestingClass {
 			return;
 
 		STYLED_FS = TestDatasetsVector.lineBrokenQuix.getStyledFS();
-		atlasStyler = new AtlasStyler(STYLED_FS);
+		atlasStyler = new AtlasStylerVector(STYLED_FS);
 
 		TextRuleList tRl = atlasStyler.getRlf().createTextRulesList(true);
 

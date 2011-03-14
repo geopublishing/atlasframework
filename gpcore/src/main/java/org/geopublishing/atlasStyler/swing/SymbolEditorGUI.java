@@ -38,7 +38,7 @@ import javax.swing.table.TableCellRenderer;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -71,7 +71,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	protected static final String PROPERTY_SYMBOL_CHANGED = "SYMBOL_CHANGED";
 	protected static final String PROPERTY_LAYERS_CHANGED = "LAYERS_CHANGED";
 
-	private static final String DIALOG_TITLE = AtlasStyler
+	private static final String DIALOG_TITLE = AtlasStylerVector
 			.R("SymbolEditor.Title");
 
 	private static final Dimension SYMBOL_SIZE = new Dimension(60, 60);
@@ -116,7 +116,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!evt.getPropertyName().equals(AbstractEditGUI.PROPERTY_UPDATED))
+			if (!evt.getPropertyName().equals(AbstractStyleEditGUI.PROPERTY_UPDATED))
 				return;
 
 			SymbolEditorGUI.this.firePropertyChange(PROPERTY_SYMBOL_CHANGED,
@@ -251,7 +251,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 					.addPropertyChangeListener(listenerUpdatePreview);
 
 			jPanelPreview = new JPanel(new MigLayout(),
-					AtlasStyler.R("SymbolSelector.Preview.BorderTitle"));
+					AtlasStylerVector.R("SymbolSelector.Preview.BorderTitle"));
 			jPanelPreview.add(jLabelPreviewIcon, "center");
 
 		}
@@ -266,7 +266,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	private JPanel getJPanelLayers() {
 		JPanel jPanelLayers;
 		jPanelLayers = new JPanel(new MigLayout(),
-				AtlasStyler.R("SymbolEditor.SymbolLayers"));
+				AtlasStylerVector.R("SymbolEditor.SymbolLayers"));
 		jPanelLayers.add(new JScrollPane(getJTableLayers()), "wrap, top, w "
 				+ (SYMBOL_SIZE.width + 30) + ", h " + (SYMBOL_SIZE.height * 3)); // ,"top, wrap, growy, shrinkx"
 		// jPanelLayers.add(new JScrollPane(getJTableLayers()),"wrap");
@@ -290,7 +290,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		if (jPanelProperties == null) {
 			jPanelProperties = new JPanel(new BorderLayout());
 			jPanelProperties.setBorder(BorderFactory
-					.createTitledBorder(AtlasStyler
+					.createTitledBorder(AtlasStylerVector
 							.R("SymbolEditor.Properties")));
 
 			addPropertyChangeListener(new PropertyChangeListener() {
@@ -307,7 +307,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 						if (selectedSymbolizer == null) {
 							jPanelProperties.removeAll();
 							jPanelProperties.add(
-									new JLabel(AtlasStyler
+									new JLabel(AtlasStylerVector
 											.R("SymbolEditor.SelectALayer")),
 									BorderLayout.CENTER);
 						} else {
@@ -492,9 +492,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 				@Override
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == 0)
-						return AtlasStyler.R("SymbolEditor.TableColumns.Order");
+						return AtlasStylerVector.R("SymbolEditor.TableColumns.Order");
 					if (columnIndex == 1)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("SymbolEditor.TableColumns.LayerPreview");
 
 					return null;
@@ -557,7 +557,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 				}
 
 			});
-			jButtonNewLayer.setToolTipText(AtlasStyler
+			jButtonNewLayer.setToolTipText(AtlasStylerVector
 					.R("SymbolEditor.Action.AddSymbolLayer.TT"));
 		}
 		return jButtonNewLayer;
@@ -620,7 +620,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 					});
 			jButtonRemoveLayer.setEnabled(false);
-			jButtonRemoveLayer.setToolTipText(AtlasStyler
+			jButtonRemoveLayer.setToolTipText(AtlasStylerVector
 					.R("SymbolEditor.Action.RemoveSymbolLayer.TT"));
 		}
 		return jButtonRemoveLayer;
@@ -681,7 +681,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 					});
 
 			jButtonLayerDown.setEnabled(false);
-			jButtonLayerDown.setToolTipText(AtlasStyler
+			jButtonLayerDown.setToolTipText(AtlasStylerVector
 					.R("SymbolEditor.Action.MoveUpSymbolLayerDown.TT"));
 		}
 		return jButtonLayerDown;
@@ -745,7 +745,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 					});
 			jButtonLayerUp.setEnabled(false);
-			jButtonLayerUp.setToolTipText(AtlasStyler
+			jButtonLayerUp.setToolTipText(AtlasStylerVector
 					.R("SymbolEditor.Action.MoveUpSymbolLayerUp.TT"));
 		}
 		return jButtonLayerUp;

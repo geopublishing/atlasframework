@@ -49,7 +49,7 @@ import javax.swing.table.TableModel;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.dp.DataPool.EventTypes;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -276,7 +276,7 @@ public class ManageLayerStylesDialog extends JDialog {
 			// Create the model the first time
 			jTable.setModel(getTableModel());
 
-			jTable.setToolTipText(AtlasStyler
+			jTable.setToolTipText(AtlasStylerVector
 					.R("ManageLayerStylesDialog.table.TT"));
 
 			/*******************************************************************

@@ -124,7 +124,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 
 	@Test
 	public void testImportSld_14() throws IOException, TransformerException {
-		AtlasStyler as = new AtlasStyler(
+		AtlasStylerVector as = new AtlasStylerVector(
 				GTTestingUtil.TestDatasetsVector.arabicInHeader
 						.getFeatureSource());
 

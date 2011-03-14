@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.TextRuleList;
 
 import de.schmitzm.i18n.LanguagesComboBox;
@@ -34,7 +34,7 @@ public class TextLabelingClassLanguageSelectorDialog extends
 				.R("TextSymbolizerClass.CreateALanguageDefault.DialogTitle"));
 		this.rulesList = rulesList;
 
-		lcb = new LanguagesComboBox(AtlasStyler.getLanguages(),
+		lcb = new LanguagesComboBox(AtlasStylerVector.getLanguages(),
 				rulesList.getDefaultLanguages());
 
 		setContentPane(new JPanel(new MigLayout("wrap 1, w 400")));

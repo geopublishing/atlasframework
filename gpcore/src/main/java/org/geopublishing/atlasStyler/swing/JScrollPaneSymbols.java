@@ -38,7 +38,7 @@ import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRulesList;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleListFactory;
 import org.geopublishing.atlasStyler.SingleRuleList;
 
@@ -60,9 +60,9 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 	 * The size of one cell in the table
 	 */
 	public static final Dimension size = new Dimension(150,
-			AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE.height + 9);
+			AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE.height + 9);
 
-	public static final Dimension SYMBOL_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
+	public static final Dimension SYMBOL_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
 	public static final String PROPERTY_SYMBOL_SELECTED = "SYMBOL_SELECTED";
 

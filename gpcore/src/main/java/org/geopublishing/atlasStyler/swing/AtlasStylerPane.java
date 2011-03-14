@@ -24,7 +24,10 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.TextRuleList;
@@ -141,17 +144,27 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	public JComponent createEditorComponent(AbstractRulesList ruleList) {
 
 		JComponent newEditorGui = new JLabel();
+		
+		// TODO Raster Rules Lists
+		
+		
+		// Vector RulesLists:
 		if (ruleList instanceof SingleRuleList)
 			newEditorGui = new SingleSymbolGUI((SingleRuleList<?>) ruleList);
 		else if (ruleList instanceof UniqueValuesRuleList)
 			newEditorGui = new UniqueValuesGUI((UniqueValuesRuleList) ruleList,
-					atlasStyler);
+					(AtlasStylerVector)atlasStyler);
 		else if (ruleList instanceof GraduatedColorRuleList)
 			newEditorGui = new GraduatedColorQuantitiesGUI(
-					(GraduatedColorRuleList) ruleList, atlasStyler);
+					(GraduatedColorRuleList) ruleList, (AtlasStylerVector)atlasStyler);
 		else if (ruleList instanceof TextRuleList)
 			newEditorGui = new TextRuleListGUI((TextRuleList) ruleList,
-					atlasStyler);
+					(AtlasStylerVector)atlasStyler);
+		// Raster RulesLists
+		else if (ruleList instanceof RasterRulesList_DistinctValues){
+			newEditorGui = new RasterRulesList_Distinctvalues_GUI((RasterRulesList_DistinctValues) ruleList,
+					(AtlasStylerRaster)atlasStyler);
+		}
 
 		cachedRulesListGuis.put(ruleList, newEditorGui);
 
@@ -161,11 +174,19 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	private JComponent createStatusLabel() {
 		String statusText = "<html>";
 
-		if (FeatureUtil.getValueFieldNames(
-				atlasStyler.getStyledFeatures().getSchema()).size() == 0) {
-			statusText += AtlasStyler
-					.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
-					+ "<br/>";
+		if (atlasStyler instanceof AtlasStylerVector){
+			// vector specific error messages:
+			
+			if (FeatureUtil.getValueFieldNames(
+					((AtlasStylerVector)atlasStyler).getStyledFeatures().getSchema()).size() == 0) {
+				statusText += AtlasStylerVector
+				.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
+				+ "<br/>";
+			}
+			
+		} else {
+			// raster specific error messages 
+			
 		}
 
 		// Go through the AtlasStyler import errors:
@@ -187,7 +208,6 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	 */
 	private void initialize() {
 		setOneTouchExpandable(true);
-		setDividerLocation(200);
 
 		// setLayout(new MigLayout("top", "[grow]", "[grow]"));
 
@@ -197,7 +217,8 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 		// add(jPanelRuleListEditor, "width 400:650:900, top, growx 200");
 		setRightComponent(jPanelRuleListEditor);
 		changeEditorComponent(createStatusLabel());
-
+		
+		setDividerLocation(-1);
 	}
 
 	private RulesListsListTablePanel getRulesListsListTablePanel() {

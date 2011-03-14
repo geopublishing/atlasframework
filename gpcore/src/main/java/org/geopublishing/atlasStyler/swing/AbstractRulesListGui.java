@@ -1,5 +1,7 @@
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Window;
+
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
@@ -10,14 +12,19 @@ import de.schmitzm.swing.JPanel;
  * Parent of a Swing GUIs that are placed on the right side of
  * {@link AtlasStylerPane} and represent an {@link AbstractRulesList}.
  */
-abstract public class AbstractRuleListGui extends JPanel {
+abstract public class AbstractRulesListGui<RLT extends AbstractRulesList> extends JPanel implements
+		ClosableSubwindows {
 
-	public AbstractRuleListGui(AbstractRulesList rulesList) {
+	public AbstractRulesListGui(RLT rulesList) {
 		listenerEnableDisableGUIwhenRLenabledDisabled = new RuleChangeListener_GuiEnabledDisabled(
 				this, rulesList);
+		
+		this.rulesList = rulesList;
 
 		rulesList.addListener(listenerEnableDisableGUIwhenRLenabledDisabled);
 	}
+	
+	final RLT rulesList;
 
 	/**
 	 * Every GUI for an {@link AbstractRulesList} should have such a listener as
@@ -28,7 +35,7 @@ abstract public class AbstractRuleListGui extends JPanel {
 	class RuleChangeListener_GuiEnabledDisabled implements RuleChangeListener {
 
 		private final AbstractRulesList rulesList;
-		private final AbstractRuleListGui gui;
+		private final AbstractRulesListGui<RLT> gui;
 
 		@Override
 		public void changed(RuleChangedEvent e) {
@@ -39,7 +46,7 @@ abstract public class AbstractRuleListGui extends JPanel {
 		}
 
 		public RuleChangeListener_GuiEnabledDisabled(
-				AbstractRuleListGui abstractRuleListGui,
+				AbstractRulesListGui<RLT> abstractRuleListGui,
 				AbstractRulesList rulesList) {
 			this.gui = abstractRuleListGui;
 
@@ -49,4 +56,17 @@ abstract public class AbstractRuleListGui extends JPanel {
 
 	}
 
+	@Override
+	public void dispose() {
+		for (Window w : openWindows) {
+			if (w instanceof ClosableSubwindows) {
+				((ClosableSubwindows) w).dispose();
+			}
+			w.dispose();
+		}
+	}
+
+	public RLT getRulesList() {
+		return rulesList;
+	}
 }

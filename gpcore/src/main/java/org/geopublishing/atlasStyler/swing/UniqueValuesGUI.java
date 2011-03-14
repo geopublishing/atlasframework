@@ -49,7 +49,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.SingleRuleList;
@@ -72,12 +72,10 @@ import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class UniqueValuesGUI extends AbstractRuleListGui implements
-		ClosableSubwindows {
-	protected Logger LOGGER = LangUtil.createLogger(this);
-
+public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> {
+	protected final static Logger LOGGER = LangUtil.createLogger(UniqueValuesGUI.class);
 	/**
-	 * Listen for changes in the RuleList. Must be kept as a reference in
+	 * Listen for changes in the RulesList. Must be kept as a reference in
 	 * {@link UniqueValuesGUI} because the listeners are kept in a
 	 * {@link WeakHashMap}
 	 */
@@ -101,10 +99,6 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 		}
 
 	};
-
-	private JLabel jLabelHeading = null;
-
-	private JLabel jLabelValue = null;
 
 	private JComboBox jComboBoxPalette = null;
 
@@ -137,19 +131,13 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	 */
 	private final static Dimension SMALLBUTTONSIZE = new Dimension(12, 16);
 
-	protected final AtlasStyler atlasStyler;
+	protected final AtlasStylerVector atlasStyler;
 
-	/**
-	 * This is the RuleList this GUI is working on.
-	 */
-	private final UniqueValuesRuleList rulesList;
-
-	public static final Dimension ICON_SIZE = AtlasStyler.DEFAULT_SYMBOL_PREVIEW_SIZE;
+	public static final Dimension ICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
 	public UniqueValuesGUI(UniqueValuesRuleList rl,
-			AtlasStyler atlasStyler) {
+			AtlasStylerVector atlasStyler) {
 		super(rl);
-		this.rulesList = rl;
 		this.atlasStyler = atlasStyler;
 		initialize();
 		rulesList.fireEvents(new RuleChangedEvent("GUI opened", rulesList));
@@ -161,17 +149,10 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getAttributeJPanel() {
-		// JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 1"),
-		// AtlasStyler.R("UniqueValuesGUI.borderTitle.value_Field"));
-		//
-		// jLabelValue = new JLabel(
-		// AtlasStyler
-		// .R("UniqueValuesGUI.labelFor.valueFieldSelectionCombobox"));
-
 		JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 4"));
 
-		jLabelValue = new JLabel(
-				AtlasStyler.R("UniqueValuesGUI.borderTitle.value_Field"));
+		JLabel jLabelValue = new JLabel(
+				AtlasStylerVector.R("UniqueValuesGUI.borderTitle.value_Field"));
 
 		jPanelValueField.add(jLabelValue);
 		jPanelValueField.add(getJComboBoxValueField(), "growx, right, wrap");
@@ -182,8 +163,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	}
 
 	/**
-	 * This method initializes a AttributesJComboBox with attributes to use for
-	 * the classification
+	 * This method initializes a AttributesJComboBox with attributes to use 
 	 */
 	private AttributesJComboBox getJComboBoxValueField() {
 		AttributesJComboBox jComboBoxValueAttribute = new AttributesJComboBox(
@@ -235,11 +215,11 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
-				.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+				.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
 
 		jLabelTemplate = new JLabel(
-				AtlasStyler.R("UniqueValues.ChooseTemplate.Label"));
+				AtlasStylerVector.R("UniqueValues.ChooseTemplate.Label"));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette());
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
@@ -322,9 +302,9 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 				}
 			});
 
-			jButtonApplyPalette.setText(AtlasStyler
+			jButtonApplyPalette.setText(AtlasStylerVector
 					.R("UniqueValues.applyPaletteButton.title"));
-			jButtonApplyPalette.setToolTipText(AtlasStyler
+			jButtonApplyPalette.setToolTipText(AtlasStylerVector
 					.R("UniqueValues.applyPaletteButton.toolTip"));
 
 		}
@@ -339,7 +319,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
 			jButtonTemplate = new JButton();
-			jButtonTemplate.setToolTipText(AtlasStyler
+			jButtonTemplate.setToolTipText(AtlasStylerVector
 					.R("UniqueValuesGUI.selectTemplateButton.toolTip"));
 			jButtonTemplate.setBorder(BorderFactory.createEtchedBorder());
 
@@ -358,7 +338,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 
 					SymbolSelectorGUI gui = new SymbolSelectorGUI(
 							UniqueValuesGUI.this,
-							AtlasStyler
+							AtlasStylerVector
 									.R("UniqueValuesGUI.selectTemplateDialog.dialogTitle"),
 							template);
 
@@ -425,9 +405,9 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 					rulesList.applyTemplate();
 				}
 			});
-			jButtonApplyTemplate.setText(AtlasStyler
+			jButtonApplyTemplate.setText(AtlasStylerVector
 					.R("UniqueValues.applyTemplateButton.title"));
-			jButtonApplyTemplate.setToolTipText(AtlasStyler
+			jButtonApplyTemplate.setToolTipText(AtlasStylerVector
 					.R("UniqueValues.applyTemplateButton.tooltip"));
 		}
 		return jButtonApplyTemplate;
@@ -439,7 +419,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
 			jButtonAddAllValues = new ThinButton(new AbstractAction(
-					AtlasStyler.R("UniqueValues.Button.AddAllValues")) {
+					AtlasStylerVector.R("UniqueValues.Button.AddAllValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -447,12 +427,12 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 						JOptionPane
 								.showMessageDialog(
 										UniqueValuesGUI.this,
-										AtlasStyler
+										AtlasStylerVector
 												.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
 						return;
 					}
 
-					String title = AtlasStyler
+					String title = AtlasStylerVector
 							.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
 
 					final AtlasSwingWorker<Integer> findUniques = new AtlasSwingWorker<Integer>(
@@ -468,7 +448,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 						JOptionPane
 								.showMessageDialog(
 										UniqueValuesGUI.this,
-										AtlasStyler
+										AtlasStylerVector
 												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
 														added));
 					} catch (CancellationException ce) {
@@ -490,7 +470,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	private JButton getJButtonAddValues() {
 		if (jButtonAddValues == null) {
 			jButtonAddValues = new ThinButton(new AbstractAction(
-					AtlasStyler.R("UniqueValues.Button.AddValues")) {
+					AtlasStylerVector.R("UniqueValues.Button.AddValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -515,7 +495,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
 			jButtonRemove = new ThinButton(new AbstractAction(
-					AtlasStyler.R("UniqueValues.Button.RemoveValue")) {
+					AtlasStylerVector.R("UniqueValues.Button.RemoveValue")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -563,7 +543,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	private JButton getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
 			jButtonRemoveAll = new ThinButton(new AbstractAction(
-					AtlasStyler.R("UniqueValues.Button.RemoveAllValues")) {
+					AtlasStylerVector.R("UniqueValues.Button.RemoveAllValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -800,8 +780,8 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 
 							Object val = rulesList.getValues().get(row);
 
-							if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-								LOGGER.debug(AtlasStyler.getLanguages());
+							if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+								LOGGER.debug(AtlasStylerVector.getLanguages());
 
 								final Translation translation = new Translation();
 
@@ -813,11 +793,11 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 									if (val.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
 										/** We are in the default rule* */
 										transLabel = new TranslationEditJPanel(
-												AtlasStyler
+												AtlasStylerVector
 														.R("UniqueValuesGUI.LabelForClass",
-																AtlasStyler
+																AtlasStylerVector
 																		.R("UniqueValuesGUI.AllOthersSymbol.label")),
-												translation, AtlasStyler
+												translation, AtlasStylerVector
 														.getLanguages());
 									} else {
 
@@ -835,12 +815,12 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 										}
 
 										transLabel = new TranslationEditJPanel(
-												AtlasStyler
+												AtlasStylerVector
 														.R("UniqueValuesGUI.LabelForClass",
 																rulesList
 																		.getValues()
 																		.get(index)),
-												translation, AtlasStyler
+												translation, AtlasStylerVector
 														.getLanguages());
 									}
 
@@ -1080,16 +1060,16 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 				@Override
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == 0)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.symbol");
 					if (columnIndex == 1)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.value");
 					if (columnIndex == 2)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.label");
 					if (columnIndex == 3)
-						return AtlasStyler
+						return AtlasStylerVector
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.count");
 					return super.getColumnName(columnIndex);
 				}
@@ -1138,7 +1118,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	 */
 	public JCheckBox getWithDefaultCheckbox() {
 		final JCheckBox jCheckBoxWithDefault = new JCheckBox(
-				AtlasStyler.R("UniqueValuesGUI.AllOthersSymbol.label"));
+				AtlasStylerVector.R("UniqueValuesGUI.AllOthersSymbol.label"));
 
 		jCheckBoxWithDefault.addActionListener(new ActionListener() {
 
@@ -1190,7 +1170,7 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 	 * @return void
 	 */
 	private void initialize() {
-		jLabelHeading = new JLabel(AtlasStyler.R("UniqueValues.Heading"));
+		JLabel jLabelHeading = new JLabel(AtlasStylerVector.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
@@ -1215,13 +1195,4 @@ public class UniqueValuesGUI extends AbstractRuleListGui implements
 
 	}
 
-	@Override
-	public void dispose() {
-		for (Window w : openWindows) {
-			if (w instanceof ClosableSubwindows) {
-				((ClosableSubwindows) w).dispose();
-			}
-			w.dispose();
-		}
-	}
 }

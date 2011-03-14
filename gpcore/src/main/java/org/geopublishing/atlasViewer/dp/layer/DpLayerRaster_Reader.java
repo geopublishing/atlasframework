@@ -338,13 +338,10 @@ public class DpLayerRaster_Reader extends
 		super.uncache();
 
 		/** Close any open attribute table for this layer */
-		AVDialogManager.dm_AtlasRasterStyler.disposeInstanceFor(this);
+		AVDialogManager.dm_AtlasStyler.disposeInstanceFor(this);
 
 		if (gc != null) {
-			// MS-01.sc
-			// gc.dispose(true);
 			gc.dispose();
-			// MS-01.ec
 			gc = null;
 		}
 

@@ -30,7 +30,7 @@ import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
 
@@ -88,7 +88,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 	}
 
 	public GraphicEditGUIinDialog(Component owner, final Fill fill) {
-		super(SwingUtil.getParentWindow(owner), AtlasStyler
+		super(SwingUtil.getParentWindow(owner), AtlasStylerVector
 				.R("GraphicEditGUIinDialog.Title"));
 
 		this.fill = fill;
@@ -173,7 +173,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 						@Override
 						public void propertyChange(PropertyChangeEvent evt) {
 							if (evt.getPropertyName().equals(
-									AbstractEditGUI.PROPERTY_UPDATED)) {
+									AbstractStyleEditGUI.PROPERTY_UPDATED)) {
 								try {
 									// LOGGER.info("Our graphic fill now has "
 									// + fill.getGraphicFill()
@@ -191,7 +191,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 								}
 
 								GraphicEditGUIinDialog.this.firePropertyChange(
-										AbstractEditGUI.PROPERTY_UPDATED, null,
+										AbstractStyleEditGUI.PROPERTY_UPDATED, null,
 										null);
 							}
 						}
@@ -259,7 +259,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 	@Override
 	public void dispose() {
 
-		firePropertyChange(AbstractEditGUI.PROPERTY_UPDATED, null, null);
+		firePropertyChange(AbstractStyleEditGUI.PROPERTY_UPDATED, null, null);
 
 		super.dispose();
 

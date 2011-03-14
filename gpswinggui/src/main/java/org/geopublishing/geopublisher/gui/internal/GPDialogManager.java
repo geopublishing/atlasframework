@@ -18,6 +18,8 @@ import java.util.List;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -277,15 +279,18 @@ public class GPDialogManager {
 
 							@Override
 							public DesignAtlasStylerDialog create() {
-								final DpLayerVectorFeatureSource dpl = (DpLayerVectorFeatureSource) constArgs[0];
+								final DpLayer dpl = (DpLayer) constArgs[0];
 								final DesignAtlasMapLegend mapLegend = (DesignAtlasMapLegend) constArgs[1];
 								final MapLayer mapLayer = (MapLayer) constArgs[2];
 								final LayerStyle layerStyle = (LayerStyle) constArgs[3];
 
-								return new DesignAtlasStylerDialog(owner, dpl,
+								if (dpl instanceof DpLayerRaster_Reader)
+								return new DesignAtlasStylerDialog(owner, (DpLayerRaster_Reader)dpl,
 										mapLegend, mapLayer, layerStyle);
+								else
+									return new DesignAtlasStylerDialog(owner, (DpLayerVectorFeatureSource) dpl,
+											mapLegend, mapLayer, layerStyle);
 							}
-
 						}));
 			} catch (Exception e) {
 				ExceptionDialog.show(owner, e);

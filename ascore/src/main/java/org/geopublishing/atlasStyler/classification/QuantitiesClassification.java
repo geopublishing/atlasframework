@@ -22,7 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 import org.geotools.data.DefaultQuery;
 import org.geotools.feature.FeatureCollection;
@@ -57,13 +57,13 @@ public class QuantitiesClassification extends FeatureClassification {
 		EI, MANUAL, QUANTILES;
 
 		public String getDesc() {
-			return AtlasStyler
+			return AtlasStylerVector
 					.R("QuantitiesClassifiction.Method.ComboboxEntry."
 							+ toString());
 		}
 
 		public String getToolTip() {
-			return AtlasStyler
+			return AtlasStylerVector
 					.R("QuantitiesClassifiction.Method.ComboboxEntry."
 							+ toString() + ".TT");
 		}

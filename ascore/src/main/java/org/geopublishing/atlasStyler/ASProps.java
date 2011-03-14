@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 import de.schmitzm.swing.ExceptionDialog;
 
 /**
- * Singleton and delegation pattern to the {@link AtlasStyler}'s
+ * Singleton and delegation pattern to the {@link AtlasStylerVector}'s
  * {@link Properties}
  * 
  * Only the methods working on the enumeration {@link Keys} are public

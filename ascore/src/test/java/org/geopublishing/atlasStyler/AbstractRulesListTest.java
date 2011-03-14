@@ -67,7 +67,7 @@ public class AbstractRulesListTest extends TestingClass {
 
 	@Test
 	public void testEnabledDisabledFilterViaSaveAndLoad() throws IOException {
-		AtlasStyler as = AsTestingUtil
+		AtlasStylerVector as = AsTestingUtil
 				.getAtlasStyler(TestDatasetsVector.polygonSnow);
 
 		testRuleLists(as, false, "S", f1, false, "U", f1, false, "G", f3,
@@ -80,7 +80,7 @@ public class AbstractRulesListTest extends TestingClass {
 				true, "T", f3);
 	}
 
-	private void testRuleLists(AtlasStyler as, boolean sEnabled, String sTitle,
+	private void testRuleLists(AtlasStylerVector as, boolean sEnabled, String sTitle,
 			Filter sFilter, boolean uEnabled, String uTitle, Filter uFilter,
 			boolean gEnabled, String gTitle, Filter gFilter, boolean tEnabled,
 			String tTitle, Filter tFilter) throws IOException,
@@ -103,7 +103,7 @@ public class AbstractRulesListTest extends TestingClass {
 			SingleRuleList<?> singleRulesList = as
 					.getRlf()
 					.createSingleRulesList(
-							AtlasStyler.getRuleTitleFor(as.getStyledFeatures()),
+							AtlasStylerVector.getRuleTitleFor(as.getStyledFeatures()),
 							true);
 			singleRulesList.setMinScaleDenominator(sMin);
 			singleRulesList.setMaxScaleDenominator(sMax);
@@ -169,7 +169,7 @@ public class AbstractRulesListTest extends TestingClass {
 		StylingUtil.validates(as.getStyle());
 
 		// New AtlasStyler, load the Styles
-		as = new AtlasStyler(TestDatasetsVector.polygonSnow.getFeatureSource());
+		as = new AtlasStylerVector(TestDatasetsVector.polygonSnow.getFeatureSource());
 		Style[] importStyle = StylingUtil.loadSLD(tf);
 		as.importStyle(importStyle[0]);
 

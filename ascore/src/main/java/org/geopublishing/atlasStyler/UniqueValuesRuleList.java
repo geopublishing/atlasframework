@@ -224,7 +224,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				idx -= getBrewerPalette().getMaxColors();
 				if ((componentForGui != null) && (!warnedOnce)) {
 
-					final String msg = AtlasStyler
+					final String msg = AtlasStylerVector
 							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
 									getBrewerPalette().getMaxColors(),
 									getValues().size());
@@ -659,7 +659,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 				getValues().add(ALLOTHERS_IDENTIFICATION_VALUE);
 				getSymbols().add(getTemplate().copy());
 				getLabels()
-						.add(AtlasStyler.R("UniqueValuesGUI.AllOthersLabel"));
+						.add(AtlasStylerVector.R("UniqueValuesGUI.AllOthersLabel"));
 
 			} else
 			/***********************************************************************

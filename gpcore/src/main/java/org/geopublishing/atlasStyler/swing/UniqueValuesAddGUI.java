@@ -34,7 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 
@@ -87,7 +87,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 		this.rulesList = rulesList;
 		initialize();
 
-		String title = AtlasStyler
+		String title = AtlasStylerVector
 				.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
 		final AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner,
 				title, title);
@@ -131,7 +131,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setTitle(AtlasStyler.R("UniqueValuesAddGUI.DialogTitle"));
+		this.setTitle(AtlasStylerVector.R("UniqueValuesAddGUI.DialogTitle"));
 		this.setModal(true);
 		pack();
 	}
@@ -186,7 +186,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			gridBagConstraints8.insets = new Insets(5, 1, 1, 5);
 			gridBagConstraints8.gridy = 0;
 			jLabelSelectTheValueToAdd = new JLabel();
-			jLabelSelectTheValueToAdd.setText(AtlasStyler
+			jLabelSelectTheValueToAdd.setText(AtlasStylerVector
 					.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
@@ -245,13 +245,13 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			gridBagConstraints3.gridwidth = 3;
 			gridBagConstraints3.gridy = 0;
 			jLabel = new JLabel();
-			jLabel.setText(AtlasStyler
+			jLabel.setText(AtlasStylerVector
 					.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
 			jPanel2 = new JPanel();
-			jPanel2.setToolTipText(AtlasStyler
+			jPanel2.setToolTipText(AtlasStylerVector
 					.R("UniqueValuesAddGUI.AddNewValueToList.TT"));
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(AtlasStyler
+			jPanel2.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
 					.R("UniqueValuesAddGUI.AddNewValueToList.BorderTitle")));
 			jPanel2.add(jLabel, gridBagConstraints3);
 			jPanel2.add(getJTextField(), gridBagConstraints4);
@@ -281,7 +281,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 		if (jButtonAddToList == null) {
 			jButtonAddToList = new ThinButton(
 					new AbstractAction(
-							AtlasStyler
+							AtlasStylerVector
 									.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
 
 						@Override

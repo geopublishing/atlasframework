@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
@@ -37,6 +38,15 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 		this.mapLegend = mapLegend;
 
 	}
+	
+	public DesignAtlasStylerDialog(Component owner,
+			DpLayerRaster_Reader dpLayer, DesignAtlasMapLegend mapLegend,
+			MapLayer mapLayer, LayerStyle layerStyle) {
+		super(owner, dpLayer, mapLegend, mapLayer, layerStyle);
+		this.mapLegend = mapLegend;
+
+	}
+
 
 	@Override
 	public boolean okClose() {
@@ -70,9 +80,9 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 		 */
 		AtlasConfigEditable ace = mapLegend.getAce();
 
-		File dataDir = new File(ace.getDataDir(), dpLayer.getDataDirname());
+		File dataDir = new File(ace.getDataDir(), dpLayerVector.getDataDirname());
 
-		final String filename = map.getSelectedStyleIDs().get(dpLayer.getId());
+		final String filename = map.getSelectedStyleIDs().get(dpLayerVector.getId());
 		try {
 			StylingUtil.saveStyleToSld(getAtlasStyler().getStyle(), new File(
 					dataDir, filename));

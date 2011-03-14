@@ -36,7 +36,7 @@ import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil;
 import de.schmitzm.testing.TestingClass;
-public class AtlasStylerTest extends TestingClass {
+public class AtlasStylerVectorTest extends TestingClass {
 
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
 
@@ -56,14 +56,14 @@ public class AtlasStylerTest extends TestingClass {
 
 	@Test
 	public void testConstructors() {
-		AtlasStyler as1 = new AtlasStyler(featureSource_polygon);
+		AtlasStylerVector as1 = new AtlasStylerVector(featureSource_polygon);
 
 		assertNotNull(as1);
 
-		AtlasStyler as2 = new AtlasStyler(new StyledFS(featureSource_polygon));
+		AtlasStylerVector as2 = new AtlasStylerVector(new StyledFS(featureSource_polygon));
 		assertNotNull(as2);
 
-		AtlasStyler as3 = new AtlasStyler(new StyledFS(featureSource_polygon),
+		AtlasStylerVector as3 = new AtlasStylerVector(new StyledFS(featureSource_polygon),
 				null, null, null, false);
 		assertNotNull(as3);
 	}
@@ -72,7 +72,7 @@ public class AtlasStylerTest extends TestingClass {
 	public void testCreateAndStoreAndLoad_UniqueValuesRL() throws IOException,
 			TransformerException {
 		StyledFS styledFeatures = new StyledFS(featureSource_polygon);
-		AtlasStyler as = new AtlasStyler(styledFeatures);
+		AtlasStylerVector as = new AtlasStylerVector(styledFeatures);
 
 		String propName = featureSource_polygon.getSchema()
 				.getAttributeDescriptors().get(1).getLocalName();
@@ -114,7 +114,7 @@ public class AtlasStylerTest extends TestingClass {
 
 		as = null;
 		// Create a new AtlasStyler
-		AtlasStyler as2 = new AtlasStyler(styledFeatures, style1, null, null,
+		AtlasStylerVector as2 = new AtlasStylerVector(styledFeatures, style1, null, null,
 				null);
 		assertEquals(1, as2.getRuleLists().size());
 		UniqueValuesPolygonRuleList uniqueRL2 = (UniqueValuesPolygonRuleList) as2
