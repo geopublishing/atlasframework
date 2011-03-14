@@ -278,6 +278,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna</artifactId>
+			<version>3.0.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna_WindowUtils</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>chrriis.dj</groupId>
 			<artifactId>DJNativeSwing-SWT</artifactId>
 			<version>0.9.8</version>
@@ -368,10 +380,10 @@
 		</profile>
 	</profiles>
 
-  <repositories>
-    <repository>
-      <id>toolchain_eu</id>
-      <url>http://toolchain.eu/maven2/</url>
-    </repository>
-  </repositories>
+	<repositories>
+		<repository>
+			<id>toolchain_eu</id>
+			<url>http://toolchain.eu/maven2/</url>
+		</repository>
+	</repositories>
 </project>
