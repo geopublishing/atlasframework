@@ -112,8 +112,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		throw new RuntimeException("Filter not recognized.");
 	}
 
-	Integer countNew = 0;
-
 	private final ArrayList<String> labels = new ArrayList<String>();
 
 	private BrewerPalette palette = ColorBrewer.instance().getPalettes()[0];
@@ -149,7 +147,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 		if (getPropertyFieldName() == null)
 			return 0;
 
-		countNew = 0;
+		Integer countNew = 0;
 		pushQuite();
 		for (final Object uniqueString : getAllUniqueValuesThatAreNotYetIncluded()) {
 			if (sw != null && sw.isCancelled())

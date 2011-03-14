@@ -171,6 +171,31 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return palette;
 	}
 
+	public void applyOpacity() {
+		pushQuite();
+
+		try {
+
+			final Double op = getOpacity();
+
+			for (int i = 0; i < getValues().size(); i++) {
+
+				int idx = i;
+				while (idx >= getPalette().getMaxColors()) {
+					idx -= getPalette().getMaxColors();
+				}
+
+				getOpacities().set(i, op);
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(
+					"Applied an OPACITY to all ColorMapEntries ", this));
+		}
+	}
+
+	private Double opacity;
+
 	/**
 	 * @param parentGui
 	 *            is <code>null</code>, no warnings will be shown if the number
@@ -179,31 +204,46 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public void applyPalette(JComponent parentGui) {
 		pushQuite();
 
-		boolean warnedOnce = false;
+		try {
 
-		final Color[] colors = getPalette().getColors();
+			boolean warnedOnce = false;
 
-		for (int i = 0; i < getValues().size(); i++) {
+			final Color[] colors = getPalette().getColors();
 
-			int idx = i;
-			while (idx >= getPalette().getMaxColors()) {
-				idx -= getPalette().getMaxColors();
-				if ((parentGui != null) && (!warnedOnce)) {
+			for (int i = 0; i < getValues().size(); i++) {
 
-					final String msg = AtlasStylerVector
-							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
-									getPalette().getMaxColors(), getValues()
-											.size());
-					JOptionPane.showMessageDialog(
-							SwingUtil.getParentWindowComponent(parentGui), msg);
-					warnedOnce = true;
+				int idx = i;
+				while (idx >= getPalette().getMaxColors()) {
+					idx -= getPalette().getMaxColors();
+					if ((parentGui != null) && (!warnedOnce)) {
+
+						final String msg = AtlasStylerVector
+								.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+										getPalette().getMaxColors(),
+										getValues().size());
+						JOptionPane.showMessageDialog(
+								SwingUtil.getParentWindowComponent(parentGui),
+								msg);
+						warnedOnce = true;
+					}
 				}
+
+				getColors().set(i, colors[idx]);
 			}
 
-			getColors().set(i, colors[idx]);
+		} finally {
+			popQuite(new RuleChangedEvent(
+					"Applied a COLORPALETTE to all ColorMapEntries", this));
 		}
 
-		popQuite(new RuleChangedEvent("Applied a COLORPALETTE ", this));
-
 	}
+
+	public void setOpacity(Double opacity) {
+		this.opacity = opacity;
+	}
+
+	public Double getOpacity() {
+		return opacity;
+	}
+
 }

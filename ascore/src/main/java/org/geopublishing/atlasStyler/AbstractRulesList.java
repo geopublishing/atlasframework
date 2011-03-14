@@ -500,9 +500,10 @@ public abstract class AbstractRulesList {
 		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
 			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES };
 		}
-		
+
 		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
-			return valuesFor(asv.getStyledFeatures().getGeometryForm(), asv.getStyledFeatures().getSchema());
+			return valuesFor(asv.getStyledFeatures().getGeometryForm(), asv
+					.getStyledFeatures().getSchema());
 		}
 	}
 
@@ -530,9 +531,6 @@ public abstract class AbstractRulesList {
 	 * {@link Rule}. Very good to update previews.<br>
 	 * <b>The listening class must keep a reference to the listener (e.g. make
 	 * it a field variable) because the listeners are kept in a WeakHashSet.</b>
-	 * 
-	 * @param listener
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public void addListener(RuleChangeListener listener) {
 		listeners.add(listener);
