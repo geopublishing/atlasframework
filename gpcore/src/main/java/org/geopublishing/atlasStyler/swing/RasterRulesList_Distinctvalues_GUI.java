@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.WeakHashMap;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -16,15 +17,11 @@ import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.SingleRuleList;
 import org.geopublishing.atlasStyler.UniqueValuesRuleList;
-import org.geopublishing.atlasStyler.swing.UniqueValuesGUI.UniqueValuesSingleRuleListCellRenderer;
 import org.geotools.styling.ColorMapEntry;
-import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
@@ -46,6 +43,32 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	final static int COLIDX_OPACITY = 1;
 	final static int COLIDX_VALUE = 2;
 	final static int COLIDX_LABEL = 3;
+
+	/**
+	 * Listen for changes in the RulesList. Must be kept as a reference in
+	 * {@link UniqueValuesGUI} because the listeners are kept in a
+	 * {@link WeakHashMap}
+	 */
+	final RuleChangeListener updateClassificationTableWhenRuleListChanges = new RuleChangeListener() {
+
+		@Override
+		public void changed(RuleChangedEvent e) {
+
+			// Try to remember the selected item
+			int selViewIdx = getJTable().getSelectedRow();
+
+			getTableModel().fireTableDataChanged();
+
+			getJTable().getSelectionModel().clearSelection();
+			getJTable().getSelectionModel().addSelectionInterval(selViewIdx,
+					selViewIdx);
+
+			/** scroll */
+			getJTable().scrollRectToVisible(
+					getJTable().getCellRect(selViewIdx, 0, true));
+		}
+
+	};
 
 	private DefaultTableModel getTableModel() {
 
@@ -139,9 +162,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		if (jTable == null) {
 			jTable = new JTable(getTableModel());
 
-			/** Render nicely* */
-			jTable.setDefaultRenderer(SingleRuleList.class,
-					new UniqueValuesSingleRuleListCellRenderer());
+			/** Render nicely COLOR */
+			// jTable.setDefaultRenderer(SingleRuleList.class,
+			// new UniqueValuesSingleRuleListCellRenderer());
 
 			getRulesList().addListener(
 					updateClassificationTableWhenRuleListChanges);
@@ -190,16 +213,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 										// "all others rule" is eneabled and
 										// where it is positioned in the list!
 										int index = row;
-										if (RasterRulesList_Distinctvalues_GUI.this
-												.getRulesList()
-												.isWithDefaultSymbol()) {
-											int allOthersRuleIdx = RasterRulesList_Distinctvalues_GUI.this
-													.getRulesList()
-													.getAllOthersRuleIdx();
-
-											if (allOthersRuleIdx < row)
-												index = row - 1;
-										}
 
 										transLabel = new TranslationEditJPanel(
 												AtlasStylerVector
@@ -273,68 +286,73 @@ public class RasterRulesList_Distinctvalues_GUI extends
 						/*******************************************************
 						 * Changing the Symbol with a MouseClick
 						 */
-						if (col == 0) {
-							getRulesList().getSymbols().get(row).getListeners()
-									.clear();
-							final SingleRuleList<? extends Symbolizer> editSymbol = getRulesList()
-									.getSymbols().get(row);
-							final SingleRuleList<? extends Symbolizer> backup = editSymbol
-									.copy();
-
-							SymbolSelectorGUI gui = new SymbolSelectorGUI(
-									SwingUtil
-											.getParentWindow(RasterRulesList_Distinctvalues_GUI.this),
-									"Change symbol for "
-											+ getRulesList().getLabels().get(
-													row), editSymbol);
-
-							/***************************************************
-							 * Listen to a CANCEL to use the backup
-							 */
-							gui.addPropertyChangeListener(new PropertyChangeListener() {
-
-								@Override
-								public void propertyChange(
-										PropertyChangeEvent evt) {
-
-									if (evt.getPropertyName()
-											.equals(SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES)) {
-
-										backup.copyTo(editSymbol);
-									}
-
-									if (evt.getPropertyName().equals(
-											SymbolSelectorGUI.PROPERTY_CLOSED)) {
-									}
-
-								}
-
-							});
-
-							// we have a referenct to it!
-							listenToEditedSymbolAndPassOnTheEvent = new RuleChangeListener() {
-
-								@Override
-								public void changed(RuleChangedEvent e) {
-
-									/** Exchanging the Symbol * */
-									getRulesList().getSymbols().set(row,
-											editSymbol);
-
-									// Fire an event?! TODO
-									getRulesList().fireEvents(
-											new RuleChangedEvent(
-													"Editing a Symbol",
-													getRulesList()));
-
-								}
-
-							};
-							editSymbol
-									.addListener(listenToEditedSymbolAndPassOnTheEvent);
-
-							gui.setModal(true);
-							gui.setVisible(true);
+						if (col == COLIDX_COLOR) {
+							// getRulesList().getSymbols().get(row).getListeners()
+							// .clear();
+							// final SingleRuleList<? extends Symbolizer>
+							// editSymbol = getRulesList()
+							// .getSymbols().get(row);
+							// final SingleRuleList<? extends Symbolizer> backup
+							// = editSymbol
+							// .copy();
+							//
+							// SymbolSelectorGUI gui = new SymbolSelectorGUI(
+							// SwingUtil
+							// .getParentWindow(RasterRulesList_Distinctvalues_GUI.this),
+							// "Change symbol for "
+							// + getRulesList().getLabels().get(
+							// row), editSymbol);
+							//
+							// /***************************************************
+							// * Listen to a CANCEL to use the backup
+							// */
+							// gui.addPropertyChangeListener(new
+							// PropertyChangeListener() {
+							//
+							// @Override
+							// public void propertyChange(
+							// PropertyChangeEvent evt) {
+							//
+							// if (evt.getPropertyName()
+							// .equals(SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES))
+							// {
+							//
+							// backup.copyTo(editSymbol);
+							// }
+							//
+							// if (evt.getPropertyName().equals(
+							// SymbolSelectorGUI.PROPERTY_CLOSED)) {
+							// }
+							//
+							// }
+							//
+							// });
+							//
+							// // we have a referenct to it!
+							// listenToEditedSymbolAndPassOnTheEvent = new
+							// RuleChangeListener() {
+							//
+							// @Override
+							// public void changed(RuleChangedEvent e) {
+							//
+							// /** Exchanging the Symbol * */
+							// getRulesList().getSymbols().set(row,
+							// editSymbol);
+							//
+							// // Fire an event?! TODO
+							// getRulesList().fireEvents(
+							// new RuleChangedEvent(
+							// "Editing a Symbol",
+							// getRulesList()));
+							//
+							// }
+							//
+							// };
+							// editSymbol
+							// .addListener(listenToEditedSymbolAndPassOnTheEvent);
+							//
+							// gui.setModal(true);
+							// gui.setVisible(true);
 						}
 					}
 
