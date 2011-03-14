@@ -10,18 +10,20 @@ import org.geotools.styling.Symbolizer;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 
 public class AtlasStylerRaster extends AtlasStyler {
-	
-	private final static Logger LOGGER = Logger.getLogger(AtlasStylerRaster.class);
-	
-	StyledGridCoverageReaderInterface styledRaster; 
 
-	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster, Style loadStyle, MapLayer mapLayer, HashMap<String, Object> params,
+	private final static Logger LOGGER = Logger
+			.getLogger(AtlasStylerRaster.class);
+
+	StyledGridCoverageReaderInterface styledRaster;
+
+	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster,
+			Style loadStyle, MapLayer mapLayer, HashMap<String, Object> params,
 			Boolean withDefaults) {
 		super(mapLayer, params, withDefaults);
 		this.styledRaster = styledRaster;
-		
+
 		this.rlf = new RuleListFactory(styledRaster);
-		
+
 		if (loadStyle != null) {
 			// Correct propertynames against the Schema
 			importStyle(loadStyle);
@@ -51,5 +53,9 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public Style sanitize(Style style) {
 		return style;
 	}
+
+	// public RasterLegendData getRasterLegendData() {
+	// return styledRaster.get;
+	// }
 
 }

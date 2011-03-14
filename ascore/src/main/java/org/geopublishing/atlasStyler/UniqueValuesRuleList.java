@@ -204,13 +204,12 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 	/**
 	 * Apply the ColorPalette to all symbols at once
 	 * 
-	 * @param componentForGui
-	 *            If not <code>null</code>, a message may appear
-	 * 
-	 * 
+	 * @param parentGui
+	 *            is <code>null</code>, no warnings will be shown if the number
+	 *            of classes if higher than the number of colors
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void applyPalette(final JComponent componentForGui) {
+	public void applyPalette(final JComponent parentGui) {
 		pushQuite();
 
 		boolean warnedOnce = false;
@@ -222,16 +221,14 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 			int idx = i;
 			while (idx >= getBrewerPalette().getMaxColors()) {
 				idx -= getBrewerPalette().getMaxColors();
-				if ((componentForGui != null) && (!warnedOnce)) {
+				if ((parentGui != null) && (!warnedOnce)) {
 
 					final String msg = AtlasStylerVector
 							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
 									getBrewerPalette().getMaxColors(),
 									getValues().size());
-					JOptionPane
-							.showMessageDialog(SwingUtil
-									.getParentWindowComponent(componentForGui),
-									msg);
+					JOptionPane.showMessageDialog(
+							SwingUtil.getParentWindowComponent(parentGui), msg);
 					warnedOnce = true;
 				}
 			}
@@ -658,8 +655,8 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 				getValues().add(ALLOTHERS_IDENTIFICATION_VALUE);
 				getSymbols().add(getTemplate().copy());
-				getLabels()
-						.add(AtlasStylerVector.R("UniqueValuesGUI.AllOthersLabel"));
+				getLabels().add(
+						AtlasStylerVector.R("UniqueValuesGUI.AllOthersLabel"));
 
 			} else
 			/***********************************************************************

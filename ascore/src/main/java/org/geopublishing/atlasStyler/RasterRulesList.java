@@ -3,7 +3,11 @@ package org.geopublishing.atlasStyler;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
@@ -11,6 +15,7 @@ import org.geotools.styling.FeatureTypeStyle;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.swing.SwingUtil;
 
 public abstract class RasterRulesList extends AbstractRulesList {
 
@@ -20,6 +25,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	private final ArrayList<Color> colors = new ArrayList<Color>();
 
 	final int cmt;
+	private BrewerPalette palette = null;
 
 	private StyledRasterInterface styledRaster;
 
@@ -98,14 +104,24 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	 */
 	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
 		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-			getValues()
-					.add(Double.valueOf(cme.getQuantity().evaluate(null)
-							.toString()));
+			final Double valueDouble = Double.valueOf(cme.getQuantity()
+					.evaluate(null).toString());
+			getValues().add(valueDouble);
 			getOpacities().add(
 					Double.valueOf(cme.getOpacity().evaluate(null).toString()));
 			getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
 
-			getLabels().add(new Translation(cme.getLabel()));
+			final String labelFromCM = cme.getLabel();
+
+			if (labelFromCM != null && !labelFromCM.isEmpty()) {
+				getLabels().add(new Translation(labelFromCM));
+			} else {
+				Translation translation = styledRaster.getLegendMetaData().get(
+						valueDouble);
+				if (translation == null)
+					translation = new Translation("");
+				getLabels().add(translation);
+			}
 		}
 
 	}
@@ -147,4 +163,47 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		fireEvents(new RuleChangedEvent("Removed all entries", this));
 	}
 
+	public void setPalette(BrewerPalette palette) {
+		this.palette = palette;
+	}
+
+	public BrewerPalette getPalette() {
+		return palette;
+	}
+
+	/**
+	 * @param parentGui
+	 *            is <code>null</code>, no warnings will be shown if the number
+	 *            of classes if higher than the number of colors
+	 */
+	public void applyPalette(JComponent parentGui) {
+		pushQuite();
+
+		boolean warnedOnce = false;
+
+		final Color[] colors = getPalette().getColors();
+
+		for (int i = 0; i < getValues().size(); i++) {
+
+			int idx = i;
+			while (idx >= getPalette().getMaxColors()) {
+				idx -= getPalette().getMaxColors();
+				if ((parentGui != null) && (!warnedOnce)) {
+
+					final String msg = AtlasStylerVector
+							.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+									getPalette().getMaxColors(), getValues()
+											.size());
+					JOptionPane.showMessageDialog(
+							SwingUtil.getParentWindowComponent(parentGui), msg);
+					warnedOnce = true;
+				}
+			}
+
+			getColors().set(i, colors[idx]);
+		}
+
+		popQuite(new RuleChangedEvent("Applied a COLORPALETTE ", this));
+
+	}
 }

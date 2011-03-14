@@ -83,4 +83,19 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 		return RulesListType.RASTER_COLORMAP_DISTINCTVALUES;
 	}
 
+	/**
+	 * @param row
+	 * @param delta
+	 *            -1 to move the row one up
+	 */
+	public void move(int row, int delta) {
+
+		getValues().add(row + delta, getValues().remove(row));
+		getLabels().add(row + delta, getLabels().remove(row));
+		getColors().add(row + delta, getColors().remove(row));
+		getOpacities().add(row + delta, getOpacities().remove(row));
+		fireEvents(new RuleChangedEvent("Index " + row + " moved up to "
+				+ (row - 1), this));
+	}
+
 }
