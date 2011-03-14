@@ -3,6 +3,8 @@ package org.geopublishing.atlasStyler;
 import java.util.ArrayList;
 import java.util.List;
 
+import jj2000.j2k.NotImplementedError;
+
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
 import org.opengis.filter.Filter;
@@ -84,6 +86,18 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 	@Override
 	public RulesListType getType() {
 		return RulesListType.RASTER_COLORMAP_DISTINCTVALUES;
+	}
+
+	public List<String> getLabels() {
+		throw new NotImplementedError();
+	}
+
+	public List<String> getValues() {
+		throw new NotImplementedError();
+	}
+
+	public List<Double> getOpacity() {
+		throw new NotImplementedError();
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.geopublishing.atlasStyler;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
 
@@ -48,7 +49,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		this.rs = rs;
 		if (rs != null)
 			setColorMap(rs.getColorMap());
-		else setColorMap(null);
+		else
+			setColorMap(null);
 	}
 
 	public RasterSymbolizer getRs() {
@@ -61,6 +63,10 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	public org.geotools.styling.ColorMap getColorMap() {
 		return colorMap;
+	}
+
+	public int getNumClasses() {
+		throw new NotImplementedException();
 	}
 
 }
