@@ -307,8 +307,9 @@ public class AMLImport {
 			String burl = ac.getJnlpBaseUrl();
 			if (burl != null) {
 				// In v1.6 the basename was stored in the last part of the URL
-				ac.setBaseName(burl.substring(burl.substring(0, burl.length() - 1)
-						.lastIndexOf("/") + 1, burl.length() - 1));
+				ac.setBaseName(burl.substring(
+						burl.substring(0, burl.length() - 1).lastIndexOf("/") + 1,
+						burl.length() - 1));
 			}
 		}
 
@@ -816,7 +817,7 @@ public class AMLImport {
 			Node node) throws AtlasRecoverableException {
 		RasterLegendData rld = new RasterLegendData(false);
 		rld.setPaintGaps(Boolean.valueOf(node.getAttributes()
-				.getNamedItem("paintGaps").getNodeValue()));
+				.getNamedItem(AMLUtil.ATT_paintGaps).getNodeValue()));
 
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {

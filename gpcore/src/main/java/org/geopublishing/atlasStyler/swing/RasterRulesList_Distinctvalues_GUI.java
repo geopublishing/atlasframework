@@ -3,6 +3,8 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -11,7 +13,9 @@ import java.util.Arrays;
 import java.util.WeakHashMap;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -30,10 +34,13 @@ import org.geopublishing.atlasStyler.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.brewer.color.BrewerPalette;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.ThinButton;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
@@ -68,7 +75,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		this.add(jLabelHeading, "center");
 		this.add(getJPanelColorAndOpacity(), "grow x");
 
-		this.add(new JScrollPane(getJTable()), "grow x, height 50:150:600");
+		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 
 		JPanel jPanelButtons = new JPanel(new MigLayout(
 				"ins n 0 n 0, gap 1, fillx"));
@@ -81,14 +88,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			jPanelButtons.add(getJButtonDown(), "gapx rel");
 		}
 		this.add(jPanelButtons, "");
-	}
-
-	private Component getJButtonDown() {
-		return new JPanel();
-	}
-
-	private Component getJButtonUp() {
-		return new JPanel();
 	}
 
 	/**
@@ -110,8 +109,13 @@ public class RasterRulesList_Distinctvalues_GUI extends
 					Arrays.sort(selectedRows);
 					ArrayUtils.reverse(selectedRows);
 
-					for (int rowIdx : selectedRows) {
-						rulesList.removeIdx(rowIdx);
+					rulesList.pushQuite();
+					try {
+						for (int rowIdx : selectedRows) {
+							rulesList.removeIdx(rowIdx);
+						}
+					} finally {
+						rulesList.popQuite();
 					}
 
 					// De-select anything afterwards
@@ -174,6 +178,28 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	}
 
 	private Component getJPanelColorAndOpacity() {
+		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
+				"wrap 2, inset 1, gap 1", "[grow][]"));
+		jPanelColorAndTemplate
+				.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
+
+		JLabel jLabelTemplate = new JLabel(
+				AtlasStylerVector.R("UniqueValues.ChooseTemplate.Label"));
+
+		jPanelColorAndTemplate.add(getJComboBoxPalette());
+		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
+		jPanelColorAndTemplate.add(jLabelTemplate, "split 2");
+		jPanelColorAndTemplate.add(getJButtonOpacity());
+		jPanelColorAndTemplate.add(getJButtonApplyOpacity(), "sgx");
+		return jPanelColorAndTemplate;
+	}
+
+	private Component getJButtonOpacity() {
+		return new JPanel();
+	}
+
+	private Component getJButtonApplyOpacity() {
 		return new JPanel();
 	}
 
@@ -195,7 +221,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			// Try to remember the selected item
 			int selViewIdx = getJTable().getSelectedRow();
 
-			getTableModel().fireTableDataChanged();
+			getTableModel().fireTableStructureChanged();
 
 			getJTable().getSelectionModel().clearSelection();
 			getJTable().getSelectionModel().addSelectionInterval(selViewIdx,
@@ -207,6 +233,10 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		}
 
 	};
+	private JButton jButtonUp;
+	private ThinButton jButtonDown;
+	private ThinButton jButtonApplyPalette;
+	private JComboBoxBrewerPalettes jComboBoxPalette;
 
 	private DefaultTableModel getTableModel() {
 
@@ -314,13 +344,11 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				@Override
 				public void mouseClicked(MouseEvent e) {
 
-					if (e.getClickCount() == COLIDX_LABEL) {
+					if (e.getClickCount() == 2) {
 						int col = jTable.columnAtPoint(e.getPoint());
 						final int row = jTable.rowAtPoint(e.getPoint());
 
-						if (col == 2) {
-
-							Object val = getRulesList().getValues().get(row);
+						if (col == COLIDX_LABEL) {
 
 							if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 								LOGGER.debug(AtlasStylerVector.getLanguages());
@@ -485,6 +513,187 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			jTable.getColumnModel().getColumn(0).setMaxWidth(53);
 		}
 		return jTable;
+	}
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonUp() {
+		if (jButtonUp == null) {
+
+			jButtonUp = new ThinButton(new AbstractAction() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int row = getJTable().getSelectedRow();
+
+					if (row < 1)
+						return;
+
+					rulesList.move(row, -1);
+
+					// Update the selection
+					getJTable().getSelectionModel().clearSelection();
+					getJTable().getSelectionModel().addSelectionInterval(
+							row - 1, row - 1);
+				}
+
+			});
+
+			// jButtonUp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+			jButtonUp.setEnabled(false);
+			jButtonUp.setIcon(Icons.getUpArrowIcon());
+
+			/** Activate and disable on selection-changes * */
+			getJTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (getJTable().getSelectedRowCount() != 1)
+								jButtonUp.setEnabled(false);
+							else {
+								if (getJTable().getSelectedRow() > 0) // not the
+									// first pos
+									jButtonUp.setEnabled(true);
+								else
+									jButtonUp.setEnabled(false);
+							}
+						}
+
+					});
+
+		}
+		return jButtonUp;
+	}
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonDown() {
+		if (jButtonDown == null) {
+
+			jButtonDown = new ThinButton(new AbstractAction() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					rulesList.pushQuite();
+
+					int row = getJTable().getSelectedRow();
+
+					if (row == getJTable().getModel().getRowCount() - 1)
+						return;
+
+					getRulesList().move(row, 1);
+
+					getJTable().getSelectionModel().clearSelection();
+					getJTable().getSelectionModel().addSelectionInterval(
+							row + 1, row + 1);
+				}
+
+			});
+
+			// jButtonDown.setBorder(BorderFactory.createEmptyBorder(2, 2, 2,
+			// 2));
+			jButtonDown.setEnabled(false);
+			jButtonDown.setIcon(Icons.getDownArrowIcon());
+
+			/** Activate and disable on selection-changes * */
+			getJTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
+
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (getJTable().getSelectedRowCount() != 1)// onyl
+								// single
+								// selections
+								jButtonDown.setEnabled(false);
+							else {
+								if ((getJTable().getSelectedRow() != getJTable()
+										.getModel().getRowCount() - 1) // not
+								// on
+								// the
+								// last
+								// pos
+								)
+
+									jButtonDown.setEnabled(true);
+								else
+									jButtonDown.setEnabled(false);
+							}
+						}
+
+					});
+
+		}
+		return jButtonDown;
+	}
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JButton getJButtonApplyPalette() {
+		if (jButtonApplyPalette == null) {
+			jButtonApplyPalette = new ThinButton(new AbstractAction() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					rulesList
+							.applyPalette(RasterRulesList_Distinctvalues_GUI.this);
+				}
+			});
+
+			jButtonApplyPalette.setText(AtlasStylerVector
+					.R("UniqueValues.applyPaletteButton.title"));
+			jButtonApplyPalette.setToolTipText(AtlasStylerVector
+					.R("UniqueValues.applyPaletteButton.toolTip"));
+
+		}
+		return jButtonApplyPalette;
+	}
+
+	/**
+	 * This method initializes jComboBox
+	 * 
+	 * @return javax.swing.JComboBox
+	 */
+	private JComboBox getJComboBoxPalette() {
+		if (jComboBoxPalette == null) {
+
+			jComboBoxPalette = new JComboBoxBrewerPalettes(false);
+
+			if (rulesList.getPalette() != null)
+				jComboBoxPalette.getModel().setSelectedItem(
+						rulesList.getPalette());
+			else if (jComboBoxPalette.getSelectedItem() != null
+					&& jComboBoxPalette.getSelectedItem() instanceof BrewerPalette) {
+				rulesList.setPalette((BrewerPalette) jComboBoxPalette
+						.getSelectedItem());
+			}
+			jComboBoxPalette.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						rulesList.setPalette((BrewerPalette) (e.getItem()));
+						jComboBoxPalette.setToolTipText(rulesList.getPalette()
+								.getDescription());
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPalette, false);
+		}
+		return jComboBoxPalette;
 	}
 
 }

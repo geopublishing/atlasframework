@@ -115,6 +115,8 @@ public class AMLUtil {
 	 */
 	public static final String ATT_maplogoPosition = "mapLogoPosition";
 
+	public static final String ATT_paintGaps = "paintGaps";
+
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 

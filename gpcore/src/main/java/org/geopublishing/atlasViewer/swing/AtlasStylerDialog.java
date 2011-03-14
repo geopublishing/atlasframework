@@ -25,7 +25,6 @@ import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
-import org.geotools.styling.StyledLayer;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
@@ -40,11 +39,24 @@ public class AtlasStylerDialog extends StylerDialog {
 	protected AtlasMapLegend atlasMapLegend;
 	protected Map map;
 
+	/**
+	 * @returns the {@link #dpLayerRaster} is set. Otherwise the
+	 *          {@link #dpLayerVector}
+	 */
+	public StyledLayerInterface<?> getStyledLayer() {
+		if (dpLayerRaster != null)
+			return dpLayerRaster;
+		if (dpLayerVector != null)
+			return dpLayerVector;
+		return null;
+	}
+
 	// If null if this Style doesn't come from a layerStyle
 	protected LayerStyle layerStyle;
 
 	/**
 	 * Constructor to user with vector data
+	 * 
 	 * @param owner
 	 * @param dpLayer
 	 * @param atlasMapLegend
@@ -69,11 +81,12 @@ public class AtlasStylerDialog extends StylerDialog {
 		init(owner, dpLayer, atlasMapLegend, mapLayer, layerStyle);
 	}
 
-	
 	/**
 	 * Constructor to user with raster data
+	 * 
 	 * @param owner
-	 * @param dpLayer Source of raster data
+	 * @param dpLayer
+	 *            Source of raster data
 	 * @param atlasMapLegend
 	 * @param mapLayer
 	 * @param layerStyle
@@ -96,9 +109,7 @@ public class AtlasStylerDialog extends StylerDialog {
 		init(owner, dpLayer, atlasMapLegend, mapLayer, layerStyle);
 	}
 
-
-	private void init(Component owner,
-			final DpLayer dpLayer,
+	private void init(Component owner, final DpLayer dpLayer,
 			final AtlasMapLegend atlasMapLegend, final MapLayer mapLayer,
 			final LayerStyle layerStyle) {
 		getAtlasStyler().setOwner(this);
@@ -168,13 +179,12 @@ public class AtlasStylerDialog extends StylerDialog {
 				SwingUtil.WEST);
 	}
 
-	private static HashMap<String, Object> getParamMap(
-			DpLayer dpLayer_) {
+	private static HashMap<String, Object> getParamMap(DpLayer dpLayer_) {
 		HashMap<String, Object> params = new HashMap<String, Object>();
 		params.put(AtlasStylerVector.PARAM_LANGUAGES_LIST_STRING, dpLayer_
 				.getAtlasConfig().getLanguages());
-		params.put(AtlasStylerVector.PARAM_FONTS_LIST_FONT, dpLayer_.getAtlasConfig()
-				.getFonts());
+		params.put(AtlasStylerVector.PARAM_FONTS_LIST_FONT, dpLayer_
+				.getAtlasConfig().getFonts());
 		return params;
 	}
 
@@ -187,6 +197,10 @@ public class AtlasStylerDialog extends StylerDialog {
 		if (layerStyle != null) {
 			layerStyle.setStyle(getAtlasStyler().getStyle());
 
+			// if (getAtlasStyler() instanceof AtlasStylerRaster) {
+			// ((AtlasStylerRaster)getAtlasStyler()).getRasterLegendData().copyTo(dpLayerRaster.getLegendMetaData());
+			// }
+
 			/**
 			 * If may be, that the selectedTab/ selectedItem in the legend Panel
 			 * might have been set to another Tab/Item. For that case we set it
@@ -195,7 +209,7 @@ public class AtlasStylerDialog extends StylerDialog {
 			map.setSelectedStyleID(dpLayerVector.getId(), layerStyle.getID());
 
 		} else {
-			dpLayerVector.setStyle(getAtlasStyler().getStyle());
+			getStyledLayer().setStyle(getAtlasStyler().getStyle());
 		}
 
 		return super.okClose();
@@ -208,15 +222,10 @@ public class AtlasStylerDialog extends StylerDialog {
 		super.cancel();
 
 		if (layerStyle == null) {
-			
-			if (isVector()) {
-				// The edited Style was a default Style
-				dpLayerVector.setStyle(mapLayer.getStyle());
-			} else {
-				dpLayerRaster.setStyle(mapLayer.getStyle());
-			}
+
+			getStyledLayer().setStyle(mapLayer.getStyle());
 		} else {
-			if (isVector()){
+			if (isVector()) {
 				// The edited Style came from a LayerStyle
 				layerStyle.setStyle(mapLayer.getStyle());
 			}

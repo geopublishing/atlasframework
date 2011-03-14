@@ -106,7 +106,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 	private DefaultTableModel tableModel;
 
-	private JComboBox jComboBoxPalettes = null;
+	private JComboBoxBrewerPalettes jComboBoxPalettes = null;
 
 	private JLabel jLabelTemplate = null;
 
@@ -969,14 +969,18 @@ public class GraduatedColorQuantitiesGUI extends
 
 		if (jComboBoxPalettes == null) {
 
-			final DefaultComboBoxModel aModel = new DefaultComboBoxModel(
-					ASUtil.getPalettes(new PaletteType(true, false),
-							classifier.getNumClasses()));
-			aModel.setSelectedItem(rulesList.getBrewerPalette());
+			// final DefaultComboBoxModel aModel = new DefaultComboBoxModel(
+			// ASUtil.getPalettes(new PaletteType(true, false),
+			// classifier.getNumClasses()));
+			//
+			// jComboBoxPalettes = new JComboBox(aModel);
+			//
+			// jComboBoxPalettes.setRenderer(new PaletteCellRenderer());
 
-			jComboBoxPalettes = new JComboBox(aModel);
+			jComboBoxPalettes = new JComboBoxBrewerPalettes(false);
 
-			jComboBoxPalettes.setRenderer(new PaletteCellRenderer());
+			jComboBoxPalettes.getModel().setSelectedItem(
+					rulesList.getBrewerPalette());
 
 			jComboBoxPalettes.addItemListener(new ItemListener() {
 

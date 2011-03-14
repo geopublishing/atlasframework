@@ -23,6 +23,10 @@ import javax.swing.ListCellRenderer;
 
 import org.geotools.brewer.color.BrewerPalette;
 
+/**
+ * A renderer for {@link JComboBoxBrewerPalettes}
+ * 
+ */
 public class PaletteCellRenderer extends JLabel implements ListCellRenderer {
 
 	public PaletteCellRenderer() {

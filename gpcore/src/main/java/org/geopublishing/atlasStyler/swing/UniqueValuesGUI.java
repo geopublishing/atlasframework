@@ -21,7 +21,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.WeakHashMap;
@@ -29,7 +28,6 @@ import java.util.concurrent.CancellationException;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -56,8 +54,6 @@ import org.geopublishing.atlasStyler.UniqueValuesRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
-import org.geotools.brewer.color.ColorBrewer;
-import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
@@ -87,7 +83,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 			// Try to remember the selected item
 			int selViewIdx = getJTable().getSelectedRow();
 
-			getTableModel().fireTableDataChanged();
+			// We could have removed a line.. so the whole structure might have
+			// changed
+			getTableModel().fireTableStructureChanged();
 
 			getJTable().getSelectionModel().clearSelection();
 			getJTable().getSelectionModel().addSelectionInterval(selViewIdx,
@@ -100,7 +98,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 	};
 
-	private JComboBox jComboBoxPalette = null;
+	private JComboBoxBrewerPalettes jComboBoxPalette = null;
 
 	private JButton jButtonApplyPalette = null;
 
@@ -237,36 +235,10 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	private JComboBox getJComboBoxPalette() {
 		if (jComboBoxPalette == null) {
 
-			BrewerPalette[] palettes = new BrewerPalette[] {};
-			// This code only the paletes usefull for unique values.
-			final PaletteType paletteTypeUnique = new PaletteType(false, true);
-			final PaletteType paletteTypeRanged = new PaletteType(true, false);
-			try {
-				ColorBrewer brewer1, brewer2;
-				brewer1 = ColorBrewer.instance(paletteTypeUnique);
-				brewer2 = ColorBrewer.instance(paletteTypeRanged);
-				BrewerPalette[] palettes1 = brewer1
-						.getPalettes(paletteTypeUnique);
-				BrewerPalette[] palettes2 = brewer2
-						.getPalettes(paletteTypeRanged);
-				palettes = LangUtil.extendArray(palettes1, palettes2);
-			} catch (IOException e) {
-				LOGGER.error("Error loading palettes", e);
-				palettes = ColorBrewer.instance().getPalettes();
-			}
-			DefaultComboBoxModel aModel = new DefaultComboBoxModel(palettes);
-			//
-			// DefaultComboBoxModel aModel = new
-			// DefaultComboBoxModel(StylingUtil.addReversePalettes( brewer
-			// .getPalettes(paletteTypeUnique)));
+			jComboBoxPalette = new JComboBoxBrewerPalettes(false);
 
-			aModel.setSelectedItem(rulesList.getBrewerPalette());
-
-			jComboBoxPalette = new JComboBox(aModel);
-
-			PaletteCellRenderer aRenderer = new PaletteCellRenderer();
-			jComboBoxPalette.setRenderer(aRenderer);
-
+			jComboBoxPalette.getModel().setSelectedItem(
+					rulesList.getBrewerPalette());
 			jComboBoxPalette.addItemListener(new ItemListener() {
 
 				@Override

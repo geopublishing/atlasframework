@@ -1046,33 +1046,6 @@ public class AMLExporter {
 				new Double(attrib.getFunctionA()).toString());
 		element.setAttribute(AMLUtil.ATT_functionX,
 				new Double(attrib.getFunctionX()).toString());
-		//
-		// try { // was a TO DO: was for backward compatibility. remove in 1.4
-		// final SimpleFeatureType schema = dpe.getFeatureSource().getSchema();
-		// boolean found = false;
-		// for (int i = 0; i < schema.getAttributeCount(); i++) {
-		// if (schema.getAttributeDescriptors().get(i).getName().equals(
-		// attrib.getName())) {
-		// element.setAttribute("col", String.valueOf(i));
-		// found = true;
-		// break;
-		// }
-		// }
-		// if (!found) {
-		// LOGGER.warn("No column for attrib " + attrib.getLocalName()
-		// + " found. Throwing the metadata away...");
-		// return null;
-		// }
-		// } catch (final Exception e) {
-		// statusWindow
-		// .exceptionOccurred(new AtlasException(
-		// "Could not determine the indexes of attribute names '"
-		// + attrib.getLocalName()
-		// + "' of layer '"
-		// + dpe.getTitle()
-		// + "'.\n This is used for backward compatibility with GP 1.2 only.",
-		// e));
-		// }
 
 		element.setAttribute("visible", String.valueOf(attrib.isVisible()));
 
@@ -1155,8 +1128,8 @@ public class AMLExporter {
 			final RasterLegendData legendMetaData) {
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
 				"rasterLegendData");
-		element.setAttribute("paintGaps", legendMetaData.isPaintGaps()
-				.toString());
+		element.setAttribute(AMLUtil.ATT_paintGaps, legendMetaData
+				.isPaintGaps().toString());
 
 		for (final Double key : legendMetaData.getSortedKeys()) {
 			final Element item = document.createElementNS(AMLUtil.AMLURI,

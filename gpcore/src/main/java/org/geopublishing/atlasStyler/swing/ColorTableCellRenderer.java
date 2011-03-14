@@ -14,8 +14,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 
-import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -26,14 +26,21 @@ import javax.swing.table.TableCellRenderer;
  * @author Stefan A. Tzeggai
  * 
  */
-public class ColorTableCellRenderer extends JComponent implements
+public class ColorTableCellRenderer extends DefaultTableCellRenderer implements
 		TableCellRenderer {
+
+	private static final long serialVersionUID = -2538584781131815363L;
+
 	// The current color to display
 	Color curColor;
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int rowIndex, int vColIndex) {
+
+		super.getTableCellRendererComponent(table, value, isSelected, hasFocus,
+				rowIndex, vColIndex);
+
 		// // Set the color to paint
 		// if (curColor instanceof Color) {
 		curColor = (Color) value;
@@ -47,7 +54,8 @@ public class ColorTableCellRenderer extends JComponent implements
 	// Paint current color
 	@Override
 	public void paint(Graphics g) {
+		super.paint(g);
 		g.setColor(curColor);
-		g.fillRect(0, 0, getWidth() - 1, getHeight() - 1);
+		g.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
 	}
 }
