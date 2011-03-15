@@ -190,9 +190,9 @@
 		</dependency>
 
 		<dependency>
-		<!-- A HTML render in Java  -->
+		<!-- A HTML renderer in Java  -->
 			<groupId>lobo</groupId>
-			<artifactId>cobra</artifactId>
+			<artifactId>cobra-gp</artifactId>
 			<version>0.98.4</version>
 		</dependency>
 
