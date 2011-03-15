@@ -388,13 +388,6 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.geopublishing.geopublisher</groupId>
-			<artifactId>gpcore</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<dependency>
 			<!-- Test dependency, pulls ascore-tests -->
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
@@ -493,6 +486,20 @@
 			<version>1.5.3</version>
 			<type>jar</type>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>avswinggui</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.geopublishing.atlasStyler</groupId>
+			<artifactId>avswinggui</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

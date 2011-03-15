@@ -15,6 +15,7 @@
 
 
 	<properties>
+		<swt.version>3.6</swt.version>
 		<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClass>
 	</properties>
 
@@ -56,155 +57,114 @@
 	</build>
 
 	<profiles>
+
 		<profile>
-			<!-- If run on the special "gisbert" profile, the application is released 
-				to the geopublishing.org webpage -->
-			<id>gisbert</id>
-			<build>
-				<plugins>
-
-
-					<plugin>
-						<groupId>org.codehaus.mojo.webstart</groupId>
-						<artifactId>webstart-maven-plugin</artifactId>
-						<version>1.0-beta-1-SNAPSHOT</version>
-
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<goals>
-									<goal>jnlp</goal>
-								</goals>
-							</execution>
-						</executions>
-
-						<configuration>
-							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
-
-							<jnlp>
-								<inputTemplate>as_template.jnlp</inputTemplate>
-								<outputFile>as.jnlp</outputFile>
-								<mainClass>${mainClass}</mainClass>
-							</jnlp>
-
-							<sign>
-								<keypass>wasser</keypass>
-								<storepass>wasser</storepass>
-								<alias>IMPETUS</alias>
-							</sign>
-
-							<verbose>false</verbose>
-							<excludeTransitive>false</excludeTransitive>
-
-							<pack200>true</pack200> <!-- still buggy sadly -->
-							<gzip>true</gzip> <!-- still buggy sadly -->
-
-						</configuration>
-					</plugin>
-
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.3</version>
-						<executions>
-							<execution>
-								<phase>deploy</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<tasks>
-										<ant target="publish" inheritRefs="true">
-											<property name="mvn.buildNumber" value="${buildNumber}" />
-											<property name="mvn.project.version" value="${project.version}" />
-										</ant>
-										<ant target="add-deb-to-repo" inheritRefs="true"
-											antfile="${basedir}/src/deb/ant/build.xml">
-											<property name="mvn.buildNumber" value="${buildNumber}" />
-											<property name="mvn.project.version" value="${project.version}" />
-											<property name="mvn.basedir" value="${project.basedir}" />
-											<property name="mvn.project.artifactId" value="${project.artifactId}" />
-										</ant>
-									</tasks>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-
-					<plugin>
-						<groupId>com.mindtree.techworks.insight.releng</groupId>
-						<artifactId>maven-jsmooth-plugin</artifactId>
-						<version>0.1.0-SNAPSHOT</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jsmoothcompile</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<jsmoothFile>target/classes/atlasStyler.jsmooth</jsmoothFile>
-							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
-							<setExeName>false</setExeName>
-							<setJarName>true</setJarName>
-							<includeDependencies>true</includeDependencies>
-							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
-						</configuration>
-					</plugin>
-
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.2-beta-5</version>
-
-						<configuration>
-							<filters>
-								<!-- an empty filters tag is needed -->
-							</filters>
-							<descriptors>
-								<descriptor>${project.basedir}/src/assembly/full.xml</descriptor>
-							</descriptors>
-						</configuration>
-						<executions>
-							<execution>
-								<id>full</id>
-								<phase>package</phase>
-								<goals>
-									<goal>attached</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-				</plugins>
-
-			</build>
-
+			<id>windows-32</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>swt-windows</swt.artifactId>
+				<swt.classifier>x86</swt.classifier>
+				<os>windows</os>
+			</properties>
 		</profile>
+		<profile>
+			<id>windows-64</id>
+			<activation>
+				<os>
+					<family>windows</family>
+					<arch>x64</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>swt-windows</swt.artifactId>
+				<swt.classifier>x86_64</swt.classifier>
+				<os>windows</os>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-32</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>swt-gtk-linux</swt.artifactId>
+				<swt.classifier>x86</swt.classifier>
+				<os>linux</os>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux-64</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<arch>amd64</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>swt-gtk-linux</swt.artifactId>
+				<swt.classifier>x86_64</swt.classifier>
+				<os>linux</os>
+			</properties>
+		</profile>
+		<profile>
+			<id>macosx-32</id>
+			<activation>
+				<os>
+					<family>mac</family>
+					<arch>x86</arch>
+				</os>
+			</activation>
+			<properties>
+				<swt.artifactId>swt-cocoa-macosx</swt.artifactId>
+				<swt.classifier>x86</swt.classifier>
+				<os>macosx</os>
+			</properties>
+		</profile>
+
 	</profiles>
 
 
 
 	<dependencies>
 
-<!---->
-		<!-- <dependency> -->
-		<!-- <groupId>org.geotools</groupId> -->
-		<!-- <artifactId>gt-imagepyramid</artifactId> -->
-		<!-- <version>${geotools.version}</version> -->
-		<!-- <type>jar</type> -->
-		<!-- </dependency> -->
-<!---->
-		<!-- <dependency> -->
-		<!-- <groupId>org.geotools</groupId> -->
-		<!-- <artifactId>gt-imagemosaic</artifactId> -->
-		<!-- <version>${geotools.version}</version> -->
-		<!-- <type>jar</type> -->
-		<!-- </dependency> -->
+		<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJNativeSwing</artifactId>
+			<version>0.9.8</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.sun.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>3.0.9</version>
+		</dependency>
 
+		<dependency>
+			<groupId>com.sun</groupId>
+			<artifactId>jna_WindowUtils</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJNativeSwing-SWT</artifactId>
+			<version>0.9.8</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.swt</groupId>
+			<artifactId>${swt.artifactId}</artifactId>
+			<version>${swt.version}</version>
+			<classifier>${swt.classifier}</classifier>
+		</dependency>
 
 		<dependency>
 			<!-- Test dependency -->
@@ -222,23 +182,6 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		
-		<dependency>
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-gt</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>de.schmitzm</groupId>
-			<artifactId>schmitzm-core</artifactId>
-			<version>${schmitzm.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
@@ -255,17 +198,6 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
-
-
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-
-
 
 	</dependencies>
 

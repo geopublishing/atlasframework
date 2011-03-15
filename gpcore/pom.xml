@@ -15,12 +15,6 @@
 	</parent>
 
 
-	<properties>
-		<!-- <swt.artifactId>swt-gtk-linux</swt.artifactId> -->
-		<swt.version>3.6</swt.version>
-		<!-- <swt.classifier>x86_64</swt.classifier> -->
-		<!-- <os>linux</os> -->
-	</properties>
 
 	<build>
 		<plugins>
@@ -269,37 +263,6 @@
 		<!-- <type>jar</type> -->
 		<!-- </dependency> -->
 
-		<dependency>
-			<groupId>chrriis.dj</groupId>
-			<artifactId>DJNativeSwing</artifactId>
-			<version>0.9.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>3.0.9</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sun</groupId>
-			<artifactId>jna_WindowUtils</artifactId>
-			<version>1.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>chrriis.dj</groupId>
-			<artifactId>DJNativeSwing-SWT</artifactId>
-			<version>0.9.8</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.swt</groupId>
-			<artifactId>${swt.artifactId}</artifactId>
-			<version>${swt.version}</version>
-			<classifier>${swt.classifier}</classifier>
-		</dependency>
-
 	</dependencies>
 
 
@@ -337,76 +300,6 @@
 			</build>
 		</profile>
 
-		<profile>
-			<id>windows-32</id>
-			<activation>
-				<os>
-					<family>windows</family>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-windows</swt.artifactId>
-				<swt.classifier>x86</swt.classifier>
-				<os>windows</os>
-			</properties>
-		</profile>
-		<profile>
-			<id>windows-64</id>
-			<activation>
-				<os>
-					<family>windows</family>
-					<arch>x64</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-windows</swt.artifactId>
-				<swt.classifier>x86_64</swt.classifier>
-				<os>windows</os>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux-32</id>
-			<activation>
-				<os>
-					<family>unix</family>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-gtk-linux</swt.artifactId>
-				<swt.classifier>x86</swt.classifier>
-				<os>linux</os>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux-64</id>
-			<activation>
-				<os>
-					<family>unix</family>
-					<arch>amd64</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-gtk-linux</swt.artifactId>
-				<swt.classifier>x86_64</swt.classifier>
-				<os>linux</os>
-			</properties>
-		</profile>
-		<profile>
-			<id>macosx-32</id>
-			<activation>
-				<os>
-					<family>mac</family>
-					<arch>x86</arch>
-				</os>
-			</activation>
-			<properties>
-				<swt.artifactId>swt-cocoa-macosx</swt.artifactId>
-				<swt.classifier>x86</swt.classifier>
-				<os>macosx</os>
-			</properties>
-		</profile>
 	</profiles>
 
 	<repositories>
