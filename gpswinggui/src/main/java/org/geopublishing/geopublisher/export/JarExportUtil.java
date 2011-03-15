@@ -159,6 +159,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 */
 	public static final String GPCORE_JARNAME = "gpcore-" + getVersion()
 			+ getSnapshot() + postfixJar;
+	/**
+	 * Filename of the gpcore jar
+	 */
+	public static final String AVSWINGGUI_JARNAME = "avswinggui-"
+			+ getVersion() + getSnapshot() + postfixJar;
 
 	/**
 	 * Filename of the gpnatives jar
@@ -199,7 +204,9 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					ASCORE_JARNAME,
 					// ASSWINGGUI_JARNAME,
 					// GPSYNC_JARNAME,
-					GPCORE_JARNAME, GPNATIVES_JARNAME }));
+					GPCORE_JARNAME, AVSWINGGUI_JARNAME
+			// , GPNATIVES_JARNAME
+			}));
 
 	/**
 	 * Mainclass for the exprted atlas.
@@ -385,8 +392,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * system temp directory.
 	 */
 	private final File tempDir = new File(IOUtil.getTempDir(),
-			ATLAS_TEMP_FILE_EXPORTINSTANCE_ID + GpCoreUtil.RANDOM.nextInt(19999)
-					+ 10000);
+			ATLAS_TEMP_FILE_EXPORTINSTANCE_ID
+					+ GpCoreUtil.RANDOM.nextInt(19999) + 10000);
 
 	/** Is export to DISK requested? **/
 	private final Boolean toDisk;
@@ -905,6 +912,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		String path = null;
 		if (jarName.contains(GPCORE_JARNAME)) {
 			path = "org/geopublishing/geopublisher/gpcore/" + getVersion()
+					+ getSnapshot();
+		}
+
+		if (jarName.contains(AVSWINGGUI_JARNAME)) {
+			path = "org/geopublishing/geopublisher/atlasViewer/" + getVersion()
 					+ getSnapshot();
 		}
 
@@ -2112,9 +2124,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 
 		classpathString += "gt-epsg-hsql-2.6-SNAPSHOT.jar" + " "
-				+ GPCORE_JARNAME + " " + ASCORE_JARNAME + " "
-				+ SCHMITZM_JARNAME1 + " " + SCHMITZM_JARNAME2
-				+ SCHMITZM_JARNAME3 + " " + SCHMITZM_JARNAME4;
+				+ AVSWINGGUI_JARNAME + " " + GPCORE_JARNAME + " "
+				+ ASCORE_JARNAME + " " + SCHMITZM_JARNAME1 + " "
+				+ SCHMITZM_JARNAME2 + SCHMITZM_JARNAME3 + " "
+				+ SCHMITZM_JARNAME4;
 
 		mainAtts.put(Attributes.Name.CLASS_PATH, classpathString);
 

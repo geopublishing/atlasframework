@@ -488,14 +488,14 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.geopublishing.atlasStyler</groupId>
+			<groupId>org.geopublishing.atlasViewer</groupId>
 			<artifactId>avswinggui</artifactId>
 			<version>${project.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.geopublishing.atlasStyler</groupId>
+			<groupId>org.geopublishing.atlasViewer</groupId>
 			<artifactId>avswinggui</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
