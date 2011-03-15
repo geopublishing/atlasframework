@@ -241,7 +241,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			final Integer xmx = GPProps.getInt(GPProps.Keys.startJVMWithXmx,
 					256);
 			fileWriter.write("# JAVA "
-					+ GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14+")
+					+ GPProps.get(Keys.MinimumJavaVersion, "1.6.0_18+")
 					+ " or higher is required! \n");
 			fileWriter
 					.write("# This will start the atlas with a maximum of "
