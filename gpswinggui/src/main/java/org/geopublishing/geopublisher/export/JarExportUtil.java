@@ -916,7 +916,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 
 		if (jarName.contains(AVSWINGGUI_JARNAME)) {
-			path = "org/geopublishing/atlasViewer/" + getVersion()
+			path = "org/geopublishing/atlasViewer/avswinggui/" + getVersion()
 					+ getSnapshot();
 		}
 
