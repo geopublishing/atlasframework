@@ -17,13 +17,16 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DataUtilities;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -40,17 +43,17 @@ public class ACETranslationPrinterTest extends TestingClass {
 	@Test
 	public void testPrint() throws DocNameMissingException, IOException,
 			AtlasException, FactoryException, TransformException, SAXException,
-			ParserConfigurationException {
+			ParserConfigurationException, InterruptedException, InvocationTargetException {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE();
 		assertNotNull(ace);
 
-		/**
+		/**HTMLInfoJWebBrowser
 		 * Ask the user to select a save position
 		 */
 
-		File exportFile = new File(IOUtil.getTempDir(), "translations.html");
+		final File exportFile = new File(IOUtil.getTempDir(), "translations.html");
 
-		if (TestingUtil.INTERACTIVE) {
+		if (TestingUtil.hasGui()) {
 			JFileChooser dc = new JFileChooser(exportFile);
 			dc.setDialogType(JFileChooser.SAVE_DIALOG);
 			dc.setDialogTitle(GpUtil
@@ -59,7 +62,7 @@ public class ACETranslationPrinterTest extends TestingClass {
 			// if ((dc.showSaveDialog(null) != JFileChooser.APPROVE_OPTION)
 			// || (dc.getSelectedFile() == null))
 			// return;
-			exportFile = dc.getSelectedFile();
+			File exportFile2 = dc.getSelectedFile();
 		}
 
 		exportFile.delete();
@@ -78,7 +81,7 @@ public class ACETranslationPrinterTest extends TestingClass {
 		out.write(allTrans);
 		out.close();
 
-		if (TestingUtil.INTERACTIVE) {
+		if (TestingUtil.hasGui()) {
 			DocumentPane documentPane = new DocumentPane(
 					DataUtilities.fileToURL(exportFile), 0);
 			documentPane.saveDocument();
@@ -86,7 +89,13 @@ public class ACETranslationPrinterTest extends TestingClass {
 
 			assertTrue(exportFile.exists());
 
-			AVSwingUtil.lauchHTMLviewer(null, exportFile.toURI());
+			SwingUtilities.invokeAndWait(new Runnable() {
+				
+				@Override
+				public void run() {
+					AVSwingUtil.lauchHTMLviewer(null, exportFile.toURI());
+				}
+			});
 		}
 	}
 }

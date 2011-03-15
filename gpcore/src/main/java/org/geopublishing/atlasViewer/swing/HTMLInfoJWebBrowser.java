@@ -70,10 +70,7 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 		this.atlasConfig = ac;
 		this.setBarsVisible(false);
 		
-// Erstaml wieder raus, weil auf Hudson im JUnit-test:
-// java.lang.IllegalStateException: This call must happen in the AWT Event Dispatch Thread! Please refer to http://java.sun.com/docs/books/tutorial/uiswing/concurrency/index.html and http://java.sun.com/javase/6/docs/api/javax/swing/SwingUtilities.html#invokeLater(java.lang.Runnable)
-//		at chrriis.dj.nativeswing.swtimpl.components.JWebBrowser.setDefaultPopupMenuRegistered(JWebBrowser.java:1092)
-//		this.setDefaultPopupMenuRegistered(false);
+		this.setDefaultPopupMenuRegistered(false);
 		showDocument(url);
 		addWebBrowserListener(LISTENER);
 	}

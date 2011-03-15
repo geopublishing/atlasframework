@@ -19,11 +19,14 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.SwingUtilities;
 
 import net.charabia.jsmoothgen.application.JSmoothModelBean;
 import net.charabia.jsmoothgen.application.JSmoothModelPersistency;
@@ -495,24 +498,28 @@ public class JarExportUtilTest extends TestingClass {
 	}
 
 	@Test
-	public void testCreateIndexHTML() throws IOException {
+	public void testCreateIndexHTML() throws IOException, InterruptedException, InvocationTargetException {
 		AtlasConfigEditable ace = TestAtlas.small.getAce();
 
 		JarExportUtil jeu = new JarExportUtil(ace, TestingUtil.getNewTempDir(),
 				false, false, false);
 
-		File html = jeu.createIndexHTML(ace, TestingUtil.getNewTempDir());
+		final File html = jeu.createIndexHTML(ace, TestingUtil.getNewTempDir());
 
 		assertTrue(html.exists());
 
 		System.out.println(html.getAbsolutePath() + ":");
 		System.out.println(IOUtil.readFileAsString(html));
 
-		if (TestingUtil.INTERACTIVE) {
-			AVSwingUtil.lauchHTMLviewer(null, DataUtilities.fileToURL(html));
-		} else {
-		}
-
+		if (TestingUtil.hasGui()) {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				
+				@Override
+				public void run() {
+					AVSwingUtil.lauchHTMLviewer(null, DataUtilities.fileToURL(html));
+				}
+			});
+		} 
 	}
 
 }
