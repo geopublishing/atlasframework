@@ -186,7 +186,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 					 * Open a PopupMenu if the right mouse button was pressed.
 					 * Start the default action if double-clicked.
 					 */
-					if (e.getButton() == MouseEvent.BUTTON3)
+					if (e.isPopupTrigger())
 					// The right mouse opens the popup
 					{
 

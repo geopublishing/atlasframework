@@ -37,6 +37,7 @@ import com.lightdev.app.shtm.DocumentPane;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
+
 public class ACETranslationPrinterTest extends TestingClass {
 
 	@Test
