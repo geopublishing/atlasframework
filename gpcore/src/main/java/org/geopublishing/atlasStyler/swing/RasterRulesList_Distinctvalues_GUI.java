@@ -122,7 +122,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 							rulesList.removeIdx(rowIdx);
 						}
 					} finally {
-						rulesList.popQuite();
+						rulesList.popQuite(new RuleChangedEvent("Indexes "
+								+ selectedRows + " removed", rulesList));
 					}
 
 					// De-select anything afterwards
@@ -207,6 +208,10 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				}
 			});
 
+			if (rulesList.getOpacity() != null) {
+				ASUtil.selectOrInsert(jComboBoxOpacity, rulesList.getOpacity());
+			}
+
 			SwingUtil.addMouseWheelForCombobox(jComboBoxOpacity);
 		}
 		return jComboBoxOpacity;
@@ -222,9 +227,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 					rulesList.applyOpacity();
 				}
 			});
-			jButtonApplyOpacity.setText(AtlasStylerVector
+			jButtonApplyOpacity.setText(ASUtil
 					.R("UniqueValues.applyTemplateButton.title"));
-			jButtonApplyOpacity.setToolTipText(AtlasStylerVector
+			jButtonApplyOpacity.setToolTipText(ASUtil
 					.R("UniqueValues.applyTemplateButton.tooltip"));
 		}
 		return jButtonApplyOpacity;
@@ -274,16 +279,16 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 				@Override
 				public Class<?> getColumnClass(int columnIndex) {
-					if (columnIndex == COLIDX_COLOR) // Color
+					if (columnIndex == COLIDX_COLOR)
 						return Color.class;
 
-					if (columnIndex == COLIDX_OPACITY) // Value
+					if (columnIndex == COLIDX_OPACITY)
 						return Double.class;
 
-					if (columnIndex == COLIDX_VALUE) // Value
+					if (columnIndex == COLIDX_VALUE)
 						return Double.class;
 
-					if (columnIndex == COLIDX_LABEL) // Label
+					if (columnIndex == COLIDX_LABEL)
 						return Translation.class;
 
 					return null;
@@ -297,16 +302,16 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				@Override
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == COLIDX_COLOR)
-						return AtlasStylerVector
-								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.color");
+						return ASUtil
+								.R("GraduatedColorQuantities.Column.Color");
 					if (columnIndex == COLIDX_OPACITY)
-						return AtlasStylerVector
+						return ASUtil
 								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.opacity");
 					if (columnIndex == COLIDX_VALUE)
-						return AtlasStylerVector
+						return ASUtil
 								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.value");
 					if (columnIndex == COLIDX_LABEL)
-						return AtlasStylerVector
+						return ASUtil
 								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.label");
 					return super.getColumnName(columnIndex);
 				}
@@ -333,12 +338,18 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 				@Override
 				public boolean isCellEditable(int rowIndex, int columnIndex) {
+					if (columnIndex == COLIDX_OPACITY)
+						return true;
 					return false;
 				}
 
 				@Override
 				public void setValueAt(Object aValue, int rowIndex,
 						int columnIndex) {
+					if (columnIndex == COLIDX_OPACITY) {
+						rulesList.setOpacity(rowIndex, (Double) aValue);
+
+					}
 				}
 
 			};
@@ -462,72 +473,20 @@ public class RasterRulesList_Distinctvalues_GUI extends
 						 * Changing the Symbol with a MouseClick
 						 */
 						if (col == COLIDX_COLOR) {
-							// getRulesList().getSymbols().get(row).getListeners()
-							// .clear();
-							// final SingleRuleList<? extends Symbolizer>
-							// editSymbol = getRulesList()
-							// .getSymbols().get(row);
-							// final SingleRuleList<? extends Symbolizer> backup
-							// = editSymbol
-							// .copy();
-							//
-							// SymbolSelectorGUI gui = new SymbolSelectorGUI(
-							// SwingUtil
-							// .getParentWindow(RasterRulesList_Distinctvalues_GUI.this),
-							// "Change symbol for "
-							// + getRulesList().getLabels().get(
-							// row), editSymbol);
-							//
-							// /***************************************************
-							// * Listen to a CANCEL to use the backup
-							// */
-							// gui.addPropertyChangeListener(new
-							// PropertyChangeListener() {
-							//
-							// @Override
-							// public void propertyChange(
-							// PropertyChangeEvent evt) {
-							//
-							// if (evt.getPropertyName()
-							// .equals(SymbolSelectorGUI.PROPERTY_CANCEL_CHANGES))
-							// {
-							//
-							// backup.copyTo(editSymbol);
-							// }
-							//
-							// if (evt.getPropertyName().equals(
-							// SymbolSelectorGUI.PROPERTY_CLOSED)) {
-							// }
-							//
-							// }
-							//
-							// });
-							//
-							// // we have a referenct to it!
-							// listenToEditedSymbolAndPassOnTheEvent = new
-							// RuleChangeListener() {
-							//
-							// @Override
-							// public void changed(RuleChangedEvent e) {
-							//
-							// /** Exchanging the Symbol * */
-							// getRulesList().getSymbols().set(row,
-							// editSymbol);
-							//
-							// // Fire an event?! TODO
-							// getRulesList().fireEvents(
-							// new RuleChangedEvent(
-							// "Editing a Symbol",
-							// getRulesList()));
-							//
-							// }
-							//
-							// };
-							// editSymbol
-							// .addListener(listenToEditedSymbolAndPassOnTheEvent);
-							//
-							// gui.setModal(true);
-							// gui.setVisible(true);
+							// Click on the color field => Manually change the
+							// color.
+							final Color oldColor = rulesList.getColors().get(
+									row);
+							final Color newColor = AVSwingUtil
+									.showColorChooser(
+											RasterRulesList_Distinctvalues_GUI.this,
+											"", oldColor);
+
+							if (newColor != oldColor) {
+								rulesList.getColors().set(row, newColor);
+								rulesList.fireEvents(new RuleChangedEvent(
+										"Manually changed a color", rulesList));
+							}
 						}
 					}
 
@@ -604,8 +563,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-
-					rulesList.pushQuite();
 
 					int row = getJTable().getSelectedRow();
 

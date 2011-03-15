@@ -12,8 +12,10 @@ import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
 
+import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
@@ -66,6 +68,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return styledRaster;
 	}
 
+	public abstract RasterLegendData getRasterLegendData();
+
 	public int getNumClasses() {
 		// return getColorMap().getColorMapEntries().length;
 		return getValues().size();
@@ -104,26 +108,31 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	 */
 	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
 		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-			final Double valueDouble = Double.valueOf(cme.getQuantity()
-					.evaluate(null).toString());
-			getValues().add(valueDouble);
-			getOpacities().add(
-					Double.valueOf(cme.getOpacity().evaluate(null).toString()));
-			getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
-
-			final String labelFromCM = cme.getLabel();
-
-			if (labelFromCM != null && !labelFromCM.isEmpty()) {
-				getLabels().add(new Translation(labelFromCM));
-			} else {
-				Translation translation = styledRaster.getLegendMetaData().get(
-						valueDouble);
-				if (translation == null)
-					translation = new Translation("");
-				getLabels().add(translation);
-			}
+			importValuesLabelsQuantitiesColors(cme);
 		}
 
+	}
+
+	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
+		final Double valueDouble = Double.valueOf(cme.getQuantity()
+				.evaluate(null).toString());
+		getValues().add(valueDouble);
+		getOpacities().add(
+				Double.valueOf(cme.getOpacity().evaluate(null).toString()));
+		getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
+
+		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
+				.getLegendMetaData().get(valueDouble) : null;
+
+		if (I18NUtil.isEmpty(translation)) {
+			final String labelFromCM = cme.getLabel();
+			if (labelFromCM != null && !labelFromCM.isEmpty())
+				getLabels().add(new Translation(labelFromCM));
+			else
+				translation = new Translation("");
+
+		}
+		getLabels().add(translation);
 	}
 
 	public ArrayList<Double> getOpacities() {
@@ -242,6 +251,11 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		this.opacity = opacity;
 	}
 
+	/**
+	 * A global Setting for all CMEs
+	 * 
+	 * @return
+	 */
 	public Double getOpacity() {
 		return opacity;
 	}

@@ -20,6 +20,7 @@ import org.opengis.filter.Filter;
 import org.opengis.parameter.ParameterValueGroup;
 
 import de.schmitzm.geotools.FilterUtil;
+import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -29,6 +30,12 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class RasterRulesList_DistinctValues extends RasterRulesList {
+
+	private final ArrayList<Boolean> showInLegends = new ArrayList<Boolean>();
+
+	public ArrayList<Boolean> getShowInLegends() {
+		return showInLegends;
+	}
 
 	public RasterRulesList_DistinctValues(StyledRasterInterface styledRaster) {
 		super(styledRaster, ColorMap.TYPE_VALUES);
@@ -152,6 +159,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 		getLabels().add(new Translation(String.valueOf(uniqueValue)));
 		getColors().add(Color.CYAN);
 		getOpacities().add(1.);
+		getShowInLegends().add(true);
 
 		return true;
 	}
@@ -232,8 +240,34 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 		getLabels().add(row + delta, getLabels().remove(row));
 		getColors().add(row + delta, getColors().remove(row));
 		getOpacities().add(row + delta, getOpacities().remove(row));
+		getShowInLegends().add(row + delta, getShowInLegends().remove(row));
 		fireEvents(new RuleChangedEvent("Index " + row + " moved up to "
 				+ (row - 1), this));
 	}
 
+	@Override
+	/**
+	 * For distinct values, the RasterLegend is 1:1 relation to the values 
+	 */
+	public RasterLegendData getRasterLegendData() {
+		RasterLegendData rld = new RasterLegendData(true);
+
+		for (int i = 0; i < getNumClasses(); i++) {
+			// if (getShowInLegends().get(i))
+			rld.put(getValues().get(i), getLabels().get(i));
+		}
+
+		return rld;
+	}
+
+	public void setOpacity(int rowIndex, Double newOp) {
+		if (newOp == getOpacities().get(rowIndex))
+			return;
+		if (newOp > 1.)
+			newOp = 1.;
+		if (newOp < 0.)
+			newOp = 0.;
+		getOpacities().set(rowIndex, newOp);
+		fireEvents(new RuleChangedEvent("Opacity changed", this));
+	}
 }

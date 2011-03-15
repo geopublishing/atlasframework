@@ -19,9 +19,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geotools.data.FeatureSource;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;
@@ -42,12 +40,8 @@ import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
-import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
-import de.schmitzm.i18n.I18NUtil;
-import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * The {@link AtlasStylerVector} is a class to create SLD documents for a
@@ -201,13 +195,6 @@ public class AtlasStylerVector extends AtlasStyler {
 		final String msg = "GeometryForm not recognized = " + defaultGeometry;
 		LOGGER.error(msg);
 		throw new IllegalArgumentException(msg);
-	}
-
-	/**
-	 * @Deprecated use AsUtil.R
-	 */
-	public static String R(String key, final Object... values) {
-		return ASUtil.R(key, values);
 	}
 
 	/**
@@ -470,7 +457,6 @@ public class AtlasStylerVector extends AtlasStyler {
 		return styledFeatures;
 	}
 
-	
 	/**
 	 * Convenience method to indicate if the {@link FeatureSource} is of type
 	 * {@link LineString}.
@@ -518,6 +504,11 @@ public class AtlasStylerVector extends AtlasStyler {
 	public Style sanitize(Style style) {
 		return StylingUtil.correctPropertyNames(styleCached,
 				getStyledFeatures().getSchema());
+	}
+
+	@Override
+	StyleChangedEvent getStyleChangeEvent() {
+		return new StyleChangedEvent(getStyle());
 	}
 
 }

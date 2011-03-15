@@ -88,6 +88,12 @@ public class GraduatedColorQuantitiesGUI extends
 	final protected static Logger LOGGER = Logger
 			.getLogger(GraduatedColorQuantitiesGUI.class);
 
+	protected static final int COLIDX_COLOR = 0;
+
+	protected static final int COLIDX_LIMIT = 1;
+
+	protected static final int COLIDX_LABEL = 2;
+
 	private JPanel jPanel = null;
 
 	private JLabel jLabelClassificationTypeDescription = null;
@@ -521,7 +527,7 @@ public class GraduatedColorQuantitiesGUI extends
 						final int col = jTable.columnAtPoint(e.getPoint());
 						final int row = jTable.rowAtPoint(e.getPoint());
 
-						if (col == 0) {
+						if (col == COLIDX_COLOR) {
 							// Click on the color field => Manually change the
 							// color.
 							final Color oldColor = rulesList.getColors()[row];
@@ -536,7 +542,7 @@ public class GraduatedColorQuantitiesGUI extends
 										"Manually changed a color", rulesList));
 							}
 
-						} else if (col == 1) {
+						} else if (col == COLIDX_LIMIT) {
 							JOptionPane.showMessageDialog(
 									SwingUtil
 											.getParentWindowComponent(GraduatedColorQuantitiesGUI.this),
@@ -547,14 +553,14 @@ public class GraduatedColorQuantitiesGUI extends
 							return;
 						}
 
-						if (col != 2)
+						if (col != COLIDX_LABEL)
 							return;
 
 						/**
 						 * If its a right mouse click, we open a context menu
 						 * which allows to reset all labels to default.
 						 */
-						if (e.getButton() == MouseEvent.BUTTON3) {
+						if (e.isPopupTrigger()) {
 							final JPopupMenu toolPopup = new JPopupMenu();
 							toolPopup.add(new JMenuItem(
 									new AbstractAction(
@@ -679,13 +685,13 @@ public class GraduatedColorQuantitiesGUI extends
 
 				@Override
 				public Class<?> getColumnClass(final int columnIndex) {
-					if (columnIndex == 0) // Colors
+					if (columnIndex == COLIDX_COLOR) // Colors
 						return Color.class;
 
-					if (columnIndex == 1) // Limits
+					if (columnIndex == COLIDX_LIMIT) // Limits
 						return String.class;
 
-					if (columnIndex == 2) // Label
+					if (columnIndex == COLIDX_LABEL) // Label
 						return String.class;
 
 					return null;
@@ -698,7 +704,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 				@Override
 				public String getColumnName(final int columnIndex) {
-					if (columnIndex == 0)
+					if (columnIndex == COLIDX_COLOR)
 						return AtlasStylerVector
 								.R("GraduatedColorQuantities.Column.Color");
 					if (columnIndex == 1)

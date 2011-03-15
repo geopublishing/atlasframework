@@ -7,6 +7,7 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 
+import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 
 public class AtlasStylerRaster extends AtlasStyler {
@@ -16,20 +17,23 @@ public class AtlasStylerRaster extends AtlasStyler {
 
 	StyledGridCoverageReaderInterface styledRaster;
 
+	private RasterLegendData backupRasterLegend;
+
 	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster,
 			Style loadStyle, MapLayer mapLayer, HashMap<String, Object> params,
 			Boolean withDefaults) {
 		super(mapLayer, params, withDefaults);
+
 		this.styledRaster = styledRaster;
 
 		this.rlf = new RuleListFactory(styledRaster);
 
 		if (loadStyle != null) {
-			// Correct propertynames against the Schema
-			importStyle(loadStyle);
+			importStyle(loadStyle, styledRaster.getLegendMetaData());
 		} else {
 			if (styledRaster.getStyle() != null) {
-				importStyle(styledRaster.getStyle());
+				importStyle(styledRaster.getStyle(),
+						styledRaster.getLegendMetaData());
 			} else {
 
 				if (withDefaults != null && withDefaults == true) {
@@ -54,8 +58,51 @@ public class AtlasStylerRaster extends AtlasStyler {
 		return style;
 	}
 
+	public RasterLegendData getLegendMetaData() {
+
+		if (getRuleLists().size() == 0)
+			return new RasterLegendData(false);
+
+		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
+
+		// TODO What if there is more than one RUlesList!?
+
+		return rrl.getRasterLegendData();
+	}
+
 	// public RasterLegendData getRasterLegendData() {
 	// return styledRaster.get;
 	// }
 
+	@Override
+	public void cancel() {
+		super.cancel();
+
+		// Apply the RasterLegendData if it is a raster
+		if (this != null) {
+			backupRasterLegend.copyTo(styledRaster.getLegendMetaData());
+		}
+
+		for (final StyleChangeListener l : listeners) {
+			// LOGGER.debug("fires a StyleChangedEvent... ");
+			l.changed(new StyleChangedEvent(backupStyle));
+		}
+
+	}
+
+	public void importStyle(Style importStyle, RasterLegendData rasterLegendData) {
+		// Backup
+		if (backupRasterLegend == null) {
+			backupRasterLegend = new RasterLegendData(true);
+			if (rasterLegendData != null)
+				rasterLegendData.copyTo(backupRasterLegend);
+		}
+
+		super.importStyle(importStyle);
+	}
+
+	@Override
+	StyleChangedEvent getStyleChangeEvent() {
+		return new RasterStyleChangedEvent(getStyle(), getLegendMetaData());
+	}
 }

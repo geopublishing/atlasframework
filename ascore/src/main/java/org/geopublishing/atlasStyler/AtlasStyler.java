@@ -46,6 +46,7 @@ public abstract class AtlasStyler {
 		 */
 		OGC_SINGLELANGUAGE
 	}
+
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_TEMPLATES = "templates";
 
@@ -102,13 +103,11 @@ public abstract class AtlasStyler {
 	 * Used when {@link #cancel()} is called.
 	 */
 	protected Style backupStyle;
-	
 
 	/**
 	 * This factory is used to create empty or default rule lists.
 	 */
 	protected RuleListFactory rlf;
-
 
 	/**
 	 * This factory is used to create rule-lists. Returns a
@@ -209,7 +208,7 @@ public abstract class AtlasStyler {
 			Boolean withDefaults) {
 		// this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
-		
+
 		// If no params were passed, use an empty List, so we don't have to
 		// check against null
 		if (params == null)
@@ -257,11 +256,6 @@ public abstract class AtlasStyler {
 	 */
 	public void cancel() {
 		styleCached = backupStyle;
-
-		for (final StyleChangeListener l : listeners) {
-			// LOGGER.debug("fires a StyleChangedEvent... ");
-			l.changed(new StyleChangedEvent(backupStyle));
-		}
 	}
 
 	/**
@@ -324,19 +318,30 @@ public abstract class AtlasStyler {
 		// LOGGER.info(" FIREING EVENT to " + listeners.size());
 
 		styleCached = null;
-		styleCached = getStyle();
+		StyleChangedEvent ev = getStyleChangeEvent();
+		if (ev == null)
+			return;
+
+		styleCached = ev.getStyle();
 		if (styleCached == null)
 			return;
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			try {
-				l.changed(new StyleChangedEvent(styleCached));
+				l.changed(ev);
 			} catch (Exception e) {
 				LOGGER.error(e);
 			}
 		}
 	}
+
+	/**
+	 * Returns a StyleChangedEvent or a RasterStyleChangedEvent
+	 * 
+	 * @return
+	 */
+	abstract StyleChangedEvent getStyleChangeEvent();
 
 	/**
 	 * A list of fonts that will be available for styling in extension to the
@@ -385,9 +390,6 @@ public abstract class AtlasStyler {
 		}
 		return ruleLists;
 	}
-	
-	
-	
 
 	/***************************************************************************
 	 * @return A full {@link Style} that represents the last RuleList that has
@@ -441,7 +443,6 @@ public abstract class AtlasStyler {
 		}
 		return styleCached;
 	}
-
 
 	public abstract Style sanitize(Style style);
 
@@ -571,10 +572,7 @@ public abstract class AtlasStyler {
 		this.title = title;
 	}
 
-	abstract public AbstractRulesList copyRulesList(AbstractRulesList rl) ;
-
-
-
+	abstract public AbstractRulesList copyRulesList(AbstractRulesList rl);
 
 	/**
 	 * Because the rule title may not be empty, we check different sources here.
@@ -587,16 +585,16 @@ public abstract class AtlasStyler {
 		if (!I18NUtil.isEmpty(sf.getTitle()))
 			return sf.getTitle();
 
-		if (sf instanceof StyledFeaturesInterface){
-			return new Translation(getLanguages(), ((StyledFeaturesInterface)sf)
-					.getSchema().getName().getLocalPart());
-		} else{
+		if (sf instanceof StyledFeaturesInterface) {
+			return new Translation(getLanguages(),
+					((StyledFeaturesInterface) sf).getSchema().getName()
+							.getLocalPart());
+		} else {
 			// RASTER
-			return new Translation( "raster this baby" );
+			return new Translation("raster this baby");
 		}
 	}
 
-	
 	/**
 	 * Tries to interpret a {@link Style} as {@link AbstractRulesList}s. Only
 	 * {@link FeatureTypeStyle}s with parameter <code>name</code> starting with
@@ -677,6 +675,15 @@ public abstract class AtlasStyler {
 			fireStyleChangedEvents(getRuleLists().get(0));
 		}
 
+	}
+
+	/**
+	 * @Deprecated use AsUtil.R
+	 */
+	@Deprecated
+	// use AsUtil.R
+	public static String R(String key, final Object... values) {
+		return ASUtil.R(key, values);
 	}
 
 }
