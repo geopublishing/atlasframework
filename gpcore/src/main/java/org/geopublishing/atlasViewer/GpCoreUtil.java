@@ -48,6 +48,7 @@ import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
@@ -66,6 +67,7 @@ import de.schmitzm.i18n.Translation;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.lang.ResourceProvider;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
@@ -548,10 +550,33 @@ public class GpCoreUtil {
 	 */
 	public static HTMLInfoPaneInterface createHTMLInfoPane(URL url,
 			AtlasConfig ac) {
-		// use an HTML view bases on JEditorPane
-		return new HTMLInfoJPane(url, ac);
-		// use an HTML view bases on DJ project
-		// return new HTMLInfoJWebBrowser(url, ac);
+	  
+	  HTMLInfoPaneInterface htmlInfoPane = null;
+	  
+//	  // try to use an HTML view based on DJ project
+//	  htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
+//	      "org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser",
+//	      true, // fallback if class can not be loaded
+//	      url, ac // constructor arguments 
+//	  );
+	  
+      // try to use an HTML view based on Lobo/Cobra
+      htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
+          "org.geopublishing.atlasViewer.swing.HTMLInfoLoboBrowser",
+          true, // fallback if class can not be loaded
+          url, ac // constructor arguments 
+      );
+	  
+      if ( htmlInfoPane != null ) {
+        LOGGER.info("Using HTMLInfoPaneInterface for HTML view.");
+        return htmlInfoPane;
+      }
+	  
+  
+	  // use an HTML view based on JEditorPane
+	  htmlInfoPane = new HTMLInfoJPane(url, ac);
+	  
+	  return htmlInfoPane;
 	}
 
 	/**
@@ -563,5 +588,4 @@ public class GpCoreUtil {
 	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
 		return createHTMLInfoPane(map.getInfoURL(), map.getAc());
 	}
-
 }
