@@ -190,6 +190,7 @@
 		</dependency>
 
 		<dependency>
+		<!-- A HTML render in Java  -->
 			<groupId>lobo</groupId>
 			<artifactId>cobra</artifactId>
 			<version>0.98.4</version>
