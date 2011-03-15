@@ -21,11 +21,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasMapView;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
@@ -87,23 +87,23 @@ public class DesignMapView extends AtlasMapView {
 			layerManager = designLayerPanel;
 			JScrollPane scrollPane = new JScrollPane(designLayerPanel);
 			tabbedPane
-					.addTab(AtlasViewerGUI
+					.addTab(GpCoreUtil
 							.R("AtlasMapView.tabbedPane.LayersTab_label"),
 							scrollPane);
 
 			tabbedPane.setToolTipTextAt(0,
-					AtlasViewerGUI.R("AtlasMapView.tabbedPane.LayersTab_tt"));
+					GpCoreUtil.R("AtlasMapView.tabbedPane.LayersTab_tt"));
 			
 			DesignHTMLInfoPane html = getDesignInfoPanel(); 
 			JComponent htmlComponent = html.getComponent();
 			if ( !html.hasScrollPane() )
 			  htmlComponent = new JScrollPane(htmlComponent);
 			tabbedPane.addTab(
-					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_label"),
+					GpCoreUtil.R("AtlasMapView.tabbedPane.InfoTab_label"),
 					htmlComponent);
 
 			tabbedPane.setToolTipTextAt(1,
-					AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
+					GpCoreUtil.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 			add(tabbedPane, BorderLayout.CENTER);
 

@@ -30,8 +30,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
@@ -56,10 +56,10 @@ public class AtlasAboutDialog extends JDialog {
 			jLabel2.setText(null);
 			jLabel3.setText("<html><h1>" + atlasConfig.getTitle()
 					+ "</h1><br/><font size='-2' color='gray'>AtlasViewer "
-					+ ReleaseUtil.getVersionInfo(AVUtil.class)
+					+ ReleaseUtil.getVersionInfo(GpCoreUtil.class)
 					+ "</font></html>");
-			jButton1.setText(AtlasViewerGUI.R("HtmlBrowserWindow.button.close"));
-			setTitle(AtlasViewerGUI.R("AtlasViewer.HelpMenu.About",
+			jButton1.setText(GpCoreUtil.R("HtmlBrowserWindow.button.close"));
+			setTitle(GpCoreUtil.R("AtlasViewer.HelpMenu.About",
 					atlasConfig.getTitle()));
 //MS: now done in HTMLInfoJPane
 //			html.setContentType("text/html");
@@ -90,7 +90,7 @@ public class AtlasAboutDialog extends JDialog {
 		jLabel3 = new javax.swing.JLabel();
 		jPanel1 = new javax.swing.JPanel();
 		jButton1 = new javax.swing.JButton();
-		html = AVUtil.createHTMLInfoPane(atlasConfig.getAboutHTMLURL(), atlasConfig);
+		html = GpCoreUtil.createHTMLInfoPane(atlasConfig.getAboutHTMLURL(), atlasConfig);
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 

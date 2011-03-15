@@ -41,6 +41,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.Webserver;
@@ -85,10 +86,10 @@ public class ClickInfoPanel extends JPanel {
 	static private final Logger LOGGER = Logger.getLogger(ClickInfoPanel.class);
 
 	private static final JLabel CRS_LABEL = new JLabel(
-			AtlasViewerGUI.R("ClickInfoPanel.CRS.label") + ":",
+			GpCoreUtil.R("ClickInfoPanel.CRS.label") + ":",
 			SwingConstants.TRAILING);
 
-	final static String CRSValueToolTip = AtlasViewerGUI
+	final static String CRSValueToolTip = GpCoreUtil
 			.R("ClickInfoPanel.CRS.tooltip");
 
 	private static final JLabel X_LABEL = new JLabel("X" + ":",
@@ -111,7 +112,7 @@ public class ClickInfoPanel extends JPanel {
 
 	private JComponent infopanel;
 
-	final static String cordinatesMsg = AtlasViewerGUI
+	final static String cordinatesMsg = GpCoreUtil
 			.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.cordinates");
 
 	protected int countVisibleAttribsWithContent = 0;
@@ -176,7 +177,7 @@ public class ClickInfoPanel extends JPanel {
 					for (final double value : gcValue) {
 						i++;
 
-						final JLabel key = new JLabel(AtlasViewerGUI.R(
+						final JLabel key = new JLabel(GpCoreUtil.R(
 								"ClickInfoPanel.label_for_band", i));
 						key.setFont(DEFAULT_FONT);
 						panel.add(key);
@@ -227,7 +228,7 @@ public class ClickInfoPanel extends JPanel {
 					}
 
 					final JLabel key = new JLabel(
-							AtlasViewerGUI
+							GpCoreUtil
 									.R("ClickInfoPanel.label_for_raster_value"));
 					key.setFont(DEFAULT_FONT);
 					key.setLabelFor(valueLabel);
@@ -254,7 +255,7 @@ public class ClickInfoPanel extends JPanel {
 		// **********************************************************************
 		// titleString = layerManager.getTitleFor(layer);
 		panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER,
-				AtlasViewerGUI.R("ClickInfoPanel.titledBorder.bands")));
+				GpCoreUtil.R("ClickInfoPanel.titledBorder.bands")));
 
 		return panel;
 	}
@@ -333,7 +334,7 @@ public class ClickInfoPanel extends JPanel {
 			if (iterator.hasNext()) {
 				feature = iterator.next();
 			} else {
-				return new JLabel(AtlasViewerGUI.R("ClickInfoPanel.no_feature"));
+				return new JLabel(GpCoreUtil.R("ClickInfoPanel.no_feature"));
 			}
 		} finally {
 			fc.close(iterator);
@@ -604,7 +605,7 @@ public class ClickInfoPanel extends JPanel {
 												};
 											});
 									valueComponent
-											.setToolTipText(AtlasViewerGUI
+											.setToolTipText(GpCoreUtil
 													.R("ClickInfoPanel.OpenHTMLButton.TT",
 															title));
 								}
@@ -671,69 +672,10 @@ public class ClickInfoPanel extends JPanel {
 											};
 										});
 								valueComponent
-										.setToolTipText(AtlasViewerGUI
+										.setToolTipText(GpCoreUtil
 												.R("ClickInfoPanel.OpenHTMLinBrowserButton.TT",
 														documentTitle));
 							}
-
-							// else
-							// //
-							// **********************************************************
-							// // Trying to interpret the value as an Atlas-Link
-							// to
-							// // a video like: "video://filename"
-							// //
-							// **********************************************************
-							// if (valueString.startsWith("video://")) {
-							// try {
-							// final String videoFilename = valueString
-							// .substring(8);
-							//
-							// final StyledLayerInterface<?> styledObj =
-							// layerManager
-							// .getStyledObjectFor(layer);
-							//
-							// if (styledObj instanceof DpEntry) {
-							// final DpEntry dpe = (DpEntry) styledObj;
-							//
-							// final URL mediaURL = AVSwingUtil
-							// .createLocalCopyFromURL(
-							// this,
-							// IOUtil.extendURL(IOUtil
-							// .getParentUrl(dpe
-							// .getUrl()),
-							// videoFilename),
-							// videoFilename, "avi")
-							// .toURI().toURL();
-							// LOGGER.debug("showing now = " + mediaURL);
-							//
-							// // Use lightweight components for Swing
-							// // compatibility
-							// Manager.setHint(
-							// Manager.LIGHTWEIGHT_RENDERER, true);
-							// mediaPlayer = Manager
-							// .createRealizedPlayer(mediaURL);
-							// mediaPlayer.start();
-							//
-							// // create a player to play the media
-							// // specified
-							// // in
-							// // the URL
-							//
-							// final JMFVideoPanel videoPanel = new
-							// JMFVideoPanel(
-							// mediaPlayer);
-							//
-							// valueComponent = null;
-							// videoComponent = videoPanel;
-							//
-							// }
-							//
-							// } catch (final Exception e2) {
-							// disposeVideoPlayer();
-							// ExceptionDialog.show(ClickInfoPanel.this, e2);
-							// }
-							// }
 
 							else
 							// **********************************************************
@@ -801,7 +743,7 @@ public class ClickInfoPanel extends JPanel {
 					5, 0, // initX, initY
 					5, getYPad()); // xPad, yPad
 
-			final String msg = AtlasViewerGUI
+			final String msg = GpCoreUtil
 					.R("ClickInfoPanel.BorderFactory.CreateTitledBorder.attributes");
 			panel.setBorder(BorderFactory.createTitledBorder(LINE_BORDER, msg)); // i8ndone
 		}

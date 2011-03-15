@@ -128,13 +128,9 @@
 				<os>macosx</os>
 			</properties>
 		</profile>
-
 	</profiles>
 
-
-
 	<dependencies>
-
 		<dependency>
 			<groupId>chrriis.dj</groupId>
 			<artifactId>DJNativeSwing</artifactId>

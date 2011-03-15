@@ -20,8 +20,8 @@ import java.net.URL;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.http.Webserver;
@@ -111,7 +111,7 @@ public class GpTestingUtil extends GTTestingUtil {
 			throws FactoryException, TransformException, AtlasException,
 			SAXException, IOException, ParserConfigurationException {
 
-		AVUtil.initAtlasLogging();
+		GpCoreUtil.initAtlasLogging();
 
 		AtlasViewerGUI.setupResLoMan(new String[] { atlasDir });
 

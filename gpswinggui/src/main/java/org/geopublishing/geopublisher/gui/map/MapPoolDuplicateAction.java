@@ -20,7 +20,7 @@ import javax.swing.AbstractAction;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.Icons;
@@ -82,7 +82,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 		final File newHtmlDir = ace.getHtmlDirFor(newMap);
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(mapPoolJTable,
-				null, AVUtil.R("dialog.title.wait"));
+				null, GpCoreUtil.R("dialog.title.wait"));
 		AtlasSwingWorker<Void> swingWorker = new AtlasSwingWorker<Void>(
 				statusDialog) {
 

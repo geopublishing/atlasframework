@@ -19,13 +19,10 @@ import java.net.URL;
 
 import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
 
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
-import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
-import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
 import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
@@ -90,7 +87,7 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
       return htmlPane.hasScrollPane();
     }
     public DesignHTMLInfoPane(AtlasConfigEditable ace_, Map map_) {
-      this(ace_, map_, AVUtil.createHTMLInfoPane(map_));
+      this(ace_, map_, GpCoreUtil.createHTMLInfoPane(map_));
     }
     
     public DesignHTMLInfoPane(AtlasConfigEditable ace_, Map map_, HTMLInfoPaneInterface htmlPane_) {

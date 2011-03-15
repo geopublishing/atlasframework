@@ -43,7 +43,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
@@ -381,7 +381,7 @@ public class DnDJTree extends JTree implements DragSourceListener,
 				((DefaultTreeModel) getModel()).insertNodeInto(droppedNode,
 						dropTargetNode, dropTargetNode.getChildCount());
 
-				AVUtil.expandToNode(this, droppedNode);
+				GpCoreUtil.expandToNode(this, droppedNode);
 			}
 
 			dropped = true;

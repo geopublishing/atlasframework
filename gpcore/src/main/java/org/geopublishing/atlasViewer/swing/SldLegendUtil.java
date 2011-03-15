@@ -29,6 +29,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.map.Map;
@@ -285,7 +286,7 @@ public class SldLegendUtil {
 					legendPanel.setSelectedComponent(oneStyleLegend);
 				}
 
-				legendPanel.setToolTipTextAt(count, AtlasViewerGUI.R(
+				legendPanel.setToolTipTextAt(count, GpCoreUtil.R(
 						"Legend.Views.TabbedPane.ToolTip", ls.getTitle()
 								.toString()));
 

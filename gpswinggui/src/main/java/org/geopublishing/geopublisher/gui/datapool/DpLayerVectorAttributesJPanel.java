@@ -35,11 +35,11 @@ import javax.swing.JList;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.EditAttributesJDialog;
@@ -211,7 +211,7 @@ public class DpLayerVectorAttributesJPanel extends JPanel implements
 			//
 			{
 				final JButton openTable = new SmallButton(new AbstractAction(
-						AtlasViewerGUI.R("LayerToolMenu.table"),
+						GpCoreUtil.R("LayerToolMenu.table"),
 						Icons.ICON_TABLE) {
 
 					@Override

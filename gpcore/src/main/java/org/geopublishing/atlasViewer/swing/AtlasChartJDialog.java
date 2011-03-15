@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.jfree.chart.JFreeChart;
 
@@ -135,8 +136,8 @@ public class AtlasChartJDialog extends AtlasDialog {
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 						AtlasChartJDialog.this,
-						AtlasViewerGUI.R("dialog.title.wait"),
-						AtlasViewerGUI.R("dialog.title.wait"));
+						GpCoreUtil.R("dialog.title.wait"),
+						GpCoreUtil.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override
@@ -262,7 +263,7 @@ public class AtlasChartJDialog extends AtlasDialog {
 				}
 			}
 
-		}, AtlasViewerGUI.R("AtlasChartJPanel.zoomFullExtent.tt"));
+		}, GpCoreUtil.R("AtlasChartJPanel.zoomFullExtent.tt"));
 
 		return resetZoomTool;
 	}

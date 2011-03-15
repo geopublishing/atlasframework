@@ -22,9 +22,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -387,12 +387,12 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 	 * JARs are shown that have to be extracted first.
 	 * <p>
 	 * The temporary files of the AtlasViewer are identified by their filename
-	 * starting with {@link AVUtil#ATLAS_TEMP_FILE_INSTANCE_ID}
+	 * starting with {@link GpCoreUtil#ATLAS_TEMP_FILE_INSTANCE_ID}
 	 */
 	public static void cleanupTemp() {
 
-		IOUtil.cleanupTempDir(AVUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
-				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
+		IOUtil.cleanupTempDir(GpCoreUtil.ATLAS_TEMP_FILE_INSTANCE_ID,
+				GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID);
 
 	}
 

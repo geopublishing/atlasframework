@@ -24,8 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.swing.SwingUtil;
 
@@ -68,13 +68,13 @@ public class HTMLBrowserWindow extends JDialog {
 
 	private void init() {
 		JPanel cp = new JPanel(new BorderLayout());
-		HTMLInfoPaneInterface html = AVUtil.createHTMLInfoPane(infoURL, atlasConfig);
+		HTMLInfoPaneInterface html = GpCoreUtil.createHTMLInfoPane(infoURL, atlasConfig);
 		JComponent htmlComponent = html.getComponent();
 		if ( !html.hasScrollPane() )
 		  htmlComponent = new JScrollPane(htmlComponent);
 		cp.add(htmlComponent,BorderLayout.CENTER);
 
-		final String msg = AtlasViewerGUI.R("HtmlBrowserWindow.button.close");
+		final String msg = GpCoreUtil.R("HtmlBrowserWindow.button.close");
 		cp.add(new JButton(new AbstractAction(msg) {
 
 			@Override

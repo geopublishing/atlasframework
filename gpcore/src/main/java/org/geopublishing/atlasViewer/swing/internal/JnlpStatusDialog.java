@@ -16,7 +16,7 @@ import java.net.URL;
 import javax.jnlp.DownloadServiceListener;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.swing.StatusDialog;
 
@@ -43,7 +43,7 @@ public class JnlpStatusDialog extends StatusDialog implements
 	}
 
 	public JnlpStatusDialog(Component owner) {
-		this(owner, AtlasViewerGUI.R("JNLPStatus.Downloading"), AtlasViewerGUI.R("JNLPStatus.Downloading"));
+		this(owner, GpCoreUtil.R("JNLPStatus.Downloading"), GpCoreUtil.R("JNLPStatus.Downloading"));
 	}
 
 	@Override

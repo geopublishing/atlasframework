@@ -17,7 +17,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 
@@ -54,7 +54,7 @@ public abstract class AtlasTask<K> extends SwingWorker<K, String> {
 
 		this.owner = owner;
 
-		progressWindow = new AtlasStatusDialog(owner, AtlasViewerGUI
+		progressWindow = new AtlasStatusDialog(owner, GpCoreUtil
 				.R("dialog.title.wait"), startText);
 
 		progressWindow.started();

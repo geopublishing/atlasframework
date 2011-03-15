@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.net.BindException;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
 
 import rachel.http.WebServer;
@@ -65,7 +65,7 @@ public class Webserver {
 								WebResourceManager.getInstance());
 					} catch (BindException e1) {
 						try {
-							PORT = (AVUtil.RANDOM.nextInt(200)) + 9000;
+							PORT = (GpCoreUtil.RANDOM.nextInt(200)) + 9000;
 							webserver = new WebServer(PORT,
 									WebResourceManager.getInstance());
 						} catch (BindException e2) {

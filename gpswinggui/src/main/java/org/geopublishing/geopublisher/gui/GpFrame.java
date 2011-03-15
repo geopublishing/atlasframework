@@ -44,6 +44,7 @@ import javax.swing.UIManager;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -348,7 +349,7 @@ public class GpFrame extends JFrame {
 		// ******************************************************************
 		fileMenu.add(new JSeparator()); // SEPARATOR
 		menuItem = new GpMenuItem(
-				AtlasViewerGUI
+				GpCoreUtil
 						.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
 				null, ActionCmds.exitGP, Icons.ICON_EXIT_SMALL);
 		fileMenu.add(menuItem);
@@ -739,9 +740,9 @@ public class GpFrame extends JFrame {
 		AtlasConfigEditable ace = gp.getAce();
 
 		JMenu languageSubMenu = new JMenu(
-				AtlasViewerGUI
+				GpCoreUtil
 						.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
-		languageSubMenu.setToolTipText(AtlasViewerGUI
+		languageSubMenu.setToolTipText(GpCoreUtil
 				.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_tt"));
 		languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
 

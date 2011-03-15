@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
@@ -21,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
@@ -38,7 +37,6 @@ import de.schmitzm.geotools.styling.StyledFeatureCollectionInterface;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
-import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
 
@@ -283,7 +281,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	 */
 	@Override
 	protected HTMLBrowserWindow getHTMLBrowserWindow() {
-		final String titleText = AtlasViewerGUI.R(
+		final String titleText = GpCoreUtil.R(
 				"LayerPaneGroup.ClickedInfoButton.information_about",
 				getTitle());
 

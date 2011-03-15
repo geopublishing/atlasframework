@@ -503,9 +503,6 @@
 		</dependency>
 	</dependencies>
 
-
-
-
 	<repositories>
 
 		<!-- These are actually already defined in the parent pom.xml AND pom_basic.xml 
@@ -513,24 +510,27 @@
 			split the porject into 7 single modules. -->
 
 		<repository>
-			<!-- Releases for geopublishing.org & more by www.wikisquare.de -->
+			<!-- Releases for geopublishing.org and more by www.wikisquare.de -->
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 			<id>releases.artifactory.wikisquare.de</id>
-			<name>Releases for geopublishing.org - powered by wikisquare.de</name>
+			<name>Releases for geopublishing.org - powered by wikisquare.de
+			</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-releases</url>
 		</repository>
 
 		<repository>
-			<!-- Snapshot releases geopublishing.org & more by www.wikisquare.de -->
+			<!-- Snapshot releases geopublishing.org and more by www.wikisquare.de -->
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
 			</snapshots>
 			<id>snapshots.artifactory.wikisquare.de</id>
-			<name>Snapshots for geopublishing.org - powered by wikisquare.de</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots</url>
+			<name>Snapshots for geopublishing.org - powered by wikisquare.de
+			</name>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots
+			</url>
 		</repository>
 	</repositories>
 
@@ -538,13 +538,15 @@
 		<snapshotRepository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-snapshots</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local</url>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 		<repository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-releases</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local</url>
+			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>

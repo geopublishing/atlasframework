@@ -42,7 +42,7 @@
 //	}
 //
 //	public JnlpStatusDialog(Component owner) {
-//		this(owner, AtlasViewerGUI.R("JNLPStatus.Downloading"), AtlasViewerGUI.R("JNLPStatus.Downloading"));
+//		this(owner, GpCoreUtil.R("JNLPStatus.Downloading"), GpCoreUtil.R("JNLPStatus.Downloading"));
 //	}
 //
 //	@Override

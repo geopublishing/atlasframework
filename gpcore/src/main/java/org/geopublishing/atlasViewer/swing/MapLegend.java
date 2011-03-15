@@ -34,8 +34,8 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.ExportableLayer;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
@@ -517,7 +517,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 		MapLayer[] layers = getGeoMapPane().getMapContext().getLayers();
 		for (MapLayer ml : layers) {
 			if (ml.getTitle().equals(styledObj.getId())) {
-				AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
+				AVSwingUtil.showMessageDialog(this, GpCoreUtil.R(
 						"MapLegend.InsertLayer.LayerAlreadyInContext",
 						styledObj.getTitle()));
 				return false;
@@ -1222,7 +1222,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 	@Override
 	public void paint(Graphics g) {
 		if (getGeoMapPane().getMapContext().getLayers().length == 0) {
-			g.drawString(AVUtil.R("MapLegend.IsEmptyMsg"), 2, 20);
+			g.drawString(GpCoreUtil.R("MapLegend.IsEmptyMsg"), 2, 20);
 		} else
 			super.paint(g);
 	}

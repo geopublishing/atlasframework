@@ -17,8 +17,8 @@ import java.net.URL;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasAboutDialog;
@@ -131,7 +131,7 @@ public enum AtlasProtocol {
 		if (map == null) {
 			LOGGER.error(mapId + " is not a known mapID.");
 			AVSwingUtil.showMessageDialog(owner,
-					AVUtil.R("AtlasMapLink.TargetMapIDCantBeFound", mapId));
+					GpCoreUtil.R("AtlasMapLink.TargetMapIDCantBeFound", mapId));
 			return;
 		}
 
@@ -140,7 +140,7 @@ public enum AtlasProtocol {
 		 * would happen.
 		 */
 		if (!AtlasViewerGUI.isRunning()) {
-			AVSwingUtil.showMessageDialog(owner, AVUtil.R(
+			AVSwingUtil.showMessageDialog(owner, GpCoreUtil.R(
 					"AtlasMapLink.NotOpeningBecauseNoAtlasViewerOpen",
 					map.getTitle()));
 			return;

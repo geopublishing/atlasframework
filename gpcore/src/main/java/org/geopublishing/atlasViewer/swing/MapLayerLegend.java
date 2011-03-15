@@ -52,6 +52,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.swing.AtlasStylerSaveLayerToSLDAction;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.ExportableLayer;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject;
 import org.geopublishing.atlasViewer.swing.internal.DnDAtlasObject.AtlasDragSources;
 import org.geopublishing.atlasViewer.swing.plaf.BasicMapLayerLegendPaneUI;
@@ -457,7 +458,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		try {
 			exportable.exportWithGUI(owner);
 		} catch (final IOException e) {
-			final String msg = AtlasViewerGUI
+			final String msg = GpCoreUtil
 					.R("LayerPaneGroup.JOptionPane.ShowMessageDialog.export_failed");
 			JOptionPane.showMessageDialog(owner, msg); // i8ndone
 		}
@@ -468,7 +469,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * passed properly
 	 */
 	protected HTMLBrowserWindow getHTMLBrowserWindow() {
-		final String titleText = AtlasViewerGUI.R(
+		final String titleText = GpCoreUtil.R(
 				"LayerPaneGroup.ClickedInfoButton.information_about",
 				getTitle());
 
@@ -503,7 +504,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * not start/end with a <code>html</code> tag.
 	 */
 	public String getLegendTooltip() {
-		return AtlasViewerGUI.R("LayerBar.default.tooltip");
+		return GpCoreUtil.R("LayerBar.default.tooltip");
 
 	}
 
@@ -532,7 +533,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// ****************************************************************************
 		if (isFilterable()) {
 
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+			toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 					.R("LayerToolMenu.filter"), Icons.ICON_FILTER) {
 
 				@Override
@@ -544,7 +545,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 
 			final JMenuItem removeFilterMenuItem = new JMenuItem();
 			removeFilterMenuItem
-					.setAction(new AbstractAction(AtlasViewerGUI
+					.setAction(new AbstractAction(GpCoreUtil
 							.R("LayerToolMenu.remove_filter"),
 							Icons.ICON_REMOVE_FILTER) {
 
@@ -571,7 +572,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 //				&& !(styledLayer instanceof StyledRasterInterface)
 				) {
 
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+			toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 					.R("LayerToolMenu.style"), Icons.ICON_STYLE) {
 
 				@Override
@@ -592,7 +593,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		if (isTableViewable()) {
 
 			final AbstractAction showTableAction = new AbstractAction(
-					AtlasViewerGUI.R("LayerToolMenu.table"), Icons.ICON_TABLE) {
+					GpCoreUtil.R("LayerToolMenu.table"), Icons.ICON_TABLE) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -606,21 +607,21 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 				}
 			};
 			showTableAction.putValue(Action.SHORT_DESCRIPTION,
-					AtlasViewerGUI.R("LayerToolMenu.table.tt"));
+					GpCoreUtil.R("LayerToolMenu.table.tt"));
 			toolPopup.add(new JMenuItem(showTableAction));
 		}
 
 		/**
 		 * Button to remove the layer from the MapContext
 		 */
-		toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+		toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 				.R("LayerToolMenu.remove"), Icons.ICON_REMOVE) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final String msg1 = AtlasViewerGUI
+				final String msg1 = GpCoreUtil
 						.R("LayerPaneGroup.GetParentWindow.This.realy_want_to_remove_layer");
-				final String msg2 = AtlasViewerGUI
+				final String msg2 = GpCoreUtil
 						.R("LayerPaneGroup.GetParentWindow.JOptionPane.YesNoOption.remove");
 				// i8ndone
 				if (JOptionPane.showConfirmDialog(
@@ -642,7 +643,7 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 * Button to export the layer to a local folder
 		 */
 		if (isExportable()) {
-			toolPopup.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+			toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 					.R("LayerToolMenu.export"), Icons.ICON_EXPORT) {
 
 				@Override

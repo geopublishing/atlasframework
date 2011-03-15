@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
@@ -19,12 +20,10 @@ import org.geopublishing.atlasViewer.map.Map;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserListener;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserNavigationEvent;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.SwingUtil;
 
 /**
  * An HTML view based on the {@link JWebBrowser} of <i>The DJ Project</i>.
@@ -36,7 +35,7 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 	/**
 	 * This message is shows when no data can be found.
 	 */
-	final String NODATA_MSG = AtlasViewerGUI
+	final String NODATA_MSG = GpCoreUtil
 			.R("HTMLInfoPane.NODATA.MSG.sorry_no_info_available");
 
 	/** Configuration of the atlas */

@@ -53,8 +53,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AVProps.Keys;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.AMLImport;
 import org.geopublishing.atlasViewer.dp.DpEntry;
@@ -123,19 +123,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	}
 
 	/**
-	 * Convenience method to access the {@link AtlasViewerGUI}s translation
-	 * resources.
-	 * 
-	 * @param key
-	 *            the key for the AtlasViewerTranslation.properties file
-	 * @param values
-	 *            optinal values
-	 */
-	public static String R(String key, Object... values) {
-		return AVUtil.R(key, values);
-	}
-
-	/**
 	 * The main JFrame of the AtlasViewer.
 	 */
 	volatile private JFrame atlasJFrame;
@@ -169,7 +156,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 		// Atlas Viewer is starting
 		LOGGER.info("Starting AtlasViewer.. "
-				+ ReleaseUtil.getVersionInfo(AVUtil.class));
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class));
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasViewer"));
 
 		/*
@@ -200,7 +187,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				setMap(mapPool.get(0));
 			}
 		} else {
-			final String msgNoMapFound = R("AtlasViewer.error.noMapInAtlas");
+			final String msgNoMapFound = GpCoreUtil.R("AtlasViewer.error.noMapInAtlas");
 			LOGGER.warn(msgNoMapFound);
 			getJFrame().setContentPane(new JLabel(msgNoMapFound));
 		}
@@ -338,7 +325,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		}
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(getJFrame(),
-				null, R("AmlViewer.process.opening_map", newMap.getTitle()));
+				null, GpCoreUtil.R("AmlViewer.process.opening_map", newMap.getTitle()));
 
 		// Remember the status of the toolbar
 		Integer lastMapsTool = -99;
@@ -377,7 +364,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				if (JNLPUtil.isAtlasDataFromJWS(atlasConfig)) {
 					LOGGER.debug("atlas data comes from JWS, so we download all parts of map "
 							+ newMap.getId() + " (if not already cached)...");
-					publish(R("AmlViewer.process.downloading_map",
+					publish(GpCoreUtil.R("AmlViewer.process.downloading_map",
 							newMap.getTitle()));
 					newMap.downloadMap(statusDialog);
 				}
@@ -601,7 +588,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 */
 	private JMenuItem getShowGroupsMenuItem() {
 		JMenuItem menuitemGroups = new JMenuItem(
-				R("AtlasViewer.FileMenu.ShowThematicGroups"));
+				GpCoreUtil.R("AtlasViewer.FileMenu.ShowThematicGroups"));
 		menuitemGroups.addActionListener(new ActionListener() {
 
 			@Override
@@ -624,7 +611,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 	 * 
 	 */
 	public static void main(String[] args) {
-		AVUtil.initAtlasLogging();
+		GpCoreUtil.initAtlasLogging();
 		// final URL log4jURL = AtlasConfig.getResLoMan().getResourceAsUrl(
 		// "av_log4j.xml");
 
@@ -683,13 +670,13 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 					@Override
 					protected AtlasConfig doInBackground() throws Exception {
-						publish(R("AtlasViewer.process.EPSG_codes_caching"));
+						publish(GpCoreUtil.R("AtlasViewer.process.EPSG_codes_caching"));
 						GTUtil.initEPSG();
 
 						// Starting the internal WebServer
 						new Webserver();
 
-						publish(R("dialog.title.wait"));
+						publish(GpCoreUtil.R("dialog.title.wait"));
 						new AMLImport().parseAtlasConfig(statusDialog,
 								getAtlasConfig(), true);
 
@@ -795,7 +782,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				&& JNLPUtil.countPartsToDownload(atlasConfig.getDataPool())
 						.size() > 0) {
 			boolean dlNow = SwingUtil.askYesNo(getJFrame(),
-					AVUtil.R("DownloadAllDataAtOnceQuestionAtAtlasStart"));
+					GpCoreUtil.R("DownloadAllDataAtOnceQuestionAtAtlasStart"));
 			if (dlNow == true) {
 				// The actionperformed will start a SwingWorker
 				new DownloadAllJNLPAction(AtlasViewerGUI.this)
@@ -1063,13 +1050,13 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		if (languageSubMenu == null) {
 
 			languageSubMenu = new JMenu(
-					AtlasViewerGUI
+					GpCoreUtil
 							.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language"));
 
 			languageSubMenu.setFont(AtlasMenuItem.BIGFONT);
 
 			languageSubMenu
-					.setToolTipText(AtlasViewerGUI
+					.setToolTipText(GpCoreUtil
 							.R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_tt"));
 			languageSubMenu.setIcon(Icons.ICON_FLAGS_SMALL);
 		} else {
@@ -1081,7 +1068,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		// different tooltip appears.
 		if (getAtlasConfig().getLanguages().size() == 1) {
 			getLanguageSubMenu()
-					.setToolTipText(
+					.setToolTipText(GpCoreUtil.
 							R("AtlasViewer.FileMenu.LanguageSubMenu.change_language_notAvailable_tt",
 									getAtlasConfig().getLanguages().get(0)));
 			getLanguageSubMenu().setEnabled(false);

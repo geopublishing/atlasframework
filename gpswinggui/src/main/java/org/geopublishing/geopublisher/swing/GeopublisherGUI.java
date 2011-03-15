@@ -36,8 +36,8 @@ import javax.swing.UIManager;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.exceptions.AtlasRecoverableException;
@@ -131,7 +131,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		/**
 		 * Doing some initializations
 		 */
-		AVUtil.fixBug4847375();
+		GpCoreUtil.fixBug4847375();
 		SHTMLPanelImpl.setTextResources(null);
 	}
 
@@ -229,7 +229,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * **/
 	public GeopublisherGUI(final boolean askToOpenLastAtlas) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
-				+ "... " + ReleaseUtil.getVersionInfo(AVUtil.class));
+				+ "... " + ReleaseUtil.getVersionInfo(GpCoreUtil.class));
 
 		GpUtil.initGpLogging();
 
@@ -316,7 +316,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (!editAtlasDialog.isCancelled()) {
 				getJFrame().setTitle(
 						R("ApplicationMainWindowTitle_with_open_atlas",
-								ReleaseUtil.getVersionInfo(AVUtil.class), ace
+								ReleaseUtil.getVersionInfo(GpCoreUtil.class), ace
 										.getTitle().toString()));
 			}
 
@@ -481,8 +481,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (mapPool.getStartMapID() == null
 					|| mapPool.get(mapPool.getStartMapID()) == null) {
 				JOptionPane.showMessageDialog(getJFrame(),
-						AtlasViewerGUI.R("AtlasViewer.error.noMapInAtlas"),
-						AtlasViewerGUI.R("AtlasViewer.error.noMapInAtlas"),
+						GpCoreUtil.R("AtlasViewer.error.noMapInAtlas"),
+						GpCoreUtil.R("AtlasViewer.error.noMapInAtlas"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -517,8 +517,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (mapPool.getStartMapID() == null
 					|| mapPool.get(mapPool.getStartMapID()) == null) {
 				JOptionPane.showMessageDialog(getJFrame(),
-						AtlasViewerGUI.R("AtlasViewer.error.noMapInAtlas"),
-						AtlasViewerGUI.R("AtlasViewer.error.noMapInAtlas"),
+						GpCoreUtil.R("AtlasViewer.error.noMapInAtlas"),
+						GpCoreUtil.R("AtlasViewer.error.noMapInAtlas"),
 						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -647,7 +647,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 * for the MyDocuments
 		 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4847375
 		 */
-		AVUtil.fixBug4847375();
+		GpCoreUtil.fixBug4847375();
 
 		final JFileChooser dc = new JFileChooser(new File(GPProps.get(
 				GPProps.Keys.LastOpenAtlasFolder, "")).getParent());
@@ -767,7 +767,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		if (gpJFrame != null)
 			gpJFrame.dispose();
 
-		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(AVUtil.class)
+		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(GpCoreUtil.class)
 				+ " terminating with exitcode " + exitCode);
 
 		// Store the Logging Level in ~/.Geopublisher/Geopublisher.properties
@@ -993,7 +993,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					null,
 					message,
 					R("CommandLineHelp.title",
-							ReleaseUtil.getVersionInfo(AVUtil.class)),
+							ReleaseUtil.getVersionInfo(GpCoreUtil.class)),
 					JOptionPane.INFORMATION_MESSAGE);
 			System.exit(-1);
 		} else

@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.netbeans.spi.wizard.ResultProgressHandle;
@@ -71,9 +71,9 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	}
 
 	private static final String version = ReleaseUtil
-			.getVersionMaj(AVUtil.class)
+			.getVersionMaj(GpCoreUtil.class)
 			+ "."
-			+ ReleaseUtil.getVersionMin(AVUtil.class);
+			+ ReleaseUtil.getVersionMin(GpCoreUtil.class);
 
 	/**
 	 * Are we exporting from SNAPSHOT relases, then the exported atlas need
@@ -120,7 +120,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 
 	protected final AtlasConfigEditable ace;
 
-	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = AVUtil.ATLAS_TEMP_FILE_BASE_ID
+	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID
 			+ "_EXPORT_" + System.currentTimeMillis();
 
 	/**
@@ -167,7 +167,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		// }
 
 		IOUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
-				AVUtil.ATLAS_TEMP_FILE_BASE_ID);
+				GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID);
 	}
 
 	public boolean isKeepTempFiles() {

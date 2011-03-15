@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
@@ -155,18 +155,18 @@ public class DpEntryJPanel extends JPanel implements Cancellable {
 
 				if (env != null) {
 					bbodyPanel.add(new JLabel("x1:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
+					bbodyPanel.add(new JLabel(GpCoreUtil.formatCoord(crs,
 							env.getMinX())));
 					bbodyPanel.add(new JLabel("y1:"));
 					bbodyPanel.add(
-							new JLabel(AVUtil.formatCoord(crs, env.getMinY())),
+							new JLabel(GpCoreUtil.formatCoord(crs, env.getMinY())),
 							"wrap");
 
 					bbodyPanel.add(new JLabel("x2:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
+					bbodyPanel.add(new JLabel(GpCoreUtil.formatCoord(crs,
 							env.getMaxX())));
 					bbodyPanel.add(new JLabel("y2:"));
-					bbodyPanel.add(new JLabel(AVUtil.formatCoord(crs,
+					bbodyPanel.add(new JLabel(GpCoreUtil.formatCoord(crs,
 							env.getMaxY())));
 
 					final JLabel bblabel = new JLabel(R("BBOX") + ":");

@@ -21,7 +21,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.GPProps.Keys;
@@ -156,7 +156,7 @@ public class GpUtil {
 	 */
 	public final static String getRandomID(String prefix) {
 		DecimalFormat decimalFormat = new DecimalFormat(prefix + "_00000000000");
-		return String.valueOf(decimalFormat.format(Math.abs(AVUtil.RANDOM
+		return String.valueOf(decimalFormat.format(Math.abs(GpCoreUtil.RANDOM
 				.nextInt(Integer.MAX_VALUE))));
 	}
 

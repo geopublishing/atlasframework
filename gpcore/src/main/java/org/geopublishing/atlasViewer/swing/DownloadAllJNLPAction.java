@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 
 import de.schmitzm.swing.ExceptionDialog;
@@ -21,11 +22,11 @@ public class DownloadAllJNLPAction extends AbstractAction {
 	private final Component owner;
 
 	public DownloadAllJNLPAction(AtlasViewerGUI atlasViewer) {
-		super(AtlasViewerGUI.R("AtlasViewer.FileMenu.downloadAllRessources"));
+		super(GpCoreUtil.R("AtlasViewer.FileMenu.downloadAllRessources"));
 		this.atlasViewer = atlasViewer;
 		this.owner = atlasViewer.getJFrame();
 		putValue(Action.LONG_DESCRIPTION,
-				AtlasViewerGUI
+				GpCoreUtil
 						.R("AtlasViewer.FileMenu.downloadAllRessources.tooltip"));
 	}
 
@@ -53,7 +54,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 				AVSwingUtil
 						.showMessageDialog(
 								atlasViewer.getJFrame(),
-								AtlasViewerGUI
+								GpCoreUtil
 										.R("AtlasViewer.FileMenu.downloadAllRessources.AlreadyDownloaded"));
 
 				return;
@@ -84,7 +85,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 				AVSwingUtil
 						.showMessageDialog(
 								atlasViewer.getJFrame(),
-								AtlasViewerGUI
+								GpCoreUtil
 										.R("AtlasViewer.FileMenu.downloadAllRessources.Success"));
 			}
 		} catch (UnavailableServiceException e1) {

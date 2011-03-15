@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geotools.map.MapLayer;
 import org.geotools.map.event.MapLayerEvent;
 
@@ -77,7 +78,7 @@ public class AttributeTableJDialog extends AtlasDialog {
 	public AttributeTableJDialog(Component owner,
 			final StyledFeaturesInterface<?> styledObj,
 			final MapLegend mapLegend) {
-		super(owner, AtlasViewerGUI.R("AttributeTable.dialog.title", styledObj
+		super(owner, GpCoreUtil.R("AttributeTable.dialog.title", styledObj
 				.getTitle()));
 		this.owner = owner;
 		this.styledObj = styledObj;

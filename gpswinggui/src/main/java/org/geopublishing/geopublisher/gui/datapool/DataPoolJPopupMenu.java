@@ -20,12 +20,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -82,7 +82,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				 */
 				JMenuItem attributeTableJMenuItem = new JMenuItem(
 						new AbstractAction(
-								AtlasViewerGUI.R("LayerToolMenu.table"),
+								GpCoreUtil.R("LayerToolMenu.table"),
 								Icons.ICON_TABLE) {
 
 							@Override

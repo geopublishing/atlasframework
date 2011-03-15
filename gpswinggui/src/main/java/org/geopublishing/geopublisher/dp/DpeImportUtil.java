@@ -20,10 +20,10 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.List;
 
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.DpEditableInterface;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasImportCancelledException;
@@ -87,7 +87,7 @@ public class DpeImportUtil {
 			DpeImportUtil.askTranslationsBeforeCopy(dpe, owner);
 
 			final AtlasStatusDialog atlasStatusDialog = new AtlasStatusDialog(
-					owner, AtlasViewerGUI.R("dialog.title.wait"), GpUtil.R(
+					owner, GpCoreUtil.R("dialog.title.wait"), GpUtil.R(
 							"ImportingDPE.StatusMessage", dpe.getTitle()
 									.toString()));
 

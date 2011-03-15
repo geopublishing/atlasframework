@@ -21,9 +21,9 @@ import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.map.MapPool;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
@@ -38,7 +38,7 @@ public class ExportWizardPage_Save extends WizardPage {
 			.R("ExportWizard.StartPage.Save.Explanation"));
 	private final String validationFailedMsg_HasToSave = GeopublisherGUI
 			.R("ExportWizard.StartPage.ValidationError.Save");
-	private final String validationFailedMsg_NoMaps = AtlasViewerGUI
+	private final String validationFailedMsg_NoMaps = GpCoreUtil
 			.R("AtlasViewer.error.noMapInAtlas");
 	private JCheckBox saveJCheckbox;
 

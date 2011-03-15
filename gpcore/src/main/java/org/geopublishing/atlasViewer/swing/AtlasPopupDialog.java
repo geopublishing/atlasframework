@@ -42,8 +42,8 @@ import javax.swing.KeyStroke;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
@@ -139,7 +139,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 
 	public JComponent getHtmlInfoJPane() {
 		if (htmlInfoJPane == null) {
-			htmlInfoJPane = AVUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
+			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
 			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
 		}

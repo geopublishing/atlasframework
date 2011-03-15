@@ -13,7 +13,7 @@ package org.geopublishing.atlasViewer.swing;
 import java.awt.Component;
 import java.io.File;
 
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.swing.internal.AtlasTask;
 
 import de.schmitzm.io.IOUtil;
@@ -43,13 +43,13 @@ public abstract class AtlasExportTask extends AtlasTask<Boolean> {
 		if (success) {
 			setPrefix("");
 
-			final String exportDoneMsg = AVUtil.R(
+			final String exportDoneMsg = GpCoreUtil.R(
 					"AtlasExportTask.export_to_XXX_done",
 					IOUtil.escapePath( exportDir
 							));
 
 			if ((exportDir != null)) {
-				final String openExportFolderMsg = AVUtil
+				final String openExportFolderMsg = GpCoreUtil
 						.R("AtlasExportTask.process.opening_export_folder");
 				/**
 				 * Starting an explorer might take some time... Sleep for 1s

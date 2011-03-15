@@ -15,7 +15,7 @@ import java.util.Comparator;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 /**
@@ -155,7 +155,7 @@ public enum DpEntryType {
 	 * Provides an short name for this {@link DpEntryType}
 	 */
 	public static String getLine1For(DpEntryType type) {
-		return AVUtil.R("DpEntryType."+type.toString() + ".line1");
+		return GpCoreUtil.R("DpEntryType."+type.toString() + ".line1");
 
 		// String line1 = null;
 		// if (type == DpEntryType.VIDEO) {
@@ -203,7 +203,7 @@ public enum DpEntryType {
 	 * Provides an additional detail for this {@link DpEntryType}
 	 */
 	public static String getLine2For(DpEntryType type) {
-		return AVUtil.R("DpEntryType."+type.toString() + ".line2");
+		return GpCoreUtil.R("DpEntryType."+type.toString() + ".line2");
 		// String line2 = null;
 		// if (type == DpEntryType.VIDEO) {
 		//

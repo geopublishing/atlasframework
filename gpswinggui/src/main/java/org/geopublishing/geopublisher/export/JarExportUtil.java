@@ -60,9 +60,9 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
@@ -385,7 +385,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * system temp directory.
 	 */
 	private final File tempDir = new File(IOUtil.getTempDir(),
-			ATLAS_TEMP_FILE_EXPORTINSTANCE_ID + AVUtil.RANDOM.nextInt(19999)
+			ATLAS_TEMP_FILE_EXPORTINSTANCE_ID + GpCoreUtil.RANDOM.nextInt(19999)
 					+ 10000);
 
 	/** Is export to DISK requested? **/
@@ -1851,7 +1851,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			 * the atlas.exe and delete it afterwards)
 			 */
 			URL iconURL = ace.getResource(AtlasConfig.JWSICON_RESOURCE_NAME);
-			if (!AVUtil.exists(iconURL)) {
+			if (!GpCoreUtil.exists(iconURL)) {
 				// LOGGER
 				// .info("No user-defined icon provided. Using the default one.");
 				iconURL = GpUtil.class
@@ -2120,7 +2120,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		mainAtts.put(Attributes.Name.MAIN_CLASS, MAIN_CLASS);
 		mainAtts.put(Attributes.Name.SPECIFICATION_TITLE, "Atlas Viewer "
-				+ ReleaseUtil.getVersionInfo(AVUtil.class));
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class));
 		mainAtts.put(Attributes.Name.SPECIFICATION_VENDOR,
 				"Stefan Alfons Tzeggai - www.wikisquare.de");
 		mainAtts.put(Attributes.Name.IMPLEMENTATION_TITLE, ace.getTitle()

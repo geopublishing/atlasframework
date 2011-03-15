@@ -53,7 +53,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.map.Map;
@@ -311,7 +311,7 @@ public class MapPoolJTable extends JTable {
 				/**
 				 * Check the Title translations:
 				 */
-				List<String> missing = AVUtil.getMissingLanguages(getAce(),
+				List<String> missing = GpCoreUtil.getMissingLanguages(getAce(),
 						map.getTitle());
 				if (missing.size() > 0) {
 					tooltTipHtml.append("<li>"
@@ -325,7 +325,7 @@ public class MapPoolJTable extends JTable {
 				/**
 				 * Check the Description translations:
 				 */
-				missing = AVUtil.getMissingLanguages(getAce(), map.getDesc());
+				missing = GpCoreUtil.getMissingLanguages(getAce(), map.getDesc());
 				if (missing.size() > 0) {
 
 					tooltTipHtml.append("<li>"

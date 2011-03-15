@@ -28,6 +28,7 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
@@ -189,7 +190,7 @@ public class HTMLInfoJPane extends JEditorPane implements HTMLInfoPaneInterface 
 	/**
 	 * This message is shows when no data can be found.
 	 */
-	final String NODATA_MSG = AtlasViewerGUI
+	final String NODATA_MSG = GpCoreUtil
 			.R("HTMLInfoPane.NODATA.MSG.sorry_no_info_available");
 
 	private final AtlasConfig atlasConfig;

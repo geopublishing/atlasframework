@@ -26,7 +26,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DataUtilities;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;

@@ -23,9 +23,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
@@ -185,7 +185,7 @@ public class AMLImport {
 
 		if (atlasXmlAsStream == null) {
 			throw new AtlasFatalException(
-					AVUtil.R("AmlImport.error.cant_find_atlas.xml"));
+					GpCoreUtil.R("AmlImport.error.cant_find_atlas.xml"));
 		}
 
 		/**

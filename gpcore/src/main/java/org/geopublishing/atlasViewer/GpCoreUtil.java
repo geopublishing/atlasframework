@@ -51,7 +51,6 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.HTMLInfoJPane;
-import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
 import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GPProps;
@@ -77,7 +76,7 @@ import de.schmitzm.versionnumber.ReleaseUtil;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-public class AVUtil {
+public class GpCoreUtil {
 	/***************************************************************************
 	 * This string is used to identify the temp files of the AV. Any files and
 	 * folders starting with this string in the temp folder will be deleted when
@@ -133,7 +132,7 @@ public class AVUtil {
 		return RESOURCE.getString(key, reqLanguage, values);
 	}
 
-	public static final Logger LOGGER = Logger.getLogger(AVUtil.class);
+	public static final Logger LOGGER = Logger.getLogger(GpCoreUtil.class);
 
 	/**
 	 * Creates a random number generator mainly used for IDs
@@ -541,15 +540,6 @@ public class AVUtil {
 
 	}
 
-	/**
-	 * Factory method to create an html viewport.
-	 * 
-	 * @param map
-	 *            a Map
-	 */
-	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
-		return createHTMLInfoPane(map.getInfoURL(), map.getAc());
-	}
 
 	/**
 	 * Factory method to create an html viewport.
@@ -560,8 +550,20 @@ public class AVUtil {
 	public static HTMLInfoPaneInterface createHTMLInfoPane(URL url,
 			AtlasConfig ac) {
 		// use an HTML view bases on JEditorPane
-		//return new HTMLInfoJPane(url, ac);
+		return new HTMLInfoJPane(url, ac);
 		// use an HTML view bases on DJ project
-		return new HTMLInfoJWebBrowser(url, ac);
+//		return new HTMLInfoJWebBrowser(url, ac);
 	}
+	
+
+	/**
+	 * Factory method to create an html viewport.
+	 * 
+	 * @param map
+	 *            a Map
+	 */
+	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
+		return createHTMLInfoPane(map.getInfoURL(), map.getAc());
+	}
+
 }

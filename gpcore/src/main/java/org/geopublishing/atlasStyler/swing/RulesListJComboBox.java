@@ -13,7 +13,6 @@ import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.opengis.feature.type.FeatureType;
 
-import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.swing.SwingUtil;
 
 /**

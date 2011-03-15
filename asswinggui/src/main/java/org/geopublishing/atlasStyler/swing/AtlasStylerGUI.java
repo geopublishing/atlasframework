@@ -56,10 +56,9 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.swing.importWizard.ImportWizard;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
@@ -123,7 +122,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 */
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
-				+ ReleaseUtil.getVersionInfo(AVUtil.class));
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class));
 		//
 		// // Setting up the logger from a XML configuration file. This is also
 		// // done in ASProps, as it is eventually called earlier.
@@ -179,7 +178,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		this.setContentPane(getJContentPane());
 		String AtlasStyler_MainWindowTitle = "AtlasStyler "
-				+ ReleaseUtil.getVersionInfo(AVUtil.class);
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class);
 		this.setTitle(AtlasStyler_MainWindowTitle);
 
 		// In Xubuntu (OS-Geo Live DVD) the JFrame otherwise is hidden behind
@@ -255,7 +254,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		{ // Exit
 			JMenuItem mi = new JMenuItem(
 					new AbstractAction(
-							AtlasViewerGUI
+							GpCoreUtil
 									.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
 							Icons.ICON_EXIT_SMALL) {
 

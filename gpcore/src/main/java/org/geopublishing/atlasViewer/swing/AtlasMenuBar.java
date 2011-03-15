@@ -30,6 +30,7 @@ import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.swing.internal.AtlasJMenu;
@@ -69,7 +70,7 @@ public class AtlasMenuBar extends JMenuBar {
 			// Create a new default help menu with standard labels!
 
 			AtlasJMenu fileMenu = new AtlasJMenu(
-					AtlasViewerGUI.R("AtlasViewer.FileMenu"));
+					GpCoreUtil.R("AtlasViewer.FileMenu"));
 
 			addFileMenuItems(fileMenu);
 			add(fileMenu, 0);
@@ -77,7 +78,7 @@ public class AtlasMenuBar extends JMenuBar {
 
 		if (!hasHelpMenu) {
 			AtlasJMenu helpMenu = new AtlasJMenu(
-					AtlasViewerGUI.R("AtlasViewer.HelpMenu"));
+					GpCoreUtil.R("AtlasViewer.HelpMenu"));
 
 			addHelpMenuItems(helpMenu);
 			add(helpMenu);
@@ -111,8 +112,7 @@ public class AtlasMenuBar extends JMenuBar {
 			countHere++;
 			if (countHere > maxItems) {
 				JMenu weiterMenu = new JMenu(
-						AtlasViewerGUI
-								.R("AtlasViewer.MenuToLongForScreen.Next"));
+						GpCoreUtil.R("AtlasViewer.MenuToLongForScreen.Next"));
 				parent.add(weiterMenu);
 				parent = weiterMenu;
 				countHere = 0;
@@ -160,7 +160,7 @@ public class AtlasMenuBar extends JMenuBar {
 		 */
 		JMenuItem screenshotMenuItem = new AtlasMenuItem(
 				new AbstractAction(
-						AtlasViewerGUI
+						GpCoreUtil
 								.R("AtlasViewer.FileMenu.JMenuItem.save_smart_screenshots"),
 						Icons.ICON_SCREENSHOT_SMALL) {
 
@@ -181,7 +181,7 @@ public class AtlasMenuBar extends JMenuBar {
 					}
 
 				},
-				AtlasViewerGUI
+				GpCoreUtil
 						.R("AtlasViewer.FileMenu.JMenuItem.ToolTip.save_smart_screenshots"));
 		screenshotMenuItem.setAccelerator(KeyStroke.getKeyStroke(
 				KeyEvent.VK_PRINTSCREEN, 0, true));
@@ -260,10 +260,9 @@ public class AtlasMenuBar extends JMenuBar {
 		// ******************************************************************
 		if (atlasViewer.getAtlasConfig().getAboutHTMLURL() != null) {
 			JMenuItem aboutMenuItem = new AtlasMenuItem();
-			aboutMenuItem.setText(AtlasViewerGUI.R(
-					"AtlasViewer.HelpMenu.About", atlasViewer.getAtlasConfig()
-							.getTitle().toString()));
-			aboutMenuItem.setToolTipText(AtlasViewerGUI.R(
+			aboutMenuItem.setText(GpCoreUtil.R("AtlasViewer.HelpMenu.About",
+					atlasViewer.getAtlasConfig().getTitle().toString()));
+			aboutMenuItem.setToolTipText(GpCoreUtil.R(
 					"AtlasViewer.HelpMenu.About.tooltip", atlasViewer
 							.getAtlasConfig().getTitle().toString()));
 
@@ -306,7 +305,7 @@ public class AtlasMenuBar extends JMenuBar {
 	 */
 	private JMenuItem getExitMenuItem() {
 		JMenuItem exitMenuItem = new AtlasMenuItem();
-		exitMenuItem.setText(AtlasViewerGUI
+		exitMenuItem.setText(GpCoreUtil
 				.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"));
 		exitMenuItem.setIcon(Icons.ICON_EXIT_SMALL);
 		exitMenuItem.addActionListener(atlasViewer);
@@ -327,7 +326,7 @@ public class AtlasMenuBar extends JMenuBar {
 			jCheckBoxMenuItemAntiAliasing.setSelected(atlasViewer
 					.getAtlasConfig().getProperties()
 					.get(AVProps.Keys.antialiasingMaps, "1").equals("1"));
-			jCheckBoxMenuItemAntiAliasing.setText(AtlasViewerGUI
+			jCheckBoxMenuItemAntiAliasing.setText(GpCoreUtil
 					.R("AtlasViewer.AAMenuItem.SetText.toggle_antialiasing"));
 			jCheckBoxMenuItemAntiAliasing.setActionCommand("antiAliasing");
 			jCheckBoxMenuItemAntiAliasing.addActionListener(atlasViewer);

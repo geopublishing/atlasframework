@@ -32,8 +32,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
@@ -51,7 +51,7 @@ import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class AVSwingUtil extends AVUtil {
+public class AVSwingUtil extends GpCoreUtil {
 	static final Logger LOGGER = Logger.getLogger(AVSwingUtil.class);
 
 	public final static float HEADING_FONT_SIZE = 14;
@@ -161,7 +161,7 @@ public class AVSwingUtil extends AVUtil {
 
 		if (SwingUtilities.isEventDispatchThread()) {
 			final int result = JOptionPane.showConfirmDialog(owner, question,
-					AVUtil.R("GeneralQuestionDialogTitle"),
+					GpCoreUtil.R("GeneralQuestionDialogTitle"),
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
 					null);
 			return result == JOptionPane.OK_OPTION;
@@ -174,7 +174,7 @@ public class AVSwingUtil extends AVUtil {
 					public void run() {
 						resultAskOkCancel.set(JOptionPane.OK_OPTION == JOptionPane
 								.showConfirmDialog(owner, question,
-										AVUtil.R("GeneralQuestionDialogTitle"),
+										GpCoreUtil.R("GeneralQuestionDialogTitle"),
 										JOptionPane.OK_CANCEL_OPTION,
 										JOptionPane.QUESTION_MESSAGE, null));
 
@@ -589,7 +589,7 @@ public class AVSwingUtil extends AVUtil {
 		SwingUtil.checkOnEDT();
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(parent, null,
-				AVUtil.R("AtlasViewer.process.EPSG_codes_caching"));
+				GpCoreUtil.R("AtlasViewer.process.EPSG_codes_caching"));
 		AtlasSwingWorker<Void> swingWorker = new AtlasSwingWorker<Void>(
 				statusDialog) {
 
@@ -606,10 +606,10 @@ public class AVSwingUtil extends AVUtil {
 		} catch (CancellationException e) {
 		} catch (ExecutionException e) {
 			throw new RuntimeException(
-					AVUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
+					GpCoreUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
 		} catch (InterruptedException e) {
 			throw new RuntimeException(
-					AVUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
+					GpCoreUtil.R("AtlasViewer.process.EPSG_codes_caching"), e);
 		}
 	}
 

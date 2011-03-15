@@ -33,6 +33,7 @@ import javax.swing.JToolBar;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.filter.identity.FeatureIdImpl;
 import org.jfree.chart.JFreeChart;
@@ -272,7 +273,7 @@ public class AtlasChartJPanel extends JPanel implements
 									WindowSelectionMode.ZOOM_IN_CHART);
 						}
 
-					}, AtlasViewerGUI.R("AtlasChartJPanel.zoom.tt"));
+					}, GpCoreUtil.R("AtlasChartJPanel.zoom.tt"));
 			toolBar.add(zoomToolButton);
 			bg.add(zoomToolButton);
 
@@ -410,7 +411,7 @@ public class AtlasChartJPanel extends JPanel implements
 				}
 
 			});
-			printChartButton.setToolTipText(AtlasViewerGUI
+			printChartButton.setToolTipText(GpCoreUtil
 					.R("AtlasChartJPanel.PrintChartButton.TT"));
 			toolBar.add(printChartButton);
 
@@ -433,7 +434,7 @@ public class AtlasChartJPanel extends JPanel implements
 				}
 
 			});
-			saveChartAction.setToolTipText(AtlasViewerGUI
+			saveChartAction.setToolTipText(GpCoreUtil
 					.R("AtlasChartJPanel.SaveChartButton.TT"));
 			toolBar.add(saveChartAction);
 
@@ -442,7 +443,7 @@ public class AtlasChartJPanel extends JPanel implements
 			//
 			{
 				final JButton openTable = new JButton();
-				openTable.setAction(new AbstractAction(AtlasViewerGUI
+				openTable.setAction(new AbstractAction(GpCoreUtil
 						.R("LayerToolMenu.table"),
 						Icons.ICON_TABLE) {
 

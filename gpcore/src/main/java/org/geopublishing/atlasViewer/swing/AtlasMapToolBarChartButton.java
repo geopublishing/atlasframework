@@ -19,6 +19,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPopupMenu;
 
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geotools.map.MapContext;
@@ -52,7 +53,7 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 
 //		setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-		setAction(new AbstractAction(AtlasViewerGUI
+		setAction(new AbstractAction(GpCoreUtil
 				.R("AtlasMapToolBarChartButton.Title"), Icons.ICON_CHART_MEDIUM) {
 //			setAction(new AbstractAction(AtlasViewer
 //					.R("AtlasMapToolBarChartButton.PopupMenu.Title"), Icons.ICON_CHART_BIG) {
@@ -95,7 +96,7 @@ public class AtlasMapToolBarChartButton extends SmallButton {
 			}
 
 		});
-		setToolTipText(AtlasViewerGUI.R("MapPaneButtons.ChartButton.TT"));
+		setToolTipText(GpCoreUtil.R("MapPaneButtons.ChartButton.TT"));
 
 		setBorder(BorderFactory.createCompoundBorder(getBorder(),BorderFactory.createEmptyBorder(0, 0, 0, 3)));
 	}

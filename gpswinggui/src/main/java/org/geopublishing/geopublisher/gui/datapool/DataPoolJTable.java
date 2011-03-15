@@ -43,7 +43,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DataPool;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
@@ -246,7 +246,7 @@ public class DataPoolJTable extends JTable {
 				/**
 				 * Check the Title translations:
 				 */
-				List<String> missing = AVUtil.getMissingLanguages(getAce(),
+				List<String> missing = GpCoreUtil.getMissingLanguages(getAce(),
 						dpe.getTitle());
 				if (missing.size() > 0) {
 					somethingMissing = true;
@@ -261,7 +261,7 @@ public class DataPoolJTable extends JTable {
 				/**
 				 * Check the Description translations:
 				 */
-				missing = AVUtil.getMissingLanguages(getAce(), dpe.getDesc());
+				missing = GpCoreUtil.getMissingLanguages(getAce(), dpe.getDesc());
 				if (missing.size() > 0) {
 					somethingMissing = true;
 
@@ -276,7 +276,7 @@ public class DataPoolJTable extends JTable {
 				/**
 				 * Check the Keyword translations:
 				 */
-				missing = AVUtil.getMissingLanguages(getAce(),
+				missing = GpCoreUtil.getMissingLanguages(getAce(),
 						dpe.getKeywords());
 				if (missing.size() > 0) {
 					somethingMissing = true;

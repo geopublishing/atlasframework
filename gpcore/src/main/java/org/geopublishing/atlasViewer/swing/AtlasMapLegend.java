@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.ExportableLayer;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
@@ -367,7 +368,7 @@ public class AtlasMapLegend extends MapLegend {
 		 */
 		MapPaneToolBarAction searchAction = new MapPaneToolBarAction(
 				AtlasMapView.ACTION_SEARCH, getMapPaneToolBar(),
-				AtlasViewerGUI.R("AtlasMapView.SearchButton.Label"),
+				GpCoreUtil.R("AtlasMapView.SearchButton.Label"),
 				Icons.ICON_SEARCH) {
 
 			private SearchMapDialog searchMapDialog;
@@ -382,9 +383,9 @@ public class AtlasMapLegend extends MapLegend {
 						ExceptionDialog
 								.show(AtlasMapLegend.this,
 										null,
-										AtlasViewerGUI
+										GpCoreUtil
 												.R("AtlasMapView.errmess.Title"),
-										AtlasViewerGUI
+												GpCoreUtil
 												.R("AtlasMapView.errmess.FunctionNotAvailable"));
 						return;
 					}
@@ -401,7 +402,7 @@ public class AtlasMapLegend extends MapLegend {
 			}
 		};
 		searchAction.putValue(Action.SHORT_DESCRIPTION,
-				AtlasViewerGUI.R("AtlasMapView.SearchButton.tt"));
+				GpCoreUtil.R("AtlasMapView.SearchButton.tt"));
 		getMapPaneToolBar().addAction(searchAction, true);
 		// Look.. this true is important - otherwise
 		// the MapPaneButtons are not recreated

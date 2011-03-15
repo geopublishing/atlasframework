@@ -69,7 +69,7 @@ import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.swing.AtlasMapLayerLegend;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLayerLegend;
@@ -477,7 +477,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				if (insideClick(e, controlEyeX, controlEyeY, controlEyeWidth,
 						controlEyeWidth)) {
 
-					mapLayerLegend.setToolTipText(AVUtil
+					mapLayerLegend.setToolTipText(GpCoreUtil
 							.R("LayerBar.Icons.eye.tooltip"));
 
 					mapLayerLegend.repaint(controlEyeX, controlEyeY,
@@ -486,7 +486,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 				} else if (insideClick(e, controlToolX, controlToolY,
 						controlToolWidth, controlToolWidth)) {
 
-					mapLayerLegend.setToolTipText(AVUtil
+					mapLayerLegend.setToolTipText(GpCoreUtil
 							.R("LayerBar.Icons.tool.tooltip"));
 
 					mapLayerLegend.repaint(controlToolX, controlToolY,
@@ -496,7 +496,7 @@ public class BasicMapLayerLegendPaneUI extends TaskPaneUI {
 						&& insideClick(e, controlInfoX, controlInfoY,
 								controlInfoWidth, controlInfoWidth)) {
 
-					mapLayerLegend.setToolTipText(AVUtil
+					mapLayerLegend.setToolTipText(GpCoreUtil
 							.R("LayerBar.Icons.info.tooltip"));
 
 					mapLayerLegend.repaint(controlInfoX, controlInfoY,

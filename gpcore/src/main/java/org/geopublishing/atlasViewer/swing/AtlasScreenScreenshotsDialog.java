@@ -44,6 +44,7 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 
 import org.geopublishing.atlasViewer.AVProps;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 
 import de.schmitzm.geotools.gui.SelectableXMapPane;
 import de.schmitzm.swing.ExceptionDialog;
@@ -60,17 +61,17 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 	public AtlasScreenScreenshotsDialog(final AtlasMapView mapView) {
 		this.mapView = mapView;
 
-		setTitle(AtlasViewerGUI.R("Screenshot.DialogTitle"));
+		setTitle(GpCoreUtil.R("Screenshot.DialogTitle"));
 
 		screenshots = makeScreenshots();
 
 		final JRadioButton[] radioButtons = new JRadioButton[3];
-		radioButtons[0] = new JRadioButton(AtlasViewerGUI
+		radioButtons[0] = new JRadioButton(GpCoreUtil
 				.R("Screenshot.Version.WithLegend"));
 		radioButtons[0].setSelected(true);
-		radioButtons[1] = new JRadioButton(AtlasViewerGUI
+		radioButtons[1] = new JRadioButton(GpCoreUtil
 				.R("Screenshot.Version.WithGrid"));
-		radioButtons[2] = new JRadioButton(AtlasViewerGUI
+		radioButtons[2] = new JRadioButton(GpCoreUtil
 				.R("Screenshot.Version.MapOnly"));
 
 		/**
@@ -125,7 +126,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		}
 
 		cp.setLayout(new BorderLayout());
-		JLabel topLIne = new JLabel(AtlasViewerGUI
+		JLabel topLIne = new JLabel(GpCoreUtil
 				.R("Screenshot.PleaseChooseAnImageText"));
 		topLIne.setBorder(BorderFactory.createEmptyBorder(5, 6, 0, 5));
 		cp.add(topLIne, BorderLayout.NORTH);
@@ -134,7 +135,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 		JPanel buttonsPanel = new JPanel(new FlowLayout());
 		buttonsPanel.setAlignmentX(FlowLayout.RIGHT);
 
-		JButton saveButton = new JButton(new AbstractAction(AtlasViewerGUI
+		JButton saveButton = new JButton(new AbstractAction(GpCoreUtil
 				.R("Screenshot.SaveImageButton")) {
 
 			@Override
@@ -170,12 +171,12 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 
 					@Override
 					public String getDescription() {
-						return AtlasViewerGUI.R("ImageFileChooser.description");
+						return GpCoreUtil.R("ImageFileChooser.description");
 					}
 
 				};
 				fc.setFileFilter(imageFilesFilter);
-				fc.setDialogTitle(AtlasViewerGUI
+				fc.setDialogTitle(GpCoreUtil
 						.R("Screenshot.ChooseImagenameDialogTitle"));
 
 				int showSaveDialog = fc
@@ -196,7 +197,7 @@ public class AtlasScreenScreenshotsDialog extends JDialog {
 
 				if (selectedFile.exists()) {
 					int showConfirmDialog = JOptionPane.showConfirmDialog(
-							AtlasScreenScreenshotsDialog.this, AtlasViewerGUI
+							AtlasScreenScreenshotsDialog.this, GpCoreUtil
 									.R("Screenshot.OverwriteFileQuestion"));
 					if (showConfirmDialog != JOptionPane.OK_OPTION)
 						return;

@@ -54,14 +54,13 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.swing.AVDialogManager;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasChartJDialog;
 import org.geopublishing.atlasViewer.swing.AtlasChartJPanel;
 import org.geopublishing.atlasViewer.swing.AtlasMapLegend;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.atlasViewer.swing.MapLegend;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
@@ -293,7 +292,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 		buttons.add(getUpdateChartJButton());
 
 		JButton attributes = new JButton(new AbstractAction(
-				AtlasViewerGUI.R("LayerToolMenu.table"),
+				GpCoreUtil.R("LayerToolMenu.table"),
 				Icons.ICON_TABLE) {
 
 			@Override
@@ -703,7 +702,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 					 * from the new newly selected attribute
 					 */
 					{
-						AVUtil.applyDefaultTitleAndTranslationToAxis(
+						GpCoreUtil.applyDefaultTitleAndTranslationToAxis(
 								styledLayer, chartStyle,
 								ChartStyle.DOMAIN_AXIS, 0,
 								atlasConfigEditable.getLanguages());
@@ -1234,7 +1233,7 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 				 * the new newly selected attribute
 				 */
 				{
-					AVUtil.applyDefaultTitleAndTranslationToLegend(styledLayer,
+					GpCoreUtil.applyDefaultTitleAndTranslationToLegend(styledLayer,
 							chartStyle, rendererIndex, seriesIdx,
 							atlasConfigEditable.getLanguages());
 				}
@@ -1571,8 +1570,8 @@ public class DesignAtlasChartJDialog extends CancellableDialogAdapter {
 
 				AtlasStatusDialog statusDialog = new AtlasStatusDialog(
 						DesignAtlasChartJDialog.this,
-						AtlasViewerGUI.R("dialog.title.wait"),
-						AtlasViewerGUI.R("dialog.title.wait"));
+						GpCoreUtil.R("dialog.title.wait"),
+						GpCoreUtil.R("dialog.title.wait"));
 				AtlasSwingWorker<JFreeChart> asw = new AtlasSwingWorker<JFreeChart>(
 						statusDialog) {
 					@Override

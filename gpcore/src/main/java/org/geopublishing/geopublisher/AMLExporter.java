@@ -35,9 +35,9 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
@@ -340,11 +340,11 @@ public class AMLExporter {
 		// Storing the version this atlas.xml is being created with inside the
 		// atlas.xml
 		atlas.setAttribute(AMLUtil.ATT_majVersion,
-				String.valueOf(ReleaseUtil.getVersionMaj(AVUtil.class)));
+				String.valueOf(ReleaseUtil.getVersionMaj(GpCoreUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_minVersion,
-				String.valueOf(ReleaseUtil.getVersionMin(AVUtil.class)));
+				String.valueOf(ReleaseUtil.getVersionMin(GpCoreUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_buildVersion,
-				String.valueOf(ReleaseUtil.getVersionBuild(AVUtil.class)));
+				String.valueOf(ReleaseUtil.getVersionBuild(GpCoreUtil.class)));
 
 		// Store the atlasBaseName attribute, since 1.7
 		atlas.setAttribute(AMLUtil.ATT_atlasBasename, getAce().getBaseName());

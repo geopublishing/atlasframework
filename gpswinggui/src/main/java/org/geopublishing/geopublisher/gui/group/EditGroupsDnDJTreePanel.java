@@ -27,7 +27,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.AVUtil;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
@@ -285,7 +285,7 @@ public class EditGroupsDnDJTreePanel extends JPanel {
 		// the change
 		getJTree().setModel(new DefaultTreeModel(rootGroup));
 		if (expandToThisNode != null)
-			getJTree().expandPath(AVUtil.getPath(expandToThisNode));
+			getJTree().expandPath(GpCoreUtil.getPath(expandToThisNode));
 		repaint();
 	}
 

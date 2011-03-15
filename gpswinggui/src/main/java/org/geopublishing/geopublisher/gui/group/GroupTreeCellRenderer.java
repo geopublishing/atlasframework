@@ -11,12 +11,12 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.map.MapRef;
-import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -76,11 +76,11 @@ public class GroupTreeCellRenderer extends DefaultTreeCellRenderer {
 				 */
 				if (group2.isFileMenu()) {
 					setText(getText() + " (<-"
-							+ AtlasViewerGUI.R("AtlasViewer.FileMenu") + ")");
+							+ GpCoreUtil.R("AtlasViewer.FileMenu") + ")");
 				}
 				if (group2.isHelpMenu()) {
 					setText(getText() + " (<-"
-							+ AtlasViewerGUI.R("AtlasViewer.HelpMenu") + ")");
+							+ GpCoreUtil.R("AtlasViewer.HelpMenu") + ")");
 				}
 
 			}

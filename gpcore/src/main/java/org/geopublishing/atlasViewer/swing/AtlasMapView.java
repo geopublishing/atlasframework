@@ -32,8 +32,8 @@ import javax.swing.border.Border;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AVProps;
-import org.geopublishing.atlasViewer.AVUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
+import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
@@ -155,7 +155,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 					"",
 					new ImageIcon(MapView.class
 							.getResource("resource/icons/zoom_full_extend.png")),
-					AtlasViewerGUI.R("MapPaneButtons.DefaultZoom.TT")) {
+					GpCoreUtil.R("MapPaneButtons.DefaultZoom.TT")) {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (map.getDefaultMapArea() != null)
@@ -334,20 +334,20 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 
 				tabbedPane.setBorder(BorderFactory.createEmptyBorder());
 
-				tabbedPane.addTab(AtlasViewerGUI
+				tabbedPane.addTab(GpCoreUtil
 						.R("AtlasMapView.tabbedPane.LayersTab_label"),
 						scrollPaneOfLayerPane);
-				tabbedPane.setToolTipTextAt(0, AtlasViewerGUI
+				tabbedPane.setToolTipTextAt(0, GpCoreUtil
 						.R("AtlasMapView.tabbedPane.LayersTab_tt"));
-				HTMLInfoPaneInterface html = AVUtil.createHTMLInfoPane(map);
+				HTMLInfoPaneInterface html = GpCoreUtil.createHTMLInfoPane(map);
 				JComponent infoPanel = html.getComponent();
 				if ( !html.hasScrollPane() )
 				  infoPanel = new JScrollPane(infoPanel);
-				tabbedPane.addTab(AtlasViewerGUI
+				tabbedPane.addTab(GpCoreUtil
 						.R("AtlasMapView.tabbedPane.InfoTab_label"),
 						infoPanel);
 				tabbedPane.setToolTipTextAt(1,
-						AtlasViewerGUI.R("AtlasMapView.tabbedPane.InfoTab_tt"));
+						GpCoreUtil.R("AtlasMapView.tabbedPane.InfoTab_tt"));
 
 				tabbedPane.setSelectedIndex(1);
 				add(tabbedPane, BorderLayout.CENTER);
@@ -648,7 +648,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 						LOGGER.info(maxExtendRef);
 						LOGGER.info(newLayerEnv);
 
-						AVSwingUtil.showMessageDialog(this, AtlasViewerGUI.R(
+						AVSwingUtil.showMessageDialog(this, GpCoreUtil.R(
 								"MapLegend.InsertLayer.LayerOutsideExtend",
 								styledLayerObject.getTitle()));
 						return false;
