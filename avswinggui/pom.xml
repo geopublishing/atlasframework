@@ -19,9 +19,7 @@
 	</properties>
 
 	<build>
-
 		<plugins>
-
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -50,13 +48,10 @@
 					</archive>
 				</configuration>
 			</plugin>
-
 		</plugins>
-
 	</build>
 
 	<profiles>
-
 		<profile>
 			<id>windows-32</id>
 			<activation>

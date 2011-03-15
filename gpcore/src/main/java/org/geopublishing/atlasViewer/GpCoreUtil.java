@@ -540,7 +540,6 @@ public class GpCoreUtil {
 
 	}
 
-
 	/**
 	 * Factory method to create an html viewport.
 	 * 
@@ -552,9 +551,8 @@ public class GpCoreUtil {
 		// use an HTML view bases on JEditorPane
 		return new HTMLInfoJPane(url, ac);
 		// use an HTML view bases on DJ project
-//		return new HTMLInfoJWebBrowser(url, ac);
+		// return new HTMLInfoJWebBrowser(url, ac);
 	}
-	
 
 	/**
 	 * Factory method to create an html viewport.
