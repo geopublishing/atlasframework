@@ -13,7 +13,6 @@
 		<version>1.7-SNAPSHOT</version>
 	</parent>
 
-
 	<properties>
 		<swt.version>3.6</swt.version>
 		<mainClass>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClass>
@@ -194,6 +193,13 @@
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
+
+		<dependency>
+			<groupId>lobo</groupId>
+			<artifactId>cobra</artifactId>
+			<version>0.98.4</version>
+		</dependency>
+
 
 	</dependencies>
 
