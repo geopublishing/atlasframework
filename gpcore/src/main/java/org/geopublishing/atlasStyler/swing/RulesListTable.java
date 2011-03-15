@@ -18,12 +18,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.opengis.filter.Filter;
@@ -142,7 +142,7 @@ public class RulesListTable extends JTable {
 
 		// Re-add the weak listener that listens for filter changes created
 		// external, e.g. by popup menu insert
-		for (AbstractRulesList rl : rulesList) {
+		for (RulesListInterface rl : rulesList) {
 			rl.addListener(listenForRulesListChangesWhichShowInTheTable);
 		}
 
@@ -179,7 +179,7 @@ public class RulesListTable extends JTable {
 				int rowInModel = RulesListTable.this
 						.convertRowIndexToModel(rowAtPoint);
 
-				AbstractRulesList ruleList = rulesList.get(rowInModel);
+				RulesListInterface ruleList = rulesList.get(rowInModel);
 
 				final int i = e.getWheelRotation() * -1;
 
@@ -192,7 +192,7 @@ public class RulesListTable extends JTable {
 
 					// Nicht größer Unendlich erlauben
 					if (i > 0
-							&& ruleList.getMinScaleDenominator() >= AbstractRulesList.MAX_SCALEDENOMINATOR) {
+							&& ruleList.getMinScaleDenominator() >= RulesListInterface.MAX_SCALEDENOMINATOR) {
 						return;
 					}
 
@@ -209,7 +209,7 @@ public class RulesListTable extends JTable {
 
 					// Nicht größer Unendlich erlauben
 					if (i > 0
-							&& ruleList.getMaxScaleDenominator() >= AbstractRulesList.MAX_SCALEDENOMINATOR) {
+							&& ruleList.getMaxScaleDenominator() >= RulesListInterface.MAX_SCALEDENOMINATOR) {
 						return;
 					}
 
@@ -249,7 +249,7 @@ public class RulesListTable extends JTable {
 			proto.setVerticalAlignment(SwingConstants.TOP);
 
 			if (value != null
-					&& ((Number) value).doubleValue() >= AbstractRulesList.MAX_SCALEDENOMINATOR)
+					&& ((Number) value).doubleValue() >= RulesListInterface.MAX_SCALEDENOMINATOR)
 				proto.setText("<html>&#8734;</html>");
 			else
 				proto.setText(NumberFormat.getIntegerInstance().format(value));
@@ -301,7 +301,7 @@ public class RulesListTable extends JTable {
 				getSelectionModel()
 						.setSelectionInterval(rowInModel, rowInModel);
 
-				AbstractRulesList ruleList = rulesList.get(rowInModel);
+				RulesListInterface ruleList = rulesList.get(rowInModel);
 				RulesListPopup popup = new RulesListPopup(ruleList, asd);
 				popup.show(component, e.getX(), e.getY());
 				return true;

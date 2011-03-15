@@ -15,7 +15,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Set;
 import java.util.concurrent.CancellationException;
 
@@ -30,24 +29,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.UniqueValuesRuleList;
+import org.geopublishing.atlasStyler.UniqueValuesRulesListInterface;
 
-import de.schmitzm.swing.AtlasDialog;
-import de.schmitzm.swing.CancelButton;
+import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.ThinButton;
 import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class UniqueValuesAddGUI extends AtlasDialog {
+public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 	private static final Logger log = Logger
 			.getLogger(UniqueValuesAddGUI.class);
 
@@ -65,47 +61,43 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 
 	private ThinButton jButtonAddToList = null;
 
-	private JButton jButtonOk = null;
-
-	private JButton jButtonCancel = null;
-
 	private JLabel jLabelSelectTheValueToAdd = null;
 
 	private JScrollPane jScrollPane = null;
 
 	private JList jListValues = null;
 
-	private final UniqueValuesRuleList rulesList;
+	private final UniqueValuesRulesListInterface<VALUETYPE> rulesList;
 
 	/**
 	 * @param owner
 	 * @param featureSource_polygon
 	 */
 	public UniqueValuesAddGUI(Component owner,
-			final UniqueValuesRuleList rulesList) {
+			final UniqueValuesRulesListInterface<VALUETYPE> rulesList) {
 		super(owner);
 		this.rulesList = rulesList;
 		initialize();
 
-		String title = AtlasStylerVector
+		String title = ASUtil
 				.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
 		final AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner,
 				title, title);
 
-		AtlasSwingWorker<Set<Object>> findUniques = new AtlasSwingWorker<Set<Object>>(
+		AtlasSwingWorker<Set<VALUETYPE>> findUniques = new AtlasSwingWorker<Set<VALUETYPE>>(
 				statusDialog) {
 
 			@Override
-			protected Set<Object> doInBackground() throws Exception {
+			protected Set<VALUETYPE> doInBackground() throws Exception {
 				return rulesList.getAllUniqueValuesThatAreNotYetIncluded();
 			}
 
 		};
 		try {
-			Set<Object> uniqueValues = findUniques.executeModal();
+			Set<VALUETYPE> uniqueValues = findUniques.executeModal();
 
 			DefaultListModel defaultListModel = new DefaultListModel();
-			for (Object uv : uniqueValues) {
+			for (VALUETYPE uv : uniqueValues) {
 				defaultListModel.addElement(uv);
 			}
 			getJListValues().setModel(defaultListModel);
@@ -131,7 +123,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 	 */
 	private void initialize() {
 		this.setContentPane(getJContentPane());
-		this.setTitle(AtlasStylerVector.R("UniqueValuesAddGUI.DialogTitle"));
+		this.setTitle(ASUtil.R("UniqueValuesAddGUI.DialogTitle"));
 		this.setModal(true);
 		pack();
 	}
@@ -186,7 +178,7 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			gridBagConstraints8.insets = new Insets(5, 1, 1, 5);
 			gridBagConstraints8.gridy = 0;
 			jLabelSelectTheValueToAdd = new JLabel();
-			jLabelSelectTheValueToAdd.setText(AtlasStylerVector
+			jLabelSelectTheValueToAdd.setText(ASUtil
 					.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
@@ -215,8 +207,8 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			gridBagConstraints6.gridy = 0;
 			jPanelButtons = new JPanel();
 			jPanelButtons.setLayout(new GridBagLayout());
-			jPanelButtons.add(getJButtonOk(), gridBagConstraints6);
-			jPanelButtons.add(getJButtonCancel(), gridBagConstraints7);
+			jPanelButtons.add(getOkButton(), gridBagConstraints6);
+			jPanelButtons.add(getCancelButton(), gridBagConstraints7);
 		}
 		return jPanelButtons;
 	}
@@ -245,13 +237,12 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			gridBagConstraints3.gridwidth = 3;
 			gridBagConstraints3.gridy = 0;
 			jLabel = new JLabel();
-			jLabel.setText(AtlasStylerVector
-					.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
+			jLabel.setText(ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
 			jPanel2 = new JPanel();
-			jPanel2.setToolTipText(AtlasStylerVector
+			jPanel2.setToolTipText(ASUtil
 					.R("UniqueValuesAddGUI.AddNewValueToList.TT"));
 			jPanel2.setLayout(new GridBagLayout());
-			jPanel2.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+			jPanel2.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("UniqueValuesAddGUI.AddNewValueToList.BorderTitle")));
 			jPanel2.add(jLabel, gridBagConstraints3);
 			jPanel2.add(getJTextField(), gridBagConstraints4);
@@ -311,73 +302,60 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 		return jButtonAddToList;
 	}
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonOk() {
-		if (jButtonOk == null) {
-			jButtonOk = new OkButton();
+	// /**
+	// * This method initializes jButton
+	// *
+	// * @return javax.swing.JButton
+	// */
+	// private JButton getJButtonOk() {
+	// if (jButtonOk == null) {
+	// jButtonOk = new OkButton();
+	//
+	// jButtonOk.addActionListener(new ActionListener() {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	//
+	// UniqueValuesAddGUI.this.dispose();
+	// }
+	//
+	// });
+	//
+	// getJListValues().addListSelectionListener(
+	// new ListSelectionListener() {
+	//
+	// @Override
+	// public void valueChanged(ListSelectionEvent e) {
+	// jButtonOk.setEnabled((getJListValues()
+	// .getSelectedValues().length > 0));
+	// }
+	//
+	// });
+	//
+	// jButtonOk.setEnabled(false);
+	// }
+	// return jButtonOk;
+	// }
 
-			jButtonOk.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					rulesList.pushQuite();
-					for (Object obj : getJListValues().getSelectedValues()) {
-
-						try {
-							rulesList.addUniqueValue(obj);
-						} catch (IllegalArgumentException e2) {
-							ExceptionDialog.show(SwingUtil
-									.getParentWindow(UniqueValuesAddGUI.this),
-									e2);
-						}
-					}
-					rulesList.popQuite();
-					rulesList.fireEvents(new RuleChangedEvent(
-							"Manually added more unique values...", rulesList));
-					UniqueValuesAddGUI.this.dispose();
-				}
-
-			});
-
-			getJListValues().addListSelectionListener(
-					new ListSelectionListener() {
-
-						@Override
-						public void valueChanged(ListSelectionEvent e) {
-							jButtonOk.setEnabled((getJListValues()
-									.getSelectedValues().length > 0));
-						}
-
-					});
-
-			jButtonOk.setEnabled(false);
-		}
-		return jButtonOk;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonCancel() {
-		if (jButtonCancel == null) {
-			jButtonCancel = new CancelButton();
-			jButtonCancel.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					UniqueValuesAddGUI.this.dispose();
-				}
-
-			});
-		}
-		return jButtonCancel;
-	}
+	// /**
+	// * This method initializes jButton
+	// *
+	// * @return javax.swing.JButton
+	// */
+	// private JButton getJButtonCancel() {
+	// if (jButtonCancel == null) {
+	// jButtonCancel = new CancelButton();
+	// jButtonCancel.addActionListener(new ActionListener() {
+	//
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	// UniqueValuesAddGUI.this.dispose();
+	// }
+	//
+	// });
+	// }
+	// return jButtonCancel;
+	// }
 
 	/**
 	 * This method initializes jScrollPane
@@ -402,6 +380,34 @@ public class UniqueValuesAddGUI extends AtlasDialog {
 			jListValues = new JList();
 		}
 		return jListValues;
+	}
+
+	@Override
+	public void cancel() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean okClose() {
+		rulesList.pushQuite();
+		try {
+
+			for (VALUETYPE obj : (VALUETYPE[]) getJListValues()
+					.getSelectedValues()) {
+
+				try {
+					rulesList.addUniqueValue(obj);
+				} catch (IllegalArgumentException e2) {
+					ExceptionDialog.show(
+							SwingUtil.getParentWindow(UniqueValuesAddGUI.this),
+							e2);
+				}
+			}
+		} finally {
+			rulesList.popQuite(new RuleChangedEvent(
+					"Manually added more unique values...", rulesList));
+		}
+		return super.okClose();
 	}
 
 }

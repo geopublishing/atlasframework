@@ -128,7 +128,7 @@ public abstract class AtlasStyler {
 	 */
 	final private List<Exception> importErrorLog = new ArrayList<Exception>();
 
-	private AbstractRulesList lastChangedRuleList;
+	private RulesListInterface lastChangedRuleList;
 
 	/**
 	 * This listener is attached to all rule lists and propagates any events as
@@ -153,7 +153,7 @@ public abstract class AtlasStyler {
 				// }
 			}
 
-			final AbstractRulesList someRuleList = e.getSourceRL();
+			final RulesListInterface someRuleList = e.getSourceRL();
 
 			lastChangedRuleList = someRuleList;
 
@@ -285,7 +285,7 @@ public abstract class AtlasStyler {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	protected void fireStyleChangedEvents(final AbstractRulesList ruleList) {
+	protected void fireStyleChangedEvents(final RulesListInterface ruleList) {
 		if (!(ruleList instanceof TextRuleList))
 			lastChangedRuleList = ruleList;
 
@@ -363,7 +363,7 @@ public abstract class AtlasStyler {
 	 *         via the {@link RuleChangeListener}. Never return the labeling
 	 *         TextRulesList. {@link #listenerFireStyleChange}
 	 */
-	public AbstractRulesList getLastChangedRuleList() {
+	public RulesListInterface getLastChangedRuleList() {
 		return lastChangedRuleList;
 	}
 
@@ -413,7 +413,7 @@ public abstract class AtlasStyler {
 			}
 
 			// TODO handle textRuleLists special at the end?
-			for (AbstractRulesList ruleList : getRuleListsReverse()) {
+			for (RulesListInterface ruleList : getRuleListsReverse()) {
 				styleCached.featureTypeStyles().add(ruleList.getFTS());
 			}
 
@@ -540,7 +540,7 @@ public abstract class AtlasStyler {
 	}
 
 	public void setLastChangedRuleList(
-			final AbstractRulesList lastChangedRuleList) {
+			final RulesListInterface lastChangedRuleList) {
 
 		if (!(lastChangedRuleList instanceof TextRuleList))
 			this.lastChangedRuleList = lastChangedRuleList;
@@ -572,7 +572,7 @@ public abstract class AtlasStyler {
 		this.title = title;
 	}
 
-	abstract public AbstractRulesList copyRulesList(AbstractRulesList rl);
+	abstract public AbstractRulesList copyRulesList(RulesListInterface rl);
 
 	/**
 	 * Because the rule title may not be empty, we check different sources here.

@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;
@@ -29,7 +29,7 @@ public class RulesListPopup extends JPopupMenu {
 	static final Double[] scalesCopied = new Double[2];
 	private final StylerDialog asd;
 
-	public RulesListPopup(final AbstractRulesList rulesList, StylerDialog asd) {
+	public RulesListPopup(final RulesListInterface rulesList, StylerDialog asd) {
 		this.asd = asd;
 
 		// Write the name if the layer as a header of the menu:
@@ -55,7 +55,7 @@ public class RulesListPopup extends JPopupMenu {
 		}
 	}
 
-	private void addXMLMenuItems(final AbstractRulesList rulesList) {
+	private void addXMLMenuItems(final RulesListInterface rulesList) {
 
 		add(new AbstractAction(AtlasStylerVector.R("RulesListPopup.copyXML"),
 				Icons.ICON_XML) {
@@ -78,7 +78,7 @@ public class RulesListPopup extends JPopupMenu {
 
 	}
 
-	private void addFilterMenuItems(final AbstractRulesList rulesList) {
+	private void addFilterMenuItems(final RulesListInterface rulesList) {
 		// Copy Filter
 		final Filter rlFilter = rulesList.getRlFilter();
 		if (rlFilter != null) {
@@ -118,7 +118,7 @@ public class RulesListPopup extends JPopupMenu {
 		}
 	}
 
-	private void addScaleMenuItems(final AbstractRulesList rulesList) {
+	private void addScaleMenuItems(final RulesListInterface rulesList) {
 		if (asd.getPreviewMapPane() != null) {
 
 			final double previewScaleDenominator = asd.getPreviewMapPane()

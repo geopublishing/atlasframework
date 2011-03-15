@@ -61,6 +61,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private ThinButton jButtonRemove;
 	private JComboBox jComboBoxOpacity;
 	private ThinButton jButtonApplyOpacity;
+	private ThinButton jButtonAddValues;
 
 	public RasterRulesList_Distinctvalues_GUI(
 			RasterRulesList_DistinctValues rulesList,
@@ -73,8 +74,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	}
 
 	private void initialize() {
-		JLabel jLabelHeading = new JLabel(
-				AtlasStylerVector.R("UniqueValues.Heading"));
+		JLabel jLabelHeading = new JLabel(ASUtil.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
@@ -105,7 +105,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
 			jButtonRemove = new ThinButton(new AbstractAction(
-					AtlasStylerVector.R("UniqueValues.Button.RemoveValue")) {
+					ASUtil.R("UniqueValues.Button.RemoveValue")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -155,17 +155,15 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	private Component getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
-			jButtonRemoveAll = new ThinButton(
-					new AbstractAction(
-							AtlasStylerVector
-									.R("UniqueValues.Button.RemoveAllValues")) {
+			jButtonRemoveAll = new ThinButton(new AbstractAction(
+					ASUtil.R("UniqueValues.Button.RemoveAllValues")) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							rulesList.removeAll();
-						}
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					rulesList.removeAll();
+				}
 
-					});
+			});
 
 			jButtonRemoveAll.setEnabled(rulesList.getValues().size() > 0);
 
@@ -174,15 +172,33 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	}
 
-	private Component getJButtonAddValues() {
-		return new JPanel();
+	/**
+	 * A button to add one unique value of the selected column
+	 */
+	private JButton getJButtonAddValues() {
+		if (jButtonAddValues == null) {
+			jButtonAddValues = new ThinButton(new AbstractAction(
+					ASUtil.R("UniqueValues.Button.AddValues")) {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
+							RasterRulesList_Distinctvalues_GUI.this, rulesList);
+					valuesGUI.setVisible(true);
+				}
+
+			});
+
+		}
+
+		return jButtonAddValues;
 	}
 
 	private Component getJPanelColorAndOpacity() {
 		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
-				.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+				.setBorder(BorderFactory.createTitledBorder(ASUtil
 						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette());
@@ -404,11 +420,10 @@ public class RasterRulesList_Distinctvalues_GUI extends
 									int index = row;
 
 									transLabel = new TranslationEditJPanel(
-											AtlasStylerVector
-													.R("RasterRulesList_Distinctvalues_GUI.LabelForClass",
-															getRulesList()
-																	.getValues()
-																	.get(index)),
+											ASUtil.R(
+													"RasterRulesList_Distinctvalues_GUI.LabelForClass",
+													getRulesList().getValues()
+															.get(index)),
 											translation, AtlasStylerVector
 													.getLanguages());
 
@@ -631,9 +646,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				}
 			});
 
-			jButtonApplyPalette.setText(AtlasStylerVector
+			jButtonApplyPalette.setText(ASUtil
 					.R("UniqueValues.applyPaletteButton.title"));
-			jButtonApplyPalette.setToolTipText(AtlasStylerVector
+			jButtonApplyPalette.setToolTipText(ASUtil
 					.R("UniqueValues.applyPaletteButton.toolTip"));
 
 		}
@@ -682,12 +697,12 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
 			jButtonAddAllValues = new ThinButton(new AbstractAction(
-					AtlasStylerVector.R("UniqueValues.Button.AddAllValues")) {
+					ASUtil.R("UniqueValues.Button.AddAllValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					String title = AtlasStylerVector
+					String title = ASUtil
 							.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
 
 					final AtlasSwingWorker<Integer> findUniques = new AtlasSwingWorker<Integer>(
@@ -700,12 +715,11 @@ public class RasterRulesList_Distinctvalues_GUI extends
 					};
 					try {
 						Integer added = findUniques.executeModal();
-						JOptionPane
-								.showMessageDialog(
-										RasterRulesList_Distinctvalues_GUI.this,
-										AtlasStylerVector
-												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
-														added));
+						JOptionPane.showMessageDialog(
+								RasterRulesList_Distinctvalues_GUI.this,
+								ASUtil.R(
+										"UniqueValuesRuleList.AddAllValues.DoneMsg",
+										added));
 					} catch (CancellationException ce) {
 						// findUniques.cancel(true);
 						return;

@@ -49,7 +49,8 @@ import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
 
-public abstract class UniqueValuesRuleList extends FeatureRuleList {
+public abstract class UniqueValuesRuleList extends FeatureRuleList implements
+		UniqueValuesRulesListInterface<Object> {
 	/**
 	 * Special unique value. When exporting by {@link #getRules()}, this value
 	 * is translated to the special "all others" rule *
@@ -168,14 +169,11 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList {
 
 	/**
 	 * @param uniqueValue
-	 *            Unique value to all to the list.
+	 *            Adds a unique value to to the list of values.
 	 * 
 	 * @return <code>false</code> is the value already exists
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public boolean addUniqueValue(final Object uniqueValue)
-			throws IllegalArgumentException {
+	public boolean addUniqueValue(final Object uniqueValue) {
 
 		if (getValues().contains(uniqueValue)) {
 			LOGGER.warn("The unique Value '" + uniqueValue

@@ -23,7 +23,7 @@ import de.schmitzm.lang.LangUtil;
 public class RuleChangedEvent {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	private final AbstractRulesList sourceRL;
+	private final RulesListInterface sourceRL;
 
 	private final String reason;
 
@@ -45,12 +45,12 @@ public class RuleChangedEvent {
 	public static final String RULE_CHANGE_EVENT_MINMAXSCALE_STRING = "min- or max-scale changed for this RulesList";
 	public static final String RULE_PLACEMENT_CHANGED_STRING = "label placement changed";
 
-	public RuleChangedEvent(String reason, final AbstractRulesList sourceRL) {
+	public RuleChangedEvent(String reason, final RulesListInterface sourceRL) {
 		this.reason = reason;
 		this.sourceRL = sourceRL;
 	}
 
-	public AbstractRulesList getSourceRL() {
+	public RulesListInterface getSourceRL() {
 		return sourceRL;
 	}
 

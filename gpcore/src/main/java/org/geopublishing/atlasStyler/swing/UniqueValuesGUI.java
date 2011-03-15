@@ -442,20 +442,16 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	private JButton getJButtonAddValues() {
 		if (jButtonAddValues == null) {
 			jButtonAddValues = new ThinButton(new AbstractAction(
-					AtlasStylerVector.R("UniqueValues.Button.AddValues")) {
+					ASUtil.R("UniqueValues.Button.AddValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
-							SwingUtil.getParentWindow(UniqueValuesGUI.this),
-							rulesList);
+							UniqueValuesGUI.this, rulesList);
 					valuesGUI.setVisible(true);
 				}
-
 			});
-
 		}
-
 		return jButtonAddValues;
 	}
 

@@ -5,6 +5,7 @@ import java.awt.Window;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.RulesListInterface;
 
 import de.schmitzm.swing.JPanel;
 
@@ -12,7 +13,7 @@ import de.schmitzm.swing.JPanel;
  * Parent of a Swing GUIs that are placed on the right side of
  * {@link AtlasStylerPane} and represent an {@link AbstractRulesList}.
  */
-abstract public class AbstractRulesListGui<RLT extends AbstractRulesList> extends JPanel implements
+abstract public class AbstractRulesListGui<RLT extends RulesListInterface> extends JPanel implements
 		ClosableSubwindows {
 
 	public AbstractRulesListGui(RLT rulesList) {
@@ -34,7 +35,7 @@ abstract public class AbstractRulesListGui<RLT extends AbstractRulesList> extend
 
 	class RuleChangeListener_GuiEnabledDisabled implements RuleChangeListener {
 
-		private final AbstractRulesList rulesList;
+		private final RulesListInterface rulesList;
 		private final AbstractRulesListGui<RLT> gui;
 
 		@Override
@@ -47,7 +48,7 @@ abstract public class AbstractRulesListGui<RLT extends AbstractRulesList> extend
 
 		public RuleChangeListener_GuiEnabledDisabled(
 				AbstractRulesListGui<RLT> abstractRuleListGui,
-				AbstractRulesList rulesList) {
+				RulesListInterface rulesList) {
 			this.gui = abstractRuleListGui;
 
 			this.rulesList = rulesList;

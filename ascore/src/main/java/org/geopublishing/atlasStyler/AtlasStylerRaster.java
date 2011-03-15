@@ -49,7 +49,7 @@ public class AtlasStylerRaster extends AtlasStyler {
 	}
 
 	@Override
-	public AbstractRulesList copyRulesList(AbstractRulesList rl) {
+	public AbstractRulesList copyRulesList(RulesListInterface rl) {
 		return null;
 	}
 

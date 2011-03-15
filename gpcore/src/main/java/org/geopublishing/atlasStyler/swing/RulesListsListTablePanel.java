@@ -23,6 +23,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 import de.schmitzm.swing.ButtonGroup;
@@ -313,7 +314,7 @@ public class RulesListsListTablePanel extends JPanel {
 							atlasStyler.getRuleLists().pushQuite();
 							try {
 								for (int idx : idxList) {
-									AbstractRulesList rl = atlasStyler
+									RulesListInterface rl = atlasStyler
 											.getRuleLists().get(idx);
 									AbstractRulesList duplicate = atlasStyler
 											.copyRulesList(rl);

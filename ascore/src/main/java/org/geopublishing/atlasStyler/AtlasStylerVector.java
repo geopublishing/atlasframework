@@ -236,7 +236,7 @@ public class AtlasStylerVector extends AtlasStyler {
 	 * Creates a copy of any given RulesList
 	 */
 	@Override
-	public AbstractRulesList copyRulesList(AbstractRulesList rl) {
+	public AbstractRulesList copyRulesList(RulesListInterface rl) {
 		FeatureTypeStyle fts = rl.getFTS();
 		try {
 			return getRlf().importFts(fts, false);
@@ -331,7 +331,7 @@ public class AtlasStylerVector extends AtlasStyler {
 	 * @param newRl
 	 *            newly selected RuleList
 	 */
-	void askToTransferTemplates(AbstractRulesList oldRl, FeatureRuleList newRl) {
+	void askToTransferTemplates(RulesListInterface oldRl, FeatureRuleList newRl) {
 		if (oldRl == null || newRl == null || oldRl == newRl)
 			return;
 		if (oldRl.getGeometryForm() != newRl.getGeometryForm())
@@ -397,7 +397,7 @@ public class AtlasStylerVector extends AtlasStyler {
 	 * @param newRl
 	 *            newly selected RuleList
 	 */
-	void askToTransferTemplates(AbstractRulesList oldRl, SingleRuleList newRl) {
+	void askToTransferTemplates(RulesListInterface oldRl, SingleRuleList newRl) {
 
 		if (oldRl == null || oldRl == newRl)
 			return;

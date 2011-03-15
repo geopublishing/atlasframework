@@ -29,7 +29,8 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class RasterRulesList_DistinctValues extends RasterRulesList {
+public class RasterRulesList_DistinctValues extends RasterRulesList implements
+		UniqueValuesRulesListInterface<Double> {
 
 	private final ArrayList<Boolean> showInLegends = new ArrayList<Boolean>();
 
@@ -146,6 +147,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
+	@Override
 	public boolean addUniqueValue(final Double uniqueValue)
 			throws IllegalArgumentException {
 

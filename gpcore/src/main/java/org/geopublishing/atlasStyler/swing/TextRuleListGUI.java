@@ -31,10 +31,10 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.data.DefaultQuery;
@@ -481,7 +481,7 @@ public class TextRuleListGUI extends AbstractRulesListGui<TextRuleList> {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					AbstractRulesList symbRL = atlasStyler
+					RulesListInterface symbRL = atlasStyler
 							.getLastChangedRuleList();
 
 					rulesList.importClassesFromStyle(symbRL,

@@ -39,10 +39,10 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASProps;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasStyler.TextRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.feature.FeatureCollection;
@@ -196,7 +196,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 		final Style style = StylingUtil.STYLE_BUILDER.createStyle();
 
 		// We use the actual styling defined as the default
-		final AbstractRulesList lastChangedRuleList = atlasStyler
+		final RulesListInterface lastChangedRuleList = atlasStyler
 				.getLastChangedRuleList();
 		if (lastChangedRuleList != null) {
 			style.featureTypeStyles().add(lastChangedRuleList.getFTS());

@@ -11,7 +11,6 @@
 package org.geopublishing.atlasStyler;
 
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -22,14 +21,11 @@ import org.apache.log4j.Logger;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
-import org.geotools.styling.Style;
 import org.geotools.util.SimpleInternationalString;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.And;
 import org.opengis.filter.Filter;
-import org.opengis.filter.FilterFactory2;
-import org.opengis.filter.PropertyIsEqualTo;
 
 import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
@@ -45,66 +41,9 @@ import de.schmitzm.lang.LangUtil;
  * @author stefan
  * 
  */
-public abstract class AbstractRulesList {
-	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
-
-	// ** Do not change the value, it is needed to recognize SLD **//
-	private static final String ALL_LABEL_CLASSES_ENABLED = "ALL_LABEL_CLASSES_ENABLED";
-
-	// ** Do not change the value, it is needed to recognize SLD **//
-	private static final String RL_FILTER_APPLIED_STR = "RL_FILTER_APPLIED";
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_FILTER_APPLIED_FILTER = ff.equals(
-			ff.literal(RL_FILTER_APPLIED_STR),
-			ff.literal(RL_FILTER_APPLIED_STR));
+public abstract class AbstractRulesList implements RulesListInterface {
 
 	private String title = this.getClass().getSimpleName().toString();
-
-	/**
-	 * A Filter to mark that one class/rule has been disabled. Sorry,
-	 * AtlasStyler specifc, but used in Sl #createLegendSwing method
-	 **/
-	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
-
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
-			ff.literal(ALL_LABEL_CLASSES_ENABLED),
-			ff.literal(ALL_LABEL_CLASSES_ENABLED));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
-	 * is not used anymore and only for backward compatibility. Will be removed
-	 * in 2.0
-	 **/
-	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("1"));
-
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
-	 * is not used anymore and only for backward compatibility. Will be removed
-	 * in 2.0
-	 **/
-	public static final PropertyIsEqualTo oldAllClassesDisabledFilter = ff
-			.equals(ff.literal("1"), ff.literal("2"));
-
-	/**
-	 * If used as a {@link Rule}'s name, the rule should not be imported, but
-	 * rather just be ignored.
-	 */
-	static final String RULENAME_DONTIMPORT = "DONTIMPORT";
-
-	/**
-	 * To simplifly the usage, any ScaleDenominator above this value will be
-	 * interpreted as Infinite.
-	 */
-	public static final double MAX_SCALEDENOMINATOR = 1E20;
 
 	protected Filter addAbstractRlSettings(Filter filter) {
 		filter = addRuleListFilterAppliedFilter(filter);
@@ -154,11 +93,12 @@ public abstract class AbstractRulesList {
 
 	private Filter rlFilter = null;
 
-	/**
-	 * Gets a filter that is applied to the whole AbstractRulesList. If will be
-	 * added to all filters of all rules. Returns <code>null</code> for
-	 * Filter.INCLUDE
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRlFilter()
 	 */
+	@Override
 	public Filter getRlFilter() {
 		if (rlFilter == Filter.INCLUDE)
 			return null;
@@ -169,14 +109,36 @@ public abstract class AbstractRulesList {
 
 	double minScaleDenominator = 0.0;
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#getMaxScaleDenominator()
+	 */
+	@Override
 	public double getMaxScaleDenominator() {
 		return maxScaleDenominator;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#getMinScaleDenominator()
+	 */
+	@Override
 	public double getMinScaleDenominator() {
 		return minScaleDenominator;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setMaxScaleDenominator
+	 * (double)
+	 */
+	@Override
 	public void setMaxScaleDenominator(double maxScaleDenominator) {
 		// May not be smaller than 0
 		if (maxScaleDenominator < 0.)
@@ -197,6 +159,14 @@ public abstract class AbstractRulesList {
 				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setMinScaleDenominator
+	 * (double)
+	 */
+	@Override
 	public void setMinScaleDenominator(double minScaleDenominator) {
 
 		// May not be smaller than 0
@@ -218,12 +188,14 @@ public abstract class AbstractRulesList {
 				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
 	}
 
-	/**
-	 * Sets a filter that is applied to the whole AbstractRulesList. If will be
-	 * added to all filters of all rules. When changed, a
-	 * {@link RuleChangedEvent} is fired. <code>Filter.INCLUDE</code> is changed
-	 * to <code>null</code>
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setRlFilter(org.opengis
+	 * .filter.Filter)
 	 */
+	@Override
 	public void setRlFilter(Filter rlFilter) {
 		if (rlFilter == this.rlFilter)
 			return;
@@ -526,31 +498,35 @@ public abstract class AbstractRulesList {
 	private boolean quite = false;
 	Stack<Boolean> stackQuites = new Stack<Boolean>();
 
-	/**
-	 * Adds a {@link RuleChangeListener} which listens to changes in the
-	 * {@link Rule}. Very good to update previews.<br>
-	 * <b>The listening class must keep a reference to the listener (e.g. make
-	 * it a field variable) because the listeners are kept in a WeakHashSet.</b>
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#addListener(org.
+	 * geopublishing.atlasStyler.RuleChangeListener)
 	 */
+	@Override
 	public void addListener(RuleChangeListener listener) {
 		listeners.add(listener);
 	}
 
-	/**
-	 * Clears all {@link RuleChangeListener}s
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#clearListeners()
 	 */
+	@Override
 	public void clearListeners() {
 		listeners.clear();
 	}
 
-	/**
-	 * Tells all {@link RuleChangeListener} that the {@link Rule}s represented
-	 * by this {@link AbstractRulesList} implementation have changed.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#fireEvents(org.geopublishing
+	 * .atlasStyler.RuleChangedEvent)
 	 */
+	@Override
 	public void fireEvents(RuleChangedEvent rce) {
 
 		if (quite) {
@@ -569,15 +545,14 @@ public abstract class AbstractRulesList {
 		}
 	}
 
-	/**
-	 * The AtlasStyler stores meta information in the name tag of
-	 * {@link FeatureTypeStyle}s.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return a {@link String} that contains all information for this
-	 *         particular RuleList
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#getAtlasMetaInfoForFTSName
+	 * ()
 	 */
+	@Override
 	public abstract String getAtlasMetaInfoForFTSName();
 
 	/**
@@ -586,10 +561,14 @@ public abstract class AbstractRulesList {
 	 */
 	private boolean enabled = true;
 
-	/**
-	 * Imports the information stored in the FTS and then calls
-	 * importRules(fts.rules());
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#importFts(org.geotools
+	 * .styling.FeatureTypeStyle)
 	 */
+	@Override
 	public void importFts(FeatureTypeStyle fts) {
 		pushQuite();
 		try {
@@ -626,11 +605,12 @@ public abstract class AbstractRulesList {
 
 	abstract void importRules(List<Rule> rules);
 
-	/**
-	 * @return Returns the SLD {@link FeatureTypeStyle}s that represents this
-	 *         RuleList. This method implemented here doesn't set the
-	 *         FeatureTypeName. This is overridden in {@link FeatureRuleList}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getFTS()
 	 */
+	@Override
 	public FeatureTypeStyle getFTS() {
 		List<Rule> rules = applyScaleDominators(getRules());
 		rules = applyHideDisabledRulesLists(rules);
@@ -664,19 +644,22 @@ public abstract class AbstractRulesList {
 
 	}
 
-	/**
-	 * Returns direct access to the {@link RuleChangeListener}s {@link HashSet}
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getListeners()
 	 */
+	@Override
 	public Set<RuleChangeListener> getListeners() {
 		return listeners;
 	}
 
-	/**
-	 * @return Returns the SLD {@link Rule}s that it represents. The min- and
-	 *         max-Scale Denominators are applied to all Rules.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRules()
 	 */
+	@Override
 	public abstract List<Rule> getRules();
 
 	/**
@@ -711,28 +694,30 @@ public abstract class AbstractRulesList {
 		return rules;
 	}
 
-	/**
-	 * When importing a {@link Style}, the {@link AtlasStylerVector} recognizes
-	 * its RuleLists by reading meta information from the
-	 * {@link FeatureTypeStyle}s name. That information starts with a basic
-	 * identifier for the RuleList type.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return An identifier string for that RuleList type.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getType()
 	 */
+	@Override
 	public abstract RulesListType getType();
 
-	/**
-	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#isQuite()
 	 */
+	@Override
 	public boolean isQuite() {
 		return quite;
 	}
 
-	/**
-	 * Remove a QUITE-State from the event firing state stack
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#popQuite()
 	 */
+	@Override
 	public void popQuite() {
 		setQuite(stackQuites.pop());
 		if (quite == false) {
@@ -745,6 +730,14 @@ public abstract class AbstractRulesList {
 
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#popQuite(org.geopublishing
+	 * .atlasStyler.RuleChangedEvent)
+	 */
+	@Override
 	public void popQuite(RuleChangedEvent ruleChangedEvent) {
 		setQuite(stackQuites.pop());
 		if (quite == false)
@@ -757,24 +750,24 @@ public abstract class AbstractRulesList {
 		}
 	}
 
-	/**
-	 * Add a QUITE-State to the event firing state stack
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#pushQuite()
 	 */
+	@Override
 	public void pushQuite() {
 		stackQuites.push(quite);
 		setQuite(true);
 	}
 
-	/**
-	 * Removes a {@link RuleChangeListener} which listens to changes in the
-	 * {@link Rule}.
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param listener
-	 *            {@link RuleChangeListener} to remove
-	 * @return <code>false</code> if {@link RuleChangeListener} not found
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#removeListener(org.
+	 * geopublishing.atlasStyler.RuleChangeListener)
 	 */
+	@Override
 	public boolean removeListener(RuleChangeListener listener) {
 		return listeners.remove(listener);
 	}
@@ -786,17 +779,22 @@ public abstract class AbstractRulesList {
 		quite = b;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getGeometryForm()
+	 */
+	@Override
 	public GeometryForm getGeometryForm() {
 		return geometryForm;
 	}
 
-	/**
-	 * If <code>false</code>, all rules in this filter will always evaluate to
-	 * false.<br/>
-	 * Allows to define whether all rules are enabled. If disabled, if doesn't
-	 * throw away all information, but just disables rules with an Always-False
-	 * filter.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#setEnabled(boolean)
 	 */
+	@Override
 	public void setEnabled(boolean enabled) {
 		if (enabled == this.enabled)
 			return;
@@ -805,14 +803,24 @@ public abstract class AbstractRulesList {
 				RuleChangedEvent.RULE_CHANGE_EVENT_ENABLED_STRING, this));
 	}
 
-	/**
-	 * If <code>false</code>, all rules in this filter will always evaluate to
-	 * false.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#isEnabled()
 	 */
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setTitle(java.lang.String
+	 * )
+	 */
+	@Override
 	public void setTitle(String title) {
 		if (title == this.title)
 			return;
@@ -821,6 +829,12 @@ public abstract class AbstractRulesList {
 				RuleChangedEvent.RULE_CHANGE_EVENT_TITLE_STRING, this));
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getTitle()
+	 */
+	@Override
 	public String getTitle() {
 		return title;
 	}

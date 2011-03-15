@@ -37,9 +37,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListCellRenderer;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleListFactory;
+import org.geopublishing.atlasStyler.RulesListInterface;
 import org.geopublishing.atlasStyler.SingleRuleList;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -146,7 +146,7 @@ public abstract class JScrollPaneSymbols extends JScrollPane {
 
 					if ((e.getClickCount() == 2)
 							&& (e.getButton() == MouseEvent.BUTTON1)) {
-						final AbstractRulesList rl = (AbstractRulesList) jListSymbols
+						final RulesListInterface rl = (RulesListInterface) jListSymbols
 								.getModel().getElementAt(i);
 
 						new AtlasSwingWorker<Void>(JScrollPaneSymbols.this) {

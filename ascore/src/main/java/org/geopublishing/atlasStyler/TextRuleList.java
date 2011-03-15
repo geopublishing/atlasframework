@@ -504,7 +504,7 @@ public class TextRuleList extends AbstractRulesList {
 		return RulesListType.TEXT_LABEL;
 	}
 
-	public void importClassesFromStyle(AbstractRulesList symbRL, Component owner) {
+	public void importClassesFromStyle(RulesListInterface symbRL, Component owner) {
 
 		pushQuite();
 
