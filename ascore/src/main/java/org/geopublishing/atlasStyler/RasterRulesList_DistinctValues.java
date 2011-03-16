@@ -25,6 +25,7 @@ import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -32,11 +33,6 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		UniqueValuesRulesListInterface<Double> {
 
-	private final ArrayList<Boolean> showInLegends = new ArrayList<Boolean>();
-
-	public ArrayList<Boolean> getShowInLegends() {
-		return showInLegends;
-	}
 
 	public RasterRulesList_DistinctValues(StyledRasterInterface styledRaster) {
 		super(styledRaster, ColorMap.TYPE_VALUES);
@@ -111,7 +107,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 
 	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
 
-		Integer countNew = 0;
+		int countBefore = getNumClasses();
+		int countNew = 0;
 		pushQuite();
 
 		try {
@@ -126,6 +123,10 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 			LOGGER.error("Error calculating raster statistics", e);
 			if (sw != null)
 				ExceptionDialog.show(e);
+		}
+		
+		if (countBefore==0) {
+			applyPalette(null);
 		}
 
 		/** Fire an event * */
@@ -159,9 +160,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 
 		getValues().add(uniqueValue);
 		getLabels().add(new Translation(String.valueOf(uniqueValue)));
-		getColors().add(Color.CYAN);
-		getOpacities().add(1.);
-		getShowInLegends().add(true);
+		getColors().add(Color.WHITE);
+		getOpacities().add(getOpacity());
 
 		return true;
 	}
@@ -242,7 +242,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		getLabels().add(row + delta, getLabels().remove(row));
 		getColors().add(row + delta, getColors().remove(row));
 		getOpacities().add(row + delta, getOpacities().remove(row));
-		getShowInLegends().add(row + delta, getShowInLegends().remove(row));
 		fireEvents(new RuleChangedEvent("Index " + row + " moved up to "
 				+ (row - 1), this));
 	}
@@ -262,14 +261,4 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		return rld;
 	}
 
-	public void setOpacity(int rowIndex, Double newOp) {
-		if (newOp == getOpacities().get(rowIndex))
-			return;
-		if (newOp > 1.)
-			newOp = 1.;
-		if (newOp < 0.)
-			newOp = 0.;
-		getOpacities().set(rowIndex, newOp);
-		fireEvents(new RuleChangedEvent("Opacity changed", this));
-	}
 }

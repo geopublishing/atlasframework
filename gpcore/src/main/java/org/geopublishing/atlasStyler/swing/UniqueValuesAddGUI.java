@@ -35,6 +35,8 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.UniqueValuesRulesListInterface;
+import org.geopublishing.atlasViewer.GpCoreUtil;
+import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.ExceptionDialog;
@@ -54,8 +56,6 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 	private JPanel jPanelButtons = null;
 
 	private JPanel jPanel2 = null;
-
-	private JLabel jLabel = null;
 
 	private JTextField jTextField = null;
 
@@ -95,6 +95,10 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 		};
 		try {
 			Set<VALUETYPE> uniqueValues = findUniques.executeModal();
+
+			if (uniqueValues.size() == 0)
+				AVSwingUtil.showMessageDialog(UniqueValuesAddGUI.this,
+						ASUtil.R("UniqueValues.NothingToAdd"));
 
 			DefaultListModel defaultListModel = new DefaultListModel();
 			for (VALUETYPE uv : uniqueValues) {
@@ -177,9 +181,8 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
 			gridBagConstraints8.insets = new Insets(5, 1, 1, 5);
 			gridBagConstraints8.gridy = 0;
-			jLabelSelectTheValueToAdd = new JLabel();
-			jLabelSelectTheValueToAdd.setText(ASUtil
-					.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
+			jLabelSelectTheValueToAdd = new JLabel(
+					ASUtil.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelSelectTheValueToAdd, gridBagConstraints8);
@@ -236,15 +239,15 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.gridwidth = 3;
 			gridBagConstraints3.gridy = 0;
-			jLabel = new JLabel();
-			jLabel.setText(ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
+			JLabel addNewValueToList = new JLabel(
+					ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
 			jPanel2 = new JPanel();
 			jPanel2.setToolTipText(ASUtil
 					.R("UniqueValuesAddGUI.AddNewValueToList.TT"));
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("UniqueValuesAddGUI.AddNewValueToList.BorderTitle")));
-			jPanel2.add(jLabel, gridBagConstraints3);
+			jPanel2.add(addNewValueToList, gridBagConstraints3);
 			jPanel2.add(getJTextField(), gridBagConstraints4);
 			jPanel2.add(getJButtonAddToList(), gridBagConstraints5);
 		}

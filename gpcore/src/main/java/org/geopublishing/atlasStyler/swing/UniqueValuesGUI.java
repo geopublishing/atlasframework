@@ -219,10 +219,10 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		jLabelTemplate = new JLabel(
 				AtlasStylerVector.R("UniqueValues.ChooseTemplate.Label"));
 
-		jPanelColorAndTemplate.add(getJComboBoxPalette());
+		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
-		jPanelColorAndTemplate.add(jLabelTemplate, "split 2");
-		jPanelColorAndTemplate.add(getJButtonTemplate());
+		jPanelColorAndTemplate.add(jLabelTemplate, "split 2, align r");
+		jPanelColorAndTemplate.add(getJButtonTemplate(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyTemplate(), "sgx");
 		return jPanelColorAndTemplate;
 	}
@@ -1150,7 +1150,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 		this.add(jLabelHeading, "center");
 		this.add(getAttributeJPanel(), "split 2, grow x");
-		this.add(getJPanelColorAndTemplate(), "grow x");
+		this.add(getJPanelColorAndTemplate(), "align r");
 
 		this.add(new JScrollPane(getJTable()), "grow x, height 50:150:600");
 

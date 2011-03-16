@@ -80,7 +80,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
 		this.add(jLabelHeading, "center");
-		this.add(getJPanelColorAndOpacity(), "grow x");
+		this.add(getJPanelColorAndOpacity(), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 
@@ -91,7 +91,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			jPanelButtons.add(getJButtonAddValues(), "gapx rel unrel");
 			jPanelButtons.add(getJButtonRemove());
 			jPanelButtons.add(getJButtonRemoveAll(), "gapx rel unrel");
-			jPanelButtons.add(getJButtonUp());
+			jPanelButtons.add(getJButtonUp(), "gapx rel");
 			jPanelButtons.add(getJButtonDown(), "gapx rel");
 		}
 		this.add(jPanelButtons, "");
@@ -201,10 +201,11 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				.setBorder(BorderFactory.createTitledBorder(ASUtil
 						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
 
-		jPanelColorAndTemplate.add(getJComboBoxPalette());
+		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
-		jPanelColorAndTemplate.add(new JLabel(""), "split 2");
-		jPanelColorAndTemplate.add(getJComboboxOpacity());
+		JLabel jLabelTemplate = new JLabel(ASUtil.R("OpacityLabel"));
+		jPanelColorAndTemplate.add(jLabelTemplate, "split 2, align r");
+		jPanelColorAndTemplate.add(getJComboboxOpacity(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyOpacity(), "sgx");
 		return jPanelColorAndTemplate;
 	}
@@ -225,7 +226,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			});
 
 			if (rulesList.getOpacity() != null) {
-				ASUtil.selectOrInsert(jComboBoxOpacity, rulesList.getOpacity());
+				ASUtil.selectOrInsert(jComboBoxOpacity, rulesList.getOpacity()
+						.floatValue());
 			}
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxOpacity);
@@ -341,6 +343,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				public Object getValueAt(int rowIndex, int columnIndex) {
 
 					if (columnIndex == COLIDX_COLOR) {
+						if (rulesList.getOpacities().get(rowIndex) == 0)
+							return null;
 						return rulesList.getColors().get(rowIndex);
 					} else if (columnIndex == COLIDX_OPACITY) {
 						return rulesList.getOpacities().get(rowIndex);
@@ -364,7 +368,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 						int columnIndex) {
 					if (columnIndex == COLIDX_OPACITY) {
 						rulesList.setOpacity(rowIndex, (Double) aValue);
-
 					}
 				}
 
@@ -382,9 +385,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JTable getJTable() {
 		if (jTable == null) {
 			jTable = new JTable(getTableModel());
-
-			/** Render nicely COLOR */
-			jTable.setDefaultRenderer(Color.class, new ColorTableCellRenderer());
 
 			getRulesList().addListener(updateTableWhenRuleListChanges);
 
@@ -509,10 +509,16 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 			});
 
-			jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+			// jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-			jTable.setRowHeight(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE.height + 2);
-			jTable.getColumnModel().getColumn(0).setMaxWidth(53);
+			jTable.setRowHeight(jTable.getRowHeight() + 2);
+
+			/** Render nicely COLOR */
+			jTable.setDefaultRenderer(Color.class, new ColorTableCellRenderer());
+			SwingUtil.setColumnLook(jTable, COLIDX_COLOR,
+					new ColorTableCellRenderer(), 30, 60, 100);
+			SwingUtil.setColumnLook(jTable, COLIDX_OPACITY, null, 30, 40, 40);
+			SwingUtil.setColumnLook(jTable, COLIDX_VALUE, null, 30, 100, 200);
 		}
 		return jTable;
 	}

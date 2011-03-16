@@ -1,5 +1,8 @@
 package org.geopublishing.atlasStyler;
 
+import hep.aida.bin.QuantileBin1D;
+import hep.aida.bin.StaticBin1D;
+
 import java.awt.Color;
 import java.util.ArrayList;
 
@@ -17,6 +20,7 @@ import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
 
 public abstract class RasterRulesList extends AbstractRulesList {
@@ -107,10 +111,12 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	 * Attenetion: Ignores the CM type!
 	 */
 	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
+		QuantileBin1D ops = new QuantileBin1D(1.);
 		for (ColorMapEntry cme : cm.getColorMapEntries()) {
 			importValuesLabelsQuantitiesColors(cme);
+			ops.add(getOpacities().get(getNumClasses() - 1));
 		}
-
+		setOpacity(ops.median());
 	}
 
 	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
@@ -188,13 +194,9 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			final Double op = getOpacity();
 
 			for (int i = 0; i < getValues().size(); i++) {
-
-				int idx = i;
-				while (idx >= getPalette().getMaxColors()) {
-					idx -= getPalette().getMaxColors();
-				}
-
-				getOpacities().set(i, op);
+				if (getOpacities().get(i) == 0)
+					continue;
+				setOpacity(i, op);
 			}
 
 		} finally {
@@ -204,6 +206,17 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	private Double opacity;
+
+	public void setOpacity(int rowIndex, Double newOp) {
+		if (newOp == getOpacities().get(rowIndex))
+			return;
+		if (newOp > 1.)
+			newOp = 1.;
+		if (newOp < 0.)
+			newOp = 0.;
+		getOpacities().set(rowIndex, LangUtil.round(newOp, 2));
+		fireEvents(new RuleChangedEvent("Opacity changed", this));
+	}
 
 	/**
 	 * @param parentGui
@@ -215,29 +228,30 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 		try {
 
-			boolean warnedOnce = false;
-
 			final Color[] colors = getPalette().getColors();
 
+			if (getNumClassesVisible() > getPalette().getMaxColors()
+					&& parentGui != null) {
+
+				final String msg = ASUtil
+						.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+								getPalette().getMaxColors(),
+								getNumClassesVisible());
+				JOptionPane.showMessageDialog(
+						SwingUtil.getParentWindowComponent(parentGui), msg);
+			}
+
+			int idx = 0;
 			for (int i = 0; i < getValues().size(); i++) {
 
-				int idx = i;
-				while (idx >= getPalette().getMaxColors()) {
-					idx -= getPalette().getMaxColors();
-					if ((parentGui != null) && (!warnedOnce)) {
-
-						final String msg = AtlasStylerVector
-								.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
-										getPalette().getMaxColors(),
-										getValues().size());
-						JOptionPane.showMessageDialog(
-								SwingUtil.getParentWindowComponent(parentGui),
-								msg);
-						warnedOnce = true;
-					}
-				}
+				if (getOpacities().get(i) == 0)
+					continue;
 
 				getColors().set(i, colors[idx]);
+
+				idx++;
+				idx = idx % getPalette().getMaxColors();
+
 			}
 
 		} finally {
@@ -245,6 +259,15 @@ public abstract class RasterRulesList extends AbstractRulesList {
 					"Applied a COLORPALETTE to all ColorMapEntries", this));
 		}
 
+	}
+
+	public int getNumClassesVisible() {
+		int visible = 0;
+		for (Double o : getOpacities()) {
+			if (o > 0.)
+				visible++;
+		}
+		return visible;
 	}
 
 	public void setOpacity(Double opacity) {

@@ -55,6 +55,7 @@ public class ColorTableCellRenderer extends DefaultTableCellRenderer implements
 	@Override
 	public void paint(Graphics g) {
 		super.paint(g);
+		if (curColor==null) return;
 		g.setColor(curColor);
 		g.fillRect(1, 1, getWidth() - 2, getHeight() - 2);
 	}
