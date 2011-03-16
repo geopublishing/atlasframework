@@ -22,7 +22,7 @@ import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 import org.geotools.data.DefaultQuery;
 import org.geotools.feature.FeatureCollection;
@@ -48,29 +48,7 @@ import de.schmitzm.lang.LimitedHashMap;
  * 
  * @author stefan
  */
-public class QuantitiesClassification extends FeatureClassification {
-
-	/**
-	 * Different Methods to classify
-	 */
-	public enum METHOD {
-		EI, MANUAL, QUANTILES;
-
-		public String getDesc() {
-			return AtlasStylerVector
-					.R("QuantitiesClassifiction.Method.ComboboxEntry."
-							+ toString());
-		}
-
-		public String getToolTip() {
-			return AtlasStylerVector
-					.R("QuantitiesClassifiction.Method.ComboboxEntry."
-							+ toString() + ".TT");
-		}
-
-	}
-
-	public static final METHOD DEFAULT_METHOD = METHOD.QUANTILES;
+public class QuantitiesClassification extends FeatureClassification implements QuantitiesRulesListsInterface {
 
 	static final public int MAX_FEATURES_DEFAULT = 10000;
 
@@ -109,9 +87,6 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	volatile private boolean cancelCalculation;
 
-	/** The type of classification that is used. Quantiles by default * */
-	public METHOD classificationMethod = DEFAULT_METHOD;
-
 	/**
 	 * If the classification contains 5 classes, then we have to save 5+1
 	 * breaks.
@@ -146,6 +121,8 @@ public class QuantitiesClassification extends FeatureClassification {
 
 	private final LimitedHashMap<String, DynamicBin1D> staticStatsCache = new LimitedHashMap<String, DynamicBin1D>(
 			20);
+
+	private METHOD method;
 
 	/**
 	 * @param featureSource
@@ -204,7 +181,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		if (getMethod() == null)
 			throw new IllegalStateException("method has to be set");
 
-		switch (classificationMethod) {
+		switch (method) {
 		case EI:
 			return getEqualIntervalLimits();
 
@@ -318,7 +295,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	/**
 	 * @return A {@link ComboBoxModel} that contains a list of class numbers.<br/>
 	 *         When we supported SD as a classification METHOD long ago, this
-	 *         retured something dependent on the {@link #classificationMethod}.
+	 *         retured something dependent on the {@link #method}.
 	 *         Not it always returns a list of numbers.
 	 */
 	public ComboBoxModel getClassificationParameterComboBoxModel() {
@@ -326,7 +303,7 @@ public class QuantitiesClassification extends FeatureClassification {
 		DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
 				new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
 
-		switch (classificationMethod) {
+		switch (method) {
 		case EI:
 		case QUANTILES:
 		default:
@@ -386,7 +363,7 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	public METHOD getMethod() {
-		return classificationMethod;
+		return method;
 	}
 
 	/**
@@ -649,9 +626,9 @@ public class QuantitiesClassification extends FeatureClassification {
 	}
 
 	public void setMethod(final METHOD newMethod) {
-		if ((classificationMethod != null)
-				&& (classificationMethod != newMethod)) {
-			classificationMethod = newMethod;
+		if ((method != null)
+				&& (method != newMethod)) {
+			method = newMethod;
 
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.METHODS_CHG));
 		}

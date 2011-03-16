@@ -9,8 +9,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.opengis.feature.type.FeatureType;
 
 import de.schmitzm.swing.SwingUtil;

@@ -22,12 +22,7 @@ public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public GraduatedColorPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures,GeometryForm.POINT);
-	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.QUANTITIES_COLORIZED_POINT;
+		super(RulesListType.QUANTITIES_COLORIZED_POINT, styledFeatures,GeometryForm.POINT);
 	}
 
 	@Override

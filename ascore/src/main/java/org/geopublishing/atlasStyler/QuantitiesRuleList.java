@@ -20,8 +20,6 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasStyler.rulesLists.FeatureRuleList;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
@@ -35,7 +33,7 @@ import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
 abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
-		FeatureRuleList {
+		FeatureRuleList implements QuantitiesRulesListsInterface {
 	/** KEY-name for the KVPs in the meta information * */
 	private static final String KVP_NORMALIZATION_FIELD = "NORM";
 
@@ -90,8 +88,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	private Color[] colors = null;
 
-	protected METHOD method = QuantitiesClassification.DEFAULT_METHOD;
-
 	/**
 	 * The {@link String} name of the attribute used to normalize the quantity
 	 * attribute
@@ -106,9 +102,11 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private String value_field_name;
 
-	public QuantitiesRuleList(StyledFeaturesInterface<?> styledFeatures,
+	private METHOD method;
+
+	public QuantitiesRuleList(RulesListType rulesListType,  StyledFeaturesInterface<?> styledFeatures,
 			GeometryForm geometryForm) {
-		super(styledFeatures, geometryForm);
+		super(rulesListType, styledFeatures, geometryForm);
 		Collection<String> numericalFieldNames = FeatureUtil
 				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
 		if (numericalFieldNames.size() > 0)
@@ -204,6 +202,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		return colors;
 	}
 
+	@Override
 	public METHOD getMethod() {
 		return method;
 	}
@@ -391,6 +390,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		this.colors = colors;
 	}
 
+	@Override
 	public void setMethod(METHOD method) {
 		this.method = method;
 	}

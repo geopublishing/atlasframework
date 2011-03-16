@@ -23,19 +23,7 @@ public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures,GeometryForm.LINE);
-	}
-
-//
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public SingleRuleList getDefaultTemplate() {
-//		return ASUtil.getDefaultLineTemplate();
-//	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.UNIQUE_VALUE_LINE;
+		super(RulesListType.UNIQUE_VALUE_LINE, styledFeatures,GeometryForm.LINE);
 	}
 
 	@Override

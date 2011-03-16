@@ -15,10 +15,10 @@ import java.awt.event.ItemEvent;
 import javax.swing.JComboBox;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 
 import de.schmitzm.swing.SwingUtil;
 

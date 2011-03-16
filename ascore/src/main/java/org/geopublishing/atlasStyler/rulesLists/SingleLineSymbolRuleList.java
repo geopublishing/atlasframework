@@ -31,11 +31,11 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	protected org.apache.log4j.Logger LOGGER = LangUtil.createLogger(this);
 
 	public SingleLineSymbolRuleList(String title) {
-		super(title, GeometryForm.LINE);
+		super(RulesListType.SINGLE_SYMBOL_LINE, title, GeometryForm.LINE);
 	}
 
 	public SingleLineSymbolRuleList(Translation title) {
-		super(title, GeometryForm.LINE);
+		super(RulesListType.SINGLE_SYMBOL_LINE, title, GeometryForm.LINE);
 	}
 
 	@Override
@@ -104,11 +104,6 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 			biggestSize = ASUtil.getBiggestWidth(ps, biggestSize);
 		}
 		return biggestSize;
-	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.SINGLE_SYMBOL_LINE;
 	}
 
 	@Override

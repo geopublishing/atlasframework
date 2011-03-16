@@ -18,20 +18,20 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
+import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 
 import de.schmitzm.swing.SwingUtil;
 
 /**
  * An extension of a {@link JComboBox} that allows to choose one of the
- * classification methods. It supports tooltips for the entries and localised
+ * classification methods. It supports tooltips for the entries and localized
  * labels. The values inside the {@link JComboBox} are hold as {@link Enum} type
  * {@link METHOD}.
  * 
- * @author SK
+ * @author Stefan Tzeggai
  * 
  */
 public class ClassificationMethodJComboBox extends JComboBox {

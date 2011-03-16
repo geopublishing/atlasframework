@@ -39,11 +39,11 @@ public class SinglePolygonSymbolRuleList extends
 			.createLogger(SinglePolygonSymbolRuleList.class);
 
 	public SinglePolygonSymbolRuleList(String title) {
-		super(title, GeometryForm.POLYGON);
+		super(RulesListType.SINGLE_SYMBOL_POLYGON, title, GeometryForm.POLYGON);
 	}
 
 	public SinglePolygonSymbolRuleList(Translation title) {
-		super(title, GeometryForm.POLYGON);
+		super(RulesListType.SINGLE_SYMBOL_POLYGON, title, GeometryForm.POLYGON);
 	}
 
 	@Override
@@ -142,10 +142,6 @@ public class SinglePolygonSymbolRuleList extends
 		return biggestSize;
 	}
 
-	@Override
-	public RulesListType getType() {
-		return RulesListType.SINGLE_SYMBOL_POLYGON;
-	}
 
 	/**
 	 * @return <code>true</code> if a rotatable element is used by these

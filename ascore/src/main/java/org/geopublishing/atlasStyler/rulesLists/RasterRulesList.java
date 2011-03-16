@@ -4,6 +4,7 @@ import hep.aida.bin.QuantileBin1D;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -11,12 +12,17 @@ import javax.swing.JOptionPane;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
+import org.geotools.styling.RasterSymbolizer;
+import org.geotools.styling.Rule;
+import org.opengis.filter.Filter;
 
+import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -37,8 +43,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	private StyledRasterInterface<?> styledRaster;
 
-	public RasterRulesList(StyledRasterInterface<?> styledRaster, int colorMapType) {
-		super(null);
+	public RasterRulesList(RulesListType rlt, StyledRasterInterface<?> styledRaster, int colorMapType) {
+		super(rlt, null);
 		setStyledRaster(styledRaster);
 
 		cmt = colorMapType;
@@ -284,6 +290,40 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	 */
 	public Double getOpacity() {
 		return opacity;
+	}
+
+
+	@Override
+	final public List<Rule> getRules() {
+
+		RasterSymbolizer rs = StylingUtil.STYLE_BUILDER
+				.createRasterSymbolizer();
+		rs.setColorMap(getColorMap());
+
+		Rule rule = ASUtil.SB.createRule(rs);
+
+		/** Saving the legend label */
+		rule.setTitle("TITLE"+getType().getTitle());
+		rule.setName("NAME"+getType().getTitle());
+
+		// addFilters(rule);
+
+		rule.symbolizers().clear();
+
+		rule.symbolizers().add(rs);
+
+		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
+
+		// The order is important! This is parsed the reverse way. The last
+		// thing added to the filter equals the first level in the XML.
+		filter = addAbstractRlSettings(filter);
+
+		rule.setFilter(filter);
+
+		ArrayList<Rule> rList = new ArrayList<Rule>();
+		rList.add(rule);
+
+		return rList;
 	}
 
 }

@@ -137,9 +137,9 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 		}
 	}
 
-	public UniqueValuesRuleList(StyledFeaturesInterface<?> styledFeatures,
+	public UniqueValuesRuleList(RulesListType rulesListType , StyledFeaturesInterface<?> styledFeatures,
 			GeometryForm geometryForm) {
-		super(styledFeatures, geometryForm);
+		super(rulesListType, styledFeatures, geometryForm);
 	}
 
 	/**

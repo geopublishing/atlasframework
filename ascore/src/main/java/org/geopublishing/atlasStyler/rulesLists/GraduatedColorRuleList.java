@@ -20,7 +20,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.QuantitiesRuleList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.FeatureTypeStyle;
@@ -74,9 +74,9 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		}
 	};
 
-	public GraduatedColorRuleList(StyledFeaturesInterface<?> styledFeatures,
+	public GraduatedColorRuleList(RulesListType rulesListType, StyledFeaturesInterface<?> styledFeatures,
 			GeometryForm geometryForm) {
-		super(styledFeatures, geometryForm);
+		super(rulesListType, styledFeatures, geometryForm);
 	}
 
 	/**
@@ -116,7 +116,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 					+ getNumClasses() + " to " + maxColors
 					+ " because we don't have a betterPalette");
 		}
-
 		return brewerPalette;
 	}
 
@@ -277,15 +276,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				else
 					noDataRule
 							.setName(FeatureRuleList.NODATA_RULE_NAME_HIDEINLEGEND);
-
-				//
-				// // Use the min/max scale denominators from the template also
-				// for
-				// // the nodata values.. no matter what it's template has
-				// noDataRule.setMinScaleDenominator(getTemplate()
-				// .getMinScaleDenominator());
-				// noDataRule.setMaxScaleDenominator(getTemplate()
-				// .getMaxScaleDenominator());
 
 				noDataRule.setFilter(getNoDataFilter());
 				rules.add(noDataRule);

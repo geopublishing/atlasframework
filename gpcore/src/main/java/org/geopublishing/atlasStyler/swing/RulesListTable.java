@@ -18,13 +18,13 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.RulesListsList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.AtlasStylerDialog;
 import org.opengis.filter.Filter;
 

@@ -9,11 +9,11 @@ import javax.swing.JLabel;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
@@ -41,7 +41,7 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 		this.owner = owner;
 		this.atlasStyler = atlasStyler;
 
-			jComboBoxRuleListType = new RulesListJComboBox(atlasStyler);
+		jComboBoxRuleListType = new RulesListJComboBox(atlasStyler);
 
 		jComboBoxRuleListType.addActionListener(new ActionListener() {
 
@@ -93,12 +93,12 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 
 			GeometryForm geomType = asv.getStyledFeatures().getGeometryForm();
 
-			add(new JLabel(ASUtil.R("AddRulesListDialog.explanation", geomType,
-					countTextAttr, countNumAttr)), "top, grow, width ::500");
+			add(new JLabel(ASUtil.R("AddRulesListDialog.Vector.explanation",
+					geomType, countTextAttr, countNumAttr)),
+					"top, grow, width ::500");
 		} else {
-
-			AtlasStylerRaster asr = (AtlasStylerRaster) atlasStyler;
-			add(new JLabel("RASTER Styler TODO chenge text"));
+			add(new JLabel(ASUtil.R("AddRulesListDialog.Raster.explanation")),
+					"top, grow, width ::500");
 		}
 
 		add(getImageLabel(), "growx 10, width 100, height 80");
@@ -118,11 +118,6 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 
 		pack();
 
-	}
-
-	void insert(AbstractRulesList rl) {
-
-		atlasStyler.addRulesList(rl);
 	}
 
 	@Override

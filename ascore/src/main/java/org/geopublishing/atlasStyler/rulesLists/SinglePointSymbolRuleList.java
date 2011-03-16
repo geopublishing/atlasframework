@@ -36,11 +36,11 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 	}
 
 	public SinglePointSymbolRuleList(String title) {
-		super(title, GeometryForm.POINT);
+		super(RulesListType.SINGLE_SYMBOL_POINT, title, GeometryForm.POINT);
 	}
 
 	public SinglePointSymbolRuleList(Translation title) {
-		super(title, GeometryForm.POINT);
+		super(RulesListType.SINGLE_SYMBOL_POINT, title, GeometryForm.POINT);
 	}
 
 	@Override
@@ -176,11 +176,6 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 			maxSize = ASUtil.getBiggestSize(ps, maxSize);
 		}
 		return maxSize;
-	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.SINGLE_SYMBOL_POINT;
 	}
 
 	@Override

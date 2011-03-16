@@ -22,13 +22,9 @@ public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	public GraduatedColorPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures,GeometryForm.POLYGON);
+		super(RulesListType.QUANTITIES_COLORIZED_POLYGON, styledFeatures,GeometryForm.POLYGON);
 	}
 
-	@Override
-	public RulesListType getType() {
-		return RulesListType.QUANTITIES_COLORIZED_POLYGON;
-	}
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {

@@ -2,14 +2,13 @@ package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.media.jai.Histogram;
 
-import org.geopublishing.atlasStyler.ASUtil;
+import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -21,11 +20,9 @@ import org.geotools.styling.Rule;
 import org.opengis.filter.Filter;
 import org.opengis.parameter.ParameterValueGroup;
 
-import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
-import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
@@ -34,9 +31,11 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		UniqueValuesRulesListInterface<Double> {
 
+	private static final Logger LOGGER = Logger
+			.getLogger(RasterRulesList_DistinctValues.class);
 
 	public RasterRulesList_DistinctValues(StyledRasterInterface<?> styledRaster) {
-		super(styledRaster, ColorMap.TYPE_VALUES);
+		super(RulesListType.RASTER_COLORMAP_DISTINCTVALUES, styledRaster, ColorMap.TYPE_VALUES);
 	}
 
 	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
@@ -58,8 +57,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 			if (sw != null)
 				ExceptionDialog.show(e);
 		}
-		
-		if (countBefore==0) {
+
+		if (countBefore == 0) {
 			applyPalette(null);
 		}
 
@@ -183,47 +182,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	}
 
 	@Override
-	public List<Rule> getRules() {
-
-		RasterSymbolizer rs = StylingUtil.STYLE_BUILDER
-				.createRasterSymbolizer();
-		rs.setColorMap(getColorMap());
-
-		Rule rule = ASUtil.SB.createRule(rs);
-
-		/** Saving the legend label */
-		rule.setTitle("raster titel todo");
-		rule.setTitle("raster name todo");
-
-		// addFilters(rule);
-
-		rule.symbolizers().clear();
-
-		rule.symbolizers().add(rs);
-
-		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
-
-		// The order is important! This is parsed the reverse way. The last
-		// thing added to the filter equals the first level in the XML.
-		filter = addAbstractRlSettings(filter);
-
-		rule.setFilter(filter);
-
-		ArrayList<Rule> rList = new ArrayList<Rule>();
-		rList.add(rule);
-
-		return rList;
-
-	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.RASTER_COLORMAP_DISTINCTVALUES;
-	}
-
-	@Override
-	public
-	void importRules(List<Rule> rules) {
+	public void importRules(List<Rule> rules) {
 		pushQuite();
 
 		if (rules.size() > 1) {

@@ -10,8 +10,8 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
@@ -68,7 +68,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 		QuantitiesClassification quantitiesClassification = new QuantitiesClassification(
 				sfc, "random");
 		quantitiesClassification.setRecalcAutomatically(false);
-		quantitiesClassification.classificationMethod = METHOD.QUANTILES;
+		quantitiesClassification.setMethod(METHOD.QUANTILES);
 		quantitiesClassification.setNumClasses(5);
 		quantitiesClassification.calculateClassLimitsBlocking();
 
@@ -105,7 +105,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 		QuantitiesClassification quantitiesClassification = new QuantitiesClassification(
 				sfc, "allsame");
 		quantitiesClassification.setRecalcAutomatically(false);
-		quantitiesClassification.classificationMethod = METHOD.QUANTILES;
+		quantitiesClassification.setMethod(METHOD.QUANTILES);
 		quantitiesClassification.setNumClasses(5);
 		quantitiesClassification.calculateClassLimitsBlocking();
 		TreeSet<Double> classLimits = quantitiesClassification.getClassLimits();

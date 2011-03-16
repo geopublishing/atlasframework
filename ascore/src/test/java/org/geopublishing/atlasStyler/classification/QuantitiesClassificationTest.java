@@ -24,7 +24,7 @@ import java.util.TreeSet;
 import javax.xml.transform.TransformerException;
 
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
+import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.filter.text.cql2.CQLException;

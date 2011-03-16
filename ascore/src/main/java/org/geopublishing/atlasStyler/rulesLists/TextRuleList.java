@@ -116,13 +116,13 @@ public class TextRuleList extends AbstractRulesList {
 
 	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
 			GeometryForm geometryForm, boolean withDefaults) {
-		super(geometryForm);
+		super(RulesListType.TEXT_LABEL, geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
 
 	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
 			boolean withDefaults) {
-		super(GeometryForm.ANY);
+		super(RulesListType.TEXT_LABEL, GeometryForm.ANY);
 		this.styledFeatures = styledFeatures;
 		if (withDefaults)
 			addDefaultClass();
@@ -501,11 +501,6 @@ public class TextRuleList extends AbstractRulesList {
 
 	public List<TextSymbolizer> getSymbolizers() {
 		return classesSymbolizers;
-	}
-
-	@Override
-	public RulesListType getType() {
-		return RulesListType.TEXT_LABEL;
 	}
 
 	public void importClassesFromStyle(RulesListInterface symbRL, Component owner) {

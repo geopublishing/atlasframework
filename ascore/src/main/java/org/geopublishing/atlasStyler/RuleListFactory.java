@@ -8,6 +8,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
@@ -130,8 +131,16 @@ public class RuleListFactory {
 			return createUniqueValuesPointRulesList(withDefaults);
 		case UNIQUE_VALUE_POLYGON:
 			return createUniqueValuesPolygonRulesList(withDefaults);
+			
 		case RASTER_COLORMAP_DISTINCTVALUES:
-			return createRasterDistinctValues(withDefaults);
+			return new RasterRulesList_DistinctValues(
+					(StyledRasterInterface) styledFS);
+		case RASTER_COLORMAP_INTERVALS:
+			return new RasterRulesList_Intervals(
+					(StyledRasterInterface) styledFS);
+		case RASTER_COLORMAP_RAMPS:
+			return new RasterRulesList_Ramps(
+					(StyledRasterInterface) styledFS);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);
@@ -140,11 +149,6 @@ public class RuleListFactory {
 			throw new IllegalArgumentException("RulesListType not recognized");
 		}
 
-	}
-
-	private AbstractRulesList createRasterDistinctValues(boolean withDefaults) {
-		return new RasterRulesList_DistinctValues(
-				(StyledRasterInterface) styledFS);
 	}
 
 	static public SingleLineSymbolRuleList createSingleLineSymbolRulesList(

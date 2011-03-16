@@ -24,6 +24,8 @@ import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.RulesListsList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
@@ -281,7 +283,9 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		return filter;
 	}
 
-	public AbstractRulesList(GeometryForm geometryForm) {
+	public AbstractRulesList(RulesListType rulesListType, GeometryForm geometryForm) {
+		if (rulesListType == null) throw new IllegalArgumentException("RulesListType may not be nulL!");
+		ruleListType = rulesListType;
 		this.geometryForm = geometryForm;
 	}
 
@@ -298,8 +302,15 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	public enum RulesListType {
 
 		// RASTER
-		RASTER_COLORMAP_DISTINCTVALUES("/images/raster_colormap1.png",
-				"StylerSelection.raster_colormap1"),
+		RASTER_COLORMAP_DISTINCTVALUES(
+				"/images/raster_colormap_distinctvalues.png",
+				"StylerSelection.raster_values"),
+
+		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
+				"StylerSelection.raster_ramp"),
+
+		RASTER_COLORMAP_INTERVALS("/images/raster_colormap_intervals.png",
+				"StylerSelection.raster_interval"),
 
 		// POINTs
 		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
@@ -357,7 +368,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		 * @return a localized title for this {@link RulesListType}
 		 */
 		public String getTitle() {
-			return AtlasStylerVector.R(i8nKey);
+			return ASUtil.R(i8nKey);
 		}
 
 		/**
@@ -469,14 +480,13 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 		public static RulesListType[] valuesFor(AtlasStyler as) {
 			if (as instanceof AtlasStylerVector) {
-				AtlasStylerVector asv = (AtlasStylerVector) as;
-				return valuesFor(((AtlasStylerVector) as));
+				return valuesFor((AtlasStylerVector) as);
 			} else
 				return valuesFor((AtlasStylerRaster) as);
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
-			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES };
+			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES, RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
@@ -566,6 +576,8 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	 * false.
 	 */
 	private boolean enabled = true;
+
+	final private RulesListType ruleListType;
 
 	/*
 	 * (non-Javadoc)
@@ -706,7 +718,9 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	 * @see org.geopublishing.atlasStyler.RulesListInterface#getType()
 	 */
 	@Override
-	public abstract RulesListType getType();
+	final public RulesListType getType() {
+		return ruleListType;
+	}
 
 	/*
 	 * (non-Javadoc)

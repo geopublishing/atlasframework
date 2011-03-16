@@ -76,9 +76,9 @@ public abstract class FeatureRuleList extends AbstractRulesList {
 
 	private SingleRuleList<? extends Symbolizer> template;
 
-	public FeatureRuleList(StyledFeaturesInterface<?> styledFeatures,
+	public FeatureRuleList(RulesListType rulesListType, StyledFeaturesInterface<?> styledFeatures,
 			GeometryForm geometryForm) {
-		super(geometryForm);
+		super(rulesListType, geometryForm);
 		this.styledFeatures = styledFeatures;
 	}
 

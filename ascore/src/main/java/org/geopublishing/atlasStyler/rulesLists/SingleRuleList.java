@@ -29,6 +29,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
@@ -77,8 +78,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(String label, GeometryForm geometryForm) {
-		super(geometryForm);
+	public SingleRuleList(RulesListType rulesListType,String label, GeometryForm geometryForm) {
+		super(rulesListType, geometryForm);
 		pushQuite();
 		setLabel(label);
 		popQuite();
@@ -88,8 +89,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(Translation label, GeometryForm geometryForm) {
-		super(geometryForm);
+	public SingleRuleList(RulesListType rulesListType,Translation label, GeometryForm geometryForm) {
+		super(rulesListType, geometryForm);
 		setRuleTitle(label);
 	}
 
