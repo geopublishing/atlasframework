@@ -24,17 +24,12 @@ import de.schmitzm.swing.JPanel;
 
 public class FeatureClassificationGUI extends ClassificationGUI {
 
-	AtlasStylerVector atlasStyler;
-	FeatureClassification classifier;
-
 	private JButton jButtonExclusion = null;
 
 	public FeatureClassificationGUI(Component owner,
 			FeatureClassification classifier, AtlasStylerVector atlasStyler,
 			String title) {
 		super(owner, classifier, atlasStyler, title);
-		this.classifier = classifier;
-		this.atlasStyler = atlasStyler;
 	}
 
 	/**
@@ -55,16 +50,20 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 						ClassificationGUI owner = FeatureClassificationGUI.this;
 
 						AVDialogManager.dm_AttributeTable.getInstanceFor(
-								atlasStyler.getStyledFeatures(), owner,
-								atlasStyler.getStyledFeatures(), null); // TODO
-																		// TODO
-																		// atlasStyler.getMapLegend()
-																		// TODO
-																		// TODO
+								getAtlasStyler().getStyledFeatures(), owner,
+								getAtlasStyler().getStyledFeatures(), null); // TODO
+						// TODO
+						// atlasStyler.getMapLegend()
+						// TODO
+						// TODO
 					}
 
 				});
 		return button;
+	}
+
+	private AtlasStylerVector getAtlasStyler() {
+		return (AtlasStylerVector) atlasStyler;
 	}
 
 	private JPanel jPanelData = null;
@@ -114,9 +113,9 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 						// TODO GP_Dialogmanager
 
 						filterDialog = new AtlasFeatureLayerFilterDialog(
-								FeatureClassificationGUI.this, atlasStyler
-										.getStyledFeatures(), null, atlasStyler
-										.getMapLayer());
+								FeatureClassificationGUI.this, getAtlasStyler()
+										.getStyledFeatures(), null,
+								getAtlasStyler().getMapLayer());
 						// ,
 						// atlasStyler TODO TODO
 						// .getMapLegend().getGeoMapPane()
@@ -153,9 +152,9 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 			 */
 			String label_xachsis;
 			{
-				AttributeMetadataInterface amdValue = atlasStyler
+				AttributeMetadataInterface amdValue = getAtlasStyler()
 						.getAttributeMetaDataMap().get(
-								classifier.getValue_field_name());
+								getClassifier().getValue_field_name());
 
 				// AttributeMetadata amdValue = ASUtil.getAttributeMetadataFor(
 				// atlasStyler, getValue_field_name());
@@ -163,22 +162,22 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 						&& (!I18NUtil.isEmpty(amdValue.getTitle().toString()))) {
 					label_xachsis = amdValue.getTitle().toString();
 				} else
-					label_xachsis = classifier.getValue_field_name();
+					label_xachsis = getClassifier().getValue_field_name();
 
-				if (classifier.getNormalizer_field_name() != null) {
+				if (getClassifier().getNormalizer_field_name() != null) {
 					// AttributeMetadata amdNorm =
 					// ASUtil.getAttributeMetadataFor(
 					// atlasStyler, getNormalizer_field_name());
-					AttributeMetadataInterface amdNorm = atlasStyler
+					AttributeMetadataInterface amdNorm = getAtlasStyler()
 							.getAttributeMetaDataMap().get(
-									classifier.getNormalizer_field_name());
+									getClassifier().getNormalizer_field_name());
 					if (amdNorm != null
 							&& (!I18NUtil
 									.isEmpty(amdNorm.getTitle().toString()))) {
 						label_xachsis += "/" + amdNorm.getTitle().toString();
 					} else
 						label_xachsis += "/"
-								+ classifier.getNormalizer_field_name();
+								+ getClassifier().getNormalizer_field_name();
 				}
 			}
 
@@ -190,5 +189,9 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 			return ERROR_IMAGE;
 		}
 
+	}
+
+	private FeatureClassification getClassifier() {
+		return (FeatureClassification) classifier;
 	}
 }

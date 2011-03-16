@@ -110,7 +110,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 
 	Integer histogramBins = 14;
 
-	private final AtlasStyler atlasStyler;
+	protected final AtlasStyler atlasStyler;
 
 	public ClassificationGUI(Component owner, Classification classifier,
 			AtlasStyler atlasStyler, String title) {
