@@ -137,10 +137,10 @@ public class RuleListFactory {
 					(StyledRasterInterface) styledFS);
 		case RASTER_COLORMAP_INTERVALS:
 			return new RasterRulesList_Intervals(
-					(StyledRasterInterface) styledFS);
+					(StyledRasterInterface) styledFS, withDefaults);
 		case RASTER_COLORMAP_RAMPS:
 			return new RasterRulesList_Ramps(
-					(StyledRasterInterface) styledFS);
+					(StyledRasterInterface) styledFS, withDefaults);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);

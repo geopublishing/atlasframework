@@ -44,6 +44,7 @@ import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 
@@ -515,4 +516,9 @@ public class AtlasStylerVector extends AtlasStyler {
 		return new StyleChangedEvent(getStyle());
 	}
 
+
+	@Override
+	public StyledLayerInterface<?> getStyledInterface() {
+		return styledFeatures;
+	}
 }

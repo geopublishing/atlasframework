@@ -29,6 +29,7 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
@@ -156,20 +157,25 @@ public class StylerDialog extends CancellableDialogAdapter {
 		setMaximumSize(new Dimension(980, 400));
 		setPreferredSize(new Dimension(980, 400));
 
+		Translation title = atlasStyler.getTitle();
 		if (isVector()) {
-			final SimpleFeatureType schema = getAtlasStylerVector().getStyledFeatures()
-					.getSchema();
-
+			final SimpleFeatureType schema = getAtlasStylerVector()
+			.getStyledFeatures().getSchema();
 			String typeName = schema.getTypeName();
 
 			String geomTyp = schema.getGeometryDescriptor().getType()
 					.getBinding().getSimpleName();
 
-			final Translation title = atlasStyler.getTitle();
-			setTitle("AtlasStyler for: " + title != null ? title.toString()
-					: typeName + "  (" + geomTyp + ")");
+			setTitle(ASUtil.R("StylerDialogTitle",
+					title != null ? title.toString() : typeName + "  ("
+							+ geomTyp + ")"));
 		} else {
-			setTitle("Raster my baby!");
+			
+			if (title == null)
+				title = getAtlasStyler().getStyledInterface().getTitle();
+
+			setTitle(ASUtil.R("StylerDialogTitle",
+					title != null ? title.toString() : "RASTER"));
 		}
 
 		this.setContentPane(getJContentPane());

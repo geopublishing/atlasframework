@@ -52,23 +52,21 @@ import de.schmitzm.swing.TranslationEditJPanel;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
- * A GUI to edit a {@link RasterRulesList_DistinctValues}
+ * A GUI to edit a {@link RasterRulesList_Intervals}
  */
-public class RasterRulesList_Distinctvalues_GUI extends
-		AbstractRulesListGui<RasterRulesList_DistinctValues> {
+public class RasterRulesList_Intervals_GUI extends
+		AbstractRulesListGui<RasterRulesList_Intervals> {
 
 	protected final static Logger LOGGER = LangUtil
-			.createLogger(RasterRulesList_Distinctvalues_GUI.class);
+			.createLogger(RasterRulesList_Intervals_GUI.class);
+	
 	private JTable jTable;
 	private DefaultTableModel tableModel;
-	private ThinButton jButtonRemoveAll;
-	private ThinButton jButtonRemove;
 	private JComboBox jComboBoxOpacity;
 	private ThinButton jButtonApplyOpacity;
-	private ThinButton jButtonAddValues;
 
-	public RasterRulesList_Distinctvalues_GUI(
-			RasterRulesList_DistinctValues rulesList,
+	public RasterRulesList_Intervals_GUI(
+			RasterRulesList_Intervals rulesList,
 			AtlasStylerRaster atlasStyler) {
 		super(rulesList);
 		initialize();
@@ -87,115 +85,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		this.add(getJPanelColorAndOpacity(), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
-
-		JPanel jPanelButtons = new JPanel(new MigLayout(
-				"ins n 0 n 0, gap 1, fillx"));
-		{
-			jPanelButtons.add(getJButtonAddAllValues());
-			jPanelButtons.add(getJButtonAddValues(), "gapx rel unrel");
-			jPanelButtons.add(getJButtonRemove());
-			jPanelButtons.add(getJButtonRemoveAll(), "gapx rel unrel");
-			jPanelButtons.add(getJButtonUp(), "gapx rel");
-			jPanelButtons.add(getJButtonDown(), "gapx rel");
-		}
-		this.add(jPanelButtons, "");
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonRemove() {
-		if (jButtonRemove == null) {
-			jButtonRemove = new ThinButton(new AbstractAction(
-					ASUtil.R("UniqueValues.Button.RemoveValue")) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int[] selectedRows = getJTable().getSelectedRows();
-
-					// We remove from last to fist - so that indexes to not mix
-					// up
-					Arrays.sort(selectedRows);
-					ArrayUtils.reverse(selectedRows);
-
-					rulesList.pushQuite();
-					try {
-						for (int rowIdx : selectedRows) {
-							rulesList.removeIdx(rowIdx);
-						}
-					} finally {
-						rulesList.popQuite(new RuleChangedEvent("Indexes "
-								+ selectedRows + " removed", rulesList));
-					}
-
-					// De-select anything afterwards
-					getJTable().getSelectionModel().clearSelection();
-				}
-
-			});
-
-			getJTable().getSelectionModel().addListSelectionListener(
-					new ListSelectionListener() {
-
-						@Override
-						public void valueChanged(ListSelectionEvent e) {
-							if (getJTable().getSelectedRows().length == 0)
-								jButtonRemove.setEnabled(false);
-							else {
-								jButtonRemove.setEnabled(true);
-							}
-						}
-
-					});
-
-			/** Initializing with disabled button * */
-			jButtonRemove.setEnabled(false);
-
-		}
-		return jButtonRemove;
-	}
-
-	private Component getJButtonRemoveAll() {
-		if (jButtonRemoveAll == null) {
-			jButtonRemoveAll = new ThinButton(new AbstractAction(
-					ASUtil.R("UniqueValues.Button.RemoveAllValues")) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					rulesList.removeAll();
-				}
-
-			});
-
-			jButtonRemoveAll.setEnabled(rulesList.getValues().size() > 0);
-
-		}
-		return jButtonRemoveAll;
-
-	}
-
-	/**
-	 * A button to add one unique value of the selected column
-	 */
-	private JButton getJButtonAddValues() {
-		if (jButtonAddValues == null) {
-			jButtonAddValues = new ThinButton(new AbstractAction(
-					ASUtil.R("UniqueValues.Button.AddValues")) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					UniqueValuesAddGUI valuesGUI = new UniqueValuesAddGUI(
-							RasterRulesList_Distinctvalues_GUI.this, rulesList);
-					valuesGUI.setVisible(true);
-				}
-
-			});
-
-		}
-
-		return jButtonAddValues;
 	}
 
 	private Component getJPanelColorAndOpacity() {
@@ -264,7 +153,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	/**
 	 * Listen for changes in the RulesList. Must be kept as a reference in
-	 * {@link RasterRulesList_Distinctvalues_GUI} because the listeners are kept
+	 * {@link RasterRulesList_Intervals_GUI} because the listeners are kept
 	 * in a {@link WeakHashMap}
 	 */
 	final RuleChangeListener updateTableWhenRuleListChanges = new RuleChangeListener() {
@@ -287,11 +176,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		}
 
 	};
-	private JButton jButtonUp;
-	private ThinButton jButtonDown;
 	private ThinButton jButtonApplyPalette;
 	private JComboBoxBrewerPalettes jComboBoxPalette;
-	private ThinButton jButtonAddAllValues;
 
 	private DefaultTableModel getTableModel() {
 
@@ -432,7 +318,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 													.getLanguages());
 
 									ask = new TranslationAskJDialog(
-											RasterRulesList_Distinctvalues_GUI.this,
+											RasterRulesList_Intervals_GUI.this,
 											transLabel);
 									ask.addPropertyChangeListener(new PropertyChangeListener() {
 
@@ -471,7 +357,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 								 */
 								String newTitle = ASUtil
 										.askForString(
-												RasterRulesList_Distinctvalues_GUI.this,
+												RasterRulesList_Intervals_GUI.this,
 												getRulesList().getLabels()
 														.get(row).toString(),
 												null);
@@ -498,7 +384,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 									row);
 							final Color newColor = AVSwingUtil
 									.showColorChooser(
-											RasterRulesList_Distinctvalues_GUI.this,
+											RasterRulesList_Intervals_GUI.this,
 											"", oldColor);
 
 							if (newColor != oldColor) {
@@ -532,118 +418,6 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButtonUp() {
-		if (jButtonUp == null) {
-
-			jButtonUp = new ThinButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					int row = getJTable().getSelectedRow();
-
-					if (row < 1)
-						return;
-
-					rulesList.move(row, -1);
-
-					// Update the selection
-					getJTable().getSelectionModel().clearSelection();
-					getJTable().getSelectionModel().addSelectionInterval(
-							row - 1, row - 1);
-				}
-
-			});
-
-			// jButtonUp.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-			jButtonUp.setEnabled(false);
-			jButtonUp.setIcon(Icons.getUpArrowIcon());
-
-			/** Activate and disable on selection-changes * */
-			getJTable().getSelectionModel().addListSelectionListener(
-					new ListSelectionListener() {
-
-						@Override
-						public void valueChanged(ListSelectionEvent e) {
-							if (getJTable().getSelectedRowCount() != 1)
-								jButtonUp.setEnabled(false);
-							else
-								jButtonUp.setEnabled(getJTable()
-										.getSelectedRow() > 0);
-						}
-					});
-
-		}
-		return jButtonUp;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonDown() {
-		if (jButtonDown == null) {
-
-			jButtonDown = new ThinButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					int row = getJTable().getSelectedRow();
-
-					if (row == getJTable().getModel().getRowCount() - 1)
-						return;
-
-					getRulesList().move(row, 1);
-
-					getJTable().getSelectionModel().clearSelection();
-					getJTable().getSelectionModel().addSelectionInterval(
-							row + 1, row + 1);
-				}
-
-			});
-
-			// jButtonDown.setBorder(BorderFactory.createEmptyBorder(2, 2, 2,
-			// 2));
-			jButtonDown.setEnabled(false);
-			jButtonDown.setIcon(Icons.getDownArrowIcon());
-
-			/** Activate and disable on selection-changes * */
-			getJTable().getSelectionModel().addListSelectionListener(
-					new ListSelectionListener() {
-
-						@Override
-						public void valueChanged(ListSelectionEvent e) {
-							if (getJTable().getSelectedRowCount() != 1)// onyl
-								// single
-								// selections
-								jButtonDown.setEnabled(false);
-							else {
-								if ((getJTable().getSelectedRow() != getJTable()
-										.getModel().getRowCount() - 1) // not
-								// on
-								// the
-								// last
-								// pos
-								)
-
-									jButtonDown.setEnabled(true);
-								else
-									jButtonDown.setEnabled(false);
-							}
-						}
-
-					});
-
-		}
-		return jButtonDown;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
 	private JButton getJButtonApplyPalette() {
 		if (jButtonApplyPalette == null) {
 			jButtonApplyPalette = new ThinButton(new AbstractAction() {
@@ -652,7 +426,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				public void actionPerformed(ActionEvent e) {
 
 					rulesList
-							.applyPalette(RasterRulesList_Distinctvalues_GUI.this);
+							.applyPalette(RasterRulesList_Intervals_GUI.this);
 				}
 			});
 
@@ -673,7 +447,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JComboBox getJComboBoxPalette() {
 		if (jComboBoxPalette == null) {
 
-			jComboBoxPalette = new JComboBoxBrewerPalettes(false);
+			jComboBoxPalette = new JComboBoxBrewerPalettes(true);
 
 			if (rulesList.getPalette() != null)
 				jComboBoxPalette.getModel().setSelectedItem(
@@ -701,49 +475,5 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		return jComboBoxPalette;
 	}
 
-	/**
-	 * A button to add all unique values of the selected column
-	 */
-	private JButton getJButtonAddAllValues() {
-		if (jButtonAddAllValues == null) {
-			jButtonAddAllValues = new ThinButton(new AbstractAction(
-					ASUtil.R("UniqueValues.Button.AddAllValues")) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					String title = ASUtil
-							.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
-
-					final AtlasSwingWorker<Integer> findUniques = new AtlasSwingWorker<Integer>(
-							RasterRulesList_Distinctvalues_GUI.this, title) {
-
-						@Override
-						protected Integer doInBackground() throws Exception {
-							return rulesList.addAllValues(this);
-						}
-					};
-					try {
-						Integer added = findUniques.executeModal();
-						JOptionPane.showMessageDialog(
-								RasterRulesList_Distinctvalues_GUI.this,
-								ASUtil.R(
-										"UniqueValuesRuleList.AddAllValues.DoneMsg",
-										added));
-					} catch (CancellationException ce) {
-						// findUniques.cancel(true);
-						return;
-					} catch (Exception ee) {
-						ExceptionDialog.show(ee);
-					}
-
-					getJButtonRemoveAll().setEnabled(
-							rulesList.getValues().size() > 0);
-				}
-
-			});
-		}
-		return jButtonAddAllValues;
-	}
 
 }

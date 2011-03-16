@@ -50,8 +50,6 @@ import de.schmitzm.lang.LimitedHashMap;
  */
 public class QuantitiesClassification extends FeatureClassification implements QuantitiesRulesListsInterface {
 
-	static final public int MAX_FEATURES_DEFAULT = 10000;
-
 	/**
 	 * This CONSTANT is only used in the JCombobox. NORMALIZER_FIELD String is
 	 * null, and in the SLD a "null"

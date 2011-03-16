@@ -13,13 +13,14 @@ import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 
 public class AtlasStylerRaster extends AtlasStyler {
 
 	private final static Logger LOGGER = Logger
 			.getLogger(AtlasStylerRaster.class);
 
-	StyledGridCoverageReaderInterface styledRaster;
+	private StyledGridCoverageReaderInterface styledRaster;
 
 	private RasterLegendData backupRasterLegend;
 
@@ -28,7 +29,7 @@ public class AtlasStylerRaster extends AtlasStyler {
 			Boolean withDefaults) {
 		super(mapLayer, params, withDefaults);
 
-		this.styledRaster = styledRaster;
+		this.setStyledRaster(styledRaster);
 
 		this.rlf = new RuleListFactory(styledRaster);
 
@@ -74,17 +75,13 @@ public class AtlasStylerRaster extends AtlasStyler {
 		return rrl.getRasterLegendData();
 	}
 
-	// public RasterLegendData getRasterLegendData() {
-	// return styledRaster.get;
-	// }
-
 	@Override
 	public void cancel() {
 		super.cancel();
 
 		// Apply the RasterLegendData if it is a raster
 		if (this != null) {
-			backupRasterLegend.copyTo(styledRaster.getLegendMetaData());
+			backupRasterLegend.copyTo(getStyledRaster().getLegendMetaData());
 		}
 
 		for (final StyleChangeListener l : listeners) {
@@ -108,5 +105,18 @@ public class AtlasStylerRaster extends AtlasStyler {
 	@Override
 	StyleChangedEvent getStyleChangeEvent() {
 		return new RasterStyleChangedEvent(getStyle(), getLegendMetaData());
+	}
+
+	public void setStyledRaster(StyledGridCoverageReaderInterface styledRaster) {
+		this.styledRaster = styledRaster;
+	}
+
+	public StyledGridCoverageReaderInterface getStyledRaster() {
+		return styledRaster;
+	}
+
+	@Override
+	public StyledLayerInterface<?> getStyledInterface() {
+		return styledRaster;
 	}
 }

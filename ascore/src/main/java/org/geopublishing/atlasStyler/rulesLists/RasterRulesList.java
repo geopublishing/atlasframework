@@ -270,6 +270,33 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	}
 
+	@Override
+	public void importRules(List<Rule> rules) {
+		pushQuite();
+
+		if (rules.size() > 1) {
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+					+ " with " + rules.size() + " rules");
+		}
+
+		Rule rule = rules.get(0);
+		
+		// TODO Parse metainfostring?!
+
+		try {
+			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+			ColorMap cm = rs.getColorMap();
+
+			importValuesLabelsQuantitiesColors(cm);
+
+			// Analyse the filters...
+			Filter filter = rule.getFilter();
+			filter = parseAbstractRlSettings(filter);
+
+		} finally {
+			popQuite();
+		}
+	}
 	public int getNumClassesVisible() {
 		int visible = 0;
 		for (Double o : getOpacities()) {

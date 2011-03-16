@@ -13,32 +13,26 @@ import de.schmitzm.geotools.styling.StyledRasterInterface;
 
 public class RasterRulesList_Intervals extends RasterRulesList {
 
-	public RasterRulesList_Intervals(StyledRasterInterface<?> styledRaster) {
+	public RasterRulesList_Intervals(StyledRasterInterface<?> styledRaster, boolean withDefaults) {
 		super(RulesListType.RASTER_COLORMAP_INTERVALS, styledRaster, ColorMap.TYPE_INTERVALS);
+		
+		if (withDefaults) {
+			// TODO automatically min to max?
+		}
 	}
 
 	@Override
 	public String getAtlasMetaInfoForFTSName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "";
 	}
 
 	@Override
 	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void importRules(List<Rule> rules) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public RasterLegendData getRasterLegendData() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RasterLegendData(true);
 	}
 
 }

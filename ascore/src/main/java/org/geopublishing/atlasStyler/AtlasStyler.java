@@ -49,6 +49,8 @@ public abstract class AtlasStyler {
 		 */
 		OGC_SINGLELANGUAGE
 	}
+	
+	public abstract StyledLayerInterface<?> getStyledInterface();
 
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_TEMPLATES = "templates";
@@ -334,7 +336,7 @@ public abstract class AtlasStyler {
 			try {
 				l.changed(ev);
 			} catch (Exception e) {
-				LOGGER.error(e);
+				LOGGER.error("Error while informing StyleChangeListener "+l, e);
 			}
 		}
 	}

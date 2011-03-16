@@ -19,7 +19,7 @@ import de.schmitzm.lang.LangUtil;
 public abstract class FeatureClassification extends Classification {
 	static public final int MAX_NUMBER_OF_COLORS_ALLOWED = 11;
 
-	protected Logger LOGGER = LangUtil.createLogger(this);
+	final static Logger LOGGER = LangUtil.createLogger(FeatureClassification.class);
 
 	private StyledFeaturesInterface<?> styledFeatures;
 

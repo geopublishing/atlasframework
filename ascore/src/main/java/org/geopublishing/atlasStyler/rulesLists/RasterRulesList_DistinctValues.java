@@ -181,32 +181,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		return rld;
 	}
 
-	@Override
-	public void importRules(List<Rule> rules) {
-		pushQuite();
-
-		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules");
-		}
-
-		Rule rule = rules.get(0);
-
-		try {
-			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
-			ColorMap cm = rs.getColorMap();
-
-			importValuesLabelsQuantitiesColors(cm);
-
-			// Analyse the filters...
-			Filter filter = rule.getFilter();
-			filter = parseAbstractRlSettings(filter);
-
-		} finally {
-			popQuite();
-		}
-	}
-
 	/**
 	 * @param row
 	 * @param delta
