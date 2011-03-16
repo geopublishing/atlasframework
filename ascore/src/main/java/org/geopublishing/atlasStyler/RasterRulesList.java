@@ -1,7 +1,6 @@
 package org.geopublishing.atlasStyler;
 
 import hep.aida.bin.QuantileBin1D;
-import hep.aida.bin.StaticBin1D;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -33,9 +32,9 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	final int cmt;
 	private BrewerPalette palette = null;
 
-	private StyledRasterInterface styledRaster;
+	private StyledRasterInterface<?> styledRaster;
 
-	public RasterRulesList(StyledRasterInterface styledRaster, int colorMapType) {
+	public RasterRulesList(StyledRasterInterface<?> styledRaster, int colorMapType) {
 		super(null);
 		setStyledRaster(styledRaster);
 
@@ -64,11 +63,11 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
 
-	public void setStyledRaster(StyledRasterInterface styledRaster) {
+	public void setStyledRaster(StyledRasterInterface<?> styledRaster) {
 		this.styledRaster = styledRaster;
 	}
 
-	public StyledRasterInterface getStyledRaster() {
+	public StyledRasterInterface<?> getStyledRaster() {
 		return styledRaster;
 	}
 

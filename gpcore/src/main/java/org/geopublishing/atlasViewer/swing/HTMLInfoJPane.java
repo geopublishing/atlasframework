@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -29,12 +28,8 @@ import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
-import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.map.Map;
-
-import de.schmitzm.io.IOUtil;
-import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * A panel that displays HTML Info about a given {@link Map} The HTML will be

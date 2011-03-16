@@ -51,6 +51,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
@@ -828,7 +829,7 @@ public class GraduatedColorQuantitiesGUI extends
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+					if (AtlasStyler.getLanguageMode() == AtlasStyler.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 						// Open a dialog that allows to edit the NODATA legend
 						// entries label
@@ -837,7 +838,7 @@ public class GraduatedColorQuantitiesGUI extends
 								noDataSymbol.getLabel());
 
 						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-								AtlasStylerVector
+								ASUtil
 										.R("translate_label_for_NODATA_values"),
 								translation, AtlasStylerVector.getLanguages());
 						TranslationAskJDialog ask = new TranslationAskJDialog(
@@ -879,7 +880,7 @@ public class GraduatedColorQuantitiesGUI extends
 					} else {
 						final String newNodataTitle = ASUtil.askForString(
 								GraduatedColorQuantitiesGUI.this, noDataSymbol
-										.getLabel(), AtlasStylerVector
+										.getLabel(), ASUtil
 										.R("translate_label_for_NODATA_values"));
 
 						if (newNodataTitle != null) {
@@ -907,9 +908,9 @@ public class GraduatedColorQuantitiesGUI extends
 			if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 				final JCheckBox noDataShowInLegendCB = new JCheckBox(
-						AtlasStylerVector
+						ASUtil
 								.R("NoDataValues.ShallAppearInLegend.Label"));
-				noDataShowInLegendCB.setToolTipText(AtlasStylerVector
+				noDataShowInLegendCB.setToolTipText(ASUtil
 						.R("NoDataValues.ShallAppearInLegend.TT"));
 
 				// Initially set the value depending on the rules's name

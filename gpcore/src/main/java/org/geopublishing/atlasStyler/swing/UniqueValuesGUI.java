@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +17,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -36,10 +34,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -128,6 +124,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 * Used for the "move up" and "move down" buttons.
 	 */
 	private final static Dimension SMALLBUTTONSIZE = new Dimension(12, 16);
+	protected static final int COLIDX_SYMBOL = 0;
+	protected static final int COLIDX_VALUE = 1;
+	protected static final int COLIDX_LABEL = 2;
 
 	protected final AtlasStylerVector atlasStyler;
 
@@ -150,7 +149,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		JPanel jPanelValueField = new JPanel(new MigLayout("inset 1, gap 4"));
 
 		JLabel jLabelValue = new JLabel(
-				AtlasStylerVector.R("UniqueValuesGUI.borderTitle.value_Field"));
+				ASUtil.R("UniqueValuesGUI.borderTitle.value_Field"));
 
 		jPanelValueField.add(jLabelValue);
 		jPanelValueField.add(getJComboBoxValueField(), "growx, right, wrap");
@@ -205,19 +204,16 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	}
 
 	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelColorAndTemplate() {
 		final JPanel jPanelColorAndTemplate = new JPanel(new MigLayout(
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
-				.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+				.setBorder(BorderFactory.createTitledBorder(ASUtil
 						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
 
 		jLabelTemplate = new JLabel(
-				AtlasStylerVector.R("UniqueValues.ChooseTemplate.Label"));
+				ASUtil.R("UniqueValues.ChooseTemplate.Label"));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
@@ -228,9 +224,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	}
 
 	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJComboBoxPalette() {
 		if (jComboBoxPalette == null) {
@@ -259,9 +252,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	}
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonApplyPalette() {
 		if (jButtonApplyPalette == null) {
@@ -274,9 +264,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 				}
 			});
 
-			jButtonApplyPalette.setText(AtlasStylerVector
+			jButtonApplyPalette.setText(ASUtil
 					.R("UniqueValues.applyPaletteButton.title"));
-			jButtonApplyPalette.setToolTipText(AtlasStylerVector
+			jButtonApplyPalette.setToolTipText(ASUtil
 					.R("UniqueValues.applyPaletteButton.toolTip"));
 
 		}
@@ -284,14 +274,13 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	}
 
 	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
 	 */
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
+			
+			// TODO SymbolButton?!
 			jButtonTemplate = new JButton();
-			jButtonTemplate.setToolTipText(AtlasStylerVector
+			jButtonTemplate.setToolTipText(ASUtil
 					.R("UniqueValuesGUI.selectTemplateButton.toolTip"));
 			jButtonTemplate.setBorder(BorderFactory.createEtchedBorder());
 
@@ -310,7 +299,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 					SymbolSelectorGUI gui = new SymbolSelectorGUI(
 							UniqueValuesGUI.this,
-							AtlasStylerVector
+							ASUtil
 									.R("UniqueValuesGUI.selectTemplateDialog.dialogTitle"),
 							template);
 
@@ -363,11 +352,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 	};
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
 	private JButton getJButtonApplyTemplate() {
 		if (jButtonApplyTemplate == null) {
 			jButtonApplyTemplate = new ThinButton(new AbstractAction() {
@@ -377,9 +361,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 					rulesList.applyTemplate();
 				}
 			});
-			jButtonApplyTemplate.setText(AtlasStylerVector
+			jButtonApplyTemplate.setText(ASUtil
 					.R("UniqueValues.applyTemplateButton.title"));
-			jButtonApplyTemplate.setToolTipText(AtlasStylerVector
+			jButtonApplyTemplate.setToolTipText(ASUtil
 					.R("UniqueValues.applyTemplateButton.tooltip"));
 		}
 		return jButtonApplyTemplate;
@@ -391,7 +375,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
 			jButtonAddAllValues = new ThinButton(new AbstractAction(
-					AtlasStylerVector.R("UniqueValues.Button.AddAllValues")) {
+					ASUtil.R("UniqueValues.Button.AddAllValues")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -399,12 +383,12 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 						JOptionPane
 								.showMessageDialog(
 										UniqueValuesGUI.this,
-										AtlasStylerVector
+										ASUtil
 												.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
 						return;
 					}
 
-					String title = AtlasStylerVector
+					String title = ASUtil
 							.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
 
 					final AtlasSwingWorker<Integer> findUniques = new AtlasSwingWorker<Integer>(
@@ -420,7 +404,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 						JOptionPane
 								.showMessageDialog(
 										UniqueValuesGUI.this,
-										AtlasStylerVector
+										ASUtil
 												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
 														added));
 					} catch (CancellationException ce) {
@@ -455,11 +439,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		return jButtonAddValues;
 	}
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
 			jButtonRemove = new ThinButton(new AbstractAction(
@@ -503,11 +482,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		return jButtonRemove;
 	}
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
 	private JButton getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
 			jButtonRemoveAll = new ThinButton(
@@ -728,7 +702,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 			/** Render nicely* */
 			jTable.setDefaultRenderer(SingleRuleList.class,
-					new UniqueValuesSingleRuleListCellRenderer());
+					new SingleRuleListTableCellRenderer());
 
 			rulesList.addListener(updateClassificationTableWhenRuleListChanges);
 
@@ -747,7 +721,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 						int col = jTable.columnAtPoint(e.getPoint());
 						final int row = jTable.rowAtPoint(e.getPoint());
 
-						if (col == 2) {
+						if (col == COLIDX_LABEL) {
 
 							Object val = rulesList.getValues().get(row);
 
@@ -764,9 +738,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 									if (val.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
 										/** We are in the default rule* */
 										transLabel = new TranslationEditJPanel(
-												AtlasStylerVector
+												ASUtil
 														.R("UniqueValuesGUI.LabelForClass",
-																AtlasStylerVector
+																ASUtil
 																		.R("UniqueValuesGUI.AllOthersSymbol.label")),
 												translation, AtlasStylerVector
 														.getLanguages());
@@ -786,7 +760,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 										}
 
 										transLabel = new TranslationEditJPanel(
-												AtlasStylerVector
+												ASUtil
 														.R("UniqueValuesGUI.LabelForClass",
 																rulesList
 																		.getValues()
@@ -850,7 +824,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 						/*******************************************************
 						 * Changing the Symbol with a MouseClick
 						 */
-						if (col == 0) {
+						if (col == COLIDX_SYMBOL) {
 							rulesList.getSymbols().get(row).getListeners()
 									.clear();
 							final SingleRuleList<? extends Symbolizer> editSymbol = rulesList
@@ -936,69 +910,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	//
 	// private Color unselectedBackground;
 
-	class UniqueValuesSingleRuleListCellRenderer extends
-			DefaultTableCellRenderer {
-
-		protected Logger LOGGER = LangUtil.createLogger(this);
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table,
-				Object value, boolean isSelected, boolean hasFocus, int row,
-				int column) {
-			if (value == null)
-				return new JLabel("null");
-
-			SingleRuleList<? extends Symbolizer> singleRL = (SingleRuleList<?>) value;
-
-			BufferedImage image = singleRL
-					.getImage(AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
-
-			// JLabel tableCellRendererComponent = (JLabel) super
-			// .getTableCellRendererComponent(table, value, isSelected,
-			// hasFocus, row, column);
-
-			JLabel tableCellRendererComponent = new JLabel();
-			//
-			// Color fg = null;
-			// Color bg = null;
-			//
-			// JTable.DropLocation dropLocation = table.getDropLocation();
-			// if (dropLocation != null && !dropLocation.isInsertRow()
-			// && !dropLocation.isInsertColumn()
-			// && dropLocation.getRow() == row
-			// && dropLocation.getColumn() == column) {
-			//
-			// fg = UIManager.getColor("Table.dropCellForeground");
-			// bg = UIManager.getColor("Table.dropCellBackground");
-			//
-			// isSelected = true;
-			// }
-			//
-			// if (isSelected) {
-			// tableCellRendererComponent.setForeground(fg == null ? table
-			// .getSelectionForeground() : fg);
-			// tableCellRendererComponent.setBackground(bg == null ? table
-			// .getSelectionBackground() : bg);
-			// } else {
-			// tableCellRendererComponent
-			// .setForeground(unselectedForeground != null ?
-			// unselectedForeground
-			// : table.getForeground());
-			// tableCellRendererComponent
-			// .setBackground(unselectedBackground != null ?
-			// unselectedBackground
-			// : table.getBackground());
-			// }
-
-			tableCellRendererComponent.setText("");
-			tableCellRendererComponent
-					.setHorizontalAlignment(SwingConstants.CENTER);
-			tableCellRendererComponent.setIcon(new ImageIcon(image));
-
-			return tableCellRendererComponent;
-		}
-
-	}
 
 	private DefaultTableModel getTableModel() {
 
@@ -1008,13 +919,13 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 				@Override
 				public Class<?> getColumnClass(int columnIndex) {
-					if (columnIndex == 0) // Symbol
+					if (columnIndex == COLIDX_SYMBOL) // Symbol
 						return SingleRuleList.class;
 
-					if (columnIndex == 1) // Value
+					if (columnIndex == COLIDX_VALUE) // Value
 						return String.class;
 
-					if (columnIndex == 2) // Label
+					if (columnIndex == COLIDX_LABEL) // Label
 						return String.class;
 
 					if (columnIndex == 3) // Count
@@ -1031,17 +942,17 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 				@Override
 				public String getColumnName(int columnIndex) {
-					if (columnIndex == 0)
-						return AtlasStylerVector
+					if (columnIndex == COLIDX_SYMBOL)
+						return ASUtil
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.symbol");
-					if (columnIndex == 1)
-						return AtlasStylerVector
+					if (columnIndex == COLIDX_VALUE)
+						return ASUtil
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.value");
-					if (columnIndex == 2)
-						return AtlasStylerVector
+					if (columnIndex == COLIDX_LABEL)
+						return ASUtil
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.label");
 					if (columnIndex == 3)
-						return AtlasStylerVector
+						return ASUtil
 								.R("UniqueValuesGUI.classesTable.columnHeadersTitle.count");
 					return super.getColumnName(columnIndex);
 				}
@@ -1054,11 +965,11 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 				@Override
 				public Object getValueAt(int rowIndex, int columnIndex) {
 
-					if (columnIndex == 0) {
+					if (columnIndex == COLIDX_SYMBOL) {
 						return rulesList.getSymbols().get(rowIndex);
-					} else if (columnIndex == 1) {
+					} else if (columnIndex == COLIDX_VALUE) {
 						return rulesList.getValues().get(rowIndex);
-					} else if (columnIndex == 2) {
+					} else if (columnIndex == COLIDX_LABEL) {
 						return rulesList.getLabels().get(rowIndex);
 					}
 					// else if (columnIndex == 3) {
@@ -1090,7 +1001,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 */
 	public JCheckBox getWithDefaultCheckbox() {
 		final JCheckBox jCheckBoxWithDefault = new JCheckBox(
-				AtlasStylerVector.R("UniqueValuesGUI.AllOthersSymbol.label"));
+				ASUtil.R("UniqueValuesGUI.AllOthersSymbol.label"));
 
 		jCheckBoxWithDefault.addActionListener(new ActionListener() {
 
@@ -1143,7 +1054,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 */
 	private void initialize() {
 		JLabel jLabelHeading = new JLabel(
-				AtlasStylerVector.R("UniqueValues.Heading"));
+				ASUtil.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
@@ -1152,7 +1063,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 		this.add(getAttributeJPanel(), "split 2, grow x");
 		this.add(getJPanelColorAndTemplate(), "align r");
 
-		this.add(new JScrollPane(getJTable()), "grow x, height 50:150:600");
+		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 
 		JPanel jPanelButtons = new JPanel(new MigLayout(
 				"ins n 0 n 0, gap 1, fillx"));

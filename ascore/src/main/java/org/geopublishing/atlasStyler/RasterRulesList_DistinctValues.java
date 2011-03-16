@@ -25,7 +25,6 @@ import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
-import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -34,8 +33,69 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		UniqueValuesRulesListInterface<Double> {
 
 
-	public RasterRulesList_DistinctValues(StyledRasterInterface styledRaster) {
+	public RasterRulesList_DistinctValues(StyledRasterInterface<?> styledRaster) {
 		super(styledRaster, ColorMap.TYPE_VALUES);
+	}
+
+	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
+
+		int countBefore = getNumClasses();
+		int countNew = 0;
+		pushQuite();
+
+		try {
+
+			for (final Double uniqueValue : getAllUniqueValuesThatAreNotYetIncluded()) {
+				if (sw != null && sw.isCancelled())
+					return 0;
+				addUniqueValue(uniqueValue);
+				countNew++;
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error calculating raster statistics", e);
+			if (sw != null)
+				ExceptionDialog.show(e);
+		}
+		
+		if (countBefore==0) {
+			applyPalette(null);
+		}
+
+		/** Fire an event * */
+		if (countNew > 0)
+			popQuite(new RuleChangedEvent("Added " + countNew + " values.",
+					this));
+		else
+			popQuite();
+
+		return countNew;
+
+	}
+
+	/**
+	 * @param uniqueValue
+	 *            Unique value to all to the list.
+	 * 
+	 * @return <code>false</code> is the value already exists
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	@Override
+	public boolean addUniqueValue(final Double uniqueValue)
+			throws IllegalArgumentException {
+
+		if (getValues().contains(uniqueValue)) {
+			LOGGER.warn("The unique Value '" + uniqueValue
+					+ "' can't be added, it is allready in the list");
+			return false;
+		}
+
+		getValues().add(uniqueValue);
+		getLabels().add(new Translation(String.valueOf(uniqueValue)));
+		getColors().add(Color.WHITE);
+		getOpacities().add(getOpacity());
+
+		return true;
 	}
 
 	/**
@@ -105,91 +165,19 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		return uniques;
 	}
 
-	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
-
-		int countBefore = getNumClasses();
-		int countNew = 0;
-		pushQuite();
-
-		try {
-
-			for (final Double uniqueValue : getAllUniqueValuesThatAreNotYetIncluded()) {
-				if (sw != null && sw.isCancelled())
-					return 0;
-				addUniqueValue(uniqueValue);
-				countNew++;
-			}
-		} catch (Exception e) {
-			LOGGER.error("Error calculating raster statistics", e);
-			if (sw != null)
-				ExceptionDialog.show(e);
-		}
-		
-		if (countBefore==0) {
-			applyPalette(null);
-		}
-
-		/** Fire an event * */
-		if (countNew > 0)
-			popQuite(new RuleChangedEvent("Added " + countNew + " values.",
-					this));
-		else
-			popQuite();
-
-		return countNew;
-
-	}
-
+	@Override
 	/**
-	 * @param uniqueValue
-	 *            Unique value to all to the list.
-	 * 
-	 * @return <code>false</code> is the value already exists
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * For distinct values, the RasterLegend is 1:1 relation to the values 
 	 */
-	@Override
-	public boolean addUniqueValue(final Double uniqueValue)
-			throws IllegalArgumentException {
+	public RasterLegendData getRasterLegendData() {
+		RasterLegendData rld = new RasterLegendData(true);
 
-		if (getValues().contains(uniqueValue)) {
-			LOGGER.warn("The unique Value '" + uniqueValue
-					+ "' can't be added, it is allready in the list");
-			return false;
+		for (int i = 0; i < getNumClasses(); i++) {
+			// if (getShowInLegends().get(i))
+			rld.put(getValues().get(i), getLabels().get(i));
 		}
 
-		getValues().add(uniqueValue);
-		getLabels().add(new Translation(String.valueOf(uniqueValue)));
-		getColors().add(Color.WHITE);
-		getOpacities().add(getOpacity());
-
-		return true;
-	}
-
-	@Override
-	void importRules(List<Rule> rules) {
-		pushQuite();
-
-		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules");
-		}
-
-		Rule rule = rules.get(0);
-
-		try {
-			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
-			ColorMap cm = rs.getColorMap();
-
-			importValuesLabelsQuantitiesColors(cm);
-
-			// Analyse the filters...
-			Filter filter = rule.getFilter();
-			filter = parseAbstractRlSettings(filter);
-
-		} finally {
-			popQuite();
-		}
+		return rld;
 	}
 
 	@Override
@@ -231,6 +219,32 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		return RulesListType.RASTER_COLORMAP_DISTINCTVALUES;
 	}
 
+	@Override
+	void importRules(List<Rule> rules) {
+		pushQuite();
+
+		if (rules.size() > 1) {
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+					+ " with " + rules.size() + " rules");
+		}
+
+		Rule rule = rules.get(0);
+
+		try {
+			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+			ColorMap cm = rs.getColorMap();
+
+			importValuesLabelsQuantitiesColors(cm);
+
+			// Analyse the filters...
+			Filter filter = rule.getFilter();
+			filter = parseAbstractRlSettings(filter);
+
+		} finally {
+			popQuite();
+		}
+	}
+
 	/**
 	 * @param row
 	 * @param delta
@@ -244,21 +258,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		getOpacities().add(row + delta, getOpacities().remove(row));
 		fireEvents(new RuleChangedEvent("Index " + row + " moved up to "
 				+ (row - 1), this));
-	}
-
-	@Override
-	/**
-	 * For distinct values, the RasterLegend is 1:1 relation to the values 
-	 */
-	public RasterLegendData getRasterLegendData() {
-		RasterLegendData rld = new RasterLegendData(true);
-
-		for (int i = 0; i < getNumClasses(); i++) {
-			// if (getShowInLegends().get(i))
-			rld.put(getValues().get(i), getLabels().get(i));
-		}
-
-		return rld;
 	}
 
 }

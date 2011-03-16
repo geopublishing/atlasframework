@@ -74,7 +74,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	}
 
 	private void initialize() {
-		JLabel jLabelHeading = new JLabel(ASUtil.R("UniqueValues.Heading"));
+		JLabel jLabelHeading = new JLabel(ASUtil.R("RasterRulesList_Distinctvalues_GUI.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
@@ -199,7 +199,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
 				.setBorder(BorderFactory.createTitledBorder(ASUtil
-						.R("UniqueValues.PanelBorderTitle.Colors_and_Template")));
+						.R("RasterRulesList_Distinctvalues_GUI.PanelBorderTitle.Colors_and_Opacity")));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
@@ -248,7 +248,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			jButtonApplyOpacity.setText(ASUtil
 					.R("UniqueValues.applyTemplateButton.title"));
 			jButtonApplyOpacity.setToolTipText(ASUtil
-					.R("UniqueValues.applyTemplateButton.tooltip"));
+					.R("RasterRulesList_Distinctvalues_GUI.PanelBorderTitle.applyTemplateButton.tooltip",rulesList.getNumClassesVisible()));
 		}
 		return jButtonApplyOpacity;
 	}
@@ -321,10 +321,10 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == COLIDX_COLOR)
 						return ASUtil
-								.R("GraduatedColorQuantities.Column.Color");
+								.R("ColorLabel");
 					if (columnIndex == COLIDX_OPACITY)
 						return ASUtil
-								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.opacity");
+								.R("OpacityLabel");
 					if (columnIndex == COLIDX_VALUE)
 						return ASUtil
 								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.value");
