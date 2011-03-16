@@ -15,7 +15,10 @@ import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Style;

@@ -1,7 +1,22 @@
 package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorLineRuleList;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesLineRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPointRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPolygonRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Symbolizer;

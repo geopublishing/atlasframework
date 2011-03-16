@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.lang.LangUtil;

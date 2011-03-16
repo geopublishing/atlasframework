@@ -19,7 +19,7 @@ import javax.swing.JButton;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.simple.SimpleFeatureType;
 

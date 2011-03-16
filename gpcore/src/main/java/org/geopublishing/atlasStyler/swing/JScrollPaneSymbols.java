@@ -39,8 +39,8 @@ import javax.swing.ListCellRenderer;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleListFactory;
-import org.geopublishing.atlasStyler.RulesListInterface;
-import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.i18n.Translation;

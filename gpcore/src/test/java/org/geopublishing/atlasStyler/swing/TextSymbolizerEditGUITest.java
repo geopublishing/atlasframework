@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -11,6 +11,8 @@
 package org.geopublishing.atlasStyler;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 
 import de.schmitzm.lang.LangUtil;
 

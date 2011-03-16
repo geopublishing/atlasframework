@@ -16,7 +16,14 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
-import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.PointSymbolizer;

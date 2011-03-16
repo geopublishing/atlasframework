@@ -21,6 +21,8 @@ import java.util.Set;
 
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPolygonRuleList;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Style;

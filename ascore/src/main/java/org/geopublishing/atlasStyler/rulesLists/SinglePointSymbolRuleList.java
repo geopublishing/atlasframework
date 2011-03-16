@@ -8,10 +8,13 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.PointSymbolizer;

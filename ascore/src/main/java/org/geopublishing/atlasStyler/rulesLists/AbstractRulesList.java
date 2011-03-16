@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.net.URL;
 import java.util.List;
@@ -18,6 +18,12 @@ import java.util.Stack;
 import javax.swing.ImageIcon;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
@@ -600,10 +606,10 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 	}
 
-	abstract void parseMetaInfoString(String metaInfoString,
+	public abstract void parseMetaInfoString(String metaInfoString,
 			FeatureTypeStyle fts);
 
-	abstract void importRules(List<Rule> rules);
+	abstract public void importRules(List<Rule> rules);
 
 	/*
 	 * (non-Javadoc)

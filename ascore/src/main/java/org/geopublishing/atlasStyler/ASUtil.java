@@ -47,6 +47,10 @@ import javax.swing.table.TableCellRenderer;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;

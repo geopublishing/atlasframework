@@ -22,16 +22,16 @@ import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.GraduatedColorRuleList;
-import org.geopublishing.atlasStyler.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.RulesListsList;
-import org.geopublishing.atlasStyler.SingleRuleList;
-import org.geopublishing.atlasStyler.TextRuleList;
-import org.geopublishing.atlasStyler.UniqueValuesRuleList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.lang.LangUtil;

@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.filter.function.EnvFunction;

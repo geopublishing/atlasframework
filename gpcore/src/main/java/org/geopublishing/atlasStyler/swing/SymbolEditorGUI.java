@@ -41,7 +41,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.styling.Graphic;

@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 
 import de.schmitzm.swing.JPanel;
 

@@ -1,7 +1,7 @@
 package org.geopublishing.atlasStyler.swing;
 
 import org.geopublishing.atlasStyler.RuleListFactory;
-import org.geopublishing.atlasStyler.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

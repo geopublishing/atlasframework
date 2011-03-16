@@ -2,10 +2,10 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Window;
 
-import org.geopublishing.atlasStyler.AbstractRulesList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 
 import de.schmitzm.swing.JPanel;
 

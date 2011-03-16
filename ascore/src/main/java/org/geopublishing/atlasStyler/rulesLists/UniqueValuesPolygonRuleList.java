@@ -8,30 +8,29 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.styling.FeatureTypeStyle;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
-import de.schmitzm.lang.LangUtil;
 
-public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
-	protected Logger LOGGER = LangUtil.createLogger(this);
+public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
+	private Logger LOGGER = Logger.getLogger(UniqueValuesPolygonRuleList.class);
 
-	public GraduatedColorPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures,GeometryForm.POINT);
+	public UniqueValuesPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		super(styledFeatures, GeometryForm.POLYGON);
 	}
 
 	@Override
 	public RulesListType getType() {
-		return RulesListType.QUANTITIES_COLORIZED_POINT;
+		return RulesListType.UNIQUE_VALUE_POLYGON;
 	}
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importPointTemplateFromFirstRule(importFTS));
+		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
 	}
-
 }

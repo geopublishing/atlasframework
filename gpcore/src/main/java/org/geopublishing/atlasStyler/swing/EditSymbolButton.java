@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.SingleRuleList;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 
 

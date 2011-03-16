@@ -20,6 +20,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.FeatureRuleList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.data.FeatureSource;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.FeatureTypeStyle;

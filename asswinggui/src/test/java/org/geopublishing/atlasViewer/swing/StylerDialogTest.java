@@ -1,7 +1,7 @@
 package org.geopublishing.atlasViewer.swing;
 
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.junit.Test;
 

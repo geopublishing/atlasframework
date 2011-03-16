@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -9,6 +9,8 @@ import java.util.TreeSet;
 
 import javax.media.jai.Histogram;
 
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.processing.OperationJAI;
@@ -220,6 +222,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	}
 
 	@Override
+	public
 	void importRules(List<Rule> rules) {
 		pushQuite();
 

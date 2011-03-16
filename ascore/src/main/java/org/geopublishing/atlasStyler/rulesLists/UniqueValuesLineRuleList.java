@@ -8,28 +8,39 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.styling.FeatureTypeStyle;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.lang.LangUtil;
 
-public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
-	private Logger LOGGER = Logger.getLogger(UniqueValuesPolygonRuleList.class);
+public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
+	
+	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public UniqueValuesPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(styledFeatures, GeometryForm.POLYGON);
+	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
+		super(styledFeatures,GeometryForm.LINE);
 	}
+
+//
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public SingleRuleList getDefaultTemplate() {
+//		return ASUtil.getDefaultLineTemplate();
+//	}
 
 	@Override
 	public RulesListType getType() {
-		return RulesListType.UNIQUE_VALUE_POLYGON;
+		return RulesListType.UNIQUE_VALUE_LINE;
 	}
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {
-		setTemplate(ASUtil.importPolygonTemplateFromFirstRule(importFTS));
+		setTemplate(ASUtil.importLineTemplateFromFirstRule(importFTS));
+
 	}
 }

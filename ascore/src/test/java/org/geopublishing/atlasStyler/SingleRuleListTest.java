@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.xml.transform.TransformerException;
 
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.styling.Style;
 import org.junit.After;

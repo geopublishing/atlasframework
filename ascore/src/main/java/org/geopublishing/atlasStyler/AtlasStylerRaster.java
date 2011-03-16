@@ -3,6 +3,10 @@ package org.geopublishing.atlasStyler;
 import java.util.HashMap;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;

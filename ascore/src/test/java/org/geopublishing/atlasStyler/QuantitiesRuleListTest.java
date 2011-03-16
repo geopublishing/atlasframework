@@ -10,9 +10,10 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
-import org.geopublishing.atlasStyler.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureCollections;

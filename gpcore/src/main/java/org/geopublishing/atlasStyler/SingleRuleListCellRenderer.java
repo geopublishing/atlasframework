@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 
 import de.schmitzm.lang.LangUtil;
 

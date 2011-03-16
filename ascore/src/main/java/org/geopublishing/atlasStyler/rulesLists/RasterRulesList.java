@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import hep.aida.bin.QuantileBin1D;
 
@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
@@ -60,6 +63,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	@Override
+	public
 	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
 

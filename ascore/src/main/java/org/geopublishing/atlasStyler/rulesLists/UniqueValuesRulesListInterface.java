@@ -1,7 +1,9 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.io.IOException;
 import java.util.Set;
+
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 
 public interface UniqueValuesRulesListInterface<VALUETYPE> extends
 		RulesListInterface {

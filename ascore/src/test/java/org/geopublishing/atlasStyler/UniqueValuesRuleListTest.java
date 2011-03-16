@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Set;
 
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

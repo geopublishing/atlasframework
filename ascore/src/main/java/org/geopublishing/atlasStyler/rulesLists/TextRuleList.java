@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,7 +18,11 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.filter.AndImpl;
 import org.geotools.filter.BinaryComparisonAbstract;
 import org.geotools.styling.FeatureTypeStyle;
@@ -72,10 +76,10 @@ public class TextRuleList extends AbstractRulesList {
 			ff.literal("LABEL_CLASS_ENABLED"),
 			ff.literal("LABEL_CLASS_ENABLED"));
 
-	static final Filter DEFAULT_FILTER_ALL_OTHERS = FilterUtil.ALLWAYS_TRUE_FILTER;
+	public static final Filter DEFAULT_FILTER_ALL_OTHERS = FilterUtil.ALLWAYS_TRUE_FILTER;
 
 	/** All default text rule names start with this **/
-	static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
+	public static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
 
 	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
 
@@ -262,7 +266,7 @@ public class TextRuleList extends AbstractRulesList {
 	 *            if <code>null</code>, the rule will be true when no specific
 	 *            rendering language has been set.
 	 */
-	protected static Filter classLanguageFilter(String lang) {
+	public static Filter classLanguageFilter(String lang) {
 
 		if (lang == null)
 			lang = XMapPane.ENV_LANG_DEFAULT;
@@ -1010,10 +1014,10 @@ public class TextRuleList extends AbstractRulesList {
 	public ArrayList<String> getDefaultLanguages() {
 		ArrayList<String> usedLangs = new ArrayList<String>();
 
-		if (AtlasStylerVector.languageMode == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
+		if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
 			return usedLangs;
 
-		for (String lang : AtlasStylerVector.getLanguages()) {
+		for (String lang : AtlasStyler.getLanguages()) {
 			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
 				usedLangs.add(lang);
 			}
@@ -1039,6 +1043,7 @@ public class TextRuleList extends AbstractRulesList {
 	}
 
 	@Override
+	public
 	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 		// Does nothing
 	}

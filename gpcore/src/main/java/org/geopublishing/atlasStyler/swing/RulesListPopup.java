@@ -10,7 +10,7 @@ import javax.swing.JPopupMenu;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.RulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.FeatureTypeStyle;
 import org.opengis.filter.Filter;

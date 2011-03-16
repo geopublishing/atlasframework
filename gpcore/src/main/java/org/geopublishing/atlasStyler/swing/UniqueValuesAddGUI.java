@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.UniqueValuesRulesListInterface;
+import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRulesListInterface;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import de.schmitzm.swing.CancellableDialogAdapter;

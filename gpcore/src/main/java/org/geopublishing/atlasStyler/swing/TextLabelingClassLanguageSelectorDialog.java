@@ -8,7 +8,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.TextRuleList;
+import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 
 import de.schmitzm.i18n.LanguagesComboBox;
 import de.schmitzm.swing.CancellableDialogAdapter;

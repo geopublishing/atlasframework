@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Stack;
 
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geotools.util.WeakHashSet;
 
 public class RulesListsList extends ArrayList<AbstractRulesList> {

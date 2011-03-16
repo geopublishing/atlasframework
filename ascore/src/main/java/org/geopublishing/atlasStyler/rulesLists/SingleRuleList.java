@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,6 +25,10 @@ import java.util.Vector;
 import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
@@ -188,6 +192,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	@Override
+	public
 	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
 

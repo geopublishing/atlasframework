@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.QuantitiesRuleList;
+import org.geopublishing.atlasStyler.RuleChangeListener;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.classification.QuantitiesClassification.METHOD;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
@@ -382,6 +386,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	}
 
 	@Override
+	public
 	void importRules(List<Rule> rules) {
 		/***********************************************************
 		 * Parsing information in the RULEs
