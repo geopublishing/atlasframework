@@ -19,6 +19,7 @@ import java.net.URL;
 
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
+import javax.swing.JPopupMenu;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.Document;
@@ -279,6 +280,14 @@ public class HTMLInfoJPane extends JEditorPane implements HTMLInfoPaneInterface 
   @Override
   public void showDocument(String content) {
     setText(content);
+  }
+
+  /**
+   * Connects a popup menu to the html view. This method has to disable
+   * a browser internal popup menu.
+   */
+  public void connectPopupMenu(JPopupMenu menu) {
+    setComponentPopupMenu(menu);
   }
 
   /**

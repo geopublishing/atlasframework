@@ -1,8 +1,10 @@
 package org.geopublishing.atlasViewer.swing;
 
+import java.awt.PopupMenu;
 import java.net.URL;
 
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 
 /**
  * Interface for all methods needed for a html viewer.
@@ -37,4 +39,10 @@ public interface HTMLInfoPaneInterface {
    * necessary to create one.
    */
   public boolean hasScrollPane();
+  
+  /**
+   * Connects a popup menu to the html view. This method has to disable
+   * a browser internal popup menu.
+   */
+  public void connectPopupMenu(JPopupMenu menu);
 }

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui.map;
 
+import java.awt.PopupMenu;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -86,6 +87,11 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
     public boolean hasScrollPane() {
       return htmlPane.hasScrollPane();
     }
+    
+    public void connectPopupMenu(JPopupMenu menu) {
+      htmlPane.connectPopupMenu(menu);
+    }
+
     public DesignHTMLInfoPane(AtlasConfigEditable ace_, Map map_) {
       this(ace_, map_, GpCoreUtil.createHTMLInfoPane(map_));
     }
@@ -103,49 +109,14 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 		//
 		// @SuppressWarnings("unused")
 		// DropTarget dt = new DropTarget(this, importByDropTargetListener);
-		MouseListener popupMouseListener = new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent evt) {
-
-				/**
-				 * If the lines under the mouse is not selected, select it
-				 * first...
-				 */
-				if (evt.isPopupTrigger()) {
-					JPopupMenu popupMenu = new JPopupMenu();
-
-					/**
-					 * Edit HTML info files...
-					 */
-					popupMenu.add(new MapPoolEditHTMLAction(map));
-
-					/**
-					 * Delete HTML info files...
-					 */
-					popupMenu.add(new MapPoolDeleteAllHTMLAction(
-							getComponent(), map));
-
-					popupMenu.show(getComponent(), evt.getX(), evt
-							.getY());
-
-				}
-			}
-
-		};
-		getComponent().addMouseListener(popupMouseListener);
 		
-//        JPopupMenu popupMenu = new JPopupMenu();
-//        /** Edit HTML info files... */
-//        popupMenu.add(new MapPoolEditHTMLAction(map));
-//        /** Delete HTML info files... */
-//        popupMenu.add(new MapPoolDeleteAllHTMLAction(
-//                getComponent(), map));
-//        getComponent().setComponentPopupMenu(popupMenu);
-        
-//		// TEST
-//		if ( htmlPane instanceof HTMLInfoJWebBrowser ) {
-//          ((HTMLInfoJWebBrowser)htmlPane).getNativeComponent().addMouseListener(popupMouseListener);
-//        }
+        JPopupMenu popupMenu = new JPopupMenu();
+        /** Edit HTML info files... */
+        popupMenu.add(new MapPoolEditHTMLAction(map));
+        /** Delete HTML info files... */
+        popupMenu.add(new MapPoolDeleteAllHTMLAction(
+                getComponent(), map));
+        connectPopupMenu(popupMenu);
         
 		/** As this is a WeakHashMapSet, we don't have to remove it... **/
 		ace.getMapPool().addChangeListener(listenForMapChanges);

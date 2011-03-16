@@ -360,7 +360,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				tabTitles.add(title);
 			}
 
-			SimplyHTMLUtil.openHTMLEditors(getJFrame(), ace,
+			GpSwingUtil.openHTMLEditors(getJFrame(), ace,
 					ace.getAboutHtMLFiles(getJFrame()), tabTitles,
 					GpUtil.R("EditAboutWindow.EditorTitle"));
 
@@ -383,7 +383,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				tabTitles.add(title);
 			}
 
-			SimplyHTMLUtil.openHTMLEditors(getJFrame(), ace,
+			GpSwingUtil.openHTMLEditors(getJFrame(), ace,
 					ace.getPopupHtMLFiles(getJFrame()), tabTitles,
 					GpUtil.R("EditPopupWindow.EditorTitle"));
 

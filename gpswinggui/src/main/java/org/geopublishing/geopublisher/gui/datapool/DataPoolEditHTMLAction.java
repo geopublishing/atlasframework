@@ -67,7 +67,7 @@ public class DataPoolEditHTMLAction extends AbstractAction {
 					I18NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
-		SimplyHTMLUtil.openHTMLEditors(dpTable, ace, infoFiles, tabTitles,
+		GpSwingUtil.openHTMLEditors(dpTable, ace, infoFiles, tabTitles,
 				GeopublisherGUI.R("EditLayerHTML.Dialog.Title", dpl.getTitle()
 						.toString()));
 

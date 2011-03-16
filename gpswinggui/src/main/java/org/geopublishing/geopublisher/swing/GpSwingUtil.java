@@ -12,16 +12,27 @@ package org.geopublishing.geopublisher.swing;
  ******************************************************************************/
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -551,11 +562,123 @@ public class GpSwingUtil extends GpUtil {
     public static DesignHTMLInfoPane createDesignHTMLInfoPane(AtlasConfigEditable ace, Map map) {
       // Note: although we now have 2 versions to display html...
       //  a) JEditorPane -> HTMLInfoJPane
-      //  b) JWebBrowser -> HTMLInfoView
+      //  b) JWebBrowser -> HTMLInfoJWebBrowser
+      //  c) LOBO        -> HTMLInfoLoboBrowser
       // ... we only have ONE version of DesignHTMLInfoPane, which
-      // uses (a) or (b) according to the factory method 
+      // uses (a), (b) or (c) according to the factory method 
       // AVUtil.createHTMLInfoPane(.)
       return new DesignHTMLInfoPane(ace,map);
+    }
+
+    /**
+     * Factory method to create an design html editor.
+     * @param map a Map
+     */
+    public static HTMLEditPaneInterface createHTMLEditPane(AtlasConfigEditable ace) {
+      HTMLEditPaneInterface htmlEditPane = null;
+      
+      // try to use an HTML view based on DJ project
+      htmlEditPane = (HTMLEditPaneInterface)LangUtil.instantiateObject(
+          "org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor",
+          true, // fallback if class can not be loaded
+          "FCK"
+      );
+
+      if ( htmlEditPane != null ) {
+        LOGGER.info("Using "+LangUtil.getSimpleClassName(htmlEditPane)+" as HTML editor.");
+        return htmlEditPane;
+      }
+      
+      // use editor based on SimplyHTML
+      htmlEditPane = new HTMLEditPaneSimplyHTML();
+      
+      return htmlEditPane;
+    }
+    /**
+     * 
+     * @param owner
+     * @param ace
+     * @param htmlFiles
+     *            A {@link List} of {@link File}s that all will automatically be
+     *            created if they don't exist! No matter if the user saves his
+     *            changes.
+     * @param tabTitles
+     * @param windowTitle
+     */
+    @SuppressWarnings("deprecation")
+    public static void openHTMLEditors(Component owner,
+            AtlasConfigEditable ace, List<File> htmlFiles,
+            List<String> tabTitles, String windowTitle) {
+
+        if (tabTitles.size() != htmlFiles.size())
+            throw new IllegalArgumentException(
+                    "Number of HTML URLs and Titles must be equal.");
+
+        /**
+         * We open the HTML editor to edit the About information.
+         */
+
+        final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
+        JComponent htmlEditorPanel = htmlEditor.getComponent();
+        final JDialog editorDialog = new JDialog(SwingUtil
+                .getParentWindow(owner), windowTitle);
+        editorDialog.setModal(true);
+        editorDialog
+                .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+        
+        editorDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if ( htmlEditor.performClosing(editorDialog) )
+                  editorDialog.dispose();
+            }
+        });
+
+        htmlEditorPanel.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("closing")) {
+                    editorDialog.dispose();
+                }
+            }
+        });
+
+        editorDialog.setSize(new Dimension(620, 400));
+        if ( !htmlEditor.hasScrollPane() ) {
+          htmlEditorPanel = new JScrollPane(htmlEditorPanel);
+        }
+        editorDialog.getContentPane().add(htmlEditorPanel);
+
+        // String content = "<html> <body> <p> test </p> </body> </html>";
+        // htmlEditorPanel.setCurrentDocumentContent(content
+        htmlEditor.removeAllTabs();
+
+        /**
+         * Add one Tab for every language that is supported
+         */
+        for (int i = 0; i < ace.getLanguages().size(); i++) {
+            try {
+                File htmlFile = htmlFiles.get(i);
+                if (!htmlFile.exists())
+                    htmlFile.createNewFile();
+
+                // Sad but true, we have to use the depreciated way here
+                URL htmlURL = htmlFile.toURL();
+
+                LOGGER.info(htmlEditor.getClass().getSimpleName()+" for " + htmlURL + " (was file = "
+                    + htmlFile.getCanonicalPath() + ")");
+
+                htmlEditor.addEditorTab(tabTitles.get(i), htmlURL, i);
+            
+            } catch (Exception ex) {
+                ExceptionDialog.show(owner, ex);
+            }
+        }
+
+        SwingUtil.centerFrameOnScreenRandom(editorDialog);
+
+        editorDialog.setVisible(true);
     }
 
 }

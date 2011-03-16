@@ -270,7 +270,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 									.getDisplayLanguage()));
 				}
 
-				SimplyHTMLUtil.openHTMLEditors(owner, ace, infoFiles,
+				GpSwingUtil.openHTMLEditors(owner, ace, infoFiles,
 						tabTitles, GeopublisherGUI.R(
 								"EditLayerHTML.Dialog.Title", dpLayer
 										.getTitle().toString()));

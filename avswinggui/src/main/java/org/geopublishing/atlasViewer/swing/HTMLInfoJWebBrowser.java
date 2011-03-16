@@ -5,10 +5,14 @@ package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.net.URL;
 
 import javax.swing.JComponent;
+import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -142,6 +146,24 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 	@Override
 	public boolean hasScrollPane() {
 		return false;
+	}
+
+	/**
+	 * Connects a popup menu to the html view.
+	 * TODO: Does not work fine yet!
+	 */
+	@Override
+	public void connectPopupMenu(final JPopupMenu menu) {
+      MouseListener popupMouseListener = new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent evt) {
+          if (evt.isPopupTrigger())
+              menu.show(getComponent(), evt.getX(), evt
+                      .getY());
+  
+        }
+      };
+	  getNativeComponent().addMouseListener(popupMouseListener);
 	}
 
 	private final WebBrowserListener LISTENER = new WebBrowserAdapter() {

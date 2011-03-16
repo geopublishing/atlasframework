@@ -70,7 +70,7 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 					I18NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
-		SimplyHTMLUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,
+		GpSwingUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,
 				GeopublisherGUI.R("Map.HTMLInfo.EditDialog.Title", map.getTitle()
 						.toString()));
 

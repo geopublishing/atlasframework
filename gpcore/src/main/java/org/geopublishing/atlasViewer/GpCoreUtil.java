@@ -567,7 +567,7 @@ public class GpCoreUtil {
       );
 	  
       if ( htmlInfoPane != null ) {
-        LOGGER.info("Using HTMLInfoPaneInterface for HTML view.");
+        LOGGER.info("Using "+LangUtil.getSimpleClassName(htmlInfoPane)+" for HTML view.");
         return htmlInfoPane;
       }
 	  
