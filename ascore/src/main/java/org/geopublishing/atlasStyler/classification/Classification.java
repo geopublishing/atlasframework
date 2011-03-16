@@ -10,17 +10,35 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.classification;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeSet;
+
+import javax.swing.ComboBoxModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 
 public abstract class Classification {
 	ClassificationChangeEvent lastOpressedEvent = null;
 
-	private Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
+	public void setMethod(CLASSIFICATION_METHOD method) {
+		this.method = method;
+	}
+
+	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
+
+	public CLASSIFICATION_METHOD getMethod() {
+		return method;
+	}
+
+	public abstract ComboBoxModel getClassificationParameterComboBoxModel();
+
+	private final Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
 
 	// protected Logger LOGGER = LangUtil.createLogger(this);
 	protected Logger LOGGER = Logger.getLogger(Classification.class);
@@ -162,6 +180,57 @@ public abstract class Classification {
 	}
 
 	/**
+	 * Rplaces all values in the classification limits that can make problems
+	 * when exported to XML. Geoserver 2.0.1 is not compatible with -Inf, Inf,
+	 * Na
+	 * 
+	 * @param replacement
+	 *            A number that will replace Inf+ as abs(replacement), and Inf-
+	 *            as -abs(replacement)
+	 */
+	public TreeSet<Double> removeNanAndInf(Double replacement) {
+
+		// Filter class limits against -Inf and +Inf. GS doesn't like them
+		TreeSet<Double> newClassLimits = new TreeSet<Double>();
+		for (Double l : getClassLimits()) {
+			if (l == Double.NEGATIVE_INFINITY)
+				l = -1. * Math.abs(replacement);
+			if (l == Double.POSITIVE_INFINITY)
+				l = Math.abs(replacement);
+			if (l == Double.NaN)
+				l = 0.;
+			newClassLimits.add(l);
+		}
+		setClassLimits(newClassLimits);
+		return newClassLimits;
+	}
+
+	protected int numClasses = 5;
+
+	protected boolean recalcAutomatically = true;
+
+	public void setClassLimits(final TreeSet<Double> classLimits_) {
+
+		// if (classLimits_.size() == 1) {
+		// // Special case: Create a second classLimit with the same value!
+		// classLimits_.add(classLimits_.first());
+		// }
+
+		this.breaks = classLimits_;
+		this.numClasses = classLimits_.size() - 1;
+
+		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
+	}
+
+	protected volatile boolean cancelCalculation;
+
+	/**
+	 * If the classification contains 5 classes, then we have to save 5+1
+	 * breaks.
+	 */
+	protected volatile TreeSet<Double> breaks = new TreeSet<Double>();
+
+	/**
 	 * resets the number of NODATA values found and excluded from the
 	 * classification
 	 **/
@@ -173,4 +242,25 @@ public abstract class Classification {
 		this.quite = quite;
 	}
 
+	public abstract void setNumClasses(Integer newNum);
+
+	public abstract TreeSet<Double> getClassLimits();
+
+	public abstract BufferedImage createHistogramImage(boolean showMean,
+			boolean showSd, int histogramBins, String xAxisLabel)
+			throws InterruptedException, IOException;
+
+	abstract public Long getCount();
+
+	abstract public Double getMean();
+
+	abstract public Double getMedian();
+
+	abstract public Double getMin();
+
+	abstract public Double getSum();
+
+	abstract public Double getSD();
+
+	abstract public Double getMax();
 }

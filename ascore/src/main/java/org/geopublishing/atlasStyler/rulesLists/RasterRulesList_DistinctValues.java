@@ -2,7 +2,6 @@ package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,9 +14,6 @@ import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.processing.OperationJAI;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.styling.ColorMap;
-import org.geotools.styling.RasterSymbolizer;
-import org.geotools.styling.Rule;
-import org.opengis.filter.Filter;
 import org.opengis.parameter.ParameterValueGroup;
 
 import de.schmitzm.geotools.data.rld.RasterLegendData;

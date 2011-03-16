@@ -24,7 +24,6 @@ import java.util.TreeSet;
 import javax.xml.transform.TransformerException;
 
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureSource;
 import org.geotools.filter.text.cql2.CQLException;
@@ -116,10 +115,10 @@ public class QuantitiesClassificationTest extends TestingClass {
 	public void testChangeOfValueFieldNameAndReusingTheObject()
 			throws IOException, InterruptedException, CQLException {
 
-		final QuantitiesClassification clfcn = new QuantitiesClassification(
+		final FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "SQMI_CNTRY");
 		clfcn.setRecalcAutomatically(false);
-		clfcn.setMethod(METHOD.QUANTILES);
+		clfcn.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		clfcn.setNumClasses(3);
 		clfcn.calculateClassLimitsBlocking();
 
@@ -130,7 +129,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 		 * Change ValueFieldName to POP,
 		 */
 		clfcn.setValue_field_name("POP_CNTRY");
-		clfcn.setMethod(METHOD.QUANTILES);
+		clfcn.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		clfcn.setNumClasses(10);
 		clfcn.calculateClassLimitsBlocking();
 		assertTrue(testBreaks(clfcn.getClassLimits(), -99999.0, 6782.0,
@@ -157,7 +156,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 
 		clfcn.setNormalizer_field_name(null);
 
-		clfcn.setMethod(METHOD.EI);
+		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
 
 		clfcn.calculateClassLimitsBlocking();
 
@@ -169,14 +168,14 @@ public class QuantitiesClassificationTest extends TestingClass {
 	public void testNoDataValueviaAMD() throws IOException,
 			InterruptedException {
 
-		QuantitiesClassification clfcn = new QuantitiesClassification(
+		FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "SQKM_CNTRY");
 
 		clfcn.getStyledFeatures().getAttributeMetaDataMap().get("SQKM_CNTRY")
 				.addNodataValue(0.0);
 
 		clfcn.setRecalcAutomatically(false);
-		clfcn.setMethod(METHOD.EI);
+		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
 		clfcn.setNumClasses(4);
 		clfcn.calculateClassLimitsBlocking();
 		assertTrue(testBreaks(clfcn.getClassLimits(), 1.668, 4212986.250999999,
@@ -186,10 +185,10 @@ public class QuantitiesClassificationTest extends TestingClass {
 	@Test
 	public void testQEqualInterval() throws IOException, InterruptedException {
 
-		QuantitiesClassification clfcn = new QuantitiesClassification(
+		FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "POP_CNTRY");
 		clfcn.setRecalcAutomatically(false);
-		clfcn.setMethod(METHOD.EI);
+		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
 		clfcn.setNumClasses(4);
 		clfcn.calculateClassLimitsBlocking();
 		assertTrue(testBreaks(clfcn.getClassLimits(), -99999.0, 3.2017708025E8,
@@ -204,11 +203,11 @@ public class QuantitiesClassificationTest extends TestingClass {
 			throws IOException, InterruptedException {
 		// Filter exclude = ff.equals(ff.property("LANDLOCKED"),
 		// ff.literal("N"));
-		QuantitiesClassification clfcn = new QuantitiesClassification(
+		FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "POP_CNTRY", null);
 		clfcn.setRecalcAutomatically(false);
 
-		clfcn.setMethod(METHOD.EI);
+		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
 
 		clfcn.setNumClasses(4);
 
@@ -221,10 +220,10 @@ public class QuantitiesClassificationTest extends TestingClass {
 	@Test
 	public void testQuantile() throws IOException, InterruptedException {
 
-		final QuantitiesClassification clfcn = new QuantitiesClassification(
+		final FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "POP_CNTRY");
 		clfcn.setRecalcAutomatically(false);
-		clfcn.setMethod(METHOD.QUANTILES);
+		clfcn.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		clfcn.setNumClasses(10);
 		clfcn.calculateClassLimitsBlocking();
 
@@ -237,10 +236,10 @@ public class QuantitiesClassificationTest extends TestingClass {
 	public void testQuantileNormalized() throws IOException,
 			InterruptedException {
 
-		final QuantitiesClassification clfcn = new QuantitiesClassification(
+		final FeatureClassification clfcn = new FeatureClassification(
 				new StyledFS(featureSource_polygon), "POP_CNTRY", "SQKM_CNTRY");
 		clfcn.setRecalcAutomatically(false);
-		clfcn.setMethod(METHOD.QUANTILES);
+		clfcn.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		clfcn.setNumClasses(5);
 		clfcn.calculateClassLimitsBlocking();
 
@@ -257,7 +256,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 		StyledFS styledFeaturesFiltered = new StyledFS(featureSource_polygon);
 		styledFeaturesFiltered.setFilter(ECQL
 				.toFilter("POP_CNTRY > 0 and POP_CNTRY < 500000"));
-		final QuantitiesClassification clfcn = new QuantitiesClassification(
+		final FeatureClassification clfcn = new FeatureClassification(
 				styledFeaturesFiltered);
 
 		clfcn.setRecalcAutomatically(false);
@@ -267,7 +266,7 @@ public class QuantitiesClassificationTest extends TestingClass {
 
 		clfcn.setNumClasses(4);
 
-		clfcn.setMethod(METHOD.QUANTILES);
+		clfcn.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 
 		clfcn.calculateClassLimitsBlocking();
 

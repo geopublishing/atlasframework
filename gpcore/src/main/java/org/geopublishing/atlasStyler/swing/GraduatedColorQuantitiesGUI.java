@@ -53,13 +53,13 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
-import org.geopublishing.atlasStyler.swing.classification.QuantitiesClassification;
+import org.geopublishing.atlasStyler.swing.classification.FeatureClassificationGUIfied;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.brewer.color.BrewerPalette;
@@ -107,7 +107,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 	private JLabel jLabelHeading = null;
 
-	private final QuantitiesClassification classifier;
+	private final FeatureClassificationGUIfied classifier;
 
 	protected SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
 
@@ -148,7 +148,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 			this.atlasStyler = atlasStyler;
 
-			classifier = new QuantitiesClassification(
+			classifier = new FeatureClassificationGUIfied(
 					GraduatedColorQuantitiesGUI.this,
 					ruleList.getStyledFeatures(),
 					ruleList.getValue_field_name(),
@@ -166,7 +166,7 @@ public class GraduatedColorQuantitiesGUI extends
 				 * have to start calculation directly.
 				 */
 				if (ruleList.getClassLimits().size() == 0) {
-					classifier.setMethod(METHOD.QUANTILES);
+					classifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 					classifier.setNumClasses(5);
 				}
 
@@ -208,7 +208,7 @@ public class GraduatedColorQuantitiesGUI extends
 							ruleList.setClassLimits(
 									classifier.getClassLimits(), !noChange); // here
 
-							if (classifier.getMethod() == METHOD.MANUAL) {
+							if (classifier.getMethod() == CLASSIFICATION_METHOD.MANUAL) {
 								getNumClassesJComboBox().setEnabled(false);
 								getNumClassesJComboBox().setSelectedItem(
 										new Integer(ruleList.getNumClasses()));
@@ -370,7 +370,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 			}
 
-			private QuantitiesClassificationGUI getQuantitiesClassificationGUI() {
+			private ClassificationGUI getQuantitiesClassificationGUI() {
 				// if (quantGUI == null) {
 				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = rulesList
 						.getStyledFeatures().getAttributeMetaDataMap();
@@ -388,11 +388,10 @@ public class GraduatedColorQuantitiesGUI extends
 									.getTitle().toString();
 				}
 
-				QuantitiesClassificationGUI quantGUI = new QuantitiesClassificationGUI(
-						jToggleButton_Classify, classifier, atlasStyler,
-						AtlasStylerVector.R(
-								"QuantitiesClassificationGUI.Title",
-								titleVariables));
+				ClassificationGUI quantGUI = new FeatureClassificationGUI(
+						jToggleButton_Classify, classifier, atlasStyler, ASUtil
+								.R("QuantitiesClassificationGUI.Title",
+										titleVariables));
 				quantGUI.addWindowListener(new WindowAdapter() {
 
 					@Override
@@ -481,7 +480,7 @@ public class GraduatedColorQuantitiesGUI extends
 								final java.awt.event.ItemEvent e) {
 							if (e.getStateChange() == ItemEvent.SELECTED) {
 
-								if (org.geopublishing.atlasStyler.classification.QuantitiesClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX == e
+								if (org.geopublishing.atlasStyler.classification.FeatureClassification.NORMALIZE_NULL_VALUE_IN_COMBOBOX == e
 										.getItem())
 									classifier.setNormalizer_field_name(null);
 								else
@@ -838,8 +837,7 @@ public class GraduatedColorQuantitiesGUI extends
 								noDataSymbol.getLabel());
 
 						final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-								ASUtil
-										.R("translate_label_for_NODATA_values"),
+								ASUtil.R("translate_label_for_NODATA_values"),
 								translation, AtlasStylerVector.getLanguages());
 						TranslationAskJDialog ask = new TranslationAskJDialog(
 								GraduatedColorQuantitiesGUI.this, transLabel);
@@ -879,9 +877,9 @@ public class GraduatedColorQuantitiesGUI extends
 
 					} else {
 						final String newNodataTitle = ASUtil.askForString(
-								GraduatedColorQuantitiesGUI.this, noDataSymbol
-										.getLabel(), ASUtil
-										.R("translate_label_for_NODATA_values"));
+								GraduatedColorQuantitiesGUI.this,
+								noDataSymbol.getLabel(),
+								ASUtil.R("translate_label_for_NODATA_values"));
 
 						if (newNodataTitle != null) {
 							noDataLabelButton.setText(newNodataTitle + ":");
@@ -908,8 +906,7 @@ public class GraduatedColorQuantitiesGUI extends
 			if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
 
 				final JCheckBox noDataShowInLegendCB = new JCheckBox(
-						ASUtil
-								.R("NoDataValues.ShallAppearInLegend.Label"));
+						ASUtil.R("NoDataValues.ShallAppearInLegend.Label"));
 				noDataShowInLegendCB.setToolTipText(ASUtil
 						.R("NoDataValues.ShallAppearInLegend.TT"));
 

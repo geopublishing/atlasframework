@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
-import hep.aida.bin.QuantileBin1D;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Point;
@@ -24,14 +20,12 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.CellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
@@ -51,29 +45,14 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
+import org.geopublishing.atlasStyler.classification.Classification;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
-import org.geopublishing.atlasViewer.swing.AVDialogManager;
-import org.geopublishing.atlasViewer.swing.Icons;
-import org.geotools.gml3.bindings.AbstractSurfaceTypeBinding;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.plot.ValueMarker;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.statistics.HistogramDataset;
-import org.jfree.ui.RectangleAnchor;
-import org.jfree.ui.TextAnchor;
 
-import cern.colt.list.DoubleArrayList;
-import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
-import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
-import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.AtlasDialog;
-import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
@@ -85,11 +64,11 @@ import de.schmitzm.swing.SwingUtil;
  * @author SK
  * 
  */
-public class QuantitiesClassificationGUI extends AtlasDialog {
+public abstract class ClassificationGUI extends AtlasDialog {
 	protected final static Logger LOGGER = Logger
-			.getLogger(QuantitiesClassificationGUI.class);
+			.getLogger(ClassificationGUI.class);
 
-	private static final BufferedImage ERROR_IMAGE = new BufferedImage(400,
+	protected static final BufferedImage ERROR_IMAGE = new BufferedImage(400,
 			200, BufferedImage.TYPE_3BYTE_BGR);
 
 	private static final BufferedImage WAIT_IMAGE = new BufferedImage(400, 200,
@@ -105,10 +84,6 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	private JComboBox jComboBoxMethod = null;
 
-	private JPanel jPanelData = null;
-
-	private JButton jButtonExclusion = null;
-
 	private JPanel jPanelDescriptiveStatistics = null;
 
 	private JTable jTableStats = null;
@@ -121,7 +96,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	private JTable jTableBreakValues = null;
 
-	private final QuantitiesClassification classifier;
+	protected final Classification classifier;
 
 	private JPanel jPanelHistParams = null;
 
@@ -135,11 +110,10 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 	Integer histogramBins = 14;
 
-	private final AtlasStylerVector atlasStyler;
+	private final AtlasStyler atlasStyler;
 
-	public QuantitiesClassificationGUI(Component owner,
-			QuantitiesClassification classifier, AtlasStylerVector atlasStyler,
-			String title) {
+	public ClassificationGUI(Component owner, Classification classifier,
+			AtlasStyler atlasStyler, String title) {
 		super(SwingUtil.getParentWindow(owner), title);
 		this.classifier = classifier;
 		this.atlasStyler = atlasStyler;
@@ -170,7 +144,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jContentPane = new JPanel(new MigLayout("flowy, gap 1, inset 1"));
 
 			jContentPane.add(getJPanelLinksOben(), "sgx1, split 3");
-			jContentPane.add(getJPanelDataExclusion(), "sgx1");
+			jContentPane.add(getJPanelData(), "sgx1");
 			jContentPane.add(getJPanelHistogramParameters());
 			jContentPane
 					.add(getJPanelLowerPart(), "gap related, spanx 2, wrap");
@@ -187,18 +161,19 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelLinksOben() {
 		if (jPanelLinksOben == null) {
-			jLabelParameter = new JLabel(AtlasStylerVector
-					.R("ComboBox.NumberOfClasses"));
+			jLabelParameter = new JLabel(
+					AtlasStylerVector.R("ComboBox.NumberOfClasses"));
 
-			jLabelParameter.setToolTipText(AtlasStylerVector
+			jLabelParameter.setToolTipText(ASUtil
 					.R("ComboBox.NumberOfClasses.TT"));
 
-			jLabelMethodSelection = new JLabel(AtlasStylerVector
-					.R("QuantitiesClassificationGUI.Combobox.Method"));
+			jLabelMethodSelection = new JLabel(
+					ASUtil.R("QuantitiesClassificationGUI.Combobox.Method"));
 
-			jPanelLinksOben = new JPanel(new MigLayout("wrap 2, gap 1, inset 1"), AtlasStylerVector
-					.R("GraduatedColorQuantities.classification.BorderTitle"));
-			
+			jPanelLinksOben = new JPanel(
+					new MigLayout("wrap 2, gap 1, inset 1"),
+					ASUtil.R("GraduatedColorQuantities.classification.BorderTitle"));
+
 			jPanelLinksOben.add(jLabelMethodSelection);
 			jPanelLinksOben.add(getJComboBoxMethod());
 			jPanelLinksOben.add(jLabelParameter);
@@ -218,117 +193,13 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 		return jComboBoxMethod;
 	}
 
-	/**
-	 * This method initializes jPanel1
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanelDataExclusion() {
-		if (jPanelData == null) {
-			jPanelData = new JPanel(new MigLayout("gap 1, inset 1"));
-			jPanelData.setBorder(BorderFactory.createTitledBorder(ASUtil
-					.R("QuantitiesClassificationGUI.Data.BorderTitle")));
-
-			if (atlasStyler.getMapLayer() != null) {
-				jPanelData.add(getJButtonExclusion());
-			}
-
-			jPanelData.add(getJButtonAttribTable());
-			// SwingUtil.setPreferredWidth(jPanelData, 100);
-			// jPanel1.add(getJButtonSampling(), gridBagConstraints6);
-		}
-		return jPanelData;
-	}
-
-	/**
-	 * This button opens the AttributeTable
-	 * 
-	 * @return
-	 */
-	private JButton getJButtonAttribTable() {
-		JButton button = new JButton(new AbstractAction(AtlasStylerVector
-				.R("QuantitiesClassificationGUI.Data.ShowAttribTableButton"),
-				Icons.ICON_TABLE) {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				/*
-				 * If possible, set the JMapPane as the parent GUI. If now
-				 * available, use this dialog
-				 */
-				QuantitiesClassificationGUI owner = QuantitiesClassificationGUI.this;
-
-				AVDialogManager.dm_AttributeTable.getInstanceFor(atlasStyler
-						.getStyledFeatures(), owner, atlasStyler
-						.getStyledFeatures(), null); // TODO TODO atlasStyler.getMapLegend() TODO TODO 
-			}
-
-		});
-		return button;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonExclusion() {
-		if (jButtonExclusion == null) {
-			jButtonExclusion = new JButton();
-
-			jButtonExclusion.setAction(new AbstractAction(ASUtil
-					.R("QuantitiesClassificationGUI.DataExclusion.Button")) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-
-					final AtlasFeatureLayerFilterDialog filterDialog;
-					try {
-
-						// This is all ugly ;-/
-						// TODO GP_Dialogmanager
-
-						filterDialog = new AtlasFeatureLayerFilterDialog(
-								QuantitiesClassificationGUI.this, atlasStyler
-										.getStyledFeatures(), 
-										null, atlasStyler
-										.getMapLayer()
-										);
-//										,
-//										atlasStyler TODO TODO 
-//										.getMapLegend().getGeoMapPane()
-//										.getMapPane() TODO TODO 
-
-						// TODO listen to any filter changes?
-
-						filterDialog.setVisible(true);
-
-					} catch (Exception ee) {
-						LOGGER.error(ee);
-						ExceptionDialog.show(QuantitiesClassificationGUI.this,
-								ee);
-					}
-				}
-
-			});
-			jButtonExclusion.setToolTipText(AtlasStylerVector
-					.R("QuantitiesClassificationGUI.DataExclusion.Button.TT"));
-		}
-		return jButtonExclusion;
-	}
-
-	/**
-	 * This method initializes jPanel2
-	 * 
-	 * @return javax.swing.JPanel
-	 */
 	private JPanel getJPanelDescriptiveStatistics() {
 		if (jPanelDescriptiveStatistics == null) {
-			jPanelDescriptiveStatistics = new JPanel(new MigLayout("gap 1, inset 1"));
+			jPanelDescriptiveStatistics = new JPanel(new MigLayout(
+					"gap 1, inset 1"));
 			jPanelDescriptiveStatistics
-					.setBorder(BorderFactory
-							.createTitledBorder(AtlasStylerVector
-									.R("QuantitiesClassificationGUI.Statistics.BorderTitle")));
+					.setBorder(BorderFactory.createTitledBorder(ASUtil
+							.R("QuantitiesClassificationGUI.Statistics.BorderTitle")));
 			final JScrollPane scrollPane = new JScrollPane(
 					getJTableStatistics());
 			SwingUtil.setPreferredWidth(scrollPane, 250);
@@ -362,22 +233,14 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 			jTableStats.setModel(new DefaultTableModel() {
 				final String[] fieldNames = new String[] {
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Count"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Min"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Max"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Sum"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Mean"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Median"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.SD"),
-						AtlasStylerVector
-								.R("Classification.DescriptiveStatistics.Excluded") };
+						ASUtil.R("Classification.DescriptiveStatistics.Count"),
+						ASUtil.R("Classification.DescriptiveStatistics.Min"),
+						ASUtil.R("Classification.DescriptiveStatistics.Max"),
+						ASUtil.R("Classification.DescriptiveStatistics.Sum"),
+						ASUtil.R("Classification.DescriptiveStatistics.Mean"),
+						ASUtil.R("Classification.DescriptiveStatistics.Median"),
+						ASUtil.R("Classification.DescriptiveStatistics.SD"),
+						ASUtil.R("Classification.DescriptiveStatistics.Excluded") };
 
 				@Override
 				public Class<?> getColumnClass(int columnIndex) {
@@ -404,23 +267,22 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 						return fieldNames[rowIndex];
 
 					try {
-						QuantileBin1D stats = classifier.getStatistics();
 						if (rowIndex == 0) // Count
-							return stats.size();
+							return classifier.getCount();
 						if (rowIndex == 1) // Min
-							return stats.min();
+							return classifier.getMin();
 						if (rowIndex == 2) // Max
-							return stats.max();
+							return classifier.getMax();
 						if (rowIndex == 3) // Sum
-							return stats.sum();
+							return classifier.getSum();
 						if (rowIndex == 4) // Mean
-							return stats.mean();
+							return classifier.getMean();
 						if (rowIndex == 5) // Median
-							return stats.median();
+							return classifier.getMedian();
 						if (rowIndex == 6) // SD
-							return stats.standardDeviation();
+							return classifier.getSD();
 						if (rowIndex == 7) // NODATA
-							return classifier.getNoDataValuesCount();						
+							return classifier.getNoDataValuesCount();
 					} catch (Exception e) {
 						LOGGER.error("While creating the statistics:", e);
 					}
@@ -441,8 +303,8 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 			jTableStats.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			jTableStats.setTableHeader(null);
 
-			jTableStats.setDefaultRenderer(Double.class, ASUtil
-					.getDoubleCellRenderer());
+			jTableStats.setDefaultRenderer(Double.class,
+					ASUtil.getDoubleCellRenderer());
 
 			/**
 			 * When the classification is recalculated, also repaint the table.
@@ -477,14 +339,15 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	private JPanel getJPanelLowerPart() {
 		if (panelLowerPart == null) {
 			panelLowerPart = new JPanel(new MigLayout("flowy, gap 1, inset 1"));
-			JLabel jLabelBreaksTable = new JLabel(AtlasStylerVector
-					.R("Classification.BreakValues"));
+			JLabel jLabelBreaksTable = new JLabel(
+					AtlasStylerVector.R("Classification.BreakValues"));
 			jLabelBreaksTable.setToolTipText(AtlasStylerVector
 					.R("Classification.BreakValues.TT"));
 
 			JLabel jLabelBreaksExplanation = new JLabel(
 					"<html><font size='-2'>"
-							+ AtlasStylerVector.R("Classification.BreakValues.TT")
+							+ AtlasStylerVector
+									.R("Classification.BreakValues.TT")
 							+ "</html>");
 
 			panelLowerPart.add(getHistogram(), "wrap");
@@ -506,8 +369,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 * @return A {@link JLabel} showing the histogram. The {@link JLabel} is
 	 *         updated when new classes are available
 	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	 *         Tzeggai</a>
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private JLabel getHistogram() {
 		if (jFreeChartJLabel == null) {
@@ -538,125 +400,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 		return jFreeChartJLabel;
 	}
 
-	/**
-	 * This method creates the Histogram image with JFreeChart
-	 * 
-	 * @return
-	 */
-	BufferedImage getHistogramImage() {
-
-		HistogramDataset hds = new HistogramDataset();
-		DoubleArrayList valuesAL;
-		try {
-			valuesAL = classifier.getStatistics().elements();
-			// new double[] {0.4,3,4,2,5.,22.,4.,2.,33.,12.}
-			double[] elements = Arrays.copyOf(valuesAL.elements(), classifier
-					.getStatistics().size());
-			hds.addSeries(1, elements, histogramBins);
-		} catch (Exception e) {
-			LOGGER.error(e);
-			return ERROR_IMAGE;
-		}
-
-		/**
-		 * Label the x-axis. If a NormalizerField has been selected, this has to
-		 * be presented here as well. Where possible use the AttributeMetaData
-		 * information.
-		 */
-		String label_xachsis;
-		{
-			AttributeMetadataInterface amdValue = atlasStyler.getAttributeMetaDataMap()
-					.get(classifier.getValue_field_name());
-
-			// AttributeMetadata amdValue = ASUtil.getAttributeMetadataFor(
-			// atlasStyler, classifier.getValue_field_name());
-			if (amdValue != null
-					&& (!I18NUtil.isEmpty(amdValue.getTitle().toString()))) {
-				label_xachsis = amdValue.getTitle().toString();
-			} else
-				label_xachsis = classifier.getValue_field_name();
-
-			if (classifier.getNormalizer_field_name() != null) {
-				// AttributeMetadata amdNorm = ASUtil.getAttributeMetadataFor(
-				// atlasStyler, classifier.getNormalizer_field_name());
-				AttributeMetadataInterface amdNorm = atlasStyler
-						.getAttributeMetaDataMap().get(
-								classifier.getNormalizer_field_name());
-				if (amdNorm != null
-						&& (!I18NUtil.isEmpty(amdNorm.getTitle().toString()))) {
-					label_xachsis += "/" + amdNorm.getTitle().toString();
-				} else
-					label_xachsis += "/"
-							+ classifier.getNormalizer_field_name();
-			}
-		}
-
-		/** Statically label the Y Axis **/
-		String label_yachsis = ASUtil
-				.R("QuantitiesClassificationGUI.Histogram.YAxisLabel");
-
-		JFreeChart chart = org.jfree.chart.ChartFactory.createHistogram(null,
-				label_xachsis, label_yachsis, hds, PlotOrientation.VERTICAL,
-				false, true, true);
-
-		/***********************************************************************
-		 * Paint the classes into the JFreeChart
-		 */
-		int countLimits = 0;
-		for (Double cLimit : classifier.getClassLimits()) {
-			ValueMarker marker = new ValueMarker(cLimit);
-			XYPlot plot = chart.getXYPlot();
-			marker.setPaint(Color.orange);
-			marker.setLabel(String.valueOf(countLimits));
-			marker.setLabelAnchor(RectangleAnchor.TOP_LEFT);
-			marker.setLabelTextAnchor(TextAnchor.TOP_RIGHT);
-			plot.addDomainMarker(marker);
-
-			countLimits++;
-		}
-
-		/***********************************************************************
-		 * Optionally painting SD and MEAN into the histogram
-		 */
-		try {
-			if (jCheckBoxShowSD.isSelected()) {
-				ValueMarker marker;
-				marker = new ValueMarker(classifier.getStatistics()
-						.standardDeviation(), Color.green.brighter(),
-						new BasicStroke(1.5f));
-				XYPlot plot = chart.getXYPlot();
-				marker
-						.setLabel(ASUtil
-								.R("QuantitiesClassificationGUI.Histogram.SD.ShortLabel"));
-				marker.setLabelAnchor(RectangleAnchor.BOTTOM_LEFT);
-				marker.setLabelTextAnchor(TextAnchor.BOTTOM_RIGHT);
-				plot.addDomainMarker(marker);
-			}
-
-			if (jCheckBoxShowMean.isSelected()) {
-				ValueMarker marker;
-				marker = new ValueMarker(classifier.getStatistics().mean(),
-						Color.green.darker(), new BasicStroke(1.5f));
-				XYPlot plot = chart.getXYPlot();
-				marker
-						.setLabel(ASUtil
-								.R("QuantitiesClassificationGUI.Histogram.Mean.ShortLabel"));
-				marker.setLabelAnchor(RectangleAnchor.BOTTOM_LEFT);
-				marker.setLabelTextAnchor(TextAnchor.BOTTOM_RIGHT);
-				plot.addDomainMarker(marker);
-			}
-
-		} catch (Exception e) {
-			LOGGER.error("Painting SD and MEAN into the histogram", e);
-		}
-
-		/***********************************************************************
-		 * Render the Chart
-		 */
-		BufferedImage image = chart.createBufferedImage(400, 200);
-
-		return image;
-	}
+	protected abstract BufferedImage getHistogramImage();
 
 	/**
 	 * This method initializes jToggleButton
@@ -740,8 +484,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 						try {
 							Double aValue2 = (Double) aValue;
 
-							if (classifier.getMethod() != METHOD.MANUAL) {
-								classifier.setMethod(METHOD.MANUAL);
+							if (classifier.getMethod() != CLASSIFICATION_METHOD.MANUAL) {
+								classifier
+										.setMethod(CLASSIFICATION_METHOD.MANUAL);
 							}
 
 							Object oldValue = classifier.getClassLimits()
@@ -778,8 +523,8 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 			jTableBreakValues.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 			SwingUtil.setColumnLook(jTableBreakValues, 0, null, null, null, 30);
-			SwingUtil.setColumnLook(jTableBreakValues, 1, ASUtil
-					.getDoubleCellRenderer(), 30, null, null);
+			SwingUtil.setColumnLook(jTableBreakValues, 1,
+					ASUtil.getDoubleCellRenderer(), 30, null, null);
 
 			((JLabel) jTableBreakValues.getDefaultRenderer(Integer.class))
 					.setHorizontalAlignment(SwingConstants.CENTER);
@@ -882,8 +627,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 
 							// Editing the classbreaks always turn's the
 							// classification method to MANUAL
-							if (classifier.getMethod() != METHOD.MANUAL) {
-								classifier.setMethod(METHOD.MANUAL);
+							if (classifier.getMethod() != CLASSIFICATION_METHOD.MANUAL) {
+								classifier
+										.setMethod(CLASSIFICATION_METHOD.MANUAL);
 							}
 
 							// The newValue has been calculated. Now insert it
@@ -914,8 +660,9 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 								return;
 							}
 
-							if (classifier.getMethod() != METHOD.MANUAL) {
-								classifier.setMethod(METHOD.MANUAL);
+							if (classifier.getMethod() != CLASSIFICATION_METHOD.MANUAL) {
+								classifier
+										.setMethod(CLASSIFICATION_METHOD.MANUAL);
 							}
 
 							Double value = (Double) jTableBreakValues
@@ -956,7 +703,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 							@Override
 							public void actionPerformed(ActionEvent e) {
 								String value = ASUtil
-										.getClipboardContents(QuantitiesClassificationGUI.this);
+										.getClipboardContents(ClassificationGUI.this);
 								getJTableBreakValues().getModel().setValueAt(
 										value, rowIndex, 1);
 
@@ -1004,8 +751,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	private JPanel getJPanelHistogramParameters() {
 		if (jPanelHistParams == null) {
 			jLabelHistogrammColumns = new JLabel(
-					ASUtil
-							.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums"));
+					ASUtil.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums"));
 			jLabelHistogrammColumns
 					.setToolTipText(ASUtil
 							.R("QuantitiesClassificationGUI.HistogramParameters.NoOfColums.TT"));
@@ -1057,12 +803,11 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JCheckBox
 	 */
-	private JCheckBox getJCheckBoxShowSD() {
+	protected JCheckBox getJCheckBoxShowSD() {
 		if (jCheckBoxShowSD == null) {
 			jCheckBoxShowSD = new JCheckBox(
 					new AbstractAction(
-							ASUtil
-									.R("QuantitiesClassificationGUI.HistogramParameters.ShowSD")) {
+							ASUtil.R("QuantitiesClassificationGUI.HistogramParameters.ShowSD")) {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -1080,12 +825,11 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JCheckBox
 	 */
-	private JCheckBox getJCheckBoxShowMean() {
+	protected JCheckBox getJCheckBoxShowMean() {
 		if (jCheckBoxShowMean == null) {
 			jCheckBoxShowMean = new JCheckBox(
 					new AbstractAction(
-							ASUtil
-									.R("QuantitiesClassificationGUI.HistogramParameters.ShowMean")) {
+							ASUtil.R("QuantitiesClassificationGUI.HistogramParameters.ShowMean")) {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -1100,5 +844,7 @@ public class QuantitiesClassificationGUI extends AtlasDialog {
 		}
 		return jCheckBoxShowMean;
 	}
+
+	abstract protected JPanel getJPanelData();
 
 }

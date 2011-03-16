@@ -18,10 +18,10 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
+import org.geopublishing.atlasStyler.classification.Classification;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 
 import de.schmitzm.swing.SwingUtil;
 
@@ -29,15 +29,14 @@ import de.schmitzm.swing.SwingUtil;
  * An extension of a {@link JComboBox} that allows to choose one of the
  * classification methods. It supports tooltips for the entries and localized
  * labels. The values inside the {@link JComboBox} are hold as {@link Enum} type
- * {@link METHOD}.
+ * {@link CLASSIFICATION_METHOD}.
  * 
  * @author Stefan Tzeggai
  * 
  */
 public class ClassificationMethodJComboBox extends JComboBox {
 
-	public ClassificationMethodJComboBox(
-			final QuantitiesClassification classifier) {
+	public ClassificationMethodJComboBox(final Classification classifier) {
 
 		/**
 		 * Internally the JComboBox works on METHOS enums, but renders localized
@@ -49,7 +48,7 @@ public class ClassificationMethodJComboBox extends JComboBox {
 					Object value, int index, boolean isSelected,
 					boolean cellHasFocus) {
 
-				METHOD mValue = (METHOD) value;
+				CLASSIFICATION_METHOD mValue = (CLASSIFICATION_METHOD) value;
 
 				if (isSelected) {
 					setBackground(list.getSelectionBackground());
@@ -71,8 +70,7 @@ public class ClassificationMethodJComboBox extends JComboBox {
 			}
 		});
 
-		setModel(new DefaultComboBoxModel(QuantitiesClassification.METHOD
-				.values()));
+		setModel(new DefaultComboBoxModel(CLASSIFICATION_METHOD.values()));
 		setSelectedItem(classifier.getMethod());
 
 		/**
@@ -84,7 +82,7 @@ public class ClassificationMethodJComboBox extends JComboBox {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-					classifier.setMethod((METHOD) e.getItem());
+					classifier.setMethod((CLASSIFICATION_METHOD) e.getItem());
 				}
 			}
 		});

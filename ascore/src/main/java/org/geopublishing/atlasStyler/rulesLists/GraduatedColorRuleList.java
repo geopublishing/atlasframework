@@ -20,7 +20,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.QuantitiesRuleList;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.FeatureTypeStyle;
@@ -74,8 +74,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		}
 	};
 
-	public GraduatedColorRuleList(RulesListType rulesListType, StyledFeaturesInterface<?> styledFeatures,
-			GeometryForm geometryForm) {
+	public GraduatedColorRuleList(RulesListType rulesListType,
+			StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
 		super(rulesListType, styledFeatures, geometryForm);
 	}
 
@@ -326,7 +326,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 				if (kvp[1].equals("QANTILES"))
 					kvp[1] = "QUANTILES";
 
-				setMethod(METHOD.valueOf(kvp[1]));
+				setMethod(CLASSIFICATION_METHOD.valueOf(kvp[1]));
 
 			}
 
@@ -376,8 +376,7 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	}
 
 	@Override
-	public
-	void importRules(List<Rule> rules) {
+	public void importRules(List<Rule> rules) {
 		/***********************************************************
 		 * Parsing information in the RULEs
 		 * 

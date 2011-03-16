@@ -7,11 +7,14 @@ import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 
@@ -23,6 +26,22 @@ public class AtlasStylerRaster extends AtlasStyler {
 	private StyledGridCoverageReaderInterface styledRaster;
 
 	private RasterLegendData backupRasterLegend;
+
+	/**
+	 * Create an {@link AtlasStylerVector} object for any
+	 * {@link StyledFeaturesInterface}
+	 */
+	public AtlasStylerRaster(AbstractGridCoverage2DReader reader) {
+		this(new StyledGridCoverageReader(reader), null, null, null, null);
+	}
+
+	/**
+	 * Create an {@link AtlasStylerVector} object for any
+	 * {@link StyledFeaturesInterface}
+	 */
+	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster) {
+		this(styledRaster, null, null, null, null);
+	}
 
 	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster,
 			Style loadStyle, MapLayer mapLayer, HashMap<String, Object> params,

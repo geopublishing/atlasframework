@@ -15,10 +15,10 @@ import java.awt.event.ItemEvent;
 import javax.swing.JComboBox;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
+import org.geopublishing.atlasStyler.classification.Classification;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
 
 import de.schmitzm.swing.SwingUtil;
 
@@ -26,14 +26,14 @@ import de.schmitzm.swing.SwingUtil;
  * An extension to a {@link JComboBox} that allows to change the number of
  * classes used for the classification. It propagates the changes to the
  * underlying classification object.<br/>
- * If classification method {@link METHOD.MANUAL} is chosen, the
+ * If classification method {@link CLASSIFICATION_METHOD.MANUAL} is chosen, the
  * {@link JComboBox} is disabled.
  */
 public class NumClassesJComboBox extends JComboBox {
 	final protected static Logger LOGGER = Logger
 			.getLogger(NumClassesJComboBox.class);
 
-	public NumClassesJComboBox(final QuantitiesClassification classifier) {
+	public NumClassesJComboBox(final Classification classifier) {
 		setModel(classifier.getClassificationParameterComboBoxModel());
 
 		setSelectedItem(classifier.getNumClasses());
@@ -42,12 +42,12 @@ public class NumClassesJComboBox extends JComboBox {
 			@Override
 			public void itemStateChanged(java.awt.event.ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
-//					LOGGER.debug("StateChangeEvent for ParamComboBox");
+					// LOGGER.debug("StateChangeEvent for ParamComboBox");
 
 					Integer newNum = (Integer) e.getItem();
-//					LOGGER
-//							.debug("       new number of clases set via the GUI = "
-//									+ newNum);
+					// LOGGER
+					// .debug("       new number of clases set via the GUI = "
+					// + newNum);
 
 					classifier.setNumClasses(newNum);
 					//
@@ -70,7 +70,7 @@ public class NumClassesJComboBox extends JComboBox {
 				NumClassesJComboBox.this.setModel(classifier
 						.getClassificationParameterComboBoxModel());
 
-				if (classifier.getMethod() == METHOD.MANUAL)
+				if (classifier.getMethod() == CLASSIFICATION_METHOD.MANUAL)
 					NumClassesJComboBox.this.setEnabled(false);
 				else
 					NumClassesJComboBox.this.setEnabled(true);
@@ -80,7 +80,7 @@ public class NumClassesJComboBox extends JComboBox {
 		/**
 		 * For manual classification, this JComboBox is disabled.
 		 */
-		setEnabled(classifier.getMethod() != METHOD.MANUAL);
+		setEnabled(classifier.getMethod() != CLASSIFICATION_METHOD.MANUAL);
 
 		SwingUtil.addMouseWheelForCombobox(this);
 

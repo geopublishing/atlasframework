@@ -1,12 +1,8 @@
 package org.geopublishing.atlasStyler;
 
-import java.util.List;
-
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.Rule;
 
 import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledRasterInterface;

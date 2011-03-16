@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.rulesLists.FeatureRuleList;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
@@ -33,7 +34,7 @@ import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
 abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
-		FeatureRuleList implements QuantitiesRulesListsInterface {
+		FeatureRuleList {
 	/** KEY-name for the KVPs in the meta information * */
 	private static final String KVP_NORMALIZATION_FIELD = "NORM";
 
@@ -102,10 +103,10 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 */
 	private String value_field_name;
 
-	private METHOD method;
+	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
 
-	public QuantitiesRuleList(RulesListType rulesListType,  StyledFeaturesInterface<?> styledFeatures,
-			GeometryForm geometryForm) {
+	public QuantitiesRuleList(RulesListType rulesListType,
+			StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
 		super(rulesListType, styledFeatures, geometryForm);
 		Collection<String> numericalFieldNames = FeatureUtil
 				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
@@ -202,8 +203,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		return colors;
 	}
 
-	@Override
-	public METHOD getMethod() {
+	public CLASSIFICATION_METHOD getMethod() {
 		return method;
 	}
 
@@ -390,8 +390,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		this.colors = colors;
 	}
 
-	@Override
-	public void setMethod(METHOD method) {
+	public void setMethod(CLASSIFICATION_METHOD method) {
 		this.method = method;
 	}
 

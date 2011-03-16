@@ -17,6 +17,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.classification.FeatureClassification;
 
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.lang.LangUtil;
@@ -33,15 +34,15 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
  * 
  * @author stefan
  */
-public class QuantitiesClassification extends
-		org.geopublishing.atlasStyler.classification.QuantitiesClassification {
+public class FeatureClassificationGUIfied extends
+		FeatureClassification {
 
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	volatile private AtlasSwingWorker<TreeSet<Double>> calculateStatisticsWorker;
 	private final Component owner;
 
-	public QuantitiesClassification(Component owner,
+	public FeatureClassificationGUIfied(Component owner,
 			StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name, final String normalizer_field_name) {
 		super(styledFeatures, value_field_name, normalizer_field_name);
@@ -52,7 +53,7 @@ public class QuantitiesClassification extends
 	 * @param featureSource
 	 *            The featuresource to use for the statistics
 	 */
-	public QuantitiesClassification(Component owner,
+	public FeatureClassificationGUIfied(Component owner,
 			final StyledFeaturesInterface<?> styledFeatures) {
 		this(owner, styledFeatures, null, null);
 	}
@@ -63,7 +64,7 @@ public class QuantitiesClassification extends
 	 * @param value_field_name
 	 *            The column that is used for the classification
 	 */
-	public QuantitiesClassification(Component owner,
+	public FeatureClassificationGUIfied(Component owner,
 			final StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name) {
 		this(owner, styledFeatures, value_field_name, null);
@@ -109,12 +110,12 @@ public class QuantitiesClassification extends
 			setClassLimits(newLimits);
 			popQuite();
 		} catch (InterruptedException e) {
-			setQuite(stackQuites.pop());
+			setQuite((Boolean) stackQuites.pop());
 		} catch (CancellationException e) {
-			setQuite(stackQuites.pop());
+			setQuite((Boolean) stackQuites.pop());
 		} catch (ExecutionException exception) {
 			// ExceptionDialog.show(owner, exception);
-			setQuite(stackQuites.pop());
+			setQuite((Boolean) stackQuites.pop());
 		} finally {
 		}
 

@@ -10,8 +10,8 @@ import java.util.TreeSet;
 
 import javax.xml.transform.TransformerException;
 
-import org.geopublishing.atlasStyler.QuantitiesRulesListsInterface.METHOD;
-import org.geopublishing.atlasStyler.classification.QuantitiesClassification;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
+import org.geopublishing.atlasStyler.classification.FeatureClassification;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
@@ -65,10 +65,10 @@ public class QuantitiesRuleListTest extends TestingClass {
 		GraduatedColorPointRuleList ruleList = new GraduatedColorPointRuleList(
 				sfc);
 
-		QuantitiesClassification quantitiesClassification = new QuantitiesClassification(
+		FeatureClassification quantitiesClassification = new FeatureClassification(
 				sfc, "random");
 		quantitiesClassification.setRecalcAutomatically(false);
-		quantitiesClassification.setMethod(METHOD.QUANTILES);
+		quantitiesClassification.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		quantitiesClassification.setNumClasses(5);
 		quantitiesClassification.calculateClassLimitsBlocking();
 
@@ -102,10 +102,10 @@ public class QuantitiesRuleListTest extends TestingClass {
 		GraduatedColorPointRuleList ruleList = new GraduatedColorPointRuleList(
 				sfc);
 
-		QuantitiesClassification quantitiesClassification = new QuantitiesClassification(
+		FeatureClassification quantitiesClassification = new FeatureClassification(
 				sfc, "allsame");
 		quantitiesClassification.setRecalcAutomatically(false);
-		quantitiesClassification.setMethod(METHOD.QUANTILES);
+		quantitiesClassification.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 		quantitiesClassification.setNumClasses(5);
 		quantitiesClassification.calculateClassLimitsBlocking();
 		TreeSet<Double> classLimits = quantitiesClassification.getClassLimits();
@@ -159,7 +159,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 		assertEquals(new Color(252, 141, 89), colorRl.getColors()[1]);
 		assertEquals(new Color(254, 224, 139), colorRl.getColors()[2]);
 
-		assertEquals(METHOD.MANUAL, colorRl.getMethod());
+		assertEquals(CLASSIFICATION_METHOD.MANUAL, colorRl.getMethod());
 
 		assertEquals("en{- 3 MBps/billion capita}", colorRl.getRuleTitles()
 				.get(0));
