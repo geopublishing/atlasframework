@@ -21,8 +21,10 @@ import de.schmitzm.lang.LangUtil;
 public class GraduatedColorLineRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public GraduatedColorLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(RulesListType.QUANTITIES_COLORIZED_LINE, styledFeatures, GeometryForm.LINE);
+	public GraduatedColorLineRuleList(
+			StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
+		super(RulesListType.QUANTITIES_COLORIZED_LINE, styledFeatures,
+				GeometryForm.LINE, withDefaults);
 	}
 
 	@Override

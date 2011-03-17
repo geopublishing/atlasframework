@@ -137,7 +137,7 @@ public class DpLayerRaster_Reader extends
 					AtlasConfig.exportURLtoFileNoEx(
 							IOUtil.changeUrlExt(url, "sld"),
 							IOUtil.changeFileExt(file, "sld"));
-//					publish("done");
+					// publish("done");
 					success = true;
 				} catch (Exception e) {
 					done();
@@ -164,8 +164,8 @@ public class DpLayerRaster_Reader extends
 				 * Can we define transparent colors here?
 				 */
 				GeneralParameterValue[] readParams = null;
-				
-				URL url ;
+
+				URL url;
 				url = getUrl();
 
 				/**
@@ -403,6 +403,7 @@ public class DpLayerRaster_Reader extends
 		return null;
 	}
 
+	@Override
 	public void setLegendMetaData(RasterLegendData legendMetaData) {
 		this.legendMetaData = legendMetaData;
 	}
@@ -440,6 +441,12 @@ public class DpLayerRaster_Reader extends
 		if (getEnvelope() == null)
 			return null;
 		return new ReferencedEnvelope(getEnvelope(), getCrs());
+	}
+
+	@Override
+	public Double getNodataValue() {
+		LOGGER.warn("Returning fixed hack 0 NODATAVALUE");
+		return 0.;
 	}
 
 }

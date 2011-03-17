@@ -7,6 +7,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorLineRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
@@ -39,6 +40,72 @@ public class RuleListFactory {
 	private static final Logger LOGGER = LangUtil
 			.createLogger(AtlasStylerVector.class);
 
+	static public SingleLineSymbolRuleList createSingleLineSymbolRulesList(
+			Translation title, boolean withDefaults) {
+		SingleLineSymbolRuleList singleLineSymbolRuleList = new SingleLineSymbolRuleList(
+				title);
+
+		if (withDefaults) {
+			singleLineSymbolRuleList.addNewDefaultLayer();
+		}
+		return singleLineSymbolRuleList;
+	}
+
+	/**
+	 * @return an {@link GraduatedColorRuleList} for the given
+	 *         {@link GeometryAttributeType}
+	 * 
+	 * @param geometryAttributeType
+	 *            {@link GeometryAttributeType} that defines
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * @param title
+	 */
+
+	static public SinglePointSymbolRuleList createSinglePointSymbolRulesList(
+			Translation title, boolean withDefaults) {
+
+		SinglePointSymbolRuleList singlePointSymbolRuleList = new SinglePointSymbolRuleList(
+				title);
+
+		if (withDefaults) {
+			singlePointSymbolRuleList.addNewDefaultLayer();
+		}
+		return singlePointSymbolRuleList;
+	}
+
+	static public SinglePolygonSymbolRuleList createSinglePolygonSymbolRulesList(
+			Translation title, boolean withDefaults) {
+		SinglePolygonSymbolRuleList singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
+				title);
+
+		if (withDefaults) {
+			// We have already imported a Style and we fill this RuleList
+			// with a default layer.
+			singlePolygonSymbolRuleList.addNewDefaultLayer();
+		}
+		return singlePolygonSymbolRuleList;
+	}
+
+	static public SingleRuleList<? extends Symbolizer> createSingleRulesList(
+			Translation title, final GeometryForm geometryForm,
+			boolean withDefaults) {
+		switch (geometryForm) {
+		case LINE:
+			return createSingleLineSymbolRulesList(title, withDefaults);
+		case POINT:
+			return createSinglePointSymbolRulesList(title, withDefaults);
+		case POLYGON:
+			return createSinglePolygonSymbolRulesList(title, withDefaults);
+		case ANY:
+			LOGGER.warn("Returned a polygon Single rule list for geometry type ANY");
+			return createSinglePolygonSymbolRulesList(title, withDefaults);
+		default:
+			throw new IllegalArgumentException("Can't create for type "
+					+ geometryForm);
+		}
+	}
+
 	private final StyledLayerInterface<?> styledFS;
 
 	/**
@@ -53,21 +120,21 @@ public class RuleListFactory {
 	public GraduatedColorRuleList createGraduatedColorLineRulesList(
 			boolean withDefaults) {
 		GraduatedColorLineRuleList graduatedColorLineRuleList = new GraduatedColorLineRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return graduatedColorLineRuleList;
 	}
 
 	public GraduatedColorRuleList createGraduatedColorPointRulesList(
 			boolean withDefaults) {
 		GraduatedColorPointRuleList graduatedColorPointRuleList = new GraduatedColorPointRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return graduatedColorPointRuleList;
 	}
 
 	public GraduatedColorRuleList createGraduatedColorPolygonRulesList(
 			boolean withDefaults) {
 		GraduatedColorPolygonRuleList graduatedColorPolygonRuleList = new GraduatedColorPolygonRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return graduatedColorPolygonRuleList;
 	}
 
@@ -131,7 +198,7 @@ public class RuleListFactory {
 			return createUniqueValuesPointRulesList(withDefaults);
 		case UNIQUE_VALUE_POLYGON:
 			return createUniqueValuesPolygonRulesList(withDefaults);
-			
+
 		case RASTER_COLORMAP_DISTINCTVALUES:
 			return new RasterRulesList_DistinctValues(
 					(StyledRasterInterface) styledFS);
@@ -139,8 +206,8 @@ public class RuleListFactory {
 			return new RasterRulesList_Intervals(
 					(StyledRasterInterface) styledFS, withDefaults);
 		case RASTER_COLORMAP_RAMPS:
-			return new RasterRulesList_Ramps(
-					(StyledRasterInterface) styledFS, withDefaults);
+			return new RasterRulesList_Ramps((StyledRasterInterface) styledFS,
+					withDefaults);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);
@@ -151,53 +218,6 @@ public class RuleListFactory {
 
 	}
 
-	static public SingleLineSymbolRuleList createSingleLineSymbolRulesList(
-			Translation title, boolean withDefaults) {
-		SingleLineSymbolRuleList singleLineSymbolRuleList = new SingleLineSymbolRuleList(
-				title);
-
-		if (withDefaults) {
-			singleLineSymbolRuleList.addNewDefaultLayer();
-		}
-		return singleLineSymbolRuleList;
-	}
-
-	/**
-	 * @return an {@link GraduatedColorRuleList} for the given
-	 *         {@link GeometryAttributeType}
-	 * 
-	 * @param geometryAttributeType
-	 *            {@link GeometryAttributeType} that defines
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @param title
-	 */
-
-	static public SinglePointSymbolRuleList createSinglePointSymbolRulesList(
-			Translation title, boolean withDefaults) {
-
-		SinglePointSymbolRuleList singlePointSymbolRuleList = new SinglePointSymbolRuleList(
-				title);
-
-		if (withDefaults) {
-			singlePointSymbolRuleList.addNewDefaultLayer();
-		}
-		return singlePointSymbolRuleList;
-	}
-
-	static public SinglePolygonSymbolRuleList createSinglePolygonSymbolRulesList(
-			Translation title, boolean withDefaults) {
-		SinglePolygonSymbolRuleList singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
-				title);
-
-		if (withDefaults) {
-			// We have already imported a Style and we fill this RuleList
-			// with a default layer.
-			singlePolygonSymbolRuleList.addNewDefaultLayer();
-		}
-		return singlePolygonSymbolRuleList;
-	}
-
 	/**
 	 * Uses the styledFeature's {@link GeometryForm}
 	 */
@@ -206,25 +226,6 @@ public class RuleListFactory {
 		return createSingleRulesList(title,
 				((StyledFeaturesInterface<?>) styledFS).getGeometryForm(),
 				withDefaults);
-	}
-
-	static public SingleRuleList<? extends Symbolizer> createSingleRulesList(
-			Translation title, final GeometryForm geometryForm,
-			boolean withDefaults) {
-		switch (geometryForm) {
-		case LINE:
-			return createSingleLineSymbolRulesList(title, withDefaults);
-		case POINT:
-			return createSinglePointSymbolRulesList(title, withDefaults);
-		case POLYGON:
-			return createSinglePolygonSymbolRulesList(title, withDefaults);
-		case ANY:
-			LOGGER.warn("Returned a polygon Single rule list for geometry type ANY");
-			return createSinglePolygonSymbolRulesList(title, withDefaults);
-		default:
-			throw new IllegalArgumentException("Can't create for type "
-					+ geometryForm);
-		}
 	}
 
 	/**
@@ -239,21 +240,21 @@ public class RuleListFactory {
 	public UniqueValuesLineRuleList createUniqueValuesLineRulesList(
 			boolean withDefaults) {
 		UniqueValuesLineRuleList uniqueValuesLineRuleList = new UniqueValuesLineRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return uniqueValuesLineRuleList;
 	}
 
 	public UniqueValuesPointRuleList createUniqueValuesPointRulesList(
 			boolean withDefaults) {
 		UniqueValuesPointRuleList uniqueValuesPointRuleList = new UniqueValuesPointRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return uniqueValuesPointRuleList;
 	}
 
 	public UniqueValuesPolygonRuleList createUniqueValuesPolygonRulesList(
 			boolean withDefaults) {
 		UniqueValuesPolygonRuleList uniqueValuesPolygonRuleList = new UniqueValuesPolygonRuleList(
-				(StyledFeaturesInterface<?>) styledFS);
+				(StyledFeaturesInterface<?>) styledFS, withDefaults);
 		return uniqueValuesPolygonRuleList;
 	}
 
@@ -332,16 +333,6 @@ public class RuleListFactory {
 		// metaInfoString));
 	}
 
-	private AbstractRulesList importRasterDistinctValuesRulesList(
-			FeatureTypeStyle fts) {
-		if (!(styledFS instanceof StyledRasterInterface))
-			return null;
-		RasterRulesList_DistinctValues rasterRulesList_DistinctValues = new RasterRulesList_DistinctValues(
-				(StyledRasterInterface) styledFS);
-		rasterRulesList_DistinctValues.importFts(fts);
-		return rasterRulesList_DistinctValues;
-	}
-
 	private GraduatedColorRuleList importGraduatedColorRulesList(
 			FeatureTypeStyle fts) {
 		String metaInfoString = fts.getName();
@@ -394,13 +385,43 @@ public class RuleListFactory {
 
 	}
 
+	private RasterRulesList importRasterDistinctValuesRulesList(
+			FeatureTypeStyle fts) {
+		if (!(styledFS instanceof StyledRasterInterface))
+			return null;
+		StyledRasterInterface<?> styledRaster = (StyledRasterInterface<?>) styledFS;
+
+		String metaInfoString = fts.getName();
+
+		RasterRulesList rasterRulesList = null;
+
+		/***************************************************************
+		 * Importing everything that starts with QUANTITIES
+		 */
+		if (metaInfoString
+				.startsWith(RulesListType.RASTER_COLORMAP_DISTINCTVALUES
+						.toString())) {
+			rasterRulesList = new RasterRulesList_DistinctValues(styledRaster);
+		} else if (metaInfoString
+				.startsWith(RulesListType.RASTER_COLORMAP_INTERVALS.toString())) {
+			rasterRulesList = new RasterRulesList_Intervals(styledRaster, false);
+		} else if (metaInfoString
+				.startsWith(RulesListType.RASTER_COLORMAP_RAMPS.toString())) {
+			rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
+		}
+
+		if (rasterRulesList != null)
+			rasterRulesList.importFts(fts);
+
+		return rasterRulesList;
+	}
+
 	private SingleRuleList<? extends Symbolizer> importSingleRuleList(
 			FeatureTypeStyle fts) throws AtlasStylerParsingException {
 
 		final String metaInfoString = fts.getName();
 
-		Translation title = AtlasStylerVector
-				.getRuleTitleFor((StyledFeaturesInterface<?>) styledFS);
+		Translation title = AtlasStylerVector.getRuleTitleFor(styledFS);
 
 		/***************************************************************
 		 * Importing everything that starts with SINGLE

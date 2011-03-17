@@ -11,6 +11,7 @@
 package org.geopublishing.atlasStyler.rulesLists;
 
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -37,6 +38,7 @@ import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 
 /**
@@ -48,243 +50,42 @@ import de.schmitzm.lang.LangUtil;
  * 
  */
 public abstract class AbstractRulesList implements RulesListInterface {
+	/** KEY-name for the KVPs in the meta information * */
+	public static final String KVP_METHOD = "METHOD";
+	/** KEY-name for the KVPs in the meta information * */
+	public static final String KVP_PALTETTE = "PALETTE";
 
-	private String title = this.getClass().getSimpleName().toString();
+	public static final String METAINFO_KVP_EQUALS_CHAR = "#";
 
-	protected Filter addAbstractRlSettings(Filter filter) {
-		filter = addRuleListFilterAppliedFilter(filter);
-		filter = addRuleListEnabledDisabledFilter(filter);
-		return filter;
-	}
+	public static final String METAINFO_SEPERATOR_CHAR = ":";
 
-	/**
-	 * If a rlFilter is defined, it is returned here, wrapped in a recognizable
-	 * AND structure. @see {@link #parseRuleListFilterAppliedFilter(Filter)}
-	 */
-	Filter addRuleListFilterAppliedFilter(Filter filter) {
+	public String createDefaultClassLabelFor(Number lower, Number upper,
+			boolean isLast, String unit, DecimalFormat formatter) {
+		String limitsLabel;
 
-		if (getRlFilter() != null && getRlFilter() != Filter.INCLUDE) {
-
-			And markerAndFilter = ff.and(RL_FILTER_APPLIED_FILTER,
-					getRlFilter());
-
-			filter = ff.and(markerAndFilter, filter);
-		}
-
-		return filter;
-	}
-
-	/**
-	 * Tries to determine, whether this filter contains a layer filter. @see
-	 * {@link #addRuleListFilterAppliedFilter}
-	 */
-	Filter parseRuleListFilterAppliedFilter(Filter filter) {
-		if (filter instanceof And) {
-			And and1 = (And) filter;
-
-			if (and1.getChildren().get(0) instanceof And) {
-				And and2 = (And) and1.getChildren().get(0);
-				if (and2.getChildren().get(0).equals(RL_FILTER_APPLIED_FILTER)) {
-
-					// Import the rule list filter
-					setRlFilter(and2.getChildren().get(1));
-
-					// return the rest
-					return and1.getChildren().get(1);
-				}
-			}
-		}
-		return filter;
-	}
-
-	private Filter rlFilter = null;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRlFilter()
-	 */
-	@Override
-	public Filter getRlFilter() {
-		if (rlFilter == Filter.INCLUDE)
-			return null;
-		return rlFilter;
-	}
-
-	double maxScaleDenominator = Double.MAX_VALUE;
-
-	double minScaleDenominator = 0.0;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#getMaxScaleDenominator()
-	 */
-	@Override
-	public double getMaxScaleDenominator() {
-		return maxScaleDenominator;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#getMinScaleDenominator()
-	 */
-	@Override
-	public double getMinScaleDenominator() {
-		return minScaleDenominator;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#setMaxScaleDenominator
-	 * (double)
-	 */
-	@Override
-	public void setMaxScaleDenominator(double maxScaleDenominator) {
-		// May not be smaller than 0
-		if (maxScaleDenominator < 0.)
-			maxScaleDenominator = 0.;
-
-		if (maxScaleDenominator > MAX_SCALEDENOMINATOR)
-			maxScaleDenominator = MAX_SCALEDENOMINATOR;
-
-		// "Push" the MaxScaleDenominator when moving up
-		if (maxScaleDenominator < minScaleDenominator)
-			minScaleDenominator = maxScaleDenominator - 1.;
-
-		if (this.maxScaleDenominator == maxScaleDenominator)
-			return;
-
-		this.maxScaleDenominator = maxScaleDenominator;
-		fireEvents(new RuleChangedEvent(
-				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#setMinScaleDenominator
-	 * (double)
-	 */
-	@Override
-	public void setMinScaleDenominator(double minScaleDenominator) {
-
-		// May not be smaller than 0
-		if (minScaleDenominator < 0.)
-			minScaleDenominator = 0.;
-
-		if (minScaleDenominator > MAX_SCALEDENOMINATOR)
-			minScaleDenominator = MAX_SCALEDENOMINATOR;
-
-		// "Push" the MaxScaleDenominator when moving up
-		if (minScaleDenominator > maxScaleDenominator)
-			maxScaleDenominator = minScaleDenominator + 1.;
-
-		if (this.minScaleDenominator == minScaleDenominator)
-			return;
-
-		this.minScaleDenominator = minScaleDenominator;
-		fireEvents(new RuleChangedEvent(
-				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#setRlFilter(org.opengis
-	 * .filter.Filter)
-	 */
-	@Override
-	public void setRlFilter(Filter rlFilter) {
-		if (rlFilter == this.rlFilter)
-			return;
-		this.rlFilter = rlFilter;
-		if (this.rlFilter == Filter.INCLUDE)
-			this.rlFilter = null;
-		fireEvents(new RuleChangedEvent(
-				RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING, this));
-
-	}
-
-	/**
-	 * Returns <code>ff.and(RL_ENABLED_FILTER, filter)</code> or
-	 * <code>ff.and(RL_DISABLED_FILTER, filter)</code>.<Br/>
-	 * 
-	 * @see #parseAbstractRlSettings(Filter)
-	 * 
-	 */
-	private Filter addRuleListEnabledDisabledFilter(Filter filter) {
-		// Are all classes enabled?
-		if (isEnabled()) {
-			filter = ff.and(RL_ENABLED_FILTER, filter);
+		if (lower.equals(upper)) {
+			limitsLabel = formatter.format(lower);
 		} else {
-			filter = ff.and(RL_DISABLED_FILTER, filter);
+			limitsLabel = "[" + formatter.format(lower) + " - "
+					+ formatter.format(upper);
+			limitsLabel += isLast ? "]" : "[";
 		}
 
-		return filter;
-	}
+		if (unit != null && !unit.isEmpty())
+			limitsLabel += " " + unit;
 
-	protected Filter parseAbstractRlSettings(Filter filter) {
-		filter = parseRuleListEnabledDisabledFilter(filter);
-		filter = parseRuleListFilterAppliedFilter(filter);
-		return filter;
-	}
+		String stringTitle;
+		/**
+		 * Create a default title
+		 */
+		if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+			stringTitle = new Translation(AtlasStylerVector.getLanguages(),
+					limitsLabel).toOneLine();
+		} else {
+			stringTitle = limitsLabel;
+		}
 
-	/**
-	 * Returns a shorter filter. The method tries to identify
-	 * #RL_DISABLED_FILTER or #RL_ENABLED_FILTER and sets the #enabled variable.
-	 * It should always be parsed as the first FilterParser (FilterParsers eat
-	 * the filter).
-	 * 
-	 * @see #addAbstractRlSettings(Filter)
-	 */
-	private Filter parseRuleListEnabledDisabledFilter(Filter filter) {
-		if (!(filter instanceof AndImpl)) {
-			setEnabled(true);
-			LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
-					+ filter);
-			return filter;
-		} else
-			try {
-				AndImpl andImpl = (AndImpl) filter;
-				List<?> andChildren = andImpl.getChildren();
-				final Object child0 = andChildren.get(0);
-				if (child0.equals(RL_DISABLED_FILTER)) {
-					setEnabled(false);
-				} else if (child0.equals(oldAllClassesDisabledFilter)) {
-					setEnabled(false);
-				} else if (child0.equals(RL_ENABLED_FILTER)) {
-					setEnabled(true);
-				} else if (child0.equals(OldAllClassesEnabledFilter)) {
-					setEnabled(true);
-				} else
-					throw new RuntimeException(child0.toString() + "\n"
-							+ filter);
-
-				// Returning just the right part of the filter
-				filter = (Filter) andChildren.get(1);
-
-			} catch (Exception e) {
-				setEnabled(true);
-				LOGGER.error(
-						"Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled.",
-						e);
-			}
-
-		return filter;
-	}
-
-	public AbstractRulesList(RulesListType rulesListType, GeometryForm geometryForm) {
-		if (rulesListType == null) throw new IllegalArgumentException("RulesListType may not be nulL!");
-		ruleListType = rulesListType;
-		this.geometryForm = geometryForm;
+		return stringTitle;
 	}
 
 	/**
@@ -299,95 +100,76 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	 */
 	public enum RulesListType {
 
-		// RASTER
-		RASTER_COLORMAP_DISTINCTVALUES(
-				"/images/raster_colormap_distinctvalues.png",
-				"StylerSelection.raster_values"),
-
-		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
-				"StylerSelection.raster_ramp"),
-
-		RASTER_COLORMAP_INTERVALS("/images/raster_colormap_intervals.png",
-				"StylerSelection.raster_interval"),
-
-		// POINTs
-		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/single_point_symbol.png",
-				"StylerSelection.single_symbol_centroids"),
-
-		// Quant Colored
-		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
-				"StylerSelection.quantities_colored"),
-
 		QUANTITIES_COLORIZED_LINE("/images/line_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
-		QUANTITIES_COLORIZED_POLYGON("/images/polygon_graduated_colors.png",
+		// Quant Colored
+		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
 		QUANTITIES_COLORIZED_POINT_FOR_POLYGON(
 				"/images/point_graduated_colors.png",
 				"StylerSelection.quantities_colored_centroids"),
 
-		// UUNIQUE VALUES
-		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
-				"StylerSelection.categories_unique_values"),
+		QUANTITIES_COLORIZED_POLYGON("/images/polygon_graduated_colors.png",
+				"StylerSelection.quantities_colored"),
+
+		// RASTER
+		RASTER_COLORMAP_DISTINCTVALUES(
+				"/images/raster_colormap_distinctvalues.png",
+				"StylerSelection.raster_values"),
+
+		RASTER_COLORMAP_INTERVALS("/images/raster_colormap_intervals.png",
+				"StylerSelection.raster_interval"),
+
+		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
+				"StylerSelection.raster_ramp"),
+
+		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		// POINTs
+		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/single_point_symbol.png",
+				"StylerSelection.single_symbol_centroids"),
+
+		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		// TEST
+		TEXT_LABEL("/images/text_labeling.png", "StylerSelection.textLabeling"),
 
 		UNIQUE_VALUE_LINE("/images/line_unique_values.png",
 				"StylerSelection.categories_unique_values"),
 
-		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
+		// UUNIQUE VALUES
+		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
 				"StylerSelection.categories_unique_values"),
 
 		UNIQUE_VALUE_POINT_FOR_POLYGON("/images/point_unique_values.png",
 				"StylerSelection.categories_unique_values_centroids"),
 
-		// TEST
-		TEXT_LABEL("/images/text_labeling.png", "StylerSelection.textLabeling");
+		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
+				"StylerSelection.categories_unique_values");
 
-		private final String imgResLocation;
-		private final String i8nKey;
-		private ImageIcon imageIcon;
-
-		RulesListType(String imgResLocation, String i8nKey) {
-			this.imgResLocation = imgResLocation;
-			this.i8nKey = i8nKey;
+		public static RulesListType[] valuesFor(AtlasStyler as) {
+			if (as instanceof AtlasStylerVector) {
+				return valuesFor((AtlasStylerVector) as);
+			} else
+				return valuesFor((AtlasStylerRaster) as);
 		}
 
-		/**
-		 * @return a localized title for this {@link RulesListType}
-		 */
-		public String getTitle() {
-			return ASUtil.R(i8nKey);
+		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
+			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
+					RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
 		}
 
-		/**
-		 * @return An example image for this {@link RulesListType}
-		 */
-		public ImageIcon getImage() {
-			if (imageIcon == null) {
-				URL resource = getClass().getResource(imgResLocation);
-				if (resource != null) {
-					imageIcon = new ImageIcon(resource);
-				}
-			}
-			return imageIcon;
+		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
+			return valuesFor(asv.getStyledFeatures().getGeometryForm(), asv
+					.getStyledFeatures().getSchema());
 		}
-
-		/**
-		 * @return the RulesListTypes that make sense to create them for a given
-		 *         {@link GeometryForm}. If paramter schema is empty, the list
-		 *         does not filter against available attributes.
-		 */
-		RulesListType[] rlts;
 
 		/**
 		 * Returns an Array of vector RulesLists available for the given Schema
@@ -472,31 +254,59 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			// }
 		}
 
+		private final String i8nKey;
+
+		private ImageIcon imageIcon;
+
+		private final String imgResLocation;
+
+		/**
+		 * @return the RulesListTypes that make sense to create them for a given
+		 *         {@link GeometryForm}. If paramter schema is empty, the list
+		 *         does not filter against available attributes.
+		 */
+		RulesListType[] rlts;
+
+		RulesListType(String imgResLocation, String i8nKey) {
+			this.imgResLocation = imgResLocation;
+			this.i8nKey = i8nKey;
+		}
+
+		/**
+		 * @return An example image for this {@link RulesListType}
+		 */
+		public ImageIcon getImage() {
+			if (imageIcon == null) {
+				URL resource = getClass().getResource(imgResLocation);
+				if (resource != null) {
+					imageIcon = new ImageIcon(resource);
+				}
+			}
+			return imageIcon;
+		}
+
 		public String getImageResLocation() {
 			return imgResLocation;
 		}
 
-		public static RulesListType[] valuesFor(AtlasStyler as) {
-			if (as instanceof AtlasStylerVector) {
-				return valuesFor((AtlasStylerVector) as);
-			} else
-				return valuesFor((AtlasStylerRaster) as);
-		}
-
-		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
-			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES, RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
-		}
-
-		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
-			return valuesFor(asv.getStyledFeatures().getGeometryForm(), asv
-					.getStyledFeatures().getSchema());
+		/**
+		 * @return a localized title for this {@link RulesListType}
+		 */
+		public String getTitle() {
+			return ASUtil.R(i8nKey);
 		}
 	}
 
-	RuleChangedEvent lastOpressedEvent = null;
+	/**
+	 * If <code>false</code>, all rules in this filter will always evaluate to
+	 * false.
+	 */
+	private boolean enabled = true;
 
 	/** The geometry form this RuleList is designed for. **/
 	final private GeometryForm geometryForm;
+
+	RuleChangedEvent lastOpressedEvent = null;
 
 	// This is a WeakHashSet, so references to the listeners have to exist in
 	// the classes adding the listeners. They shall not be anonymous instances.
@@ -505,12 +315,37 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 	final protected Logger LOGGER = LangUtil.createLogger(this);
 
+	double maxScaleDenominator = Double.MAX_VALUE;
+
+	double minScaleDenominator = 0.0;
+
 	/**
 	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
 	 * be fired.
 	 */
 	private boolean quite = false;
+
+	private Filter rlFilter = null;
+
+	final private RulesListType ruleListType;
+
 	Stack<Boolean> stackQuites = new Stack<Boolean>();
+
+	private String title = this.getClass().getSimpleName().toString();
+
+	public AbstractRulesList(RulesListType rulesListType,
+			GeometryForm geometryForm) {
+		if (rulesListType == null)
+			throw new IllegalArgumentException("RulesListType may not be nulL!");
+		ruleListType = rulesListType;
+		this.geometryForm = geometryForm;
+	}
+
+	protected Filter addAbstractRlSettings(Filter filter) {
+		filter = addRuleListFilterAppliedFilter(filter);
+		filter = addRuleListEnabledDisabledFilter(filter);
+		return filter;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -521,6 +356,96 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	@Override
 	public void addListener(RuleChangeListener listener) {
 		listeners.add(listener);
+	}
+
+	/**
+	 * Returns <code>ff.and(RL_ENABLED_FILTER, filter)</code> or
+	 * <code>ff.and(RL_DISABLED_FILTER, filter)</code>.<Br/>
+	 * 
+	 * @see #parseAbstractRlSettings(Filter)
+	 * 
+	 */
+	private Filter addRuleListEnabledDisabledFilter(Filter filter) {
+		// Are all classes enabled?
+		if (isEnabled()) {
+			filter = ff.and(RL_ENABLED_FILTER, filter);
+		} else {
+			filter = ff.and(RL_DISABLED_FILTER, filter);
+		}
+
+		return filter;
+	}
+
+	/**
+	 * If a rlFilter is defined, it is returned here, wrapped in a recognizable
+	 * AND structure. @see {@link #parseRuleListFilterAppliedFilter(Filter)}
+	 */
+	Filter addRuleListFilterAppliedFilter(Filter filter) {
+
+		if (getRlFilter() != null && getRlFilter() != Filter.INCLUDE) {
+
+			And markerAndFilter = ff.and(RL_FILTER_APPLIED_FILTER,
+					getRlFilter());
+
+			filter = ff.and(markerAndFilter, filter);
+		}
+
+		return filter;
+	}
+
+	private List<Rule> applyHideDisabledRulesLists(List<Rule> rules) {
+		for (Rule r : rules) {
+
+			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
+			// Legend, so schmitzm will ignore the layer
+			if (!isEnabled()) {
+
+				// Do not add it again if it is already added:
+				if (r.getName() != null
+						&& r.getName().contains(
+								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
+					continue;
+
+				// Add the HIDEME marker
+				r.setName(r.getName() + "_"
+						+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
+			}
+		}
+
+		return rules;
+
+	}
+
+	/**
+	 * Sets the min/max Scale denomintors . Should be applied to every rule
+	 * created by this RulesLists.
+	 */
+	protected List<Rule> applyScaleDominators(List<Rule> rules) {
+		for (Rule r : rules) {
+			applyScaleDominators(r);
+
+			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
+			// Legend, so schmitzm will ignore the layer
+			if (!isEnabled()) {
+				if (r.getName() != null
+						&& !r.getName().contains(
+								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
+					r.setName(r.getName() + "_"
+							+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
+			}
+		}
+
+		return rules;
+	}
+
+	/**
+	 * Sets the min/max Scale denomintors . Should be applied to every rule
+	 * created by this RulesLists.
+	 */
+	protected Rule applyScaleDominators(Rule rule) {
+		rule.setMaxScaleDenominator(getMaxScaleDenominator());
+		rule.setMinScaleDenominator(getMinScaleDenominator());
+		return rule;
 	}
 
 	/*
@@ -559,23 +484,110 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		}
 	}
 
+	// @Override
+	// public abstract String extendMetaInfoString(String metaInfoString);
+
+	public String extendMetaInfoString() {
+		return getType().toString();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getFTS()
+	 */
+	@Override
+	public FeatureTypeStyle getFTS() {
+		List<Rule> rules = applyScaleDominators(getRules());
+		rules = applyHideDisabledRulesLists(rules);
+		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
+				rules.toArray(new Rule[] {}));
+		ftstyle.setName(extendMetaInfoString());
+		ftstyle.getDescription().setTitle(new SimpleInternationalString(title));
+		return ftstyle;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getGeometryForm()
+	 */
+	@Override
+	public GeometryForm getGeometryForm() {
+		return geometryForm;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getListeners()
+	 */
+	@Override
+	public Set<RuleChangeListener> getListeners() {
+		return listeners;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.geopublishing.atlasStyler.RulesListInterface#getAtlasMetaInfoForFTSName
-	 * ()
+	 * org.geopublishing.atlasStyler.RulesListInterface#getMaxScaleDenominator()
 	 */
 	@Override
-	public abstract String getAtlasMetaInfoForFTSName();
+	public double getMaxScaleDenominator() {
+		return maxScaleDenominator;
+	}
 
-	/**
-	 * If <code>false</code>, all rules in this filter will always evaluate to
-	 * false.
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#getMinScaleDenominator()
 	 */
-	private boolean enabled = true;
+	@Override
+	public double getMinScaleDenominator() {
+		return minScaleDenominator;
+	}
 
-	final private RulesListType ruleListType;
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRlFilter()
+	 */
+	@Override
+	public Filter getRlFilter() {
+		if (rlFilter == Filter.INCLUDE)
+			return null;
+		return rlFilter;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRules()
+	 */
+	@Override
+	public abstract List<Rule> getRules();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return title;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#getType()
+	 */
+	@Override
+	final public RulesListType getType() {
+		return ruleListType;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -616,108 +628,16 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 	}
 
-	public abstract void parseMetaInfoString(String metaInfoString,
-			FeatureTypeStyle fts);
-
 	abstract public void importRules(List<Rule> rules);
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getFTS()
+	 * @see org.geopublishing.atlasStyler.RulesListInterface#isEnabled()
 	 */
 	@Override
-	public FeatureTypeStyle getFTS() {
-		List<Rule> rules = applyScaleDominators(getRules());
-		rules = applyHideDisabledRulesLists(rules);
-		FeatureTypeStyle ftstyle = ASUtil.SB.createFeatureTypeStyle("Feature",
-				rules.toArray(new Rule[] {}));
-		ftstyle.setName(getAtlasMetaInfoForFTSName());
-		ftstyle.getDescription().setTitle(new SimpleInternationalString(title));
-		return ftstyle;
-	}
-
-	private List<Rule> applyHideDisabledRulesLists(List<Rule> rules) {
-		for (Rule r : rules) {
-
-			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
-			// Legend, so schmitzm will ignore the layer
-			if (!isEnabled()) {
-
-				// Do not add it again if it is already added:
-				if (r.getName() != null
-						&& r.getName().contains(
-								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
-					continue;
-
-				// Add the HIDEME marker
-				r.setName(r.getName() + "_"
-						+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
-			}
-		}
-
-		return rules;
-
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getListeners()
-	 */
-	@Override
-	public Set<RuleChangeListener> getListeners() {
-		return listeners;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getRules()
-	 */
-	@Override
-	public abstract List<Rule> getRules();
-
-	/**
-	 * Sets the min/max Scale denomintors . Should be applied to every rule
-	 * created by this RulesLists.
-	 */
-	protected Rule applyScaleDominators(Rule rule) {
-		rule.setMaxScaleDenominator(getMaxScaleDenominator());
-		rule.setMinScaleDenominator(getMinScaleDenominator());
-		return rule;
-	}
-
-	/**
-	 * Sets the min/max Scale denomintors . Should be applied to every rule
-	 * created by this RulesLists.
-	 */
-	protected List<Rule> applyScaleDominators(List<Rule> rules) {
-		for (Rule r : rules) {
-			applyScaleDominators(r);
-
-			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
-			// Legend, so schmitzm will ignore the layer
-			if (!isEnabled()) {
-				if (r.getName() != null
-						&& !r.getName().contains(
-								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
-					r.setName(r.getName() + "_"
-							+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
-			}
-		}
-
-		return rules;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getType()
-	 */
-	@Override
-	final public RulesListType getType() {
-		return ruleListType;
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 	/*
@@ -728,6 +648,82 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	@Override
 	public boolean isQuite() {
 		return quite;
+	}
+
+	protected Filter parseAbstractRlSettings(Filter filter) {
+		filter = parseRuleListEnabledDisabledFilter(filter);
+		filter = parseRuleListFilterAppliedFilter(filter);
+		return filter;
+	}
+
+	public abstract void parseMetaInfoString(String metaInfoString,
+			FeatureTypeStyle fts);
+
+	/**
+	 * Returns a shorter filter. The method tries to identify
+	 * #RL_DISABLED_FILTER or #RL_ENABLED_FILTER and sets the #enabled variable.
+	 * It should always be parsed as the first FilterParser (FilterParsers eat
+	 * the filter).
+	 * 
+	 * @see #addAbstractRlSettings(Filter)
+	 */
+	private Filter parseRuleListEnabledDisabledFilter(Filter filter) {
+		if (!(filter instanceof AndImpl)) {
+			setEnabled(true);
+			LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
+					+ filter);
+			return filter;
+		} else
+			try {
+				AndImpl andImpl = (AndImpl) filter;
+				List<?> andChildren = andImpl.getChildren();
+				final Object child0 = andChildren.get(0);
+				if (child0.equals(RL_DISABLED_FILTER)) {
+					setEnabled(false);
+				} else if (child0.equals(oldAllClassesDisabledFilter)) {
+					setEnabled(false);
+				} else if (child0.equals(RL_ENABLED_FILTER)) {
+					setEnabled(true);
+				} else if (child0.equals(OldAllClassesEnabledFilter)) {
+					setEnabled(true);
+				} else
+					throw new RuntimeException(child0.toString() + "\n"
+							+ filter);
+
+				// Returning just the right part of the filter
+				filter = (Filter) andChildren.get(1);
+
+			} catch (Exception e) {
+				setEnabled(true);
+				LOGGER.error(
+						"Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled.",
+						e);
+			}
+
+		return filter;
+	}
+
+	/**
+	 * Tries to determine, whether this filter contains a layer filter. @see
+	 * {@link #addRuleListFilterAppliedFilter}
+	 */
+	Filter parseRuleListFilterAppliedFilter(Filter filter) {
+		if (filter instanceof And) {
+			And and1 = (And) filter;
+
+			if (and1.getChildren().get(0) instanceof And) {
+				And and2 = (And) and1.getChildren().get(0);
+				if (and2.getChildren().get(0).equals(RL_FILTER_APPLIED_FILTER)) {
+
+					// Import the rule list filter
+					setRlFilter(and2.getChildren().get(1));
+
+					// return the rest
+					return and1.getChildren().get(1);
+				}
+			}
+		}
+		return filter;
 	}
 
 	/*
@@ -790,23 +786,6 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		return listeners.remove(listener);
 	}
 
-	/**
-	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s.
-	 */
-	private void setQuite(boolean b) {
-		quite = b;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getGeometryForm()
-	 */
-	@Override
-	public GeometryForm getGeometryForm() {
-		return geometryForm;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -824,11 +803,84 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#isEnabled()
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setMaxScaleDenominator
+	 * (double)
 	 */
 	@Override
-	public boolean isEnabled() {
-		return enabled;
+	public void setMaxScaleDenominator(double maxScaleDenominator) {
+		// May not be smaller than 0
+		if (maxScaleDenominator < 0.)
+			maxScaleDenominator = 0.;
+
+		if (maxScaleDenominator > MAX_SCALEDENOMINATOR)
+			maxScaleDenominator = MAX_SCALEDENOMINATOR;
+
+		// "Push" the MaxScaleDenominator when moving up
+		if (maxScaleDenominator < minScaleDenominator)
+			minScaleDenominator = maxScaleDenominator - 1.;
+
+		if (this.maxScaleDenominator == maxScaleDenominator)
+			return;
+
+		this.maxScaleDenominator = maxScaleDenominator;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setMinScaleDenominator
+	 * (double)
+	 */
+	@Override
+	public void setMinScaleDenominator(double minScaleDenominator) {
+
+		// May not be smaller than 0
+		if (minScaleDenominator < 0.)
+			minScaleDenominator = 0.;
+
+		if (minScaleDenominator > MAX_SCALEDENOMINATOR)
+			minScaleDenominator = MAX_SCALEDENOMINATOR;
+
+		// "Push" the MaxScaleDenominator when moving up
+		if (minScaleDenominator > maxScaleDenominator)
+			maxScaleDenominator = minScaleDenominator + 1.;
+
+		if (this.minScaleDenominator == minScaleDenominator)
+			return;
+
+		this.minScaleDenominator = minScaleDenominator;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_MINMAXSCALE_STRING, this));
+	}
+
+	/**
+	 * If quite, the RuleList will not fire {@link RuleChangedEvent}s.
+	 */
+	private void setQuite(boolean b) {
+		quite = b;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.geopublishing.atlasStyler.RulesListInterface#setRlFilter(org.opengis
+	 * .filter.Filter)
+	 */
+	@Override
+	public void setRlFilter(Filter rlFilter) {
+		if (rlFilter == this.rlFilter)
+			return;
+		this.rlFilter = rlFilter;
+		if (this.rlFilter == Filter.INCLUDE)
+			this.rlFilter = null;
+		fireEvents(new RuleChangedEvent(
+				RuleChangedEvent.RULE_CHANGE_EVENT_FILTER_STRING, this));
+
 	}
 
 	/*
@@ -845,16 +897,6 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		this.title = title;
 		fireEvents(new RuleChangedEvent(
 				RuleChangedEvent.RULE_CHANGE_EVENT_TITLE_STRING, this));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.geopublishing.atlasStyler.RulesListInterface#getTitle()
-	 */
-	@Override
-	public String getTitle() {
-		return title;
 	}
 
 }

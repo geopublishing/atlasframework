@@ -13,8 +13,6 @@ package org.geopublishing.atlasStyler.swing.classification;
 import java.awt.Component;
 import java.io.IOException;
 import java.util.TreeSet;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.classification.FeatureClassification;
@@ -25,19 +23,18 @@ import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
- * A quantitative classification. The inveralls are defined by upper and lower
+ * A quantitative classification. The intervals are defined by upper and lower
  * limits
- * 
  * 
  * @param <T>
  *            The type of the value field
  * 
  * @author stefan
  */
-public class FeatureClassificationGUIfied extends
-		FeatureClassification {
+public class FeatureClassificationGUIfied extends FeatureClassification {
 
-	protected Logger LOGGER = LangUtil.createLogger(this);
+	private final static Logger LOGGER = LangUtil
+			.createLogger(FeatureClassificationGUIfied.class);
 
 	volatile private AtlasSwingWorker<TreeSet<Double>> calculateStatisticsWorker;
 	private final Component owner;
@@ -70,7 +67,11 @@ public class FeatureClassificationGUIfied extends
 		this(owner, styledFeatures, value_field_name, null);
 	}
 
-	public void calculateClassLimitsWithWorker() {
+	@Override
+	/**
+	 * This overwritten variant of #calculateClassLimits manages a AtlasStatusDialog to be shown while calculating. Calling this method takes it's time, but the GUI is not blocked.
+	 */
+	public void calculateClassLimits() {
 		breaks = new TreeSet<Double>();
 
 		/**
@@ -86,8 +87,9 @@ public class FeatureClassificationGUIfied extends
 		if (calculateStatisticsWorker != null
 				&& !calculateStatisticsWorker.isDone()) {
 			LOGGER.debug("Cancelling calculation on another thread");
-			setCancelCalculation(true);
+			cancelCalculation.set(true);
 			calculateStatisticsWorker.cancel(true);
+			calculateStatisticsWorker = null;
 		}
 
 		AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
@@ -103,20 +105,15 @@ public class FeatureClassificationGUIfied extends
 
 		};
 
-		pushQuite();
 		TreeSet<Double> newLimits;
+		pushQuite();
 		try {
 			newLimits = calculateStatisticsWorker.executeModal();
 			setClassLimits(newLimits);
-			popQuite();
-		} catch (InterruptedException e) {
-			setQuite((Boolean) stackQuites.pop());
-		} catch (CancellationException e) {
-			setQuite((Boolean) stackQuites.pop());
-		} catch (ExecutionException exception) {
-			// ExceptionDialog.show(owner, exception);
-			setQuite((Boolean) stackQuites.pop());
+		} catch (Exception e) {
+			LOGGER.error("Error calculating classification", e);
 		} finally {
+			popQuite();
 		}
 
 	}

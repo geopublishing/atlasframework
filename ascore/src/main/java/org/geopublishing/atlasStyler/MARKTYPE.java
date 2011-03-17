@@ -1,9 +1,9 @@
 package org.geopublishing.atlasStyler;
 
 public enum MARKTYPE {
-	circle, square, triangle, star, cross, external_graphic,
-	// internal_graphic,
-	shape_vertline, shape_horline, shape_slash, shape_backslash, shape_dot, shape_plus, shape_times;
+	circle, cross, external_graphic, shape_backslash, shape_dot, shape_horline,
+	shape_plus, shape_slash, shape_times, // internal_graphic,
+	shape_vertline, square, star, triangle;
 
 	public static MARKTYPE readWellKnownName(String s) {
 		final String ss = s.toLowerCase();

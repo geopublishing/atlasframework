@@ -16,38 +16,47 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.ComboBoxModel;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 
 public abstract class Classification {
+	/**
+	 * If the classification contains 5 classes, then we have to save 5+1
+	 * breaks.
+	 */
+	protected volatile TreeSet<Double> breaks = new TreeSet<Double>();
+
+	public final AtomicBoolean cancelCalculation = new AtomicBoolean(false);
+
 	ClassificationChangeEvent lastOpressedEvent = null;
 
-	public void setMethod(CLASSIFICATION_METHOD method) {
-		this.method = method;
-	}
-
-	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
-
-	public CLASSIFICATION_METHOD getMethod() {
-		return method;
-	}
-
-	public abstract ComboBoxModel getClassificationParameterComboBoxModel();
+	/**
+	 * Count of digits the classes are rounded to. A negative value means round
+	 * to digits BEFORE decimal point! If {@code null} (this is the default!) no
+	 * round is performed.
+	 */
+	private Integer limitsDigits = null;
 
 	private final Set<ClassificationChangedListener> listeners = new HashSet<ClassificationChangedListener>();
 
-	// protected Logger LOGGER = LangUtil.createLogger(this);
-	protected Logger LOGGER = Logger.getLogger(Classification.class);
+	private final static Logger LOGGER = Logger.getLogger(Classification.class);
+
+	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
 
 	/**
 	 * Counts the number of NODATA values found and excluded from the
 	 * classification
 	 **/
+	// TODO Atomic!?
 	long noDataValuesCount = 0;
+
+	protected int numClasses = 5;
 
 	/**
 	 * If {@link #quite} == <code>true</code> no {@link RuleChangedEvent} will
@@ -55,20 +64,53 @@ public abstract class Classification {
 	 */
 	private boolean quite = false;
 
+	private boolean recalcAutomatically = true;
+
 	protected Stack<Boolean> stackQuites = new Stack<Boolean>();
 
 	public void addListener(ClassificationChangedListener l) {
 		listeners.add(l);
 	}
 
+	/**
+	 * Calculates the {@link TreeSet} of classLimits, blocking the thread.
+	 */
+	public final TreeSet<Double> calculateClassLimitsBlocking()
+			throws IOException, InterruptedException {
+		/**
+		 * Do we have all necessary information to calculate ClassLimits?
+		 */
+		if (getMethod() == CLASSIFICATION_METHOD.MANUAL) {
+			LOGGER.warn("calculateClassLimitsBlocking has been called but METHOD == MANUAL");
+			return getClassLimits();
+		}
+		if (getMethod() == null)
+			throw new IllegalStateException("method has to be set");
+
+		switch (getMethod()) {
+		case EI:
+			return getEqualIntervalLimits();
+
+		case QUANTILES:
+		default:
+			return getQuantileLimits();
+		}
+	}
+
+	public abstract BufferedImage createHistogramImage(boolean showMean,
+			boolean showSd, int histogramBins, String xAxisLabel)
+			throws InterruptedException, IOException;
+
 	public void dispose() {
 		listeners.clear();
 	}
 
+	// public abstract TreeSet<Double> getClassLimits();
+
 	/**
 	 * Fires the given {@link ClassificationChangeEvent} to all listeners.
 	 */
-	public void fireEvent(final ClassificationChangeEvent evt) {
+	final public void fireEvent(final ClassificationChangeEvent evt) {
 
 		if (quite) {
 			lastOpressedEvent = evt;
@@ -78,6 +120,10 @@ public abstract class Classification {
 		}
 
 		if (evt == null)
+			return;
+
+		if (evt.getType() == CHANGETYPES.START_NEW_STAT_CALCULATION
+				&& getMethod() == CLASSIFICATION_METHOD.MANUAL)
 			return;
 
 		LOGGER.debug("Classification fires event: " + evt.getType());
@@ -109,7 +155,90 @@ public abstract class Classification {
 			}
 		}
 
+		boolean calcNewStats = true;
+
+		if (getMethod() == CLASSIFICATION_METHOD.MANUAL) {
+			// Never calculate statistics (including new class breaks?!) when we
+			// are manual. TODO Maybe that should be moved to the stuff after
+			// getStats...
+			calcNewStats = false;
+		} else if (evt.getType() == CHANGETYPES.START_NEW_STAT_CALCULATION) {
+			calcNewStats = false;
+		} else if (evt.getType() == CHANGETYPES.CLASSES_CHG) {
+			calcNewStats = false;
+		}
+
+		if ((calcNewStats) && (recalcAutomatically)) {
+			LOGGER.debug("Starting to calculate new class-limits on another thread due to "
+					+ evt.getType().toString());
+			calculateClassLimits();
+		}
+
 	}
+
+	public abstract ComboBoxModel getClassificationParameterComboBoxModel();
+
+	public TreeSet<Double> getClassLimits() {
+		return breaks;
+	}
+
+	/**
+	 * Returns the number of digits the (quantile) class limits are rounded to.
+	 * Positive values means round to digits AFTER comma, Negative values means
+	 * round to digits BEFORE comma.
+	 * 
+	 * @return {@code null} if no round is performed
+	 */
+	public Integer getClassValueDigits() {
+		return this.limitsDigits;
+	}
+
+	abstract public Long getCount();
+
+	abstract protected TreeSet<Double> getQuantileLimits();
+
+	/**
+	 * Equal Interval Classification method divides a set of attribute values
+	 * into groups that contain an equal range of values. This method better
+	 * communicates with continuous set of data. The map designed by using equal
+	 * interval classification is easy to accomplish and read . It however is
+	 * not good for clustered data because you might get the map with many
+	 * features in one or two classes and some classes with no features because
+	 * of clustered data.
+	 * 
+	 * @return nClasses + 1 breaks
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	final public TreeSet<Double> getEqualIntervalLimits() throws IOException {
+
+		breaks = new TreeSet<Double>();
+		final Double step = 100. / numClasses;
+		final double max = getMax();
+		final double min = getMin();
+		for (double i = 0; i < 100;) {
+			final double percent = (i) * 0.01;
+			final double equal = min + (percent * (max - min));
+			breaks.add(equal);
+			i = i + step;
+		}
+		breaks.add(max);
+		breaks = ASUtil.roundLimits(breaks, limitsDigits);
+
+		return breaks;
+	}
+
+	abstract public Double getMax();
+
+	abstract public Double getMean();
+
+	abstract public Double getMedian();
+
+	public CLASSIFICATION_METHOD getMethod() {
+		return method;
+	}
+
+	abstract public Double getMin();
 
 	/**
 	 * Counts the number of NODATA values found and excluded from the
@@ -122,7 +251,13 @@ public abstract class Classification {
 	/**
 	 * @return Returns the number of classes
 	 */
-	public abstract int getNumClasses();
+	public int getNumClasses() {
+		return numClasses;
+	}
+
+	abstract public Double getSD();
+
+	abstract public Double getSum();
 
 	/**
 	 * Adds one to the number of NODATA values found and excluded from the
@@ -134,6 +269,15 @@ public abstract class Classification {
 
 	public boolean isQuite() {
 		return quite;
+	}
+
+	/**
+	 * Determine if you want the classification to be recalculated whenever if
+	 * makes sense automatically. Events for START calculation and
+	 * NEW_STATS_AVAIL will be fired.
+	 */
+	public boolean isRecalcAutomatically() {
+		return recalcAutomatically;
 	}
 
 	/**
@@ -188,7 +332,7 @@ public abstract class Classification {
 	 *            A number that will replace Inf+ as abs(replacement), and Inf-
 	 *            as -abs(replacement)
 	 */
-	public TreeSet<Double> removeNanAndInf(Double replacement) {
+	final public TreeSet<Double> removeNanAndInf(Double replacement) {
 
 		// Filter class limits against -Inf and +Inf. GS doesn't like them
 		TreeSet<Double> newClassLimits = new TreeSet<Double>();
@@ -205,11 +349,15 @@ public abstract class Classification {
 		return newClassLimits;
 	}
 
-	protected int numClasses = 5;
+	/**
+	 * resets the number of NODATA values found and excluded from the
+	 * classification
+	 **/
+	final public void resetNoDataCount() {
+		noDataValuesCount = 0;
+	}
 
-	protected boolean recalcAutomatically = true;
-
-	public void setClassLimits(final TreeSet<Double> classLimits_) {
+	final public void setClassLimits(final TreeSet<Double> classLimits_) {
 
 		// if (classLimits_.size() == 1) {
 		// // Special case: Create a second classLimit with the same value!
@@ -222,45 +370,69 @@ public abstract class Classification {
 		fireEvent(new ClassificationChangeEvent(CHANGETYPES.CLASSES_CHG));
 	}
 
-	protected volatile boolean cancelCalculation;
-
 	/**
-	 * If the classification contains 5 classes, then we have to save 5+1
-	 * breaks.
+	 * Setzs the number of digits the (quantile) class limits are rounded to. If
+	 * set to {@code null} no round is performed.
+	 * 
+	 * @param digits
+	 *            positive values means round to digits AFTER comma, negative
+	 *            values means round to digits BEFORE comma
+	 * 
+	 *            TODO abgleichen mit QuantitiesRuleListe#setClassDigits
 	 */
-	protected volatile TreeSet<Double> breaks = new TreeSet<Double>();
-
-	/**
-	 * resets the number of NODATA values found and excluded from the
-	 * classification
-	 **/
-	public void resetNoDataCount() {
-		noDataValuesCount = 0;
+	final public void setLimitsDigits(final Integer digits) {
+		this.limitsDigits = digits;
 	}
 
-	public void setQuite(boolean quite) {
+	final public void setMethod(final CLASSIFICATION_METHOD newMethod) {
+		if ((method != null) && (method != newMethod)) {
+			method = newMethod;
+
+			fireEvent(new ClassificationChangeEvent(CHANGETYPES.METHODS_CHG));
+		}
+	}
+
+	final public void setNumClasses(Integer numClasses2) {
+		if (numClasses2 != null && !numClasses2.equals(numClasses)) {
+			numClasses = numClasses2;
+			// LOGGER.debug("QuanClassification set NumClasses to " +
+			// numClasses2
+			// + " and fires event");
+			fireEvent(new ClassificationChangeEvent(CHANGETYPES.NUM_CLASSES_CHG));
+		}
+	}
+
+	final public void setQuite(boolean quite) {
 		this.quite = quite;
 	}
 
-	public abstract void setNumClasses(Integer newNum);
+	/**
+	 * Determine if you want the classification to be recalculated whenever if
+	 * makes sense automatically. Events for START calculation and
+	 * NEW_STATS_AVAIL will be fired if set to <code>true</code> Default is
+	 * <code>true</code>. Switching it to false can be usefull for tests. If set
+	 * to <false> you have to call {@link #calculateClassLimitsBlocking()} to
+	 * update the statistics.
+	 */
+	final public void setRecalcAutomatically(final boolean b) {
+		recalcAutomatically = b;
+	}
 
-	public abstract TreeSet<Double> getClassLimits();
-
-	public abstract BufferedImage createHistogramImage(boolean showMean,
-			boolean showSd, int histogramBins, String xAxisLabel)
-			throws InterruptedException, IOException;
-
-	abstract public Long getCount();
-
-	abstract public Double getMean();
-
-	abstract public Double getMedian();
-
-	abstract public Double getMin();
-
-	abstract public Double getSum();
-
-	abstract public Double getSD();
-
-	abstract public Double getMax();
+	/**
+	 * 
+	 */
+	public void calculateClassLimits() {
+		pushQuite();
+		TreeSet<Double> newLimits;
+		try {
+			newLimits = calculateClassLimitsBlocking();
+			setClassLimits(newLimits);
+			popQuite();
+		} catch (InterruptedException e) {
+			setQuite(stackQuites.pop());
+		} catch (IOException exception) {
+			setQuite(stackQuites.pop());
+		} finally {
+		}
+	}
 }

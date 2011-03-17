@@ -63,7 +63,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 				"someId", "titel", (Style) null);
 
 		GraduatedColorPointRuleList ruleList = new GraduatedColorPointRuleList(
-				sfc);
+				sfc, true);
 
 		FeatureClassification quantitiesClassification = new FeatureClassification(
 				sfc, "random");
@@ -100,7 +100,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 				"someId", "titel", (Style) null);
 
 		GraduatedColorPointRuleList ruleList = new GraduatedColorPointRuleList(
-				sfc);
+				sfc, true);
 
 		FeatureClassification quantitiesClassification = new FeatureClassification(
 				sfc, "allsame");
@@ -133,7 +133,7 @@ public class QuantitiesRuleListTest extends TestingClass {
 				.getStyle());
 
 		assertTrue(as.getLastChangedRuleList() instanceof QuantitiesRuleList);
-		QuantitiesRuleList<Number> colorRl = (QuantitiesRuleList<Number>) as
+		QuantitiesRuleList colorRl = (QuantitiesRuleList) as
 				.getLastChangedRuleList();
 
 		List<FeatureTypeStyle> featureTypeStyles = as.getStyle()
@@ -151,8 +151,8 @@ public class QuantitiesRuleListTest extends TestingClass {
 		List<Rule> colorsRs = colorsFs.rules();
 		assertEquals(7, colorsRs.size());
 
-		assertEquals(0.0, colorRl.getClassLimits().first());
-		assertEquals(35000., colorRl.getClassLimits().last());
+		assertEquals(0.0, colorRl.getClassLimits().first(), 0.1);
+		assertEquals(35000., colorRl.getClassLimits().last(), 0.1);
 
 		// CHeck colors
 		assertEquals(new Color(17, 17, 17), colorRl.getColors()[0]);

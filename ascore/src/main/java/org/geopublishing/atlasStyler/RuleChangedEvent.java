@@ -23,50 +23,41 @@ import de.schmitzm.lang.LangUtil;
  * 
  */
 public class RuleChangedEvent {
+	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RulesList";
+
+	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RulesList";
+
+	public static final String RULE_CHANGE_EVENT_MINMAXSCALE_STRING = "min- or max-scale changed for this RulesList";
+
+	public static final String RULE_CHANGE_EVENT_TITLE_STRING = "Title of rl has changed";
+
+	public static final String RULE_PLACEMENT_CHANGED_STRING = "label placement changed";
+
 	protected Logger LOGGER = LangUtil.createLogger(this);
-
-	private final RulesListInterface sourceRL;
-
-	private final String reason;
-
 	/**
 	 * <code>null</code> or the new value where it makes sense (e.g. min Max
 	 * Scale change)
 	 */
 	private Object newValue;
-
 	/**
 	 * <code>null</code> or the old value where it makes sense (e.g. min Max
 	 * Scale change)
 	 */
 	private Object oldValue;
-
-	public static final String RULE_CHANGE_EVENT_ENABLED_STRING = "Enabled or disabled all Rules in this RulesList";
-	public static final String RULE_CHANGE_EVENT_FILTER_STRING = "Filter changed for this RulesList";
-	public static final String RULE_CHANGE_EVENT_TITLE_STRING = "Title of rl has changed";
-	public static final String RULE_CHANGE_EVENT_MINMAXSCALE_STRING = "min- or max-scale changed for this RulesList";
-	public static final String RULE_PLACEMENT_CHANGED_STRING = "label placement changed";
+	private final String reason;
+	private final RulesListInterface sourceRL;
 
 	public RuleChangedEvent(String reason, final RulesListInterface sourceRL) {
 		this.reason = reason;
 		this.sourceRL = sourceRL;
 	}
 
-	public RulesListInterface getSourceRL() {
-		return sourceRL;
-	}
-
-	@Override
-	public String toString() {
-		return "" + getReason() + " from RL: " + sourceRL.toString();
-	}
-
 	/**
-	 * A constant STRING, @see RULE_CHANGE_EVENT_ENABLED_STRING or
-	 * RULE_CHANGE_EVENT_FILTER_STRING
+	 * @return may return <code>null</code> or the new value where it makes
+	 *         sense (e.g. min Max Scale change)
 	 */
-	public String getReason() {
-		return reason;
+	public Object getNewValue() {
+		return newValue;
 	}
 
 	/**
@@ -78,19 +69,28 @@ public class RuleChangedEvent {
 	}
 
 	/**
-	 * @return may return <code>null</code> or the new value where it makes
-	 *         sense (e.g. min Max Scale change)
+	 * A constant STRING, @see RULE_CHANGE_EVENT_ENABLED_STRING or
+	 * RULE_CHANGE_EVENT_FILTER_STRING
 	 */
-	public Object getNewValue() {
-		return newValue;
+	public String getReason() {
+		return reason;
+	}
+
+	public RulesListInterface getSourceRL() {
+		return sourceRL;
+	}
+
+	public void setNewValue(Object newValue) {
+		this.newValue = newValue;
 	}
 
 	public void setOldValue(Object oldValue) {
 		this.oldValue = oldValue;
 	}
 
-	public void setNewValue(Object newValue) {
-		this.newValue = newValue;
+	@Override
+	public String toString() {
+		return "" + getReason() + " from RL: " + sourceRL.toString();
 	}
 
 }

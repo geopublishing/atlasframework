@@ -108,7 +108,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 
 	private JCheckBox jCheckBoxShowMean = null;
 
-	Integer histogramBins = 14;
+	Integer histogramBins = 59;
 
 	protected final AtlasStyler atlasStyler;
 
@@ -322,8 +322,8 @@ public abstract class ClassificationGUI extends AtlasDialog {
 				@Override
 				public void classifierAvailableNewClasses(
 						ClassificationChangeEvent e) {
-					((DefaultTableModel) jTableStats.getModel())
-							.fireTableDataChanged();
+					((DefaultTableModel) getJTableStatistics().getModel())
+							.fireTableStructureChanged();
 				}
 
 			});

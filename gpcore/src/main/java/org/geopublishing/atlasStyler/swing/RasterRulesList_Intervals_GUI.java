@@ -7,8 +7,13 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.TreeSet;
 import java.util.WeakHashMap;
 
 import javax.swing.AbstractAction;
@@ -19,6 +24,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JToggleButton;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
@@ -30,11 +37,16 @@ import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
+import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
+import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
+import org.geopublishing.atlasStyler.classification.RasterClassification;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.brewer.color.BrewerPalette;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.ThinButton;
@@ -49,30 +61,207 @@ public class RasterRulesList_Intervals_GUI extends
 
 	protected final static Logger LOGGER = LangUtil
 			.createLogger(RasterRulesList_Intervals_GUI.class);
-	
+
+	final static int COLIDX_COLOR = 0;
+	final static int COLIDX_OPACITY = 1;
+	final static int COLIDX_VALUE = 2;
+	final static int COLIDX_LABEL = 3;
+
 	private JTable jTable;
 	private DefaultTableModel tableModel;
 	private JComboBox jComboBoxOpacity;
 	private ThinButton jButtonApplyOpacity;
 
-	public RasterRulesList_Intervals_GUI(
-			RasterRulesList_Intervals rulesList,
+	private final AtlasStylerRaster atlasStyler;
+
+	public RasterRulesList_Intervals_GUI(RasterRulesList_Intervals rulesList,
 			AtlasStylerRaster atlasStyler) {
 		super(rulesList);
-		initialize();
-		rulesList.fireEvents(new RuleChangedEvent("GUI created for "
-				+ this.getClass().getSimpleName()
-				+ ", possibly setting some default values", rulesList));
+		this.atlasStyler = atlasStyler;
+
+		rulesList.pushQuite();
+
+		try {
+			classifier = createAndConfigureClassifier(rulesList);
+
+			initialize();
+			rulesList.fireEvents(new RuleChangedEvent("GUI created for "
+					+ this.getClass().getSimpleName()
+					+ ", possibly setting some default values", rulesList));
+		} finally {
+			rulesList.popQuite();
+		}
+	}
+
+	/**
+	 * Creates a new FeatureClassificationGUIfied classifier and configures it
+	 * with the number of classes etc. from the ruleslist. Also adds a listener
+	 * that communicates classifier changes to the ruleslist.
+	 */
+	private RasterClassificationGUIfied createAndConfigureClassifier(
+			final RasterRulesList_Intervals ruleList) {
+		final RasterClassificationGUIfied newClassifier = new RasterClassificationGUIfied(
+				RasterRulesList_Intervals_GUI.this,
+				atlasStyler.getStyledRaster());
+
+		newClassifier.pushQuite();
+		try {
+
+			newClassifier.setMethod(ruleList.getMethod());
+			newClassifier.setNumClasses(ruleList.getNumClasses());
+			newClassifier.setClassLimits(new TreeSet(ruleList.getValues()));
+
+			/**
+			 * If the ruleList doesn't contain calculated class limits, we have
+			 * to start calculation directly.
+			 */
+			if (ruleList.getValues().size() == 0) {
+				newClassifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
+				newClassifier.setNumClasses(5);
+			}
+
+			/**
+			 * Any changes in the classifier must be reported to the RuleList
+			 */
+			newClassifier.addListener(new ClassificationChangedAdapter() {
+
+				@Override
+				public void classifierAvailableNewClasses(
+						final ClassificationChangeEvent e) {
+
+					ruleList.pushQuite();
+
+					// // Checking if anything has really changed
+					// boolean equalsValue = newClassifier.getValue_field_name()
+					// .equals(ruleList.getValue_field_name());
+					//
+					// boolean equalsNormalizer = newClassifier
+					// .getNormalizer_field_name() == ruleList
+					// .getNormalizer_field_name()
+					// || (newClassifier.getNormalizer_field_name() != null &&
+					// newClassifier
+					// .getNormalizer_field_name()
+					// .equals(ruleList.getNormalizer_field_name()));
+					boolean equalsNumClasses = newClassifier.getNumClasses() == ruleList
+							.getNumClasses();
+					boolean noChange = equalsNumClasses;
+
+					try {
+
+						// ruleList.setValue_field_name(newClassifier
+						// .getValue_field_name());
+						// ruleList.setNormalizer_field_name(newClassifier
+						// .getNormalizer_field_name());
+						// ruleList.setMethod(newClassifier.getMethod());
+						ruleList.setValues(
+								new ArrayList<Double>(newClassifier
+										.getClassLimits()), !noChange); // here
+
+						// On MANUAL mode deactivate the numClassesJComboBox,
+						// otherwise enable it
+						// if (newClassifier.getMethod() ==
+						// CLASSIFICATION_METHOD.MANUAL) {
+						// getNumClassesJComboBox().setEnabled(false);
+						// getNumClassesJComboBox().setSelectedItem(
+						// new Integer(ruleList.getNumClasses()));
+						// } else
+						// getNumClassesJComboBox().setEnabled(true);
+
+					} finally {
+						ruleList.popQuite();
+					}
+
+				}
+			});
+
+		} finally {
+			newClassifier.popQuite();
+		}
+
+		return newClassifier;
+	}
+
+	private final RasterClassification classifier;
+
+	protected SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
+
+	/**
+	 * This method initializes jButton
+	 * 
+	 * @return javax.swing.JButton
+	 */
+	private JToggleButton getClassifyJToggleButton() {
+		final JToggleButton jToggleButton_Classify = new JToggleButton();
+		jToggleButton_Classify.setAction(new AbstractAction(ASUtil
+				.R("GraduatedColorQuantities.Classify.Button")) {
+
+			private ClassificationGUI openQuantitiesClassificationGUI;
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				if (jToggleButton_Classify.isSelected()) {
+
+					// Test here, if the data is problematic and show the
+					// exception to the user without opening the dialog.
+					try {
+						classifier.getStatistics();
+					} catch (final Exception eee) {
+						jToggleButton_Classify.setSelected(false);
+						ExceptionDialog.show(
+								RasterRulesList_Intervals_GUI.this, eee);
+						return;
+					}
+
+					openQuantitiesClassificationGUI = getQuantitiesClassificationGUI();
+					openQuantitiesClassificationGUI.setVisible(true);
+				} else {
+					if (openQuantitiesClassificationGUI != null)
+						openQuantitiesClassificationGUI.setVisible(false);
+					openQuantitiesClassificationGUI = null;
+				}
+
+			}
+
+			private ClassificationGUI getQuantitiesClassificationGUI() {
+				// Title like :
+				ClassificationGUI quantGUI = new RasterClassificationGUI(
+						jToggleButton_Classify, classifier, atlasStyler, ASUtil
+								.R("QuantitiesClassificationGUI.Title", ""));
+				quantGUI.addWindowListener(new WindowAdapter() {
+
+					@Override
+					public void windowClosed(final WindowEvent e) {
+						jToggleButton_Classify.setSelected(false);
+					}
+
+					@Override
+					public void windowClosing(final WindowEvent e) {
+						jToggleButton_Classify.setSelected(false);
+					}
+
+				});
+				// }
+				return quantGUI;
+			}
+
+		});
+		jToggleButton_Classify.setToolTipText(ASUtil
+				.R("GraduatedColorQuantities.Classify.Button.TT"));
+		return jToggleButton_Classify;
 	}
 
 	private void initialize() {
-		JLabel jLabelHeading = new JLabel(ASUtil.R("RasterRulesList_Distinctvalues_GUI.Heading"));
-		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
-				AVSwingUtil.HEADING_FONT_SIZE));
+		new JLabel(ASUtil.R("RasterRulesList_Intervals_GUI.Heading"))
+				.setFont(new JLabel(ASUtil
+						.R("RasterRulesList_Intervals_GUI.Heading")).getFont()
+						.deriveFont(AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
-		this.add(jLabelHeading, "center");
-		this.add(getJPanelColorAndOpacity(), "align l");
+		this.add(new JLabel(ASUtil.R("RasterRulesList_Intervals_GUI.Heading")),
+				"center");
+
+		this.add(getJPanelColorAndOpacity(), "align l, split 2");
+		this.add(getClassifyJToggleButton(), "align l, split 2");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 	}
@@ -82,7 +271,7 @@ public class RasterRulesList_Intervals_GUI extends
 				"wrap 2, inset 1, gap 1", "[grow][]"));
 		jPanelColorAndTemplate
 				.setBorder(BorderFactory.createTitledBorder(ASUtil
-						.R("RasterRulesList_Distinctvalues_GUI.PanelBorderTitle.Colors_and_Opacity")));
+						.R("RasterRulesList_PanelBorderTitle.Colors_and_Opacity")));
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
@@ -99,6 +288,11 @@ public class RasterRulesList_Intervals_GUI extends
 			jComboBoxOpacity.setModel(new DefaultComboBoxModel(
 					AbstractStyleEditGUI.OPACITY_VALUES));
 
+			if (rulesList.getOpacity() != null) {
+				ASUtil.selectOrInsert(jComboBoxOpacity, rulesList.getOpacity()
+						.floatValue());
+			}
+
 			jComboBoxOpacity.addItemListener(new ItemListener() {
 
 				@Override
@@ -107,11 +301,6 @@ public class RasterRulesList_Intervals_GUI extends
 							.getSelectedItem()).doubleValue());
 				}
 			});
-
-			if (rulesList.getOpacity() != null) {
-				ASUtil.selectOrInsert(jComboBoxOpacity, rulesList.getOpacity()
-						.floatValue());
-			}
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxOpacity);
 		}
@@ -130,21 +319,14 @@ public class RasterRulesList_Intervals_GUI extends
 			});
 			jButtonApplyOpacity.setText(ASUtil
 					.R("UniqueValues.applyTemplateButton.title"));
-			jButtonApplyOpacity.setToolTipText(ASUtil
-					.R("RasterRulesList_Distinctvalues_GUI.PanelBorderTitle.applyTemplateButton.tooltip",rulesList.getNumClassesVisible()));
 		}
 		return jButtonApplyOpacity;
 	}
 
-	final static int COLIDX_COLOR = 0;
-	final static int COLIDX_OPACITY = 1;
-	final static int COLIDX_VALUE = 2;
-	final static int COLIDX_LABEL = 3;
-
 	/**
 	 * Listen for changes in the RulesList. Must be kept as a reference in
-	 * {@link RasterRulesList_Intervals_GUI} because the listeners are kept
-	 * in a {@link WeakHashMap}
+	 * {@link RasterRulesList_Intervals_GUI} because the listeners are kept in a
+	 * {@link WeakHashMap}
 	 */
 	final RuleChangeListener updateTableWhenRuleListChanges = new RuleChangeListener() {
 
@@ -184,7 +366,7 @@ public class RasterRulesList_Intervals_GUI extends
 						return Double.class;
 
 					if (columnIndex == COLIDX_VALUE)
-						return Double.class;
+						return String.class;
 
 					if (columnIndex == COLIDX_LABEL)
 						return Translation.class;
@@ -200,17 +382,14 @@ public class RasterRulesList_Intervals_GUI extends
 				@Override
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == COLIDX_COLOR)
-						return ASUtil
-								.R("ColorLabel");
+						return ASUtil.R("ColorLabel");
 					if (columnIndex == COLIDX_OPACITY)
-						return ASUtil
-								.R("OpacityLabel");
+						return ASUtil.R("OpacityLabel");
 					if (columnIndex == COLIDX_VALUE)
 						return ASUtil
-								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.value");
+								.R("GraduatedColorQuantities.Column.Limits");
 					if (columnIndex == COLIDX_LABEL)
-						return ASUtil
-								.R("RasterRulesList_Distinctvalues_GUI.classesTable.columnHeadersTitle.label");
+						return ASUtil.R("LabelLabel");
 					return super.getColumnName(columnIndex);
 				}
 
@@ -229,7 +408,23 @@ public class RasterRulesList_Intervals_GUI extends
 					} else if (columnIndex == COLIDX_OPACITY) {
 						return rulesList.getOpacities().get(rowIndex);
 					} else if (columnIndex == COLIDX_VALUE) {
-						return rulesList.getValues().get(rowIndex);
+
+						final Number lower = rulesList.getValues()
+								.get(rowIndex);
+
+						DecimalFormat formatter = rulesList.getFormatter();
+
+						if (rowIndex + 1 < rulesList.getValues().size()) {
+							final Number upper = rulesList.getValues().get(
+									rowIndex + 1);
+
+							final String limitsLabel = formatter.format(lower)
+									+ " -> " + formatter.format(upper);
+							return limitsLabel;
+						} else {
+							final String limitsLabel = formatter.format(lower);
+							return limitsLabel;
+						}
 					} else if (columnIndex == COLIDX_LABEL) {
 						return rulesList.getLabels().get(rowIndex);
 					}
@@ -264,6 +459,8 @@ public class RasterRulesList_Intervals_GUI extends
 	 */
 	private JTable getJTable() {
 		if (jTable == null) {
+			// if (1 == 1.)
+			// return new JTable();
 			jTable = new JTable(getTableModel());
 
 			getRulesList().addListener(updateTableWhenRuleListChanges);
@@ -301,7 +498,7 @@ public class RasterRulesList_Intervals_GUI extends
 
 									transLabel = new TranslationEditJPanel(
 											ASUtil.R(
-													"RasterRulesList_Distinctvalues_GUI.LabelForClass",
+													"RasterRulesList_Intervals_GUI.LabelForClass",
 													getRulesList().getValues()
 															.get(index)),
 											translation, AtlasStylerVector
@@ -345,12 +542,10 @@ public class RasterRulesList_Intervals_GUI extends
 								/***********************************************
 								 * AtlasStyler.LANGUAGE_MODE.OGC
 								 */
-								String newTitle = ASUtil
-										.askForString(
-												RasterRulesList_Intervals_GUI.this,
-												getRulesList().getLabels()
-														.get(row).toString(),
-												null);
+								String newTitle = ASUtil.askForString(
+										RasterRulesList_Intervals_GUI.this,
+										getRulesList().getLabels().get(row)
+												.toString(), null);
 								if (newTitle != null) {
 									getRulesList().getLabels().set(row,
 											new Translation(newTitle));
@@ -389,6 +584,25 @@ public class RasterRulesList_Intervals_GUI extends
 
 			});
 
+			classifier.addListener(new ClassificationChangedAdapter() {
+
+				@Override
+				public void classifierAvailableNewClasses(
+						final ClassificationChangeEvent e) {
+					jTable.setEnabled(true);
+					getTableModel().fireTableStructureChanged();
+				}
+
+				@Override
+				public void classifierCalculatingStatistics(
+						final ClassificationChangeEvent e) {
+
+					jTable.setEnabled(false);
+
+				}
+
+			});
+
 			// jTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 			jTable.setRowHeight(jTable.getRowHeight() + 2);
@@ -415,8 +629,7 @@ public class RasterRulesList_Intervals_GUI extends
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					rulesList
-							.applyPalette(RasterRulesList_Intervals_GUI.this);
+					rulesList.applyPalette(RasterRulesList_Intervals_GUI.this);
 				}
 			});
 
@@ -464,6 +677,5 @@ public class RasterRulesList_Intervals_GUI extends
 		}
 		return jComboBoxPalette;
 	}
-
 
 }

@@ -50,8 +50,6 @@ public abstract class AtlasStyler {
 		OGC_SINGLELANGUAGE
 	}
 	
-	public abstract StyledLayerInterface<?> getStyledInterface();
-
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_TEMPLATES = "templates";
 
@@ -98,6 +96,36 @@ public abstract class AtlasStyler {
 	}
 
 	/**
+	 * Because the rule title may not be empty, we check different sources here.
+	 * the translated title of the styled layer would be first choice.
+	 * 
+	 * @return never <code>null</code> and never ""
+	 */
+	public static Translation getRuleTitleFor(StyledLayerInterface sf) {
+
+		if (!I18NUtil.isEmpty(sf.getTitle()))
+			return sf.getTitle();
+
+		if (sf instanceof StyledFeaturesInterface) {
+			return new Translation(getLanguages(),
+					((StyledFeaturesInterface) sf).getSchema().getName()
+							.getLocalPart());
+		} else {
+			// RASTER
+			return new Translation("raster this baby");
+		}
+	}
+
+	/**
+	 * @Deprecated use AsUtil.R
+	 */
+	@Deprecated
+	// use AsUtil.R
+	public static String R(String key, final Object... values) {
+		return ASUtil.R(key, values);
+	}
+
+	/**
 	 * If false, the {@link AtlasStylerVector} only fires
 	 * {@link StyleChangedEvent}s when the dialog is closed.
 	 */
@@ -108,19 +136,6 @@ public abstract class AtlasStyler {
 	 * Used when {@link #cancel()} is called.
 	 */
 	protected Style backupStyle;
-
-	/**
-	 * This factory is used to create empty or default rule lists.
-	 */
-	protected RuleListFactory rlf;
-
-	/**
-	 * This factory is used to create rule-lists. Returns a
-	 * {@link RuleListFactory}.
-	 */
-	public RuleListFactory getRlf() {
-		return rlf;
-	}
 
 	/**
 	 * A list of fonts that will be available for styling in extension to the
@@ -181,6 +196,11 @@ public abstract class AtlasStyler {
 
 	/** If true, no Events will be fired to listeners */
 	private boolean quite = true;
+
+	/**
+	 * This factory is used to create empty or default rule lists.
+	 */
+	protected RuleListFactory rlf;
 
 	/**
 	 * List of {@link AbstractRulesList}s that {@link AtlasStylerVector} is
@@ -263,6 +283,8 @@ public abstract class AtlasStyler {
 		styleCached = backupStyle;
 	}
 
+	abstract public AbstractRulesList copyRulesList(RulesListInterface rl);
+
 	/**
 	 * Disposes the {@link AtlasStylerVector}. Tries to help the Java GC by
 	 * removing dependencies.
@@ -280,21 +302,6 @@ public abstract class AtlasStyler {
 	 */
 	public void fireStyleChangedEvents() {
 		fireStyleChangedEvents(false);
-	}
-
-	/**
-	 * Explicitly informs all {@link StyleChangeListener}s about changed in the
-	 * {@link Style} due to the given parameter <code>ruleList</code>
-	 * 
-	 * Sets the parameter ruleList as the lastChangedRuleList
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	protected void fireStyleChangedEvents(final RulesListInterface ruleList) {
-		if (!(ruleList instanceof TextRuleList))
-			lastChangedRuleList = ruleList;
-
-		fireStyleChangedEvents();
 	}
 
 	/**
@@ -342,11 +349,19 @@ public abstract class AtlasStyler {
 	}
 
 	/**
-	 * Returns a StyleChangedEvent or a RasterStyleChangedEvent
+	 * Explicitly informs all {@link StyleChangeListener}s about changed in the
+	 * {@link Style} due to the given parameter <code>ruleList</code>
 	 * 
-	 * @return
+	 * Sets the parameter ruleList as the lastChangedRuleList
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	abstract StyleChangedEvent getStyleChangeEvent();
+	protected void fireStyleChangedEvents(final RulesListInterface ruleList) {
+		if (!(ruleList instanceof TextRuleList))
+			lastChangedRuleList = ruleList;
+
+		fireStyleChangedEvents();
+	}
 
 	/**
 	 * A list of fonts that will be available for styling in extension to the
@@ -385,6 +400,14 @@ public abstract class AtlasStyler {
 	}
 
 	/**
+	 * This factory is used to create rule-lists. Returns a
+	 * {@link RuleListFactory}.
+	 */
+	public RuleListFactory getRlf() {
+		return rlf;
+	}
+
+	/**
 	 * List of {@link AbstractRulesList}s that {@link AtlasStylerVector} is
 	 * combining to one {@link Style}.
 	 */
@@ -394,6 +417,20 @@ public abstract class AtlasStyler {
 			ruleLists.addListener(rulesListsListListener);
 		}
 		return ruleLists;
+	}
+
+	/**
+	 * Returns a new {@link ArrayList} with a reversed order of the RulesLists.
+	 * Changed to this {@link List} will not change the order of the RuleLists.
+	 * Changes to the ruleLists will change the RuleLists.
+	 */
+	protected List<AbstractRulesList> getRuleListsReverse() {
+
+		ArrayList<AbstractRulesList> arrayList = new ArrayList<AbstractRulesList>();
+
+		arrayList.addAll(getRuleLists());
+		Collections.reverse(arrayList);
+		return arrayList;
 	}
 
 	/***************************************************************************
@@ -449,155 +486,17 @@ public abstract class AtlasStyler {
 		return styleCached;
 	}
 
-	public abstract Style sanitize(Style style);
-
 	/**
-	 * Returns a new {@link ArrayList} with a reversed order of the RulesLists.
-	 * Changed to this {@link List} will not change the order of the RuleLists.
-	 * Changes to the ruleLists will change the RuleLists.
+	 * Returns a StyleChangedEvent or a RasterStyleChangedEvent
+	 * 
+	 * @return
 	 */
-	protected List<AbstractRulesList> getRuleListsReverse() {
+	abstract StyleChangedEvent getStyleChangeEvent();
 
-		ArrayList<AbstractRulesList> arrayList = new ArrayList<AbstractRulesList>();
-
-		arrayList.addAll(getRuleLists());
-		Collections.reverse(arrayList);
-		return arrayList;
-	}
+	public abstract StyledLayerInterface<?> getStyledInterface();
 
 	public Translation getTitle() {
 		return title;
-	}
-
-	public boolean isAutomaticPreview() {
-		return automaticPreview;
-	}
-
-	/**
-	 * @return <code>true</code> means, that {@link AtlasStylerVector} will fire
-	 *         {@link StyleChangedEvent}s
-	 */
-	public boolean isQuite() {
-		return quite;
-	}
-
-	/**
-	 * Before loading a style we have to forget everything we might have
-	 * imported before. Does not remove the listeners!
-	 */
-	public void reset() {
-
-		getRuleLists().clear();
-
-		styleCached = null;
-
-		lastChangedRuleList = null;
-
-	}
-
-	public void setAutomaticPreview(final boolean automaticPreview) {
-		ASProps.set(ASProps.Keys.automaticPreview, automaticPreview ? 1 : 0);
-		this.automaticPreview = automaticPreview;
-	}
-
-	/**
-	 * A list of fonts that will be available for styling. If set to
-	 * <code>null</code>, {@link #getFonts()} will return a new and empty
-	 * ArayList<Font>
-	 */
-	public void setFonts(List<Font> fonts) {
-		if (fonts == null)
-			fonts = new ArrayList<Font>();
-		else
-			this.fonts = fonts;
-	}
-
-	/**
-	 * The {@link AtlasStylerVector} can run in two {@link LANGUAGE_MODE}s.
-	 */
-	public void setLanguageMode(final LANGUAGE_MODE languageMode) {
-		AtlasStylerVector.languageMode = languageMode;
-	}
-
-	public final void setLanguages(final List<String> languages) {
-		this.languages = languages;
-	}
-
-	/**
-	 * Reset the {@link List} of supported Languages to the passed
-	 * {@link String}
-	 * 
-	 * @param langs
-	 *            new {@link List} of lang codes
-	 */
-	public void setLanguages(final String... langs) {
-		if (langs.length > 0)
-			languages.clear();
-
-		for (String code : langs) {
-			code = code.trim();
-			if (I18NUtil.isValidISOLangCode(code)) {
-				languages.add(code);
-			} else
-				throw new IllegalArgumentException("The ISO Language code '"
-						+ code + "' is not known/valid." + "\nIgnoring it.");
-		}
-	}
-
-	public void setLastChangedRuleList(
-			final RulesListInterface lastChangedRuleList) {
-
-		if (!(lastChangedRuleList instanceof TextRuleList))
-			this.lastChangedRuleList = lastChangedRuleList;
-
-		if (lastChangedRuleList != null) {
-			LOGGER.info("Changing LCRL manually to "
-					+ lastChangedRuleList.getClass().getSimpleName());
-		} else {
-			LOGGER.info("Changing LCRL to null");
-		}
-	}
-
-	/**
-	 * If not <code>null</code>, swing dialogs might popup.
-	 */
-	public void setOwner(Component owner) {
-		this.owner = owner;
-	}
-
-	/**
-	 * <code>true</code> means, that {@link AtlasStylerVector} will fire
-	 * {@link StyleChangedEvent}s
-	 */
-	public void setQuite(final boolean quite) {
-		this.quite = quite;
-	}
-
-	public void setTitle(final Translation title) {
-		this.title = title;
-	}
-
-	abstract public AbstractRulesList copyRulesList(RulesListInterface rl);
-
-	/**
-	 * Because the rule title may not be empty, we check different sources here.
-	 * the translated title of the styled layer would be first choice.
-	 * 
-	 * @return never <code>null</code> and never ""
-	 */
-	public static Translation getRuleTitleFor(StyledLayerInterface sf) {
-
-		if (!I18NUtil.isEmpty(sf.getTitle()))
-			return sf.getTitle();
-
-		if (sf instanceof StyledFeaturesInterface) {
-			return new Translation(getLanguages(),
-					((StyledFeaturesInterface) sf).getSchema().getName()
-							.getLocalPart());
-		} else {
-			// RASTER
-			return new Translation("raster this baby");
-		}
 	}
 
 	/**
@@ -682,13 +581,114 @@ public abstract class AtlasStyler {
 
 	}
 
+	public boolean isAutomaticPreview() {
+		return automaticPreview;
+	}
+
 	/**
-	 * @Deprecated use AsUtil.R
+	 * @return <code>true</code> means, that {@link AtlasStylerVector} will fire
+	 *         {@link StyleChangedEvent}s
 	 */
-	@Deprecated
-	// use AsUtil.R
-	public static String R(String key, final Object... values) {
-		return ASUtil.R(key, values);
+	public boolean isQuite() {
+		return quite;
+	}
+
+	/**
+	 * Before loading a style we have to forget everything we might have
+	 * imported before. Does not remove the listeners!
+	 */
+	public void reset() {
+
+		getRuleLists().clear();
+
+		styleCached = null;
+
+		lastChangedRuleList = null;
+
+	}
+
+	public abstract Style sanitize(Style style);
+
+	public void setAutomaticPreview(final boolean automaticPreview) {
+		ASProps.set(ASProps.Keys.automaticPreview, automaticPreview ? 1 : 0);
+		this.automaticPreview = automaticPreview;
+	}
+
+	/**
+	 * A list of fonts that will be available for styling. If set to
+	 * <code>null</code>, {@link #getFonts()} will return a new and empty
+	 * ArayList<Font>
+	 */
+	public void setFonts(List<Font> fonts) {
+		if (fonts == null)
+			fonts = new ArrayList<Font>();
+		else
+			this.fonts = fonts;
+	}
+
+	/**
+	 * The {@link AtlasStylerVector} can run in two {@link LANGUAGE_MODE}s.
+	 */
+	public void setLanguageMode(final LANGUAGE_MODE languageMode) {
+		AtlasStylerVector.languageMode = languageMode;
+	}
+
+	public final void setLanguages(final List<String> languages) {
+		this.languages = languages;
+	}
+
+	/**
+	 * Reset the {@link List} of supported Languages to the passed
+	 * {@link String}
+	 * 
+	 * @param langs
+	 *            new {@link List} of lang codes
+	 */
+	public void setLanguages(final String... langs) {
+		if (langs.length > 0)
+			languages.clear();
+
+		for (String code : langs) {
+			code = code.trim();
+			if (I18NUtil.isValidISOLangCode(code)) {
+				languages.add(code);
+			} else
+				throw new IllegalArgumentException("The ISO Language code '"
+						+ code + "' is not known/valid." + "\nIgnoring it.");
+		}
+	}
+
+	public void setLastChangedRuleList(
+			final RulesListInterface lastChangedRuleList) {
+
+		if (!(lastChangedRuleList instanceof TextRuleList))
+			this.lastChangedRuleList = lastChangedRuleList;
+
+		if (lastChangedRuleList != null) {
+			LOGGER.info("Changing LCRL manually to "
+					+ lastChangedRuleList.getClass().getSimpleName());
+		} else {
+			LOGGER.info("Changing LCRL to null");
+		}
+	}
+
+	/**
+	 * If not <code>null</code>, swing dialogs might popup.
+	 */
+	public void setOwner(Component owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * <code>true</code> means, that {@link AtlasStylerVector} will fire
+	 * {@link StyleChangedEvent}s
+	 */
+	public void setQuite(final boolean quite) {
+		this.quite = quite;
+	}
+
+	public void setTitle(final Translation title) {
+		this.title = title;
 	}
 
 }

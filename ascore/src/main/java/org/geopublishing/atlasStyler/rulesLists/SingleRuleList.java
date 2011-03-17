@@ -53,6 +53,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	final static protected Logger LOGGER = LangUtil
 			.createLogger(SingleRuleList.class);
 
+	private String label = "title missing";
+
 	/**
 	 * This {@link Vector} represents a list of all {@link Symbolizer}s that
 	 * will be used to paint the symbols
@@ -65,8 +67,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	private String styleTitle;
 
-	private String label = "title missing";
-
 	/**
 	 * This boolean defines whether the entry shall be shown the legend. <b>This
 	 * is only interpreted in GP/Atlas context.</b>
@@ -77,7 +77,8 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(RulesListType rulesListType,String label, GeometryForm geometryForm) {
+	public SingleRuleList(RulesListType rulesListType, String label,
+			GeometryForm geometryForm) {
 		super(rulesListType, geometryForm);
 		pushQuite();
 		setLabel(label);
@@ -88,9 +89,21 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 * @param label
 	 *            label for the rule
 	 */
-	public SingleRuleList(RulesListType rulesListType,Translation label, GeometryForm geometryForm) {
+	public SingleRuleList(RulesListType rulesListType, Translation label,
+			GeometryForm geometryForm) {
 		super(rulesListType, geometryForm);
 		setRuleTitle(label);
+	}
+
+	private void addFilters(Rule rule) {
+		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
+
+		// The order is important! This is parsed the reverse way. The last
+		// thing added to the filter equals the first level in the XML.
+		filter = addAbstractRlSettings(filter);
+
+		rule.setFilter(filter);
+
 	}
 
 	/**
@@ -186,16 +199,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		return to;
 	}
 
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		return getType().toString();
-	}
-
-	@Override
-	public
-	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
-	}
-
 	/**
 	 * The {@link Color} returned by {@link #getColor()} is replaced against the
 	 * given color parameter. Any other occurrence of the original color will
@@ -235,6 +238,15 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 						ASUtil.createFeatureType(getGeometryDescriptor()), size);
 
 		return image;
+	}
+
+	/**
+	 * @return The title of the first and only {@link Rule}. This is used as the
+	 *         label for this rule in the legend. This max return a
+	 *         "oneLineCoded" {@link Translation} if running in GP.
+	 */
+	public String getLabel() {
+		return label;
 	}
 
 	/** Returns a description or the type of the {@link Symbolizer} */
@@ -283,17 +295,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		return rList;
 	}
 
-	private void addFilters(Rule rule) {
-		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
-
-		// The order is important! This is parsed the reverse way. The last
-		// thing added to the filter equals the first level in the XML.
-		filter = addAbstractRlSettings(filter);
-
-		rule.setFilter(filter);
-
-	}
-
 	/**
 	 * @return Returns the biggest Size used if any Size is used. If no size
 	 *         used returns 0.
@@ -327,15 +328,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * @return The title of the first and only {@link Rule}. This is used as the
-	 *         label for this rule in the legend. This max return a
-	 *         "oneLineCoded" {@link Translation} if running in GP.
-	 */
-	public String getLabel() {
-		return label;
-	}
-
-	/**
 	 * @return <code>True</code> if any item is used that has a changeable
 	 *         {@link Color} TODO think again .. do we need that?
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
@@ -348,6 +340,48 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	public boolean hasSize() {
 		return getSizeBiggest() >= 0.;
+	}
+
+	/**
+	 * This stuff is the same for all three SINGLE_RULES types.
+	 */
+	@Override
+	public void importRules(List<Rule> rules) {
+		pushQuite();
+
+		if (rules.size() > 1) {
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+					+ " with " + rules.size() + " rules, strange!");
+		}
+
+		Rule rule = rules.get(0);
+
+		try {
+
+			final List<? extends Symbolizer> symbs = rule.symbolizers();
+			addSymbolizers(symbs);
+			reverseSymbolizers();
+
+			// We had some stupid AbstractMethodException here...
+			try {
+				final Description description = rule.getDescription();
+				final InternationalString title2 = description.getTitle();
+				setLabel(title2.toString());
+			} catch (final NullPointerException e) {
+				LOGGER.warn("The title style to import has been null!");
+				setLabel("");
+			} catch (final Exception e) {
+				LOGGER.error("The title style to import could not been set!", e);
+				setLabel("");
+			}
+
+			// Analyse the filters...
+			Filter filter = rule.getFilter();
+			filter = parseAbstractRlSettings(filter);
+
+		} finally {
+			popQuite();
+		}
 	}
 
 	/**
@@ -418,6 +452,10 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		} finally {
 			pushQuite();
 		}
+	}
+
+	@Override
+	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
 
 	public SymbolizerType removeSymbolizer(int index) {
@@ -491,10 +529,39 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	abstract public void setColor(Color newColor);
 
 	/**
+	 * Set the title of the first and only {@link Rule}. This is used as the
+	 * label for this rule in the legend.
+	 * 
+	 */
+	public void setLabel(String label) {
+
+		if (label == null || label.equals("")) {
+			// LOGGER.warn("rule title may not be empty");
+			label = ""; // i8n
+		}
+
+		// Is the new title really different from the old one?
+		boolean change = true;
+		if (this.label != null && label != null && this.label.equals(label))
+			change = false;
+
+		if (change) {
+			// Update the title and fire an event
+			this.label = label;
+			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
+					+ label, this));
+		}
+	}
+
+	/**
 	 * Sets the rotation of any subelement where it makes sense. This fires an
 	 * event to all {@link RuleChangeListener}s.
 	 */
 	public abstract void setRotation(Double size);
+
+	public void setRuleTitle(Translation translation) {
+		setLabel(translation.toOneLine());
+	}
 
 	/**
 	 * Sets the size of any sub-element where it makes sense. This fires an
@@ -560,31 +627,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	}
 
 	/**
-	 * Set the title of the first and only {@link Rule}. This is used as the
-	 * label for this rule in the legend.
-	 * 
-	 */
-	public void setLabel(String label) {
-
-		if (label == null || label.equals("")) {
-			// LOGGER.warn("rule title may not be empty");
-			label = ""; // i8n
-		}
-
-		// Is the new title really different from the old one?
-		boolean change = true;
-		if (this.label != null && label != null && this.label.equals(label))
-			change = false;
-
-		if (change) {
-			// Update the title and fire an event
-			this.label = label;
-			fireEvents(new RuleChangedEvent("Single Legend Label changed to "
-					+ label, this));
-		}
-	}
-
-	/**
 	 * /** This boolean defines whether the entry shall be shown the legend.
 	 * <b>This is only interpreted in GP/Atlas context.</b> Changing this
 	 * property will automatically fire a {@link RuleChangedEvent}
@@ -595,52 +637,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			fireEvents(new RuleChangedEvent("visiblility in legend changed",
 					this));
 		}
-	}
-
-	/**
-	 * This stuff is the same for all three SINGLE_RULES types.
-	 */
-	@Override
-	public void importRules(List<Rule> rules) {
-		pushQuite();
-
-		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules, strange!");
-		}
-
-		Rule rule = rules.get(0);
-
-		try {
-
-			final List<? extends Symbolizer> symbs = rule.symbolizers();
-			addSymbolizers(symbs);
-			reverseSymbolizers();
-
-			// We had some stupid AbstractMethodException here...
-			try {
-				final Description description = rule.getDescription();
-				final InternationalString title2 = description.getTitle();
-				setLabel(title2.toString());
-			} catch (final NullPointerException e) {
-				LOGGER.warn("The title style to import has been null!");
-				setLabel("");
-			} catch (final Exception e) {
-				LOGGER.error("The title style to import could not been set!", e);
-				setLabel("");
-			}
-
-			// Analyse the filters...
-			Filter filter = rule.getFilter();
-			filter = parseAbstractRlSettings(filter);
-
-		} finally {
-			popQuite();
-		}
-	}
-
-	public void setRuleTitle(Translation translation) {
-		setLabel(translation.toOneLine());
 	}
 
 }

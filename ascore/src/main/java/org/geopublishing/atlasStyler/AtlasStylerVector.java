@@ -237,20 +237,6 @@ public class AtlasStylerVector extends AtlasStyler {
 		this(styledFeatures, null, null, null, null);
 	}
 
-	/**
-	 * Creates a copy of any given RulesList
-	 */
-	@Override
-	public AbstractRulesList copyRulesList(RulesListInterface rl) {
-		FeatureTypeStyle fts = rl.getFTS();
-		try {
-			return getRlf().importFts(fts, false);
-		} catch (AtlasStylerParsingException e) {
-			LOGGER.warn("Trying to copy RL=" + rl + " failed.", e);
-			return null;
-		}
-	}
-
 	/***************************************************************************
 	 * Constructor that starts styling a {@link StyledFeaturesInterface}. Loads
 	 * the given paramter <code>loadStyle</code> {@link Style} at construction
@@ -297,34 +283,6 @@ public class AtlasStylerVector extends AtlasStyler {
 			}
 		}
 		setAttributeMetaDataMap(styledFeatures.getAttributeMetaDataMap());
-	}
-
-	public AttributeMetadataMap<? extends AttributeMetadataInterface> getAttributeMetaDataMap() {
-		return attributeMetaDataMap;
-	}
-
-	/**
-	 * Returns a list of available fonts: A combination of the the
-	 * AtlasStyler.getDefaultFontFamilies() and the fonts passed to
-	 * {@link AtlasStylerVector} on construction.
-	 */
-	public List<Literal>[] getAvailableFonts() {
-		List<Literal>[] fontFamilies = AtlasStylerVector
-				.getDefaultFontFamilies();
-
-		/**
-		 * Add user defined Fonts. One Family for every extra font.
-		 */
-		List<Font> extraFonts = getFonts();
-
-		int i = fontFamilies.length;
-		for (Font f : extraFonts) {
-			fontFamilies = LangUtil.extendArray(fontFamilies,
-					new ArrayList<Literal>());
-			fontFamilies[i].add(FilterUtil.FILTER_FAC.literal(f.getName()));
-			i++;
-		}
-		return fontFamilies;
 	}
 
 	/**
@@ -458,7 +416,59 @@ public class AtlasStylerVector extends AtlasStyler {
 		}
 	}
 
+	/**
+	 * Creates a copy of any given RulesList
+	 */
+	@Override
+	public AbstractRulesList copyRulesList(RulesListInterface rl) {
+		FeatureTypeStyle fts = rl.getFTS();
+		try {
+			return getRlf().importFts(fts, false);
+		} catch (AtlasStylerParsingException e) {
+			LOGGER.warn("Trying to copy RL=" + rl + " failed.", e);
+			return null;
+		}
+	}
+
+	public AttributeMetadataMap<? extends AttributeMetadataInterface> getAttributeMetaDataMap() {
+		return attributeMetaDataMap;
+	}
+
+	/**
+	 * Returns a list of available fonts: A combination of the the
+	 * AtlasStyler.getDefaultFontFamilies() and the fonts passed to
+	 * {@link AtlasStylerVector} on construction.
+	 */
+	public List<Literal>[] getAvailableFonts() {
+		List<Literal>[] fontFamilies = AtlasStylerVector
+				.getDefaultFontFamilies();
+
+		/**
+		 * Add user defined Fonts. One Family for every extra font.
+		 */
+		List<Font> extraFonts = getFonts();
+
+		int i = fontFamilies.length;
+		for (Font f : extraFonts) {
+			fontFamilies = LangUtil.extendArray(fontFamilies,
+					new ArrayList<Literal>());
+			fontFamilies[i].add(FilterUtil.FILTER_FAC.literal(f.getName()));
+			i++;
+		}
+		return fontFamilies;
+	}
+
+	@Override
+	StyleChangedEvent getStyleChangeEvent() {
+		return new StyleChangedEvent(getStyle());
+	}
+
 	public StyledFeaturesInterface<?> getStyledFeatures() {
+		return styledFeatures;
+	}
+
+	@Override
+	public StyledLayerInterface<?> getStyledInterface() {
 		return styledFeatures;
 	}
 
@@ -500,25 +510,15 @@ public class AtlasStylerVector extends AtlasStyler {
 				.getFeatureSource()) == GeometryForm.POLYGON;
 	}
 
-	public void setAttributeMetaDataMap(
-			final AttributeMetadataMap<? extends AttributeMetadataInterface> attributeMetaDataMap) {
-		this.attributeMetaDataMap = attributeMetaDataMap;
-	}
-
 	@Override
 	public Style sanitize(Style style) {
 		return StylingUtil.correctPropertyNames(styleCached,
 				getStyledFeatures().getSchema());
 	}
 
-	@Override
-	StyleChangedEvent getStyleChangeEvent() {
-		return new StyleChangedEvent(getStyle());
-	}
 
-
-	@Override
-	public StyledLayerInterface<?> getStyledInterface() {
-		return styledFeatures;
+	public void setAttributeMetaDataMap(
+			final AttributeMetadataMap<? extends AttributeMetadataInterface> attributeMetaDataMap) {
+		this.attributeMetaDataMap = attributeMetaDataMap;
 	}
 }

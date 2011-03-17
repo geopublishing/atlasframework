@@ -18,10 +18,13 @@ import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 
 public class UniqueValuesPolygonRuleList extends UniqueValuesRuleList {
-	private Logger LOGGER = Logger.getLogger(UniqueValuesPolygonRuleList.class);
+	private final Logger LOGGER = Logger
+			.getLogger(UniqueValuesPolygonRuleList.class);
 
-	public UniqueValuesPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(RulesListType.UNIQUE_VALUE_POLYGON, styledFeatures, GeometryForm.POLYGON);
+	public UniqueValuesPolygonRuleList(
+			StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
+		super(RulesListType.UNIQUE_VALUE_POLYGON, styledFeatures,
+				GeometryForm.POLYGON, withDefaults);
 	}
 
 	@Override

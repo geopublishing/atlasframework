@@ -23,9 +23,9 @@ public class AtlasStylerRaster extends AtlasStyler {
 	private final static Logger LOGGER = Logger
 			.getLogger(AtlasStylerRaster.class);
 
-	private StyledGridCoverageReaderInterface styledRaster;
-
 	private RasterLegendData backupRasterLegend;
+
+	private StyledGridCoverageReaderInterface styledRaster;
 
 	/**
 	 * Create an {@link AtlasStylerVector} object for any
@@ -73,28 +73,6 @@ public class AtlasStylerRaster extends AtlasStyler {
 	}
 
 	@Override
-	public AbstractRulesList copyRulesList(RulesListInterface rl) {
-		return null;
-	}
-
-	@Override
-	public Style sanitize(Style style) {
-		return style;
-	}
-
-	public RasterLegendData getLegendMetaData() {
-
-		if (getRuleLists().size() == 0)
-			return new RasterLegendData(false);
-
-		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
-
-		// TODO What if there is more than one RUlesList!?
-
-		return rrl.getRasterLegendData();
-	}
-
-	@Override
 	public void cancel() {
 		super.cancel();
 
@@ -110,6 +88,37 @@ public class AtlasStylerRaster extends AtlasStyler {
 
 	}
 
+	@Override
+	public AbstractRulesList copyRulesList(RulesListInterface rl) {
+		return null;
+	}
+
+	public RasterLegendData getLegendMetaData() {
+
+		if (getRuleLists().size() == 0)
+			return new RasterLegendData(false);
+
+		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
+
+		// TODO What if there is more than one RUlesList!?
+
+		return rrl.getRasterLegendData();
+	}
+
+	@Override
+	StyleChangedEvent getStyleChangeEvent() {
+		return new RasterStyleChangedEvent(getStyle(), getLegendMetaData());
+	}
+
+	@Override
+	public StyledLayerInterface<?> getStyledInterface() {
+		return styledRaster;
+	}
+
+	public StyledGridCoverageReaderInterface getStyledRaster() {
+		return styledRaster;
+	}
+
 	public void importStyle(Style importStyle, RasterLegendData rasterLegendData) {
 		// Backup
 		if (backupRasterLegend == null) {
@@ -122,20 +131,11 @@ public class AtlasStylerRaster extends AtlasStyler {
 	}
 
 	@Override
-	StyleChangedEvent getStyleChangeEvent() {
-		return new RasterStyleChangedEvent(getStyle(), getLegendMetaData());
+	public Style sanitize(Style style) {
+		return style;
 	}
 
 	public void setStyledRaster(StyledGridCoverageReaderInterface styledRaster) {
 		this.styledRaster = styledRaster;
-	}
-
-	public StyledGridCoverageReaderInterface getStyledRaster() {
-		return styledRaster;
-	}
-
-	@Override
-	public StyledLayerInterface<?> getStyledInterface() {
-		return styledRaster;
 	}
 }

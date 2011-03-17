@@ -16,11 +16,11 @@ public interface UniqueValuesRulesListInterface<VALUETYPE> extends
 	 */
 	public boolean addUniqueValue(final VALUETYPE uniqueValue);
 
-	public void pushQuite();
+	public Set<VALUETYPE> getAllUniqueValuesThatAreNotYetIncluded()
+			throws IllegalArgumentException, IOException;
 
 	public void popQuite(RuleChangedEvent ruleChangedEvent);
 
-	public Set<VALUETYPE> getAllUniqueValuesThatAreNotYetIncluded()
-			throws IllegalArgumentException, IOException;
+	public void pushQuite();
 
 }

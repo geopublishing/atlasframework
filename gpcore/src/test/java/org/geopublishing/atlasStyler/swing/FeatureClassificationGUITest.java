@@ -40,6 +40,6 @@ public class FeatureClassificationGUITest extends TestingClass {
 		ClassificationGUI gui = new FeatureClassificationGUI(null, classifier,
 				asv, "junit test vector classification");
 
-		TestingUtil.testGui(gui, 10);
+		TestingUtil.testGui(gui);
 	}
 }

@@ -12,7 +12,6 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.processing.OperationJAI;
-import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.styling.ColorMap;
 import org.opengis.parameter.ParameterValueGroup;
 
@@ -31,7 +30,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 			.getLogger(RasterRulesList_DistinctValues.class);
 
 	public RasterRulesList_DistinctValues(StyledRasterInterface<?> styledRaster) {
-		super(RulesListType.RASTER_COLORMAP_DISTINCTVALUES, styledRaster, ColorMap.TYPE_VALUES);
+		super(RulesListType.RASTER_COLORMAP_DISTINCTVALUES, styledRaster,
+				ColorMap.TYPE_VALUES);
 	}
 
 	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
@@ -110,10 +110,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 
 		StyledGridCoverageReaderInterface styledReader = (StyledGridCoverageReaderInterface) getStyledRaster();
 		AbstractGridCoverage2DReader reader = styledReader.getGeoObject();
-		GeneralEnvelope originalEnvelope = reader.getOriginalEnvelope();
-		LOGGER.debug(originalEnvelope);
-		int gridCoverageCount = reader.getGridCoverageCount();
-		LOGGER.debug(gridCoverageCount);
 
 		// try {
 		GridCoverage2D coverage = reader.read(null);
@@ -130,6 +126,14 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		int countBins = -1;
 		for (double d = low; d < high; d += 1.) {
 			countBins++;
+
+			if (d == Double.NaN)
+				continue;
+			if (d == Double.NEGATIVE_INFINITY)
+				continue;
+			if (d == Double.POSITIVE_INFINITY)
+				continue;
+
 			if (hist.getBins()[0][countBins] == 0)
 				continue;
 
@@ -137,35 +141,10 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				uniques.add(d);
 		}
 
-		// GridStatistic gs = GridUtil.determineStatistic(coverage, 0);
-		// SortedMap<String, Integer> h = gs.histogramm;
-		// for (String s : h.keySet()) {
-		// Double d = Double.valueOf(s);
-		// if (!getValues().contains(d))
-		// uniques.add(d);
-		// }
-		//
-		// } catch (Exception e) {
-		// LOGGER.error("Error converting CoverageReader to Coverage2", e);
-		// }
-
-		// // now filter the null values and the ones that are already part of
-		// // the
-		// // list
-		// for (final Object o : vals) {
-		// if (o == null)
-		// continue;
-		// if (values.contains(o))
-		// continue;
-		// uniques.add(o);
-		// }
 		return uniques;
 	}
 
 	@Override
-	/**
-	 * For distinct values, the RasterLegend is 1:1 relation to the values 
-	 */
 	public RasterLegendData getRasterLegendData() {
 		RasterLegendData rld = new RasterLegendData(true);
 

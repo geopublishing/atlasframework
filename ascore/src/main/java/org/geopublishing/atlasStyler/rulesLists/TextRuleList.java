@@ -49,14 +49,21 @@ import de.schmitzm.i18n.Translation;
 
 public class TextRuleList extends AbstractRulesList {
 
-	/**
-	 * A Filter to mark that not ALL classes have been disabled by the
-	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
-	 * not used anymore and only for backward compatibility. Will be removed in
-	 * 2.0
-	 **/
-	public static final PropertyIsEqualTo oldClassesEnabledFilter = ff.equals(
-			ff.literal("1"), ff.literal("1"));
+	/** A Filter to mark a {@link TextSymbolizer} class as disabled **/
+	public final static PropertyIsEqualTo classDisabledFilter = ff.equals(
+			ff.literal("LABEL_CLASS_DISABLED"), ff.literal("YES"));
+
+	/** A Filter to mark a {@link TextSymbolizer} class as enabled **/
+	public final static PropertyIsEqualTo classEnabledFilter = ff.equals(
+			ff.literal("LABEL_CLASS_ENABLED"),
+			ff.literal("LABEL_CLASS_ENABLED"));
+
+	/** All default text rule names start with this **/
+	public static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
+
+	public static final Filter DEFAULT_FILTER_ALL_OTHERS = FilterUtil.ALLWAYS_TRUE_FILTER;
+
+	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
@@ -67,24 +74,43 @@ public class TextRuleList extends AbstractRulesList {
 	public static final PropertyIsEqualTo oldClassesDisabledFilter = ff.equals(
 			ff.literal("1"), ff.literal("2"));
 
-	/** A Filter to mark a {@link TextSymbolizer} class as disabled **/
-	public final static PropertyIsEqualTo classDisabledFilter = ff.equals(
-			ff.literal("LABEL_CLASS_DISABLED"), ff.literal("YES"));
+	/**
+	 * A Filter to mark that not ALL classes have been disabled by the
+	 * {@link TextRuleList}{@link #setEnabled(boolean)} method. This filter is
+	 * not used anymore and only for backward compatibility. Will be removed in
+	 * 2.0
+	 **/
+	public static final PropertyIsEqualTo oldClassesEnabledFilter = ff.equals(
+			ff.literal("1"), ff.literal("1"));
 
-	/** A Filter to mark a {@link TextSymbolizer} class as enabled **/
-	public final static PropertyIsEqualTo classEnabledFilter = ff.equals(
-			ff.literal("LABEL_CLASS_ENABLED"),
-			ff.literal("LABEL_CLASS_ENABLED"));
+	/**
+	 * A piece of {@link Filter} that is only true, if the rendering language is
+	 * set to the given language. @see XMapPane#setRenderLanguage
+	 * 
+	 * @param lang
+	 *            if <code>null</code>, the rule will be true when no specific
+	 *            rendering language has been set.
+	 */
+	public static Filter classLanguageFilter(String lang) {
 
-	public static final Filter DEFAULT_FILTER_ALL_OTHERS = FilterUtil.ALLWAYS_TRUE_FILTER;
+		if (lang == null)
+			lang = XMapPane.ENV_LANG_DEFAULT;
 
-	/** All default text rule names start with this **/
-	public static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
+		// set argument to set a default return value of 0
+		Expression exEnv = ff.function("env", ff.literal(XMapPane.ENV_LANG),
+				ff.literal(XMapPane.ENV_LANG_DEFAULT));
 
-	final static protected Logger LOGGER = Logger.getLogger(TextRuleList.class);
+		Filter filter = ff.equals(ff.literal(lang), exEnv);
+
+		return filter;
+
+	}
 
 	/** Stores whether the class specific {@link TextSymbolizer}s are enabled **/
 	private final List<Boolean> classesEnabled = new ArrayList<Boolean>();
+
+	/** Stores all {@link Filter}s for all classes **/
+	private final List<Filter> classesFilters = new ArrayList<Filter>();
 
 	/**
 	 * Stores whether the class is only valid for a special language. If
@@ -92,19 +118,16 @@ public class TextRuleList extends AbstractRulesList {
 	 **/
 	private final List<String> classesLanguages = new ArrayList<String>();
 
-	/** Stores all {@link Filter}s for all classes **/
-	private final List<Filter> classesFilters = new ArrayList<Filter>();
-
 	/** Stores all maxScale parameters for the classes **/
 	List<Double> classesMaxScales = new ArrayList<Double>();
 
 	/** Stores all minScale parameters for all classes **/
 	List<Double> classesMinScales = new ArrayList<Double>();
 
+	private List<String> classesRuleNames = new ArrayList<String>();
+
 	/** Stores all {@link TextSymbolizer}s for all classes **/
 	List<TextSymbolizer> classesSymbolizers = new ArrayList<TextSymbolizer>();
-
-	private List<String> classesRuleNames = new ArrayList<String>();
 
 	/**
 	 * @deprecated move the selIdx out of this class
@@ -115,12 +138,6 @@ public class TextRuleList extends AbstractRulesList {
 	final private StyledFeaturesInterface<?> styledFeatures;
 
 	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
-			GeometryForm geometryForm, boolean withDefaults) {
-		super(RulesListType.TEXT_LABEL, geometryForm);
-		this.styledFeatures = styledFeatures;
-	}
-
-	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
 			boolean withDefaults) {
 		super(RulesListType.TEXT_LABEL, GeometryForm.ANY);
 		this.styledFeatures = styledFeatures;
@@ -128,60 +145,10 @@ public class TextRuleList extends AbstractRulesList {
 			addDefaultClass();
 	}
 
-	/**
-	 * @return the index of the newly added class
-	 */
-	public int addDefaultClass(String lang) {
-
-		TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
-
-		pushQuite();
-
-		try {
-			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
-				LOGGER.debug("Not adding a default class for " + lang
-						+ " because an equal class already exits!");
-				return -1;
-			}
-
-			String ruleName = DEFAULT_CLASS_RULENAME;
-			if (lang != null)
-				ruleName += "_" + lang;
-
-			return addClass(defaultTextSymbolizer, ruleName,
-					DEFAULT_FILTER_ALL_OTHERS, true, lang, null, null);
-
-		} finally {
-			popQuite(new RuleChangedEvent("Added a default TextSymbolizer",
-					this));
-		}
-	}
-
-	/**
-	 * @return <code>true</code> if another class with the same filter and name
-	 *         already exists.
-	 */
-	public boolean existsClass(Filter filter, String lang) {
-
-		for (int i = 0; i < countClasses(); i++) {
-			if (getClassLang(i) == null && lang != null)
-				continue;
-			if (getClassLang(i) != null && !getClassLang(i).equals(lang))
-				continue;
-
-			if (filter != null
-					&& getClassFilter(i).toString().equals(filter.toString()))
-				return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @return the index of the newly added class
-	 */
-	public int addDefaultClass() {
-		return addDefaultClass(null);
+	public TextRuleList(StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm, boolean withDefaults) {
+		super(RulesListType.TEXT_LABEL, geometryForm);
+		this.styledFeatures = styledFeatures;
 	}
 
 	/**
@@ -248,6 +215,42 @@ public class TextRuleList extends AbstractRulesList {
 		return filter;
 	}
 
+	/**
+	 * @return the index of the newly added class
+	 */
+	public int addDefaultClass() {
+		return addDefaultClass(null);
+	}
+
+	/**
+	 * @return the index of the newly added class
+	 */
+	public int addDefaultClass(String lang) {
+
+		TextSymbolizer defaultTextSymbolizer = createDefaultTextSymbolizer();
+
+		pushQuite();
+
+		try {
+			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
+				LOGGER.debug("Not adding a default class for " + lang
+						+ " because an equal class already exits!");
+				return -1;
+			}
+
+			String ruleName = DEFAULT_CLASS_RULENAME;
+			if (lang != null)
+				ruleName += "_" + lang;
+
+			return addClass(defaultTextSymbolizer, ruleName,
+					DEFAULT_FILTER_ALL_OTHERS, true, lang, null, null);
+
+		} finally {
+			popQuite(new RuleChangedEvent("Added a default TextSymbolizer",
+					this));
+		}
+	}
+
 	private Filter addLanguageFilter(Filter filter, int idx) {
 		// Is this class language specific?
 		if (getClassLang(idx) != null) {
@@ -259,26 +262,10 @@ public class TextRuleList extends AbstractRulesList {
 	}
 
 	/**
-	 * A piece of {@link Filter} that is only true, if the rendering language is
-	 * set to the given language. @see XMapPane#setRenderLanguage
-	 * 
-	 * @param lang
-	 *            if <code>null</code>, the rule will be true when no specific
-	 *            rendering language has been set.
+	 * @return the number of text classes defined.
 	 */
-	public static Filter classLanguageFilter(String lang) {
-
-		if (lang == null)
-			lang = XMapPane.ENV_LANG_DEFAULT;
-
-		// set argument to set a default return value of 0
-		Expression exEnv = ff.function("env", ff.literal(XMapPane.ENV_LANG),
-				ff.literal(XMapPane.ENV_LANG_DEFAULT));
-
-		Filter filter = ff.equals(ff.literal(lang), exEnv);
-
-		return filter;
-
+	public int countClasses() {
+		return classesFilters.size();
 	}
 
 	private TextSymbolizer createDefaultTextSymbolizer() {
@@ -327,15 +314,28 @@ public class TextRuleList extends AbstractRulesList {
 		return ts;
 	}
 
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		return RulesListType.TEXT_LABEL.toString();
+	/**
+	 * @return <code>true</code> if another class with the same filter and name
+	 *         already exists.
+	 */
+	public boolean existsClass(Filter filter, String lang) {
+
+		for (int i = 0; i < countClasses(); i++) {
+			if (getClassLang(i) == null && lang != null)
+				continue;
+			if (getClassLang(i) != null && !getClassLang(i).equals(lang))
+				continue;
+
+			if (filter != null
+					&& getClassFilter(i).toString().equals(filter.toString()))
+				return true;
+		}
+
+		return false;
 	}
 
-	public Boolean isClassEnabled(int index) {
-		if (index > classesEnabled.size() - 1)
-			return null;
-		return classesEnabled.get(index);
+	private List<Filter> getClassesFilters() {
+		return classesFilters;
 	}
 
 	public Filter getClassFilter(int index) {
@@ -350,8 +350,29 @@ public class TextRuleList extends AbstractRulesList {
 		return classesLanguages.get(index);
 	}
 
-	private List<Filter> getClassesFilters() {
-		return classesFilters;
+	public TextSymbolizer getClassSymbolizer(int index) {
+		if (index > classesSymbolizers.size() - 1)
+			return null;
+		return classesSymbolizers.get(index);
+	}
+
+	/**
+	 * A list of languages that a default class has already been defined for
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getDefaultLanguages() {
+		ArrayList<String> usedLangs = new ArrayList<String>();
+
+		if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
+			return usedLangs;
+
+		for (String lang : AtlasStyler.getLanguages()) {
+			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
+				usedLangs.add(lang);
+			}
+		}
+		return usedLangs;
 	}
 
 	/**
@@ -360,6 +381,12 @@ public class TextRuleList extends AbstractRulesList {
 	@Deprecated
 	public String getRuleName() {
 		return classesRuleNames.get(selIdx);
+	}
+
+	public String getRuleName(int index) {
+		if (index > classesRuleNames.size() - 1)
+			return null;
+		return classesRuleNames.get(index);
 	}
 
 	public List<String> getRuleNames() {
@@ -470,12 +497,6 @@ public class TextRuleList extends AbstractRulesList {
 		return rules;
 	}
 
-	public String getRuleName(int index) {
-		if (index > classesRuleNames.size() - 1)
-			return null;
-		return classesRuleNames.get(index);
-	}
-
 	/**
 	 * @deprecated move the selIdx out of this class
 	 */
@@ -503,7 +524,26 @@ public class TextRuleList extends AbstractRulesList {
 		return classesSymbolizers;
 	}
 
-	public void importClassesFromStyle(RulesListInterface symbRL, Component owner) {
+	// /**
+	// * Are all {@link TextSymbolizer} classes disabled/enabled.
+	// */
+	// public boolean isEnabled() {
+	// return enabled;
+	// }
+
+	/**
+	 * @return <code>true</code> is at least one DEFAULT rule exists.
+	 */
+	public boolean hasDefault() {
+		for (String s : getRuleNames()) {
+			if (s != null && s.startsWith(DEFAULT_CLASS_RULENAME))
+				return true;
+		}
+		return false;
+	}
+
+	public void importClassesFromStyle(RulesListInterface symbRL,
+			Component owner) {
 
 		pushQuite();
 
@@ -725,61 +765,10 @@ public class TextRuleList extends AbstractRulesList {
 
 	}
 
-	// /**
-	// * Are all {@link TextSymbolizer} classes disabled/enabled.
-	// */
-	// public boolean isEnabled() {
-	// return enabled;
-	// }
-
-	private void removeAllClassesButFirst() {
-		TextSymbolizer backupS = getClassSymbolizer(0);
-		getSymbolizers().clear();
-		getSymbolizers().add(backupS);
-
-		String backupRN = getRuleNames().get(0);
-		getRuleNames().clear();
-		getRuleNames().add(backupRN);
-
-		Filter backupFR = getClassFilter(0);
-		getClassesFilters().clear();
-		getClassesFilters().add(backupFR);
-
-		Double backupMin = classesMinScales.get(0);
-		classesMinScales.clear();
-		classesMinScales.add(backupMin);
-
-		Double backupMax = classesMaxScales.get(0);
-		classesMaxScales.clear();
-		classesMaxScales.add(backupMax);
-
-		Boolean backupEnabled = classesEnabled.get(0);
-		classesEnabled.clear();
-		classesEnabled.add(backupEnabled);
-	}
-
-	/**
-	 * @param classIdx
-	 *            Label class idx, 0 = default/all others
-	 */
-	public void removeClassEnabled(int classIdx) {
-		classesEnabled.remove(classIdx);
-	}
-
-	/**
-	 * @param classIdx
-	 *            Label class idx, 0 = default/all others
-	 */
-	public void removeClassMaxScale(int classIdx) {
-		classesMaxScales.remove(classIdx);
-	}
-
-	/**
-	 * @param classIdx
-	 *            Label class idx, 0 = default/all others
-	 */
-	public void removeClassMinScale(int classIdx) {
-		classesMinScales.remove(classIdx);
+	public Boolean isClassEnabled(int index) {
+		if (index > classesEnabled.size() - 1)
+			return null;
+		return classesEnabled.get(index);
 	}
 
 	/**
@@ -870,54 +859,91 @@ public class TextRuleList extends AbstractRulesList {
 		return filter;
 	}
 
-	private void setClassRuleName(int index, String ruleName) {
-		while (classesRuleNames.size() - 1 < index) {
-			classesRuleNames.add("");
-		}
-		classesRuleNames.set(index, ruleName);
-
-		fireEvents(new RuleChangedEvent(
-				"a text CLASS rulename has been set to " + ruleName, this));
+	@Override
+	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
+		// Does nothing
 	}
 
-	public void setClassMinMaxScales(int index, Double minValue, Double maxValue) {
-		setClassMinScale(index, minValue);
-		setClassMaxScale(index, maxValue);
+	private void removeAllClassesButFirst() {
+		TextSymbolizer backupS = getClassSymbolizer(0);
+		getSymbolizers().clear();
+		getSymbolizers().add(backupS);
+
+		String backupRN = getRuleNames().get(0);
+		getRuleNames().clear();
+		getRuleNames().add(backupRN);
+
+		Filter backupFR = getClassFilter(0);
+		getClassesFilters().clear();
+		getClassesFilters().add(backupFR);
+
+		Double backupMin = classesMinScales.get(0);
+		classesMinScales.clear();
+		classesMinScales.add(backupMin);
+
+		Double backupMax = classesMaxScales.get(0);
+		classesMaxScales.clear();
+		classesMaxScales.add(backupMax);
+
+		Boolean backupEnabled = classesEnabled.get(0);
+		classesEnabled.clear();
+		classesEnabled.add(backupEnabled);
 	}
 
-	public void setClassMaxScale(int index, Double maxValue) {
-		while (classesMaxScales.size() - 1 < index) {
-			classesMaxScales.add(0.);
-		}
-
-		if (maxValue == null)
-			maxValue = Double.MAX_VALUE;
-		classesMaxScales.set(index, maxValue);
-
-		fireEvents(new RuleChangedEvent(
-				"a text CLASS MaxScale has been set to " + maxValue, this));
+	/**
+	 * Remove a text symbolizer class.
+	 */
+	public void removeClass(int idx) {
+		getSymbolizers().remove(idx);
+		getClassesFilters().remove(idx);
+		getRuleNames().remove(idx);
+		removeClassMinScale(idx);
+		removeClassMaxScale(idx);
+		removeClassEnabled(idx);
 	}
 
-	public void setClassMinScale(int index, Double minValue) {
-		while (classesMinScales.size() - 1 < index) {
-			classesMinScales.add(0.);
-		}
-		if (minValue == null)
-			minValue = 0.;
-		classesMinScales.set(index, minValue);
-
-		fireEvents(new RuleChangedEvent(
-				"a text CLASS MinScale has been set to " + minValue, this));
+	/**
+	 * @param classIdx
+	 *            Label class idx, 0 = default/all others
+	 */
+	public void removeClassEnabled(int classIdx) {
+		classesEnabled.remove(classIdx);
 	}
 
-	private void setClassSymbolizer(int index, TextSymbolizer ts) {
-		while (classesSymbolizers.size() - 1 < index) {
-			classesSymbolizers.add(ts);
-		}
-		classesSymbolizers.set(index, ts);
+	/**
+	 * @param classIdx
+	 *            Label class idx, 0 = default/all others
+	 */
+	public void removeClassMaxScale(int classIdx) {
+		classesMaxScales.remove(classIdx);
+	}
 
+	/**
+	 * @param classIdx
+	 *            Label class idx, 0 = default/all others
+	 */
+	public void removeClassMinScale(int classIdx) {
+		classesMinScales.remove(classIdx);
+	}
+
+	public void setClassEnabled(int index, boolean b) {
+		while (classesEnabled.size() - 1 < index) {
+			classesEnabled.add(true);
+		}
+		classesEnabled.set(index, b);
 		fireEvents(new RuleChangedEvent(
-				"a text CLASS symbolizer has been set to " + ts, this));
+				"a text symbolizer class enablement has been set to " + b, this));
+	}
+
+	public void setClassFilter(int index, Filter filter) {
+		while (classesFilters.size() - 1 < index) {
+			classesFilters.add(Filter.EXCLUDE);
+		}
+
+		classesFilters.set(index, filter);
+		fireEvents(new RuleChangedEvent(
+				"a text symbolizer class FILTER has been set to " + filter,
+				this));
 	}
 
 	/**
@@ -944,24 +970,54 @@ public class TextRuleList extends AbstractRulesList {
 				this));
 	}
 
-	public void setClassFilter(int index, Filter filter) {
-		while (classesFilters.size() - 1 < index) {
-			classesFilters.add(Filter.EXCLUDE);
+	public void setClassMaxScale(int index, Double maxValue) {
+		while (classesMaxScales.size() - 1 < index) {
+			classesMaxScales.add(0.);
 		}
 
-		classesFilters.set(index, filter);
+		if (maxValue == null)
+			maxValue = Double.MAX_VALUE;
+		classesMaxScales.set(index, maxValue);
+
 		fireEvents(new RuleChangedEvent(
-				"a text symbolizer class FILTER has been set to " + filter,
-				this));
+				"a text CLASS MaxScale has been set to " + maxValue, this));
 	}
 
-	public void setClassEnabled(int index, boolean b) {
-		while (classesEnabled.size() - 1 < index) {
-			classesEnabled.add(true);
+	public void setClassMinMaxScales(int index, Double minValue, Double maxValue) {
+		setClassMinScale(index, minValue);
+		setClassMaxScale(index, maxValue);
+	}
+
+	public void setClassMinScale(int index, Double minValue) {
+		while (classesMinScales.size() - 1 < index) {
+			classesMinScales.add(0.);
 		}
-		classesEnabled.set(index, b);
+		if (minValue == null)
+			minValue = 0.;
+		classesMinScales.set(index, minValue);
+
 		fireEvents(new RuleChangedEvent(
-				"a text symbolizer class enablement has been set to " + b, this));
+				"a text CLASS MinScale has been set to " + minValue, this));
+	}
+
+	private void setClassRuleName(int index, String ruleName) {
+		while (classesRuleNames.size() - 1 < index) {
+			classesRuleNames.add("");
+		}
+		classesRuleNames.set(index, ruleName);
+
+		fireEvents(new RuleChangedEvent(
+				"a text CLASS rulename has been set to " + ruleName, this));
+	}
+
+	private void setClassSymbolizer(int index, TextSymbolizer ts) {
+		while (classesSymbolizers.size() - 1 < index) {
+			classesSymbolizers.add(ts);
+		}
+		classesSymbolizers.set(index, ts);
+
+		fireEvents(new RuleChangedEvent(
+				"a text CLASS symbolizer has been set to " + ts, this));
 	}
 
 	public void setRuleNames(List<String> ruleNames) {
@@ -980,67 +1036,6 @@ public class TextRuleList extends AbstractRulesList {
 	public void setSymbolizers(List<TextSymbolizer> symbolizers) {
 		this.classesSymbolizers = symbolizers;
 		fireEvents(new RuleChangedEvent("setSymbolizers", this));
-	}
-
-	/**
-	 * @return the number of text classes defined.
-	 */
-	public int countClasses() {
-		return classesFilters.size();
-	}
-
-	/**
-	 * Remove a text symbolizer class.
-	 */
-	public void removeClass(int idx) {
-		getSymbolizers().remove(idx);
-		getClassesFilters().remove(idx);
-		getRuleNames().remove(idx);
-		removeClassMinScale(idx);
-		removeClassMaxScale(idx);
-		removeClassEnabled(idx);
-	}
-
-	/**
-	 * A list of languages that a default class has already been defined for
-	 * 
-	 * @return
-	 */
-	public ArrayList<String> getDefaultLanguages() {
-		ArrayList<String> usedLangs = new ArrayList<String>();
-
-		if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.OGC_SINGLELANGUAGE)
-			return usedLangs;
-
-		for (String lang : AtlasStyler.getLanguages()) {
-			if (existsClass(DEFAULT_FILTER_ALL_OTHERS, lang)) {
-				usedLangs.add(lang);
-			}
-		}
-		return usedLangs;
-	}
-
-	public TextSymbolizer getClassSymbolizer(int index) {
-		if (index > classesSymbolizers.size() - 1)
-			return null;
-		return classesSymbolizers.get(index);
-	}
-
-	/**
-	 * @return <code>true</code> is at least one DEFAULT rule exists.
-	 */
-	public boolean hasDefault() {
-		for (String s : getRuleNames()) {
-			if (s != null && s.startsWith(DEFAULT_CLASS_RULENAME))
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	public
-	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
-		// Does nothing
 	}
 
 }

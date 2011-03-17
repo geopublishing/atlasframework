@@ -10,6 +10,8 @@ public enum CLASSIFICATION_METHOD {
 
 	// TODO NATURAL BREAKS
 
+	public static final CLASSIFICATION_METHOD DEFAULT_METHOD = CLASSIFICATION_METHOD.QUANTILES;
+
 	public String getDesc() {
 		return ASUtil.R("QuantitiesClassifiction.Method.ComboboxEntry."
 				+ toString());
@@ -19,6 +21,4 @@ public enum CLASSIFICATION_METHOD {
 		return ASUtil.R("QuantitiesClassifiction.Method.ComboboxEntry."
 				+ toString() + ".TT");
 	}
-
-	public static final CLASSIFICATION_METHOD DEFAULT_METHOD = CLASSIFICATION_METHOD.QUANTILES;
 }

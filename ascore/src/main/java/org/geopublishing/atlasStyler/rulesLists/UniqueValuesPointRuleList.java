@@ -22,8 +22,10 @@ public class UniqueValuesPointRuleList extends UniqueValuesRuleList {
 
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public UniqueValuesPointRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(RulesListType.UNIQUE_VALUE_POINT, styledFeatures, GeometryForm.POINT);
+	public UniqueValuesPointRuleList(StyledFeaturesInterface<?> styledFeatures,
+			boolean withDefaults) {
+		super(RulesListType.UNIQUE_VALUE_POINT, styledFeatures,
+				GeometryForm.POINT, withDefaults);
 
 	}
 

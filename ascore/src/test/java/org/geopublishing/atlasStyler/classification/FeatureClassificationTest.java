@@ -44,7 +44,7 @@ import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
 
-public class QuantitiesClassificationTest extends TestingClass {
+public class FeatureClassificationTest extends TestingClass {
 
 	/**
 	 * Uses TestingUtil.TestDatasetsVector.countryShp.getFeatureSource() and
@@ -168,8 +168,8 @@ public class QuantitiesClassificationTest extends TestingClass {
 	public void testNoDataValueviaAMD() throws IOException,
 			InterruptedException {
 
-		FeatureClassification clfcn = new FeatureClassification(
-				new StyledFS(featureSource_polygon), "SQKM_CNTRY");
+		FeatureClassification clfcn = new FeatureClassification(new StyledFS(
+				featureSource_polygon), "SQKM_CNTRY");
 
 		clfcn.getStyledFeatures().getAttributeMetaDataMap().get("SQKM_CNTRY")
 				.addNodataValue(0.0);
@@ -185,8 +185,8 @@ public class QuantitiesClassificationTest extends TestingClass {
 	@Test
 	public void testQEqualInterval() throws IOException, InterruptedException {
 
-		FeatureClassification clfcn = new FeatureClassification(
-				new StyledFS(featureSource_polygon), "POP_CNTRY");
+		FeatureClassification clfcn = new FeatureClassification(new StyledFS(
+				featureSource_polygon), "POP_CNTRY");
 		clfcn.setRecalcAutomatically(false);
 		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
 		clfcn.setNumClasses(4);
@@ -203,8 +203,8 @@ public class QuantitiesClassificationTest extends TestingClass {
 			throws IOException, InterruptedException {
 		// Filter exclude = ff.equals(ff.property("LANDLOCKED"),
 		// ff.literal("N"));
-		FeatureClassification clfcn = new FeatureClassification(
-				new StyledFS(featureSource_polygon), "POP_CNTRY", null);
+		FeatureClassification clfcn = new FeatureClassification(new StyledFS(
+				featureSource_polygon), "POP_CNTRY", null);
 		clfcn.setRecalcAutomatically(false);
 
 		clfcn.setMethod(CLASSIFICATION_METHOD.EI);
@@ -291,8 +291,8 @@ public class QuantitiesClassificationTest extends TestingClass {
 
 		extractColors(snowStyleOriginal, beforeColors);
 
-		AtlasStylerVector atlasStyler = new AtlasStylerVector(featureSource_snowPolygon,
-				snowStyle);
+		AtlasStylerVector atlasStyler = new AtlasStylerVector(
+				featureSource_snowPolygon, snowStyle);
 		Style afterImport = atlasStyler.getStyle();
 
 		extractColors(afterImport, afterColors);

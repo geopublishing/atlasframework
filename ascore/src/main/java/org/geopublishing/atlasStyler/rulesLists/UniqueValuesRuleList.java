@@ -137,9 +137,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 		}
 	}
 
-	public UniqueValuesRuleList(RulesListType rulesListType , StyledFeaturesInterface<?> styledFeatures,
-			GeometryForm geometryForm) {
-		super(rulesListType, styledFeatures, geometryForm);
+	public UniqueValuesRuleList(RulesListType rulesListType,
+			StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm, boolean withDefaults) {
+		super(rulesListType, styledFeatures, geometryForm, withDefaults);
 	}
 
 	/**
@@ -168,6 +169,10 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 			popQuite();
 
 		return countNew;
+	}
+
+	public void addDefaultRule() {
+		setDefaultRuleEnabled(true);
 	}
 
 	/**
@@ -324,7 +329,7 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 	}
 
 	@Override
-	public String getAtlasMetaInfoForFTSName() {
+	public String extendMetaInfoString() {
 		final String metaInfoString = getType().toString();
 
 		return metaInfoString;
@@ -524,172 +529,6 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 		return values;
 	}
 
-	public boolean isWithDefaultSymbol() {
-		return getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE);
-	}
-
-	@Override
-	public void parseMetaInfoString(final String metaInfoString,
-			final FeatureTypeStyle fts) {
-	}
-
-	/**
-	 * Removes a single value
-	 * 
-	 * @param value
-	 *            Removes this value
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	private void removeValue(final Object value) {
-
-		// Just to ensure internal data structure integrity
-		test();
-
-		final int idx = getValues().indexOf(value);
-
-		if (idx >= 0) {
-			getValues().remove(idx);
-			getLabels().remove(idx);
-			getSymbols().remove(idx);
-		} else {
-			LOGGER.warn("Asked to remove a value that doesn't exist !?: '"
-					+ value + "'");
-		}
-
-		// Just to ensure internal data structure integrity
-		test();
-
-		fireEvents(new RuleChangedEvent("Removed value " + value, this));
-		// LOGGER.debug("remove = "+strVal+" size left = "+getValues().size());
-	}
-
-	/**
-	 * Remove the given list of {@link String} values.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void removeValues(final List<Object> values) {
-		pushQuite();
-
-		try {
-
-			// System.out.println(values);
-
-			for (final Object strVal : values.toArray(new Object[] {})) {
-				removeValue(strVal);
-			}
-
-		} finally {
-			popQuite(new RuleChangedEvent(values.size()
-					+ " categories have been removed", this));
-		}
-	}
-
-	public void setBrewerPalette(final BrewerPalette palette) {
-		this.palette = palette;
-	}
-
-	/**
-	 * Set the first field used for the categorization.
-	 * 
-	 * @param newName
-	 *            Give the name directly as a {@link PropertyName}
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	public void setPropertyFieldName(final String newName,
-			final boolean removeOldClasses) {
-
-		// We may not use the Getter here!.. It generates content :-(
-		if (propertyFieldName != null)
-			if (propertyFieldName.equals(newName))
-				return;
-
-		propertyFieldName = newName;
-
-		if (removeOldClasses) {
-			for (int i = 0; i < values.size(); i++) {
-				if (values.get(i) != ALLOTHERS_IDENTIFICATION_VALUE) {
-					values.remove(i);
-					symbols.remove(i);
-					labels.remove(i);
-				}
-			}
-		}
-
-		fireEvents(new RuleChangedEvent("The PropertyField changed to "
-				+ getPropertyFieldName() + ". Other rules have been removed.",
-				this));
-
-		// Just to ensure internal data structure integrity
-		test();
-	}
-
-	public void setSymbols(
-			final List<SingleRuleList<? extends Symbolizer>> symbols) {
-		this.symbols = symbols;
-	}
-
-	public void addDefaultRule() {
-		setDefaultRuleEnabled(true);
-	}
-
-	public void removeDefaultRule() {
-		setDefaultRuleEnabled(false);
-	}
-
-	public void setDefaultRuleEnabled(final boolean withDefaultSymbol) {
-
-		pushQuite();
-
-		try {
-
-			/***********************************************************************
-			 * It has been activated.. create a default rule and insert it at
-			 * the end
-			 */
-			if ((withDefaultSymbol == true)
-					&& (!getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE))) {
-
-				getValues().add(ALLOTHERS_IDENTIFICATION_VALUE);
-				getSymbols().add(getTemplate().copy());
-				getLabels().add(
-						AtlasStylerVector.R("UniqueValuesGUI.AllOthersLabel"));
-
-			} else
-			/***********************************************************************
-			 * It has been disabled.. remove the default rule
-			 */
-			{
-				removeValue(ALLOTHERS_IDENTIFICATION_VALUE);
-
-			}
-
-		} finally {
-			popQuite(new RuleChangedEvent("WithDefaultRule set to "
-					+ withDefaultSymbol, this));
-		}
-	}
-
-	/**
-	 * A helper method to debug and ensure internal data structure integrity.
-	 */
-	void test() {
-		// A Test!
-		if (getSymbols().size() - getLabels().size() + getValues().size() != getSymbols()
-				.size()) {
-			System.out.println("Symbols : "
-					+ LangUtil.stringConcatWithSep(" ", getSymbols()));
-			System.out.println("Labels:   "
-					+ LangUtil.stringConcatWithSep(" ", getLabels()));
-			System.out.println("Values : "
-					+ LangUtil.stringConcatWithSep(" ", getValues()));
-			throw new RuntimeException(
-					"UniquevaluesRuleList is not in balance!");
-		}
-	}
-
 	@Override
 	public void importRules(List<Rule> rules) {
 
@@ -756,6 +595,168 @@ public abstract class UniqueValuesRuleList extends FeatureRuleList implements
 		// } finally {
 		// popQuite();
 		// }
+	}
+
+	public boolean isWithDefaultSymbol() {
+		return getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE);
+	}
+
+	@Override
+	public void parseMetaInfoString(final String metaInfoString,
+			final FeatureTypeStyle fts) {
+	}
+
+	public void removeDefaultRule() {
+		setDefaultRuleEnabled(false);
+	}
+
+	/**
+	 * Removes a single value
+	 * 
+	 * @param value
+	 *            Removes this value
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	private void removeValue(final Object value) {
+
+		// Just to ensure internal data structure integrity
+		test();
+
+		final int idx = getValues().indexOf(value);
+
+		if (idx >= 0) {
+			getValues().remove(idx);
+			getLabels().remove(idx);
+			getSymbols().remove(idx);
+		} else {
+			LOGGER.warn("Asked to remove a value that doesn't exist !?: '"
+					+ value + "'");
+		}
+
+		// Just to ensure internal data structure integrity
+		test();
+
+		fireEvents(new RuleChangedEvent("Removed value " + value, this));
+		// LOGGER.debug("remove = "+strVal+" size left = "+getValues().size());
+	}
+
+	/**
+	 * Remove the given list of {@link String} values.
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void removeValues(final List<Object> values) {
+		pushQuite();
+
+		try {
+
+			// System.out.println(values);
+
+			for (final Object strVal : values.toArray(new Object[] {})) {
+				removeValue(strVal);
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(values.size()
+					+ " categories have been removed", this));
+		}
+	}
+
+	public void setBrewerPalette(final BrewerPalette palette) {
+		this.palette = palette;
+	}
+
+	public void setDefaultRuleEnabled(final boolean withDefaultSymbol) {
+
+		pushQuite();
+
+		try {
+
+			/***********************************************************************
+			 * It has been activated.. create a default rule and insert it at
+			 * the end
+			 */
+			if ((withDefaultSymbol == true)
+					&& (!getValues().contains(ALLOTHERS_IDENTIFICATION_VALUE))) {
+
+				getValues().add(ALLOTHERS_IDENTIFICATION_VALUE);
+				getSymbols().add(getTemplate().copy());
+				getLabels().add(
+						AtlasStylerVector.R("UniqueValuesGUI.AllOthersLabel"));
+
+			} else
+			/***********************************************************************
+			 * It has been disabled.. remove the default rule
+			 */
+			{
+				removeValue(ALLOTHERS_IDENTIFICATION_VALUE);
+
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent("WithDefaultRule set to "
+					+ withDefaultSymbol, this));
+		}
+	}
+
+	/**
+	 * Set the first field used for the categorization.
+	 * 
+	 * @param newName
+	 *            Give the name directly as a {@link PropertyName}
+	 * 
+	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 */
+	public void setPropertyFieldName(final String newName,
+			final boolean removeOldClasses) {
+
+		// We may not use the Getter here!.. It generates content :-(
+		if (propertyFieldName != null)
+			if (propertyFieldName.equals(newName))
+				return;
+
+		propertyFieldName = newName;
+
+		if (removeOldClasses) {
+			for (int i = 0; i < values.size(); i++) {
+				if (values.get(i) != ALLOTHERS_IDENTIFICATION_VALUE) {
+					values.remove(i);
+					symbols.remove(i);
+					labels.remove(i);
+				}
+			}
+		}
+
+		fireEvents(new RuleChangedEvent("The PropertyField changed to "
+				+ getPropertyFieldName() + ". Other rules have been removed.",
+				this));
+
+		// Just to ensure internal data structure integrity
+		test();
+	}
+
+	public void setSymbols(
+			final List<SingleRuleList<? extends Symbolizer>> symbols) {
+		this.symbols = symbols;
+	}
+
+	/**
+	 * A helper method to debug and ensure internal data structure integrity.
+	 */
+	void test() {
+		// A Test!
+		if (getSymbols().size() - getLabels().size() + getValues().size() != getSymbols()
+				.size()) {
+			System.out.println("Symbols : "
+					+ LangUtil.stringConcatWithSep(" ", getSymbols()));
+			System.out.println("Labels:   "
+					+ LangUtil.stringConcatWithSep(" ", getLabels()));
+			System.out.println("Values : "
+					+ LangUtil.stringConcatWithSep(" ", getValues()));
+			throw new RuntimeException(
+					"UniquevaluesRuleList is not in balance!");
+		}
 	}
 
 }

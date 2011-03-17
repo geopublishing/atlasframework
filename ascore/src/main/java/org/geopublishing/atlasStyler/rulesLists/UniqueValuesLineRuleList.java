@@ -19,11 +19,13 @@ import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.lang.LangUtil;
 
 public class UniqueValuesLineRuleList extends UniqueValuesRuleList {
-	
+
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(RulesListType.UNIQUE_VALUE_LINE, styledFeatures,GeometryForm.LINE);
+	public UniqueValuesLineRuleList(StyledFeaturesInterface<?> styledFeatures,
+			boolean withDefaults) {
+		super(RulesListType.UNIQUE_VALUE_LINE, styledFeatures,
+				GeometryForm.LINE, withDefaults);
 	}
 
 	@Override

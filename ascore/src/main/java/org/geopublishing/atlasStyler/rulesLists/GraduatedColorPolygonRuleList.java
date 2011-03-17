@@ -21,10 +21,11 @@ import de.schmitzm.lang.LangUtil;
 public class GraduatedColorPolygonRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public GraduatedColorPolygonRuleList(StyledFeaturesInterface<?> styledFeatures) {
-		super(RulesListType.QUANTITIES_COLORIZED_POLYGON, styledFeatures,GeometryForm.POLYGON);
+	public GraduatedColorPolygonRuleList(
+			StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
+		super(RulesListType.QUANTITIES_COLORIZED_POLYGON, styledFeatures,
+				GeometryForm.POLYGON, withDefaults);
 	}
-
 
 	@Override
 	public void importTemplate(FeatureTypeStyle importFTS) {

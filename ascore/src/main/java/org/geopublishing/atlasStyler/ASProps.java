@@ -47,35 +47,35 @@ public abstract class ASProps {
 		antialiasingMaps, automaticPreview,
 		/** Name of charset used for exporting SLD XML* */
 		charsetName,
-		/** JVM/System wide default setting. Applied when starting up **/
-		FORCE_LONGITUDE_FIRST_AXIS_ORDER, language, /**
+		/** List of DB (PostGIS) Servers encoded in one String **/
+		dbList, /** JVM/System wide default setting. Applied when starting up **/
+		FORCE_LONGITUDE_FIRST_AXIS_ORDER, language, LAST_IMPORTED_FILE,
+		/** last used SB server on the list of DB servers **/
+		lastDbIdx,
+		/**
 		 * Last directory used for
 		 * save full SLD dialog
 		 */
-		lastExportDirectory, /** Last directory used for open dialog */
+		lastExportDirectory,
+		/** Last directory used for open dialog */
 		lastImportDirectory,
+		/** last used import source in wizard **/
+		lastImportWizardType,
 		/** Last postgis database used **/
 		lastPgDatabase,
 		/** Last postgis hostname used **/
-		lastPgHost,
-		/** Last postgis hostname used **/
+		lastPgHost, /** Last postgis hostname used **/
 		lastPgPort,
 		/** Last postgis table used **/
 		lastPgTable,
 		/** Last postgis username used **/
 		lastPgUsername,
-		/** JFrame starts maximized? */
-		windowMaximized, LAST_IMPORTED_FILE,
-		/** List of WFS servers encoded in one String **/
-		wfsList,
-		/** List of DB (PostGIS) Servers encoded in one String **/
-		dbList,
 		/** last used WFS server on the list of WFS servers **/
 		lastWfsIdx,
-		/** last used SB server on the list of DB servers **/
-		lastDbIdx,
-		/** last used import source in wizard **/
-		lastImportWizardType, logLevel
+		logLevel,
+		/** List of WFS servers encoded in one String **/
+		wfsList, /** JFrame starts maximized? */
+		windowMaximized
 
 	}
 

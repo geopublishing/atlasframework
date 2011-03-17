@@ -14,6 +14,7 @@ import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.brewer.color.BrewerPalette;
+import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
@@ -32,17 +33,21 @@ import de.schmitzm.swing.SwingUtil;
 
 public abstract class RasterRulesList extends AbstractRulesList {
 
-	private final ArrayList<Double> values = new ArrayList<Double>();
+	protected final int cmt;
+	private final ArrayList<Color> colors = new ArrayList<Color>();
 	private final ArrayList<Translation> labels = new ArrayList<Translation>();
 	private final ArrayList<Double> opacities = new ArrayList<Double>();
-	private final ArrayList<Color> colors = new ArrayList<Color>();
 
-	final int cmt;
-	private BrewerPalette palette = null;
+	private Double opacity = 1.;
+	private BrewerPalette palette = ASUtil.getPalettes(new PaletteType(true,
+			false), -1)[0];
 
 	private StyledRasterInterface<?> styledRaster;
 
-	public RasterRulesList(RulesListType rlt, StyledRasterInterface<?> styledRaster, int colorMapType) {
+	protected final ArrayList<Double> values = new ArrayList<Double>();
+
+	public RasterRulesList(RulesListType rlt,
+			StyledRasterInterface<?> styledRaster, int colorMapType) {
 		super(rlt, null);
 		setStyledRaster(styledRaster);
 
@@ -52,159 +57,22 @@ public abstract class RasterRulesList extends AbstractRulesList {
 					"ColorMapType has to be 1, 2 or 3!");
 	}
 
-	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		String metaInfoString = getType().toString();
-
-		// metaInfoString = extendMetaInfoString(metaInfoString);
-		//
-		// metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_METHOD
-		// + METAINFO_KVP_EQUALS_CHAR + getMethod();
-		//
-		// metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
-		// + METAINFO_KVP_EQUALS_CHAR + getBrewerPalette().getName();
-
-		return metaInfoString;
-	}
-
-	@Override
-	public
-	void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
-	}
-
-	public void setStyledRaster(StyledRasterInterface<?> styledRaster) {
-		this.styledRaster = styledRaster;
-	}
-
-	public StyledRasterInterface<?> getStyledRaster() {
-		return styledRaster;
-	}
-
-	public abstract RasterLegendData getRasterLegendData();
-
-	public int getNumClasses() {
-		// return getColorMap().getColorMapEntries().length;
-		return getValues().size();
-	}
-
-	/**
-	 * Assembles the Colormap from the values, lables, colors and opacities
-	 * 
-	 * @return
-	 */
-	public ColorMap getColorMap() {
-
-		ColorMap cm = StylingUtil.STYLE_FACTORY.createColorMap();
-		cm.setType(cmt);
-
-		for (int i = 0; i < getValues().size(); i++) {
-
-			final Translation label = getLabels().get(i);
-			String labelString = label.toString();
-			if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-				labelString = label.toOneLine();
-			}
-
-			ColorMapEntry cme = StylingUtil.createColorMapEntry(labelString,
-					getValues().get(i), getColors().get(i),
-					getOpacities().get(i));
-
-			cm.addColorMapEntry(cme);
-		}
-
-		return cm;
-	}
-
-	/**
-	 * Attenetion: Ignores the CM type!
-	 */
-	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
-		QuantileBin1D ops = new QuantileBin1D(1.);
-		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-			importValuesLabelsQuantitiesColors(cme);
-			ops.add(getOpacities().get(getNumClasses() - 1));
-		}
-		setOpacity(ops.median());
-	}
-
-	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
-		final Double valueDouble = Double.valueOf(cme.getQuantity()
-				.evaluate(null).toString());
-		getValues().add(valueDouble);
-		getOpacities().add(
-				Double.valueOf(cme.getOpacity().evaluate(null).toString()));
-		getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
-
-		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
-				.getLegendMetaData().get(valueDouble) : null;
-
-		if (I18NUtil.isEmpty(translation)) {
-			final String labelFromCM = cme.getLabel();
-			if (labelFromCM != null && !labelFromCM.isEmpty())
-				getLabels().add(new Translation(labelFromCM));
-			else
-				translation = new Translation("");
-
-		}
-		getLabels().add(translation);
-	}
-
-	public ArrayList<Double> getOpacities() {
-		return opacities;
-	}
-
-	public ArrayList<Color> getColors() {
-		return colors;
-	}
-
-	public ArrayList<Translation> getLabels() {
-		return labels;
-	}
-
-	public ArrayList<Double> getValues() {
-		return values;
-	}
-
-	public void removeIdx(int index) {
-		getValues().remove(index);
-		getOpacities().remove(index);
-		getLabels().remove(index);
-		getColors().remove(index);
-
-		fireEvents(new RuleChangedEvent("Index " + index + " removed", this));
-	}
-
-	/**
-	 * Ent
-	 */
-	public void removeAll() {
-		getValues().clear();
-		getOpacities().clear();
-		getLabels().clear();
-		getColors().clear();
-
-		fireEvents(new RuleChangedEvent("Removed all entries", this));
-	}
-
-	public void setPalette(BrewerPalette palette) {
-		this.palette = palette;
-	}
-
-	public BrewerPalette getPalette() {
-		return palette;
-	}
-
 	public void applyOpacity() {
 		pushQuite();
 
 		try {
 
 			final Double op = getOpacity();
+			if (op == null)
+				return;
 
 			for (int i = 0; i < getValues().size(); i++) {
-				if (getOpacities().get(i) == 0)
-					continue;
-				setOpacity(i, op);
+
+				if (i >= getOpacities().size())
+					getOpacities().add(op);
+
+				if (getOpacities().get(i) != 0)
+					setOpacity(i, op);
 			}
 
 		} finally {
@@ -213,20 +81,9 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		}
 	}
 
-	private Double opacity;
-
-	public void setOpacity(int rowIndex, Double newOp) {
-		if (newOp == getOpacities().get(rowIndex))
-			return;
-		if (newOp > 1.)
-			newOp = 1.;
-		if (newOp < 0.)
-			newOp = 0.;
-		getOpacities().set(rowIndex, LangUtil.round(newOp, 2));
-		fireEvents(new RuleChangedEvent("Opacity changed", this));
-	}
-
 	/**
+	 * 1 value = 1 class
+	 * 
 	 * @param parentGui
 	 *            is <code>null</code>, no warnings will be shown if the number
 	 *            of classes if higher than the number of colors
@@ -234,9 +91,12 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public void applyPalette(JComponent parentGui) {
 		pushQuite();
 
+		getColors().clear();
+
 		try {
 
-			final Color[] colors = getPalette().getColors();
+			if (getValues().size() == 0)
+				return;
 
 			if (getNumClassesVisible() > getPalette().getMaxColors()
 					&& parentGui != null) {
@@ -249,13 +109,19 @@ public abstract class RasterRulesList extends AbstractRulesList {
 						SwingUtil.getParentWindowComponent(parentGui), msg);
 			}
 
+			final Color[] colors = getPalette().getColors(
+					getValues().size() % getPalette().getMaxColors());
+
 			int idx = 0;
 			for (int i = 0; i < getValues().size(); i++) {
 
-				if (getOpacities().get(i) == 0)
+				if (getOpacities().get(i) == 0.)
 					continue;
 
-				getColors().set(i, colors[idx]);
+				if (i >= getColors().size())
+					getColors().add(colors[idx]);
+				else
+					getColors().set(i, colors[idx]);
 
 				idx++;
 				idx = idx % getPalette().getMaxColors();
@@ -270,32 +136,72 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	@Override
-	public void importRules(List<Rule> rules) {
-		pushQuite();
+	public String extendMetaInfoString() {
+		String metaInfoString = super.extendMetaInfoString();
 
-		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules");
+		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
+				+ METAINFO_KVP_EQUALS_CHAR + getPalette().getName();
+
+		return metaInfoString;
+	}
+
+	/**
+	 * Assembles the Colormap from the values, lables, colors and opacities
+	 * 
+	 * @return
+	 */
+	public ColorMap getColorMap() {
+
+		ColorMap cm = StylingUtil.STYLE_FACTORY.createColorMap();
+		cm.setType(cmt);
+
+		for (int i = 0; i < getValues().size(); i++) {
+
+			String labelString = "";
+
+			final Translation label = getLabels().get(i);
+			if (label != null) {
+				if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+					labelString = label.toOneLine();
+				} else
+					labelString = label.toString();
+			}
+
+			ColorMapEntry cme = StylingUtil.createColorMapEntry(labelString,
+					getValues().get(i), getColors().get(i),
+					getOpacities().get(i));
+
+			cm.addColorMapEntry(cme);
 		}
 
-		Rule rule = rules.get(0);
-		
-		// TODO Parse metainfostring?!
+		return cm;
+	}
 
-		try {
-			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
-			ColorMap cm = rs.getColorMap();
+	public ArrayList<Color> getColors() {
+		return colors;
+	}
 
-			importValuesLabelsQuantitiesColors(cm);
+	public ArrayList<Translation> getLabels() {
+		return labels;
+	}
 
-			// Analyse the filters...
-			Filter filter = rule.getFilter();
-			filter = parseAbstractRlSettings(filter);
-
-		} finally {
-			popQuite();
+	/**
+	 * Attention: "Classes" means logical classes. When using ColorMap.RAMPS or
+	 * COLOMAP.INTERVAL it is values - 1
+	 */
+	public int getNumClasses() {
+		if (cmt == ColorMap.TYPE_VALUES)
+			return getValues().size();
+		else {
+			if (getValues().size() < 1)
+				return 0;
+			return getValues().size() - 1;
 		}
 	}
+
+	/**
+	 * Returns the number of visible (opacity > 0) classes.
+	 */
 	public int getNumClassesVisible() {
 		int visible = 0;
 		for (Double o : getOpacities()) {
@@ -305,8 +211,11 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return visible;
 	}
 
-	public void setOpacity(Double opacity) {
-		this.opacity = opacity;
+	/**
+	 * Opacities for classes
+	 */
+	public ArrayList<Double> getOpacities() {
+		return opacities;
 	}
 
 	/**
@@ -318,6 +227,11 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return opacity;
 	}
 
+	public BrewerPalette getPalette() {
+		return palette;
+	}
+
+	public abstract RasterLegendData getRasterLegendData();
 
 	@Override
 	final public List<Rule> getRules() {
@@ -329,8 +243,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		Rule rule = ASUtil.SB.createRule(rs);
 
 		/** Saving the legend label */
-		rule.setTitle("TITLE"+getType().getTitle());
-		rule.setName("NAME"+getType().getTitle());
+		rule.setTitle("TITLE" + getType().getTitle());
+		rule.setName("NAME" + getType().getTitle());
 
 		// addFilters(rule);
 
@@ -350,6 +264,166 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		rList.add(rule);
 
 		return rList;
+	}
+
+	public StyledRasterInterface<?> getStyledRaster() {
+		return styledRaster;
+	}
+
+	public ArrayList<Double> getValues() {
+		return values;
+	}
+
+	@Override
+	public void importRules(List<Rule> rules) {
+		pushQuite();
+
+		if (rules.size() > 1) {
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+					+ " with " + rules.size() + " rules");
+		}
+
+		Rule rule = rules.get(0);
+
+		// TODO Parse metainfostring?!
+
+		try {
+			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+			ColorMap cm = rs.getColorMap();
+
+			importValuesLabelsQuantitiesColors(cm);
+
+			// Analyse the filters...
+			Filter filter = rule.getFilter();
+			filter = parseAbstractRlSettings(filter);
+
+		} finally {
+			popQuite();
+		}
+	}
+
+	/**
+	 * Attenetion: Ignores the CM type!
+	 */
+	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
+		QuantileBin1D ops = new QuantileBin1D(1.);
+
+		int count = 0;
+		for (ColorMapEntry cme : cm.getColorMapEntries()) {
+			importValuesLabelsQuantitiesColors(cme);
+
+			if (cmt == ColorMap.TYPE_VALUES || count > 0) {
+				// Add the last added opacity to the statistics
+				ops.add(getOpacities().get(getOpacities().size() - 1));
+			} else {
+				// Skip the first if n+1=values = n classes
+			}
+
+			count++;
+		}
+
+		if (ops.median() >= 0 && ops.median() < 1.)
+			setOpacity(ops.median());
+		else
+			setOpacity(1.);
+	}
+
+	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
+		final Double valueDouble = Double.valueOf(cme.getQuantity()
+				.evaluate(null).toString());
+
+		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
+				.getLegendMetaData().get(valueDouble) : null;
+
+		if (I18NUtil.isEmpty(translation)) {
+			final String labelFromCM = cme.getLabel();
+			if (labelFromCM != null && !labelFromCM.isEmpty())
+				getLabels().add(new Translation(labelFromCM));
+			else
+				translation = new Translation("");
+
+		}
+
+		add(valueDouble,
+				Double.valueOf(cme.getOpacity().evaluate(null).toString()),
+				StylingUtil.getColorFromColorMapEntry(cme), translation);
+	}
+
+	public void add(Double value, Double opacity, Color color, Translation label) {
+		getValues().add(value);
+		if (opacity == null)
+			opacity = 1.;
+		getOpacities().add(opacity);
+		getColors().add(color);
+		getLabels().add(label);
+	}
+
+	public void set(int idx, Double value, Double opacity, Color color,
+			Translation label) {
+		getValues().set(idx, value);
+		getOpacities().set(idx, opacity);
+		getColors().set(idx, color);
+		getLabels().set(idx, label);
+	}
+
+	public void setOrAdd(int idx, Double value, Double opacity, Color color,
+			Translation label) {
+		if (idx >= getValues().size())
+			add(value, opacity, color, label);
+		else
+			set(idx, value, opacity, color, label);
+	}
+
+	@Override
+	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
+
+		metaInfoString = metaInfoString
+				.substring(getType().toString().length());
+
+	}
+
+	/**
+	 * Ent
+	 */
+	public void removeAll() {
+		getValues().clear();
+		getOpacities().clear();
+		getLabels().clear();
+		getColors().clear();
+
+		fireEvents(new RuleChangedEvent("Removed all entries", this));
+	}
+
+	public void removeIdx(int index) {
+		getValues().remove(index);
+		getOpacities().remove(index);
+		getLabels().remove(index);
+		getColors().remove(index);
+
+		fireEvents(new RuleChangedEvent("Index " + index + " removed", this));
+	}
+
+	public void setOpacity(Double opacity) {
+		this.opacity = opacity;
+	}
+
+	public void setOpacity(int rowIndex, Double newOp) {
+		if (newOp == getOpacities().get(rowIndex))
+			return;
+		if (newOp > 1.)
+			newOp = 1.;
+		if (newOp < 0.)
+			newOp = 0.;
+		getOpacities().set(rowIndex, LangUtil.round(newOp, 2));
+		fireEvents(new RuleChangedEvent("Opacity changed", this));
+	}
+
+	public void setPalette(BrewerPalette palette) {
+		this.palette = palette;
+	}
+
+	public void setStyledRaster(StyledRasterInterface<?> styledRaster) {
+		this.styledRaster = styledRaster;
 	}
 
 }

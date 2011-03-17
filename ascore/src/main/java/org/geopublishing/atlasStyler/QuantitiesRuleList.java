@@ -13,70 +13,29 @@ package org.geopublishing.atlasStyler;
 import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.rulesLists.FeatureRuleList;
-import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
-import org.opengis.filter.Filter;
-import org.opengis.filter.PropertyIsBetween;
 
-import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
-import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
-abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
-		FeatureRuleList {
-	/** KEY-name for the KVPs in the meta information * */
-	private static final String KVP_NORMALIZATION_FIELD = "NORM";
-
-	/** KEY-name for the KVPs in the meta information * */
-	private static final String KVP_VALUE_FIELD = "VALUE";
+abstract public class QuantitiesRuleList extends FeatureRuleList {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(QuantitiesRuleList.class);
 
 	/**
-	 * @param filter
-	 *            A {@link Filter}
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * 
-	 * @return <code>null</code> if it is not a "BetweenFilter"
-	 */
-	public static double[] interpretBetweenFilter(Filter filter) {
-
-		if (filter instanceof AndImpl) {
-			// This is a AND ( NOT ( NODATA ) , BETWEENFILTER) construction
-			// We continue the interpretion with only the last filter
-			Iterator<Filter> fi = ((AndImpl) filter).getFilterIterator();
-			while (fi.hasNext())
-				filter = fi.next();
-		}
-
-		if (filter instanceof PropertyIsBetween) {
-			PropertyIsBetween betweenFilter = (PropertyIsBetween) filter;
-			double lower = Double.parseDouble(betweenFilter.getLowerBoundary()
-					.toString());
-			double upper = Double.parseDouble(betweenFilter.getUpperBoundary()
-					.toString());
-			return new double[] { lower, upper };
-		}
-		throw new RuntimeException("Unparsable Filter " + filter);
-	}
-
-	/**
 	 * Defines the number of digits shown in interval description (rule title);
 	 * Default is 3
 	 */
-	private int classDigits = 3;
+	private int classDigits = 2;
 
 	public final DecimalFormat classDigitsDecimalFormat = new DecimalFormat(
 			SwingUtil.getNumberFormatPattern(classDigits));
@@ -85,33 +44,19 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 			SwingUtil.getNumberFormatPattern(0));
 
 	/** Caches the limits* */
-	private TreeSet<NUMBERTYPE> classLimits = new TreeSet<NUMBERTYPE>();
+	private TreeSet<Double> classLimits = new TreeSet<Double>();
 
 	private Color[] colors = null;
 
-	/**
-	 * The {@link String} name of the attribute used to normalize the quantity
-	 * attribute
-	 */
-	private String normalizer_field_name;
+	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
 
 	private HashMap<Integer, String> ruleTitles = new HashMap<Integer, String>();
 
-	/**
-	 * The {@link String} name of the attribute which contains the quantity
-	 * values
-	 */
-	private String value_field_name;
-
-	private CLASSIFICATION_METHOD method = CLASSIFICATION_METHOD.DEFAULT_METHOD;
-
 	public QuantitiesRuleList(RulesListType rulesListType,
-			StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
-		super(rulesListType, styledFeatures, geometryForm);
-		Collection<String> numericalFieldNames = FeatureUtil
-				.getNumericalFieldNames(getStyledFeatures().getSchema(), false);
-		if (numericalFieldNames.size() > 0)
-			value_field_name = numericalFieldNames.toArray(new String[] {})[0];
+			StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm, boolean withDefaults) {
+
+		super(rulesListType, styledFeatures, geometryForm, withDefaults);
 	}
 
 	/**
@@ -129,55 +74,12 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	public String createDefaultClassLabelFor(Number lower, Number upper,
 			boolean isLast) {
 
-		String limitsLabel;
-
-		DecimalFormat formatter = getFormatter();
-
-		if (lower.equals(upper)) {
-			limitsLabel = formatter.format(lower);
-		} else {
-			limitsLabel = "[" + formatter.format(lower) + " - "
-					+ formatter.format(upper);
-			limitsLabel += isLast ? "]" : "[";
-		}
-
-		String unit = getStyledFeatures().getAttributeMetaDataMap()
-				.get(getValue_field_name()).getUnit();
-		if (unit != null && !unit.isEmpty())
-			limitsLabel += " " + unit;
-
-		String stringTitle;
-		/**
-		 * Create a default title
-		 */
-		if (AtlasStylerVector.getLanguageMode() == AtlasStylerVector.LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-			stringTitle = new Translation(AtlasStylerVector.getLanguages(),
-					limitsLabel).toOneLine();
-		} else {
-			stringTitle = limitsLabel;
-		}
-
-		return stringTitle;
-	}
-
-	/**
-	 * The children of this class define most metainfo. Some metainformation is
-	 * the same for all children and is added here.
-	 * 
-	 * @param metaInfoString
-	 *            The metaInfoString starting with a getType()-result and some
-	 *            KVPs
-	 * 
-	 * @return an expanded {@link String} with more KVPs
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	protected String extendMetaInfoString(String metaInfoString) {
-		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_VALUE_FIELD
-				+ METAINFO_KVP_EQUALS_CHAR + getValue_field_name();
-		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_NORMALIZATION_FIELD
-				+ METAINFO_KVP_EQUALS_CHAR + getNormalizer_field_name();
-		return metaInfoString;
+		return createDefaultClassLabelFor(
+				lower,
+				upper,
+				isLast,
+				getStyledFeatures().getAttributeMetaDataMap()
+						.get(getValue_field_name()).getUnit(), getFormatter());
 	}
 
 	/**
@@ -187,7 +89,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		return this.classDigits;
 	}
 
-	public TreeSet<NUMBERTYPE> getClassLimits() {
+	public TreeSet<Double> getClassLimits() {
 		return classLimits;
 	}
 
@@ -195,8 +97,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * @return the classLimits as an {@link ArrayList}.
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public ArrayList<NUMBERTYPE> getClassLimitsAsArrayList() {
-		return new ArrayList<NUMBERTYPE>(classLimits);
+	public ArrayList<Double> getClassLimitsAsArrayList() {
+		return new ArrayList<Double>(classLimits);
 	}
 
 	public Color[] getColors() {
@@ -205,13 +107,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	public CLASSIFICATION_METHOD getMethod() {
 		return method;
-	}
-
-	/**
-	 * @return the normalizer_field_name
-	 */
-	public String getNormalizer_field_name() {
-		return normalizer_field_name;
 	}
 
 	public int getNumClasses() {
@@ -224,70 +119,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 	public HashMap<Integer, String> getRuleTitles() {
 		return ruleTitles;
-	}
-
-	/**
-	 * @return the value_field_name
-	 */
-	final public String getValue_field_name() {
-		return value_field_name;
-	}
-
-	/**
-	 * The children of this class parse most metainfo. Some metainformation is
-	 * the same for all children and is parsed here. This method must be called
-	 * from all children.
-	 * 
-	 * @param metaInfoString
-	 *            The metaInfoString cleared from with a getType()-result and
-	 *            some KVPs
-	 * 
-	 * @return an expanded {@link String} with more KVPs
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	protected void parseMetaInfoString(String metaInfoString) {
-
-		/***********************************************************************
-		 * Parsing a list of Key-Value Pairs from the FeatureTypeStyleName
-		 */
-		String[] kvp = new String[] { "uninitialized", "uninit" };
-		String value = "nothging yet";
-		try {
-
-			String[] params = metaInfoString.split(METAINFO_SEPERATOR_CHAR);
-			for (String p : params) {
-				kvp = p.split(METAINFO_KVP_EQUALS_CHAR);
-
-				if (kvp[0].equalsIgnoreCase(KVP_NORMALIZATION_FIELD.toString())) {
-					value = kvp[1];
-					if (value.equalsIgnoreCase("null"))
-						setNormalizer_field_name(null);
-					else
-						setNormalizer_field_name(FeatureUtil
-								.findBestMatchingAttribute(
-										getStyledFeatures().getSchema(), value)
-								.getLocalPart());
-				}
-
-				if (kvp[0].equalsIgnoreCase(KVP_VALUE_FIELD.toString())) {
-					value = kvp[1];
-					if (value.equalsIgnoreCase("null"))
-						setValue_field_name(null);
-					else
-						setValue_field_name(FeatureUtil
-								.findBestMatchingAttributeFallBackFirstNumeric(
-										getStyledFeatures().getSchema(), kvp[1])
-								.getLocalPart());
-				}
-			}
-
-		} catch (RuntimeException e) {
-			LOGGER.error("KVP=" + kvp[0] + kvp[1]);
-			LOGGER.error("VALUE=" + value);
-
-			throw (e);
-		}
 	}
 
 	/***************************************************************************
@@ -320,8 +151,16 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits) {
+	public void setClassLimits(TreeSet<Double> classLimits) {
 		setClassLimits(classLimits, false);
+	}
+
+	/**
+	 * @return a {@link DecimalFormat} appropriate to render samples of the
+	 *         selected value attribute.
+	 */
+	public DecimalFormat getFormatter() {
+		return classDigitsDecimalFormat;
 	}
 
 	/**
@@ -337,7 +176,7 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public void setClassLimits(TreeSet<NUMBERTYPE> classLimits,
+	public void setClassLimits(TreeSet<Double> classLimits,
 			boolean resetRuleTitles) {
 
 		this.classLimits = classLimits;
@@ -356,8 +195,8 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 
 		// This loop will only be executed if there are at least 2 breaks
 		for (int i = 0; i < classLimits.size() - 1; i++) {
-			NUMBERTYPE lower = getClassLimitsAsArrayList().get(i);
-			NUMBERTYPE upper = getClassLimitsAsArrayList().get(i + 1);
+			Double lower = getClassLimitsAsArrayList().get(i);
+			Double upper = getClassLimitsAsArrayList().get(i + 1);
 
 			String stringTitle = createDefaultClassLabelFor(lower, upper,
 					!(i < classLimits.size() - 1 - 1));
@@ -394,25 +233,9 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 		this.method = method;
 	}
 
-	/**
-	 * @param normalizer_field_name
-	 *            the normalizer_field_name to set
-	 */
-	final public void setNormalizer_field_name(String normalizer_field_name) {
-		this.normalizer_field_name = normalizer_field_name;
-	}
-
 	public void setRuleTitles(HashMap<Integer, String> ruleTitles) {
 		this.ruleTitles = ruleTitles;
 		fireEvents(new RuleChangedEvent("setRuleTitles", this));
-	}
-
-	/**
-	 * @param value_field_name
-	 *            the value_field_name to set
-	 */
-	public void setValue_field_name(String value_field_name) {
-		this.value_field_name = value_field_name;
 	}
 
 	protected void updateColorsClassesChanged() {
@@ -425,17 +248,6 @@ abstract public class QuantitiesRuleList<NUMBERTYPE extends Number> extends
 				setColors(null);
 			}
 		}
-	}
-
-	/**
-	 * @return a {@link DecimalFormat} appropriate to render samples of the
-	 *         selected value attribute.
-	 */
-	public DecimalFormat getFormatter() {
-		if (getValue_field_name() == null)
-			return classDigitsDecimalFormat;
-
-		return classDigitsDecimalFormat;
 	}
 
 }

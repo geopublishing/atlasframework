@@ -45,11 +45,7 @@ import de.schmitzm.geotools.styling.StylingUtil;
  * @author Stefan A. Tzeggai
  * 
  */
-public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> {
-	/** KEY-name for the KVPs in the meta information * */
-	private static final String KVP_METHOD = "METHOD";
-	/** KEY-name for the KVPs in the meta information * */
-	private static final String KVP_PALTETTE = "PALETTE";
+public abstract class GraduatedColorRuleList extends QuantitiesRuleList {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(GraduatedColorRuleList.class);
@@ -75,8 +71,9 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	};
 
 	public GraduatedColorRuleList(RulesListType rulesListType,
-			StyledFeaturesInterface<?> styledFeatures, GeometryForm geometryForm) {
-		super(rulesListType, styledFeatures, geometryForm);
+			StyledFeaturesInterface<?> styledFeatures,
+			GeometryForm geometryForm, boolean withDefaults) {
+		super(rulesListType, styledFeatures, geometryForm, withDefaults);
 	}
 
 	/**
@@ -84,10 +81,8 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 	 * allows loading and saving the RL
 	 */
 	@Override
-	public String getAtlasMetaInfoForFTSName() {
-		String metaInfoString = getType().toString();
-
-		metaInfoString = extendMetaInfoString(metaInfoString);
+	public String extendMetaInfoString() {
+		String metaInfoString = super.extendMetaInfoString();
 
 		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_METHOD
 				+ METAINFO_KVP_EQUALS_CHAR + getMethod();
@@ -299,9 +294,71 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		return temp;
 	}
 
+	@Override
+	public void importRules(List<Rule> rules) {
+		/***********************************************************
+		 * Parsing information in the RULEs
+		 * 
+		 * title, class limits
+		 */
+		int countRules = 0;
+		final TreeSet<Double> classLimits = new TreeSet<Double>();
+		double[] ds = null;
+		for (final Rule r : rules) {
+
+			if (r.getName().toString()
+					.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
+				// This rule defines the NoDataSymbol
+				this.importNoDataRule(r);
+				continue;
+			}
+
+			// set Title
+			this.getRuleTitles().put(countRules,
+					GTUtil.descriptionTitle(r.getDescription()));
+
+			// Class Limits
+			Filter filter = r.getFilter();
+
+			// Reving and preceeding Enabled/Disabled filter
+			filter = parseAbstractRlSettings(filter);
+
+			ds = interpretBetweenFilter(filter);
+			classLimits.add(ds[0]);
+
+			countRules++;
+		}
+		if (ds != null) {
+			// The last limit is only added if there have been
+			// any rules
+			classLimits.add(ds[1]);
+		}
+		setClassLimits(classLimits, false);
+
+		/**
+		 * Now determine the colors stored inside the symbolizers.
+		 */
+		for (int ri = 0; ri < countRules; ri++) {
+			// Import the dominant color from the symbolizers
+			// (they can differ from the palette colors, because
+			// they might have been changed manually.
+			for (final Symbolizer s : rules.get(ri).getSymbolizers()) {
+
+				final Color c = StylingUtil.getSymbolizerColor(s);
+
+				if (c != null) {
+					// LOGGER.debug("Rule " + ri + " has color " + c);
+					this.getColors()[ri] = c;
+					break;
+				}
+			}
+
+		}
+	}
+
 	/**
-	 * Together with {@link #getAtlasMetaInfoForFTSName()} this allows loading
-	 * and saving the RL
+	 * Together with {@link #extendMetaInfoString()} this allows loading and
+	 * saving the RL
 	 */
 	@Override
 	public void parseMetaInfoString(String metaInfoString,
@@ -373,68 +430,6 @@ public abstract class GraduatedColorRuleList extends QuantitiesRuleList<Double> 
 		this.brewerPalette = newPalette;
 		setColors(null);
 		fireEvents(new RuleChangedEvent("Set brewer palette", this));
-	}
-
-	@Override
-	public void importRules(List<Rule> rules) {
-		/***********************************************************
-		 * Parsing information in the RULEs
-		 * 
-		 * title, class limits
-		 */
-		int countRules = 0;
-		final TreeSet<Double> classLimits = new TreeSet<Double>();
-		double[] ds = null;
-		for (final Rule r : rules) {
-
-			if (r.getName().toString()
-					.startsWith(FeatureRuleList.NODATA_RULE_NAME)) {
-				// This rule defines the NoDataSymbol
-				this.importNoDataRule(r);
-				continue;
-			}
-
-			// set Title
-			this.getRuleTitles().put(countRules,
-					GTUtil.descriptionTitle(r.getDescription()));
-
-			// Class Limits
-			Filter filter = r.getFilter();
-
-			// Reving and preceeding Enabled/Disabled filter
-			filter = parseAbstractRlSettings(filter);
-
-			ds = interpretBetweenFilter(filter);
-			classLimits.add(ds[0]);
-
-			countRules++;
-		}
-		if (ds != null) {
-			// The last limit is only added if there have been
-			// any rules
-			classLimits.add(ds[1]);
-		}
-		setClassLimits(classLimits, false);
-
-		/**
-		 * Now determine the colors stored inside the symbolizers.
-		 */
-		for (int ri = 0; ri < countRules; ri++) {
-			// Import the dominant color from the symbolizers
-			// (they can differ from the palette colors, because
-			// they might have been changed manually.
-			for (final Symbolizer s : rules.get(ri).getSymbolizers()) {
-
-				final Color c = StylingUtil.getSymbolizerColor(s);
-
-				if (c != null) {
-					// LOGGER.debug("Rule " + ri + " has color " + c);
-					this.getColors()[ri] = c;
-					break;
-				}
-			}
-
-		}
 	}
 
 }

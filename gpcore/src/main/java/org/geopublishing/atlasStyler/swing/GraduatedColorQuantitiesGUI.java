@@ -115,8 +115,6 @@ public class GraduatedColorQuantitiesGUI extends
 
 	private JComboBoxBrewerPalettes jComboBoxPalettes = null;
 
-	private JLabel jLabelTemplate = null;
-
 	private JButton jButtonTemplate = null;
 
 	private final AtlasStylerVector atlasStyler;
@@ -148,83 +146,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 			this.atlasStyler = atlasStyler;
 
-			classifier = new FeatureClassificationGUIfied(
-					GraduatedColorQuantitiesGUI.this,
-					ruleList.getStyledFeatures(),
-					ruleList.getValue_field_name(),
-					ruleList.getNormalizer_field_name());
-
-			classifier.pushQuite();
-			try {
-
-				classifier.setMethod(ruleList.getMethod());
-				classifier.setNumClasses(ruleList.getNumClasses());
-				classifier.setClassLimits(ruleList.getClassLimits());
-
-				/**
-				 * If the ruleList doesn't contain calculated class limits, we
-				 * have to start calculation directly.
-				 */
-				if (ruleList.getClassLimits().size() == 0) {
-					classifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
-					classifier.setNumClasses(5);
-				}
-
-				/**
-				 * Any changes to the classifier must be reported to the
-				 * RuleList
-				 */
-				classifier.addListener(new ClassificationChangedAdapter() {
-
-					@Override
-					public void classifierAvailableNewClasses(
-							final ClassificationChangeEvent e) {
-
-						ruleList.pushQuite();
-
-						// Checking if anything has really changed
-						boolean equalsValue = classifier.getValue_field_name()
-								.equals(ruleList.getValue_field_name());
-
-						boolean equalsNormalizer = classifier
-								.getNormalizer_field_name() == ruleList
-								.getNormalizer_field_name()
-								|| (classifier.getNormalizer_field_name() != null && classifier
-										.getNormalizer_field_name()
-										.equals(ruleList
-												.getNormalizer_field_name()));
-						boolean equalsNumClasses = classifier.getNumClasses() == ruleList
-								.getNumClasses();
-						boolean noChange = equalsValue && equalsNormalizer
-								&& equalsNumClasses;
-
-						try {
-
-							ruleList.setValue_field_name(classifier
-									.getValue_field_name());
-							ruleList.setNormalizer_field_name(classifier
-									.getNormalizer_field_name());
-							ruleList.setMethod(classifier.getMethod());
-							ruleList.setClassLimits(
-									classifier.getClassLimits(), !noChange); // here
-
-							if (classifier.getMethod() == CLASSIFICATION_METHOD.MANUAL) {
-								getNumClassesJComboBox().setEnabled(false);
-								getNumClassesJComboBox().setSelectedItem(
-										new Integer(ruleList.getNumClasses()));
-							} else
-								getNumClassesJComboBox().setEnabled(true);
-
-						} finally {
-							ruleList.popQuite();
-						}
-
-					}
-				});
-
-			} finally {
-				classifier.popQuite();
-			}
+			classifier = createAndConfigureClassifier(ruleList);
 
 			if (atlasStyler.getMapLayer() != null)
 				atlasStyler.getMapLayer().addMapLayerListener(
@@ -238,14 +160,99 @@ public class GraduatedColorQuantitiesGUI extends
 	}
 
 	/**
+	 * Creates a new FeatureClassificationGUIfied classifier and configures it
+	 * with the number of classes etc. from the ruleslist. Also adds a listener
+	 * that communicates classifier changes to the ruleslist.
+	 */
+	private FeatureClassificationGUIfied createAndConfigureClassifier(
+			final GraduatedColorRuleList rulesList) {
+		final FeatureClassificationGUIfied newClassifier = new FeatureClassificationGUIfied(
+				GraduatedColorQuantitiesGUI.this,
+				rulesList.getStyledFeatures(), rulesList.getValue_field_name(),
+				rulesList.getNormalizer_field_name());
+
+		newClassifier.pushQuite();
+		try {
+
+			newClassifier.setMethod(rulesList.getMethod());
+			newClassifier.setNumClasses(rulesList.getNumClasses());
+			newClassifier.setClassLimits(rulesList.getClassLimits());
+
+			/**
+			 * If the ruleList doesn't contain calculated class limits, we have
+			 * to start calculation directly.
+			 */
+			if (rulesList.getClassLimits().size() == 0) {
+				newClassifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
+				newClassifier.setNumClasses(5);
+			}
+
+			/**
+			 * Any changes to the classifier must be reported to the RuleList
+			 */
+			newClassifier.addListener(new ClassificationChangedAdapter() {
+
+				@Override
+				public void classifierAvailableNewClasses(
+						final ClassificationChangeEvent e) {
+
+					rulesList.pushQuite();
+
+					// Checking if anything has really changed
+					boolean equalsValue = newClassifier.getValue_field_name()
+							.equals(rulesList.getValue_field_name());
+
+					boolean equalsNormalizer = newClassifier
+							.getNormalizer_field_name() == rulesList
+							.getNormalizer_field_name()
+							|| (newClassifier.getNormalizer_field_name() != null && newClassifier
+									.getNormalizer_field_name()
+									.equals(rulesList
+											.getNormalizer_field_name()));
+					boolean equalsNumClasses = newClassifier.getNumClasses() == rulesList
+							.getNumClasses();
+					boolean noChange = equalsValue && equalsNormalizer
+							&& equalsNumClasses;
+
+					try {
+
+						rulesList.setValue_field_name(newClassifier
+								.getValue_field_name());
+						rulesList.setNormalizer_field_name(newClassifier
+								.getNormalizer_field_name());
+						rulesList.setMethod(newClassifier.getMethod());
+						rulesList.setClassLimits(
+								newClassifier.getClassLimits(), !noChange); // here
+
+						if (newClassifier.getMethod() == CLASSIFICATION_METHOD.MANUAL) {
+							getNumClassesJComboBox().setEnabled(false);
+							getNumClassesJComboBox().setSelectedItem(
+									new Integer(rulesList.getNumClasses()));
+						} else
+							getNumClassesJComboBox().setEnabled(true);
+
+					} finally {
+						rulesList.popQuite();
+					}
+
+				}
+			});
+
+		} finally {
+			newClassifier.popQuite();
+		}
+
+		return newClassifier;
+	}
+
+	/**
 	 * This method initializes this
 	 * 
 	 * @return void
 	 */
 	private void initialize() {
 		setLayout(new MigLayout("wrap 2, fillx", "grow", "grow"));
-		jLabelHeading = new JLabel(
-				AtlasStylerVector.R("GraduatedColorQuantities.Heading"));
+		jLabelHeading = new JLabel(ASUtil.R("GraduatedColorQuantities.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 
@@ -287,16 +294,12 @@ public class GraduatedColorQuantitiesGUI extends
 	}
 
 	/**
-	 * This method initializes jPanel2
 	 * 
-	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelClassification() {
 
-		JLabel jLabelParam = new JLabel(
-				AtlasStylerVector.R("ComboBox.NumberOfClasses"));
-		jLabelParam.setToolTipText(AtlasStylerVector
-				.R("ComboBox.NumberOfClasses.TT"));
+		JLabel jLabelParam = new JLabel(ASUtil.R("ComboBox.NumberOfClasses"));
+		jLabelParam.setToolTipText(ASUtil.R("ComboBox.NumberOfClasses.TT"));
 
 		jLabelClassificationTypeDescription = new JLabel(AtlasStylerVector.R(
 				"GraduatedColorQuantities.classification.Method", classifier
@@ -310,9 +313,9 @@ public class GraduatedColorQuantitiesGUI extends
 			@Override
 			public void classifierMethodChanged(
 					final ClassificationChangeEvent e) {
-				jLabelClassificationTypeDescription.setText(AtlasStylerVector
-						.R("GraduatedColorQuantities.classification.Method",
-								classifier.getMethod().getDesc()));
+				jLabelClassificationTypeDescription.setText(ASUtil.R(
+						"GraduatedColorQuantities.classification.Method",
+						classifier.getMethod().getDesc()));
 				jLabelClassificationTypeDescription.setToolTipText(classifier
 						.getMethod().getToolTip());
 			}
@@ -348,6 +351,8 @@ public class GraduatedColorQuantitiesGUI extends
 		jToggleButton_Classify.setAction(new AbstractAction(AtlasStylerVector
 				.R("GraduatedColorQuantities.Classify.Button")) {
 
+			private ClassificationGUI classificationGUI;
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				if (jToggleButton_Classify.isSelected()) {
@@ -363,14 +368,17 @@ public class GraduatedColorQuantitiesGUI extends
 						return;
 					}
 
-					getQuantitiesClassificationGUI().setVisible(true);
+					classificationGUI = getClassificationGUI();
+					classificationGUI.setVisible(true);
 				} else {
-					getQuantitiesClassificationGUI().setVisible(false);
+					if (classificationGUI != null)
+						getClassificationGUI().setVisible(false);
+					classificationGUI = null;
 				}
 
 			}
 
-			private ClassificationGUI getQuantitiesClassificationGUI() {
+			private ClassificationGUI getClassificationGUI() {
 				// if (quantGUI == null) {
 				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = rulesList
 						.getStyledFeatures().getAttributeMetaDataMap();
@@ -410,7 +418,7 @@ public class GraduatedColorQuantitiesGUI extends
 			}
 
 		});
-		jToggleButton_Classify.setToolTipText(AtlasStylerVector
+		jToggleButton_Classify.setToolTipText(ASUtil
 				.R("GraduatedColorQuantities.Classify.Button.TT"));
 		return jToggleButton_Classify;
 	}
@@ -564,8 +572,7 @@ public class GraduatedColorQuantitiesGUI extends
 							final JPopupMenu toolPopup = new JPopupMenu();
 							toolPopup.add(new JMenuItem(
 									new AbstractAction(
-											AtlasStylerVector
-													.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
+											ASUtil.R("GraduatedColorQuantities.ClassesTable.PopupMenuCommand.ResetLabels")) {
 
 										@Override
 										public void actionPerformed(
@@ -591,11 +598,10 @@ public class GraduatedColorQuantitiesGUI extends
 							if (ask == null) {
 
 								final TranslationEditJPanel transLabel = new TranslationEditJPanel(
-										AtlasStylerVector
-												.R("GraduatedColorsQuant.translate_label_for_classN",
-														(row + 1)),
-										translation, AtlasStylerVector
-												.getLanguages());
+										ASUtil.R(
+												"GraduatedColorsQuant.translate_label_for_classN",
+												(row + 1)), translation,
+										AtlasStylerVector.getLanguages());
 
 								ask = new TranslationAskJDialog(
 										GraduatedColorQuantitiesGUI.this,
@@ -705,13 +711,13 @@ public class GraduatedColorQuantitiesGUI extends
 				@Override
 				public String getColumnName(final int columnIndex) {
 					if (columnIndex == COLIDX_COLOR)
-						return AtlasStylerVector
+						return ASUtil
 								.R("GraduatedColorQuantities.Column.Color");
-					if (columnIndex == 1)
-						return AtlasStylerVector
+					if (columnIndex == COLIDX_LIMIT)
+						return ASUtil
 								.R("GraduatedColorQuantities.Column.Limits");
-					if (columnIndex == 2)
-						return AtlasStylerVector
+					if (columnIndex == COLIDX_LABEL)
+						return ASUtil
 								.R("GraduatedColorQuantities.Column.Label");
 					return super.getColumnName(columnIndex);
 				}
@@ -730,14 +736,14 @@ public class GraduatedColorQuantitiesGUI extends
 					/***********************************************************
 					 * getValue 0 Color
 					 */
-					if (columnIndex == 0) { // Color
+					if (columnIndex == COLIDX_COLOR) { // Color
 						return rulesList.getColors()[rowIndex];
 					}
 
 					/***********************************************************
 					 * getValue 1 Limit
 					 */
-					if (columnIndex == 1) { // Limits
+					if (columnIndex == COLIDX_LIMIT) { // Limits
 
 						final ArrayList<Double> classLimitsAsArrayList = rulesList
 								.getClassLimitsAsArrayList();
@@ -764,7 +770,7 @@ public class GraduatedColorQuantitiesGUI extends
 					/***********************************************************
 					 * getValue 2 Label
 					 */
-					if (columnIndex == 2) { // Label
+					if (columnIndex == COLIDX_LABEL) { // Label
 
 						String string = rulesList.getRuleTitles().get(rowIndex);
 
@@ -792,13 +798,13 @@ public class GraduatedColorQuantitiesGUI extends
 	private JPanel getJPanelColorsAndTemplate() {
 		final JPanel panel = new JPanel(new MigLayout("width 100%", "grow"));
 
-		jLabelTemplate = new JLabel(
-				AtlasStylerVector.R("GraduatedColorQuantities.Template"));
-		jLabelTemplate.setToolTipText(AtlasStylerVector
+		JLabel jLabelTemplate = new JLabel(
+				ASUtil.R("GraduatedColorQuantities.Template"));
+		jLabelTemplate.setToolTipText(ASUtil
 				.R("GraduatedColorQuantities.Template.TT"));
 
 		final JLabel jLabelColorPalette = new JLabel(
-				AtlasStylerVector.R("GraduatedColorQuantities.ColorRamp"));
+				ASUtil.R("GraduatedColorQuantities.ColorRamp"));
 
 		panel.add(jLabelColorPalette, "left");
 		panel.add(getJComboBoxColors(), "left");
@@ -822,7 +828,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 			final SmallButton noDataLabelButton = new SmallButton(
 					new Translation(noDataSymbol.getLabel()) + ":",
-					AtlasStylerVector.R("translate_label_for_NODATA_values.tt"));
+					ASUtil.R("translate_label_for_NODATA_values.tt"));
 			noDataLabelButton.addActionListener(new ActionListener() {
 
 				@Override
