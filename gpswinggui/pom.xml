@@ -26,7 +26,7 @@
 				<!-- Starting the application via mvn ecex:java -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.1.1</version>
+				<version>1.2</version>
 
 				<executions>
 					<execution>
@@ -87,6 +87,17 @@
 
 	<profiles>
 		<profile>
+
+			<dependencies>
+			<!-- On GISBERT only add SWT JARs for ALL Systems! -->
+				<dependency>
+					<groupId>de.wikisquare</groupId>
+					<artifactId>swt</artifactId>
+					<version>3.6</version>
+				</dependency>
+			</dependencies>
+
+
 			<!-- If run on the special "gisbert" profile, the application is released 
 				to the geopublishing.org webpage -->
 			<id>gisbert</id>
@@ -111,14 +122,13 @@
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
 							<dependencies>
-							<!-- These dependencies are managed by a JNLP extension -->
+								<!-- These dependencies are managed by a JNLP extension -->
 								<excludes>
-<!-- 									<exclude>org.eclipse.swt:swt-windows</exclude> -->
+									<exclude>org.eclipse.swt:swt-windows</exclude>
 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
-<!-- 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude> -->
+									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude>
 								</excludes>
 							</dependencies>
-
 
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
@@ -239,6 +249,7 @@
 								</descriptor>
 							</descriptors>
 						</configuration>
+
 						<executions>
 							<execution>
 								<id>full</id>
