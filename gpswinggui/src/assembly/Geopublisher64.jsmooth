@@ -7,10 +7,10 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>swt-windows-3.6-x86.jar;${project.build.finalName}.jar</classPath>
+<classPath>swt-windows-3.6-x86_64.jar;${project.build.finalName}.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
-<executableName>Geopublisher.exe</executableName>
+<executableName>Geopublisher_64bit.exe</executableName>
 <initialMemoryHeap>80000000</initialMemoryHeap>
 <javaProperties>
 <name>java.library.path</name>

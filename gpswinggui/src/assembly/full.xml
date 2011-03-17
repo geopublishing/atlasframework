@@ -36,6 +36,7 @@
 			<directory>target</directory>
 			<includes>
 				<include>Geopublisher.exe</include>
+				<include>Geopublisher_64bit.exe</include>
 			</includes>
 			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
 		</fileSet>
