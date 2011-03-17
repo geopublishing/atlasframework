@@ -17,6 +17,7 @@ import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
+import org.geotools.styling.ColorMapEntryImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
@@ -24,6 +25,7 @@ import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.I18NUtil;
@@ -221,7 +223,19 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return palette;
 	}
 
-	public abstract RasterLegendData getRasterLegendData();
+	/**
+	 * This method works for "n+1 values ==> n classes" and
+	 * "n values ==> n classes" since it counts over {@link #getNumClasses()}
+	 */
+	public RasterLegendData getRasterLegendData() {
+		RasterLegendData rld = new RasterLegendData(true);
+
+		for (int i = 0; i < getNumClasses(); i++) {
+			rld.put(getValues().get(i), getLabels().get(i));
+		}
+
+		return rld;
+	}
 
 	@Override
 	final public List<Rule> getRules() {
@@ -241,6 +255,13 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		rule.symbolizers().clear();
 
 		rule.symbolizers().add(rs);
+		if (rs.getColorMap().getColorMapEntries().length == 0) {
+			// An empty colormap will result in a fullly black raster!?
+			rs.getColorMap().addColorMapEntry(
+					StylingUtil.createColorMapEntry(
+							RulesListInterface.RULENAME_DONTIMPORT,
+							Double.MIN_VALUE, Color.WHITE, 0.0));
+		}
 
 		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
 
@@ -324,11 +345,6 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		final Double valueDouble = Double.valueOf(cme.getQuantity()
 				.evaluate(null).toString());
 
-		if (!full) {
-			getValues().add(valueDouble);
-			return;
-		}
-
 		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
 				.getLegendMetaData().get(valueDouble) : null;
 
@@ -339,6 +355,15 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			else
 				translation = new Translation("");
 
+		}
+
+		if (translation.toString().startsWith(
+				RulesListInterface.RULENAME_DONTIMPORT))
+			return;
+
+		if (!full) {
+			getValues().add(valueDouble);
+			return;
 		}
 
 		add(valueDouble,

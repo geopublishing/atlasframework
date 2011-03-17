@@ -323,18 +323,6 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		}
 	}
 
-	@Override
-	public RasterLegendData getRasterLegendData() {
-		RasterLegendData rld = new RasterLegendData(true);
-
-		for (int i = 1; i < getNumClasses(); i++) {
-			// if (getShowInLegends().get(i))
-			rld.put(getValues().get(i), getLabels().get(i));
-		}
-
-		return rld;
-	}
-
 	public DecimalFormat getFormatter() {
 		return classDigitsDecimalFormat;
 	}

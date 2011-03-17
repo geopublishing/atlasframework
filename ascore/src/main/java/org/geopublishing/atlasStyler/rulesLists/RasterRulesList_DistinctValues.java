@@ -148,18 +148,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		return uniques;
 	}
 
-	@Override
-	public RasterLegendData getRasterLegendData() {
-		RasterLegendData rld = new RasterLegendData(true);
-
-		for (int i = 0; i < getNumClasses(); i++) {
-			// if (getShowInLegends().get(i))
-			rld.put(getValues().get(i), getLabels().get(i));
-		}
-
-		return rld;
-	}
-
 	/**
 	 * @param row
 	 * @param delta
