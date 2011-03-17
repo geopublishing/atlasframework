@@ -1,6 +1,7 @@
 package org.geopublishing.geopublisher.swing;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
@@ -32,6 +33,14 @@ public interface HTMLEditPaneInterface /*extends HTMLInfoPaneInterface*/ {
    */
   public boolean hasScrollPane();
 
+  
+  /**
+   * Returns the preferred dialog size for the editor. Because of the
+   * menu structure some editors might need a bigger windows than others. 
+   * If this method returns <code>null</code> a default size is used. 
+   */
+  public Dimension getPreferredSize();
+  
   /**
    * Adds a tab pane to edit a HTML document.
    * @param title  tab title

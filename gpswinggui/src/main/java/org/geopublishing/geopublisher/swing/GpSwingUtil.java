@@ -644,7 +644,10 @@ public class GpSwingUtil extends GpUtil {
             }
         });
 
-        editorDialog.setSize(new Dimension(620, 400));
+        Dimension size = htmlEditor.getPreferredSize();
+        if ( size == null )
+          size = new Dimension(620, 400);
+        editorDialog.setSize(size);
         if ( !htmlEditor.hasScrollPane() ) {
           htmlEditorPanel = new JScrollPane(htmlEditorPanel);
         }

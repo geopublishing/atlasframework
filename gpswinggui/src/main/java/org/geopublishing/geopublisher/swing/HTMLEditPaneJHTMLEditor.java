@@ -3,12 +3,15 @@ package org.geopublishing.geopublisher.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.text.Document;
 
 import org.apache.log4j.Logger;
 
@@ -17,6 +20,7 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 
@@ -55,10 +59,23 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     this.tabs = new JTabbedPane();
     this.tabs.setTabPlacement(JTabbedPane.TOP);
     add(tabs,BorderLayout.CENTER);
-    setPreferredSize( new Dimension(500,400) );
+    setPreferredSize( new Dimension(800,500) );
   }
   
+//  private String createFCKConfigString(String... props) {
+//    StringBuffer propStr = new StringBuffer();
+//    for (int i=0; i<props.length; i++) {
+//      if ( i > 0 )
+//        propStr.append(",");
+//      }
+//    propStr +=
+//    }
+//    return propStr;
+//  }
+  
   protected JHTMLEditor createJHTMLEditor(String editorType) {
+    JHTMLEditor htmlEditor = null;
+    
     if ( editorType.equalsIgnoreCase("FCK" ) ) {
       // Create FCK as editor
       final String configScript =   
@@ -78,13 +95,32 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
         "[&apos;Image&apos;,&apos;Flash&apos;,&apos;Table&apos;,&apos;Rule&apos;,&apos;Smiley&apos;,&apos;SpecialChar&apos;,&apos;PageBreak&apos;, &apos;-&apos;, &apos;ShowBlocks&apos;],\n" +   
         "];\n" +   
         "FCKConfig.ToolbarCanCollapse = false;\n";   
-      final JHTMLEditor htmlEditor = new JHTMLEditor(   
+      htmlEditor = new JHTMLEditor(   
           JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.FCKEditor),   
-          JHTMLEditor.setCustomJavascriptConfiguration (configScript)
+          JHTMLEditor.setCustomJavascriptConfiguration(configScript)
       );
   //    htmlEditor = new JHTMLEditor();
       return htmlEditor;
     }
+
+    if ( editorType.equalsIgnoreCase("TinyMCE" ) ) {
+      // Create TinyMCE as editor
+      final String configScript =   
+          "theme_advanced_buttons1: &apos;bold,italic,underline,strikethrough,sub,sup,|,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,removeformat&apos;," +   
+          "theme_advanced_buttons2: &apos;undo,redo,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,forecolor,backcolor,bullist,numlist,|,outdent,indent,blockquote,|,table&apos;," +   
+          "theme_advanced_buttons3: &apos;&apos;," +   
+          "theme_advanced_toolbar_location: &apos;top&apos;," +   
+          "theme_advanced_toolbar_align: &apos;left&apos;," +   
+          // Language can be configured when language packs are added to the classpath. Language packs can be found here: http://tinymce.moxiecode.com/download_i18n.php   
+//            "language: &apos;de&apos;," +   
+          "plugins: &apos;table,paste&apos;";   
+ 
+        htmlEditor = new JHTMLEditor(   
+            JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.TinyMCE),   
+            JHTMLEditor.setCustomJavascriptConfiguration(configScript)
+        );
+        return htmlEditor;
+      }
     throw new UnsupportedOperationException("Unknown editor type to create JHTMLEditor: "+editorType);
   }
 
@@ -115,16 +151,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
   @Override
   public void addEditorTab(String title, URL url, int idx) {
     JHTMLEditor newEditor = createJHTMLEditor(editorType);
-    newEditor.setHTMLContent(loadHTMLFromURL(url));
+    newEditor.setHTMLContent(IOUtil.readURLasString(url));
     tabs.addTab(title, newEditor);
-  }
-
-  private static String loadHTMLFromURL(URL url) {
-    NativeInterface.open();
-    JWebBrowser browser = new JWebBrowser();
-    if ( browser.navigate(url.toString()) ) 
-      return browser.getHTMLContent();
-    return "Hallo";
   }
   
   /**
