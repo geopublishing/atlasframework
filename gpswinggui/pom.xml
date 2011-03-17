@@ -89,12 +89,20 @@
 		<profile>
 
 			<dependencies>
-				<!-- On GISBERT only add SWT JARs for ALL Systems! -->
+				<!-- On GISBERT add SWT JARs for ALL Systems! -->
 				<dependency>
 					<groupId>de.wikisquare</groupId>
 					<artifactId>swt</artifactId>
 					<version>3.6</version>
 				</dependency>
+
+<!-- 				On GISBERT add JAI JARs for ALL Systems! -->
+				<dependency>
+					<groupId>de.wikisquare</groupId>
+					<artifactId>jai</artifactId>
+					<version>1.1.3</version>
+				</dependency>
+
 			</dependencies>
 
 
@@ -124,9 +132,23 @@
 							<dependencies>
 								<!-- These dependencies are managed by a JNLP extension -->
 								<excludes>
+								
+								<!-- SWT -->
 									<exclude>org.eclipse.swt:swt-windows</exclude>
 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude>
+									
+								<!-- JAI -->
+									<exclude>com.sun.media:jai_codec-linux</exclude>
+									<exclude>com.sun.media:jai_codec-windows</exclude>
+									<exclude>com.sun.media:jai_core-linux</exclude>
+									<exclude>com.sun.media:jai_core-windows</exclude>
+									<exclude>com.sun.media:libmlib_jai-linux</exclude>
+									<exclude>com.sun.media:mlib_jai-windows</exclude>
+									<exclude>com.sun.media:mlib_jai_mmx-windows</exclude>
+									<exclude>com.sun.media:mlib_jai_util-windows</exclude>
+									<exclude>com.sun.media:mlibwrapper_jai-linux</exclude>
+									<exclude>com.sun.media:mlibwrapper_jai-windows</exclude>
 								</excludes>
 							</dependencies>
 

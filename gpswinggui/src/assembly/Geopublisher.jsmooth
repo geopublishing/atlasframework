@@ -7,7 +7,7 @@
 <JVMSearchPath>exepath</JVMSearchPath>
 <JVMSearchPath>jview</JVMSearchPath>
 <bundledJVMPath>jre</bundledJVMPath>
-<classPath>swt-windows-3.6-x86.jar;${project.build.finalName}.jar</classPath>
+<classPath>jai_codec-windows-1.1.3.jar;jai_core-windows-1.1.3.jar;mlibwrapper_jai-windows-1.1.3.jar;swt-windows-3.6-x86.jar;${project.build.finalName}.jar</classPath>
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>Geopublisher.exe</executableName>
