@@ -114,9 +114,8 @@
 							<!-- These dependencies are managed by a JNLP extension -->
 								<excludes>
 <!-- 									<exclude>org.eclipse.swt:swt-windows</exclude> -->
-<!-- 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude> -->
+									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
 <!-- 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude> -->
-										<exclude>org.eclipse.swt:*</exclude>
 								</excludes>
 							</dependencies>
 
