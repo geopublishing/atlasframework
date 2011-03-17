@@ -58,7 +58,6 @@ import org.geopublishing.geopublisher.gui.AtlasLanguagesConfigDialog;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
 import org.geopublishing.geopublisher.gui.GpFrame;
 import org.geopublishing.geopublisher.gui.GpJSplitPane;
-import org.geopublishing.geopublisher.gui.SimplyHTMLUtil;
 import org.geopublishing.geopublisher.gui.export.ExportWizard;
 import org.geopublishing.geopublisher.gui.importwizard.ImportWizard;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;

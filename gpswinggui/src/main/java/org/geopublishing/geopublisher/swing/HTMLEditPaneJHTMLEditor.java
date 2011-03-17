@@ -2,24 +2,16 @@ package org.geopublishing.geopublisher.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
 import java.net.URL;
 
 import javax.swing.JComponent;
-import javax.swing.JEditorPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.text.Document;
 
 import org.apache.log4j.Logger;
 
-import chrriis.dj.nativeswing.NSOption;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;

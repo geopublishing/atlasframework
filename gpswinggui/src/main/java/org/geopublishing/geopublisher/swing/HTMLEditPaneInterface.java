@@ -1,15 +1,9 @@
 package org.geopublishing.geopublisher.swing;
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.io.File;
 import java.net.URL;
-import java.util.List;
 
 import javax.swing.JComponent;
-
-import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
-import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 /**
  * Interface for all methods needed for a html editor.

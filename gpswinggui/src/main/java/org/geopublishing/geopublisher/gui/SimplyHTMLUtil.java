@@ -10,30 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
-import java.net.URL;
-import java.util.List;
-
-import javax.swing.JDialog;
-import javax.swing.WindowConstants;
-
 import org.apache.log4j.Logger;
-import org.geopublishing.geopublisher.AtlasConfigEditable;
-
-import com.lightdev.app.shtm.DocumentPane;
-import com.lightdev.app.shtm.SHTMLEditorKitActions;
-import com.lightdev.app.shtm.SHTMLPanelImpl;
-import com.lightdev.app.shtm.SHTMLPanelMultipleDocImpl;
-
-import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.SwingUtil;
 
 /**
  * TODO DOKU

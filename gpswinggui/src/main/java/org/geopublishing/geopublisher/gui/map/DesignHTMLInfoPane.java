@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui.map;
 
-import java.awt.PopupMenu;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
