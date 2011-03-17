@@ -27,6 +27,8 @@
 	<property name="file.encoding" value="UTF-8"/>
 <!--	<nativelib  href="gpnatives-${project.version}.jar" part="main" /> -->
 
+    <extension href="http://www.wikisquare.de/swt/swt-3.6.jnlp" name="SWT-3.6"/>
+
 	$dependencies
 
   </resources>

@@ -110,6 +110,16 @@
 						<configuration>
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
+							<dependencies>
+							<!-- These dependencies are managed by a JNLP extension -->
+								<excludes>
+									<exclude>org.eclipse.swt:swt-windows</exclude>
+									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
+									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude>
+								</excludes>
+							</dependencies>
+
+
 							<jnlp>
 								<inputTemplate>gp_template.jnlp</inputTemplate>
 								<outputFile>gp.jnlp</outputFile>
