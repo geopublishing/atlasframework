@@ -96,8 +96,8 @@
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
 
-							<pack200>true</pack200> <!-- still buggy sadly -->
-							<gzip>true</gzip> <!-- still buggy sadly -->
+							<pack200>true</pack200>
+							<gzip>true</gzip>
 
 						</configuration>
 					</plugin>
