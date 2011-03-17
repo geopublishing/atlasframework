@@ -46,6 +46,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     super();
     if ( editorType == null )
       editorType = "FCK";
+    System.setProperty("nativeswing.components.debug.printoptions", "true");
+    System.setProperty("nativeswing.components.debug.printshapecomputing", "true");
     NativeInterface.open();
     this.editorType = editorType;
     this.setLayout(new BorderLayout());
@@ -53,6 +55,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     this.tabs.setTabPlacement(JTabbedPane.TOP);
     add(tabs,BorderLayout.CENTER);
     setPreferredSize( new Dimension(800,500) );
+    
   }
   
   protected JHTMLEditor createJHTMLEditor(String editorType) {
@@ -133,7 +136,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
   @Override
   public void addEditorTab(String title, URL url, int idx) {
     JHTMLEditor newEditor = createJHTMLEditor(editorType);
-    newEditor.setHTMLContent(IOUtil.readURLasString(url));
+//  newEditor.setHTMLContent(IOUtil.readURLasString(url));
+    newEditor.setHTMLContent("<p>Hallo</p>");
     tabs.addTab(title, newEditor);
   }
   
