@@ -11,7 +11,7 @@ echo "Starting Geopublisher..."
 
 set SWTJAR=swt-windows-3.6-x86.jar
 
-md %HOMEPATH%\.Geopublishing > dummy
+md %HOMEPATH%\.Geopublishing >%HOMEPATH%\.Geopublishing\javaversion.txt
 java -version 2>%HOMEPATH%\.Geopublishing\javaversion.txt
 
 FINDSTR "64" %HOMEPATH%\.Geopublishing\javaversion.txt
