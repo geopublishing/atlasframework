@@ -17,37 +17,44 @@
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
     Contact info: lobochief@users.sourceforge.net
-*/
+ */
 package org.lobobrowser.html.domimpl;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import org.w3c.dom.UserDataHandler;
-import org.w3c.dom.css.CSSStyleSheet;
-import org.w3c.dom.html2.*;
-import org.geopublishing.atlasViewer.GpCoreUtil;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.AtlasProtocolException;
-import org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser;
-import org.lobobrowser.html.*;
-import org.lobobrowser.html.style.*;
-import org.lobobrowser.util.gui.*;
-import com.steadystate.css.dom.*;
-import java.util.logging.*;
+import org.lobobrowser.html.HtmlRendererContext;
+import org.lobobrowser.html.UserAgentContext;
+import org.lobobrowser.html.style.CSSUtilities;
+import org.lobobrowser.html.style.ColorRenderState;
+import org.lobobrowser.html.style.RenderState;
+import org.lobobrowser.html.style.TextDecorationRenderState;
+import org.lobobrowser.util.gui.ColorFactory;
+import org.w3c.dom.UserDataHandler;
+import org.w3c.dom.css.CSSStyleSheet;
+import org.w3c.dom.html2.HTMLBodyElement;
+import org.w3c.dom.html2.HTMLDocument;
+import org.w3c.dom.html2.HTMLLinkElement;
+
+import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
-		HTMLLinkElement {	
-	private static final Logger logger = Logger.getLogger(HTMLLinkElementImpl.class.getName());
+		HTMLLinkElement {
+	private static final Logger logger = Logger
+			.getLogger(HTMLLinkElementImpl.class.getName());
 	private static final boolean loggableInfo = logger.isLoggable(Level.INFO);
 	private CSSStyleSheet styleSheet;
-	
+
 	public HTMLLinkElementImpl(String name) {
 		super(name);
 	}
-	
-	
+
 	private boolean disabled;
-	
+
 	public boolean getDisabled() {
 		return this.disabled;
 	}
@@ -55,11 +62,11 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 	public void setDisabled(boolean disabled) {
 		this.disabled = disabled;
 		CSSStyleSheet sheet = this.styleSheet;
-		if(sheet != null) {
+		if (sheet != null) {
 			sheet.setDisabled(disabled);
 		}
 	}
-	
+
 	public String getHref() {
 		String href = this.getAttribute("href");
 		return href == null ? "" : href;
@@ -101,9 +108,9 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 		this.setAttribute("rev", rev);
 	}
 
-	public String getTarget() {		
+	public String getTarget() {
 		String target = this.getAttribute("target");
-		if(target != null) {
+		if (target != null) {
 			return target;
 		}
 		HTMLDocumentImpl doc = (HTMLDocumentImpl) this.document;
@@ -122,70 +129,82 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 		this.setAttribute("type", type);
 	}
 
+	@Override
 	public Object setUserData(String key, Object data, UserDataHandler handler) {
-		if(org.lobobrowser.html.parser.HtmlParser.MODIFYING_KEY.equals(key) && data != Boolean.TRUE) {
+		if (org.lobobrowser.html.parser.HtmlParser.MODIFYING_KEY.equals(key)
+				&& data != Boolean.TRUE) {
 			this.processLink();
-		}
-		else if(com.steadystate.css.dom.CSSStyleSheetImpl.KEY_DISABLED_CHANGED.equals(key)) {
+		} else if (com.steadystate.css.dom.CSSStyleSheetImpl.KEY_DISABLED_CHANGED
+				.equals(key)) {
 			this.informDocumentInvalid();
 		}
 		return super.setUserData(key, data, handler);
 	}
 
 	/**
-	 * If the LINK refers to a stylesheet document, this method
-	 * loads and parses it.
+	 * If the LINK refers to a stylesheet document, this method loads and parses
+	 * it.
 	 */
 	protected void processLink() {
 		this.styleSheet = null;
 		String rel = this.getAttribute("rel");
-		if(rel != null) {
+		if (rel != null) {
 			String cleanRel = rel.trim().toLowerCase();
 			boolean isStyleSheet = cleanRel.equals("stylesheet");
 			boolean isAltStyleSheet = cleanRel.equals("alternate stylesheet");
-			if(isStyleSheet || isAltStyleSheet) {
+			if (isStyleSheet || isAltStyleSheet) {
 				UserAgentContext uacontext = this.getUserAgentContext();
-				if(uacontext.isExternalCSSEnabled()) {
+				if (uacontext.isExternalCSSEnabled()) {
 					String media = this.getMedia();
-					if(CSSUtilities.matchesMedia(media, uacontext)) {
-						HTMLDocumentImpl doc = (HTMLDocumentImpl) this.getOwnerDocument();
+					if (CSSUtilities.matchesMedia(media, uacontext)) {
+						HTMLDocumentImpl doc = (HTMLDocumentImpl) this
+								.getOwnerDocument();
 						try {
 							boolean liflag = loggableInfo;
-							long time1 = liflag ? System.currentTimeMillis() : 0;
+							long time1 = liflag ? System.currentTimeMillis()
+									: 0;
 							try {
-								CSSStyleSheet sheet = CSSUtilities.parse(this, this.getHref(), doc, doc.getBaseURI(), false);
-								if(sheet != null) {
+								CSSStyleSheet sheet = CSSUtilities.parse(this,
+										this.getHref(), doc, doc.getBaseURI(),
+										false);
+								if (sheet != null) {
 									this.styleSheet = sheet;
-									if(sheet instanceof CSSStyleSheetImpl) {
-										CSSStyleSheetImpl sheetImpl = (CSSStyleSheetImpl) sheet; 
-										if(isAltStyleSheet) {
+									if (sheet instanceof CSSStyleSheetImpl) {
+										CSSStyleSheetImpl sheetImpl = (CSSStyleSheetImpl) sheet;
+										if (isAltStyleSheet) {
 											sheetImpl.setDisabledOnly(true);
+										} else {
+											sheetImpl
+													.setDisabledOnly(this.disabled);
 										}
-										else {
-											sheetImpl.setDisabledOnly(this.disabled);
-										}
-									}
-									else {
-										if(isAltStyleSheet) {
+									} else {
+										if (isAltStyleSheet) {
 											sheet.setDisabled(true);
-										}
-										else {
+										} else {
 											sheet.setDisabled(this.disabled);
-										}										
+										}
 									}
 									doc.addStyleSheet(sheet);
 								}
 							} finally {
-								if(liflag) {
+								if (liflag) {
 									long time2 = System.currentTimeMillis();
-									logger.info("processLink(): Loaded and parsed CSS (or attempted to) at URI=[" + this.getHref() + "] in " + (time2 - time1) + " ms.");
+									logger.info("processLink(): Loaded and parsed CSS (or attempted to) at URI=["
+											+ this.getHref()
+											+ "] in "
+											+ (time2 - time1) + " ms.");
 								}
 							}
 
-						} catch(MalformedURLException mfe) {
-							this.warn("Will not parse CSS. URI=[" + this.getHref() + "] with BaseURI=[" + doc.getBaseURI() + "] does not appear to be a valid URI.");
-						} catch(Throwable err) {
-							this.warn("Unable to parse CSS. URI=[" + this.getHref() + "].", err);
+						} catch (MalformedURLException mfe) {
+							this.warn("Will not parse CSS. URI=["
+									+ this.getHref() + "] with BaseURI=["
+									+ doc.getBaseURI()
+									+ "] does not appear to be a valid URI.");
+						} catch (Throwable err) {
+							this.warn(
+									"Unable to parse CSS. URI=["
+											+ this.getHref() + "].", err);
 						}
 					}
 				}
@@ -194,48 +213,47 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 	}
 
 	public String getAbsoluteHref() {
-        HtmlRendererContext rcontext = this.getHtmlRendererContext();
-        if(rcontext != null) {
-            String href = this.getHref();
-            if(href != null && href.length() > 0) {
-                String target = this.getTarget();
-                try {
-                    URL url = this.getFullURL(href);
-                    return url == null ? null : url.toExternalForm();
-                } catch(MalformedURLException mfu) {
-                    this.warn("Malformed URI: [" + href + "].", mfu);
-                }
-            }
-        }	    
-        return null;
+		HtmlRendererContext rcontext = this.getHtmlRendererContext();
+		if (rcontext != null) {
+			String href = this.getHref();
+			if (href != null && href.length() > 0) {
+				String target = this.getTarget();
+				try {
+					URL url = this.getFullURL(href);
+					return url == null ? null : url.toExternalForm();
+				} catch (MalformedURLException mfu) {
+					this.warn("Malformed URI: [" + href + "].", mfu);
+				}
+			}
+		}
+		return null;
 	}
-	
+
 	public void navigate() {
-		if(this.disabled) {
+		if (this.disabled) {
 			return;
 		}
 		HtmlRendererContext rcontext = this.getHtmlRendererContext();
-		if(rcontext != null) {
+		if (rcontext != null) {
 			String href = this.getHref();
-//MS.sn:
+			// MS.sn:
 			// Avoid MalformedURLException by "controlled"
 			// AtlasProtocolException to handle the Atlas
 			// protocol at the catching point
 			warn(href);
-			if ( AtlasProtocol.check(href) )
-			  throw new AtlasProtocolException(href);
-//MS.en:	
-			if(href != null && href.length() > 0) {
+			if (AtlasProtocol.check(href))
+				throw new AtlasProtocolException(href);
+			// MS.en:
+			if (href != null && href.length() > 0) {
 				String target = this.getTarget();
 				try {
 					URL url = this.getFullURL(href);
-					if(url == null) {
-						this.warn("Unable to resolve URI: [" + href + "].");					
-					}
-					else {
+					if (url == null) {
+						this.warn("Unable to resolve URI: [" + href + "].");
+					} else {
 						rcontext.linkClicked(this, url, target);
 					}
-				} catch(MalformedURLException mfu) {
+				} catch (MalformedURLException mfu) {
 					this.warn("Malformed URI: [" + href + "].", mfu);
 				}
 			}
@@ -244,18 +262,20 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 
 	private java.awt.Color getLinkColor() {
 		HTMLDocument doc = (HTMLDocument) this.document;
-		if(doc != null) {
+		if (doc != null) {
 			HTMLBodyElement body = (HTMLBodyElement) doc.getBody();
-			if(body != null) {
+			if (body != null) {
 				String vlink = body.getVLink();
 				String link = body.getLink();
-				if(vlink != null || link != null) {
-					HtmlRendererContext rcontext = this.getHtmlRendererContext();
-					if(rcontext != null) {
+				if (vlink != null || link != null) {
+					HtmlRendererContext rcontext = this
+							.getHtmlRendererContext();
+					if (rcontext != null) {
 						boolean visited = rcontext.isVisitedLink(this);
 						String colorText = visited ? vlink : link;
-						if(colorText != null) {
-							return ColorFactory.getInstance().getColor(colorText);
+						if (colorText != null) {
+							return ColorFactory.getInstance().getColor(
+									colorText);
 						}
 					}
 				}
@@ -263,17 +283,22 @@ public class HTMLLinkElementImpl extends HTMLAbstractUIElement implements
 		}
 		return java.awt.Color.BLUE;
 	}
-	
+
+	@Override
 	protected RenderState createRenderState(RenderState prevRenderState) {
-		if(this.hasAttribute("href")) {
-			prevRenderState = new TextDecorationRenderState(prevRenderState, RenderState.MASK_TEXTDECORATION_UNDERLINE);
-			prevRenderState = new ColorRenderState(prevRenderState, this.getLinkColor());
+		if (this.hasAttribute("href")) {
+			prevRenderState = new TextDecorationRenderState(prevRenderState,
+					RenderState.MASK_TEXTDECORATION_UNDERLINE);
+			prevRenderState = new ColorRenderState(prevRenderState,
+					this.getLinkColor());
 		}
 		return super.createRenderState(prevRenderState);
 	}
-	
+
+	@Override
 	public String toString() {
-		// Javascript code often depends on this being exactly href. See js9.html.
+		// Javascript code often depends on this being exactly href. See
+		// js9.html.
 		// To change, perhaps add method to AbstractScriptableDelegate.
 		return this.getHref();
 	}
