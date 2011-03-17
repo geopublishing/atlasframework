@@ -15,6 +15,7 @@ import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
+import org.geopublishing.geopublisher.swing.FCKUtil;
 
 /**
  * A html editor based on SimplyHTML. 
@@ -54,39 +55,28 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     setPreferredSize( new Dimension(800,500) );
   }
   
-//  private String createFCKConfigString(String... props) {
-//    StringBuffer propStr = new StringBuffer();
-//    for (int i=0; i<props.length; i++) {
-//      if ( i > 0 )
-//        propStr.append(",");
-//      }
-//    propStr +=
-//    }
-//    return propStr;
-//  }
-  
   protected JHTMLEditor createJHTMLEditor(String editorType) {
     JHTMLEditor htmlEditor = null;
     
     if ( editorType.equalsIgnoreCase("FCK" ) ) {
       // Create FCK as editor
-      final String configScript =   
-        "FCKConfig.ToolbarSets[\"Default\"] = [\n" +   
-        "[&apos;Source&apos;,&apos;DocProps&apos;,&apos;-&apos;,&apos;Save&apos;,&apos;NewPage&apos;,&apos;Preview&apos;,&apos;-&apos;,&apos;Templates&apos;],\n" +   
-        "[&apos;Cut&apos;,&apos;Copy&apos;,&apos;Paste&apos;,&apos;PasteText&apos;,&apos;PasteWord&apos;,&apos;-&apos;,&apos;Print&apos;,&apos;SpellCheck&apos;],\n" +   
-        "[&apos;Undo&apos;,&apos;Redo&apos;,&apos;-&apos;,&apos;Find&apos;,&apos;Replace&apos;,&apos;-&apos;,&apos;SelectAll&apos;,&apos;RemoveFormat&apos;],\n" +   
-        "[&apos;Form&apos;,&apos;Checkbox&apos;,&apos;Radio&apos;,&apos;TextField&apos;,&apos;Textarea&apos;,&apos;Select&apos;,&apos;Button&apos;,&apos;ImageButton&apos;,&apos;HiddenField&apos;],\n" +   
-        "&apos;/&apos;,\n" +   
-        "[&apos;Style&apos;,&apos;FontFormat&apos;,&apos;FontName&apos;,&apos;FontSize&apos;],\n" +   
-        "[&apos;TextColor&apos;,&apos;BGColor&apos;],\n" +   
-        "&apos;/&apos;,\n" +   
-        "[&apos;Bold&apos;,&apos;Italic&apos;,&apos;Underline&apos;,&apos;StrikeThrough&apos;,&apos;-&apos;,&apos;Subscript&apos;,&apos;Superscript&apos;],\n" +   
-        "[&apos;OrderedList&apos;,&apos;UnorderedList&apos;,&apos;-&apos;,&apos;Outdent&apos;,&apos;Indent&apos;,&apos;Blockquote&apos;],\n" +   
-        "[&apos;JustifyLeft&apos;,&apos;JustifyCenter&apos;,&apos;JustifyRight&apos;,&apos;JustifyFull&apos;],\n" +   
-        "[&apos;Link&apos;,&apos;Unlink&apos;,&apos;Anchor&apos;],\n" +   
-        "[&apos;Image&apos;,&apos;Flash&apos;,&apos;Table&apos;,&apos;Rule&apos;,&apos;Smiley&apos;,&apos;SpecialChar&apos;,&apos;PageBreak&apos;, &apos;-&apos;, &apos;ShowBlocks&apos;],\n" +   
+      final String configScript =
+        "FCKConfig.ToolbarSets[\"Default\"] = [\n" +
+        FCKUtil.createFCKToolbarConfigString("Source","DocProps","-","Save","NewPage","Preview","-","Templates")+
+        FCKUtil.createFCKToolbarConfigString("Cut","Copy","Paste","PasteText","PasteWord","-","Print","SpellCheck")+
+        FCKUtil.createFCKToolbarConfigString("Undo","Redo","-","Find","Replace","-","SelectAll","RemoveFormat")+
+        FCKUtil.createFCKToolbarConfigString("Form","Checkbox","Radio","TextField","Textarea","Select","Button","ImageButton","HiddenField")+
+        FCKUtil.createFCKConfigString("/")+",\n"+
+        FCKUtil.createFCKToolbarConfigString("Style","FontFormat","FontName","FontSize")+
+        FCKUtil.createFCKToolbarConfigString("TextColor","BGColor")+
+        FCKUtil.createFCKConfigString("/")+",\n"+
+        FCKUtil.createFCKToolbarConfigString("Italic","Underline","StrikeThrough","-","Subscript","Superscript")+
+        FCKUtil.createFCKToolbarConfigString("OrderedList","UnorderedList","-","Outdent","Indent","Blockquote")+
+        FCKUtil.createFCKToolbarConfigString("JustifyLeft","JustifyCenter","JustifyRight","JustifyFull")+
+        FCKUtil.createFCKToolbarConfigString("Link","Unlink","Anchor")+
+        FCKUtil.createFCKToolbarConfigString("Image","Flash","Table","Rule","Smiley","SpecialChar","PageBreak","-","ShowBlocks")+
         "];\n" +   
-        "FCKConfig.ToolbarCanCollapse = false;\n";   
+        "FCKConfig.ToolbarCanCollapse = false;\n";          
       htmlEditor = new JHTMLEditor(   
           JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.FCKEditor),   
           JHTMLEditor.setCustomJavascriptConfiguration(configScript)
