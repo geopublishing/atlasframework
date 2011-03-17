@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
@@ -619,9 +620,15 @@ public class GpSwingUtil extends GpUtil {
 
         final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
         JComponent htmlEditorPanel = htmlEditor.getComponent();
-        final JDialog editorDialog = new JDialog(SwingUtil
-                .getParentWindow(owner), windowTitle);
-        editorDialog.setModal(true);
+        // JHTMLEditor has problems when not running in frame!!
+        // So we have to use JFrame for all implementations of
+        // HTMLEditPaneInterface.
+//        final JDialog editorDialog = new JDialog(SwingUtil
+//            .getParentWindow(owner), windowTitle);
+        final JFrame editorDialog = new JFrame(windowTitle);
+//        editorDialog.setModal(true);
+        // TODO: Stefan muss hier Frame-Caching einbauen, damit
+        //       fuer eine Map nicht 2x ein Editor geöffnet wird!
         editorDialog
                 .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 

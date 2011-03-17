@@ -3,6 +3,8 @@ package org.geopublishing.geopublisher.swing;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
@@ -23,11 +25,14 @@ import org.geopublishing.geopublisher.swing.FCKUtil;
 public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInterface {
   // contains a JHTMLEditor for each (language) page
   // to edit
-  private JTabbedPane tabs = null;
+  protected JTabbedPane tabs = null;
   
   private final Logger LOGGER = LangUtil.createLogger(this);
 
+  /** */
   protected String editorType = null;
+  /** Holds the edited file for each tab. */
+  protected Map<JHTMLEditor,URL> editURLs = new HashMap<JHTMLEditor, URL>();
   
   
   /**
@@ -46,8 +51,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     super();
     if ( editorType == null )
       editorType = "FCK";
-    System.setProperty("nativeswing.components.debug.printoptions", "true");
-    System.setProperty("nativeswing.components.debug.printshapecomputing", "true");
     NativeInterface.open();
     this.editorType = editorType;
     this.setLayout(new BorderLayout());
@@ -55,7 +58,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
     this.tabs.setTabPlacement(JTabbedPane.TOP);
     add(tabs,BorderLayout.CENTER);
     setPreferredSize( new Dimension(800,500) );
-    
   }
   
   protected JHTMLEditor createJHTMLEditor(String editorType) {
@@ -84,7 +86,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
           JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.FCKEditor),   
           JHTMLEditor.setCustomJavascriptConfiguration(configScript)
       );
-  //    htmlEditor = new JHTMLEditor();
       return htmlEditor;
     }
 
@@ -136,8 +137,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
   @Override
   public void addEditorTab(String title, URL url, int idx) {
     JHTMLEditor newEditor = createJHTMLEditor(editorType);
-//  newEditor.setHTMLContent(IOUtil.readURLasString(url));
-    newEditor.setHTMLContent("<p>Hallo</p>");
+    String htmlContent = IOUtil.readURLasString(url);
+    newEditor.setHTMLContent(htmlContent);
     tabs.addTab(title, newEditor);
   }
   
