@@ -22,7 +22,7 @@ import de.schmitzm.testing.TestingUtil;
 public class JHTMLEditorTest extends TestingClass {
   
   @Test
-//  @Ignore
+  @Ignore
   public void testJHTMLEditor() throws Exception {
     if ( !hasGui() )
       return;
@@ -38,7 +38,6 @@ public class JHTMLEditorTest extends TestingClass {
         try {
           JHTMLEditor editor = new JHTMLEditor();
           editor.setPreferredSize( new Dimension(600,500) );
-
 //          dialog.setModal(true);
           dialog.getContentPane().add(editor, BorderLayout.CENTER);
           dialog.setDefaultCloseOperation( JDialog.HIDE_ON_CLOSE );
@@ -52,7 +51,7 @@ public class JHTMLEditorTest extends TestingClass {
     });
     NativeInterface.runEventPump();   
     while (dialog.isVisible()) {
-//      LangUtil.sleepExceptionless(20);
+      LangUtil.sleepExceptionless(20);
     };
   }
 }
