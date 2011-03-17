@@ -11,13 +11,13 @@
 <currentDirectory>${EXECUTABLEPATH}</currentDirectory>
 <embeddedJar>false</embeddedJar>
 <executableName>Geopublisher.exe</executableName>
-<initialMemoryHeap>105343360</initialMemoryHeap>
+<initialMemoryHeap>80000000</initialMemoryHeap>
 <javaProperties>
 <name>java.library.path</name>
 <value>.</value>
 </javaProperties>
 <mainClassName>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClassName>
-<maximumMemoryHeap>291172480</maximumMemoryHeap>
+<maximumMemoryHeap>300000000</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
 <skeletonName>Autodownload Wrapper</skeletonName>
