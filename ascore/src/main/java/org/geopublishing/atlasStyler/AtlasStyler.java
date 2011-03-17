@@ -49,7 +49,7 @@ public abstract class AtlasStyler {
 		 */
 		OGC_SINGLELANGUAGE
 	}
-	
+
 	/** These DIRNAMEs describe paths to application files on the local machines */
 	final static String DIRNAME_TEMPLATES = "templates";
 
@@ -343,7 +343,8 @@ public abstract class AtlasStyler {
 			try {
 				l.changed(ev);
 			} catch (Exception e) {
-				LOGGER.error("Error while informing StyleChangeListener "+l, e);
+				LOGGER.error("Error while informing StyleChangeListener " + l,
+						e);
 			}
 		}
 	}
@@ -690,5 +691,14 @@ public abstract class AtlasStyler {
 	public void setTitle(final Translation title) {
 		this.title = title;
 	}
+
+	public HashMap<String, Object> getDataMap() {
+		return dataMap;
+	}
+
+	/**
+	 * Store anything in here!
+	 */
+	private final HashMap<String, Object> dataMap = new HashMap<String, Object>();
 
 }

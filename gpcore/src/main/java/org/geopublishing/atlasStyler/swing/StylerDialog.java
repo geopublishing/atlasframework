@@ -57,6 +57,8 @@ import de.schmitzm.swing.SwingUtil;
  * 
  */
 public class StylerDialog extends CancellableDialogAdapter {
+	public static final String EXPERT_MODE = "Expertmode enabled";
+
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private JPanel jContentPane = null;
@@ -95,10 +97,10 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	private final XMapPane previewMapPane;
 
-	/**
-	 * If <code>true</code> the GUI hides the more compilcated parts.
-	 */
-	private boolean easy;
+	// /**
+	// * If <code>true</code> the GUI hides the more compilcated parts.
+	// */
+	// private boolean easy;
 
 	/**
 	 * Creates an AtlasStyler {@link JDialog} which allows to create a
@@ -160,7 +162,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 		Translation title = atlasStyler.getTitle();
 		if (isVector()) {
 			final SimpleFeatureType schema = getAtlasStylerVector()
-			.getStyledFeatures().getSchema();
+					.getStyledFeatures().getSchema();
 			String typeName = schema.getTypeName();
 
 			String geomTyp = schema.getGeometryDescriptor().getType()
@@ -170,7 +172,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 					title != null ? title.toString() : typeName + "  ("
 							+ geomTyp + ")"));
 		} else {
-			
+
 			if (title == null)
 				title = getAtlasStyler().getStyledInterface().getTitle();
 
@@ -354,11 +356,14 @@ public class StylerDialog extends CancellableDialogAdapter {
 	 * If <code>true</code> the GUI hides the more complicated parts.
 	 */
 	public void setEasy(boolean easy) {
-		this.easy = easy;
+		if (easy)
+			atlasStyler.getDataMap().remove(EXPERT_MODE);
+		else
+			atlasStyler.getDataMap().put(EXPERT_MODE, EXPERT_MODE);
 	}
 
 	public boolean isEasy() {
-		return easy;
+		return !atlasStyler.getDataMap().containsKey(EXPERT_MODE);
 	}
 
 	/**

@@ -516,9 +516,9 @@ public class AtlasStylerVector extends AtlasStyler {
 				getStyledFeatures().getSchema());
 	}
 
-
 	public void setAttributeMetaDataMap(
 			final AttributeMetadataMap<? extends AttributeMetadataInterface> attributeMetaDataMap) {
 		this.attributeMetaDataMap = attributeMetaDataMap;
 	}
+
 }
