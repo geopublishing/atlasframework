@@ -107,17 +107,20 @@ public class RasterRulesList_Intervals_GUI extends
 		newClassifier.pushQuite();
 		try {
 
-			newClassifier.setMethod(ruleList.getMethod());
-			newClassifier.setNumClasses(ruleList.getNumClasses());
-			newClassifier.setClassLimits(new TreeSet(ruleList.getValues()));
 
 			/**
 			 * If the ruleList doesn't contain calculated class limits, we have
 			 * to start calculation directly.
 			 */
 			if (ruleList.getValues().size() == 0) {
+				// Initialize some defaults
 				newClassifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
 				newClassifier.setNumClasses(5);
+			} else {
+				// Normal case
+				newClassifier.setMethod(ruleList.getMethod());
+				newClassifier.setNumClasses(ruleList.getNumClasses());
+				newClassifier.setClassLimits(new TreeSet(ruleList.getValues()));
 			}
 
 			/**
@@ -143,7 +146,7 @@ public class RasterRulesList_Intervals_GUI extends
 					// .getNormalizer_field_name()
 					// .equals(ruleList.getNormalizer_field_name()));
 					boolean equalsNumClasses = newClassifier.getNumClasses() == ruleList
-							.getNumClasses();
+							.getValues().size()-1;
 					boolean noChange = equalsNumClasses;
 
 					try {
@@ -402,8 +405,10 @@ public class RasterRulesList_Intervals_GUI extends
 				public Object getValueAt(int rowIndex, int columnIndex) {
 
 					if (columnIndex == COLIDX_COLOR) {
-						if (rulesList.getOpacities().get(rowIndex) == 0)
+						if (rulesList.getOpacities().get(rowIndex) <= 0.) {
+							// Do not sh
 							return null;
+						}
 						return rulesList.getColors().get(rowIndex);
 					} else if (columnIndex == COLIDX_OPACITY) {
 						return rulesList.getOpacities().get(rowIndex);

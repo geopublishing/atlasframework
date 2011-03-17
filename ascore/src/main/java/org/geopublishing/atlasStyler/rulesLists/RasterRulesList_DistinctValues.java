@@ -127,6 +127,10 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		for (double d = low; d < high; d += 1.) {
 			countBins++;
 
+			// Ignoring the NODATA-Value
+			if (d == styledReader.getNodataValue())
+				continue;
+
 			if (d == Double.NaN)
 				continue;
 			if (d == Double.NEGATIVE_INFINITY)
@@ -171,4 +175,48 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				+ (row - 1), this));
 	}
 
+	public void applyOpacity() {
+		pushQuite();
+
+		try {
+
+			final Double op = getOpacity();
+			if (op == null)
+				return;
+
+			for (int i = 0; i < getValues().size(); i++) {
+
+				if (i >= getOpacities().size())
+					getOpacities().add(op);
+
+				if (getOpacities().get(i) != 0)
+					setOpacity(i, op);
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(
+					"Applied an OPACITY to all ColorMapEntries ", this));
+		}
+	}
+
+	/**
+	 * Throws an exception as soon as the array sizes of values, colors and
+	 * opacities are not in sync
+	 */
+	protected void test(int classesExpected) {
+		int valSize = getValues().size();
+
+		if (classesExpected == -1)
+			classesExpected = valSize;
+
+		int opSize = getOpacities().size();
+		int colSize = getColors().size();
+		int labelSize = getLabels().size();
+		String error = "expectedClasses=" + classesExpected + "  valSize="
+				+ valSize + " opSize=" + opSize + " colSize=" + colSize
+				+ " labelSize=" + labelSize;
+		if (opSize != classesExpected || (valSize != classesExpected)
+				|| colSize != classesExpected || labelSize != classesExpected)
+			throw new RuntimeException(error);
+	}
 }

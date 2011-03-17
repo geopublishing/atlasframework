@@ -57,29 +57,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 					"ColorMapType has to be 1, 2 or 3!");
 	}
 
-	public void applyOpacity() {
-		pushQuite();
-
-		try {
-
-			final Double op = getOpacity();
-			if (op == null)
-				return;
-
-			for (int i = 0; i < getValues().size(); i++) {
-
-				if (i >= getOpacities().size())
-					getOpacities().add(op);
-
-				if (getOpacities().get(i) != 0)
-					setOpacity(i, op);
-			}
-
-		} finally {
-			popQuite(new RuleChangedEvent(
-					"Applied an OPACITY to all ColorMapEntries ", this));
-		}
-	}
+	public abstract void applyOpacity();
 
 	/**
 	 * 1 value = 1 class
@@ -110,7 +88,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			}
 
 			final Color[] colors = getPalette().getColors(
-					getValues().size() % getPalette().getMaxColors());
+					Math.min(getValues().size(), getPalette().getMaxColors()));
 
 			int idx = 0;
 			for (int i = 0; i < getValues().size(); i++) {
@@ -190,14 +168,26 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	 * COLOMAP.INTERVAL it is values - 1
 	 */
 	public int getNumClasses() {
-		if (cmt == ColorMap.TYPE_VALUES)
-			return getValues().size();
-		else {
-			if (getValues().size() < 1)
-				return 0;
-			return getValues().size() - 1;
+		int numClasses = -1;
+
+		try {
+
+			if (cmt == ColorMap.TYPE_VALUES)
+				numClasses = getValues().size();
+			else {
+				if (getValues().size() < 1)
+					numClasses = 0;
+				else
+					numClasses = getValues().size() - 1;
+			}
+		} finally {
+			test(numClasses);
 		}
+
+		return numClasses;
 	}
+
+	protected abstract void test(int numClasses);
 
 	/**
 	 * Returns the number of visible (opacity > 0) classes.
@@ -310,13 +300,14 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 		int count = 0;
 		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-			importValuesLabelsQuantitiesColors(cme);
 
 			if (cmt == ColorMap.TYPE_VALUES || count > 0) {
+				importValuesLabelsQuantitiesColors(cme, true);
 				// Add the last added opacity to the statistics
 				ops.add(getOpacities().get(getOpacities().size() - 1));
 			} else {
 				// Skip the first if n+1=values = n classes
+				importValuesLabelsQuantitiesColors(cme, false);
 			}
 
 			count++;
@@ -328,9 +319,15 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			setOpacity(1.);
 	}
 
-	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
+	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme,
+			boolean full) {
 		final Double valueDouble = Double.valueOf(cme.getQuantity()
 				.evaluate(null).toString());
+
+		if (!full) {
+			getValues().add(valueDouble);
+			return;
+		}
 
 		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
 				.getLegendMetaData().get(valueDouble) : null;
@@ -338,7 +335,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		if (I18NUtil.isEmpty(translation)) {
 			final String labelFromCM = cme.getLabel();
 			if (labelFromCM != null && !labelFromCM.isEmpty())
-				getLabels().add(new Translation(labelFromCM));
+				translation = new Translation(labelFromCM);
 			else
 				translation = new Translation("");
 

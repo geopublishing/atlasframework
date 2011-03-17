@@ -54,18 +54,22 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 			}
 
 			final Color[] colors = getPalette().getColors(
-					getValues().size() - 1);
+					Math.min(getPalette().getMaxColors(),
+							getValues().size() - 1));
 
 			int idx = 0;
 			for (int i = 1; i < getValues().size(); i++) {
 
-				if (getOpacities().get(i) == 0)
-					continue;
+				Color colorToSet;
+				if (getOpacities().get(i-1) == 0.) {
+					colorToSet = Color.WHITE;
+				} else
+				colorToSet = colors[idx];
 
 				if (i >= getColors().size())
-					getColors().add(colors[idx]);
+					getColors().add(colorToSet);
 				else
-					getColors().set(i, colors[idx]);
+					getColors().set(i, colorToSet);
 
 				idx++;
 				idx = idx % getPalette().getMaxColors();
@@ -186,6 +190,8 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 	@Override
 	public ColorMap getColorMap() {
 
+		test(-1);
+
 		ColorMap cm = StylingUtil.STYLE_FACTORY.createColorMap();
 		cm.setType(cmt);
 
@@ -234,7 +240,7 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 	public void setValues(ArrayList<Double> classLimits, boolean resetRuleTitles) {
 
 		getValues().clear();
-		getValues().addAll(new ArrayList(classLimits));
+		getValues().addAll(classLimits);
 
 		getOpacities().clear();
 		applyOpacity();
@@ -275,9 +281,11 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		if (classLimits.size() == 1 && resetRuleTitles) {
 			getLabels().set(0, new Translation(classLimits.get(0).toString()));
 		}
+		
+		if (getLabels().size() != classLimits .size()-1) {
+			throw new RuntimeException("Labels not set correctly");
+		}
 
-		// Setting the colors to null we lead to new colors being created the
-		// next time getColors() is called.
 		updateColorsClassesChanged();
 
 		fireEvents(new RuleChangedEvent("Set class limits", this));
@@ -307,7 +315,7 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		if (getColors() != null) {
 			// The user might have manually adapted the colors, so we try to
 			// keep them where possible.
-			if (getColors().size() == getNumClasses()) {
+			if (getColors().size() == getValues().size() - 1) {
 				return;
 			} else {
 				applyPalette(null);
@@ -331,4 +339,58 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		return classDigitsDecimalFormat;
 	}
 
+	@Override
+	public void applyOpacity() {
+		pushQuite();
+
+		try {
+
+			final Double op = getOpacity();
+			if (op == null)
+				return;
+
+			for (int i = 0; i < getValues().size() - 1; i++) {
+
+				if (i >= getOpacities().size())
+					getOpacities().add(op);
+
+				if (getOpacities().get(i) != 0)
+					setOpacity(i, op);
+			}
+
+			// Remove extra opacities
+			while (getOpacities().size() > getValues().size() - 1) {
+				getOpacities().remove(getOpacities().size() - 1);
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(
+					"Applied an OPACITY to all ColorMapEntries ", this));
+		}
+	}
+
+	/**
+	 * Throws an exception as soon as the array sizes of values, colors and
+	 * opacities are not in sync
+	 */
+	@Override
+	protected void test(int classesExpected) {
+		int valSize = getValues().size();
+
+		if (classesExpected == -1)
+			classesExpected = valSize - 1;
+		if (classesExpected < 0)
+			classesExpected = 0;
+
+		int opSize = getOpacities().size();
+		int colSize = getColors().size();
+		int labelSize = getLabels().size();
+		String error = "expectedClasses=" + classesExpected + "  valSize="
+				+ valSize + " opSize=" + opSize + " colSize=" + colSize
+				+ " labelSize=" + labelSize;
+		if (opSize != classesExpected
+				|| (valSize != classesExpected + 1 && (classesExpected != 0 && valSize != 0))
+				|| colSize != classesExpected || labelSize != classesExpected)
+			throw new RuntimeException(error);
+	}
 }

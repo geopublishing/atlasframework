@@ -25,4 +25,16 @@ public class RasterRulesList_Ramps extends RasterRulesList {
 		return rld;
 	}
 
+	@Override
+	protected void test(int numClasses) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void applyOpacity() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
