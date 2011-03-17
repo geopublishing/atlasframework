@@ -259,6 +259,21 @@
 
 		<dependency>
 			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-core</artifactId>
+			<version>${schmitzm.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-jfree-gt</artifactId>
+			<version>${schmitzm.version}</version>
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.schmitzm</groupId>
 			<artifactId>schmitzm-jfree-gt</artifactId>
 			<version>${schmitzm.version}</version>
 			<type>test-jar</type>
