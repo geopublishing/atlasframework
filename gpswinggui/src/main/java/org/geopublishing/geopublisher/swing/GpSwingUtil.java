@@ -688,6 +688,12 @@ public class GpSwingUtil extends GpUtil {
         SwingUtil.centerFrameOnScreenRandom(editorDialog);
 
         editorDialog.setVisible(true);
+        
+//        // Because we can not use JDialog anymore, we "fake"
+//        // the modal property
+//        while ( editorDialog.isVisible() ) {
+//          LangUtil.sleepExceptionless(50);
+//        }
     }
 
 }
