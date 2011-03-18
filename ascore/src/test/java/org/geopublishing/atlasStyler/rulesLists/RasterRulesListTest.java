@@ -3,10 +3,16 @@ package org.geopublishing.atlasStyler.rulesLists;
 import static org.junit.Assert.assertEquals;
 
 import org.geotools.styling.ColorMap;
+import org.junit.Test;
 
 import de.schmitzm.testing.TestingClass;
 
 public class RasterRulesListTest extends TestingClass {
+	
+	@Test
+	public void testRun() {
+		System.out.println("all good");
+	}
 
 	protected void testExportAndImport(RasterRulesList rl, RasterRulesList rl2) {
 		// Reimport
