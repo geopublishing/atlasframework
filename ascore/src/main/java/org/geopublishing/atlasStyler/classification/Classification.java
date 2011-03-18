@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.classification;
 
+import hep.aida.bin.DynamicBin1D;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,8 +19,10 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
@@ -31,6 +35,7 @@ public abstract class Classification {
 	 * breaks.
 	 */
 	protected volatile TreeSet<Double> breaks = new TreeSet<Double>();
+	protected DynamicBin1D stats = null;
 
 	public final AtomicBoolean cancelCalculation = new AtomicBoolean(false);
 
@@ -53,8 +58,7 @@ public abstract class Classification {
 	 * Counts the number of NODATA values found and excluded from the
 	 * classification
 	 **/
-	// TODO Atomic!?
-	long noDataValuesCount = 0;
+	AtomicLong noDataValuesCount = new AtomicLong();
 
 	protected int numClasses = 5;
 
@@ -103,6 +107,76 @@ public abstract class Classification {
 
 	public void dispose() {
 		listeners.clear();
+		stats.clear();
+	}
+
+	/**
+	 * @return A {@link ComboBoxModel} that contains a list of class numbers.<br/>
+	 *         When we supported SD as a classification METHOD long ago, this
+	 *         retured something dependent on the {@link #method}. Not it always
+	 *         returns a list of numbers.
+	 */
+	public ComboBoxModel getClassificationParameterComboBoxModel() {
+
+		DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
+				new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
+
+		switch (getMethod()) {
+		case EI:
+		case QUANTILES:
+		default:
+			nClassesComboBoxModel.setSelectedItem(numClasses);
+			return nClassesComboBoxModel;
+
+		}
+	}
+
+	public Double getMax() {
+		try {
+			return getStatistics().max();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
+	}
+
+	abstract protected DynamicBin1D getStatistics()
+			throws InterruptedException, IOException;
+
+	public Double getMean() {
+		try {
+			return getStatistics().mean();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
+	}
+
+	public Double getMedian() {
+		try {
+			return getStatistics().median();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
+	}
+
+	public Double getMin() {
+		try {
+			return getStatistics().min();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
+	}
+
+	public Long getCount() {
+		try {
+			return Long.valueOf(getStatistics().size());
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
 	}
 
 	// public abstract TreeSet<Double> getClassLimits();
@@ -128,6 +202,11 @@ public abstract class Classification {
 
 		LOGGER.debug("Classification fires event: " + evt.getType());
 
+		if (evt.getType() == CHANGETYPES.NODATAVALUE_CHANGED) {
+			// Force expensive recreation of the statistics
+			stats = null;
+		}
+
 		for (ClassificationChangedListener l : listeners) {
 			switch (evt.getType()) {
 			case NORM_CHG:
@@ -144,6 +223,8 @@ public abstract class Classification {
 				break;
 			case NUM_CLASSES_CHG:
 				l.classifierNumClassesChanged(evt);
+				break;
+			case NODATAVALUE_CHANGED:
 				break;
 			case START_NEW_STAT_CALCULATION:
 				l.classifierCalculatingStatistics(evt);
@@ -176,8 +257,6 @@ public abstract class Classification {
 
 	}
 
-	public abstract ComboBoxModel getClassificationParameterComboBoxModel();
-
 	public TreeSet<Double> getClassLimits() {
 		return breaks;
 	}
@@ -192,10 +271,6 @@ public abstract class Classification {
 	public Integer getClassValueDigits() {
 		return this.limitsDigits;
 	}
-
-	abstract public Long getCount();
-
-	abstract protected TreeSet<Double> getQuantileLimits();
 
 	/**
 	 * Equal Interval Classification method divides a set of attribute values
@@ -228,24 +303,16 @@ public abstract class Classification {
 		return breaks;
 	}
 
-	abstract public Double getMax();
-
-	abstract public Double getMean();
-
-	abstract public Double getMedian();
-
 	public CLASSIFICATION_METHOD getMethod() {
 		return method;
 	}
-
-	abstract public Double getMin();
 
 	/**
 	 * Counts the number of NODATA values found and excluded from the
 	 * classification
 	 **/
 	public long getNoDataValuesCount() {
-		return noDataValuesCount;
+		return noDataValuesCount.longValue();
 	}
 
 	/**
@@ -255,16 +322,58 @@ public abstract class Classification {
 		return numClasses;
 	}
 
-	abstract public Double getSD();
-
-	abstract public Double getSum();
+	public Double getSum() {
+		try {
+			return getStatistics().sum();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
+	}
 
 	/**
-	 * Adds one to the number of NODATA values found and excluded from the
-	 * classification
-	 **/
-	public void increaseNoDataValue() {
-		noDataValuesCount++;
+	 * Quantiles classification method distributes a set of values into groups
+	 * that contain an equal number of values. This method places the same
+	 * number of data values in each class and will never have empty classes or
+	 * classes with too few or too many values. It is attractive in that this
+	 * method always produces distinct map patterns.
+	 * 
+	 * @return nClasses + 1 breaks
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public TreeSet<Double> getQuantileLimits() {
+
+		try {
+			getStatistics();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+
+		// LOGGER.debug("getQuantileLimits numClasses ziel variable ist : "
+		// + numClasses);
+
+		breaks = new TreeSet<Double>();
+		final Double step = 100. / new Double(numClasses);
+		for (double i = 0; i < 100;) {
+			final double percent = (i) * 0.01;
+			final double quantile = stats.quantile(percent);
+			breaks.add(quantile);
+			i = i + step;
+		}
+		breaks.add(stats.max());
+		breaks = ASUtil.roundLimits(breaks, getClassValueDigits());
+
+		return breaks;
+	}
+
+	public Double getSD() {
+		try {
+			return getStatistics().standardDeviation();
+		} catch (Exception e) {
+			LOGGER.error("Error calculating statistics", e);
+			return null;
+		}
 	}
 
 	public boolean isQuite() {
@@ -347,14 +456,6 @@ public abstract class Classification {
 		}
 		setClassLimits(newClassLimits);
 		return newClassLimits;
-	}
-
-	/**
-	 * resets the number of NODATA values found and excluded from the
-	 * classification
-	 **/
-	final public void resetNoDataCount() {
-		noDataValuesCount = 0;
 	}
 
 	final public void setClassLimits(final TreeSet<Double> classLimits_) {

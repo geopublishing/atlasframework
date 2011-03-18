@@ -1,6 +1,5 @@
 package org.geopublishing.atlasViewer.swing;
 
-import java.awt.PopupMenu;
 import java.net.URL;
 
 import javax.swing.JComponent;

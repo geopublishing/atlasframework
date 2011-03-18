@@ -17,7 +17,6 @@ import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
-import org.geotools.styling.ColorMapEntryImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
@@ -25,7 +24,6 @@ import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.data.rld.RasterLegendData;
-import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.I18NUtil;
@@ -121,6 +119,11 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
 				+ METAINFO_KVP_EQUALS_CHAR + getPalette().getName();
+
+		if (getStyledRaster().getNodataValue() != null)
+			metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_NODATA
+					+ METAINFO_KVP_EQUALS_CHAR
+					+ getStyledRaster().getNodataValue();
 
 		return metaInfoString;
 	}
@@ -398,9 +401,60 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	@Override
 	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
-
 		metaInfoString = metaInfoString
 				.substring(getType().toString().length());
+
+		/***********************************************************************
+		 * Parsing a list of Key-Value Pairs from the FeatureTypeStyleName
+		 */
+		String[] params = metaInfoString.split(METAINFO_SEPERATOR_CHAR);
+		for (String p : params) {
+			String[] kvp = p.split(METAINFO_KVP_EQUALS_CHAR);
+
+			if (kvp[0].equalsIgnoreCase(KVP_NODATA.toString())) {
+
+				// Try to understand NODATAVALUE as Double from String
+				try {
+					Double noDataValue = Double.valueOf(kvp[1]);
+
+					//
+					if (getStyledRaster().getNodataValue() == null) {
+						getStyledRaster().setNodataValue(noDataValue);
+					} else if (!getStyledRaster().getNodataValue().equals(
+							noDataValue)) {
+						LOGGER.info("StyledRaster has NODATA value '"
+								+ getStyledRaster().getNodataValue()
+								+ "'. SLD has '" + noDataValue
+								+ "'. StyledRaster value is not changed!");
+					}
+				} catch (NumberFormatException e) {
+					LOGGER.error("Failes to parse NODATA value", e);
+				}
+			}
+
+			else
+
+			if (kvp[0].equalsIgnoreCase(KVP_PALTETTE)) {
+				String brewerPaletteName = kvp[1];
+
+				BrewerPalette foundIt = null;
+
+				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(
+						true, false), getNumClasses())) {
+					if (ppp.getName().equals(brewerPaletteName)) {
+						foundIt = ppp;
+						break;
+					}
+				}
+				if (foundIt == null) {
+					LOGGER.warn("Couldn't find the palette with the name '"
+							+ brewerPaletteName + "'.");
+				} else {
+					setPalette(foundIt);
+				}
+			}
+
+		}
 
 	}
 

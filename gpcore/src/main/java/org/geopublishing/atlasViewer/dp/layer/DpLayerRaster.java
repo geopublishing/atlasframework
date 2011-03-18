@@ -26,14 +26,23 @@ import de.schmitzm.jfree.chart.style.ChartStyle;
 public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle>
 		extends DpLayer<E, CHART_STYLE_IMPL> {
 
+	public Double getNodataValue() {
+		return nodataValue;
+	}
+
+	public void setNodataValue(Double nodataValue) {
+		this.nodataValue = nodataValue;
+	}
+
+	private Double nodataValue;
+
 	public DpLayerRaster(AtlasConfig ac) {
 		super(ac);
 	}
 
-	// TODO doku
 	abstract public RasterLegendData getLegendMetaData();
 
-	// TODO doku
-	abstract public void setLegendMetaData(RasterLegendData parseRasterLegendData);
+	abstract public void setLegendMetaData(
+			RasterLegendData parseRasterLegendData);
 
 }

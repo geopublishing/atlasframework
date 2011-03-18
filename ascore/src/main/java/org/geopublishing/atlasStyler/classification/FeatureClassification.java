@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeSet;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -67,7 +66,8 @@ public class FeatureClassification extends Classification {
 	 */
 	public static final String NORMALIZE_NULL_VALUE_IN_COMBOBOX = "-";
 
-	protected Logger LOGGER = LangUtil.createLogger(this);
+	final static private Logger LOGGER = LangUtil
+			.createLogger(FeatureClassification.class);
 
 	private String normalizer_field_name;
 
@@ -75,8 +75,6 @@ public class FeatureClassification extends Classification {
 
 	private final LimitedHashMap<String, DynamicBin1D> staticStatsCache = new LimitedHashMap<String, DynamicBin1D>(
 			20);
-
-	private DynamicBin1D stats = null;
 
 	private StyledFeaturesInterface<?> styledFeatures;
 
@@ -233,40 +231,6 @@ public class FeatureClassification extends Classification {
 	@Override
 	public void dispose() {
 		super.dispose();
-		stats.clear();
-		stats = null;
-	}
-
-	/**
-	 * @return A {@link ComboBoxModel} that contains a list of class numbers.<br/>
-	 *         When we supported SD as a classification METHOD long ago, this
-	 *         retured something dependent on the {@link #method}. Not it always
-	 *         returns a list of numbers.
-	 */
-	@Override
-	public ComboBoxModel getClassificationParameterComboBoxModel() {
-
-		DefaultComboBoxModel nClassesComboBoxModel = new DefaultComboBoxModel(
-				new Integer[] { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 });
-
-		switch (getMethod()) {
-		case EI:
-		case QUANTILES:
-		default:
-			nClassesComboBoxModel.setSelectedItem(numClasses);
-			return nClassesComboBoxModel;
-
-		}
-	}
-
-	@Override
-	public Long getCount() {
-		try {
-			return Long.valueOf(getStatistics().size());
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
 	}
 
 	/**
@@ -279,46 +243,6 @@ public class FeatureClassification extends Classification {
 				+ " FILTER=" + getStyledFeatures().getFilter();
 	}
 
-	@Override
-	public Double getMax() {
-		try {
-			return getStatistics().max();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
-	}
-
-	@Override
-	public Double getMean() {
-		try {
-			return getStatistics().mean();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
-	}
-
-	@Override
-	public Double getMedian() {
-		try {
-			return getStatistics().median();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
-	}
-
-	@Override
-	public Double getMin() {
-		try {
-			return getStatistics().min();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
-	}
-
 	/**
 	 * @return the name of the {@link Attribute} used for the normalization of
 	 *         the value. e.g. value = value field / normalization field
@@ -328,58 +252,12 @@ public class FeatureClassification extends Classification {
 	}
 
 	/**
-	 * Quantiles classification method distributes a set of values into groups
-	 * that contain an equal number of values. This method places the same
-	 * number of data values in each class and will never have empty classes or
-	 * classes with too few or too many values. It is attractive in that this
-	 * method always produces distinct map patterns.
-	 * 
-	 * @return nClasses + 1 breaks
-	 * @throws IOException
-	 * @throws InterruptedException
-	 */
-	@Override
-	public TreeSet<Double> getQuantileLimits() {
-
-		try {
-			getStatistics();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-
-		// LOGGER.debug("getQuantileLimits numClasses ziel variable ist : "
-		// + numClasses);
-
-		breaks = new TreeSet<Double>();
-		final Double step = 100. / new Double(numClasses);
-		for (double i = 0; i < 100;) {
-			final double percent = (i) * 0.01;
-			final double quantile = stats.quantile(percent);
-			breaks.add(quantile);
-			i = i + step;
-		}
-		breaks.add(stats.max());
-		breaks = ASUtil.roundLimits(breaks, getClassValueDigits());
-
-		return breaks;
-	}
-
-	@Override
-	public Double getSD() {
-		try {
-			return getStatistics().standardDeviation();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
-	}
-
-	/**
 	 * This is where the magic happens. Here the attributes of the features are
 	 * summarized in a {@link DynamicBin1D} class.
 	 * 
 	 * @throws IOException
 	 */
+	@Override
 	synchronized public DynamicBin1D getStatistics()
 			throws InterruptedException, IOException {
 
@@ -412,7 +290,7 @@ public class FeatureClassification extends Classification {
 					.getFeatureSource().getFeatures(query);
 
 			// Forget about the count of NODATA values
-			resetNoDataCount();
+			noDataValuesCount.set(0);
 
 			final DynamicBin1D stats_local = new DynamicBin1D();
 
@@ -453,7 +331,7 @@ public class FeatureClassification extends Classification {
 					final Object filtered = amd.fiterNodata(f
 							.getAttribute(value_field_name));
 					if (filtered == null) {
-						increaseNoDataValue();
+						noDataValuesCount.incrementAndGet();
 						continue;
 					}
 
@@ -465,7 +343,7 @@ public class FeatureClassification extends Classification {
 						Object filteredNorm = amdNorm.fiterNodata(f
 								.getAttribute(normalizer_field_name));
 						if (filteredNorm == null) {
-							increaseNoDataValue();
+							noDataValuesCount.incrementAndGet();
 							continue;
 						}
 
@@ -476,7 +354,7 @@ public class FeatureClassification extends Classification {
 								|| valueNormDivider.isNaN()) {
 							// Even if it is not defined as a NODATA value,
 							// division by null is not definied.
-							increaseNoDataValue();
+							noDataValuesCount.incrementAndGet();
 							continue;
 						}
 
@@ -505,16 +383,6 @@ public class FeatureClassification extends Classification {
 	 **/
 	public StyledFeaturesInterface<?> getStyledFeatures() {
 		return styledFeatures;
-	}
-
-	@Override
-	public Double getSum() {
-		try {
-			return getStatistics().sum();
-		} catch (Exception e) {
-			LOGGER.error("Error calculating statistics", e);
-			return null;
-		}
 	}
 
 	/**

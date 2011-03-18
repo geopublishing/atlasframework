@@ -54,6 +54,8 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	public static final String KVP_METHOD = "METHOD";
 	/** KEY-name for the KVPs in the meta information * */
 	public static final String KVP_PALTETTE = "PALETTE";
+	/** KEY-name for the KVPs in the meta information * */
+	public static final String KVP_NODATA = "NODATAVALUE";
 
 	public static final String METAINFO_KVP_EQUALS_CHAR = "#";
 

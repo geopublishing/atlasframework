@@ -191,7 +191,7 @@ public class FeatureClassificationGUI extends ClassificationGUI {
 
 	}
 
-	private FeatureClassification getClassifier() {
+	public FeatureClassification getClassifier() {
 		return (FeatureClassification) classifier;
 	}
 }

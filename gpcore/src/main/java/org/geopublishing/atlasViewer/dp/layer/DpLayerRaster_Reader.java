@@ -443,10 +443,4 @@ public class DpLayerRaster_Reader extends
 		return new ReferencedEnvelope(getEnvelope(), getCrs());
 	}
 
-	@Override
-	public Double getNodataValue() {
-		LOGGER.warn("Returning fixed hack 0 NODATAVALUE");
-		return 0.;
-	}
-
 }

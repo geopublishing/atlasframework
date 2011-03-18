@@ -769,7 +769,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxColumns() {
+	protected JComboBox getJComboBoxColumns() {
 		if (jComboBoxColumns == null) {
 			jComboBoxColumns = new JComboBox();
 
@@ -846,5 +846,9 @@ public abstract class ClassificationGUI extends AtlasDialog {
 	}
 
 	abstract protected JPanel getJPanelData();
+
+	public Classification getClassifier() {
+		return classifier;
+	}
 
 }

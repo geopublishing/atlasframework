@@ -3,6 +3,7 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Component;
 import java.io.IOException;
 import java.util.TreeSet;
+import java.util.concurrent.CancellationException;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.classification.RasterClassification;
@@ -64,6 +65,7 @@ public class RasterClassificationGUIfied extends RasterClassification {
 		try {
 			newLimits = calculateStatisticsWorker.executeModal();
 			setClassLimits(newLimits);
+		} catch (CancellationException e) {
 		} catch (Exception e) {
 			LOGGER.error("Error calculating classification", e);
 		} finally {

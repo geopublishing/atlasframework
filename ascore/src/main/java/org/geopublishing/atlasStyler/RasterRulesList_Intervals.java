@@ -10,13 +10,10 @@ import javax.swing.JOptionPane;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
-import org.geotools.brewer.color.BrewerPalette;
-import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
 
-import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
@@ -61,10 +58,10 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 			for (int i = 1; i < getValues().size(); i++) {
 
 				Color colorToSet;
-				if (getOpacities().get(i-1) == 0.) {
+				if (getOpacities().get(i - 1) == 0.) {
 					colorToSet = Color.WHITE;
 				} else
-				colorToSet = colors[idx];
+					colorToSet = colors[idx];
 
 				if (i >= getColors().size())
 					getColors().add(colorToSet);
@@ -90,6 +87,8 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 	@Override
 	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 
+		super.parseMetaInfoString(metaInfoString, fts);
+
 		metaInfoString = metaInfoString
 				.substring(getType().toString().length());
 
@@ -108,29 +107,6 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 					kvp[1] = "QUANTILES";
 
 				setMethod(CLASSIFICATION_METHOD.valueOf(kvp[1]));
-
-			}
-
-			else
-
-			if (kvp[0].equalsIgnoreCase(KVP_PALTETTE)) {
-				String brewerPaletteName = kvp[1];
-
-				BrewerPalette foundIt = null;
-
-				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(
-						true, false), getNumClasses())) {
-					if (ppp.getName().equals(brewerPaletteName)) {
-						foundIt = ppp;
-						break;
-					}
-				}
-				if (foundIt == null) {
-					LOGGER.warn("Couldn't find the palette with the name '"
-							+ brewerPaletteName + "'.");
-				} else {
-					setPalette(foundIt);
-				}
 			}
 
 		}
@@ -281,8 +257,8 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		if (classLimits.size() == 1 && resetRuleTitles) {
 			getLabels().set(0, new Translation(classLimits.get(0).toString()));
 		}
-		
-		if (getLabels().size() != classLimits .size()-1) {
+
+		if (getLabels().size() != classLimits.size() - 1) {
 			throw new RuntimeException("Labels not set correctly");
 		}
 

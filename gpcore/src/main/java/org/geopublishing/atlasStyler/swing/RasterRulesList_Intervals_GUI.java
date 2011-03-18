@@ -107,7 +107,6 @@ public class RasterRulesList_Intervals_GUI extends
 		newClassifier.pushQuite();
 		try {
 
-
 			/**
 			 * If the ruleList doesn't contain calculated class limits, we have
 			 * to start calculation directly.
@@ -146,7 +145,7 @@ public class RasterRulesList_Intervals_GUI extends
 					// .getNormalizer_field_name()
 					// .equals(ruleList.getNormalizer_field_name()));
 					boolean equalsNumClasses = newClassifier.getNumClasses() == ruleList
-							.getValues().size()-1;
+							.getValues().size() - 1;
 					boolean noChange = equalsNumClasses;
 
 					try {
@@ -187,6 +186,8 @@ public class RasterRulesList_Intervals_GUI extends
 	private final RasterClassification classifier;
 
 	protected SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
+
+	private JPanel noDataValueBox;
 
 	/**
 	 * This method initializes jButton
@@ -264,7 +265,7 @@ public class RasterRulesList_Intervals_GUI extends
 				"center");
 
 		this.add(getJPanelColorAndOpacity(), "align l, split 2");
-		this.add(getClassifyJToggleButton(), "align l, split 2");
+		this.add(getClassifyJToggleButton(), "align r");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 	}

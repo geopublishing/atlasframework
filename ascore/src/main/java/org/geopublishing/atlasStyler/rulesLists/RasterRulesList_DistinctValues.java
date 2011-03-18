@@ -15,7 +15,6 @@ import org.geotools.coverage.processing.OperationJAI;
 import org.geotools.styling.ColorMap;
 import org.opengis.parameter.ParameterValueGroup;
 
-import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.i18n.Translation;
