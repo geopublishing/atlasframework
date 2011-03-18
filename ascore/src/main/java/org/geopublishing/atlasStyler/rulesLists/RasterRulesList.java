@@ -1,7 +1,5 @@
 package org.geopublishing.atlasStyler.rulesLists;
 
-import hep.aida.bin.QuantileBin1D;
-
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +21,8 @@ import org.geotools.styling.Rule;
 import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.FilterUtil;
-import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
-import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
@@ -226,19 +222,32 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return palette;
 	}
 
-	/**
-	 * This method works for "n+1 values ==> n classes" and
-	 * "n values ==> n classes" since it counts over {@link #getNumClasses()}
-	 */
-	public RasterLegendData getRasterLegendData() {
-		RasterLegendData rld = new RasterLegendData(true);
-
-		for (int i = 0; i < getNumClasses(); i++) {
-			rld.put(getValues().get(i), getLabels().get(i));
-		}
-
-		return rld;
-	}
+	//
+	// /**
+	// * This method works for "n+1 values ==> n classes" and
+	// * "n values ==> n classes" since it counts over {@link #getNumClasses()}
+	// */
+	// public RasterLegendData getRasterLegendData() {
+	//
+	// if (cmt == ColorMap.TYPE_VALUES) {
+	// RasterLegendData rld = new RasterLegendData(true);
+	//
+	// for (int i = 0; i < getNumClasses(); i++) {
+	// rld.put(getValues().get(i), getLabels().get(i));
+	// }
+	//
+	// return rld;
+	// } else {
+	// RasterLegendData rld = new RasterLegendData(false);
+	//
+	// for (int i = 0; i < getNumClasses(); i++) {
+	// rld.put(getValues().get(i+1), getLabels().get(i));
+	// }
+	//
+	// return rld;
+	// }
+	//
+	// }
 
 	@Override
 	final public List<Rule> getRules() {
@@ -287,6 +296,61 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public ArrayList<Double> getValues() {
 		return values;
 	}
+//
+//	/**
+//	 * Attenetion: Ignores the CM type!
+//	 */
+//	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
+//		QuantileBin1D ops = new QuantileBin1D(1.);
+//
+//		int count = 0;
+//		for (ColorMapEntry cme : cm.getColorMapEntries()) {
+//
+//			if (cmt == ColorMap.TYPE_VALUES || count > 0) {
+//				importValuesLabelsQuantitiesColors(cme, true);
+//				// Add the last added opacity to the statistics
+//				ops.add(getOpacities().get(getOpacities().size() - 1));
+//			} else {
+//				// Skip the first if n+1=values = n classes
+//				importValuesLabelsQuantitiesColors(cme, false);
+//			}
+//
+//			count++;
+//		}
+//
+//		if (ops.median() >= 0 && ops.median() < 1.)
+//			setOpacity(ops.median());
+//		else
+//			setOpacity(1.);
+//	}
+//	@Override
+//	public void importRules(List<Rule> rules) {
+//		pushQuite();
+//
+//		if (rules.size() > 1) {
+//			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+//					+ " with " + rules.size() + " rules");
+//		}
+//
+//		Rule rule = rules.get(0);
+//
+//		// TODO Parse metainfostring?!
+//
+//		try {
+//			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+//			ColorMap cm = rs.getColorMap();
+//
+//			importValuesLabelsQuantitiesColors(cm);
+//
+//			// Analyse the filters...
+//			Filter filter = rule.getFilter();
+//			filter = parseAbstractRlSettings(filter);
+//
+//		} finally {
+//			popQuite();
+//		}
+//	}
+	
 
 	@Override
 	public void importRules(List<Rule> rules) {
@@ -305,10 +369,10 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
 			ColorMap cm = rs.getColorMap();
 
-			importValuesLabelsQuantitiesColors(cm);
+			importColorMap(cm);
 
 			// Analyse the filters...
-			Filter filter = rule.getFilter();
+			org.opengis.filter.Filter filter = rule.getFilter();
 			filter = parseAbstractRlSettings(filter);
 
 		} finally {
@@ -316,63 +380,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		}
 	}
 
-	/**
-	 * Attenetion: Ignores the CM type!
-	 */
-	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
-		QuantileBin1D ops = new QuantileBin1D(1.);
 
-		int count = 0;
-		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-
-			if (cmt == ColorMap.TYPE_VALUES || count > 0) {
-				importValuesLabelsQuantitiesColors(cme, true);
-				// Add the last added opacity to the statistics
-				ops.add(getOpacities().get(getOpacities().size() - 1));
-			} else {
-				// Skip the first if n+1=values = n classes
-				importValuesLabelsQuantitiesColors(cme, false);
-			}
-
-			count++;
-		}
-
-		if (ops.median() >= 0 && ops.median() < 1.)
-			setOpacity(ops.median());
-		else
-			setOpacity(1.);
-	}
-
-	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme,
-			boolean full) {
-		final Double valueDouble = Double.valueOf(cme.getQuantity()
-				.evaluate(null).toString());
-
-		Translation translation = styledRaster.getLegendMetaData() != null ? styledRaster
-				.getLegendMetaData().get(valueDouble) : null;
-
-		if (I18NUtil.isEmpty(translation)) {
-			final String labelFromCM = cme.getLabel();
-			if (labelFromCM != null && !labelFromCM.isEmpty())
-				translation = new Translation(labelFromCM);
-			else
-				translation = new Translation("");
-
-		}
-
-		if (translation.toString().startsWith(
-				RulesListInterface.RULENAME_DONTIMPORT))
-			return;
-
-		if (!full) {
-			getValues().add(valueDouble);
-			return;
-		}
-
-		add(valueDouble,
-				Double.valueOf(cme.getOpacity().evaluate(null).toString()),
-				StylingUtil.getColorFromColorMapEntry(cme), translation);
-	}
+	abstract public void importColorMap(ColorMap cm);
 
 	public void add(Double value, Double opacity, Color color, Translation label) {
 		getValues().add(value);
@@ -500,6 +509,13 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	public void setStyledRaster(StyledRasterInterface<?> styledRaster) {
 		this.styledRaster = styledRaster;
+	}
+
+	public void reset() {
+		getColors().clear();
+		getLabels().clear();
+		getValues().clear();
+		getOpacities().clear();
 	}
 
 }

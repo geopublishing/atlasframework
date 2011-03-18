@@ -221,6 +221,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 			jTableStats = new JTable();
 
 			/**
+			 * Classification.DescriptiveStatistics.Subsampled=Subsampling:
 			 * Classification.DescriptiveStatistics.Count=Count:
 			 * Classification.DescriptiveStatistics.Min=Minimum:
 			 * Classification.DescriptiveStatistics.Max=Maximum:
@@ -233,6 +234,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 
 			jTableStats.setModel(new DefaultTableModel() {
 				final String[] fieldNames = new String[] {
+						ASUtil.R("Classification.DescriptiveStatistics.Subsampling"),
 						ASUtil.R("Classification.DescriptiveStatistics.Count"),
 						ASUtil.R("Classification.DescriptiveStatistics.Min"),
 						ASUtil.R("Classification.DescriptiveStatistics.Max"),
@@ -258,7 +260,7 @@ public abstract class ClassificationGUI extends AtlasDialog {
 
 				@Override
 				public int getRowCount() {
-					return 8;
+					return 9;
 				}
 
 				@Override
@@ -267,21 +269,28 @@ public abstract class ClassificationGUI extends AtlasDialog {
 						return fieldNames[rowIndex];
 
 					try {
-						if (rowIndex == 0) // Count
+						if (rowIndex == 0) {
+							// Subsampling to every nth values
+							if (classifier.getSubsampling() > 1)
+								return ASUtil.R("Classification.DescriptiveStatistics.SubsamplingEveryNthValue",classifier.getSubsampling());
+							else
+								return ASUtil.R("Classification.DescriptiveStatistics.SubsamplingAll");
+						}
+						if (rowIndex == 1) // Count
 							return classifier.getCount();
-						if (rowIndex == 1) // Min
+						if (rowIndex == 2) // Min
 							return classifier.getMin();
-						if (rowIndex == 2) // Max
+						if (rowIndex == 3) // Max
 							return classifier.getMax();
-						if (rowIndex == 3) // Sum
+						if (rowIndex == 4) // Sum
 							return classifier.getSum();
-						if (rowIndex == 4) // Mean
+						if (rowIndex == 5) // Mean
 							return classifier.getMean();
-						if (rowIndex == 5) // Median
+						if (rowIndex == 6) // Median
 							return classifier.getMedian();
-						if (rowIndex == 6) // SD
+						if (rowIndex == 7) // SD
 							return classifier.getSD();
-						if (rowIndex == 7) // NODATA
+						if (rowIndex == 8) // NODATA
 							return classifier.getNoDataValuesCount();
 					} catch (Exception e) {
 						LOGGER.error("While creating the statistics:", e);

@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -17,6 +16,7 @@ import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public class AtlasStylerRaster extends AtlasStyler {
 
@@ -92,22 +92,23 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public AbstractRulesList copyRulesList(RulesListInterface rl) {
 		return null;
 	}
-
-	public RasterLegendData getLegendMetaData() {
-
-		if (getRuleLists().size() == 0)
-			return new RasterLegendData(false);
-
-		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
-
-		// TODO What if there is more than one RUlesList!?
-
-		return rrl.getRasterLegendData();
-	}
-
+//
+//	public RasterLegendData getLegendMetaData() {
+//
+//		if (getRuleLists().size() == 0)
+//			return new RasterLegendData(false);
+//
+//		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
+//
+//		// TODO What if there is more than one RUlesList!?
+//
+//		return rrl.getRasterLegendData();
+//	}
+//
 	@Override
 	StyleChangedEvent getStyleChangeEvent() {
-		return new RasterStyleChangedEvent(getStyle(), getLegendMetaData());
+		RasterLegendData rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false, null);
+		return new RasterStyleChangedEvent(getStyle(), rlm);
 	}
 
 	@Override

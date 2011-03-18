@@ -788,8 +788,6 @@ public class GpFrame extends JFrame {
 	private JMenu getChangeGpLangJMenu() {
 		SwingUtil.checkOnEDT();
 
-		// AtlasConfigEditable ace = gp.getAce();
-
 		JMenu languageSubMenu = new JMenu(
 				GpUtil.R("MenuBar.OptionsMenu.change_gp_language"));
 		languageSubMenu.setToolTipText(GpUtil

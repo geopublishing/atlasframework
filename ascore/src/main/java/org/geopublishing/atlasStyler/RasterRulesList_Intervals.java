@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;
@@ -110,7 +111,6 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 			}
 
 		}
-
 	}
 
 	public RasterRulesList_Intervals(StyledRasterInterface<?> styledRaster,
@@ -165,39 +165,117 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 	 */
 	@Override
 	public ColorMap getColorMap() {
+		
 
 		test(-1);
 
 		ColorMap cm = StylingUtil.STYLE_FACTORY.createColorMap();
 		cm.setType(cmt);
+		if (getValues().size()<2) return cm; 
 
-		for (int i = 0; i < getValues().size(); i++) {
+		int lastidx = getValues().size() - 1;
+		for (int i = 0; i < lastidx; i++) {
 
-			if (i == 0) {
-				ColorMapEntry cme = StylingUtil.createColorMapEntry("",
-						getValues().get(i), Color.WHITE, 0.);
-				cm.addColorMapEntry(cme);
-			} else {
-				String labelString = "";
+			String labelString = "";
 
-				final Translation label = getLabels().get(i - 1);
-				if (label != null) {
-					if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
-						labelString = label.toOneLine();
-					} else
-						labelString = label.toString();
-				}
-				ColorMapEntry cme = StylingUtil.createColorMapEntry(
-						labelString, getValues().get(i),
-						getColors().get(i - 1), getOpacities().get(i - 1));
-
-				cm.addColorMapEntry(cme);
-
+			final Translation label = getLabels().get(i);
+			if (label != null) {
+				if (AtlasStyler.getLanguageMode() == LANGUAGE_MODE.ATLAS_MULTILANGUAGE) {
+					labelString = label.toOneLine();
+				} else
+					labelString = label.toString();
 			}
+
+			Color color;
+			Double opacity;
+			if (i == 0) {
+				color = Color.WHITE;
+				opacity = 0.;
+			} else {
+				color = getColors().get(i - 1);
+				opacity = getOpacities().get(i - 1);
+			}
+
+			ColorMapEntry cme = StylingUtil.createColorMapEntry(labelString,
+					getValues().get(i), color, opacity);
+
+			cm.addColorMapEntry(cme);
 
 		}
 
+		ColorMapEntry cme = StylingUtil.createColorMapEntry("", getValues()
+				.get(lastidx), getColors().get(lastidx - 1),
+				getOpacities().get(lastidx -1));
+		cm.addColorMapEntry(cme);
+
 		return cm;
+	}
+	
+
+	@Override
+	public void importColorMap(ColorMap cm) {
+		reset();
+		
+		int countCME = cm.getColorMapEntries().length;
+		int lastCME = cm.getColorMapEntries().length -1;
+		
+		ArrayList<ColorMapEntry> cmes= new ArrayList<ColorMapEntry>();
+		for (ColorMapEntry cme: cm.getColorMapEntries())
+			cmes.add(cme);
+		
+		for (int i = 0 ; i < countCME; i++) {
+
+			// Wert wird immer importiert
+			ColorMapEntry cme = cmes.get(i);
+			getValues().add(Double.valueOf(cme.getQuantity().toString()));
+			
+			if (i < lastCME){
+				// Bis auf dem letzten wird das label importiert
+				getLabels().add(new Translation(cme.getLabel()));
+			}
+			
+			if (i > 0) {
+				getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
+				getOpacities().add(Double.valueOf(cme.getOpacity().evaluate(null).toString()));
+			}
+			
+		}
+
+	}
+
+	/**
+	 * INTERVAL!
+	 */
+	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme,
+			boolean full) {
+		final Double valueDouble = Double.valueOf(cme.getQuantity()
+				.evaluate(null).toString());
+
+		if (!full) {
+			getValues().add(valueDouble);
+			return;
+		}
+
+		// Translation translation = styledRaster.getLegendMetaData() != null ?
+		// styledRaster
+		// .getLegendMetaData().get(valueDouble) : null;
+		//
+		// if (I18NUtil.isEmpty(translation)) {
+		final String labelFromCM = cme.getLabel();
+		Translation translation;
+		if (labelFromCM != null && !labelFromCM.isEmpty())
+			translation = new Translation(labelFromCM);
+		else
+			translation = new Translation("");
+		// }
+
+		if (translation.toString().startsWith(
+				RulesListInterface.RULENAME_DONTIMPORT))
+			return;
+
+		add(valueDouble,
+				Double.valueOf(cme.getOpacity().evaluate(null).toString()),
+				StylingUtil.getColorFromColorMapEntry(cme), translation);
 	}
 
 	/**
@@ -218,9 +296,15 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		getValues().clear();
 		getValues().addAll(classLimits);
 
-		getOpacities().clear();
-		applyOpacity();
-
+		// Wenn mehr OPs als Classen, dann entfernen
+		while (getOpacities().size() > classLimits.size()-1) {
+			getOpacities().remove(getOpacities().size()-1);
+		}
+		// Wenn weniger OPs als Classen, dann hinzufügen
+		while (getOpacities().size() < classLimits.size()-1) {
+			getOpacities().add(getOpacity());
+		}
+		
 		if (classLimits.size() < 1) {
 			LOGGER.error("numClasses == " + classLimits.size()
 					+ " bei setClassLimits!?");
@@ -244,7 +328,7 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 			// If we do not reset the ruleTiles, we only put a default where no
 			// other value exists
 			if (!resetRuleTitles) {
-				if (getLabels().get(i) != null) {
+				if (getLabels().get(i) == null || getLabels().get(i).isEmpty()) {
 					getLabels().set(i, new Translation(stringTitle));
 				}
 			} else {
@@ -357,4 +441,5 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 				|| colSize != classesExpected || labelSize != classesExpected)
 			throw new RuntimeException(error);
 	}
+
 }

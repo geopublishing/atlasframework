@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,6 @@ import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
-import org.geopublishing.geopublisher.swing.FCKUtil;
 
 /**
  * A html editor based on SimplyHTML. 

@@ -5,7 +5,6 @@ import java.awt.Dimension;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.junit.Ignore;
@@ -16,7 +15,6 @@ import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
-import de.schmitzm.testing.TestingUtil;
 
 
 public class JHTMLEditorTest extends TestingClass {

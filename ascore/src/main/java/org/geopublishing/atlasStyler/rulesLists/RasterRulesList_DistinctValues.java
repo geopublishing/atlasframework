@@ -1,5 +1,7 @@
 package org.geopublishing.atlasStyler.rulesLists;
 
+import hep.aida.bin.QuantileBin1D;
+
 import java.awt.Color;
 import java.io.IOException;
 import java.util.Set;
@@ -13,10 +15,12 @@ import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.processing.OperationJAI;
 import org.geotools.styling.ColorMap;
+import org.geotools.styling.ColorMapEntry;
 import org.opengis.parameter.ParameterValueGroup;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
@@ -31,6 +35,45 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	public RasterRulesList_DistinctValues(StyledRasterInterface<?> styledRaster) {
 		super(RulesListType.RASTER_COLORMAP_DISTINCTVALUES, styledRaster,
 				ColorMap.TYPE_VALUES);
+	}
+
+
+	/**
+	 * Attenetion: Ignores the CM type!
+	 */
+	public void importColorMap(ColorMap cm) {
+		QuantileBin1D ops = new QuantileBin1D(1.);
+
+		for (ColorMapEntry cme : cm.getColorMapEntries()) {
+
+			importValuesLabelsQuantitiesColors(cme);
+			// Add the last added opacity to the statistics
+			ops.add(getOpacities().get(getOpacities().size() - 1));
+		}
+
+		if (ops.median() >= 0 && ops.median() < 1.)
+			setOpacity(ops.median());
+		else
+			setOpacity(1.);
+	}
+
+	protected void importValuesLabelsQuantitiesColors(ColorMapEntry cme) {
+		final Double valueDouble = Double.valueOf(cme.getQuantity()
+				.evaluate(null).toString());
+
+		final String labelFromCM = cme.getLabel();
+		Translation translation= new Translation("");
+		if (labelFromCM != null && !labelFromCM.isEmpty())
+			translation = new Translation(labelFromCM);
+		// }
+
+		if (translation.toString().startsWith(
+				RulesListInterface.RULENAME_DONTIMPORT))
+			return;
+
+		add(valueDouble,
+				Double.valueOf(cme.getOpacity().evaluate(null).toString()),
+				StylingUtil.getColorFromColorMapEntry(cme), translation);
 	}
 
 	public Integer addAllValues(AtlasSwingWorker<Integer> sw) {
@@ -206,4 +249,5 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				|| colSize != classesExpected || labelSize != classesExpected)
 			throw new RuntimeException(error);
 	}
+
 }

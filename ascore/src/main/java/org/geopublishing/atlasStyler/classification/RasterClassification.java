@@ -14,7 +14,9 @@ import hep.aida.bin.DynamicBin1D;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.Arrays;
@@ -133,7 +135,7 @@ public class RasterClassification extends Classification {
 
 		return image;
 	}
-
+ 
 	/**
 	 * This is where the magic happens. Here the attributes of the features are
 	 * summarized in a {@link DynamicBin1D} class.
@@ -147,24 +149,63 @@ public class RasterClassification extends Classification {
 		cancelCalculation.set(false);
 
 		if (stats == null) {
-			GridCoverage2D coverage = getStyledRaster().getGeoObject().read(null);
+			GridCoverage2D coverage = getStyledRaster().getGeoObject().read(
+					null);
 
+//			stats = new DynamicBin1D();
 			stats = new DynamicBin1D();
+			
+			noDataValuesCount.set(0);
 
 			final RenderedImage rim = coverage.getRenderedImage();
-			double[] values = rim.getData().getSamples(0, 0, rim.getWidth(),
-					rim.getHeight(), band, (double[]) null);
-			final DoubleArrayList doubleArrayList = new DoubleArrayList(values);
+			
+			long size = Long.valueOf(rim.getHeight())*Long.valueOf(rim.getWidth());
+			long maxPixels = 3000000l;
+			if (size > maxPixels){
+				setSubsampling((int) (size  / maxPixels));
+				LOGGER.info("Subsampling to every "+getSubsampling()+" pixel");
+			}
 
-			if (getStyledRaster().getNodataValue() != null) {
-				int sizewithNodata = doubleArrayList.size();
-				doubleArrayList.removeAll(new DoubleArrayList(
-						new double[] { getStyledRaster().getNodataValue() }));
-				noDataValuesCount.set(sizewithNodata - doubleArrayList.size());
-			} else
-				noDataValuesCount.set(0);
+			for (int row = 0; row < rim.getHeight(); row++) {
+				
+				if (row % getSubsampling() != 0) {
+					// Skipping this line for Subsampling
+					continue;
+				} else {
+					// DO
+					System.out.println("");
+				}
+				
+				int x1  = 0;
+				int w = rim.getWidth();
+				
+				int y1 =row;
+				int h = 1;
+				
+				Raster data = rim.getData( new Rectangle(x1, y1, w, h));
+				double[] values = data.getSamples(0, y1, w,h,
+						band, (double[]) null);
 
-			stats.addAllOf(doubleArrayList);
+				final DoubleArrayList doubleArrayList = new DoubleArrayList(
+						values);
+
+				if (getStyledRaster().getNodataValue() != null) {
+					int sizewithNodata = doubleArrayList.size();
+					doubleArrayList
+							.removeAll(new DoubleArrayList(
+									new double[] { getStyledRaster()
+											.getNodataValue() }));
+					noDataValuesCount.addAndGet(sizewithNodata
+							- doubleArrayList.size());
+				}  
+				
+				stats.addAllOf(doubleArrayList);
+				
+				
+				LOGGER.info("Added "+doubleArrayList.size()+" to statistics");
+				LOGGER.info(stats.size()+" in stats");
+				doubleArrayList.clear();
+			}
 
 			// Forget about the count of NODATA values
 

@@ -75,6 +75,11 @@ public abstract class Classification {
 	public void addListener(ClassificationChangedListener l) {
 		listeners.add(l);
 	}
+	
+	/**
+	 * If greate 1, only every nth value is evaluated. 
+	 */
+	private int subsampling = 1;
 
 	/**
 	 * Calculates the {@link TreeSet} of classLimits, blocking the thread.
@@ -535,5 +540,13 @@ public abstract class Classification {
 			setQuite(stackQuites.pop());
 		} finally {
 		}
+	}
+
+	public void setSubsampling(int subsampling) {
+		this.subsampling = subsampling;
+	}
+
+	public int getSubsampling() {
+		return subsampling;
 	}
 }
