@@ -143,7 +143,7 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
    */
   @Override
   public boolean hasScrollPane() {
-    return false;
+    return true;
   }
 
   /**

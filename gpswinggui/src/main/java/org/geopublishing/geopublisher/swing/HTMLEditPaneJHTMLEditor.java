@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -16,6 +18,9 @@ import javax.swing.JTabbedPane;
 
 import org.apache.log4j.Logger;
 
+import chrriis.common.WebServer;
+import chrriis.common.WebServer.HTTPRequest;
+import chrriis.common.WebServer.WebServerContent;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorListener;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorSaveEvent;
@@ -93,7 +98,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
    */
   @Override
   public void addEditorTab(String title, URL url, int idx) {
-    JHTMLEditor editor = createJHTMLEditor(editorType);
+    JHTMLEditor editor = createJHTMLEditor(editorType, url);
     // add a listener for the save operation
     editor.addHTMLEditorListener(this);
     // add source file to map (for the new editor tab)
@@ -197,49 +202,107 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements HTMLEditPaneInter
    * Creates an {@link JHTMLEditor} instance.
    * @param editorType supported (javascript) editors: "FCK", "TinyMCE"
    */
-  protected JHTMLEditor createJHTMLEditor(String editorType) {
+  protected JHTMLEditor createJHTMLEditor(String editorType, URL sourceURL) {
     JHTMLEditor htmlEditor = null;
+    
+    URL    baseURL    = null;
+    String baseURLStr = null;
+    String baseURLEnc = null;
+    try {
+      baseURL    = IOUtil.getParentUrl(sourceURL);
+      baseURLStr = baseURL.toString();
+      baseURLStr += "/";
+      baseURLEnc = new org.apache.commons.codec.net.URLCodec().encode(baseURL.toString()).substring(5);
+    } catch (Exception err) {
+      LOGGER.warn("Could not determine parent URL for '"+sourceURL+"'");
+    }
     
     if ( editorType.equalsIgnoreCase("FCK" ) ) {
       // Create FCK as editor
-      String configScript =
-        "FCKConfig.ToolbarSets[\"Default\"] = [\n" +
-        FCKUtil.createFCKToolbarConfigString("Source","DocProps","-","Save","NewPage","Preview","-","Templates")+
-        FCKUtil.createFCKToolbarConfigString("Cut","Copy","Paste","PasteText","PasteWord","-","Print","SpellCheck")+
-        FCKUtil.createFCKToolbarConfigString("Undo","Redo","-","Find","Replace","-","SelectAll","RemoveFormat")+
-//        FCKUtil.createFCKToolbarConfigString("Form","Checkbox","Radio","TextField","Textarea","Select","Button","ImageButton","HiddenField")+
-        FCKUtil.createFCKConfigString("/")+",\n"+
-        FCKUtil.createFCKToolbarConfigString("FontFormat","FontName","FontSize")+
-        FCKUtil.createFCKToolbarConfigString("TextColor","BGColor")+
-        FCKUtil.createFCKConfigString("/")+",\n"+
-        FCKUtil.createFCKToolbarConfigString("Italic","Underline","StrikeThrough","-","Subscript","Superscript")+
-        FCKUtil.createFCKToolbarConfigString("OrderedList","UnorderedList","-","Outdent","Indent","Blockquote")+
-        FCKUtil.createFCKToolbarConfigString("JustifyLeft","JustifyCenter","JustifyRight","JustifyFull")+
-        FCKUtil.createFCKToolbarConfigString("Link","Unlink","Anchor")+
-        FCKUtil.createFCKToolbarConfigString("Image","Table","Rule","Smiley","SpecialChar","PageBreak","-","ShowBlocks")+
-        "];\n" +   
-        "FCKConfig.ToolbarCanCollapse = false;\n"; 
+      String configScript = "";
+      // Configure toolbars 
       // Also possible actions (but not useful for GP:
-      // "Style", "Flash"
-//      LOGGER.info(configScript);
+      // 'Style', 'Flash'
+      // 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField'   
+      configScript +=
+        "FCKConfig.ToolbarSets[\"Default\"] = [\n" +   
+        "['Source','DocProps','-','Save','NewPage','Preview','-','Templates'],\n" +   
+        "['Cut','Copy','Paste','PasteText','PasteWord','-','Print','SpellCheck'],\n" +   
+        "['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],\n" +   
+        "'/',\n" +   
+        "['FontFormat','FontName','FontSize'],\n" +   
+        "['TextColor','BGColor'],\n" +   
+        "'/',\n" +   
+        "['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],\n" +   
+        "['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],\n" +   
+        "['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],\n" +   
+        "['Link','Unlink','Anchor'],\n" +   
+        "['Image','Table','Rule','Smiley','SpecialChar','PageBreak', '-', 'ShowBlocks'],\n" +   
+        "];\n" +   
+        "FCKConfig.ToolbarCanCollapse = false;\n";
+      // Configure base URL so that the images with relative URLs are
+      // also shown
+      if ( baseURLStr != null )
+        configScript +=
+          "FCKConfig.BaseHref = '"+baseURLStr+"';\n";  
+      // Hide "target" options for links because in GP
+      // we can only show links in the same frame
+      configScript += 
+        "FCKConfig.LinkDlgHideTarget = true;\n";
+      // Hide complete "link" tab for images to avoid
+      // the "target" property (see above!)
+      configScript += 
+        "FCKConfig.ImageDlgHideLink = true;\n"; 
+      // Set starting focus to editing area
+      configScript += 
+        "FCKConfig.StartupFocus = true;\n"; 
+//      // Set auto formatting html code (on output = saving)
+//      configScript += 
+//        "FCKConfig.FormatOutput = true; FCKConfig.FormatSource = true;\n"; 
+      // Set language used in GP
+      configScript += 
+        "FCKConfig.AutoDetectLanguage = false; FCKConfig.DefaultLanguage = \""+Locale.getDefault()+"\";\n";
+      // Disable Upload buttons 
+      configScript += 
+        "FCKConfig.ImageUpload = false; FCKConfig.LinkUpload = false;\n"; 
+      // Disable Browse buttons
+//      configScript += 
+//        "FCKConfig.ImageBrowser = false; FCKConfig.LinkBrowser = false;\n"; 
+      
+//      configScript += 
+//        "FCKConfig.ImageUploadURL = '"+baseURL+"';\n"; 
+//      configScript += 
+//        "FCKConfig.ImageBrowser = false;\n"; 
+//
+//      configScript += 
+//        "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension + '&StartFolder='"+baseURLStr+"';\n"; 
+//      configScript
+//        += "var _FileBrowserLanguage = 'Java'; var _QuickUploadLanguage = 'Java';\n";
+
+      
+      
+       
+      LOGGER.debug(configScript);
+      // Create editor instance
       htmlEditor = new JHTMLEditor(   
-//          JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.FCKEditor),   
+          JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.FCKEditor),   
           JHTMLEditor.setCustomJavascriptConfiguration(configScript)
       );
+      htmlEditor.setFileBrowserStartFolder(baseURLStr.substring(6));
       return htmlEditor;
     }
 
     if ( editorType.equalsIgnoreCase("TinyMCE" ) ) {
       // Create TinyMCE as editor
       final String configScript =   
-          "theme_advanced_buttons1: &apos;bold,italic,underline,strikethrough,sub,sup,|,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,removeformat&apos;," +   
-          "theme_advanced_buttons2: &apos;undo,redo,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,forecolor,backcolor,bullist,numlist,|,outdent,indent,blockquote,|,table&apos;," +   
-          "theme_advanced_buttons3: &apos;&apos;," +   
-          "theme_advanced_toolbar_location: &apos;top&apos;," +   
-          "theme_advanced_toolbar_align: &apos;left&apos;," +   
+          "theme_advanced_buttons1: 'bold,italic,underline,strikethrough,sub,sup,|,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,removeformat'," +   
+          "theme_advanced_buttons2: 'undo,redo,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,forecolor,backcolor,bullist,numlist,|,outdent,indent,blockquote,|,table'," +   
+          "theme_advanced_buttons3: ''," +   
+          "theme_advanced_toolbar_location: 'top'," +   
+          "theme_advanced_toolbar_align: 'left'," +   
           // Language can be configured when language packs are added to the classpath. Language packs can be found here: http://tinymce.moxiecode.com/download_i18n.php   
-//            "language: &apos;de&apos;," +   
-          "plugins: &apos;table,paste&apos;";   
+//            "language: 'de'," +   
+          "plugins: 'table,paste'";   
  
         htmlEditor = new JHTMLEditor(   
             JHTMLEditor.setEditorImplementation(JHTMLEditor.HTMLEditorImplementation.TinyMCE),   

@@ -141,7 +141,7 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 	 */
 	@Override
 	public boolean hasScrollPane() {
-		return false;
+		return true;
 	}
 
 	/**
