@@ -51,12 +51,6 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>chrriis.dj</groupId>
-			<artifactId>DJNativeSwing</artifactId>
-			<version>0.9.8</version>
-		</dependency>
-
 
 		<dependency>
 			<!-- Test dependency -->
