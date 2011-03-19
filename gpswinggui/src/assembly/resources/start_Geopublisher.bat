@@ -10,14 +10,14 @@ rem  You should have received a copy of the GNU Lesser General Public License al
 echo "Starting Geopublisher..." 
 
 set HOMEPATH_COMPL=%HOMEDRIVE%%HOMEPATH%
-set SWTJAR=swt-windows-3.6-x86.jar
+set SWTJAR=swt-windows-${swt.version}-x86.jar
 set JAI=jai_codec-windows-1.1.3.jar;jai_core-windows-1.1.3.jar;mlibwrapper_jai-windows-1.1.3.jar
 
 md "%HOMEPATH_COMPL%\.Geopublishing"
 java -version 2>"%HOMEPATH_COMPL%\.Geopublishing\javaversion.txt"
 
 FINDSTR "64" "%HOMEPATH_COMPL%\.Geopublishing\javaversion.txt"
-if %ERRORLEVEL% EQU 0 set SWTJAR=swt-windows-3.6-x86_64.jar
+if %ERRORLEVEL% EQU 0 set SWTJAR=swt-windows-${swt.version}-x86_64.jar
 echo.Using native SWT library %SWTJAR%
 
 javaw -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp "%JAI%;%SWTJAR%;%HOMEPATH%\.Geopublishing;gpswinggui-${project.version}.jar" org.geopublishing.geopublisher.swing.GeopublisherGUI %~f1 %~f2 %~f3 %~f4 %~f5 %~f6 %~f7 %~f8 %~f9 %~f10 %~f11 %~f12 %~f13

@@ -13,6 +13,7 @@ import org.junit.Test;
 import chrriis.common.UIUtils;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
+import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor.HTMLEditorImplementation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
 
@@ -34,7 +35,7 @@ public class JHTMLEditorTest extends TestingClass {
     SwingUtilities.invokeAndWait( new Runnable() {
       public void run() {
         try {
-          JHTMLEditor editor = new JHTMLEditor();
+          JHTMLEditor editor = new JHTMLEditor(HTMLEditorImplementation.FCKEditor);
           editor.setPreferredSize( new Dimension(600,500) );
 //          dialog.setModal(true);
           dialog.getContentPane().add(editor, BorderLayout.CENTER);

@@ -6,7 +6,7 @@
 #  You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 echo "Starting Geopublisher..."
 
-export SWTJAR="swt-gtk-linux-3.6-x86.jar"
+export SWTJAR="swt-gtk-linux-${swt.version}-x86.jar"
 
 export JAI=jai_core-linux-1.1.3.jar:jai_codec-linux-1.1.3.jar
 
@@ -15,7 +15,7 @@ java -version &> ~/.Geopublishing/javaversion
 
 if [[ `cat ~/.Geopublishing/javaversion` == *64-Bit* ]]
 then
-  export SWTJAR="swt-gtk-linux-3.6-x86_64.jar"
+  export SWTJAR="swt-gtk-linux-${swt.version}-x86_64.jar"
   echo "Using 64bit SWT native libs for 64-bit Java..."
 fi
 

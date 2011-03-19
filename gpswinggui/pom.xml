@@ -16,6 +16,7 @@
 
 	<properties>
 		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
+		<swt.version>3.7M5</swt.version>
 	</properties>
 
 	<build>
@@ -93,7 +94,7 @@
 				<dependency>
 					<groupId>de.wikisquare</groupId>
 					<artifactId>swt</artifactId>
-					<version>3.6</version>
+					<version>${swt.version}</version>
 				</dependency>
 
 <!-- 				On GISBERT add JAI JARs for ALL Systems! -->
@@ -459,7 +460,7 @@
 			<type>jar</type>
 			<scope>compile</scope>
 			<exclusions>
-				<!-- We use a newer miglayout via schmirtm, not 3.7 -->
+				<!-- We use a newer miglayout via schmitzm, not 3.7 -->
 				<exclusion>
 					<groupId>com.miglayout</groupId>
 					<artifactId>miglayout</artifactId>
@@ -592,7 +593,7 @@
 		<dependency>
 			<groupId>chrriis.dj</groupId>
 			<artifactId>DJNativeSwing</artifactId>
-			<version>0.9.8</version>
+			<version>1.0.1</version>
 		</dependency>
 
 	</dependencies>
