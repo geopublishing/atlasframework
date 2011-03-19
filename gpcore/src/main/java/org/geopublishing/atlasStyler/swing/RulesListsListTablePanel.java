@@ -1,5 +1,6 @@
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +23,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
@@ -41,6 +42,8 @@ public class RulesListsListTablePanel extends JPanel {
 	private final AtlasStyler atlasStyler;
 
 	private SmallButton addButton;
+	
+	private SmallButton gdalInfoButton;
 
 	private SmallButton removeButton;
 
@@ -89,9 +92,25 @@ public class RulesListsListTablePanel extends JPanel {
 		add(getAddButton(), "split 6, align left");
 		add(getDuplicateButton(), "align left");
 		add(getRemoveButton(), "align left, gapx");
+		add(getGdalInfoButton(), "align center, gapx");
 		add(new JLabel(), "growx");
 		add(getUpButton(), "align right");
 		add(getDownButton(), "align right");
+	}
+
+	private Component getGdalInfoButton() {
+		if (gdalInfoButton == null) {
+			gdalInfoButton  = new SmallButton(new AbstractAction("gdal") {
+				
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					GdalInfo2RulesListDialog gdalInfo2RulesListDialog = new GdalInfo2RulesListDialog(RulesListsListTablePanel.this, (AtlasStylerRaster) atlasStyler);
+					gdalInfo2RulesListDialog.setModal(true);
+					gdalInfo2RulesListDialog.setVisible(true);
+				}
+			});
+			
+		}return gdalInfoButton;
 	}
 
 	private JPanel getModeButtons(final StylerDialog asd) {
@@ -297,7 +316,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private JButton getDuplicateButton() {
 		if (duplicateButton == null) {
 			duplicateButton = new SmallButton(new AbstractAction(
-					AtlasStylerVector
+					ASUtil
 							.R("RulesListsList.Action.DuplicateRulesLists")) {
 
 				@Override
