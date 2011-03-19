@@ -1,5 +1,8 @@
 package org.geopublishing.atlasStyler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
@@ -20,13 +23,16 @@ import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
 import org.geotools.data.FeatureSource;
+import org.geotools.styling.ColorMap;
 import org.geotools.styling.FeatureTypeStyle;
+import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 
@@ -106,7 +112,7 @@ public class RuleListFactory {
 		}
 	}
 
-	private final StyledLayerInterface<?> styledFS;
+	private final StyledLayerInterface<?> styledLayer;
 
 	/**
 	 * @param styledLayer
@@ -114,27 +120,27 @@ public class RuleListFactory {
 	 *            created for.
 	 */
 	public RuleListFactory(StyledLayerInterface<?> styledLayer) {
-		this.styledFS = styledLayer;
+		this.styledLayer = styledLayer;
 	}
 
 	public GraduatedColorRuleList createGraduatedColorLineRulesList(
 			boolean withDefaults) {
 		GraduatedColorLineRuleList graduatedColorLineRuleList = new GraduatedColorLineRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return graduatedColorLineRuleList;
 	}
 
 	public GraduatedColorRuleList createGraduatedColorPointRulesList(
 			boolean withDefaults) {
 		GraduatedColorPointRuleList graduatedColorPointRuleList = new GraduatedColorPointRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return graduatedColorPointRuleList;
 	}
 
 	public GraduatedColorRuleList createGraduatedColorPolygonRulesList(
 			boolean withDefaults) {
 		GraduatedColorPolygonRuleList graduatedColorPolygonRuleList = new GraduatedColorPolygonRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return graduatedColorPolygonRuleList;
 	}
 
@@ -146,7 +152,7 @@ public class RuleListFactory {
 	public GraduatedColorRuleList createGraduatedColorRuleList(
 			boolean withDefaults) {
 		return createGraduatedColorRuleList(
-				((StyledFeaturesInterface) styledFS).getGeometryForm(),
+				((StyledFeaturesInterface) styledLayer).getGeometryForm(),
 				withDefaults);
 	}
 
@@ -172,7 +178,7 @@ public class RuleListFactory {
 	public AbstractRulesList createRulesList(RulesListType rlType,
 			boolean withDefaults) {
 
-		Translation title = AtlasStyler.getRuleTitleFor(styledFS);
+		Translation title = AtlasStyler.getRuleTitleFor(styledLayer);
 
 		switch (rlType) {
 		case QUANTITIES_COLORIZED_LINE:
@@ -201,13 +207,13 @@ public class RuleListFactory {
 
 		case RASTER_COLORMAP_DISTINCTVALUES:
 			return new RasterRulesList_DistinctValues(
-					(StyledRasterInterface) styledFS);
+					(StyledRasterInterface) styledLayer);
 		case RASTER_COLORMAP_INTERVALS:
 			return new RasterRulesList_Intervals(
-					(StyledRasterInterface) styledFS, withDefaults);
+					(StyledRasterInterface) styledLayer, withDefaults);
 		case RASTER_COLORMAP_RAMPS:
-			return new RasterRulesList_Ramps((StyledRasterInterface) styledFS,
-					withDefaults);
+			return new RasterRulesList_Ramps(
+					(StyledRasterInterface) styledLayer, withDefaults);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);
@@ -224,7 +230,7 @@ public class RuleListFactory {
 	public SingleRuleList<? extends Symbolizer> createSingleRulesList(
 			Translation title, boolean withDefaults) {
 		return createSingleRulesList(title,
-				((StyledFeaturesInterface<?>) styledFS).getGeometryForm(),
+				((StyledFeaturesInterface<?>) styledLayer).getGeometryForm(),
 				withDefaults);
 	}
 
@@ -233,28 +239,28 @@ public class RuleListFactory {
 	 */
 	public TextRuleList createTextRulesList(boolean withDefaults) {
 		TextRuleList textRulesList = new TextRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return textRulesList;
 	}
 
 	public UniqueValuesLineRuleList createUniqueValuesLineRulesList(
 			boolean withDefaults) {
 		UniqueValuesLineRuleList uniqueValuesLineRuleList = new UniqueValuesLineRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return uniqueValuesLineRuleList;
 	}
 
 	public UniqueValuesPointRuleList createUniqueValuesPointRulesList(
 			boolean withDefaults) {
 		UniqueValuesPointRuleList uniqueValuesPointRuleList = new UniqueValuesPointRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return uniqueValuesPointRuleList;
 	}
 
 	public UniqueValuesPolygonRuleList createUniqueValuesPolygonRulesList(
 			boolean withDefaults) {
 		UniqueValuesPolygonRuleList uniqueValuesPolygonRuleList = new UniqueValuesPolygonRuleList(
-				(StyledFeaturesInterface<?>) styledFS, withDefaults);
+				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return uniqueValuesPolygonRuleList;
 	}
 
@@ -263,7 +269,7 @@ public class RuleListFactory {
 	 */
 	public UniqueValuesRuleList createUniqueValuesRulesList(boolean withDefaults) {
 		return createUniqueValuesRulesList(
-				((StyledFeaturesInterface<?>) styledFS).getGeometryForm(),
+				((StyledFeaturesInterface<?>) styledLayer).getGeometryForm(),
 				withDefaults);
 	}
 
@@ -296,7 +302,7 @@ public class RuleListFactory {
 					fts.toString()));
 		}
 
-		if (styledFS instanceof StyledFeaturesInterface) {
+		if (styledLayer instanceof StyledFeaturesInterface) {
 			// Singles
 			AbstractRulesList importedThisAbstractRuleList = importSingleRuleList(fts);
 			if (importedThisAbstractRuleList != null)
@@ -318,9 +324,9 @@ public class RuleListFactory {
 				return importedThisAbstractRuleList;
 		}
 
-		if (styledFS instanceof StyledRasterInterface) {
+		if (styledLayer instanceof StyledRasterInterface) {
 			// Raster
-			AbstractRulesList importedThisAbstractRuleList = importRasterDistinctValuesRulesList(fts);
+			AbstractRulesList importedThisAbstractRuleList = importRasterRulesList(fts);
 			if (importedThisAbstractRuleList != null)
 				return importedThisAbstractRuleList;
 		}
@@ -385,28 +391,42 @@ public class RuleListFactory {
 
 	}
 
-	private RasterRulesList importRasterDistinctValuesRulesList(
-			FeatureTypeStyle fts) {
-		if (!(styledFS instanceof StyledRasterInterface))
+	private RasterRulesList importRasterRulesList(FeatureTypeStyle fts) {
+		if (!(styledLayer instanceof StyledRasterInterface))
 			return null;
-		StyledRasterInterface<?> styledRaster = (StyledRasterInterface<?>) styledFS;
+		StyledRasterInterface<?> styledRaster = (StyledRasterInterface<?>) styledLayer;
 
 		String metaInfoString = fts.getName();
 
 		RasterRulesList rasterRulesList = null;
 
+		// Try to just look at the ColorMapType
+		final List<RasterSymbolizer> rsList = new ArrayList<RasterSymbolizer>();
+		StylingUtil.getRasterSymbolizers(rsList, fts);
+		int cmt = -1;
+		if (rsList.get(0) != null) {
+			RasterSymbolizer rasterSymbolizer = rsList.get(0);
+			ColorMap cm = rasterSymbolizer.getColorMap();
+			cmt = cm.getType();
+		}
+
 		/***************************************************************
 		 * Importing everything that starts with QUANTITIES
 		 */
-		if (metaInfoString
-				.startsWith(RulesListType.RASTER_COLORMAP_DISTINCTVALUES
-						.toString())) {
+		if (cmt == ColorMap.TYPE_VALUES
+				|| metaInfoString
+						.startsWith(RulesListType.RASTER_COLORMAP_DISTINCTVALUES
+								.toString())) {
 			rasterRulesList = new RasterRulesList_DistinctValues(styledRaster);
-		} else if (metaInfoString
-				.startsWith(RulesListType.RASTER_COLORMAP_INTERVALS.toString())) {
+		} else if (cmt == ColorMap.TYPE_INTERVALS
+				|| metaInfoString
+						.startsWith(RulesListType.RASTER_COLORMAP_INTERVALS
+								.toString())) {
 			rasterRulesList = new RasterRulesList_Intervals(styledRaster, false);
-		} else if (metaInfoString
-				.startsWith(RulesListType.RASTER_COLORMAP_RAMPS.toString())) {
+		} else if (cmt == ColorMap.TYPE_RAMP
+				|| metaInfoString
+						.startsWith(RulesListType.RASTER_COLORMAP_RAMPS
+								.toString())) {
 			rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
 		}
 
@@ -421,7 +441,7 @@ public class RuleListFactory {
 
 		final String metaInfoString = fts.getName();
 
-		Translation title = AtlasStylerVector.getRuleTitleFor(styledFS);
+		Translation title = AtlasStylerVector.getRuleTitleFor(styledLayer);
 
 		/***************************************************************
 		 * Importing everything that starts with SINGLE
