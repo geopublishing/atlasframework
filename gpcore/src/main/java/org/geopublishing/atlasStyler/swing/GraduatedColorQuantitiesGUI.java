@@ -107,7 +107,7 @@ public class GraduatedColorQuantitiesGUI extends
 
 	private JLabel jLabelHeading = null;
 
-	private final FeatureClassificationGUIfied classifier;
+	private FeatureClassificationGUIfied classifier;
 
 	protected SwingWorker<TreeSet<Double>, String> calculateStatisticsWorker;
 
@@ -166,31 +166,31 @@ public class GraduatedColorQuantitiesGUI extends
 	 */
 	private FeatureClassificationGUIfied createAndConfigureClassifier(
 			final GraduatedColorRuleList rulesList) {
-		final FeatureClassificationGUIfied newClassifier = new FeatureClassificationGUIfied(
+		classifier = new FeatureClassificationGUIfied(
 				GraduatedColorQuantitiesGUI.this,
 				rulesList.getStyledFeatures(), rulesList.getValue_field_name(),
 				rulesList.getNormalizer_field_name());
 
-		newClassifier.pushQuite();
+		classifier.pushQuite();
 		try {
 
-			newClassifier.setMethod(rulesList.getMethod());
-			newClassifier.setNumClasses(rulesList.getNumClasses());
-			newClassifier.setClassLimits(rulesList.getClassLimits());
+			classifier.setMethod(rulesList.getMethod());
+			classifier.setNumClasses(rulesList.getNumClasses());
+			classifier.setClassLimits(rulesList.getClassLimits());
 
 			/**
 			 * If the ruleList doesn't contain calculated class limits, we have
 			 * to start calculation directly.
 			 */
 			if (rulesList.getClassLimits().size() == 0) {
-				newClassifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
-				newClassifier.setNumClasses(5);
+				classifier.setMethod(CLASSIFICATION_METHOD.QUANTILES);
+				classifier.setNumClasses(5);
 			}
 
 			/**
 			 * Any changes to the classifier must be reported to the RuleList
 			 */
-			newClassifier.addListener(new ClassificationChangedAdapter() {
+			classifier.addListener(new ClassificationChangedAdapter() {
 
 				@Override
 				public void classifierAvailableNewClasses(
@@ -199,32 +199,32 @@ public class GraduatedColorQuantitiesGUI extends
 					rulesList.pushQuite();
 
 					// Checking if anything has really changed
-					boolean equalsValue = newClassifier.getValue_field_name()
+					boolean equalsValue = classifier.getValue_field_name()
 							.equals(rulesList.getValue_field_name());
 
-					boolean equalsNormalizer = newClassifier
+					boolean equalsNormalizer = classifier
 							.getNormalizer_field_name() == rulesList
 							.getNormalizer_field_name()
-							|| (newClassifier.getNormalizer_field_name() != null && newClassifier
+							|| (classifier.getNormalizer_field_name() != null && classifier
 									.getNormalizer_field_name()
 									.equals(rulesList
 											.getNormalizer_field_name()));
-					boolean equalsNumClasses = newClassifier.getNumClasses() == rulesList
+					boolean equalsNumClasses = classifier.getNumClasses() == rulesList
 							.getNumClasses();
 					boolean noChange = equalsValue && equalsNormalizer
 							&& equalsNumClasses;
 
 					try {
 
-						rulesList.setValue_field_name(newClassifier
+						rulesList.setValue_field_name(classifier
 								.getValue_field_name());
-						rulesList.setNormalizer_field_name(newClassifier
+						rulesList.setNormalizer_field_name(classifier
 								.getNormalizer_field_name());
-						rulesList.setMethod(newClassifier.getMethod());
+						rulesList.setMethod(classifier.getMethod());
 						rulesList.setClassLimits(
-								newClassifier.getClassLimits(), !noChange); // here
+								classifier.getClassLimits(), !noChange); // here
 
-						if (newClassifier.getMethod() == CLASSIFICATION_METHOD.MANUAL) {
+						if (classifier.getMethod() == CLASSIFICATION_METHOD.MANUAL) {
 							getNumClassesJComboBox().setEnabled(false);
 							getNumClassesJComboBox().setSelectedItem(
 									new Integer(rulesList.getNumClasses()));
@@ -239,10 +239,10 @@ public class GraduatedColorQuantitiesGUI extends
 			});
 
 		} finally {
-			newClassifier.popQuite();
+			classifier.popQuite();
 		}
 
-		return newClassifier;
+		return classifier;
 	}
 
 	/**
