@@ -238,49 +238,45 @@
 						</executions>
 					</plugin>
 
-					<plugin>
-						<groupId>com.mindtree.techworks.insight.releng</groupId>
-						<artifactId>maven-jsmooth-plugin</artifactId>
-						<version>0.1.0-SNAPSHOT</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jsmoothcompile</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile>
-							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
-							<setExeName>false</setExeName>
-							<setJarName>true</setJarName>
-							<includeDependencies>true</includeDependencies>
-							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
-						</configuration>
-					</plugin>
+<!-- 					<plugin> -->
+<!-- 						<groupId>com.mindtree.techworks.insight.releng</groupId> -->
+<!-- 						<artifactId>maven-jsmooth-plugin</artifactId> -->
+<!-- 						<version>0.1.0-SNAPSHOT</version> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<phase>package</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>jsmoothcompile</goal> -->
+<!-- 								</goals> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 						<configuration> -->
+<!-- 							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
+<!-- 							<setExeName>false</setExeName> -->
+<!-- 							<setJarName>true</setJarName> -->
+<!-- 							<includeDependencies>true</includeDependencies> -->
+<!-- 						</configuration> -->
+<!-- 					</plugin> -->
 
-					<plugin>
-						<groupId>com.mindtree.techworks.insight.releng</groupId>
-						<artifactId>maven-jsmooth-plugin</artifactId>
-						<version>0.1.0-SNAPSHOT</version>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>jsmoothcompile</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile>
-							<!-- <iconLocation>${project.basedir}/src/assembly/resources/insight.ico</iconLocation> -->
-							<setExeName>false</setExeName>
-							<setJarName>true</setJarName>
-							<includeDependencies>true</includeDependencies>
-							<!-- <dependencyBaseDir>lib</dependencyBaseDir> -->
-						</configuration>
-					</plugin>
+<!-- 					<plugin> -->
+<!-- 						<groupId>com.mindtree.techworks.insight.releng</groupId> -->
+<!-- 						<artifactId>maven-jsmooth-plugin</artifactId> -->
+<!-- 						<version>0.1.0-SNAPSHOT</version> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<phase>package</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>jsmoothcompile</goal> -->
+<!-- 								</goals> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 						<configuration> -->
+<!-- 							<jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
+<!-- 							<setExeName>false</setExeName> -->
+<!-- 							<setJarName>true</setJarName> -->
+<!-- 							<includeDependencies>true</includeDependencies> -->
+<!-- 						</configuration> -->
+<!-- 					</plugin> -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
