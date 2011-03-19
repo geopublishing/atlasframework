@@ -332,7 +332,8 @@ public class StylerDialog extends CancellableDialogAdapter {
 	public void dispose() {
 		if (isDisposed)
 			return;
-		tabbedPane.dispose();
+		if (tabbedPane != null)
+			tabbedPane.dispose();
 		if (previewMapPane != null) {
 			// Not really needed, but anyways..
 			previewMapPane
