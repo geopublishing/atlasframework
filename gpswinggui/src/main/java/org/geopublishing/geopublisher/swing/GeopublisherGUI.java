@@ -232,7 +232,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		GpUtil.initGpLogging();
 
+		LOGGER.debug("file.encoding before setting it explicitly: "+System.getProperty("file.encoding"));
 		System.setProperty("file.encoding", "UTF-8");
+		LOGGER.debug("file.encoding after setting it exlicitly to UTF-8: "+System.getProperty("file.encoding"));
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of
