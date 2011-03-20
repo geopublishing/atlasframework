@@ -62,7 +62,7 @@
 					<!-- </execution> -->
 				</executions>
 			</plugin>
-		
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -95,6 +95,15 @@
 	</build>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>jfree</groupId>
+			<artifactId>jcommon</artifactId>
+			<version>1.0.15</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+
 
 		<dependency>
 			<!-- Test dependency -->
