@@ -23,13 +23,8 @@ import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 /**
- * A quantitative classification. The intervals are defined by upper and lower
- * limits
- * 
- * @param <T>
- *            The type of the value field
- * 
- * @author stefan
+ * This extension of {@link FeatureClassification} opens a
+ * {@link AtlasStatusDialog} while calculations are performed.
  */
 public class FeatureClassificationGUIfied extends FeatureClassification {
 
@@ -46,10 +41,6 @@ public class FeatureClassificationGUIfied extends FeatureClassification {
 		this.owner = owner;
 	}
 
-	/**
-	 * @param featureSource
-	 *            The featuresource to use for the statistics
-	 */
 	public FeatureClassificationGUIfied(Component owner,
 			final StyledFeaturesInterface<?> styledFeatures) {
 		this(owner, styledFeatures, null, null);
@@ -92,10 +83,7 @@ public class FeatureClassificationGUIfied extends FeatureClassification {
 			calculateStatisticsWorker = null;
 		}
 
-		AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner);
-
-		calculateStatisticsWorker = new AtlasSwingWorker<TreeSet<Double>>(
-				statusDialog) {
+		calculateStatisticsWorker = new AtlasSwingWorker<TreeSet<Double>>(owner) {
 
 			@Override
 			protected TreeSet<Double> doInBackground() throws IOException,
@@ -105,11 +93,9 @@ public class FeatureClassificationGUIfied extends FeatureClassification {
 
 		};
 
-		TreeSet<Double> newLimits;
 		pushQuite();
 		try {
-			newLimits = calculateStatisticsWorker.executeModal();
-			setClassLimits(newLimits);
+			setClassLimits(calculateStatisticsWorker.executeModal());
 		} catch (Exception e) {
 			LOGGER.error("Error calculating classification", e);
 		} finally {

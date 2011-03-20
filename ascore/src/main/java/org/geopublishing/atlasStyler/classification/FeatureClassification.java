@@ -73,11 +73,21 @@ public class FeatureClassification extends Classification {
 
 	private DefaultComboBoxModel normlizationAttribsComboBoxModel;
 
+	/**
+	 * Caches up to 8 Statistics. Remember, that the {@link DynamicBin1D}
+	 * actually keeps the data in memory!
+	 */
 	private final LimitedHashMap<String, DynamicBin1D> staticStatsCache = new LimitedHashMap<String, DynamicBin1D>(
-			20);
+			8);
 
+	/**
+	 * The styled Feature this {@link Classification} works on.
+	 */
 	private StyledFeaturesInterface<?> styledFeatures;
 
+	/**
+	 * The selected value attribute-field local-name.
+	 */
 	protected String value_field_name;
 
 	private DefaultComboBoxModel valueAttribsComboBoxModel;
@@ -112,7 +122,7 @@ public class FeatureClassification extends Classification {
 	 * @param value_field_name
 	 *            The column that is used for the classification
 	 * @param normalizer_field_name
-	 *            If null, no normalization will be used
+	 *            If <code>null</code>, no normalization will be used
 	 */
 	public FeatureClassification(StyledFeaturesInterface<?> styledFeatures,
 			final String value_field_name, final String normalizer_field_name) {

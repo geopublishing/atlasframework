@@ -388,7 +388,6 @@ public class RuleListFactory {
 		quantitiesRuleList.importFts(fts);
 
 		return quantitiesRuleList;
-
 	}
 
 	private RasterRulesList importRasterRulesList(FeatureTypeStyle fts) {

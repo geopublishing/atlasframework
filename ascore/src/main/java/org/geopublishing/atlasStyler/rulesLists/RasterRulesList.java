@@ -296,61 +296,61 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public ArrayList<Double> getValues() {
 		return values;
 	}
-//
-//	/**
-//	 * Attenetion: Ignores the CM type!
-//	 */
-//	protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
-//		QuantileBin1D ops = new QuantileBin1D(1.);
-//
-//		int count = 0;
-//		for (ColorMapEntry cme : cm.getColorMapEntries()) {
-//
-//			if (cmt == ColorMap.TYPE_VALUES || count > 0) {
-//				importValuesLabelsQuantitiesColors(cme, true);
-//				// Add the last added opacity to the statistics
-//				ops.add(getOpacities().get(getOpacities().size() - 1));
-//			} else {
-//				// Skip the first if n+1=values = n classes
-//				importValuesLabelsQuantitiesColors(cme, false);
-//			}
-//
-//			count++;
-//		}
-//
-//		if (ops.median() >= 0 && ops.median() < 1.)
-//			setOpacity(ops.median());
-//		else
-//			setOpacity(1.);
-//	}
-//	@Override
-//	public void importRules(List<Rule> rules) {
-//		pushQuite();
-//
-//		if (rules.size() > 1) {
-//			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-//					+ " with " + rules.size() + " rules");
-//		}
-//
-//		Rule rule = rules.get(0);
-//
-//		// TODO Parse metainfostring?!
-//
-//		try {
-//			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
-//			ColorMap cm = rs.getColorMap();
-//
-//			importValuesLabelsQuantitiesColors(cm);
-//
-//			// Analyse the filters...
-//			Filter filter = rule.getFilter();
-//			filter = parseAbstractRlSettings(filter);
-//
-//		} finally {
-//			popQuite();
-//		}
-//	}
-	
+
+	//
+	// /**
+	// * Attenetion: Ignores the CM type!
+	// */
+	// protected void importValuesLabelsQuantitiesColors(ColorMap cm) {
+	// QuantileBin1D ops = new QuantileBin1D(1.);
+	//
+	// int count = 0;
+	// for (ColorMapEntry cme : cm.getColorMapEntries()) {
+	//
+	// if (cmt == ColorMap.TYPE_VALUES || count > 0) {
+	// importValuesLabelsQuantitiesColors(cme, true);
+	// // Add the last added opacity to the statistics
+	// ops.add(getOpacities().get(getOpacities().size() - 1));
+	// } else {
+	// // Skip the first if n+1=values = n classes
+	// importValuesLabelsQuantitiesColors(cme, false);
+	// }
+	//
+	// count++;
+	// }
+	//
+	// if (ops.median() >= 0 && ops.median() < 1.)
+	// setOpacity(ops.median());
+	// else
+	// setOpacity(1.);
+	// }
+	// @Override
+	// public void importRules(List<Rule> rules) {
+	// pushQuite();
+	//
+	// if (rules.size() > 1) {
+	// LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+	// + " with " + rules.size() + " rules");
+	// }
+	//
+	// Rule rule = rules.get(0);
+	//
+	// // TODO Parse metainfostring?!
+	//
+	// try {
+	// RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+	// ColorMap cm = rs.getColorMap();
+	//
+	// importValuesLabelsQuantitiesColors(cm);
+	//
+	// // Analyse the filters...
+	// Filter filter = rule.getFilter();
+	// filter = parseAbstractRlSettings(filter);
+	//
+	// } finally {
+	// popQuite();
+	// }
+	// }
 
 	@Override
 	public void importRules(List<Rule> rules) {
@@ -379,7 +379,6 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			popQuite();
 		}
 	}
-
 
 	abstract public void importColorMap(ColorMap cm);
 
@@ -410,6 +409,12 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 	@Override
 	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
+
+		if (!metaInfoString.startsWith(getType().toString())) {
+			// When importing a no ATlasStyler ColorMap
+			return;
+		}
+
 		metaInfoString = metaInfoString
 				.substring(getType().toString().length());
 

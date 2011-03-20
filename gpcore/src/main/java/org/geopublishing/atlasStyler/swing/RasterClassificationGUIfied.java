@@ -14,6 +14,10 @@ import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
+/**
+ * This extension of {@link RasterClassification} opens a
+ * {@link AtlasStatusDialog} when calculations are performed.
+ */
 public class RasterClassificationGUIfied extends RasterClassification {
 
 	public RasterClassificationGUIfied(Component owner,
