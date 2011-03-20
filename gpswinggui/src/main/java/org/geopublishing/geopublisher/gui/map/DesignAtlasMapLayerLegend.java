@@ -54,6 +54,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.MapView;
+import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.i18n.I18NUtil;
@@ -229,14 +230,29 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	public JPopupMenu getToolMenu() {
 		JPopupMenu menu = super.getToolMenu();
 
+		/**
+		 * Offer the OLD AtlasStylerRaster
+		 */
+		if (dpLayer instanceof StyledGridCoverageReaderInterface) {
+			menu.add(new AbstractAction("OLD RasterStyler", Icons.ICON_STYLE) {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					GPDialogManager.dm_AtlasRasterStyler.getInstanceFor(
+							dpLayer, DesignAtlasMapLayerLegend.this, ace,
+							DesignAtlasMapLayerLegend.this);
+				}
+
+			});
+		}
+
 		menu.addSeparator();
 
 		/**
 		 * Edit DPE
 		 */
 		menu.add(new AbstractAction(GeopublisherGUI
-				.R("DataPoolWindow_Action_EditDPE_label"),
-				Icons.ICON_TOOL) {
+				.R("DataPoolWindow_Action_EditDPE_label"), Icons.ICON_TOOL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -269,10 +285,9 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 									.getDisplayLanguage()));
 				}
 
-				GpSwingUtil.openHTMLEditors(owner, ace, infoFiles,
-						tabTitles, GeopublisherGUI.R(
-								"EditLayerHTML.Dialog.Title", dpLayer
-										.getTitle().toString()));
+				GpSwingUtil.openHTMLEditors(owner, ace, infoFiles, tabTitles,
+						GeopublisherGUI.R("EditLayerHTML.Dialog.Title", dpLayer
+								.getTitle().toString()));
 
 				/**
 				 * Try to update a few cached values for the TODO nicer!

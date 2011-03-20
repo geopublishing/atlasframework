@@ -38,76 +38,6 @@ import de.schmitzm.swing.ExceptionDialog;
 @SuppressWarnings("unchecked")
 public class AVDialogManager {
 
-	// /**
-	// * The key is a {@link StyledRasterInterface}. Parameters to get an
-	// instance
-	// * are: KEY, OWNERGUI, AConfig, AtlasMapLegend (optional)
-	// */
-	// final public static DialogManager<Object, AtlasStylerRasterDialog>
-	// dm_AtlasRasterStyler = new DialogManager<Object,
-	// AtlasStylerRasterDialog>() {
-	//
-	// @Override
-	// public AtlasStylerRasterDialog getInstanceFor(final Object key,
-	// final Component owner, final Object... constArgs) {
-	// try {
-	// return bringup(super.getInstanceFor(key,
-	// new DialogManager.FactoryInterface() {
-	//
-	// @Override
-	// public AtlasStylerRasterDialog create() {
-	// final StyledRasterInterface styledRaster = (StyledRasterInterface) key;
-	// final AtlasConfig ac = (AtlasConfig) constArgs[0];
-	//
-	// /***********************************************************************
-	// * First create the AtlasStyler ....
-	// */
-	// final AtlasStylerRasterDialog atlasRasterStyler = new
-	// AtlasStylerRasterDialog(
-	// owner, styledRaster, ac.getLanguages());
-	//
-	// if (constArgs.length == 2
-	// && constArgs[1] != null) {
-	// final MapLayerLegend mapLayerLegend = (MapLayerLegend) constArgs[1];
-	//
-	// atlasRasterStyler
-	// .addListener(new StyleChangeListener() {
-	//
-	// @Override
-	// public void changed(
-	// StyleChangedEvent e) {
-	// styledRaster.setStyle(e
-	// .getStyle());
-	// mapLayerLegend.updateStyle(e
-	// .getStyle());
-	//
-	// // Because events from this
-	// // Dialog might also have
-	// // changed the Gap on-off
-	// // state,
-	// // without changing the
-	// // style,
-	// // we always recreate the
-	// // legend
-	// // for this layer
-	// mapLayerLegend
-	// .recreateLegend();
-	// }
-	// });
-	// }
-	//
-	// return atlasRasterStyler;
-	// }
-	//
-	// }));
-	// } catch (Exception e) {
-	// ExceptionDialog.show(owner, e);
-	// return null;
-	// }
-	// }
-	//
-	// };
-
 	final static public DialogManager<StyledFeaturesInterface<?>, AttributeTableJDialog> dm_AttributeTable = new DialogManager<StyledFeaturesInterface<?>, AttributeTableJDialog>() {
 
 		@Override
@@ -320,14 +250,14 @@ public class AVDialogManager {
 									return new AtlasStylerDialog(owner,
 											(DpLayerVectorFeatureSource) dpl,
 											mapLegend, mapLayer, layerStyle);
-								
+
 								if (dpl instanceof DpLayerRaster_Reader)
 									return new AtlasStylerDialog(owner,
 											(DpLayerRaster_Reader) dpl,
 											mapLegend, mapLayer, layerStyle);
-								
+
 								throw new IllegalArgumentException();
-								
+
 							}
 
 						}));
