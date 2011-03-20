@@ -6,11 +6,8 @@ package org.geopublishing.atlasViewer.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.JComponent;
@@ -19,7 +16,6 @@ import javax.swing.JPopupMenu;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
-import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.AtlasProtocolException;
 import org.geopublishing.atlasViewer.map.Map;
@@ -32,8 +28,6 @@ import org.lobobrowser.html.test.SimpleHtmlRendererContext;
 import org.lobobrowser.html.test.SimpleUserAgentContext;
 import org.w3c.dom.html2.HTMLElement;
 
-import de.schmitzm.io.IOUtil;
-import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.event.PipedMouseListener;
 
 /**

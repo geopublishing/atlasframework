@@ -164,8 +164,11 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
+			// return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
+			// RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
+			// Removed one...
 			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
-					RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
+					RASTER_COLORMAP_RAMPS };
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerVector asv) {

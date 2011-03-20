@@ -102,13 +102,24 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 		// Create all GUIs and cache them.
 		{
 			for (AbstractRulesList ruleList : atlasStyler.getRuleLists()) {
-				JComponent createEditorComponent = createEditorComponent(ruleList);
+				createEditorComponent(ruleList);
 			}
 		}
 
 		getRulesListsListTablePanel().getRulesListTable().getSelectionModel()
 				.addListSelectionListener(listenToSelectionInTable);
-		// getRulesListsListTablePanel().getRulesListTable().getModel().addTableModelListener(listenToChangeInModelLike);
+
+		if (getRulesListsListTablePanel().getRulesListTable().getSelectedRow() != -1) {
+			int s1 = getRulesListsListTablePanel().getRulesListTable()
+					.getSelectedRow();
+			// Wenn eine RL selektiert ist, dann nochmal selektieren, damit die
+			// GUI sich aktualisiert
+			getRulesListsListTablePanel().getRulesListTable()
+					.getSelectionModel().clearSelection();
+			getRulesListsListTablePanel().getRulesListTable()
+					.getSelectionModel().addSelectionInterval(s1, s1);
+		}
+
 		atlasStyler.setQuite(false);
 
 	}
@@ -145,31 +156,30 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	public JComponent createEditorComponent(AbstractRulesList ruleList) {
 
 		JComponent newEditorGui = new JLabel();
-		
-		// TODO Raster Rules Lists
-		
-		
+
 		// Vector RulesLists:
 		if (ruleList instanceof SingleRuleList)
 			newEditorGui = new SingleSymbolGUI((SingleRuleList<?>) ruleList);
 		else if (ruleList instanceof UniqueValuesRuleList)
 			newEditorGui = new UniqueValuesGUI((UniqueValuesRuleList) ruleList,
-					(AtlasStylerVector)atlasStyler);
+					(AtlasStylerVector) atlasStyler);
 		else if (ruleList instanceof GraduatedColorRuleList)
 			newEditorGui = new GraduatedColorQuantitiesGUI(
-					(GraduatedColorRuleList) ruleList, (AtlasStylerVector)atlasStyler);
+					(GraduatedColorRuleList) ruleList,
+					(AtlasStylerVector) atlasStyler);
 		else if (ruleList instanceof TextRuleList)
 			newEditorGui = new TextRuleListGUI((TextRuleList) ruleList,
-					(AtlasStylerVector)atlasStyler);
+					(AtlasStylerVector) atlasStyler);
 		// Raster RulesLists
-		else if (ruleList instanceof RasterRulesList_DistinctValues){
-			newEditorGui = new RasterRulesList_Distinctvalues_GUI((RasterRulesList_DistinctValues) ruleList,
-					(AtlasStylerRaster)atlasStyler);
-		}		else if (ruleList instanceof RasterRulesList_Intervals){
-			newEditorGui = new RasterRulesList_Intervals_GUI((RasterRulesList_Intervals) ruleList,
-					(AtlasStylerRaster)atlasStyler);
+		else if (ruleList instanceof RasterRulesList_DistinctValues) {
+			newEditorGui = new RasterRulesList_Distinctvalues_GUI(
+					(RasterRulesList_DistinctValues) ruleList,
+					(AtlasStylerRaster) atlasStyler);
+		} else if (ruleList instanceof RasterRulesList_Intervals) {
+			newEditorGui = new RasterRulesList_Intervals_GUI(
+					(RasterRulesList_Intervals) ruleList,
+					(AtlasStylerRaster) atlasStyler);
 		}
-
 
 		cachedRulesListGuis.put(ruleList, newEditorGui);
 
@@ -179,19 +189,20 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 	private JComponent createStatusLabel() {
 		String statusText = "<html>";
 
-		if (atlasStyler instanceof AtlasStylerVector){
+		if (atlasStyler instanceof AtlasStylerVector) {
 			// vector specific error messages:
-			
+
 			if (FeatureUtil.getValueFieldNames(
-					((AtlasStylerVector)atlasStyler).getStyledFeatures().getSchema()).size() == 0) {
+					((AtlasStylerVector) atlasStyler).getStyledFeatures()
+							.getSchema()).size() == 0) {
 				statusText += AtlasStylerVector
-				.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
-				+ "<br/>";
+						.R("TextRuleListGUI.notAvailableBecauseNoAttribsExist")
+						+ "<br/>";
 			}
-			
+
 		} else {
-			// raster specific error messages 
-			
+			// raster specific error messages
+
 		}
 
 		// Go through the AtlasStyler import errors:
@@ -222,7 +233,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 		// add(jPanelRuleListEditor, "width 400:650:900, top, growx 200");
 		setRightComponent(jPanelRuleListEditor);
 		changeEditorComponent(createStatusLabel());
-		
+
 		setDividerLocation(-1);
 	}
 

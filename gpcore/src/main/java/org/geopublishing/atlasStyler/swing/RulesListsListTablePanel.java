@@ -42,7 +42,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private final AtlasStyler atlasStyler;
 
 	private SmallButton addButton;
-	
+
 	private SmallButton gdalInfoButton;
 
 	private SmallButton removeButton;
@@ -92,25 +92,34 @@ public class RulesListsListTablePanel extends JPanel {
 		add(getAddButton(), "split 6, align left");
 		add(getDuplicateButton(), "align left");
 		add(getRemoveButton(), "align left, gapx");
-		add(getGdalInfoButton(), "align center, gapx");
+		if (atlasStyler instanceof AtlasStylerRaster)
+			add(getGdalInfoButton(), "align center, gapx");
 		add(new JLabel(), "growx");
 		add(getUpButton(), "align right");
 		add(getDownButton(), "align right");
+
+		// Automatically select the first RulesList
+		if (getRulesListTable().getModel().getRowCount() > 0) {
+			getRulesListTable().getSelectionModel().addSelectionInterval(0, 0);
+		}
 	}
 
 	private Component getGdalInfoButton() {
 		if (gdalInfoButton == null) {
-			gdalInfoButton  = new SmallButton(new AbstractAction("gdal") {
-				
+			gdalInfoButton = new SmallButton(new AbstractAction("gdal") {
+
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					GdalInfo2RulesListDialog gdalInfo2RulesListDialog = new GdalInfo2RulesListDialog(RulesListsListTablePanel.this, (AtlasStylerRaster) atlasStyler);
+					GdalInfo2RulesListDialog gdalInfo2RulesListDialog = new GdalInfo2RulesListDialog(
+							RulesListsListTablePanel.this,
+							(AtlasStylerRaster) atlasStyler);
 					gdalInfo2RulesListDialog.setModal(true);
 					gdalInfo2RulesListDialog.setVisible(true);
 				}
 			});
-			
-		}return gdalInfoButton;
+
+		}
+		return gdalInfoButton;
 	}
 
 	private JPanel getModeButtons(final StylerDialog asd) {
@@ -316,8 +325,7 @@ public class RulesListsListTablePanel extends JPanel {
 	private JButton getDuplicateButton() {
 		if (duplicateButton == null) {
 			duplicateButton = new SmallButton(new AbstractAction(
-					ASUtil
-							.R("RulesListsList.Action.DuplicateRulesLists")) {
+					ASUtil.R("RulesListsList.Action.DuplicateRulesLists")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
