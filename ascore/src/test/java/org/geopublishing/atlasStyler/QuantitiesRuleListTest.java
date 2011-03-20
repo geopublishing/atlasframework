@@ -142,12 +142,12 @@ public class QuantitiesRuleListTest extends TestingClass {
 		assertEquals(2, featureTypeStyles.size());
 
 		// Text rules imported:
-		FeatureTypeStyle textFs = featureTypeStyles.get(0);
+		FeatureTypeStyle textFs = featureTypeStyles.get(1);
 		List<Rule> textRs = textFs.rules();
 		assertEquals(3, textRs.size());
 
 		// Colors!
-		FeatureTypeStyle colorsFs = featureTypeStyles.get(1);
+		FeatureTypeStyle colorsFs = featureTypeStyles.get(0);
 		List<Rule> colorsRs = colorsFs.rules();
 		assertEquals(7, colorsRs.size());
 

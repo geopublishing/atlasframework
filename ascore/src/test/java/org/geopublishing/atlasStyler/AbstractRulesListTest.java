@@ -181,12 +181,12 @@ public class AbstractRulesListTest extends TestingClass {
 		as.importStyle(importStyle[0]);
 
 		SingleRuleList singleRulesList = (SingleRuleList) as.getRuleLists()
-				.get(0);
+				.get(3);
 		UniqueValuesRuleList uniqueRulesList = (UniqueValuesRuleList) as
-				.getRuleLists().get(1);
-		GraduatedColorRuleList gradColorsRulesList = (GraduatedColorRuleList) as
 				.getRuleLists().get(2);
-		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(3);
+		GraduatedColorRuleList gradColorsRulesList = (GraduatedColorRuleList) as
+				.getRuleLists().get(1);
+		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(0);
 
 		// Compare on/off
 		assertEquals(sEnabled, singleRulesList.isEnabled());

@@ -369,12 +369,12 @@ public class TextRuleListTest extends TestingClass {
 
 		as.importStyle(style);
 
-		assertTrue(as.getRuleLists().get(1) instanceof TextRuleList);
-		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(1);
+		assertTrue(as.getRuleLists().get(0) instanceof TextRuleList);
+		TextRuleList textRulesList = (TextRuleList) as.getRuleLists().get(0);
 
 		assertEquals(
 				"3 rules in the TextRulesList are expected since we have a general default and one language specific default with TWO label attributes",
-				3, as.getStyle().featureTypeStyles().get(0).rules().size());
+				3, as.getStyle().featureTypeStyles().get(1).rules().size());
 
 		assertEquals(2, textRulesList.countClasses());
 		assertEquals(0, textRulesList.getDefaultLanguages().size());
