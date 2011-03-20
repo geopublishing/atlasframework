@@ -3,6 +3,9 @@ package org.geopublishing.atlasStyler.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -22,6 +25,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -44,8 +48,8 @@ import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SmallButton;
 import de.schmitzm.swing.SwingUtil;
-import de.schmitzm.swing.ThinButton;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -60,11 +64,62 @@ public class RasterRulesList_Distinctvalues_GUI extends
 			.createLogger(RasterRulesList_Distinctvalues_GUI.class);
 	private JTable jTable;
 	private DefaultTableModel tableModel;
-	private ThinButton jButtonRemoveAll;
-	private ThinButton jButtonRemove;
+	private SmallButton jButtonRemoveAll;
+	private SmallButton jButtonRemove;
 	private JComboBox jComboBoxOpacity;
-	private ThinButton jButtonApplyOpacity;
-	private ThinButton jButtonAddValues;
+	private SmallButton jButtonApplyOpacity;
+	private SmallButton jButtonAddValues;
+	private JPanel noDataValueBox;
+
+	protected JPanel getJPanelData() {
+		if (noDataValueBox == null) {
+			noDataValueBox = new JPanel(new MigLayout());
+
+			noDataValueBox.add(new JLabel(ASUtil.R("NoDataValueLabel") + ":"));
+
+			final JTextField tf = new JTextField(10);
+			tf.setText(String.valueOf(rulesList.getStyledRaster()
+					.getNodataValue()));
+			noDataValueBox.add(tf, "gap rel");
+			tf.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					doit(tf);
+				}
+
+			});
+
+			tf.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent e) {
+					doit(tf);
+				}
+			});
+
+		}
+		return noDataValueBox;
+	}
+
+	public void doit(JTextField tf) {
+
+		try {
+			final Double parsed = Double.valueOf(tf.getText());
+			if (parsed != null
+					&& !parsed.equals(rulesList.getStyledRaster()
+							.getNodataValue())) {
+				rulesList.getStyledRaster().setNodataValue(parsed);
+
+				// Automatically remove the NODATA value from the classes?!
+				int indexOfNodata = rulesList.getValues().indexOf(parsed);
+				if (indexOfNodata >= 0)
+					rulesList.removeIdx(indexOfNodata);
+			}
+
+		} catch (Exception ee) {
+			LOGGER.warn("Entering NODATA value in GUI", ee);
+		}
+	}
 
 	public RasterRulesList_Distinctvalues_GUI(
 			RasterRulesList_DistinctValues rulesList,
@@ -84,7 +139,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
 		this.add(jLabelHeading, "center");
-		this.add(getJPanelColorAndOpacity(), "align l");
+		this.add(getJPanelColorAndOpacity(), "align l, split 2");
+		this.add(getJPanelData(), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 
@@ -108,7 +164,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 */
 	private JButton getJButtonRemove() {
 		if (jButtonRemove == null) {
-			jButtonRemove = new ThinButton(new AbstractAction(
+			jButtonRemove = new SmallButton(new AbstractAction(
 					ASUtil.R("UniqueValues.Button.RemoveValue")) {
 
 				@Override
@@ -159,7 +215,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	private Component getJButtonRemoveAll() {
 		if (jButtonRemoveAll == null) {
-			jButtonRemoveAll = new ThinButton(new AbstractAction(
+			jButtonRemoveAll = new SmallButton(new AbstractAction(
 					ASUtil.R("UniqueValues.Button.RemoveAllValues")) {
 
 				@Override
@@ -181,7 +237,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 */
 	private JButton getJButtonAddValues() {
 		if (jButtonAddValues == null) {
-			jButtonAddValues = new ThinButton(new AbstractAction(
+			jButtonAddValues = new SmallButton(new AbstractAction(
 					ASUtil.R("UniqueValues.Button.AddValues")) {
 
 				@Override
@@ -204,11 +260,15 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		jPanelColorAndTemplate
 				.setBorder(BorderFactory.createTitledBorder(ASUtil
 						.R("RasterRulesList_PanelBorderTitle.Colors_and_Opacity")));
-
 		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
+
+		jPanelColorAndTemplate.add(
+				getInvertColorsButton(rulesList.getColors()),
+				"align l, split 3");
+
 		JLabel jLabelTemplate = new JLabel(ASUtil.R("OpacityLabel"));
-		jPanelColorAndTemplate.add(jLabelTemplate, "split 2, align r");
+		jPanelColorAndTemplate.add(jLabelTemplate, "align r");
 		jPanelColorAndTemplate.add(getJComboboxOpacity(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyOpacity(), "sgx");
 		return jPanelColorAndTemplate;
@@ -242,7 +302,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	private Component getJButtonApplyOpacity() {
 		if (jButtonApplyOpacity == null) {
-			jButtonApplyOpacity = new ThinButton(new AbstractAction() {
+			jButtonApplyOpacity = new SmallButton(new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -290,10 +350,10 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 	};
 	private JButton jButtonUp;
-	private ThinButton jButtonDown;
-	private ThinButton jButtonApplyPalette;
+	private SmallButton jButtonDown;
+	private SmallButton jButtonApplyPalette;
 	private JComboBoxBrewerPalettes jComboBoxPalette;
-	private ThinButton jButtonAddAllValues;
+	private SmallButton jButtonAddAllValues;
 
 	private DefaultTableModel getTableModel() {
 
@@ -534,7 +594,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JButton getJButtonUp() {
 		if (jButtonUp == null) {
 
-			jButtonUp = new ThinButton(new AbstractAction() {
+			jButtonUp = new SmallButton(new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -583,7 +643,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private JButton getJButtonDown() {
 		if (jButtonDown == null) {
 
-			jButtonDown = new ThinButton(new AbstractAction() {
+			jButtonDown = new SmallButton(new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -645,7 +705,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 */
 	private JButton getJButtonApplyPalette() {
 		if (jButtonApplyPalette == null) {
-			jButtonApplyPalette = new ThinButton(new AbstractAction() {
+			jButtonApplyPalette = new SmallButton(new AbstractAction() {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -705,7 +765,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	 */
 	private JButton getJButtonAddAllValues() {
 		if (jButtonAddAllValues == null) {
-			jButtonAddAllValues = new ThinButton(new AbstractAction(
+			jButtonAddAllValues = new SmallButton(new AbstractAction(
 					ASUtil.R("UniqueValues.Button.AddAllValues")) {
 
 				@Override

@@ -18,64 +18,90 @@ import org.geotools.styling.ColorMap;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.JPanel;
+import de.schmitzm.swing.SwingUtil;
 
 public class GdalInfo2RulesListDialog extends CancellableDialogAdapter {
 
 	private JTextArea gdaltextarea;
 	private final AtlasStylerRaster asr;
 	private ColorMap colorMap;
+	private final JLabel infolabel = new JLabel();
 
 	public GdalInfo2RulesListDialog(Component owner, AtlasStylerRaster asr) {
-		super(owner, "Import gdal info output"); //i8n
+		super(owner, ASUtil.R("GdalInfo2RulesList.Header"));
 		this.asr = asr;
-		
-		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 100:300:500"));
+
+		JPanel contentPane = new JPanel(new MigLayout("wrap 1"));
 		contentPane.add(new JLabel(ASUtil.R("GdalInfo2RulesList.Explanation")));
-		contentPane.add( new JScrollPane( getGdalTextArea() ),"grow y, grow x");
-		contentPane.add(getOkButton());
+		contentPane.add(new JScrollPane(getGdalTextArea()), "grow y, grow x");
+		contentPane.add(getOkButton(), "tag ok, split 3");
+		contentPane.add(getCancelButton(), "tag cancel");
+		contentPane.add(infolabel);
 		setContentPane(contentPane);
-		
+
+		getOkButton().setEnabled(false);
+
+		SwingUtil.setPreferredWidth(this, 400);
+
 		pack();
 	}
 
 	private JTextArea getGdalTextArea() {
-		if (gdaltextarea == null){
-			gdaltextarea = new JTextArea(30,30);
-			
-			gdaltextarea.getDocument().addDocumentListener(new DocumentListener() {
-				
-				@Override
-				public void removeUpdate(DocumentEvent e) {
-					parse();
-				}
-				
-				@Override
-				public void insertUpdate(DocumentEvent e) {
-					parse();
-				}
-				
-				@Override
-				public void changedUpdate(DocumentEvent e) {
-					parse();
-				}
-			});
+		if (gdaltextarea == null) {
+			gdaltextarea = new JTextArea(40, 20);
+
+			gdaltextarea.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							parse();
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							parse();
+						}
+
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							parse();
+						}
+					});
 		}
 		return gdaltextarea;
 	}
 
 	@Override
 	public void cancel() {
+		dispose();
 	}
-	
+
 	@Override
 	public boolean okClose() {
-		RasterRulesList_DistinctValues newRl = new RasterRulesList_DistinctValues(asr.getStyledRaster());
+		RasterRulesList_DistinctValues newRl = new RasterRulesList_DistinctValues(
+				asr.getStyledRaster());
 		newRl.importColorMap(colorMap);
+		newRl.setTitle("gdalimport");
 		asr.addRulesList(newRl);
 		return super.okClose();
 	}
 
 	public void parse() {
-		colorMap = StylingUtil.parseColormapToSld(getGdalTextArea().getText());
+		try {
+			colorMap = StylingUtil.parseColormapToSld(getGdalTextArea()
+					.getText());
+		} catch (Exception e) {
+			colorMap = null;
+		}
+		getOkButton().setEnabled(
+				colorMap != null && colorMap.getColorMapEntries().length > 0);
+		if (colorMap == null) {
+			infolabel.setText(ASUtil.R("GdalInfo2RulesList.NothingImported"));
+		} else {
+			infolabel.setText(ASUtil.R(
+					"GdalInfo2RulesList.UnderstandingColormapWithNValues",
+					colorMap.getColorMapEntries().length));
+		}
 	}
 }

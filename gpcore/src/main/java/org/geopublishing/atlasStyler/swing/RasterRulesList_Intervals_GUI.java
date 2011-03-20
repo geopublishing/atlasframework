@@ -279,8 +279,12 @@ public class RasterRulesList_Intervals_GUI extends
 
 		jPanelColorAndTemplate.add(getJComboBoxPalette(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyPalette(), "sgx");
+
+		jPanelColorAndTemplate.add(
+				getInvertColorsButton(rulesList.getColors()),
+				"align l, split 3");
 		JLabel jLabelTemplate = new JLabel(ASUtil.R("OpacityLabel"));
-		jPanelColorAndTemplate.add(jLabelTemplate, "split 2, align r");
+		jPanelColorAndTemplate.add(jLabelTemplate, "align r");
 		jPanelColorAndTemplate.add(getJComboboxOpacity(), "align r");
 		jPanelColorAndTemplate.add(getJButtonApplyOpacity(), "sgx");
 		return jPanelColorAndTemplate;

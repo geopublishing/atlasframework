@@ -182,7 +182,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 					(AtlasStylerRaster) atlasStyler);
 		} else if (ruleList instanceof RasterRulesList_Ramps) {
 			newEditorGui = new JLabel(
-					"Please use the old Raster styler (in Geopublisher) for this type of raster style. ");
+					"<html>ColorMap.RAMPS not yet supported. Please use the old raster-styler in Geopublisher for this type of raster style.</html>");
 		}
 
 		cachedRulesListGuis.put(ruleList, newEditorGui);

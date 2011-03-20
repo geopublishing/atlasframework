@@ -38,7 +38,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	}
 
 	/**
-	 * Attenetion: Ignores the CM type!
+	 * Imports the ColorMap for a DistinctValues Ruleslist. Here every
+	 * ColorMapEntry equals one Class
 	 */
 	@Override
 	public void importColorMap(ColorMap cm) {

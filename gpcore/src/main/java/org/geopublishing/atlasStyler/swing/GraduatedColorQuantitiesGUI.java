@@ -965,7 +965,7 @@ public class GraduatedColorQuantitiesGUI extends
 		// button.setBorder( BorderFactory.createEmptyBorder(1,1,1,1));
 
 		button.setToolTipText(AtlasStylerVector
-				.R("GraduatedColorQuantities.ColorRamp.RevertButton.TT"));
+				.R("ColorPalette.RevertButton.TT"));
 
 		return button;
 	}

@@ -1366,7 +1366,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			// ******************************************************************
 			aResource = document.createElement("java");
 			aResource.setAttribute("version",
-					GPProps.get(Keys.MinimumJavaVersion, "1.6.0_14") + "+");
+					GPProps.get(Keys.MinimumJavaVersion, "1.6.0_18") + "+");
 			aResource.setAttribute("href",
 					"http://java.sun.com/products/autodl/j2se");
 			aResource.setAttribute("java-vm-args",
