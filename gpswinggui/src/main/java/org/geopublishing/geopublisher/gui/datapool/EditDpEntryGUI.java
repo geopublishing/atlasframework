@@ -81,7 +81,10 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 					tabbedPane.getTabCount());
 
 			/** A tab with DpEntryType specific stuff **/
-			{
+			if (1 == 2) {
+
+				// Arthur meint ds braucht man nicht ;-)
+
 				Component typeSpecific = null;
 				if (dpe instanceof DpLayerRaster)
 					typeSpecific = createRasterTab((DpLayerRaster) dpe);
