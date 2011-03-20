@@ -10,7 +10,10 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui.map;
 
+import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.gui.datapool.DataPoolDeleteAction;
+import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
@@ -59,7 +63,7 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 					.getSelectedRow()));
 		}
 
-		AtlasConfigEditable ace = (AtlasConfigEditable) map.getAc();
+		final AtlasConfigEditable ace = (AtlasConfigEditable) map.getAc();
 
 		List<File> infoFiles = GpSwingUtil.getHTMLFilesFor(map);
 
@@ -69,14 +73,31 @@ public class MapPoolEditHTMLAction extends AbstractAction {
 					I18NUtil.getFirstLocaleForLang(l).getDisplayLanguage()));
 		}
 
-		GpSwingUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,
-				GeopublisherGUI.R("Map.HTMLInfo.EditDialog.Title", map.getTitle()
-						.toString()));
+		final String title = GeopublisherGUI.R("Map.HTMLInfo.EditDialog.Title",
+				map.getTitle().toString());
+		// GpSwingUtil.openHTMLEditors(mpTable, ace, infoFiles, tabTitles,
+		// title);
 
-		map.resetMissingHTMLinfos();
-		
-		ace.getMapPool().fireChangeEvents(MapPoolEditHTMLAction.this,
-				MapPool.EventTypes.changeMap, map);
+		String key = GpSwingUtil.openHTMLEditorsKey(infoFiles);
+		Window instanceFor = GPDialogManager.dm_HtmlEditor.getInstanceFor(key,
+				mpTable, ace, infoFiles, tabTitles, title);
+
+		// TODO In case this HTML editor is beeing tried to be opened
+		// twice, these listeneras are added twice.!
+		instanceFor.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				super.windowClosed(e);
+				/**
+				 * Try to update a few cached values for the TODO nicer!
+				 */
+				map.resetMissingHTMLinfos();
+
+				ace.getMapPool().fireChangeEvents(MapPoolEditHTMLAction.this,
+						MapPool.EventTypes.changeMap, map);
+
+			};
+		});
 
 	}
 

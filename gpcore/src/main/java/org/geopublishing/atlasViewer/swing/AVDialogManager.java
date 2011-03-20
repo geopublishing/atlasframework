@@ -11,6 +11,7 @@
 package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Component;
+import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -27,7 +28,6 @@ import org.geotools.styling.Style;
 
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.jfree.chart.style.ChartStyle;
-import de.schmitzm.swing.AtlasDialog;
 import de.schmitzm.swing.DialogManager;
 import de.schmitzm.swing.ExceptionDialog;
 
@@ -63,14 +63,14 @@ public class AVDialogManager {
 							}
 
 							@Override
-							public void afterCreation(AtlasDialog newInstance) {
+							public void afterCreation(Window newInstance) {
 								if (mapLegend != null)
 									mapLegend.showOrHideSelectionButtons();
 								super.afterCreation(newInstance);
 							}
 
 							@Override
-							public void beforeDispose(AtlasDialog newInstance) {
+							public void beforeDispose(Window newInstance) {
 								if (mapLegend != null)
 									mapLegend.showOrHideSelectionButtons();
 							};
@@ -111,7 +111,7 @@ public class AVDialogManager {
 						new DialogManager.FactoryInterface() {
 
 							@Override
-							public void afterCreation(AtlasDialog newInstance) {
+							public void afterCreation(Window newInstance) {
 								if (mapLegend != null) {
 
 									mapLegend.showOrHideSelectionButtons();
@@ -123,7 +123,7 @@ public class AVDialogManager {
 							};
 
 							@Override
-							public void beforeDispose(AtlasDialog newInstance) {
+							public void beforeDispose(Window newInstance) {
 								if (mapLegend != null) {
 
 									newInstance

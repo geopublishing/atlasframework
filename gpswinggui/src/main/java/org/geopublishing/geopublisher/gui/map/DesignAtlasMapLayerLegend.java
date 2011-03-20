@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -285,17 +287,32 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 									.getDisplayLanguage()));
 				}
 
-				GpSwingUtil.openHTMLEditors(owner, ace, infoFiles, tabTitles,
-						GeopublisherGUI.R("EditLayerHTML.Dialog.Title", dpLayer
-								.getTitle().toString()));
+				final String dialogTitle = GeopublisherGUI.R(
+						"EditLayerHTML.Dialog.Title", dpLayer.getTitle()
+								.toString());
+				// GpSwingUtil.openHTMLEditors(owner, ace, infoFiles, tabTitles,
+				// dialogTitle);
 
-				/**
-				 * Try to update a few cached values for the TODO nicer!
-				 */
-				dpLayer.uncache();
-				ace.getDataPool().fireChangeEvents(EventTypes.changeDpe);
+				String key = GpSwingUtil.openHTMLEditorsKey(infoFiles);
+				Window instanceFor = GPDialogManager.dm_HtmlEditor
+						.getInstanceFor(key, owner, ace, infoFiles, tabTitles,
+								dialogTitle);
+
+				// TODO In case this HTML editor is beeing tried to be opened
+				// twice, these listeneras are added twice.!
+				instanceFor.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						super.windowClosed(e);
+						/**
+						 * Try to update a few cached values for the TODO nicer!
+						 */
+						dpLayer.uncache();
+						ace.getDataPool()
+								.fireChangeEvents(EventTypes.changeDpe);
+					};
+				});
 			}
-
 		});
 
 		/*

@@ -12,6 +12,7 @@ package org.geopublishing.geopublisher.swing;
 
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -232,14 +233,16 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		GpUtil.initGpLogging();
 
-		LOGGER.debug("java.nio.charset.Charset.defaultCharset().name(): "+java.nio.charset.Charset.defaultCharset().name());
+		LOGGER.debug("java.nio.charset.Charset.defaultCharset().name(): "
+				+ java.nio.charset.Charset.defaultCharset().name());
 
-		LOGGER.debug("file.encoding before setting it explicitly: "+System.getProperty("file.encoding"));
-		
-		
+		LOGGER.debug("file.encoding before setting it explicitly: "
+				+ System.getProperty("file.encoding"));
+
 		System.setProperty("file.encoding", "UTF-8");
-		
-		LOGGER.debug("file.encoding after setting it exlicitly to UTF-8: "+System.getProperty("file.encoding"));
+
+		LOGGER.debug("file.encoding after setting it exlicitly to UTF-8: "
+				+ System.getProperty("file.encoding"));
 
 		/*
 		 * Register as a SingleInstance for JNLP. Starting another instance of
@@ -322,8 +325,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (!editAtlasDialog.isCancelled()) {
 				getJFrame().setTitle(
 						R("ApplicationMainWindowTitle_with_open_atlas",
-								ReleaseUtil.getVersionInfo(GpCoreUtil.class), ace
-										.getTitle().toString()));
+								ReleaseUtil.getVersionInfo(GpCoreUtil.class),
+								ace.getTitle().toString()));
 			}
 
 		}
@@ -366,9 +369,18 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				tabTitles.add(title);
 			}
 
-			GpSwingUtil.openHTMLEditors(getJFrame(), ace,
-					ace.getAboutHtMLFiles(getJFrame()), tabTitles,
-					GpUtil.R("EditAboutWindow.EditorTitle"));
+			final String title = GpUtil.R("EditAboutWindow.EditorTitle");
+			// GpSwingUtil.openHTMLEditors(getJFrame(), ace,
+			// ace.getAboutHtMLFiles(getJFrame()), tabTitles,
+			// title);
+
+			String key = GpSwingUtil.openHTMLEditorsKey(ace
+					.getAboutHtMLFiles(getJFrame()));
+			Window instanceFor = GPDialogManager.dm_HtmlEditor.getInstanceFor(
+					key, getJFrame(), ace, ace.getAboutHtMLFiles(getJFrame()),
+					tabTitles, title);
+
+			// TODO Throw event after this dialog is closed?
 
 		} else if (cmd.equals(ActionCmds.editPopupInfo.toString())) {
 
@@ -389,9 +401,18 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				tabTitles.add(title);
 			}
 
-			GpSwingUtil.openHTMLEditors(getJFrame(), ace,
-					ace.getPopupHtMLFiles(getJFrame()), tabTitles,
-					GpUtil.R("EditPopupWindow.EditorTitle"));
+			final String title = GpUtil.R("EditPopupWindow.EditorTitle");
+			// GpSwingUtil.openHTMLEditors(getJFrame(), ace,
+			// ace.getPopupHtMLFiles(getJFrame()), tabTitles,
+			// title);
+
+			String key = GpSwingUtil.openHTMLEditorsKey(ace
+					.getPopupHtMLFiles(getJFrame()));
+			Window instanceFor = GPDialogManager.dm_HtmlEditor.getInstanceFor(
+					key, getJFrame(), ace, ace.getPopupHtMLFiles(getJFrame()),
+					tabTitles, title);
+
+			// TODO Throw event after this dialog is closed?
 
 			// The next time the atlas is viewed, the popup has to reappear!
 			ace.getProperties()
@@ -773,7 +794,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		if (gpJFrame != null)
 			gpJFrame.dispose();
 
-		LOGGER.info("Geopublisher " + ReleaseUtil.getVersionInfo(GpCoreUtil.class)
+		LOGGER.info("Geopublisher "
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class)
 				+ " terminating with exitcode " + exitCode);
 
 		// Store the Logging Level in ~/.Geopublisher/Geopublisher.properties

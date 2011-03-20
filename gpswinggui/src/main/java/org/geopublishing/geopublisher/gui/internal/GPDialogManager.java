@@ -12,8 +12,10 @@ package org.geopublishing.geopublisher.gui.internal;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.util.List;
 
 import org.geopublishing.atlasStyler.StyleChangeListener;
@@ -39,13 +41,13 @@ import org.geopublishing.geopublisher.gui.map.DesignMapViewJDialog;
 import org.geopublishing.geopublisher.gui.map.EditMapJDialog;
 import org.geopublishing.geopublisher.gui.map.ManageChartsForMapDialog;
 import org.geopublishing.geopublisher.swing.AtlasIconsDialog;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.map.MapLayer;
 
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.jfree.feature.style.FeatureChartStyle;
-import de.schmitzm.swing.AtlasDialog;
 import de.schmitzm.swing.CancellableDialogManager;
 import de.schmitzm.swing.DialogManager;
 import de.schmitzm.swing.ExceptionDialog;
@@ -58,6 +60,44 @@ import de.schmitzm.swing.ExceptionDialog;
  */
 @SuppressWarnings("unchecked")
 public class GPDialogManager {
+
+	/**
+	 * DialogManager for HTML editors. The KEY is a String concatenation of all
+	 * File.toStrings for the HTMl files to edit. Next parameter is Owner
+	 * component. Then AtlasConfigEditable ace, List<File> htmlFiles,
+	 * List<String> tabTitles, String windowTitle
+	 **/
+	final static public DialogManager<String, Window> dm_HtmlEditor = new DialogManager<String, Window>() {
+
+		@Override
+		public Window getInstanceFor(final String key, final Component owner,
+				final Object... constArgs) {
+
+			try {
+
+				return bringup(super.getInstanceFor(key,
+						new DialogManager.FactoryInterface() {
+
+							@Override
+							public Window create() {
+
+								AtlasConfigEditable ace = (AtlasConfigEditable) constArgs[0];
+								List<File> htmlFiles = (List<File>) constArgs[1];
+								List<String> tabTitles = (List<String>) constArgs[2];
+								String windowTitle = (String) constArgs[3];
+
+								return GpSwingUtil.openHTMLEditors(owner, ace,
+										htmlFiles, tabTitles, windowTitle);
+
+							}
+
+						}));
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, e);
+				return null;
+			}
+		}
+	};
 
 	/**
 	 * The key is a {@link StyledRasterInterface}. Parameters to get an instance
@@ -309,7 +349,7 @@ public class GPDialogManager {
 							}
 
 							@Override
-							public void afterCreation(AtlasDialog newInstance) {
+							public void afterCreation(Window newInstance) {
 								if (mapLegend != null) {
 
 									mapLegend.showOrHideSelectionButtons();
@@ -321,7 +361,7 @@ public class GPDialogManager {
 							};
 
 							@Override
-							public void beforeDispose(AtlasDialog newInstance) {
+							public void beforeDispose(Window newInstance) {
 								if (mapLegend != null) {
 
 									newInstance

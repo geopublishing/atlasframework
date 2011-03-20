@@ -13,6 +13,7 @@ package org.geopublishing.geopublisher.swing;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
@@ -57,6 +58,7 @@ import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.DialogManager;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -554,145 +556,163 @@ public class GpSwingUtil extends GpUtil {
 		return htmlFiles;
 	}
 
-    /**
-     * Factory method to create an design html viewport.
-     * @param map a Map
-     */
-    public static DesignHTMLInfoPane createDesignHTMLInfoPane(AtlasConfigEditable ace, Map map) {
-      // Note: although we now have 2 versions to display html...
-      //  a) JEditorPane -> HTMLInfoJPane
-      //  b) JWebBrowser -> HTMLInfoJWebBrowser
-      //  c) LOBO        -> HTMLInfoLoboBrowser
-      // ... we only have ONE version of DesignHTMLInfoPane, which
-      // uses (a), (b) or (c) according to the factory method 
-      // AVUtil.createHTMLInfoPane(.)
-      return new DesignHTMLInfoPane(ace,map);
-    }
+	/**
+	 * Factory method to create an design html viewport.
+	 * 
+	 * @param map
+	 *            a Map
+	 */
+	public static DesignHTMLInfoPane createDesignHTMLInfoPane(
+			AtlasConfigEditable ace, Map map) {
+		// Note: although we now have 2 versions to display html...
+		// a) JEditorPane -> HTMLInfoJPane
+		// b) JWebBrowser -> HTMLInfoJWebBrowser
+		// c) LOBO -> HTMLInfoLoboBrowser
+		// ... we only have ONE version of DesignHTMLInfoPane, which
+		// uses (a), (b) or (c) according to the factory method
+		// AVUtil.createHTMLInfoPane(.)
+		return new DesignHTMLInfoPane(ace, map);
+	}
 
-    /**
-     * Factory method to create an design html editor.
-     * @param map a Map
-     */
-    public static HTMLEditPaneInterface createHTMLEditPane(AtlasConfigEditable ace) {
-      HTMLEditPaneInterface htmlEditPane = null;
-      
-      // try to use an HTML view based on DJ project
-      htmlEditPane = (HTMLEditPaneInterface)LangUtil.instantiateObject(
-          "org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor",
-          true, // fallback if class can not be loaded
-          "FCK"
-      );
+	/**
+	 * Factory method to create an design html editor.
+	 * 
+	 * @param map
+	 *            a Map
+	 */
+	public static HTMLEditPaneInterface createHTMLEditPane(
+			AtlasConfigEditable ace) {
+		HTMLEditPaneInterface htmlEditPane = null;
 
-      if ( htmlEditPane != null ) {
-        LOGGER.info("Using "+LangUtil.getSimpleClassName(htmlEditPane)+" as HTML editor.");
-        return htmlEditPane;
-      }
-      
-      // use editor based on SimplyHTML
-      htmlEditPane = new HTMLEditPaneSimplyHTML();
-      
-      return htmlEditPane;
-    }
-    /**
-     * 
-     * @param owner
-     * @param ace
-     * @param htmlFiles
-     *            A {@link List} of {@link File}s that all will automatically be
-     *            created if they don't exist! No matter if the user saves his
-     *            changes.
-     * @param tabTitles
-     * @param windowTitle
-     */
-    @SuppressWarnings("deprecation")
-    public static void openHTMLEditors(Component owner,
-            AtlasConfigEditable ace, List<File> htmlFiles,
-            List<String> tabTitles, String windowTitle) {
+		// try to use an HTML view based on DJ project
+		htmlEditPane = (HTMLEditPaneInterface) LangUtil.instantiateObject(
+				"org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor",
+				true, // fallback if class can not be loaded
+				"FCK");
 
-        if (tabTitles.size() != htmlFiles.size())
-            throw new IllegalArgumentException(
-                    "Number of HTML URLs and Titles must be equal.");
+		if (htmlEditPane != null) {
+			LOGGER.info("Using " + LangUtil.getSimpleClassName(htmlEditPane)
+					+ " as HTML editor.");
+			return htmlEditPane;
+		}
 
-        /**
-         * We open the HTML editor to edit the About information.
-         */
+		// use editor based on SimplyHTML
+		htmlEditPane = new HTMLEditPaneSimplyHTML();
 
-        final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
-        JComponent htmlEditorPanel = htmlEditor.getComponent();
-        // JHTMLEditor has problems when not running in frame!!
-        // So we have to use JFrame for all implementations of
-        // HTMLEditPaneInterface.
-//        final JDialog editorDialog = new JDialog(SwingUtil
-//            .getParentWindow(owner), windowTitle);
-        final JFrame editorDialog = new JFrame(windowTitle);
-//        editorDialog.setModal(true);
-        // TODO: Stefan muss hier Frame-Caching einbauen, damit
-        //       fuer eine Map nicht 2x ein Editor geöffnet wird!
-        editorDialog
-                .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		return htmlEditPane;
+	}
 
-        
-        editorDialog.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                if ( htmlEditor.performClosing(editorDialog) )
-                  editorDialog.dispose();
-            }
-        });
+	public static String openHTMLEditorsKey(List<File> htmlFiles) {
+		String key = "";
+		for (File f : htmlFiles) {
+			key += f;
+		}
+		return key;
+	}
 
-        htmlEditorPanel.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent evt) {
-                if (evt.getPropertyName().equals("closing")) {
-                    editorDialog.dispose();
-                }
-            }
-        });
+	/**
+	 * This method should only be called by the {@link DialogManager}. All
+	 * program points, where a HTML editor should be opened must should use the
+	 * {@link DialogManager}.
+	 * 
+	 * @param owner
+	 * @param ace
+	 * @param htmlFiles
+	 *            A {@link List} of {@link File}s that all will automatically be
+	 *            created if they don't exist! No matter if the user saves his
+	 *            changes.
+	 * @param tabTitles
+	 * @param windowTitle
+	 */
+	public static Window openHTMLEditors(Component owner,
+			AtlasConfigEditable ace, List<File> htmlFiles,
+			List<String> tabTitles, String windowTitle) {
 
-        Dimension size = htmlEditor.getPreferredSize();
-        if ( size == null )
-          size = new Dimension(620, 400);
-        editorDialog.setSize(size);
-        if ( !htmlEditor.hasScrollPane() ) {
-          htmlEditorPanel = new JScrollPane(htmlEditorPanel);
-        }
-        editorDialog.getContentPane().add(htmlEditorPanel);
+		if (tabTitles.size() != htmlFiles.size())
+			throw new IllegalArgumentException(
+					"Number of HTML URLs and Titles must be equal.");
 
-        // String content = "<html> <body> <p> test </p> </body> </html>";
-        // htmlEditorPanel.setCurrentDocumentContent(content
-        htmlEditor.removeAllTabs();
+		/**
+		 * We open the HTML editor to edit the About information.
+		 */
+		final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
+		JComponent htmlEditorPanel = htmlEditor.getComponent();
+		// JHTMLEditor has problems when not running in frame!!
+		// So we have to use JFrame for all implementations of
+		// HTMLEditPaneInterface.
+		// final JDialog editorDialog = new JDialog(SwingUtil
+		// .getParentWindow(owner), windowTitle);
+		final JFrame editorFrame = new JFrame(windowTitle);
+		// editorDialog.setModal(true);
+		// TODO: Stefan muss hier Frame-Caching einbauen, damit
+		// fuer eine Map nicht 2x ein Editor geöffnet wird!
+		editorFrame
+				.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        /**
-         * Add one Tab for every language that is supported
-         */
-        for (int i = 0; i < ace.getLanguages().size(); i++) {
-            try {
-                File htmlFile = htmlFiles.get(i);
-                if (!htmlFile.exists())
-                    htmlFile.createNewFile();
+		editorFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (htmlEditor.performClosing(editorFrame))
+					editorFrame.dispose();
+			}
+		});
 
-                // Sad but true, we have to use the depreciated way here
-                URL htmlURL = htmlFile.toURL();
+		htmlEditorPanel.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				if (evt.getPropertyName().equals("closing")) {
+					editorFrame.dispose();
+				}
+			}
+		});
 
-                LOGGER.info(htmlEditor.getClass().getSimpleName()+" for " + htmlURL + " (was file = "
-                    + htmlFile.getCanonicalPath() + ")");
+		Dimension size = htmlEditor.getPreferredSize();
+		if (size == null)
+			size = new Dimension(620, 400);
+		editorFrame.setSize(size);
+		if (!htmlEditor.hasScrollPane()) {
+			htmlEditorPanel = new JScrollPane(htmlEditorPanel);
+		}
+		editorFrame.getContentPane().add(htmlEditorPanel);
 
-                htmlEditor.addEditorTab(tabTitles.get(i), htmlURL, i);
-            
-            } catch (Exception ex) {
-                ExceptionDialog.show(owner, ex);
-            }
-        }
+		// String content = "<html> <body> <p> test </p> </body> </html>";
+		// htmlEditorPanel.setCurrentDocumentContent(content
+		htmlEditor.removeAllTabs();
 
-        SwingUtil.centerFrameOnScreenRandom(editorDialog);
+		/**
+		 * Add one Tab for every language that is supported
+		 */
+		for (int i = 0; i < ace.getLanguages().size(); i++) {
+			try {
+				File htmlFile = htmlFiles.get(i);
+				if (!htmlFile.exists())
+					htmlFile.createNewFile();
 
-        editorDialog.setVisible(true);
-        
-//        // Because we can not use JDialog anymore, we "fake"
-//        // the modal property
-//        while ( editorDialog.isVisible() ) {
-//          LangUtil.sleepExceptionless(50);
-//        }
-    }
+				// Sad but true, we have to use the depreciated way here
+				URL htmlURL = htmlFile.toURL();
+
+				LOGGER.info(htmlEditor.getClass().getSimpleName() + " for "
+						+ htmlURL + " (was file = "
+						+ htmlFile.getCanonicalPath() + ")");
+
+				htmlEditor.addEditorTab(tabTitles.get(i), htmlURL, i);
+
+			} catch (Exception ex) {
+				ExceptionDialog.show(owner, ex);
+			}
+		}
+
+		SwingUtil.centerFrameOnScreenRandom(editorFrame);
+
+		editorFrame.setVisible(true);
+
+		// // Because we can not use JDialog anymore, we "fake"
+		// // the modal property
+		// while ( editorDialog.isVisible() ) {
+		// LangUtil.sleepExceptionless(50);
+		// }
+
+		return editorFrame;
+	}
 
 }
