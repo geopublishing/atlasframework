@@ -81,49 +81,6 @@
 				</configuration>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.1</version>
-				<executions>
-					<execution>
-						<id>Create atlasdependencies.properties</id>
-						<phase>clean</phase>
-						<goals>
-							<goal>build-classpath</goal>
-						</goals>
-						<inherited>false</inherited>
-						<configuration>
-							<includeScope>compile</includeScope>
-							<outputFile>src/main/resources/atlasdependencies.properties</outputFile>
-							<outputFilterFile>true</outputFilterFile>
-							<pathSeparator>:</pathSeparator>
-							<prefix>.</prefix>
-							<regenerateFile>true</regenerateFile>
-						</configuration>
-					</execution>
-					<!-- <execution> -->
-					<!-- <id>unpack native libs</id> -->
-					<!-- <phase>compile</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>unpack</goal> -->
-					<!-- </goals> -->
-					<!-- <configuration> -->
-					<!-- <artifactItems> -->
-					<!-- <artifactItem> -->
-					<!-- <groupId>org.geopublishing</groupId> -->
-					<!-- <artifactId>gpnatives</artifactId> -->
-					<!-- <version>${project.version}</version> -->
-					<!-- vorher auskommentiert? <classifier>${build.type}</classifier> -->
-					<!-- <type>jar</type> -->
-					<!-- <overWrite>true</overWrite> -->
-					<!-- <outputDirectory>${project.build.directory}/natives</outputDirectory> -->
-					<!-- </artifactItem> -->
-					<!-- </artifactItems> -->
-					<!-- </configuration> -->
-					<!-- </execution> -->
-				</executions>
-			</plugin>
 		</plugins>
 
 
