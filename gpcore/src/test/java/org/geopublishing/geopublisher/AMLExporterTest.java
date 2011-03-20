@@ -31,7 +31,6 @@ public class AMLExporterTest extends AMLExporter {
 			AtlasException, FactoryException, TransformException, SAXException,
 			IOException, TransformerException {
 		super(GpTestingUtil.getAtlasConfigE(TestAtlas.small));
-
 	}
 
 	@Test

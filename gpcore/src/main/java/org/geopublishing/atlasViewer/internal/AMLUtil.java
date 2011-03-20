@@ -117,6 +117,8 @@ public class AMLUtil {
 
 	public static final String ATT_paintGaps = "paintGaps";
 
+	public static final String ATT_NODATA = "nodata";
+
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 

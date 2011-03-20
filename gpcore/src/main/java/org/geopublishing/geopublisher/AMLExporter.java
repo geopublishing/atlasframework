@@ -1085,6 +1085,10 @@ public class AMLExporter {
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
+		if (dpe.getNodataValue() != null)
+			element.setAttribute(AMLUtil.ATT_NODATA,
+					String.valueOf(dpe.getNodataValue()));
+
 		// Creating a aml:name tag...
 		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
 

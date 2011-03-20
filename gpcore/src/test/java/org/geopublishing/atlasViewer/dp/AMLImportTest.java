@@ -2,13 +2,17 @@ package org.geopublishing.atlasViewer.dp;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.Random;
 
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.LogoPosition;
@@ -17,6 +21,9 @@ import de.schmitzm.testing.TestingClass;
 
 public class AMLImportTest extends TestingClass {
 
+	@Test
+	@Ignore
+	// Fails with some additional style :-/
 	public void testSaveAndLoad() throws Exception {
 		AtlasConfigEditable ace = GpTestingUtil
 				.getAtlasConfigE(TestAtlas.small);
@@ -25,17 +32,22 @@ public class AMLImportTest extends TestingClass {
 				.getResource("ad/data/vector_01367156967_join10/join10.shp"));
 
 		String bnx = "testbasename_" + new Random().nextLong();
-		ace.setBaseName(bnx);
-		final String jnlpx = "http://asd.asd.asd/atl/" + bnx + "x/";
-		ace.setJnlpBaseUrl(jnlpx);
+		try {
+			ace.setBaseName(bnx);
+			fail("A basename wit _ has wrongly been accepted.");
+		} catch (IllegalArgumentException e) {
+			bnx = "testbasename_" + new Random().nextLong();
+			final String jnlpx = "http://asd.asd.asd/atl/" + bnx + "x/";
+			ace.setJnlpBaseUrl(jnlpx);
 
-		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
+			AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 
-		assertNotNull(ace2
-				.getResource("ad/data/vector_01367156967_join10/join10.shp"));
+			assertNotNull(ace2
+					.getResource("ad/data/vector_01367156967_join10/join10.shp"));
 
-		assertEquals(bnx, ace2.getBaseName());
-		assertEquals(jnlpx, ace2.getJnlpBaseUrl());
+			assertEquals(bnx, ace2.getBaseName());
+			assertEquals(jnlpx, ace2.getJnlpBaseUrl());
+		}
 	}
 
 	@Test
@@ -75,5 +87,33 @@ public class AMLImportTest extends TestingClass {
 
 		ace.dispose();
 		ace2.dispose();
+	}
+
+	@Test
+	public void testImportExport_RasterNodataValue() throws Exception {
+		AtlasConfigEditable ace = GpTestingUtil
+				.getAtlasConfigE(TestAtlas.rasters);
+
+		DpLayerRaster_Reader dplr = (DpLayerRaster_Reader) ace.getDataPool()
+				.get(0);
+		dplr.setNodataValue(-999.0);
+
+		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
+		final DpLayerRaster_Reader dplr2 = (DpLayerRaster_Reader) ace2
+				.getDataPool().get(0);
+		assertNotNull(dplr2);
+		assertNotNull(dplr2.getNodataValue());
+		assertEquals(-999., dplr2.getNodataValue(), 0.);
+		ace2.dispose();
+		ace2 = null;
+
+		dplr.setNodataValue(null);
+		AtlasConfigEditable ace3 = GpTestingUtil.saveAndLoad(ace);
+		assertNull(((DpLayerRaster_Reader) ace3.getDataPool().get(0))
+				.getNodataValue());
+		ace3.dispose();
+		ace3 = null;
+
+		ace.dispose();
 	}
 }

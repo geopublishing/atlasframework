@@ -771,6 +771,17 @@ public class AMLImport {
 			dpe.setExportable(false);
 		}
 
+		// ****************************************************************************
+		// The nodata attribute is optional and defaults to null
+		// ****************************************************************************
+		try {
+			final String nodeValueString = node.getAttributes()
+					.getNamedItem(AMLUtil.ATT_NODATA).getNodeValue();
+			dpe.setNodataValue(Double.valueOf(nodeValueString));
+		} catch (Exception e) {
+			dpe.setNodataValue(null);
+		}
+
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			final Node n = childNodes.item(i);
