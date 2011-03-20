@@ -37,10 +37,10 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				ColorMap.TYPE_VALUES);
 	}
 
-
 	/**
 	 * Attenetion: Ignores the CM type!
 	 */
+	@Override
 	public void importColorMap(ColorMap cm) {
 		QuantileBin1D ops = new QuantileBin1D(1.);
 
@@ -62,7 +62,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				.evaluate(null).toString());
 
 		final String labelFromCM = cme.getLabel();
-		Translation translation= new Translation("");
+		Translation translation = new Translation("");
 		if (labelFromCM != null && !labelFromCM.isEmpty())
 			translation = new Translation(labelFromCM);
 		// }
@@ -170,7 +170,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 			countBins++;
 
 			// Ignoring the NODATA-Value
-			if (d == styledReader.getNodataValue())
+			if (styledReader.getNodataValue() != null
+					&& d == styledReader.getNodataValue())
 				continue;
 
 			if (d == Double.NaN)
@@ -205,6 +206,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 				+ (row - 1), this));
 	}
 
+	@Override
 	public void applyOpacity() {
 		pushQuite();
 
@@ -233,6 +235,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	 * Throws an exception as soon as the array sizes of values, colors and
 	 * opacities are not in sync
 	 */
+	@Override
 	protected void test(int classesExpected) {
 		int valSize = getValues().size();
 
