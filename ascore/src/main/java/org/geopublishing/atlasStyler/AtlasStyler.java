@@ -543,7 +543,11 @@ public abstract class AtlasStyler {
 						fts, false);
 				if (importedThisAbstractRuleList != null) {
 
-					ruleLists.add(importedThisAbstractRuleList);
+					// We are reverting the order while importing the SLD to the
+					// RulesListsList. When exporting to getStyle it is reverted
+					// again. This allows the RulesListTable to show the last
+					// painted rulesList on top.
+					ruleLists.add(0, importedThisAbstractRuleList);
 
 					importedThisAbstractRuleList
 							.addListener(listenerFireStyleChange);

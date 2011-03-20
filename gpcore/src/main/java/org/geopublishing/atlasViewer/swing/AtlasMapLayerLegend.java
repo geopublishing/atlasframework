@@ -51,8 +51,7 @@ import de.schmitzm.lang.LangUtil;
  */
 public class AtlasMapLayerLegend extends MapLayerLegend {
 
-	final private Logger LOGGER = LangUtil
-			.createLogger(this);
+	final private Logger LOGGER = LangUtil.createLogger(this);
 
 	protected final DpLayer<?, ? extends ChartStyle> dpLayer;
 
@@ -152,9 +151,10 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		 * additional styles, we render a DropDown component.
 		 */
 		removeAll();
+		// TODO Hier wird kein scaleDenominator übergeben!
 		add(SldLegendUtil.createAdditionalStylesPane(mapLayer, availableStyles,
 				(DpLayer<?, ? extends ChartStyle>) styledLayer, map,
-				atlasMapLegend));
+				atlasMapLegend, null));
 
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		LayerStyle selectedLayerStyle = dpLayer.getLayerStyleByID(map
@@ -175,26 +175,28 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	@Override
 	public JPopupMenu getToolMenu() {
 		JPopupMenu menu = super.getToolMenu();
-//
-//		// ****************************************************************************
-//		// Create AtlasStylerRaster Button
-//		// ****************************************************************************
-//		if (styledLayer instanceof StyledRasterInterface<?>
-//				&& isStyleEditable()) {
-//
-//			menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
-//					.R("LayerToolMenu.style"),
-//					Icons.ICON_STYLE) {
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//
-//					AVDialogManager.dm_AtlasStyler.getInstanceFor(
-//							styledLayer, AtlasMapLayerLegend.this, styledLayer,
-//							AtlasMapLayerLegend.this);
-//				}
-//			}));
-//		}
+		//
+		// //
+		// ****************************************************************************
+		// // Create AtlasStylerRaster Button
+		// //
+		// ****************************************************************************
+		// if (styledLayer instanceof StyledRasterInterface<?>
+		// && isStyleEditable()) {
+		//
+		// menu.add(new JMenuItem(new AbstractAction(AtlasViewerGUI
+		// .R("LayerToolMenu.style"),
+		// Icons.ICON_STYLE) {
+		//
+		// @Override
+		// public void actionPerformed(ActionEvent e) {
+		//
+		// AVDialogManager.dm_AtlasStyler.getInstanceFor(
+		// styledLayer, AtlasMapLayerLegend.this, styledLayer,
+		// AtlasMapLayerLegend.this);
+		// }
+		// }));
+		// }
 
 		return menu;
 	}

@@ -72,12 +72,18 @@ public class SldLegendUtil {
 	/**
 	 * Creates a legend using the given description and {@link Style}.
 	 * 
-	 * @param style All selection related {@link FeatureTypeStyle}s are automatically removed.
+	 * @param style
+	 *            All selection related {@link FeatureTypeStyle}s are
+	 *            automatically removed.
 	 * @param desc
 	 *            may be <code>null</code>. In that case no description is used.
+	 * @param scaleDenominator
+	 *            <code>null</code> of a Scale Denominator to determine whether
+	 *            a Rule is actually visible in that scale.
 	 */
 	static public JPanel createLegend(
-			final StyledLayerInterface<?> styledLayer, Style style, String desc) {
+			final StyledLayerInterface<?> styledLayer, Style style,
+			String desc, Double scaleDenominator) {
 
 		if (styledLayer == null)
 			throw new IllegalArgumentException("styledLayer may not be null!");
@@ -85,8 +91,8 @@ public class SldLegendUtil {
 		if (style == null) {
 			style = styledLayer.getStyle();
 		}
-		
-		// Remove any selection & text 
+
+		// Remove any selection & text
 		if (style != null)
 			style = StylingUtil.removeSelectionFeatureTypeStyle(style);
 
@@ -94,11 +100,11 @@ public class SldLegendUtil {
 		if (styledLayer instanceof StyledFeaturesInterface) {
 			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(style,
 					((StyledFeaturesInterface) styledLayer).getSchema(),
-					ICONWIDTH, ICONHEIGHT);
+					ICONWIDTH, ICONHEIGHT, scaleDenominator);
 		} else if (styledLayer instanceof StyledRasterInterface<?>) {
 			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(
 					(StyledRasterInterface<?>) styledLayer, style, ICONWIDTH,
-					ICONHEIGHT);
+					ICONHEIGHT, scaleDenominator);
 		} else {
 			throw new IllegalArgumentException("Can't create a legend for "
 					+ styledLayer.getClass().getSimpleName());
@@ -126,25 +132,31 @@ public class SldLegendUtil {
 	 * Creates a legend using the given translated description and and
 	 * {@link Style}.
 	 * 
+	 * @param scaleDenominator
+	 *            <code>null</code> of a Scale Denominator to determine whether
+	 *            a Rule is actually visible in that scale.
+	 * 
 	 * @param layerStyle
 	 *            If <code>null</code>, description and {@link Style} from the
 	 *            {@link StyledLayerInterface} are used.
 	 */
 	static public JPanel createLegend(
 			final StyledLayerInterface<?> styledLayer, Style style,
-			Translation desc) {
+			Translation desc, Double scaleDenominator) {
 		return createLegend(styledLayer, style, desc != null ? desc.toString()
-				: null);
+				: null, scaleDenominator);
 	}
 
 	/**
-	 * Creates a legend using any description (if available) and {@link Style} from the
-	 * {@link StyledLayerInterface}.
+	 * Creates a legend using any description (if available) and {@link Style}
+	 * from the {@link StyledLayerInterface}. * @param scaleDenominator
+	 * <code>null</code> of a Scale Denominator to determine whether a Rule is
+	 * actually visible in that scale.
 	 */
 	static public JPanel createLegend(
-			final StyledLayerInterface<?> styledLayer) {
-		return createLegend(styledLayer, styledLayer.getStyle(), styledLayer
-				.getDesc());
+			final StyledLayerInterface<?> styledLayer, Double scaleDenominator) {
+		return createLegend(styledLayer, styledLayer.getStyle(),
+				styledLayer.getDesc(), scaleDenominator);
 	}
 
 	/**
@@ -156,10 +168,11 @@ public class SldLegendUtil {
 	 *            {@link StyledLayerInterface} are used.
 	 */
 	static public JComponent createLegend(
-			final StyledLayerInterface<?> styledLayer, LayerStyle layerStyle) {
+			final StyledLayerInterface<?> styledLayer, LayerStyle layerStyle,
+			Double scaleDenominator) {
 
 		if (layerStyle == null)
-			return createLegend(styledLayer);
+			return createLegend(styledLayer, scaleDenominator);
 
 		Translation desc = null;
 		if (!I18NUtil.isEmpty(layerStyle.getDesc())) {
@@ -168,10 +181,9 @@ public class SldLegendUtil {
 			desc = styledLayer.getDesc();
 		}
 
-		return createLegend(styledLayer, layerStyle.getStyle(), desc);
+		return createLegend(styledLayer, layerStyle.getStyle(), desc,
+				scaleDenominator);
 	}
-	
-	
 
 	/**
 	 * @param mapLayer
@@ -189,13 +201,10 @@ public class SldLegendUtil {
 	 *         available, it will replace the {@link DpLayer} as the source for
 	 *         title and description.
 	 */
-	public static Component createAdditionalStylesPane(
-			final MapLayer mapLayer,
+	public static Component createAdditionalStylesPane(final MapLayer mapLayer,
 			final ArrayList<String> availStyleIDs,
-			final DpLayer<?, ? extends ChartStyle> dpLayer, 
-			final Map map, 
-			final AtlasMapLegend atlasMapLegend
-			) {
+			final DpLayer<?, ? extends ChartStyle> dpLayer, final Map map,
+			final AtlasMapLegend atlasMapLegend, Double scaleDenominator) {
 
 		/**
 		 * Determine whether the the number of rules differs so much, that a
@@ -212,8 +221,7 @@ public class SldLegendUtil {
 		}
 
 		if (availStyleIDs.size() > 3 || (max - min > 4)) {
-			String selectedStyleID = map.getSelectedStyleID(
-					dpLayer.getId());
+			String selectedStyleID = map.getSelectedStyleID(dpLayer.getId());
 			if (selectedStyleID == null) {
 				// We might just have created new additional styles, and none
 				// has been selected yet. But thats not a reason for a NPE -
@@ -223,8 +231,9 @@ public class SldLegendUtil {
 
 			// Let's create a JComboBox
 			final JComboBoxForAddStylesPanel comboBoxForAddStylesPanel = new JComboBoxForAddStylesPanel(
-					availStyleIDs, dpLayer, mapLayer, selectedStyleID, atlasMapLegend);
-			
+					availStyleIDs, dpLayer, mapLayer, selectedStyleID,
+					atlasMapLegend, scaleDenominator);
+
 			comboBoxForAddStylesPanel.getComboBox().addItemListener(
 					new ItemListener() {
 
@@ -239,18 +248,16 @@ public class SldLegendUtil {
 							 */
 							if (comboBoxForAddStylesPanel.getComboBox()
 									.getSelectedIndex() < 0) {
-								map.setSelectedStyleID(dpLayer.getId(),
-										null);
+								map.setSelectedStyleID(dpLayer.getId(), null);
 							} else {
 
 								final String styleID = availStyleIDs
 										.get(comboBoxForAddStylesPanel
 												.getComboBox()
 												.getSelectedIndex());
-								map.setSelectedStyleID(dpLayer.getId(),
-										styleID);
+								map.setSelectedStyleID(dpLayer.getId(), styleID);
 							}
-							
+
 							atlasMapLegend.recreateLayerList(dpLayer.getId());
 
 						}
@@ -274,7 +281,7 @@ public class SldLegendUtil {
 				LayerStyle ls = dpLayer.getLayerStyleByID(lsID);
 
 				JComponent oneStyleLegend = SldLegendUtil.createLegend(dpLayer,
-						ls);
+						ls, scaleDenominator);
 
 				legendPanel.addTab(ls.getTitle() != null ? ls.getTitle()
 						.toString() : "UNNAMED!", oneStyleLegend);
@@ -312,8 +319,7 @@ public class SldLegendUtil {
 							LayerStyle layerStyle = dpLayer
 									.getLayerStyleByID(styleID);
 							mapLayer.setStyle(layerStyle.getStyle());
-							map.setSelectedStyleID(dpLayer.getId(),
-									styleID);
+							map.setSelectedStyleID(dpLayer.getId(), styleID);
 						}
 					}
 
@@ -328,7 +334,6 @@ public class SldLegendUtil {
 
 	}
 
-
 	public static class JComboBoxForAddStylesPanel extends JPanel {
 		protected Logger LOGGER = LangUtil
 				.createLogger(JComboBoxForAddStylesPanel.class);
@@ -337,16 +342,22 @@ public class SldLegendUtil {
 		private final JComboBox comboBox;
 
 		/**
-		 * @param availStyleIDs a list of additional style IDs to offer
-		 * @param dpLayer {@link DpLayer} where the add. styles come from 
-		 * @param mapLayer the {@link MapLayer} where the styles will be set when changed 
+		 * @param availStyleIDs
+		 *            a list of additional style IDs to offer
+		 * @param dpLayer
+		 *            {@link DpLayer} where the add. styles come from
+		 * @param mapLayer
+		 *            the {@link MapLayer} where the styles will be set when
+		 *            changed
 		 * @param selectedStyleId
 		 *            The ID if the LayerStyle that should be selected by
 		 *            default
+		 * @param scaleDenominator
 		 */
 		public JComboBoxForAddStylesPanel(
 				final ArrayList<String> availStyleIDs, final DpLayer dpLayer,
-				final MapLayer mapLayer, String selectedStyleId, final AtlasMapLegend atlasMapLegend) {
+				final MapLayer mapLayer, String selectedStyleId,
+				final AtlasMapLegend atlasMapLegend, Double scaleDenominator) {
 			super(new BorderLayout());
 
 			int selectedIndex = -1;
@@ -355,10 +366,9 @@ public class SldLegendUtil {
 				LayerStyle ls = dpLayer.getLayerStyleByID(availStyleIDs.get(i));
 
 				if (ls == null) {
-					LOGGER
-							.warn("JComboBoxForAddStylesPanel has been told to offer a view with ID="
-									+ availStyleIDs.get(i)
-									+ ", but it doesn't exist. We omit the style.");
+					LOGGER.warn("JComboBoxForAddStylesPanel has been told to offer a view with ID="
+							+ availStyleIDs.get(i)
+							+ ", but it doesn't exist. We omit the style.");
 					continue;
 				}
 
@@ -375,49 +385,50 @@ public class SldLegendUtil {
 			comboBox.setSelectedIndex(selectedIndex);
 
 			// Utilities.addMouseWheelForCombobox(getComboBox());
-//
-//			/**
-//			 * This Listener reacts to selections on the ComboBox with A)
-//			 * updating the legnd, and B) updting the map's style.
-//			 */
-//			getComboBox().addItemListener(new ItemListener() {
-//
-//				@Override
-//				public void itemStateChanged(ItemEvent e) {
-//					if (e.getStateChange() == ItemEvent.DESELECTED) {
-//						return;
-//					}
-//
-//					String newSelectedLayerStyle = availStyleIDs.get(getComboBox()
-//							.getSelectedIndex());
-//					
-//					map.set
-//					
-////					final LayerStyle ls = dpLayer
-////							.getLayerStyleByID(newSelectedLayerStyle);
-////					/**
-////					 * Because JComboBox doesn't have all the legends as
-////					 * components on the tabs, we create them
-////					 */
-////					{
-////						JComboBoxForAddStylesPanel.this.removeAll();
-////						JComboBoxForAddStylesPanel.this.add(comboBox,
-////								BorderLayout.NORTH);
-////						final JComponent legend = LegendHelper.createLegend(
-////								dpLayer, ls);
-////						JComboBoxForAddStylesPanel.this.add(legend,
-////								BorderLayout.CENTER);
-////					}
-//					atlasMapLegend.recreateLayerList(dpLayer.getId());
-//
-////					mapLayer.setStyle(ls.getStyle());
-//				}
-//
-//			});
+			//
+			// /**
+			// * This Listener reacts to selections on the ComboBox with A)
+			// * updating the legnd, and B) updting the map's style.
+			// */
+			// getComboBox().addItemListener(new ItemListener() {
+			//
+			// @Override
+			// public void itemStateChanged(ItemEvent e) {
+			// if (e.getStateChange() == ItemEvent.DESELECTED) {
+			// return;
+			// }
+			//
+			// String newSelectedLayerStyle = availStyleIDs.get(getComboBox()
+			// .getSelectedIndex());
+			//
+			// map.set
+			//
+			// // final LayerStyle ls = dpLayer
+			// // .getLayerStyleByID(newSelectedLayerStyle);
+			// // /**
+			// // * Because JComboBox doesn't have all the legends as
+			// // * components on the tabs, we create them
+			// // */
+			// // {
+			// // JComboBoxForAddStylesPanel.this.removeAll();
+			// // JComboBoxForAddStylesPanel.this.add(comboBox,
+			// // BorderLayout.NORTH);
+			// // final JComponent legend = LegendHelper.createLegend(
+			// // dpLayer, ls);
+			// // JComboBoxForAddStylesPanel.this.add(legend,
+			// // BorderLayout.CENTER);
+			// // }
+			// atlasMapLegend.recreateLayerList(dpLayer.getId());
+			//
+			// // mapLayer.setStyle(ls.getStyle());
+			// }
+			//
+			// });
 
 			add(comboBox, BorderLayout.NORTH);
-			add(SldLegendUtil.createLegend(dpLayer, dpLayer
-					.getLayerStyleByID(selectedStyleId)), BorderLayout.CENTER);
+			add(SldLegendUtil.createLegend(dpLayer,
+					dpLayer.getLayerStyleByID(selectedStyleId),
+					scaleDenominator), BorderLayout.CENTER);
 
 		}
 

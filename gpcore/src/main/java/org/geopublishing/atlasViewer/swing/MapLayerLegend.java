@@ -229,7 +229,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		setScrollOnExpand(false);
 		setAnimated(false);
 
-		add(SldLegendUtil.createLegend(styledLayer));
+		// TODO Hier wird kein scaleDenominator übergeben!
+		add(SldLegendUtil.createLegend(styledLayer, null));
 
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		Style style2 = styledLayer.getStyle();
@@ -569,8 +570,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// Create AtlasStyler Button
 		// ****************************************************************************
 		if (isStyleEditable()
-//				&& !(styledLayer instanceof StyledRasterInterface)
-				) {
+		// && !(styledLayer instanceof StyledRasterInterface)
+		) {
 
 			toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 					.R("LayerToolMenu.style"), Icons.ICON_STYLE) {
