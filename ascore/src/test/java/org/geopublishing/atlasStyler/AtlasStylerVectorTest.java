@@ -25,6 +25,7 @@ import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasStyler.rulesLists.UniqueValuesPolygonRuleList;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.FeatureTypeStyle;
+import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 import org.junit.BeforeClass;
@@ -37,7 +38,9 @@ import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.i18n.Translation;
 import de.schmitzm.testing.TestingClass;
+
 public class AtlasStylerVectorTest extends TestingClass {
 
 	private static FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon;
@@ -62,11 +65,12 @@ public class AtlasStylerVectorTest extends TestingClass {
 
 		assertNotNull(as1);
 
-		AtlasStylerVector as2 = new AtlasStylerVector(new StyledFS(featureSource_polygon));
+		AtlasStylerVector as2 = new AtlasStylerVector(new StyledFS(
+				featureSource_polygon));
 		assertNotNull(as2);
 
-		AtlasStylerVector as3 = new AtlasStylerVector(new StyledFS(featureSource_polygon),
-				null, null, null, false);
+		AtlasStylerVector as3 = new AtlasStylerVector(new StyledFS(
+				featureSource_polygon), null, null, null, false);
 		assertNotNull(as3);
 	}
 
@@ -116,8 +120,8 @@ public class AtlasStylerVectorTest extends TestingClass {
 
 		as = null;
 		// Create a new AtlasStyler
-		AtlasStylerVector as2 = new AtlasStylerVector(styledFeatures, style1, null, null,
-				null);
+		AtlasStylerVector as2 = new AtlasStylerVector(styledFeatures, style1,
+				null, null, null);
 		assertEquals(1, as2.getRuleLists().size());
 		UniqueValuesPolygonRuleList uniqueRL2 = (UniqueValuesPolygonRuleList) as2
 				.getRuleLists().get(0);
@@ -143,6 +147,56 @@ public class AtlasStylerVectorTest extends TestingClass {
 		}
 
 		assertTrue(StylingUtil.validates(uniqueRL1.getFTS()));
+	}
+
+	@Test
+	public void testReihenfolgeDerRuleslists() {
+		StyledFS styledFeatures = new StyledFS(featureSource_polygon);
+		AtlasStylerVector as = new AtlasStylerVector(styledFeatures);
+
+		// String propName = featureSource_polygon.getSchema()
+		// .getAttributeDescriptors().get(1).getLocalName();
+		//
+		// assertEquals("FIPS_CNTRY", propName);
+		final SingleRuleList<PolygonSymbolizer> rl1 = as.getRlf()
+				.createSinglePolygonSymbolRulesList(new Translation("A"), true);
+		final SingleRuleList<PolygonSymbolizer> rl2 = as.getRlf()
+				.createSinglePolygonSymbolRulesList(new Translation("B"), true);
+		as.addRulesList(rl1);
+		as.addRulesList(rl2);
+
+		String title1 = as.getRuleLists().get(0).getRules().get(0).getTitle();
+		String title2 = as.getRuleLists().get(1).getRules().get(0).getTitle();
+		assertEquals("B", new Translation(title1).toString());
+		assertEquals("A", new Translation(title2).toString());
+
+		Style style1 = as.getStyle();
+		as.importStyle(style1);
+
+		title1 = as.getRuleLists().get(0).getRules().get(0).getTitle();
+		title2 = as.getRuleLists().get(1).getRules().get(0).getTitle();
+		assertEquals("B", new Translation(title1).toString());
+		assertEquals("A", new Translation(title2).toString());
+
+		// as = null;
+		// // Create a new AtlasStyler
+		// AtlasStylerVector as3 = new AtlasStylerVector(styledFeatures, style1,
+		// null, null, null);
+		// style1 = null;
+		// assertEquals(2, as3.getRuleLists().size());
+		// Style style2 = as3.getStyle();
+		// as3 = null;
+		//
+		// // Create a new AtlasStyler
+		// AtlasStylerVector as2 = new AtlasStylerVector(styledFeatures, style2,
+		// null, null, null);
+		// assertEquals(2, as2.getRuleLists().size());
+		//
+		// title1 = as2.getRuleLists().get(0).getRules().get(0).getTitle();
+		// title2 = as2.getRuleLists().get(1).getRules().get(0).getTitle();
+		// assertEquals("B", new Translation(title1).toString());
+		// assertEquals("A", new Translation(title2).toString());
+
 	}
 
 	@Test
