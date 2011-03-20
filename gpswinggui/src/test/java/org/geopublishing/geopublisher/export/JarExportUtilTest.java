@@ -344,12 +344,15 @@ public class JarExportUtilTest extends TestingClass {
 		File fileGpCoreDiskJar = new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.GPCORE_JARNAME);
 		assertTrue(fileGpCoreDiskJar.exists());
-		assertTrue(new File(atlasExportTesttDir, "JWS/"
-				+ JarExportUtil.GPCORE_JARNAME).exists());
 
 		assertTrue(new File(atlasExportTesttDir, "DISK/"
 				+ JarExportUtil.DISK_SUB_DIR + JarExportUtil.SCHMITZM_JARNAME3)
 				.exists());
+
+		assertFalse(
+				"The libs are not exported anymore, but rahter referenced online",
+				new File(atlasExportTesttDir, "JWS/"
+						+ JarExportUtil.GPCORE_JARNAME).exists());
 
 		assertFalse(
 				"The libs are not exported anymore, but rahter referenced online",
@@ -498,7 +501,8 @@ public class JarExportUtilTest extends TestingClass {
 	}
 
 	@Test
-	public void testCreateIndexHTML() throws IOException, InterruptedException, InvocationTargetException {
+	public void testCreateIndexHTML() throws IOException, InterruptedException,
+			InvocationTargetException {
 		AtlasConfigEditable ace = TestAtlas.small.getAce();
 
 		JarExportUtil jeu = new JarExportUtil(ace, TestingUtil.getNewTempDir(),
@@ -513,13 +517,14 @@ public class JarExportUtilTest extends TestingClass {
 
 		if (TestingUtil.hasGui()) {
 			SwingUtilities.invokeAndWait(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					AVSwingUtil.lauchHTMLviewer(null, DataUtilities.fileToURL(html));
+					AVSwingUtil.lauchHTMLviewer(null,
+							DataUtilities.fileToURL(html));
 				}
 			});
-		} 
+		}
 	}
 
 }
