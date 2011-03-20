@@ -198,13 +198,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * and therefore are not part of the dependencies.
 	 */
 	final static List<String> BASEJARS = new ArrayList<String>(
-			Arrays.asList(new String[] {
-					// SCHMITZM_JARNAME1, SCHMITZM_JARNAME2,
-					// SCHMITZM_JARNAME3,SCHMITZM_JARNAME4, GSRCJ_JARNAME
-					ASCORE_JARNAME,
-					// ASSWINGGUI_JARNAME,
-					// GPSYNC_JARNAME,
-					GPCORE_JARNAME, AVSWINGGUI_JARNAME
+			Arrays.asList(new String[] { SCHMITZM_JARNAME1, SCHMITZM_JARNAME2,
+					SCHMITZM_JARNAME3, SCHMITZM_JARNAME4, GSRCJ_JARNAME,
+					ASCORE_JARNAME, GPSYNC_JARNAME, GPCORE_JARNAME,
+					AVSWINGGUI_JARNAME
 			// , GPNATIVES_JARNAME
 			}));
 
