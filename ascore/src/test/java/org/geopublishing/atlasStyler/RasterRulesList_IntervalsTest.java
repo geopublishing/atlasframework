@@ -27,9 +27,11 @@ public class RasterRulesList_IntervalsTest extends RasterRulesListTest {
 
 	@Test
 	public void testColorMapImport1() {
-		ColorMap cm = StylingUtil.STYLE_BUILDER.createColorMap(new String[] {
-				"A", "B", "ignore" }, new double[] { 1, 2, 3 }, new Color[] {
-				Color.red, Color.blue, Color.green }, ColorMap.TYPE_INTERVALS);
+		ColorMap cm = StylingUtil.STYLE_BUILDER
+				.createColorMap(new String[] { "A", "B", "ignore", "ignore2" },
+						new double[] { 1, 2, 3, 3 }, new Color[] { Color.red,
+								Color.blue, Color.green, Color.green },
+						ColorMap.TYPE_INTERVALS);
 		RasterRulesList_Intervals rl = new RasterRulesList_Intervals(
 				styledRaster, false);
 		rl.importColorMap(cm);
@@ -44,13 +46,14 @@ public class RasterRulesList_IntervalsTest extends RasterRulesListTest {
 		assertEquals(Color.blue, rl.getColors().get(0));
 		assertEquals("B", rl.getLabels().get(1).toString());
 
-		testExportAndImport(rl, new RasterRulesList_Intervals(
-				styledRaster, false));
+		testExportAndImport(rl, new RasterRulesList_Intervals(styledRaster,
+				false));
 
-		RasterLegendData rld = StyledLayerUtil.generateRasterLegendData(rl.getColorMap(), true,null);
-		assertEquals(2,rld.size());
-		assertEquals("A",rld.get(1.).toString());
-		assertEquals("B",rld.get(2.).toString());
+		RasterLegendData rld = StyledLayerUtil.generateRasterLegendData(
+				rl.getColorMap(), true, null);
+		assertEquals(2, rld.size());
+		assertEquals("A", rld.get(1.).toString());
+		assertEquals("B", rld.get(2.).toString());
 	}
 
 }

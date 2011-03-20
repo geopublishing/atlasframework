@@ -1020,17 +1020,14 @@ public class AMLExporter {
 	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute
 	 * tag.
 	 * 
-	 * @return {@link org.w3c.dom.Element} that represent the XML tag
+	 * @return {@link org.w3c.dom.Element} that represents the XML tag
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @param dpe
-	 *            For backward compatibility we also write the <code>col</code>
-	 *            attribute. The 'col' attribute has been abandoned since >= 1.3
 	 */
 	private Element exportAttributeMetadata(
 			final DpLayerVectorFeatureSource dpe, final Document document,
 			final AttributeMetadataImpl attrib) {
-		// Creating a aml:rasterLayer tag...
+
 		final Element element = document.createElementNS(AMLUtil.AMLURI,
 				AMLUtil.TAG_attributeMetadata);
 
@@ -1062,6 +1059,8 @@ public class AMLExporter {
 
 		// Storing the NODATA values
 		for (Object nodatavalue : attrib.getNodataValues()) {
+			if (nodatavalue == null)
+				continue;
 			Element ndValue = document.createElementNS(AMLUtil.AMLURI,
 					AMLUtil.TAG_nodataValue);
 			ndValue.setTextContent(nodatavalue.toString());

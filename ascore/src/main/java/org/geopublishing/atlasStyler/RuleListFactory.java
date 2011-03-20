@@ -422,11 +422,13 @@ public class RuleListFactory {
 						.startsWith(RulesListType.RASTER_COLORMAP_INTERVALS
 								.toString())) {
 			rasterRulesList = new RasterRulesList_Intervals(styledRaster, false);
-		} else if (cmt == ColorMap.TYPE_RAMP
-				|| metaInfoString
-						.startsWith(RulesListType.RASTER_COLORMAP_RAMPS
-								.toString())) {
-			rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
+
+			// NOT YET
+			// } else if (cmt == ColorMap.TYPE_RAMP
+			// || metaInfoString
+			// .startsWith(RulesListType.RASTER_COLORMAP_RAMPS
+			// .toString())) {
+			// rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
 		}
 
 		if (rasterRulesList != null)

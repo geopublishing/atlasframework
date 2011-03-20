@@ -165,13 +165,13 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 	 */
 	@Override
 	public ColorMap getColorMap() {
-		
 
 		test(-1);
 
 		ColorMap cm = StylingUtil.STYLE_FACTORY.createColorMap();
 		cm.setType(cmt);
-		if (getValues().size()<2) return cm; 
+		if (getValues().size() < 2)
+			return cm;
 
 		int lastidx = getValues().size() - 1;
 		for (int i = 0; i < lastidx; i++) {
@@ -203,42 +203,53 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 
 		}
 
+		// The pre-last CME
 		ColorMapEntry cme = StylingUtil.createColorMapEntry("", getValues()
-				.get(lastidx), getColors().get(lastidx - 1),
-				getOpacities().get(lastidx -1));
+				.get(lastidx), getColors().get(lastidx - 1), getOpacities()
+				.get(lastidx - 1));
+		cm.addColorMapEntry(cme);
+
+		// The last CME is only a repetition of the pre-last CME to make the
+		// upper limit of the last class INCLUSIVE
 		cm.addColorMapEntry(cme);
 
 		return cm;
 	}
-	
 
 	@Override
 	public void importColorMap(ColorMap cm) {
 		reset();
-		
-		int countCME = cm.getColorMapEntries().length;
-		int lastCME = cm.getColorMapEntries().length -1;
-		
-		ArrayList<ColorMapEntry> cmes= new ArrayList<ColorMapEntry>();
-		for (ColorMapEntry cme: cm.getColorMapEntries())
+
+		/**
+		 * Because the upper Limits are EXCLUSIVE, the last value is repeated by
+		 * AtlasStylerRaster. So the last CME can be ignored, since it is
+		 * expected to contain the pre-last's value again.
+		 */
+		int countCME = cm.getColorMapEntries().length - 1;
+		int lastCME = countCME - 1;
+
+		ArrayList<ColorMapEntry> cmes = new ArrayList<ColorMapEntry>();
+		for (ColorMapEntry cme : cm.getColorMapEntries())
 			cmes.add(cme);
-		
-		for (int i = 0 ; i < countCME; i++) {
+
+		for (int i = 0; i < countCME; i++) {
 
 			// Wert wird immer importiert
 			ColorMapEntry cme = cmes.get(i);
 			getValues().add(Double.valueOf(cme.getQuantity().toString()));
-			
-			if (i < lastCME){
+
+			if (i < lastCME) {
 				// Bis auf dem letzten wird das label importiert
 				getLabels().add(new Translation(cme.getLabel()));
 			}
-			
+
 			if (i > 0) {
 				getColors().add(StylingUtil.getColorFromColorMapEntry(cme));
-				getOpacities().add(Double.valueOf(cme.getOpacity().evaluate(null).toString()));
+				getOpacities().add(
+						Double.valueOf(cme.getOpacity().evaluate(null)
+								.toString()));
 			}
-			
+
 		}
 
 	}
@@ -297,14 +308,14 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 		getValues().addAll(classLimits);
 
 		// Wenn mehr OPs als Classen, dann entfernen
-		while (getOpacities().size() > classLimits.size()-1) {
-			getOpacities().remove(getOpacities().size()-1);
+		while (getOpacities().size() > classLimits.size() - 1) {
+			getOpacities().remove(getOpacities().size() - 1);
 		}
 		// Wenn weniger OPs als Classen, dann hinzufügen
-		while (getOpacities().size() < classLimits.size()-1) {
+		while (getOpacities().size() < classLimits.size() - 1) {
 			getOpacities().add(getOpacity());
 		}
-		
+
 		if (classLimits.size() < 1) {
 			LOGGER.error("numClasses == " + classLimits.size()
 					+ " bei setClassLimits!?");

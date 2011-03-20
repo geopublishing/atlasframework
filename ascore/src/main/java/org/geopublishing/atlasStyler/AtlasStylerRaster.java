@@ -92,22 +92,30 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public AbstractRulesList copyRulesList(RulesListInterface rl) {
 		return null;
 	}
-//
-//	public RasterLegendData getLegendMetaData() {
-//
-//		if (getRuleLists().size() == 0)
-//			return new RasterLegendData(false);
-//
-//		RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
-//
-//		// TODO What if there is more than one RUlesList!?
-//
-//		return rrl.getRasterLegendData();
-//	}
-//
+
+	//
+	// public RasterLegendData getLegendMetaData() {
+	//
+	// if (getRuleLists().size() == 0)
+	// return new RasterLegendData(false);
+	//
+	// RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
+	//
+	// // TODO What if there is more than one RUlesList!?
+	//
+	// return rrl.getRasterLegendData();
+	// }
+	//
 	@Override
 	StyleChangedEvent getStyleChangeEvent() {
-		RasterLegendData rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false, null);
+		RasterLegendData rlm = new RasterLegendData(false);
+		try {
+			rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false,
+					null);
+		} catch (Exception e) {
+			// Happens if there are no classes, and hence no entries in the
+			// colormap.
+		}
 		return new RasterStyleChangedEvent(getStyle(), rlm);
 	}
 

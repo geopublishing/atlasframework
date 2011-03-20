@@ -30,6 +30,7 @@ import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
 import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRuleList;
@@ -179,6 +180,9 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 			newEditorGui = new RasterRulesList_Intervals_GUI(
 					(RasterRulesList_Intervals) ruleList,
 					(AtlasStylerRaster) atlasStyler);
+		} else if (ruleList instanceof RasterRulesList_Ramps) {
+			newEditorGui = new JLabel(
+					"Please use the old Raster styler (in Geopublisher) for this type of raster style. ");
 		}
 
 		cachedRulesListGuis.put(ruleList, newEditorGui);
