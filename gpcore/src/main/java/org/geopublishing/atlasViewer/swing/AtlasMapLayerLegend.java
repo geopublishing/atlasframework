@@ -151,10 +151,11 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 		 * additional styles, we render a DropDown component.
 		 */
 		removeAll();
-		// TODO Hier wird kein scaleDenominator übergeben!
+
 		add(SldLegendUtil.createAdditionalStylesPane(mapLayer, availableStyles,
 				(DpLayer<?, ? extends ChartStyle>) styledLayer, map,
-				atlasMapLegend, null));
+				atlasMapLegend, mapLegend.getGeoMapPane().getMapPane()
+						.getScaleDenominator()));
 
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		LayerStyle selectedLayerStyle = dpLayer.getLayerStyleByID(map

@@ -66,6 +66,7 @@ import de.schmitzm.geotools.gui.XMapPaneEvent;
 import de.schmitzm.geotools.gui.XMapPaneTool;
 import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
 import de.schmitzm.geotools.map.event.JMapPaneListener;
+import de.schmitzm.geotools.map.event.ScaleChangedEvent;
 import de.schmitzm.geotools.selection.FeatureMapLayerSelectionSynchronizer;
 import de.schmitzm.geotools.selection.StyledFeatureLayerSelectionModel;
 import de.schmitzm.geotools.selection.StyledLayerSelectionModel;
@@ -75,6 +76,7 @@ import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledGridCoverageInterface;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
@@ -342,9 +344,37 @@ public class MapLegend extends JXTaskPaneContainer implements
 		this.mapPaneToolBar = mapPaneToolBar;
 
 		// ****************************************************************************
+		// This Listener will recreate the legend when the Zoom of the map
+		// changes.
+		// ****************************************************************************
+		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
+
+			private MapLayerLegend lastSpecialGroup;
+
+			@Override
+			public void performMapPaneEvent(XMapPaneEvent e) {
+
+				if (e instanceof ScaleChangedEvent) {
+					ScaleChangedEvent sce = (ScaleChangedEvent) e;
+
+					// Iterate over all layer-ids
+					for (StyledLayerInterface<?> sl : rememberId2StyledLayer
+							.values()) {
+						if (StyledLayerUtil.hasScalechangeAnyEffect(
+								sl.getStyle(), sce.getOldScaleDenominator(),
+								sce.getNewScaleDenominator())) {
+							rememberId2MapLayerLegend.remove(sl.getId());
+						}
+					}
+					recreateLayerList();
+				}
+			}
+
+		});
+
+		// ****************************************************************************
 		// This Listener will visually mark the Layer where features were
-		// selected
-		// Typically the ClickInfoPanel will be shown in parallel.
+		// selected. Typically the ClickInfoPanel will be shown in parallel.
 		// ****************************************************************************
 		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
 

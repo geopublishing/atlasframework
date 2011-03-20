@@ -181,10 +181,9 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * The {@link MapLayerLegend} represents one {@link MapLayer} in the legend.
 	 * It can be Dragged'n'Dropped.
 	 * 
-	 * @param gmp
-	 *            {@link GeoMapPane} that the legend is working on
 	 * @param mapLayer
 	 *            The {@link MapLayer} this is representings
+	 * 
 	 * @param exportable
 	 *            if != null, then the GUI will test if export is allowed. null
 	 *            may be passed
@@ -229,8 +228,8 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		setScrollOnExpand(false);
 		setAnimated(false);
 
-		// TODO Hier wird kein scaleDenominator übergeben!
-		add(SldLegendUtil.createLegend(styledLayer, null));
+		add(SldLegendUtil.createLegend(styledLayer, mapLegend.getGeoMapPane()
+				.getMapPane().getScaleDenominator()));
 
 		// Update the style in the MapLayer if needed and keep any selection FTS
 		Style style2 = styledLayer.getStyle();
