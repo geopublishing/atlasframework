@@ -272,7 +272,6 @@ public abstract class AtlasStyler {
 	public void addRulesList(AbstractRulesList rulelist) {
 		rulelist.addListener(listenerFireStyleChange);
 		getRuleLists().add(0, rulelist);
-		// fireStyleChangedEvents(rulelist);
 	}
 
 	/**

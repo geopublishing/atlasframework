@@ -127,7 +127,8 @@ public class RulesListTable extends JTable {
 		if (rc > 0) {
 			// Default selcet the last one.. nice when it has just been added
 			if (getSelectionModel().isSelectionEmpty())
-				getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
+				// getSelectionModel().setSelectionInterval(rc - 1, rc - 1);
+				getSelectionModel().setSelectionInterval(0, 0);
 		}
 
 		updateColumnsLook();
