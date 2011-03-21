@@ -285,7 +285,7 @@ public class JHTMLEditor extends NSPanelComponent {
 		return webBrowser;
 	}
 
-	// MS-Hack.sn:
+	// MS-Hack.sn
 	protected String fileBrowserStartFolder = null;
 
 	public void setFileBrowserStartFolder(String folder) {
@@ -296,7 +296,7 @@ public class JHTMLEditor extends NSPanelComponent {
 		return fileBrowserStartFolder;
 	}
 
-	// MS-Hack.en:
+	// MS-Hack.en
 
 	protected static WebServerContent getWebServerContent(
 			final HTTPRequest httpRequest) {
@@ -309,7 +309,7 @@ public class JHTMLEditor extends NSPanelComponent {
 			return null;
 		}
 
-		// MS-Hack.sn:
+		// MS-Hack.sn
 		String currFolder = httpRequest.getQueryParameterMap().get(
 				"CurrentFolder");
 		if (currFolder != null &&

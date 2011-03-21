@@ -5,7 +5,9 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -139,27 +141,44 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	public void saveHTML(HTMLEditorSaveEvent event) {
 		saveHTML(event.getHTMLEditor());
 	}
-
+	
 	protected void saveHTML(JHTMLEditor editor) {
 		URL sourceURL = editURLs.get(editor);
 		String htmlContent = editor.getHTMLContent();
 		BufferedWriter writer = null;
 		try {
-		    // parse the html content for image references to the
-		    // local file system, copy these references to the
-		    // image folder and replace the reference in the html
-		    // content
-		    // ...
-		    // TODO
+		  File sourceHTMLFile = IOUtil.urlToFile(sourceURL);
 		  
-			File sourceFile = IOUtil.urlToFile(sourceURL);
-			writer = new BufferedWriter(new FileWriter(sourceFile, false));
-			writer.write(htmlContent);
-			writer.flush();
-			JOptionPane.showMessageDialog(this,
-					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.success"),
-					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
-					JOptionPane.INFORMATION_MESSAGE);
+		  // parse the html content for image references to the
+		  // local file system, 
+		  Map<String,File> replaceRef = GpSwingUtil.findFileReferencesToReplace(htmlContent);
+		  // copy references to the image folder and replace
+		  // the reference in the html content
+		  Vector<String> copiedFiles = new Vector<String>();
+		  for (String absImageRef : replaceRef.keySet()) {
+		    File sourceRefFile = replaceRef.get(absImageRef);
+		    // replace html content with relative URL
+		    String relImageRef = "images/" + sourceRefFile.getName();
+		    htmlContent = htmlContent.replace(absImageRef, relImageRef);
+		    // copy file
+		    File destRefFile = new File(sourceHTMLFile.getParent(),relImageRef);
+		    if ( !destRefFile.equals(sourceRefFile) ) {
+		      IOUtil.copyFile(LOGGER, sourceRefFile, destRefFile, false);
+		      copiedFiles.add(sourceRefFile.getName());
+		    }
+		  }		  
+		  // replace editor content with reworked content
+		  editor.setHTMLContent(htmlContent);
+		  // write html file
+		  writer = new BufferedWriter(new FileWriter(sourceHTMLFile, false));
+		  writer.write(htmlContent);
+		  writer.flush();
+		  JOptionPane.showMessageDialog(this,
+		      copiedFiles.size() == 0
+		      ? GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.success")
+		      : GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.success2", copiedFiles.size(), "\n- "+LangUtil.stringConcatWithSep("\n- ", (Collection)copiedFiles) ),
+		      GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
+		      JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception err) {
 			ExceptionDialog.show(editor, err,
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
