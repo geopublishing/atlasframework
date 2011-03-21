@@ -544,6 +544,15 @@ public class WebServer {
             }
           }
           HTTPRequest httpRequest = new HTTPRequest(resourcePath, headerMap);
+//          //MS-Hack.sn
+//          String currFolder = httpRequest.getQueryParameterMap().get("CurrentFolder");
+//          if ( currFolder != null && currFolder.equals("/") ) {
+//            httpRequest.getQueryParameterMap().put("CurrentFolder","D:/DOWNLOAD/");
+//          }
+//          if ( httpRequest.getQueryParameterMap().size() > 0 ) {
+//            System.out.println("dsdss");
+//          }
+          //MS-Hack.en
           httpRequest.setPostMethod(isPostMethod);
           if(isPostMethod) {
             HTTPData[] httpDataArray;
