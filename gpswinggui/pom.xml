@@ -20,9 +20,7 @@
 	</properties>
 
 	<build>
-
 		<plugins>
-
 			<plugin>
 				<!-- Starting the application via mvn ecex:java -->
 				<groupId>org.codehaus.mojo</groupId>
@@ -159,41 +157,37 @@
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
 
-							<commonJarResources>
-								<jarResource>
-									<artifactId>swt-windows</artifactId>
-									<version>${swt.version}</version>
-									<classifier>x86</classifier>
-								</jarResource>
-
-								<jarResource>
-									<groupId>org.eclipse.swt</groupId>
-									<artifactId>swt-windows</artifactId>
-									<version>${swt.version}</version>
-									<classifier>x86_64</classifier>
-								</jarResource>
-
-								<jarResource>
-									<groupId>org.eclipse.swt</groupId>
-									<artifactId>swt-gtk-linux</artifactId>
-									<version>${swt.version}</version>
-									<classifier>x86</classifier>
-								</jarResource>
-
-								<jarResource>
-									<groupId>org.eclipse.swt</groupId>
-									<artifactId>swt-gtk-linux</artifactId>
-									<version>${swt.version}</version>
-									<classifier>x86_64</classifier>
-								</jarResource>
-
-								<jarResource>
-									<groupId>org.eclipse.swt</groupId>
-									<artifactId>swt-cocoa-macosx</artifactId>
-									<version>${swt.version}</version>
-									<classifier>x86</classifier>
-								</jarResource>
-							</commonJarResources>
+<!-- 							<commonJarResources> -->
+<!-- 								<jarResource> -->
+<!-- 									<artifactId>swt-windows</artifactId> -->
+<!-- 									<version>${swt.version}</version> -->
+<!-- 									<classifier>x86</classifier> -->
+<!-- 								</jarResource> -->
+<!-- 								<jarResource> -->
+<!-- 									<groupId>org.eclipse.swt</groupId> -->
+<!-- 									<artifactId>swt-windows</artifactId> -->
+<!-- 									<version>${swt.version}</version> -->
+<!-- 									<classifier>x86_64</classifier> -->
+<!-- 								</jarResource> -->
+<!-- 								<jarResource> -->
+<!-- 									<groupId>org.eclipse.swt</groupId> -->
+<!-- 									<artifactId>swt-gtk-linux</artifactId> -->
+<!-- 									<version>${swt.version}</version> -->
+<!-- 									<classifier>x86</classifier> -->
+<!-- 								</jarResource> -->
+<!-- 								<jarResource> -->
+<!-- 									<groupId>org.eclipse.swt</groupId> -->
+<!-- 									<artifactId>swt-gtk-linux</artifactId> -->
+<!-- 									<version>${swt.version}</version> -->
+<!-- 									<classifier>x86_64</classifier> -->
+<!-- 								</jarResource> -->
+<!-- 								<jarResource> -->
+<!-- 									<groupId>org.eclipse.swt</groupId> -->
+<!-- 									<artifactId>swt-cocoa-macosx</artifactId> -->
+<!-- 									<version>${swt.version}</version> -->
+<!-- 									<classifier>x86</classifier> -->
+<!-- 								</jarResource> -->
+<!-- 							</commonJarResources> -->
 
 							<sign>
 								<keypass>wasser</keypass>
@@ -204,8 +198,8 @@
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
 
-							<pack200>true</pack200> <!-- still buggy sadly -->
-							<gzip>true</gzip> <!-- still buggy sadly -->
+							<pack200>true</pack200> 
+							<gzip>true</gzip>
 
 						</configuration>
 					</plugin>
