@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -143,6 +145,13 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 		String htmlContent = editor.getHTMLContent();
 		BufferedWriter writer = null;
 		try {
+		    // parse the html content for image references to the
+		    // local file system, copy these references to the
+		    // image folder and replace the reference in the html
+		    // content
+		    // ...
+		    // TODO
+		  
 			File sourceFile = IOUtil.urlToFile(sourceURL);
 			writer = new BufferedWriter(new FileWriter(sourceFile, false));
 			writer.write(htmlContent);

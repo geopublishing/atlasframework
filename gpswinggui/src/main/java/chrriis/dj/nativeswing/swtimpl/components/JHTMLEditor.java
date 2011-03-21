@@ -312,8 +312,9 @@ public class JHTMLEditor extends NSPanelComponent {
 		// MS-Hack.sn:
 		String currFolder = httpRequest.getQueryParameterMap().get(
 				"CurrentFolder");
-		if (currFolder != null
-				&& htmlEditor.getFileBrowserStartFolder() != null) {
+		if (currFolder != null &&
+		    currFolder.equals("/") &&
+		    htmlEditor.getFileBrowserStartFolder() != null) {
 			httpRequest.getQueryParameterMap().put("CurrentFolder",
 					htmlEditor.getFileBrowserStartFolder());
 		}
