@@ -315,7 +315,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			LOGGER.debug(configScript);
 			// Create editor instance
 			htmlEditor = new JHTMLEditor(JHTMLEditor.HTMLEditorImplementation.FCKEditor, FCKEditorOptions.setCustomJavascriptConfiguration(configScript));
-			htmlEditor.setFileBrowserStartFolder(baseURLStr.substring(6));
+			htmlEditor.setFileBrowserStartFolder(baseURL);
 			return htmlEditor;
 		}
 

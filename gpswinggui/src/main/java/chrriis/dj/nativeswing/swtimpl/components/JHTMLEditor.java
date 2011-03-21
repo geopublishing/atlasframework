@@ -10,6 +10,7 @@ package chrriis.dj.nativeswing.swtimpl.components;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -286,16 +287,25 @@ public class JHTMLEditor extends NSPanelComponent {
 	}
 
 	// MS-Hack.sn
-	protected String fileBrowserStartFolder = null;
+	protected URL fileBrowserStartFolder = null;
 
-	public void setFileBrowserStartFolder(String folder) {
+	public void setFileBrowserStartFolder(URL folder) {
 		fileBrowserStartFolder = folder;
 	}
 
-	public String getFileBrowserStartFolder() {
+	public URL getFileBrowserStartFolder() {
 		return fileBrowserStartFolder;
 	}
 
+    public String getFileBrowserStartFolderStr() {
+      URL url = getFileBrowserStartFolder();
+      if ( url == null )
+        return "";
+      String urlStr = url.getPath();
+      if ( !urlStr.endsWith("/") )
+        urlStr += "/";
+      return urlStr;
+  }
 	// MS-Hack.en
 
 	protected static WebServerContent getWebServerContent(
@@ -312,11 +322,10 @@ public class JHTMLEditor extends NSPanelComponent {
 		// MS-Hack.sn
 		String currFolder = httpRequest.getQueryParameterMap().get(
 				"CurrentFolder");
-		if (currFolder != null &&
+        if (currFolder != null &&
 		    currFolder.equals("/") &&
 		    htmlEditor.getFileBrowserStartFolder() != null) {
-			httpRequest.getQueryParameterMap().put("CurrentFolder",
-					htmlEditor.getFileBrowserStartFolder());
+          httpRequest.getQueryParameterMap().put("CurrentFolder",htmlEditor.getFileBrowserStartFolderStr());
 		}
 		// MS-Hack.en
 
