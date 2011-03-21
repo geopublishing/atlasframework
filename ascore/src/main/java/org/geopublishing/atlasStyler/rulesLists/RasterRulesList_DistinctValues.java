@@ -8,9 +8,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.media.jai.Histogram;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geotools.brewer.color.PaletteType;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.processing.OperationJAI;
@@ -35,6 +39,68 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 	public RasterRulesList_DistinctValues(StyledRasterInterface<?> styledRaster) {
 		super(RulesListType.RASTER_COLORMAP_DISTINCTVALUES, styledRaster,
 				ColorMap.TYPE_VALUES);
+
+		// The default palette is not suitable for distinct values
+		setPalette(ASUtil.getPalettes(new PaletteType(false, true), -1)[0]);
+
+	}
+
+	/**
+	 * 1 value = 1 class
+	 * 
+	 * @param parentGui
+	 *            is <code>null</code>, no warnings will be shown if the number
+	 *            of classes if higher than the number of colors
+	 */
+	@Override
+	public void applyPalette(JComponent parentGui) {
+		pushQuite();
+
+		getColors().clear();
+
+		try {
+
+			if (getValues().size() == 0)
+				return;
+
+			if (getNumClassesVisible() > getPalette().getMaxColors()
+					&& parentGui != null) {
+
+				final String msg = ASUtil
+						.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
+								getPalette().getMaxColors(),
+								getNumClassesVisible());
+				JOptionPane.showMessageDialog(
+						SwingUtil.getParentWindowComponent(parentGui), msg);
+			}
+
+			final Color[] colors = getPalette().getColors(
+					Math.min(getValues().size(), getPalette().getMaxColors()));
+
+			int idx = 0;
+			for (int i = 0; i < getValues().size(); i++) {
+
+				if (getOpacities().get(i) == 0.) {
+					getColors().add(Color.white);
+					// idx nicht erhöhen!
+					continue;
+				}
+
+				if (i >= getColors().size())
+					getColors().add(colors[idx]);
+				else
+					getColors().set(i, colors[idx]);
+
+				idx++;
+				idx = idx % getPalette().getMaxColors();
+
+			}
+
+		} finally {
+			popQuite(new RuleChangedEvent(
+					"Applied a COLORPALETTE to all ColorMapEntries", this));
+		}
+
 	}
 
 	/**

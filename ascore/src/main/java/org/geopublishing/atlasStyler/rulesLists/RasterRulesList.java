@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
@@ -25,7 +24,6 @@ import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.swing.SwingUtil;
 
 public abstract class RasterRulesList extends AbstractRulesList {
 
@@ -54,60 +52,6 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	public abstract void applyOpacity();
-
-	/**
-	 * 1 value = 1 class
-	 * 
-	 * @param parentGui
-	 *            is <code>null</code>, no warnings will be shown if the number
-	 *            of classes if higher than the number of colors
-	 */
-	public void applyPalette(JComponent parentGui) {
-		pushQuite();
-
-		getColors().clear();
-
-		try {
-
-			if (getValues().size() == 0)
-				return;
-
-			if (getNumClassesVisible() > getPalette().getMaxColors()
-					&& parentGui != null) {
-
-				final String msg = ASUtil
-						.R("UniqueValuesGUI.WarningDialog.more_classes_than_colors.msg",
-								getPalette().getMaxColors(),
-								getNumClassesVisible());
-				JOptionPane.showMessageDialog(
-						SwingUtil.getParentWindowComponent(parentGui), msg);
-			}
-
-			final Color[] colors = getPalette().getColors(
-					Math.min(getValues().size(), getPalette().getMaxColors()));
-
-			int idx = 0;
-			for (int i = 0; i < getValues().size(); i++) {
-
-				if (getOpacities().get(i) == 0.)
-					continue;
-
-				if (i >= getColors().size())
-					getColors().add(colors[idx]);
-				else
-					getColors().set(i, colors[idx]);
-
-				idx++;
-				idx = idx % getPalette().getMaxColors();
-
-			}
-
-		} finally {
-			popQuite(new RuleChangedEvent(
-					"Applied a COLORPALETTE to all ColorMapEntries", this));
-		}
-
-	}
 
 	@Override
 	public String extendMetaInfoString() {
@@ -522,5 +466,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		getValues().clear();
 		getOpacities().clear();
 	}
+
+	public abstract void applyPalette(JComponent parentGui);
 
 }

@@ -71,7 +71,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	private SmallButton jButtonAddValues;
 	private JPanel noDataValueBox;
 
-	protected JPanel getJPanelData() {
+	protected JPanel getJPanelNoData() {
 		if (noDataValueBox == null) {
 			noDataValueBox = new JPanel(new MigLayout());
 
@@ -114,6 +114,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				int indexOfNodata = rulesList.getValues().indexOf(parsed);
 				if (indexOfNodata >= 0)
 					rulesList.removeIdx(indexOfNodata);
+
+				rulesList.fireEvents(new RuleChangedEvent(
+						"NODATA value changed", rulesList));
 			}
 
 		} catch (Exception ee) {
@@ -140,7 +143,7 @@ public class RasterRulesList_Distinctvalues_GUI extends
 
 		this.add(jLabelHeading, "center");
 		this.add(getJPanelColorAndOpacity(), "align l, split 2");
-		this.add(getJPanelData(), "align l");
+		this.add(getJPanelNoData(), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 
