@@ -133,7 +133,7 @@ public class ImportWizardResultProducer_WFS extends ImportWizardResultProducer
 						}
 
 						Summary summary = Summary.create(
-								new JScrollPane(getSummaryPanel(startTime,
+								new JScrollPane(getSummaryPanelShapefile(startTime,
 										countFeatures, wfsSfs, importedSld)),
 								"ok");
 

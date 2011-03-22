@@ -81,6 +81,7 @@ import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.GeoMapPane;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
@@ -520,12 +521,12 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		// ****************************************************************************
 		// AtlasStyler related button to save the LayerStyler as .SLD
 		// ****************************************************************************
-		if (styledLayer instanceof StyledFS) {
+		if (styledLayer instanceof StyledFS
+				|| styledLayer instanceof StyledGridCoverageReader) {
 
-			final StyledFS styledFS = (StyledFS) styledLayer;
 			// We are in AtlasStyler. Offer to save the .SLD
 			toolPopup.add(new JMenuItem(new AtlasStylerSaveLayerToSLDAction(
-					this, styledFS)));
+					this, styledLayer)));
 		}
 
 		// ****************************************************************************

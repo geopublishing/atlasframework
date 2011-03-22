@@ -65,6 +65,17 @@ import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
 public class DpLayerVectorFeatureSourceShapefileEd extends
 		DpLayerVectorFeatureSourceShapefile implements DpEditableInterface {
+	private File sldFile;
+
+	@Override
+	public File getSldFile() {
+		return sldFile;
+	}
+
+	@Override
+	public void setSldFile(File sldFile) {
+		this.sldFile = sldFile;
+	}
 
 	static private final Logger LOGGER = Logger
 			.getLogger(DpLayerVectorFeatureSourceShapefileEd.class);

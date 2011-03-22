@@ -28,7 +28,7 @@ import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
-import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
@@ -37,18 +37,18 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 	static private final Logger LOGGER = Logger
 			.getLogger(AtlasStylerSaveLayerToSLDAction.class);;
 
-	private final StyledFS styledShp;
+	private final StyledLayerInterface<?> styledLayer;
 
 	private final Component owner;
 
-	public AtlasStylerSaveLayerToSLDAction(Component owner, StyledFS styledShp) {
-		super(AtlasStylerVector.R("AtlasStylerGUI.saveToSLDFile"),
-				Icons.ICON_EXPORT);
+	public AtlasStylerSaveLayerToSLDAction(Component owner,
+			StyledLayerInterface<?> styledLayer) {
+		super(ASUtil.R("AtlasStylerGUI.saveToSLDFile"), Icons.ICON_EXPORT);
 		this.owner = owner;
-		this.styledShp = styledShp;
+		this.styledLayer = styledLayer;
 
-		setEnabled(StylingUtil.isStyleDifferent(styledShp.getStyle(),
-				styledShp.getSldFile()));
+		setEnabled(StylingUtil.isStyleDifferent(styledLayer.getStyle(),
+				styledLayer.getSldFile()));
 	}
 
 	@Override
@@ -58,15 +58,15 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 
 		// Test whether a .sld file can be created. Ask the user to change
 		// position of the .sld
-		while (!IOUtil.canWriteOrCreate(styledShp.getSldFile())) {
+		while (!IOUtil.canWriteOrCreate(styledLayer.getSldFile())) {
 
 			AVSwingUtil.showMessageDialog(
 					owner,
 					AtlasStylerVector.R("StyledLayerSLDNotWritable.Msg",
-							IOUtil.escapePath(styledShp.getSldFile())));
+							IOUtil.escapePath(styledLayer.getSldFile())));
 
 			File startWithFile = new File(System.getProperty("user.home"),
-					styledShp.getSldFile().getName());
+					styledLayer.getSldFile().getName());
 			JFileChooser dc = new JFileChooser(startWithFile);
 			dc.addChoosableFileFilter(new FileNameExtensionFilter("SLD",
 					new String[] { "sld", "xml" }));
@@ -89,14 +89,14 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 						exportFile.getName() + ".sld");
 			}
 
-			styledShp.setSldFile(exportFile);
+			styledLayer.setSldFile(exportFile);
 		}
 
-		if (styledShp.getSldFile().exists()) {
+		if (styledLayer.getSldFile().exists()) {
 			try {
 				FileUtils
-						.copyFile(styledShp.getSldFile(), IOUtil.changeFileExt(
-								styledShp.getSldFile(), "sld.bak"));
+						.copyFile(styledLayer.getSldFile(), IOUtil.changeFileExt(
+								styledLayer.getSldFile(), "sld.bak"));
 				backup = true;
 			} catch (IOException e1) {
 				LOGGER.warn("could not create a backup of the existing .sld",
@@ -106,26 +106,27 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		}
 
 		try {
-			StylingUtil.saveStyleToSld(styledShp.getStyle(),
-					styledShp.getSldFile());
+			StylingUtil.saveStyleToSld(styledLayer.getStyle(),
+					styledLayer.getSldFile());
 
 			if (backup)
 				AVSwingUtil.showMessageDialog(owner, AtlasStylerVector.R(
 						"AtlasStylerGUI.saveToSLDFileSuccessAndBackedUp",
-						IOUtil.escapePath(styledShp.getSldFile())));
+						IOUtil.escapePath(styledLayer.getSldFile())));
 			else
 				AVSwingUtil.showMessageDialog(owner, AtlasStylerVector.R(
 						"AtlasStylerGUI.saveToSLDFileSuccess",
-						IOUtil.escapePath(styledShp.getSldFile())));
+						IOUtil.escapePath(styledLayer.getSldFile())));
 
 			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
-					styledShp.getSldFile()));
+					styledLayer.getSldFile()));
 			if (es.size() > 0) {
 				ExceptionDialog.show(
 						owner,
 						new IllegalStateException(ASUtil.R(
 								"AtlasStylerExport.WarningSLDNotValid",
-								IOUtil.escapePath(styledShp.getSldFile())), es.get(0)));
+								IOUtil.escapePath(styledLayer.getSldFile())), es
+								.get(0)));
 			}
 
 		} catch (Exception e1) {

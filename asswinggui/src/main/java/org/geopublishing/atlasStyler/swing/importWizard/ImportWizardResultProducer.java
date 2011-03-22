@@ -25,6 +25,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledFS;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.SwingUtil;
 
@@ -55,7 +57,7 @@ public abstract class ImportWizardResultProducer implements
 	}
 
 	File setSldFileAndAskImportIfExists(Component owner, String sldFileName,
-			StyledFS dbSfs, File sldFile) {
+			StyledLayerInterface<?> dbSfs, File sldFile) {
 		File importedSldFile = null;
 
 		String sldDir;
@@ -76,7 +78,7 @@ public abstract class ImportWizardResultProducer implements
 							IOUtil.escapePath(sldDir)));
 
 			if (askYesNo == true) {
-				dbSfs.loadStyle();
+				StyledLayerUtil.loadStyle(dbSfs);
 				importedSldFile = sldFile;
 			}
 		}
@@ -130,15 +132,16 @@ public abstract class ImportWizardResultProducer implements
 	 * @param importedSld
 	 *            <code>null</code> if no .sldd has been impoerted.
 	 */
-	JPanel getSummaryPanel(long startTime, int countFeatures,
+	JPanel getSummaryPanelShapefile(long startTime, int countFeatures,
 			final StyledFS dbSfs, File importedSld) {
 		JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
 
 		summaryPanel.add(new JLabel(AsSwingUtil
 				.R("ImportWizard.ImportWasSuccessfull")));
 
-		LOGGER.debug("Count features from PG " + dbSfs.getTitle().toString()
-				+ " took " + (System.currentTimeMillis() - startTime) + "ms");
+		LOGGER.debug("Count features from ShapeFile "
+				+ dbSfs.getTitle().toString() + " took "
+				+ (System.currentTimeMillis() - startTime) + "ms");
 
 		// summaryPanel.add(new JLabel("Features: " + countFeatures
 		// + (countFeatures == -1 ? " => query not supported" : "")));
@@ -157,7 +160,7 @@ public abstract class ImportWizardResultProducer implements
 						"ImportWizard.SummaryText.TypeOfGeometry",
 						geometryFormString)));
 
-		//i8n
+		// i8n
 		summaryPanel.add(new JLabel("Name of geometry column "
 				+ dbSfs.getSchema().getGeometryDescriptor().getName()));
 

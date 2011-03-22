@@ -110,7 +110,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	private StylerMapView stylerMapView = null;
 
-	final private HashMap<String, StyledFS> styledObjCache = new HashMap<String, StyledFS>();
+	final private HashMap<String, StyledLayerInterface<?>> styledObjCache = new HashMap<String, StyledLayerInterface<?>>();
 
 	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
 			getStylerMapView().getMapManager());
@@ -283,20 +283,20 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		List<StyledLayerInterface<?>> styledObjects = getMapManager()
 				.getStyledObjects();
 		for (StyledLayerInterface<?> styledObj : styledObjects) {
-			if (styledObj instanceof StyledFS) {
-				StyledFS stedFS = (StyledFS) styledObj;
+			// if (styledObj instanceof StyledFS) {
+			// StyledFS stedFS = (StyledFS) styledObj;
 
-				askToSaveSld(stedFS);
+			askToSaveSld(styledObj);
 
-			} else {
-				JOptionPane
-						.showMessageDialog(
-								AtlasStylerGUI.this,
-								"The type of "
-										+ styledObj.getTitle()
-										+ " is not recognized. That must be a bug. Sorry."); // i8n
-				continue;
-			}
+			// } else {
+			// JOptionPane
+			// .showMessageDialog(
+			// AtlasStylerGUI.this,
+			// "The type of "
+			// + styledObj.getTitle()
+			// + " is not recognized. That must be a bug. Sorry."); // i8n
+			// continue;
+			// }
 
 		}
 		dispose();
@@ -320,7 +320,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		}
 
 		System.exit(exitCode);
-
 	}
 
 	/**
@@ -372,42 +371,41 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	 * A very basic dialog to asking the user to store the .SLD file for a
 	 * layer.
 	 * 
-	 * @param styledFS
+	 * @param styledLayer
 	 *            The {@link StyledFS} that links to the geodata.
 	 */
-	protected void askToSaveSld(StyledFS styledFS) {
+	protected void askToSaveSld(StyledLayerInterface<?> styledLayer) {
 
-		File sldFile = styledFS.getSldFile();
+		File sldFile = styledLayer.getSldFile();
 
 		// Only ask to save if the style has changed
-		if (!StylingUtil.isStyleDifferent(styledFS.getStyle(), sldFile))
+		if (!StylingUtil.isStyleDifferent(styledLayer.getStyle(), sldFile))
 			return;
 
 		if (sldFile == null) {
 			// There is no .SLD set so far. Lets ask the user where to save it.
 
-			styledFS.setSldFile(sldFile);
+			styledLayer.setSldFile(sldFile);
 			// TODO no SLD, ask the user!
 			throw new RuntimeException(
 					"Not yet implemented. Please contact the authors.");
 		}
 
-		if (!SwingUtil.askYesNo(
-				AtlasStylerGUI.this,
-				AtlasStylerVector.R("AtlasStylerGUI.saveToSLDFileQuestion",
-						styledFS.getTitle(), IOUtil.escapePath(sldFile))))
+		if (!SwingUtil.askYesNo(AtlasStylerGUI.this, AtlasStylerVector.R(
+				"AtlasStylerGUI.saveToSLDFileQuestion", styledLayer.getTitle(),
+				IOUtil.escapePath(sldFile))))
 			return;
 
-		Style style = styledFS.getStyle();
+		Style style = styledLayer.getStyle();
 
 		if (style == null) {
 			AVSwingUtil.showMessageDialog(AtlasStylerGUI.this, "The Style for "
-					+ styledFS.getTitle()
+					+ styledLayer.getTitle()
 					+ " is null. That must be a bug. Not saving.");
 			return;
 		}
 
-		new AtlasStylerSaveLayerToSLDAction(this, styledFS)
+		new AtlasStylerSaveLayerToSLDAction(this, styledLayer)
 				.actionPerformed(null);
 
 	}
@@ -501,11 +499,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					// If the file exists, the user will be asked about
 					// overwriting it
 					if (exportSLDFile.exists()) {
-						if (!AVSwingUtil.askOKCancel(
-								AtlasStylerGUI.this,
-								AtlasStylerVector
-										.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
-												exportSLDFile.getName())))
+						if (!AVSwingUtil
+								.askOKCancel(
+										AtlasStylerGUI.this,
+										AtlasStylerVector
+												.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
+														exportSLDFile.getName())))
 							return;
 					}
 
@@ -600,7 +599,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	/**
 	 * Adds a layer to the map context to style it.
 	 */
-	public boolean addLayer(StyledFS styledFS) {
+	public boolean addLayer(StyledLayerInterface<?> styledFS) {
 
 		if (styledFS.getStyle() == null) {
 			// Einen default Style erstellen

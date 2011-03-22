@@ -103,7 +103,7 @@ public class GPDialogManager {
 	 * The key is a {@link StyledRasterInterface}. Parameters to get an instance
 	 * are: KEY, OWNERGUI, AConfig, AtlasMapLegend (optional)
 	 */
-	final public static DialogManager<Object, OldAtlasStylerRasterDialog> dm_AtlasRasterStyler = new DialogManager<Object, OldAtlasStylerRasterDialog>() {
+	final public static DialogManager<Object, OldAtlasStylerRasterDialog> dm_OldAtlasRasterStyler = new DialogManager<Object, OldAtlasStylerRasterDialog>() {
 
 		@Override
 		public OldAtlasStylerRasterDialog getInstanceFor(final Object key,

@@ -114,7 +114,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 						}
 
 						Summary summary = Summary
-								.create(new JScrollPane(getSummaryPanel(start,
+								.create(new JScrollPane(getSummaryPanelShapefile(start,
 										countFeatures, dbSfs, importedSldFile)),
 										"ok");
 

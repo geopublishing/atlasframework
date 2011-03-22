@@ -3,15 +3,10 @@ package org.geopublishing.geopublisher.swing;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class HTMLSourceReplaceTest extends TestingClass {

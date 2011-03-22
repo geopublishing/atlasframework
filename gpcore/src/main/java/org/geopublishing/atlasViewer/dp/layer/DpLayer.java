@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.dp.layer;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -518,5 +520,15 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	public E getGeoObject(AtlasStatusDialogInterface statusDialog) {
 		LOGGER.warn("called not fully implemented getGeoObject(AtlasStatusDialog statusDialog) in abstract DpLayer");
 		return getGeoObject();
+	}
+
+	@Override
+	public File getSldFile() {
+		throw new NotImplementedException();
+	}
+
+	@Override
+	public void setSldFile(File sldFile) {
+		throw new NotImplementedException();
 	}
 }

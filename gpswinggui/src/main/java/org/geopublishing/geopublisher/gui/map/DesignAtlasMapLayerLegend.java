@@ -240,7 +240,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					GPDialogManager.dm_AtlasRasterStyler.getInstanceFor(
+					GPDialogManager.dm_OldAtlasRasterStyler.getInstanceFor(
 							dpLayer, DesignAtlasMapLayerLegend.this, ace,
 							DesignAtlasMapLayerLegend.this);
 				}

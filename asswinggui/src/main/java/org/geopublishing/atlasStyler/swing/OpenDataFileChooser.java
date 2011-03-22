@@ -13,7 +13,6 @@ package org.geopublishing.atlasStyler.swing;
 import java.io.File;
 
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.geopublishing.atlasStyler.ASUtil;
 
@@ -29,9 +28,20 @@ public class OpenDataFileChooser extends JFileChooser {
 	public OpenDataFileChooser(File currentDirectory) {
 		super(currentDirectory);
 
-		addChoosableFileFilter(new FileNameExtensionFilter("GML", "gml"));
-		addChoosableFileFilter(new FileNameExtensionFilter(ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP")); // TODO Let them click on any part of a shapefile
+		// TODO Let them click on any part of ashapefile
+
+		addChoosableFileFilter(ASUtil.FILTER_GML);
+
+		addChoosableFileFilter(ASUtil.FILTER_RASTERSUPPORTED);
+
+		addChoosableFileFilter(ASUtil.FILTER_SHAPE);
+
+		addChoosableFileFilter(ASUtil.FILTER_ALLSUPPORted); // TODO Let them
+															// click on
+		// any
+		// part of a
+		// shapefile
+
 		setDialogType(OPEN_DIALOG);
 	}
-
 }

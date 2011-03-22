@@ -35,6 +35,17 @@ public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 		DpEditableInterface {
 	final static private Logger LOGGER = Logger
 			.getLogger(DpLayerRasterEd_Reader.class);
+	private File sldFile;
+
+	@Override
+	public File getSldFile() {
+		return sldFile;
+	}
+
+	@Override
+	public void setSldFile(File sldFile) {
+		this.sldFile = sldFile;
+	}
 
 	/**
 	 * Constructor
@@ -81,8 +92,8 @@ public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 		File dataDir = new File(getAce().getDataDir(), dirname);
 		setDataDirname(dirname);
 
-		DpeImportUtil.copyFilesWithOrWithoutGUI(this, DataUtilities
-				.fileToURL(file), owner, dataDir);
+		DpeImportUtil.copyFilesWithOrWithoutGUI(this,
+				DataUtilities.fileToURL(file), owner, dataDir);
 	}
 
 	@Override
@@ -123,8 +134,9 @@ public class DpLayerRasterEd_Reader extends DpLayerRaster_Reader implements
 
 		// Try to copy pending world files...
 		for (WORLD_POSTFIXES pf : GeoImportUtil.WORLD_POSTFIXES.values()) {
-			IOUtil.copyURLNoException(IOUtil.changeUrlExt(sourceUrl, pf
-					.toString()), targetDir, true);
+			IOUtil.copyURLNoException(
+					IOUtil.changeUrlExt(sourceUrl, pf.toString()), targetDir,
+					true);
 		}
 
 		// Copy optional .prj file to data directory

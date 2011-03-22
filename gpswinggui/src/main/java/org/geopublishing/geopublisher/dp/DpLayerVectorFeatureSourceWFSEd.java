@@ -27,9 +27,19 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import de.schmitzm.swing.swingworker.AtlasStatusDialogInterface;
 
-
 public class DpLayerVectorFeatureSourceWFSEd extends
 		DpLayerVectorFeatureSourceWFS implements DpEditableInterface {
+	private File sldFile;
+
+	@Override
+	public File getSldFile() {
+		return sldFile;
+	}
+
+	@Override
+	public void setSldFile(File sldFile) {
+		this.sldFile = sldFile;
+	}
 
 	public DpLayerVectorFeatureSourceWFSEd(AtlasConfig ace,
 			FeatureSource<SimpleFeatureType, SimpleFeature> wfsFS,

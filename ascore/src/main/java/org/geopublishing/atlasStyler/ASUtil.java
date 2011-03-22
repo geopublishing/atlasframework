@@ -42,6 +42,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
@@ -90,9 +91,17 @@ import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
 public class ASUtil {
+	static Logger LOGGER = Logger.getLogger(ASUtil.class);
+
+	/**
+	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
+	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
+	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
+	 */
+	private final static ResourceProvider RESOURCE = ResourceProvider
+			.newInstance("locales.AtlasStylerTranslation", Locale.ENGLISH);
 
 	private static BrewerPalette arthursPalette;
-
 	/**
 	 * A flag that allows only one of these dialogs to pop up.
 	 */
@@ -108,15 +117,17 @@ public class ASUtil {
 
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
 
-	static Logger LOGGER = Logger.getLogger(ASUtil.class);
-
-	/**
-	 * {@link ResourceProvider}, der die Lokalisation fuer GUI-Komponenten des
-	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
-	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
-	 */
-	private final static ResourceProvider RESOURCE = ResourceProvider
-			.newInstance("locales.AtlasStylerTranslation", Locale.ENGLISH);
+	public static final FileNameExtensionFilter FILTER_GML = new FileNameExtensionFilter(
+			"GML", "gml", "GML");
+	public static final FileNameExtensionFilter FILTER_ALLSUPPORted = new FileNameExtensionFilter(
+			ASUtil.R("Filetype_AllSupported"), "shp", "SHP", "zip", "ZIP",
+			"gml", "GML", "tif", "TIF", "tiff", "TIFF", "a00", "asc", "ASC",
+			"txt", "ascii", "ASCII");
+	public static final FileNameExtensionFilter FILTER_RASTERSUPPORTED = new FileNameExtensionFilter(
+			ASUtil.R("Filetype_ImportableRaster"), "tif", "TIF", "tiff",
+			"TIFF", "a00", "asc", "ASC", "txt");
+	public static final FileNameExtensionFilter FILTER_SHAPE = new FileNameExtensionFilter(
+			ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP");
 
 	public static final StyleBuilder SB = StylingUtil.STYLE_BUILDER;
 
@@ -255,7 +266,8 @@ public class ASUtil {
 	}
 
 	/**
-	 * Creates a default Style that is compatible with {@link AtlasStylerVector}.
+	 * Creates a default Style that is compatible with {@link AtlasStylerVector}
+	 * .
 	 */
 	public static Style createDefaultStyle(
 			final StyledLayerInterface<?> styledLayer) {
@@ -530,8 +542,8 @@ public class ASUtil {
 
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
-	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to find a
-	 * default legend label automatically for all languages.
+	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to
+	 * find a default legend label automatically for all languages.
 	 * 
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
@@ -543,8 +555,8 @@ public class ASUtil {
 
 	/**
 	 * Returns a default {@link SingleRuleList} symbol for NODATA values. If
-	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to find a
-	 * default legend label automatically for all languages.
+	 * {@link AtlasStylerVector} is running in multilanguage mode, it tries to
+	 * find a default legend label automatically for all languages.
 	 * 
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
@@ -694,8 +706,8 @@ public class ASUtil {
 	 */
 	public static BufferedImage getFillImage(final Fill fill,
 			final SimpleFeatureType featureType) {
-		return getFillImage(fill, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE,
-				featureType);
+		return getFillImage(fill,
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
 	}
 
 	public static BufferedImage getGraphicImage(final Graphic graphic,

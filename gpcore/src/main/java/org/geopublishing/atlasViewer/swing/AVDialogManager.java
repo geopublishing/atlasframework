@@ -15,6 +15,8 @@ import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import org.geopublishing.atlasStyler.AtlasStyler;
+import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
@@ -27,6 +29,8 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
+import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
+import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.swing.DialogManager;
 import de.schmitzm.swing.ExceptionDialog;
@@ -168,7 +172,7 @@ public class AVDialogManager {
 
 							@Override
 							public StylerDialog create() {
-								final StyledFeaturesInterface<?> styledFeatures = (StyledFeaturesInterface<?>) constArgs[0];
+								final StyledLayerInterface<?> styledLayer = (StyledLayerInterface<?>) constArgs[0];
 								final MapLayer mapLayer = (MapLayer) constArgs[1];
 								final MapLegend mapLegend = (MapLegend) constArgs[2];
 
@@ -184,13 +188,24 @@ public class AVDialogManager {
 								/***********************************************************************
 								 * First create the AtlasStyler ....
 								 */
-								final AtlasStylerVector atlasStyler = new AtlasStylerVector(
-										styledFeatures, mapLayer.getStyle(),
-										mapLayer, null, true);
+								AtlasStyler atlasStyler = null;
+
+								if (styledLayer instanceof StyledGridCoverageReaderInterface)
+									atlasStyler = new AtlasStylerRaster(
+											(StyledGridCoverageReaderInterface) styledLayer,
+											mapLayer.getStyle(), mapLayer,
+											null, true);
+								else
+									atlasStyler = new AtlasStylerVector(
+											(StyledFeaturesInterface<?>) styledLayer,
+											mapLayer.getStyle(), mapLayer,
+											null, true);
 
 								final MapLayerLegend mapLayerLegend = mapLegend
-										.getLayerLegendForId(styledFeatures
+										.getLayerLegendForId(styledLayer
 												.getId());
+
+								final AtlasStyler atlasStylerFinal = atlasStyler;
 
 								// This listener informs the MapLayerLegend,
 								// resulting in a new legend and repained
@@ -201,9 +216,9 @@ public class AVDialogManager {
 											@Override
 											public void changed(
 													StyleChangedEvent e) {
-												final Style style = atlasStyler
+												final Style style = atlasStylerFinal
 														.getStyle();
-												styledFeatures.setStyle(style);
+												styledLayer.setStyle(style);
 												mapLayerLegend
 														.updateStyle(style);
 											}

@@ -17,6 +17,7 @@ import org.opengis.filter.PropertyIsEqualTo;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public interface RulesListInterface {
 	// ** Do not change the value, it is needed to recognize SLD **//
@@ -72,7 +73,7 @@ public interface RulesListInterface {
 	 * If used as a {@link Rule}'s name, the rule should not be imported, but
 	 * rather just be ignored.
 	 */
-	static final String RULENAME_DONTIMPORT = "DONTIMPORT";
+	static final String RULENAME_DONTIMPORT = StyledLayerUtil.DONT_IMPORT_MARKER_STRING;
 
 	/**
 	 * Adds a {@link RuleChangeListener} which listens to changes in the
