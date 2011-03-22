@@ -719,29 +719,37 @@ public class GpSwingUtil extends GpUtil {
 		return editorFrame;
 	}
 
-    /**
-     * Finds all "img" occurrences with absolute file references in
-     * a html content and extracts the file information.
-     * @param htmlContent html content
-     * @return a map with the strings to replace as key and the 
-     *         corresponding file references as value
-     */
-    public static java.util.Map<String,File> findFileReferencesToReplace(String htmlContent) {
-      java.util.Map<String,File> map = new HashMap<String, File>();
-      // find all "img" occurrences in html
-      Pattern pattern = Pattern.compile("<[iI][mM][gG].*?src=['\"](.*?)['\"].*?>");
-      Matcher matcher = pattern.matcher(htmlContent);
-      while ( matcher.find() ) {
-        try {
-          String fileURL     = matcher.group(1);
-          File   file        = IOUtil.urlToFile( new URL(fileURL) );
-          map.put(fileURL, file);
-        } catch (MalformedURLException err) {
-          // given image URL is not an absolute URL,
-          // so ignore this exception because the given URL
-          // already is a relative URL 
-        }
-      }         
-      return map;
-    }
+	/**
+	 * Finds all "img" occurrences with absolute file references in a html
+	 * content and extracts the file information.
+	 * 
+	 * @param htmlContent
+	 *            html content
+	 * @return a map with the strings to replace as key and the corresponding
+	 *         file references as value
+	 */
+	public static java.util.Map<String, File> findFileReferencesToReplace(
+			String htmlContent) {
+		java.util.Map<String, File> map = new HashMap<String, File>();
+
+		if (htmlContent == null)
+			return map;
+
+		// find all "img" occurrences in html
+		Pattern pattern = Pattern
+				.compile("<[iI][mM][gG].*?src=['\"](.*?)['\"].*?>");
+		Matcher matcher = pattern.matcher(htmlContent);
+		while (matcher.find()) {
+			try {
+				String fileURL = matcher.group(1);
+				File file = IOUtil.urlToFile(new URL(fileURL));
+				map.put(fileURL, file);
+			} catch (MalformedURLException err) {
+				// given image URL is not an absolute URL,
+				// so ignore this exception because the given URL
+				// already is a relative URL
+			}
+		}
+		return map;
+	}
 }

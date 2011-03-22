@@ -5,15 +5,12 @@ import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
@@ -141,44 +138,60 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	public void saveHTML(HTMLEditorSaveEvent event) {
 		saveHTML(event.getHTMLEditor());
 	}
-	
+
 	protected void saveHTML(JHTMLEditor editor) {
 		URL sourceURL = editURLs.get(editor);
 		String htmlContent = editor.getHTMLContent();
+
+		if (htmlContent == null) {
+			LOGGER.warn(JHTMLEditor.class.getSimpleName()
+					+ " asked to save a NULL HTML content! Ignoring...");
+			return;
+		}
+
 		BufferedWriter writer = null;
 		try {
-		  File sourceHTMLFile = IOUtil.urlToFile(sourceURL);
-		  
-		  // parse the html content for image references to the
-		  // local file system, 
-		  Map<String,File> replaceRef = GpSwingUtil.findFileReferencesToReplace(htmlContent);
-		  // copy references to the image folder and replace
-		  // the reference in the html content
-		  Vector<String> copiedFiles = new Vector<String>();
-		  for (String absImageRef : replaceRef.keySet()) {
-		    File sourceRefFile = replaceRef.get(absImageRef);
-		    // replace html content with relative URL
-		    String relImageRef = "images/" + sourceRefFile.getName();
-		    htmlContent = htmlContent.replace(absImageRef, relImageRef);
-		    // copy file
-		    File destRefFile = new File(sourceHTMLFile.getParent(),relImageRef);
-		    if ( !destRefFile.equals(sourceRefFile) ) {
-		      IOUtil.copyFile(LOGGER, sourceRefFile, destRefFile, false);
-		      copiedFiles.add(sourceRefFile.getName());
-		    }
-		  }		  
-		  // replace editor content with reworked content
-		  editor.setHTMLContent(htmlContent);
-		  // write html file
-		  writer = new BufferedWriter(new FileWriter(sourceHTMLFile, false));
-		  writer.write(htmlContent);
-		  writer.flush();
-		  JOptionPane.showMessageDialog(this,
-		      copiedFiles.size() == 0
-		      ? GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.success")
-		      : GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.success2", copiedFiles.size(), "\n- "+LangUtil.stringConcatWithSep("\n- ", (Collection)copiedFiles) ),
-		      GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
-		      JOptionPane.INFORMATION_MESSAGE);
+			File sourceHTMLFile = IOUtil.urlToFile(sourceURL);
+
+			// parse the html content for image references to the
+			// local file system,
+			Map<String, File> replaceRef = GpSwingUtil
+					.findFileReferencesToReplace(htmlContent);
+			// copy references to the image folder and replace
+			// the reference in the html content
+			Vector<String> copiedFiles = new Vector<String>();
+			for (String absImageRef : replaceRef.keySet()) {
+				File sourceRefFile = replaceRef.get(absImageRef);
+				// replace html content with relative URL
+				String relImageRef = "images/" + sourceRefFile.getName();
+				htmlContent = htmlContent.replace(absImageRef, relImageRef);
+				// copy file
+				File destRefFile = new File(sourceHTMLFile.getParent(),
+						relImageRef);
+				if (!destRefFile.equals(sourceRefFile)) {
+					IOUtil.copyFile(LOGGER, sourceRefFile, destRefFile, false);
+					copiedFiles.add(sourceRefFile.getName());
+				}
+			}
+			// replace editor content with reworked content
+			editor.setHTMLContent(htmlContent);
+			// write html file
+			writer = new BufferedWriter(new FileWriter(sourceHTMLFile, false));
+			writer.write(htmlContent);
+			writer.flush();
+			JOptionPane.showMessageDialog(
+					this,
+					copiedFiles.size() == 0 ? GpSwingUtil
+							.R("HTMLEditPaneJHTMLEditor.save.success")
+							: GpSwingUtil.R(
+									"HTMLEditPaneJHTMLEditor.save.success2",
+									copiedFiles.size(),
+									"\n- "
+											+ LangUtil.stringConcatWithSep(
+													"\n- ",
+													(Collection) copiedFiles)),
+					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
+					JOptionPane.INFORMATION_MESSAGE);
 		} catch (Exception err) {
 			ExceptionDialog.show(editor, err,
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
@@ -299,10 +312,9 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			configScript += "FCKConfig.ImageUpload = false; FCKConfig.LinkUpload = false;\n";
 			// Disable Browse buttons
 			// configScript +=
-            // "FCKConfig.ImageBrowser = false; FCKConfig.LinkBrowser = false;\n";
-            // Disable Browse buttons for links
-            configScript +=
-              "FCKConfig.LinkBrowser = false;\n";
+			// "FCKConfig.ImageBrowser = false; FCKConfig.LinkBrowser = false;\n";
+			// Disable Browse buttons for links
+			configScript += "FCKConfig.LinkBrowser = false;\n";
 
 			// configScript +=
 			// "FCKConfig.ImageUploadURL = '"+baseURL+"';\n";
@@ -314,10 +326,13 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// configScript
 			// +=
 			// "var _FileBrowserLanguage = 'Java'; var _QuickUploadLanguage = 'Java';\n";
-			
+
 			LOGGER.debug(configScript);
 			// Create editor instance
-			htmlEditor = new JHTMLEditor(JHTMLEditor.HTMLEditorImplementation.FCKEditor, FCKEditorOptions.setCustomJavascriptConfiguration(configScript));
+			htmlEditor = new JHTMLEditor(
+					JHTMLEditor.HTMLEditorImplementation.FCKEditor,
+					FCKEditorOptions
+							.setCustomJavascriptConfiguration(configScript));
 			htmlEditor.setFileBrowserStartFolder(baseURL);
 			return htmlEditor;
 		}
@@ -335,7 +350,9 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					// "language: 'de'," +
 					"plugins: 'table,paste'";
 
-			htmlEditor = new JHTMLEditor(JHTMLEditor.HTMLEditorImplementation.TinyMCE, TinyMCEOptions.setCustomHTMLHeaders(configScript));
+			htmlEditor = new JHTMLEditor(
+					JHTMLEditor.HTMLEditorImplementation.TinyMCE,
+					TinyMCEOptions.setCustomHTMLHeaders(configScript));
 			return htmlEditor;
 		}
 		throw new UnsupportedOperationException(
