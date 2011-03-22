@@ -2,10 +2,10 @@
 <jnlp codebase="http://www.geopublishing.org/gp/" href="http://www.geopublishing.org/gp/as.jnlp" spec="1.0+">
   
   <information>
-    <title>AtlasStyler SLD Editor ${project.version}</title>
+    <title>AtlasStyler SLD/SE Editor ${project.version}</title>
     <description>A graphical editor to create OGC SLD/SE files</description>
     <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
-    <vendor>geopublishing.org</vendor>
+    <vendor>en.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
     <icon kind="splash" href="startAStesting_en.gif"/>    
     
@@ -18,10 +18,10 @@
   </information>
   
   <information locale="de">
-    <title>AtlasStyler SLD Editor ${project.version}</title>
-    <description>A graphical editor to create OGC SLD/SE files</description>
-    <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
-    <vendor>geopublishing.org</vendor>
+    <title>AtlasStyler SLD/SE Editor ${project.version}</title>
+    <description>Grafischer Editor für OGC SLD/SE Dateien</description>
+    <homepage href="http://de.geopublishing.org/AtlasStyler"/>    
+    <vendor>de.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
     <icon kind="splash" href="startAStesting_de.gif"/>    
     
@@ -34,10 +34,10 @@
   </information>
   
   <information locale="fr">
-    <title>AtlasStyler SLD Editor ${project.version}</title>
+    <title>AtlasStyler SLD/SE Editor ${project.version}</title>
     <description>A graphical editor to create OGC SLD/SE files</description>
-    <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
-    <vendor>geopublishing.org</vendor>
+    <homepage href="http://fr.geopublishing.org/AtlasStyler"/>    
+    <vendor>fr.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
     <icon kind="splash" href="startAStesting_fr.gif"/>    
     

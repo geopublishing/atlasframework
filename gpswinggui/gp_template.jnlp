@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jnlp codebase="http://www.geopublishing.org/gp/" href="http://www.geopublishing.org/gp/gp.jnlp" spec="1.0+">
   <information>
-    <title>Geopublisher Atlas Author</title>
+    <title>Geopublisher Atlas Author ${project.version}</title>
     <description>A software to create interactive multimedia atlases</description>
     <homepage href="http://en.geopublishing.org/Geopublisher"/>    
-    <vendor>geopublishing.org</vendor>
+    <vendor>en.geopublishing.org</vendor>
     <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startGP.gif"/>    
+    <icon kind="splash" href="startGPtesting_en.gif"/>    
+	<shortcut online="true">
+	  <desktop/>
+	  <menu submenu="Geopublishing"/>
+	</shortcut>    
+	
+    <offline-allowed/>
+  </information>
+  
+  <information locale="de">
+    <title>Geopublisher Atlas Ersteller ${project.version}</title>
+    <description>Erstellung von mehrsprechigen, digitalen Atlanten für Online- und Offline-Nutzung</description>
+    <homepage href="http://de.geopublishing.org/Geopublisher"/>    
+    <vendor>de.geopublishing.org</vendor>
+    <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
+    <icon kind="splash" href="startGPtesting_de.gif"/>    
+	<shortcut online="true">
+	  <desktop/>
+	  <menu submenu="Geopublishing"/>
+	</shortcut>    
+	
+    <offline-allowed/>
+  </information>
+  
+  <information locale="fr">
+    <title>Geopublisher Atlas Author ${project.version}</title>
+    <description>A software to create interactive multimedia atlases</description>
+    <homepage href="http://fr.geopublishing.org/Geopublisher"/>    
+    <vendor>fr.geopublishing.org</vendor>
+    <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
+    <icon kind="splash" href="startGPtesting_fr.gif"/>    
 	<shortcut online="true">
 	  <desktop/>
 	  <menu submenu="Geopublishing"/>
