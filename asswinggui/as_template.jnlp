@@ -63,7 +63,7 @@
 	
 	<extension href="http://www.wikisquare.de/jai/jai-1.1.3.jnlp" name="JAI"/>
 	
-		$dependencies
+	$dependencies
 		
   </resources>
   
