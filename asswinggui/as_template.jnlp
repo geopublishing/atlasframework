@@ -2,7 +2,7 @@
 <jnlp codebase="http://www.geopublishing.org/gp/" href="http://www.geopublishing.org/gp/as.jnlp" spec="1.0+">
   
   <information>
-    <title>AtlasStyler SLD Editor</title>
+    <title>AtlasStyler SLD Editor ${project.version}</title>
     <description>A graphical editor to create OGC SLD/SE files</description>
     <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
     <vendor>geopublishing.org</vendor>
@@ -18,7 +18,7 @@
   </information>
   
   <information locale="de">
-    <title>AtlasStyler SLD Editor</title>
+    <title>AtlasStyler SLD Editor ${project.version}</title>
     <description>A graphical editor to create OGC SLD/SE files</description>
     <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
     <vendor>geopublishing.org</vendor>
@@ -34,7 +34,7 @@
   </information>
   
   <information locale="fr">
-    <title>AtlasStyler SLD Editor</title>
+    <title>AtlasStyler SLD Editor ${project.version}</title>
     <description>A graphical editor to create OGC SLD/SE files</description>
     <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
     <vendor>geopublishing.org</vendor>
