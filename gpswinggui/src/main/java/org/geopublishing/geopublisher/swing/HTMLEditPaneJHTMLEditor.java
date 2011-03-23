@@ -266,6 +266,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.SaveQuestion"));
 			switch (ret) {
 			case JOptionPane.CANCEL_OPTION:
+			case JOptionPane.DEFAULT_OPTION: // ESC
 				// do nothing, just return FALSE to NOT close the dialog
 				return false;
 			case JOptionPane.YES_OPTION:
