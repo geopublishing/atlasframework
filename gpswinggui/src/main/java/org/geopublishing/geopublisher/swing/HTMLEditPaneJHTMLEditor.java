@@ -16,7 +16,9 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.http.Webserver;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorDirtyStateEvent;
@@ -260,7 +262,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 		try {
 			baseURL = IOUtil.getParentUrl(sourceURL);
 			baseURLStr = baseURL.toString();
-			baseURLStr += "/";
+			if (SystemUtils.IS_OS_WINDOWS)
+				baseURLStr += "/";
 			baseURLEnc = new org.apache.commons.codec.net.URLCodec().encode(
 					baseURL.toString()).substring(5);
 		} catch (Exception err) {
@@ -321,7 +324,14 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// configScript +=
 			// "FCKConfig.ImageBrowser = false;\n";
 			//
-			// configScript +=
+
+			String myimageBrowserUrl = "http://localhost:" + Webserver.PORT
+					+ "/browser.html";
+
+			configScript += "FCKConfig.ImageBrowserURL = \""
+					+ myimageBrowserUrl + "\";\n";
+			// configScript
+			configScript += "FCKConfig.debug=true;";
 			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension + '&StartFolder='"+baseURLStr+"';\n";
 			// configScript
 			// +=
