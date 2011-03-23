@@ -65,6 +65,8 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JDirectoryDialog;
 
 import com.lightdev.app.shtm.DocumentPane;
 import com.lightdev.app.shtm.SHTMLPanelImpl;
@@ -669,28 +671,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return;
 		// If there was an open Atlas, it is closed now.
 
-		/**
-		 * Fix an ugly bug that disables the "Create Folder" button on Windows
-		 * for the MyDocuments
-		 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4847375
-		 */
-		GpCoreUtil.fixBug4847375();
-
-		final JFileChooser dc = new JFileChooser(new File(GPProps.get(
-				GPProps.Keys.LastOpenAtlasFolder, "")).getParent());
-		dc.setDialogTitle(GpUtil.R("CreateAtlas.Dialog.Title"));
-		dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		dc.setAcceptAllFileFilterUsed(true);
-
-		dc.setMultiSelectionEnabled(false);
-
-		dc.setDialogType(JFileChooser.SAVE_DIALOG);
-
-		if ((dc.showOpenDialog(getJFrame()) != JFileChooser.APPROVE_OPTION)
-				|| (dc.getSelectedFile() == null))
+		final File atlasDir = askLoadAtlas2();
+		if (atlasDir == null)
 			return;
-
-		final File atlasDir = dc.getSelectedFile();
 
 		// Wenn der Name einer nicht existierenden Datei angegeben wurde, dann
 		// fragen ob wir das als Ordner estellen sollen
@@ -769,6 +752,57 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				ActionCmds.editAtlasParams.toString()));
 
 		getJFrame().updateMenu();
+	}
+
+	private File askLoadAtlas() {
+
+		/**
+		 * Fix an ugly bug that disables the "Create Folder" button on Windows
+		 * for the MyDocuments
+		 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4847375
+		 */
+		GpCoreUtil.fixBug4847375();
+
+		final JFileChooser dc = new JFileChooser(new File(GPProps.get(
+				GPProps.Keys.LastOpenAtlasFolder, "")).getParent());
+		dc.setDialogTitle(GpUtil.R("CreateAtlas.Dialog.Title"));
+		dc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		dc.setAcceptAllFileFilterUsed(true);
+
+		dc.setMultiSelectionEnabled(false);
+
+		dc.setDialogType(JFileChooser.SAVE_DIALOG);
+
+		if ((dc.showOpenDialog(getJFrame()) != JFileChooser.APPROVE_OPTION)
+				|| (dc.getSelectedFile() == null))
+			return null;
+
+		return dc.getSelectedFile();
+	}
+
+	private File askLoadAtlas2() {
+
+		try {
+			NativeInterface.open();
+
+			JDirectoryDialog fileDialog = new JDirectoryDialog();
+			fileDialog.setTitle(GpUtil.R("CreateAtlas.Dialog.Title"));
+			fileDialog.setSelectedDirectory(new File(GPProps.get(
+					GPProps.Keys.LastOpenAtlasFolder, "")).getParent());
+
+			fileDialog.show(getJFrame().getContentPane());
+
+			String selectedFileName = fileDialog.getSelectedDirectory();
+
+			if (selectedFileName == null)
+				return null;
+
+			return new File(selectedFileName);
+		} catch (Throwable e) {
+			// Fallback
+			return askLoadAtlas();
+		}
+
 	}
 
 	/**

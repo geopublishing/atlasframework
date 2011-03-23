@@ -5,13 +5,20 @@
 
 function SelectFile( fileUrl )
 {
+	window.resizeTo(10,10);
 // window.opener.SetUrl( url, width, height, alt);
 window.opener.SetUrl( fileUrl ) ;
 window.close() ;
 }
 </script>
 </head>
-<body>
+<body onLoad="window.resizeTo(10,10);">
+if (TOF) {
+setUrl(SDSDSD).
+}
+window.close(); 
+
+
 <a href="javascript:SelectFile('File1.jpg');">File 1</a><br />
 <a href="javascript:SelectFile('File2.jpg');">File 2</a>
 </body>
