@@ -693,7 +693,8 @@ public class GpSwingUtil extends GpUtil {
 					htmlFile.createNewFile();
 
 				// Sad but true, we have to use the depreciated way here
-				URL htmlURL = htmlFile.toURL();
+//				URL htmlURL = htmlFile.toURL();
+				URL htmlURL = IOUtil.fileToURL(htmlFile);
 
 				LOGGER.info(htmlEditor.getClass().getSimpleName() + " for "
 						+ htmlURL + " (was file = "

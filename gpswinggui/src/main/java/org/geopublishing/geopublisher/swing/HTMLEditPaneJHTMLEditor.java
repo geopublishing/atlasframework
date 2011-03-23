@@ -261,39 +261,15 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 
 		URL baseURL = null;
 		String baseURLStr = null;
-		// String baseURLEnc = null;
 		try {
-
-			final String awcPath = ace.getAtlasDir().getAbsolutePath();
-			String s1 = IOUtil.getParentUrl(sourceURL).toString();
-
-			String s2 = s1.substring(s1.indexOf(awcPath) + awcPath.length());
-
-			baseURLStr = "http://localhost:" + Webserver.PORT + "/" + s2;
-
+			String awcAbsURLStr = IOUtil.fileToURL( ace.getAtlasDir().getAbsoluteFile() ).toString();
+			String sourceAbsURLStr = IOUtil.getParentUrl(sourceURL).toString();
+			int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
+            String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx + awcAbsURLStr.length());
+			baseURLStr = "http://localhost:" + Webserver.PORT + "/" + sourceRelURLStr;
 			if (!baseURLStr.endsWith("/"))
 				baseURLStr += "/";
-
-			// baseURL = IOUtil.getParentUrl(sourceURL);
-			// baseURLStr = baseURL.toString();
-			//
-			//
-			//
-			// final String absolutePath = ace.getAtlasDir().getAbsolutePath();
-			// int l = absolutePath.length();
-			// baseURL.
-			//
-			// String relPathInAtlas = baseURLStr.substring(l);
-			//
-			// // if (SystemUtils.IS_OS_WINDOWS)
-			// // baseURLStr = baseURLStr.replaceAll("file:", "file:/");
-			//
-			// baseURLStr = "http://localhost:" + Webserver.PORT +
-			// relPathInAtlas;
-			// baseURLStr += "/";
-			//
-			// baseURLEnc = new org.apache.commons.codec.net.URLCodec().encode(
-			// baseURL.toString()).substring(5);
+			baseURL = new URL(baseURLStr);
 		} catch (Exception err) {
 			LOGGER.warn("Could not determine parent URL for '" + sourceURL
 					+ "'");
