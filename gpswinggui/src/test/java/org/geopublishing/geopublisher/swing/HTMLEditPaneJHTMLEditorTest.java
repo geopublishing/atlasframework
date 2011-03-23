@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
@@ -28,13 +29,17 @@ public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
 	}
 
 	@Test
-	@Ignore
-	public void testD() {
+	public void testD() throws MalformedURLException {
 		File f = new File(
 				"file:/home/stefan/Desktop/GP/Atlanten/ChartDemoAtlas/AWC/ad/html/map_01357691812");
+
+		f = IOUtil
+				.urlToFile(new URL(
+						"file:/media/biggy/stefan/Bilder/00new/90igsterGeburtstag_have2cut/2009-02-07%202009-02-0701.png"));
+
 		assertNotNull(f);
 		assertTrue(f.exists());
-		assertTrue(f.isDirectory());
+		// assertTrue(f.isDirectory());
 	}
 
 	@Test

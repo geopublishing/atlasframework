@@ -16,9 +16,9 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
-import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.http.Webserver;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorDirtyStateEvent;
@@ -52,11 +52,13 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	/** Holds the source URL / File for each editing tab. */
 	protected Map<JHTMLEditor, URL> editURLs = new HashMap<JHTMLEditor, URL>();
 
+	private final AtlasConfigEditable ace;
+
 	/**
 	 * Creates a new editor based on {@link JWebBrowser} with FCK.
 	 */
-	public HTMLEditPaneJHTMLEditor() {
-		this(null);
+	public HTMLEditPaneJHTMLEditor(AtlasConfigEditable ace) {
+		this(null, ace);
 	}
 
 	/**
@@ -66,8 +68,9 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 *            type of editor (currently only "FCK" and "TinyMCE" is
 	 *            supported); if <code>null</code> "FCK" is used
 	 */
-	public HTMLEditPaneJHTMLEditor(String editorType) {
+	public HTMLEditPaneJHTMLEditor(String editorType, AtlasConfigEditable ace) {
 		super(new BorderLayout());
+		this.ace = ace;
 		if (editorType == null)
 			editorType = "FCK";
 		NativeInterface.open();
@@ -258,14 +261,39 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 
 		URL baseURL = null;
 		String baseURLStr = null;
-		String baseURLEnc = null;
+		// String baseURLEnc = null;
 		try {
-			baseURL = IOUtil.getParentUrl(sourceURL);
-			baseURLStr = baseURL.toString();
-			if (SystemUtils.IS_OS_WINDOWS)
+
+			final String awcPath = ace.getAtlasDir().getAbsolutePath();
+			String s1 = IOUtil.getParentUrl(sourceURL).toString();
+
+			String s2 = s1.substring(s1.indexOf(awcPath) + awcPath.length());
+
+			baseURLStr = "http://localhost:" + Webserver.PORT + "/" + s2;
+
+			if (!baseURLStr.endsWith("/"))
 				baseURLStr += "/";
-			baseURLEnc = new org.apache.commons.codec.net.URLCodec().encode(
-					baseURL.toString()).substring(5);
+
+			// baseURL = IOUtil.getParentUrl(sourceURL);
+			// baseURLStr = baseURL.toString();
+			//
+			//
+			//
+			// final String absolutePath = ace.getAtlasDir().getAbsolutePath();
+			// int l = absolutePath.length();
+			// baseURL.
+			//
+			// String relPathInAtlas = baseURLStr.substring(l);
+			//
+			// // if (SystemUtils.IS_OS_WINDOWS)
+			// // baseURLStr = baseURLStr.replaceAll("file:", "file:/");
+			//
+			// baseURLStr = "http://localhost:" + Webserver.PORT +
+			// relPathInAtlas;
+			// baseURLStr += "/";
+			//
+			// baseURLEnc = new org.apache.commons.codec.net.URLCodec().encode(
+			// baseURL.toString()).substring(5);
 		} catch (Exception err) {
 			LOGGER.warn("Could not determine parent URL for '" + sourceURL
 					+ "'");
@@ -328,10 +356,10 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			String myimageBrowserUrl = "http://localhost:" + Webserver.PORT
 					+ "/browser.html";
 			configScript += "ImageBrowserWindowWidth = \"5\"; ImageBrowserWindowHeight = \"5\";\n"
-              + myimageBrowserUrl + "\";\n";
+					+ myimageBrowserUrl + "\";\n";
 
-//			configScript += "FCKConfig.ImageBrowserURL = \""
-//					+ myimageBrowserUrl + "\";\n";
+			// configScript += "FCKConfig.ImageBrowserURL = \""
+			// + myimageBrowserUrl + "\";\n";
 			// configScript
 			configScript += "FCKConfig.debug=true;\n";
 			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension + '&StartFolder='"+baseURLStr+"';\n";
