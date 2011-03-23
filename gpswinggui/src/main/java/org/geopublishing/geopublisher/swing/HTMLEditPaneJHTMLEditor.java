@@ -141,10 +141,34 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 */
 	@Override
 	public void saveHTML(HTMLEditorSaveEvent event) {
-		saveHTML(event.getHTMLEditor());
+		saveHTML(event.getHTMLEditor(),null);
 	}
 
-	protected void saveHTML(JHTMLEditor editor) {
+	private void showSuccessMessage(Vector<String> copiedFiles) {
+      JOptionPane.showMessageDialog(
+          this,
+          copiedFiles.size() == 0 ? GpSwingUtil
+                  .R("HTMLEditPaneJHTMLEditor.save.success")
+                  : GpSwingUtil.R(
+                          "HTMLEditPaneJHTMLEditor.save.success2",
+                          copiedFiles.size(),
+                          "\n- "
+                                  + LangUtil.stringConcatWithSep(
+                                          "\n- ",
+                                          (Collection) copiedFiles)),
+          GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
+          JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
+	 * Saves the content of the given editor to its source.
+	 * @param editor the editor
+	 * @param collectCopiedFiles stores names of the image files copied
+	 *        to map folder (can be {@code null}, if not {@code null} 
+	 *        the copied files are only stored in the list and a success
+	 *        message is NOT given)
+	 */
+	protected void saveHTML(JHTMLEditor editor, Vector<String> collectCopiedFiles) {
 		URL sourceURL = editURLs.get(editor);
 		String htmlContent = editor.getHTMLContent();
 
@@ -164,7 +188,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					.findFileReferencesToReplace(htmlContent);
 			// copy references to the image folder and replace
 			// the reference in the html content
-			Vector<String> copiedFiles = new Vector<String>();
+			Vector<String> copiedFiles = (collectCopiedFiles != null) ? collectCopiedFiles : new Vector<String>();
 			for (String absImageRef : replaceRef.keySet()) {
 				File sourceRefFile = replaceRef.get(absImageRef);
 				// replace html content with relative URL
@@ -188,25 +212,12 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// SO we have to force saving the html as real UTF8 -even on
 			// windows.
 			FileUtils.writeStringToFile(sourceHTMLFile, htmlContent, "UTF-8");
-			//
-			// writer = new BufferedWriter(new FileWriter(sourceHTMLFile,
-			// false));
-			// writer.write(htmlContent);
-			// writer.flush();
 
-			JOptionPane.showMessageDialog(
-					this,
-					copiedFiles.size() == 0 ? GpSwingUtil
-							.R("HTMLEditPaneJHTMLEditor.save.success")
-							: GpSwingUtil.R(
-									"HTMLEditPaneJHTMLEditor.save.success2",
-									copiedFiles.size(),
-									"\n- "
-											+ LangUtil.stringConcatWithSep(
-													"\n- ",
-													(Collection) copiedFiles)),
-					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
-					JOptionPane.INFORMATION_MESSAGE);
+			// To avoid multiple "success" dialogs when method is
+			// called for all editors the dialog is only shown
+			// if no global list is given
+			if ( collectCopiedFiles == null )
+			  showSuccessMessage(copiedFiles);
 		} catch (Exception err) {
 			ExceptionDialog.show(editor, err,
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
@@ -250,8 +261,10 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 				return false;
 			case JOptionPane.YES_OPTION:
 				// save changed files
+			    Vector<String> copiedFiles = new Vector<String>();
 				for (JHTMLEditor editor : changedURLs)
-					saveHTML(editor);
+					saveHTML(editor,copiedFiles);
+				showSuccessMessage(copiedFiles);
 				return true;
 			case JOptionPane.NO_OPTION:
 				// do not save the changes, just return TRUE to close the dialog
