@@ -20,6 +20,21 @@ import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
+/**
+ * This dialog allows to paste the output of gdalinfo, like: <code>
+  Band 1 Block=256x256 Type=Byte, ColorInterp=Palette
+  Overviews: 2397x2103, 1199x1052, 600x526
+  Color Table (RGB with 256 entries)
+    0: 216,240,224,255
+    1: 32,104,48,255
+    2: 208,240,224,255
+    3: 200,224,208,255
+    4: 192,224,200,255
+</code>
+ * 
+ * @author stefan
+ * 
+ */
 public class GdalInfo2RulesListDialog extends CancellableDialogAdapter {
 
 	private JTextArea gdaltextarea;
@@ -31,14 +46,13 @@ public class GdalInfo2RulesListDialog extends CancellableDialogAdapter {
 		super(owner, ASUtil.R("GdalInfo2RulesList.Header"));
 		this.asr = asr;
 
-		JPanel contentPane = new JPanel(new MigLayout("wrap 1"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 1, w 100:300:500"));
 		contentPane.add(new JLabel(ASUtil.R("GdalInfo2RulesList.Explanation")));
 		contentPane.add(new JScrollPane(getGdalTextArea()), "grow y, grow x");
 		contentPane.add(getOkButton(), "tag ok, split 3");
 		contentPane.add(getCancelButton(), "tag cancel");
 		contentPane.add(infolabel);
 		setContentPane(contentPane);
-
 		getOkButton().setEnabled(false);
 
 		SwingUtil.setPreferredWidth(this, 400);
@@ -48,7 +62,7 @@ public class GdalInfo2RulesListDialog extends CancellableDialogAdapter {
 
 	private JTextArea getGdalTextArea() {
 		if (gdaltextarea == null) {
-			gdaltextarea = new JTextArea(40, 20);
+			gdaltextarea = new JTextArea(30, 30);
 
 			gdaltextarea.getDocument().addDocumentListener(
 					new DocumentListener() {
@@ -68,6 +82,7 @@ public class GdalInfo2RulesListDialog extends CancellableDialogAdapter {
 							parse();
 						}
 					});
+
 		}
 		return gdaltextarea;
 	}

@@ -126,11 +126,10 @@ public abstract class ImportWizardResultProducer implements
 	/**
 	 * Creates a report about an imported FeaatureSource
 	 * 
-	 * @param startTime
 	 * @param countFeatures
 	 * @param dbSfs
 	 * @param importedSld
-	 *            <code>null</code> if no .sldd has been impoerted.
+	 *            <code>null</code> if no .sld has been impoerted.
 	 */
 	JPanel getSummaryPanelShapefile(long startTime, int countFeatures,
 			final StyledFS dbSfs, File importedSld) {
@@ -160,12 +159,10 @@ public abstract class ImportWizardResultProducer implements
 						"ImportWizard.SummaryText.TypeOfGeometry",
 						geometryFormString)));
 
-		// i8n
-		summaryPanel.add(new JLabel("Name of geometry column "
+		summaryPanel.add(new JLabel(ASUtil.R("NameOfGeometryColumn")+": "
 				+ dbSfs.getSchema().getGeometryDescriptor().getName()));
 
-		// i8n
-		summaryPanel.add(new JLabel("CRS: "
+		summaryPanel.add(new JLabel(ASUtil.R("CoordinateReferenceSystem_ShortLabel")+": "
 				+ dbSfs.getSchema().getCoordinateReferenceSystem().getName()
 						.getCode()));
 
