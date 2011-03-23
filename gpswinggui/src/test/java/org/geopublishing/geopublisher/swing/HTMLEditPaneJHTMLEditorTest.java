@@ -38,6 +38,7 @@ public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testD2() throws MalformedURLException, IOException {
 		InputStream openStream = new URL("http://localhost:" + Webserver.PORT
 				+ "/browser.html").openStream();
