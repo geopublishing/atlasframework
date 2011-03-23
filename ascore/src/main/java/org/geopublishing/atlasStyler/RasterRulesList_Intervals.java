@@ -316,6 +316,11 @@ public class RasterRulesList_Intervals extends RasterRulesList {
 			getOpacities().add(getOpacity());
 		}
 
+		// Wenn mehr Labels als Classen, dann entfernen
+		while (getLabels().size() > classLimits.size() - 1) {
+			getLabels().remove(getLabels().size() - 1);
+		}
+
 		if (classLimits.size() < 1) {
 			LOGGER.error("numClasses == " + classLimits.size()
 					+ " bei setClassLimits!?");
