@@ -327,11 +327,13 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 
 			String myimageBrowserUrl = "http://localhost:" + Webserver.PORT
 					+ "/browser.html";
+			configScript += "ImageBrowserWindowWidth = \"5\"; ImageBrowserWindowHeight = \"5\";\n"
+              + myimageBrowserUrl + "\";\n";
 
-			configScript += "FCKConfig.ImageBrowserURL = \""
-					+ myimageBrowserUrl + "\";\n";
+//			configScript += "FCKConfig.ImageBrowserURL = \""
+//					+ myimageBrowserUrl + "\";\n";
 			// configScript
-			configScript += "FCKConfig.debug=true;";
+			configScript += "FCKConfig.debug=true;\n";
 			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension + '&StartFolder='"+baseURLStr+"';\n";
 			// configScript
 			// +=
