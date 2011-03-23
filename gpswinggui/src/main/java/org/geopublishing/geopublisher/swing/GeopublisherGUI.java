@@ -671,7 +671,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return;
 		// If there was an open Atlas, it is closed now.
 
-		final File atlasDir = askLoadAtlas2();
+		final File atlasDir = askLoadAtlasNativeSWt();
 		if (atlasDir == null)
 			return;
 
@@ -780,7 +780,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		return dc.getSelectedFile();
 	}
 
-	private File askLoadAtlas2() {
+	private File askLoadAtlasNativeSWt() {
 
 		try {
 			NativeInterface.open();

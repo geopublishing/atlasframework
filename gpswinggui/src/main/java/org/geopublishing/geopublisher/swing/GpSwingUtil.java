@@ -18,11 +18,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -54,7 +52,6 @@ import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
-import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AMLExporter;
@@ -63,11 +60,9 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignHTMLInfoPane;
 
-import chrriis.common.ObjectRegistry;
-import chrriis.common.WebServer.HTTPRequest;
-import chrriis.common.WebServer.WebServerContent;
-import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
-
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JFileDialog;
+import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.DialogType;
 import de.schmitzm.i18n.I18NUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -704,7 +699,7 @@ public class GpSwingUtil extends GpUtil {
 					htmlFile.createNewFile();
 
 				// Sad but true, we have to use the depreciated way here
-//				URL htmlURL = htmlFile.toURL();
+				// URL htmlURL = htmlFile.toURL();
 				URL htmlURL = IOUtil.fileToURL(htmlFile);
 
 				LOGGER.info(htmlEditor.getClass().getSimpleName() + " for "
@@ -764,80 +759,135 @@ public class GpSwingUtil extends GpUtil {
 		}
 		return map;
 	}
-	
-	   /** {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif, .tiff, .gif). */
-    public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter("Images",true,".png",".jpg",".jpeg",".tif",".tiff",".gif");
-    
-    /**
-     * Performs a file choose.
-     * @param parent component for the dialog (can be {@code null})
-     * @param startFolder start folder for the chooser (if {@code null} "/" is used)
-     * @param filter defines which files can be selected
-     * @return {@code null} if the dialog was not approved
-     */
-    public static File chooseFile(Component parent, File startFolder, FileExtensionFilter filter) {
-      if ( startFolder == null )
-        startFolder = new File("/");
-      
-      JFileChooser chooser = new JFileChooser(startFolder);
-      if ( filter != null ) {
-        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setFileFilter(filter.toJFileChooserFilter());
-      }
-      int ret = chooser.showOpenDialog(parent);
-      if (ret == JFileChooser.APPROVE_OPTION)
-        return chooser.getSelectedFile();
-      return null;
-    }
-    
-    /**
-     * Copies a file to a relative path.
-     * @param parent parent component for info dialogs (if {@code} no dialogs will be shown!)
-     * @param source source file
-     * @param basePath base path for the destination folder
-     * @param relDir directory (!) relative to {@code basePath} the file will be
-     *                copied to
-     * @return the relative path (including the filename) in case of success (also
-     *         when the copy was not necessary, because source and destination files are equal!);
-     *         {@code null} if copy could not be processed.
-     */
-    public static String copyFileToRelativeFolder(Component parent, File source, File basePath, String relDir) {
-      // relative path should not start with "/"
-      if ( relDir.length() > 1 && relDir.startsWith("/") )
-        relDir.substring(1);
-      // path should end with "/" to concat the filename
-      // to directory
-      if ( !relDir.endsWith("/") )
-        relDir += "/";
-      
-      String fileName = source.getName();
-      String relFilePath = relDir + fileName;
-      File destFile = new File(basePath,relFilePath);
-      // if source file is equal to destination file
-      // do nothing, just return the relative path
-      if ( destFile.equals(source) )
-        return relFilePath;
-      
-      try {
-        destFile.getParentFile().mkdirs();
-        IOUtil.copyFile(null, source, destFile, false);
-        if ( parent != null )
-          JOptionPane.showMessageDialog(
-              parent,
-              fileName + " copied to map image folder",
-              "File copied",
-              JOptionPane.INFORMATION_MESSAGE);
-        return relFilePath;
-      } catch (IOException err) {
-        if ( parent != null )
-          ExceptionDialog.show(parent, err,
-              "Error coping file",
-              fileName + " could not be copied!");
-        else
-          LOGGER.error("Error coping file",err);
-        return null;
-      }
-    }
 
-  }
+	/**
+	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
+	 * .tiff, .gif).
+	 */
+	public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
+			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
+
+	/**
+	 * Performs a file choose.
+	 * 
+	 * @param parent
+	 *            component for the dialog (can be {@code null})
+	 * @param startFolder
+	 *            start folder for the chooser (if {@code null} "/" is used)
+	 * @param filter
+	 *            defines which files can be selected
+	 * @return {@code null} if the dialog was not approved
+	 */
+	public static File chooseFileFallback(Component parent, File startFolder,
+			FileExtensionFilter filter) {
+		if (startFolder == null)
+			startFolder = new File("/");
+
+		JFileChooser chooser = new JFileChooser(startFolder);
+		if (filter != null) {
+			chooser.setAcceptAllFileFilterUsed(false);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setFileFilter(filter.toJFileChooserFilter());
+		}
+		int ret = chooser.showOpenDialog(parent);
+		if (ret == JFileChooser.APPROVE_OPTION)
+			return chooser.getSelectedFile();
+		return null;
+	}
+
+	/**
+	 * Performs a file choose using the Native OSdialog via SWT
+	 * 
+	 * @param parent
+	 *            component for the dialog (can be {@code null})
+	 * @param startFolder
+	 *            start folder for the chooser (if {@code null} "/" is used)
+	 * @param filter
+	 *            defines which files can be selected
+	 * @return {@code null} if the dialog was not approved
+	 */
+	public static File chooseFile(Component parent, File startFolder,
+			FileExtensionFilter filter) {
+
+		try {
+			NativeInterface.open();
+
+			JFileDialog fileDialog = new JFileDialog();
+			// fileDialog.setTitle(GpSwingUtil.R("CreateAtlas.Dialog.Title"));
+			fileDialog.setParentDirectory(startFolder.getAbsolutePath());
+
+			fileDialog.setDialogType(DialogType.OPEN_DIALOG_TYPE);
+			fileDialog.setExtensionFilters(
+					new String[] { filter.toNativeFileFilter()[0] },
+					new String[] { filter.toNativeFileFilter()[1] }, 0);
+			fileDialog.show(parent);
+			fileDialog.setTitle("Choose an image.");// i8n
+
+			String selectedFileName = fileDialog.getSelectedFileName();
+
+			if (selectedFileName == null)
+				return null;
+
+			return new File(fileDialog.getParentDirectory(), selectedFileName);
+		} catch (Exception e) {
+			return chooseFileFallback(parent, startFolder, filter);
+		}
+	}
+
+	/**
+	 * Copies a file to a relative path.
+	 * 
+	 * @param parent
+	 *            parent component for info dialogs (if {@code} no dialogs will
+	 *            be shown!)
+	 * @param source
+	 *            source file
+	 * @param basePath
+	 *            base path for the destination folder
+	 * @param relDir
+	 *            directory (!) relative to {@code basePath} the file will be
+	 *            copied to
+	 * @return the relative path (including the filename) in case of success
+	 *         (also when the copy was not necessary, because source and
+	 *         destination files are equal!); {@code null} if copy could not be
+	 *         processed.
+	 */
+	public static String copyFileToRelativeFolder(Component parent,
+			File source, File basePath, String relDir) {
+		// relative path should not start with "/"
+		if (relDir.length() > 1 && relDir.startsWith("/"))
+			relDir.substring(1);
+		// path should end with "/" to concat the filename
+		// to directory
+		if (!relDir.endsWith("/"))
+			relDir += "/";
+
+		String fileNameCleaned = IOUtil.cleanFilename(source.getName());
+		String relFilePath = relDir + fileNameCleaned;
+		File destFile = new File(basePath, relFilePath);
+		// if source file is equal to destination file
+		// do nothing, just return the relative path
+		if (destFile.equals(source))
+			return relFilePath;
+
+		try {
+			destFile.getParentFile().mkdirs();
+
+			// TODO Ask to overwrite one day
+			IOUtil.copyFile(null, source, destFile, true);
+			if (parent != null)
+				JOptionPane.showMessageDialog(parent, fileNameCleaned
+						+ " copied to map image folder", "File copied", // i8n
+						JOptionPane.INFORMATION_MESSAGE);
+			return relFilePath;
+		} catch (IOException err) {
+			if (parent != null)
+				ExceptionDialog.show(parent, err, "Error coping file",
+						fileNameCleaned + " could not be copied!");
+			else
+				LOGGER.error("Error coping file", err);
+			return null;
+		}
+	}
+
+}

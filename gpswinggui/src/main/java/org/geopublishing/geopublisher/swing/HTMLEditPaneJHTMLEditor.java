@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +15,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
@@ -181,9 +181,19 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// replace editor content with reworked content
 			editor.setHTMLContent(htmlContent);
 			// write html file
-			writer = new BufferedWriter(new FileWriter(sourceHTMLFile, false));
-			writer.write(htmlContent);
-			writer.flush();
+
+			// Explicitly writing the HTML file in UTF-8 - of course the HTML
+			// should only use &uuml; etc. and no special characters anyways..
+			// BUT! Laotic &'...; tags are converted by FCKEditor no real UTF!
+			// SO we have to force saving the html as real UTF8 -even on
+			// windows.
+			FileUtils.writeStringToFile(sourceHTMLFile, htmlContent, "UTF-8");
+			//
+			// writer = new BufferedWriter(new FileWriter(sourceHTMLFile,
+			// false));
+			// writer.write(htmlContent);
+			// writer.flush();
+
 			JOptionPane.showMessageDialog(
 					this,
 					copiedFiles.size() == 0 ? GpSwingUtil
