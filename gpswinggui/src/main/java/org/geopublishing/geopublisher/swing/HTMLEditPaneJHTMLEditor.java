@@ -111,6 +111,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	@Override
 	public void addEditorTab(String title, URL url, int idx) {
 		JHTMLEditor editor = createJHTMLEditor(editorType, url);
+
 		// add a listener for the save operation
 		editor.addHTMLEditorListener(this);
 		// add source file to map (for the new editor tab)
@@ -261,15 +262,23 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 
 		URL baseURL = null;
 		String baseURLStr = null;
+		File browseStartupFolder = null;
 		try {
-			String awcAbsURLStr = IOUtil.fileToURL( ace.getAtlasDir().getAbsoluteFile() ).toString();
+			String awcAbsURLStr = IOUtil.fileToURL(
+					ace.getAtlasDir().getAbsoluteFile()).toString();
 			String sourceAbsURLStr = IOUtil.getParentUrl(sourceURL).toString();
 			int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
-            String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx + awcAbsURLStr.length());
-			baseURLStr = "http://localhost:" + Webserver.PORT + "/" + sourceRelURLStr;
+			String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx
+					+ awcAbsURLStr.length());
+			baseURLStr = "http://localhost:" + Webserver.PORT + "/"
+					+ sourceRelURLStr;
 			if (!baseURLStr.endsWith("/"))
 				baseURLStr += "/";
 			baseURL = new URL(baseURLStr);
+
+			// Startup folder for file chooser
+			// = Directory of the html file
+			browseStartupFolder = IOUtil.urlToFile(sourceURL).getParentFile();
 		} catch (Exception err) {
 			LOGGER.warn("Could not determine parent URL for '" + sourceURL
 					+ "'");
@@ -329,10 +338,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// "FCKConfig.ImageBrowser = false;\n";
 			//
 
-			String myimageBrowserUrl = "http://localhost:" + Webserver.PORT
-					+ "/browser.html";
-			configScript += "ImageBrowserWindowWidth = \"5\"; ImageBrowserWindowHeight = \"5\";\n"
-					+ myimageBrowserUrl + "\";\n";
+			configScript += "ImageBrowserWindowWidth = \"5\"; ImageBrowserWindowHeight = \"5\";\n";
 
 			// configScript += "FCKConfig.ImageBrowserURL = \""
 			// + myimageBrowserUrl + "\";\n";
@@ -349,7 +355,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					JHTMLEditor.HTMLEditorImplementation.FCKEditor,
 					FCKEditorOptions
 							.setCustomJavascriptConfiguration(configScript));
-			htmlEditor.setFileBrowserStartFolder(baseURL);
+
+			htmlEditor.setFileBrowserStartFolder(browseStartupFolder);
 			return htmlEditor;
 		}
 

@@ -10,7 +10,6 @@ package chrriis.dj.nativeswing.swtimpl.components;
 import java.awt.BorderLayout;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
@@ -287,25 +286,25 @@ public class JHTMLEditor extends NSPanelComponent {
 	}
 
 	// MS-Hack.sn
-	protected URL fileBrowserStartFolder = null;
+	protected File fileBrowserStartFolder = null;
 
-	public void setFileBrowserStartFolder(URL folder) {
+	public void setFileBrowserStartFolder(File folder) {
 		fileBrowserStartFolder = folder;
 	}
 
-	public URL getFileBrowserStartFolder() {
+	public File getFileBrowserStartFolder() {
 		return fileBrowserStartFolder;
 	}
 
-    public String getFileBrowserStartFolderStr() {
-      URL url = getFileBrowserStartFolder();
-      if ( url == null )
-        return "";
-      String urlStr = url.getPath();
-      if ( !urlStr.endsWith("/") )
-        urlStr += "/";
-      return urlStr;
-  }
+	// public String getFileBrowserStartFolderStr() {
+	// URL url = getFileBrowserStartFolder();
+	// if ( url == null )
+	// return "";
+	// String urlStr = url.getPath();
+	// if ( !urlStr.endsWith("/") )
+	// urlStr += "/";
+	// return urlStr;
+	// }
 	// MS-Hack.en
 
 	protected static WebServerContent getWebServerContent(
@@ -319,19 +318,19 @@ public class JHTMLEditor extends NSPanelComponent {
 			return null;
 		}
 
-		// MS-Hack.sn
-		String currFolder = httpRequest.getQueryParameterMap().get(
-				"CurrentFolder");
-        if (currFolder != null &&
-		    currFolder.equals("/") &&
-		    htmlEditor.getFileBrowserStartFolder() != null) {
-          httpRequest.getQueryParameterMap().put("CurrentFolder",htmlEditor.getFileBrowserStartFolderStr());
-		}
-        if ( "".equals(currFolder) ) {
-          currFolder = "/";
-          httpRequest.getQueryParameterMap().put("CurrentFolder",currFolder);
-        }
-		// MS-Hack.en
+		// // MS-Hack.sn
+		// String currFolder = httpRequest.getQueryParameterMap().get(
+		// "CurrentFolder");
+		// if (currFolder != null &&
+		// currFolder.equals("/") &&
+		// htmlEditor.getFileBrowserStartFolder() != null) {
+		// httpRequest.getQueryParameterMap().put("CurrentFolder",htmlEditor.getFileBrowserStartFolderStr());
+		// }
+		// if ( "".equals(currFolder) ) {
+		// currFolder = "/";
+		// httpRequest.getQueryParameterMap().put("CurrentFolder",currFolder);
+		// }
+		// // MS-Hack.en
 
 		String resourcePath_ = resourcePath.substring(index + 1);
 		if (resourcePath_.startsWith("/")) {

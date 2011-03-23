@@ -51,4 +51,9 @@ public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
 		openStream.close();
 	}
 
+	@Test
+	public void testCreateJHTMLEditor() {
+
+	}
+
 }

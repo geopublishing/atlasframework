@@ -31,11 +31,14 @@ import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import org.geopublishing.atlasViewer.http.Webserver;
 
 import chrriis.dj.nativeswing.NSSystemProperty;
+import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
 import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.ExceptionDialog;
 
 /**
  * @author Christopher Deckers
@@ -1025,7 +1028,18 @@ public class WebServer {
 
 		// MS-Hack.sn
 		if (parameter
-				.endsWith("editor/filemanager/browser/default/browser.html")) {
+				.contains("editor/filemanager/browser/default/browser.html")) {
+
+			int index1 = parameter.indexOf("components.JHTMLEditor") + 22;
+			int index2 = parameter.indexOf("editor", index1 + 1);
+			final String substring = parameter
+					.substring(index1 + 1, index2 - 1);
+			int instanceId = Integer.valueOf(substring);
+
+			final Object object = ObjectRegistry.getInstance().get(instanceId);
+			JHTMLEditor ed = (JHTMLEditor) object;
+			final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
+
 			return new WebServerContent() {
 				@Override
 				public InputStream getInputStream() {
@@ -1033,14 +1047,43 @@ public class WebServer {
 						String template = IOUtil.readURLasString(new URL(
 								"http://localhost:" + Webserver.PORT
 										+ "/browser.html"));
-						JFileChooser chooser = new JFileChooser(new File("/"));
+						JFileChooser chooser = new JFileChooser(
+								fileBrowserStartFolder);
 						int ret = chooser.showOpenDialog(null);
 						String approveStr = "false";
 						String fileStr = "";
 						if (ret == JFileChooser.APPROVE_OPTION) {
 							File choosenFile = chooser.getSelectedFile();
-							approveStr = "true";
-							fileStr = IOUtil.fileToURL(choosenFile).toString();
+							try {
+
+								// automatically copy file to image folder and
+								// create relative url
+								String fileName = choosenFile.getName();
+								String relImagePath = "images/" + fileName;
+
+								File destFile = new File(
+										fileBrowserStartFolder, relImagePath);
+								if (!destFile.equals(choosenFile)) {
+									IOUtil.copyFile(null, choosenFile,
+											destFile, false);
+									JOptionPane
+											.showMessageDialog(
+													null,
+													fileName
+															+ " copied to map image folder",
+													"File copied",
+													JOptionPane.INFORMATION_MESSAGE);
+								}
+
+								approveStr = "true";
+
+								fileStr = relImagePath;
+							} catch (Exception err) {
+								ExceptionDialog.show(null, err,
+										"Error choosing file",
+										choosenFile.getName()
+												+ " could not be copied!");
+							}
 						}
 						String site = template
 								.replace("${approve}", approveStr);
