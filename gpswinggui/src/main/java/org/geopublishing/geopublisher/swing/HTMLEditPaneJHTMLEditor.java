@@ -330,6 +330,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// configScript +=
 			// "FCKConfig.ImageBrowser = false; FCKConfig.LinkBrowser = false;\n";
 			// Disable Browse buttons for links
+
 			configScript += "FCKConfig.LinkBrowser = false;\n";
 
 			// configScript +=

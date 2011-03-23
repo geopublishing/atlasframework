@@ -1037,7 +1037,7 @@ public class WebServer {
 			int instanceId = Integer.valueOf(substring);
 
 			final Object object = ObjectRegistry.getInstance().get(instanceId);
-			JHTMLEditor ed = (JHTMLEditor) object;
+			final JHTMLEditor ed = (JHTMLEditor) object;
 			final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
 
 			return new WebServerContent() {
@@ -1068,7 +1068,7 @@ public class WebServer {
 											destFile, false);
 									JOptionPane
 											.showMessageDialog(
-													null,
+													ed.getWebBrowser(),
 													fileName
 															+ " copied to map image folder",
 													"File copied",
@@ -1079,7 +1079,7 @@ public class WebServer {
 
 								fileStr = relImagePath;
 							} catch (Exception err) {
-								ExceptionDialog.show(null, err,
+								ExceptionDialog.show(ed.getWebBrowser(), err,
 										"Error choosing file",
 										choosenFile.getName()
 												+ " could not be copied!");
