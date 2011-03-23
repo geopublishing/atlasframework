@@ -7,7 +7,6 @@
  */
 package chrriis.common;
 
-import java.awt.Component;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -34,18 +33,14 @@ import java.util.concurrent.Semaphore;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 
 import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import chrriis.dj.nativeswing.NSSystemProperty;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
-import de.schmitzm.geotools.testing.GTTestingUtil;
 import de.schmitzm.io.IOUtil;
-import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.FileExtensionFilter;
 
 /**

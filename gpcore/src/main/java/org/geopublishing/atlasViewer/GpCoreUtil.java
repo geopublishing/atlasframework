@@ -549,33 +549,33 @@ public class GpCoreUtil {
 	 */
 	public static HTMLInfoPaneInterface createHTMLInfoPane(URL url,
 			AtlasConfig ac) {
-	  
-	  HTMLInfoPaneInterface htmlInfoPane = null;
-	  
-//	  // try to use an HTML view based on DJ project
-//	  htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
-//	      "org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser",
-//	      true, // fallback if class can not be loaded
-//	      url, ac // constructor arguments 
-//	  );
-	  
-      // try to use an HTML view based on Lobo/Cobra
-      htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
-          "org.geopublishing.atlasViewer.swing.HTMLInfoLoboBrowser",
-          true, // fallback if class can not be loaded
-          url, ac // constructor arguments 
-      );
-	  
-      if ( htmlInfoPane != null ) {
-        LOGGER.info("Using "+LangUtil.getSimpleClassName(htmlInfoPane)+" for HTML view.");
-        return htmlInfoPane;
-      }
-	  
-  
-	  // use an HTML view based on JEditorPane
-	  htmlInfoPane = new HTMLInfoJPane(url, ac);
-	  
-	  return htmlInfoPane;
+
+		HTMLInfoPaneInterface htmlInfoPane = null;
+
+		// // try to use an HTML view based on DJ project
+		// htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
+		// "org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser",
+		// true, // fallback if class can not be loaded
+		// url, ac // constructor arguments
+		// );
+
+		// try to use an HTML view based on Lobo/Cobra
+		htmlInfoPane = (HTMLInfoPaneInterface) LangUtil.instantiateObject(
+				"org.geopublishing.atlasViewer.swing.HTMLInfoLoboBrowser",
+				true, // fallback if class can not be loaded
+				url, ac // constructor arguments
+				);
+
+		if (htmlInfoPane != null) {
+			LOGGER.info("Using " + LangUtil.getSimpleClassName(htmlInfoPane)
+					+ " for HTML view.");
+			return htmlInfoPane;
+		}
+
+		// use an HTML view based on JEditorPane
+		htmlInfoPane = new HTMLInfoJPane(url, ac);
+
+		return htmlInfoPane;
 	}
 
 	/**

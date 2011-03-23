@@ -141,34 +141,36 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 */
 	@Override
 	public void saveHTML(HTMLEditorSaveEvent event) {
-		saveHTML(event.getHTMLEditor(),null);
+		saveHTML(event.getHTMLEditor(), null);
 	}
 
 	private void showSuccessMessage(Vector<String> copiedFiles) {
-      JOptionPane.showMessageDialog(
-          this,
-          copiedFiles.size() == 0 ? GpSwingUtil
-                  .R("HTMLEditPaneJHTMLEditor.save.success")
-                  : GpSwingUtil.R(
-                          "HTMLEditPaneJHTMLEditor.save.success2",
-                          copiedFiles.size(),
-                          "\n- "
-                                  + LangUtil.stringConcatWithSep(
-                                          "\n- ",
-                                          (Collection) copiedFiles)),
-          GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
-          JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(
+				this,
+				copiedFiles.size() == 0 ? GpSwingUtil
+						.R("HTMLEditPaneJHTMLEditor.save.success")
+						: GpSwingUtil.R(
+								"HTMLEditPaneJHTMLEditor.save.success2",
+								copiedFiles.size(),
+								"\n- "
+										+ LangUtil.stringConcatWithSep("\n- ",
+												(Collection) copiedFiles)),
+				GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
 	 * Saves the content of the given editor to its source.
-	 * @param editor the editor
-	 * @param collectCopiedFiles stores names of the image files copied
-	 *        to map folder (can be {@code null}, if not {@code null} 
-	 *        the copied files are only stored in the list and a success
-	 *        message is NOT given)
+	 * 
+	 * @param editor
+	 *            the editor
+	 * @param collectCopiedFiles
+	 *            stores names of the image files copied to map folder (can be
+	 *            {@code null}, if not {@code null} the copied files are only
+	 *            stored in the list and a success message is NOT given)
 	 */
-	protected void saveHTML(JHTMLEditor editor, Vector<String> collectCopiedFiles) {
+	protected void saveHTML(JHTMLEditor editor,
+			Vector<String> collectCopiedFiles) {
 		URL sourceURL = editURLs.get(editor);
 		String htmlContent = editor.getHTMLContent();
 
@@ -188,7 +190,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					.findFileReferencesToReplace(htmlContent);
 			// copy references to the image folder and replace
 			// the reference in the html content
-			Vector<String> copiedFiles = (collectCopiedFiles != null) ? collectCopiedFiles : new Vector<String>();
+			Vector<String> copiedFiles = (collectCopiedFiles != null) ? collectCopiedFiles
+					: new Vector<String>();
 			for (String absImageRef : replaceRef.keySet()) {
 				File sourceRefFile = replaceRef.get(absImageRef);
 				// replace html content with relative URL
@@ -211,13 +214,18 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// BUT! Laotic &'...; tags are converted by FCKEditor no real UTF!
 			// SO we have to force saving the html as real UTF8 -even on
 			// windows.
+			if (!htmlContent.startsWith("<html>")) {
+				htmlContent = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"></head><body>"
+						+ htmlContent + "</body></html>";
+			}
+
 			FileUtils.writeStringToFile(sourceHTMLFile, htmlContent, "UTF-8");
 
 			// To avoid multiple "success" dialogs when method is
 			// called for all editors the dialog is only shown
 			// if no global list is given
-			if ( collectCopiedFiles == null )
-			  showSuccessMessage(copiedFiles);
+			if (collectCopiedFiles == null)
+				showSuccessMessage(copiedFiles);
 		} catch (Exception err) {
 			ExceptionDialog.show(editor, err,
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
@@ -246,8 +254,9 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// TODO: Unfortunately the compare between file and content is
 			// ever unequal! Probably because readURLasString(.) does
 			// manually inserts "\n" for line breaks.
-			if (editor.getHTMLContent() != null &&
-			    !editor.getHTMLContent().equals(IOUtil.readURLasString(url)))
+			if (editor.getHTMLContent() != null
+					&& !editor.getHTMLContent().equals(
+							IOUtil.readURLasString(url)))
 				changedURLs.add(editor);
 		}
 
@@ -261,9 +270,9 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 				return false;
 			case JOptionPane.YES_OPTION:
 				// save changed files
-			    Vector<String> copiedFiles = new Vector<String>();
+				Vector<String> copiedFiles = new Vector<String>();
 				for (JHTMLEditor editor : changedURLs)
-					saveHTML(editor,copiedFiles);
+					saveHTML(editor, copiedFiles);
 				showSuccessMessage(copiedFiles);
 				return true;
 			case JOptionPane.NO_OPTION:
@@ -366,9 +375,14 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			configScript += "FCKConfig.ImageUpload = false; FCKConfig.LinkUpload = false;\n";
 			// Disable Browse buttons for links
 			configScript += "FCKConfig.LinkBrowser = false;\n";
-			// We use our own file chooser (hack in DJ WebServer), so the unfortunately
-			// necessary browser window should be as small as possible! 
+			// We use our own file chooser (hack in DJ WebServer), so the
+			// unfortunately
+			// necessary browser window should be as small as possible!
 			configScript += "FCKConfig.ImageBrowserWindowWidth = \"1\"; FCKConfig.ImageBrowserWindowHeight = \"1\";\n";
+
+			configScript += "FCKConfig.AdditionalNumericEntities = \"[^ 0-9A-z\\d():\\-]\" ;\n";
+			// configScript +=
+			// "FCKConfig.AdditionalNumericEntities = \"[^ A-z\\d]\" ;\n";
 
 			// Use of a custom browser (does only work if this
 			// runs on the same web server as FCK!
@@ -377,8 +391,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// configScript +=
 			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension;\n";
 
-//			// Enable FCK debugging
-//			configScript += "FCKConfig.debug = true;\n";
+			// // Enable FCK debugging
+			// configScript += "FCKConfig.debug = true;\n";
 
 			// Log the editor configuration
 			LOGGER.debug(configScript);
