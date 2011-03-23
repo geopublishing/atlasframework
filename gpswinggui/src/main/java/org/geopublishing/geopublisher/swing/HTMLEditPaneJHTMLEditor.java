@@ -225,7 +225,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// TODO: Unfortunately the compare between file and content is
 			// ever unequal! Probably because readURLasString(.) does
 			// manually inserts "\n" for line breaks.
-			if (!editor.getHTMLContent().equals(IOUtil.readURLasString(url)))
+			if (editor.getHTMLContent() != null &&
+			    !editor.getHTMLContent().equals(IOUtil.readURLasString(url)))
 				changedURLs.add(editor);
 		}
 
@@ -340,31 +341,25 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					+ Locale.getDefault() + "\";\n";
 			// Disable Upload buttons
 			configScript += "FCKConfig.ImageUpload = false; FCKConfig.LinkUpload = false;\n";
-			// Disable Browse buttons
-			// configScript +=
-			// "FCKConfig.ImageBrowser = false; FCKConfig.LinkBrowser = false;\n";
 			// Disable Browse buttons for links
-
 			configScript += "FCKConfig.LinkBrowser = false;\n";
+			// We use our own file chooser (hack in DJ WebServer), so the unfortunately
+			// necessary browser window should be as small as possible! 
+			configScript += "FCKConfig.ImageBrowserWindowWidth = \"1\"; FCKConfig.ImageBrowserWindowHeight = \"1\";\n";
 
-			// configScript +=
-			// "FCKConfig.ImageUploadURL = '"+baseURL+"';\n";
-			// configScript +=
-			// "FCKConfig.ImageBrowser = false;\n";
-			//
-
-			configScript += "ImageBrowserWindowWidth = \"5\"; ImageBrowserWindowHeight = \"5\";\n";
-
+			// Use of a custom browser (does only work if this
+			// runs on the same web server as FCK!
 			// configScript += "FCKConfig.ImageBrowserURL = \""
 			// + myimageBrowserUrl + "\";\n";
-			// configScript
-			configScript += "FCKConfig.debug=true;\n";
-			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension + '&StartFolder='"+baseURLStr+"';\n";
-			// configScript
-			// +=
-			// "var _FileBrowserLanguage = 'Java'; var _QuickUploadLanguage = 'Java';\n";
+			// configScript +=
+			// "FCKConfig.ImageBrowserURL = FCKConfig.BasePath + 'filemanager/browser/default/browser.html?Connector=../../connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension;\n";
 
+//			// Enable FCK debugging
+//			configScript += "FCKConfig.debug = true;\n";
+
+			// Log the editor configuration
 			LOGGER.debug(configScript);
+
 			// Create editor instance
 			htmlEditor = new JHTMLEditor(
 					JHTMLEditor.HTMLEditorImplementation.FCKEditor,

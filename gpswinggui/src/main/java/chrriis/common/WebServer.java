@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
@@ -38,9 +39,11 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.geopublishing.atlasViewer.http.Webserver;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 import chrriis.dj.nativeswing.NSSystemProperty;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
+import de.schmitzm.geotools.testing.GTTestingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.FileExtensionFilter;
@@ -1021,126 +1024,81 @@ public class WebServer {
 		contentProviderList.remove(webServerContentProvider);
 	}
 
-	// MS-Hack.sn
+	//MS-Hack.sn
 	/**
-	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
-	 * .tiff, .gif).
+	 * Determines the calling {@link JHTMLEditor} instance from registry cache.
 	 */
-	public static final FileFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
-			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
-
+	public static JHTMLEditor determineJHTMLEditorFromRegistry(HTTPRequest httpRequest) {
+      // extract the ID of the calling JHTMLEditor from resourcePath
+      // e.g. "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
+      // --> we need the "1" between "JHTMLEditor" and "/editor"
+      String resourcePath = httpRequest.getResourcePath();
+      final Pattern pattern = Pattern
+        .compile("JHTMLEditor/(\\d+?)/editor");
+      Matcher matcher = pattern.matcher(resourcePath);
+      if ( !matcher.find() ) {
+        JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.","Error", JOptionPane.ERROR_MESSAGE);
+        return null;
+      }
+      final int instanceId = Integer.valueOf(matcher.group(1));
+      final Object object = ObjectRegistry.getInstance().get(instanceId);
+      return (JHTMLEditor)object;
+	}
+	
 	/**
-	 * Performs the file choose.
-	 * 
-	 * @return {@code null} if the dialog was not approved
+	 * Opens a file chooser.
+	 * In case of request type "Image" the chosen file is copied to
+	 * the "image" folder relative to the {@linkplain JHTMLEditor#getFileBrowserStartFolder()
+	 * file chooser start folder}.
+	 * @param httpRequest the request 
+	 * @return a "dummy" {@link WebServerContent} which sets the new relative file
+	 *         path (of the chosen file) to the calling component and closes the
+	 *         web browser window
 	 */
-	public static File chooseFile(final String type, File startFolder,
-			Component parent) {
-		JFileChooser chooser = new JFileChooser(startFolder);
-		if (type != null) {
-			// chooser.setAcceptAllFileFilterUsed(false);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			if (type.equalsIgnoreCase("IMAGE"))
-				chooser.setFileFilter(IMAGE_FILE_FILTER);
-		}
-		int ret = chooser.showOpenDialog(parent);
-		if (ret == JFileChooser.APPROVE_OPTION)
-			return chooser.getSelectedFile();
-		return null;
-	}
+    public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
+      final JHTMLEditor ed = (JHTMLEditor) determineJHTMLEditorFromRegistry(httpRequest);
+      final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
+      final String type = httpRequest.getQueryParameterMap().get("Type");
 
-	public static String copyFileToRelativeFolder(Component parent,
-			File source, File basePath, String relPath) {
-		if (relPath.startsWith("/"))
-			relPath.substring(1);
-		if (!relPath.endsWith("/"))
-			relPath += "/";
+      // Open file chooser
+      FileExtensionFilter filter = null;
+      if ( "Image".equals(type) )
+        filter = GpSwingUtil.IMAGE_FILE_FILTER;
+      final File choosenFile = GpSwingUtil.chooseFile(ed,fileBrowserStartFolder,filter);
+      
+      String relImagePath = null;
+      if ( choosenFile != null )
+        relImagePath = GpSwingUtil.copyFileToRelativeFolder(ed.getWebBrowser(), choosenFile, fileBrowserStartFolder, "images");
 
-		String fileName = source.getName();
-		String relFilePath = relPath + fileName;
-		File destFile = new File(basePath, relFilePath);
-		// if source file is equal to destination file
-		// do nothing, just return the relative path
-		if (destFile.equals(source))
-			return relFilePath;
-
-		try {
-			IOUtil.copyFile(null, source, destFile, false);
-			JOptionPane.showMessageDialog(parent, fileName
-					+ " copied to map image folder", "File copied",
-					JOptionPane.INFORMATION_MESSAGE);
-			return relFilePath;
-		} catch (IOException err) {
-			ExceptionDialog.show(parent, err, "Error coping file", fileName
-					+ " could not be copied!");
-			return null;
-		}
-	}
-
-	public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
-		// extract the ID of the calling JHTMLEditor from resourcePath
-		// e.g.
-		// "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
-		// --> we need the "1" between "JHTMLEditor" and "/editor"
-		String resourcePath = httpRequest.getResourcePath();
-		final Pattern pattern = Pattern.compile("JHTMLEditor/(\\d+?)/editor");
-		Matcher matcher = pattern.matcher(resourcePath);
-		if (!matcher.find()) {
-			JOptionPane.showMessageDialog(null,
-					"JHTMLEditor instance not found.", "Error",
-					JOptionPane.ERROR_MESSAGE);
-			return null;
-		}
-		final int instanceId = Integer.valueOf(matcher.group(1));
-		final Object object = ObjectRegistry.getInstance().get(instanceId);
-		final JHTMLEditor ed = (JHTMLEditor) object;
-
-		final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
-		final String type = httpRequest.getQueryParameterMap().get("Type");
-
-		return new WebServerContent() {
-			@Override
-			public InputStream getInputStream() {
-				try {
-					String template = IOUtil.readURLasString(new URL(
-							"http://localhost:" + Webserver.PORT
-									+ "/browser.html"));
-					File choosenFile = chooseFile(type, fileBrowserStartFolder,
-							ed);
-					String approveStr = "false";
-					String fileStr = "";
-					if (choosenFile != null) {
-						String relImagePath = copyFileToRelativeFolder(
-								ed.getWebBrowser(), choosenFile,
-								fileBrowserStartFolder, "images");
-						// if copy was successful replace the template
-						// wildcard with the relative path of the
-						// choosen file
-						if (relImagePath != null) {
-							approveStr = "true";
-							fileStr = relImagePath;
-						}
-					}
-					String site = template.replace("${approve}", approveStr);
-					site = site.replace("${fileTemplate}", fileStr);
-					return new ByteArrayInputStream(site.getBytes());
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException((e));
-				}
-			}
-		};
-
-	}
-
-	// MS-Hack.en
-
+      // if copy was successful replace the template
+      // wildcard with the relative path of the
+      // choosen file
+      String approveStr = (relImagePath == null) ? "false" : "true";
+      String fileStr = (relImagePath == null) ? "" : relImagePath;
+      String template = null;
+      try {
+        template = IOUtil.readURLasString(new URL(
+          "http://localhost:" + Webserver.PORT
+          + "/browser.html"));
+      } catch (MalformedURLException err) {
+        return null;
+      }
+      String site = template.replace("${approve}", approveStr);
+      site = site.replace("${fileTemplate}", fileStr);
+      
+      final String site_ = site;
+      return new WebServerContent() {
+          @Override
+          public InputStream getInputStream() {
+            return new ByteArrayInputStream(site_.getBytes());
+          }
+      };
+    }
+    //MS-Hack.en
+	
 	protected static WebServerContent getWebServerContent(
 			HTTPRequest httpRequest) {
 		String parameter = httpRequest.getResourcePath();
-
-		System.out.println(httpRequest.getResourcePath());
-
 		if (parameter.startsWith("/")) {
 			parameter = parameter.substring(1);
 		}
@@ -1148,14 +1106,15 @@ public class WebServer {
 		// MS-Hack.sn
 		// Because Geopublisher (with HTML editor) runs on local
 		// system, we want to use a "normal" file chooser.
+//        System.out.println(httpRequest.getResourcePath());
 		if (parameter
 				.contains("editor/filemanager/browser/default/browser.html")) {
-			WebServerContent content = performFileBrowsing(httpRequest);
-			if (content != null)
-				return content;
+		  WebServerContent content = performFileBrowsing(httpRequest);
+		  if ( content != null )
+		    return content;
 		}
 		// MS-Hack.en
-
+		
 		int index = parameter.indexOf('/');
 		if (index != -1) {
 			String type = parameter.substring(0, index);
