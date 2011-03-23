@@ -260,7 +260,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	protected JHTMLEditor createJHTMLEditor(String editorType, URL sourceURL) {
 		JHTMLEditor htmlEditor = null;
 
-		URL baseURL = null;
 		String baseURLStr = null;
 		File browseStartupFolder = null;
 		try {
@@ -274,7 +273,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					+ sourceRelURLStr;
 			if (!baseURLStr.endsWith("/"))
 				baseURLStr += "/";
-			baseURL = new URL(baseURLStr);
 
 			// Startup folder for file chooser
 			// = Directory of the html file
