@@ -17,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
@@ -260,27 +259,44 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	protected JHTMLEditor createJHTMLEditor(String editorType, URL sourceURL) {
 		JHTMLEditor htmlEditor = null;
 
-		String baseURLStr = null;
-		File browseStartupFolder = null;
-		try {
-			String awcAbsURLStr = IOUtil.fileToURL(
-					ace.getAtlasDir().getAbsoluteFile()).toString();
-			String sourceAbsURLStr = IOUtil.getParentUrl(sourceURL).toString();
-			int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
-			String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx
-					+ awcAbsURLStr.length());
-			baseURLStr = "http://localhost:" + Webserver.PORT + "/"
-					+ sourceRelURLStr;
-			if (!baseURLStr.endsWith("/"))
-				baseURLStr += "/";
+		/**
+		 * A File pointing to the local directory where to start the IMage/File
+		 * browser Swing Dialog
+		 */
+		File browseStartupFolder = IOUtil.urlToFile(sourceURL).getParentFile();
 
-			// Startup folder for file chooser
-			// = Directory of the html file
-			browseStartupFolder = IOUtil.urlToFile(sourceURL).getParentFile();
+		/**
+		 * The base url for the WebBrowser of the FCK HTML Editor
+		 */
+		String baseHrefStr = null;
+		try {
+
+			baseHrefStr = ace.getBrowserURLString(IOUtil
+					.getParentUrl(sourceURL));
 		} catch (Exception err) {
 			LOGGER.warn("Could not determine parent URL for '" + sourceURL
 					+ "'");
 		}
+
+		//
+		// String awcAbsURLStr = IOUtil.fileToURL(
+		// ace.getAtlasDir().getAbsoluteFile()).toString();
+		// String sourceAbsURLStr = IOUtil.getParentUrl(sourceURL).toString();
+		// int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
+		// String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx
+		// + awcAbsURLStr.length());
+		// baseURLStr = "http://localhost:" + Webserver.PORT + "/"
+		// + sourceRelURLStr;
+		// if (!baseURLStr.endsWith("/"))
+		// baseURLStr += "/";
+		//
+		// // Startup folder for file chooser
+		// // = Directory of the html file
+		// browseStartupFolder = IOUtil.urlToFile(sourceURL).getParentFile();
+		// } catch (Exception err) {
+		// LOGGER.warn("Could not determine parent URL for '" + sourceURL
+		// + "'");
+		// }
 
 		if (editorType.equalsIgnoreCase("FCK")) {
 			// Create FCK as editor
@@ -306,8 +322,8 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 					+ "];\n" + "FCKConfig.ToolbarCanCollapse = false;\n";
 			// Configure base URL so that the images with relative URLs are
 			// also shown
-			if (baseURLStr != null)
-				configScript += "FCKConfig.BaseHref = '" + baseURLStr + "';\n";
+			if (baseHrefStr != null)
+				configScript += "FCKConfig.BaseHref = '" + baseHrefStr + "';\n";
 			// Hide "target" options for links because in GP
 			// we can only show links in the same frame
 			configScript += "FCKConfig.LinkDlgHideTarget = true;\n";

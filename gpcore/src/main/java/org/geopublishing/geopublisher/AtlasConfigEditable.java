@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.http.FileWebResourceLoader;
+import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
@@ -743,6 +745,37 @@ public class AtlasConfigEditable extends AtlasConfig {
 		rememberFolderSizes.clear();
 
 		super.uncache();
+	}
+
+	/**
+	 * Returns a {@link URL} where to access a given file://-URL (may be a
+	 * directory) in the local {@link Webserver}.
+	 * 
+	 * Returns <code>null</code> if the given file/directory can not be mapped
+	 * to a URL in the local webserver.
+	 */
+	public String getBrowserURLString(URL fileUrlInAtlasData) {
+
+		try {
+
+			String awcAbsURLStr = IOUtil.fileToURL(
+					getAtlasDir().getAbsoluteFile()).toString();
+			String sourceAbsURLStr = fileUrlInAtlasData.toString();
+			int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
+			String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx
+					+ awcAbsURLStr.length());
+			String urlViaLocalServer = "http://localhost:" + Webserver.PORT
+					+ "/" + sourceRelURLStr;
+			if (!urlViaLocalServer.endsWith("/"))
+				urlViaLocalServer += "/";
+
+			return urlViaLocalServer;
+		} catch (Exception e) {
+			LOGGER.error(fileUrlInAtlasData
+					+ " could not be mapped to a URL in the local webserver", e);
+			return null;
+		}
+
 	}
 
 }
