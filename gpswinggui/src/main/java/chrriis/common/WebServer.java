@@ -41,7 +41,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 
 import chrriis.dj.nativeswing.NSSystemProperty;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor;
-import de.schmitzm.geotools.testing.GTTestingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.FileExtensionFilter;
@@ -1021,111 +1020,121 @@ public class WebServer {
 			WebServerContentProvider webServerContentProvider) {
 		contentProviderList.remove(webServerContentProvider);
 	}
-	//MS-Hack.sn
-	/** {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif, .tiff, .gif). */
-	public static final FileFilter IMAGE_FILE_FILTER = new FileExtensionFilter("Images",true,".png",".jpg",".jpeg",".tif",".tiff",".gif");
-	
+
+	// MS-Hack.sn
+	/**
+	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
+	 * .tiff, .gif).
+	 */
+	public static final FileFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
+			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
+
 	/**
 	 * Performs the file choose.
+	 * 
 	 * @return {@code null} if the dialog was not approved
 	 */
-	public static File chooseFile(final String type, File startFolder, Component parent) {
-      JFileChooser chooser = new JFileChooser(startFolder);
-      if ( type != null ) {
-//        chooser.setAcceptAllFileFilterUsed(false);
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        if ( type.equalsIgnoreCase("IMAGE") )
-          chooser.setFileFilter(IMAGE_FILE_FILTER);
-      }
-      int ret = chooser.showOpenDialog(parent);
-      if (ret == JFileChooser.APPROVE_OPTION)
-        return chooser.getSelectedFile();
-      return null;
+	public static File chooseFile(final String type, File startFolder,
+			Component parent) {
+		JFileChooser chooser = new JFileChooser(startFolder);
+		if (type != null) {
+			// chooser.setAcceptAllFileFilterUsed(false);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			if (type.equalsIgnoreCase("IMAGE"))
+				chooser.setFileFilter(IMAGE_FILE_FILTER);
+		}
+		int ret = chooser.showOpenDialog(parent);
+		if (ret == JFileChooser.APPROVE_OPTION)
+			return chooser.getSelectedFile();
+		return null;
 	}
-	
-	public static String copyFileToRelativeFolder(Component parent, File source, File basePath, String relPath) {
-	  if ( relPath.startsWith("/") )
-	    relPath.substring(1);
-	  if ( !relPath.endsWith("/") )
-	    relPath += "/";
-	  
-	  String fileName = source.getName();
-	  String relFilePath = relPath + fileName;
-      File destFile = new File(basePath,relFilePath);
-      // if source file is equal to destination file
-      // do nothing, just return the relative path
-      if ( destFile.equals(source) )
-        return relFilePath;
-      
-      try {
-        IOUtil.copyFile(null, source, destFile, false);
-        JOptionPane.showMessageDialog(
-            parent,
-            fileName + " copied to map image folder",
-            "File copied",
-            JOptionPane.INFORMATION_MESSAGE);
-        return relFilePath;
-      } catch (IOException err) {
-        ExceptionDialog.show(parent, err,
-            "Error coping file",
-            fileName + " could not be copied!");
-        return null;
-      }
+
+	public static String copyFileToRelativeFolder(Component parent,
+			File source, File basePath, String relPath) {
+		if (relPath.startsWith("/"))
+			relPath.substring(1);
+		if (!relPath.endsWith("/"))
+			relPath += "/";
+
+		String fileName = source.getName();
+		String relFilePath = relPath + fileName;
+		File destFile = new File(basePath, relFilePath);
+		// if source file is equal to destination file
+		// do nothing, just return the relative path
+		if (destFile.equals(source))
+			return relFilePath;
+
+		try {
+			IOUtil.copyFile(null, source, destFile, false);
+			JOptionPane.showMessageDialog(parent, fileName
+					+ " copied to map image folder", "File copied",
+					JOptionPane.INFORMATION_MESSAGE);
+			return relFilePath;
+		} catch (IOException err) {
+			ExceptionDialog.show(parent, err, "Error coping file", fileName
+					+ " could not be copied!");
+			return null;
+		}
 	}
 
 	public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
-	  // extract the ID of the calling JHTMLEditor from resourcePath
-	  // e.g. "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
-	  // --> we need the "1" between "JHTMLEditor" and "/editor"
-	  String resourcePath = httpRequest.getResourcePath();
-      final Pattern pattern = Pattern
-        .compile("JHTMLEditor/(\\d+?)/editor");
-      Matcher matcher = pattern.matcher(resourcePath);
-      if ( !matcher.find() ) {
-        JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.","Error", JOptionPane.ERROR_MESSAGE);
-        return null;
-      }
-      final int instanceId = Integer.valueOf(matcher.group(1));
-      final Object object = ObjectRegistry.getInstance().get(instanceId);
-      final JHTMLEditor ed = (JHTMLEditor) object;
-     
-      final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
-      final String type = httpRequest.getQueryParameterMap().get("Type");
+		// extract the ID of the calling JHTMLEditor from resourcePath
+		// e.g.
+		// "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
+		// --> we need the "1" between "JHTMLEditor" and "/editor"
+		String resourcePath = httpRequest.getResourcePath();
+		final Pattern pattern = Pattern.compile("JHTMLEditor/(\\d+?)/editor");
+		Matcher matcher = pattern.matcher(resourcePath);
+		if (!matcher.find()) {
+			JOptionPane.showMessageDialog(null,
+					"JHTMLEditor instance not found.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		final int instanceId = Integer.valueOf(matcher.group(1));
+		final Object object = ObjectRegistry.getInstance().get(instanceId);
+		final JHTMLEditor ed = (JHTMLEditor) object;
 
-      return new WebServerContent() {
-          @Override
-          public InputStream getInputStream() {
-              try {
-                  String template = IOUtil.readURLasString(new URL(
-                          "http://localhost:" + Webserver.PORT
-                                  + "/browser.html"));
-                  File choosenFile = chooseFile(type, fileBrowserStartFolder, ed);
-                  String approveStr = "false";
-                  String fileStr = "";
-                  if ( choosenFile != null ) {
-                    String relImagePath = copyFileToRelativeFolder(ed.getWebBrowser(), choosenFile, fileBrowserStartFolder, "images");
-                    // if copy was successful replace the template
-                    // wildcard with the relative path of the
-                    // choosen file
-                    if ( relImagePath != null ) { 
-                      approveStr = "true";
-                      fileStr = relImagePath;
-                    }
-                  }
-                  String site = template
-                          .replace("${approve}", approveStr);
-                  site = site.replace("${fileTemplate}", fileStr);
-                  return new ByteArrayInputStream(site.getBytes());
-              } catch (Exception e) {
-                  e.printStackTrace();
-                  throw new RuntimeException((e));
-              }
-          }
-      };
-	  
+		final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
+		final String type = httpRequest.getQueryParameterMap().get("Type");
+
+		return new WebServerContent() {
+			@Override
+			public InputStream getInputStream() {
+				try {
+					String template = IOUtil.readURLasString(new URL(
+							"http://localhost:" + Webserver.PORT
+									+ "/browser.html"));
+					File choosenFile = chooseFile(type, fileBrowserStartFolder,
+							ed);
+					String approveStr = "false";
+					String fileStr = "";
+					if (choosenFile != null) {
+						String relImagePath = copyFileToRelativeFolder(
+								ed.getWebBrowser(), choosenFile,
+								fileBrowserStartFolder, "images");
+						// if copy was successful replace the template
+						// wildcard with the relative path of the
+						// choosen file
+						if (relImagePath != null) {
+							approveStr = "true";
+							fileStr = relImagePath;
+						}
+					}
+					String site = template.replace("${approve}", approveStr);
+					site = site.replace("${fileTemplate}", fileStr);
+					return new ByteArrayInputStream(site.getBytes());
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException((e));
+				}
+			}
+		};
+
 	}
-    //MS-Hack.en
-	
+
+	// MS-Hack.en
+
 	protected static WebServerContent getWebServerContent(
 			HTTPRequest httpRequest) {
 		String parameter = httpRequest.getResourcePath();
@@ -1141,12 +1150,12 @@ public class WebServer {
 		// system, we want to use a "normal" file chooser.
 		if (parameter
 				.contains("editor/filemanager/browser/default/browser.html")) {
-		  WebServerContent content = performFileBrowsing(httpRequest);
-		  if ( content != null )
-		    return content;
+			WebServerContent content = performFileBrowsing(httpRequest);
+			if (content != null)
+				return content;
 		}
 		// MS-Hack.en
-		
+
 		int index = parameter.indexOf('/');
 		if (index != -1) {
 			String type = parameter.substring(0, index);
