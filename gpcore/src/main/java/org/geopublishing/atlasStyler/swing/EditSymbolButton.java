@@ -8,13 +8,14 @@ import java.beans.PropertyChangeListener;
 
 import javax.swing.JButton;
 
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 
-
 /**
- * This extension of the {@link UpdatingSymbolButton} will open a dialog to edit the symbol when clicked.
+ * This extension of the {@link UpdatingSymbolButton} will open a dialog to edit
+ * the symbol when clicked.
  */
 public class EditSymbolButton extends UpdatingSymbolButton {
 
@@ -26,9 +27,10 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public EditSymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(singleSymbolRuleList,
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
-	
+
 	/**
 	 * Listens to close/cancel of any {@link SymbolSelectorGUI}.
 	 */
@@ -49,36 +51,31 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 		}
 	};
 
-	
 	/**
 	 * Creates a {@link JButton} with a preview image of the given
-	 * {@link SingleRuleList}. The button image will have the given dimensions. 
+	 * {@link SingleRuleList}. The button image will have the given dimensions.
 	 */
-	public EditSymbolButton(final SingleRuleList singleSymbolRuleList, Dimension size) {
+	public EditSymbolButton(final SingleRuleList singleSymbolRuleList,
+			Dimension size) {
 		super(singleSymbolRuleList, size);
-		
-		addActionListener(new ActionListener(){
-			
+
+		addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
 				final SingleRuleList<? extends Symbolizer> template = getSingleSymbolRuleList();
-				
-				if (template == null) return;
-//				template.getListeners().clear();
+
+				if (template == null)
+					return;
 
 				backup = template.copy();
 
 				final SymbolSelectorGUI gui = new SymbolSelectorGUI(
-		EditSymbolButton.this, AtlasStylerVector
-								.R("SymbolSelector.ForTemplate.Title"),
-						template);
+						EditSymbolButton.this,
+						ASUtil.R("SymbolSelector.ForTemplate.Title"), template);
 
-				gui
-						.addPropertyChangeListener(listenCancelOkForSelectionInSymbolSelectionGUI);
-//
-//				template
-//						.addListener(listenerUpdatePreviewIconOnTemplateChange);
+				gui.addPropertyChangeListener(listenCancelOkForSelectionInSymbolSelectionGUI);
 
 				gui.setModal(true);
 				gui.setVisible(true);

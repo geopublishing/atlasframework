@@ -66,8 +66,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 	public static final String PROPERTY_CLOSED = "CLOSED";
 
-	private static final String DIALOG_TITLE = AtlasStylerVector
-			.R("SymbolSelector.Title");
+	private static final String DIALOG_TITLE = ASUtil.R("SymbolSelector.Title");
 
 	private static final Dimension DEFAULT_PREVIEW_ICON_SIZE = new Dimension(
 			80, 60);
@@ -252,8 +251,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 					color = singleSymbolRuleList.getColor();
 
 					Color newColor = AVSwingUtil.showColorChooser(
-							SymbolSelectorGUI.this,
-							AtlasStylerVector.R("SymbolSelector.Preview.ChooseColor"),
+							SymbolSelectorGUI.this, AtlasStylerVector
+									.R("SymbolSelector.Preview.ChooseColor"),
 							color);
 
 					if (newColor != null) {
@@ -557,8 +556,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 						return;
 					}
 
-					File dir = AtlasStylerVector.getSymbolsDir(singleSymbolRuleList
-							.getGeometryForm());
+					File dir = AtlasStylerVector
+							.getSymbolsDir(singleSymbolRuleList
+									.getGeometryForm());
 					JFileChooser chooser = new JFileChooser(dir);
 					chooser.setDialogTitle(AtlasStylerVector
 							.R("SymbolSelector.SaveToFileDialog.Title"));

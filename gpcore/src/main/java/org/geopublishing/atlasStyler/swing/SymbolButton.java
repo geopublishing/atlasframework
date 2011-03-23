@@ -23,14 +23,13 @@ import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.styling.Symbolizer;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-
 public class SymbolButton extends JButton {
 
 	// final ImageIcon image;
 
 	private BufferedImage bImage;
 	private final Dimension iconSize;
-	private SingleRuleList singleSymbolRuleList;
+	SingleRuleList singleSymbolRuleList;
 
 	/**
 	 * Creates a {@link JButton} with a preview image of the given
@@ -38,7 +37,8 @@ public class SymbolButton extends JButton {
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public SymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(singleSymbolRuleList,
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
 	/**
@@ -62,7 +62,8 @@ public class SymbolButton extends JButton {
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
 	public SymbolButton(Symbolizer symbolizer, SimpleFeatureType featureType) {
-		this(symbolizer, featureType, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
+		this(symbolizer, featureType,
+				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
 	/**
@@ -82,9 +83,9 @@ public class SymbolButton extends JButton {
 
 	private void init() {
 		setIcon(new ImageIcon(bImage));
-//		setContentAreaFilled(false);
+		// setContentAreaFilled(false);
 		setIconTextGap(0);
-//		setSize(iconSize);
+		// setSize(iconSize);
 	}
 
 	// @Override
@@ -94,26 +95,27 @@ public class SymbolButton extends JButton {
 
 	@Override
 	public void paint(Graphics g) {
-		 super.paint(g);
-////		setIcon(new ImageIcon(bImage));
-//		g.drawImage(bImage, 0, 0, null);
-//		g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-//		g.drawRect(1, 1, bImage.getWidth() - 1, bImage.getHeight() - 1);
-//		g.setColor(Color.WHITE);
-//		g.drawString(getText(), 3, bImage.getHeight() - 3);
+		super.paint(g);
+		// // setIcon(new ImageIcon(bImage));
+		// g.drawImage(bImage, 0, 0, null);
+		// g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+		// g.drawRect(1, 1, bImage.getWidth() - 1, bImage.getHeight() - 1);
+		// g.setColor(Color.WHITE);
+		// g.drawString(getText(), 3, bImage.getHeight() - 3);
 	}
 
 	public void setSingleSymbolRuleList(SingleRuleList singleSymbolRuleList) {
 		this.singleSymbolRuleList = singleSymbolRuleList;
-		
+
 		if (singleSymbolRuleList != null) {
 			bImage = singleSymbolRuleList.getImage(iconSize);
 		} else {
-			bImage = new BufferedImage(iconSize.width, iconSize.height, BufferedImage.TYPE_INT_ARGB);
+			bImage = new BufferedImage(iconSize.width, iconSize.height,
+					BufferedImage.TYPE_INT_ARGB);
 		}
 		init();
 		repaint();
-		
+
 	}
 
 	public SingleRuleList getSingleSymbolRuleList() {

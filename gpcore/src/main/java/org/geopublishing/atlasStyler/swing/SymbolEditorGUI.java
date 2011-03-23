@@ -38,6 +38,7 @@ import javax.swing.table.TableCellRenderer;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
@@ -71,8 +72,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	protected static final String PROPERTY_SYMBOL_CHANGED = "SYMBOL_CHANGED";
 	protected static final String PROPERTY_LAYERS_CHANGED = "LAYERS_CHANGED";
 
-	private static final String DIALOG_TITLE = AtlasStylerVector
-			.R("SymbolEditor.Title");
+	private static final String DIALOG_TITLE = ASUtil.R("SymbolEditor.Title");
 
 	private static final Dimension SYMBOL_SIZE = new Dimension(60, 60);
 
@@ -116,7 +116,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 		@Override
 		public void propertyChange(PropertyChangeEvent evt) {
-			if (!evt.getPropertyName().equals(AbstractStyleEditGUI.PROPERTY_UPDATED))
+			if (!evt.getPropertyName().equals(
+					AbstractStyleEditGUI.PROPERTY_UPDATED))
 				return;
 
 			SymbolEditorGUI.this.firePropertyChange(PROPERTY_SYMBOL_CHANGED,
@@ -492,7 +493,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 				@Override
 				public String getColumnName(int columnIndex) {
 					if (columnIndex == 0)
-						return AtlasStylerVector.R("SymbolEditor.TableColumns.Order");
+						return AtlasStylerVector
+								.R("SymbolEditor.TableColumns.Order");
 					if (columnIndex == 1)
 						return AtlasStylerVector
 								.R("SymbolEditor.TableColumns.LayerPreview");
@@ -620,7 +622,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 					});
 			jButtonRemoveLayer.setEnabled(false);
-			jButtonRemoveLayer.setToolTipText(AtlasStylerVector
+			jButtonRemoveLayer.setToolTipText(ASUtil
 					.R("SymbolEditor.Action.RemoveSymbolLayer.TT"));
 		}
 		return jButtonRemoveLayer;
@@ -638,23 +640,19 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (jTableLayers.getSelectedRow() >= 0) {
-						// Something is selected
-						Vector<Symbolizer> symbolizers = singleSymbolRuleList
-								.getSymbolizers();
+					if (jTableLayers.getSelectedRow() >= 0
+							&& jTableLayers.getSelectedRow() < jTableLayers
+									.getModel().getRowCount() - 1) {
 
-						if (jTableLayers.getSelectedRow() < symbolizers.size() - 1) {
-							Symbolizer symbolizer = symbolizers
-									.remove(jTableLayers.getSelectedRow());
-							symbolizers.insertElementAt(symbolizer,
-									jTableLayers.getSelectedRow() + 1);
-							jTableLayers.getSelectionModel()
-									.addSelectionInterval(0,
-											jTableLayers.getSelectedRow() + 1);
+						final int selectedRow = jTableLayers.getSelectedRow();
+						singleSymbolRuleList.move(selectedRow, 1);
 
-							SymbolEditorGUI.this.firePropertyChange(
-									PROPERTY_LAYERS_CHANGED, null, null);
-						}
+						jTableLayers.getSelectionModel().clearSelection();
+						jTableLayers.getSelectionModel().addSelectionInterval(
+								selectedRow + 1, selectedRow + 1);
+
+						SymbolEditorGUI.this.firePropertyChange(
+								PROPERTY_LAYERS_CHANGED, null, null);
 
 					}
 				}
@@ -699,30 +697,42 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					if (jTableLayers.getSelectedRow() >= 0) {
-						// Something is selected
-						Vector<Symbolizer> symbolizers = singleSymbolRuleList
-								.getSymbolizers();
+					if (jTableLayers.getSelectedRow() > 0) {
 
-						if (jTableLayers.getSelectedRow() > 0) {
-							Symbolizer symbolizer = symbolizers
-									.remove(jTableLayers.getSelectedRow());
-							symbolizers.insertElementAt(symbolizer,
-									jTableLayers.getSelectedRow() - 1);
-							jTableLayers.getSelectionModel()
-									.addSelectionInterval(0,
-											jTableLayers.getSelectedRow() - 1);
-							//
-							// // Clear the cache of all GUIs, as they are
-							// // chached with
-							// // their RowIndex as key (Sadly a
-							// // PointSymbolizer
-							// // doesn't have a name or title)
-							// editPropertiesGUICache.clear();
+						final int selectedRow = jTableLayers.getSelectedRow();
+						singleSymbolRuleList.move(selectedRow, -1);
 
-							SymbolEditorGUI.this.firePropertyChange(
-									PROPERTY_LAYERS_CHANGED, null, null);
-						}
+						jTableLayers.getSelectionModel().clearSelection();
+						jTableLayers.getSelectionModel().addSelectionInterval(
+								selectedRow - 1, selectedRow - 1);
+
+						SymbolEditorGUI.this.firePropertyChange(
+								PROPERTY_LAYERS_CHANGED, null, null);
+
+						// // Something is selected
+						// List<Symbolizer> symbolizers = singleSymbolRuleList
+						// .getSymbolizers();
+						//
+						//
+						// if (jTableLayers.getSelectedRow() > 0) {
+						// Symbolizer symbolizer = symbolizers
+						// .remove(jTableLayers.getSelectedRow());
+						// symbolizers.insertElementAt(symbolizer,
+						// jTableLayers.getSelectedRow() - 1);
+						// jTableLayers.getSelectionModel()
+						// .addSelectionInterval(0,
+						// jTableLayers.getSelectedRow() - 1);
+						// //
+						// // // Clear the cache of all GUIs, as they are
+						// // // chached with
+						// // // their RowIndex as key (Sadly a
+						// // // PointSymbolizer
+						// // // doesn't have a name or title)
+						// // editPropertiesGUICache.clear();
+						//
+						// SymbolEditorGUI.this.firePropertyChange(
+						// PROPERTY_LAYERS_CHANGED, null, null);
+						// }
 
 					}
 				}
@@ -750,45 +760,6 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		}
 		return jButtonLayerUp;
 	}
-
-	//
-	// /**
-	// * This method initializes jButton
-	// *
-	// * @return javax.swing.JButton
-	// */
-	// private JButton getJButtonOk() {
-	// if (jButtonOk == null) {
-	// jButtonOk = new OkButton(new AbstractAction() {
-	//
-	// @Override
-	// public void actionPerformed(ActionEvent e) {
-	// okClose();
-	// }
-	//
-	// });
-	// }
-	// return jButtonOk;
-	// }
-
-	// /**
-	// * This method initializes jButton
-	// *
-	// * @return javax.swing.JButton
-	// */
-	// private JButton getJButtonCancel() {
-	// if (jButtonCancel == null) {
-	// jButtonCancel = new CancelButton(new AbstractAction() {
-	//
-	// @Override
-	// public void actionPerformed(ActionEvent e) {
-	// cancelClose();
-	// }
-	//
-	// });
-	// }
-	// return jButtonCancel;
-	// }
 
 	@Override
 	public void dispose() {

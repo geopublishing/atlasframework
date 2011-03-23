@@ -104,7 +104,15 @@ public class RasterRulesList_Distinctvalues_GUI extends
 	public void doit(JTextField tf) {
 
 		try {
-			final Double parsed = Double.valueOf(tf.getText());
+			final String text = tf.getText();
+
+			if ("".equals(text) || "null".equals(text)) {
+				rulesList.getStyledRaster().setNodataValue(null);
+				rulesList.fireEvents(new RuleChangedEvent(
+						"NODATA value removed", rulesList));
+			}
+
+			final Double parsed = Double.valueOf(text);
 			if (parsed != null
 					&& !parsed.equals(rulesList.getStyledRaster()
 							.getNodataValue())) {
