@@ -1,21 +1,26 @@
 package org.geopublishing.geopublisher.swing;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.http.Webserver;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.TransformException;
+import org.xml.sax.SAXException;
 
-import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
@@ -29,30 +34,19 @@ public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
 	}
 
 	@Test
-	public void testD() throws MalformedURLException {
-		File f = new File(
-				"file:/home/stefan/Desktop/GP/Atlanten/ChartDemoAtlas/AWC/ad/html/map_01357691812");
+	public void testWindowsPath() throws AtlasException, FactoryException,
+			TransformException, SAXException, IOException,
+			ParserConfigurationException {
+		AtlasConfigEditable ace = GpTestingUtil
+				.getAtlasConfigE(TestAtlas.small);
 
-		f = IOUtil
-				.urlToFile(new URL(
-						"file:/media/biggy/stefan/Bilder/00new/90igsterGeburtstag_have2cut/2009-02-07%202009-02-0701.png"));
-
-		assertNotNull(f);
+		File f = new File(ace.getAtlasDir(), "ad/html/map_01357691812");
 		assertTrue(f.exists());
-		// assertTrue(f.isDirectory());
-	}
 
-	@Test
-	@Ignore
-	public void testD2() throws MalformedURLException, IOException {
-		InputStream openStream = new URL("http://localhost:" + Webserver.PORT
-				+ "/browser.html").openStream();
-		assertNotNull(openStream);
-		openStream.close();
-	}
-
-	@Test
-	public void testCreateJHTMLEditor() {
+		String browserURLString = ace.getBrowserURLString(f);
+		assertNotNull(browserURLString);
+		assertEquals("http://localhost:" + Webserver.PORT
+				+ "/ad/html/map_01357691812/", browserURLString);
 
 	}
 

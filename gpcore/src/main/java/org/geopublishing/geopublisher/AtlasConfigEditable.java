@@ -748,6 +748,17 @@ public class AtlasConfigEditable extends AtlasConfig {
 	}
 
 	/**
+	 * Returns a {@link URL} where to access a given File (may be a directory)
+	 * in the local {@link Webserver}.
+	 * 
+	 * Returns <code>null</code> if the given file/directory can not be mapped
+	 * to a URL in the local webserver.
+	 */
+	public String getBrowserURLString(File fileInAtlasData) {
+		return getBrowserURLString(IOUtil.fileToURL(fileInAtlasData));
+	}
+
+	/**
 	 * Returns a {@link URL} where to access a given file://-URL (may be a
 	 * directory) in the local {@link Webserver}.
 	 * 
@@ -762,6 +773,8 @@ public class AtlasConfigEditable extends AtlasConfig {
 					getAtlasDir().getAbsoluteFile()).toString();
 			String sourceAbsURLStr = fileUrlInAtlasData.toString();
 			int relURLStartIdx = sourceAbsURLStr.indexOf(awcAbsURLStr);
+			if (relURLStartIdx == -1)
+				return null;
 			String sourceRelURLStr = sourceAbsURLStr.substring(relURLStartIdx
 					+ awcAbsURLStr.length());
 			String urlViaLocalServer = "http://localhost:" + Webserver.PORT
