@@ -59,7 +59,6 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 			// That is saved at another place... probably a better place here,
 			// beausee only now have we canged the Style
 			// TODO
-			// TODO
 
 			return super.okClose();
 		}

@@ -552,7 +552,7 @@ public class AtlasMapLegend extends MapLegend {
 
 				showOrHideChartButton();
 
-				// TODO TODO
+				// TODO
 				// // Activate all additional Styles if this layer has never
 				// been
 				// // configured for this map

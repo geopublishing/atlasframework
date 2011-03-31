@@ -493,16 +493,18 @@ public class RasterRulesList_Distinctvalues_GUI extends
 									// where it is positioned in the list!
 									int index = row;
 
-									transLabel = new TranslationEditJPanel(
-											ASUtil.R(
-													"RasterRulesList_Distinctvalues_GUI.LabelForClass",
+									final String title = ASUtil
+											.R("RasterRulesList_Distinctvalues_GUI.LabelForClass",
 													getRulesList().getValues()
-															.get(index)),
+															.get(index));
+									transLabel = new TranslationEditJPanel(
+											title,
 											translation, AtlasStylerVector
 													.getLanguages());
 
 									ask = new TranslationAskJDialog(
 											RasterRulesList_Distinctvalues_GUI.this,
+											title,
 											transLabel);
 									ask.addPropertyChangeListener(new PropertyChangeListener() {
 

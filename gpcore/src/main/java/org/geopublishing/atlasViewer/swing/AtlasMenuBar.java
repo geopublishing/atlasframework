@@ -271,8 +271,7 @@ public class AtlasMenuBar extends JMenuBar {
 			helpMenu.add(aboutMenuItem);
 		}
 
-		// Add the logging menu, which allows to open the logfile, TODO
-		// OptionsMenu
+		// Add the logging menu, which allows to open the logfile
 		helpMenu.add(SwingUtil.createChangeLog4JLevelJMenu());
 
 		// {
