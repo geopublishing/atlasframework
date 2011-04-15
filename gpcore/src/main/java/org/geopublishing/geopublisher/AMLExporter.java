@@ -74,6 +74,7 @@ import de.schmitzm.geotools.io.GeoExportUtil;
 import de.schmitzm.geotools.io.GeoImportUtil;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.FilterUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.jfree.chart.style.ChartStyleUtil;
@@ -463,7 +464,7 @@ public class AMLExporter {
 		File fontsDir = getAce().getFontsDir();
 
 		Collection<File> listFiles = FileUtils.listFiles(fontsDir,
-				GpUtil.FontsFilesFilter, IOUtil.BlacklistedFoldersFilter);
+				GpUtil.FontsFilesFilter, FilterUtil.BlacklistedFoldersFilter);
 		for (File f : listFiles) {
 
 			// Test whether the font is readable

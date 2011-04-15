@@ -28,7 +28,7 @@ import org.netbeans.spi.wizard.ResultProgressHandle;
 import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 
-import de.schmitzm.io.IOUtil;
+import de.schmitzm.io.FilterUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.swing.ExceptionDialog;
 
@@ -132,7 +132,7 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 											atlasConfigEditable.getHtmlDir(),
 											mapDir.getName());
 									FileUtils.copyDirectory(mapDir, newMapDir,
-											IOUtil.BlacklistedFoldersFilter);
+													FilterUtil.BlacklistedFoldersFilter);
 								}
 
 								// Copy which additional style is
@@ -185,7 +185,7 @@ public class ImportWizardResultProducer_GPA extends ImportWizardResultProducer {
 										atlasConfigEditable.getDataDir(),
 										eDpe.getDataDirname());
 								FileUtils.copyDirectory(dpeDir, newDpeDir,
-										IOUtil.BlacklistedFoldersFilter);
+										FilterUtil.BlacklistedFoldersFilter);
 
 								eDpe.setAtlasConfig(atlasConfigEditable);
 								eDpe.uncache();

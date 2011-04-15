@@ -85,6 +85,7 @@ import org.w3c.dom.Element;
 
 import sun.security.tools.JarSigner;
 import sun.tools.jar.Main;
+import de.schmitzm.io.FilterUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
@@ -577,8 +578,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		Collection<String> listRelFileNames = new ArrayList<String>();
 		if (testWhat.isDirectory()) {
 			final Collection<File> listFiles = FileUtils.listFiles(testWhat,
-					IOUtil.BlacklistedFilesFilter,
-					IOUtil.BlacklistedFoldersFilter);
+					FilterUtil.BlacklistedFilesFilter,
+					FilterUtil.BlacklistedFoldersFilter);
 			for (File f : listFiles) {
 				String relFileName = f.getAbsolutePath().substring(
 						baseDir.getAbsolutePath().length() + 1);
@@ -1152,8 +1153,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 				final Collection<File> listFiles = FileUtils.listFiles(
 						new File(absolutePath, relpath),
-						IOUtil.BlacklistedFilesFilter,
-						IOUtil.BlacklistedFoldersFilter);
+						FilterUtil.BlacklistedFilesFilter,
+						FilterUtil.BlacklistedFoldersFilter);
 				for (final File intoJarSource : listFiles) {
 
 					String act = intoJarSource.getPath();
@@ -1724,7 +1725,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 					Collection<File> listFiles = FileUtils.listFiles(fontsDir,
 							GpUtil.FontsFilesFilter,
-							IOUtil.BlacklistedFoldersFilter);
+							FilterUtil.BlacklistedFoldersFilter);
 					for (File f : listFiles) {
 						try {
 							// Font createFont = Font.createFont(
@@ -1966,8 +1967,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			targetDirJWS.setReadable(true, false);
 
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirJWS,
-					IOUtil.BlacklistedFoldersFilter,
-					IOUtil.BlacklistedFilesFilter);
+					FilterUtil.BlacklistedFoldersFilter,
+					FilterUtil.BlacklistedFilesFilter);
 			while (iterateFiles.hasNext()) {
 				File next = iterateFiles.next();
 				// next.setWritable(false, false);
@@ -1982,8 +1983,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			targetDirDISK.setReadable(true, false);
 
 			Iterator<File> iterateFiles = FileUtils.iterateFiles(targetDirDISK,
-					IOUtil.BlacklistedFoldersFilter,
-					IOUtil.BlacklistedFilesFilter);
+					FilterUtil.BlacklistedFoldersFilter,
+					FilterUtil.BlacklistedFilesFilter);
 			while (iterateFiles.hasNext()) {
 				File next = iterateFiles.next();
 				next.setReadable(true, false);

@@ -28,7 +28,7 @@ import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
-import de.schmitzm.io.IOUtil;
+import de.schmitzm.io.FilterUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -92,7 +92,7 @@ public class MapPoolDuplicateAction extends AbstractAction {
 				// When copying the directory, we are SVN friendly and do not
 				// copy svn files.
 				FileUtils.copyDirectory(htmlDir, newHtmlDir,
-						IOUtil.BlacklistedFoldersFilter);
+						FilterUtil.BlacklistedFoldersFilter);
 				return null;
 			}
 

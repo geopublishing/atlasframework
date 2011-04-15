@@ -26,6 +26,7 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.opengis.filter.expression.Literal;
 
+import de.schmitzm.io.FilterUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.AtlasDialog;
@@ -147,7 +148,7 @@ public class ManageFontsDialog extends AtlasDialog {
 		fontNamesInFolder = new String[0];
 
 		Collection<File> listTtfFiles = FileUtils.listFiles(ace.getFontsDir(),
-				GpUtil.FontsFilesFilter, IOUtil.BlacklistedFoldersFilter);
+				GpUtil.FontsFilesFilter, FilterUtil.BlacklistedFoldersFilter);
 		for (File f : listTtfFiles) {
 
 			String relPath = f.getAbsolutePath().substring(

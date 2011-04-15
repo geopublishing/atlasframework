@@ -22,7 +22,7 @@ import chrriis.dj.nativeswing.swtimpl.EventDispatchUtils;
 import chrriis.dj.nativeswing.swtimpl.Message;
 import chrriis.dj.nativeswing.swtimpl.NativeComponent;
 import chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor.JHTMLEditorImplementation;
-import de.schmitzm.io.IOUtil;
+import de.schmitzm.io.FilterUtil;
 
 /**
  * @author Christopher Deckers
@@ -390,7 +390,7 @@ class JHTMLEditorFCKeditor implements JHTMLEditorImplementation {
 								.listFiles(new FileFilter() {
 									public boolean accept(File pathname) {
 										return !pathname.isFile()
-												&& IOUtil.BlacklistedFoldersFilter
+												&& FilterUtil.BlacklistedFoldersFilter
 														.accept(pathname);
 									}
 								})) {
@@ -406,7 +406,7 @@ class JHTMLEditorFCKeditor implements JHTMLEditorImplementation {
 								.listFiles(new FileFilter() {
 									public boolean accept(File pathname) {
 										if (!pathname.isFile()
-												&& IOUtil.BlacklistedFoldersFilter
+												&& FilterUtil.BlacklistedFoldersFilter
 														.accept(pathname)) {
 											return false;
 										}
