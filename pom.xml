@@ -14,7 +14,6 @@
 	<modules>
 		<module>gp-parent</module>
 		<module>ascore</module>
-<!--		<module>gpnatives</module> -->
 		<module>gpcore</module>
 		<module>asswinggui</module>
 		<module>avswinggui</module>
