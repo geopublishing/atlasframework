@@ -777,10 +777,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	private URL getJarUrlInsideGpNatives(String libName) {
 		if (GPNATIVES_JARNAME.equals(libName))
 			return null;
-		URL findNativesJar = findJarUrl(GPNATIVES_JARNAME);
+//		URL findNativesJar = findJarUrl(GPNATIVES_JARNAME);
 		URL url;
 		try {
-			url = new URL("jar:" + findNativesJar.toString() + "!/" + libName);
+			url = new URL("jar:" + 
+//					findNativesJar.toString() + 
+					"!/" + libName);
 			url.openStream().close();
 		} catch (Exception e) {
 			// LOGGER.info(e);
