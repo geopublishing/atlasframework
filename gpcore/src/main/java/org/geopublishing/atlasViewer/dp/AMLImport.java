@@ -286,6 +286,15 @@ public class AMLImport {
 		NodeList nodes;
 		// LOGGER.debug("Parsing DOM to AtlasConfig...");
 
+		// Checking options for gphoster
+		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI,AMLUtil.TAG_GPHOSTER);
+		if (nodes.getLength()!=0)
+		{
+			Node gpHosterNode = nodes.item(0);
+			if(gpHosterNode.getAttributes().getNamedItem(AMLUtil.ATT_AUTH)!= null){
+				ac.setGpHosterAuth((Boolean.parseBoolean(gpHosterNode.getAttributes().getNamedItem(AMLUtil.ATT_AUTH).getTextContent())));
+			}
+		}
 		// Checking the GP version this atlas.xml has been created with
 		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI, "atlas");
 		Node atlasNode = nodes.item(0);
@@ -296,6 +305,8 @@ public class AMLImport {
 			ac.setJnlpBaseUrl(atlasNode.getAttributes()
 					.getNamedItem(AMLUtil.ATT_jnlpBaseUrl).getTextContent());
 		}
+		
+		
 
 		// Read the atlasBaseName attribute (since 1.7)
 		final Node atlasBasenameXMLItem = atlasNode.getAttributes()

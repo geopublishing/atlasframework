@@ -54,7 +54,7 @@ public class AMLImportTest extends TestingClass {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 		ace.setGpHosterAuth(true);
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
-		assertTrue(ace2.isGpHosterAuth());
+		assertTrue(ace2.getGpHosterAuth());
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class AMLImportTest extends TestingClass {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 		ace.setGpHosterAuth(false);
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
-		assertFalse(ace2.isGpHosterAuth());
+		assertFalse(ace2.getGpHosterAuth());
 	}
 
 	@Test

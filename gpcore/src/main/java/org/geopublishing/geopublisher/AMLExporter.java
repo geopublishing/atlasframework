@@ -346,6 +346,7 @@ public class AMLExporter {
 				String.valueOf(ReleaseUtil.getVersionMin(GpCoreUtil.class)));
 		atlas.setAttribute(AMLUtil.ATT_buildVersion,
 				String.valueOf(ReleaseUtil.getVersionBuild(GpCoreUtil.class)));
+		
 
 		// Store the atlasBaseName attribute, since 1.7
 		atlas.setAttribute(AMLUtil.ATT_atlasBasename, getAce().getBaseName());
@@ -374,7 +375,12 @@ public class AMLExporter {
 		atlasversion.appendChild(document.createTextNode(getAce()
 				.getAtlasversion().toString()));
 		atlas.appendChild(atlasversion);
-
+		
+		// <aml:gphoster>
+		Element gphosterauth = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_GPHOSTER);
+		gphosterauth.setAttribute(AMLUtil.ATT_AUTH,getAce().getGpHosterAuth()+"");
+		atlas.appendChild(gphosterauth);
+		
 		// <aml:supportedLanguages>
 		// Loops over List of supported Languagecodes
 		final Element supportedLanguages = document.createElementNS(

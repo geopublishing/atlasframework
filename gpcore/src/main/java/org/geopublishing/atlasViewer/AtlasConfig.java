@@ -582,6 +582,7 @@ public class AtlasConfig implements Disposable {
 	 * Where on the map shall the maplogo be displayed.
 	 */
 	protected LogoPosition maplogoPosition = LogoPosition.BOTTOMRIGHT;
+	private boolean gpHosterAuth;
 
 	/**
 	 * Where to position the map logo on the map image
@@ -596,5 +597,11 @@ public class AtlasConfig implements Disposable {
 	public void setMaplogoPosition(LogoPosition pos) {
 		maplogoPosition = pos;
 	}
+	public void setGpHosterAuth(boolean gpHosterAuth) {
+		this.gpHosterAuth = gpHosterAuth;
+	}
 
+	public boolean getGpHosterAuth() {
+			return gpHosterAuth;
+	}
 }

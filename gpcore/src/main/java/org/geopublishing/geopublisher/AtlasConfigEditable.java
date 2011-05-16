@@ -70,6 +70,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	public static final String SPLASHSCREEN_RESOURCE_NAME_FALLBACK = "/export/default_splashscreen.png";
 	public static final String MAPLOGO_RESOURCE_NAME_FALLBACK = "/export/default_maplogo.png";
 
+	private boolean gpHosterAuth = false;
 	private final FileResourceLoader fileResLoader;
 
 	private final FileWebResourceLoader fileWebResLoader;
@@ -792,5 +793,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		}
 
 	}
+
+
 
 }

@@ -120,6 +120,14 @@ public class AMLUtil {
 	public static final String ATT_NODATA = "nodata";
 
 	/**
+	 * if the atlas is exported to the web, this option shows wheater or not the
+	 * atlas schould be publicly accessible
+	 */
+	public static final String ATT_AUTH = "auth";
+	
+	public static final String TAG_GPHOSTER ="gpHoster";
+
+	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 
 	 * @throws CQLException
