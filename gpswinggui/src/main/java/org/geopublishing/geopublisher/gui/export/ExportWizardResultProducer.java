@@ -68,8 +68,6 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData.get(ExportWizard.ACE);
 
-		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
-			return null; // TODO what should be return here?
 
 		final Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
 		final Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
@@ -77,7 +75,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final boolean isDiskZip = (Boolean) wizardData.get(ExportWizard.DISKZIP_CHECKBOX);
 		final String exportDir = (String) wizardData.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
-		final Boolean gpHosterAuth = !(Boolean) wizardData.get(ExportWizard.GpHosterAuth);
+		final Boolean isPublic = (Boolean) wizardData.get(ExportWizard.GpHosterAuth);
+		final boolean gpHosterAuth = isPublic != null ? !isPublic : true;
 
 		final GpHosterClient gphc = (GpHosterClient) wizardData.get(ExportWizard.GPHC);
 
@@ -114,9 +113,6 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				GPProps.set(Keys.gpHosterServerList, liste.toPropertiesString());
 			}
 			
-			ace.setGpHosterAuth(gpHosterAuth);
-			GpSwingUtil.save(ace,null,false);
-				
 			// if (gphc.getUserName() != null)
 			// GPProps.set(Keys.GPH_Username, gphc.getUserName());
 			// if (gphc.getPassword() != null)
@@ -124,6 +120,11 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 			GPProps.store();
 		}
+
+		ace.setGpHosterAuth(gpHosterAuth);
+
+		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
+			return null; // TODO what should be return here?
 
 		/**
 		 * Start the export as a DeferredWizardResult

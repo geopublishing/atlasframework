@@ -582,6 +582,7 @@ public class AtlasConfig implements Disposable {
 	 * Where on the map shall the maplogo be displayed.
 	 */
 	protected LogoPosition maplogoPosition = LogoPosition.BOTTOMRIGHT;
+
 	private boolean gpHosterAuth;
 
 	/**

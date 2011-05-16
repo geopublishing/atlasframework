@@ -250,8 +250,8 @@ public class GpHosterClient {
 		if (atlasBasenameFree(atlasBasename))
 			return null;
 
-		System.out
-				.println("Username = " + username + " password = " + password);
+		// System.out
+		// .println("Username = " + username + " password = " + password);
 
 		return new AtlasFingerprint(sendRESTstring(METHOD.GET.toString(),
 				FINGERPRINT_ATLAS_PATH + atlasBasename, null, username,

@@ -134,10 +134,6 @@ public class ExportWizard extends WizardBranchController {
 	 * return a {@link File} or a {@link JPanel}
 	 */
 	public static Object showWizard(Component owner, AtlasConfigEditable atlasConfigEditable) {
-		//
-		// // TODO
-		// if (owner == null)
-		// throw new IllegalStateException();
 
 		while (!checkForRequiredMetadata(owner, atlasConfigEditable)) {
 			EditAtlasParamsDialog editAtlasParamsDialog = new EditAtlasParamsDialog(owner, atlasConfigEditable);
