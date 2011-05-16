@@ -37,8 +37,8 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 				GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
 
 				gphc.setUserName((String) getWizardData(ExportWizard.GPH_USERNAME));
-				if ((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD) != null)
-					gphc.setUserName((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD));
+				// if ((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD) != null)
+				// gphc.setUserName((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD));
 				gphc.setPassword((String) getWizardData(ExportWizard.GPH_PASSWORD));
 
 				try {
