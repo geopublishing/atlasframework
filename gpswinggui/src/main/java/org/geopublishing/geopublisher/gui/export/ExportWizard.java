@@ -21,12 +21,10 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
-import org.geopublishing.geopublisher.GPProps;
-import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.export.GpHosterServerSettings;
+import org.geopublishing.geopublisher.export.gphoster.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.gui.EditAtlasParamsDialog;
-import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.api.wizard.WizardDisplayer;
 import org.netbeans.spi.wizard.Wizard;
@@ -107,14 +105,7 @@ public class ExportWizard extends WizardBranchController {
 
 		// Create the one and only instance of GpHoster!
 		// The settings to use are defined in the properties
-		GpHosterServerSettings gpss;
-		try {
-			gpss = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList)).get(GPProps.getInt(
-					Keys.lastGpHosterServerIdx, 1) - 1);
-		} catch (Exception e) {
-			LOGGER.warn("Failed to read the selected GpHosterServer settigs from properties", e);
-			gpss = GpHosterServerSettings.DEFAULT;
-		}
+		GpHosterServerSettings gpss = GpFtpAtlasExport.getSelectedGpHosterServerSettings();
 		final GpHosterClient gphc = new GpHosterClient(gpss);
 		initialProperties.put(GPHC, gphc);
 	}

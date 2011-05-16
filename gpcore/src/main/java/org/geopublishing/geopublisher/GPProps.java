@@ -293,7 +293,6 @@ public abstract class GPProps {
 			 * ;-)
 			 */
 			properties.load(new FileInputStream(getPropertiesFile()));
-
 		} catch (final IOException e1) {
 			if (guiOwner != null) {
 				ExceptionDialog.show(guiOwner, e1);
@@ -367,8 +366,6 @@ public abstract class GPProps {
 	 * .Geopublisher/geopublisher.properties...<br/>
 	 * TODO should probably be seperated into a user and a system properties
 	 * file...
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static void upgrade() {
 		LOGGER.debug("upgrade from " + PROPERTIES_FILENAME);

@@ -123,7 +123,8 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 			return false;
 		try {
 
-			String[] split = propString.split(Pattern.quote(DELIMITER));
+			// + " " makes sense, trust me!
+			String[] split = (propString + " ").split(Pattern.quote(DELIMITER));
 
 			int i = 0;
 			setAlias(split[i++]);

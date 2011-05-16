@@ -90,6 +90,7 @@ import de.schmitzm.versionnumber.ReleaseUtil;
  */
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
+
 	static {
 		// Do not use bold font as default, its ugly!
 		Font oldLabelFont = UIManager.getFont("Label.font");

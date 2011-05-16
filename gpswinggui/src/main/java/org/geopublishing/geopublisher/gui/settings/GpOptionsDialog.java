@@ -6,6 +6,7 @@ import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableTabbedDialogAdapter;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
@@ -26,6 +27,12 @@ public class GpOptionsDialog extends CancellableTabbedDialogAdapter {
 		SwingUtil.setRelativeFramePosition(this, parentWindow, 0.5, 0.5);
 
 		setVisible(true);
+
+
+		SwingUtil.setPreferredHeight(this, (int) (getPreferredSize().getHeight() * 1.2));
+		SwingUtil.setPreferredWidth(this, (int) (getPreferredSize().getWidth() * 1.2));
+		pack();
+		LangUtil.sleepExceptionless(100);
 		pack();
 
 		setModal(true);

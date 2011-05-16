@@ -21,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
+import org.geopublishing.geopublisher.export.gphoster.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
@@ -28,17 +29,12 @@ import org.netbeans.spi.wizard.WizardPage;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
-	private final String validationJwsOrDiskFailedMsg = GeopublisherGUI
-			.R("ExportWizard.JwsOrDisk.ValidationError");
+	private final String validationJwsOrDiskFailedMsg = GeopublisherGUI.R("ExportWizard.JwsOrDisk.ValidationError");
 
-	JLabel explanationJLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation"));
-	JLabel explanationJwsJLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation.Jws"));
-	JLabel explanationDiskJLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation.Disk"));
-	JLabel explanationFtpJLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.Ftp.Explanation.Ftp"));
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation"));
+	JLabel explanationJwsJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation.Jws"));
+	JLabel explanationDiskJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.JwsOrDisk.Explanation.Disk"));
+	JLabel explanationFtpJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.Explanation.Ftp"));
 	JCheckBox diskJCheckbox;
 	JCheckBox jwsJCheckbox;
 	JCheckBox ftpJCheckbox;
@@ -54,10 +50,8 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 	}
 
 	@Override
-	protected String validateContents(final Component component,
-			final Object event) {
-		if ((!getJwsJCheckbox().isSelected())
-				&& (!getDiskJCheckbox().isSelected())
+	protected String validateContents(final Component component, final Object event) {
+		if ((!getJwsJCheckbox().isSelected()) && (!getDiskJCheckbox().isSelected())
 				&& (!getFtpJCheckbox().isSelected())) {
 			return validationJwsOrDiskFailedMsg;
 		}
@@ -107,8 +101,7 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 
 	private JCheckBox getJwsJCheckbox() {
 		if (jwsJCheckbox == null) {
-			jwsJCheckbox = new JCheckBox(
-					GeopublisherGUI.R("ExportWizard.JwsOrDisk.JwsCheckbox"));
+			jwsJCheckbox = new JCheckBox(GeopublisherGUI.R("ExportWizard.JwsOrDisk.JwsCheckbox"));
 			jwsJCheckbox.setName(ExportWizard.JWS_CHECKBOX);
 			jwsJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportJWS));
 
@@ -118,8 +111,8 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 
 	private JCheckBox getFtpJCheckbox() {
 		if (ftpJCheckbox == null) {
-			ftpJCheckbox = new JCheckBox(
-					GeopublisherGUI.R("ExportWizard.Ftp.FtpCheckbox"));
+			ftpJCheckbox = new JCheckBox(GeopublisherGUI.R("ExportWizard.Ftp.FtpCheckbox", GpFtpAtlasExport
+					.getSelectedGpHosterServerSettings().getAlias()));
 			ftpJCheckbox.setName(ExportWizard.FTP_CHECKBOX);
 			ftpJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportFtp));
 		}
@@ -128,8 +121,7 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 
 	private JCheckBox getDiskJCheckbox() {
 		if (diskJCheckbox == null) {
-			diskJCheckbox = new JCheckBox(
-					GeopublisherGUI.R("ExportWizard.JwsOrDisk.DiskCheckbox"));
+			diskJCheckbox = new JCheckBox(GeopublisherGUI.R("ExportWizard.JwsOrDisk.DiskCheckbox"));
 			diskJCheckbox.setName(ExportWizard.DISK_CHECKBOX);
 			diskJCheckbox.setSelected(GPProps.getBoolean(Keys.LastExportDisk));
 
@@ -137,8 +129,7 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					getDiskZipJCheckbox().setEnabled(
-							getDiskJCheckbox().isSelected());
+					getDiskZipJCheckbox().setEnabled(getDiskJCheckbox().isSelected());
 				}
 			});
 		}
@@ -147,11 +138,9 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 
 	private JCheckBox getDiskZipJCheckbox() {
 		if (diskJCheckboxZip == null) {
-			diskJCheckboxZip = new JCheckBox(
-					GeopublisherGUI.R("ExportWizard.JwsOrDisk.DiskZipCheckbox"));
+			diskJCheckboxZip = new JCheckBox(GeopublisherGUI.R("ExportWizard.JwsOrDisk.DiskZipCheckbox"));
 			diskJCheckboxZip.setName(ExportWizard.DISKZIP_CHECKBOX);
-			diskJCheckboxZip.setSelected(GPProps.getBoolean(
-					Keys.LastExportDiskZipped, true));
+			diskJCheckboxZip.setSelected(GPProps.getBoolean(Keys.LastExportDiskZipped, true));
 			diskJCheckboxZip.setEnabled(getDiskJCheckbox().isSelected());
 
 		}

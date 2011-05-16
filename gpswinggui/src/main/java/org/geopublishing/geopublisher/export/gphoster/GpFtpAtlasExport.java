@@ -7,8 +7,12 @@ import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
+import org.geopublishing.geopublisher.GPProps;
+import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.LoggerResultProgressHandle;
 import org.geopublishing.geopublisher.export.AbstractAtlasExporter;
+import org.geopublishing.geopublisher.export.GpHosterServerSettings;
+import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.geopublishing.gpsync.GpDiff;
 import org.geopublishing.gpsync.GpSync;
@@ -24,7 +28,7 @@ import de.schmitzm.swing.formatter.MbDecimalFormatter;
  */
 public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
-	final static Logger LOGGER = Logger.getLogger(GpFtpAtlasExport.class);
+	final static Logger log = Logger.getLogger(GpFtpAtlasExport.class);
 
 	private final GpHosterClient gphc;
 
@@ -42,13 +46,13 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 		GpSync gpSync = new GpSync(ace.getAtlasDir(), ace.getBaseName());
 
-		LOGGER.info("Contacting geopublishing.org");
+		log.info("Contacting geopublishing.org");
 		progress.setBusy("Contacting geopublishing.org");// i8n
 
 		checkAbort();
 		AtlasFingerprint requestedFingerprint = null;
 		if (!gphc.atlasBasenameFree(ace.getBaseName()))
-			LOGGER.info("GpFtf sync: this is a new atlas.");
+			log.info("GpFtf sync: this is a new atlas.");
 		else {
 			requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
 		}
@@ -98,15 +102,15 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 					final String zipFilename = zipFile.getName();
 					// final String zipFilename = gpSync.getAtlasname() + ".zip";
-					LOGGER.info("FTP Upload " + zipFilename + " started");
+					log.info("FTP Upload " + zipFilename + " started");
 					ftpClient.put(fis, zipFilename);
 					if (cancel.get() == true) {
-						LOGGER.info("FTP Upload " + zipFilename + " cancelled, deleting zip on ftp");
+						log.info("FTP Upload " + zipFilename + " cancelled, deleting zip on ftp");
 						ftpClient.delete(gpSync.getAtlasname() + ".zip");
-						LOGGER.debug("deleting " + zipFilename + " on ftp finished");
+						log.debug("deleting " + zipFilename + " on ftp finished");
 					} else {
 						gphc.informAboutUploadedZipFile(ace.getBaseName(), zipFile);
-						LOGGER.info("FTP Upload " + zipFilename + " finished");
+						log.info("FTP Upload " + zipFilename + " finished");
 					}
 					checkAbort();
 
@@ -133,6 +137,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		}
 		return size;
 	}
+
 	//
 	// /**
 	// * Initiates a URL request to the gp-hoster servlet and requests a
@@ -192,4 +197,22 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 	// return null;
 	// }
 	// }
+
+	/**
+	 * @return The selected or default GpHosterServerSettings for exporting
+	 */
+	public static GpHosterServerSettings getSelectedGpHosterServerSettings() {
+		try {
+
+			GPProps.get(Keys.gpHosterServerList);
+			final String propertiesString = GPProps.get(Keys.gpHosterServerList,
+					GpHosterServerSettings.DEFAULT.toPropertiesString());
+			final Integer int1 = GPProps.getInt(Keys.lastGpHosterServerIdx, 0);
+			return new GpHosterServerList(propertiesString).get(int1);
+		} catch (Exception e) {
+			log.error("error getting the select gphosterservice", e);
+			return GpHosterServerSettings.DEFAULT;
+		}
+	}
+
 }

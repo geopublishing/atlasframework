@@ -87,8 +87,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox()
-							.getSelectedItem();
+					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox().getSelectedItem();
 
 					GpHosterServerList oldList = getDbJComboBox().getDbList();
 
@@ -96,8 +95,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 					updateComboboxModel();
 
-					getDbJComboBox().setSelectedIndex(
-							getDbJComboBox().getItemCount() - 1);
+					getDbJComboBox().setSelectedIndex(getDbJComboBox().getItemCount() - 1);
 
 				}
 
@@ -109,8 +107,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dbDelJButton
-							.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
+					dbDelJButton.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
 				}
 			});
 
@@ -119,22 +116,20 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	}
 
 	/**
-	 * Updates the Combobox Model with the list of server stored in the
-	 * porperties. This does not automatically trigger a validation, since the
-	 * selected Item is not explicitly set.
+	 * Updates the Combobox Model with the list of server stored in the porperties. This does not automatically trigger
+	 * a validation, since the selected Item is not explicitly set.
 	 */
 	private void updateComboboxModel() {
 		getDbJComboBox().listChanged();
 		// Save the new settings
-		GPProps.set(Keys.gpHosterServerList, getDbJComboBox().getDbList()
-				.toPropertiesString());
-		GPProps.set(Keys.lastGpHosterServerIdx, getDbJComboBox()
-				.getSelectedIndex());
+		GPProps.set(Keys.gpHosterServerList, getDbJComboBox().getDbList().toPropertiesString());
+		GPProps.set(Keys.lastGpHosterServerIdx, getDbJComboBox().getSelectedIndex());
+		GPProps.store();
 	}
 
 	private void createOrEditDb(GpHosterServerSettings dbServer) {
-		GpHosterServerSettings newOrEditedDbServer = GpHosterServerSettings
-				.createOrEdit(GpHostingOptionsTab.this, dbServer);
+		GpHosterServerSettings newOrEditedDbServer = GpHosterServerSettings.createOrEdit(GpHostingOptionsTab.this,
+				dbServer);
 
 		if (newOrEditedDbServer == null)
 			return;
@@ -157,15 +152,17 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	private GpHosterServerListJComboBox getDbJComboBox() {
 		if (dbJComboBox == null) {
 
-			final String propertiesString = GPProps
-					.get(GPProps.Keys.gpHosterServerList);
-			dbJComboBox = new GpHosterServerListJComboBox(
-					new GpHosterServerList(propertiesString));
+			final String propertiesString = GPProps.get(GPProps.Keys.gpHosterServerList,
+					GpHosterServerSettings.DEFAULT.toPropertiesString());
+			dbJComboBox = new GpHosterServerListJComboBox(new GpHosterServerList(propertiesString));
 
 			SwingUtil.addMouseWheelForCombobox(dbJComboBox);
 
 			// Select the last used server
 			if (GPProps.get(Keys.lastGpHosterServerIdx) != null) {
+
+				// TODO
+
 				Integer idx = GPProps.getInt(Keys.lastGpHosterServerIdx, -1);
 				if (idx < dbJComboBox.getDbList().size())
 					dbJComboBox.setSelectedIndex(idx);
@@ -176,8 +173,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Store the last used server index
-					GPProps.set(Keys.lastGpHosterServerIdx,
-							dbJComboBox.getSelectedIndex());
+					GPProps.set(Keys.lastGpHosterServerIdx, dbJComboBox.getSelectedIndex());
 				}
 			});
 
@@ -196,8 +192,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox()
-							.getSelectedItem();
+					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox().getSelectedItem();
 
 					createOrEditDb(db);
 
@@ -211,8 +206,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dbEditJButton.setEnabled(getDbJComboBox()
-							.getSelectedIndex() >= 0);
+					dbEditJButton.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
 				}
 			});
 
