@@ -73,8 +73,12 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 					return gphc.checkService().validationValue();
 				}
 			}.executeModalNoEx();
-			if (r != null)
+			if (r != null) {
+				// Der GP Dienst ist vermutlich nicht online.
+				putWizardData(ExportWizard.FTP_CHECKBOX, false);
+				getFtpJCheckbox().setSelected(false);
 				return r;
+			}
 		}
 
 		return null;

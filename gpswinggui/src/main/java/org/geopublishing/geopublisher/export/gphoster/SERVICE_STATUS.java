@@ -8,6 +8,9 @@ import org.geopublishing.geopublisher.GpUtil;
 public enum SERVICE_STATUS {
 	GPHOSTER_FTP_DOWN, GPHOSTER_REST_DOWN, SYSTEM_OFFLINE, OK;
 
+	/**
+	 * Returns <code>null</code> if all is is ok.
+	 */
 	public String validationValue() {
 
 		if (this == OK)
