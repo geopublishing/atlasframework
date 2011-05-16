@@ -77,6 +77,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final boolean isDiskZip = (Boolean) wizardData.get(ExportWizard.DISKZIP_CHECKBOX);
 		final String exportDir = (String) wizardData.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
+		final Boolean gpHosterAuth = (Boolean) wizardData.get(ExportWizard.GpHosterAuth);
 
 		final GpHosterClient gphc = (GpHosterClient) wizardData.get(ExportWizard.GPHC);
 
@@ -112,6 +113,10 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				}
 				GPProps.set(Keys.gpHosterServerList, liste.toPropertiesString());
 			}
+			
+			ace.setGpHosterAuth(gpHosterAuth);
+			GpSwingUtil.save(ace,null,false);
+				
 			// if (gphc.getUserName() != null)
 			// GPProps.set(Keys.GPH_Username, gphc.getUserName());
 			// if (gphc.getPassword() != null)

@@ -84,7 +84,7 @@ public class ExportWizard extends WizardBranchController {
 	 * 
 	 * @see ExportWizardPage_GpHoster_ExportOptions
 	 */
-	public static final String MAKE_PUBLIC = "public?";
+	public static final String GpHosterAuth = "public?";
 
 	/** Used to identify whether a Sync to FTP is a first one **/
 	public static final String FTP_FIRST = "firstSync?";

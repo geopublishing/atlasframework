@@ -246,6 +246,7 @@ public class GpHosterClient {
 	private AtlasFingerprint atlasFingerprint(String atlasBasename,
 			String username, String password) throws IOException {
 
+		//Atlas does not exist online, so no remote atlasFingerprint can be retrieved
 		if (atlasBasenameFree(atlasBasename))
 			return null;
 

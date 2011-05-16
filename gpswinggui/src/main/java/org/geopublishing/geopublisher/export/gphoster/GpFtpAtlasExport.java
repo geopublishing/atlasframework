@@ -50,7 +50,8 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		progress.setBusy("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());// i8n
 
 		checkAbort();
-		AtlasFingerprint requestedFingerprint = null;
+		AtlasFingerprint requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
+		
 		if (gphc.atlasBasenameFree(ace.getBaseName()))
 			log.info("GpFtf sync: this is a new atlas.");
 		else {

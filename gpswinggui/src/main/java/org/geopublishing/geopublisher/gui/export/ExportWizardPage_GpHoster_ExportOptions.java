@@ -81,7 +81,7 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 		if (makePublicCheckBox == null) {
 			makePublicCheckBox = new JCheckBox(
 					GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
-			makePublicCheckBox.setName(ExportWizard.MAKE_PUBLIC);
+			makePublicCheckBox.setName(ExportWizard.GpHosterAuth);
 		}
 		return makePublicCheckBox;
 	}
