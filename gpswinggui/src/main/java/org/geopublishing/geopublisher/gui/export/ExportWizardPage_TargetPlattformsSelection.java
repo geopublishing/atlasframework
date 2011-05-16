@@ -78,6 +78,9 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 				putWizardData(ExportWizard.FTP_CHECKBOX, false);
 				getFtpJCheckbox().setSelected(false);
 				return r;
+			} else {
+				putWizardData(ExportWizard.FTP_CHECKBOX, true);
+				getFtpJCheckbox().setSelected(true);
 			}
 		}
 
