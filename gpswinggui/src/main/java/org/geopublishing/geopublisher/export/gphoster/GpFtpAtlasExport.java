@@ -28,8 +28,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 	private final GpHosterClient gphc;
 
-	public GpFtpAtlasExport(AtlasConfigEditable ace, GpHosterClient gphc,
-			ResultProgressHandle progress) {
+	public GpFtpAtlasExport(AtlasConfigEditable ace, GpHosterClient gphc, ResultProgressHandle progress) {
 		super(ace, progress);
 		this.gphc = gphc;
 	}
@@ -64,57 +63,61 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 		progress.setBusy("Creating zip"); // i8n
 		File zipFile = gpSync.createZip(gpDiff);
-		checkAbort();
+		try {
 
-		long zipSizeMb = zipFile.length();
-		progress.setBusy("Uploading " + gpDiff.getDiffFilePaths().size()
-				+ " files (" + new MbDecimalFormatter().format(zipSizeMb)
-				+ "), delete " + gpDiff.getFilesToDelete().size() + "files"); // i8n
+			checkAbort();
 
-		final FTPClient ftpClient = new FTPClient();
-		try { // quit ftp connection
-			ftpClient.setRemoteHost(gphc.getFtpHostname());
-			ftpClient.setTimeout(5000);
-			ftpClient.connect();
-			// TODO Generate programatically!
-			ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
-			FileInputStream fis = new FileInputStream(zipFile);
-			try {
-				ftpClient.setType(FTPTransferType.BINARY);
+			long zipSizeMb = zipFile.length();
+			progress.setBusy("Uploading " + gpDiff.getDiffFilePaths().size() + " files ("
+					+ new MbDecimalFormatter().format(zipSizeMb) + "), delete " + gpDiff.getFilesToDelete().size()
+					+ "files"); // i8n
 
-				// Start a Timer-Thread to look for cancel requests
-				final Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
+			final FTPClient ftpClient = new FTPClient();
+			try { // quit ftp connection
+				ftpClient.setRemoteHost(gphc.getFtpHostname());
+				ftpClient.setTimeout(5000);
+				ftpClient.connect();
+				// TODO Generate programatically!
+				ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
+				FileInputStream fis = new FileInputStream(zipFile);
+				try {
+					ftpClient.setType(FTPTransferType.BINARY);
 
-					@Override
-					public void run() {
-						if (cancel.get() == true) {
-							ftpClient.cancelTransfer();
-							timer.cancel();
+					// Start a Timer-Thread to look for cancel requests
+					final Timer timer = new Timer();
+					timer.schedule(new TimerTask() {
+
+						@Override
+						public void run() {
+							if (cancel.get() == true) {
+								ftpClient.cancelTransfer();
+								timer.cancel();
+							}
 						}
+					}, 300, 300);
+
+					final String zipFilename = zipFile.getName();
+					// final String zipFilename = gpSync.getAtlasname() + ".zip";
+					LOGGER.info("FTP Upload " + zipFilename + " started");
+					ftpClient.put(fis, zipFilename);
+					if (cancel.get() == true) {
+						LOGGER.info("FTP Upload " + zipFilename + " cancelled, deleting zip on ftp");
+						ftpClient.delete(gpSync.getAtlasname() + ".zip");
+						LOGGER.debug("deleting " + zipFilename + " on ftp finished");
+					} else {
+						gphc.informAboutUploadedZipFile(ace.getBaseName(), zipFile);
+						LOGGER.info("FTP Upload " + zipFilename + " finished");
 					}
-				}, 300, 300);
+					checkAbort();
 
-				final String zipFilename = gpSync.getAtlasname() + ".zip";
-				LOGGER.info("FTP Upload " + zipFilename + " started");
-				ftpClient.put(fis, zipFilename);
-				if (cancel.get() == true) {
-					LOGGER.info("FTP Upload " + zipFilename
-							+ " cancelled, deleting zip on ftp");
-					ftpClient.delete(gpSync.getAtlasname() + ".zip");
-					LOGGER.debug("deleting " + zipFilename + " on ftp finished");
-				} else {
-					gphc.informAboutUploadedZipFile(ace.getBaseName(), zipFile);
-					LOGGER.info("FTP Upload " + zipFilename + " finished");
+				} finally {
+					fis.close();
 				}
-				checkAbort();
-
 			} finally {
-				fis.close();
-				zipFile.delete();
+				ftpClient.quit();
 			}
 		} finally {
-			ftpClient.quit();
+			zipFile.delete();
 			progress.setBusy("FTP connection cosed"); // i8n
 		}
 
