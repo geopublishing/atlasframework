@@ -67,7 +67,6 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
-import org.jfree.util.Log;
 
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
@@ -640,7 +639,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 
 				@Override
 				public void run() {
-					Log.info("Automatically closing "
+					LOGGER.info("Automatically closing "
 							+ AtlasViewerGUI.class.getSimpleName()
 							+ " (TESTMODE activated) after "
 							+ TESTMODE_WAITTOKILL + "ms NOW");

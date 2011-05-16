@@ -755,10 +755,6 @@ public class AMLImport {
 		// if (ac.getProperties().getBoolean(Keys.rasterReader, true)) {
 		LOGGER.info("Using new raster reader for " + id);
 		dpe = new DpLayerRaster_Reader(ac);
-		// } else {
-		// Log.info("Using old gridCoverage " + id);
-		// dpe = new DpLayerRaster_GridCoverage2D(ac);
-		// }
 
 		dpe.setId(id);
 		// ****************************************************************************

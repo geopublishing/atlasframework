@@ -247,7 +247,7 @@ public class AVSwingUtil extends GpCoreUtil {
 		// FileUtils.copyURLToFile(url, localTempFile);
 		// localTempFile.deleteOnExit();
 		// String msg = "downloaded to " + localTempFile;
-		// Log.debug(msg);
+		// LOGGER.debug(msg);
 		// log.debug(msg);
 		// return true;
 		// }

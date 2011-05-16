@@ -12,9 +12,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.gpsync.AtlasFingerprint;
-import org.jfree.util.Log;
 
 import sun.misc.BASE64Encoder;
 
@@ -27,6 +27,8 @@ import de.schmitzm.io.IOUtil;
  */
 public class GpHosterClient {
 
+	private final static Logger log = Logger.getLogger(GpHosterClient.class);
+
 	private static final String EXISTS_USER_PATH = "userExists/";
 	private static final String CREATE_USER_PATH = "userCreate/";
 	private static final String DELETE_USER_PATH = "userDelete/";
@@ -36,6 +38,7 @@ public class GpHosterClient {
 
 	private static final String MASTUSER = "w2";
 	private static final String MASTPASSWD = "32894013";
+
 	private static final int SC_OK = 200;
 
 	// TODO Make switchable!
@@ -125,7 +128,7 @@ public class GpHosterClient {
 	 */
 	public boolean userDelete() throws IOException {
 		if (getUserName() == null || getUserName().equals(MASTUSER)) {
-			Log.info("Will not delete the master user!");
+			log.info("Will not delete the master user!");
 			return false;
 		}
 		return userDelete(getUserName(), getPassword());
@@ -400,7 +403,7 @@ public class GpHosterClient {
 		final boolean valid = SC_OK == sendRESTint(METHOD.GET.toString(),
 				EXISTS_USER_PATH + getUserName(), null, getUserName(),
 				getPassword());
-		Log.debug("Checking for validity of user/password: " + getUserName()
+		log.debug("Checking for validity of user/password: " + getUserName()
 				+ "/" + getPassword() + ": " + valid);
 		return valid;
 	}
