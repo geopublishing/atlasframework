@@ -337,13 +337,18 @@ public class GpHosterClient {
 		return connection;
 	}
 
+	long lastCheckStatusTime = 0;
+
 	/**
-	 * Does tests to check whether the service is available. Unless the system
-	 * is completely offline, the result is cached.
+	 * Does tests to check whether the service is available. Unless the system is completely offline, the result is
+	 * cached for 5 Seconds.
 	 */
 	public SERVICE_STATUS checkService() {
-		if (serviceStatus == null
+
+		if (serviceStatus == null || ((System.currentTimeMillis() - lastCheckStatusTime) > 5000)
 				|| serviceStatus == SERVICE_STATUS.SYSTEM_OFFLINE) {
+
+			lastCheckStatusTime = System.currentTimeMillis();
 
 			// Check generally
 			if (!IOUtil.urlExists("http://www.denic.de/"))

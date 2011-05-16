@@ -36,8 +36,7 @@ import org.netbeans.spi.wizard.WizardPage;
 import de.schmitzm.lang.LangUtil;
 
 /**
- * This {@link Wizard} provides an easy way for the Geopublisher user to export
- * the atlas.
+ * This {@link Wizard} provides an easy way for the Geopublisher user to export the atlas.
  * 
  * @see {@link ExportWizardResultProducer} which finally runs the export.
  * @see {@link ExportWizardPage_Save}
@@ -49,8 +48,7 @@ import de.schmitzm.lang.LangUtil;
  * @author Stefan A. Tzeggai
  */
 public class ExportWizard extends WizardBranchController {
-	private static final Wizard FTP_BRANCH = new ExportWizardFTPBrancher()
-			.createWizard();
+	private static final Wizard FTP_BRANCH = new ExportWizardFTPBrancher().createWizard();
 
 	final static protected Logger LOGGER = Logger.getLogger(ExportWizard.class);
 
@@ -102,23 +100,19 @@ public class ExportWizard extends WizardBranchController {
 	static Map<Object, Object> initialProperties = new HashMap<Object, Object>();
 
 	/**
-	 * This constructor also defines the default (first) steps of the wizard
-	 * until it branches.
+	 * This constructor also defines the default (first) steps of the wizard until it branches.
 	 */
 	protected ExportWizard() {
-		super(new WizardPage[] { new ExportWizardPage_Save(),
-				new ExportWizardPage_TargetPlattformsSelection() });
+		super(new WizardPage[] { new ExportWizardPage_Save(), new ExportWizardPage_TargetPlattformsSelection() });
 
 		// Create the one and only instance of GpHoster!
 		// The settings to use are defined in the properties
 		GpHosterServerSettings gpss;
 		try {
-			gpss = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList))
-					.get(GPProps.getInt(Keys.lastGpHosterServerIdx, 0));
+			gpss = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList)).get(GPProps.getInt(
+					Keys.lastGpHosterServerIdx, 1) - 1);
 		} catch (Exception e) {
-			LOGGER.error(
-					"Failed to read the selected GpHosterServer settigs from properties",
-					e);
+			LOGGER.warn("Failed to read the selected GpHosterServer settigs from properties", e);
 			gpss = GpHosterServerSettings.DEFAULT;
 		}
 		final GpHosterClient gphc = new GpHosterClient(gpss);
@@ -126,22 +120,16 @@ public class ExportWizard extends WizardBranchController {
 	}
 
 	/**
-	 * @return whether all required meta-data has been supplied that is need for
-	 *         a successful export. (Title, Desc, Creator/Vendor in ALL
-	 *         languages and AtlasBasename)
+	 * @return whether all required meta-data has been supplied that is need for a successful export. (Title, Desc,
+	 *         Creator/Vendor in ALL languages and AtlasBasename)
 	 */
-	private static boolean checkForRequiredMetadata(Component owner,
-			AtlasConfigEditable ace) {
+	private static boolean checkForRequiredMetadata(Component owner, AtlasConfigEditable ace) {
 
 		for (String lang : ace.getLanguages()) {
-			if (ace.getBaseName() == null || ace.getTitle().get(lang) == null
-					|| ace.getTitle().get(lang).equals("")
-					|| ace.getDesc().get(lang) == null
-					|| ace.getDesc().get(lang).equals("")
-					|| ace.getCreator().get(lang) == null
-					|| ace.getCreator().get(lang).equals("")) {
-				AVSwingUtil.showMessageDialog(owner,
-						GeopublisherGUI.R("Export.Error.MissingMetaData"));
+			if (ace.getBaseName() == null || ace.getTitle().get(lang) == null || ace.getTitle().get(lang).equals("")
+					|| ace.getDesc().get(lang) == null || ace.getDesc().get(lang).equals("")
+					|| ace.getCreator().get(lang) == null || ace.getCreator().get(lang).equals("")) {
+				AVSwingUtil.showMessageDialog(owner, GeopublisherGUI.R("Export.Error.MissingMetaData"));
 				return false;
 			}
 		}
@@ -149,17 +137,15 @@ public class ExportWizard extends WizardBranchController {
 	}
 
 	/**
-	 * Exports an {@link AtlasConfigEditable} and returns a {@link File}
-	 * pointing to the export directory or <code>null</code>.
+	 * Exports an {@link AtlasConfigEditable} and returns a {@link File} pointing to the export directory or
+	 * <code>null</code>.
 	 * 
 	 * return a {@link File} or a {@link JPanel}
 	 */
-	public static Object showWizard(Component owner,
-			AtlasConfigEditable atlasConfigEditable) {
+	public static Object showWizard(Component owner, AtlasConfigEditable atlasConfigEditable) {
 
 		while (!checkForRequiredMetadata(owner, atlasConfigEditable)) {
-			EditAtlasParamsDialog editAtlasParamsDialog = new EditAtlasParamsDialog(
-					owner, atlasConfigEditable);
+			EditAtlasParamsDialog editAtlasParamsDialog = new EditAtlasParamsDialog(owner, atlasConfigEditable);
 			editAtlasParamsDialog.setVisible(true);
 			if (editAtlasParamsDialog.isCancelled())
 				return null;
@@ -170,8 +156,7 @@ public class ExportWizard extends WizardBranchController {
 		Wizard wiz = chartStartWizard.createWizard();
 
 		/**
-		 * This wizard shall start with featureSource and attributeMetaDataMap
-		 * set in the initialProperties map:
+		 * This wizard shall start with featureSource and attributeMetaDataMap set in the initialProperties map:
 		 */
 
 		initialProperties.put(ACE, atlasConfigEditable);
@@ -180,15 +165,13 @@ public class ExportWizard extends WizardBranchController {
 		// Window parent = SwingUtil.getParentWindow(owner);
 		// parent.getBounds()
 
-		final Object showWizard = WizardDisplayer.showWizard(wiz, null, null,
-				initialProperties);
+		final Object showWizard = WizardDisplayer.showWizard(wiz, null, null, initialProperties);
 
 		return showWizard;
 	}
 
 	/**
-	 * It's being called all the time, so the Wizard can figure out which is the
-	 * next step.
+	 * It's being called all the time, so the Wizard can figure out which is the next step.
 	 */
 	@Override
 	public Wizard getWizardForStep(String step, Map wizardData) {
@@ -202,20 +185,16 @@ public class ExportWizard extends WizardBranchController {
 		Class<WizardPage>[] path = new Class[] {};
 
 		if (isDisk != null && isDisk || isJws != null && isJws)
-			path = (Class<WizardPage>[]) LangUtil.extendArray(path,
-					ExportWizardPage_ExportFolder.class);
+			path = (Class<WizardPage>[]) LangUtil.extendArray(path, ExportWizardPage_ExportFolder.class);
 		if (isDisk != null && isDisk)
-			path = (Class<WizardPage>[]) LangUtil.extendArray(path,
-					ExportWizardPage_JRECopy.class);
+			path = (Class<WizardPage>[]) LangUtil.extendArray(path, ExportWizardPage_JRECopy.class);
 		if (isJws != null && isJws)
-			path = (Class<WizardPage>[]) LangUtil.extendArray(path,
-					ExportWizardPage_JNLPDefinition.class);
+			path = (Class<WizardPage>[]) LangUtil.extendArray(path, ExportWizardPage_JNLPDefinition.class);
 		if (isFtp != null && isFtp)
 			return FTP_BRANCH;
 
 		// Last page:
-		path = (Class<WizardPage>[]) LangUtil.extendArray(path,
-				ExportWizardPage_WaitExporting.class);
+		path = (Class<WizardPage>[]) LangUtil.extendArray(path, ExportWizardPage_WaitExporting.class);
 
 		// System.out.println(path.length + " "
 		// + LangUtil.stringConcatWithSep("->  ", path));

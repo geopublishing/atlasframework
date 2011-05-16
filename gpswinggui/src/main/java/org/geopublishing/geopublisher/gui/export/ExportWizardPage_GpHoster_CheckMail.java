@@ -62,7 +62,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 			createdUserWithSuccessEx = e;
 			removeAll();
 			add(new JLabel(
-					"Could not create user. Please create a user online at hosting.geopublishing.org: "
+"Could not create user. Please try again later: "
 							+ e.getLocalizedMessage()), "");
 
 		}
