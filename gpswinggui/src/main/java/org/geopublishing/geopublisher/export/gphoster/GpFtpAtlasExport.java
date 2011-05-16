@@ -46,12 +46,12 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 		GpSync gpSync = new GpSync(ace.getAtlasDir(), ace.getBaseName());
 
-		log.info("Contacting geopublishing.org");
-		progress.setBusy("Contacting geopublishing.org");// i8n
+		log.info("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());
+		progress.setBusy("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());// i8n
 
 		checkAbort();
 		AtlasFingerprint requestedFingerprint = null;
-		if (!gphc.atlasBasenameFree(ace.getBaseName()))
+		if (gphc.atlasBasenameFree(ace.getBaseName()))
 			log.info("GpFtf sync: this is a new atlas.");
 		else {
 			requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
@@ -204,13 +204,25 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 	public static GpHosterServerSettings getSelectedGpHosterServerSettings() {
 		try {
 
-			GPProps.get(Keys.gpHosterServerList);
-			final String propertiesString = GPProps.get(Keys.gpHosterServerList,
-					GpHosterServerSettings.DEFAULT.toPropertiesString());
-			final Integer int1 = GPProps.getInt(Keys.lastGpHosterServerIdx, 0);
+			String propertiesString = GPProps.get(Keys.gpHosterServerList);
+			if (propertiesString == null) {
+				propertiesString = GpHosterServerSettings.DEFAULT.toPropertiesString();
+				GPProps.set(Keys.gpHosterServerList, propertiesString);
+				GPProps.store();
+			}
+			Integer int1 = GPProps.getInt(Keys.lastGpHosterServerIdx, null);
+			if (int1 == null) {
+				GPProps.set(Keys.lastGpHosterServerIdx, 0);
+				GPProps.store();
+				int1 = 0;
+			}
 			return new GpHosterServerList(propertiesString).get(int1);
 		} catch (Exception e) {
+			log.error("Error in gphosterlist", e);
+			GPProps.set(Keys.gpHosterServerList, GpHosterServerSettings.DEFAULT.toPropertiesString());
+			GPProps.set(Keys.lastGpHosterServerIdx, 0);
 			log.error("error getting the select gphosterservice", e);
+			GPProps.store();
 			return GpHosterServerSettings.DEFAULT;
 		}
 	}

@@ -24,16 +24,17 @@ import javax.swing.JTextArea;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
+import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.export.gphoster.GpFtpAtlasExport;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
+import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.netbeans.spi.wizard.DeferredWizardResult;
@@ -42,12 +43,12 @@ import org.netbeans.spi.wizard.Summary;
 import org.netbeans.spi.wizard.WizardException;
 import org.netbeans.spi.wizard.WizardPage.WizardResultProducer;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 
 /**
- * This class is using the values collected during the {@link ExportWizard} to
- * export the {@link AtlasConfigEditable}.
+ * This class is using the values collected during the {@link ExportWizard} to export the {@link AtlasConfigEditable}.
  * 
  * 
  * 
@@ -55,8 +56,7 @@ import de.schmitzm.swing.SwingUtil;
  */
 public class ExportWizardResultProducer implements WizardResultProducer {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ExportWizardResultProducer.class);
+	private static final Logger LOGGER = Logger.getLogger(ExportWizardResultProducer.class);
 
 	@Override
 	public boolean cancel(Map settings) {
@@ -66,27 +66,19 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 	@Override
 	public Object finish(Map wizardData) throws WizardException {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
-				.get(ExportWizard.ACE);
+		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData.get(ExportWizard.ACE);
 
-		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
-				false))
+		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
 			return null; // TODO what should be return here?
 
-		final Boolean isJws = (Boolean) wizardData
-				.get(ExportWizard.JWS_CHECKBOX);
-		final Boolean isFtp = (Boolean) wizardData
-				.get(ExportWizard.FTP_CHECKBOX);
-		final Boolean isDisk = (Boolean) wizardData
-				.get(ExportWizard.DISK_CHECKBOX);
-		final boolean isDiskZip = (Boolean) wizardData
-				.get(ExportWizard.DISKZIP_CHECKBOX);
-		final String exportDir = (String) wizardData
-				.get(ExportWizard.EXPORTFOLDER);
+		final Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
+		final Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
+		final Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
+		final boolean isDiskZip = (Boolean) wizardData.get(ExportWizard.DISKZIP_CHECKBOX);
+		final String exportDir = (String) wizardData.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
 
-		final GpHosterClient gphc = (GpHosterClient) wizardData
-				.get(ExportWizard.GPHC);
+		final GpHosterClient gphc = (GpHosterClient) wizardData.get(ExportWizard.GPHC);
 
 		/**
 		 * Store stuff to the geopublisher.properties
@@ -95,8 +87,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			if (isJws) {
 				// GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
 				// .get(ExportWizard.JNLPURL));
-				ace.setJnlpBaseUrl((String) wizardData
-						.get(ExportWizard.JNLPURL));
+				ace.setJnlpBaseUrl((String) wizardData.get(ExportWizard.JNLPURL));
 			}
 
 			if (exportDir != null)
@@ -107,9 +98,20 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			GPProps.set(Keys.LastExportDiskZipped, isDiskZip);
 			GPProps.set(Keys.LastExportJWS, isJws);
 
-			if (isFtp)
-				GPProps.set(Keys.gpHosterServerList, gphc.getServerSettings()
-						.toPropertiesString());
+			if (isFtp) {
+				// Weil jetzt eine GPHoster Verbindung erfolgreicht war, ist ein guter zeitpunkt Benutzername und
+				// Passwort zu speichern
+
+				GpHosterServerList liste = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList));
+				for (GpHosterServerSettings s : liste) {
+					if (gphc.getServerSettings().getAlias().equals(s.getAlias())
+							&& gphc.getServerSettings().getRestUrl().equals(s.getRestUrl())) {
+						s.setPassword(gphc.getPassword());
+						s.setUsername(gphc.getUserName());
+					}
+				}
+				GPProps.set(Keys.gpHosterServerList, liste.toPropertiesString());
+			}
 			// if (gphc.getUserName() != null)
 			// GPProps.set(Keys.GPH_Username, gphc.getUserName());
 			// if (gphc.getPassword() != null)
@@ -128,8 +130,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			private GpFtpAtlasExport gpFtpAtlasExport;
 
 			/**
-			 * If the user aborts the export, we tell it to JarExportUtil
-			 * instance
+			 * If the user aborts the export, we tell it to JarExportUtil instance
 			 */
 			@Override
 			public void abort() {
@@ -145,14 +146,12 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 				try {
 					if (isFtp) {
-						gpFtpAtlasExport = new GpFtpAtlasExport(ace, gphc,
-								progress);
+						gpFtpAtlasExport = new GpFtpAtlasExport(ace, gphc, progress);
 						gpFtpAtlasExport.export();
 					}
 					if (isDisk || isJws) {
 
-						jarExportUtil = new JarExportUtil(ace, progress,
-								new File(exportDir), isDisk, isJws, copyJRE);
+						jarExportUtil = new JarExportUtil(ace, progress, new File(exportDir), isDisk, isJws, copyJRE);
 						jarExportUtil.setZipDiskAfterExport(isDiskZip);
 						jarExportUtil.export();
 					}
@@ -165,8 +164,9 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					return;
 				}
 
-				progress.finished(Summary.create(getSummaryJPanel(), new File(
-						exportDir)));
+				progress.finished(Summary.create(getSummaryJPanel(), null));
+				// progress.finished(Summary.create(getSummaryJPanel(), new File(
+				// exportDir)));
 
 			}
 
@@ -191,39 +191,40 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			private JPanel getSummaryJPanel() {
 				JPanel panel = new JPanel(new MigLayout("wrap 1"));
 
-				String exportJWSandDISKdirRepresentation = exportDir;
-				if (SystemUtils.IS_OS_WINDOWS) {
-					// Otherwise all Windows paths are missing the slashes
-					exportJWSandDISKdirRepresentation = exportJWSandDISKdirRepresentation
-							.replace("\\", "\\\\");
+				if (exportDir != null) {
+					// Es wurde nach DISK oder JWS exportiert
+
+					String exportJWSandDISKdirRepresentation = IOUtil.escapePath(exportDir);
+
+					panel.add(new JLabel(GeopublisherGUI.R("Export.Dialog.Finished.Msg",
+							exportJWSandDISKdirRepresentation)));
+
+					final JButton openFolderButton = new JButton(
+							GeopublisherGUI.R("ExportWizard.Result.OpenFolderButton.Label"));
+					openFolderButton.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							try {
+								AVSwingUtil.lauchHTMLviewer(null, new URL(exportDir));
+							} catch (MalformedURLException e1) {
+								SwingUtil.openOSFolder(new File(exportDir));
+							}
+							openFolderButton.setEnabled(false);
+
+							// TODO Here it would be nice to close the Wizard... but
+							// how??
+						}
+
+					});
+
+					panel.add(openFolderButton, "align center");
 				}
 
-				panel.add(new JLabel(GeopublisherGUI.R(
-						"Export.Dialog.Finished.Msg",
-						exportJWSandDISKdirRepresentation)));
-
-				final JButton openFolderButton = new JButton(
-						GeopublisherGUI
-								.R("ExportWizard.Result.OpenFolderButton.Label"));
-				openFolderButton.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						try {
-							AVSwingUtil.lauchHTMLviewer(null,
-									new URL(exportDir));
-						} catch (MalformedURLException e1) {
-							SwingUtil.openOSFolder(new File(exportDir));
-						}
-						openFolderButton.setEnabled(false);
-
-						// TODO Here it would be nice to close the Wizard... but
-						// how??
-					}
-
-				});
-
-				panel.add(openFolderButton, "align center");
+				if (isFtp) {
+					// TODO
+					panel.add(new JLabel(GeopublisherGUI.R("ExportWizard.Result.FtpUploadSuccess.Label")));
+				}
 
 				return panel;
 			}
