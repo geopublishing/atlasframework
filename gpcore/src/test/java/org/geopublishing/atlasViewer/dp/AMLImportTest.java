@@ -1,8 +1,10 @@
 package org.geopublishing.atlasViewer.dp;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Random;
@@ -25,11 +27,9 @@ public class AMLImportTest extends TestingClass {
 	@Ignore
 	// Fails with some additional style :-/
 	public void testSaveAndLoad() throws Exception {
-		AtlasConfigEditable ace = GpTestingUtil
-				.getAtlasConfigE(TestAtlas.small);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
-		assertNotNull(ace
-				.getResource("ad/data/vector_01367156967_join10/join10.shp"));
+		assertNotNull(ace.getResource("ad/data/vector_01367156967_join10/join10.shp"));
 
 		String bnx = "testbasename_" + new Random().nextLong();
 		try {
@@ -42,8 +42,7 @@ public class AMLImportTest extends TestingClass {
 
 			AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 
-			assertNotNull(ace2
-					.getResource("ad/data/vector_01367156967_join10/join10.shp"));
+			assertNotNull(ace2.getResource("ad/data/vector_01367156967_join10/join10.shp"));
 
 			assertEquals(bnx, ace2.getBaseName());
 			assertEquals(jnlpx, ace2.getJnlpBaseUrl());
@@ -51,10 +50,24 @@ public class AMLImportTest extends TestingClass {
 	}
 
 	@Test
-	public void testImportExport_MetricNotVisible_MapPosition()
-			throws Exception {
-		AtlasConfigEditable ace = GpTestingUtil
-				.getAtlasConfigE(TestAtlas.small);
+	public void testFtpExportAuth() throws Exception {
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+		ace.setGpHosterAuth(true);
+		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
+		assertTrue(ace2.isGpHosterAuth());
+	}
+
+	@Test
+	public void testFtpExportAuth2() throws Exception {
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+		ace.setGpHosterAuth(false);
+		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
+		assertFalse(ace2.isGpHosterAuth());
+	}
+
+	@Test
+	public void testImportExport_MetricNotVisible_MapPosition() throws Exception {
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
 		Map map1_0 = ace.getMapPool().get(0);
 		map1_0.setScaleUnits(ScalePanel.ScaleUnits.METRIC);
@@ -82,8 +95,7 @@ public class AMLImportTest extends TestingClass {
 		map2_0 = ace2.getMapPool().get(0);
 		assertEquals(map1_0.getScaleUnits(), map2_0.getScaleUnits());
 		assertEquals(map1_0.isScaleVisible(), map2_0.isScaleVisible());
-		assertEquals(map1_0.isPreviewMapExtendInGeopublisher(),
-				map2_0.isPreviewMapExtendInGeopublisher());
+		assertEquals(map1_0.isPreviewMapExtendInGeopublisher(), map2_0.isPreviewMapExtendInGeopublisher());
 
 		ace.dispose();
 		ace2.dispose();
@@ -91,16 +103,13 @@ public class AMLImportTest extends TestingClass {
 
 	@Test
 	public void testImportExport_RasterNodataValue() throws Exception {
-		AtlasConfigEditable ace = GpTestingUtil
-				.getAtlasConfigE(TestAtlas.rasters);
+		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.rasters);
 
-		DpLayerRaster_Reader dplr = (DpLayerRaster_Reader) ace.getDataPool()
-				.get(0);
+		DpLayerRaster_Reader dplr = (DpLayerRaster_Reader) ace.getDataPool().get(0);
 		dplr.setNodataValue(-999.0);
 
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
-		final DpLayerRaster_Reader dplr2 = (DpLayerRaster_Reader) ace2
-				.getDataPool().get(0);
+		final DpLayerRaster_Reader dplr2 = (DpLayerRaster_Reader) ace2.getDataPool().get(0);
 		assertNotNull(dplr2);
 		assertNotNull(dplr2.getNodataValue());
 		assertEquals(-999., dplr2.getNodataValue(), 0.);
@@ -109,8 +118,7 @@ public class AMLImportTest extends TestingClass {
 
 		dplr.setNodataValue(null);
 		AtlasConfigEditable ace3 = GpTestingUtil.saveAndLoad(ace);
-		assertNull(((DpLayerRaster_Reader) ace3.getDataPool().get(0))
-				.getNodataValue());
+		assertNull(((DpLayerRaster_Reader) ace3.getDataPool().get(0)).getNodataValue());
 		ace3.dispose();
 		ace3 = null;
 
