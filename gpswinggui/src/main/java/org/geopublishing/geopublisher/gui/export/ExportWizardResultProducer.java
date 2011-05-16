@@ -77,7 +77,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 		final boolean isDiskZip = (Boolean) wizardData.get(ExportWizard.DISKZIP_CHECKBOX);
 		final String exportDir = (String) wizardData.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
-		final Boolean gpHosterAuth = (Boolean) wizardData.get(ExportWizard.GpHosterAuth);
+		final Boolean gpHosterAuth = !(Boolean) wizardData.get(ExportWizard.GpHosterAuth);
 
 		final GpHosterClient gphc = (GpHosterClient) wizardData.get(ExportWizard.GPHC);
 
