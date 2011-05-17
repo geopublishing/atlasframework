@@ -33,6 +33,7 @@
 						<inherited>false</inherited>
 						<configuration>
 							<includeScope>compile</includeScope>
+<!-- 							<outputFile>target/classes/atlasdependencies.properties</outputFile> -->							
 							<outputFile>src/main/resources/atlasdependencies.properties</outputFile>
 							<outputFilterFile>true</outputFilterFile>
 							<pathSeparator>:</pathSeparator>
