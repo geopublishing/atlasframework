@@ -6,7 +6,7 @@
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-parent</artifactId>
 	<name>gp-parent</name>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.7</version>
 	<packaging>pom</packaging>
 	<description>General settings and descriptions of all Geopublishing
 		modules</description>
@@ -29,7 +29,7 @@
 	<properties>
 		<geotools.version>2.6.5</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<schmitzm.version>2.5-SNAPSHOT</schmitzm.version>
+		<schmitzm.version>2.5</schmitzm.version>
 	</properties>
 
 	<organization>
@@ -66,8 +66,8 @@
 	<scm>
 		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk
 		</connection>
-		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
-		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/gp-atlas-framework
+		<url>https://svn.wald.intevation.org/svn/atlas-framework/branches/1.7-fixes</url>
+		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/branches/1.7-fixes
 		</developerConnection>
 	</scm>
 
