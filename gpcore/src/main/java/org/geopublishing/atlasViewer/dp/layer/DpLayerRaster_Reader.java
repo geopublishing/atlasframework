@@ -310,7 +310,7 @@ public class DpLayerRaster_Reader extends
 
 		} catch (Exception e) {
 			throw new RuntimeException(
-					"Exception while accessing the GeoObject", e);
+"Exception while accessing the GeoObject for " + getId() + " " + this, e);
 		}
 	}
 

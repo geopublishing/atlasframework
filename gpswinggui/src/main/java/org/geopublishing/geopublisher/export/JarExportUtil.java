@@ -2002,6 +2002,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "index.html"), targetDirJWS, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), JNLP_FILENAME), targetDirJWS, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "icon.gif"), targetDirJWS, true);
+
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "splashscreen.png"), targetDirJWS, true);
 		}
 

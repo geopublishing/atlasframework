@@ -80,7 +80,29 @@
 					</archive>
 				</configuration>
 			</plugin>
-
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
+				<executions>
+					<execution>
+						<id>buildnumber in phase initialize</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+						<svn>javasvn</svn> </providerImplementations> -->
+					<format>{0,date,yyyyMMddHHmm}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
+			</plugin>
 		</plugins>
 
 

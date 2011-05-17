@@ -22,6 +22,28 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0-beta-4</version>
+				<executions>
+					<execution>
+						<id>buildnumber in phase initialize</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+						<svn>javasvn</svn> </providerImplementations> -->
+					<format>{0,date,yyyyMMddHHmm}</format>
+					<items>
+						<item>timestamp</item>
+					</items>
+				</configuration>
+			</plugin>
+			<plugin>
 				<!-- Starting the application via mvn ecex:java -->
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -95,7 +117,7 @@
 					<version>${swt.version}</version>
 				</dependency>
 
-<!-- 				On GISBERT add JAI JARs for ALL Systems! -->
+				<!-- On GISBERT add JAI JARs for ALL Systems! -->
 				<dependency>
 					<groupId>de.wikisquare</groupId>
 					<artifactId>jai</artifactId>
@@ -131,13 +153,13 @@
 							<dependencies>
 								<!-- These dependencies are managed by a JNLP extension -->
 								<excludes>
-								
-								<!-- SWT -->
+
+									<!-- SWT -->
 									<exclude>org.eclipse.swt:swt-windows</exclude>
 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude>
-									
-								<!-- JAI -->
+
+									<!-- JAI -->
 									<exclude>com.sun.media:jai_codec-linux</exclude>
 									<exclude>com.sun.media:jai_codec-windows</exclude>
 									<exclude>com.sun.media:jai_core-linux</exclude>
@@ -157,37 +179,37 @@
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
 
-<!-- 							<commonJarResources> -->
-<!-- 								<jarResource> -->
-<!-- 									<artifactId>swt-windows</artifactId> -->
-<!-- 									<version>${swt.version}</version> -->
-<!-- 									<classifier>x86</classifier> -->
-<!-- 								</jarResource> -->
-<!-- 								<jarResource> -->
-<!-- 									<groupId>org.eclipse.swt</groupId> -->
-<!-- 									<artifactId>swt-windows</artifactId> -->
-<!-- 									<version>${swt.version}</version> -->
-<!-- 									<classifier>x86_64</classifier> -->
-<!-- 								</jarResource> -->
-<!-- 								<jarResource> -->
-<!-- 									<groupId>org.eclipse.swt</groupId> -->
-<!-- 									<artifactId>swt-gtk-linux</artifactId> -->
-<!-- 									<version>${swt.version}</version> -->
-<!-- 									<classifier>x86</classifier> -->
-<!-- 								</jarResource> -->
-<!-- 								<jarResource> -->
-<!-- 									<groupId>org.eclipse.swt</groupId> -->
-<!-- 									<artifactId>swt-gtk-linux</artifactId> -->
-<!-- 									<version>${swt.version}</version> -->
-<!-- 									<classifier>x86_64</classifier> -->
-<!-- 								</jarResource> -->
-<!-- 								<jarResource> -->
-<!-- 									<groupId>org.eclipse.swt</groupId> -->
-<!-- 									<artifactId>swt-cocoa-macosx</artifactId> -->
-<!-- 									<version>${swt.version}</version> -->
-<!-- 									<classifier>x86</classifier> -->
-<!-- 								</jarResource> -->
-<!-- 							</commonJarResources> -->
+							<!-- <commonJarResources> -->
+							<!-- <jarResource> -->
+							<!-- <artifactId>swt-windows</artifactId> -->
+							<!-- <version>${swt.version}</version> -->
+							<!-- <classifier>x86</classifier> -->
+							<!-- </jarResource> -->
+							<!-- <jarResource> -->
+							<!-- <groupId>org.eclipse.swt</groupId> -->
+							<!-- <artifactId>swt-windows</artifactId> -->
+							<!-- <version>${swt.version}</version> -->
+							<!-- <classifier>x86_64</classifier> -->
+							<!-- </jarResource> -->
+							<!-- <jarResource> -->
+							<!-- <groupId>org.eclipse.swt</groupId> -->
+							<!-- <artifactId>swt-gtk-linux</artifactId> -->
+							<!-- <version>${swt.version}</version> -->
+							<!-- <classifier>x86</classifier> -->
+							<!-- </jarResource> -->
+							<!-- <jarResource> -->
+							<!-- <groupId>org.eclipse.swt</groupId> -->
+							<!-- <artifactId>swt-gtk-linux</artifactId> -->
+							<!-- <version>${swt.version}</version> -->
+							<!-- <classifier>x86_64</classifier> -->
+							<!-- </jarResource> -->
+							<!-- <jarResource> -->
+							<!-- <groupId>org.eclipse.swt</groupId> -->
+							<!-- <artifactId>swt-cocoa-macosx</artifactId> -->
+							<!-- <version>${swt.version}</version> -->
+							<!-- <classifier>x86</classifier> -->
+							<!-- </jarResource> -->
+							<!-- </commonJarResources> -->
 
 							<sign>
 								<keypass>wasser</keypass>
@@ -198,7 +220,7 @@
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
 
-							<pack200>true</pack200> 
+							<pack200>true</pack200>
 							<gzip>true</gzip>
 
 						</configuration>
@@ -232,45 +254,45 @@
 						</executions>
 					</plugin>
 
-<!-- 					<plugin> -->
-<!-- 						<groupId>com.mindtree.techworks.insight.releng</groupId> -->
-<!-- 						<artifactId>maven-jsmooth-plugin</artifactId> -->
-<!-- 						<version>0.1.0-SNAPSHOT</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<phase>package</phase> -->
-<!-- 								<goals> -->
-<!-- 									<goal>jsmoothcompile</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 						<configuration> -->
-<!-- 							<jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
-<!-- 							<setExeName>false</setExeName> -->
-<!-- 							<setJarName>true</setJarName> -->
-<!-- 							<includeDependencies>true</includeDependencies> -->
-<!-- 						</configuration> -->
-<!-- 					</plugin> -->
+					<!-- <plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
-<!-- 					<plugin> -->
-<!-- 						<groupId>com.mindtree.techworks.insight.releng</groupId> -->
-<!-- 						<artifactId>maven-jsmooth-plugin</artifactId> -->
-<!-- 						<version>0.1.0-SNAPSHOT</version> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<phase>package</phase> -->
-<!-- 								<goals> -->
-<!-- 									<goal>jsmoothcompile</goal> -->
-<!-- 								</goals> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 						<configuration> -->
-<!-- 							<jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
-<!-- 							<setExeName>false</setExeName> -->
-<!-- 							<setJarName>true</setJarName> -->
-<!-- 							<includeDependencies>true</includeDependencies> -->
-<!-- 						</configuration> -->
-<!-- 					</plugin> -->
+					<!-- <plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>

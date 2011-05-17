@@ -5,6 +5,7 @@ import java.io.FilenameFilter;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -21,19 +22,17 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	final static Logger LOGGER = Logger.getLogger(AbstractAtlasExporter.class);
 
 	/**
-	 * Used to trigger canellation of the export. Export should idikate that
-	 * it's cleaning up the mess and return.
+	 * Used to trigger canellation of the export. Export should idikate that it's cleaning up the mess and return.
 	 */
 	public AtomicBoolean cancel = new AtomicBoolean(false);
 
 	protected ResultProgressHandle progress;
 
 	/**
-	 * Monitors the isRunning method of {@link #progress}. If it has been
-	 * canceled throws an {@link AtlasExportCancelledException}.
+	 * Monitors the isRunning method of {@link #progress}. If it has been canceled throws an
+	 * {@link AtlasExportCancelledException}.
 	 * 
-	 * User <code>jarExportUtil.cancel.set(true);</code> to request the thread
-	 * to cancel.
+	 * User <code>jarExportUtil.cancel.set(true);</code> to request the thread to cancel.
 	 * 
 	 * @throws AtlasExportCancelledException
 	 */
@@ -70,23 +69,19 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		}
 	}
 
-	private static final String version = ReleaseUtil
-			.getVersionMaj(GpCoreUtil.class)
-			+ "."
-			+ ReleaseUtil.getVersionMin(GpCoreUtil.class);
+	private static final String version = ReleaseUtil.getVersionMaj(AtlasStyler.class) + "."
+			+ ReleaseUtil.getVersionMin(AtlasStyler.class);
 
 	/**
-	 * Are we exporting from SNAPSHOT relases, then the exported atlas need
-	 * -SNAPSHOT jars also
+	 * Are we exporting from SNAPSHOT relases, then the exported atlas need -SNAPSHOT jars also
 	 **/
-	private static final String snapshot = ReleaseUtil.getVersionInfo(
-			GpUtil.class).contains("SNAPSHOT") ? "-SNAPSHOT" : "";
+	private static final String snapshot = ReleaseUtil.getVersionInfo(GpUtil.class).contains("SNAPSHOT") ? "-SNAPSHOT"
+			: "";
 
 	/**
-	 * Files next to atlas.gpa will be copied to the folders without putting
-	 * them in a JAR. This can be useful for example for PDF files that should
-	 * be referencable from within the atlas, but also reside uncompressed on
-	 * the CD root directory.
+	 * Files next to atlas.gpa will be copied to the folders without putting them in a JAR. This can be useful for
+	 * example for PDF files that should be referencable from within the atlas, but also reside uncompressed on the CD
+	 * root directory.
 	 */
 	protected static final FilenameFilter filterForRootLevelFiles = new FilenameFilter() {
 
@@ -113,39 +108,35 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 	};
 
 	/**
-	 * Resource location of the <code>license.html</code> with the license of
-	 * AtlasViewer.</code>
+	 * Resource location of the <code>license.html</code> with the license of AtlasViewer.</code>
 	 */
 	public static final String LICENSEHTML_RESOURCE_NAME = "/export/license.html";
 
 	protected final AtlasConfigEditable ace;
 
-	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID
-			+ "_EXPORT_" + System.currentTimeMillis();
+	public final String ATLAS_TEMP_FILE_EXPORTINSTANCE_ID = GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID + "_EXPORT_"
+			+ System.currentTimeMillis();
 
 	/**
-	 * Allows to tell the exporter to NOT delte all temp directories. This is
-	 * usefull if atlases are exported parallel
+	 * Allows to tell the exporter to NOT delte all temp directories. This is usefull if atlases are exported parallel
 	 */
 	private boolean keepTempFiles = false;
 
-	public AbstractAtlasExporter(AtlasConfigEditable ace,
-			ResultProgressHandle progress) {
+	public AbstractAtlasExporter(AtlasConfigEditable ace, ResultProgressHandle progress) {
 		this.progress = progress;
 		this.ace = ace;
 	}
 
 	/**
-	 * This approach could be problematic if there are more than one exports
-	 * running at a time.
+	 * This approach could be problematic if there are more than one exports running at a time.
 	 */
 	public void deleteOldTempExportDirs() {
 
 		/**
-		 * On the command line -t can be specified to NOT delte any temp files.
-		 * This needed in version 1.6 to run exports in parallel.<br/>
-		 * TODO Temp file management must be improved, so that every instacne
-		 * just deletes its own temp files after execution.
+		 * On the command line -t can be specified to NOT delte any temp files. This needed in version 1.6 to run
+		 * exports in parallel.<br/>
+		 * TODO Temp file management must be improved, so that every instacne just deletes its own temp files after
+		 * execution.
 		 */
 		// if (isKeepTempFiles())
 		// return;
@@ -166,8 +157,7 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		// }
 		// }
 
-		IOUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID,
-				GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID);
+		IOUtil.cleanupTempDir(ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, GpCoreUtil.ATLAS_TEMP_FILE_BASE_ID);
 	}
 
 	public boolean isKeepTempFiles() {

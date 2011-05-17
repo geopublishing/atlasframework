@@ -26,15 +26,15 @@
 				<executions>
 					<execution>
 						<id>Create atlasdependencies.properties</id>
-						<phase>generate-sources</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>build-classpath</goal>
 						</goals>
 						<inherited>false</inherited>
 						<configuration>
 							<includeScope>compile</includeScope>
-<!-- 							<outputFile>target/classes/atlasdependencies.properties</outputFile> -->							
-							<outputFile>src/main/resources/atlasdependencies.properties</outputFile>
+							<outputFile>target/classes/atlasdependencies.properties</outputFile>
+							<!-- <outputFile>src/main/resources/atlasdependencies.properties</outputFile> -->
 							<outputFilterFile>true</outputFilterFile>
 							<pathSeparator>:</pathSeparator>
 							<prefix>.</prefix>
