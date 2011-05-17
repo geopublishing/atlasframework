@@ -24,7 +24,7 @@
 
 <project basedir="${mvn.basedir}/src/deb/ant">
 	<property name="SNAPSHOT"
-	          value="-testing"
+	          value=""
 	          description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty."
 	/>
 	<property name="PROGNAME"
