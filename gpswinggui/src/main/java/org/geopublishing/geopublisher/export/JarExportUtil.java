@@ -834,9 +834,9 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		if (jarName.contains(SCHMITZM_JARNAME3))
 			path = "de/schmitzm/schmitzm-jfree-gt/2.5";
 		if (jarName.contains(SCHMITZM_JARNAME4))
-			path = "de/schmitzm/schmitzm-jfree/2.5
+			path = "de/schmitzm/schmitzm-jfree/2.5";
 		if (jarName.contains(GSRCJ_JARNAME))
-			path = "org/geopublishing/gsrcj/0.5
+			path = "org/geopublishing/gsrcj/0.5";
 		if (jarName.contains(GPSYNC_JARNAME))
 			path = "org/geopublishing/gpsync/1.0";
 
