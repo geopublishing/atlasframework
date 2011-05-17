@@ -59,6 +59,7 @@ import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geotools.data.DataUtilities;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.styling.Style;
+import org.jfree.util.Log;
 import org.opengis.filter.Filter;
 import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
@@ -180,6 +181,7 @@ public class AMLExporter {
 	private File atlasXml = null;
 
 	void info(final String msg) {
+		if (statusWindow != null)
 		statusWindow.setDescription(msg);
 	}
 
@@ -378,7 +380,8 @@ public class AMLExporter {
 
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
-					statusWindow.exceptionOccurred(e);
+					if (statusWindow != null)
+						statusWindow.exceptionOccurred(e);
 				} finally {
 					// dpl.dispose();
 				}
@@ -668,8 +671,12 @@ public class AMLExporter {
 
 		// Creating a sequence of <aml:translation> tags, minOccurs=1
 		if (translation == null) {
-			statusWindow.warningOccurred(this.getClass().getSimpleName(), null, "No translation given for " + tagname
-					+ "\nAtlasMarkupLanguage will probably not be valid.");
+			final String warning = "No translation given for " + tagname
+					+ "\nAtlasMarkupLanguage will probably not be valid.";
+			if (statusWindow != null) {
+				statusWindow.warningOccurred(this.getClass().getSimpleName(), null, warning);
+			} else
+				Log.warn(warning);
 		} else {
 			if (translation.size() == 0) {
 				for (final String code : getAce().getLanguages()) {
@@ -1216,7 +1223,7 @@ public class AMLExporter {
 					"AtlasML.xsd"));
 		} catch (final Exception e) {
 			LOGGER.debug(" Error while copying AtlasML.xsd... ignoring");
-			// statusWindow.exceptionOccurred(new AtlasException(e));
+			// if (statusWindow != null)statusWindow.exceptionOccurred(new AtlasException(e));
 		}
 
 	}
