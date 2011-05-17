@@ -4,14 +4,14 @@
 	<groupId>org.geopublishing.geopublisher</groupId>
 	<artifactId>gpswinggui</artifactId>
 	<packaging>jar</packaging>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.7</version>
 	<name>Geopublisher Swing GUI</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 
 	<parent>
 		<groupId>org.geopublishing</groupId>
 		<artifactId>gp-parent</artifactId>
-		<version>1.7-SNAPSHOT</version>
+		<version>1.7</version>
 	</parent>
 
 	<properties>
