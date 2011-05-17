@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <atlas xmlns:ns0="http://www.w3.org/2001/XMLSchema-instance" ns0:schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd" xmlns="http://www.wikisquare.de/AtlasML">
   <gphoster auth="true">
+  </gphoster>
   <name>
     <translation lang="de">aa</translation>
   </name>
