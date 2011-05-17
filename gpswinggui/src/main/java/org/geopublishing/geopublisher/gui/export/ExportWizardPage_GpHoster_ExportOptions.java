@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
@@ -29,8 +30,7 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 	@Override
 	protected void renderingPage() {
 
-		validCredentials = new AtlasSwingWorker<String>(this,
-				"checking username and password") {
+		validCredentials = new AtlasSwingWorker<String>(this, "checking username, password") { // i8n
 
 			@Override
 			protected String doInBackground() throws Exception {
@@ -41,11 +41,15 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 				// gphc.setUserName((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD));
 				gphc.setPassword((String) getWizardData(ExportWizard.GPH_PASSWORD));
 
+				String acebasename = ((AtlasConfigEditable) getWizardData(ExportWizard.ACE)).getBaseName();
+
 				try {
-					if (gphc.validateCredentials()) {
-						return null;
-					} else
-						return "username + password not valid!"; // i8n
+					if (!gphc.validateCredentials())
+						return "username + password not valid!"; // i8n i8n
+					if (!gphc.canEditAtlas(acebasename))
+						return "The user " + gphc.getUserName() + " has no permissions for atlas '" + acebasename
+								+ "'."; // i8n i8n
+					return null;
 				} catch (IOException e) {
 					return e.getLocalizedMessage();
 				}
@@ -71,16 +75,14 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 
 	private JLabel getExplanationLabel() {
 		if (explanationLabel == null) {
-			explanationLabel = new JLabel(
-					GeopublisherGUI.R("ExportWizard.Ftp.Export.Explanation"));
+			explanationLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.Export.Explanation"));
 		}
 		return explanationLabel;
 	}
 
 	private JCheckBox getMakePublicCheckBox() {
 		if (makePublicCheckBox == null) {
-			makePublicCheckBox = new JCheckBox(
-					GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
+			makePublicCheckBox = new JCheckBox(GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
 			makePublicCheckBox.setName(ExportWizard.GpHosterAuth);
 		}
 		return makePublicCheckBox;
