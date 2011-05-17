@@ -5,7 +5,6 @@ import java.io.FilenameFilter;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.AVProps;
 import org.geopublishing.atlasViewer.AtlasCancelException;
 import org.geopublishing.atlasViewer.AtlasConfig;
@@ -69,8 +68,8 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		}
 	}
 
-	private static final String version = ReleaseUtil.getVersionMaj(AtlasStyler.class) + "."
-			+ ReleaseUtil.getVersionMin(AtlasStyler.class);
+	private static final String version = ReleaseUtil.getVersionMaj(GpCoreUtil.class) + "."
+			+ ReleaseUtil.getVersionMin(GpCoreUtil.class);
 
 	/**
 	 * Are we exporting from SNAPSHOT relases, then the exported atlas need -SNAPSHOT jars also
@@ -168,10 +167,14 @@ abstract public class AbstractAtlasExporter implements AtlasExporter {
 		this.keepTempFiles = deleteTempFiles;
 	}
 
+	@Deprecated
+	// Doesn't really work as expected
 	public static String getSnapshot() {
 		return snapshot;
 	}
 
+	@Deprecated
+	// Doesn't really work as expected
 	public static String getVersion() {
 		return version;
 	}

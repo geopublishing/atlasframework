@@ -148,19 +148,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 	private static final String postfixJar = ".jar";
 
-	/**
-	 * Filename of the gpcore jar
-	 */
-	public static final String GPCORE_JARNAME = "gpcore-" + getVersion() + getSnapshot() + postfixJar;
-	/**
-	 * Filename of the gpcore jar
-	 */
-	public static final String AVSWINGGUI_JARNAME = "avswinggui-" + getVersion() + getSnapshot() + postfixJar;
-
-	/**
-	 * Filename of the ascore jar
-	 */
-	public static final String ASCORE_JARNAME = "ascore-" + getVersion() + getSnapshot() + postfixJar;
 
 	/**
 	 * UGLY: During the export, the location of the required JARs is determined by looking at the classpath string. When
@@ -175,6 +162,21 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.5-SNAPSHOT.jar";
 	public static final String GSRCJ_JARNAME = "gsrcj-0.5-SNAPSHOT.jar";
 	public static final String GPSYNC_JARNAME = "gpsync-1.0-SNAPSHOT.jar";
+	// TODO UGLY!
+	private static String GPVERSION = "1.7-SNAPSHOT";
+	/**
+	 * Filename of the gpcore jar
+	 */
+	public static final String GPCORE_JARNAME = "gpcore-" + GPVERSION + postfixJar;
+	/**
+	 * Filename of the gpcore jar
+	 */
+	public static final String AVSWINGGUI_JARNAME = "avswinggui-" + GPVERSION + postfixJar;
+
+	/**
+	 * Filename of the ascore jar
+	 */
+	public static final String ASCORE_JARNAME = "ascore-" + GPVERSION + postfixJar;
 
 	/**
 	 * List of JARs that are all created from the one geopublihing.org POM file and therefore are not part of the
@@ -811,15 +813,15 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		String path = null;
 		if (jarName.contains(GPCORE_JARNAME)) {
-			path = "org/geopublishing/geopublisher/gpcore/" + getVersion() + getSnapshot();
+			path = "org/geopublishing/geopublisher/gpcore/" + GPVERSION;
 		}
 
 		if (jarName.contains(AVSWINGGUI_JARNAME)) {
-			path = "org/geopublishing/atlasViewer/avswinggui/" + getVersion() + getSnapshot();
+			path = "org/geopublishing/atlasViewer/avswinggui/" + GPVERSION;
 		}
 
 		if (jarName.contains(ASCORE_JARNAME)) {
-			path = "org/geopublishing/atlasStyler/ascore/" + getVersion() + getSnapshot();
+			path = "org/geopublishing/atlasStyler/ascore/" + GPVERSION;
 		}
 
 		/**
@@ -1248,7 +1250,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 				// TODO Make this nicer!
 				// if (export SHould Reuse Online JARs) {
-				if (ReleaseUtil.isSnapshot(GeopublisherGUI.class)) {
+				if (GPVERSION.endsWith("SNAPSHOT")) {
 					libNameChecked = "http://www.geopublishing.org/gp/" + libNameChecked;
 				} else {
 					libNameChecked = "http://www.geopublishing.org/gp_stable/" + libNameChecked;
