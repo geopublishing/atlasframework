@@ -33,7 +33,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	private final Map backupProperties = new HashMap();
 
 	public GpHostingOptionsTab(GeopublisherGUI gpg) {
-		super(new MigLayout("wrap 1, w ::400px"));
+		super(new MigLayout("wrap 1, h 100::, w ::400px"));
 		this.gpg = gpg;
 
 		// i8n
