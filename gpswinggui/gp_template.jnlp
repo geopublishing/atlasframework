@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp codebase="http://www.geopublishing.org/gp/" href="http://www.geopublishing.org/gp/gp.jnlp" spec="1.0+">
+<jnlp codebase="http://www.geopublishing.org/gp-${project.version}/" href="http://www.geopublishing.org/gp-${project.version}/gp.jnlp" spec="1.0+">
   <information>
     <title>Geopublisher Atlas Author ${project.version}</title>
     <description>A software to create interactive multimedia atlases</description>

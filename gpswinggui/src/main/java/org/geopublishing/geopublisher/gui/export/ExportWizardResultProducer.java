@@ -50,8 +50,7 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 
 /**
- * This class is using the values collected during the {@link ExportWizard} to
- * export the {@link AtlasConfigEditable}.
+ * This class is using the values collected during the {@link ExportWizard} to export the {@link AtlasConfigEditable}.
  * 
  * 
  * 
@@ -59,8 +58,7 @@ import de.schmitzm.swing.SwingUtil;
  */
 public class ExportWizardResultProducer implements WizardResultProducer {
 
-	private static final Logger LOGGER = Logger
-			.getLogger(ExportWizardResultProducer.class);
+	private static final Logger LOGGER = Logger.getLogger(ExportWizardResultProducer.class);
 
 	@Override
 	public boolean cancel(Map settings) {
@@ -70,28 +68,20 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 	@Override
 	public Object finish(Map wizardData) throws WizardException {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData
-				.get(ExportWizard.ACE);
+		final AtlasConfigEditable ace = (AtlasConfigEditable) wizardData.get(ExportWizard.ACE);
 
-		final Boolean isJws = (Boolean) wizardData
-				.get(ExportWizard.JWS_CHECKBOX);
-		final Boolean isFtp = (Boolean) wizardData
-				.get(ExportWizard.FTP_CHECKBOX);
-		final Boolean isDisk = (Boolean) wizardData
-				.get(ExportWizard.DISK_CHECKBOX);
-		final boolean isDiskZip = (Boolean) wizardData
-				.get(ExportWizard.DISKZIP_CHECKBOX);
-		final String exportDir = (String) wizardData
-				.get(ExportWizard.EXPORTFOLDER);
+		final Boolean isJws = (Boolean) wizardData.get(ExportWizard.JWS_CHECKBOX);
+		final Boolean isFtp = (Boolean) wizardData.get(ExportWizard.FTP_CHECKBOX);
+		final Boolean isDisk = (Boolean) wizardData.get(ExportWizard.DISK_CHECKBOX);
+		final boolean isDiskZip = (Boolean) wizardData.get(ExportWizard.DISKZIP_CHECKBOX);
+		final String exportDir = (String) wizardData.get(ExportWizard.EXPORTFOLDER);
 		final Boolean copyJRE = (Boolean) wizardData.get(ExportWizard.COPYJRE);
-		final Boolean isPublic = (Boolean) wizardData
-				.get(ExportWizard.GpHosterAuth);
+		final Boolean isPublic = (Boolean) wizardData.get(ExportWizard.GpHosterAuth);
 		final boolean gpHosterAuth = isPublic != null ? !isPublic : true;
 
-		final GpHosterClient gphc = (GpHosterClient) wizardData
-				.get(ExportWizard.GPHC);
-		
-		final String URL = (String) wizardData.get(ExportWizardFTPBrancher.URL_FOR_ATLAS);
+		final GpHosterClient gphc = (GpHosterClient) wizardData.get(ExportWizard.GPHC);
+
+		final String urlForAtlas = (String) wizardData.get(ExportWizardFTPBrancher.URL_FOR_ATLAS);
 
 		/**
 		 * Store stuff to the geopublisher.properties
@@ -100,8 +90,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			if (isJws) {
 				// GPProps.set(GPProps.Keys.jnlpURL, (String) wizardData
 				// .get(ExportWizard.JNLPURL));
-				ace.setJnlpBaseUrl((String) wizardData
-						.get(ExportWizard.JNLPURL));
+				ace.setJnlpBaseUrl((String) wizardData.get(ExportWizard.JNLPURL));
 			}
 
 			if (exportDir != null)
@@ -117,13 +106,10 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				// guter zeitpunkt Benutzername und
 				// Passwort zu speichern
 
-				GpHosterServerList liste = new GpHosterServerList(
-						GPProps.get(Keys.gpHosterServerList));
+				GpHosterServerList liste = new GpHosterServerList(GPProps.get(Keys.gpHosterServerList));
 				for (GpHosterServerSettings s : liste) {
-					if (gphc.getServerSettings().getAlias()
-							.equals(s.getAlias())
-							&& gphc.getServerSettings().getRestUrl()
-									.equals(s.getRestUrl())) {
+					if (gphc.getServerSettings().getAlias().equals(s.getAlias())
+							&& gphc.getServerSettings().getRestUrl().equals(s.getRestUrl())) {
 						s.setPassword(gphc.getPassword());
 						s.setUsername(gphc.getUserName());
 					}
@@ -141,8 +127,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 		ace.setGpHosterAuth(gpHosterAuth);
 
-		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(),
-				false))
+		if (!GpSwingUtil.save(ace, GeopublisherGUI.getInstance().getJFrame(), false))
 			return null; // TODO what should be return here?
 
 		/**
@@ -155,8 +140,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 			private GpFtpAtlasExport gpFtpAtlasExport;
 
 			/**
-			 * If the user aborts the export, we tell it to JarExportUtil
-			 * instance
+			 * If the user aborts the export, we tell it to JarExportUtil instance
 			 */
 			@Override
 			public void abort() {
@@ -172,14 +156,12 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 				try {
 					if (isFtp) {
-						gpFtpAtlasExport = new GpFtpAtlasExport(ace, gphc,
-								progress);
+						gpFtpAtlasExport = new GpFtpAtlasExport(ace, gphc, progress);
 						gpFtpAtlasExport.export();
 					}
 					if (isDisk || isJws) {
 
-						jarExportUtil = new JarExportUtil(ace, progress,
-								new File(exportDir), isDisk, isJws, copyJRE);
+						jarExportUtil = new JarExportUtil(ace, progress, new File(exportDir), isDisk, isJws, copyJRE);
 						jarExportUtil.setZipDiskAfterExport(isDiskZip);
 						jarExportUtil.export();
 					}
@@ -187,16 +169,14 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					LOGGER.info("Export aborted by user:", e);
 					progress.finished(getAbortSummary());
 					return;
-				} catch (FTPException ftpe){
-					progress.failed(GeopublisherGUI.R("ExportWizard.Result.FTPException"),false);
+				} catch (FTPException ftpe) {
+					progress.failed(GeopublisherGUI.R("ExportWizard.Result.FTPException"), false);
 					return;
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					if (e.getMessage().contains("400")) {
 						progress.failed(
-								GeopublisherGUI
-										.R("ExportWizard.Result.AtlasBelongsToAnotherUser",
-												ace.getBaseName()), false);
+								GeopublisherGUI.R("ExportWizard.Result.AtlasBelongsToAnotherUser", ace.getBaseName()),
+								false);
 					} else {
 						exportFailed(progress, e);
 					}
@@ -234,23 +214,19 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				if (exportDir != null) {
 					// Es wurde nach DISK oder JWS exportiert
 
-					String exportJWSandDISKdirRepresentation = IOUtil
-							.escapePath(exportDir);
+					String exportJWSandDISKdirRepresentation = IOUtil.escapePath(exportDir);
 
-					panel.add(new JLabel(GeopublisherGUI.R(
-							"Export.Dialog.Finished.Msg",
+					panel.add(new JLabel(GeopublisherGUI.R("Export.Dialog.Finished.Msg",
 							exportJWSandDISKdirRepresentation)));
 
 					final JButton openFolderButton = new JButton(
-							GeopublisherGUI
-									.R("ExportWizard.Result.OpenFolderButton.Label"));
+							GeopublisherGUI.R("ExportWizard.Result.OpenFolderButton.Label"));
 					openFolderButton.addActionListener(new ActionListener() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							try {
-								AVSwingUtil.lauchHTMLviewer(null, new URL(
-										exportDir));
+								AVSwingUtil.lauchHTMLviewer(null, new URL(exportDir));
 							} catch (MalformedURLException e1) {
 								SwingUtil.openOSFolder(new File(exportDir));
 							}
@@ -267,20 +243,17 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 				}
 
 				if (isFtp) {
-					// TODO
-					panel.add(new JLabel(GeopublisherGUI
-							.R("ExportWizard.Result.FtpUploadSuccess.Label")));
-					
-					final JButton openURLButton = new JButton(URL);
+					panel.add(new JLabel(GeopublisherGUI.R("ExportWizard.Result.FtpUploadSuccess.Label")));
+
+					final JButton openURLButton = new JButton(urlForAtlas);
 					openURLButton.addActionListener(new ActionListener() {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							try {
-								AVSwingUtil.lauchHTMLviewer(null, new URL(
-										URL));
+								AVSwingUtil.lauchHTMLviewer(null, new URL(urlForAtlas));
 							} catch (MalformedURLException e1) {
-								SwingUtil.openOSFolder(new File(URL));
+								ExceptionDialog.show(e1);
 							}
 							openURLButton.setEnabled(false);
 						}

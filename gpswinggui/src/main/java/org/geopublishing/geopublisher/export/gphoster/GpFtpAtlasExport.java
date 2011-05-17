@@ -50,13 +50,15 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		progress.setBusy("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());// i8n
 
 		checkAbort();
-		AtlasFingerprint requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
+		AtlasFingerprint requestedFingerprint = null;
 		
 		if (gphc.atlasBasenameFree(ace.getBaseName()))
 			log.info("GpFtf sync: this is a new atlas.");
 		else {
 			requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
 		}
+
+		progress.setBusy("comparing atlases"); // i8n
 
 		GpDiff gpDiff = gpSync.compare(requestedFingerprint);
 		if (gpDiff.isSame()) {
@@ -66,7 +68,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 		// long sizeMb = calcSize(gpDiff) / 1024 / 1024;
 
-		progress.setBusy("Creating zip"); // i8n
+		progress.setBusy("Creating zip for upload"); // i8n
 		File zipFile = gpSync.createZip(gpDiff);
 		try {
 
@@ -82,6 +84,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 				ftpClient.setRemoteHost(gphc.getFtpHostname());
 				ftpClient.setTimeout(5000);
 				ftpClient.connect();
+
 				// TODO Generate programatically!
 				ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
 				FileInputStream fis = new FileInputStream(zipFile);
@@ -139,65 +142,6 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		return size;
 	}
 
-	//
-	// /**
-	// * Initiates a URL request to the gp-hoster servlet and requests a
-	// * fingerprint for this atlas. This method times out after 5 seconds and
-	// * then throws a new runtimeEx(SocketTimeoutException). returns
-	// * <code>null</code> if it is a new atlas.
-	// *
-	// * @param progress
-	// *
-	// * TODO Should be moved to a "hoster api" package/class/module
-	// * @throws SocketTimeoutException
-	// *
-	// * @MOVE GpHoster REST API module one day
-	// */
-	// public static AtlasFingerprint requestFingerprint(AtlasConfigEditable
-	// ace,
-	// ResultProgressHandle progress) {
-	// InputStream afp2Is;
-	// final String path = GEOPUBLISHING_ORG + ace.getBaseName()
-	// + ".fingerprint";
-	// try {
-	// // LOGGER.debug("Connecting " + path);
-	// final URL url = new URL(path);
-	//
-	// URLConnection conn = url.openConnection();
-	// // setting these timeouts ensures the client does not deadlock
-	// // indefinitely
-	// // when the server has problems.
-	// conn.setConnectTimeout(5000);
-	// conn.setReadTimeout(5000);
-	//
-	// afp2Is = conn.getInputStream();
-	// String afp2Txt;
-	// try {
-	// // LOGGER.debug(" connecting success!");
-	// afp2Txt = IOUtil.convertStreamToString(afp2Is);
-	// } finally {
-	// afp2Is.close();
-	// }
-	// if (afp2Txt.contains("ERROR"))
-	// return null;
-	// final AtlasFingerprint afpRemote = new AtlasFingerprint(afp2Txt);
-	//
-	// return afpRemote;
-	// } catch (MalformedURLException e) {
-	// throw new RuntimeException("Could not get atlas fingerprint from "
-	// + path, e);
-	// } catch (FileNotFoundException e) {
-	// // if status 404 then return null;
-	// // throw new
-	// return null;
-	// } catch (SocketTimeoutException e) {
-	// throw new AtlasExportException(
-	// "Timeout while connecting the gphoster servlet:", e);
-	// } catch (IOException e) {
-	// LOGGER.debug("Could not get atlas fingerprint from " + path, e);
-	// return null;
-	// }
-	// }
 
 	/**
 	 * @return The selected or default GpHosterServerSettings for exporting
