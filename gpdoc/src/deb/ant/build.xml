@@ -23,7 +23,7 @@
 -->
 
 <project basedir="${mvn.basedir}/src/deb/ant" name="Atlas-Geopublishing-Framework documentation">
-	<property name="SNAPSHOT" value="-testing" description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty." />
+	<property name="SNAPSHOT" value="" description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty." />
 	<property name="PROGNAME" value="geopublishing-doc${SNAPSHOT}" description="the name of the program / the .deb name without any versions" />
 	
 	<taskdef name="deb" classname="com.googlecode.ant_deb_task.Deb" classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar" />
