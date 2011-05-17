@@ -49,6 +49,7 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 					if (!gphc.canEditAtlas(acebasename))
 						return "The user " + gphc.getUserName() + " has no permissions for atlas '" + acebasename
 								+ "'."; // i8n i8n
+					putWizardData(ExportWizardFTPBrancher.URL_FOR_ATLAS, gphc.getUrlForAtlas(acebasename));
 					return null;
 				} catch (IOException e) {
 					return e.getLocalizedMessage();

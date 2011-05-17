@@ -90,6 +90,8 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 		final GpHosterClient gphc = (GpHosterClient) wizardData
 				.get(ExportWizard.GPHC);
+		
+		final String URL = (String) wizardData.get(ExportWizardFTPBrancher.URL_FOR_ATLAS);
 
 		/**
 		 * Store stuff to the geopublisher.properties
@@ -268,6 +270,23 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					// TODO
 					panel.add(new JLabel(GeopublisherGUI
 							.R("ExportWizard.Result.FtpUploadSuccess.Label")));
+					
+					final JButton openURLButton = new JButton(URL);
+					openURLButton.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							try {
+								AVSwingUtil.lauchHTMLviewer(null, new URL(
+										URL));
+							} catch (MalformedURLException e1) {
+								SwingUtil.openOSFolder(new File(URL));
+							}
+							openURLButton.setEnabled(false);
+						}
+
+					});
+					panel.add(openURLButton, "align center");
 				}
 
 				return panel;

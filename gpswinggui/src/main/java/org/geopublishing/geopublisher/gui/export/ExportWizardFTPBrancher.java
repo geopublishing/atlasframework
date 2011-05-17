@@ -16,6 +16,7 @@ public class ExportWizardFTPBrancher extends WizardBranchController {
 	public static final String USERNAME = "username?";
 	public static final String PASSWORD = "password?";
 	public static final String MAKE_PUBLIC = "public?";
+	public static final String URL_FOR_ATLAS = "url?";
 
 	protected ExportWizardFTPBrancher() {
 		super(new ExportWizardPage_GpHoster_FtpExport());

@@ -36,6 +36,7 @@ public class GpHosterClient {
 	private static final String CAN_EDIT_ATlAS_PATH = "canEditAtlas/";
 	private static final String CHECKFREE_ATLASNAME_PATH = "atlasnameFree/";
 	private static final String FINGERPRINT_ATLAS_PATH = "atlasFingerprint/";
+	private static final String URL_FOR_ATLAS_PATH= "getUrlForBaseName/";
 
 	private static final String MASTUSER = "w2";
 	private static final String MASTPASSWD = "32894013";
@@ -360,6 +361,16 @@ public class GpHosterClient {
 				getUserName(), getPassword());
 		log.debug("Checking for validity of user/password: " + getUserName() + "/" + getPassword() + ": " + valid);
 		return valid;
+	}
+	
+	/**
+	 * Retrieve URL for online atlas
+	 * @throws IOException 
+	 */
+	public String getUrlForAtlas(String basename) throws IOException{
+		final String url = sendRESTstring(METHOD.GET.toString(), URL_FOR_ATLAS_PATH + basename, null, getUserName(), getPassword());
+		log.debug("Retrieving URL for Atlas: "+basename);
+		return url;
 	}
 
 }
