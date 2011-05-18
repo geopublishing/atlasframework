@@ -13,18 +13,17 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
 import de.schmitzm.swing.input.ManualInputOption.PasswordViewable;
+import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
-	private final String validationFtpFailedPassword = GeopublisherGUI
-			.R("ExportWizard.Ftp.ValidationError_Password");
-	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R(
-			"ExportWizard.Ftp.CheckMail.Explanation", "XXX"));
+	private final String validationFtpFailedPassword = GeopublisherGUI.R("ExportWizard.Ftp.ValidationError_Password");
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.CheckMail.Explanation", "XXX"));
 
 	private PasswordViewable pwField;
 
 	/**
-	 * The user is created via a rest call when this page is rendered. Whether
-	 * this creation was successfull, is stored in this variable.
+	 * The user is created via a rest call when this page is rendered. Whether this creation was successfull, is stored
+	 * in this variable.
 	 */
 	private CREATE_USER_RESULT createdUserWithSuccess = CREATE_USER_RESULT.ERROR;
 	private IOException createdUserWithSuccessEx = null;
@@ -41,30 +40,34 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	@Override
 	protected void renderingPage() {
 
-		GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
-		String name = (String) getWizardData(ExportWizard.GPH_USERNAME);
-		String email = (String) getWizardData(ExportWizard.GPH_EMAIL_FIELD);
-		try {
-			createdUserWithSuccess = gphc.userCreate(name, email);
+		final GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
+		final String name = (String) getWizardData(ExportWizard.GPH_USERNAME);
+		final String email = (String) getWizardData(ExportWizard.GPH_EMAIL_FIELD);
 
-			if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR) {
-				removeAll();
-				add(new JLabel(
-						"Could not create user. Please create a user online at hosting.geopublishing.org"),
-						"");
-			} else if (createdUserWithSuccess == CREATE_USER_RESULT.EXITSALREADY_PWDSENT) {
-				add(new JLabel(
-						"User already existed. A password reminder has been sent."),
-						"", 0);
+		// TODO AtlasStatusDialog
+		createdUserWithSuccess = new AtlasSwingWorker<CREATE_USER_RESULT>(this) {
+
+			@Override
+			protected CREATE_USER_RESULT doInBackground() throws Exception {
+				try {
+					return gphc.userCreate(name, email);
+				} catch (IOException e) {
+					createdUserWithSuccessEx = e;
+					return CREATE_USER_RESULT.ERROR;
+				}
 			}
 
-		} catch (IOException e) {
-			createdUserWithSuccessEx = e;
-			removeAll();
-			add(new JLabel(
-"Could not create user. Please try again later: "
-							+ e.getLocalizedMessage()), "");
+		}.executeModalNoEx();
 
+		removeAll();
+		if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR) {
+			if (createdUserWithSuccessEx != null)
+				add(new JLabel("Could not create user. Please try again later: "
+						+ createdUserWithSuccessEx.getLocalizedMessage()), ""); // i8n
+			else
+				add(new JLabel("Could not create user. Please try again later."), ""); // i8n
+		} else if (createdUserWithSuccess == CREATE_USER_RESULT.EXITSALREADY_PWDSENT) {
+			add(new JLabel("User already existed. A password reminder has been sent."), "", 0); // i8n
 		}
 
 	}
@@ -79,8 +82,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 
 	private PasswordViewable getPWField() {
 		if (pwField == null) {
-			pwField = new PasswordViewable(
-					GeopublisherGUI.R("ExportWizard.FtpExport.Password"));
+			pwField = new PasswordViewable(GeopublisherGUI.R("ExportWizard.FtpExport.Password"));
 			pwField.setName(ExportWizard.GPH_PASSWORD);
 		}
 		return pwField;
@@ -89,8 +91,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	@Override
 	protected String validateContents(Component component, Object event) {
 
-		if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR
-				|| createdUserWithSuccessEx != null)
+		if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR || createdUserWithSuccessEx != null)
 			return GeopublisherGUI.R("ExportWizard.GpHoster.CheckMail.ServiceError");
 
 		if (getPWField().getValue() == null) {
@@ -100,8 +101,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 		// Because Schmitzm Password input component is not properly handled by
 		// the wizard, we put the password into the wizardmap manually
 		if (getPWField().getValue() != null)
-			putWizardData(ExportWizard.GPH_PASSWORD,
-					String.valueOf(getPWField().getValue()));
+			putWizardData(ExportWizard.GPH_PASSWORD, String.valueOf(getPWField().getValue()));
 
 		return null;
 	}
