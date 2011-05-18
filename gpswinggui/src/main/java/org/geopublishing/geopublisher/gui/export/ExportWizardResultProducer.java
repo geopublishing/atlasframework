@@ -301,8 +301,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 
 	protected Summary getAbortSummary() {
 		JPanel aborted = new JPanel(new MigLayout());
-		aborted.add(new JLabel(
-				"<html>The export has been aborted by the user. Temporary files have been deleted.</html>")); // i8n
+		aborted.add(new JLabel(GeopublisherGUI.R("ExportWizard.ResultProducer.ExportCanceled")));
 
 		return Summary.create(aborted, null);
 	}

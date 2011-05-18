@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.export.gphoster.GpHosterClient;
 import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
 import org.geopublishing.geopublisher.gui.settings.GpHostingOptionsTab;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import de.schmitzm.geotools.io.AbstractServerSettings;
 import de.schmitzm.swing.input.ManualInputOption;
@@ -52,10 +53,9 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 	public void setUsername(String username) {
 		if (!checkString(username))
-			throw new IllegalArgumentException(username
-					+ " is not a legal username, " + DELIMITER + " and "
-					+ GpHosterServerSettings.DELIMITER
-					+ " are not allowed in usernames"); // i8n
+			throw new IllegalArgumentException(GeopublisherGUI.R(
+					"GpHosterServerSettings.IllegalUsername", username,
+					DELIMITER, GpHosterServerSettings.DELIMITER));
 		this.username = username;
 	}
 
@@ -65,10 +65,9 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 
 	public void setPassword(String password) {
 		if (!checkString(password))
-			throw new IllegalArgumentException(password
-					+ " is not a legal password, " + DELIMITER + " and "
-					+ GpHosterServerSettings.DELIMITER
-					+ " are not allowed in passwords"); // i8n
+			throw new IllegalArgumentException(GeopublisherGUI.R(
+					"GpHosterServerSettings.IllegalPassword", password,
+					DELIMITER, GpHosterServerSettings.DELIMITER));
 		this.password = password;
 	}
 
@@ -158,29 +157,30 @@ public class GpHosterServerSettings extends AbstractServerSettings {
 			dbServer = new GpHosterServerSettings();
 		}
 
-		// i8n
-		Text titleInput = new ManualInputOption.Text("Title", true,
+		Text titleInput = new ManualInputOption.Text(
+				GeopublisherGUI.R("GpHosterServerSettings.Title"), true,
 				dbServer.getTitle());
 
-		// i8n
-		Text hostInput = new ManualInputOption.Text("REST URL", true,
+		Text hostInput = new ManualInputOption.Text(
+				GeopublisherGUI.R("GpHosterServerSettings.RestURL"), true,
 				dbServer.getRestUrl());
 
-		// i8n
-		Text ftphostInput = new ManualInputOption.Text("FTP Hostname", true,
+		Text ftphostInput = new ManualInputOption.Text(
+				GeopublisherGUI.R("GpHosterServerSettings.FTPHostname"), true,
 				dbServer.getFtpHostname());
 
-		// i8n
-		Text userInput = new ManualInputOption.Text("Username", false,
+		Text userInput = new ManualInputOption.Text(
+				GeopublisherGUI.R("GpHosterServerSettings.Username"), false,
 				dbServer.getUsername());
 
 		PasswordViewable passwdInput = new ManualInputOption.PasswordViewable(
-				"Password", false, dbServer.getPassword());
+				GeopublisherGUI.R("GpHosterServerSettings.Password"), false,
+				dbServer.getPassword());
 
-		// i8n
 		Object[] input = MultipleOptionPane.showMultipleInputDialog(
-				gpHostingOptionsTab, "DB Connection paramters", titleInput,
-				hostInput, ftphostInput, userInput, passwdInput);
+				gpHostingOptionsTab,
+				GeopublisherGUI.R("GpHosterServerSettings.DBParameters"),
+				titleInput, hostInput, ftphostInput, userInput, passwdInput);
 
 		if (input == null) {
 			if (newCreated)

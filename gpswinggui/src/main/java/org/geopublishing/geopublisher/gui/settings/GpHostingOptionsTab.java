@@ -36,10 +36,10 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 		super(new MigLayout("wrap 1, h 100::, w ::400px"));
 		this.gpg = gpg;
 
-		// i8n
 		JLabel explanationJLabel = new JLabel(
-				"<html>This server setting defines which server to contact when Geopublisher is exporting to the Internet. Usually the geopublishing.org Server is the correct choice and should not be changed.</html>");
-		JLabel dbServerSelectionJLabel = new JLabel("GpHoster Server"); // i8n
+				GeopublisherGUI.R("GpHostingOptionsTab.explanationLabel"));
+		JLabel dbServerSelectionJLabel = new JLabel(
+				GeopublisherGUI.R("GpHosterOptionsTab.dbServerSelectionLabel"));
 		add(explanationJLabel, "growx, push");
 
 		add(dbServerSelectionJLabel, "split 2, gapy unrelated, push");
@@ -87,7 +87,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox().getSelectedItem();
+					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox()
+							.getSelectedItem();
 
 					GpHosterServerList oldList = getDbJComboBox().getDbList();
 
@@ -95,7 +96,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 					updateComboboxModel();
 
-					getDbJComboBox().setSelectedIndex(getDbJComboBox().getItemCount() - 1);
+					getDbJComboBox().setSelectedIndex(
+							getDbJComboBox().getItemCount() - 1);
 
 				}
 
@@ -107,7 +109,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dbDelJButton.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
+					dbDelJButton
+							.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
 				}
 			});
 
@@ -116,20 +119,23 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	}
 
 	/**
-	 * Updates the Combobox Model with the list of server stored in the porperties. This does not automatically trigger
-	 * a validation, since the selected Item is not explicitly set.
+	 * Updates the Combobox Model with the list of server stored in the
+	 * porperties. This does not automatically trigger a validation, since the
+	 * selected Item is not explicitly set.
 	 */
 	private void updateComboboxModel() {
 		getDbJComboBox().listChanged();
 		// Save the new settings
-		GPProps.set(Keys.gpHosterServerList, getDbJComboBox().getDbList().toPropertiesString());
-		GPProps.set(Keys.lastGpHosterServerIdx, getDbJComboBox().getSelectedIndex());
+		GPProps.set(Keys.gpHosterServerList, getDbJComboBox().getDbList()
+				.toPropertiesString());
+		GPProps.set(Keys.lastGpHosterServerIdx, getDbJComboBox()
+				.getSelectedIndex());
 		GPProps.store();
 	}
 
 	private void createOrEditDb(GpHosterServerSettings dbServer) {
-		GpHosterServerSettings newOrEditedDbServer = GpHosterServerSettings.createOrEdit(GpHostingOptionsTab.this,
-				dbServer);
+		GpHosterServerSettings newOrEditedDbServer = GpHosterServerSettings
+				.createOrEdit(GpHostingOptionsTab.this, dbServer);
 
 		if (newOrEditedDbServer == null)
 			return;
@@ -152,9 +158,11 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	private GpHosterServerListJComboBox getDbJComboBox() {
 		if (dbJComboBox == null) {
 
-			final String propertiesString = GPProps.get(GPProps.Keys.gpHosterServerList,
+			final String propertiesString = GPProps.get(
+					GPProps.Keys.gpHosterServerList,
 					GpHosterServerSettings.DEFAULT.toPropertiesString());
-			dbJComboBox = new GpHosterServerListJComboBox(new GpHosterServerList(propertiesString));
+			dbJComboBox = new GpHosterServerListJComboBox(
+					new GpHosterServerList(propertiesString));
 
 			SwingUtil.addMouseWheelForCombobox(dbJComboBox);
 
@@ -173,7 +181,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Store the last used server index
-					GPProps.set(Keys.lastGpHosterServerIdx, dbJComboBox.getSelectedIndex());
+					GPProps.set(Keys.lastGpHosterServerIdx,
+							dbJComboBox.getSelectedIndex());
 				}
 			});
 
@@ -187,12 +196,14 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 	 */
 	private JButton getEditServerJButton() {
 		if (dbEditJButton == null) {
-			AbstractAction a = new AbstractAction("Edit") {// i8n
+			AbstractAction a = new AbstractAction(
+					GeopublisherGUI.R("GpHostingOptionsTab.ServerEditButton")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox().getSelectedItem();
+					GpHosterServerSettings db = (GpHosterServerSettings) getDbJComboBox()
+							.getSelectedItem();
 
 					createOrEditDb(db);
 
@@ -206,7 +217,8 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					dbEditJButton.setEnabled(getDbJComboBox().getSelectedIndex() >= 0);
+					dbEditJButton.setEnabled(getDbJComboBox()
+							.getSelectedIndex() >= 0);
 				}
 			});
 
