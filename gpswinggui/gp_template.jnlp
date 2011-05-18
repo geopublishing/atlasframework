@@ -17,7 +17,7 @@
   
   <information locale="de">
     <title>Geopublisher Atlas Ersteller ${project.version}</title>
-    <description>Erstellung von mehrsprechigen, digitalen Atlanten für Online- und Offline-Nutzung</description>
+    <description>Erstellung von mehrsprechigen, digitalen Atlanten f&uml;r Online- und Offline-Nutzung</description>
     <homepage href="http://de.geopublishing.org/Geopublisher"/>    
     <vendor>de.geopublishing.org</vendor>
     <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 

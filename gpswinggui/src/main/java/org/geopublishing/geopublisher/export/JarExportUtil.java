@@ -148,7 +148,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 	private static final String postfixJar = ".jar";
 
-
 	/**
 	 * UGLY: During the export, the location of the required JARs is determined by looking at the classpath string. When
 	 * running from with Eclipse or a Maven-Multimodule project, some projects are not in the classpath as jars, but
@@ -1248,14 +1247,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 				libNameChecked = LIB_DIR + "/" + libName;
 
-				// TODO Make this nicer!
-				// if (export SHould Reuse Online JARs) {
-				if (GPVERSION.endsWith("SNAPSHOT")) {
-					libNameChecked = "http://www.geopublishing.org/gp/" + libNameChecked;
-				} else {
-					libNameChecked = "http://www.geopublishing.org/gp_stable/" + libNameChecked;
-				}
-				// }
+				// Reference to other online jars
+				libNameChecked = "http://www.geopublishing.org/gp-" + GPVERSION + "/" + libNameChecked;
 
 				// Cleaning the URL for better reuse
 				libNameChecked = libNameChecked.replace("./", "");
