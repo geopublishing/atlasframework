@@ -1994,6 +1994,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			/**
 			 * Exclusively for JWS
 			 */
+			new File(targetDirJWS, "index.html").delete(); // GpHoster puts a "wait please" file there
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "index.html"), targetDirJWS, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), JNLP_FILENAME), targetDirJWS, true);
 			FileUtils.moveFileToDirectory(new File(getTempDir(), "icon.gif"), targetDirJWS, true);
