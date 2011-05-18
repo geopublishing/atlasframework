@@ -39,7 +39,7 @@ public class GpHostingOptionsTab extends JPanel implements Cancellable {
 		JLabel explanationJLabel = new JLabel(
 				GeopublisherGUI.R("GpHostingOptionsTab.explanationLabel"));
 		JLabel dbServerSelectionJLabel = new JLabel(
-				GeopublisherGUI.R("GpHosterOptionsTab.dbServerSelectionLabel"));
+				GeopublisherGUI.R("GpHostingOptionsTab.dbServerSelectionLabel"));
 		add(explanationJLabel, "growx, push");
 
 		add(dbServerSelectionJLabel, "split 2, gapy unrelated, push");
