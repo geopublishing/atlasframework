@@ -21,6 +21,7 @@ import sun.misc.BASE64Encoder;
 import com.enterprisedt.net.ftp.FTPClient;
 
 import de.schmitzm.io.IOUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * Manages talking to the gp-hoster-jsf HTTP API
@@ -113,7 +114,13 @@ public class GpHosterClient {
 		CREATED_PWDSENT, ERROR, EXITSALREADY_PWDSENT
 	}
 
+	/**
+	 * Asks the GpHoster Service to create a new user. If the new user already existed, a password reminder is send.
+	 */
 	public CREATE_USER_RESULT userCreate(String username, String email) throws IOException {
+
+		SwingUtil.checkNotOnEDT();
+
 		int code = sendRESTint(METHOD.GET.toString(), CREATE_USER_PATH + username + "?email=" + email, null, MASTUSER,
 				MASTPASSWD);
 
