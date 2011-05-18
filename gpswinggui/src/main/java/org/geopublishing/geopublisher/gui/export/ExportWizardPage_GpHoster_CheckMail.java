@@ -17,7 +17,7 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	private final String validationFtpFailedPassword = GeopublisherGUI.R("ExportWizard.Ftp.ValidationError_Password");
-	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.CheckMail.Explanation", "XXX"));
+	JLabel explanationJLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.CheckMail.Explanation"));
 
 	private PasswordViewable pwField;
 
