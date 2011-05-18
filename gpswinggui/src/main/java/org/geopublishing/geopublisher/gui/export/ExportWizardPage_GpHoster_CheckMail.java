@@ -91,7 +91,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 
 		if (createdUserWithSuccess == CREATE_USER_RESULT.ERROR
 				|| createdUserWithSuccessEx != null)
-			return "Service error. Account could not be created"; // i8n
+			return GeopublisherGUI.R("ExportWizard.GpHoster.CheckMail.ServiceError");
 
 		if (getPWField().getValue() == null) {
 			return validationFtpFailedPassword;

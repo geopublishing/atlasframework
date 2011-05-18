@@ -20,6 +20,7 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 	private JLabel explanationLabel;
 	private JCheckBox makePublicCheckBox;
 	private String validCredentials = null;
+	private JLabel makePublicExplanationLabel;
 
 	public ExportWizardPage_GpHoster_ExportOptions() {
 		// GpHosterClient gphc = (GpHosterClient)
@@ -30,26 +31,34 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 	@Override
 	protected void renderingPage() {
 
-		validCredentials = new AtlasSwingWorker<String>(this, "checking username, password") { // i8n
+		validCredentials = new AtlasSwingWorker<String>(
+				this,
+				GeopublisherGUI
+						.R("ExportWizard.Ftp.ExportOptions.validatingCredentials")) {
 
 			@Override
 			protected String doInBackground() throws Exception {
 				GpHosterClient gphc = (GpHosterClient) getWizardData(ExportWizard.GPHC);
 
 				gphc.setUserName((String) getWizardData(ExportWizard.GPH_USERNAME));
-				// if ((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD) != null)
-				// gphc.setUserName((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD));
+				// if ((String) getWizardData(ExportWizard.GPH_EMAIL_FIELD) !=
+				// null)
+				// gphc.setUserName((String)
+				// getWizardData(ExportWizard.GPH_EMAIL_FIELD));
 				gphc.setPassword((String) getWizardData(ExportWizard.GPH_PASSWORD));
 
-				String acebasename = ((AtlasConfigEditable) getWizardData(ExportWizard.ACE)).getBaseName();
-
+				String acebasename = ((AtlasConfigEditable) getWizardData(ExportWizard.ACE))
+						.getBaseName();
 				try {
 					if (!gphc.validateCredentials())
-						return "username + password not valid!"; // i8n i8n
+						return GeopublisherGUI
+								.R("ExportWizard.Ftp.ExportOptions.invalidCredentials");
 					if (!gphc.canEditAtlas(acebasename))
-						return "The user " + gphc.getUserName() + " has no permissions for atlas '" + acebasename
-								+ "'."; // i8n i8n
-					putWizardData(ExportWizardFTPBrancher.URL_FOR_ATLAS, gphc.getUrlForAtlas(acebasename));
+						return GeopublisherGUI.R(
+								"ExportWizard.Ftp.ExportOptions.NoPermission",
+								gphc.getUserName(), acebasename);
+					putWizardData(ExportWizardFTPBrancher.URL_FOR_ATLAS,
+							gphc.getUrlForAtlas(acebasename));
 					return null;
 				} catch (IOException e) {
 					return e.getLocalizedMessage();
@@ -72,21 +81,33 @@ public class ExportWizardPage_GpHoster_ExportOptions extends WizardPage {
 		setLayout(new MigLayout("wrap 1"));
 		add(getExplanationLabel());
 		add(getMakePublicCheckBox());
+		add(getMakePublicExplanationLabel());
 	}
 
 	private JLabel getExplanationLabel() {
 		if (explanationLabel == null) {
-			explanationLabel = new JLabel(GeopublisherGUI.R("ExportWizard.Ftp.Export.Explanation"));
+			explanationLabel = new JLabel(
+					GeopublisherGUI.R("ExportWizard.Ftp.Export.Explanation"));
 		}
 		return explanationLabel;
 	}
 
 	private JCheckBox getMakePublicCheckBox() {
 		if (makePublicCheckBox == null) {
-			makePublicCheckBox = new JCheckBox(GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
+			makePublicCheckBox = new JCheckBox(
+					GeopublisherGUI.R("ExportWizard.Ftp.Export.Public"));
 			makePublicCheckBox.setName(ExportWizard.GpHosterAuth);
 		}
 		return makePublicCheckBox;
+	}
+
+	private JLabel getMakePublicExplanationLabel() {
+		if (makePublicExplanationLabel == null) {
+			makePublicExplanationLabel = new JLabel(
+					GeopublisherGUI
+							.R("ExportWizard.Ftp.Export.Public.Explanation"));
+		}
+		return makePublicExplanationLabel;
 	}
 
 	public static String getDescription() {

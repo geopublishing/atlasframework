@@ -13,6 +13,7 @@ import org.geopublishing.geopublisher.LoggerResultProgressHandle;
 import org.geopublishing.geopublisher.export.AbstractAtlasExporter;
 import org.geopublishing.geopublisher.export.GpHosterServerSettings;
 import org.geopublishing.geopublisher.gui.settings.GpHosterServerList;
+import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.gpsync.AtlasFingerprint;
 import org.geopublishing.gpsync.GpDiff;
 import org.geopublishing.gpsync.GpSync;
@@ -32,7 +33,8 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 	private final GpHosterClient gphc;
 
-	public GpFtpAtlasExport(AtlasConfigEditable ace, GpHosterClient gphc, ResultProgressHandle progress) {
+	public GpFtpAtlasExport(AtlasConfigEditable ace, GpHosterClient gphc,
+			ResultProgressHandle progress) {
 		super(ace, progress);
 		this.gphc = gphc;
 	}
@@ -46,45 +48,47 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 		GpSync gpSync = new GpSync(ace.getAtlasDir(), ace.getBaseName());
 
-		log.info("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());
-		progress.setBusy("Contacting " + getSelectedGpHosterServerSettings().getRestUrl());// i8n
+		log.info("Contacting "
+				+ getSelectedGpHosterServerSettings().getRestUrl());
+		progress.setBusy(GeopublisherGUI.R("GpFtpAtlasExport.ContactingServer",
+				getSelectedGpHosterServerSettings().getRestUrl()));
 
 		checkAbort();
-		AtlasFingerprint requestedFingerprint = null;
-		
+		AtlasFingerprint requestedFingerprint = gphc.atlasFingerprint(ace
+				.getBaseName());
+
 		if (gphc.atlasBasenameFree(ace.getBaseName()))
 			log.info("GpFtf sync: this is a new atlas.");
 		else {
 			requestedFingerprint = gphc.atlasFingerprint(ace.getBaseName());
 		}
 
-		progress.setBusy("comparing atlases"); // i8n
-
 		GpDiff gpDiff = gpSync.compare(requestedFingerprint);
 		if (gpDiff.isSame()) {
-			progress.finished("Atlases are the same. Nothing to upload"); // i8n
+			progress.finished(GeopublisherGUI.R("GpFtpAtlasExport.sameAtlases"));
 			return;
 		}
 
 		// long sizeMb = calcSize(gpDiff) / 1024 / 1024;
 
-		progress.setBusy("Creating zip for upload"); // i8n
+		progress.setBusy(GeopublisherGUI.R("GpFtpAtlasExport.creatingZip"));
 		File zipFile = gpSync.createZip(gpDiff);
 		try {
 
 			checkAbort();
 
 			long zipSizeMb = zipFile.length();
-			progress.setBusy("Uploading " + gpDiff.getDiffFilePaths().size() + " files ("
-					+ new MbDecimalFormatter().format(zipSizeMb) + "), delete " + gpDiff.getFilesToDelete().size()
-					+ "files"); // i8n
+			progress.setBusy(GeopublisherGUI.R(
+					"GpFtpAtlasExport.uploadingAtlas", gpDiff
+							.getDiffFilePaths().size(),
+					new MbDecimalFormatter().format(zipSizeMb), gpDiff
+							.getFilesToDelete().size()));
 
 			final FTPClient ftpClient = new FTPClient();
 			try { // quit ftp connection
 				ftpClient.setRemoteHost(gphc.getFtpHostname());
 				ftpClient.setTimeout(5000);
 				ftpClient.connect();
-
 				// TODO Generate programatically!
 				ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
 				FileInputStream fis = new FileInputStream(zipFile);
@@ -105,15 +109,19 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 					}, 300, 300);
 
 					final String zipFilename = zipFile.getName();
-					// final String zipFilename = gpSync.getAtlasname() + ".zip";
+					// final String zipFilename = gpSync.getAtlasname() +
+					// ".zip";
 					log.info("FTP Upload " + zipFilename + " started");
 					ftpClient.put(fis, zipFilename);
 					if (cancel.get() == true) {
-						log.info("FTP Upload " + zipFilename + " cancelled, deleting zip on ftp");
+						log.info("FTP Upload " + zipFilename
+								+ " cancelled, deleting zip on ftp");
 						ftpClient.delete(gpSync.getAtlasname() + ".zip");
-						log.debug("deleting " + zipFilename + " on ftp finished");
+						log.debug("deleting " + zipFilename
+								+ " on ftp finished");
 					} else {
-						gphc.informAboutUploadedZipFile(ace.getBaseName(), zipFile);
+						gphc.informAboutUploadedZipFile(ace.getBaseName(),
+								zipFile);
 						log.info("FTP Upload " + zipFilename + " finished");
 					}
 					checkAbort();
@@ -126,8 +134,8 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 			}
 		} finally {
 			zipFile.delete();
-			progress.setBusy("FTP connection cosed"); // i8n
-		}
+			progress.setBusy(GeopublisherGUI.R("GpFtpAtlasExport.FtpConnectionClosed")); 
+			}
 
 	}
 
@@ -142,6 +150,65 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 		return size;
 	}
 
+	//
+	// /**
+	// * Initiates a URL request to the gp-hoster servlet and requests a
+	// * fingerprint for this atlas. This method times out after 5 seconds and
+	// * then throws a new runtimeEx(SocketTimeoutException). returns
+	// * <code>null</code> if it is a new atlas.
+	// *
+	// * @param progress
+	// *
+	// * TODO Should be moved to a "hoster api" package/class/module
+	// * @throws SocketTimeoutException
+	// *
+	// * @MOVE GpHoster REST API module one day
+	// */
+	// public static AtlasFingerprint requestFingerprint(AtlasConfigEditable
+	// ace,
+	// ResultProgressHandle progress) {
+	// InputStream afp2Is;
+	// final String path = GEOPUBLISHING_ORG + ace.getBaseName()
+	// + ".fingerprint";
+	// try {
+	// // LOGGER.debug("Connecting " + path);
+	// final URL url = new URL(path);
+	//
+	// URLConnection conn = url.openConnection();
+	// // setting these timeouts ensures the client does not deadlock
+	// // indefinitely
+	// // when the server has problems.
+	// conn.setConnectTimeout(5000);
+	// conn.setReadTimeout(5000);
+	//
+	// afp2Is = conn.getInputStream();
+	// String afp2Txt;
+	// try {
+	// // LOGGER.debug(" connecting success!");
+	// afp2Txt = IOUtil.convertStreamToString(afp2Is);
+	// } finally {
+	// afp2Is.close();
+	// }
+	// if (afp2Txt.contains("ERROR"))
+	// return null;
+	// final AtlasFingerprint afpRemote = new AtlasFingerprint(afp2Txt);
+	//
+	// return afpRemote;
+	// } catch (MalformedURLException e) {
+	// throw new RuntimeException("Could not get atlas fingerprint from "
+	// + path, e);
+	// } catch (FileNotFoundException e) {
+	// // if status 404 then return null;
+	// // throw new
+	// return null;
+	// } catch (SocketTimeoutException e) {
+	// throw new AtlasExportException(
+	// "Timeout while connecting the gphoster servlet:", e);
+	// } catch (IOException e) {
+	// LOGGER.debug("Could not get atlas fingerprint from " + path, e);
+	// return null;
+	// }
+	// }
 
 	/**
 	 * @return The selected or default GpHosterServerSettings for exporting
@@ -151,7 +218,8 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 
 			String propertiesString = GPProps.get(Keys.gpHosterServerList);
 			if (propertiesString == null) {
-				propertiesString = GpHosterServerSettings.DEFAULT.toPropertiesString();
+				propertiesString = GpHosterServerSettings.DEFAULT
+						.toPropertiesString();
 				GPProps.set(Keys.gpHosterServerList, propertiesString);
 				GPProps.store();
 			}
@@ -164,7 +232,8 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 			return new GpHosterServerList(propertiesString).get(int1);
 		} catch (Exception e) {
 			log.error("Error in gphosterlist", e);
-			GPProps.set(Keys.gpHosterServerList, GpHosterServerSettings.DEFAULT.toPropertiesString());
+			GPProps.set(Keys.gpHosterServerList,
+					GpHosterServerSettings.DEFAULT.toPropertiesString());
 			GPProps.set(Keys.lastGpHosterServerIdx, 0);
 			log.error("error getting the select gphosterservice", e);
 			GPProps.store();
