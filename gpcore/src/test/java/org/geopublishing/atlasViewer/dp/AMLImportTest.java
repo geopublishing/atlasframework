@@ -57,13 +57,13 @@ public class AMLImportTest extends TestingClass {
 		assertTrue(ace2.getGpHosterAuth());
 	}
 
-	@Test
-	public void testAmlSaveMemoryError() throws Exception {
-		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
-		for (int i = 0; i < 100; i++) {
-			GpTestingUtil.saveAndLoad(ace);
-		}
-	}
+//	@Test
+//	public void testAmlSaveMemoryError() throws Exception {
+//		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+//		for (int i = 0; i < 100; i++) {
+//			GpTestingUtil.saveAndLoad(ace);
+//		}
+//	}
 
 	@Test
 	public void testFtpExportAuth2() throws Exception {
