@@ -69,6 +69,7 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 		} else if (createdUserWithSuccess == CREATE_USER_RESULT.EXITSALREADY_PWDSENT) {
 			add(new JLabel("User already existed. A password reminder has been sent."), "", 0); // i8n
 		}
+		add(getPWField(), "growx");
 
 	}
 
