@@ -193,7 +193,7 @@ public class CliOptions extends Options {
 				} else if (AtlasConfig.isAtlasDir(awcFile.getParentFile())) {
 					awcFile = awcFile.getParentFile();
 				} else {
-					File awcFile2 = new File(new File("."), commandLine
+					File awcFile2 = new File(System.getProperty("user.dir"), commandLine
 							.getOptionValue(CliOptions.AWCFOLDER).trim());
 					if (AtlasConfig.isAtlasDir(awcFile2)) {
 						awcFile = awcFile2;
