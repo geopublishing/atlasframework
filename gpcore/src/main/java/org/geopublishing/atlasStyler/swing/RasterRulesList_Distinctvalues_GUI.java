@@ -110,6 +110,8 @@ public class RasterRulesList_Distinctvalues_GUI extends
 				rulesList.getStyledRaster().setNodataValue(null);
 				rulesList.fireEvents(new RuleChangedEvent(
 						"NODATA value removed", rulesList));
+				tf.setText("");
+				return;
 			}
 
 			final Double parsed = Double.valueOf(text);

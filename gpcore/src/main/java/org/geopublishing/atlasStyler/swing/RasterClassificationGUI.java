@@ -14,6 +14,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
 import org.geopublishing.atlasStyler.classification.RasterClassification;
@@ -85,7 +86,17 @@ public class RasterClassificationGUI extends ClassificationGUI {
 	public void doit(JTextField tf) {
 
 		try {
-			final Double parsed = Double.valueOf(tf.getText());
+			String text = tf.getText();
+			
+			if ("".equals(text) || "null".equals(text)) {
+				getClassifier().getStyledRaster().setNodataValue(null);
+				classifier.fireEvent(new ClassificationChangeEvent(
+						CHANGETYPES.NODATAVALUE_CHANGED));
+				tf.setText("");
+				return;
+			}
+
+			final Double parsed = Double.valueOf(text);
 			if (parsed != null
 					&& !parsed.equals(getClassifier().getStyledRaster()
 							.getNodataValue())) {
