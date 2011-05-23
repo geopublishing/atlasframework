@@ -760,8 +760,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 					 * Opens a modal about window.
 					 */
 					JDialog aboutWindow = new AtlasPopupDialog(getJFrame(),
-							true, getAtlasConfig());
-					aboutWindow.setVisible(true);
+							getAtlasConfig());
 				}
 			});
 		}
