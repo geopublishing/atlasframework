@@ -45,6 +45,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
@@ -63,7 +64,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 	OkButton okButton;
 
 	/** Creates new form AtlasAboutDialog2 */
-	public AtlasPopupDialog(Component parentGUI, boolean modal,
+	public AtlasPopupDialog(Component parentGUI, 
 			AtlasConfig atlasConfig) {
 		super(SwingUtil.getParentWindow(parentGUI),
 				ModalityType.MODELESS);
@@ -100,6 +101,11 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		// setPreferredSize(getHtmlInfoJPane().getPreferredSize());
 
 		SwingUtil.centerFrameOnScreen(this);
+		
+		setVisible(true);
+		
+		LangUtil.sleepExceptionless(300);
+		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
 	}
 
 	// Pressing ESC disposes the Dialog
