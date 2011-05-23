@@ -25,14 +25,10 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geotools.data.DataUtilities;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
-
-import com.lightdev.app.shtm.DocNameMissingException;
-import com.lightdev.app.shtm.DocumentPane;
 
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
@@ -41,7 +37,7 @@ import de.schmitzm.testing.TestingUtil;
 public class ACETranslationPrinterTest extends TestingClass {
 
 	@Test
-	public void testPrint() throws DocNameMissingException, IOException,
+	public void testPrint() throws IOException,
 			AtlasException, FactoryException, TransformException, SAXException,
 			ParserConfigurationException, InterruptedException, InvocationTargetException {
 		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE();
@@ -82,10 +78,6 @@ public class ACETranslationPrinterTest extends TestingClass {
 		out.close();
 
 		if (TestingUtil.hasGui()) {
-			DocumentPane documentPane = new DocumentPane(
-					DataUtilities.fileToURL(exportFile), 0);
-			documentPane.saveDocument();
-			documentPane = null;
 
 			assertTrue(exportFile.exists());
 

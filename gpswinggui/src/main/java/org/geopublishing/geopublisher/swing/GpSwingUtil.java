@@ -78,25 +78,22 @@ public class GpSwingUtil extends GpUtil {
 	private static final Logger LOGGER = Logger.getLogger(GpSwingUtil.class);
 
 	/**
-	 * Deletes a {@link DpEntry}. This deletes the Entry from the Atlas'
-	 * datapool, as well as all references to it, as well as the folder on disk.
+	 * Deletes a {@link DpEntry}. This deletes the Entry from the Atlas' datapool, as well as all references to it, as
+	 * well as the folder on disk.
 	 * 
 	 * @param ace
-	 *            {@link AtlasConfigEditable} where the {@link DpEntry} is part
-	 *            of.
+	 *            {@link AtlasConfigEditable} where the {@link DpEntry} is part of.
 	 * @param dpe
 	 *            {@link DpEntry} to be deleted.
 	 * @param askUserToVerify
-	 *            If <code>true</code>, the user will be asked for confirmation.
-	 *            The confirmation will list all references. If
-	 *            <code>false</code>, the DPE and all references are
-	 *            automatically removed.
+	 *            If <code>true</code>, the user will be asked for confirmation. The confirmation will list all
+	 *            references. If <code>false</code>, the DPE and all references are automatically removed.
 	 * 
-	 * @return <code>null</code> if the deletion failed or was aborted by the
-	 *         user. Otherwise the removed {@link DpEntry}.
+	 * @return <code>null</code> if the deletion failed or was aborted by the user. Otherwise the removed
+	 *         {@link DpEntry}.
 	 */
-	public static DpEntry<?> deleteDpEntry(Component owner,
-			AtlasConfigEditable ace, DpEntry<?> dpe, boolean askUserToVerify) {
+	public static DpEntry<?> deleteDpEntry(Component owner, AtlasConfigEditable ace, DpEntry<?> dpe,
+			boolean askUserToVerify) {
 		LinkedList<AtlasRefInterface<?>> references = new LinkedList<AtlasRefInterface<?>>();
 
 		// ****************************************************************************
@@ -133,14 +130,10 @@ public class GpSwingUtil extends GpUtil {
 		if (askUserToVerify) {
 			// Ask the user if she still wants to delete the DPE, even though
 			// references exist.
-			int res = JOptionPane.showConfirmDialog(owner, GpUtil.R(
-					"DeleteDpEntry.QuestionDeleteDpeAndReferences", dpe
-							.getFilename(), countRefsInMappool, LangUtil
-							.stringConcatWithSep(", ", mapsWithReferences),
-					references.size() - countRefsInMappool, dpe.getTitle()
-							.toString()), GpUtil
-					.R("DataPoolWindow_Action_DeleteDPE_label" + " "
-							+ dpe.getTitle()), JOptionPane.YES_NO_OPTION);
+			int res = JOptionPane.showConfirmDialog(owner, GpUtil.R("DeleteDpEntry.QuestionDeleteDpeAndReferences",
+					dpe.getFilename(), countRefsInMappool, LangUtil.stringConcatWithSep(", ", mapsWithReferences),
+					references.size() - countRefsInMappool, dpe.getTitle().toString()), GpUtil
+					.R("DataPoolWindow_Action_DeleteDPE_label" + " " + dpe.getTitle()), JOptionPane.YES_NO_OPTION);
 			if (res != JOptionPane.YES_OPTION)
 				return null;
 		}
@@ -203,8 +196,7 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Checks if a filename is OK for the AV. Asks the use to accespt the
-	 * changed name
+	 * Checks if a filename is OK for the AV. Asks the use to accespt the changed name
 	 * 
 	 * @param owner
 	 *            GUI owner
@@ -215,20 +207,16 @@ public class GpSwingUtil extends GpUtil {
 	 * @throws AtlasImportException
 	 *             if the user doesn't like the change of the filename.
 	 */
-	public static String cleanFilenameWithUI(Component owner,
-			String nameCandidate) throws AtlasImportException {
+	public static String cleanFilenameWithUI(Component owner, String nameCandidate) throws AtlasImportException {
 		String cleanName = IOUtil.cleanFilename(nameCandidate);
 
 		if (!cleanName.equals(nameCandidate)) {
 			/**
-			 * The candidate was not clean. Ask the user to accept the new name
-			 * or cancel.
+			 * The candidate was not clean. Ask the user to accept the new name or cancel.
 			 */
 
-			if (!AVSwingUtil.askOKCancel(owner,
-					R("Cleanfile.Question", nameCandidate, cleanName))) {
-				throw new AtlasImportException(R(
-						"Cleanfile.Denied.ImportCancelled", nameCandidate));
+			if (!AVSwingUtil.askOKCancel(owner, R("Cleanfile.Question", nameCandidate, cleanName))) {
+				throw new AtlasImportException(R("Cleanfile.Denied.ImportCancelled", nameCandidate));
 			}
 		}
 
@@ -236,12 +224,10 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Validates, that all directory references actually exist. If some
-	 * directory is missing, asks the user if he want's to delete the entry and
-	 * all references to it.<br/>
-	 * Also checks that all directories in <code>ad/data</code> folder are
-	 * actually referenced. If now, the used is asked to delete the folder.</br>
-	 * This method also initializes the size-cache for every {@link DpEntry}.
+	 * Validates, that all directory references actually exist. If some directory is missing, asks the user if he want's
+	 * to delete the entry and all references to it.<br/>
+	 * Also checks that all directories in <code>ad/data</code> folder are actually referenced. If now, the used is
+	 * asked to delete the folder.</br> This method also initializes the size-cache for every {@link DpEntry}.
 	 */
 	public static void validate(AtlasConfigEditable ace, final Component owner) {
 		LOGGER.debug("starting validation of datatpool");
@@ -271,16 +257,11 @@ public class GpSwingUtil extends GpUtil {
 		// ****************************************************************************
 		for (final DpEntry<?> dpe : errorEntries) {
 
-			final String msg1 = GpUtil.R(
-					"AtlasLoader.Validation.dpe.invalid.msg", dpe.getTitle(),
-					dpe.getId());
-			final String msg2 = GpUtil.R(
-					"AtlasLoader.Validation.dpe.invalid.msg.folderDoesnExist",
-					new File(ace.getDataDir(), dpe.getDataDirname())
-							.getAbsolutePath());
+			final String msg1 = GpUtil.R("AtlasLoader.Validation.dpe.invalid.msg", dpe.getTitle(), dpe.getId());
+			final String msg2 = GpUtil.R("AtlasLoader.Validation.dpe.invalid.msg.folderDoesnExist",
+					new File(ace.getDataDir(), dpe.getDataDirname()).getAbsolutePath());
 
-			final String question = GpUtil
-					.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
+			final String question = GpUtil.R("AtlasLoader.Validation.dpe.invalid.msg.exitOrRemoveQuestion");
 
 			if (SwingUtil.askYesNo(owner, msg1 + "\n" + msg2 + "\n" + question)) {
 				deleteDpEntry(owner, ace, dpe, false);
@@ -291,14 +272,12 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Checks the data dir folder of the {@link AtlasConfigEditable} and asks to
-	 * delete any unexpected folders.
+	 * Checks the data dir folder of the {@link AtlasConfigEditable} and asks to delete any unexpected folders.
 	 * 
 	 * @param owner
 	 *            if <code>null</code> all files will be deleted automatically
 	 */
-	public static void cleanFolder(AtlasConfigEditable ace,
-			final Component owner) {
+	public static void cleanFolder(AtlasConfigEditable ace, final Component owner) {
 
 		// ****************************************************************************
 		// now list all directories in ad/html and check whether they are
@@ -325,8 +304,7 @@ public class GpSwingUtil extends GpUtil {
 			if (isReferenced)
 				continue;
 
-			LOGGER.info("The map directory " + IOUtil.escapePath(dir)
-					+ " is not referenced in the atlas.");
+			LOGGER.info("The map directory " + IOUtil.escapePath(dir) + " is not referenced in the atlas.");
 
 			askToDeleteUnreferencedFolder(ace.getHtmlDir(), owner, dir);
 
@@ -354,8 +332,7 @@ public class GpSwingUtil extends GpUtil {
 			if (isReferenced)
 				continue;
 
-			LOGGER.info("The directory " + IOUtil.escapePath(dir)
-					+ " is not referenced in the atlas.");
+			LOGGER.info("The directory " + IOUtil.escapePath(dir) + " is not referenced in the atlas.");
 
 			askToDeleteUnreferencedFolder(ace.getDataDir(), owner, dir);
 
@@ -363,41 +340,30 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Asks to delete a file or folder and returns <code>true</code> if the file
-	 * has been deleted.
+	 * Asks to delete a file or folder and returns <code>true</code> if the file has been deleted.
 	 */
-	private static boolean askToDeleteUnreferencedFolder(File dir,
-			final Component owner, File d) {
+	private static boolean askToDeleteUnreferencedFolder(File dir, final Component owner, File d) {
 
 		boolean askDelete = true;
 		if (owner != null)
-			askDelete = AVSwingUtil
-					.askOKCancel(
-							owner,
-							GpSwingUtil
-									.R("UnreferencedDirectoryFoundInAtlasDataDir_AskIfItShouldBeDeleted",
-											IOUtil.escapePath(dir), d.getName()));
+			askDelete = AVSwingUtil.askOKCancel(
+					owner,
+					GpSwingUtil.R("UnreferencedDirectoryFoundInAtlasDataDir_AskIfItShouldBeDeleted",
+							IOUtil.escapePath(dir), d.getName()));
 		if (askDelete) {
 			if (owner != null)
-				LOGGER.info("User allowed to delete folder "
-						+ IOUtil.escapePath(d) + ".");
+				LOGGER.info("User allowed to delete folder " + IOUtil.escapePath(d) + ".");
 			else
-				LOGGER.info("Automatically delete folder "
-						+ IOUtil.escapePath(d) + ".");
+				LOGGER.info("Automatically delete folder " + IOUtil.escapePath(d) + ".");
 
 			if ((d.isDirectory() && new File(d, ".svn").exists())) {
-				LOGGER.info("Please use:\nsvn del \"" + IOUtil.escapePath(d)
-						+ "\" && svn commit \"" + IOUtil.escapePath(d)
-						+ "\" -m \"deleted an unused directory\"");
+				LOGGER.info("Please use:\nsvn del \"" + IOUtil.escapePath(d) + "\" && svn commit \""
+						+ IOUtil.escapePath(d) + "\" -m \"deleted an unused directory\"");
 
 				if (owner != null)
-					AVSwingUtil
-							.showMessageDialog(
-									owner,
-									GpSwingUtil
-											.R("UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",
-													d.getName(),
-													IOUtil.escapePath(d)));
+					AVSwingUtil.showMessageDialog(owner, GpSwingUtil.R(
+							"UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",
+							d.getName(), IOUtil.escapePath(d)));
 			} else {
 
 				// Just delete the directory!
@@ -412,32 +378,24 @@ public class GpSwingUtil extends GpUtil {
 	 * Save the {@link AtlasConfig} to its project directory
 	 * 
 	 * @param parentGUI
-	 *            If not <code>null</code>, the user get's feedback message
-	 *            SaveAtlas.Success.Message
+	 *            If not <code>null</code>, the user get's feedback message SaveAtlas.Success.Message
 	 * 
-	 * @return false Only if there happened an error while saving. If there is
-	 *         nothing to save, returns true;
+	 * @return false Only if there happened an error while saving. If there is nothing to save, returns true;
 	 */
-	public static boolean save(final AtlasConfigEditable ace,
-			final Component parentGUI, boolean confirm) {
+	public static boolean save(final AtlasConfigEditable ace, final Component parentGUI, boolean confirm) {
 
 		SwingUtil.checkOnEDT();
 
-		AtlasSwingWorker<Boolean> swingWorker = new AtlasSwingWorker<Boolean>(
-				parentGUI) {
+		AtlasSwingWorker<Boolean> swingWorker = new AtlasSwingWorker<Boolean>(parentGUI) {
 
 			@Override
 			protected Boolean doInBackground() throws Exception {
 				AMLExporter amlExporter = new AMLExporter(ace);
 
 				if (amlExporter.saveAtlasConfigEditable(statusDialog)) {
-					ace.getProperties().save(
-							new File(ace.getAtlasDir(),
-									AVProps.PROPERTIESFILE_RESOURCE_NAME));
+					ace.getProperties().save(new File(ace.getAtlasDir(), AVProps.PROPERTIESFILE_RESOURCE_NAME));
 
-					new File(ace.getAtlasDir(),
-							AtlasConfigEditable.ATLAS_GPA_FILENAME)
-							.createNewFile();
+					new File(ace.getAtlasDir(), AtlasConfigEditable.ATLAS_GPA_FILENAME).createNewFile();
 
 					return true;
 				}
@@ -449,8 +407,7 @@ public class GpSwingUtil extends GpUtil {
 		try {
 			Boolean saved = swingWorker.executeModal();
 			if (saved && confirm) {
-				JOptionPane.showMessageDialog(parentGUI,
-						GeopublisherGUI.R("SaveAtlas.Success.Message"));
+				JOptionPane.showMessageDialog(parentGUI, GeopublisherGUI.R("SaveAtlas.Success.Message"));
 			}
 			return saved;
 		} catch (Exception e) {
@@ -460,17 +417,14 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Returns a {@link List} of {@link File}s that point to the HTML info files
-	 * of a DpLayer. The order of the {@link File}s in the {@link List} is equal
-	 * to the order of the languages.<br/>
-	 * All HTML files returned to exist! If they don't exist they are being
-	 * created with a default text.
+	 * Returns a {@link List} of {@link File}s that point to the HTML info files of a DpLayer. The order of the
+	 * {@link File}s in the {@link List} is equal to the order of the languages.<br/>
+	 * All HTML files returned to exist! If they don't exist they are being created with a default text.
 	 * 
 	 * @param dpl
 	 *            {@link DpLayer} that the HTML files belong to.
 	 */
-	static public List<File> getHTMLFilesFor(
-			DpLayer<?, ? extends ChartStyle> dpl) {
+	static public List<File> getHTMLFilesFor(DpLayer<?, ? extends ChartStyle> dpl) {
 
 		List<File> htmlFiles = new ArrayList<File>();
 
@@ -479,16 +433,12 @@ public class GpSwingUtil extends GpUtil {
 		File dir = new File(ac.getDataDir(), dpl.getDataDirname());
 		for (String lang : ac.getLanguages()) {
 			try {
-				File htmlFile = new File(
-						(FilenameUtils.removeExtension(new File(dir, dpl
-								.getFilename()).getCanonicalPath())
-								+ "_"
-								+ lang + ".html"));
+				File htmlFile = new File((FilenameUtils.removeExtension(new File(dir, dpl.getFilename())
+						.getCanonicalPath()) + "_" + lang + ".html"));
 
 				if (!htmlFile.exists()) {
 
-					LOGGER.info("Creating a default info HTML file for dpe "
-							+ dpl.getTitle() + "\n at "
+					LOGGER.info("Creating a default info HTML file for dpe " + dpl.getTitle() + "\n at "
 							+ htmlFile.getAbsolutePath());
 
 					/**
@@ -496,9 +446,8 @@ public class GpSwingUtil extends GpUtil {
 					 */
 
 					FileWriter fw = new FileWriter(htmlFile);
-					fw.write(GpUtil.R("DPLayer.HTMLInfo.DefaultHTMLFile",
-							I18NUtil.getFirstLocaleForLang(lang)
-									.getDisplayLanguage(), dpl.getTitle()));
+					fw.write(GpUtil.R("DPLayer.HTMLInfo.DefaultHTMLFile", I18NUtil.getFirstLocaleForLang(lang)
+							.getDisplayLanguage(), dpl.getTitle()));
 
 					fw.flush();
 					fw.close();
@@ -507,19 +456,16 @@ public class GpSwingUtil extends GpUtil {
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(),
-						e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
 			}
 		}
 		return htmlFiles;
 	}
 
 	/**
-	 * Returns a {@link List} of {@link File}s that point to the HTML info
-	 * filesfor a {@link Map}. The order of the {@link File}s in the
-	 * {@link List} is equal to the order of the languages.<br/>
-	 * All HTML files returned to exist! If they don't exist they are being
-	 * created with a default text.
+	 * Returns a {@link List} of {@link File}s that point to the HTML info filesfor a {@link Map}. The order of the
+	 * {@link File}s in the {@link List} is equal to the order of the languages.<br/>
+	 * All HTML files returned to exist! If they don't exist they are being created with a default text.
 	 * 
 	 * @param dpl
 	 *            {@link DpLayer} that the HTML files belong to.
@@ -535,12 +481,10 @@ public class GpSwingUtil extends GpUtil {
 
 		for (String lang : ace.getLanguages()) {
 			try {
-				File htmlFile = new File(new File(dir, "index" + "_" + lang
-						+ ".html").getCanonicalPath());
+				File htmlFile = new File(new File(dir, "index" + "_" + lang + ".html").getCanonicalPath());
 
 				if (!htmlFile.exists()) {
-					LOGGER.info("Creating a default info HTML file for map "
-							+ map.getTitle() + "\n at "
+					LOGGER.info("Creating a default info HTML file for map " + map.getTitle() + "\n at "
 							+ htmlFile.getAbsolutePath());
 
 					/**
@@ -548,9 +492,8 @@ public class GpSwingUtil extends GpUtil {
 					 */
 
 					FileWriter fw = new FileWriter(htmlFile);
-					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I18NUtil
-							.getFirstLocaleForLang(lang).getDisplayLanguage(),
-							map.getTitle()));
+					fw.write(GpUtil.R("Map.HTMLInfo.DefaultHTMLFile", I18NUtil.getFirstLocaleForLang(lang)
+							.getDisplayLanguage(), map.getTitle()));
 
 					fw.flush();
 					fw.close();
@@ -559,8 +502,7 @@ public class GpSwingUtil extends GpUtil {
 
 			} catch (IOException e) {
 				LOGGER.error(e);
-				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(),
-						e);
+				ExceptionDialog.show(GeopublisherGUI.getInstance().getJFrame(), e);
 			}
 		}
 		return htmlFiles;
@@ -572,8 +514,7 @@ public class GpSwingUtil extends GpUtil {
 	 * @param map
 	 *            a Map
 	 */
-	public static DesignHTMLInfoPane createDesignHTMLInfoPane(
-			AtlasConfigEditable ace, Map map) {
+	public static DesignHTMLInfoPane createDesignHTMLInfoPane(AtlasConfigEditable ace, Map map) {
 		// Note: although we now have 2 versions to display html...
 		// a) JEditorPane -> HTMLInfoJPane
 		// b) JWebBrowser -> HTMLInfoJWebBrowser
@@ -590,24 +531,22 @@ public class GpSwingUtil extends GpUtil {
 	 * @param map
 	 *            a Map
 	 */
-	public static HTMLEditPaneInterface createHTMLEditPane(
-			AtlasConfigEditable ace) {
+	public static HTMLEditPaneInterface createHTMLEditPane(AtlasConfigEditable ace) {
 		HTMLEditPaneInterface htmlEditPane = null;
 
 		// try to use an HTML view based on DJ project
 		htmlEditPane = (HTMLEditPaneInterface) LangUtil.instantiateObject(
-				"org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor",
-				true, // fallback if class can not be loaded
+				"org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor", true, // fallback if class can not be
+																						// loaded
 				"FCK", ace);
 
 		if (htmlEditPane != null) {
-			LOGGER.info("Using " + LangUtil.getSimpleClassName(htmlEditPane)
-					+ " as HTML editor.");
+			LOGGER.info("Using " + LangUtil.getSimpleClassName(htmlEditPane) + " as HTML editor.");
 			return htmlEditPane;
 		}
-
-		// use editor based on SimplyHTML
-		htmlEditPane = new HTMLEditPaneSimplyHTML();
+		//
+		// // use editor based on SimplyHTML
+		// htmlEditPane = new HTMLEditPaneSimplyHTML();
 
 		return htmlEditPane;
 	}
@@ -621,26 +560,22 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * This method should only be called by the {@link DialogManager}. All
-	 * program points, where a HTML editor should be opened must should use the
-	 * {@link DialogManager}.
+	 * This method should only be called by the {@link DialogManager}. All program points, where a HTML editor should be
+	 * opened must should use the {@link DialogManager}.
 	 * 
 	 * @param owner
 	 * @param ace
 	 * @param htmlFiles
-	 *            A {@link List} of {@link File}s that all will automatically be
-	 *            created if they don't exist! No matter if the user saves his
-	 *            changes.
+	 *            A {@link List} of {@link File}s that all will automatically be created if they don't exist! No matter
+	 *            if the user saves his changes.
 	 * @param tabTitles
 	 * @param windowTitle
 	 */
-	public static Window openHTMLEditors(Component owner,
-			AtlasConfigEditable ace, List<File> htmlFiles,
+	public static Window openHTMLEditors(Component owner, AtlasConfigEditable ace, List<File> htmlFiles,
 			List<String> tabTitles, String windowTitle) {
 
 		if (tabTitles.size() != htmlFiles.size())
-			throw new IllegalArgumentException(
-					"Number of HTML URLs and Titles must be equal.");
+			throw new IllegalArgumentException("Number of HTML URLs and Titles must be equal.");
 
 		/**
 		 * We open the HTML editor to edit the About information.
@@ -656,8 +591,7 @@ public class GpSwingUtil extends GpUtil {
 		// editorDialog.setModal(true);
 		// TODO: Stefan muss hier Frame-Caching einbauen, damit
 		// fuer eine Map nicht 2x ein Editor geöffnet wird!
-		editorFrame
-				.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		editorFrame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		editorFrame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -702,8 +636,7 @@ public class GpSwingUtil extends GpUtil {
 				// URL htmlURL = htmlFile.toURL();
 				URL htmlURL = IOUtil.fileToURL(htmlFile);
 
-				LOGGER.info(htmlEditor.getClass().getSimpleName() + " for "
-						+ htmlURL + " (was file = "
+				LOGGER.info(htmlEditor.getClass().getSimpleName() + " for " + htmlURL + " (was file = "
 						+ htmlFile.getCanonicalPath() + ")");
 
 				htmlEditor.addEditorTab(tabTitles.get(i), htmlURL, i);
@@ -727,24 +660,20 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * Finds all "img" occurrences with absolute file references in a html
-	 * content and extracts the file information.
+	 * Finds all "img" occurrences with absolute file references in a html content and extracts the file information.
 	 * 
 	 * @param htmlContent
 	 *            html content
-	 * @return a map with the strings to replace as key and the corresponding
-	 *         file references as value
+	 * @return a map with the strings to replace as key and the corresponding file references as value
 	 */
-	public static java.util.Map<String, File> findFileReferencesToReplace(
-			String htmlContent) {
+	public static java.util.Map<String, File> findFileReferencesToReplace(String htmlContent) {
 		java.util.Map<String, File> map = new HashMap<String, File>();
 
 		if (htmlContent == null)
 			return map;
 
 		// find all "img" occurrences in html
-		Pattern pattern = Pattern
-				.compile("<[iI][mM][gG].*?src=['\"](.*?)['\"].*?>");
+		Pattern pattern = Pattern.compile("<[iI][mM][gG].*?src=['\"](.*?)['\"].*?>");
 		Matcher matcher = pattern.matcher(htmlContent);
 		while (matcher.find()) {
 			try {
@@ -761,11 +690,10 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
-	 * .tiff, .gif).
+	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif, .tiff, .gif).
 	 */
-	public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
-			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
+	public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter("Images", true, ".png", ".jpg",
+			".jpeg", ".tif", ".tiff", ".gif");
 
 	/**
 	 * Performs a file choose.
@@ -778,8 +706,7 @@ public class GpSwingUtil extends GpUtil {
 	 *            defines which files can be selected
 	 * @return {@code null} if the dialog was not approved
 	 */
-	public static File chooseFileFallback(Component parent, File startFolder,
-			FileExtensionFilter filter) {
+	public static File chooseFileFallback(Component parent, File startFolder, FileExtensionFilter filter) {
 		if (startFolder == null)
 			startFolder = new File("/");
 
@@ -806,8 +733,7 @@ public class GpSwingUtil extends GpUtil {
 	 *            defines which files can be selected
 	 * @return {@code null} if the dialog was not approved
 	 */
-	public static File chooseFile(Component parent, File startFolder,
-			FileExtensionFilter filter) {
+	public static File chooseFile(Component parent, File startFolder, FileExtensionFilter filter) {
 
 		try {
 			NativeInterface.open();
@@ -817,8 +743,7 @@ public class GpSwingUtil extends GpUtil {
 			fileDialog.setParentDirectory(startFolder.getAbsolutePath());
 
 			fileDialog.setDialogType(DialogType.OPEN_DIALOG_TYPE);
-			fileDialog.setExtensionFilters(
-					new String[] { filter.toNativeFileFilter()[0] },
+			fileDialog.setExtensionFilters(new String[] { filter.toNativeFileFilter()[0] },
 					new String[] { filter.toNativeFileFilter()[1] }, 0);
 			fileDialog.show(parent);
 			fileDialog.setTitle("Choose an image.");// i8n
@@ -838,22 +763,17 @@ public class GpSwingUtil extends GpUtil {
 	 * Copies a file to a relative path.
 	 * 
 	 * @param parent
-	 *            parent component for info dialogs (if {@code} no dialogs will
-	 *            be shown!)
+	 *            parent component for info dialogs (if {@code} no dialogs will be shown!)
 	 * @param source
 	 *            source file
 	 * @param basePath
 	 *            base path for the destination folder
 	 * @param relDir
-	 *            directory (!) relative to {@code basePath} the file will be
-	 *            copied to
-	 * @return the relative path (including the filename) in case of success
-	 *         (also when the copy was not necessary, because source and
-	 *         destination files are equal!); {@code null} if copy could not be
-	 *         processed.
+	 *            directory (!) relative to {@code basePath} the file will be copied to
+	 * @return the relative path (including the filename) in case of success (also when the copy was not necessary,
+	 *         because source and destination files are equal!); {@code null} if copy could not be processed.
 	 */
-	public static String copyFileToRelativeFolder(Component parent,
-			File source, File basePath, String relDir) {
+	public static String copyFileToRelativeFolder(Component parent, File source, File basePath, String relDir) {
 		// relative path should not start with "/"
 		if (relDir.length() > 1 && relDir.startsWith("/"))
 			relDir.substring(1);
@@ -876,14 +796,12 @@ public class GpSwingUtil extends GpUtil {
 			// TODO Ask to overwrite one day
 			IOUtil.copyFile(null, source, destFile, true);
 			if (parent != null)
-				JOptionPane.showMessageDialog(parent, fileNameCleaned
-						+ " copied to map image folder", "File copied", // i8n
+				JOptionPane.showMessageDialog(parent, fileNameCleaned + " copied to map image folder", "File copied", // i8n
 						JOptionPane.INFORMATION_MESSAGE);
 			return relFilePath;
 		} catch (IOException err) {
 			if (parent != null)
-				ExceptionDialog.show(parent, err, "Error coping file",
-						fileNameCleaned + " could not be copied!");
+				ExceptionDialog.show(parent, err, "Error coping file", fileNameCleaned + " could not be copied!");
 			else
 				LOGGER.error("Error coping file", err);
 			return null;

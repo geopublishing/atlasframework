@@ -67,10 +67,6 @@ import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JDirectoryDialog;
-
-import com.lightdev.app.shtm.DocumentPane;
-import com.lightdev.app.shtm.SHTMLPanelImpl;
-
 import de.schmitzm.i18n.SwitchLanguageDialog;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.io.IOUtil;
@@ -135,7 +131,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		 * Doing some initializations
 		 */
 		GpCoreUtil.fixBug4847375();
-		SHTMLPanelImpl.setTextResources(null);
 	}
 
 	/**
@@ -460,14 +455,14 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 						exportFile));
 				out.write(allTrans);
 				out.close();
-
-				/**
-				 * Clean it with SimplyHTML
-				 */
-				DocumentPane documentPane = new DocumentPane(exportFile.toURI()
-						.toURL(), 0);
-				documentPane.saveDocument();
-				documentPane = null;
+				//
+				// /**
+				// * Clean it with SimplyHTML
+				// */
+				// DocumentPane documentPane = new DocumentPane(exportFile.toURI()
+				// .toURL(), 0);
+				// documentPane.saveDocument();
+				// documentPane = null;
 
 				/**
 				 * Open it
