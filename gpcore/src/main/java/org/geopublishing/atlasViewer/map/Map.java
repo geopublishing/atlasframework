@@ -468,7 +468,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 *         file. <code>null</code> is returned, if no HTML file is found for
 	 *         the active language.
 	 */
-	private URL getInfoURL(final String activeLang) {
+	public URL getInfoURL(final String activeLang) {
 		// That was too slow String:
 		// urlString = Webserver.getDocumentBase() + "/" +
 		// getId() + "/" + "index.html";

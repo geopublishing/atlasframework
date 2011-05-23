@@ -271,7 +271,7 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	 * 
 	 * @return <code>null</code> or a {@link URL}
 	 */
-	private URL getInfoURL(String lang) {
+	public URL getInfoURL(String lang) {
 		try {
 			URL infoURL;
 			String url = getUrl().toString();

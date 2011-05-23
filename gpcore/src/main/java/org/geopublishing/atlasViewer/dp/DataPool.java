@@ -252,6 +252,18 @@ public class DataPool extends TreeMap<String, DpEntry<? extends ChartStyle>> {
 	}
 
 	/**
+	 * Return an unsorted list of only the layer data pool entries
+	 */
+	public Set<DpLayer> getLayers() {
+		HashSet<DpLayer> layers = new HashSet<DpLayer>();
+		for (DpEntry dpe : values()) {
+			if (dpe instanceof DpLayer)
+				layers.add((DpLayer) dpe);
+		}
+		return layers;
+	}
+
+	/**
 	 * Return an unsorted list of only the raster layer data pool entries
 	 */
 	public Set<DpLayerRaster> getRasterLayers() {
