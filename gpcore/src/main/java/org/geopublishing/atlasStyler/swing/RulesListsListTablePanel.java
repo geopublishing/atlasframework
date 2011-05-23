@@ -127,10 +127,10 @@ public class RulesListsListTablePanel extends JPanel {
 
 			modeButtons = new JPanel(new MigLayout());
 
-			modeButtons.add(new JLabel("Bedienungsmodus:")); // i8n
+			modeButtons.add(new JLabel(ASUtil.R("UserMode.Label")));
 
 			final JRadioButton easyButton = new JRadioButton(
-					new AbstractAction("easy") { // i8n
+new AbstractAction(ASUtil.R("UserMode.Easy.Label")) {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
@@ -146,7 +146,7 @@ public class RulesListsListTablePanel extends JPanel {
 
 			modeButtons.add(easyButton);
 			final JRadioButton expertButton = new JRadioButton(
-					new AbstractAction("expert") { // I8n
+new AbstractAction(ASUtil.R("UserMode.Expert.Label")) {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
