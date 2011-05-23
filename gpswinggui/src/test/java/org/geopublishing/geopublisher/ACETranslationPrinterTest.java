@@ -82,10 +82,10 @@ public class ACETranslationPrinterTest extends TestingClass {
 		out.close();
 
 		if (TestingUtil.hasGui()) {
-			DocumentPane documentPane = new DocumentPane(
-					DataUtilities.fileToURL(exportFile), 0);
-			documentPane.saveDocument();
-			documentPane = null;
+//			DocumentPane documentPane = new DocumentPane(
+//					DataUtilities.fileToURL(exportFile), 0);
+//			documentPane.saveDocument();
+//			documentPane = null;
 
 			assertTrue(exportFile.exists());
 

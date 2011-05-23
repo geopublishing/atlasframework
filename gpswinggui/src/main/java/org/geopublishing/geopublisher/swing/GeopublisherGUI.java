@@ -462,14 +462,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				out.close();
 
 				/**
-				 * Clean it with SimplyHTML
-				 */
-				DocumentPane documentPane = new DocumentPane(exportFile.toURI()
-						.toURL(), 0);
-				documentPane.saveDocument();
-				documentPane = null;
-
-				/**
 				 * Open it
 				 */
 				AVSwingUtil.lauchHTMLviewer(getJFrame(), exportFile.toURI());
