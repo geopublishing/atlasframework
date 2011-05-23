@@ -91,11 +91,17 @@ public class AMLImport {
 	 * them away if conversion not possible.
 	 **/
 	private static boolean upgradeFromPreGP13 = false;
+
 	/**
 	 * If set to <code>true</code> empty Strings will be added as NODATA Values
 	 * for every String attribute.
 	 **/
 	private static boolean upgradeFromPreGP14 = false;
+
+	/**
+	 * If set to <code>true</code> all HTML files are checked for wrong color HEX statement.
+	 **/
+	protected static boolean upgradeFromPreGP17 = false;
 
 	static void info(String msg) {
 		if (statusDialog != null)
@@ -530,6 +536,11 @@ public class AMLImport {
 		if (majMin < 1.4) {
 			upgradeFromPreGP14 = true;
 			LOGGER.info("atlas.xml has been created with a version prior to 1.4. \"\" NODATA values for Strings will be added automatically.");
+		}
+
+		if (majMin < 1.7) {
+			upgradeFromPreGP17 = true;
+			LOGGER.info("atlas.xml has been created with a version prior to 1.7. HTML files are check/corrected for wrong color HEX values");
 		}
 
 	}
@@ -1132,8 +1143,6 @@ public class AMLImport {
 						dplvfs.setFilterRule(filterString);
 					}
 
-					// } else if (name.equals("chart") && dplvfs.getUrl() !=
-					// null) {
 				} else if (name.equals("chart")
 						&& AVSwingUtil.getUrl(dplvfs, statusDialog) != null) {
 					try {

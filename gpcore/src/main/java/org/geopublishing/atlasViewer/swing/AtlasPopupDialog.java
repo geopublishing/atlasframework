@@ -76,32 +76,29 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 	private void initGUI() {
 		// setExtendedState(Frame.MAXIMIZED_BOTH);
 		Dimension fullScreen = getToolkit().getScreenSize();
-		Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.9),
-				(int) (fullScreen.height * 0.85));
+		Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
 
 		setTitle(atlasConfig.getTitle().toString());
 
-		JPanel contentPane = new JPanel(new MigLayout("wrap 2, fillx, w "
-				+ (dialogSize.width - 5) + "!"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]", "[][fill]"));
 
 		contentPane.add(getTitleJLabel(), "growx, push");
-		contentPane.add(getLogoJLabel(), "growy, right");
+		contentPane.add(getLogoJLabel(), "right");
 		JComponent htmlComponent = getHtmlInfoJPane();
-		if ( !htmlInfoJPane.hasScrollPane() )
-		  htmlComponent = new JScrollPane(htmlComponent);
-		contentPane.add(htmlComponent,"span 2, grow, pushy 200");
+		if (!htmlInfoJPane.hasScrollPane()) {
+			htmlComponent = new JScrollPane(getHtmlInfoJPane());
+		}
+		contentPane.add(htmlComponent, "span 2, grow, pushy 200");
 		contentPane.add(getOkButton(), "tag ok, span 2");
 		setContentPane(contentPane);
 
-		// try {
-		// Thread.sleep(300);
-		// } catch (InterruptedException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
+		//
 		setSize(dialogSize);
-		// pack();
+
+		// JPanel contentPane = new JPanel(new MigLayout("warp 2, fillx", "[grow]","[grow]"));
+
+		// setPreferredSize(getHtmlInfoJPane().getPreferredSize());
+
 		SwingUtil.centerFrameOnScreen(this);
 	}
 
