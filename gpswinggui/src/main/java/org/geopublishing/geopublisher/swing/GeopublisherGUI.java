@@ -455,6 +455,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 						exportFile));
 				out.write(allTrans);
 				out.close();
+
 				//
 				// /**
 				// * Clean it with SimplyHTML

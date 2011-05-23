@@ -12,6 +12,7 @@ package org.geopublishing.geopublisher;
 
 import javax.swing.tree.TreeNode;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
@@ -38,8 +39,7 @@ public class ACETranslationPrinter {
 	/**
 	 * This method can take a while and produce disk traffic.
 	 * 
-	 * @return a {@link String} containing a human-readable summary of all
-	 *         {@link Translation}s used.
+	 * @return a {@link String} containing a human-readable summary of all {@link Translation}s used.
 	 */
 	public String printAllTranslations() {
 		txt = new StringBuffer(4000);
@@ -48,15 +48,11 @@ public class ACETranslationPrinter {
 		 * AtlasParams
 		 */
 		printWayH1(R("ACETranslationPrinter.Heading.GeneralInformation"));
-		printWayH2(R("MenuBar.AtlasMenu"),
-				R("MenuBar.AtlasMenu.ChangeAtlasParams"));
+		printWayH2(R("MenuBar.AtlasMenu"), R("MenuBar.AtlasMenu.ChangeAtlasParams"));
 		printTranslation(ace.getTitle(), "AtlasParamsTranslationDialog.Title");
-		printTranslation(ace.getDesc(),
-				"AtlasParamsTranslationDialog.Description");
-		printTranslation(ace.getCreator(),
-				"AtlasParamsTranslationDialog.Creator");
-		printTranslation(ace.getCopyright(),
-				"AtlasParamsTranslationDialog.Copyright");
+		printTranslation(ace.getDesc(), "AtlasParamsTranslationDialog.Description");
+		printTranslation(ace.getCreator(), "AtlasParamsTranslationDialog.Creator");
+		printTranslation(ace.getCopyright(), "AtlasParamsTranslationDialog.Copyright");
 
 		/**
 		 * DataPool
@@ -64,14 +60,11 @@ public class ACETranslationPrinter {
 		printWayH1(R("DataPoolJTable.Border.Title"));
 		for (DpEntry<? extends ChartStyle> dpe : ace.getDataPool().values()) {
 
-			printWayH2(R("DataPoolJTable.Border.Title"),
-					R("DataPoolJTable.ColumnName.Filename"), dpe.getFilename(),
+			printWayH2(R("DataPoolJTable.Border.Title"), R("DataPoolJTable.ColumnName.Filename"), dpe.getFilename(),
 					R("DataPoolWindow_Action_EditDPE_label"));
 			printTranslation(dpe.getTitle(), "EditDPEDialog.TranslateTitle");
-			printTranslation(dpe.getDesc(),
-					"EditDPEDialog.TranslateDescription");
-			printTranslation(dpe.getKeywords(),
-					"EditDPEDialog.TranslateKeywords");
+			printTranslation(dpe.getDesc(), "EditDPEDialog.TranslateDescription");
+			printTranslation(dpe.getKeywords(), "EditDPEDialog.TranslateKeywords");
 
 			if (dpe instanceof DpLayerVector<?, ?>) {
 
@@ -81,10 +74,8 @@ public class ACETranslationPrinter {
 
 				DpLayerVector<?, ?> dplv = (DpLayerVector<?, ?>) dpe;
 				for (LayerStyle ls : dplv.getLayerStyles()) {
-					printWayH3(R("DataPoolJTable.Border.Title"),
-							"\"<b>" + dpe.getFilename() + "</b>\"",
-							R("DataPoolWindow_Action_ManageLayerStyles_label"),
-							"\"<b>" + ls.getFilename() + "</b>\"");
+					printWayH3(R("DataPoolJTable.Border.Title"), "\"<b>" + dpe.getFilename() + "</b>\"",
+							R("DataPoolWindow_Action_ManageLayerStyles_label"), "\"<b>" + ls.getFilename() + "</b>\"");
 
 					txt.append("<ul>");
 					printTranslation(ls.getTitle(), "Attributes.Edit.Title");
@@ -99,27 +90,18 @@ public class ACETranslationPrinter {
 				 * List visible attributes
 				 */
 				DpLayerVectorFeatureSource dplv = (DpLayerVectorFeatureSource) dpe;
-				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = dplv
-						.getAttributeMetaDataMap();
-				for (AttributeMetadataImpl attributeMetaData : attributeMetaDataMap
-						.sortedValues()) {
+				AttributeMetadataMap<AttributeMetadataImpl> attributeMetaDataMap = dplv.getAttributeMetaDataMap();
+				for (AttributeMetadataImpl attributeMetaData : attributeMetaDataMap.sortedValues()) {
 					if (attributeMetaData.isVisible()) {
 						try {
-							printWayH3(
-									R("DataPoolJTable.Border.Title"),
-									"\"<b>" + dpe.getFilename() + "</b>\"",
-									R("DataPoolWindow_Action_EditColumns_label"),
-									"\"<b>" + attributeMetaData.getName()
+							printWayH3(R("DataPoolJTable.Border.Title"), "\"<b>" + dpe.getFilename() + "</b>\"",
+									R("DataPoolWindow_Action_EditColumns_label"), "\"<b>" + attributeMetaData.getName()
 											+ "</b>\"");
 
 							txt.append("<ul>");
-							printTranslation(attributeMetaData.getTitle(),
-									"Attributes.Edit.Title");
-							printTranslation(attributeMetaData.getDesc(),
-									"Attributes.Edit.Desc");
-							txt.append("<li><h3>" + R("Unit") + " = "
-									+ attributeMetaData.getUnit()
-									+ "</h3></li>");
+							printTranslation(attributeMetaData.getTitle(), "Attributes.Edit.Title");
+							printTranslation(attributeMetaData.getDesc(), "Attributes.Edit.Desc");
+							txt.append("<li><h3>" + R("Unit") + " = " + attributeMetaData.getUnit() + "</h3></li>");
 							txt.append("</ul>");
 
 						} catch (Exception e) {
@@ -130,29 +112,27 @@ public class ACETranslationPrinter {
 
 				}
 			}
-			
+
 			/**
 			 * list Charts
 			 */
 			printWayH1(R("Charts"));
 			try {
-			    org.geopublishing.atlasViewer.map.Map map = ace.getMapPool().get(0);
-			    for (ChartStyle cs : dpe.getCharts()) {
-			        txt.append("<ul>");
-			        printWayH2(
-			                R("MapPoolJTable.Border.Title"),
-			                R("MapPoolJTable.ColumnName.NameLang",Translation.getActiveLang()),
-			                "<b>\"" + map.getTitle().toString() + "\"</b>",
-			                R("MapPoolWindow.Action.OpenInMapComposer"),
-			                "<b>\"" +dpe.getTitle().toString() + "\"</b>",
-			                R("DataPoolWindow_Action_ManageCharts_label")
-			        );
-			        printTranslation(cs.getTitleStyle().getLabelTranslation(), "Attributes.Edit.Title");
-			        printTranslation(cs.getDescStyle().getLabelTranslation(), "Attributes.Edit.Desc");
-			        txt.append("</ul>");
-			    }
+				org.geopublishing.atlasViewer.map.Map map = ace.getMapPool().get(0);
+				for (ChartStyle cs : dpe.getCharts()) {
+					txt.append("<ul>");
+					printWayH2(R("MapPoolJTable.Border.Title"),
+							R("MapPoolJTable.ColumnName.NameLang", Translation.getActiveLang()), "<b>\""
+									+ StringEscapeUtils.escapeHtml(map.getTitle().toString()) + "\"</b>",
+							R("MapPoolWindow.Action.OpenInMapComposer"),
+							"<b>\"" + StringEscapeUtils.escapeHtml(dpe.getTitle().toString()) + "\"</b>",
+							R("DataPoolWindow_Action_ManageCharts_label"));
+					printTranslation(cs.getTitleStyle().getLabelTranslation(), "Attributes.Edit.Title");
+					printTranslation(cs.getDescStyle().getLabelTranslation(), "Attributes.Edit.Desc");
+					txt.append("</ul>");
+				}
 			} catch (Exception e) {
-                txt.append(ERROR + e.getLocalizedMessage());
+				txt.append(ERROR + e.getLocalizedMessage());
 			}
 		}
 
@@ -160,29 +140,22 @@ public class ACETranslationPrinter {
 		 * MapPool
 		 */
 		printWayH1(R("MapPoolJTable.Border.Title"));
-		for (org.geopublishing.atlasViewer.map.Map map : ace.getMapPool()
-				.values()) {
+		for (org.geopublishing.atlasViewer.map.Map map : ace.getMapPool().values()) {
 
-			printWayH2(
-					R("MapPoolJTable.Border.Title"),
-					R("MapPoolJTable.ColumnName.NameLang",
-							Translation.getActiveLang()), "<b>\""
-							+ map.getTitle().toString() + "\"</b>",
+			printWayH2(R("MapPoolJTable.Border.Title"),
+					R("MapPoolJTable.ColumnName.NameLang", Translation.getActiveLang()), "<b>\""
+ + StringEscapeUtils.escapeHtml(map.getTitle().toString()) + "\"</b>",
 					R("MapPoolWindow.Button_EditMap_label"));
-			printTranslation(map.getTitle(),
-					"MapPreferences_translateTheMapsName");
-			printTranslation(map.getDesc(),
-					"MapPreferences_translateTheMapsDescription");
-			printTranslation(map.getKeywords(),
-					"MapPreferences_translateTheMapsKeywords");
+			printTranslation(map.getTitle(), "MapPreferences_translateTheMapsName");
+			printTranslation(map.getDesc(), "MapPreferences_translateTheMapsDescription");
+			printTranslation(map.getKeywords(), "MapPreferences_translateTheMapsKeywords");
 		}
 
 		/**
 		 * Groups/ Menus
 		 */
 		printWayH1(R("EditGroupsDnDJTreePanel.Border.Title"));
-		printGroup(ace.getRootGroup(),
-				R("EditGroupsDnDJTreePanel.Border.Title"));
+		printGroup(ace.getRootGroup(), R("EditGroupsDnDJTreePanel.Border.Title"));
 
 		return txt.toString();
 	}
@@ -196,16 +169,19 @@ public class ACETranslationPrinter {
 			if (!child.isLeaf()) {
 				Group subg = (Group) child;
 
-				String[] longWay = LangUtil.extendArray(wayToHere, subg
-						.getTitle().toString());
+				String[] longWay = LangUtil.extendArray(wayToHere, subg.getTitle().toString());
+
+				// Object[] lw2 = ArrayUtils.clone(longWay);
+				// longWay = new String[0];
+				// for (Object s : lw2) {
+				// longWay = LangUtil.extendArray(wayToHere, StringEscapeUtils.escapeHtml(((String) s)));
+				// }
+
 				printWayH2(longWay);
 
-				printTranslation(subg.getTitle(),
-						"GroupTree.Edit.TranslateTitle");
-				printTranslation(subg.getDesc(),
-						"GroupTree.Edit.TranslateDescription");
-				printTranslation(subg.getKeywords(),
-						"GroupTree.Edit.TranslateKeywords");
+				printTranslation(subg.getTitle(), "GroupTree.Edit.TranslateTitle");
+				printTranslation(subg.getDesc(), "GroupTree.Edit.TranslateDescription");
+				printTranslation(subg.getKeywords(), "GroupTree.Edit.TranslateKeywords");
 
 				printGroup(subg, longWay);
 			}
@@ -213,8 +189,7 @@ public class ACETranslationPrinter {
 		}
 
 		/*
-		 * GroupTree.Edit.TranslateTitle=Translate name:
-		 * GroupTree.Edit.TranslateDescription=Translate description:
+		 * GroupTree.Edit.TranslateTitle=Translate name: GroupTree.Edit.TranslateDescription=Translate description:
 		 * GroupTree.Edit.TranslateKeywords=Translate keywords:
 		 */
 	}
@@ -238,7 +213,7 @@ public class ACETranslationPrinter {
 	}
 
 	public String R(String key, Object... values) {
-		return GeopublisherGUI.R(key, values);
+		return StringEscapeUtils.escapeHtml(GeopublisherGUI.R(key, values));
 	}
 
 	private void printWay(String... steps) {
@@ -266,7 +241,7 @@ public class ACETranslationPrinter {
 			if (val == null)
 				val = "";
 			txt.append("<p>");
-			txt.append(l + " = " + val);
+			txt.append(l + " = " + StringEscapeUtils.escapeHtml(val));
 			txt.append("</p>");
 			txt.append("</li>");
 		}

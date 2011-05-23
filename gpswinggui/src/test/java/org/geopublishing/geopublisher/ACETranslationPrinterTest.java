@@ -90,4 +90,9 @@ public class ACETranslationPrinterTest extends TestingClass {
 			});
 		}
 	}
+
+	@Test
+	public void testPrintGroup() {
+
+	}
 }
