@@ -22,12 +22,14 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.DeferredWizardResult;
 import org.netbeans.spi.wizard.WizardPage;
 
+import de.schmitzm.swing.SwingUtil;
+
 public class ExportWizardPage_WaitExporting extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
 	JLabel explanationJLabel = new JLabel(
-			GeopublisherGUI.R("ExportWizard.ExportWait"));
+GeopublisherGUI.R("ExportWizard.ExportWait.Explanation"));
 
 	public ExportWizardPage_WaitExporting() {
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
@@ -38,7 +40,7 @@ public class ExportWizardPage_WaitExporting extends WizardPage {
 		add(cancelExportButton);
 	}
 
-	JButton cancelExportButton = new JButton(new AbstractAction("cancel") {
+	JButton cancelExportButton = new JButton(new AbstractAction(SwingUtil.R("Cancel")) {
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {

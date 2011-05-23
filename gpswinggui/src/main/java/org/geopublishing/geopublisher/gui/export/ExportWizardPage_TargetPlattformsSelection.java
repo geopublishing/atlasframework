@@ -87,14 +87,14 @@ public class ExportWizardPage_TargetPlattformsSelection extends WizardPage {
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		add(explanationJLabel);
 
-		add(getFtpJCheckbox(), "gapy unrelated");
-		add(explanationFtpJLabel);
-
-		add(getDiskJCheckbox(), "split 2, gapy unrelated");
+		add(getDiskJCheckbox(), "split 2, gapy");
 		add(getDiskZipJCheckbox(), "");
 		add(explanationDiskJLabel);
 
-		add(getJwsJCheckbox(), "gapy unrelated");
+		add(getFtpJCheckbox(), "gapy");
+		add(explanationFtpJLabel);
+
+		add(getJwsJCheckbox(), "gapy");
 		add(explanationJwsJLabel);
 
 	}
