@@ -76,9 +76,9 @@ public class ExportWizardPage_GpHoster_CheckMail extends WizardPage {
 	private void initGui() {
 		setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
-		setLayout(new MigLayout("wrap 1"));
+		setLayout(new MigLayout("wrap 1","grow"));
 		add(explanationJLabel);
-		add(getPWField(), "growx");
+		add(getPWField());
 	}
 
 	private PasswordViewable getPWField() {
