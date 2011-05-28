@@ -29,7 +29,7 @@
 	<properties>
 		<geotools.version>2.6.5</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<schmitzm.version>2.5-SNAPSHOT</schmitzm.version>
+		<schmitzm.version>2.6-SNAPSHOT</schmitzm.version>
 	</properties>
 
 	<organization>
