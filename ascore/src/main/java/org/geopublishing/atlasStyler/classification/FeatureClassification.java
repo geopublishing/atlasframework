@@ -19,10 +19,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
+import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
@@ -77,9 +79,10 @@ public class FeatureClassification extends Classification {
 	 * Caches up to 8 Statistics. Remember, that the {@link DynamicBin1D}
 	 * actually keeps the data in memory!
 	 */
-	private final LimitedHashMap<String, DynamicBin1D> staticStatsCache = new LimitedHashMap<String, DynamicBin1D>(
-			8);
+	private final Map<String, DynamicBin1D> staticStatsCache = MapUtils
+			.synchronizedMap(new LimitedHashMap<String, DynamicBin1D>(8));
 
+	private boolean cacheEnabled = true;
 	/**
 	 * The styled Feature this {@link Classification} works on.
 	 */
@@ -248,7 +251,7 @@ public class FeatureClassification extends Classification {
 	 *         String is the Key for the {@link #staticStatsCache}.
 	 */
 	private String getKey() {
-		return "ID=" + getStyledFeatures().getId() + " VALUE="
+		return "ID=" + getStyledFeatures().getId() + "TITLE=" + getStyledFeatures().getTitle() + " VALUE="
 				+ value_field_name + " NORM=" + normalizer_field_name
 				+ " FILTER=" + getStyledFeatures().getFilter();
 	}
@@ -282,7 +285,7 @@ public class FeatureClassification extends Classification {
 		stats = staticStatsCache.get(getKey());
 		// stats = null;
 
-		if (stats == null) {
+		if (stats == null || !cacheEnabled) {
 			// Old style.. asking for ALL attributes
 			// FeatureCollection<SimpleFeatureType, SimpleFeature> features =
 			// getStyledFeatures()
@@ -377,7 +380,8 @@ public class FeatureClassification extends Classification {
 
 				stats = stats_local;
 
-				staticStatsCache.put(getKey(), stats);
+				if (cacheEnabled)
+					staticStatsCache.put(getKey(), stats);
 
 			} finally {
 				features.close(iterator);
@@ -475,6 +479,14 @@ public class FeatureClassification extends Classification {
 
 			fireEvent(new ClassificationChangeEvent(CHANGETYPES.VALUE_CHG));
 		}
+	}
+
+	public void setCacheEnabled(boolean cacheEnabled) {
+		this.cacheEnabled = cacheEnabled;
+	}
+
+	public boolean isCacheEnabled() {
+		return cacheEnabled;
 	}
 
 }
