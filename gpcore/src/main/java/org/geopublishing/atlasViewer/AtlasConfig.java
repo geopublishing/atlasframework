@@ -91,8 +91,8 @@ public class AtlasConfig implements Disposable {
 	public void setBaseName(String basename) {
 		if (!checkBasename(basename))
 			throw new IllegalArgumentException(
-					GpUtil.R("IllegalCharactersInAtlasBasename.Message")); 
-		
+					GpUtil.R("IllegalCharactersInAtlasBasename.Message"));
+
 		this.basename = basename;
 	}
 
@@ -105,19 +105,25 @@ public class AtlasConfig implements Disposable {
 			// Used in the Geoserver namespaces / stylenames
 			if (basename.contains("_"))
 				return false;
+			if (basename.contains("."))
+				return false;
 			if (basename.contains(" "))
+				return false;
+			if (basename.contains("*"))
 				return false;
 			// URL dangerouse
 			if (basename.contains("?"))
 				return false;
+			// Only lowercase
+			if (!basename.toLowerCase().equals(basename))
+				return false;			
 			// URL dangerouse
 			if (basename.contains("&"))
 				return false;
-			// Only lowercase
-			if (!basename.toLowerCase().equals(basename))
-				return false;
 			if (basename.matches("[^\\p{ASCII}]"))
 				return false;
+			if (basename.length() <= 2)
+				return false;	
 		}
 		return true;
 	}
