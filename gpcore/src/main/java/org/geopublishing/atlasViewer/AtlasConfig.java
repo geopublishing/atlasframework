@@ -51,7 +51,7 @@ public class AtlasConfig implements Disposable {
 
 	/** Default JNLP base URL for new atlases **/
 	public static final String DEFAULTBASENAME = "myatlas";
-	private static final String ATLAS_BASE_URL = "http://atlas.geopublishing.org/atlases/";
+	private static final String ATLAS_BASE_URL = "http://atlas.geopublishing.org/hosted/";
 	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT = ATLAS_BASE_URL
 			+ DEFAULTBASENAME + "/";
 
@@ -91,7 +91,7 @@ public class AtlasConfig implements Disposable {
 	public void setBaseName(String basename) {
 		if (!checkBasename(basename))
 			throw new IllegalArgumentException(
-					GpUtil.R("IllegalCharactersInAtlasBasename.Message")); 
+					GpUtil.R("IllegalCharactersInAtlasBasename.Message"));
 
 		this.basename = basename;
 	}
@@ -116,7 +116,7 @@ public class AtlasConfig implements Disposable {
 				return false;
 			// Only lowercase
 			if (!basename.toLowerCase().equals(basename))
-				return false;			
+				return false;
 			// URL dangerouse
 			if (basename.contains("&"))
 				return false;
@@ -577,13 +577,9 @@ public class AtlasConfig implements Disposable {
 	 * @return A ASCII only simple name for this atlas.
 	 */
 	public String getBaseName() {
-		// if (basename == null) {
-		// String bn = getJnlpBaseUrl();
-		// return bn.substring(
-		// bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
-		// bn.length() - 1);
-
-		// }
+		if (basename == null) {
+			basename = "";
+		}
 		return basename;
 	}
 
@@ -607,11 +603,12 @@ public class AtlasConfig implements Disposable {
 	public void setMaplogoPosition(LogoPosition pos) {
 		maplogoPosition = pos;
 	}
+
 	public void setGpHosterAuth(boolean gpHosterAuth) {
 		this.gpHosterAuth = gpHosterAuth;
 	}
 
 	public boolean getGpHosterAuth() {
-			return gpHosterAuth;
+		return gpHosterAuth;
 	}
 }
