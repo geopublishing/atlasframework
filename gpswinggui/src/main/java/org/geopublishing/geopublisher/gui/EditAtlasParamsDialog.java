@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.StringUtils;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
@@ -79,7 +80,7 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 	/**
 	 * Asks for the atlasbasename
 	 * 
-	 * @since 1.7 a required ASCII id for each atlas
+	 * @since 1.7 a requires ASCII id for each atlas
 	 */
 	private JPanel getBasenamePanel() {
 		if (abnPanel == null) {
@@ -108,7 +109,7 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 		}
 		boolean result = super.okClose();
 		if (result) {
-			ace.setBaseName(getBasenameJTextfield().getText());
+			ace.setBaseName(StringUtils.trimToEmpty(getBasenameJTextfield().getText()));
 			ace.fireChangeEvents();
 		}
 		return result;
