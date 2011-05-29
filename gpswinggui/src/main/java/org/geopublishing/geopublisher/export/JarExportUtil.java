@@ -1777,6 +1777,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
 		// für DISK exportiert wird.
+
+		// Native Libs nicht mehr mitkopieren, kann komplett entfernt werden?  
 		if (toDisk) {
 			libs = LangUtil.extendArray(libs, getNativeLibNames());
 		}
