@@ -1,5 +1,6 @@
 package org.geopublishing.geopublisher;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
@@ -12,6 +13,8 @@ public class AtlasConfigEditableTest {
 		assertFalse(AtlasConfigEditable.checkBasename(" asd "));
 		assertFalse(AtlasConfigEditable.checkBasename("my atlas"));
 		assertFalse(AtlasConfigEditable.checkBasename("a?"));
+		assertFalse(AtlasConfigEditable.checkBasename("testAr"));
+		assertTrue(AtlasConfigEditable.checkBasename("testar"));
 	}
 
 }

@@ -91,7 +91,7 @@ public class AtlasConfig implements Disposable {
 	public void setBaseName(String basename) {
 		if (!checkBasename(basename))
 			throw new IllegalArgumentException(
-					"atlas basename may not contain _ characters. Use - instead."); // i8n
+					GpUtil.R("IllegalCharactersInAtlasBasename.Message")); 
 
 		this.basename = basename;
 	}
@@ -106,6 +106,8 @@ public class AtlasConfig implements Disposable {
 			if (basename.contains("_"))
 				return false;
 			if (basename.contains(" "))
+				return false;
+			if (basename.contains("*"))
 				return false;
 			// URL dangerouse
 			if (basename.contains("?"))
