@@ -20,7 +20,7 @@ FINDSTR "64" "%HOMEPATH_COMPL%\.Geopublishing\javaversion.txt"
 if %ERRORLEVEL% EQU 0 set SWTJAR=swt-windows-${swt.version}-x86_64.jar
 echo.Using native SWT library %SWTJAR%
 
-javaw -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp "%JAI%;%SWTJAR%;%HOMEPATH%\.Geopublishing;gpswinggui-${project.version}.jar" org.geopublishing.geopublisher.swing.GeopublisherGUI %~f1 %~f2 %~f3 %~f4 %~f5 %~f6 %~f7 %~f8 %~f9 %~f10 %~f11 %~f12 %~f13
+javaw -Xmx500m -Dfile.encoding=UTF8  -Djava.library.path=. -cp "%JAI%;%SWTJAR%;%HOMEPATH%\.Geopublishing;gpswinggui-${project.version}.jar" org.geopublishing.geopublisher.swing.GeopublisherGUI %~f1 %~f2 %~f3 %~f4 %~f5 %~f6 %~f7 %~f8 %~f9 %~f10 %~f11 %~f12 %~f13
 
 endlocal
 

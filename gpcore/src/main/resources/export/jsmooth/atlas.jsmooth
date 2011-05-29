@@ -20,7 +20,7 @@
 <value>atlasdata</value>
 </javaProperties>
 <mainClassName>org.geopublishing.atlasViewer.swing.AtlasViewerGUI</mainClassName>
-<maximumMemoryHeap>241172480</maximumMemoryHeap>
+<maximumMemoryHeap>400000000</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
 <skeletonName>Autodownload Wrapper</skeletonName>
