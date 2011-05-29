@@ -33,6 +33,7 @@ import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.StringUtils;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpUtil;
@@ -94,7 +95,7 @@ public class EditAtlasParamsDialog extends TranslationAskJDialog {
 
 	JTextField getBasenameJTextfield() {
 		if (basenameTextfield == null) {
-			basenameTextfield = new JTextField(ace.getBaseName());
+			basenameTextfield = new JTextField(StringUtils.trimToEmpty(ace.getBaseName()));
 		}
 		return basenameTextfield;
 	}
