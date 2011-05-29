@@ -122,8 +122,6 @@ public class AtlasConfig implements Disposable {
 				return false;
 			if (basename.matches("[^\\p{ASCII}]"))
 				return false;
-			if (basename.length() <= 2)
-				return false;	
 		}
 		return true;
 	}
