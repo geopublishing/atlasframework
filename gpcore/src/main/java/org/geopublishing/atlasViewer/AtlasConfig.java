@@ -111,6 +111,8 @@ public class AtlasConfig implements Disposable {
 				return false;
 			if (basename.contains("*"))
 				return false;
+			if (basename.contains("/"))
+				return false;
 			// URL dangerouse
 			if (basename.contains("?"))
 				return false;
