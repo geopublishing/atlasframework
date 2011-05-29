@@ -73,6 +73,7 @@ public class GpHosterClient {
 	}
 
 	public String getUserName() {
+		if (server.getUsername() == null || server.getUsername().equals("null")) return "";
 		return server.getUsername();
 	}
 
@@ -84,6 +85,7 @@ public class GpHosterClient {
 	}
 
 	public String getPassword() {
+		if (server.getPassword()== null || server.getPassword().equals("null")) return "";
 		return server.getPassword();
 	}
 
