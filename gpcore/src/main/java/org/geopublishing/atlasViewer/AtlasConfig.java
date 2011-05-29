@@ -51,7 +51,7 @@ public class AtlasConfig implements Disposable {
 
 	/** Default JNLP base URL for new atlases **/
 	public static final String DEFAULTBASENAME = "myatlas";
-	private static final String ATLAS_BASE_URL = "http://atlas.geopublishing.org/atlases/";
+	private static final String ATLAS_BASE_URL = "http://atlas.geopublishing.org/hosted/";
 	public static final String HTTP_WWW_GEOPUBLISHING_ORG_ATLASES_DEFAULT = ATLAS_BASE_URL
 			+ DEFAULTBASENAME + "/";
 
@@ -577,13 +577,9 @@ public class AtlasConfig implements Disposable {
 	 * @return A ASCII only simple name for this atlas.
 	 */
 	public String getBaseName() {
-		// if (basename == null) {
-		// String bn = getJnlpBaseUrl();
-		// return bn.substring(
-		// bn.substring(0, bn.length() - 1).lastIndexOf("/") + 1,
-		// bn.length() - 1);
-
-		// }
+		if (basename == null) {
+			basename = "";
+		}
 		return basename;
 	}
 
