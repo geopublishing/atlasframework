@@ -187,6 +187,8 @@ public class GpSwingUtil extends GpUtil {
 			// Now we change this map
 			map.setLayers(layersNew);
 			map.setMedia(mediaNew);
+			// Under windows deleting the .prj of a Shape fails if we do not uncache any affected map here.
+			map.uncache();
 		}
 
 		Group.findReferencesTo(group, dpe, references, true);
