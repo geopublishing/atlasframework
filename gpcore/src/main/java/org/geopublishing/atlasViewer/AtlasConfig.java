@@ -112,6 +112,9 @@ public class AtlasConfig implements Disposable {
 			// URL dangerouse
 			if (basename.contains("?"))
 				return false;
+			// Only lowercase
+			if (!basename.toLowerCase().equals(basename))
+				return false;			
 			// URL dangerouse
 			if (basename.contains("&"))
 				return false;
