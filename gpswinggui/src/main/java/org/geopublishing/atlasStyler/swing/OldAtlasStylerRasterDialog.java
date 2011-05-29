@@ -92,21 +92,14 @@ public class OldAtlasStylerRasterDialog extends CancellableDialogAdapter {
 			backupLegendData = legendData.copy();
 		}
 
-		rasterSymbolizer = StylingUtil.getRasterSymbolizers(workingStyle)
-				.get(0);
-
-		// hardcode, but so many styles come with a wrong geometry property
-		// name...
-		rasterSymbolizer.setGeometryPropertyName("geom"); // Do we still need
-															// this? No! It's
-															// done in getStyle
-															// i think
-
-		// try{
-		// StylingUtil.saveStyleToSLD(workingStyle, new
-		// java.io.File("/home/stefan/Desktop/preOpenRasterStyler.sld"));
-		// } catch (Exception e) {
-		// }
+		List<RasterSymbolizer> rasterSymbolizers = StylingUtil
+				.getRasterSymbolizers(workingStyle);
+		if (rasterSymbolizers.size() > 0) {
+			rasterSymbolizer = rasterSymbolizers.get(0);
+		} else {
+			rasterSymbolizer = StylingUtil.getRasterSymbolizers(
+					StylingUtil.createDefaultStyle(styledRaster)).get(0);
+		}
 
 		initGUI();
 	}
