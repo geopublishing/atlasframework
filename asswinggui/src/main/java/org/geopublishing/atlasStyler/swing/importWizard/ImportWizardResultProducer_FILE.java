@@ -137,12 +137,13 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 			 * Import a Shapefile selected by the Wizard into the AtlasStylerGUI
 			 */
 			private Summary importShape(final AtlasStylerGUI asg,
-					final File importFile, ResultProgressHandle progress,
+					File importFile, ResultProgressHandle progress,
 					long startTime) throws FileNotFoundException, IOException {
 				URL urlToShape;
 
 				if (importFile.getName().toLowerCase().endsWith("zip")) {
 					urlToShape = GeoImportUtil.uncompressShapeZip(importFile);
+					importFile = DataUtilities.urlToFile(urlToShape);
 				} else {
 					urlToShape = DataUtilities.fileToURL(importFile);
 				}
@@ -205,28 +206,32 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 						if (!AVSwingUtil
 								.askOKCancel(
 										asg,
-										AtlasStylerVector
+										ASUtil
 												.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
 														e.getMessage(),
 														prjFile.getName(),
 														GeoImportUtil
 																.getDefaultCRS()
-																.getName())))
+																.getName()))) {
 							dataStore.dispose();
-						abort();
+							abort();
+							return null;
+						}
 					}
 				} else {
 					if (!AVSwingUtil
 							.askOKCancel(
 									asg,
-									AtlasStylerVector
+									ASUtil
 											.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
 													prjFile.getName(),
 													GeoImportUtil
 															.getDefaultCRS()
-															.getName())))
+															.getName()))) {
 						dataStore.dispose();
-					abort();
+						abort();
+						return null;
+					}
 				}
 
 				if (prjCRS == null) {

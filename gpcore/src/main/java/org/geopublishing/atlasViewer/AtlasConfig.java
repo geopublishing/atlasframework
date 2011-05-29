@@ -91,8 +91,8 @@ public class AtlasConfig implements Disposable {
 	public void setBaseName(String basename) {
 		if (!checkBasename(basename))
 			throw new IllegalArgumentException(
-					"atlas basename may not contain _ characters. Use - instead."); // i8n
-
+					GpUtil.R("IllegalCharactersInAtlasBasename.Message")); 
+		
 		this.basename = basename;
 	}
 
@@ -112,6 +112,9 @@ public class AtlasConfig implements Disposable {
 				return false;
 			// URL dangerouse
 			if (basename.contains("&"))
+				return false;
+			// Only lowercase
+			if (!basename.toLowerCase().equals(basename))
 				return false;
 			if (basename.matches("[^\\p{ASCII}]"))
 				return false;
@@ -598,11 +601,12 @@ public class AtlasConfig implements Disposable {
 	public void setMaplogoPosition(LogoPosition pos) {
 		maplogoPosition = pos;
 	}
+
 	public void setGpHosterAuth(boolean gpHosterAuth) {
 		this.gpHosterAuth = gpHosterAuth;
 	}
 
 	public boolean getGpHosterAuth() {
-			return gpHosterAuth;
+		return gpHosterAuth;
 	}
 }
