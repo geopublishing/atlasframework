@@ -18,7 +18,7 @@
 <value>.</value>
 </javaProperties>
 <mainClassName>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClassName>
-<maximumMemoryHeap>281172480</maximumMemoryHeap>
+<maximumMemoryHeap>500000000</maximumMemoryHeap>
 <maximumVersion></maximumVersion>
 <minimumVersion>1.6</minimumVersion>
 <skeletonName>Autodownload Wrapper</skeletonName>
