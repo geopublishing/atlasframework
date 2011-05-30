@@ -102,27 +102,7 @@ public class AtlasConfig implements Disposable {
 	 */
 	public static boolean checkBasename(String basename) {
 		if (basename != null) {
-			// Used in the Geoserver namespaces / stylenames
-			if (basename.contains("_"))
-				return false;
-			if (basename.contains("."))
-				return false;
-			if (basename.contains(" "))
-				return false;
-			if (basename.contains("*"))
-				return false;
-			if (basename.contains("/"))
-				return false;
-			// URL dangerouse
-			if (basename.contains("?"))
-				return false;
-			// Only lowercase
-			if (!basename.toLowerCase().equals(basename))
-				return false;
-			// URL dangerouse
-			if (basename.contains("&"))
-				return false;
-			if (basename.matches("[^\\p{ASCII}]"))
+			if (basename.matches(".*[^a-z0-9].*"))
 				return false;
 		}
 		return true;
