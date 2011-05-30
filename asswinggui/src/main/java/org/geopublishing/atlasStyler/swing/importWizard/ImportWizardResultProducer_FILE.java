@@ -128,7 +128,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					return null;
 				}
 
-				// TODO Better Raster import feedback
+				// TODO Better Raster import feedback, like x and y and BANDS! i8n
 				return Summary.create(new JScrollPane(new JLabel(
 						"Rasterimport OK")), "ok");
 			}
@@ -256,11 +256,11 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 							idxShpDs.createSpatialIndex();
 						} catch (Exception e) {
 							throw new IllegalStateException(
-									"The Shapefile has a broken .qix file and a new one can not be created. Please delete or fix the .qix file manually.",
+									"The Shapefile has a broken .qix file and a new one can not be created. Please delete or fix the .qix file manually.", //i8n
 									e);
 						}
 						throw new AtlasImportException(
-								"The Shapefile had a broken .qix file which has now been repaired. Please reimport the Shapefile.");
+								"The Shapefile had a broken .qix file which has now been repaired. Please reimport the Shapefile."); //i8n
 
 					} finally {
 						dataStore.dispose();
@@ -277,6 +277,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 				StyledFS styledFS = new StyledFS(fs, id);
 
 				styledFS.setTitle(importFile.getName());
+				styledFS.setDesc("");
 
 				File sldFile = IOUtil.changeFileExt(importFile, "sld");
 
