@@ -149,7 +149,7 @@
 		</dependency>
 
 		<dependency>
-			<version>0.5-SNAPSHOT</version>
+			<version>0.5</version>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gsrcj</artifactId>
 		</dependency>
@@ -161,7 +161,7 @@
 		</dependency>
 
 		<dependency>
-			<version>0.5-SNAPSHOT</version>
+			<version>0.5</version>
 			<groupId>org.geopublishing</groupId>
 			<artifactId>gsrcj</artifactId>
 			<type>test-jar</type>
