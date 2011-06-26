@@ -109,6 +109,9 @@ The package contains the tutorials, documentation and some demo data for Geopubl
 			<arg line='-b ${REPO.DIR} includedeb maverick ${TARGETDEB}' />
 		</exec>
 
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for natty to the repo">
+			<arg line='-b ${REPO.DIR} includedeb natty ${TARGETDEB}' />
+		</exec>
 
 		<!-- MAEMO -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for freemantle to the repo">
