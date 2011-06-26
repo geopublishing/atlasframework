@@ -8,6 +8,7 @@
 	<name>Geopublishing Documentation</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 
+
 	<parent>
 		<groupId>org.geopublishing</groupId>
 		<artifactId>gp-parent</artifactId>
