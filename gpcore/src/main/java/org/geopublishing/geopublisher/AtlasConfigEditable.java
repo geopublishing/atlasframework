@@ -42,7 +42,6 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
-import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.styling.Style;
 
 import rachel.http.loader.WebResourceManager;
