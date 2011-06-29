@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.commons.io.FileUtils;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.internal.AMLUtil;
@@ -82,7 +83,7 @@ public class AMLExporterTest extends AMLExporter {
 		created = writeBuildxml(newTempDir, getAce().getBaseName() + "/");
 		assertNotNull(created);
 		assertTrue(created.exists());
-		IOUtil.deleteFolder(newTempDir, null, true, false, true);
+		FileUtils.deleteDirectory(newTempDir);
 
 	}
 

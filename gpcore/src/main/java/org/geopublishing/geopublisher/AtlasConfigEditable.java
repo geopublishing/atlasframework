@@ -126,7 +126,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 	 */
 	public void deleteAtlas() {
 		try {
-			IOUtil.deleteFolder(getAtlasDir(), null, true, false, true);
+			FileUtils.deleteDirectory(getAtlasDir());
 		} catch (Exception e) {
 			LOGGER.error(e);
 		}
