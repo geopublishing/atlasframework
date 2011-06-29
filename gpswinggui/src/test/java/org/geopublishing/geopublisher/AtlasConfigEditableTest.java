@@ -47,6 +47,7 @@ public class AtlasConfigEditableTest extends TestingClass {
 		ace.getRootGroup().removeAllChildren();
 		// Should still be 1 as one map is always exported
 		assertEquals(1, ace.getUsedMaps().size());
+		ace.deleteAtlas();
 	}
 
 }

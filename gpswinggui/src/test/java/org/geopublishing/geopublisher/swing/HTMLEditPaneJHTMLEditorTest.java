@@ -48,6 +48,7 @@ public class HTMLEditPaneJHTMLEditorTest extends TestingClass {
 		assertEquals("http://localhost:" + Webserver.PORT
 				+ "/ad/html/map_01357691812/", browserURLString);
 
+		ace.deleteAtlas();
 	}
 
 }

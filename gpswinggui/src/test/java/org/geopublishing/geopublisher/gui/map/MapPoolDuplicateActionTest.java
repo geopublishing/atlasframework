@@ -22,13 +22,15 @@ import org.xml.sax.SAXException;
 
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
+
 public class MapPoolDuplicateActionTest extends TestingClass {
 
 	@Test
 	public void testDuplicateMap() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+		AtlasConfigEditable ace = GpTestingUtil
+				.getAtlasConfigE(TestAtlas.small);
 		Map map1 = ace.getMapPool().get(0);
 		File htmlDir1 = ace.getHtmlDirFor(map1);
 
@@ -61,7 +63,7 @@ public class MapPoolDuplicateActionTest extends TestingClass {
 			// Cleanup
 			FileUtils.deleteDirectory(htmlDir2);
 		}
-
+		ace.deleteAtlas();
 	}
 
 }

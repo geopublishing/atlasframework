@@ -45,6 +45,7 @@ import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geotools.data.DataUtilities;
+import org.hsqldb.lib.FileUtil;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -74,6 +75,7 @@ public class JarExportUtilTest extends TestingClass {
     public void tearDown() throws Exception {
 	atlasConfig.dispose();
 	FileUtils.deleteDirectory(atlasExportTesttDir);
+	atlasConfig.deleteAtlas();
     }
 
     /**
@@ -89,6 +91,7 @@ public class JarExportUtilTest extends TestingClass {
 
 	final JSmoothModelBean model = JSmoothModelPersistency
 		.load(destinationProjectFile);
+	FileUtils.deleteDirectory(destinationProjectFile.getParentFile());
     }
 
     @Test
@@ -153,7 +156,6 @@ public class JarExportUtilTest extends TestingClass {
 
 	JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir,
 		true, true, false);
-
 	String[] jarLibNames = jeu.getJarLibNames();
 
 	assertTrue("Number of dependencies should be greater than 20",
@@ -163,6 +165,7 @@ public class JarExportUtilTest extends TestingClass {
 	    assertFalse(dep + " is an unwanted dependency", dep.toLowerCase()
 		    .contains("ant"));
 	}
+	FileUtils.deleteDirectory(jeu.getTempDir());
     }
 
     // @Test
@@ -244,6 +247,7 @@ public class JarExportUtilTest extends TestingClass {
 	assertExitsTempFilesCount(
 		jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 0);
 
+    FileUtils.deleteDirectory(jarExportUtil.getTempDir());
     }
 
     private void assertExitsTempFilesCount(final String tempPrefix, int count) {
@@ -429,12 +433,14 @@ public class JarExportUtilTest extends TestingClass {
 		timer.cancel();
 	    }
 	}
+	FileUtils.deleteDirectory(jeu.getTempDir());
 
     }
 
     @Test
     public void testJarExecutables() throws IOException {
-	new JarExportUtil(atlasConfig, atlasExportTesttDir, true, true, false);
+	JarExportUtil jeu = new JarExportUtil(atlasConfig, atlasExportTesttDir, true, true, false);
+	FileUtils.deleteDirectory(jeu.getTempDir());
     }
 
     @Test
@@ -464,6 +470,7 @@ public class JarExportUtilTest extends TestingClass {
 		dpeJarFileExpected.getAbsolutePath(),
 		createdJar.getAbsolutePath());
 	dpeJarFileExpected.delete();
+	FileUtils.deleteDirectory(jarExportUtil.getTempDir());
     }
 
     @Test
@@ -497,17 +504,18 @@ public class JarExportUtilTest extends TestingClass {
 	jeu.createJSmooth(atlasDISKDir);
 
 	assertTrue(exeFile + " must exist after creation", exeFile.exists());
+	FileUtils.deleteDirectory(jeu.getTempDir());
     }
 
     @Test
     public void testCreateIndexHTML() throws IOException, InterruptedException,
 	    InvocationTargetException {
-	AtlasConfigEditable ace = TestAtlas.small.getAce();
 
-	JarExportUtil jeu = new JarExportUtil(ace, TestingUtil.getNewTempDir(),
+	File tmp1 = TestingUtil.getNewTempDir();
+	JarExportUtil jeu = new JarExportUtil(atlasConfig, tmp1,
 		false, false, false);
 
-	final File html = jeu.createIndexHTML(ace, TestingUtil.getNewTempDir());
+	final File html = jeu.createIndexHTML(atlasConfig, tmp1);
 
 	assertTrue(html.exists());
 
@@ -524,6 +532,7 @@ public class JarExportUtilTest extends TestingClass {
 		}
 	    });
 	}
+	FileUtils.deleteDirectory(jeu.getTempDir());
     }
 
 }

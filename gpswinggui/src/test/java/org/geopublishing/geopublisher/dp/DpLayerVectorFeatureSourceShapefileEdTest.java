@@ -67,6 +67,7 @@ public class DpLayerVectorFeatureSourceShapefileEdTest extends TestingClass {
 		} finally {
 			fc.close(fi);
 		}
+		ace.deleteAtlas();
 	}
 
 	@Test

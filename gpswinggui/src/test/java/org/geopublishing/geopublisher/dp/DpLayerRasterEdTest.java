@@ -20,6 +20,7 @@ import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geotools.map.DefaultMapLayer;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,7 +34,8 @@ import de.schmitzm.testing.TestingUtil;
 
 public class DpLayerRasterEdTest extends TestingClass {
 
-	static AtlasConfigEditable ace;
+	private File atlasExportTesttDir;
+	public AtlasConfigEditable ace;
 	private static final String RASTER_AAIGRID_SLDTRANSPARENT_ID_IN_RASTERATLAS = "raster_00993740883";
 	private static final String RASTER_GEOTIFF_MIT_SLD_ID_IN_RASTERATLAS = "raster_01619177922";
 
@@ -68,14 +70,19 @@ public class DpLayerRasterEdTest extends TestingClass {
 				TestingUtil.checkPixel(bi, 1, 1, 0, 0, 0, 0));
 	}
 
-	@BeforeClass
-	public static void setupAndLoadAtlas() throws AtlasException,
+	@Before
+	public void setupAndLoadAtlas() throws AtlasException,
 			FactoryException, TransformException, SAXException, IOException,
 			ParserConfigurationException {
 		ace = GpTestingUtil.getAtlasConfigE(TestAtlas.rasters);
+		atlasExportTesttDir = GpTestingUtil.createAtlasExportTesttDir();
 	}
 
-	File atlasExportTesttDir;
+	@After
+	public void tearDown() throws IOException {
+		FileUtils.deleteDirectory(atlasExportTesttDir);
+		ace.deleteAtlas();
+	}
 
 	/**
 	 * TODO Use maven test classifier to make DpLayerRasterTest.checkMapLayer..
@@ -132,16 +139,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 		assertTrue(atlasExportTesttDir.mkdir());
 	}
 
-	@Before
-	public void setupTest() {
-		atlasExportTesttDir = GpTestingUtil.createAtlasExportTesttDir();
-	}
-
-	@After
-	public void tearDown() throws IOException {
-		FileUtils.deleteDirectory(atlasExportTesttDir);
-	}
-
+	
 	@Test
 	public void testTransparencyOfAAIGrid_Transparent_With_SLD_GP()
 			throws Throwable {

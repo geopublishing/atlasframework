@@ -5,9 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.CliOptions.Errors;
@@ -29,18 +31,21 @@ public class CliOptionsTest extends TestingClass {
 	// private final ByteArrayOutputStream errContent = new
 	// ByteArrayOutputStream();
 	CliOptions cliOptions;
+	private File testAtlas;
 
 	@Before
-	public void setUpStreams() {
+	public void setUp() {
 		// System.setOut(new PrintStream(outContent));
 		// System.setErr(new PrintStream(errContent));
 		cliOptions = new CliOptions();
+		testAtlas = TestAtlas.small.getFile();
 	}
 
 	@After
-	public void cleanUpStreams() {
+	public void cleanUp() throws IOException {
 		// System.setOut(null);
 		// System.setErr(null);
+		FileUtils.deleteDirectory(testAtlas.getParentFile());
 	}
 
 	//
@@ -86,7 +91,7 @@ public class CliOptionsTest extends TestingClass {
 			// Loads an atlas into the GUI and closes GP after a few seconds
 
 			int performArgs = CliOptions.performArgs(new String[] { "-a",
-					TestAtlas.small.getFile().toString(), "-s" });
+					testAtlas.toString(), "-s" });
 			assertEquals(0, performArgs);
 			assertTrue(!GeopublisherGUI.isInstanciated());
 		}
@@ -100,7 +105,7 @@ public class CliOptionsTest extends TestingClass {
 			// Loads an atlas into the GUI and closes GP after a few seconds
 
 			int performArgs = CliOptions.performArgs(new String[] { "-a "
-					+ TestAtlas.small.getFile() });
+					+ testAtlas });
 			assertEquals(-1, performArgs);
 
 			LangUtil.sleepExceptionless(5000);
@@ -129,7 +134,7 @@ public class CliOptionsTest extends TestingClass {
 				"Not empty directory should not allow export without -f",
 				Errors.EXPORTDIR_NOTEMPTYNOFORCE.getErrCode(),
 				CliOptions.performArgs(new String[] { "-e", "/tmp", "--atlas",
-						TestAtlas.small.getFile().toString() }));
+						testAtlas.toString() }));
 	}
 
 	@Test
@@ -141,13 +146,14 @@ public class CliOptionsTest extends TestingClass {
 		assertEquals(
 				Errors.EXPORTDIR_NOTEMPTYNOFORCE.getErrCode(),
 				CliOptions.performArgs(new String[] { "-e", expDir.toString(),
-						"--atlas", TestAtlas.small.getFile().toString() }));
+						"--atlas", testAtlas.toString() }));
 
 		assertEquals(
 				0,
 				CliOptions.performArgs(new String[] { "-f", "-e",
 						expDir.toString(), "--atlas",
-						TestAtlas.small.getFile().toString() }));
+						testAtlas.toString() }));
+		FileUtils.deleteDirectory(expDir);
 
 	}
 
@@ -159,10 +165,11 @@ public class CliOptionsTest extends TestingClass {
 		assertEquals(
 				0,
 				CliOptions.performArgs(new String[] { "-e", expDir.toString(),
-						"--atlas", TestAtlas.small.getFile().toString() }));
+						"--atlas", testAtlas.toString() }));
 
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
+		FileUtils.deleteDirectory(expDir);
 	}
 
 	@Test
@@ -172,12 +179,15 @@ public class CliOptionsTest extends TestingClass {
 
 		assertEquals(0, CliOptions.performArgs(new String[] {
 				"--" + CliOptions.ZIPDISK, "-e", expDir.toString(), "-d",
-				"--atlas", TestAtlas.small.getFile().toString() }));
+				"--atlas", testAtlas.toString() }));
 
-		assertTrue(ArrayUtils.contains(expDir.list(), TestAtlas.small.getAce()
+		AtlasConfigEditable ace = TestAtlas.small.getAce();
+		assertTrue(ArrayUtils.contains(expDir.list(), ace
 				.getBaseName() + ".zip"));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
+		FileUtils.deleteDirectory(expDir);
+		ace.deleteAtlas();
 	}
 
 	@Test
@@ -187,10 +197,11 @@ public class CliOptionsTest extends TestingClass {
 
 		assertEquals(0, CliOptions.performArgs(new String[] { "-e",
 				expDir.toString(), "-j", "--atlas",
-				TestAtlas.small.getFile().toString() }));
+				testAtlas.toString() }));
 
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
 		assertTrue(ArrayUtils.contains(expDir.list(), JarExportUtil.JWS));
+		FileUtils.deleteDirectory(expDir);
 	}
 
 	@Test
@@ -201,7 +212,7 @@ public class CliOptionsTest extends TestingClass {
 		assertEquals(
 				0,
 				CliOptions.performArgs(new String[] { "-e", expDir.toString(),
-						"-j", "--atlas", TestAtlas.small.getFile().toString(),
+						"-j", "--atlas", testAtlas.toString(),
 						"-u", "http://atlas/atlas/" }));
 
 		assertFalse(ArrayUtils.contains(expDir.list(), JarExportUtil.DISK));
@@ -212,6 +223,7 @@ public class CliOptionsTest extends TestingClass {
 		assertTrue(readFileAsString.contains("http://atlas/atlas/"));
 		assertTrue(readFileAsString.contains("http://atlas/atlas/"
 				+ JarExportUtil.JNLP_FILENAME));
+		FileUtils.deleteDirectory(expDir);
 	}
 
 	@Test

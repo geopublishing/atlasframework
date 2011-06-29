@@ -13,6 +13,7 @@ package org.geopublishing.geopublisher;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.opengis.feature.type.Name;
@@ -21,13 +22,13 @@ import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
 public class EditAttributesJDialogTest extends TestingClass {
 
+	private static AtlasConfigEditable atlasConfigE;
 //	static DpLayerRasterPyramid pyr;
 	private static DpLayerVectorFeatureSource dplv;
 
 	@BeforeClass
 	public static void setUp() throws Exception {
-
-		AtlasConfigEditable atlasConfigE = GpTestingUtil.getAtlasConfigE();
+		atlasConfigE = GpTestingUtil.getAtlasConfigE();
 		for (DpEntry dpe : atlasConfigE.getDataPool().values()) {
 //			if (dpe instanceof DpLayerRasterPyramid) {
 //				pyr = (DpLayerRasterPyramid) dpe;
@@ -42,6 +43,10 @@ public class EditAttributesJDialogTest extends TestingClass {
 		if (dplv == null)
 			throw new RuntimeException(
 					"no dplv with more than at least 1 attrib found in atlas");
+	}
+	@After
+	public void cleanUp(){
+		atlasConfigE.deleteAtlas();
 	}
 
 	@Test

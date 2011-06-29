@@ -1,5 +1,6 @@
 package org.geopublishing.geopublisher.gui.settings;
 
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
@@ -10,13 +11,15 @@ import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class GpOptionsDialogInteractiveTest extends TestingClass {
-
+private AtlasConfigEditable ace;
 	@Before
 	public void setUp() throws Exception {
+		ace = TestAtlas.small.getAce();
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		ace.deleteAtlas();
 	}
 
 	@Test
@@ -25,8 +28,7 @@ public class GpOptionsDialogInteractiveTest extends TestingClass {
 
 			@Override
 			public void run() {
-				GeopublisherGUI gpg = new GeopublisherGUI(TestAtlas.small
-						.getAce());
+				GeopublisherGUI gpg = new GeopublisherGUI(ace);
 				GpOptionsDialog gpOptionsDialog = new GpOptionsDialog(gpg
 						.getJFrame(), gpg);
 			}

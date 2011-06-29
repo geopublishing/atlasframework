@@ -17,6 +17,7 @@ public class ManageFontsDialogTest extends TestingClass {
 			ManageFontsDialog manageFontsDialog = new ManageFontsDialog(null,
 					ace);
 			TestingUtil.testGui(manageFontsDialog);
+			ace.deleteAtlas();
 		}
 	}
 

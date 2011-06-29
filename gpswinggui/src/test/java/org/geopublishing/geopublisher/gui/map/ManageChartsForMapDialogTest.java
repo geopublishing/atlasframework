@@ -50,6 +50,7 @@ public class ManageChartsForMapDialogTest extends TestingClass {
 
 			TestingUtil.testGui(manageChartsForMapDialog);
 		}
+		ace.deleteAtlas();
 	}
 
 }

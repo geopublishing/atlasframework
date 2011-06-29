@@ -20,6 +20,7 @@ public class EditAtlasParamsDialogInteractiveTest {
 		TestingUtil.testGui(editAtlasParamsDialog, 120);
 
 		assertEquals(bn, ace.getBaseName());
+		ace.deleteAtlas();
 	}
 
 }

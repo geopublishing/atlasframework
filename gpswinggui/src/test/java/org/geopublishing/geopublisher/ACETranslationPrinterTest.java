@@ -89,6 +89,7 @@ public class ACETranslationPrinterTest extends TestingClass {
 				}
 			});
 		}
+		ace.deleteAtlas();
 	}
 
 	@Test
