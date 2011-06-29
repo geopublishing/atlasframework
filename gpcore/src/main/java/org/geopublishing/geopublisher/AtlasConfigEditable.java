@@ -42,6 +42,7 @@ import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.map.MapPool.EventTypes;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.styling.Style;
 
 import rachel.http.loader.WebResourceManager;
@@ -105,7 +106,7 @@ public class AtlasConfigEditable extends AtlasConfig {
 		isDisposed = true;
 
 		super.dispose();
-
+		getAtlasDir();
 		try {
 			getResLoMan().removeResourceLoader(fileResLoader);
 		} catch (Exception e) {
@@ -118,6 +119,17 @@ public class AtlasConfigEditable extends AtlasConfig {
 			LOGGER.error(e);
 		}
 
+	}
+
+	/**
+	 * this function completely deletes the atlas directory
+	 */
+	public void deleteAtlas() {
+		try {
+			IOUtil.deleteFolder(getAtlasDir(), null, true, false, true);
+		} catch (Exception e) {
+			LOGGER.error(e);
+		}
 	}
 
 	/** The name of the marker file for a AtlasWorkingCopy folder **/
@@ -793,7 +805,5 @@ public class AtlasConfigEditable extends AtlasConfig {
 		}
 
 	}
-
-
 
 }

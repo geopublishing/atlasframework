@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class AtlasConfigTest extends TestingClass {
@@ -25,8 +26,10 @@ public class AtlasConfigTest extends TestingClass {
 
 	@After
 	public void dispose() {
-		if (ace != null)
+		if (ace != null) {
 			ace.dispose();
+			ace.deleteAtlas();
+		}
 	}
 
 	@Test

@@ -55,6 +55,8 @@ public class AMLImportTest extends TestingClass {
 		ace.setGpHosterAuth(true);
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 		assertTrue(ace2.getGpHosterAuth());
+		ace.deleteAtlas();
+		ace2.deleteAtlas();
 	}
 
 //	@Test
@@ -72,6 +74,8 @@ public class AMLImportTest extends TestingClass {
 		ace.setGpHosterAuth(false);
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 		assertFalse(ace2.getGpHosterAuth());
+		ace.deleteAtlas();
+		ace2.deleteAtlas();
 	}
 
 	@Test
@@ -107,7 +111,9 @@ public class AMLImportTest extends TestingClass {
 		assertEquals(map1_0.isPreviewMapExtendInGeopublisher(), map2_0.isPreviewMapExtendInGeopublisher());
 
 		ace.dispose();
+		ace.deleteAtlas();
 		ace2.dispose();
+		ace2.deleteAtlas();
 	}
 
 	@Test
@@ -123,14 +129,17 @@ public class AMLImportTest extends TestingClass {
 		assertNotNull(dplr2.getNodataValue());
 		assertEquals(-999., dplr2.getNodataValue(), 0.);
 		ace2.dispose();
+		ace2.deleteAtlas();
 		ace2 = null;
 
 		dplr.setNodataValue(null);
 		AtlasConfigEditable ace3 = GpTestingUtil.saveAndLoad(ace);
 		assertNull(((DpLayerRaster_Reader) ace3.getDataPool().get(0)).getNodataValue());
 		ace3.dispose();
+		ace3.deleteAtlas();
 		ace3 = null;
 
 		ace.dispose();
+		ace.deleteAtlas();
 	}
 }

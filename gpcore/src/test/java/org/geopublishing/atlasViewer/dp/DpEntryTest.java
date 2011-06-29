@@ -7,9 +7,11 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
+import org.junit.After;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -43,6 +45,7 @@ public class DpEntryTest extends TestingClass {
 		}
 		assertEquals("The chart demo atlas contains one layer with charts ", 1,
 				dpeWithChartCount);
+		atlasConfig.deleteAtlas();
 	}
-
+	
 }

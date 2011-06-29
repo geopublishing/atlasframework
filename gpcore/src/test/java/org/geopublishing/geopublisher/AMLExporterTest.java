@@ -16,6 +16,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
+import org.junit.After;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
@@ -23,6 +24,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingUtil;
 
 public class AMLExporterTest extends AMLExporter {
@@ -31,6 +33,11 @@ public class AMLExporterTest extends AMLExporter {
 			AtlasException, FactoryException, TransformException, SAXException,
 			IOException, TransformerException {
 		super(GpTestingUtil.getAtlasConfigE(TestAtlas.small));
+	}
+
+	@After
+	public void cleanup() {
+		getAce().deleteAtlas();
 	}
 
 	@Test
@@ -75,6 +82,7 @@ public class AMLExporterTest extends AMLExporter {
 		created = writeBuildxml(newTempDir, getAce().getBaseName() + "/");
 		assertNotNull(created);
 		assertTrue(created.exists());
+		IOUtil.deleteFolder(newTempDir, null, true, false, true);
 
 	}
 

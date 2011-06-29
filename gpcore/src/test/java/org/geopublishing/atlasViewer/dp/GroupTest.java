@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
+
 public class GroupTest extends TestingClass {
 
 	@Test
@@ -51,6 +52,7 @@ public class GroupTest extends TestingClass {
 			Group.findReferencesTo(rootGroup, map, foundin, false);
 			assertEquals(0, foundin.size());
 		}
+		ace.deleteAtlas();
 
 	}
 
@@ -83,7 +85,7 @@ public class GroupTest extends TestingClass {
 			Group.findReferencesTo(rootGroup, map, foundin, false);
 			assertEquals(0, foundin.size());
 		}
-
+		ace.deleteAtlas();
 	}
 
 }

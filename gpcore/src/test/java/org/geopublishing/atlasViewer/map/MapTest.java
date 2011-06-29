@@ -11,19 +11,32 @@ import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
 import org.xml.sax.SAXException;
 
 import de.schmitzm.testing.TestingClass;
+
 public class MapTest extends TestingClass {
+	private AtlasConfigEditable ace;
+
+	@Before
+	public void setup() throws Exception {
+		ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+	}
+	
+	@After
+	public void cleanup(){
+		ace.deleteAtlas();
+	}
 
 	@Test
 	public void testCopy() throws AtlasException, FactoryException,
 			TransformException, SAXException, IOException,
 			ParserConfigurationException {
-		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
 
 		for (int mi = 0; mi < ace.getMapPool().size(); mi++) {
 			Map map = ace.getMapPool().get(mi);
@@ -55,10 +68,9 @@ public class MapTest extends TestingClass {
 
 	@Test
 	public void testSaveAndLoad() throws Exception {
-		AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
-		
+
 		ace.getMapPool().get(0).setPreviewMapExtendInGeopublisher(true);
-		
+
 		AtlasConfigEditable ace2 = GpTestingUtil.saveAndLoad(ace);
 
 		for (int mi = 0; mi < ace.getMapPool().size(); mi++) {
@@ -67,5 +79,6 @@ public class MapTest extends TestingClass {
 
 			checkEquals(map, map2);
 		}
+		ace2.deleteAtlas();
 	}
 }
