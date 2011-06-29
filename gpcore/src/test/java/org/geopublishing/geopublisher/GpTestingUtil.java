@@ -46,6 +46,7 @@ public class GpTestingUtil extends GTTestingUtil {
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {
 
+		
 		// TODO Create a type "new" which creates a new empty atlas in tmp dir
 		// on getAce()
 
