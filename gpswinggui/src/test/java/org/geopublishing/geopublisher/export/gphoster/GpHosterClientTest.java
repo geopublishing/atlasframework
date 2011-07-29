@@ -38,6 +38,7 @@ public class GpHosterClientTest {
 	}
 
 	@Test
+	@Ignore
 	public void testUserCreate() throws IOException {
 		if (gphc.checkService() != SERVICE_STATUS.OK)
 			return;
