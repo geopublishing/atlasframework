@@ -246,7 +246,10 @@ public abstract class GPProps {
 				inStream.close();
 			}
 		} catch (final Exception e) {
-			ExceptionDialog.show(null, e);
+			LOGGER.error(e);
+			ExceptionDialog
+					.show(null,
+							e,"Cannot save properties","<html>The properties file is not accessible. <br />Please check the permissions for <b>"+getPropertiesFile().getAbsolutePath()+"</b> to permanently keep your Geopublisher configuration.</html>");
 		}
 
 		upgrade(); // TODO Schema version comparison... naja.. eigentlich egal
@@ -347,7 +350,7 @@ public abstract class GPProps {
 		} catch (final IOException e) {
 			LOGGER.error("Can't write to " + getPropertiesFile().toString(), e); // i8nlog
 			LOGGER.error(e);
-			ExceptionDialog.show(null, e);
+			// ExceptionDialog.show(null, e);
 		} finally {
 			if (haveToCloseFOS) {
 				try {
