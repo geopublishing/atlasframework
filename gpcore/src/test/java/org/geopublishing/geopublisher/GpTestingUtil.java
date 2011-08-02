@@ -46,7 +46,6 @@ public class GpTestingUtil extends GTTestingUtil {
 	/** An enumeration of available test-atlases **/
 	public enum TestAtlas {
 
-		
 		// TODO Create a type "new" which creates a new empty atlas in tmp dir
 		// on getAce()
 
@@ -210,8 +209,9 @@ public class GpTestingUtil extends GTTestingUtil {
 
 		AtlasConfigEditable ace2 = new AMLImportEd().parseAtlasConfig(null,
 				atlasXmlFile.getParentFile().getParentFile());
-
-		FileUtils.deleteDirectory(tempDir);
+		if (tempDir.exists()) {
+			FileUtils.deleteDirectory(tempDir);
+		}
 
 		return ace2;
 	}
