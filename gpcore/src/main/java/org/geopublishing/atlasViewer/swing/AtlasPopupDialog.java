@@ -104,8 +104,8 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		
 		setVisible(true);
 		
-		LangUtil.sleepExceptionless(300);
-		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
+//		LangUtil.sleepExceptionless(300);
+//		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -145,6 +145,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
 			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
+			LangUtil.sleepExceptionless(500);
 		}
 		return htmlInfoJPane.getComponent();
 	}
