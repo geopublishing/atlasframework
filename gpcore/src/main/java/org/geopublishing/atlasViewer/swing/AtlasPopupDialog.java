@@ -76,20 +76,20 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 
 	private void initGUI() {
 		// setExtendedState(Frame.MAXIMIZED_BOTH);
+		JComponent htmlComponent = getHtmlInfoJPane();
 		Dimension fullScreen = getToolkit().getScreenSize();
 		Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
 
 		setTitle(atlasConfig.getTitle().toString());
 
-		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]", "[][fill]"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]", "[top][top,fill]"));
 
 		contentPane.add(getTitleJLabel(), "growx, push");
 		contentPane.add(getLogoJLabel(), "right");
-		JComponent htmlComponent = getHtmlInfoJPane();
 		if (!htmlInfoJPane.hasScrollPane()) {
 			htmlComponent = new JScrollPane(getHtmlInfoJPane());
 		}
-		contentPane.add(htmlComponent, "span 2, grow, pushy 200");
+		contentPane.add(htmlComponent, "span 2, grow");
 		contentPane.add(getOkButton(), "tag ok, span 2");
 		setContentPane(contentPane);
 
@@ -98,14 +98,15 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 
 		// JPanel contentPane = new JPanel(new MigLayout("warp 2, fillx", "[grow]","[grow]"));
 
-		// setPreferredSize(getHtmlInfoJPane().getPreferredSize());
+//		 setPreferredSize(getHtmlInfoJPane().getPreferredSize());
 
 		SwingUtil.centerFrameOnScreen(this);
 		
 		setVisible(true);
 		
-		LangUtil.sleepExceptionless(300);
-		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
+//		LangUtil.sleepExceptionless(350);
+//		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
+		
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -145,6 +146,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
 			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
+			LangUtil.sleepExceptionless(500);
 		}
 		return htmlInfoJPane.getComponent();
 	}
