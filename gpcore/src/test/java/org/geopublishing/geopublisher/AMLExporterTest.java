@@ -25,7 +25,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingUtil;
 
 public class AMLExporterTest extends AMLExporter {

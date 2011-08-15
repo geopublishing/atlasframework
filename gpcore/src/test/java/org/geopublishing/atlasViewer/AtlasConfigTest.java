@@ -13,7 +13,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.schmitzm.io.IOUtil;
 import de.schmitzm.testing.TestingClass;
 
 public class AtlasConfigTest extends TestingClass {

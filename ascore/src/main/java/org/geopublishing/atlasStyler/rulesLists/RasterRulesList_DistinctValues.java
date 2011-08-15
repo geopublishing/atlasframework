@@ -222,6 +222,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 
 		// try {
 		GridCoverage2D coverage = reader.read(null);
+//		coverage.getNumSampleDimensions();
 		final OperationJAI op = new OperationJAI("Histogram");
 		ParameterValueGroup params = op.getParameters();
 		params.parameter("Source").setValue(coverage);
@@ -229,8 +230,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 		coverage = (GridCoverage2D) op.doOperation(params, null);
 		final Histogram hist = (Histogram) coverage.getProperty("histogram");
 
-		double low = hist.getLowValue(0);
-		double high = hist.getHighValue(0);
+		double low = hist.getLowValue(getBand());
+		double high = hist.getHighValue(getBand());
 
 		int countBins = -1;
 		for (double d = low; d < high; d += 1.) {
@@ -248,7 +249,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesList implements
 			if (d == Double.POSITIVE_INFINITY)
 				continue;
 
-			if (hist.getBins()[0][countBins] == 0)
+			if (hist.getBins()[getBand()][countBins] == 0)
 				continue;
 
 			if (!getValues().contains(d))

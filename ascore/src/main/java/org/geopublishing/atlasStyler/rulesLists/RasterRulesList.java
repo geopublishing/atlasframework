@@ -14,9 +14,11 @@ import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
+import org.geotools.styling.ContrastEnhancement;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.Rule;
+import org.geotools.styling.SelectedChannelType;
 import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.FilterUtil;
@@ -32,23 +34,27 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	private final ArrayList<Translation> labels = new ArrayList<Translation>();
 	private final ArrayList<Double> opacities = new ArrayList<Double>();
 
+	/**
+	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
+	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
+	 * Style enhält dann eine Channel-Selektion Anweisung.
+	 */
+	private int band = 0;
+
 	private Double opacity = 1.;
-	private BrewerPalette palette = ASUtil.getPalettes(new PaletteType(true,
-			false), -1)[0];
+	private BrewerPalette palette = ASUtil.getPalettes(new PaletteType(true, false), -1)[0];
 
 	private StyledRasterInterface<?> styledRaster;
 
 	protected final ArrayList<Double> values = new ArrayList<Double>();
 
-	public RasterRulesList(RulesListType rlt,
-			StyledRasterInterface<?> styledRaster, int colorMapType) {
+	public RasterRulesList(RulesListType rlt, StyledRasterInterface<?> styledRaster, int colorMapType) {
 		super(rlt, null);
 		setStyledRaster(styledRaster);
 
 		cmt = colorMapType;
 		if (cmt < 1 || cmt > 3)
-			throw new IllegalArgumentException(
-					"ColorMapType has to be 1, 2 or 3!");
+			throw new IllegalArgumentException("ColorMapType has to be 1, 2 or 3!");
 	}
 
 	public abstract void applyOpacity();
@@ -57,12 +63,10 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public String extendMetaInfoString() {
 		String metaInfoString = super.extendMetaInfoString();
 
-		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE
-				+ METAINFO_KVP_EQUALS_CHAR + getPalette().getName();
+		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE + METAINFO_KVP_EQUALS_CHAR + getPalette().getName();
 
 		if (getStyledRaster().getNodataValue() != null)
-			metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_NODATA
-					+ METAINFO_KVP_EQUALS_CHAR
+			metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_NODATA + METAINFO_KVP_EQUALS_CHAR
 					+ getStyledRaster().getNodataValue();
 
 		return metaInfoString;
@@ -90,8 +94,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 					labelString = label.toString();
 			}
 
-			ColorMapEntry cme = StylingUtil.createColorMapEntry(labelString,
-					getValues().get(i), getColors().get(i),
+			ColorMapEntry cme = StylingUtil.createColorMapEntry(labelString, getValues().get(i), getColors().get(i),
 					getOpacities().get(i));
 
 			cm.addColorMapEntry(cme);
@@ -109,8 +112,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	/**
-	 * Attention: "Classes" means logical classes. When using ColorMap.RAMPS or
-	 * COLOMAP.INTERVAL it is values - 1
+	 * Attention: "Classes" means logical classes. When using ColorMap.RAMPS or COLOMAP.INTERVAL it is values - 1
 	 */
 	public int getNumClasses() {
 		int numClasses = -1;
@@ -166,39 +168,18 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		return palette;
 	}
 
-	//
-	// /**
-	// * This method works for "n+1 values ==> n classes" and
-	// * "n values ==> n classes" since it counts over {@link #getNumClasses()}
-	// */
-	// public RasterLegendData getRasterLegendData() {
-	//
-	// if (cmt == ColorMap.TYPE_VALUES) {
-	// RasterLegendData rld = new RasterLegendData(true);
-	//
-	// for (int i = 0; i < getNumClasses(); i++) {
-	// rld.put(getValues().get(i), getLabels().get(i));
-	// }
-	//
-	// return rld;
-	// } else {
-	// RasterLegendData rld = new RasterLegendData(false);
-	//
-	// for (int i = 0; i < getNumClasses(); i++) {
-	// rld.put(getValues().get(i+1), getLabels().get(i));
-	// }
-	//
-	// return rld;
-	// }
-	//
-	// }
-
 	@Override
 	final public List<Rule> getRules() {
 
-		RasterSymbolizer rs = StylingUtil.STYLE_BUILDER
-				.createRasterSymbolizer();
+		RasterSymbolizer rs = StylingUtil.STYLE_BUILDER.createRasterSymbolizer();
 		rs.setColorMap(getColorMap());
+
+		if (band >= 0) {
+			//  Setze SelectedChannel auf das ausgewählte Band.
+			rs.setChannelSelection(StylingUtil.STYLE_FACTORY
+					.createChannelSelection(new SelectedChannelType[] { StylingUtil.STYLE_FACTORY
+							.createSelectedChannelType(String.valueOf(band+1), (ContrastEnhancement)null) }));
+		}
 
 		Rule rule = ASUtil.SB.createRule(rs);
 
@@ -214,9 +195,8 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		if (rs.getColorMap().getColorMapEntries().length == 0) {
 			// An empty colormap will result in a fullly black raster!?
 			rs.getColorMap().addColorMapEntry(
-					StylingUtil.createColorMapEntry(
-							RulesListInterface.RULENAME_DONTIMPORT,
-							Double.MIN_VALUE, Color.WHITE, 0.0));
+					StylingUtil.createColorMapEntry(RulesListInterface.RULENAME_DONTIMPORT, Double.MIN_VALUE,
+							Color.WHITE, 0.0));
 		}
 
 		Filter filter = FilterUtil.ALLWAYS_TRUE_FILTER;
@@ -301,8 +281,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		pushQuite();
 
 		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules");
+			LOGGER.warn("Importing a " + this.getClass().getSimpleName() + " with " + rules.size() + " rules");
 		}
 
 		Rule rule = rules.get(0);
@@ -335,16 +314,14 @@ public abstract class RasterRulesList extends AbstractRulesList {
 		getLabels().add(label);
 	}
 
-	public void set(int idx, Double value, Double opacity, Color color,
-			Translation label) {
+	public void set(int idx, Double value, Double opacity, Color color, Translation label) {
 		getValues().set(idx, value);
 		getOpacities().set(idx, opacity);
 		getColors().set(idx, color);
 		getLabels().set(idx, label);
 	}
 
-	public void setOrAdd(int idx, Double value, Double opacity, Color color,
-			Translation label) {
+	public void setOrAdd(int idx, Double value, Double opacity, Color color, Translation label) {
 		if (idx >= getValues().size())
 			add(value, opacity, color, label);
 		else
@@ -359,8 +336,7 @@ public abstract class RasterRulesList extends AbstractRulesList {
 			return;
 		}
 
-		metaInfoString = metaInfoString
-				.substring(getType().toString().length());
+		metaInfoString = metaInfoString.substring(getType().toString().length());
 
 		/***********************************************************************
 		 * Parsing a list of Key-Value Pairs from the FeatureTypeStyleName
@@ -378,12 +354,9 @@ public abstract class RasterRulesList extends AbstractRulesList {
 					//
 					if (getStyledRaster().getNodataValue() == null) {
 						getStyledRaster().setNodataValue(noDataValue);
-					} else if (!getStyledRaster().getNodataValue().equals(
-							noDataValue)) {
-						LOGGER.info("StyledRaster has NODATA value '"
-								+ getStyledRaster().getNodataValue()
-								+ "'. SLD has '" + noDataValue
-								+ "'. StyledRaster value is not changed!");
+					} else if (!getStyledRaster().getNodataValue().equals(noDataValue)) {
+						LOGGER.info("StyledRaster has NODATA value '" + getStyledRaster().getNodataValue()
+								+ "'. SLD has '" + noDataValue + "'. StyledRaster value is not changed!");
 					}
 				} catch (NumberFormatException e) {
 					LOGGER.error("Failes to parse NODATA value", e);
@@ -397,16 +370,14 @@ public abstract class RasterRulesList extends AbstractRulesList {
 
 				BrewerPalette foundIt = null;
 
-				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(
-						true, false), getNumClasses())) {
+				for (BrewerPalette ppp : ASUtil.getPalettes(new PaletteType(true, false), getNumClasses())) {
 					if (ppp.getName().equals(brewerPaletteName)) {
 						foundIt = ppp;
 						break;
 					}
 				}
 				if (foundIt == null) {
-					LOGGER.warn("Couldn't find the palette with the name '"
-							+ brewerPaletteName + "'.");
+					LOGGER.warn("Couldn't find the palette with the name '" + brewerPaletteName + "'.");
 				} else {
 					setPalette(foundIt);
 				}
@@ -468,5 +439,24 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	}
 
 	public abstract void applyPalette(JComponent parentGui);
+
+	/**
+	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
+	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
+	 * Style enhält dann eine Channel-Selektion Anweisung.
+	 */
+	public void setBand(int band) {
+		System.out.println("band = "+band);
+		this.band = band;
+	}
+
+	/**
+	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
+	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
+	 * Style enhält dann eine Channel-Selektion Anweisung.
+	 */
+	public int getBand() {
+		return band;
+	}
 
 }

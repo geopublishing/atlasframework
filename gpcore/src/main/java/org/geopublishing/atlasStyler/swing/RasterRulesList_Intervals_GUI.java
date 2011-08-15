@@ -208,6 +208,7 @@ public class RasterRulesList_Intervals_GUI extends
 					// Test here, if the data is problematic and show the
 					// exception to the user without opening the dialog.
 					try {
+						classifier.setBand(rulesList.getBand());
 						classifier.getStatistics();
 					} catch (final Exception eee) {
 						jToggleButton_Classify.setSelected(false);

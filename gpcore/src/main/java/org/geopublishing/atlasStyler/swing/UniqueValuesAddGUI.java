@@ -32,7 +32,6 @@ import javax.swing.event.CaretListener;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.UniqueValuesRulesListInterface;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -45,8 +44,7 @@ import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
-	private static final Logger log = Logger
-			.getLogger(UniqueValuesAddGUI.class);
+	private static final Logger log = Logger.getLogger(UniqueValuesAddGUI.class);
 
 	private JPanel jContentPane = null;
 
@@ -72,19 +70,15 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 	 * @param owner
 	 * @param featureSource_polygon
 	 */
-	public UniqueValuesAddGUI(Component owner,
-			final UniqueValuesRulesListInterface<VALUETYPE> rulesList) {
+	public UniqueValuesAddGUI(Component owner, final UniqueValuesRulesListInterface<VALUETYPE> rulesList) {
 		super(owner);
 		this.rulesList = rulesList;
 		initialize();
 
-		String title = ASUtil
-				.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
-		final AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner,
-				title, title);
+		String title = ASUtil.R("UniqueValuesRuleList.AddAllValues.SearchingMsg");
+		final AtlasStatusDialog statusDialog = new AtlasStatusDialog(owner, title, title);
 
-		AtlasSwingWorker<Set<VALUETYPE>> findUniques = new AtlasSwingWorker<Set<VALUETYPE>>(
-				statusDialog) {
+		AtlasSwingWorker<Set<VALUETYPE>> findUniques = new AtlasSwingWorker<Set<VALUETYPE>>(statusDialog) {
 
 			@Override
 			protected Set<VALUETYPE> doInBackground() throws Exception {
@@ -96,8 +90,7 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			Set<VALUETYPE> uniqueValues = findUniques.executeModal();
 
 			if (uniqueValues.size() == 0)
-				AVSwingUtil.showMessageDialog(UniqueValuesAddGUI.this,
-						ASUtil.R("UniqueValues.NothingToAdd"));
+				AVSwingUtil.showMessageDialog(UniqueValuesAddGUI.this, ASUtil.R("UniqueValues.NothingToAdd"));
 
 			DefaultListModel defaultListModel = new DefaultListModel();
 			for (VALUETYPE uv : uniqueValues) {
@@ -105,8 +98,8 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			}
 			getJListValues().setModel(defaultListModel);
 
-			SwingUtil.setRelativeFramePosition(UniqueValuesAddGUI.this, owner,
-					SwingUtil.BOUNDS_OUTER, SwingUtil.NORTHEAST);
+			SwingUtil.setRelativeFramePosition(UniqueValuesAddGUI.this, owner, SwingUtil.BOUNDS_OUTER,
+					SwingUtil.NORTHEAST);
 			// setVisible(true);
 
 		} catch (CancellationException e) {
@@ -180,8 +173,7 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			gridBagConstraints8.anchor = GridBagConstraints.WEST;
 			gridBagConstraints8.insets = new Insets(5, 1, 1, 5);
 			gridBagConstraints8.gridy = 0;
-			jLabelSelectTheValueToAdd = new JLabel(
-					ASUtil.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
+			jLabelSelectTheValueToAdd = new JLabel(ASUtil.R("UniqueValuesAddGUI.SelectTheValuesMsg"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelSelectTheValueToAdd, gridBagConstraints8);
@@ -238,11 +230,9 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 			gridBagConstraints3.gridx = 0;
 			gridBagConstraints3.gridwidth = 3;
 			gridBagConstraints3.gridy = 0;
-			JLabel addNewValueToList = new JLabel(
-					ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
+			JLabel addNewValueToList = new JLabel(ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.Msg"));
 			jPanel2 = new JPanel();
-			jPanel2.setToolTipText(ASUtil
-					.R("UniqueValuesAddGUI.AddNewValueToList.TT"));
+			jPanel2.setToolTipText(ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.TT"));
 			jPanel2.setLayout(new GridBagLayout());
 			jPanel2.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("UniqueValuesAddGUI.AddNewValueToList.BorderTitle")));
@@ -272,18 +262,19 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 	 */
 	private JButton getJButtonAddToList() {
 		if (jButtonAddToList == null) {
-			jButtonAddToList = new ThinButton(
-					new AbstractAction(
-							AtlasStylerVector
-									.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
+			jButtonAddToList = new ThinButton(new AbstractAction(
+					ASUtil.R("UniqueValuesAddGUI.AddNewValueToList.AddButton")) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							((DefaultListModel) getJListValues().getModel())
-									.addElement(getJTextField().getText());
-						}
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String text = getJTextField().getText();
 
-					});
+					Object val = text;
+
+					((DefaultListModel) getJListValues().getModel()).addElement(val);
+				}
+
+			});
 
 			jButtonAddToList.setEnabled(false);
 
@@ -294,8 +285,7 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 					String str = getJTextField().getText();
 
 					jButtonAddToList
-							.setEnabled(((str != null)
-									&& (!str.trim().equals("")) && (!((DefaultListModel) getJListValues()
+							.setEnabled(((str != null) && (!str.trim().equals("")) && (!((DefaultListModel) getJListValues()
 									.getModel()).contains(str))));
 				}
 
@@ -394,20 +384,30 @@ public class UniqueValuesAddGUI<VALUETYPE> extends CancellableDialogAdapter {
 		rulesList.pushQuite();
 		try {
 
-			for (VALUETYPE obj : (VALUETYPE[]) getJListValues()
-					.getSelectedValues()) {
+			for (Object obj : (Object[]) getJListValues().getSelectedValues()) {
 
 				try {
-					rulesList.addUniqueValue(obj);
-				} catch (IllegalArgumentException e2) {
-					ExceptionDialog.show(
-							SwingUtil.getParentWindow(UniqueValuesAddGUI.this),
-							e2);
+					// UGLY UGLY
+					try {
+						rulesList.addUniqueValue((VALUETYPE) obj);
+					} catch (Exception e) {
+						try {
+							rulesList.addUniqueValue((VALUETYPE) (Double.valueOf(obj.toString())));
+						} catch (Exception ee) {
+							try {
+
+								rulesList.addUniqueValue((VALUETYPE) (Integer.valueOf(obj.toString())));
+							} catch (Exception eee) {
+								rulesList.addUniqueValue((VALUETYPE) (Byte.valueOf(obj.toString())));
+							}
+						}
+					}
+				} catch (RuntimeException e2) {
+					ExceptionDialog.show(SwingUtil.getParentWindow(UniqueValuesAddGUI.this), e2);
 				}
 			}
 		} finally {
-			rulesList.popQuite(new RuleChangedEvent(
-					"Manually added more unique values...", rulesList));
+			rulesList.popQuite(new RuleChangedEvent("Manually added more unique values...", rulesList));
 		}
 		return super.okClose();
 	}

@@ -53,7 +53,10 @@ public class RasterClassification extends Classification {
 
 	private final StyledGridCoverageReaderInterface styledRaster;
 
-	int band = 0;
+	/**
+	 * Working on the first band is the default.
+	 */
+	private int band = 0;
 
 	public RasterClassification(StyledGridCoverageReaderInterface styledRaster) {
 		this.styledRaster = styledRaster;
@@ -173,7 +176,7 @@ public class RasterClassification extends Classification {
 					continue;
 				} else {
 					// DO
-					System.out.println("");
+//					System.out.println("");
 				}
 				
 				int x1  = 0;
@@ -184,7 +187,7 @@ public class RasterClassification extends Classification {
 				
 				Raster data = rim.getData( new Rectangle(x1, y1, w, h));
 				double[] values = data.getSamples(0, y1, w,h,
-						band, (double[]) null);
+						getBand(), (double[]) null);
 
 				final DoubleArrayList doubleArrayList = new DoubleArrayList(
 						values);
@@ -249,6 +252,18 @@ public class RasterClassification extends Classification {
 
 	public StyledGridCoverageReaderInterface getStyledRaster() {
 		return styledRaster;
+	}
+
+	public void setBand(int band) {
+		if (band != this.band) {
+			// Statistik wegschmeissen
+			stats  = null;
+		}
+		this.band = band;
+	}
+
+	public int getBand() {
+		return band;
 	}
 
 }

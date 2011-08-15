@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -20,32 +21,35 @@ import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public class AtlasStylerRaster extends AtlasStyler {
 
-	private final static Logger LOGGER = Logger
-			.getLogger(AtlasStylerRaster.class);
+	private final static Logger LOGGER = Logger.getLogger(AtlasStylerRaster.class);
 
 	private RasterLegendData backupRasterLegend;
 
 	private StyledGridCoverageReaderInterface styledRaster;
 
 	/**
-	 * Create an {@link AtlasStylerVector} object for any
-	 * {@link StyledFeaturesInterface}
+	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
+	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
+	 * Style enhält dann eine Channel-Selektion Anweisung.
+	 */
+	private int band = 0;
+
+	/**
+	 * Create an {@link AtlasStylerVector} object for any {@link StyledFeaturesInterface}
 	 */
 	public AtlasStylerRaster(AbstractGridCoverage2DReader reader) {
 		this(new StyledGridCoverageReader(reader), null, null, null, null);
 	}
 
 	/**
-	 * Create an {@link AtlasStylerVector} object for any
-	 * {@link StyledFeaturesInterface}
+	 * Create an {@link AtlasStylerVector} object for any {@link StyledFeaturesInterface}
 	 */
 	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster) {
 		this(styledRaster, null, null, null, null);
 	}
 
-	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster,
-			Style loadStyle, MapLayer mapLayer, HashMap<String, Object> params,
-			Boolean withDefaults) {
+	public AtlasStylerRaster(StyledGridCoverageReaderInterface styledRaster, Style loadStyle, MapLayer mapLayer,
+			HashMap<String, Object> params, Boolean withDefaults) {
 		super(mapLayer, params, withDefaults);
 
 		this.setStyledRaster(styledRaster);
@@ -56,14 +60,12 @@ public class AtlasStylerRaster extends AtlasStyler {
 			importStyle(loadStyle, styledRaster.getLegendMetaData());
 		} else {
 			if (styledRaster.getStyle() != null) {
-				importStyle(styledRaster.getStyle(),
-						styledRaster.getLegendMetaData());
+				importStyle(styledRaster.getStyle(), styledRaster.getLegendMetaData());
 			} else {
 
 				if (withDefaults != null && withDefaults == true) {
-					final SingleRuleList<? extends Symbolizer> defaultRl = rlf
-							.createSingleRulesList(
-									getRuleTitleFor(styledRaster), true);
+					final SingleRuleList<? extends Symbolizer> defaultRl = rlf.createSingleRulesList(
+							getRuleTitleFor(styledRaster), true);
 					LOGGER.debug("Added default rulelist: " + defaultRl);
 					addRulesList(defaultRl);
 				}
@@ -93,25 +95,11 @@ public class AtlasStylerRaster extends AtlasStyler {
 		return null;
 	}
 
-	//
-	// public RasterLegendData getLegendMetaData() {
-	//
-	// if (getRuleLists().size() == 0)
-	// return new RasterLegendData(false);
-	//
-	// RasterRulesList rrl = (RasterRulesList) getRuleLists().get(0);
-	//
-	// // TODO What if there is more than one RUlesList!?
-	//
-	// return rrl.getRasterLegendData();
-	// }
-	//
 	@Override
 	StyleChangedEvent getStyleChangeEvent() {
 		RasterLegendData rlm = new RasterLegendData(false);
 		try {
-			rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false,
-					null);
+			rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false, null);
 		} catch (Exception e) {
 			// Happens if there are no classes, and hence no entries in the
 			// colormap.
@@ -146,5 +134,17 @@ public class AtlasStylerRaster extends AtlasStyler {
 
 	public void setStyledRaster(StyledGridCoverageReaderInterface styledRaster) {
 		this.styledRaster = styledRaster;
+	}
+
+	public void setBand(int band) {
+		this.band = band;
+		for (AbstractRulesList rl : getRuleLists()) {
+			if (rl instanceof RasterRulesList)
+			((RasterRulesList)rl).setBand(band);
+		}
+	}
+
+	public int getBand() {
+		return band;
 	}
 }
