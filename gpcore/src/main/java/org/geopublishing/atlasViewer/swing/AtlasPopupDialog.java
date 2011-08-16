@@ -45,6 +45,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
@@ -54,6 +55,8 @@ import de.schmitzm.swing.SwingUtil;
  * @author Stefan A. Tzeggai
  */
 public class AtlasPopupDialog extends javax.swing.JDialog {
+
+	private static final long serialVersionUID = 6067992352182870618L;
 
 	private final AtlasConfig atlasConfig;
 
@@ -78,7 +81,6 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		JComponent htmlComponent = getHtmlInfoJPane();
 		Dimension fullScreen = getToolkit().getScreenSize();
 		final Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
-		setSize(dialogSize);
 
 		setTitle(atlasConfig.getTitle().toString());
 
@@ -93,7 +95,13 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		contentPane.add(getOkButton(), "tag ok, span 2");
 		setContentPane(contentPane);
 
+		setSize(dialogSize);
 		SwingUtil.centerFrameOnScreen(this);
+		
+		LangUtil.sleepExceptionless(500);
+		
+		setVisible(true);
+		
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -134,6 +142,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 					atlasConfig);
 			
 
+			// So wäre es schön, aber scheiss LOBO kann das nicht!?
 			htmlInfoJPane.addRenderingDoneListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

@@ -9,8 +9,6 @@ import java.awt.Graphics;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.net.URL;
 
 import javax.swing.JComponent;
@@ -34,7 +32,7 @@ import org.w3c.dom.html2.HTMLElement;
 import de.schmitzm.swing.event.PipedMouseListener;
 
 /**
- * An HTML view based on the {@link JWebBrowser} of <i>The DJ Project</i>.
+ * An HTML view based on the {@link HtmlPanel} of <i>LOBO browser Project</i>.
  */
 public class HTMLInfoLoboBrowser extends HtmlPanel implements
 		HTMLInfoPaneInterface {
@@ -75,8 +73,11 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	public HTMLInfoLoboBrowser(URL url, AtlasConfig ac) {
 		super();
 		this.atlasConfig = ac;
+		SimpleUserAgentContext simpleUserAgentContext = new SimpleUserAgentContext();
+		
 		htmlContext = new SimpleHtmlRendererContext(this,
-				new SimpleUserAgentContext()) {
+				simpleUserAgentContext) {
+			
 			@Override
 			public boolean onContextMenu(HTMLElement element, MouseEvent event) {
 				if (HTMLInfoLoboBrowser.this.popupMenu != null) {
@@ -124,6 +125,7 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 			htmlContext.reload();
 		} else
 			htmlContext.navigate(url, "");
+		
 	}
 
 	/**
@@ -228,8 +230,6 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	/**
 	 * Performs a link by
 	 * {@link GpCoreUtil#performSpecialHTMLLink(java.awt.Component, AtlasConfig, String, String)}
-	 * .
-	 * 
 	 * @param destURL
 	 */
 	protected void performSpecialLink(String destURL) {
@@ -239,17 +239,10 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 			throw new AtlasProtocolException(destURL,
 					"Atlas protocol could not be performed: " + destURL);
 	}
-	
-	 @Override
-		public void addRenderingDoneListener(ActionListener listener) {
-			addPropertyChangeListener(new PropertyChangeListener() {
-				
-				@Override
-				public void propertyChange(PropertyChangeEvent arg0) {
-					LOGGER.debug(arg0);
-					// TODO wann ist das renderin gabgeschlossen?
-				}
-			});
-		}
+
+	@Override
+	public void addRenderingDoneListener(ActionListener listener) {
+		
+	}
 
 }

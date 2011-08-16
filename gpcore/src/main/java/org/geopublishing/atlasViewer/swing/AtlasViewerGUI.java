@@ -722,8 +722,12 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		startGui();
 	}
 
-	// TODO needs doku
+	/**
+	 * Opens the windows and dialogs of the Atlas. This method must be called on EDT.
+	 */
 	protected void startGui() {
+		
+		SwingUtil.checkOnEDT();
 
 		/***************************************************************
 		 * Match available and installed languages
@@ -744,28 +748,6 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		updateLangMenu();
 
 		/**
-		 * Open the AtlasPopupDialog on the EDT (later)
-		 */
-		if (getAtlasConfig().getPopupHTMLURL() != null
-				&& getAtlasConfig()
-						.getProperties()
-						.getBoolean(
-								org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup,
-								true)) {
-			SwingUtilities.invokeLater(new Runnable() {
-
-				@Override
-				public void run() {
-					/**
-					 * Opens a modal about window.
-					 */
-					JDialog aboutWindow = new AtlasPopupDialog(getJFrame(),
-							getAtlasConfig());
-				}
-			});
-		}
-
-		/**
 		 * Open the first map on the EDT (later)
 		 */
 		SwingUtilities.invokeLater(new Runnable() {
@@ -775,6 +757,34 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 				setFirstMap();
 			}
 		});
+		
+		AtlasPopupDialog aboutWindow = null ;
+
+		/**
+		 * Open the AtlasPopupDialog on the EDT (later)
+		 */
+		if (getAtlasConfig().getPopupHTMLURL() != null
+				&& getAtlasConfig()
+						.getProperties()
+						.getBoolean(
+								org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup,
+								true)) {
+//			SwingUtilities.invokeLater(new Runnable() {
+//
+//				@Override
+//				public void run() {
+					/**
+					 * Opens a modal about window.
+					 */
+			
+			// HACK: hier die HTML Seite einmal in den OS cache laden
+			IOUtil.readURLasString(atlasConfig.getPopupHTMLURL());
+			
+			aboutWindow = new AtlasPopupDialog(getJFrame(),
+							getAtlasConfig());
+//				}
+//			});
+		}
 
 		if (!isPreviewMode()
 				&& JNLPUtil.countPartsToDownload(atlasConfig.getDataPool())
@@ -787,6 +797,10 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 						.actionPerformed(null);
 			}
 		}
+		
+		// FInally
+		if (aboutWindow != null)
+			aboutWindow.setVisible(true);
 
 	}
 
