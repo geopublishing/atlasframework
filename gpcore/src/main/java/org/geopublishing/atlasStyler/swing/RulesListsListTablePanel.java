@@ -133,6 +133,8 @@ public class RulesListsListTablePanel extends JPanel {
 				items = LangUtil.extendArray(items, String.valueOf(b + 1));
 			}
 			final JComboBox bandModeSelectionJCombobox = new JComboBox(items);
+			SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
+
 			bandModeSelectionPanel.add(bandModeSelectionJCombobox);
 			bandModeSelectionJCombobox.addItemListener(new ItemListener() {
 				
