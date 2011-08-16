@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.awt.Color;
 import java.io.IOException;
 
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListTest;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
 import org.geotools.styling.ColorMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil;
 
-public class RasterRulesList_IntervalsTest extends RasterRulesListTest {
+public class RasterRulesList_IntervalsTest extends RasterRulesListColormapTest {
 
 	private StyledGridCoverageReader styledRaster;
 

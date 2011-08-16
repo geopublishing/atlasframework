@@ -55,6 +55,7 @@ import org.geotools.map.MapContext;
 import org.geotools.styling.Style;
 
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.TranslationAskJDialog;
@@ -122,7 +123,7 @@ public class ManageLayerStylesForMapDialog extends ManageLayerStylesDialog {
 	 */
 	@SuppressWarnings("unchecked")
 	public ManageLayerStylesForMapDialog(Component owner,
-			DpLayerVectorFeatureSource dplv, AtlasConfigEditable ace, Map map,
+			DpLayer<? extends Object, ? extends ChartStyle> dplv, AtlasConfigEditable ace, Map map,
 			Style styleUsedRightNow, MapLegend mapLegend) {
 		super(owner, dplv, ace);
 		this.map = map;

@@ -144,48 +144,7 @@ public class AtlasMapLegend extends MapLegend {
 		}
 		return super.getTitleFor(styledObj);
 	}
-
-	//
-	// /**
-	// * This method overrides the updateLegendIcon method in {@link MapLegend}.
-	// * This difference in this method is, that there can actually exist
-	// multiple
-	// * styles for one layer.
-	// *
-	// * @param styledObj
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// * Tzeggai</a>
-	// */
-	// @Override
-	// public void updateLegendIcon(StyledLayerInterface<?> styledObj) {
-	//
-	// final String id = styledObj.getId();
-	//
-	// java.util.Map<String, ArrayList<String>> additionalStyles = getMap()
-	// .getAdditionalStyles();
-	// final ArrayList<String> availableStyles = additionalStyles.get(id);
-	//
-	// if (availableStyles == null || availableStyles.size() == 0) {
-	// super.updateLegendIcon(styledObj);
-	// return;
-	// }
-	//
-	// /**
-	// * Once we are here, we can be sure that we do have at least one
-	// * additional style!<br/>
-	// * If there is only one additional (active) style for this layer (in
-	// * this map), we do not render a JTabbedPane. The Title of the only
-	// * additional style is not displayed. If there are more than 5
-	// * additional styles, we render a DropDown component.
-	// */
-	//
-	// Component legendPanel = createAdditionalStylesPane(getMapLayerFor(id),
-	// availableStyles, (DpLayer) styledObj);
-	// // rememberLegend.put(styledObj.getId(), legendPanel);
-	// rememberId2MapLayerLegend.remove(styledObj.getId());
-	//
-	// }
-
+ 
 	/**
 	 * Returns a localized title for this layer. If the layer supports
 	 * additional styles take care of this.

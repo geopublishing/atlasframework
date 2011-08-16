@@ -6,7 +6,7 @@ import org.geotools.styling.ColorMap;
 
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 
-public class RasterRulesList_Ramps extends RasterRulesList {
+public class RasterRulesList_Ramps extends RasterRulesListColormap {
 
 	public RasterRulesList_Ramps(StyledRasterInterface<?> styledRaster,
 			boolean withDefaults) {

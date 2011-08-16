@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
@@ -139,8 +139,8 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public void setBand(int band) {
 		this.band = band;
 		for (AbstractRulesList rl : getRuleLists()) {
-			if (rl instanceof RasterRulesList)
-			((RasterRulesList)rl).setBand(band);
+			if (rl instanceof RasterRulesListColormap)
+			((RasterRulesListColormap)rl).setBand(band);
 		}
 	}
 

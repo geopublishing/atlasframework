@@ -146,7 +146,11 @@ public class AtlasStylerDialog extends StylerDialog {
 						layerStyle.setStyle(style);
 					}
 
-					atlasMapLegend.getLayerLegendForId(dpLayer.getId())
+					System.err.println(dpLayer);
+					System.err.println(dpLayer.getId());
+					MapLayerLegend layerLegendForId = atlasMapLegend.getLayerLegendForId(dpLayer.getId());
+					System.err.println(layerLegendForId);
+					layerLegendForId
 							.updateStyle(style);
 				}
 

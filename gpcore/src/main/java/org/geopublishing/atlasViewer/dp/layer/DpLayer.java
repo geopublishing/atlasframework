@@ -291,6 +291,9 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 
 	}
 
+	/**
+	 * List of all Styles available for this layer.
+	 */
 	public List<LayerStyle> getLayerStyles() {
 		return layerStyles;
 	}

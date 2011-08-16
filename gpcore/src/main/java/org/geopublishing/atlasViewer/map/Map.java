@@ -513,17 +513,6 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		return additionalStyles;
 	}
 
-	//
-	// /**
-	// * This {@link java.util.Map} holds a {@link List} of {@link
-	// LayerStyle}-IDs
-	// * for every {@link DpLayer} (refered to by its ID) *
-	// */
-	// public void setAdditionalStyles(
-	// final java.util.Map<String, ArrayList<String>> additionalStyles) {
-	// this.additionalStyles = additionalStyles;
-	// }
-
 	/**
 	 * Tell the map, which user defined style to use
 	 * 

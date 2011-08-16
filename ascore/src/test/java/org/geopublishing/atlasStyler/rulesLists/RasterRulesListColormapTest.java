@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import de.schmitzm.testing.TestingClass;
 
-public class RasterRulesListTest extends TestingClass {
+public class RasterRulesListColormapTest extends TestingClass {
 	
 	@Test
 	public void testRun() {
 		System.out.println("all good");
 	}
 
-	protected void testExportAndImport(RasterRulesList rl, RasterRulesList rl2) {
+	protected void testExportAndImport(RasterRulesListColormap rl, RasterRulesListColormap rl2) {
 		// Reimport
 		{
 			ColorMap colorMap2 = rl.getColorMap();

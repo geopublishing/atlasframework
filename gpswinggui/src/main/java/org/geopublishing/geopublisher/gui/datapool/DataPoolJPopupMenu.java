@@ -119,25 +119,7 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 //						.isTableVisibleInLegend());
 //				add(showTableInLegendOnOff);
 
-				/*******************************************************************
-				 * Edit additional Styles menu
-				 */
-				JMenuItem editAdditionalStyles = new JMenuItem();
-				editAdditionalStyles.setText(GeopublisherGUI
-						.R("DataPoolWindow_Action_ManageLayerStyles_label"));
-				editAdditionalStyles.setToolTipText(GeopublisherGUI
-						.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
-
-				editAdditionalStyles.addActionListener(new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						new ManageLayerStylesDialog(owner, dpfs, dpTable
-								.getAce()).setVisible(true);
-					}
-
-				});
-				add(editAdditionalStyles);
-
+				
 				/**
 				 * Add a new MenuItem, to switch "showFilterInLegend" on/off
 				 */
@@ -177,170 +159,26 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 				add(showStylerInLegendOnOff);
 
 			}
-			//
-			// /*******************************************************************
-			// * Add a test-WFS to the FeatureSource
-			// */
-			// JMenuItem addWFS = new JMenuItem();
-			// addWFS.setText(Geopublisher.R("DataPoolWindow.Action.AddWFS"));
-			// addWFS.setToolTipText(Geopublisher
-			// .R("DataPoolWindow.Action.AddWFS.TT"));
-			//
-			// addWFS.addActionListener(new ActionListener() {
-			//
-			// public void actionPerformed(ActionEvent e) {
-			//
-			// LOGGER.info("WFS Demo");
-			// try {
-			// URL url = new URL(
-			// "http://mapbender.wheregroup.com:8180/geoserver170a/ows?version=1.0.0&service=WFS&request=GetCapabilities");
-			// // URL url = new URL(
-			// //
-			// "http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?version=1.0.0&request=getcapabilities&service=wfs");
-			//
-			// Map m = new HashMap();
-			// m.put(WFSDataStoreFactory.URL.key, url);
-			// m.put(WFSDataStoreFactory.TIMEOUT.key, new Integer(
-			// 10000));
-			// // m.put(WFSDataStoreFactory.USE_GET.key,Boolean.TRUE);
-			//
-			// DataStore wfs = (new WFSDataStoreFactory())
-			// .createNewDataStore(m);
-			// FeatureSource wfsFS = wfs.getFeatureSource(wfs
-			// .getTypeNames()[0]);
-			//
-			// wfsFS = new TwistedLatLonFeatureSource(wfsFS);
-			//
-			// LOGGER.debug(wfsFS.getBounds());
-			//
-			// // CoordinateReferenceSystem crs =
-			// // wfsFS.getSchema().getDefaultGeometry().getCoordinateSystem();
-			// // LOGGER.debug("CRS is "+crs);
-			// // if (crs instanceof GeographicCRS) {
-			// // LOGGER.debug("CRS is GeographicCRS, twist it!");
-			// // }
-			//
-			// LOGGER.debug(wfsFS.getFeatures().size());
-			// LOGGER.debug(wfs.getTypeNames()[0]);
-			// DpLayerVectorFeatureSourceWFSEd dlvs = new
-			// DpLayerVectorFeatureSourceWFSEd(
-			// dpTable.getAce(), wfsFS, false);
-			// dpTable.getAce().getDataPool().add(dlvs);
-			//
-			// Query query = new DefaultQuery(wfs.getTypeNames()[0]);
-			// FeatureReader ft = wfs.getFeatureReader(query,
-			// Transaction.AUTO_COMMIT);
-			// try {
-			// int count = 0;
-			// while (ft.hasNext()) {
-			// SimpleFeature next = ft.next();
-			// if (next != null) {
-			// LOGGER.debug(next);
-			// }
-			// }
-			// count++;
-			// LOGGER.debug("Found " + count + " features");
-			// } finally {
-			// ft.close();
-			// }
-			// } catch (Throwable exception) {
-			// LOGGER.error("Failed to execute the add WFS command",
-			// exception);
-			// ExceptionDialog.show(owner, exception);
-			// }
-			//
-			// }
-			//
-			// });
-			// add(addWFS);
 
-			//
-			// /*******************************************************************
-			// * Add a test-WFS to the FeatureSource
-			// */
-			// JMenuItem addWMS = new JMenuItem();
-			// addWMS.setText(Geopublisher
-			// .R("DataPoolWindow.Action.AddWMS"));
-			// addWMS.setToolTipText(Geopublisher
-			// .R("DataPoolWindow.Action.AddWMS.TT"));
-			//
-			// addWMS.addActionListener(new ActionListener() {
-			//
-			// public void actionPerformed(ActionEvent e) {
-			//					
-			// LOGGER.info("WFS Demo");
-			// try{
-			// URL url = new URL(
-			// "http://mapbender.wheregroup.com:8180/geoserver170a/ows?version=1.0.0&service=WFS&request=GetCapabilities");
-			// // URL url = new URL(
-			// //
-			// "http://www2.dmsolutions.ca/cgi-bin/mswfs_gmap?version=1.0.0&request=getcapabilities&service=wfs");
-			//			        
-			// Map m = new HashMap();
-			// m.put(WFSDataStoreFactory.URL.key,url);
-			// m.put(WFSDataStoreFactory.TIMEOUT.key,new Integer(10000));
-			// // m.put(WFSDataStoreFactory.USE_GET.key,Boolean.TRUE);
-			//
-			// DataStore wfs = (new
-			// WFSDataStoreFactory()).createNewDataStore(m);
-			// FeatureSource wfsFS =
-			// wfs.getFeatureSource(wfs.getTypeNames()[0]);
-			//			            
-			// wfsFS = new TwistedLatLonFeatureSource(wfsFS);
-			//			            
-			// LOGGER.debug(wfsFS.getBounds());
-			//			            
-			// // CoordinateReferenceSystem crs =
-			// wfsFS.getSchema().getDefaultGeometry().getCoordinateSystem();
-			// // LOGGER.debug("CRS is "+crs);
-			// // if (crs instanceof GeographicCRS) {
-			// // LOGGER.debug("CRS is GeographicCRS, twist it!");
-			// // }
-			//			            
-			// LOGGER.debug(wfsFS.getFeatures().size());
-			// LOGGER.debug(wfs.getTypeNames()[0]);
-			// DpLayerVectorFeatureSourceWFSEd dlvs = new
-			// DpLayerVectorFeatureSourceWFSEd(dpTable.getAce(), wfsFS, false);
-			// dpTable.getAce().getDataPool().add(dlvs);
-			//			            
-			//			            
-			// Query query = new DefaultQuery(wfs.getTypeNames()[0]);
-			// FeatureReader ft =
-			// wfs.getFeatureReader(query,Transaction.AUTO_COMMIT);
-			// try {
-			// int count = 0;
-			// while(ft.hasNext()) {
-			// SimpleFeature next = ft.next();
-			// if(next!=null) {
-			// LOGGER.debug(next);
-			// }
-			// }
-			// count++;
-			// LOGGER.debug("Found "+count+" features");
-			// }
-			// finally {
-			// ft.close();
-			// }
-			// }catch(Exception ee){
-			// LOGGER.error("Failed to execute the add WFS command", ee);
-			// }
-			//
-			//					
-			// }
-			//
-			// });
-			// add(addWMS);
-			// }
-			//
-			// /**
-			// * Creating Raster-SLDs is only available on one-band rasters.
-			// */
-			// if (dpe instanceof DpLayerRaster
-			// && ((DpLayerRaster) dpe).getNumSampleDimensions() == 1) {
-			// add(new DataPoolEditRasterLegendAction(dpTable, owner));
-			// add(new DataPoolEditRasterColorsAction(dpTable, owner));
-			// // add(new DataPoolEditRasterColorsAction2(dpTable, owner));
-			// }
+			/*******************************************************************
+			 * Edit additional Styles menu
+			 */
+			JMenuItem editAdditionalStyles = new JMenuItem();
+			editAdditionalStyles.setText(GeopublisherGUI
+					.R("DataPoolWindow_Action_ManageLayerStyles_label"));
+			editAdditionalStyles.setToolTipText(GeopublisherGUI
+					.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
+
+			editAdditionalStyles.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					new ManageLayerStylesDialog(owner, dpLayer, dpTable
+							.getAce()).setVisible(true);
+				}
+
+			});
+			add(editAdditionalStyles);
+
 
 			addSeparator();
 

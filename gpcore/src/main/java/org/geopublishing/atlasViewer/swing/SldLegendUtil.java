@@ -214,10 +214,13 @@ public class SldLegendUtil {
 		int max = Integer.MIN_VALUE;
 		for (String lsID : availStyleIDs) {
 			LayerStyle ls = dpLayer.getLayerStyleByID(lsID);
-			int length = ls.getStyle().featureTypeStyles().get(0).rules()
-					.size();
-			min = Math.min(min, length);
-			max = Math.max(max, length);
+			List<FeatureTypeStyle> featureTypeStyles = ls.getStyle()
+					.featureTypeStyles();
+			if (featureTypeStyles.size() > 0) {
+				int length = featureTypeStyles.get(0).rules().size();
+				min = Math.min(min, length);
+				max = Math.max(max, length);
+			}
 		}
 
 		if (availStyleIDs.size() > 3 || (max - min > 4)) {

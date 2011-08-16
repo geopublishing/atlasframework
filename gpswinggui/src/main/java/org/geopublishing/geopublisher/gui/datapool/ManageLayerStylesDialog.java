@@ -114,7 +114,7 @@ public class ManageLayerStylesDialog extends JDialog {
 	/**
 	 * The {@link DpLayer} that we manage the {@link LayerStyle}s for.
 	 */
-	protected final DpLayerVectorFeatureSource dpLayer;
+	protected final DpLayer  dpLayer;
 
 	private JScrollPane jScrollPane;
 
@@ -126,7 +126,7 @@ public class ManageLayerStylesDialog extends JDialog {
 	 *            {@link LayerStyle}s for.
 	 */
 	public ManageLayerStylesDialog(Component owner,
-			DpLayerVectorFeatureSource dpLayer, AtlasConfigEditable ace) {
+			DpLayer dpLayer, AtlasConfigEditable ace) {
 		super(SwingUtil.getParentWindow(owner));
 		this.dpLayer = dpLayer;
 		this.ace = ace;
@@ -365,12 +365,12 @@ public class ManageLayerStylesDialog extends JDialog {
 
 					final int idx = row - 1;
 
-					final Translation styleName = dpLayer.getLayerStyles()
-							.get(idx).getTitle();
+					final LayerStyle ls = (LayerStyle) dpLayer.getLayerStyles()
+							.get(idx);
+					final Translation styleName = ls.getTitle();
 					final Translation styleNameBackup = styleName.clone();
 
-					final Translation styleDesc = dpLayer.getLayerStyles()
-							.get(idx).getDesc();
+					final Translation styleDesc = ls.getDesc();
 					final Translation styleDescBackup = styleDesc.clone();
 
 					TranslationEditJPanel transNameLabel = new TranslationEditJPanel(
@@ -391,9 +391,9 @@ public class ManageLayerStylesDialog extends JDialog {
 									.equals(TranslationAskJDialog.PROPERTY_CANCEL_AND_CLOSE)) {
 								ask = null;
 
-								dpLayer.getLayerStyles().get(idx)
+								ls
 										.setTitle(styleNameBackup);
-								dpLayer.getLayerStyles().get(idx)
+								ls
 										.setDesc(styleDescBackup);
 							}
 							if (evt.getPropertyName()
@@ -499,7 +499,7 @@ public class ManageLayerStylesDialog extends JDialog {
 					return null;
 				}
 
-				LayerStyle layerStyle = dpLayer.getLayerStyles().get(
+				LayerStyle layerStyle = (LayerStyle) dpLayer.getLayerStyles().get(
 						rowIndex - 1);
 				if (columnIndex == 0)
 					return layerStyle.getTitle().toString();
@@ -758,7 +758,7 @@ public class ManageLayerStylesDialog extends JDialog {
 					// The first row is the default style which doesn't count.
 					int idx = getTable().getSelectedRow() - 1;
 
-					LayerStyle lsRemove = dpLayer.getLayerStyles().get(idx);
+					LayerStyle lsRemove = (LayerStyle) dpLayer.getLayerStyles().get(idx);
 					if (lsRemove == null) {
 						return;
 					}
@@ -826,7 +826,7 @@ public class ManageLayerStylesDialog extends JDialog {
 					 * 4. Remove the Style from the list of styles for this
 					 * layer
 					 */
-					lsRemove = dpLayer.getLayerStyles().remove(idx);
+					lsRemove = (LayerStyle) dpLayer.getLayerStyles().remove(idx);
 
 					/**
 					 * Update the table
@@ -875,7 +875,7 @@ public class ManageLayerStylesDialog extends JDialog {
 						return;
 
 					int idx = getTable().getSelectedRow() - 1;
-					LayerStyle style = dpLayer.getLayerStyles().get(idx);
+					LayerStyle style = (LayerStyle) dpLayer.getLayerStyles().get(idx);
 
 					File srcFile = new File(new File(
 							((AtlasConfigEditable) dpLayer.getAtlasConfig())

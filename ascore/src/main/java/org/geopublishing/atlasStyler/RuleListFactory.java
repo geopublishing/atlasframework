@@ -10,7 +10,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorLineRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
@@ -390,14 +390,14 @@ public class RuleListFactory {
 		return quantitiesRuleList;
 	}
 
-	private RasterRulesList importRasterRulesList(FeatureTypeStyle fts) {
+	private RasterRulesListColormap importRasterRulesList(FeatureTypeStyle fts) {
 		if (!(styledLayer instanceof StyledRasterInterface))
 			return null;
 		StyledRasterInterface<?> styledRaster = (StyledRasterInterface<?>) styledLayer;
 
 		String metaInfoString = fts.getName();
 
-		RasterRulesList rasterRulesList = null;
+		RasterRulesListColormap rasterRulesList = null;
 
 		// Try to just look at the ColorMapType
 		final List<RasterSymbolizer> rsList = new ArrayList<RasterSymbolizer>();

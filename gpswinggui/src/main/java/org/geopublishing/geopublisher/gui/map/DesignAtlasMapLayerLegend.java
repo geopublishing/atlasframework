@@ -360,36 +360,6 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 
 			menu.addSeparator();
 
-			/*
-			 * Menuitem: Manage Available Styles for this layer in this map
-			 */
-			JMenuItem itemManageViews = new JMenuItem();
-			itemManageViews.setText(GeopublisherGUI
-					.R("DataPoolWindow_Action_ManageLayerStyles_label"));
-			itemManageViews.setToolTipText(GeopublisherGUI
-					.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
-			itemManageViews.addActionListener(new ActionListener() {
-
-				public void actionPerformed(ActionEvent e) {
-					getManageLayerStylesForMapDialog().setVisible(true);
-					// atlasMapLegend.updateLegendIcon(styledLayer);
-					atlasMapLegend.recreateLayerList(getMapLayer().getTitle());
-				}
-
-				private JDialog getManageLayerStylesForMapDialog() {
-
-					Style styleUsedRightNow = getMapLayer().getStyle();
-
-					ManageLayerStylesForMapDialog dialog = new ManageLayerStylesForMapDialog(
-							DesignAtlasMapLayerLegend.this, dplv, ace,
-							atlasMapLegend.getMap(), styleUsedRightNow,
-							mapLegend);
-					SwingUtil.centerFrameOnScreenRandom(dialog);
-					return dialog;
-				}
-
-			});
-			menu.add(itemManageViews);
 
 			/**
 			 * Menu item: Manage available Charts for this layer in this map
@@ -413,6 +383,38 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 			menu.add(itemManageCharts);
 
 		}
+		
+
+		/*
+		 * Menuitem: Manage Available Styles for this layer in this map
+		 */
+		JMenuItem itemManageViews = new JMenuItem();
+		itemManageViews.setText(GeopublisherGUI
+				.R("DataPoolWindow_Action_ManageLayerStyles_label"));
+		itemManageViews.setToolTipText(GeopublisherGUI
+				.R("DataPoolWindow_Action_ManageLayerStyles_tt"));
+		itemManageViews.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				getManageLayerStylesForMapDialog().setVisible(true);
+				// atlasMapLegend.updateLegendIcon(styledLayer);
+				atlasMapLegend.recreateLayerList(getMapLayer().getTitle());
+			}
+
+			private JDialog getManageLayerStylesForMapDialog() {
+
+				Style styleUsedRightNow = getMapLayer().getStyle();
+
+				ManageLayerStylesForMapDialog dialog = new ManageLayerStylesForMapDialog(
+						DesignAtlasMapLayerLegend.this, dpLayer, ace,
+						atlasMapLegend.getMap(), styleUsedRightNow,
+						mapLegend);
+				SwingUtil.centerFrameOnScreenRandom(dialog);
+				return dialog;
+			}
+
+		});
+		menu.add(itemManageViews);
 
 		/*
 		 * A separator to all the on/off checkboxes

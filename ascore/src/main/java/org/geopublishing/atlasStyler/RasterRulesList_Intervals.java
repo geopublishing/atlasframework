@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
@@ -20,7 +20,7 @@ import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.swing.SwingUtil;
 
-public class RasterRulesList_Intervals extends RasterRulesList {
+public class RasterRulesList_Intervals extends RasterRulesListColormap {
 
 	/**
 	 * n+1 values = n classes

@@ -14,6 +14,7 @@ import java.awt.Component;
 import java.io.File;
 import java.io.IOException;
 
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
@@ -24,6 +25,7 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geotools.map.MapLayer;
 
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 
@@ -79,9 +81,11 @@ public class DesignAtlasStylerDialog extends AtlasStylerDialog {
 		 */
 		AtlasConfigEditable ace = mapLegend.getAce();
 
-		File dataDir = new File(ace.getDataDir(), dpLayerVector.getDataDirname());
+		DpLayer<? extends Object, ? extends ChartStyle> dpLayer = (DpLayer<? extends Object, ? extends ChartStyle>) getStyledLayer();
+		
+		File dataDir = new File(ace.getDataDir(), dpLayer.getDataDirname());
 
-		final String filename = map.getSelectedStyleIDs().get(dpLayerVector.getId());
+		final String filename = map.getSelectedStyleIDs().get(dpLayer.getId());
 		try {
 			StylingUtil.saveStyleToSld(getAtlasStyler().getStyle(), new File(
 					dataDir, filename));

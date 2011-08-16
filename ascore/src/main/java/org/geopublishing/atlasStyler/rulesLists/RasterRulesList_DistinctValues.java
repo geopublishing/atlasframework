@@ -30,7 +30,7 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class RasterRulesList_DistinctValues extends RasterRulesList implements
+public class RasterRulesList_DistinctValues extends RasterRulesListColormap implements
 		UniqueValuesRulesListInterface<Double> {
 
 	private static final Logger LOGGER = Logger
