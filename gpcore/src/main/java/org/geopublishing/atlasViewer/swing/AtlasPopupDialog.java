@@ -45,7 +45,6 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 
-import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
@@ -78,7 +77,8 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		// setExtendedState(Frame.MAXIMIZED_BOTH);
 		JComponent htmlComponent = getHtmlInfoJPane();
 		Dimension fullScreen = getToolkit().getScreenSize();
-		Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
+		final Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
+		setSize(dialogSize);
 
 		setTitle(atlasConfig.getTitle().toString());
 
@@ -93,20 +93,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		contentPane.add(getOkButton(), "tag ok, span 2");
 		setContentPane(contentPane);
 
-		//
-		setSize(dialogSize);
-
-		// JPanel contentPane = new JPanel(new MigLayout("warp 2, fillx", "[grow]","[grow]"));
-
-//		 setPreferredSize(getHtmlInfoJPane().getPreferredSize());
-
 		SwingUtil.centerFrameOnScreen(this);
-		
-		setVisible(true);
-		
-//		LangUtil.sleepExceptionless(350);
-//		setSize(new Dimension(dialogSize.width-1, dialogSize.height-1));
-		
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -145,8 +132,14 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		if (htmlInfoJPane == null) {
 			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
-			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
-			LangUtil.sleepExceptionless(500);
+			
+
+			htmlInfoJPane.addRenderingDoneListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					setVisible(true);
+				}
+			});
 		}
 		return htmlInfoJPane.getComponent();
 	}

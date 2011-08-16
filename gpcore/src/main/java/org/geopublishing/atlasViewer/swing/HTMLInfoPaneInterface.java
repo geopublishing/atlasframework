@@ -1,5 +1,6 @@
 package org.geopublishing.atlasViewer.swing;
 
+import java.awt.event.ActionListener;
 import java.net.URL;
 
 import javax.swing.JComponent;
@@ -44,4 +45,9 @@ public interface HTMLInfoPaneInterface {
    * a browser internal popup menu.
    */
   public void connectPopupMenu(JPopupMenu menu);
+  
+  /**
+   * Kann registriert werden um informiert zu werden, wenn der HTMl-Renderer den Inhalt fertig dargestellt hat. 
+   */
+  public void addRenderingDoneListener(ActionListener listener);
 }

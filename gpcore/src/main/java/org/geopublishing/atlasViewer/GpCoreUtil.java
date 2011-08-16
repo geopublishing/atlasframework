@@ -587,4 +587,5 @@ public class GpCoreUtil {
 	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
 		return createHTMLInfoPane(map.getInfoURL(), map.getAc());
 	}
+	
 }
