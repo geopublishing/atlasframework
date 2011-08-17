@@ -12,6 +12,7 @@ import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.PaletteType;
+import org.geotools.styling.ChannelSelection;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.ContrastEnhancement;
@@ -239,6 +240,20 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 
 		try {
 			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
+
+			// Alle RasterRulesLIstColorMaps haben eine singuläre
+			// ChannelSelection
+			{
+				ChannelSelection channelSelection = rs.getChannelSelection();
+				if (channelSelection != null) {
+					SelectedChannelType grayChannel = channelSelection
+							.getGrayChannel();
+					if (grayChannel != null) {
+						band = Integer.valueOf(grayChannel.getChannelName()) - 1;
+					}
+				}
+			}
+			
 			ColorMap cm = rs.getColorMap();
 
 			importColorMap(cm);

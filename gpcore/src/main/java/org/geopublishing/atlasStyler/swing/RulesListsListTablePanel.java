@@ -28,6 +28,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 
@@ -144,6 +145,18 @@ public class RulesListsListTablePanel extends JPanel {
 					asr.fireStyleChangedEvents();
 				}
 			});
+			
+			// Initialiseren der JComboBox
+			{
+				// Wenn mind. 1 RasterRulesList existiert, die Bandselektion da rauslesen
+				for (AbstractRulesList rl : asr.getRuleLists()) {
+					if (rl instanceof RasterRulesListColormap) {
+						RasterRulesListColormap rrl = (RasterRulesListColormap)rl;
+						bandModeSelectionJCombobox.setSelectedIndex(1+rrl.getBand());
+						break;
+					}
+				}
+			}
 
 		}
 		return bandModeSelectionPanel;

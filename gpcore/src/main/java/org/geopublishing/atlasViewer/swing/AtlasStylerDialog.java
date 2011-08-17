@@ -218,7 +218,7 @@ public class AtlasStylerDialog extends StylerDialog {
 			 * might have been set to another Tab/Item. For that case we set it
 			 * back to the one we are editing.
 			 */
-			map.setSelectedStyleID(dpLayerVector.getId(), layerStyle.getID());
+			map.setSelectedStyleID(getStyledLayer().getId(), layerStyle.getID());
 
 		} else {
 			getStyledLayer().setStyle(getAtlasStyler().getStyle());
