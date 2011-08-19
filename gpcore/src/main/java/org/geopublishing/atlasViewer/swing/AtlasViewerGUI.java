@@ -778,7 +778,7 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 					 */
 			
 			// HACK: hier die HTML Seite einmal in den OS cache laden
-			IOUtil.readURLasString(atlasConfig.getPopupHTMLURL());
+//			IOUtil.readURLasString(atlasConfig.getPopupHTMLURL());
 			
 			aboutWindow = new AtlasPopupDialog(getJFrame(),
 							getAtlasConfig());

@@ -45,7 +45,6 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 
-import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
@@ -98,7 +97,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		setSize(dialogSize);
 		SwingUtil.centerFrameOnScreen(this);
 		
-		LangUtil.sleepExceptionless(500);
+//		LangUtil.sleepExceptionless(500);
 		
 		setVisible(true);
 		

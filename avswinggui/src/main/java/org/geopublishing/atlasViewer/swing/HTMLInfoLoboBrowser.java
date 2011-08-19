@@ -20,6 +20,7 @@ import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.AtlasProtocolException;
 import org.geopublishing.atlasViewer.map.Map;
+import org.lobobrowser.html.FormInput;
 import org.lobobrowser.html.HtmlRendererContext;
 import org.lobobrowser.html.UserAgentContext;
 import org.lobobrowser.html.gui.FrameSetPanel;
@@ -34,15 +35,18 @@ import de.schmitzm.swing.event.PipedMouseListener;
 /**
  * An HTML view based on the {@link HtmlPanel} of <i>LOBO browser Project</i>.
  */
-public class HTMLInfoLoboBrowser extends HtmlPanel implements
-		HTMLInfoPaneInterface {
+public class HTMLInfoLoboBrowser extends HtmlPanel implements HTMLInfoPaneInterface {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 381089767702329569L;
+
 	final static private Logger LOGGER = Logger.getLogger(HTMLInfoJPane.class);
 
 	/**
 	 * This message is shows when no data can be found.
 	 */
-	final String NODATA_MSG = GpCoreUtil
-			.R("HTMLInfoPane.NODATA.MSG.sorry_no_info_available");
+	final String NODATA_MSG = GpCoreUtil.R("HTMLInfoPane.NODATA.MSG.sorry_no_info_available");
 
 	/** Configuration of the atlas */
 	protected AtlasConfig atlasConfig = null;
@@ -74,15 +78,21 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 		super();
 		this.atlasConfig = ac;
 		SimpleUserAgentContext simpleUserAgentContext = new SimpleUserAgentContext();
-		
-		htmlContext = new SimpleHtmlRendererContext(this,
-				simpleUserAgentContext) {
+
+		htmlContext = new SimpleHtmlRendererContext(this, simpleUserAgentContext) {
+
+			/**
+			 * Indicates whether navigation (via {@link #submitForm(String, URL, String, String, FormInput[])}) should be asynchronous.
+			 * This overridable implementation returns <code>true</code>.
+			 */
+			protected boolean isNavigationAsynchronous() {
+				return false;
+			}
 			
 			@Override
 			public boolean onContextMenu(HTMLElement element, MouseEvent event) {
 				if (HTMLInfoLoboBrowser.this.popupMenu != null) {
-					HTMLInfoLoboBrowser.this.popupMenu.show(
-							event.getComponent(), event.getX(), event.getY());
+					HTMLInfoLoboBrowser.this.popupMenu.show(event.getComponent(), event.getX(), event.getY());
 					return false;
 				}
 				return super.onContextMenu(element, event);
@@ -119,13 +129,15 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 		// and reload(.) to show the new content (why??)
 		// Note: because currentURL changes on navigate, we can
 		// not do this check AFTER navigate(.)!!
-		if (htmlContext.getCurrentURL() != null
-				&& htmlContext.getCurrentURL().equalsIgnoreCase(url.toString())) {
+		if (htmlContext.getCurrentURL() != null && htmlContext.getCurrentURL().equalsIgnoreCase(url.toString())) {
 			htmlContext.navigate(url, "");
 			htmlContext.reload();
 		} else
 			htmlContext.navigate(url, "");
-		
+
+//		Document d = (Document) this.getRootNode();
+//		HTMLDocumentImpl rootNode2 = (HTMLDocumentImpl) htmlContext.getHtmlPanel().getRootNode();
+
 	}
 
 	/**
@@ -148,8 +160,7 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	}
 
 	/**
-	 * Returns {@code true}, because {@link HtmlPanel} already provides
-	 * scrolling.
+	 * Returns {@code true}, because {@link HtmlPanel} already provides scrolling.
 	 */
 	@Override
 	public boolean hasScrollPane() {
@@ -172,29 +183,23 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	}
 
 	/**
-	 * Modifies the {@link HtmlBlockPanel} created by the super-method. The
-	 * existing {@link MouseListener MouseListeners} are replaced by
-	 * {@link PipedMouseListener PipedMouseListeners} to catch the
-	 * {@link AtlasProtocolException} when clicking on a link with special
-	 * {@link AtlasProtocol}. Instead of following the link, the special atlas
-	 * protocol is performed using ({@link #performSpecialLink(String)}.
+	 * Modifies the {@link HtmlBlockPanel} created by the super-method. The existing {@link MouseListener
+	 * MouseListeners} are replaced by {@link PipedMouseListener PipedMouseListeners} to catch the
+	 * {@link AtlasProtocolException} when clicking on a link with special {@link AtlasProtocol}. Instead of following
+	 * the link, the special atlas protocol is performed using ({@link #performSpecialLink(String)}.
 	 */
 	@Override
-	protected HtmlBlockPanel createHtmlBlockPanel(UserAgentContext ucontext,
-			HtmlRendererContext rcontext) {
-		HtmlBlockPanel blockPanel = super.createHtmlBlockPanel(ucontext,
-				rcontext);
+	protected HtmlBlockPanel createHtmlBlockPanel(UserAgentContext ucontext, HtmlRendererContext rcontext) {
+		HtmlBlockPanel blockPanel = super.createHtmlBlockPanel(ucontext, rcontext);
 		pipeMouseListeners(blockPanel);
 		return blockPanel;
 	}
 
 	/**
-	 * Modifies the {@link FrameSetPanel} created by the super-method. The
-	 * existing {@link MouseListener MouseListeners} are replaced by
-	 * {@link PipedMouseListener PipedMouseListeners} to catch the
-	 * {@link AtlasProtocolException} when clicking on a link with special
-	 * {@link AtlasProtocol}. Instead of following the link, the special atlas
-	 * protocol is performed using ({@link #performSpecialLink(String)}.
+	 * Modifies the {@link FrameSetPanel} created by the super-method. The existing {@link MouseListener MouseListeners}
+	 * are replaced by {@link PipedMouseListener PipedMouseListeners} to catch the {@link AtlasProtocolException} when
+	 * clicking on a link with special {@link AtlasProtocol}. Instead of following the link, the special atlas protocol
+	 * is performed using ({@link #performSpecialLink(String)}.
 	 */
 	@Override
 	protected FrameSetPanel createFrameSetPanel() {
@@ -204,9 +209,8 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	}
 
 	/**
-	 * Replaces all {@link MouseListener MouseListeners} of a {@link Component}
-	 * with a {@link PipedMouseListener}, which catches an
-	 * {@link AtlasProtocolException} to perform atlas protocol links.
+	 * Replaces all {@link MouseListener MouseListeners} of a {@link Component} with a {@link PipedMouseListener}, which
+	 * catches an {@link AtlasProtocolException} to perform atlas protocol links.
 	 * 
 	 * @see #performSpecialLink(String)
 	 */
@@ -228,21 +232,20 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 	}
 
 	/**
-	 * Performs a link by
-	 * {@link GpCoreUtil#performSpecialHTMLLink(java.awt.Component, AtlasConfig, String, String)}
+	 * Performs a link by {@link GpCoreUtil#performSpecialHTMLLink(java.awt.Component, AtlasConfig, String, String)}
+	 * 
 	 * @param destURL
 	 */
 	protected void performSpecialLink(String destURL) {
-		boolean specialLinkPerformed = AtlasProtocol.performLink(this,
-				atlasConfig, getContext().getCurrentURL(), destURL);
+		boolean specialLinkPerformed = AtlasProtocol.performLink(this, atlasConfig, getContext().getCurrentURL(),
+				destURL);
 		if (!specialLinkPerformed)
-			throw new AtlasProtocolException(destURL,
-					"Atlas protocol could not be performed: " + destURL);
+			throw new AtlasProtocolException(destURL, "Atlas protocol could not be performed: " + destURL);
 	}
 
 	@Override
 	public void addRenderingDoneListener(ActionListener listener) {
-		
+
 	}
 
 }
