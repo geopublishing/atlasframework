@@ -99,7 +99,8 @@ public class AMLImport {
 	private static boolean upgradeFromPreGP14 = false;
 
 	/**
-	 * If set to <code>true</code> all HTML files are checked for wrong color HEX statement.
+	 * If set to <code>true</code> all HTML files are checked for wrong color
+	 * HEX statement.
 	 **/
 	protected static boolean upgradeFromPreGP17 = false;
 
@@ -293,12 +294,14 @@ public class AMLImport {
 		// LOGGER.debug("Parsing DOM to AtlasConfig...");
 
 		// Checking options for gphoster
-		nodes = xml.getElementsByTagNameNS(AMLUtil.AMLURI,AMLUtil.TAG_GPHOSTER);
-		if (nodes.getLength()!=0)
-		{
+		nodes = xml
+				.getElementsByTagNameNS(AMLUtil.AMLURI, AMLUtil.TAG_GPHOSTER);
+		if (nodes.getLength() != 0) {
 			Node gpHosterNode = nodes.item(0);
-			if(gpHosterNode.getAttributes().getNamedItem(AMLUtil.ATT_AUTH)!= null){
-				ac.setGpHosterAuth((Boolean.parseBoolean(gpHosterNode.getAttributes().getNamedItem(AMLUtil.ATT_AUTH).getTextContent())));
+			if (gpHosterNode.getAttributes().getNamedItem(AMLUtil.ATT_AUTH) != null) {
+				ac.setGpHosterAuth((Boolean.parseBoolean(gpHosterNode
+						.getAttributes().getNamedItem(AMLUtil.ATT_AUTH)
+						.getTextContent())));
 			}
 		}
 		// Checking the GP version this atlas.xml has been created with
@@ -311,8 +314,6 @@ public class AMLImport {
 			ac.setJnlpBaseUrl(atlasNode.getAttributes()
 					.getNamedItem(AMLUtil.ATT_jnlpBaseUrl).getTextContent());
 		}
-		
-		
 
 		// Read the atlasBaseName attribute (since 1.7)
 		final Node atlasBasenameXMLItem = atlasNode.getAttributes()
@@ -826,6 +827,8 @@ public class AMLImport {
 					dpe.setLegendMetaData(parseRasterLegendData(ac, n));
 				} else if (name.equals("keywords")) {
 					dpe.setKeywords(parseTranslation(ac.getLanguages(), n));
+				} else if (name.equals(AMLUtil.TAG_ADDITIONAL_STYLE)) {
+					dpe.addLayerStyle(parseLayerStyle(ac, n, dpe));
 				}
 			}
 		}
@@ -1116,7 +1119,7 @@ public class AMLImport {
 						} else
 							throw e;
 					}
-				} else if (name.equals("layerStyle")) {
+				} else if (name.equals(AMLUtil.TAG_ADDITIONAL_STYLE)) {
 					dplvfs.addLayerStyle(parseLayerStyle(ac, n, dplvfs));
 				} else if (name.equals("filterRule")) {
 					String filterString = n.getFirstChild().getNodeValue();
@@ -1512,7 +1515,7 @@ public class AMLImport {
 			} else if (tagName.equals("startViewEnvelope")) {
 				final String value = childNode.getFirstChild().getNodeValue();
 
-				String[] pairs = value.split(" ");
+				String[] pairs = LangUtil.removeWhitespacesToEmpty(value).split(" ");
 				final double cornersV[][] = new double[2][2];
 				String pair[];
 				for (int iii = 0; iii < 2; iii++) {
@@ -1528,7 +1531,7 @@ public class AMLImport {
 			} else if (tagName.equals("maxExtend")) {
 				final String value = childNode.getFirstChild().getNodeValue();
 
-				String[] pairs = value.split(" ");
+				String[] pairs = LangUtil.removeWhitespacesToEmpty(value).split(" ");
 				final double cornersV[][] = new double[2][2];
 				String pair[];
 				for (int iii = 0; iii < 2; iii++) {
@@ -1604,7 +1607,7 @@ public class AMLImport {
 
 					map.add(dpRef);
 				}
-			} else if (tagName.equals("additionalStyles")) {
+			} else if (tagName.equals(AMLUtil.TAG_ADDITIONAL_STYLES)) {
 
 				String layerID = childNode.getAttributes()
 						.getNamedItem("layerID").getNodeValue();

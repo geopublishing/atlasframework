@@ -94,13 +94,14 @@ public class AMLExporter {
 	private final String CHARTSTYLE_FILEENDING = ".chart";
 	final private Logger LOGGER = Logger.getLogger(AMLExporter.class);
 	/**
-	 * This tag is replaced with the atlas base name when copying the build.xml template
+	 * This tag is replaced with the atlas base name when copying the build.xml
+	 * template
 	 **/
 	final static public String ATLASBASENAME_TAG_IN_BUILDXML = "ATLASBASENAME";
 
 	/**
-	 * Creates a <code>build.xml</code> in the AWC folder, which allows automatic pblishing on
-	 * http://atlas.geopublishing.org
+	 * Creates a <code>build.xml</code> in the AWC folder, which allows
+	 * automatic pblishing on http://atlas.geopublishing.org
 	 * 
 	 * @param targetDir
 	 * @param atlasBaseName
@@ -108,26 +109,31 @@ public class AMLExporter {
 	 */
 	public File writeBuildxml(File targetDir, String atlasBaseName) {
 
-		if (atlasBaseName == null || atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME) || atlasBaseName.equals("null")) {
-			LOGGER.info("Not writing a build.xml for automatic publishing, because the basename is " + atlasBaseName
-					+ ". Please change it.");
+		if (atlasBaseName == null
+				|| atlasBaseName.equals(AtlasConfig.DEFAULTBASENAME)
+				|| atlasBaseName.equals("null")) {
+			LOGGER.info("Not writing a build.xml for automatic publishing, because the basename is "
+					+ atlasBaseName + ". Please change it.");
 			return null;
 		}
 
 		// prepare the new content:
 		if (atlasBaseName.endsWith("/")) {
-			atlasBaseName = atlasBaseName.substring(0, atlasBaseName.length() - 1);
+			atlasBaseName = atlasBaseName.substring(0,
+					atlasBaseName.length() - 1);
 		}
 
 		String resLoc = "/autoPublish/build.xml";
 		URL templateBuildXml = GpUtil.class.getResource(resLoc);
 		if (templateBuildXml == null) {
-			LOGGER.error("Could not find " + resLoc + ". build.xml has not been created!");
+			LOGGER.error("Could not find " + resLoc
+					+ ". build.xml has not been created!");
 			return null;
 		}
 
 		String templString = IOUtil.readURLasString(templateBuildXml);
-		String buildXmlContent = templString.replaceAll(Pattern.quote(ATLASBASENAME_TAG_IN_BUILDXML), atlasBaseName);
+		String buildXmlContent = templString.replaceAll(
+				Pattern.quote(ATLASBASENAME_TAG_IN_BUILDXML), atlasBaseName);
 
 		// Prepare for writing
 		targetDir.mkdirs();
@@ -145,7 +151,8 @@ public class AMLExporter {
 
 			// Recreate the build.xml file...
 			if (!buildFile.delete()) {
-				LOGGER.error("Could not delete exitsing " + buildFile.getAbsolutePath() + ", to update it.");
+				LOGGER.error("Could not delete exitsing "
+						+ buildFile.getAbsolutePath() + ", to update it.");
 			}
 		}
 
@@ -157,7 +164,9 @@ public class AMLExporter {
 			fw.close();
 
 		} catch (Exception e) {
-			LOGGER.error("Could not write build.xml for automatic publishing on http://atlas.geopublishing.org", e);
+			LOGGER.error(
+					"Could not write build.xml for automatic publishing on http://atlas.geopublishing.org",
+					e);
 			return null;
 		}
 
@@ -165,14 +174,16 @@ public class AMLExporter {
 	}
 
 	/**
-	 * If <code>true</code>, only layers that are acessible in the exported atlas will be described in the atlas.xml
+	 * If <code>true</code>, only layers that are acessible in the exported
+	 * atlas will be described in the atlas.xml
 	 **/
 	private boolean exportMode = false;
 
 	private AtlasStatusDialogInterface statusWindow = null;
 
 	/**
-	 * The {@link AtlasConfigEditable} that is being exported by this {@link AMLExporter} instance
+	 * The {@link AtlasConfigEditable} that is being exported by this
+	 * {@link AMLExporter} instance
 	 **/
 	private final AtlasConfigEditable ace;
 
@@ -182,7 +193,7 @@ public class AMLExporter {
 
 	void info(final String msg) {
 		if (statusWindow != null)
-		statusWindow.setDescription(msg);
+			statusWindow.setDescription(msg);
 	}
 
 	void info(final Translation msg) {
@@ -194,8 +205,8 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever has been defined via
-	 * {@link #setAtlasXml(File)}
+	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever
+	 * has been defined via {@link #setAtlasXml(File)}
 	 * 
 	 * @return true if no exceptions where thrown.
 	 */
@@ -204,12 +215,13 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever has been defined via
-	 * {@link #setAtlasXml(File)}
+	 * Saves the {@link AtlasConfigEditable} to projdir/atlas.xml or whatever
+	 * has been defined via {@link #setAtlasXml(File)}
 	 * 
 	 * @return true if no exceptions where thrown.
 	 */
-	public boolean saveAtlasConfigEditable(final AtlasStatusDialogInterface statusWindow) throws Exception {
+	public boolean saveAtlasConfigEditable(
+			final AtlasStatusDialogInterface statusWindow) throws Exception {
 		this.statusWindow = statusWindow;
 
 		try {
@@ -219,11 +231,13 @@ public class AMLExporter {
 			atlasXmlhasBeenBackupped = backupAtlasXML();
 
 			/**
-			 * Saves the default CRS of that atlas to a file called {@link AtlasConfig#DEFAULTCRS_FILENAME} in
-			 * <code>ad</code> folder. Prefers to write the EPSG code of the CRS. Does not change the file it the
-			 * contents are the same (SVN friendly).
+			 * Saves the default CRS of that atlas to a file called
+			 * {@link AtlasConfig#DEFAULTCRS_FILENAME} in <code>ad</code>
+			 * folder. Prefers to write the EPSG code of the CRS. Does not
+			 * change the file it the contents are the same (SVN friendly).
 			 */
-			GeoExportUtil.writeProjectionFilePrefereEPSG(GeoImportUtil.getDefaultCRS(), new File(getAce().getAd(),
+			GeoExportUtil.writeProjectionFilePrefereEPSG(GeoImportUtil
+					.getDefaultCRS(), new File(getAce().getAd(),
 					AtlasConfig.DEFAULTCRS_FILENAME));
 
 			// Prepare the DOM document for writing
@@ -233,11 +247,13 @@ public class AMLExporter {
 				getAtlasXml().createNewFile();
 			}
 
-			FileOutputStream fileOutputStream = new FileOutputStream(getAtlasXml());
+			FileOutputStream fileOutputStream = new FileOutputStream(
+					getAtlasXml());
 
 			try { // fileOutputStream.close();
 
-				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream, "utf-8");
+				OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+						fileOutputStream, "utf-8");
 				try { // close outputStreamWriter.close();
 
 					// ****************************************************************************
@@ -246,7 +262,8 @@ public class AMLExporter {
 					final Result result = new StreamResult(outputStreamWriter);
 
 					// with indenting to make it human-readable
-					final TransformerFactory tf = TransformerFactory.newInstance();
+					final TransformerFactory tf = TransformerFactory
+							.newInstance();
 
 					// TODO Ging mit xerces, geht nicht mehr mit xalan
 					// tf.setAttribute("indent-number", new Integer(2));
@@ -258,7 +275,8 @@ public class AMLExporter {
 					// xformer.setOutputProperty(
 					// "{"+AMLUtil.AMLSCHEMALOCATION+"}indent-amount",
 					// "4");
-					xformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2");
+					xformer.setOutputProperty(
+							"{http://xml.apache.org/xalan}indent-amount", "2");
 
 					// Write the DOM document to the file
 					xformer.transform(source, result);
@@ -277,12 +295,15 @@ public class AMLExporter {
 
 			if (atlasXmlhasBeenBackupped)
 				try {
-					LOGGER.warn("copying " + AtlasConfig.ATLAS_XML_FILENAME + ".bak to "
-							+ AtlasConfig.ATLAS_XML_FILENAME);
-					IOUtil.copyFile(LOGGER, new File(getAce().getAd(), AtlasConfig.ATLAS_XML_FILENAME + ".bak"),
+					LOGGER.warn("copying " + AtlasConfig.ATLAS_XML_FILENAME
+							+ ".bak to " + AtlasConfig.ATLAS_XML_FILENAME);
+					IOUtil.copyFile(LOGGER, new File(getAce().getAd(),
+							AtlasConfig.ATLAS_XML_FILENAME + ".bak"),
 							getAtlasXml(), false);
 				} catch (final IOException ioEx) {
-					LOGGER.error("error copying " + AtlasConfig.ATLAS_XML_FILENAME + ".bak back.", ioEx);
+					LOGGER.error("error copying "
+							+ AtlasConfig.ATLAS_XML_FILENAME + ".bak back.",
+							ioEx);
 					throw (ioEx);
 				}
 
@@ -295,7 +316,8 @@ public class AMLExporter {
 	}
 
 	/**
-	 * @return A XML {@link Document} that fully represents the {@link AtlasConfig} of this atlas
+	 * @return A XML {@link Document} that fully represents the
+	 *         {@link AtlasConfig} of this atlas
 	 * @throws AtlasException
 	 * @author Stefan Alfons Tzeggai
 	 * @throws IOException
@@ -303,61 +325,79 @@ public class AMLExporter {
 	private final Document exportAtlasConfig() throws Exception {
 
 		// Create a DOM builder and parse the fragment
-		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		final DocumentBuilderFactory factory = DocumentBuilderFactory
+				.newInstance();
 		Document document = factory.newDocumentBuilder().newDocument();
 
 		// XML root element
 		final Element atlas = document.createElementNS(AMLUtil.AMLURI, "atlas");
 
 		// Linking this XML to the AtlasML Schema
-		final Attr namespaces = document.createAttributeNS("http://www.w3.org/2001/XMLSchema-instance",
-				"schemaLocation");
-		namespaces.setValue(AMLUtil.AMLURI + " http://localhost:" + Webserver.DEFAULTPORT
+		final Attr namespaces = document.createAttributeNS(
+				"http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
+		namespaces.setValue(AMLUtil.AMLURI + " http://localhost:"
+				+ Webserver.DEFAULTPORT
 				+ "/skrueger/atlas/resource/AtlasML.xsd");
 		atlas.setAttributeNode(namespaces);
 
 		// Storing the version this atlas.xml is being created with inside the
 		// atlas.xml
-		atlas.setAttribute(AMLUtil.ATT_majVersion, String.valueOf(ReleaseUtil.getVersionMaj(GpCoreUtil.class)));
-		atlas.setAttribute(AMLUtil.ATT_minVersion, String.valueOf(ReleaseUtil.getVersionMin(GpCoreUtil.class)));
-		atlas.setAttribute(AMLUtil.ATT_buildVersion, String.valueOf(ReleaseUtil.getVersionBuild(GpCoreUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_majVersion,
+				String.valueOf(ReleaseUtil.getVersionMaj(GpCoreUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_minVersion,
+				String.valueOf(ReleaseUtil.getVersionMin(GpCoreUtil.class)));
+		atlas.setAttribute(AMLUtil.ATT_buildVersion,
+				String.valueOf(ReleaseUtil.getVersionBuild(GpCoreUtil.class)));
 
 		// Store the atlasBaseName attribute, since 1.7
 		atlas.setAttribute(AMLUtil.ATT_atlasBasename, getAce().getBaseName());
 
 		// Store the JWS export jnlp baseurl parameter, since 1.6
-		atlas.setAttribute(AMLUtil.ATT_jnlpBaseUrl, String.valueOf(getAce().getJnlpBaseUrl()));
+		atlas.setAttribute(AMLUtil.ATT_jnlpBaseUrl,
+				String.valueOf(getAce().getJnlpBaseUrl()));
 
 		// Store the position of the maplogo, since 1.7
-		atlas.setAttribute(AMLUtil.ATT_maplogoPosition, String.valueOf(getAce().getMaplogoPosition()));
+		atlas.setAttribute(AMLUtil.ATT_maplogoPosition,
+				String.valueOf(getAce().getMaplogoPosition()));
 
 		// <aml:name, desc, creator, copyright
-		atlas.appendChild(exportTranslation(document, "name", getAce().getTitle()));
-		atlas.appendChild(exportTranslation(document, "desc", getAce().getDesc()));
-		atlas.appendChild(exportTranslation(document, "creator", getAce().getCreator()));
-		atlas.appendChild(exportTranslation(document, "copyright", getAce().getCopyright()));
+		atlas.appendChild(exportTranslation(document, "name", getAce()
+				.getTitle()));
+		atlas.appendChild(exportTranslation(document, "desc", getAce()
+				.getDesc()));
+		atlas.appendChild(exportTranslation(document, "creator", getAce()
+				.getCreator()));
+		atlas.appendChild(exportTranslation(document, "copyright", getAce()
+				.getCopyright()));
 
 		// <aml:atlasversion>
-		final Element atlasversion = document.createElementNS(AMLUtil.AMLURI, "atlasversion");
-		atlasversion.appendChild(document.createTextNode(getAce().getAtlasversion().toString()));
+		final Element atlasversion = document.createElementNS(AMLUtil.AMLURI,
+				"atlasversion");
+		atlasversion.appendChild(document.createTextNode(getAce()
+				.getAtlasversion().toString()));
 		atlas.appendChild(atlasversion);
 
 		// <aml:gphoster auth=...>
-		Element gphosterauth = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_GPHOSTER);
-		gphosterauth.setAttribute(AMLUtil.ATT_AUTH, getAce().getGpHosterAuth() + "");
+		Element gphosterauth = document.createElementNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_GPHOSTER);
+		gphosterauth.setAttribute(AMLUtil.ATT_AUTH, getAce().getGpHosterAuth()
+				+ "");
 		atlas.appendChild(gphosterauth);
 
 		// <aml:supportedLanguages>
 		// Loops over List of supported Languagecodes
-		final Element supportedLanguages = document.createElementNS(AMLUtil.AMLURI, "supportedLanguages");
+		final Element supportedLanguages = document.createElementNS(
+				AMLUtil.AMLURI, "supportedLanguages");
 		for (final String langcode : getAce().getLanguages()) {
-			final Element language = document.createElementNS(AMLUtil.AMLURI, "language");
+			final Element language = document.createElementNS(AMLUtil.AMLURI,
+					"language");
 			language.setAttribute("lang", langcode);
 			supportedLanguages.appendChild(language);
 		}
 		atlas.appendChild(supportedLanguages);
 
-		List<DpEntry<? extends ChartStyle>> unusedDpes = getAce().getUnusedDpes();
+		List<DpEntry<? extends ChartStyle>> unusedDpes = getAce()
+				.getUnusedDpes();
 
 		// Loop over all data pool entries and add them to the AML Document
 		for (final DpEntry de : getAce().getDataPool().values()) {
@@ -375,8 +415,10 @@ public class AMLExporter {
 
 				try {
 					final Style style = dpl.getStyle();
-					StylingUtil.saveStyleToSld(style, DataUtilities.urlToFile(DataUtilities.changeUrlExt(
-							AVSwingUtil.getUrl(dpl, statusWindow), "sld")));
+					StylingUtil.saveStyleToSld(style, DataUtilities
+							.urlToFile(DataUtilities.changeUrlExt(
+									AVSwingUtil.getUrl(dpl, statusWindow),
+									"sld")));
 
 				} catch (final Exception e) {
 					LOGGER.error("Could not transform Style for " + dpl, e);
@@ -388,7 +430,8 @@ public class AMLExporter {
 			}
 
 			if (de instanceof DpLayerVectorFeatureSource) {
-				exDpe = exportDatapoolLayerVector(document, (DpLayerVectorFeatureSource) de);
+				exDpe = exportDatapoolLayerVector(document,
+						(DpLayerVectorFeatureSource) de);
 
 			} else if (de instanceof DpLayerRaster) {
 				exDpe = exportDatapoolLayerRaster(document, (DpLayerRaster) de);
@@ -423,27 +466,31 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Creates an aml:fonts tag that lists the names of all the fonts files in ad/font folder. The list of fonts is
-	 * determined while
+	 * Creates an aml:fonts tag that lists the names of all the fonts files in
+	 * ad/font folder. The list of fonts is determined while
 	 */
 	protected Node exportFonts(Document document) {
-		final Element fontsElement = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_FONTS);
+		final Element fontsElement = document.createElementNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_FONTS);
 
 		File fontsDir = getAce().getFontsDir();
 
-		Collection<File> listFiles = FileUtils.listFiles(fontsDir, GpUtil.FontsFilesFilter,
-				FilterUtil.BlacklistedFoldersFilter);
+		Collection<File> listFiles = FileUtils.listFiles(fontsDir,
+				GpUtil.FontsFilesFilter, FilterUtil.BlacklistedFoldersFilter);
 		for (File f : listFiles) {
 
 			// Test whether the font is readable
-			String relPath = f.getAbsolutePath().substring(fontsDir.getAbsolutePath().length() + 1);
+			String relPath = f.getAbsolutePath().substring(
+					fontsDir.getAbsolutePath().length() + 1);
 			try {
 				Font.createFont(Font.TRUETYPE_FONT, f);
-				final Element fontElement = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_FONT);
+				final Element fontElement = document.createElementNS(
+						AMLUtil.AMLURI, AMLUtil.TAG_FONT);
 				fontElement.setAttribute(AMLUtil.ATT_FONT_FILENAME, relPath);
 				fontsElement.appendChild(fontElement);
 			} catch (Exception e) {
-				LOGGER.info("Not exporting a reference to broken font " + relPath + " in " + fontsDir, e);
+				LOGGER.info("Not exporting a reference to broken font "
+						+ relPath + " in " + fontsDir, e);
 			}
 
 		}
@@ -456,9 +503,11 @@ public class AMLExporter {
 			throw new AtlasCancelException();
 	}
 
-	private Node exportDatapoolMediaPdf(final Document document, final DpMediaPDF dpe) {
+	private Node exportDatapoolMediaPdf(final Document document,
+			final DpMediaPDF dpe) {
 		// LOGGER.debug("exportDatapoolMediaPDF " + dpe + " to AML");
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "pdfMedia");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"pdfMedia");
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
@@ -470,15 +519,18 @@ public class AMLExporter {
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
-		final Element datadirname = document.createElementNS(AMLUtil.AMLURI, "dataDirname");
+		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+				"dataDirname");
 		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
 		element.appendChild(datadirname);
 
 		// Creating a aml:filename tag...
-		final Element filename = document.createElementNS(AMLUtil.AMLURI, "filename");
+		final Element filename = document.createElementNS(AMLUtil.AMLURI,
+				"filename");
 		filename.appendChild(document.createTextNode(dpe.getFilename()));
 		element.appendChild(filename);
 
@@ -496,27 +548,33 @@ public class AMLExporter {
 	 * @throws DOMException
 	 * @throws AtlasCancelException
 	 */
-	private Node exportMapPool(final Document document) throws DOMException, AtlasExportException, AtlasCancelException {
+	private Node exportMapPool(final Document document) throws DOMException,
+			AtlasExportException, AtlasCancelException {
 		final MapPool mapPool = getAce().getMapPool();
 
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "mapPool");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"mapPool");
 
 		// Test whether a start map exists. When no start-map is defined, the
 		// user can not export.
-		if (mapPool.getStartMapID() != null && mapPool.get(mapPool.getStartMapID()) != null) {
+		if (mapPool.getStartMapID() != null
+				&& mapPool.get(mapPool.getStartMapID()) != null) {
 			element.setAttribute("startMap", mapPool.getStartMapID());
 		} else {
 			if (exportMode)
-				throw new AtlasExportException(GpUtil.R("ExportAtlas.NeedAtLeastOneMap"));
+				throw new AtlasExportException(
+						GpUtil.R("ExportAtlas.NeedAtLeastOneMap"));
 		}
 
 		// maps MUST contain at least one map
 		final Collection<Map> maps = mapPool.values();
-		List<String> notReferencedDpeIDs = getAce().lisIdsNotReferencedInGroupTree();
+		List<String> notReferencedDpeIDs = getAce()
+				.lisIdsNotReferencedInGroupTree();
 		for (final Map map : maps) {
 			checkCancel();
 
-			if (exportMode && notReferencedDpeIDs.contains(map.getId()) && !map.getId().equals(mapPool.getStartMapID())) {
+			if (exportMode && notReferencedDpeIDs.contains(map.getId())
+					&& !map.getId().equals(mapPool.getStartMapID())) {
 				// Only export maps that are referenced in the group tree or are
 				// marked as the start map
 				continue;
@@ -536,7 +594,8 @@ public class AMLExporter {
 	 * @return
 	 * @throws AtlasExportException
 	 */
-	private Node exportMap(final Document document, final Map map) throws AtlasExportException {
+	private Node exportMap(final Document document, final Map map)
+			throws AtlasExportException {
 
 		final Element element = document.createElementNS(AMLUtil.AMLURI, "map");
 		element.setAttribute("id", map.getId());
@@ -560,44 +619,60 @@ public class AMLExporter {
 
 		// Creating optinal aml:keywords tag
 		if (!map.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", map.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					map.getKeywords()));
 
 		// Creating optional startViewEnvelope tag ...
 		if (map.getDefaultMapArea() != null) {
-			final Element startViewEnvelope = document.createElementNS(AMLUtil.AMLURI, "startViewEnvelope");
+			final Element startViewEnvelope = document.createElementNS(
+					AMLUtil.AMLURI, "startViewEnvelope");
 			final Envelope area = map.getDefaultMapArea();
-			startViewEnvelope.appendChild(document.createTextNode(area.getMinX() + "," + area.getMinY() + " "
-					+ area.getMaxX() + "," + area.getMaxY()));
+			startViewEnvelope.appendChild(document.createTextNode(area
+					.getMinX()
+					+ ","
+					+ area.getMinY()
+					+ " "
+					+ area.getMaxX()
+					+ "," + area.getMaxY()));
 			element.appendChild(startViewEnvelope);
 		}
 
 		// Creating optional maxMapExtend tag ...
 		if (map.getMaxExtend() != null) {
-			final Element maxExtend = document.createElementNS(AMLUtil.AMLURI, "maxExtend");
+			final Element maxExtend = document.createElementNS(AMLUtil.AMLURI,
+					"maxExtend");
 			final Envelope area = map.getMaxExtend();
-			maxExtend.appendChild(document.createTextNode(area.getMinX() + "," + area.getMinY() + " " + area.getMaxX()
-					+ "," + area.getMaxY()));
+			maxExtend.appendChild(document.createTextNode(area.getMinX() + ","
+					+ area.getMinY() + " " + area.getMaxX() + ","
+					+ area.getMaxY()));
 			element.appendChild(maxExtend);
 		}
 
 		// Is the ScalePanel visible in this map?
-		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE, Boolean.valueOf(map.isScaleVisible()).toString());
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_VISIBLE,
+				Boolean.valueOf(map.isScaleVisible()).toString());
 
 		// The units used in the ScalePanel?
-		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits().toString());
+		element.setAttribute(AMLUtil.ATT_MAP_SCALE_UNITS, map.getScaleUnits()
+				.toString());
 
 		// Are the vert. and hor. GridPanels visible in this map?
-		element.setAttribute("gridPanelVisible", Boolean.valueOf(map.isGridPanelVisible()).toString());
+		element.setAttribute("gridPanelVisible",
+				Boolean.valueOf(map.isGridPanelVisible()).toString());
 		// Which formatter to use for the map grid?
-		element.setAttribute("gridPanelFormatter", map.getGridPanelFormatter().getId());
+		element.setAttribute("gridPanelFormatter", map.getGridPanelFormatter()
+				.getId());
 
 		// That .prj file store the CRS used in the map grid panel (de.:
 		// Kartenrand)
-		final File outputMapGridPanelPrjFile = new File(getAce().getHtmlDirFor(map), Map.GRIDPANEL_CRS_FILENAME);
+		final File outputMapGridPanelPrjFile = new File(getAce().getHtmlDirFor(
+				map), Map.GRIDPANEL_CRS_FILENAME);
 		try {
-			GeoExportUtil.writeProjectionFilePrefereEPSG(map.getGridPanelCRS(), outputMapGridPanelPrjFile);
+			GeoExportUtil.writeProjectionFilePrefereEPSG(map.getGridPanelCRS(),
+					outputMapGridPanelPrjFile);
 		} catch (final IOException e1) {
-			throw new AtlasExportException("Failed to save CRS: " + map.getGridPanelCRS() + " to "
+			throw new AtlasExportException("Failed to save CRS: "
+					+ map.getGridPanelCRS() + " to "
 					+ outputMapGridPanelPrjFile, e1);
 		}
 
@@ -619,14 +694,17 @@ public class AMLExporter {
 			if (styles.size() == 0)
 				continue;
 
-			final Element additionalStyles = document.createElementNS(AMLUtil.AMLURI, "additionalStyles");
+			final Element additionalStyles = document.createElementNS(
+					AMLUtil.AMLURI, AMLUtil.TAG_ADDITIONAL_STYLES);
 			additionalStyles.setAttribute("layerID", layerID);
 			final String selectedStyleID = map.getSelectedStyleID(layerID);
 			if (selectedStyleID != null)
-				additionalStyles.setAttribute("selectedStyleID", selectedStyleID);
+				additionalStyles.setAttribute("selectedStyleID",
+						selectedStyleID);
 
 			for (final String styleID : styles) {
-				final Element styleidElement = document.createElementNS(AMLUtil.AMLURI, "styleid");
+				final Element styleidElement = document.createElementNS(
+						AMLUtil.AMLURI, "styleid");
 				styleidElement.appendChild(document.createTextNode(styleID));
 				additionalStyles.appendChild(styleidElement);
 			}
@@ -648,11 +726,13 @@ public class AMLExporter {
 			if (chartIDs.size() == 0)
 				continue;
 
-			final Element availableCharts = document.createElementNS(AMLUtil.AMLURI, "availableCharts");
+			final Element availableCharts = document.createElementNS(
+					AMLUtil.AMLURI, "availableCharts");
 			availableCharts.setAttribute("layerID", layerID);
 
 			for (final String chartID : chartIDs) {
-				final Element styleidElement = document.createElementNS(AMLUtil.AMLURI, "chartID");
+				final Element styleidElement = document.createElementNS(
+						AMLUtil.AMLURI, "chartID");
 				styleidElement.appendChild(document.createTextNode(chartID));
 				availableCharts.appendChild(styleidElement);
 			}
@@ -664,17 +744,21 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Creates an < aml:desc > JDOM {@link Node} for the given {@link Translation}
+	 * Creates an < aml:desc > JDOM {@link Node} for the given
+	 * {@link Translation}
 	 */
-	private final Element exportTranslation(final Document document, final String tagname, final Translation translation) {
-		final Element element = document.createElementNS(AMLUtil.AMLURI, tagname);
+	private final Element exportTranslation(final Document document,
+			final String tagname, final Translation translation) {
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				tagname);
 
 		// Creating a sequence of <aml:translation> tags, minOccurs=1
 		if (translation == null) {
 			final String warning = "No translation given for " + tagname
 					+ "\nAtlasMarkupLanguage will probably not be valid.";
 			if (statusWindow != null) {
-				statusWindow.warningOccurred(this.getClass().getSimpleName(), null, warning);
+				statusWindow.warningOccurred(this.getClass().getSimpleName(),
+						null, warning);
 			} else
 				Log.warn(warning);
 		} else {
@@ -685,7 +769,8 @@ public class AMLExporter {
 
 			}
 			for (final String key : translation.keySet()) {
-				final Element descTranslation = document.createElementNS(AMLUtil.AMLURI, "translation");
+				final Element descTranslation = document.createElementNS(
+						AMLUtil.AMLURI, "translation");
 				descTranslation.setAttribute("lang", key);
 				String string = translation.get(key);
 				if (string == null)
@@ -697,9 +782,11 @@ public class AMLExporter {
 		return element;
 	}
 
-	private final Element exportDatapoolMediaVideo(final Document document, final DpMediaVideo dpe) {
+	private final Element exportDatapoolMediaVideo(final Document document,
+			final DpMediaVideo dpe) {
 		// LOGGER.debug("exportDatapoolMediaVideo " + dpe + " to AML");
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "videoMedia");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"videoMedia");
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
@@ -713,15 +800,18 @@ public class AMLExporter {
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
-		final Element datadirname = document.createElementNS(AMLUtil.AMLURI, "dataDirname");
+		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+				"dataDirname");
 		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
 		element.appendChild(datadirname);
 
 		// Creating a aml:filename tag...
-		final Element filename = document.createElementNS(AMLUtil.AMLURI, "filename");
+		final Element filename = document.createElementNS(AMLUtil.AMLURI,
+				"filename");
 		filename.appendChild(document.createTextNode(dpe.getFilename()));
 		element.appendChild(filename);
 
@@ -735,8 +825,8 @@ public class AMLExporter {
 	 * @throws IOException
 	 *             Thrown if e.g. saving the .cpg fails
 	 */
-	private final Element exportDatapoolLayerVector(final Document document, final DpLayerVectorFeatureSource dpe)
-			throws IOException {
+	private final Element exportDatapoolLayerVector(final Document document,
+			final DpLayerVectorFeatureSource dpe) throws IOException {
 
 		if (dpe.isBroken()) {
 			LOGGER.info("Trying to save a broken layer..." + dpe);
@@ -748,7 +838,8 @@ public class AMLExporter {
 		GpUtil.writeCpg(dpe);
 
 		// Creating a aml:rasterLayer tag...
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "vectorLayer");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"vectorLayer");
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
@@ -787,19 +878,23 @@ public class AMLExporter {
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
-		final Element datadirname = document.createElementNS(AMLUtil.AMLURI, "dataDirname");
+		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+				"dataDirname");
 		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
 		element.appendChild(datadirname);
 
 		// Creating a aml:filename tag...
-		final Element filename = document.createElementNS(AMLUtil.AMLURI, "filename");
+		final Element filename = document.createElementNS(AMLUtil.AMLURI,
+				"filename");
 		filename.appendChild(document.createTextNode(dpe.getFilename()));
 		element.appendChild(filename);
 
-		for (final AttributeMetadataImpl attrib : dpe.getAttributeMetaDataMap().values()) {
+		for (final AttributeMetadataImpl attrib : dpe.getAttributeMetaDataMap()
+				.values()) {
 			final Element att = exportAttributeMetadata(dpe, document, attrib);
 			if (att != null)
 				element.appendChild(att);
@@ -818,14 +913,17 @@ public class AMLExporter {
 		final Filter filter = dpe.getFilter();
 		if (filter != Filter.INCLUDE) {
 			// Creating a aml:filename tag...
-			final Element filterRuleElement = document.createElementNS(AMLUtil.AMLURI, "filterRule");
-			filterRuleElement.appendChild(document.createTextNode(CQL.toCQL(filter)));
+			final Element filterRuleElement = document.createElementNS(
+					AMLUtil.AMLURI, "filterRule");
+			filterRuleElement.appendChild(document.createTextNode(CQL
+					.toCQL(filter)));
 			element.appendChild(filterRuleElement);
 		}
 
 		/**
-		 * Exporting the list of charts for this layer if any exist. This has to be called, AFTER the attribute meta
-		 * data has been exported. (When parsing the XML, we need the NODATA values first)
+		 * Exporting the list of charts for this layer if any exist. This has to
+		 * be called, AFTER the attribute meta data has been exported. (When
+		 * parsing the XML, we need the NODATA values first)
 		 */
 		exportChartStyleDescriptions(document, dpe, element);
 
@@ -834,42 +932,49 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Exports the list of charts for this layer. Any old chart style files are first deleted.
+	 * Exports the list of charts for this layer. Any old chart style files are
+	 * first deleted.
 	 */
-	private void exportChartStyleDescriptions(final Document document, final DpLayerVectorFeatureSource dpe,
-			final Element element) {
+	private void exportChartStyleDescriptions(final Document document,
+			final DpLayerVectorFeatureSource dpe, final Element element) {
 
-		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe.getAtlasConfig();
+		final AtlasConfigEditable ace = (AtlasConfigEditable) dpe
+				.getAtlasConfig();
 
-		final File chartsFolder = new File(ace.getFileFor(dpe).getParentFile(), "charts");
+		final File chartsFolder = new File(ace.getFileFor(dpe).getParentFile(),
+				"charts");
 		chartsFolder.mkdirs();
 		/*
 		 * Delete all .cs file before saving the charts that actually exist
 		 */
 		{
 
-			final String[] oldChartFilenames = chartsFolder.list(new FilenameFilter() {
+			final String[] oldChartFilenames = chartsFolder
+					.list(new FilenameFilter() {
 
-				@Override
-				public boolean accept(final File dir, final String name) {
-					if (name.endsWith(CHARTSTYLE_FILEENDING))
-						return true;
-					return false;
-				}
+						@Override
+						public boolean accept(final File dir, final String name) {
+							if (name.endsWith(CHARTSTYLE_FILEENDING))
+								return true;
+							return false;
+						}
 
-			});
+					});
 			for (final String oldChartFilename : oldChartFilenames) {
-				final File chartSTyeFile = new File(chartsFolder, oldChartFilename);
+				final File chartSTyeFile = new File(chartsFolder,
+						oldChartFilename);
 				if (!chartSTyeFile.delete())
-					throw new IllegalArgumentException("Unable to delte the old chart description file "
-							+ chartSTyeFile.getAbsolutePath());
+					throw new IllegalArgumentException(
+							"Unable to delte the old chart description file "
+									+ chartSTyeFile.getAbsolutePath());
 			}
 		}
 
 		/* Iterate over all charts and create .chart files */
 		for (final FeatureChartStyle chartStyle : dpe.getCharts()) {
 
-			final String csFilename = chartStyle.getID() + CHARTSTYLE_FILEENDING;
+			final String csFilename = chartStyle.getID()
+					+ CHARTSTYLE_FILEENDING;
 
 			final File chartFile = new File(chartsFolder, csFilename);
 
@@ -881,16 +986,20 @@ public class AMLExporter {
 				// System.out.println("when saving\n"+"  "+chartStyle);
 
 				if (chartStyle instanceof FeatureChartStyle) {
-					FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY.writeStyleToFile(chartStyle, "chartStyle", chartFile);
+					FeatureChartUtil.FEATURE_CHART_STYLE_FACTORY
+							.writeStyleToFile(chartStyle, "chartStyle",
+									chartFile);
 				} else {
-					ChartStyleUtil.CHART_STYLE_FACTORY.writeStyleToFile(chartStyle, "chartStyle", chartFile);
+					ChartStyleUtil.CHART_STYLE_FACTORY.writeStyleToFile(
+							chartStyle, "chartStyle", chartFile);
 				}
 			} catch (final Exception e) {
 				LOGGER.error("Error writing the ChartStyle to XML ", e);
 			}
 
 			// Create an aml:chart tag...
-			final Element chartElement = document.createElementNS(AMLUtil.AMLURI, "chart");
+			final Element chartElement = document.createElementNS(
+					AMLUtil.AMLURI, "chart");
 			chartElement.setAttribute("filename", csFilename);
 			element.appendChild(chartElement);
 		}
@@ -905,8 +1014,10 @@ public class AMLExporter {
 	 *            {@link LayerStyle} to export
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private Element exportLayerStyle(final Document document, final LayerStyle ls) {
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "layerStyle");
+	private Element exportLayerStyle(final Document document,
+			final LayerStyle ls) {
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_ADDITIONAL_STYLE);
 
 		element.setAttribute("filename", ls.getFilename());
 		element.setAttribute("id", ls.getFilename());
@@ -919,23 +1030,32 @@ public class AMLExporter {
 	}
 
 	/**
-	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute tag.
+	 * Exports one single {@link AttributeMetadataImpl} to an aml:dataAttribute
+	 * tag.
 	 * 
 	 * @return {@link org.w3c.dom.Element} that represents the XML tag
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private Element exportAttributeMetadata(final DpLayerVectorFeatureSource dpe, final Document document,
+	private Element exportAttributeMetadata(
+			final DpLayerVectorFeatureSource dpe, final Document document,
 			final AttributeMetadataImpl attrib) {
 
-		final Element element = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_attributeMetadata);
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				AMLUtil.TAG_attributeMetadata);
 
-		element.setAttribute(AMLUtil.ATT_namespace, attrib.getName().getNamespaceURI());
-		element.setAttribute(AMLUtil.ATT_localname, attrib.getName().getLocalPart());
+		element.setAttribute(AMLUtil.ATT_namespace, attrib.getName()
+				.getNamespaceURI());
+		element.setAttribute(AMLUtil.ATT_localname, attrib.getName()
+				.getLocalPart());
 
-		element.setAttribute(AMLUtil.ATT_weight, new Integer(new Double(attrib.getWeight()).intValue()).toString());
-		element.setAttribute(AMLUtil.ATT_functionA, new Double(attrib.getFunctionA()).toString());
-		element.setAttribute(AMLUtil.ATT_functionX, new Double(attrib.getFunctionX()).toString());
+		element.setAttribute(AMLUtil.ATT_weight,
+				new Integer(new Double(attrib.getWeight()).intValue())
+						.toString());
+		element.setAttribute(AMLUtil.ATT_functionA,
+				new Double(attrib.getFunctionA()).toString());
+		element.setAttribute(AMLUtil.ATT_functionX,
+				new Double(attrib.getFunctionX()).toString());
 
 		element.setAttribute("visible", String.valueOf(attrib.isVisible()));
 
@@ -943,16 +1063,19 @@ public class AMLExporter {
 			element.setAttribute("unit", attrib.getUnit());
 
 		// Creating a aml:name tag...
-		element.appendChild(exportTranslation(document, "name", attrib.getTitle()));
+		element.appendChild(exportTranslation(document, "name",
+				attrib.getTitle()));
 
 		// Creating a aml:desc tag...
-		element.appendChild(exportTranslation(document, "desc", attrib.getDesc()));
+		element.appendChild(exportTranslation(document, "desc",
+				attrib.getDesc()));
 
 		// Storing the NODATA values
 		for (Object nodatavalue : attrib.getNodataValues()) {
 			if (nodatavalue == null)
 				continue;
-			Element ndValue = document.createElementNS(AMLUtil.AMLURI, AMLUtil.TAG_nodataValue);
+			Element ndValue = document.createElementNS(AMLUtil.AMLURI,
+					AMLUtil.TAG_nodataValue);
 			ndValue.setTextContent(nodatavalue.toString());
 			element.appendChild(ndValue);
 		}
@@ -965,15 +1088,18 @@ public class AMLExporter {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private final Element exportDatapoolLayerRaster(final Document document, final DpLayerRaster dpe) {
+	private final Element exportDatapoolLayerRaster(final Document document,
+			final DpLayerRaster<? extends Object, ChartStyle> dpe) {
 
 		// Creating a aml:rasterLayer tag...
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "rasterLayer");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"rasterLayer");
 		element.setAttribute("id", dpe.getId());
 		element.setAttribute("exportable", dpe.isExportable().toString());
 
 		if (dpe.getNodataValue() != null)
-			element.setAttribute(AMLUtil.ATT_NODATA, String.valueOf(dpe.getNodataValue()));
+			element.setAttribute(AMLUtil.ATT_NODATA,
+					String.valueOf(dpe.getNodataValue()));
 
 		// Creating a aml:name tag...
 		element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
@@ -983,20 +1109,32 @@ public class AMLExporter {
 
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", dpe.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					dpe.getKeywords()));
 
 		// Creating a aml:dataDirname tag...
-		final Element datadirname = document.createElementNS(AMLUtil.AMLURI, "dataDirname");
+		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+				"dataDirname");
 		datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
 		element.appendChild(datadirname);
 
 		// Creating a aml:filename tag...
-		final Element filename = document.createElementNS(AMLUtil.AMLURI, "filename");
+		final Element filename = document.createElementNS(AMLUtil.AMLURI,
+				"filename");
 		filename.appendChild(document.createTextNode(dpe.getFilename()));
 		element.appendChild(filename);
 
-		// Creating aml:rasterLegendData
-		element.appendChild(exportRasterLegendData(document, dpe.getLegendMetaData()));
+		/**
+		 * Exporting the additional and optional LayerStyles
+		 */
+		for (final LayerStyle ls : dpe.getLayerStyles()) {
+			element.appendChild(exportLayerStyle(document, ls));
+		}
+
+		//
+		// // Creating aml:rasterLegendData
+		// element.appendChild(exportRasterLegendData(document,
+		// dpe.getLegendMetaData()));
 
 		return element;
 	}
@@ -1010,14 +1148,19 @@ public class AMLExporter {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	private Node exportRasterLegendData(final Document document, final RasterLegendData legendMetaData) {
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "rasterLegendData");
-		element.setAttribute(AMLUtil.ATT_paintGaps, legendMetaData.isPaintGaps().toString());
+	private Node exportRasterLegendData(final Document document,
+			final RasterLegendData legendMetaData) {
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"rasterLegendData");
+		element.setAttribute(AMLUtil.ATT_paintGaps, legendMetaData
+				.isPaintGaps().toString());
 
 		for (final Double key : legendMetaData.getSortedKeys()) {
-			final Element item = document.createElementNS(AMLUtil.AMLURI, "rasterLegendItem");
+			final Element item = document.createElementNS(AMLUtil.AMLURI,
+					"rasterLegendItem");
 			item.setAttribute("value", key.toString());
-			item.appendChild(exportTranslation(document, "label", legendMetaData.get(key)));
+			item.appendChild(exportTranslation(document, "label",
+					legendMetaData.get(key)));
 			element.appendChild(item);
 		}
 		return element;
@@ -1087,33 +1230,39 @@ public class AMLExporter {
 	 *            The {@link Group} to start with
 	 * @throws AtlasFatalException
 	 */
-	private final Element exportGroup(final Document document, final Group group) throws AtlasFatalException {
+	private final Element exportGroup(final Document document, final Group group)
+			throws AtlasFatalException {
 		// LOGGER.debug("exportGroup " + group + " to AML");
-		final Element element = document.createElementNS(AMLUtil.AMLURI, "group");
+		final Element element = document.createElementNS(AMLUtil.AMLURI,
+				"group");
 
 		// Store whether this is marked as the Help menu in an optional
 		// attribute
 		if (group.isHelpMenu()) {
-			final String isHelpString = Boolean.valueOf(group.isHelpMenu()).toString();
+			final String isHelpString = Boolean.valueOf(group.isHelpMenu())
+					.toString();
 			element.setAttribute("isHelpMenu", isHelpString);
 		}
 
 		// Store whether this is marked as the File menu in an optional
 		// attribute
 		if (group.isFileMenu()) {
-			final String isFileString = Boolean.valueOf(group.isFileMenu()).toString();
+			final String isFileString = Boolean.valueOf(group.isFileMenu())
+					.toString();
 			element.setAttribute("isFileMenu", isFileString);
 		}
 
 		// Creating a aml:name tag...
-		element.appendChild(exportTranslation(document, "name", group.getTitle()));
+		element.appendChild(exportTranslation(document, "name",
+				group.getTitle()));
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", group.getDesc()));
 
 		// Creating optional aml:keywords tag
 		if (!group.getKeywords().isEmpty())
-			element.appendChild(exportTranslation(document, "keywords", group.getKeywords()));
+			element.appendChild(exportTranslation(document, "keywords",
+					group.getKeywords()));
 
 		final Enumeration<TreeNode> children = group.children();
 		while (children.hasMoreElements()) {
@@ -1128,13 +1277,15 @@ public class AMLExporter {
 
 			} else if (nextElement instanceof MapRef) {
 				final MapRef mref = (MapRef) nextElement;
-				final Element datapoolRef = document.createElementNS(AMLUtil.AMLURI, "mapRef");
+				final Element datapoolRef = document.createElementNS(
+						AMLUtil.AMLURI, "mapRef");
 				datapoolRef.setAttribute("id", mref.getTargetId());
 				element.appendChild(datapoolRef);
 
 			} else {
-				throw new AtlasFatalException("Can't export Group " + group + " because of an unknown TreeNode "
-						+ nextElement + " of class " + nextElement.getClass().getSimpleName());
+				throw new AtlasFatalException("Can't export Group " + group
+						+ " because of an unknown TreeNode " + nextElement
+						+ " of class " + nextElement.getClass().getSimpleName());
 			}
 		}
 		return element;
@@ -1148,27 +1299,31 @@ public class AMLExporter {
 	 * @return A node that can be inserted into XML
 	 */
 	private Element exportDatapoolRef(final Document document, final DpRef ref) {
-		final Element datapoolRef = document.createElementNS(AMLUtil.AMLURI, "datapoolRef");
+		final Element datapoolRef = document.createElementNS(AMLUtil.AMLURI,
+				"datapoolRef");
 		datapoolRef.setAttribute("id", ref.getTargetId());
 
 		return datapoolRef;
 	}
 
 	/**
-	 * DataPoolRefs used inside a <code>aml:map</code> definition can have two more attributes which are saved inside a
-	 * {@link java.util.Map} in the {@link Map}.
+	 * DataPoolRefs used inside a <code>aml:map</code> definition can have two
+	 * more attributes which are saved inside a {@link java.util.Map} in the
+	 * {@link Map}.
 	 * 
 	 * @param document
 	 * @param dpr
 	 * @param map
 	 * @return A node that can be inserted into XML
 	 */
-	private Node exportDatapoolRef(final Document document, final DpRef dpr, final Map map) {
+	private Node exportDatapoolRef(final Document document, final DpRef dpr,
+			final Map map) {
 		final Element datapoolRef = exportDatapoolRef(document, dpr);
 
 		{ // Add the optional hideInLegend attribute if it is set. false =
 			// default
-			final Boolean hideme = map.getHideInLegendMap().get(dpr.getTargetId());
+			final Boolean hideme = map.getHideInLegendMap().get(
+					dpr.getTargetId());
 			if (hideme != null && hideme == true) {
 				datapoolRef.setAttribute("hideInLegend", "true");
 			}
@@ -1176,7 +1331,8 @@ public class AMLExporter {
 
 		{ // Add the optional minimizeInLegend attribute if it is set. false =
 			// default
-			final Boolean minimizeMe = map.getMinimizedInLegendMap().get(dpr.getTargetId());
+			final Boolean minimizeMe = map.getMinimizedInLegendMap().get(
+					dpr.getTargetId());
 			if (minimizeMe != null && minimizeMe == true) {
 				datapoolRef.setAttribute("minimizeInLegend", "true");
 			}
@@ -1209,27 +1365,31 @@ public class AMLExporter {
 			// Copy Schema AtlasML.xsd to projectDir
 			LOGGER.debug("Copy Schema AtlasML.xsd into " + getAce().getAd());
 
-			URL resourceSchema = AtlasConfig.class.getResource("resource/AtlasML.xsd");
+			URL resourceSchema = AtlasConfig.class
+					.getResource("resource/AtlasML.xsd");
 			LOGGER.debug("schemaURL = " + resourceSchema);
 			if (resourceSchema == null) {
 				LOGGER.debug("schemaURL == null, try the new way");
 				final String location = "skrueger/atlas/resource/AtlasML.xsd";
-				resourceSchema = getAce().getResLoMan().getResourceAsUrl(location);
+				resourceSchema = getAce().getResLoMan().getResourceAsUrl(
+						location);
 				// LOGGER.debug("schemaURL (new) = " + resourceSchema);
 			}
 
 			// File schemaFile = new File(resourceSchema.toURI());
-			org.apache.commons.io.FileUtils.copyURLToFile(resourceSchema, new File(getAtlasXml().getParentFile(),
-					"AtlasML.xsd"));
+			org.apache.commons.io.FileUtils.copyURLToFile(resourceSchema,
+					new File(getAtlasXml().getParentFile(), "AtlasML.xsd"));
 		} catch (final Exception e) {
 			LOGGER.debug(" Error while copying AtlasML.xsd... ignoring");
-			// if (statusWindow != null)statusWindow.exceptionOccurred(new AtlasException(e));
+			// if (statusWindow != null)statusWindow.exceptionOccurred(new
+			// AtlasException(e));
 		}
 
 	}
 
 	/**
-	 * Keeps up to three three backups of the atlas.xml file. Returns true if atlas.xml existed.
+	 * Keeps up to three three backups of the atlas.xml file. Returns true if
+	 * atlas.xml existed.
 	 * 
 	 * @throws IOException
 	 *             if files can't be created.
@@ -1240,9 +1400,12 @@ public class AMLExporter {
 			return false;
 
 		File atlasXml = getAtlasXml();
-		File bak1 = new File(atlasXml.getParentFile(), atlasXml.getName() + ".bak");
-		File bak2 = new File(atlasXml.getParentFile(), atlasXml.getName() + ".bak.bak");
-		File bak3 = new File(atlasXml.getParentFile(), atlasXml.getName() + ".bak.bak.bak");
+		File bak1 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak");
+		File bak2 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak.bak");
+		File bak3 = new File(atlasXml.getParentFile(), atlasXml.getName()
+				+ ".bak.bak.bak");
 
 		if (bak2.exists())
 			IOUtil.copyFile(LOGGER, bak2, bak3, false);
@@ -1256,8 +1419,9 @@ public class AMLExporter {
 	}
 
 	/**
-	 * If set to <code>true</code>, the created atlas.xml only describes maps and layers that are actually
-	 * used/referenced in the atlas. To save the atlas as an 'atlas working copy' with all the information in it, it has
+	 * If set to <code>true</code>, the created atlas.xml only describes maps
+	 * and layers that are actually used/referenced in the atlas. To save the
+	 * atlas as an 'atlas working copy' with all the information in it, it has
 	 * to be set to <code>false</code>.
 	 */
 	public void setExportMode(boolean exportMode) {
@@ -1265,8 +1429,9 @@ public class AMLExporter {
 	}
 
 	/**
-	 * If set to <code>true</code>, the created atlas.xml only describes maps and layers that are actually
-	 * used/referenced in the atlas. To save the atlas as an 'atlas working copy' with all the information in it, it has
+	 * If set to <code>true</code>, the created atlas.xml only describes maps
+	 * and layers that are actually used/referenced in the atlas. To save the
+	 * atlas as an 'atlas working copy' with all the information in it, it has
 	 * to be set to <code>false</code>.
 	 */
 
@@ -1275,25 +1440,29 @@ public class AMLExporter {
 	}
 
 	/**
-	 * The {@link File} to write the {@link AtlasConfig} to. Defaults to ad/atlas.xml in the {@link AtlasConfig}'s dir.
+	 * The {@link File} to write the {@link AtlasConfig} to. Defaults to
+	 * ad/atlas.xml in the {@link AtlasConfig}'s dir.
 	 */
 	public void setAtlasXml(File atlasXml) {
 		this.atlasXml = atlasXml;
 	}
 
 	/**
-	 * @return The {@link File} the {@link AtlasConfig} will be written to in AtlasML. Defaults to ad/atlas.xml in the
-	 *         {@link AtlasConfig}'s dir.
+	 * @return The {@link File} the {@link AtlasConfig} will be written to in
+	 *         AtlasML. Defaults to ad/atlas.xml in the {@link AtlasConfig}'s
+	 *         dir.
 	 */
 	public File getAtlasXml() {
 		if (atlasXml == null) {
-			atlasXml = new File(getAce().getAd(), AtlasConfig.ATLAS_XML_FILENAME);
+			atlasXml = new File(getAce().getAd(),
+					AtlasConfig.ATLAS_XML_FILENAME);
 		}
 		return atlasXml;
 	}
 
 	/**
-	 * Retusn the {@link AtlasConfigEditable} that is being exported by this {@link AMLExporter} instance
+	 * Retusn the {@link AtlasConfigEditable} that is being exported by this
+	 * {@link AMLExporter} instance
 	 **/
 	public AtlasConfigEditable getAce() {
 		return ace;

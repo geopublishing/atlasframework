@@ -127,6 +127,9 @@ public class AMLUtil {
 	
 	public static final String TAG_GPHOSTER ="gpHoster";
 
+	public static final String TAG_ADDITIONAL_STYLES = "additionalStyles";
+	public static final String TAG_ADDITIONAL_STYLE = "layerStyle";
+
 	/**
 	 * Converts an old 'Martin' filter rule to a new CQL filter.
 	 * 

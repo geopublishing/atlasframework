@@ -65,8 +65,8 @@ public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DRe
 		StyledGridCoverageReaderInterface, ZoomRestrictableGridInterface {
 
 	static final private Logger LOGGER = Logger.getLogger(DpLayerRaster_Reader.class);
-
 	/**
+
 	 * caches the {@link GridCoverage2D} Can be un-cached by calling uncache()
 	 */
 	protected AbstractGridCoverage2DReader gc;
