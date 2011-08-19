@@ -1027,7 +1027,7 @@ public class AMLImport {
 		// TODO ATM we only expect Shapefiles here!
 		final DpLayerVectorFeatureSource dplvfs = new DpLayerVectorFeatureSourceShapefile(
 				ac);
-
+		
 		try {
 			dplvfs.setId(node.getAttributes().getNamedItem("id").getNodeValue());
 			// LOGGER.info("ID = "+dplvfs.getId());
@@ -1111,7 +1111,9 @@ public class AMLImport {
 						}
 
 					} catch (AtlasRecoverableException e) {
-						warn("Parsing attribute descriptions", e.getMessage());
+						String m = "Parsing attribute descriptions";
+						LOGGER.warn(m,e);
+						warn(m, e.getMessage());
 					} catch (RuntimeException e) {
 						if (AtlasViewerGUI.isRunning()) {
 							// warn("layer nich verfügbar aber das ist nicht schlimm",
@@ -1159,7 +1161,9 @@ public class AMLImport {
 			}
 
 		} catch (Exception e) {
-			warn("A layer has been ignored due to errors:", e.getMessage());
+			String m = "Layer "+dplvfs.getId()+"/"+dplvfs.getBaseFilename()+" has been ignored due to errors:";
+			LOGGER.error(m,e);
+			warn(m, e.getMessage());
 			return null;
 		}
 
