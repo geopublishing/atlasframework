@@ -273,7 +273,7 @@ public class DpLayerRaster_Reader extends DpLayerRaster<AbstractGridCoverage2DRe
 				double[] upper = gc.getOriginalEnvelope().getUpperCorner().getCoordinate();
 				envelope = new Envelope(lower[0], lower[1], upper[0], upper[1]);
 
-				LOGGER.info("Evaluated the following Enveloper for GeoTiffReader " + envelope);
+//				LOGGER.info("Evaluated the following Enveloper for GeoTiffReader " + envelope);
 
 				crs = gc.getCrs();
 

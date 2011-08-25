@@ -6,11 +6,12 @@ import de.schmitzm.geotools.styling.StyledRasterInterface;
 
 public abstract class RasterRulesList extends AbstractRulesList {
 
-	private Double opacity = 1.;
-	
+	protected Double opacity = null;
+
 	private StyledRasterInterface<?> styledRaster;
 
-	public RasterRulesList(RulesListType rlt, StyledRasterInterface<?> styledRaster) {
+	public RasterRulesList(RulesListType rlt,
+			StyledRasterInterface<?> styledRaster) {
 		super(rlt, null);
 		setStyledRaster(styledRaster);
 	}
@@ -20,28 +21,21 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	@Override
 	public String extendMetaInfoString() {
 		String metaInfoString = super.extendMetaInfoString();
-
-//		metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_PALTETTE + METAINFO_KVP_EQUALS_CHAR + getPalette().getName();
-//
-//		if (getStyledRaster().getNodataValue() != null)
-//			metaInfoString += METAINFO_SEPERATOR_CHAR + KVP_NODATA + METAINFO_KVP_EQUALS_CHAR
-//					+ getStyledRaster().getNodataValue();
-
 		return metaInfoString;
 	}
-   
 
 	/**
-	 * A global setting 
+	 * A global setting
 	 */
 	public Double getOpacity() {
+		if (opacity == null) return 1.;
 		return opacity;
 	}
- 
+
 	public StyledRasterInterface<?> getStyledRaster() {
 		return styledRaster;
 	}
-  
+
 	public void setOpacity(Double opacity) {
 		this.opacity = opacity;
 		fireEvents(new RuleChangedEvent("Opacity for whole RL changed", this));
@@ -50,5 +44,5 @@ public abstract class RasterRulesList extends AbstractRulesList {
 	public void setStyledRaster(StyledRasterInterface<?> styledRaster) {
 		this.styledRaster = styledRaster;
 	}
-  
+
 }

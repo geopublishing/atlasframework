@@ -12,19 +12,19 @@ package org.geopublishing.atlasStyler;
 
 import org.geotools.styling.Style;
 
-import de.schmitzm.geotools.data.rld.RasterLegendData;
-
 public class RasterStyleChangedEvent extends StyleChangedEvent {
 
-	private final RasterLegendData legendMetadata;
+//	private final RasterLegendData legendMetadata;
 
-	public RasterStyleChangedEvent(Style style, RasterLegendData legendMetadata) {
+	public RasterStyleChangedEvent(Style style
+//			, RasterLegendData legendMetadata
+			) {
 		super(style);
-		this.legendMetadata = legendMetadata;
+//		this.legendMetadata = legendMetadata;
 	}
 
-	public RasterLegendData getLegendMetadata() {
-		return legendMetadata;
-	}
+//	public RasterLegendData getLegendMetadata() {
+//		return legendMetadata;
+//	}
 
 }

@@ -223,7 +223,7 @@ public class SldLegendUtil {
 			}
 		}
 
-		if (availStyleIDs.size() > 3 || (max - min > 4)) {
+		if (availStyleIDs.size() > 2 || (max - min > 4)) {
 			String selectedStyleID = map.getSelectedStyleID(dpLayer.getId());
 			if (selectedStyleID == null) {
 				// We might just have created new additional styles, and none

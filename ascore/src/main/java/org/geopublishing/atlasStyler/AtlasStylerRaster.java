@@ -23,7 +23,7 @@ public class AtlasStylerRaster extends AtlasStyler {
 
 	private final static Logger LOGGER = Logger.getLogger(AtlasStylerRaster.class);
 
-	private RasterLegendData backupRasterLegend;
+//	private RasterLegendData backupRasterLegend;
 
 	private StyledGridCoverageReaderInterface styledRaster;
 
@@ -57,10 +57,10 @@ public class AtlasStylerRaster extends AtlasStyler {
 		this.rlf = new RuleListFactory(styledRaster);
 
 		if (loadStyle != null) {
-			importStyle(loadStyle, styledRaster.getLegendMetaData());
+			importStyle(loadStyle);
 		} else {
 			if (styledRaster.getStyle() != null) {
-				importStyle(styledRaster.getStyle(), styledRaster.getLegendMetaData());
+				importStyle(styledRaster.getStyle());
 			} else {
 
 				if (withDefaults != null && withDefaults == true) {
@@ -78,10 +78,10 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public void cancel() {
 		super.cancel();
 
-		// Apply the RasterLegendData if it is a raster
-		if (this != null) {
-			backupRasterLegend.copyTo(getStyledRaster().getLegendMetaData());
-		}
+//		// Apply the RasterLegendData if it is a raster
+//		if (this != null) {
+//			backupRasterLegend.copyTo(getStyledRaster().getLegendMetaData());
+//		}
 
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
@@ -104,7 +104,7 @@ public class AtlasStylerRaster extends AtlasStyler {
 			// Happens if there are no classes, and hence no entries in the
 			// colormap.
 		}
-		return new RasterStyleChangedEvent(getStyle(), rlm);
+		return new RasterStyleChangedEvent(getStyle());
 	}
 
 	@Override
@@ -116,16 +116,16 @@ public class AtlasStylerRaster extends AtlasStyler {
 		return styledRaster;
 	}
 
-	public void importStyle(Style importStyle, RasterLegendData rasterLegendData) {
+//	public void importStyle(Style importStyle, RasterLegendData rasterLegendData) {
 		// Backup
-		if (backupRasterLegend == null) {
-			backupRasterLegend = new RasterLegendData(true);
-			if (rasterLegendData != null)
-				rasterLegendData.copyTo(backupRasterLegend);
-		}
+//		if (backupRasterLegend == null) {
+//			backupRasterLegend = new RasterLegendData(true);
+//			if (rasterLegendData != null)
+//				rasterLegendData.copyTo(backupRasterLegend);
+//		}
 
-		super.importStyle(importStyle);
-	}
+//		super.importStyle(importStyle);
+//	}
 
 	@Override
 	public Style sanitize(Style style) {

@@ -142,7 +142,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 		Double newDenominator = sce.getNewScaleDenominator();
 
-		LOGGER.info("new scale in preview XMapPane  = " + newDenominator);
+//		LOGGER.info("new scale in preview XMapPane  = " + newDenominator);
 		for (PropertyChangeListener l : scaleChangeListeners) {
 			l.propertyChange(new PropertyChangeEvent(sce,
 					"scale change in preview", null, newDenominator));

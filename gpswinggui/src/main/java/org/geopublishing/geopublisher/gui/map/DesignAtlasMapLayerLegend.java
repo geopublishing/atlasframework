@@ -56,7 +56,6 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.MapView;
-import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.i18n.I18NUtil;
@@ -232,21 +231,21 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	public JPopupMenu getToolMenu() {
 		JPopupMenu menu = super.getToolMenu();
 
-		/**
-		 * Offer the OLD AtlasStylerRaster
-		 */
-		if (dpLayer instanceof StyledGridCoverageReaderInterface) {
-			menu.add(new AbstractAction("OLD RasterStyler", Icons.ICON_STYLE) {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					GPDialogManager.dm_OldAtlasRasterStyler.getInstanceFor(
-							dpLayer, DesignAtlasMapLayerLegend.this, ace,
-							DesignAtlasMapLayerLegend.this);
-				}
-
-			});
-		}
+//		/**
+//		 * Offer the OLD AtlasStylerRaster
+//		 */
+//		if (dpLayer instanceof StyledGridCoverageReaderInterface) {
+//			menu.add(new AbstractAction("OLD RasterStyler", Icons.ICON_STYLE) {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					GPDialogManager.dm_OldAtlasRasterStyler.getInstanceFor(
+//							dpLayer, DesignAtlasMapLayerLegend.this, ace,
+//							DesignAtlasMapLayerLegend.this);
+//				}
+//
+//			});
+//		}
 
 		menu.addSeparator();
 

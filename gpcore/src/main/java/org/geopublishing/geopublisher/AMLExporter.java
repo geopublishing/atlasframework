@@ -70,7 +70,6 @@ import org.w3c.dom.Node;
 import com.vividsolutions.jts.geom.Envelope;
 
 import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
-import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.io.GeoExportUtil;
 import de.schmitzm.geotools.io.GeoImportUtil;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -435,10 +434,6 @@ public class AMLExporter {
 
 			} else if (de instanceof DpLayerRaster) {
 				exDpe = exportDatapoolLayerRaster(document, (DpLayerRaster) de);
-
-				// } else if (de instanceof DpLayerRasterPyramid) {
-				// exDpe = exportDatapoolLayerRasterPyramid(document,
-				// (DpLayerRasterPyramid) de);
 
 			} else if (de instanceof DpMediaVideo) {
 				exDpe = exportDatapoolMediaVideo(document, (DpMediaVideo) de);
@@ -1139,89 +1134,33 @@ public class AMLExporter {
 		return element;
 	}
 
-	/**
-	 * Export a aml:rasterLegendData tag
-	 * 
-	 * @param document
-	 * @param legendMetaData
-	 * @return
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 */
-	private Node exportRasterLegendData(final Document document,
-			final RasterLegendData legendMetaData) {
-		final Element element = document.createElementNS(AMLUtil.AMLURI,
-				"rasterLegendData");
-		element.setAttribute(AMLUtil.ATT_paintGaps, legendMetaData
-				.isPaintGaps().toString());
+//	/**
+//	 * Export a aml:rasterLegendData tag
+//	 * 
+//	 * @param document
+//	 * @param legendMetaData
+//	 * @return
+//	 * 
+//	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+//	 */
+//	private Node exportRasterLegendData(final Document document,
+//			final RasterLegendData legendMetaData) {
+//		final Element element = document.createElementNS(AMLUtil.AMLURI,
+//				"rasterLegendData");
+//		element.setAttribute(AMLUtil.ATT_paintGaps, legendMetaData
+//				.isPaintGaps().toString());
+//
+//		for (final Double key : legendMetaData.getSortedKeys()) {
+//			final Element item = document.createElementNS(AMLUtil.AMLURI,
+//					"rasterLegendItem");
+//			item.setAttribute("value", key.toString());
+//			item.appendChild(exportTranslation(document, "label",
+//					legendMetaData.get(key)));
+//			element.appendChild(item);
+//		}
+//		return element;
+//	}
 
-		for (final Double key : legendMetaData.getSortedKeys()) {
-			final Element item = document.createElementNS(AMLUtil.AMLURI,
-					"rasterLegendItem");
-			item.setAttribute("value", key.toString());
-			item.appendChild(exportTranslation(document, "label",
-					legendMetaData.get(key)));
-			element.appendChild(item);
-		}
-		return element;
-	}
-
-	// /**
-	// * Exports the {@link DpLayerRasterPyramid} to a AtlasML (XML) Document
-	// * branch
-	// *
-	// * @author Stefan Alfons Tzeggai
-	// */
-	// private final Element exportDatapoolLayerRasterPyramid(
-	// final Document document, final DpLayerRasterPyramid dpe) {
-	// // LOGGER.debug("exportDatapoolLayerRasterPyramid " + dpe + " to AML");
-	//
-	// // Creating a aml:rasterLayer tag...
-	// final Element element = document.createElementNS(AMLUtil.AMLURI,
-	// "pyramidRasterLayer");
-	// element.setAttribute("id", dpe.getId());
-	// element.setAttribute("exportable", dpe.isExportable().toString());
-	//
-	// // Creating a aml:name tag...
-	// element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
-	//
-	// // Creating aml:desc tag
-	// element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
-	//
-	// // Creating optinal aml:keywords tag
-	// if (!dpe.getKeywords().isEmpty())
-	// element.appendChild(exportTranslation(document, "keywords",
-	// dpe.getKeywords()));
-	//
-	// // Creating a aml:dataDirname tag...
-	// final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
-	// "dataDirname");
-	// datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
-	// element.appendChild(datadirname);
-	//
-	// // Creating a aml:filename tag... (.properties file)
-	// final Element filename = document.createElementNS(AMLUtil.AMLURI,
-	// "filename");
-	// filename.appendChild(document.createTextNode(dpe.getFilename()));
-	// element.appendChild(filename);
-	//
-	// // Creating aml:rasterLegendData
-	// element.appendChild(exportRasterLegendData(document,
-	// dpe.getLegendMetaData()));
-	//
-	// // Creating an optional aml:transparentColor tag...
-	// final Color color = dpe.getInputTransparentColor();
-	// if (color != null) {
-	// final Element transparentColor = document.createElementNS(
-	// AMLUtil.AMLURI, "transparentColor");
-	// final String colorStr = "RGB(" + color.getRed() + ","
-	// + color.getGreen() + "," + color.getBlue() + ")";
-	// transparentColor.appendChild(document.createTextNode(colorStr));
-	// element.appendChild(transparentColor);
-	// }
-	//
-	// return element;
-	// }
 
 	/**
 	 * Create a tree of <aml:group> and <aml:datapoolRef>

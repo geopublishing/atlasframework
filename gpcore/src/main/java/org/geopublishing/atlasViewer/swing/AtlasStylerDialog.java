@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.RasterStyleChangedEvent;
 import org.geopublishing.atlasStyler.StyleChangeListener;
 import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
@@ -132,10 +131,10 @@ public class AtlasStylerDialog extends StylerDialog {
 				@Override
 				public void changed(StyleChangedEvent e) {
 
-					if (e instanceof RasterStyleChangedEvent) {
-						((RasterStyleChangedEvent) e).getLegendMetadata()
-								.copyTo(dpLayerRaster.getLegendMetaData());
-					}
+//					if (e instanceof RasterStyleChangedEvent) {
+//						((RasterStyleChangedEvent) e).getLegendMetadata()
+//								.copyTo(dpLayerRaster.getLegendMetaData());
+//					}
 
 					Style style = e.getStyle();
 					if (layerStyle == null) {

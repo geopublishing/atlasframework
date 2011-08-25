@@ -320,5 +320,6 @@ public class RasterRulesList_DistinctValues extends RasterRulesListColormap impl
 				|| colSize != classesExpected || labelSize != classesExpected)
 			throw new RuntimeException(error);
 	}
+	
 
 }

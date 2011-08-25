@@ -1,5 +1,7 @@
 package org.geopublishing.atlasStyler.rulesLists;
 
+import hep.aida.bin.DynamicBin1D;
+
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
@@ -253,7 +255,7 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 					}
 				}
 			}
-			
+
 			ColorMap cm = rs.getColorMap();
 
 			importColorMap(cm);
@@ -409,7 +411,6 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 	 * Bändern gestyled wird.
 	 */
 	public void setBand(int band) {
-		System.out.println("band = " + band);
 		this.band = band;
 	}
 
@@ -421,4 +422,19 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 		return band;
 	}
 
+	@Override
+	/**
+	 * Caclulates the overall opacity of this RulesList as the median iof all opacities.
+	 */
+	public Double getOpacity() {
+		if (opacity == null) {
+			// Benutze den häöufigsten Wert als Opacity vorgabe.
+			DynamicBin1D ds = new DynamicBin1D();
+			for (Double o : getOpacities()) {
+				ds.add(o);
+			}
+			opacity = ds.median();
+		}
+		return opacity;
+	}
 }
