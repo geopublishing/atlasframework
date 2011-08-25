@@ -160,30 +160,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * @throws ParseException
 	 */
 	public static void main(final String[] args) {
-		// try {
-		// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		// } catch (ClassNotFoundException e) {
-		// e.printStackTrace();
-		// } catch (InstantiationException e) {
-		// e.printStackTrace();
-		// } catch (IllegalAccessException e) {
-		// e.printStackTrace();
-		// } catch (UnsupportedLookAndFeelException e) {
-		// e.printStackTrace();
-		// }
-
-		// String[] st = System.getProperty("java.class.path").split(":");
-		// LOGGER.debug("Classpath:");
-		// System.out.println("Classpath:");
-		// for (String t : st) {
-		// System.out.println(t);
-		// LOGGER.debug(t);
-		// }
-		//
-		// if (args.length == 0 && GraphicsEnvironment.isHeadless()) {
-		// // Starting Geopublisher without any arguments
-		// GeopublisherGUI.getInstance(true);
-		// } else {
 		int resultCode;
 		resultCode = CliOptions.performArgs(args);
 		if (resultCode != -1) {
@@ -194,8 +170,6 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 			System.exit(resultCode);
 		}
-		// }
-
 	}
 
 	/**

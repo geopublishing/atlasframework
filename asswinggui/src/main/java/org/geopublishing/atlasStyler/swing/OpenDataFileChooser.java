@@ -17,8 +17,7 @@ import javax.swing.JFileChooser;
 import org.geopublishing.atlasStyler.ASUtil;
 
 /**
- * This extension of a {@link JFileChooser} is ment to be used to open one of
- * the Supported Geodata filestypes
+ * This extension of a {@link JFileChooser} is ment to be used to open one of the Supported Geodata filestypes
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  * 
@@ -34,13 +33,14 @@ public class OpenDataFileChooser extends JFileChooser {
 
 		addChoosableFileFilter(ASUtil.FILTER_RASTERSUPPORTED);
 
-		addChoosableFileFilter(ASUtil.FILTER_SHAPE);
-
-		addChoosableFileFilter(ASUtil.FILTER_ALLSUPPORted); // TODO Let them
-															// click on
+		// TODO Let them
+		// click on
 		// any
 		// part of a
 		// shapefile
+		addChoosableFileFilter(ASUtil.FILTER_SHAPE);
+
+		addChoosableFileFilter(ASUtil.FILTER_ALLSUPPORted);
 
 		setDialogType(OPEN_DIALOG);
 	}

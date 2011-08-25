@@ -38,7 +38,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
-import javax.swing.filechooser.FileFilter;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -60,7 +59,6 @@ import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.gui.map.DesignHTMLInfoPane;
 
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.DialogType;
 import de.schmitzm.i18n.I18NUtil;
@@ -766,13 +764,6 @@ public class GpSwingUtil extends GpUtil {
 	}
 
 	/**
-	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
-	 * .tiff, .gif).
-	 */
-	public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
-			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
-
-	/**
 	 * Performs a file choose.
 	 * 
 	 * @param parent
@@ -811,12 +802,10 @@ public class GpSwingUtil extends GpUtil {
 	 *            defines which files can be selected
 	 * @return {@code null} if the dialog was not approved
 	 */
-	public static File chooseFile(Component parent, File startFolder,
-			FileExtensionFilter filter) {
+	public static File chooseImageFile(Component parent, File startFolder,
+			FileExtensionFilter filter, String title) {
 
 		try {
-			NativeInterface.open();
-
 			JFileDialog fileDialog = new JFileDialog();
 			// fileDialog.setTitle(GpSwingUtil.R("CreateAtlas.Dialog.Title"));
 			fileDialog.setParentDirectory(startFolder.getAbsolutePath());
@@ -826,7 +815,7 @@ public class GpSwingUtil extends GpUtil {
 					new String[] { filter.toNativeFileFilter()[0] },
 					new String[] { filter.toNativeFileFilter()[1] }, 0);
 			fileDialog.show(parent);
-			fileDialog.setTitle("Choose an image.");// i8n
+			fileDialog.setTitle(title);
 
 			String selectedFileName = fileDialog.getSelectedFileName();
 

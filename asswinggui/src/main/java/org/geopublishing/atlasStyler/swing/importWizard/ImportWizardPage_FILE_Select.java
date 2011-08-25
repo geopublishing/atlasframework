@@ -6,24 +6,24 @@ import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASProps;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
-import org.geopublishing.atlasStyler.swing.OpenDataFileChooser;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.netbeans.spi.wizard.WizardPage;
+
+import de.schmitzm.swing.FileExtensionFilter;
 
 public class ImportWizardPage_FILE_Select extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(
-			AsSwingUtil.R("ImportWizard.FILE.FileSelection.Explanation"));
+	JLabel explanationJLabel = new JLabel(AsSwingUtil.R("ImportWizard.FILE.FileSelection.Explanation"));
 
 	private final String validationImportSourceTypeFailedMsg_NotExists = AsSwingUtil
 			.R("ImportWizard.FILE.FileSelection.ValidationError.NotExists");
@@ -33,8 +33,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 
 	private JButton fileChooserJButton;
 	JTextField fileJTextField;
-	final static private JLabel fileTextFieldJLabel = new JLabel(
-			AsSwingUtil.R("ImportWizard.FILE.FileTextBoxLabel"));
+	final static private JLabel fileTextFieldJLabel = new JLabel(AsSwingUtil.R("ImportWizard.FILE.FileTextBoxLabel"));
 
 	public static String getDescription() {
 		return AsSwingUtil.R("ImportWizard.FILE.FileSelection");
@@ -45,8 +44,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 	}
 
 	@Override
-	protected String validateContents(final Component component,
-			final Object event) {
+	protected String validateContents(final Component component, final Object event) {
 
 		final String absPath = getFileJTextField().getText();
 		final File file = new File(absPath);
@@ -58,13 +56,11 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 		if (!file.canRead()) {
 			return validationImportSourceTypeFailedMsg_CantRead;
 		}
-		
-		// TODO: Check whether importable
-//		if (!DpEntryFactory.test(file, ImportWizardPage_FILE_Select.this)) {
-//			return validationImportSourceTypeFailedMsg_NotImportable;
-//		}
 
-		// Check the we are not import from ourself...
+		// TODO: Check whether importable
+		// if (!DpEntryFactory.test(file, ImportWizardPage_FILE_Select.this)) {
+		// return validationImportSourceTypeFailedMsg_NotImportable;
+		// }
 
 		return null;
 	}
@@ -83,8 +79,7 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 
 	private JTextField getFileJTextField() {
 		if (fileJTextField == null) {
-			fileJTextField = new JTextField(ASProps.get(
-					ASProps.Keys.LAST_IMPORTED_FILE, ""));
+			fileJTextField = new JTextField(ASProps.get(ASProps.Keys.LAST_IMPORTED_FILE, ""));
 
 			fileJTextField.setName(ImportWizard.IMPORT_FILE);
 		}
@@ -94,67 +89,70 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 
 	public JButton getFileChooserJButton() {
 		if (fileChooserJButton == null) {
-			fileChooserJButton = new JButton(new AbstractAction("",
-					Icons.ICON_SEARCH) {
+			fileChooserJButton = new JButton(new AbstractAction("", Icons.ICON_SEARCH) {
 
 				@Override
 				public void actionPerformed(final ActionEvent e) {
 
 					File getLastOpenDir = null;
-					String lastFilePath = ASProps
-							.get(ASProps.Keys.lastImportDirectory);
+					String lastFilePath = ASProps.get(ASProps.Keys.lastImportDirectory);
 					if (lastFilePath != null)
 						getLastOpenDir = new File(lastFilePath);
+					//
+					// OpenDataFileChooser chooser = new OpenDataFileChooser(
+					// getLastOpenDir);
+					//
+					// // properties
+					// chooser.setVisible(true);
+					// int result = chooser
+					// .showOpenDialog(ImportWizardPage_FILE_Select.this);
+					//
+					// final File selectedFile = chooser.getSelectedFile();
 
-					OpenDataFileChooser chooser = new OpenDataFileChooser(
-							getLastOpenDir);
+					final File selectedFile = AsSwingUtil.chooseFileOpen(ImportWizardPage_FILE_Select.this,
+							// i8n
+							getLastOpenDir, "Select data file", 
+							new FileExtensionFilter(ASUtil.FILTER_GML),
+							new FileExtensionFilter(ASUtil.FILTER_RASTERSUPPORTED),
+							new FileExtensionFilter(ASUtil.FILTER_SHAPE),
+							new FileExtensionFilter(ASUtil.FILTER_ALLSUPPORted));
 
-					// properties
-					chooser.setVisible(true);
-					int result = chooser
-							.showOpenDialog(ImportWizardPage_FILE_Select.this);
-
-					final File selectedFile = chooser.getSelectedFile();
-
-					if (selectedFile == null
-							|| result != JFileChooser.APPROVE_OPTION)
+					if (selectedFile == null)
 						return;
 
-					ASProps.set(ASProps.Keys.lastImportDirectory,
-							selectedFile.getAbsolutePath());
-					
-					 getFileJTextField().setText(
-							 selectedFile.getAbsolutePath());
-					
-					 /*
-					 * Radically store the path into the properties now - it
-					 * really sucks to select that path all the time
+					ASProps.set(ASProps.Keys.lastImportDirectory, selectedFile.getAbsolutePath());
+
+					getFileJTextField().setText(selectedFile.getAbsolutePath());
+
+					/*
+					 * Radically store the path into the properties now - it really sucks to select that path all the
+					 * time
 					 */
-					 ASProps.set(org.geopublishing.atlasStyler.ASProps.Keys.LAST_IMPORTED_FILE,
-					 selectedFile.getAbsolutePath());
-					 ASProps.store();
-//
-//					AtlasSwingWorker<Void> openFileWorker = new AtlasSwingWorker<Void>(
-//							ImportWizardPage_FILE_Select.this) {
-//
-//						@Override
-//						protected Void doInBackground() throws IOException,
-//								InterruptedException {
-//							AtlasStylerGUI asg = (AtlasStylerGUI) getWizardData(ImportWizard.ATLAS_STYLER_GUI);
-//							addShapeLayer(selectedFile);
-//							return null;
-//						}
-//
-//					};
-//					try {
-//						openFileWorker.executeModal();
-//					} catch (CancellationException e1) {
-//						e1.printStackTrace();
-//					} catch (InterruptedException e1) {
-//						e1.printStackTrace();
-//					} catch (ExecutionException e1) {
-//						e1.printStackTrace();
-//					}
+					ASProps.set(org.geopublishing.atlasStyler.ASProps.Keys.LAST_IMPORTED_FILE,
+							selectedFile.getAbsolutePath());
+					ASProps.store();
+					//
+					// AtlasSwingWorker<Void> openFileWorker = new AtlasSwingWorker<Void>(
+					// ImportWizardPage_FILE_Select.this) {
+					//
+					// @Override
+					// protected Void doInBackground() throws IOException,
+					// InterruptedException {
+					// AtlasStylerGUI asg = (AtlasStylerGUI) getWizardData(ImportWizard.ATLAS_STYLER_GUI);
+					// addShapeLayer(selectedFile);
+					// return null;
+					// }
+					//
+					// };
+					// try {
+					// openFileWorker.executeModal();
+					// } catch (CancellationException e1) {
+					// e1.printStackTrace();
+					// } catch (InterruptedException e1) {
+					// e1.printStackTrace();
+					// } catch (ExecutionException e1) {
+					// e1.printStackTrace();
+					// }
 
 					//
 					// final String pathname = ASProps.get(

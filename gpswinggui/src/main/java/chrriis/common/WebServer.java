@@ -50,8 +50,7 @@ public class WebServer {
 
 	public static class HTTPRequest implements Cloneable {
 		HTTPRequest(String urlPath, Map<String, String> headerMap) {
-			this.headerMap = headerMap == null ? new HashMap<String, String>()
-					: headerMap;
+			this.headerMap = headerMap == null ? new HashMap<String, String>() : headerMap;
 			setURLPath(urlPath);
 		}
 
@@ -76,8 +75,7 @@ public class WebServer {
 					int eqIndex = content.indexOf('=');
 					if (eqIndex > 0) {
 						String key = content.substring(0, eqIndex);
-						String value = Utils.decodeURL(content
-								.substring(eqIndex + 1));
+						String value = Utils.decodeURL(content.substring(eqIndex + 1));
 						queryParameterMap.put(key, value);
 					} else {
 						queryParameterMap.put(content, "");
@@ -143,8 +141,7 @@ public class WebServer {
 		protected HTTPRequest clone() {
 			try {
 				HTTPRequest httpRequest = (HTTPRequest) super.clone();
-				httpRequest.queryParameterMap = new HashMap<String, String>(
-						queryParameterMap);
+				httpRequest.queryParameterMap = new HashMap<String, String>(queryParameterMap);
 				return httpRequest;
 			} catch (CloneNotSupportedException e) {
 				throw new RuntimeException(e);
@@ -180,8 +177,7 @@ public class WebServer {
 		private static Map<String, String> extensionToMimeTypeMap = new HashMap<String, String>();
 		static {
 			extensionToMimeTypeMap.put("323", "text/h323");
-			extensionToMimeTypeMap.put("acx",
-					"application/internet-property-stream");
+			extensionToMimeTypeMap.put("acx", "application/internet-property-stream");
 			extensionToMimeTypeMap.put("ai", "application/postscript");
 			extensionToMimeTypeMap.put("aif", "audio/x-aiff");
 			extensionToMimeTypeMap.put("aifc", "audio/x-aiff");
@@ -282,12 +278,10 @@ public class WebServer {
 			extensionToMimeTypeMap.put("ogv", "video/ogg");
 			extensionToMimeTypeMap.put("p10", "application/pkcs10");
 			extensionToMimeTypeMap.put("p12", "application/x-pkcs12");
-			extensionToMimeTypeMap.put("p7b",
-					"application/x-pkcs7-certificates");
+			extensionToMimeTypeMap.put("p7b", "application/x-pkcs7-certificates");
 			extensionToMimeTypeMap.put("p7c", "application/x-pkcs7-mime");
 			extensionToMimeTypeMap.put("p7m", "application/x-pkcs7-mime");
-			extensionToMimeTypeMap
-					.put("p7r", "application/x-pkcs7-certreqresp");
+			extensionToMimeTypeMap.put("p7r", "application/x-pkcs7-certreqresp");
 			extensionToMimeTypeMap.put("p7s", "application/x-pkcs7-signature");
 			extensionToMimeTypeMap.put("pbm", "image/x-portable-bitmap");
 			extensionToMimeTypeMap.put("pdf", "application/pdf");
@@ -319,20 +313,16 @@ public class WebServer {
 			extensionToMimeTypeMap.put("rtx", "text/richtext");
 			extensionToMimeTypeMap.put("scd", "application/x-msschedule");
 			extensionToMimeTypeMap.put("sct", "text/scriptlet");
-			extensionToMimeTypeMap.put("setpay",
-					"application/set-payment-initiation");
-			extensionToMimeTypeMap.put("setreg",
-					"application/set-registration-initiation");
+			extensionToMimeTypeMap.put("setpay", "application/set-payment-initiation");
+			extensionToMimeTypeMap.put("setreg", "application/set-registration-initiation");
 			extensionToMimeTypeMap.put("sh", "application/x-sh");
 			extensionToMimeTypeMap.put("shar", "application/x-shar");
 			extensionToMimeTypeMap.put("sit", "application/x-stuffit");
 			extensionToMimeTypeMap.put("snd", "audio/basic");
-			extensionToMimeTypeMap.put("spc",
-					"application/x-pkcs7-certificates");
+			extensionToMimeTypeMap.put("spc", "application/x-pkcs7-certificates");
 			extensionToMimeTypeMap.put("spl", "application/futuresplash");
 			extensionToMimeTypeMap.put("src", "application/x-wais-source");
-			extensionToMimeTypeMap
-					.put("sst", "application/vnd.ms-pkicertstore");
+			extensionToMimeTypeMap.put("sst", "application/vnd.ms-pkicertstore");
 			extensionToMimeTypeMap.put("stl", "application/vnd.ms-pkistl");
 			extensionToMimeTypeMap.put("stm", "text/html");
 			extensionToMimeTypeMap.put("svg", "image/svg+xml");
@@ -396,8 +386,7 @@ public class WebServer {
 			if (extension.startsWith(".")) {
 				extension = extension.substring(1);
 			}
-			String mimeType = extensionToMimeTypeMap.get(extension
-					.toLowerCase(Locale.ENGLISH));
+			String mimeType = extensionToMimeTypeMap.get(extension.toLowerCase(Locale.ENGLISH));
 			return mimeType != null ? mimeType : MIME_APPLICATION_OCTET_STREAM;
 		}
 
@@ -448,8 +437,8 @@ public class WebServer {
 
 		private static final String LS = Utils.LINE_SEPARATOR;
 
-		static void writeHTTPHeaders(BufferedOutputStream out, int code,
-				String contentType, long contentLength, long lastModified) {
+		static void writeHTTPHeaders(BufferedOutputStream out, int code, String contentType, long contentLength,
+				long lastModified) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("HTTP/1.0 " + code + " OK" + LS);
 			sb.append("Content-Type: " + contentType + LS);
@@ -468,10 +457,8 @@ public class WebServer {
 			}
 		}
 
-		static void writeHTTPError(BufferedOutputStream out, int code,
-				String message) {
-			writeHTTPHeaders(out, code, "text/html", message.length(),
-					System.currentTimeMillis());
+		static void writeHTTPError(BufferedOutputStream out, int code, String message) {
+			writeHTTPHeaders(out, code, "text/html", message.length(), System.currentTimeMillis());
 			try {
 				out.write(message.getBytes("UTF-8"));
 				out.flush();
@@ -582,15 +569,11 @@ public class WebServer {
 		@Override
 		public void run() {
 			try {
-				HTTPInputStream in = new HTTPInputStream(
-						new BufferedInputStream(socket.getInputStream()));
-				BufferedOutputStream out = new BufferedOutputStream(
-						socket.getOutputStream());
+				HTTPInputStream in = new HTTPInputStream(new BufferedInputStream(socket.getInputStream()));
+				BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
 				try {
 					String request = in.readAsciiLine();
-					if (request == null
-							|| !(request.endsWith(" HTTP/1.0") || request
-									.endsWith("HTTP/1.1"))) {
+					if (request == null || !(request.endsWith(" HTTP/1.0") || request.endsWith("HTTP/1.1"))) {
 						writeHTTPError(out, 500, "Invalid Method.");
 						return;
 					}
@@ -601,19 +584,16 @@ public class WebServer {
 						writeHTTPError(out, 500, "Invalid Method.");
 						return;
 					}
-					String resourcePath = request.substring(
-							(isPostMethod ? "POST " : "GET ").length(),
+					String resourcePath = request.substring((isPostMethod ? "POST " : "GET ").length(),
 							request.length() - " HTTP/1.0".length());
 					Map<String, String> headerMap = new HashMap<String, String>();
 					for (String header; (header = in.readAsciiLine()).length() > 0;) {
 						int index = header.indexOf(": ");
 						if (index > 0) {
-							headerMap.put(header.substring(0, index),
-									header.substring(index + ": ".length()));
+							headerMap.put(header.substring(0, index), header.substring(index + ": ".length()));
 						}
 					}
-					HTTPRequest httpRequest = new HTTPRequest(resourcePath,
-							headerMap);
+					HTTPRequest httpRequest = new HTTPRequest(resourcePath, headerMap);
 					// //MS-Hack.sn
 					// String currFolder =
 					// httpRequest.getQueryParameterMap().get("CurrentFolder");
@@ -628,12 +608,9 @@ public class WebServer {
 					if (isPostMethod) {
 						HTTPData[] httpDataArray;
 						String contentType = headerMap.get("Content-Type");
-						String contentLengthString = headerMap
-								.get("Content-Length");
-						int contentLength = contentLengthString == null ? -1
-								: Integer.parseInt(contentLengthString);
-						if (contentType != null
-								&& contentType.startsWith("multipart/")) {
+						String contentLengthString = headerMap.get("Content-Length");
+						int contentLength = contentLengthString == null ? -1 : Integer.parseInt(contentLengthString);
+						if (contentType != null && contentType.startsWith("multipart/")) {
 							byte[] dataBytes;
 							if (contentLength > 0) {
 								dataBytes = new byte[contentLength];
@@ -641,19 +618,15 @@ public class WebServer {
 							} else {
 								ByteArrayOutputStream baos = new ByteArrayOutputStream();
 								byte[] bytes = new byte[1024];
-								for (int i; (i = in.read(bytes)) != -1; baos
-										.write(bytes, 0, i)) {
+								for (int i; (i = in.read(bytes)) != -1; baos.write(bytes, 0, i)) {
 								}
 								dataBytes = baos.toByteArray();
 							}
 							String boundary = "--"
-									+ contentType.substring(contentType
-											.indexOf("boundary=")
-											+ "boundary=".length());
+									+ contentType.substring(contentType.indexOf("boundary=") + "boundary=".length());
 							byte[] boundaryBytes = boundary.getBytes("UTF-8");
 							List<Integer> indexList = new ArrayList<Integer>();
-							for (int i = 0; i < dataBytes.length
-									- boundaryBytes.length; i++) {
+							for (int i = 0; i < dataBytes.length - boundaryBytes.length; i++) {
 								boolean isFound = true;
 								for (int j = 0; j < boundaryBytes.length; j++) {
 									if (dataBytes[i + j] != boundaryBytes[j]) {
@@ -671,60 +644,46 @@ public class WebServer {
 								HTTPData httpData = new HTTPData();
 								httpDataArray[i] = httpData;
 								int start = indexList.get(i);
-								ByteArrayInputStream bais = new ByteArrayInputStream(
-										dataBytes, start, indexList.get(i + 1)
-												- start
-												- in.getLineSeparator()
-														.length());
+								ByteArrayInputStream bais = new ByteArrayInputStream(dataBytes, start,
+										indexList.get(i + 1) - start - in.getLineSeparator().length());
 								HTTPInputStream din = new HTTPInputStream(bais);
 								din.readAsciiLine();
-								Map<String, String> dataHeaderMap = httpData
-										.getHeaderMap();
-								for (String header; (header = din
-										.readAsciiLine()).length() > 0;) {
-									String key = header.substring(header
-											.indexOf(": "));
-									String value = header.substring(key
-											.length() + ": ".length());
+								Map<String, String> dataHeaderMap = httpData.getHeaderMap();
+								for (String header; (header = din.readAsciiLine()).length() > 0;) {
+									String key = header.substring(header.indexOf(": "));
+									String value = header.substring(key.length() + ": ".length());
 									dataHeaderMap.put(key, value);
 								}
 								ByteArrayOutputStream aos = new ByteArrayOutputStream();
-								for (int n; (n = din.read()) != -1; aos
-										.write(n)) {
+								for (int n; (n = din.read()) != -1; aos.write(n)) {
 								}
 								httpData.setBytes(aos.toByteArray());
 							}
 						} else {
-							InputStreamReader reader = new InputStreamReader(
-									in, "UTF-8");
+							InputStreamReader reader = new InputStreamReader(in, "UTF-8");
 							String dataContent;
 							if (contentLength > 0) {
 								char[] chars = new char[contentLength];
 								int offset = 0;
 								while (chars.length > offset) {
-									int n = reader.read(chars, offset,
-											chars.length - offset);
-									offset = n == -1 ? chars.length : offset
-											+ n;
+									int n = reader.read(chars, offset, chars.length - offset);
+									offset = n == -1 ? chars.length : offset + n;
 								}
 								dataContent = new String(chars);
 							} else {
 								StringBuilder sb = new StringBuilder();
 								char[] chars = new char[1024];
-								for (int i; (i = reader.read(chars)) != -1; sb
-										.append(chars, 0, i)) {
+								for (int i; (i = reader.read(chars)) != -1; sb.append(chars, 0, i)) {
 								}
 								dataContent = sb.toString();
 							}
 							HTTPData httpData = new HTTPData();
-							Map<String, String> dataHeaderMap = httpData
-									.getHeaderMap();
+							Map<String, String> dataHeaderMap = httpData.getHeaderMap();
 							for (String content : dataContent.split("&")) {
 								int eqIndex = content.indexOf('=');
 								if (eqIndex > 0) {
 									String key = content.substring(0, eqIndex);
-									String value = Utils.decodeURL(content
-											.substring(eqIndex + 1));
+									String value = Utils.decodeURL(content.substring(eqIndex + 1));
 									dataHeaderMap.put(key, value);
 								} else {
 									dataHeaderMap.put(content, "");
@@ -743,11 +702,9 @@ public class WebServer {
 							e.printStackTrace();
 						}
 					}
-					boolean isPrintRequestsDebug = Boolean
-							.parseBoolean(NSSystemProperty.WEBSERVER_DEBUG_PRINTREQUESTS
-									.get());
-					String printDataProperty = NSSystemProperty.WEBSERVER_DEBUG_PRINTDATA
-							.get();
+					boolean isPrintRequestsDebug = Boolean.parseBoolean(NSSystemProperty.WEBSERVER_DEBUG_PRINTREQUESTS
+							.get());
+					String printDataProperty = NSSystemProperty.WEBSERVER_DEBUG_PRINTDATA.get();
 					boolean isPrintDataDebug = false;
 					long printDataCount = -1;
 					if (printDataProperty != null) {
@@ -755,37 +712,29 @@ public class WebServer {
 							printDataCount = Long.parseLong(printDataProperty);
 							isPrintDataDebug = true;
 						} catch (Exception e) {
-							isPrintDataDebug = Boolean
-									.parseBoolean(printDataProperty);
+							isPrintDataDebug = Boolean.parseBoolean(printDataProperty);
 							printDataCount = Integer.MAX_VALUE;
 						}
 					}
 					if (resourceStream_ == null) {
 						if (isPrintRequestsDebug) {
-							System.err.println("Web Server "
-									+ (isPostMethod ? "POST" : "GET") + ": "
-									+ resourcePath + " -> 404 (not found)");
+							System.err.println("Web Server " + (isPostMethod ? "POST" : "GET") + ": " + resourcePath
+									+ " -> 404 (not found)");
 						}
 						writeHTTPError(out, 404, "File Not Found.");
 						return;
 					}
 					if (isPrintRequestsDebug || isPrintDataDebug) {
-						System.err.println("Web Server "
-								+ (isPostMethod ? "POST" : "GET") + ": "
-								+ resourcePath + " -> 200 (OK)");
+						System.err.println("Web Server " + (isPostMethod ? "POST" : "GET") + ": " + resourcePath
+								+ " -> 200 (OK)");
 					}
-					BufferedInputStream resourceStream = new BufferedInputStream(
-							resourceStream_);
-					writeHTTPHeaders(out, 200,
-							webServerContent.getContentType(),
-							webServerContent.getContentLength(),
+					BufferedInputStream resourceStream = new BufferedInputStream(resourceStream_);
+					writeHTTPHeaders(out, 200, webServerContent.getContentType(), webServerContent.getContentLength(),
 							webServerContent.getLastModified());
 					byte[] bytes = new byte[4096];
-					for (int i; (i = resourceStream.read(bytes)) != -1; out
-							.write(bytes, 0, i)) {
+					for (int i; (i = resourceStream.read(bytes)) != -1; out.write(bytes, 0, i)) {
 						if (isPrintDataDebug && i > 0 && printDataCount > 0) {
-							System.err.print(new String(bytes, 0, (int) Math
-									.min(i, printDataCount), "UTF-8"));
+							System.err.print(new String(bytes, 0, (int) Math.min(i, printDataCount), "UTF-8"));
 							printDataCount -= i;
 						}
 					}
@@ -854,11 +803,9 @@ public class WebServer {
 		isRunning = true;
 		instanceID = ObjectRegistry.getInstance().add(this);
 		serverSocket = new ServerSocket();
-		serverSocket.bind(new InetSocketAddress(InetAddress
-				.getByName(getHostAddress()), port));
+		serverSocket.bind(new InetSocketAddress(InetAddress.getByName(getHostAddress()), port));
 		port = serverSocket.getLocalPort();
-		if (Boolean.parseBoolean(NSSystemProperty.WEBSERVER_DEBUG_PRINTPORT
-				.get())) {
+		if (Boolean.parseBoolean(NSSystemProperty.WEBSERVER_DEBUG_PRINTPORT.get())) {
 			System.err.println("Web Server port: " + port);
 		}
 		Thread listenerThread = new Thread("WebServer") {
@@ -882,8 +829,7 @@ public class WebServer {
 							WebServerConnectionThread.semaphore.acquire();
 						} catch (InterruptedException e) {
 						}
-						WebServerConnectionThread webServerConnectionThread = new WebServerConnectionThread(
-								socket);
+						WebServerConnectionThread webServerConnectionThread = new WebServerConnectionThread(socket);
 						webServerConnectionThread.start();
 					} catch (Exception e) {
 						if (serverSocket != null) {
@@ -909,23 +855,21 @@ public class WebServer {
 
 	/**
 	 * @return A URL that when accessed will invoke the method
-	 *         <code>static WebServerContent getWebServerContent(HTTPRequest)</code>
-	 *         of the parameter class (the method visibility does not matter).
+	 *         <code>static WebServerContent getWebServerContent(HTTPRequest)</code> of the parameter class (the method
+	 *         visibility does not matter).
 	 */
 	public String getDynamicContentURL(String className, String parameter) {
-		return getURLPrefix() + "/class/" + instanceID + "/" + className + "/"
-				+ Utils.encodeURL(parameter);
+		return getURLPrefix() + "/class/" + instanceID + "/" + className + "/" + Utils.encodeURL(parameter);
 	}
 
 	/**
 	 * @return A URL that when accessed will invoke the method
-	 *         <code>static WebServerContent getWebServerContent(HTTPRequest)</code>
-	 *         of the parameter class (the method visibility does not matter).
+	 *         <code>static WebServerContent getWebServerContent(HTTPRequest)</code> of the parameter class (the method
+	 *         visibility does not matter).
 	 */
-	public String getDynamicContentURL(String className, String codebase,
-			String parameter) {
-		return getURLPrefix() + "/class/" + instanceID + "/" + className + "/"
-				+ codebase + "/" + Utils.encodeURL(parameter);
+	public String getDynamicContentURL(String className, String codebase, String parameter) {
+		return getURLPrefix() + "/class/" + instanceID + "/" + className + "/" + codebase + "/"
+				+ Utils.encodeURL(parameter);
 	}
 
 	public String getClassPathResourceURL(String className, String resourcePath) {
@@ -934,23 +878,19 @@ public class WebServer {
 			classPath = classPath.substring(0, classPath.lastIndexOf('/') + 1);
 			resourcePath = "/" + classPath + resourcePath;
 		}
-		return getURLPrefix() + "/classpath/" + instanceID
-				+ Utils.simplifyPath(resourcePath);
+		return getURLPrefix() + "/classpath/" + instanceID + Utils.simplifyPath(resourcePath);
 	}
 
 	public String getResourcePathURL(String codeBase, String resourcePath) {
 		if (codeBase == null) {
-			codeBase = new File(SystemProperty.USER_DIR.get())
-					.getAbsolutePath();
+			codeBase = new File(SystemProperty.USER_DIR.get()).getAbsolutePath();
 		}
-		return getURLPrefix() + "/resource/" + Utils.encodeURL(codeBase) + "/"
-				+ Utils.encodeURL(resourcePath);
+		return getURLPrefix() + "/resource/" + Utils.encodeURL(codeBase) + "/" + Utils.encodeURL(resourcePath);
 	}
 
 	public WebServerContent getURLContent(String resourceURL) {
 		try {
-			HTTPRequest httpRequest = new HTTPRequest(
-					new URL(resourceURL).getPath(), null);
+			HTTPRequest httpRequest = new HTTPRequest(new URL(resourceURL).getPath(), null);
 			return getWebServerContent(httpRequest);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -958,20 +898,17 @@ public class WebServer {
 		}
 	}
 
-	private final List<ClassLoader> referenceClassLoaderList = new ArrayList<ClassLoader>(
-			1);
+	private final List<ClassLoader> referenceClassLoaderList = new ArrayList<ClassLoader>(1);
 
 	public void addReferenceClassLoader(ClassLoader referenceClassLoader) {
-		if (referenceClassLoader == null
-				|| referenceClassLoader == getClass().getClassLoader()) {
+		if (referenceClassLoader == null || referenceClassLoader == getClass().getClassLoader()) {
 			return;
 		}
 		referenceClassLoaderList.add(0, referenceClassLoader);
 	}
 
 	public void removeReferenceClassLoader(ClassLoader referenceClassLoader) {
-		if (referenceClassLoader == null
-				|| referenceClassLoader == getClass().getClassLoader()) {
+		if (referenceClassLoader == null || referenceClassLoader == getClass().getClassLoader()) {
 			return;
 		}
 		referenceClassLoaderList.remove(referenceClassLoader);
@@ -988,8 +925,7 @@ public class WebServer {
 		 * 
 		 * @param httpRequest
 		 *            the request.
-		 * @return the content, or null to ignore the request and potentially
-		 *         let another handler process it.
+		 * @return the content, or null to ignore the request and potentially let another handler process it.
 		 */
 		public WebServerContent getWebServerContent(HTTPRequest httpRequest);
 	}
@@ -997,14 +933,12 @@ public class WebServer {
 	private final List<WebServerContentProvider> contentProviderList = new ArrayList<WebServerContentProvider>();
 
 	/**
-	 * Add a content provider for content that is not natively supported by the
-	 * web server.
+	 * Add a content provider for content that is not natively supported by the web server.
 	 * 
 	 * @param webServerContentProvider
 	 *            the content provider to add.
 	 */
-	public void addContentProvider(
-			WebServerContentProvider webServerContentProvider) {
+	public void addContentProvider(WebServerContentProvider webServerContentProvider) {
 		contentProviderList.add(webServerContentProvider);
 	}
 
@@ -1014,85 +948,84 @@ public class WebServer {
 	 * @param webServerContentProvider
 	 *            the content provider to remove.
 	 */
-	public void removeContentProvider(
-			WebServerContentProvider webServerContentProvider) {
+	public void removeContentProvider(WebServerContentProvider webServerContentProvider) {
 		contentProviderList.remove(webServerContentProvider);
 	}
 
-	//MS-Hack.sn
+	// MS-Hack.sn
 	/**
 	 * Determines the calling {@link JHTMLEditor} instance from registry cache.
 	 */
 	public static JHTMLEditor determineJHTMLEditorFromRegistry(HTTPRequest httpRequest) {
-      // extract the ID of the calling JHTMLEditor from resourcePath
-      // e.g. "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
-      // --> we need the "1" between "JHTMLEditor" and "/editor"
-      String resourcePath = httpRequest.getResourcePath();
-      final Pattern pattern = Pattern
-        .compile("JHTMLEditor/(\\d+?)/editor");
-      Matcher matcher = pattern.matcher(resourcePath);
-      if ( !matcher.find() ) {
-        JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.","Error", JOptionPane.ERROR_MESSAGE);
-        return null;
-      }
-      final int instanceId = Integer.valueOf(matcher.group(1));
-      final Object object = ObjectRegistry.getInstance().get(instanceId);
-      return (JHTMLEditor)object;
+		// extract the ID of the calling JHTMLEditor from resourcePath
+		// e.g.
+		// "class/2/chrriis.dj.nativeswing.swtimpl.components.JHTMLEditor/1/editor/filemanager/browser/default/browser.html"
+		// --> we need the "1" between "JHTMLEditor" and "/editor"
+		String resourcePath = httpRequest.getResourcePath();
+		final Pattern pattern = Pattern.compile("JHTMLEditor/(\\d+?)/editor");
+		Matcher matcher = pattern.matcher(resourcePath);
+		if (!matcher.find()) {
+			JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		final int instanceId = Integer.valueOf(matcher.group(1));
+		final Object object = ObjectRegistry.getInstance().get(instanceId);
+		return (JHTMLEditor) object;
 	}
-	
+
 	/**
-	 * Opens a file chooser.
-	 * In case of request type "Image" the chosen file is copied to
-	 * the "image" folder relative to the {@linkplain JHTMLEditor#getFileBrowserStartFolder()
-	 * file chooser start folder}.
-	 * @param httpRequest the request 
-	 * @return a "dummy" {@link WebServerContent} which sets the new relative file
-	 *         path (of the chosen file) to the calling component and closes the
-	 *         web browser window
+	 * Opens a file chooser. In case of request type "Image" the chosen file is copied to the "image" folder relative to
+	 * the {@linkplain JHTMLEditor#getFileBrowserStartFolder() file chooser start folder}.
+	 * 
+	 * @param httpRequest
+	 *            the request
+	 * @return a "dummy" {@link WebServerContent} which sets the new relative file path (of the chosen file) to the
+	 *         calling component and closes the web browser window
 	 */
-    public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
-      final JHTMLEditor ed = (JHTMLEditor) determineJHTMLEditorFromRegistry(httpRequest);
-      final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
-      final String type = httpRequest.getQueryParameterMap().get("Type");
+	public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
+		final JHTMLEditor ed = (JHTMLEditor) determineJHTMLEditorFromRegistry(httpRequest);
+		final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
+		final String type = httpRequest.getQueryParameterMap().get("Type");
 
-      // Open file chooser
-      FileExtensionFilter filter = null;
-      if ( "Image".equals(type) )
-        filter = GpSwingUtil.IMAGE_FILE_FILTER;
-      final File choosenFile = GpSwingUtil.chooseFile(ed,fileBrowserStartFolder,filter);
-      
-      String relImagePath = null;
-      if ( choosenFile != null )
-        relImagePath = GpSwingUtil.copyFileToRelativeFolder(ed.getWebBrowser(), choosenFile, fileBrowserStartFolder, "images");
+		// Open file chooser
+		FileExtensionFilter filter = null;
+		if ("Image".equals(type))
+			filter = GpSwingUtil.GIS_FILE_FILTER;
+		// i8n
+		final File choosenFile = GpSwingUtil.chooseImageFile(ed, fileBrowserStartFolder, filter,
+				"Image".equals(type) ? "Choose an image" : "Choose file");
 
-      // if copy was successful replace the template
-      // wildcard with the relative path of the
-      // choosen file
-      String approveStr = (relImagePath == null) ? "false" : "true";
-      String fileStr = (relImagePath == null) ? "" : relImagePath;
-      String template = null;
-      try {
-        template = IOUtil.readURLasString(new URL(
-          "http://localhost:" + Webserver.PORT
-          + "/browser.html"));
-      } catch (MalformedURLException err) {
-        return null;
-      }
-      String site = template.replace("${approve}", approveStr);
-      site = site.replace("${fileTemplate}", fileStr);
-      
-      final String site_ = site;
-      return new WebServerContent() {
-          @Override
-          public InputStream getInputStream() {
-            return new ByteArrayInputStream(site_.getBytes());
-          }
-      };
-    }
-    //MS-Hack.en
-	
-	protected static WebServerContent getWebServerContent(
-			HTTPRequest httpRequest) {
+		String relImagePath = null;
+		if (choosenFile != null)
+			relImagePath = GpSwingUtil.copyFileToRelativeFolder(ed.getWebBrowser(), choosenFile,
+					fileBrowserStartFolder, "images");
+
+		// if copy was successful replace the template
+		// wildcard with the relative path of the
+		// choosen file
+		String approveStr = (relImagePath == null) ? "false" : "true";
+		String fileStr = (relImagePath == null) ? "" : relImagePath;
+		String template = null;
+		try {
+			template = IOUtil.readURLasString(new URL("http://localhost:" + Webserver.PORT + "/browser.html"));
+		} catch (MalformedURLException err) {
+			return null;
+		}
+		String site = template.replace("${approve}", approveStr);
+		site = site.replace("${fileTemplate}", fileStr);
+
+		final String site_ = site;
+		return new WebServerContent() {
+			@Override
+			public InputStream getInputStream() {
+				return new ByteArrayInputStream(site_.getBytes());
+			}
+		};
+	}
+
+	// MS-Hack.en
+
+	protected static WebServerContent getWebServerContent(HTTPRequest httpRequest) {
 		String parameter = httpRequest.getResourcePath();
 		if (parameter.startsWith("/")) {
 			parameter = parameter.substring(1);
@@ -1101,23 +1034,22 @@ public class WebServer {
 		// MS-Hack.sn
 		// Because Geopublisher (with HTML editor) runs on local
 		// system, we want to use a "normal" file chooser.
-//        System.out.println(httpRequest.getResourcePath());
-		if (parameter
-				.contains("editor/filemanager/browser/default/browser.html")) {
-		  WebServerContent content = performFileBrowsing(httpRequest);
-		  if ( content != null )
-		    return content;
+		// System.out.println(httpRequest.getResourcePath());
+		if (parameter.contains("editor/filemanager/browser/default/browser.html")) {
+			WebServerContent content = performFileBrowsing(httpRequest);
+			if (content != null)
+				return content;
 		}
 		// MS-Hack.en
-		
+
 		int index = parameter.indexOf('/');
 		if (index != -1) {
 			String type = parameter.substring(0, index);
 			parameter = parameter.substring(index + 1);
 			if ("class".equals(type)) {
 				index = parameter.indexOf('/');
-				WebServer webServer = (WebServer) ObjectRegistry.getInstance()
-						.get(Integer.parseInt(parameter.substring(0, index)));
+				WebServer webServer = (WebServer) ObjectRegistry.getInstance().get(
+						Integer.parseInt(parameter.substring(0, index)));
 				if (webServer == null) {
 					return null;
 				}
@@ -1130,8 +1062,7 @@ public class WebServer {
 					Class<?> clazz = null;
 					for (ClassLoader referenceClassLoader : webServer.referenceClassLoaderList) {
 						try {
-							clazz = Class.forName(className, true,
-									referenceClassLoader);
+							clazz = Class.forName(className, true, referenceClassLoader);
 							break;
 						} catch (Exception e) {
 						}
@@ -1139,12 +1070,11 @@ public class WebServer {
 					if (clazz == null) {
 						clazz = Class.forName(className);
 					}
-					Method getWebServerContentMethod = clazz.getDeclaredMethod(
-							"getWebServerContent", HTTPRequest.class);
+					Method getWebServerContentMethod = clazz
+							.getDeclaredMethod("getWebServerContent", HTTPRequest.class);
 					getWebServerContentMethod.setAccessible(true);
 					httpRequest.setResourcePath(parameter);
-					return (WebServerContent) getWebServerContentMethod.invoke(
-							null, httpRequest);
+					return (WebServerContent) getWebServerContentMethod.invoke(null, httpRequest);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -1152,9 +1082,8 @@ public class WebServer {
 			}
 			if ("classpath".equals(type)) {
 				index = parameter.indexOf('/');
-				final WebServer webServer = (WebServer) ObjectRegistry
-						.getInstance()
-						.get(Integer.parseInt(parameter.substring(0, index)));
+				final WebServer webServer = (WebServer) ObjectRegistry.getInstance().get(
+						Integer.parseInt(parameter.substring(0, index)));
 				if (webServer == null) {
 					return null;
 				}
@@ -1164,22 +1093,19 @@ public class WebServer {
 					@Override
 					public String getContentType() {
 						int index = resourcePath.lastIndexOf('.');
-						return getDefaultMimeType(index == -1 ? null
-								: resourcePath.substring(index));
+						return getDefaultMimeType(index == -1 ? null : resourcePath.substring(index));
 					}
 
 					@Override
 					public InputStream getInputStream() {
 						try {
 							for (ClassLoader referenceClassLoader : webServer.referenceClassLoaderList) {
-								InputStream in = referenceClassLoader
-										.getResourceAsStream(resourcePath);
+								InputStream in = referenceClassLoader.getResourceAsStream(resourcePath);
 								if (in != null) {
 									return in;
 								}
 							}
-							return WebServer.class
-									.getResourceAsStream('/' + resourcePath);
+							return WebServer.class.getResourceAsStream('/' + resourcePath);
 						} catch (Exception e) {
 							e.printStackTrace();
 							return null;
@@ -1199,33 +1125,27 @@ public class WebServer {
 				// String codeBase = Utils.decodeURL(parameter.substring(0,
 				// index));
 				// parameter = Utils.decodeURL(parameter.substring(index + 1));
-				String codeBase = IOUtil.decodeURL(parameter
-						.substring(0, index));
+				String codeBase = IOUtil.decodeURL(parameter.substring(0, index));
 				parameter = IOUtil.decodeURL(parameter.substring(index + 1));
 				// MS-Hack.en
 				String resourceURL;
 				try {
 					URL url = new URL(codeBase);
 					int port = url.getPort();
-					resourceURL = url.getProtocol() + "://" + url.getHost()
-							+ (port != -1 ? ":" + port : "");
+					resourceURL = url.getProtocol() + "://" + url.getHost() + (port != -1 ? ":" + port : "");
 					if (parameter.startsWith("/")) {
 						resourceURL += removeHTMLAnchor(parameter);
 					} else {
 						String path = url.getPath();
-						path = path.substring(0, path.lastIndexOf('/') + 1)
-								+ parameter;
+						path = path.substring(0, path.lastIndexOf('/') + 1) + parameter;
 						resourceURL += path.startsWith("/") ? path : "/" + path;
 					}
 				} catch (Exception e) {
-					File file = Utils.getLocalFile(new File(codeBase,
-							removeHTMLAnchor(parameter)).getAbsolutePath());
+					File file = Utils.getLocalFile(new File(codeBase, removeHTMLAnchor(parameter)).getAbsolutePath());
 					if (file != null) {
-						resourceURL = new File(codeBase,
-								removeHTMLAnchor(parameter)).toURI().toString();
+						resourceURL = new File(codeBase, removeHTMLAnchor(parameter)).toURI().toString();
 					} else {
-						resourceURL = codeBase + "/"
-								+ removeHTMLAnchor(parameter);
+						resourceURL = codeBase + "/" + removeHTMLAnchor(parameter);
 					}
 				}
 				final String resourceURL_ = resourceURL;
@@ -1242,8 +1162,7 @@ public class WebServer {
 					@Override
 					public String getContentType() {
 						int index = resourceURL_.lastIndexOf('.');
-						return getDefaultMimeType(index == -1 ? null
-								: resourceURL_.substring(index));
+						return getDefaultMimeType(index == -1 ? null : resourceURL_.substring(index));
 					}
 
 					@Override
@@ -1263,8 +1182,7 @@ public class WebServer {
 			}
 		}
 		for (WebServerContentProvider contentProvider : webServer.contentProviderList) {
-			WebServerContent webServerContent = contentProvider
-					.getWebServerContent(httpRequest);
+			WebServerContent webServerContent = contentProvider.getWebServerContent(httpRequest);
 			if (webServerContent != null) {
 				return webServerContent;
 			}
@@ -1312,8 +1230,7 @@ public class WebServer {
 			}
 			webServer = new WebServer();
 			try {
-				boolean isApplet = "applet".equals(System
-						.getProperty("nativeswing.deployment.type"));
+				boolean isApplet = "applet".equals(System.getProperty("nativeswing.deployment.type"));
 				webServer.start(!isApplet);
 			} catch (Exception e) {
 				e.printStackTrace();

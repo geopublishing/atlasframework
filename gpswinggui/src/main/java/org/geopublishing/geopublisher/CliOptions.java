@@ -22,6 +22,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import de.schmitzm.versionnumber.ReleaseUtil;
 import de.schmitzm.versionnumber.ReleaseUtil.License;
 
@@ -278,6 +279,7 @@ public class CliOptions extends Options {
 
                 final File awcFileToLoad = awcFile;
 
+                NativeInterface.open();
                 SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
@@ -301,6 +303,7 @@ public class CliOptions extends Options {
 
                     }
                 });
+                NativeInterface.runEventPump();
                 return -1;
             } else {
 

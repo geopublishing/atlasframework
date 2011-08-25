@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -31,12 +32,27 @@ import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.ResourceProvider;
 import de.schmitzm.net.mail.Mailer;
 import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.FileExtensionFilter;
 import de.schmitzm.swing.formatter.MbDecimalFormatter;
 import de.schmitzm.versionnumber.ReleaseUtil;
 
 public class GpUtil {
 
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
+
+	/**
+	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
+	 * .tiff, .gif).
+	 */
+	public static final FileExtensionFilter IMAGE_FILE_FILTER = new FileExtensionFilter(
+			"Images", true, ".png", ".jpg", ".jpeg", ".tif", ".tiff", ".gif");
+
+	/**
+	 * {@link FileFilter} for image files (accepts .png, .jpg, .jpeg, .tif,
+	 * .tiff, .gif).
+	 */
+	public static final FileExtensionFilter GIS_FILE_FILTER = new FileExtensionFilter(
+			"GIS-Data", true, ".shp", ".tif", ".tiff", ".a00", ".asc", ".gml");
 
 	/**
 	 * This Mailer can sends E-Mails to <code>bugreport@wikisquare.de</code> and

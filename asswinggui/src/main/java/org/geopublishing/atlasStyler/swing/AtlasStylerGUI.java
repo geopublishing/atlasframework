@@ -72,6 +72,7 @@ import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import de.schmitzm.geotools.MapContextManagerInterface;
 import de.schmitzm.geotools.map.event.MapLayerListAdapter;
 import de.schmitzm.geotools.styling.StyledFS;
@@ -652,6 +653,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		boolean addedIndexes = checkFixIndexCreation(args);
 
 		if (!addedIndexes) {
+			NativeInterface.open();
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					AtlasStylerGUI asg = new AtlasStylerGUI();
@@ -659,27 +661,11 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 					// // TODO Switch to Apache Commons-CLI
 					if (args.length != 0) {
 						LOGGER.warn("Sorry, command line arguments are ignored in this version. Please contact geopublishing.org if you need this function.");
-						// for (String param : args) {
-						//
-						// if ((param.startsWith("\""))
-						// && (param.endsWith("\""))) {
-						// param = param.substring(1, param.length() - 1);
-						// }
-						//
-						// File fileParamter = new File(param);
-						//
-						// if (fileParamter.exists()) {
-						// LOGGER.info("Opening command line argument "
-						// + param + " as file.");
-						// new ImportWizardResultProducer_FILE()..addLayer(
-						// asg, fileParamter, asg);
-						// }
-						// }
-						//
 					}
 					asg.setVisible(true);
 				}
 			});
+			NativeInterface.runEventPump();
 
 		} else {
 			LOGGER.info("Not starting GUI because command line parameter addFix was passed");
