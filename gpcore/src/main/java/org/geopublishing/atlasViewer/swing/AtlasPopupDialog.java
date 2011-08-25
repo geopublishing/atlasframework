@@ -145,7 +145,7 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
 			// htmlInfoJPane.setPreferredSize(new Dimension(500, 320));
-			LangUtil.sleepExceptionless(500);
+			// LangUtil.sleepExceptionless(500);
 		}
 		return htmlInfoJPane.getComponent();
 	}

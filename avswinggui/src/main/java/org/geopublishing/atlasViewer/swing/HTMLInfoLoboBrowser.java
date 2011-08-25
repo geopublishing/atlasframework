@@ -74,6 +74,18 @@ public class HTMLInfoLoboBrowser extends HtmlPanel implements
 		this.atlasConfig = ac;
 		htmlContext = new SimpleHtmlRendererContext(this,
 				new SimpleUserAgentContext()) {
+
+			/**
+			 * Indicates whether navigation (via
+			 * {@link #submitForm(String, URL, String, String, FormInput[])})
+			 * should be asynchronous. This is overwritten here to avoid
+			 * problems with MigLayout rendering. MigLayout has a problem
+			 * waiting for a panel to determine its size.
+			 */
+			protected boolean isNavigationAsynchronous() {
+				return false;
+			}
+
 			@Override
 			public boolean onContextMenu(HTMLElement element, MouseEvent event) {
 				if (HTMLInfoLoboBrowser.this.popupMenu != null) {
