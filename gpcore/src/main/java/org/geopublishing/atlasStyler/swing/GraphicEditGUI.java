@@ -24,6 +24,7 @@ import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
+import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -1267,11 +1268,6 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 						SwingUtil.getParentWindow(GraphicEditGUI.this),
 						geometryForm, graphic.getExternalGraphics());
 
-				// selectExternalGraphicDialog = new SVGSelector(SwingUtil
-				// .getParentWindow(GraphicEditGUI4.this), Utilities
-				// .createFeatureType(Point.class).getDefaultGeometry(),
-				// graphic.getExternalGraphics() );
-
 				selectExternalGraphicDialog.setModal(true);
 				selectExternalGraphicDialog
 						.addPropertyChangeListener(new PropertyChangeListener() {
@@ -1282,28 +1278,14 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 								if (evt.getPropertyName().equals(
 										SVGSelector.PROPERTY_UPDATED)) {
 
-									LOGGER.info(evt.getSource().getClass()
-											.getSimpleName());
 									ExternalGraphic[] egs = (ExternalGraphic[]) evt
 											.getNewValue();
+									
+									graphic.graphicalSymbols().clear();
+									
 									if (egs != null) {
-										try {
-											LOGGER.info("EG Location = "
-													+ egs[0].getLocation());
-										} catch (Exception e) {
-											LOGGER.error(
-													"The ExternalGraphic is not valid. Removing it",
-													e);
-											graphic.setExternalGraphics(null);
-											ExceptionDialog.show(
-													SwingUtil
-															.getParentWindowComponent(GraphicEditGUI.this),
-													e);
-										}
-										graphic.setExternalGraphics(egs);
-									} else {
-										graphic.setExternalGraphics(null);
-									}
+										graphic.graphicalSymbols().addAll(Arrays.asList(egs));
+									} 
 
 									GraphicEditGUI.this.firePropertyChange(
 											AbstractStyleEditGUI.PROPERTY_UPDATED,
