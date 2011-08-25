@@ -61,6 +61,7 @@
     <property name="jnlp.packEnabled" value="true"/>
 	<property name="file.encoding" value="UTF-8"/>
 	
+	<extension href="http://www.wikisquare.de/swt/swt-${swt.version}.jnlp" name="SWT"/>
 	<extension href="http://www.wikisquare.de/jai/jai-1.1.3.jnlp" name="JAI"/>
 	
 	$dependencies
