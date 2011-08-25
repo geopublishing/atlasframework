@@ -14,6 +14,7 @@ import org.geopublishing.geopublisher.GpUtil;
 
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.DialogType;
+import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.SelectionMode;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.FileExtensionFilter;
@@ -57,14 +58,19 @@ public class AsSwingUtil extends ASUtil {
 	 *            defines which files can be selected
 	 * @return {@code null} if the dialog was not approved
 	 * 
-	 * TODO move to schmitz-swt
+	 *         TODO move to schmitz-swt
 	 */
 	public static File chooseFileOpen(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
 
 		try {
 			JFileDialog fileDialog = new JFileDialog();
-			// fileDialog.setTitle(GpSwingUtil.R("CreateAtlas.Dialog.Title"));
-			fileDialog.setParentDirectory(startFolder.getAbsolutePath());
+			
+			if (startFolder != null) {
+				if (startFolder.isDirectory())
+					fileDialog.setParentDirectory(startFolder.getAbsolutePath());
+				else
+					fileDialog.setParentDirectory(startFolder.getParent());
+			}
 
 			fileDialog.setDialogType(DialogType.OPEN_DIALOG_TYPE);
 
@@ -79,8 +85,8 @@ public class AsSwingUtil extends ASUtil {
 			}
 
 			fileDialog.setExtensionFilters(extensions, descriptions, 0);
-			fileDialog.show(parent);
 			fileDialog.setTitle(title);
+			fileDialog.show(parent);
 
 			String selectedFileName = fileDialog.getSelectedFileName();
 
@@ -89,12 +95,12 @@ public class AsSwingUtil extends ASUtil {
 
 			return new File(fileDialog.getParentDirectory(), selectedFileName);
 		} catch (Exception e) {
-			return chooseFileFallback(parent, startFolder, title, filters);
+			return chooseFileOpenFallback(parent, startFolder, title, filters);
 		}
 	}
 
 	/**
-	 * Performs a file choose as a fallback
+	 * Performs a file SAVE choose as a fallback
 	 * 
 	 * @param parent
 	 *            component for the dialog (can be {@code null})
@@ -105,13 +111,16 @@ public class AsSwingUtil extends ASUtil {
 	 *            limitations
 	 * @return {@code null} if the dialog was not approved
 	 * 
-	 * TODO move to schmitz-swt
+	 *         TODO move to schmitz-swt
 	 */
-	public static File chooseFileFallback(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
+	public static File chooseFileSaveFallback(Component parent, File startFolder, String title,
+			FileExtensionFilter... filters) {
 		if (startFolder == null)
 			startFolder = new File("/");
 
 		JFileChooser chooser = new JFileChooser(startFolder);
+		chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+
 		if (filters != null) {
 			chooser.setAcceptAllFileFilterUsed(false);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -119,11 +128,90 @@ public class AsSwingUtil extends ASUtil {
 		}
 		if (title != null)
 			chooser.setDialogTitle(title);
-		
+
 		int ret = chooser.showOpenDialog(parent);
 		if (ret == JFileChooser.APPROVE_OPTION)
 			return chooser.getSelectedFile();
 		return null;
+	}
+
+	/**
+	 * Performs a file OPEN choose as a fallback
+	 * 
+	 * @param parent
+	 *            component for the dialog (can be {@code null})
+	 * @param startFolder
+	 *            start folder for the chooser (if {@code null} "/" is used)
+	 * @param filter
+	 *            defines which files can be selected. Only the last filter in the list will be offered due to
+	 *            limitations
+	 * @return {@code null} if the dialog was not approved
+	 * 
+	 *         TODO move to schmitz-swt
+	 */
+	public static File chooseFileOpenFallback(Component parent, File startFolder, String title,
+			FileExtensionFilter... filters) {
+		if (startFolder == null)
+			startFolder = new File("/");
+
+		JFileChooser chooser = new JFileChooser(startFolder);
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+		if (filters != null) {
+			chooser.setAcceptAllFileFilterUsed(false);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setFileFilter(filters[0].toJFileChooserFilter());
+		}
+		if (title != null)
+			chooser.setDialogTitle(title);
+
+		int ret = chooser.showOpenDialog(parent);
+		if (ret == JFileChooser.APPROVE_OPTION)
+			return chooser.getSelectedFile();
+		return null;
+	}
+
+	public static File chooseFileSave(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
+		try {
+			JFileDialog fileDialog = new JFileDialog();
+			// fileDialog.setTitle(GpSwingUtil.R("CreateAtlas.Dialog.Title"));
+			
+			if (startFolder != null) {
+				if (startFolder.isDirectory())
+					fileDialog.setParentDirectory(startFolder.getCanonicalPath());
+				else {
+					fileDialog.setParentDirectory(startFolder.getParent());
+					fileDialog.setSelectedFileName(startFolder.getName());
+				}
+			}
+
+			fileDialog.setDialogType(DialogType.SAVE_DIALOG_TYPE);
+			fileDialog.setSelectionMode(SelectionMode.SINGLE_SELECTION);
+
+			String[] extensions = new String[0];
+			for (FileExtensionFilter filter : filters) {
+				extensions = LangUtil.extendArray(extensions, filter.toNativeFileFilter()[0]);
+			}
+
+			String[] descriptions = new String[0];
+			for (FileExtensionFilter filter : filters) {
+				descriptions = LangUtil.extendArray(descriptions, filter.toNativeFileFilter()[1]);
+			}
+
+			fileDialog.setExtensionFilters(extensions, descriptions, 0);
+			fileDialog.setTitle(title);
+			
+			fileDialog.show(parent);
+
+			String selectedFileName = fileDialog.getSelectedFileName();
+
+			if (selectedFileName == null)
+				return null;
+
+			return new File(fileDialog.getParentDirectory(), selectedFileName);
+		} catch (Exception e) {
+			return chooseFileSaveFallback(parent, startFolder, title, filters);
+		}
 	}
 
 }

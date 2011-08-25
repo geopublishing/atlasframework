@@ -138,7 +138,7 @@ public class StylerMapView extends MapView {
 
 		if (layerManager == null) {
 
-			layerManager = new MapLegend(getGeoMapPane(), getToolBar());
+			layerManager = new AtlasStylerMapLegend(getGeoMapPane(), getToolBar());
 
 			// ****************************************************************************
 			// Depending on the Title of the insered Layers, the width of the

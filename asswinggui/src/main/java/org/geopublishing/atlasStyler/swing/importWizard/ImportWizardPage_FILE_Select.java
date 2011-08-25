@@ -112,10 +112,11 @@ public class ImportWizardPage_FILE_Select extends WizardPage {
 					final File selectedFile = AsSwingUtil.chooseFileOpen(ImportWizardPage_FILE_Select.this,
 							// i8n
 							getLastOpenDir, "Select data file", 
+							new FileExtensionFilter(ASUtil.FILTER_ALLSUPPORTED),
 							new FileExtensionFilter(ASUtil.FILTER_GML),
 							new FileExtensionFilter(ASUtil.FILTER_RASTERSUPPORTED),
-							new FileExtensionFilter(ASUtil.FILTER_SHAPE),
-							new FileExtensionFilter(ASUtil.FILTER_ALLSUPPORted));
+							new FileExtensionFilter(ASUtil.FILTER_SHAPE)
+					);
 
 					if (selectedFile == null)
 						return;

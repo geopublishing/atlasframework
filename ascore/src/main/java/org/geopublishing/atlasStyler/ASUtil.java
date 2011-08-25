@@ -22,6 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.text.DecimalFormat;
@@ -117,9 +118,12 @@ public class ASUtil {
 
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
 
+	public static final FileNameExtensionFilter FILTER_SLD = new FileNameExtensionFilter(
+			"SLD", "sld", "xml");
+	
 	public static final FileNameExtensionFilter FILTER_GML = new FileNameExtensionFilter(
 			"GML", "gml", "GML");
-	public static final FileNameExtensionFilter FILTER_ALLSUPPORted = new FileNameExtensionFilter(
+	public static final FileNameExtensionFilter FILTER_ALLSUPPORTED = new FileNameExtensionFilter(
 			ASUtil.R("Filetype_AllSupported"), "shp", "SHP", "zip", "ZIP",
 			"gml", "GML", "tif", "TIF", "tiff", "TIFF", "a00", "asc", "ASC",
 			"txt", "ascii", "ASCII");
@@ -132,6 +136,8 @@ public class ASUtil {
 	public static final StyleBuilder SB = StylingUtil.STYLE_BUILDER;
 
 	public final static SLDTransformer sldTransformer = new SLDTransformer();
+
+	public static final String PRODUCTION_FILENAME_PART = "production";
 
 	/**
 	 * Asks to edit a {@link String} in a modal dialog. As we are working with
@@ -1226,6 +1232,16 @@ public class ASUtil {
 			}
 		}
 		model.setSelectedItem(stringVal);
+	}
+	
+	/**
+	 * Changes the name of the original .sld file to the optimized version
+	 */
+	public static File changeToOptimizedFilename(File sldFile) {
+		String pathname = sldFile.getAbsolutePath().replaceAll("\\.sld", "." + PRODUCTION_FILENAME_PART + ".sld")
+				.replaceAll("\\.SLD", "." + PRODUCTION_FILENAME_PART + ".SLD").replaceAll("\\.xml", "." + PRODUCTION_FILENAME_PART + ".xml")
+				.replaceAll("\\.XML", "." + PRODUCTION_FILENAME_PART + ".XML");
+		return new File(pathname);
 	}
 
 }

@@ -49,7 +49,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.swing.AtlasStylerSaveLayerToSLDAction;
 import org.geopublishing.atlasStyler.swing.StylerDialog;
 import org.geopublishing.atlasViewer.ExportableLayer;
 import org.geopublishing.atlasViewer.GpCoreUtil;
@@ -79,9 +78,7 @@ import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.GeoMapPane;
-import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
-import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.geotools.styling.StyledRasterInterface;
@@ -517,17 +514,6 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	public JPopupMenu getToolMenu() {
 
 		final JPopupMenu toolPopup = new JPopupMenu();
-
-		// ****************************************************************************
-		// AtlasStyler related button to save the LayerStyler as .SLD
-		// ****************************************************************************
-		if (styledLayer instanceof StyledFS
-				|| styledLayer instanceof StyledGridCoverageReader) {
-
-			// We are in AtlasStyler. Offer to save the .SLD
-			toolPopup.add(new JMenuItem(new AtlasStylerSaveLayerToSLDAction(
-					this, styledLayer)));
-		}
 
 		// ****************************************************************************
 		// Create filter-related buttons if this layer is filterable
