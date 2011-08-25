@@ -109,6 +109,10 @@
 	<profiles>
 		<profile>
 
+			<!-- If run on the special "gisbert" profile, the application is released 
+				to the geopublishing.org webpage -->
+			<id>gisbert</id>
+			
 			<dependencies>
 				<!-- On GISBERT add SWT JARs for ALL Systems! -->
 				<dependency>
@@ -125,11 +129,6 @@
 				</dependency>
 
 			</dependencies>
-
-
-			<!-- If run on the special "gisbert" profile, the application is released 
-				to the geopublishing.org webpage -->
-			<id>gisbert</id>
 			<build>
 				<plugins>
 
@@ -178,38 +177,6 @@
 								<outputFile>gp.jnlp</outputFile>
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
-
-							<!-- <commonJarResources> -->
-							<!-- <jarResource> -->
-							<!-- <artifactId>swt-windows</artifactId> -->
-							<!-- <version>${swt.version}</version> -->
-							<!-- <classifier>x86</classifier> -->
-							<!-- </jarResource> -->
-							<!-- <jarResource> -->
-							<!-- <groupId>org.eclipse.swt</groupId> -->
-							<!-- <artifactId>swt-windows</artifactId> -->
-							<!-- <version>${swt.version}</version> -->
-							<!-- <classifier>x86_64</classifier> -->
-							<!-- </jarResource> -->
-							<!-- <jarResource> -->
-							<!-- <groupId>org.eclipse.swt</groupId> -->
-							<!-- <artifactId>swt-gtk-linux</artifactId> -->
-							<!-- <version>${swt.version}</version> -->
-							<!-- <classifier>x86</classifier> -->
-							<!-- </jarResource> -->
-							<!-- <jarResource> -->
-							<!-- <groupId>org.eclipse.swt</groupId> -->
-							<!-- <artifactId>swt-gtk-linux</artifactId> -->
-							<!-- <version>${swt.version}</version> -->
-							<!-- <classifier>x86_64</classifier> -->
-							<!-- </jarResource> -->
-							<!-- <jarResource> -->
-							<!-- <groupId>org.eclipse.swt</groupId> -->
-							<!-- <artifactId>swt-cocoa-macosx</artifactId> -->
-							<!-- <version>${swt.version}</version> -->
-							<!-- <classifier>x86</classifier> -->
-							<!-- </jarResource> -->
-							<!-- </commonJarResources> -->
 
 							<sign>
 								<keypass>wasser</keypass>
