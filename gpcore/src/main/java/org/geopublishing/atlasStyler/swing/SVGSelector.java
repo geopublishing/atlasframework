@@ -82,7 +82,8 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 // TODO Convert to AtlasDialog and add a local Database of SVG symbols
 public class SVGSelector extends CancellableDialogAdapter {
-	static private final Logger LOGGER = LangUtil.createLogger(SVGSelector.class);
+	static private final Logger LOGGER = LangUtil
+			.createLogger(SVGSelector.class);
 
 	protected static final Dimension SVGICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
@@ -171,27 +172,14 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 		rescan(false);
 
-		// // Cancel any selection if the window is closed
-		// setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		// addWindowListener(new WindowAdapter() {
-		//
-		// @Override
-		// public void windowClosing(WindowEvent e) {
-		// cancel();
-		// }
-		//
-		// });
 	}
 
 	@Override
 	public void cancel() {
-		// SwingUtilities.invokeLater(new Runnable() {
-		// @Override
-		// public void run() {
+
 		SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null,
 				backup);
-		// }
-		// });
+
 	}
 
 	/**
@@ -263,8 +251,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridy = 0;
 			jLabelExplanation = new JLabel();
-			jLabelExplanation
-					.setText(AtlasStylerVector.R("SVGSelector.Heading.HTML"));
+			jLabelExplanation.setText(AtlasStylerVector
+					.R("SVGSelector.Heading.HTML"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelExplanation, gridBagConstraints5);
@@ -338,14 +326,17 @@ public class SVGSelector extends CancellableDialogAdapter {
 	private JButton getJButtoneSelfURL() {
 		if (jButtonSelfURL == null) {
 			jButtonSelfURL = new JButton();
-			jButtonSelfURL.setToolTipText(AtlasStylerVector
+			jButtonSelfURL.setToolTipText(ASUtil
 					.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
 
-			jButtonSelfURL.setAction(new AbstractAction(AtlasStylerVector
+			jButtonSelfURL.setAction(new AbstractAction(ASUtil
 					.R("ExternalGraphicsSelector.button.manual_URL")) {
+
+				private static final long serialVersionUID = 8310624537837831402L;
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					// i18n
 					JOptionPane
 							.showMessageDialog(
 									SVGSelector.this,
@@ -599,6 +590,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 			// This button is only enabled if we are not on the root level
 			jButtonUp.addActionListener(new AbstractAction() {
 
+				private static final long serialVersionUID = 6536632895051071149L;
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// Transform
@@ -616,7 +609,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 				}
 			});
 
-			jButtonUp.setToolTipText(AtlasStylerVector
+			jButtonUp.setToolTipText(ASUtil
 					.R("ExternalGraphicsSelector.button.directory_up_ToolTip"));
 
 		}
@@ -636,6 +629,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 			protected List<Object> doInBackground() throws Exception {
 
 				List<Object> entriesForTheList = new ArrayList<Object>();
+				// i18n
 				LOGGER.debug("Seaching for online Symbols");
 
 				URL index = url;
@@ -679,24 +673,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 						newNameWithOutEnding = newNameWithOutEnding
 								.substring(newNameWithOutEnding
 										.lastIndexOf("/") + 1);
-
-						// /**
-						// * Chacking if the same SVG is already included. Can
-						// * happen if we rescan or somehting like that
-						// */
-						// Enumeration<?> name2 = model.elements();
-						// while (name2.hasMoreElements()) {
-						// Object nextElement = name2.nextElement();
-						// if (nextElement instanceof URL)
-						// continue;
-						// String styleName = ((SingleRuleList) nextElement)
-						// .getStyleName();
-						// if (styleName.equals(newNameWithOutEnding)) {
-						// // A Symbol with the same StyleName allready
-						// // exits
-						// continue;
-						// }
-						// }
 
 						/*******************************************************
 						 * Now we create the URL that points to a local,
@@ -806,11 +782,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 					if (in != null)
 						in.close();
 				}
-				//
-				// /**
-				// * Sort the file list, so we have a sorted list of symbols
-				// */
-				// Collections.sort(Arrays.asList(symbolPaths));
 
 				return entriesForTheList;
 			}
@@ -830,8 +801,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 		if (reset) {
 			getJList().setModel(new DefaultListModel());
-			// imageCache.clear();
-			// symbolPreviewComponentsCache.clear();
 			cachedRuleLists.remove(key);
 		}
 

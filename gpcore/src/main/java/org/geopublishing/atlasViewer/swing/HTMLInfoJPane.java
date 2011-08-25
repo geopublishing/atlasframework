@@ -14,9 +14,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.net.URL;
 
@@ -206,15 +203,4 @@ public class HTMLInfoJPane extends JEditorPane implements HTMLInfoPaneInterface 
     setBackground(backup);
   }
   
-  @Override
-	public void addRenderingDoneListener(ActionListener listener) {
-		addPropertyChangeListener(new PropertyChangeListener() {
-			
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				LOGGER.debug(arg0);
-				// TODO wann ist das renderin gabgeschlossen?
-			}
-		});
-	}
 }

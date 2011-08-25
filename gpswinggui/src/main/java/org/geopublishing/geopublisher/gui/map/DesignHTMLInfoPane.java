@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher.gui.map;
 
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
@@ -119,8 +118,4 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 		ace.getMapPool().addChangeListener(listenForMapChanges);
 	}
 
-	@Override
-	public void addRenderingDoneListener(ActionListener listener) {
-		htmlPane.addRenderingDoneListener(listener);
-	}
 }

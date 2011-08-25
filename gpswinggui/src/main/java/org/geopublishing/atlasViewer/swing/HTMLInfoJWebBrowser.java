@@ -5,12 +5,9 @@ package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.net.URL;
 
 import javax.swing.JComponent;
@@ -293,17 +290,5 @@ public class HTMLInfoJWebBrowser extends JWebBrowser implements
 				blockLocationChange(ev); // stop standard link processing
 		}
 	};
-
-	@Override
-	public void addRenderingDoneListener(ActionListener listener) {
-		addPropertyChangeListener(new PropertyChangeListener() {
-
-			@Override
-			public void propertyChange(PropertyChangeEvent arg0) {
-				LOGGER.debug(arg0);
-				// TODO wann ist das renderin gabgeschlossen?
-			}
-		});
-	}
 
 }

@@ -97,8 +97,6 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		setSize(dialogSize);
 		SwingUtil.centerFrameOnScreen(this);
 		
-//		LangUtil.sleepExceptionless(500);
-		
 		setVisible(true);
 		
 	}
@@ -139,15 +137,6 @@ public class AtlasPopupDialog extends javax.swing.JDialog {
 		if (htmlInfoJPane == null) {
 			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getPopupHTMLURL(),
 					atlasConfig);
-			
-
-			// So wäre es schön, aber scheiss LOBO kann das nicht!?
-			htmlInfoJPane.addRenderingDoneListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					setVisible(true);
-				}
-			});
 		}
 		return htmlInfoJPane.getComponent();
 	}
