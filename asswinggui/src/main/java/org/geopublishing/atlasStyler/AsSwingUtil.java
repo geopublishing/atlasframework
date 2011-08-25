@@ -47,7 +47,7 @@ public class AsSwingUtil extends ASUtil {
 	}
 
 	/**
-	 * Performs a file choose using the Native OSdialog via SWT
+	 * Performs a file choose using the Native OS-Dialog via SWT
 	 * 
 	 * @param parent
 	 *            component for the dialog (can be {@code null})
@@ -56,6 +56,8 @@ public class AsSwingUtil extends ASUtil {
 	 * @param filter
 	 *            defines which files can be selected
 	 * @return {@code null} if the dialog was not approved
+	 * 
+	 * TODO move to schmitz-swt
 	 */
 	public static File chooseFileOpen(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
 
@@ -87,12 +89,12 @@ public class AsSwingUtil extends ASUtil {
 
 			return new File(fileDialog.getParentDirectory(), selectedFileName);
 		} catch (Exception e) {
-			return chooseFileFallback(parent, startFolder, filters);
+			return chooseFileFallback(parent, startFolder, title, filters);
 		}
 	}
 
 	/**
-	 * Performs a file choose.
+	 * Performs a file choose as a fallback
 	 * 
 	 * @param parent
 	 *            component for the dialog (can be {@code null})
@@ -102,8 +104,10 @@ public class AsSwingUtil extends ASUtil {
 	 *            defines which files can be selected. Only the last filter in the list will be offered due to
 	 *            limitations
 	 * @return {@code null} if the dialog was not approved
+	 * 
+	 * TODO move to schmitz-swt
 	 */
-	public static File chooseFileFallback(Component parent, File startFolder, FileExtensionFilter... filters) {
+	public static File chooseFileFallback(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
 		if (startFolder == null)
 			startFolder = new File("/");
 
@@ -113,6 +117,9 @@ public class AsSwingUtil extends ASUtil {
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(filters[filters.length - 1].toJFileChooserFilter());
 		}
+		if (title != null)
+			chooser.setDialogTitle(title);
+		
 		int ret = chooser.showOpenDialog(parent);
 		if (ret == JFileChooser.APPROVE_OPTION)
 			return chooser.getSelectedFile();
