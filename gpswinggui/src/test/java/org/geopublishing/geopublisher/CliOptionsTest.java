@@ -18,6 +18,7 @@ import org.geopublishing.geopublisher.export.JarExportUtil;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.io.IOUtil;
@@ -86,7 +87,7 @@ public class CliOptionsTest extends TestingClass {
 	@Test
 	public void testsLoadWithGUIandSaveAndExit() throws Throwable {
 
-		if (TestingUtil.INTERACTIVE) {
+		if (TestingUtil.HASGUI) {
 
 			// Loads an atlas into the GUI and closes GP after a few seconds
 
@@ -97,10 +98,11 @@ public class CliOptionsTest extends TestingClass {
 		}
 	}
 
+	@Ignore
 	@Test
 	public void testsLoadWithGUI() throws Throwable {
 
-		if (TestingUtil.INTERACTIVE) {
+		if (TestingUtil.HASGUI) {
 
 			// Loads an atlas into the GUI and closes GP after a few seconds
 
