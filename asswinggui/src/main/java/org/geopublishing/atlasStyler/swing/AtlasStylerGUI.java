@@ -59,6 +59,7 @@ import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.shapefile.indexed.IndexedShapefileDataStore;
@@ -77,6 +78,7 @@ import de.schmitzm.geotools.map.event.MapLayerListAdapter;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeatureSourceInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.io.IOUtil;
@@ -90,8 +92,9 @@ import de.schmitzm.versionnumber.ReleaseUtil;
 import de.schmitzm.versionnumber.ReleaseUtil.License;
 
 /**
- * This is the main GUI for the AtlasStyler standalone. It looks like a condensed {@link AtlasViewer}, and its main
- * purpose is to reach the "Style" item in the tools menu.
+ * This is the main GUI for the AtlasStyler standalone. It looks like a
+ * condensed {@link AtlasViewer}, and its main purpose is to reach the "Style"
+ * item in the tools menu.
  * 
  * @author Stefan A. Tzeggai
  * 
@@ -105,13 +108,15 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	private static final long serialVersionUID = 1231321321258008431L;
 
-	final static private Logger LOGGER = LangUtil.createLogger(AtlasStylerGUI.class);
+	final static private Logger LOGGER = LangUtil
+			.createLogger(AtlasStylerGUI.class);
 
 	private StylerMapView stylerMapView = null;
 
 	final private HashMap<String, StyledLayerInterface<?>> styledObjCache = new HashMap<String, StyledLayerInterface<?>>();
 
-	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this, getStylerMapView().getMapManager());
+	final private XMLCodeFrame xmlCodeFrame = new XMLCodeFrame(this,
+			getStylerMapView().getMapManager());
 
 	private final HashMap<String, DataStore> openDatastores = new HashMap<String, DataStore>();
 
@@ -158,9 +163,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		List<Image> icons = new ArrayList<Image>(2);
 		ClassLoader cl = AsSwingUtil.class.getClassLoader();
 		final String imagePackageName = "icons/";
-		icons.add(new ImageIcon(cl.getResource(imagePackageName + "as_icon16.png")).getImage());
-		icons.add(new ImageIcon(cl.getResource(imagePackageName + "as_icon32.png")).getImage());
-		icons.add(new ImageIcon(cl.getResource(imagePackageName + "as_icon64.png")).getImage());
+		icons.add(new ImageIcon(cl.getResource(imagePackageName
+				+ "as_icon16.png")).getImage());
+		icons.add(new ImageIcon(cl.getResource(imagePackageName
+				+ "as_icon32.png")).getImage());
+		icons.add(new ImageIcon(cl.getResource(imagePackageName
+				+ "as_icon64.png")).getImage());
 		setIconImages(icons);
 
 		AVSwingUtil.initEPSG(AtlasStylerGUI.this);
@@ -172,7 +180,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		this.setJMenuBar(createMenuBar());
 
 		this.setContentPane(getJContentPane());
-		String AtlasStyler_MainWindowTitle = "AtlasStyler " + ReleaseUtil.getVersionInfo(GpCoreUtil.class);
+		String AtlasStyler_MainWindowTitle = "AtlasStyler "
+				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class);
 		this.setTitle(AtlasStyler_MainWindowTitle);
 
 		// In Xubuntu (OS-Geo Live DVD) the JFrame otherwise is hidden behind
@@ -191,14 +200,17 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		jMenuBar.add(fileMenu);
 
 		{ // Import WIzard
-			JMenuItem mi = new JMenuItem(new AbstractAction(AsSwingUtil.R("MenuBar.FileMenu.ImportWizard")) {
+			JMenuItem mi = new JMenuItem(new AbstractAction(
+					AsSwingUtil.R("MenuBar.FileMenu.ImportWizard")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ImportWizard.showWizard(AtlasStylerGUI.this, AtlasStylerGUI.this);
+					ImportWizard.showWizard(AtlasStylerGUI.this,
+							AtlasStylerGUI.this);
 				}
 			});
-			mi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, Event.CTRL_MASK, true));
+			mi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
+					Event.CTRL_MASK, true));
 			fileMenu.add(mi);
 		}
 
@@ -207,24 +219,32 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		/**
 		 * MenuItem to create a new language
 		 */
-		JMenuItem manageLanguageJMenuitem = new JMenuItem(new AbstractAction(ASUtil.R("TranslateSoftwareDialog.Title"),
+		JMenuItem manageLanguageJMenuitem = new JMenuItem(new AbstractAction(
+				ASUtil.R("TranslateSoftwareDialog.Title"),
 				Icons.ICON_FLAGS_SMALL) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String resPath = IOUtil.escapePath(System.getProperty("user.home") + File.separator + ".Geopublishing");
-				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(AtlasStylerGUI.this,
-						true, AsSwingUtil.R("TranslateSoftwareDialog.Explanation.Html", resPath,
-								SystemUtils.IS_OS_WINDOWS ? "bat" : "sh"));
+				String resPath = IOUtil.escapePath(System
+						.getProperty("user.home")
+						+ File.separator
+						+ ".Geopublishing");
+				ResourceProviderManagerFrame manLanguagesFrame = new ResourceProviderManagerFrame(
+						AtlasStylerGUI.this, true, AsSwingUtil.R(
+								"TranslateSoftwareDialog.Explanation.Html",
+								resPath, SystemUtils.IS_OS_WINDOWS ? "bat"
+										: "sh"));
 				manLanguagesFrame.setRootPath(new File(resPath));
-				manLanguagesFrame.setTitle(ASUtil.R("TranslateSoftwareDialog.Title"));
+				manLanguagesFrame.setTitle(ASUtil
+						.R("TranslateSoftwareDialog.Title"));
 				manLanguagesFrame.setPreferredSize(new Dimension(780, 450));
 				manLanguagesFrame.setVisible(true);
 			}
 		});
 		fileMenu.add(manageLanguageJMenuitem);
 
-		AbstractAction optionsButton = new AbstractAction(AtlasStylerVector.R("Options.ButtonLabel")) {
+		AbstractAction optionsButton = new AbstractAction(
+				AtlasStylerVector.R("Options.ButtonLabel")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -235,14 +255,17 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		fileMenu.add(optionsButton);
 
 		{ // Exit
-			JMenuItem mi = new JMenuItem(new AbstractAction(
-					GpCoreUtil.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"), Icons.ICON_EXIT_SMALL) {
+			JMenuItem mi = new JMenuItem(
+					new AbstractAction(
+							GpCoreUtil
+									.R("AtlasViewer.FileMenu.ExitMenuItem.exit_application"),
+							Icons.ICON_EXIT_SMALL) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					exitAS(0);
-				}
-			});
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							exitAS(0);
+						}
+					});
 			fileMenu.add(mi);
 		}
 
@@ -260,7 +283,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		/*
 		 * Ask the use to save the changed SLDs
 		 */
-		List<StyledLayerInterface<?>> styledObjects = getMapManager().getStyledObjects();
+		List<StyledLayerInterface<?>> styledObjects = getMapManager()
+				.getStyledObjects();
 		for (StyledLayerInterface<?> styledObj : styledObjects) {
 			// if (styledObj instanceof StyledFS) {
 			// StyledFS stedFS = (StyledFS) styledObj;
@@ -293,7 +317,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		// Store the Logging Level in ~/.AtlasStyler/atlasStyler.properties
 		{
-			ASProps.set(Keys.logLevel, Logger.getRootLogger().getLevel().toString());
+			ASProps.set(Keys.logLevel, Logger.getRootLogger().getLevel()
+					.toString());
 			ASProps.store();
 		}
 
@@ -315,37 +340,39 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	StylerMapView getStylerMapView() {
 		if (stylerMapView == null) {
 			stylerMapView = new StylerMapView(this);
-			stylerMapView.getMapManager().addMapLayerListListener(new MapLayerListListener() {
+			stylerMapView.getMapManager().addMapLayerListListener(
+					new MapLayerListListener() {
 
-				public void layerAdded(MapLayerListEvent event) {
-				}
+						public void layerAdded(MapLayerListEvent event) {
+						}
 
-				public void layerChanged(MapLayerListEvent event) {
-				}
+						public void layerChanged(MapLayerListEvent event) {
+						}
 
-				public void layerMoved(MapLayerListEvent event) {
-				}
+						public void layerMoved(MapLayerListEvent event) {
+						}
 
-				public void layerRemoved(MapLayerListEvent event) {
-					String id = event.getLayer().getTitle();
-					LOGGER.debug("layer id=" + id + " removed");
+						public void layerRemoved(MapLayerListEvent event) {
+							String id = event.getLayer().getTitle();
+							LOGGER.debug("layer id=" + id + " removed");
 
-					askToSaveSld(styledObjCache.get(id));
-					styledObjCache.remove(id);
+							askToSaveSld(styledObjCache.get(id));
+							styledObjCache.remove(id);
 
-					// Dispose the datastore when removing the layer
-					DataStore openDs = openDatastores.get(id);
-					if (openDs != null)
-						openDs.dispose();
-				}
+							// Dispose the datastore when removing the layer
+							DataStore openDs = openDatastores.get(id);
+							if (openDs != null)
+								openDs.dispose();
+						}
 
-			});
+					});
 		}
 		return stylerMapView;
 	}
 
 	/**
-	 * A very basic dialog to asking the user to store the .SLD file for a layer.
+	 * A very basic dialog to asking the user to store the .SLD file for a
+	 * layer.
 	 * 
 	 * @param styledLayer
 	 *            The {@link StyledFS} that links to the geodata.
@@ -363,22 +390,27 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 			styledLayer.setSldFile(sldFile);
 			// TODO no SLD, ask the user!
-			throw new RuntimeException("Not yet implemented. Please contact the authors.");
+			throw new RuntimeException(
+					"Not yet implemented. Please contact the authors.");
 		}
 
-		if (!SwingUtil.askYesNo(AtlasStylerGUI.this,
-				ASUtil.R("AtlasStylerGUI.saveToSLDFileQuestion", styledLayer.getTitle(), IOUtil.escapePath(sldFile))))
+		if (!SwingUtil.askYesNo(
+				AtlasStylerGUI.this,
+				ASUtil.R("AtlasStylerGUI.saveToSLDFileQuestion",
+						styledLayer.getTitle(), IOUtil.escapePath(sldFile))))
 			return;
 
 		Style style = styledLayer.getStyle();
 
 		if (style == null) {
-			AVSwingUtil.showMessageDialog(AtlasStylerGUI.this, "The Style for " + styledLayer.getTitle()
+			AVSwingUtil.showMessageDialog(AtlasStylerGUI.this, "The Style for "
+					+ styledLayer.getTitle()
 					+ " is null. That must be a bug. Not saving.");
 			return;
 		}
 
-		new AtlasStylerSaveLayerToSLDAction(this, styledLayer).actionPerformed(null);
+		new AtlasStylerSaveLayerToSLDAction(this, styledLayer)
+				.actionPerformed(null);
 
 	}
 
@@ -392,11 +424,13 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		jToolBar.setFloatable(false);
 
-		AbstractAction importWiazrdAction = new AbstractAction(AtlasStylerVector.R("MenuBar.FileMenu.ImportWizard")) {
+		AbstractAction importWiazrdAction = new AbstractAction(
+				AtlasStylerVector.R("MenuBar.FileMenu.ImportWizard")) {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ImportWizard.showWizard(AtlasStylerGUI.this, AtlasStylerGUI.this);
+				ImportWizard.showWizard(AtlasStylerGUI.this,
+						AtlasStylerGUI.this);
 			}
 		};
 		importWiazrdAction.putValue(Action.LONG_DESCRIPTION,
@@ -434,10 +468,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	}
 
 	/**
-	 * A button to export all layers in form of one SLD XML file (starting a StyledLayerDescriptor tag)
+	 * A button to export all layers in form of one SLD XML file (starting a
+	 * StyledLayerDescriptor tag)
 	 */
 	private JButton getJTButtonExportAsSLD() {
-		final JButton jButtonExportAsSLD = new JButton(ASUtil.R("AtlasStylerGUI.toolbarButton.exportSLD"));
+		final JButton jButtonExportAsSLD = new JButton(
+				ASUtil.R("AtlasStylerGUI.toolbarButton.exportSLD"));
 
 		jButtonExportAsSLD.addActionListener(new ActionListener() {
 
@@ -445,17 +481,16 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					File saveDir = null;
-					String lastPath = ASProps.get(ASProps.Keys.lastExportDirectory);
+					String lastPath = ASProps
+							.get(ASProps.Keys.lastExportDirectory);
 					if (lastPath != null)
 						saveDir = new File(lastPath);
 
-					File exportSLDFile = AsSwingUtil.chooseFileSave(AtlasStylerGUI.this, saveDir, ASUtil
-							.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle"), new FileExtensionFilter(
-							ASUtil.FILTER_SLD));
-					// SaveSLDXMLFileChooser chooser = new SaveSLDXMLFileChooser(
-					// saveDir);
-
-					// int result = chooser.showSaveDialog(AtlasStylerGUI.this);
+					File exportSLDFile = AsSwingUtil.chooseFileSave(
+							AtlasStylerGUI.this,
+							saveDir,
+							ASUtil.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle"),
+							new FileExtensionFilter(ASUtil.FILTER_SLD));
 
 					// File exportSLDFile = chooser.getSelectedFile();
 					if (exportSLDFile == null
@@ -463,45 +498,75 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 							|| exportSLDFile.isDirectory())
 						return;
 
-					ASProps.set(ASProps.Keys.lastExportDirectory, exportSLDFile.getParentFile().getAbsolutePath());
+					ASProps.set(ASProps.Keys.lastExportDirectory, exportSLDFile
+							.getParentFile().getAbsolutePath());
 
 					// If the file exists, the user will be asked about
 					// overwriting it
 					if (exportSLDFile.exists()) {
-						if (!AVSwingUtil.askOKCancel(AtlasStylerGUI.this, AtlasStylerVector.R(
-								"AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
-								exportSLDFile.getName())))
+						if (!AVSwingUtil
+								.askOKCancel(
+										AtlasStylerGUI.this,
+										AtlasStylerVector
+												.R("AtlasStylerGUI.saveStyledLayerDescFileDialogTitle.OverwriteQuestion",
+														exportSLDFile.getName())))
 							return;
 					}
 
 					// Evt. wird .sld angehangen.
 					String filenamelc = exportSLDFile.getName().toLowerCase();
-					if (!filenamelc.endsWith(".sld") && !filenamelc.endsWith(".xml") && !filenamelc.endsWith(".se")) {
-						exportSLDFile = new File(exportSLDFile.getParentFile(), filenamelc + ".sld");
+					if (!filenamelc.endsWith(".sld")
+							&& !filenamelc.endsWith(".xml")
+							&& !filenamelc.endsWith(".se")) {
+						exportSLDFile = new File(exportSLDFile.getParentFile(),
+								filenamelc + ".sld");
 						JOptionPane.showMessageDialog(AtlasStylerGUI.this,
-								AsSwingUtil.R("AtlasStylerGUI.FileNameChangeTo.msg", exportSLDFile.getName()));
+								AsSwingUtil.R(
+										"AtlasStylerGUI.FileNameChangeTo.msg",
+										exportSLDFile.getName()));
 					}
 
 					// // Export
 					// Charset charset = Charset.forName("UTF-8");
-					StyledLayerDescriptor sldTag = CommonFactoryFinder.getStyleFactory(null)
+					StyledLayerDescriptor sldTag = CommonFactoryFinder
+							.getStyleFactory(null)
 							.createStyledLayerDescriptor();
 
 					/*******
 					 * Export aller Styles als ein SLD Tag
 					 */
-					for (StyledLayerInterface smi : getMapManager().getStyledObjects()) {
+					for (StyledLayerInterface smi : getMapManager()
+							.getStyledObjects()) {
 
 						try {
-							if (!(smi instanceof StyledFS)) {
-								LOGGER.info("Ein Layer aus dem MapContextManagerInterface ist kein StyledFeatureSourceInterface. Es wird ignoriert: "
-										+ smi.getTitle());
-								continue;
+							// if (!(smi instanceof StyledFS)) {
+							// LOGGER.info("Ein Layer aus dem MapContextManagerInterface ist kein StyledFeatureSourceInterface. Es wird ignoriert: "
+							// + smi.getTitle());
+							// continue;
+							// }
+
+							String name = null;
+							if (smi instanceof StyledFeatureSourceInterface) {
+								StyledFeatureSourceInterface featureGeoObj = (StyledFeatureSourceInterface) smi;
+								name = featureGeoObj.getGeoObject().getSchema()
+										.getTypeName();
+							} else if (smi instanceof StyledRasterInterface) {
+								StyledRasterInterface ri = (StyledRasterInterface) smi;
+								if (ri.getGeoObject() instanceof AbstractGridCoverage2DReader) {
+									AbstractGridCoverage2DReader agcr = (AbstractGridCoverage2DReader) ri
+											.getGeoObject();
+									if (agcr.getSource() instanceof File) {
+										File rfile = (File) agcr.getSource();
+										name = IOUtil.changeFileExt(rfile, "")
+												.getName();
+									} else
+										name = "someraster";
+								} else
+									name = "someraster";
 							}
 
-							StyledFeatureSourceInterface featureGeoObj = (StyledFeatureSourceInterface) smi;
-							String name = featureGeoObj.getGeoObject().getSchema().getTypeName();
-							NamedLayer namedLayer = CommonFactoryFinder.getStyleFactory(null).createNamedLayer();
+							NamedLayer namedLayer = CommonFactoryFinder
+									.getStyleFactory(null).createNamedLayer();
 							namedLayer.setName(name);
 							namedLayer.addStyle(smi.getStyle());
 
@@ -534,12 +599,14 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		/**
 		 * Activate the button when more than one layer is available
 		 */
-		jButtonExportAsSLD.setEnabled(getMapManager().getMapContext().getLayerCount() > 0);
+		jButtonExportAsSLD.setEnabled(getMapManager().getMapContext()
+				.getLayerCount() > 0);
 		getMapManager().addMapLayerListListener(new MapLayerListAdapter() {
 
 			@Override
 			public void layerRemoved(MapLayerListEvent arg0) {
-				jButtonExportAsSLD.setEnabled(getMapManager().getMapContext().getLayerCount() > 0);
+				jButtonExportAsSLD.setEnabled(getMapManager().getMapContext()
+						.getLayerCount() > 0);
 			}
 
 			@Override
@@ -584,13 +651,16 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		// Set the locale for running the application
 		try {
-			if (!ASProps.get(Keys.language, "system").equalsIgnoreCase("system")) {
+			if (!ASProps.get(Keys.language, "system")
+					.equalsIgnoreCase("system")) {
 
-				Translation.setDefaultLocale(new Locale(ASProps.get(Keys.language, "en")));
+				Translation.setDefaultLocale(new Locale(ASProps.get(
+						Keys.language, "en")));
 
 			}
 		} catch (Exception e) {
-			LOGGER.error("Could not set locale to " + ASProps.get(Keys.language), e);
+			LOGGER.error(
+					"Could not set locale to " + ASProps.get(Keys.language), e);
 			ExceptionDialog.show(e);
 		}
 
@@ -620,14 +690,17 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		} else {
 			LOGGER.info("Not starting GUI because command line parameter addFix was passed");
-			System.out.println("Not starting GUI because command line parameter addFix was passed");
+			System.out
+					.println("Not starting GUI because command line parameter addFix was passed");
 		}
 
 	}
 
 	/**
-	 * This method is evaluating command line arguments to look for "addFix=FILE" paramters. If at least one "addFix="
-	 * parameter is passen, the method returns <code>true</code> and the application is expected not to start a GUI.
+	 * This method is evaluating command line arguments to look for
+	 * "addFix=FILE" paramters. If at least one "addFix=" parameter is passen,
+	 * the method returns <code>true</code> and the application is expected not
+	 * to start a GUI.
 	 */
 	private static boolean checkFixIndexCreation(String[] args) {
 		boolean fixParamFound = false;
@@ -653,19 +726,22 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 				final File fileParamter = new File(param);
 
 				if (!fileParamter.exists()) {
-					LOGGER.warn("Not understanding " + param + " as file to add an index.");
+					LOGGER.warn("Not understanding " + param
+							+ " as file to add an index.");
 					continue;
 				}
 
 				if (!fileParamter.canWrite()) {
-					LOGGER.warn("Can't write to " + param + " due to missing permissions, skipping.");
+					LOGGER.warn("Can't write to " + param
+							+ " due to missing permissions, skipping.");
 					continue;
 				}
 
 				// Starting the .fix creation
 				final URL shpUrl = DataUtilities.fileToURL(fileParamter);
 				try {
-					final IndexedShapefileDataStore ds = new IndexedShapefileDataStore(shpUrl);
+					final IndexedShapefileDataStore ds = new IndexedShapefileDataStore(
+							shpUrl);
 					try {
 						ds.createSpatialIndex();
 					} catch (final IOException e) {
@@ -686,8 +762,8 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	}
 
 	/**
-	 * Called via SingleInstanceListener / SingleInstanceService. Does nothing except requesting the focus for the given
-	 * application.
+	 * Called via SingleInstanceListener / SingleInstanceService. Does nothing
+	 * except requesting the focus for the given application.
 	 */
 	@Override
 	public void newActivation(String[] arg0) {
