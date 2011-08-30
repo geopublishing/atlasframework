@@ -43,8 +43,6 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 	 */
 	final private RuleChangeListener_GuiEnabledDisabled listenerEnableDisableGUIwhenRLenabledDisabled;
 
-	private List<Color> colors;
-
 	class RuleChangeListener_GuiEnabledDisabled implements RuleChangeListener {
 
 		private final RulesListInterface rulesList;

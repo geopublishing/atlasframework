@@ -11,6 +11,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
@@ -213,6 +214,10 @@ public class RuleListFactory {
 					(StyledRasterInterface) styledLayer, withDefaults);
 		case RASTER_COLORMAP_RAMPS:
 			return new RasterRulesList_Ramps(
+					(StyledRasterInterface) styledLayer, withDefaults);
+			
+		case RASTER_RGB:
+			return new RasterRulesListRGB(
 					(StyledRasterInterface) styledLayer, withDefaults);
 
 		case TEXT_LABEL:
