@@ -39,7 +39,8 @@ import de.schmitzm.swing.SmallButton;
 import de.schmitzm.swing.SwingUtil;
 
 /**
- * This {@link JPanel} contains the {@link RulesListTable} and some labels/buttons arround it.
+ * This {@link JPanel} contains the {@link RulesListTable} and some
+ * labels/buttons arround it.
  */
 public class RulesListsListTablePanel extends JPanel {
 
@@ -59,7 +60,8 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private final StylerDialog asd;
 
-	JLabel popupMenuExplanationJLabel = new JLabel(ASUtil.R("RulesListsListTablePanel.Explanation"));
+	JLabel popupMenuExplanationJLabel = new JLabel(
+			ASUtil.R("RulesListsListTablePanel.Explanation"));
 
 	private final PropertyChangeListener updatePreviewScaleLabelListener = new PropertyChangeListener() {
 
@@ -82,17 +84,18 @@ public class RulesListsListTablePanel extends JPanel {
 		this.asd = asd;
 		this.atlasStyler = asd.getAtlasStyler();
 
-		/**
-		 * Beim Raster-Atlas-Styler kann u.U. ausgewählt werden, ob ein einzelen Band (von vielen) oder ein
-		 * RGB/Fehlfarbenbild gestyled werden soll.
-		 */
-		if (atlasStyler instanceof AtlasStylerRaster) {
-			AtlasStylerRaster asr = (AtlasStylerRaster) atlasStyler;
-			if (asr.getStyledRaster().getBandCount() > 1) {
-				// Es gibt mehr als ein Band => diese Optim wird gerendert
-				add(getBandModeCombobox(asr), "growy, sgx, wrap");
-			}
-		}
+		// /**
+		// * Beim Raster-Atlas-Styler kann u.U. ausgewählt werden, ob ein
+		// einzelen Band (von vielen) oder ein
+		// * RGB/Fehlfarbenbild gestyled werden soll.
+		// */
+		// if (atlasStyler instanceof AtlasStylerRaster) {
+		// AtlasStylerRaster asr = (AtlasStylerRaster) atlasStyler;
+		// if (asr.getStyledRaster().getBandCount() > 1) {
+		// // Es gibt mehr als ein Band => diese Optim wird gerendert
+		// add(getBandModeCombobox(asr), "growy, sgx, wrap");
+		// }
+		// }
 
 		add(getModeButtons(asd), "growy, sgx, wrap");
 		add(popupMenuExplanationJLabel, "growy, sgx, wrap");
@@ -121,47 +124,6 @@ public class RulesListsListTablePanel extends JPanel {
 		}
 	}
 
-	private JPanel getBandModeCombobox(final AtlasStylerRaster asr) {
-		if (bandModeSelectionPanel == null) {
-			bandModeSelectionPanel = new JPanel(new MigLayout());
-
-			// i8n
-			bandModeSelectionPanel.add(new JLabel("Bands-Mode:"));
-
-			// i8n
-			String[] items = new String[] { "Alle (RGB-Bild)" };
-			for (int b = 0; b < asr.getStyledRaster().getBandCount(); b++) {
-				items = LangUtil.extendArray(items, String.valueOf(b + 1));
-			}
-			final JComboBox bandModeSelectionJCombobox = new JComboBox(items);
-			SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
-
-			bandModeSelectionPanel.add(bandModeSelectionJCombobox);
-			bandModeSelectionJCombobox.addItemListener(new ItemListener() {
-				
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					asr.setBand(bandModeSelectionJCombobox.getSelectedIndex()-1);
-					asr.fireStyleChangedEvents();
-				}
-			});
-			
-			// Initialiseren der JComboBox
-			{
-				// Wenn mind. 1 RasterRulesList existiert, die Bandselektion da rauslesen
-				for (AbstractRulesList rl : asr.getRuleLists()) {
-					if (rl instanceof RasterRulesListColormap) {
-						RasterRulesListColormap rrl = (RasterRulesListColormap)rl;
-						bandModeSelectionJCombobox.setSelectedIndex(1+rrl.getBand());
-						break;
-					}
-				}
-			}
-
-		}
-		return bandModeSelectionPanel;
-	}
-
 	private Component getGdalInfoButton() {
 		if (gdalInfoButton == null) {
 
@@ -170,7 +132,8 @@ public class RulesListsListTablePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					GdalInfo2RulesListDialog gdalInfo2RulesListDialog = new GdalInfo2RulesListDialog(
-							RulesListsListTablePanel.this, (AtlasStylerRaster) atlasStyler);
+							RulesListsListTablePanel.this,
+							(AtlasStylerRaster) atlasStyler);
 					gdalInfo2RulesListDialog.setModal(true);
 					gdalInfo2RulesListDialog.setVisible(true);
 				}
@@ -187,34 +150,36 @@ public class RulesListsListTablePanel extends JPanel {
 
 			modeButtons.add(new JLabel(ASUtil.R("UserMode.Label")));
 
-			final JRadioButton easyButton = new JRadioButton(new AbstractAction(ASUtil.R("UserMode.Easy.Label")) {
+			final JRadioButton easyButton = new JRadioButton(
+					new AbstractAction(ASUtil.R("UserMode.Easy.Label")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					asd.setEasy(true);
-					popupMenuExplanationJLabel.setVisible(false);
-					getRulesListTable().updateColumnsLook();
-					getRulesListTable().updateColumnsLook();
-					// getUpButton().setVisible(false);
-					// getDownButton().setVisible(false);
-					scaleInPreviewValueJLabel.setVisible(false);
-				}
-			});
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							asd.setEasy(true);
+							popupMenuExplanationJLabel.setVisible(false);
+							getRulesListTable().updateColumnsLook();
+							getRulesListTable().updateColumnsLook();
+							// getUpButton().setVisible(false);
+							// getDownButton().setVisible(false);
+							scaleInPreviewValueJLabel.setVisible(false);
+						}
+					});
 
 			modeButtons.add(easyButton);
-			final JRadioButton expertButton = new JRadioButton(new AbstractAction(ASUtil.R("UserMode.Expert.Label")) {
+			final JRadioButton expertButton = new JRadioButton(
+					new AbstractAction(ASUtil.R("UserMode.Expert.Label")) {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					asd.setEasy(false);
-					popupMenuExplanationJLabel.setVisible(true);
-					getRulesListTable().updateColumnsLook();
-					getRulesListTable().updateColumnsLook();
-					scaleInPreviewValueJLabel.setVisible(true);
-					// getUpButton().setVisible(true);
-					// getDownButton().setVisible(true);
-				}
-			});
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							asd.setEasy(false);
+							popupMenuExplanationJLabel.setVisible(true);
+							getRulesListTable().updateColumnsLook();
+							getRulesListTable().updateColumnsLook();
+							scaleInPreviewValueJLabel.setVisible(true);
+							// getUpButton().setVisible(true);
+							// getDownButton().setVisible(true);
+						}
+					});
 			modeButtons.add(expertButton);
 
 			ButtonGroup bg = new ButtonGroup();
@@ -231,22 +196,26 @@ public class RulesListsListTablePanel extends JPanel {
 		if (asd.getPreviewMapPane() == null)
 			return;
 
-		final String formated = NumberFormat.getIntegerInstance().format(asd.getPreviewMapPane().getScaleDenominator());
+		final String formated = NumberFormat.getIntegerInstance().format(
+				asd.getPreviewMapPane().getScaleDenominator());
 
-		String label = ASUtil.R("RulesListsListTablePanel.OGCScaleDenominatorInPreview", formated);
+		String label = ASUtil.R(
+				"RulesListsListTablePanel.OGCScaleDenominatorInPreview",
+				formated);
 
 		scaleInPreviewValueJLabel.setText(label);
 	}
 
 	private JButton getAddButton() {
 		if (addButton == null) {
-			addButton = new SmallButton(new AbstractAction(ASUtil.R("RulesListsList.Action.AddRulesList")) {
+			addButton = new SmallButton(new AbstractAction(
+					ASUtil.R("RulesListsList.Action.AddRulesList")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					AddRulesListDialog addRulesListDialog = new AddRulesListDialog(RulesListsListTablePanel.this,
-							atlasStyler);
+					AddRulesListDialog addRulesListDialog = new AddRulesListDialog(
+							RulesListsListTablePanel.this, atlasStyler);
 					addRulesListDialog.setVisible(true);
 				}
 
@@ -257,12 +226,14 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getDownButton() {
 		if (jButtonLayerDown == null) {
-			jButtonLayerDown = new SmallButton(new AbstractAction("", Icons.getDownArrowIcon()) {
+			jButtonLayerDown = new SmallButton(new AbstractAction("",
+					Icons.getDownArrowIcon()) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (getRulesListTable().getSelectedRow() >= 0) {
-						int[] selectedRows = getRulesListTable().getSelectedRows();
+						int[] selectedRows = getRulesListTable()
+								.getSelectedRows();
 
 						ArrayUtils.reverse(selectedRows);
 
@@ -270,7 +241,8 @@ public class RulesListsListTablePanel extends JPanel {
 						try {
 							for (int sr : selectedRows) {
 								if (sr < atlasStyler.getRuleLists().size() - 1) {
-									AbstractRulesList rl = atlasStyler.getRuleLists().remove(sr);
+									AbstractRulesList rl = atlasStyler
+											.getRuleLists().remove(sr);
 									atlasStyler.getRuleLists().add(sr + 1, rl);
 								}
 
@@ -280,34 +252,40 @@ public class RulesListsListTablePanel extends JPanel {
 						}
 
 						// Reslect the ruleslists
-						getRulesListTable().getSelectionModel().clearSelection();
+						getRulesListTable().getSelectionModel()
+								.clearSelection();
 						for (int sr : selectedRows) {
-							getRulesListTable().getSelectionModel().addSelectionInterval(sr + 1, sr + 1);
+							getRulesListTable().getSelectionModel()
+									.addSelectionInterval(sr + 1, sr + 1);
 						}
 
 					}
 				}
 
 			});
-			getRulesListTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					if (e.getValueIsAdjusting())
-						return;
-					ListSelectionModel lsm = ((ListSelectionModel) e.getSource());
-					if ((lsm.getMinSelectionIndex() < 0)
-							|| (lsm.getMinSelectionIndex() >= getRulesListTable().getModel().getRowCount() - 1)) {
-						jButtonLayerDown.setEnabled(false);
-					} else {
-						jButtonLayerDown.setEnabled(true);
-					}
-				}
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							ListSelectionModel lsm = ((ListSelectionModel) e
+									.getSource());
+							if ((lsm.getMinSelectionIndex() < 0)
+									|| (lsm.getMinSelectionIndex() >= getRulesListTable()
+											.getModel().getRowCount() - 1)) {
+								jButtonLayerDown.setEnabled(false);
+							} else {
+								jButtonLayerDown.setEnabled(true);
+							}
+						}
 
-			});
+					});
 
 			jButtonLayerDown.setEnabled(false);
-			jButtonLayerDown.setToolTipText(ASUtil.R("RulesListsList.Action.MoveRulesListDown.TT"));
+			jButtonLayerDown.setToolTipText(ASUtil
+					.R("RulesListsList.Action.MoveRulesListDown.TT"));
 
 		}
 		return jButtonLayerDown;
@@ -315,7 +293,8 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getRemoveButton() {
 		if (removeButton == null) {
-			removeButton = new SmallButton(new AbstractAction(ASUtil.R("RulesListsList.Action.RemoveRulesLists")) {
+			removeButton = new SmallButton(new AbstractAction(
+					ASUtil.R("RulesListsList.Action.RemoveRulesLists")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -329,8 +308,11 @@ public class RulesListsListTablePanel extends JPanel {
 					Collections.sort(idxList);
 					Collections.reverse(idxList);
 
-					if (!SwingUtil.askYesNo(RulesListsListTablePanel.this,
-							ASUtil.R("RulesListsList.Action.RemoveRulesLists.Ask", idxList.size())))
+					if (!SwingUtil.askYesNo(
+							RulesListsListTablePanel.this,
+							ASUtil.R(
+									"RulesListsList.Action.RemoveRulesLists.Ask",
+									idxList.size())))
 						return;
 
 					atlasStyler.getRuleLists().pushQuite();
@@ -346,15 +328,16 @@ public class RulesListsListTablePanel extends JPanel {
 
 			// Enable/Disable the button depending on active selections in the
 			// list
-			getRulesListTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					if (e.getValueIsAdjusting())
-						return;
-					removeButton.setEnabled(e.getFirstIndex() >= 0);
-				}
-			});
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							removeButton.setEnabled(e.getFirstIndex() >= 0);
+						}
+					});
 			removeButton.setEnabled(getRulesListTable().getSelectedRow() >= 0);
 		}
 		return removeButton;
@@ -362,46 +345,50 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getDuplicateButton() {
 		if (duplicateButton == null) {
-			duplicateButton = new SmallButton(
-					new AbstractAction(ASUtil.R("RulesListsList.Action.DuplicateRulesLists")) {
+			duplicateButton = new SmallButton(new AbstractAction(
+					ASUtil.R("RulesListsList.Action.DuplicateRulesLists")) {
 
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							int[] selectedRows = getRulesListTable().getSelectedRows();
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					int[] selectedRows = getRulesListTable().getSelectedRows();
 
-							List<Integer> idxList = new ArrayList<Integer>();
-							for (int i : selectedRows) {
-								if (i >= 0)
-									idxList.add(i);
-							}
+					List<Integer> idxList = new ArrayList<Integer>();
+					for (int i : selectedRows) {
+						if (i >= 0)
+							idxList.add(i);
+					}
 
-							atlasStyler.getRuleLists().pushQuite();
-							try {
-								for (int idx : idxList) {
-									RulesListInterface rl = atlasStyler.getRuleLists().get(idx);
-									AbstractRulesList duplicate = atlasStyler.copyRulesList(rl);
-									duplicate.setTitle("Copy" + rl.getTitle());
+					atlasStyler.getRuleLists().pushQuite();
+					try {
+						for (int idx : idxList) {
+							RulesListInterface rl = atlasStyler.getRuleLists()
+									.get(idx);
+							AbstractRulesList duplicate = atlasStyler
+									.copyRulesList(rl);
+							duplicate.setTitle("Copy" + rl.getTitle());
 
-									atlasStyler.getRuleLists().add(duplicate);
-								}
-							} finally {
-								atlasStyler.getRuleLists().popQuite();
-							}
+							atlasStyler.getRuleLists().add(duplicate);
 						}
-					});
+					} finally {
+						atlasStyler.getRuleLists().popQuite();
+					}
+				}
+			});
 
 			// Enable/Disable the button depending on active selections in the
 			// list
-			getRulesListTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					if (e.getValueIsAdjusting())
-						return;
-					duplicateButton.setEnabled(e.getFirstIndex() >= 0);
-				}
-			});
-			duplicateButton.setEnabled(getRulesListTable().getSelectedRow() >= 0);
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							duplicateButton.setEnabled(e.getFirstIndex() >= 0);
+						}
+					});
+			duplicateButton
+					.setEnabled(getRulesListTable().getSelectedRow() >= 0);
 		}
 		return duplicateButton;
 	}
@@ -415,20 +402,23 @@ public class RulesListsListTablePanel extends JPanel {
 
 	private JButton getUpButton() {
 		if (jButtonLayerUp == null) {
-			jButtonLayerUp = new SmallButton(new AbstractAction("", Icons.getUpArrowIcon()) {
+			jButtonLayerUp = new SmallButton(new AbstractAction("",
+					Icons.getUpArrowIcon()) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (getRulesListTable().getSelectedRow() >= 0) {
 
-						int[] selectedRows = getRulesListTable().getSelectedRows();
+						int[] selectedRows = getRulesListTable()
+								.getSelectedRows();
 						// ArrayUtils.reverse(selectedRows);
 						atlasStyler.getRuleLists().pushQuite();
 						try {
 							for (int sr : selectedRows) {
 
 								if (sr > 0) {
-									AbstractRulesList rl = atlasStyler.getRuleLists().remove(sr);
+									AbstractRulesList rl = atlasStyler
+											.getRuleLists().remove(sr);
 									atlasStyler.getRuleLists().add(sr - 1, rl);
 								}
 
@@ -438,31 +428,36 @@ public class RulesListsListTablePanel extends JPanel {
 						}
 
 						// Reslect the ruleslists
-						getRulesListTable().getSelectionModel().clearSelection();
+						getRulesListTable().getSelectionModel()
+								.clearSelection();
 						for (int sr : selectedRows) {
-							getRulesListTable().getSelectionModel().addSelectionInterval(sr - 1, sr - 1);
+							getRulesListTable().getSelectionModel()
+									.addSelectionInterval(sr - 1, sr - 1);
 						}
 					}
 				}
 
 			});
-			getRulesListTable().getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			getRulesListTable().getSelectionModel().addListSelectionListener(
+					new ListSelectionListener() {
 
-				@Override
-				public void valueChanged(ListSelectionEvent e) {
-					if (e.getValueIsAdjusting())
-						return;
-					if (((ListSelectionModel) e.getSource()).getMinSelectionIndex() < 1) {
-						jButtonLayerUp.setEnabled(false);
-					} else {
-						jButtonLayerUp.setEnabled(true);
-					}
-				}
+						@Override
+						public void valueChanged(ListSelectionEvent e) {
+							if (e.getValueIsAdjusting())
+								return;
+							if (((ListSelectionModel) e.getSource())
+									.getMinSelectionIndex() < 1) {
+								jButtonLayerUp.setEnabled(false);
+							} else {
+								jButtonLayerUp.setEnabled(true);
+							}
+						}
 
-			});
+					});
 
 			jButtonLayerUp.setEnabled(false);
-			jButtonLayerUp.setToolTipText(ASUtil.R("RulesListsList.Action.MoveRulesListUp.TT"));
+			jButtonLayerUp.setToolTipText(ASUtil
+					.R("RulesListsList.Action.MoveRulesListUp.TT"));
 
 		}
 		return jButtonLayerUp;

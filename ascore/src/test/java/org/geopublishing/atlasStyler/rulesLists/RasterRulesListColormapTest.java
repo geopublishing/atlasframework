@@ -11,7 +11,6 @@ public class RasterRulesListColormapTest extends TestingClass {
 	
 	@Test
 	public void testRun() {
-		System.out.println("all good");
 	}
 
 	protected void testExportAndImport(RasterRulesListColormap rl, RasterRulesListColormap rl2) {
@@ -30,5 +29,11 @@ public class RasterRulesListColormapTest extends TestingClass {
 			assertEquals(rl.getValues().get(0), rl2.getValues().get(0));
 		}
 
+	}
+
+	@Test
+	public void testImportRules()
+	{
+	
 	}
 }

@@ -30,8 +30,8 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-public class RasterRulesList_DistinctValues extends RasterRulesListColormap implements
-		UniqueValuesRulesListInterface<Double> {
+public class RasterRulesList_DistinctValues extends RasterRulesListColormap
+		implements UniqueValuesRulesListInterface<Double> {
 
 	private static final Logger LOGGER = Logger
 			.getLogger(RasterRulesList_DistinctValues.class);
@@ -56,9 +56,8 @@ public class RasterRulesList_DistinctValues extends RasterRulesListColormap impl
 	public void applyPalette(JComponent parentGui) {
 		pushQuite();
 
-		getColors().clear();
-
 		try {
+			getColors().clear();
 
 			if (getValues().size() == 0)
 				return;
@@ -222,7 +221,7 @@ public class RasterRulesList_DistinctValues extends RasterRulesListColormap impl
 
 		// try {
 		GridCoverage2D coverage = reader.read(null);
-//		coverage.getNumSampleDimensions();
+		// coverage.getNumSampleDimensions();
 		final OperationJAI op = new OperationJAI("Histogram");
 		ParameterValueGroup params = op.getParameters();
 		params.parameter("Source").setValue(coverage);
@@ -289,8 +288,11 @@ public class RasterRulesList_DistinctValues extends RasterRulesListColormap impl
 				if (i >= getOpacities().size())
 					getOpacities().add(op);
 
-				if (getOpacities().get(i) != 0)
+				if (getOpacities().get(i) != 0.
+						|| (getValues().get(i) != null && !getValues().get(i)
+								.equals(getStyledRaster().getNodataValue()))){
 					setOpacity(i, op);
+				}
 			}
 
 		} finally {
@@ -320,6 +322,5 @@ public class RasterRulesList_DistinctValues extends RasterRulesListColormap impl
 				|| colSize != classesExpected || labelSize != classesExpected)
 			throw new RuntimeException(error);
 	}
-	
 
 }

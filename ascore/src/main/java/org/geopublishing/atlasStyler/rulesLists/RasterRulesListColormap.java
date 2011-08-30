@@ -231,16 +231,16 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 	public void importRules(List<Rule> rules) {
 		pushQuite();
 
-		if (rules.size() > 1) {
-			LOGGER.warn("Importing a " + this.getClass().getSimpleName()
-					+ " with " + rules.size() + " rules");
-		}
-
-		Rule rule = rules.get(0);
-
-		// TODO Parse metainfostring?!
-
 		try {
+			if (rules.size() > 1) {
+				LOGGER.warn("Importing a " + this.getClass().getSimpleName()
+						+ " with " + rules.size() + " rules");
+			}
+			
+			Rule rule = rules.get(0);
+			
+			// TODO Parse metainfostring?!
+			
 			RasterSymbolizer rs = (RasterSymbolizer) rule.symbolizers().get(0);
 
 			// Alle RasterRulesLIstColorMaps haben eine singuläre
@@ -411,7 +411,10 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 	 * Bändern gestyled wird.
 	 */
 	public void setBand(int band) {
-		this.band = band;
+		if (band != this.band) {
+			this.band = band;
+			fireEvents(new RuleChangedEvent("Band selection changed", this));
+		}
 	}
 
 	/**
@@ -427,7 +430,7 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 	 * Caclulates the overall opacity of this RulesList as the median iof all opacities.
 	 */
 	public Double getOpacity() {
-		if (opacity == null) {
+		if (opacity == null && getOpacities().size()>0) {
 			// Benutze den häöufigsten Wert als Opacity vorgabe.
 			DynamicBin1D ds = new DynamicBin1D();
 			for (Double o : getOpacities()) {
@@ -435,6 +438,7 @@ public abstract class RasterRulesListColormap extends RasterRulesList {
 			}
 			opacity = ds.median();
 		}
+		if (opacity == null || opacity <= 0) opacity = 1.;
 		return opacity;
 	}
 }

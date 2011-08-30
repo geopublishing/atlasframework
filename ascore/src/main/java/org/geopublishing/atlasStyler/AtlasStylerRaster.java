@@ -27,12 +27,12 @@ public class AtlasStylerRaster extends AtlasStyler {
 
 	private StyledGridCoverageReaderInterface styledRaster;
 
-	/**
-	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
-	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
-	 * Style enhält dann eine Channel-Selektion Anweisung.
-	 */
-	private int band = 0;
+//	/**
+//	 * Wenn <code>-1</code>, und die Anzahl der verfügbaren Band >= 3, dann werden 3 Band zusammen in einem
+//	 * RBG-Fehlfarbenbild angezeigt. Wenn der Wert >= 0 ist, dann wird ein Style nur für das eine Band erstellt. Der
+//	 * Style enhält dann eine Channel-Selektion Anweisung.
+//	 */
+//	private int band = 0;
 
 	/**
 	 * Create an {@link AtlasStylerVector} object for any {@link StyledFeaturesInterface}
@@ -135,19 +135,19 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public void setStyledRaster(StyledGridCoverageReaderInterface styledRaster) {
 		this.styledRaster = styledRaster;
 	}
-
-	public void setBand(int band) {
-		this.band = band;
-		for (AbstractRulesList rl : getRuleLists()) {
-			if (rl instanceof RasterRulesListColormap)
-			((RasterRulesListColormap)rl).setBand(band);
-		}
-	}
+//
+//	public void setBand(int band) {
+//		this.band = band;
+//		for (AbstractRulesList rl : getRuleLists()) {
+//			if (rl instanceof RasterRulesListColormap)
+//			((RasterRulesListColormap)rl).setBand(band);
+//		}
+//	}
 
 	/**
-	 * -1 ist die Auswahl für RGB
+	 * Count of available Bands
 	 */
-	public int getBand() {
-		return band;
+	public int getBands() {
+		return getStyledRaster().getBandCount();
 	}
 }

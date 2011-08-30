@@ -265,8 +265,9 @@ public class RasterRulesList_Intervals_GUI extends
 		this.add(new JLabel(ASUtil.R("RasterRulesList_Intervals_GUI.Heading")),
 				"center");
 
-		this.add(getJPanelColorAndOpacity(), "align l, split 2");
+		this.add(getJPanelColorAndOpacity(), "align l, split 3");
 		this.add(getClassifyJToggleButton(), "align r");
+		this.add(getBandModeCombobox(rulesList), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 	}

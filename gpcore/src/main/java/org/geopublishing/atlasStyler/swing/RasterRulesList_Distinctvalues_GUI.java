@@ -152,8 +152,9 @@ public class RasterRulesList_Distinctvalues_GUI extends
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));
 
 		this.add(jLabelHeading, "center");
-		this.add(getJPanelColorAndOpacity(), "align l, split 2");
+		this.add(getJPanelColorAndOpacity(), "align l, split 3");
 		this.add(getJPanelNoData(), "align l");
+		this.add(getBandModeCombobox(rulesList), "align l");
 
 		this.add(new JScrollPane(getJTable()), "grow x, grow y 20000");
 

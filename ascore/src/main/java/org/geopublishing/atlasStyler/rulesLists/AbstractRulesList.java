@@ -12,12 +12,14 @@ package org.geopublishing.atlasStyler.rulesLists;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.ImageIcon;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
@@ -25,6 +27,7 @@ import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
@@ -169,14 +172,15 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			// return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 			// RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
 			// Removed one...
+			
+			RulesListType[] rls = new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
+					RASTER_COLORMAP_INTERVALS };
 
-			if (as.getBand() < 0){
+			if (as.getBands() > 1){
 				// No specific Band selected, use RGB 
-				return new RulesListType[] { RASTER_RGB };
+				rls = LangUtil.extendArray(rls, RASTER_RGB );
 			}
-			else
-				return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
-						RASTER_COLORMAP_INTERVALS };
+			return rls;
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerVector asv) {

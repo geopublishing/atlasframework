@@ -4,20 +4,29 @@ import java.awt.Color;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Collections;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+
+import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SmallButton;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * Parent of a Swing GUIs that are placed on the right side of
@@ -42,6 +51,8 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 	 * a field.
 	 */
 	final private RuleChangeListener_GuiEnabledDisabled listenerEnableDisableGUIwhenRLenabledDisabled;
+
+
 
 	class RuleChangeListener_GuiEnabledDisabled implements RuleChangeListener {
 
@@ -102,6 +113,42 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 		button.setToolTipText(ASUtil.R("ColorPalette.RevertButton.TT"));
 
 		return button;
+	}
+	
+
+	/**
+	 * Actually belongs to a new abstract class 
+	 */
+	private JPanel bandModeSelectionPanel;
+	protected JPanel getBandModeCombobox(final RasterRulesListColormap rlcm) {
+		if (bandModeSelectionPanel == null) {
+			bandModeSelectionPanel = new JPanel(new MigLayout());
+
+			// i8n
+			bandModeSelectionPanel.add(new JLabel("Band:"));
+
+			// i8n
+			String[] items = new String[0];
+			for (int b = 0; b < rlcm.getStyledRaster().getBandCount(); b++) {
+				items = LangUtil.extendArray(items, String.valueOf(b + 1));
+			}
+			final JComboBox bandModeSelectionJCombobox = new JComboBox(items);
+			SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
+
+			bandModeSelectionPanel.add(bandModeSelectionJCombobox);
+			bandModeSelectionJCombobox.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent arg0) {
+					rlcm.setBand(bandModeSelectionJCombobox.getSelectedIndex());
+				}
+			});
+
+			// Initialiseren der JComboBox
+			bandModeSelectionJCombobox.setSelectedIndex(rlcm.getBand());
+
+		}
+		return bandModeSelectionPanel;
 	}
 
 }

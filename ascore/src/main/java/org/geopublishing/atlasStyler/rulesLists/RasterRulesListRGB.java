@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.styling.ContrastEnhancement;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
@@ -62,15 +63,15 @@ public class RasterRulesListRGB extends RasterRulesList {
 		if (getOpacity() != null)
 			rs.setOpacity(ff.literal(getOpacity()));
 
+		ContrastEnhancement ce = StylingUtil.STYLE_FACTORY
+				.createContrastEnhancement();
+
 		SelectedChannelType redT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(red),
-						(ContrastEnhancement) null);
+				.createSelectedChannelType(String.valueOf(red), ce);
 		SelectedChannelType greenT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(green),
-						(ContrastEnhancement) null);
+				.createSelectedChannelType(String.valueOf(green), ce);
 		SelectedChannelType blueT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(blue),
-						(ContrastEnhancement) null);
+				.createSelectedChannelType(String.valueOf(blue), ce);
 		ChannelSelection cs = StylingUtil.STYLE_FACTORY.channelSelection(redT,
 				greenT, blueT);
 		rs.setChannelSelection(cs);
@@ -100,35 +101,46 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	@Override
 	public void importRules(List<Rule> rules) {
-		if (rules.size() < 1)
-			return;
-		Rule r = rules.get(0);
+		pushQuite();
 
-		for (Symbolizer s : r.getSymbolizers()) {
-			if (s instanceof RasterSymbolizer) {
+		try {
 
-				RasterSymbolizer rs = (RasterSymbolizer) s;
-
-				if (rs.getOpacity() != null)
-					setOpacity(Double.valueOf(rs.getOpacity().evaluate(null)
-							.toString()));
-
-				ChannelSelection cs = rs.getChannelSelection();
-				if (cs == null)
-					continue;
-
-				try {
-					SelectedChannelType[] rgbChannels = cs.getRGBChannels();
-					red = Integer.valueOf(rgbChannels[0].getChannelName());
-					green = Integer.valueOf(rgbChannels[1].getChannelName());
-					blue = Integer.valueOf(rgbChannels[2].getChannelName());
-				} catch (Exception e) {
-					log.error("RGB channels didn't contain 3 channels??");
-					continue;
-				}
-
+			if (rules.size() < 1)
 				return;
+			Rule r = rules.get(0);
+			
+			// Analyse the filters...
+			parseAbstractRlSettings(r.getFilter());
+
+			for (Symbolizer s : r.getSymbolizers()) {
+				if (s instanceof RasterSymbolizer) {
+
+					RasterSymbolizer rs = (RasterSymbolizer) s;
+
+					if (rs.getOpacity() != null)
+						setOpacity(Double.valueOf(rs.getOpacity()
+								.evaluate(null).toString()));
+
+					ChannelSelection cs = rs.getChannelSelection();
+					if (cs == null)
+						continue;
+
+					try {
+						SelectedChannelType[] rgbChannels = cs.getRGBChannels();
+						red = Integer.valueOf(rgbChannels[0].getChannelName());
+						green = Integer
+								.valueOf(rgbChannels[1].getChannelName());
+						blue = Integer.valueOf(rgbChannels[2].getChannelName());
+					} catch (Exception e) {
+						log.error("RGB channels didn't contain 3 channels??");
+						continue;
+					}
+
+					return;
+				}
 			}
+		} finally {
+			popQuite();
 		}
 
 	}
@@ -148,6 +160,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	public void setRed(int red) {
 		this.red = red;
+		fireEvents(new RuleChangedEvent("Red channel selection changed", this));
 	}
 
 	public int getRed() {
@@ -156,6 +169,8 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	public void setGreen(int green) {
 		this.green = green;
+		fireEvents(new RuleChangedEvent("Green channel selection changed", this));
+
 	}
 
 	public int getGreen() {
@@ -164,6 +179,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	public void setBlue(int blue) {
 		this.blue = blue;
+		fireEvents(new RuleChangedEvent("Blue channel selection changed", this));
 	}
 
 	public int getBlue() {
