@@ -18,13 +18,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
-import org.apache.commons.collections.MapUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
@@ -79,7 +79,7 @@ public class FeatureClassification extends Classification {
 	 * Caches up to 8 Statistics. Remember, that the {@link DynamicBin1D}
 	 * actually keeps the data in memory!
 	 */
-	private final Map<String, DynamicBin1D> staticStatsCache = MapUtils
+	private final Map<String, DynamicBin1D> staticStatsCache = Collections
 			.synchronizedMap(new LimitedHashMap<String, DynamicBin1D>(8));
 
 	private boolean cacheEnabled = true;
