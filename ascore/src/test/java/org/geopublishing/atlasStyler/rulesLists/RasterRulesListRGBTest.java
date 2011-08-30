@@ -20,7 +20,7 @@ public class RasterRulesListRGBTest extends TestingClass {
 
 	@Before
 	public void setup() throws IOException {
-		styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffRGBWithoutSLD
+		styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffWithSld
 				.getStyled();
 	}
 
