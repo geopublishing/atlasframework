@@ -1,9 +1,10 @@
-package org.geopublishing.atlasStyler.rulesLists;
+package org.geopublishing.atlasStyler;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geotools.styling.FeatureTypeStyle;
 import org.junit.Before;
 import org.junit.Ignore;
