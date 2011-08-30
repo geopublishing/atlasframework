@@ -4,16 +4,16 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geotools.styling.FeatureTypeStyle;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.testing.GTTestingUtil;
+import de.schmitzm.testing.TestingClass;
 
-public class RasterRulesListRGBTest extends RasterRulesListColormapTest {
+public class RasterRulesListRGBTest extends TestingClass {
 
 	private StyledGridCoverageReader styledRaster;
 
@@ -24,6 +24,7 @@ public class RasterRulesListRGBTest extends RasterRulesListColormapTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport1() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
@@ -43,6 +44,7 @@ public class RasterRulesListRGBTest extends RasterRulesListColormapTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport2() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
