@@ -20,9 +20,6 @@ import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public interface RulesListInterface {
-	// ** Do not change the value, it is needed to recognize SLD **//
-	static final String ALL_LABEL_CLASSES_ENABLED = "ALL_LABEL_CLASSES_ENABLED";
-
 	public static final FilterFactory2 ff = FeatureUtil.FILTER_FACTORY2;
 
 	/**
@@ -31,6 +28,7 @@ public interface RulesListInterface {
 	 */
 	public static final double MAX_SCALEDENOMINATOR = 1E20;
 
+	
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
 	 * {@link AbstractRuleList}{@link #setEnabled(boolean)} method. This filter
@@ -47,28 +45,7 @@ public interface RulesListInterface {
 	 **/
 	public static final PropertyIsEqualTo OldAllClassesEnabledFilter = ff
 			.equals(ff.literal("1"), ff.literal("1"));
-	/**
-	 * A Filter to mark that one class/rule has been disabled. Sorry,
-	 * AtlasStyler specifc, but used in Sl #createLegendSwing method
-	 **/
-	public static final PropertyIsEqualTo RL_DISABLED_FILTER = ff.equals(
-			ff.literal("ALL_LABEL_CLASSES_DISABLED"), ff.literal("YES"));
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_ENABLED_FILTER = ff.equals(
-			ff.literal(ALL_LABEL_CLASSES_ENABLED),
-			ff.literal(ALL_LABEL_CLASSES_ENABLED));
-
-	// ** Do not change the value, it is needed to recognize SLD **//
-	static final String RL_FILTER_APPLIED_STR = "RL_FILTER_APPLIED";
-
-	/**
-	 * A Filter to mark that one class/rule is enabled
-	 **/
-	public static final PropertyIsEqualTo RL_FILTER_APPLIED_FILTER = ff.equals(
-			ff.literal(RL_FILTER_APPLIED_STR),
-			ff.literal(RL_FILTER_APPLIED_STR));
+	
 	/**
 	 * If used as a {@link Rule}'s name, the rule should not be imported, but
 	 * rather just be ignored.

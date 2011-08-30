@@ -157,7 +157,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 
 		JPanel linktoPanel = new JPanel(new MigLayout("w 100%, wrap"));
 		linktoPanel
-				.setBorder(BorderFactory.createTitledBorder("Link this map")); // i8n
+				.setBorder(BorderFactory.createTitledBorder("Link to this map")); // i8n
 
 		linktoPanel.add(new JLabel(GeopublisherGUI
 				.R("MapPreferences.LinkToThisMap.Label")));
@@ -173,7 +173,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 			JPanel oneLine = new JPanel(new BorderLayout());
 			oneLine.add(linkToMeTextfield, BorderLayout.CENTER);
 			JButton copyButton = new JButton(new AbstractAction(GeopublisherGUI
-					.R("MapPreferences.LinkToThisMap.CopyButton.Label")) {
+					.R("CopyButton.Label")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -182,7 +182,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 
 			});
 			copyButton.setToolTipText(GeopublisherGUI
-					.R("MapPreferences.LinkToThisMap.CopyButton.TT"));
+					.R("CopyButton.TT"));
 
 			copyButton.setBorder(BorderFactory.createEtchedBorder());
 

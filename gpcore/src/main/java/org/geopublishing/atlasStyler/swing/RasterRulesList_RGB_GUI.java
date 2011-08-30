@@ -1,14 +1,10 @@
 package org.geopublishing.atlasStyler.swing;
 
-import java.awt.Component;
-
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 

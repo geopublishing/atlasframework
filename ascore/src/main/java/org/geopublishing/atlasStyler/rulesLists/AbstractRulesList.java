@@ -12,14 +12,12 @@ package org.geopublishing.atlasStyler.rulesLists;
 
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 import javax.swing.ImageIcon;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
@@ -27,7 +25,6 @@ import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
@@ -41,6 +38,7 @@ import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 
@@ -385,9 +383,9 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	private Filter addRuleListEnabledDisabledFilter(Filter filter) {
 		// Are all classes enabled?
 		if (isEnabled()) {
-			filter = ff.and(RL_ENABLED_FILTER, filter);
+			filter = ff.and(StylingUtil.RL_ENABLED_FILTER, filter);
 		} else {
-			filter = ff.and(RL_DISABLED_FILTER, filter);
+			filter = ff.and(StylingUtil.RL_DISABLED_FILTER, filter);
 		}
 
 		return filter;
@@ -401,7 +399,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 		if (getRlFilter() != null && getRlFilter() != Filter.INCLUDE) {
 
-			And markerAndFilter = ff.and(RL_FILTER_APPLIED_FILTER,
+			And markerAndFilter = ff.and(StylingUtil.RL_FILTER_APPLIED_FILTER,
 					getRlFilter());
 
 			filter = ff.and(markerAndFilter, filter);
@@ -695,11 +693,11 @@ public abstract class AbstractRulesList implements RulesListInterface {
 				AndImpl andImpl = (AndImpl) filter;
 				List<?> andChildren = andImpl.getChildren();
 				final Object child0 = andChildren.get(0);
-				if (child0.equals(RL_DISABLED_FILTER)) {
+				if (child0.equals(StylingUtil.RL_DISABLED_FILTER)) {
 					setEnabled(false);
 				} else if (child0.equals(oldAllClassesDisabledFilter)) {
 					setEnabled(false);
-				} else if (child0.equals(RL_ENABLED_FILTER)) {
+				} else if (child0.equals(StylingUtil.RL_ENABLED_FILTER)) {
 					setEnabled(true);
 				} else if (child0.equals(OldAllClassesEnabledFilter)) {
 					setEnabled(true);
@@ -730,7 +728,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 			if (and1.getChildren().get(0) instanceof And) {
 				And and2 = (And) and1.getChildren().get(0);
-				if (and2.getChildren().get(0).equals(RL_FILTER_APPLIED_FILTER)) {
+				if (and2.getChildren().get(0).equals(StylingUtil.RL_FILTER_APPLIED_FILTER)) {
 
 					// Import the rule list filter
 					setRlFilter(and2.getChildren().get(1));

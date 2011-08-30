@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -37,10 +38,12 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 
 		backup();
 
-		add(new JLabel(R("EditDpEntryGUI.usage.Maps.border")));
 		MapusageTable mapUt = new MapusageTable(dpe, ace.getMapPool());
-		// mapUsage.
-		add(new JScrollPane(mapUt), "height 150");
+		if (dpe instanceof DpLayer) {
+			add(new JLabel(R("EditDpEntryGUI.usage.Maps.border")));
+			// mapUsage.
+			add(new JScrollPane(mapUt), "height 150");
+		}
 
 		add(new JLabel(R("EditDpEntryGUI.usage.Menu.border")), "gapy unrel");
 
@@ -52,6 +55,7 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 			add(new JLabel(R("EditDpEntryGUI.usage.notexported")), "gapy unrel");
 		}
 		else add(new JLabel(R("EditDpEntryGUI.usage.exported")), "gapy unrel");
+		
 	}
 
 	protected String R(String string, Object... obj) {

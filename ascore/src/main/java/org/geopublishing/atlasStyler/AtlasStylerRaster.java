@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
