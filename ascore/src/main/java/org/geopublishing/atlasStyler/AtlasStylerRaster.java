@@ -144,6 +144,9 @@ public class AtlasStylerRaster extends AtlasStyler {
 		}
 	}
 
+	/**
+	 * -1 ist die Auswahl für RGB
+	 */
 	public int getBand() {
 		return band;
 	}

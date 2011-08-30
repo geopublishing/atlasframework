@@ -46,8 +46,6 @@ import de.schmitzm.lang.LangUtil;
  * styling {@link Rule}s is presented in AtlasStyler as a
  * {@link AbstractRulesList}
  * 
- * @author stefan
- * 
  */
 public abstract class AbstractRulesList implements RulesListInterface {
 	/** KEY-name for the KVPs in the meta information * */
@@ -127,7 +125,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
 				"StylerSelection.raster_ramp"),
 
-		//TODO MJ
+		// TODO MJ
 		RASTER_RGB("/images/raster_rgb.png",
 				"StylerSelection.raster_rgb"),
 
@@ -171,8 +169,14 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			// return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 			// RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
 			// Removed one...
-			return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
-					RASTER_COLORMAP_INTERVALS };
+
+			if (as.getBand() < 0){
+				// No specific Band selected, use RGB 
+				return new RulesListType[] { RASTER_RGB };
+			}
+			else
+				return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
+						RASTER_COLORMAP_INTERVALS };
 		}
 
 		public static RulesListType[] valuesFor(AtlasStylerVector asv) {
