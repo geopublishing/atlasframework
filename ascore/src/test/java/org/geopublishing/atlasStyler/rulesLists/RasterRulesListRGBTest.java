@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import static org.junit.Assert.assertEquals;
 
