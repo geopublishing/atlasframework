@@ -155,14 +155,14 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * find the needed JARs in the local maven repository. This on the other hand expects you to "mvn install" the JARs
 	 * there whenever important changes happened to them.
 	 */
-	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.5.jar";
-	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.5.jar";
-	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.5.jar";
-	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.5.jar";
+	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.6-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.6-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.6-SNAPSHOT.jar";
+	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.6-SNAPSHOT.jar";
 	public static final String GSRCJ_JARNAME = "gsrcj-0.5.jar";
-	public static final String GPSYNC_JARNAME = "gpsync-1.0.jar";
+	public static final String GPSYNC_JARNAME = "gpsync-2.0-SNAPSHOT.jar";
 	// TODO UGLY!
-	private static String GPVERSION = "1.7";
+	private static String GPVERSION = "1.8-SNAPSHOT";
 	/**
 	 * Filename of the gpcore jar
 	 */
