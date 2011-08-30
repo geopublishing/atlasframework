@@ -1,0 +1,10 @@
+JARExportUtil:
+Von Snapshot auf nicht snapshot ändern und bei dem neuen trunk die version eins erhöhen.
+
+public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.5.jar";
+public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.5.jar";
+public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.5.jar";
+public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.5.jar";
+public static final String GSRCJ_JARNAME = "gsrcj-0.5.jar"
+public static final String GPSYNC_JARNAME = "gpsync-1.0.jar";
+private static String GPVERSION = "1.7";
