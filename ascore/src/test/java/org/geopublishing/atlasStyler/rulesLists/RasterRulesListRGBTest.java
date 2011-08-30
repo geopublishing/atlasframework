@@ -1,14 +1,14 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geotools.styling.FeatureTypeStyle;
 import org.junit.Before;
 import org.junit.Test;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.testing.GTTestingUtil;
