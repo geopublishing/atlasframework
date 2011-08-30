@@ -14,7 +14,7 @@ import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.testing.GTTestingUtil;
 import de.schmitzm.testing.TestingClass;
 
-public class RasterRulesListRGBTest extends TestingClass {
+public class RasterRulesListRGBTest extends RasterRulesListColormapTest {
 
 	private StyledGridCoverageReader styledRaster;
 
@@ -25,7 +25,6 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
-	@Ignore
 	public void testRasterRGBImportExport1() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
@@ -45,7 +44,6 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
-	@Ignore
 	public void testRasterRGBImportExport2() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
