@@ -127,6 +127,10 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
 				"StylerSelection.raster_ramp"),
 
+		//TODO MJ
+		RASTER_RGB("/images/raster_colormap_distrinctvalues.png",
+				"StylerSelection.raster_rgb"),
+
 		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
 				"StylerSelection.single_symbol"),
 
