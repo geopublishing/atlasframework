@@ -8,3 +8,11 @@ public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.5.jar";
 public static final String GSRCJ_JARNAME = "gsrcj-0.5.jar"
 public static final String GPSYNC_JARNAME = "gpsync-1.0.jar";
 private static String GPVERSION = "1.7";
+
+Version in pom.xml ändern
+
+branchen zu 1.8-fixes
+
+gpsync und schmitzm branchen
+
+
