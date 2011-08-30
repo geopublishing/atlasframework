@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.geotools.styling.FeatureTypeStyle;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
@@ -23,6 +24,7 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport1() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
@@ -42,6 +44,7 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport2() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
