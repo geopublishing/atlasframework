@@ -55,12 +55,13 @@ public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("atlasStylerClipboard", ".sld");
-			SwingUtil.checkOnEDT();
 
-			Object[] options = {
-					ASUtil.R("ExportToClipboard.Normal"),
+			Object[] options = { ASUtil.R("ExportToClipboard.Normal"),
 					ASUtil.R("ExportToClipboard.Optimized") };
 
+			// TODO create new method in AVSwingUtil like
+			// AVSwingUtil.showMessageDialog and replace this
+			SwingUtil.checkOnEDT();
 			int versionToCopy = JOptionPane
 					.showOptionDialog(
 							owner,
