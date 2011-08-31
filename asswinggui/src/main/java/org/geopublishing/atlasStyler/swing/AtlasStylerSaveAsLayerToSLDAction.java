@@ -11,6 +11,7 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,13 +19,13 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.StyledLayer;
 
@@ -67,7 +68,7 @@ public class AtlasStylerSaveAsLayerToSLDAction extends AbstractAction {
 
 		if (styledLayer.getSldFile() != null)
 			startWithFile = styledLayer.getSldFile();
-		
+
 		File exportFile = AsSwingUtil.chooseFileSave(owner, startWithFile,
 				ASUtil.R("StyledLayerSLD.ChooseFileLocationDialog.Title"),
 				new FileExtensionFilter(ASUtil.FILTER_SLD));
@@ -98,20 +99,33 @@ public class AtlasStylerSaveAsLayerToSLDAction extends AbstractAction {
 		try {
 			StylingUtil.saveStyleToSld(styledLayer.getStyle(),
 					styledLayer.getSldFile());
-			StylingUtil.saveStyleToSld(
-					styledLayer.getStyle(),
+			StylingUtil.saveStyleToSld(styledLayer.getStyle(),
 					ASUtil.changeToOptimizedFilename(styledLayer.getSldFile()),
-					true,
-					getOptimizedTitle(styledLayer));
+					true, getOptimizedTitle(styledLayer));
 
-			if (backup)
-				AVSwingUtil.showMessageDialog(owner, ASUtil.R(
+			Object[] options = { "OK", "Open File" };
+			int dialogValue = 0;
+
+			if (backup) {
+				dialogValue = JOptionPane.showOptionDialog(owner, ASUtil.R(
 						"AtlasStylerGUI.saveToSLDFileSuccessAndBackedUp",
-						IOUtil.escapePath(styledLayer.getSldFile())));
-			else
-				AVSwingUtil.showMessageDialog(owner, ASUtil.R(
-						"AtlasStylerGUI.saveToSLDFileSuccess",
-						IOUtil.escapePath(styledLayer.getSldFile())));
+						IOUtil.escapePath(styledLayer.getSldFile())), "",
+						JOptionPane.YES_NO_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options,
+						options[0]);
+			} else {
+				dialogValue = JOptionPane.showOptionDialog(
+						owner,
+						ASUtil.R("AtlasStylerGUI.saveToSLDFileSuccess",
+								IOUtil.escapePath(styledLayer.getSldFile())),
+						"", JOptionPane.YES_NO_OPTION,
+						JOptionPane.INFORMATION_MESSAGE, null, options,
+						options[0]);
+			}
+			if (dialogValue == JOptionPane.NO_OPTION) {
+				Desktop desktop = Desktop.getDesktop();
+				desktop.open(styledLayer.getSldFile());
+			}
 
 			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
 					styledLayer.getSldFile()));
@@ -132,13 +146,13 @@ public class AtlasStylerSaveAsLayerToSLDAction extends AbstractAction {
 	}
 
 	/**
-	 * Generates a title for the whole Style when a Style is exoprted in optimized mode.
+	 * Generates a title for the whole Style when a Style is exoprted in
+	 * optimized mode.
 	 */
 	public static String getOptimizedTitle(StyledLayerInterface<?> styledLayer) {
-		return "AtlasStyler "
-		+ ReleaseUtil.getVersionInfo(AtlasStyler.class)
-		+ ", Layer:" + styledLayer.getTitle()
-		+ ", Export-Mode: PRODUCTION";
+		return "AtlasStyler " + ReleaseUtil.getVersionInfo(AtlasStyler.class)
+				+ ", Layer:" + styledLayer.getTitle()
+				+ ", Export-Mode: PRODUCTION";
 	}
 
 }
