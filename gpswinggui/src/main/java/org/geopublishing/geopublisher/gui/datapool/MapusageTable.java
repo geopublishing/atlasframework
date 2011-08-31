@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
@@ -21,9 +22,9 @@ import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.swing.SwingUtil;
 
 /**
- * A table listsing the maps a {@link DpEntry} is used in.
- * 
- * @author stefan
+ * A table listsing the maps a {@link DpEntry} is used in. If the DPE is
+ * {@link DpLayer}, references are searched for in the layer lists. If the DPE
+ * is a {@link DpMedia}, references are searched for in the HTML documents.
  */
 public class MapusageTable extends JTable {
 
@@ -33,9 +34,14 @@ public class MapusageTable extends JTable {
 	private final DpEntry<? extends ChartStyle> dpe;
 	private PropertyChangeListener mapPoolChangeListener;
 
+	/**
+	 * 
+	 * @param dpe
+	 * @param mapPool
+	 */
 	public MapusageTable(final DpEntry<? extends ChartStyle> dpe,
 			final MapPool mapPool) {
-		super();
+
 		this.dpe = dpe;
 		this.mapPool = mapPool;
 
@@ -71,7 +77,7 @@ public class MapusageTable extends JTable {
 			}
 		};
 		mapPool.addChangeListener(mapPoolChangeListener);
-		
+
 		SwingUtil.setColumnLook(this, 0, null, 60, 80, null);
 
 	}
@@ -96,7 +102,8 @@ public class MapusageTable extends JTable {
 					case 2:
 						return getMapsUsing().get(row).isVisibleInLegend(dpe);
 					case 3:
-						return getMapsUsing().get(row).isSelectableFor(dpe.getId());
+						return getMapsUsing().get(row).isSelectableFor(
+								dpe.getId());
 					}
 					return super.getValueAt(row, column);
 				};

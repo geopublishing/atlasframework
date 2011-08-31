@@ -165,10 +165,9 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 		Box box = Box.createVerticalBox();
 		final List<String> languages = map.getAc().getLanguages();
 
-		for (int i = 0; i < languages.size(); i++) {
+		for (String lang : ace.getLanguages()) {
 			final JTextField linkToMeTextfield;
-			linkToMeTextfield = new JTextField("<a href=\"map://" + map.getId()
-					+ "\">" + map.getTitle().get(languages.get(i)) + "</a>");
+			linkToMeTextfield = new JTextField(map.getInternalLink(lang));
 			linkToMeTextfield.setEditable(false);
 			JPanel oneLine = new JPanel(new BorderLayout());
 			oneLine.add(linkToMeTextfield, BorderLayout.CENTER);

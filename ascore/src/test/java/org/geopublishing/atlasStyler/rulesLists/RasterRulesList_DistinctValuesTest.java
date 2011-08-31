@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.awt.Color;
 import java.io.IOException;
 
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geotools.styling.ColorMap;
 import org.junit.Before;
 import org.junit.Test;

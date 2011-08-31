@@ -581,4 +581,17 @@ public abstract class DpEntry<CHART_STYLE_IMPL extends ChartStyle> implements
 		return localTempFile;
 	}
 
+	/**
+	 * Liefert einen HTML a-Link in der eingestellten Atlas-Sprache der
+	 * innerhalb von Atlas-HTML-Dokuemnten verwendet werden kann um auf ein DPE
+	 * zu verlinken.
+	 */
+	abstract public String getInternalLink();
+
+	/**
+	 * Liefert einen HTML a-Link der innerhalb von Atlas-HTML-Dokuemnten
+	 * verwendet werden kann um auf ein DPE zu verlinken.
+	 */
+	abstract public String getInternalLink(String lang);
+
 }

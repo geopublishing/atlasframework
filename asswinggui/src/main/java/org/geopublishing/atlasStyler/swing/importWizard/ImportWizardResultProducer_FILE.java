@@ -254,10 +254,12 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 						try {
 							idxShpDs.createSpatialIndex();
 						} catch (Exception e) {
+							// I8n
 							throw new IllegalStateException(
 									"The Shapefile has a broken .qix file and a new one can not be created. Please delete or fix the .qix file manually.",
 									e);
 						}
+						// I8n
 						throw new AtlasImportException(
 								"The Shapefile had a broken .qix file which has now been repaired. Please reimport the Shapefile.");
 

@@ -267,4 +267,5 @@ public class DpLayerVectorFeatureSourceShapefile extends
 		return clone;
 	}
 
+
 }

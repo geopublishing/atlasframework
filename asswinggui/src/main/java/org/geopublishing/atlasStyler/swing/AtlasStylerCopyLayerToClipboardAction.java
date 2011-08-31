@@ -14,7 +14,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -32,14 +31,17 @@ import de.schmitzm.swing.ExceptionDialog;
 public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 	private static final long serialVersionUID = 4726448851995462364L;
 
-	static private final Logger LOGGER = Logger.getLogger(AtlasStylerCopyLayerToClipboardAction.class);;
+	static private final Logger LOGGER = Logger
+			.getLogger(AtlasStylerCopyLayerToClipboardAction.class);;
 
 	private final StyledLayerInterface<?> styledLayer;
 
 	private final Component owner;
 
-	public AtlasStylerCopyLayerToClipboardAction(Component owner, StyledLayerInterface<?> styledLayer) {
-		super(ASUtil.R("AtlasStylerGUI.copyLayerToClipboard"), Icons.ICON_EXPORT);
+	public AtlasStylerCopyLayerToClipboardAction(Component owner,
+			StyledLayerInterface<?> styledLayer) {
+		super(ASUtil.R("AtlasStylerGUI.copyLayerToClipboard"),
+				Icons.ICON_EXPORT);
 		this.owner = owner;
 		this.styledLayer = styledLayer;
 	}
@@ -47,24 +49,27 @@ public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		File tempFile;
+		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("atlasStylerClipboard", ".sld");
-		} catch (IOException e2) {
-			throw new RuntimeException(e2);
-		}
-		
-		try {
+
+			// TODO MJ:
+			// Benutezr fragen, ob er die Normale oder Optimierte/Produktion Version Kopieren will. Wenn productino, dann:;
+//			StylingUtil.saveStyleToSld(StylingUtil.optimizeStyle(styledLayer.getStyle(), AtlasStylerSaveAsLayerToSLDAction.getOptimizedTitle(styledLayer)), tempFile);
+			// sonst:
 			StylingUtil.saveStyleToSld(styledLayer.getStyle(), tempFile);
-			
-			List<Exception> es = StylingUtil.validateSld(new FileInputStream(tempFile));
+
+			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
+					tempFile));
 			if (es.size() > 0) {
 				ExceptionDialog.show(
 						owner,
-						new IllegalStateException(ASUtil.R("AtlasStylerExport.WarningSLDNotValid",
-								IOUtil.escapePath(styledLayer.getSldFile())), es.get(0)));
+						new IllegalStateException(ASUtil.R(
+								"AtlasStylerExport.WarningSLDNotValid",
+								IOUtil.escapePath(styledLayer.getSldFile())),
+								es.get(0)));
 			}
-			
+
 			LangUtil.copyToClipboard(IOUtil.readFileAsString(tempFile));
 
 		} catch (Exception e1) {
@@ -72,7 +77,8 @@ public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 			ExceptionDialog.show(owner, e1);
 			return;
 		} finally {
-			tempFile.delete();
+			if (tempFile != null)
+				tempFile.delete();
 		}
 	}
 }

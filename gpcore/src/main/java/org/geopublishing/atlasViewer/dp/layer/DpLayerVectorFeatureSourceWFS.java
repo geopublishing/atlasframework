@@ -25,10 +25,6 @@ public class DpLayerVectorFeatureSourceWFS extends DpLayerVectorFeatureSource {
 		super(ac);
 		setId("wfs test layer");
 	}
-//
-//	@Override
-//	public void seeJAR(Component owner) throws AtlasFatalException, IOException {
-//	}
 
 	@Override
 	public URL getInfoURL() {
@@ -42,9 +38,9 @@ public class DpLayerVectorFeatureSourceWFS extends DpLayerVectorFeatureSource {
 
 	@Override
 	public DpLayer<FeatureSource<SimpleFeatureType, SimpleFeature>, FeatureChartStyle> copy() {
-		DpLayerVectorFeatureSourceWFS copy = new DpLayerVectorFeatureSourceWFS(ac);
+		DpLayerVectorFeatureSourceWFS copy = new DpLayerVectorFeatureSourceWFS(
+				ac);
 		return copyTo(copy);
 	}
-
 
 }

@@ -22,6 +22,7 @@ import javax.swing.AbstractAction;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.StyledLayer;
@@ -30,6 +31,7 @@ import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.versionnumber.ReleaseUtil;
 
 /**
  * Action to save the SLD of the {@link StyledLayer} to a {@link File}. Two versions of the SLD are saved. The normal
@@ -76,9 +78,12 @@ public class AtlasStylerSaveLayerToSLDAction extends AbstractAction {
 		}
 
 		try {
-			StylingUtil.saveStyleToSld(styledLayer.getStyle(), styledLayer.getSldFile(), false);
+			StylingUtil.saveStyleToSld(styledLayer.getStyle(), styledLayer.getSldFile());
 			StylingUtil.saveStyleToSld(styledLayer.getStyle(),
-					ASUtil.changeToOptimizedFilename(styledLayer.getSldFile()), true);
+					ASUtil.changeToOptimizedFilename(styledLayer.getSldFile()), true, "AtlasStyler "
+					+ ReleaseUtil.getVersionInfo(AtlasStyler.class)
+					+ ", Layer:" + styledLayer.getTitle()
+					+ ", Export-Mode: PRODUCTION");
 
 			// TODO MJ: im dialog auch einen öffnen button über JDesktop
 			if (backup)

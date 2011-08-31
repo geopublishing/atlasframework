@@ -445,7 +445,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	public JToggleButton getJTButtonShowXML() {
 		final JToggleButton jButtonShowXML = new JToggleButton(
-				AtlasStylerVector.R("AtlasStylerGUI.toolbarButton.show_xml"));
+				ASUtil.R("AtlasStylerGUI.toolbarButton.show_xml"));
 		jButtonShowXML.setSelected(false);
 
 		jButtonShowXML.addActionListener(new AbstractAction() {

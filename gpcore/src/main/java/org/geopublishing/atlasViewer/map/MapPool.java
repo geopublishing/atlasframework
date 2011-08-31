@@ -12,6 +12,7 @@ package org.geopublishing.atlasViewer.map;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -23,6 +24,9 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.media.DpMedia;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geotools.util.WeakHashSet;
 
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -247,23 +251,45 @@ public class MapPool extends TreeMap<String, Map> {
 	}
 
 	/**
-	 * Returns a list of {@link Map}s that use the given {@link DpEntry}
+	 * Returns a list of {@link Map}s that use the given {@link DpEntry}. If the
+	 * DPE is {@link DpLayer}, references are searched for in the layer lists.
+	 * If the DPE is a {@link DpMedia}, references are searched for in the HTML
+	 * documents.
 	 */
-	public Set<Map> getMapsUsing(DpEntry<? extends ChartStyle> dpl) {
-		Set<Map> maps = new HashSet<Map>();
+	public Set<Map> getMapsUsing(DpEntry<? extends ChartStyle> dpe) {
+		final Set<Map> maps = new HashSet<Map>();
 
 		for (Map m : values()) {
+
+			// Look for the DPE in the Layer-Liste
 			for (DpRef<?> dpRef : m.getLayers()) {
-				if (dpRef.getTarget().equals(dpl)) {
+				if (dpRef.getTarget().equals(dpe)) {
 					maps.add(m);
-					continue;
+					break;
 				}
 			}
 
-			for (DpRef<?> dpRef : m.getMedia()) {
-				if (dpRef.getTarget().equals(dpl)) {
-					maps.add(m);
-					continue;
+			// Look for the DPE in the Media-Liste (not really used so far)
+			if (!maps.contains(m))
+				for (DpRef<?> dpRef : m.getMedia()) {
+					if (dpRef.getTarget().equals(dpe)) {
+						maps.add(m);
+						break;
+					}
+				}
+
+			// Look for a link to the DPE in the HTML files for this map
+			if (!maps.contains(m) && dpe instanceof DpMedia) {
+				for (String lang : m.getAc().getLanguages()) {
+					URL infoURL = m.getInfoURL(lang);
+					if (AtlasProtocol.findReferencesInHtml(infoURL,
+							(DpMedia) dpe)) {
+						maps.add(m);
+
+						// BREAK aus der Language schleife. Danach ist
+						// die
+						break;
+					}
 				}
 			}
 		}

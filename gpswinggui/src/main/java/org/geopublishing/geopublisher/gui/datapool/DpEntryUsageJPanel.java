@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
-import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -26,6 +25,7 @@ import de.schmitzm.swing.JPanel;
 
 public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 
+	private static final long serialVersionUID = 947661329996460693L;
 	private final AtlasConfigEditable ace;
 	private final DpEntry<? extends ChartStyle> dpe;
 
@@ -39,11 +39,9 @@ public class DpEntryUsageJPanel extends JPanel implements Cancellable {
 		backup();
 
 		MapusageTable mapUt = new MapusageTable(dpe, ace.getMapPool());
-		if (dpe instanceof DpLayer) {
-			add(new JLabel(R("EditDpEntryGUI.usage.Maps.border")));
-			// mapUsage.
-			add(new JScrollPane(mapUt), "height 150");
-		}
+		add(new JLabel(R("EditDpEntryGUI.usage.Maps.border")));
+		// mapUsage.
+		add(new JScrollPane(mapUt), "height 150");
 
 		add(new JLabel(R("EditDpEntryGUI.usage.Menu.border")), "gapy unrel");
 

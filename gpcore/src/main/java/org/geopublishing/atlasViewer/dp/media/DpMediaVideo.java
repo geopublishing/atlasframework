@@ -18,6 +18,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -39,7 +40,6 @@ public class DpMediaVideo extends DpMedia<ChartStyle> implements ActionListener 
 		setDesc(new Translation());
 		setType(DpEntryType.VIDEO);
 	}
-
 
 	@Override
 	/*
@@ -68,10 +68,21 @@ public class DpMediaVideo extends DpMedia<ChartStyle> implements ActionListener 
 		LOGGER.debug("uncaching video " + getTitle());
 	}
 
-
 	@Override
 	public void exportWithGUI(Component owner) throws IOException {
-		LOGGER.info("not implemented"); //TODO 
+		LOGGER.info("not implemented"); // TODO
+	}
+
+	@Override
+	public String getInternalLink(String lang) {
+		return "<a href=\"" + AtlasProtocol.VIDEO.toString().toLowerCase()
+				+ "://" + getId() + "\">" + getTitle().get(lang) + "</a>";
+	}
+
+	@Override
+	public String getInternalLink() {
+		return "<a href=\"" + AtlasProtocol.VIDEO.toString().toLowerCase()
+				+ "://" + getId() + "\">" + getTitle().toString() + "</a>";
 	}
 
 }
