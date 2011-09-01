@@ -74,13 +74,13 @@ public class RasterRulesList_RGB_GUI extends
 	private JComboBox getBlueChannelComboBox() {
 		if (blueChannelComboBox == null) {
 			blueChannelComboBox = new JComboBox(getBands());
-			blueChannelComboBox.setSelectedIndex(rulesList.getBlue()-1);
+			blueChannelComboBox.setSelectedIndex(rulesList.getBlue()-1); //1-based to 0-based
 			SwingUtil.addMouseWheelForCombobox(blueChannelComboBox);
 			blueChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setBlue(blueChannelComboBox.getSelectedIndex()+1);
+					rulesList.setBlue(blueChannelComboBox.getSelectedIndex()+1); //0-based to 1-based
 				}
 			});
 		}
@@ -90,13 +90,13 @@ public class RasterRulesList_RGB_GUI extends
 	private JComboBox getGreenChannelComboBox() {
 		if (greenChannelComboBox == null) {
 			greenChannelComboBox = new JComboBox(getBands());
-			greenChannelComboBox.setSelectedIndex(rulesList.getGreen()-1);
+			greenChannelComboBox.setSelectedIndex(rulesList.getGreen()-1); //1-based to 0-based
 			SwingUtil.addMouseWheelForCombobox(greenChannelComboBox);
 			greenChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setGreen(greenChannelComboBox.getSelectedIndex()+1);
+					rulesList.setGreen(greenChannelComboBox.getSelectedIndex()+1); //0-based to 1-based
 				}
 			});
 		}
@@ -106,13 +106,13 @@ public class RasterRulesList_RGB_GUI extends
 	private JComboBox getRedChannelComboBox() {
 		if (redChannelComboBox == null) {
 			redChannelComboBox = new JComboBox(getBands());
-			redChannelComboBox.setSelectedIndex(rulesList.getRed()-1);
+			redChannelComboBox.setSelectedIndex(rulesList.getRed()-1); //1-based to 0-based
 			SwingUtil.addMouseWheelForCombobox(redChannelComboBox);
 			redChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setRed(redChannelComboBox.getSelectedIndex()+1);
+					rulesList.setRed(redChannelComboBox.getSelectedIndex()+1); //0-based to 1-based
 				}
 			});
 		}
