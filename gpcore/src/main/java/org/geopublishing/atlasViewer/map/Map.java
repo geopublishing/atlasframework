@@ -1168,4 +1168,18 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 				+ "://" + getId() + "\">" + getTitle().toString() + "</a>";
 	}
 
+	/**
+	 * Returns <code>true</code> is any of the HTML documents for this map
+	 * contain a reference to the given {@link DpMedia}.
+	 */
+	public boolean referencesInHtml(DpMedia dpe) {
+		for (String lang : getAc().getLanguages()) {
+			URL infoURL = getInfoURL(lang);
+			if (AtlasProtocol.findReferencesInHtml(infoURL, dpe)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

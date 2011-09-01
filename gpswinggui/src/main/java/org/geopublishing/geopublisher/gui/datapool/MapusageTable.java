@@ -28,9 +28,10 @@ import de.schmitzm.swing.SwingUtil;
  */
 public class MapusageTable extends JTable {
 
+	private static final long serialVersionUID = -6898567905785330984L;
+	
 	private DefaultTableModel tm;
 	private ArrayList<Map> mapsUsing;
-	private final MapPool mapPool;
 	private final DpEntry<? extends ChartStyle> dpe;
 	private PropertyChangeListener mapPoolChangeListener;
 
@@ -43,7 +44,6 @@ public class MapusageTable extends JTable {
 			final MapPool mapPool) {
 
 		this.dpe = dpe;
-		this.mapPool = mapPool;
 
 		mapsUsing = new ArrayList<Map>(mapPool.getMapsUsing(dpe));
 

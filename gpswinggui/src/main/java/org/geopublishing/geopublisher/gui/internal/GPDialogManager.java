@@ -15,6 +15,7 @@ import java.awt.Cursor;
 import java.awt.Window;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.List;
 
@@ -80,9 +81,15 @@ public class GPDialogManager {
 								List<String> tabTitles = (List<String>) constArgs[2];
 								String windowTitle = (String) constArgs[3];
 
-								return GpSwingUtil.openHTMLEditors(owner, ace,
-										htmlFiles, tabTitles, windowTitle);
+								// Optinally pass a listener to add to listen to
+								// HTML changes when the e.g. the dave button is pressed.
+								PropertyChangeListener listener = null;
+								if (constArgs.length > 4)
+									listener = (PropertyChangeListener) constArgs[4];
 
+								return GpSwingUtil.openHTMLEditors(owner, ace,
+										htmlFiles, tabTitles, windowTitle,
+										listener);
 							}
 
 						}));
@@ -93,71 +100,75 @@ public class GPDialogManager {
 		}
 	};
 
-//	/**
-//	 * The key is a {@link StyledRasterInterface}. Parameters to get an instance
-//	 * are: KEY, OWNERGUI, AConfig, AtlasMapLegend (optional)
-//	 */
-//	final public static DialogManager<Object, OldAtlasStylerRasterDialog> dm_OldAtlasRasterStyler = new DialogManager<Object, OldAtlasStylerRasterDialog>() {
-//
-//		@Override
-//		public OldAtlasStylerRasterDialog getInstanceFor(final Object key,
-//				final Component owner, final Object... constArgs) {
-//			try {
-//				return bringup(super.getInstanceFor(key,
-//						new DialogManager.FactoryInterface() {
-//
-//							@Override
-//							public OldAtlasStylerRasterDialog create() {
-//								final StyledRasterInterface styledRaster = (StyledRasterInterface) key;
-//								final AtlasConfig ac = (AtlasConfig) constArgs[0];
-//
-//								/***********************************************************************
-//								 * First create the AtlasStyler ....
-//								 */
-//								final OldAtlasStylerRasterDialog atlasRasterStyler = new OldAtlasStylerRasterDialog(
-//										owner, styledRaster, ac.getLanguages());
-//
-//								if (constArgs.length == 2
-//										&& constArgs[1] != null) {
-//									final MapLayerLegend mapLayerLegend = (MapLayerLegend) constArgs[1];
-//
-//									atlasRasterStyler
-//											.addListener(new StyleChangeListener() {
-//
-//												@Override
-//												public void changed(
-//														StyleChangedEvent e) {
-//													styledRaster.setStyle(e
-//															.getStyle());
-//													mapLayerLegend.updateStyle(e
-//															.getStyle());
-//
-//													// Because events from this
-//													// Dialog might also have
-//													// changed the Gap on-off
-//													// state,
-//													// without changing the
-//													// style,
-//													// we always recreate the
-//													// legend
-//													// for this layer
-//													mapLayerLegend
-//															.recreateLegend();
-//												}
-//											});
-//								}
-//
-//								return atlasRasterStyler;
-//							}
-//
-//						}));
-//			} catch (Exception e) {
-//				ExceptionDialog.show(owner, e);
-//				return null;
-//			}
-//		}
-//
-//	};
+	// /**
+	// * The key is a {@link StyledRasterInterface}. Parameters to get an
+	// instance
+	// * are: KEY, OWNERGUI, AConfig, AtlasMapLegend (optional)
+	// */
+	// final public static DialogManager<Object, OldAtlasStylerRasterDialog>
+	// dm_OldAtlasRasterStyler = new DialogManager<Object,
+	// OldAtlasStylerRasterDialog>() {
+	//
+	// @Override
+	// public OldAtlasStylerRasterDialog getInstanceFor(final Object key,
+	// final Component owner, final Object... constArgs) {
+	// try {
+	// return bringup(super.getInstanceFor(key,
+	// new DialogManager.FactoryInterface() {
+	//
+	// @Override
+	// public OldAtlasStylerRasterDialog create() {
+	// final StyledRasterInterface styledRaster = (StyledRasterInterface) key;
+	// final AtlasConfig ac = (AtlasConfig) constArgs[0];
+	//
+	// /***********************************************************************
+	// * First create the AtlasStyler ....
+	// */
+	// final OldAtlasStylerRasterDialog atlasRasterStyler = new
+	// OldAtlasStylerRasterDialog(
+	// owner, styledRaster, ac.getLanguages());
+	//
+	// if (constArgs.length == 2
+	// && constArgs[1] != null) {
+	// final MapLayerLegend mapLayerLegend = (MapLayerLegend) constArgs[1];
+	//
+	// atlasRasterStyler
+	// .addListener(new StyleChangeListener() {
+	//
+	// @Override
+	// public void changed(
+	// StyleChangedEvent e) {
+	// styledRaster.setStyle(e
+	// .getStyle());
+	// mapLayerLegend.updateStyle(e
+	// .getStyle());
+	//
+	// // Because events from this
+	// // Dialog might also have
+	// // changed the Gap on-off
+	// // state,
+	// // without changing the
+	// // style,
+	// // we always recreate the
+	// // legend
+	// // for this layer
+	// mapLayerLegend
+	// .recreateLegend();
+	// }
+	// });
+	// }
+	//
+	// return atlasRasterStyler;
+	// }
+	//
+	// }));
+	// } catch (Exception e) {
+	// ExceptionDialog.show(owner, e);
+	// return null;
+	// }
+	// }
+	//
+	// };
 
 	/** DialogManager for EditAttributesDialogs **/
 	final static public CancellableDialogManager<DpEntry<? extends ChartStyle>, EditDpEntryGUI> dm_EditDpEntry = new CancellableDialogManager<DpEntry<? extends ChartStyle>, EditDpEntryGUI>() {

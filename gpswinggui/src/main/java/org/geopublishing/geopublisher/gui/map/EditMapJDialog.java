@@ -87,22 +87,36 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 	 */
 	private JPanel createGeneralTab() {
 
-		JPanel generalPanel = new JPanel(new MigLayout("w 100%"));
+		JPanel generalPanel = new JPanel(new MigLayout("w 100%","[grow]","[grow 1000][][]"));
 
 		JPanel htmlPanel = new JPanel(new MigLayout("w 100%, wrap 3",
-				"[grow]"));
+				"[grow]","[grow 10000][]"));
 		htmlPanel.setBorder(BorderFactory
 				.createTitledBorder("Map HTML description")); // i8n
 
 		// preview
-		DesignHTMLInfoPane html = GpSwingUtil.createDesignHTMLInfoPane(ace, map);
+		final DesignHTMLInfoPane html = GpSwingUtil.createDesignHTMLInfoPane(ace, map);
 		JComponent htmlPreview = html.getComponent();
 		if ( !html.hasScrollPane() )
 		    htmlPreview = new JScrollPane(htmlPreview);
-		htmlPanel.add(htmlPreview, "growx, wrap, height 255, w 100%");
-		SwingUtil.setPreferredHeight(htmlPanel, 270);
-
+		htmlPanel.add(htmlPreview, "wrap, grow");
+//		htmlPanel.add(htmlPreview, "growx, wrap, height 255:255:, w 100%, growy");
+//		SwingUtil.setPreferredHeight(htmlPanel, 270);
+		
 		/**
+		 * This button allows to delete all HTML files
+		 */
+		final JButton reloadHtmlButton = new JButton(
+				//i8n
+				new AbstractAction("reload") {
+					
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						html.reload(map.getInfoURL());
+					}
+				});
+		/**
+		 * 
 		 * This button allows to delete all HTML files
 		 */
 		final JButton deleteHtmlButton = new JButton(
@@ -113,19 +127,26 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 		ace.getMapPool().addChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				
 				if (evt.getNewValue() instanceof Map) {
-					if (((Map) evt.getNewValue()).equals(map))
+					if (((Map) evt.getNewValue()).equals(map)) {
+						
 						deleteHtmlButton.setEnabled(map
 								.getMissingHTMLLanguages().size() > 0);
+					
+						html.reload(map.getInfoURL());
+					}
 				}
+				
 			}
 		});
-		htmlPanel.add(deleteHtmlButton, "bottom, right, span 3, split 3");
+		htmlPanel.add(reloadHtmlButton, "bottom, right, span 3, split 4");
+		htmlPanel.add(deleteHtmlButton);
 
 		/**
 		 * This button allows to edit the HTML text
 		 */
-		JButton editHtmlButton = new JButton(new MapPoolEditHTMLAction(map));
+		JButton editHtmlButton = new JButton(new MapPoolEditHTMLAction(map, EditMapJDialog.this));
 		editHtmlButton.setBorder(BorderFactory.createEtchedBorder());
 		htmlPanel.add(editHtmlButton);
 

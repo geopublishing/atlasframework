@@ -35,6 +35,7 @@ import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
+import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.http.FileWebResourceLoader;
 import org.geopublishing.atlasViewer.http.Webserver;
@@ -448,6 +449,15 @@ public class AtlasConfigEditable extends AtlasConfig {
 				 * can be reached from the atlas
 				 */
 				if (m.containsDpe(dpe.getId())) {
+					referencedFromAMap = true;
+					break;
+				}
+
+				/**
+				 * If we find a reference to our DPE in the HTML-files of this
+				 * map, the DpEntry can be reached from the atlas
+				 */
+				if (dpe instanceof DpMedia && m.referencesInHtml((DpMedia) dpe)) {
 					referencedFromAMap = true;
 					break;
 				}

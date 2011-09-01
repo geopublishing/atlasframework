@@ -63,7 +63,7 @@ public class ExportWizardPage_Save extends WizardPage {
 		setPreferredSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 		setSize(ExportWizard.DEFAULT_WPANEL_SIZE);
 
-		setLayout(new MigLayout("wrap 1"));
+		setLayout(new MigLayout("wrap 1","grow","[][][][][grow 1000]"));
 
 		add(explanationJLabel);
 
@@ -98,7 +98,7 @@ public class ExportWizardPage_Save extends WizardPage {
 
 			});
 
-			add(new JScrollPane(table), "grow");
+			add(new JScrollPane(table), "growx, growy");
 		}
 
 	}

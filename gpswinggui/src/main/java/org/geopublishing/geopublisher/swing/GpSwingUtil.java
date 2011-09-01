@@ -635,10 +635,11 @@ public class GpSwingUtil extends GpUtil {
 	 *            changes.
 	 * @param tabTitles
 	 * @param windowTitle
+	 * @param htmlListener 
 	 */
 	public static Window openHTMLEditors(Component owner,
 			AtlasConfigEditable ace, List<File> htmlFiles,
-			List<String> tabTitles, String windowTitle) {
+			List<String> tabTitles, String windowTitle, PropertyChangeListener htmlListener) {
 
 		if (tabTitles.size() != htmlFiles.size())
 			throw new IllegalArgumentException(
@@ -648,6 +649,10 @@ public class GpSwingUtil extends GpUtil {
 		 * We open the HTML editor to edit the About information.
 		 */
 		final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
+		
+		if (htmlListener != null)
+			htmlEditor.addChangeListener(htmlListener);
+		
 		JComponent htmlEditorPanel = htmlEditor.getComponent();
 		// JHTMLEditor has problems when not running in frame!!
 		// So we have to use JFrame for all implementations of
@@ -655,6 +660,7 @@ public class GpSwingUtil extends GpUtil {
 		// final JDialog editorDialog = new JDialog(SwingUtil
 		// .getParentWindow(owner), windowTitle);
 		final JFrame editorFrame = new JFrame(windowTitle);
+
 		// editorDialog.setModal(true);
 		// TODO: Stefan muss hier Frame-Caching einbauen, damit
 		// fuer eine Map nicht 2x ein Editor geöffnet wird!

@@ -12,7 +12,6 @@ package org.geopublishing.atlasViewer.map;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -26,7 +25,6 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.Group;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
-import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geotools.util.WeakHashSet;
 
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -280,16 +278,13 @@ public class MapPool extends TreeMap<String, Map> {
 
 			// Look for a link to the DPE in the HTML files for this map
 			if (!maps.contains(m) && dpe instanceof DpMedia) {
-				for (String lang : m.getAc().getLanguages()) {
-					URL infoURL = m.getInfoURL(lang);
-					if (AtlasProtocol.findReferencesInHtml(infoURL,
-							(DpMedia) dpe)) {
-						maps.add(m);
-
-						// BREAK aus der Language schleife. Danach ist
-						// die
-						break;
-					}
+				
+				if (m.referencesInHtml((DpMedia) dpe)){
+					maps.add(m);
+					
+					// BREAK aus der Language schleife. Danach ist
+					// die
+					continue;
 				}
 			}
 		}
