@@ -47,7 +47,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 			red = 1;
 			green = Math.min(2, getStyledRaster().getBandCount());
 			blue = Math.min(3, getStyledRaster().getBandCount());
-		}
+		} 
 	}
 
 	@Override
