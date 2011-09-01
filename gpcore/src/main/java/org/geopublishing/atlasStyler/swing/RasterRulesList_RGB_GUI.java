@@ -49,6 +49,10 @@ public class RasterRulesList_RGB_GUI extends
 		add(getBlueChannelComboBox(), "growx");
 	}
 
+	/**
+	 * Gets the number of bands
+	 * @return Object holding strings of "Channel + <Channelnumber>" for every band
+	 */
 	private Object[] getBands() {
 		if (bands == null) {
 			int n = atlasStyler.getBands();
