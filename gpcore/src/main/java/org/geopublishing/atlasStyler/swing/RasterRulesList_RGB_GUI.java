@@ -13,7 +13,11 @@ import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.geopublisher.GpUtil;
 
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
+/**
+ * A GUI to edit a {@link RasterRulesListRGB}
+ */
 public class RasterRulesList_RGB_GUI extends
 		AbstractRulesListGui<RasterRulesListRGB> {
 
@@ -67,6 +71,7 @@ public class RasterRulesList_RGB_GUI extends
 		if (blueChannelComboBox == null) {
 			blueChannelComboBox = new JComboBox(getBands());
 			blueChannelComboBox.setSelectedIndex(rulesList.getBlue()-1);
+			SwingUtil.addMouseWheelForCombobox(blueChannelComboBox);
 			blueChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
@@ -82,6 +87,7 @@ public class RasterRulesList_RGB_GUI extends
 		if (greenChannelComboBox == null) {
 			greenChannelComboBox = new JComboBox(getBands());
 			greenChannelComboBox.setSelectedIndex(rulesList.getGreen()-1);
+			SwingUtil.addMouseWheelForCombobox(greenChannelComboBox);
 			greenChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
@@ -97,6 +103,7 @@ public class RasterRulesList_RGB_GUI extends
 		if (redChannelComboBox == null) {
 			redChannelComboBox = new JComboBox(getBands());
 			redChannelComboBox.setSelectedIndex(rulesList.getRed()-1);
+			SwingUtil.addMouseWheelForCombobox(redChannelComboBox);
 			redChannelComboBox.addItemListener(new ItemListener() {
 
 				@Override
