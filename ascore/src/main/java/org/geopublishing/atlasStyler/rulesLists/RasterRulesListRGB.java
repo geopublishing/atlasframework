@@ -163,6 +163,9 @@ public class RasterRulesListRGB extends RasterRulesList {
 		fireEvents(new RuleChangedEvent("Red channel selection changed", this));
 	}
 
+	/**
+	 * 1-based
+	 */
 	public int getRed() {
 		return red;
 	}
@@ -173,6 +176,9 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	}
 
+	/**
+	 * 1-based
+	 */
 	public int getGreen() {
 		return green;
 	}
@@ -182,6 +188,9 @@ public class RasterRulesListRGB extends RasterRulesList {
 		fireEvents(new RuleChangedEvent("Blue channel selection changed", this));
 	}
 
+	/**
+	 * 1-based
+	 */
 	public int getBlue() {
 		return blue;
 	}
