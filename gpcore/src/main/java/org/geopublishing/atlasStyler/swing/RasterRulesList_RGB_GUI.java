@@ -43,7 +43,6 @@ public class RasterRulesList_RGB_GUI extends
 		add(getGreenChannelComboBox(), "growx");
 		add(getBlueJLabel(), "gapright 5");
 		add(getBlueChannelComboBox(), "growx");
-		super.rulesList.setBlue(1);
 	}
 
 	private Object[] getBands() {
