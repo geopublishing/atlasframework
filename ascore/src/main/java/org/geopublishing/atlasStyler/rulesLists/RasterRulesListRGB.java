@@ -13,6 +13,7 @@ import org.geotools.styling.Rule;
 import org.geotools.styling.Symbolizer;
 import org.opengis.filter.Filter;
 import org.opengis.style.ChannelSelection;
+import org.opengis.style.ContrastMethod;
 import org.opengis.style.SelectedChannelType;
 
 import de.schmitzm.geotools.FilterUtil;
@@ -39,6 +40,10 @@ public class RasterRulesListRGB extends RasterRulesList {
 	 */
 	private int blue = 3;
 
+	private ContrastMethod redMethod;
+	private ContrastMethod greenMethod;
+	private ContrastMethod blueMethod;
+
 	public RasterRulesListRGB(StyledRasterInterface<?> styledRaster,
 			boolean withDefaults) {
 		super(RulesListType.RASTER_RGB, styledRaster);
@@ -47,7 +52,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 			red = 1;
 			green = Math.min(2, getStyledRaster().getBandCount());
 			blue = Math.min(3, getStyledRaster().getBandCount());
-		} 
+		}
 	}
 
 	@Override
@@ -63,15 +68,27 @@ public class RasterRulesListRGB extends RasterRulesList {
 		if (getOpacity() != null)
 			rs.setOpacity(ff.literal(getOpacity()));
 
-		ContrastEnhancement ce = StylingUtil.STYLE_FACTORY
-				.createContrastEnhancement();
+		// ContrastEnhancement ce = StylingUtil.STYLE_FACTORY
+		// .createContrastEnhancement();
 
+		ContrastEnhancement redCe = StylingUtil.STYLE_FACTORY
+				.createContrastEnhancement();
+		redCe.setMethod(redMethod);
 		SelectedChannelType redT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(red), ce);
+				.createSelectedChannelType(String.valueOf(red), redCe);
+
+		ContrastEnhancement greenCe = StylingUtil.STYLE_FACTORY
+				.createContrastEnhancement();
+		redCe.setMethod(greenMethod);
 		SelectedChannelType greenT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(green), ce);
+				.createSelectedChannelType(String.valueOf(green), greenCe);
+
+		ContrastEnhancement blueCe = StylingUtil.STYLE_FACTORY
+				.createContrastEnhancement();
+		redCe.setMethod(blueMethod);
 		SelectedChannelType blueT = StylingUtil.STYLE_FACTORY
-				.createSelectedChannelType(String.valueOf(blue), ce);
+				.createSelectedChannelType(String.valueOf(blue), blueCe);
+
 		ChannelSelection cs = StylingUtil.STYLE_FACTORY.channelSelection(redT,
 				greenT, blueT);
 		rs.setChannelSelection(cs);
@@ -108,7 +125,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 			if (rules.size() < 1)
 				return;
 			Rule r = rules.get(0);
-			
+
 			// Analyse the filters...
 			parseAbstractRlSettings(r.getFilter());
 
@@ -116,7 +133,6 @@ public class RasterRulesListRGB extends RasterRulesList {
 				if (s instanceof RasterSymbolizer) {
 
 					RasterSymbolizer rs = (RasterSymbolizer) s;
-
 					if (rs.getOpacity() != null)
 						setOpacity(Double.valueOf(rs.getOpacity()
 								.evaluate(null).toString()));
@@ -193,6 +209,54 @@ public class RasterRulesListRGB extends RasterRulesList {
 	 */
 	public int getBlue() {
 		return blue;
+	}
+
+	public void setBlueMethod(int blueMethod) {
+		switch (blueMethod) {
+		case 0:
+			this.blueMethod = ContrastMethod.NONE;
+		case 1:
+			this.blueMethod = ContrastMethod.HISTOGRAM;
+		case 2:
+			this.blueMethod = ContrastMethod.NORMALIZE;
+		}
+		fireEvents(new RuleChangedEvent("Blue channel contrast enhancement method changed", this));
+	}
+
+	public ContrastMethod getBlueMethod() {
+		return blueMethod;
+	}
+
+	public void setGreenMethod(int greenMethod) {
+		switch (greenMethod) {
+		case 0:
+			this.greenMethod = ContrastMethod.NONE;
+		case 1:
+			this.greenMethod = ContrastMethod.HISTOGRAM;
+		case 2:
+			this.greenMethod = ContrastMethod.NORMALIZE;
+		}
+		fireEvents(new RuleChangedEvent("Green channel contrast enhancement method changed", this));
+	}
+
+	public ContrastMethod getGreenMethod() {
+		return greenMethod;
+	}
+
+	public void setRedMethod(int redMethod) {
+		switch (redMethod) {
+		case 0:
+			this.redMethod = ContrastMethod.NONE;
+		case 1:
+			this.redMethod = ContrastMethod.HISTOGRAM;
+		case 2:
+			this.redMethod = ContrastMethod.NORMALIZE;
+		}
+		fireEvents(new RuleChangedEvent("Red channel contrast enhancement method changed", this));
+	}
+
+	public ContrastMethod getRedMethod() {
+		return redMethod;
 	}
 
 }
