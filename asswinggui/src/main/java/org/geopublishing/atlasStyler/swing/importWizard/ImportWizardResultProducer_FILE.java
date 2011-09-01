@@ -37,6 +37,7 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import de.schmitzm.geotools.io.GeoImportUtil;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.SwingUtil;
 
@@ -109,7 +110,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 				GeoTiffReader reader = new GeoTiffReader(
 						IOUtil.fileToURL(importFile));
-
+				
 				final StyledGridCoverageReader styledReader = new StyledGridCoverageReader(
 						reader, importFile.toString(), importFile.getName(),
 						null);
@@ -129,7 +130,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 				// TODO Better Raster import feedback
 				return Summary.create(new JScrollPane(new JLabel(
-						"Rasterimport OK")), "ok");
+						"Rasterimport OK. Imported "+styledReader.getBandCount()+" Bands")), "ok");
 			}
 
 			/**
