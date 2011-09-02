@@ -5,14 +5,18 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.geopublisher.GpUtil;
+import org.jfree.chart.ChartMouseEvent;
 import org.opengis.style.ContrastMethod;
 
 import de.schmitzm.lang.LangUtil;
@@ -71,13 +75,16 @@ public class RasterRulesList_RGB_GUI extends
 
 	private JComboBox getBlueChannelContrastComboBox() {
 		if (blueChannelContrastComboBox == null) {
-			blueChannelContrastComboBox = new JComboBox(
-					getContrastEnhancementMethods());
+			blueChannelContrastComboBox = new JComboBox(ContrastMethod.values());
+			blueChannelContrastComboBox.setRenderer(contrastListCellRenderer);
+
+			SwingUtil.addMouseWheelForCombobox(blueChannelContrastComboBox);
+			blueChannelContrastComboBox.setSelectedItem(rulesList.getBlueMethod());
 			blueChannelContrastComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setBlueMethod(blueChannelContrastComboBox.getSelectedIndex());
+					rulesList.setBlueMethod((ContrastMethod) blueChannelContrastComboBox.getSelectedItem());
 				}
 			});
 		}
@@ -87,46 +94,56 @@ public class RasterRulesList_RGB_GUI extends
 
 	private JComboBox getGreenChannelContrastComboBox() {
 		if (greenChannelContrastComboBox == null) {
-			greenChannelContrastComboBox = new JComboBox(
-					getContrastEnhancementMethods());
+			greenChannelContrastComboBox = new JComboBox(ContrastMethod.values());
+			greenChannelContrastComboBox.setRenderer(contrastListCellRenderer);
+
+			greenChannelContrastComboBox.setSelectedItem(rulesList.getGreenMethod());
+			SwingUtil.addMouseWheelForCombobox(greenChannelContrastComboBox);
 			greenChannelContrastComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setGreenMethod(greenChannelContrastComboBox.getSelectedIndex());
+					rulesList.setGreenMethod((ContrastMethod) greenChannelContrastComboBox.getSelectedItem());
 				}
 			});
 		}
 		return greenChannelContrastComboBox;
 	}
+	
+	DefaultListCellRenderer contrastListCellRenderer = new DefaultListCellRenderer() {
+		
+		@Override
+		public Component getListCellRendererComponent(JList list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+			JLabel l = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+			l.setText(((ContrastMethod)value).name());
+			return l;
+		}
+	};
+
 
 	private JComboBox getRedChannelContrastComboBox() {
 		if (redChannelContrastComboBox == null) {
-			redChannelContrastComboBox = new JComboBox(
-					getContrastEnhancementMethods());
+			redChannelContrastComboBox = new JComboBox(ContrastMethod.values());
+			redChannelContrastComboBox.setSelectedItem(rulesList.getRedMethod());
+			
+			redChannelContrastComboBox.setRenderer(contrastListCellRenderer);
+			
+			
+//			redChannelContrastComboBox = new JComboBox(
+//					getContrastEnhancementMethods());
+			SwingUtil.addMouseWheelForCombobox(redChannelContrastComboBox);
 			redChannelContrastComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setRedMethod(redChannelContrastComboBox.getSelectedIndex());
+					rulesList.setRedMethod((ContrastMethod) redChannelContrastComboBox.getSelectedItem());
 				}
 			});
 		}
 		return redChannelContrastComboBox;
 	}
 
-	private Object[] getContrastEnhancementMethods() {
-		if (contrastEnhancementMethods == null) {
-			contrastEnhancementMethods = new Object[0];
-			contrastEnhancementMethods = LangUtil.extendArray(
-					contrastEnhancementMethods, "None");
-			contrastEnhancementMethods = LangUtil.extendArray(
-					contrastEnhancementMethods, "Histogram");
-			contrastEnhancementMethods = LangUtil.extendArray(
-					contrastEnhancementMethods, "Normalize");
-		}
-		return contrastEnhancementMethods;
-	}
 	/**
 	 * Gets the number of bands
 	 * 

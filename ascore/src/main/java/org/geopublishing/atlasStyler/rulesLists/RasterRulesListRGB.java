@@ -30,19 +30,19 @@ public class RasterRulesListRGB extends RasterRulesList {
 	/**
 	 * 1-based
 	 */
-	private int red = 1;
+	private int blue = 3;
+	private ContrastMethod blueMethod;
 	/**
 	 * 1-based
 	 */
 	private int green = 2;
+
+	private ContrastMethod greenMethod;
 	/**
 	 * 1-based
 	 */
-	private int blue = 3;
-
+	private int red = 1;
 	private ContrastMethod redMethod;
-	private ContrastMethod greenMethod;
-	private ContrastMethod blueMethod;
 
 	public RasterRulesListRGB(StyledRasterInterface<?> styledRaster,
 			boolean withDefaults) {
@@ -52,12 +52,55 @@ public class RasterRulesListRGB extends RasterRulesList {
 			red = 1;
 			green = Math.min(2, getStyledRaster().getBandCount());
 			blue = Math.min(3, getStyledRaster().getBandCount());
+			redMethod = ContrastMethod.NORMALIZE;
+			greenMethod = ContrastMethod.NORMALIZE;
+			blueMethod = ContrastMethod.NORMALIZE;
 		}
+
 	}
 
 	@Override
 	public void applyOpacity() {
 		// Gibt nur eine Rule, wo die Opacity bei getRules gesetzt wird.
+	}
+
+	/**
+	 * 1-based
+	 */
+	public int getBlue() {
+		return blue;
+	}
+
+	public ContrastMethod getBlueMethod() {
+		if (blueMethod == null)
+			return ContrastMethod.NONE;
+		return blueMethod;
+	}
+
+	/**
+	 * 1-based
+	 */
+	public int getGreen() {
+		return green;
+	}
+
+	public ContrastMethod getGreenMethod() {
+		if (greenMethod == null)
+			return ContrastMethod.NONE;
+		return greenMethod;
+	}
+
+	/**
+	 * 1-based
+	 */
+	public int getRed() {
+		return red;
+	}
+
+	public ContrastMethod getRedMethod() {
+		if (redMethod == null)
+			return ContrastMethod.NONE;
+		return redMethod;
 	}
 
 	@Override
@@ -73,24 +116,36 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 		ContrastEnhancement redCe = StylingUtil.STYLE_FACTORY
 				.createContrastEnhancement();
-		redCe.setMethod(redMethod);
 		SelectedChannelType redT = StylingUtil.STYLE_FACTORY
 				.createSelectedChannelType(String.valueOf(red), redCe);
 
 		ContrastEnhancement greenCe = StylingUtil.STYLE_FACTORY
 				.createContrastEnhancement();
-		redCe.setMethod(greenMethod);
+		redCe.setMethod(getGreenMethod());
 		SelectedChannelType greenT = StylingUtil.STYLE_FACTORY
 				.createSelectedChannelType(String.valueOf(green), greenCe);
 
 		ContrastEnhancement blueCe = StylingUtil.STYLE_FACTORY
 				.createContrastEnhancement();
-		redCe.setMethod(blueMethod);
+		redCe.setMethod(getBlueMethod());
 		SelectedChannelType blueT = StylingUtil.STYLE_FACTORY
 				.createSelectedChannelType(String.valueOf(blue), blueCe);
 
 		ChannelSelection cs = StylingUtil.STYLE_FACTORY.channelSelection(redT,
 				greenT, blueT);
+		if (redMethod != null)
+			((ContrastEnhancement) cs.getRGBChannels()[0]
+					.getContrastEnhancement()).setType(ff.literal(redMethod
+					.name()));
+		if (getGreenMethod() != null)
+			((ContrastEnhancement) cs.getRGBChannels()[1]
+					.getContrastEnhancement()).setType(ff
+					.literal(getGreenMethod().name()));
+		if (getBlueMethod() != null)
+			((ContrastEnhancement) cs.getRGBChannels()[2]
+					.getContrastEnhancement()).setType(ff
+					.literal(getBlueMethod().name()));
+
 		rs.setChannelSelection(cs);
 
 		/**
@@ -144,11 +199,24 @@ public class RasterRulesListRGB extends RasterRulesList {
 					try {
 						SelectedChannelType[] rgbChannels = cs.getRGBChannels();
 						red = Integer.valueOf(rgbChannels[0].getChannelName());
+						if (rgbChannels[0].getContrastEnhancement() != null
+								&& rgbChannels[0].getContrastEnhancement()
+										.getMethod() != null)
+							redMethod = ContrastMethod.valueOf(rgbChannels[0]
+									.getContrastEnhancement().getMethod()
+									.name().toString());
+
 						green = Integer
 								.valueOf(rgbChannels[1].getChannelName());
+						setGreenMethod(ContrastMethod.valueOf(rgbChannels[1]
+								.getContrastEnhancement().getMethod().name()
+								.toString()));
 						blue = Integer.valueOf(rgbChannels[2].getChannelName());
+						setBlueMethod(ContrastMethod.valueOf(rgbChannels[2]
+								.getContrastEnhancement().getMethod().name()
+								.toString()));
 					} catch (Exception e) {
-						log.error("RGB channels didn't contain 3 channels??");
+						log.error("RGB channels didn't contain 3 channels??", e);
 						continue;
 					}
 
@@ -174,16 +242,15 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	}
 
-	public void setRed(int red) {
-		this.red = red;
-		fireEvents(new RuleChangedEvent("Red channel selection changed", this));
+	public void setBlue(int blue) {
+		this.blue = blue;
+		fireEvents(new RuleChangedEvent("Blue channel selection changed", this));
 	}
 
-	/**
-	 * 1-based
-	 */
-	public int getRed() {
-		return red;
+	public void setBlueMethod(ContrastMethod blueMethod) {
+		this.blueMethod = blueMethod;
+		fireEvents(new RuleChangedEvent(
+				"Contrastmethod for blue channel changed", this));
 	}
 
 	public void setGreen(int green) {
@@ -192,71 +259,21 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 	}
 
-	/**
-	 * 1-based
-	 */
-	public int getGreen() {
-		return green;
+	public void setGreenMethod(ContrastMethod greenMethod) {
+		this.greenMethod = greenMethod;
+		fireEvents(new RuleChangedEvent(
+				"Contrastmethod for green channel changed", this));
 	}
 
-	public void setBlue(int blue) {
-		this.blue = blue;
-		fireEvents(new RuleChangedEvent("Blue channel selection changed", this));
+	public void setRed(int red) {
+		this.red = red;
+		fireEvents(new RuleChangedEvent("Red channel selection changed", this));
 	}
 
-	/**
-	 * 1-based
-	 */
-	public int getBlue() {
-		return blue;
-	}
-
-	public void setBlueMethod(int blueMethod) {
-		switch (blueMethod) {
-		case 0:
-			this.blueMethod = ContrastMethod.NONE;
-		case 1:
-			this.blueMethod = ContrastMethod.HISTOGRAM;
-		case 2:
-			this.blueMethod = ContrastMethod.NORMALIZE;
-		}
-		fireEvents(new RuleChangedEvent("Blue channel contrast enhancement method changed", this));
-	}
-
-	public ContrastMethod getBlueMethod() {
-		return blueMethod;
-	}
-
-	public void setGreenMethod(int greenMethod) {
-		switch (greenMethod) {
-		case 0:
-			this.greenMethod = ContrastMethod.NONE;
-		case 1:
-			this.greenMethod = ContrastMethod.HISTOGRAM;
-		case 2:
-			this.greenMethod = ContrastMethod.NORMALIZE;
-		}
-		fireEvents(new RuleChangedEvent("Green channel contrast enhancement method changed", this));
-	}
-
-	public ContrastMethod getGreenMethod() {
-		return greenMethod;
-	}
-
-	public void setRedMethod(int redMethod) {
-		switch (redMethod) {
-		case 0:
-			this.redMethod = ContrastMethod.NONE;
-		case 1:
-			this.redMethod = ContrastMethod.HISTOGRAM;
-		case 2:
-			this.redMethod = ContrastMethod.NORMALIZE;
-		}
-		fireEvents(new RuleChangedEvent("Red channel contrast enhancement method changed", this));
-	}
-
-	public ContrastMethod getRedMethod() {
-		return redMethod;
+	public void setRedMethod(ContrastMethod method) {
+		redMethod = method;
+		fireEvents(new RuleChangedEvent(
+				"Contrastmethod for red channel changed", this));
 	}
 
 }

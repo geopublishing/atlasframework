@@ -65,7 +65,6 @@ import org.geotools.styling.Mark;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Rule;
-import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Stroke;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
@@ -81,6 +80,7 @@ import org.opengis.filter.expression.Literal;
 import de.schmitzm.geotools.LegendIconFeatureRenderer;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.org.geotools.styling.SLDTransformer;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -134,8 +134,6 @@ public class ASUtil {
 			ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP");
 
 	public static final StyleBuilder SB = StylingUtil.STYLE_BUILDER;
-
-	public final static SLDTransformer sldTransformer = new SLDTransformer();
 
 	public static final String PRODUCTION_FILENAME_PART = "production";
 
