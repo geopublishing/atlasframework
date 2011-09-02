@@ -215,10 +215,10 @@ public class RuleListFactory {
 		case RASTER_COLORMAP_RAMPS:
 			return new RasterRulesList_Ramps(
 					(StyledRasterInterface) styledLayer, withDefaults);
-			
+
 		case RASTER_RGB:
-			return new RasterRulesListRGB(
-					(StyledRasterInterface) styledLayer, withDefaults);
+			return new RasterRulesListRGB((StyledRasterInterface) styledLayer,
+					withDefaults);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);
@@ -434,7 +434,10 @@ public class RuleListFactory {
 			// .startsWith(RulesListType.RASTER_COLORMAP_RAMPS
 			// .toString())) {
 			// rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
-		} else if (metaInfoString.startsWith(RulesListType.RASTER_RGB.toString())){
+		} else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
+				.toString()) 
+//		TODO		|| hat kein metrMETAiNFO aber hat eien RS mit ChannelSelection 
+				) {
 			rasterRulesList = new RasterRulesListRGB(styledRaster, false);
 		}
 
