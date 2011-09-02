@@ -38,6 +38,7 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport1() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
@@ -64,6 +65,7 @@ public class RasterRulesListRGBTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testRasterRGBImportExport2() {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
@@ -95,6 +97,7 @@ public class RasterRulesListRGBTest extends TestingClass {
      * TextSymbolizer2 specific properties saved and laoded again must fit
      */
     @Test
+    @Ignore
     public void testRasterSymbolizer_inAndOut() throws TransformerException, SAXException, IOException {
     	StyleBuilder sb = new StyleBuilder(); 
     	
@@ -160,6 +163,7 @@ public class RasterRulesListRGBTest extends TestingClass {
     }
     
 	@Test
+	@Ignore
     public void testRasterSymbolizer_inAndOut2() throws TransformerException, SAXException, IOException {
     	StyleBuilder sb = new StyleBuilder(); 
     	
