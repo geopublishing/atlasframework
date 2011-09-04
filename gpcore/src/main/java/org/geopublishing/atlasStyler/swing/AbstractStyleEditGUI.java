@@ -23,9 +23,14 @@ import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import de.schmitzm.swing.JPanel;
 
 /**
- * Parent-class covering all GUI {@link JPanel}s allowing to edit {@link AbstractRulesList}  
+ * Parent-class covering all GUI {@link JPanel}s allowing to edit
+ * {@link AbstractRulesList}
  */
 public abstract class AbstractStyleEditGUI extends JPanel {
+
+	final public static Double[] GAMMA_VALUES = new Double[] { 0.1, .2, .3,
+			.4, .5, .6, .7, .8, .9, 1., 1.1, 1.2, 1.3, 1.4, 1.5,
+			1.6, 1.7, 1.8, 1.9, 2. };
 	
 	final public static Float[] OPACITY_VALUES = new Float[] { 0.1f, .2f, .3f,
 			.4f, .5f, .6f, .7f, .8f, .9f, 1.f };

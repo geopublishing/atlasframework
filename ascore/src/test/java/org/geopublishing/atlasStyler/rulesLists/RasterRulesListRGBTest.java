@@ -43,25 +43,37 @@ public class RasterRulesListRGBTest extends TestingClass {
 
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
 		
-		rl.setRedMethod(ContrastMethod.HISTOGRAM);
-		rl.setGreenMethod(ContrastMethod.NORMALIZE);
-		rl.setBlueMethod(ContrastMethod.NONE);
-
-		assertEquals(1, rl.getRed());
-		assertEquals(2, rl.getGreen());
-		assertEquals(3, rl.getBlue());
+		rl.setChannelMethod(1,ContrastMethod.HISTOGRAM);
+		rl.setChannelMethod(2,ContrastMethod.NORMALIZE);
+		rl.setChannelMethod(3,ContrastMethod.NONE);
+		rl.setGammaValue(1, 1.2);
+		rl.setGammaValue(2,0.1);
+		rl.setGammaValue(3, 2.);
+		rl.setRSGamma(1.1);
+		
+		assertEquals(1, rl.getChannel(1));
+		assertEquals(2, rl.getChannel(2));
+		assertEquals(3, rl.getChannel(3));
+		assertEquals(1.2,Double.valueOf(rl.getGammaValue(1).toString()));
+		assertEquals(0.1,Double.valueOf(rl.getGammaValue(2).toString()));
+		assertEquals(2.,Double.valueOf(rl.getGammaValue(3).toString()));
+		assertEquals(1.1,Double.valueOf(rl.getRSGamma().toString()));
 
 		FeatureTypeStyle fts = rl.getFTS();
 
 		RasterRulesListRGB rl2 = new RasterRulesListRGB(styledRaster, true);
 		rl2.importFts(fts);
 
-		assertEquals(1, rl2.getRed());
-		assertEquals(ContrastMethod.HISTOGRAM,rl2.getRedMethod());
-		assertEquals(ContrastMethod.NORMALIZE,rl2.getGreenMethod());
-		assertEquals(ContrastMethod.NONE,rl2.getBlueMethod());
-		assertEquals(2, rl2.getGreen());
-		assertEquals(3, rl2.getBlue());
+		assertEquals(1, rl2.getChannel(1));
+		assertEquals(ContrastMethod.HISTOGRAM,rl2.getChannelMethod(1));
+		assertEquals(ContrastMethod.NORMALIZE,rl2.getChannelMethod(2));
+		assertEquals(ContrastMethod.NONE,rl2.getChannelMethod(3));
+		assertEquals(2, rl2.getChannel(2));
+		assertEquals(3, rl2.getChannel(3));
+		assertEquals(1.2,Double.valueOf(rl.getGammaValue(1).toString()));
+		assertEquals(0.1,Double.valueOf(rl.getGammaValue(2).toString()));
+		assertEquals(2.,Double.valueOf(rl.getGammaValue(3).toString()));
+		assertEquals(1.1,Double.valueOf(rl.getRSGamma().toString()));
 	}
 
 	@Test
@@ -71,9 +83,9 @@ public class RasterRulesListRGBTest extends TestingClass {
 		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
 		rl.setOpacity(0.6);
 		rl.setEnabled(false);
-		rl.setRed(3);
-		rl.setGreen(2);
-		rl.setBlue(1);
+		rl.setChannel(1,3);
+		rl.setChannel(2,2);
+		rl.setChannel(3,1);
 		rl.setMaxScaleDenominator(200);
 		rl.setMinScaleDenominator(100);
 
@@ -88,9 +100,9 @@ public class RasterRulesListRGBTest extends TestingClass {
 		assertEquals(100, rl2.getMinScaleDenominator(),0);
 		assertEquals(200, rl2.getMaxScaleDenominator(),0);
 		
-		assertEquals(3, rl2.getRed());
-		assertEquals(2, rl2.getGreen());
-		assertEquals(1, rl2.getBlue());
+		assertEquals(3, rl2.getChannel(1));
+		assertEquals(2, rl2.getChannel(2));
+		assertEquals(1, rl2.getChannel(3));
 	}
 	
 	 /**
