@@ -103,7 +103,9 @@ public class AtlasStylerSaveAsLayerToSLDAction extends AbstractAction {
 					ASUtil.changeToOptimizedFilename(styledLayer.getSldFile()),
 					true, getOptimizedTitle(styledLayer));
 
-			Object[] options = { "OK", "Open File" };
+			Object[] options = { "OK",
+					ASUtil.R("AtlasStylerSaveLayerToSLD.OpenFile"),
+					ASUtil.R("AtlasStylerSaveLayerToSLD.OpenProductive") };
 			int dialogValue = 0;
 
 			if (backup) {
@@ -125,6 +127,11 @@ public class AtlasStylerSaveAsLayerToSLDAction extends AbstractAction {
 			if (dialogValue == JOptionPane.NO_OPTION) {
 				Desktop desktop = Desktop.getDesktop();
 				desktop.open(styledLayer.getSldFile());
+			}
+			if (dialogValue == JOptionPane.CANCEL_OPTION) {
+				Desktop desktop = Desktop.getDesktop();
+				desktop.open(ASUtil.changeToOptimizedFilename(styledLayer
+						.getSldFile()));
 			}
 
 			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
