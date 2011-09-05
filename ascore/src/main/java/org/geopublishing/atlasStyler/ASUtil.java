@@ -80,7 +80,6 @@ import org.opengis.filter.expression.Literal;
 import de.schmitzm.geotools.LegendIconFeatureRenderer;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import de.schmitzm.geotools.org.geotools.styling.SLDTransformer;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;

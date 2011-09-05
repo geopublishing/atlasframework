@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
@@ -46,11 +47,13 @@ import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
 public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
+	private static final long serialVersionUID = -7185838842549954978L;
+	
 	private final Logger LOGGER = LangUtil.createLogger(this);
 
 	@Override
 	protected String getDesc() {
-		return AtlasStylerVector.R("SymbolSelector.Tabs.OnlineSymbols");
+		return ASUtil.R("SymbolSelector.Tabs.OnlineSymbols");
 	}
 
 	@Override
@@ -99,28 +102,6 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 
 		rescan(false);
 	}
-
-	// /**
-	// * Rescans the online folder for symbols in background. Symbols that have
-	// * been removed are not beeing removed.
-	// *
-	// * @param reset
-	// * Shall the {@link JList} be cleared before rescan
-	// *
-	// * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons
-	// Tzeggai</a>
-	// */
-	// public void rescan(boolean reset) {
-	//
-	// if (reset) {
-	// getJListSymbols().setModel(new DefaultListModel());
-	// imageCache.clear();
-	// symbolPreviewComponentsCache.clear();
-	// }
-	//
-	// AtlasSwingWorker<Void> symbolLoader = getWorker();
-	// symbolLoader.executeModalNoEx();
-	// }
 
 	long lastTimeJScrollPaneUpdate = System.currentTimeMillis();
 
@@ -234,7 +215,7 @@ public class JScrollPaneSymbolsOnline extends JScrollPaneSymbols {
 			 * Rescan directory
 			 */
 			JMenuItem rescan = new JMenuItem(
-					AtlasStylerVector
+					ASUtil
 							.R("SymbolSelector.Tabs.OnlineSymbols.Action.Rescan"));
 			rescan.addActionListener(new ActionListener() {
 

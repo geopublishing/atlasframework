@@ -10,7 +10,7 @@ public class JScrollPaneSymbolsOnlineTest extends TestingClass {
 	@Test
 	public void testJScrollPaneSymbols() throws Throwable {
 
-		if (isInteractive()) {
+		if (hasGui()) {
 			TestingUtil.testGui(
 					new JScrollPaneSymbolsOnline(GeometryForm.POINT));
 

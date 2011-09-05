@@ -37,7 +37,6 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import de.schmitzm.geotools.io.GeoImportUtil;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
-import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.SwingUtil;
 
@@ -110,7 +109,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 
 				GeoTiffReader reader = new GeoTiffReader(
 						IOUtil.fileToURL(importFile));
-				
+
 				final StyledGridCoverageReader styledReader = new StyledGridCoverageReader(
 						reader, importFile.toString(), importFile.getName(),
 						null);
@@ -129,8 +128,12 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 				}
 
 				// TODO Better Raster import feedback
-				return Summary.create(new JScrollPane(new JLabel(
-						"Rasterimport OK. Imported "+styledReader.getBandCount()+" Bands")), "ok");
+				// i8n
+				return Summary.create(
+						new JScrollPane(new JLabel(
+								"Sucessfully imported a raster with "
+										+ styledReader.getBandCount()
+										+ " band(s).")), "ok");
 			}
 
 			/**
@@ -206,13 +209,12 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 						if (!AVSwingUtil
 								.askOKCancel(
 										asg,
-										ASUtil
-												.R("AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
-														e.getMessage(),
-														prjFile.getName(),
-														GeoImportUtil
-																.getDefaultCRS()
-																.getName()))) {
+										ASUtil.R(
+												"AtlasStylerGUI.importShapePrjBrokenWillCreateDefaultFor",
+												e.getMessage(), prjFile
+														.getName(),
+												GeoImportUtil.getDefaultCRS()
+														.getName()))) {
 							dataStore.dispose();
 							abort();
 							return null;
@@ -222,12 +224,10 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 					if (!AVSwingUtil
 							.askOKCancel(
 									asg,
-									ASUtil
-											.R("AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
-													prjFile.getName(),
-													GeoImportUtil
-															.getDefaultCRS()
-															.getName()))) {
+									ASUtil.R(
+											"AtlasStylerGUI.importShapePrjNotFoundWillCreateDefaultFor",
+											prjFile.getName(), GeoImportUtil
+													.getDefaultCRS().getName()))) {
 						dataStore.dispose();
 						abort();
 						return null;
@@ -279,7 +279,7 @@ public class ImportWizardResultProducer_FILE extends ImportWizardResultProducer
 				StyledFS styledFS = new StyledFS(fs, id);
 
 				styledFS.setTitle(importFile.getName());
-				styledFS.setDesc("");				
+				styledFS.setDesc("");
 
 				File sldFile = IOUtil.changeFileExt(importFile, "sld");
 

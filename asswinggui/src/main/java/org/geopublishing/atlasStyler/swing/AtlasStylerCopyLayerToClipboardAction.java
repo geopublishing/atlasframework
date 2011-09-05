@@ -17,13 +17,12 @@ import java.io.FileInputStream;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geopublishing.geopublisher.GpUtil;
+
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.io.IOUtil;
