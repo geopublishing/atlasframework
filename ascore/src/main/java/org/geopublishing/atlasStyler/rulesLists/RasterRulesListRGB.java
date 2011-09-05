@@ -92,7 +92,12 @@ public class RasterRulesListRGB extends RasterRulesList {
 	 *            red=1, green=2, blue=3
 	 */
 	public void setChannelMethod(int channel, ContrastMethod contrastMethod) {
-		channelMethod[channel - 1] = contrastMethod;
+		if (contrastMethod == null) // Yes they really do use null to indicate
+									// no
+									// ContrastMethod is set
+			channelMethod[channel - 1] = ContrastMethod.NONE;
+		else
+			channelMethod[channel - 1] = contrastMethod;
 		fireEvents(new RuleChangedEvent("Contrastmethod for channel changed",
 				this));
 	}
@@ -132,7 +137,11 @@ public class RasterRulesListRGB extends RasterRulesList {
 	}
 
 	public void setRSMethod(ContrastMethod contrastMethod) {
-		rsMethod = contrastMethod;
+		if (contrastMethod == null) // Yes they really do use null to indicate
+									// no ContrastMethod is set
+			rsMethod = ContrastMethod.NONE;
+		else
+			rsMethod = contrastMethod;
 		fireEvents(new RuleChangedEvent(
 				"Contrastmethod for RasterSymbolizer changed", this));
 	}
@@ -147,7 +156,11 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 		ContrastEnhancement rsCe = StylingUtil.STYLE_FACTORY
 				.createContrastEnhancement();
-		rsCe.setMethod(getRSMethod());
+		// rsCe.setMethod(getRSMethod()); //does not work in geotools < 8.0
+		if (getRSMethod() == null)
+			rsCe.setType(FilterUtil.FILTER_FAC2.literal("NONE"));
+		else
+			rsCe.setType(FilterUtil.FILTER_FAC2.literal(getRSMethod().name()));
 		rsCe.setGammaValue(getRSGamma());
 
 		ContrastEnhancement redCe = StylingUtil.STYLE_FACTORY
@@ -250,16 +263,20 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 					try {
 						SelectedChannelType[] rgbChannels = cs.getRGBChannels();
-						// if (rgbChannels[0].getContrastEnhancement() != null
-						// && rgbChannels[0].getContrastEnhancement()
-						// .getMethod() != null)
 						setChannel(1, Integer.valueOf(rgbChannels[0]
 								.getChannelName()));
-						setChannelMethod(
-								1,
-								ContrastMethod.valueOf(rgbChannels[0]
-										.getContrastEnhancement().getMethod()
-										.name().toString()));
+						
+						// null is returned when no method is specified
+						if (rgbChannels[0].getContrastEnhancement().getMethod() != null) {
+							setChannelMethod(
+									1,
+									ContrastMethod.valueOf(rgbChannels[0]
+											.getContrastEnhancement()
+											.getMethod().name().toString()));
+						} else {
+							setChannelMethod(1, ContrastMethod.NONE); 
+						}
+						
 						if (rgbChannels[0].getContrastEnhancement()
 								.getGammaValue() != null) {
 							setGammaValue(
@@ -272,11 +289,15 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 						setChannel(2, Integer.valueOf(rgbChannels[1]
 								.getChannelName()));
-						setChannelMethod(
-								2,
-								ContrastMethod.valueOf(rgbChannels[1]
-										.getContrastEnhancement().getMethod()
-										.name().toString()));
+						if (rgbChannels[1].getContrastEnhancement().getMethod() != null) {
+							setChannelMethod(
+									2,
+									ContrastMethod.valueOf(rgbChannels[1]
+											.getContrastEnhancement()
+											.getMethod().name().toString()));
+						} else {
+							setChannelMethod(2, ContrastMethod.NONE);
+						}
 						if (rgbChannels[1].getContrastEnhancement()
 								.getGammaValue() != null) {
 							setGammaValue(
@@ -289,11 +310,15 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 						setChannel(3, Integer.valueOf(rgbChannels[2]
 								.getChannelName()));
-						setChannelMethod(
-								3,
-								ContrastMethod.valueOf(rgbChannels[2]
-										.getContrastEnhancement().getMethod()
-										.name().toString()));
+						if (rgbChannels[2].getContrastEnhancement().getMethod() != null) {
+							setChannelMethod(
+									3,
+									ContrastMethod.valueOf(rgbChannels[2]
+											.getContrastEnhancement()
+											.getMethod().name().toString()));
+						} else {
+							setChannelMethod(3, ContrastMethod.NONE);
+						}
 						if (rgbChannels[2].getContrastEnhancement()
 								.getGammaValue() != null) {
 							setGammaValue(

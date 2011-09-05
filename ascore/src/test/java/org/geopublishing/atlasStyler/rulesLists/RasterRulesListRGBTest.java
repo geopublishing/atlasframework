@@ -109,7 +109,6 @@ public class RasterRulesListRGBTest extends TestingClass {
      * TextSymbolizer2 specific properties saved and laoded again must fit
      */
     @Test
-    @Ignore
     public void testRasterSymbolizer_inAndOut() throws TransformerException, SAXException, IOException {
     	StyleBuilder sb = new StyleBuilder(); 
     	
@@ -121,19 +120,23 @@ public class RasterRulesListRGBTest extends TestingClass {
     	ContrastEnhancement ceRs = StylingUtil.STYLE_FACTORY.createContrastEnhancement();
     	ceRs.setGammaValue(FilterUtil.FILTER_FAC2.literal(0.4));
 //    	ceRs.setMethod(ContrastMethod.HISTOGRAM);
-    	ceRs.setHistogram();
+    	ceRs.setType(FilterUtil.FILTER_FAC2.literal("HISTOGRAM"));
+//    	ceRs.setHistogram();
     	rs.setContrastEnhancement(ceRs);
     	
     	ContrastEnhancement ceRed = StylingUtil.STYLE_FACTORY.createContrastEnhancement();
 //    	ceRed.setMethod(ContrastMethod.HISTOGRAM);
-    	ceRed.setHistogram();
+//    	ceRed.setHistogram();
+    	ceRed.setType(FilterUtil.FILTER_FAC2.literal("HISTOGRAM"));
     	ceRed.setGammaValue(FilterUtil.FILTER_FAC2.literal(0.1));
     	ContrastEnhancement ceGreen = StylingUtil.STYLE_FACTORY.createContrastEnhancement();
 //    	ceGreen.setMethod(ContrastMethod.NORMALIZE);
-    	ceGreen.setNormalize();
+//    	ceGreen.setNormalize();
+    	ceGreen.setType(FilterUtil.FILTER_FAC2.literal("NORMALIZE"));
     	ceGreen.setGammaValue(FilterUtil.FILTER_FAC2.literal(0.2));
     	ContrastEnhancement ceBlue = StylingUtil.STYLE_FACTORY.createContrastEnhancement();
-    	ceBlue.setMethod(ContrastMethod.NONE);
+//    	ceBlue.setMethod(ContrastMethod.NONE);
+    	ceBlue.setType(FilterUtil.FILTER_FAC2.literal("NONE"));
     	ceBlue.setGammaValue(FilterUtil.FILTER_FAC2.literal(0.3));
     	
     	SelectedChannelType redT = StylingUtil.STYLE_FACTORY.createSelectedChannelType("1", ceRed);
