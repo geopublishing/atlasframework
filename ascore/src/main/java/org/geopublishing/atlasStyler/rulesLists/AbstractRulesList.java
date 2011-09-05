@@ -126,7 +126,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
 				"StylerSelection.raster_ramp"),
 
-		// TODO MJ
+		// Raster RGBs
 		RASTER_RGB("/images/raster_rgb.png",
 				"StylerSelection.raster_rgb"),
 
@@ -174,10 +174,10 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			RulesListType[] rls = new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 					RASTER_COLORMAP_INTERVALS };
 
-			if (as.getBands() > 1){
-				// No specific Band selected, use RGB 
-				rls = LangUtil.extendArray(rls, RASTER_RGB );
-			}
+//			if (as.getBands() > 1){
+//				// No specific Band selected, use RGB 
+//				rls = LangUtil.extendArray(rls, RASTER_RGB );
+//			}
 			return rls;
 		}
 
