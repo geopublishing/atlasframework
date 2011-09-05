@@ -12,6 +12,7 @@ import javax.swing.JSeparator;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.geopublisher.GpUtil;
@@ -27,24 +28,12 @@ public class RasterRulesList_RGB_GUI extends
 		AbstractRulesListGui<RasterRulesListRGB> {
 
 	private AtlasStylerRaster atlasStyler;
-	private JLabel redJLabel;
-	private JLabel greenJLabel;
-	private JLabel blueJLabel;
 	private JLabel[] channelJLabel = new JLabel[3];
 	private JLabel descriptionJLabel;
-	private JComboBox redChannelComboBox;
-	private JComboBox greenChannelComboBox;
-	private JComboBox blueChannelComboBox;
 	private JComboBox[] channelComboBox = new JComboBox[3];
 	private Object[] bands;
-	private JComboBox redChannelContrastComboBox;
-	private JComboBox blueChannelContrastComboBox;
-	private JComboBox greenChannelContrastComboBox;
 	private JComboBox[] channelContrastComboBox = new JComboBox[3];
 	private JLabel contrastDescriptionJLabel;
-	private JComboBox redChannelGammaComboBox;
-	private JComboBox greenChannelGammaComboBox;
-	private JComboBox blueChannelGammaComboBox;
 	private JComboBox[] channelGammaComboBox = new JComboBox[3];
 	private JLabel contrastJLabel;
 	private JLabel gammaValueJLabel;
@@ -91,76 +80,150 @@ public class RasterRulesList_RGB_GUI extends
 		return bands;
 	}
 
-	private JComboBox getBlueChannelComboBox() {
-		if (blueChannelComboBox == null) {
-			blueChannelComboBox = new JComboBox(getBands());
-			blueChannelComboBox.setSelectedIndex(rulesList.getChannel(3) - 1); // 1-based
+	/**
+	 * returns the corresponding JComboBox for a given channel
+	 * 
+	 * @param channel
+	 *            RGB-Channel where 1=red, 2=green, 3=blue
+	 * @return
+	 */
+	private JComboBox getChannelComboBox(int channel) {
+		if (channelComboBox[channel - 1] == null) {
+			channelComboBox[channel - 1] = new JComboBox(getBands());
+			channelComboBox[channel - 1].setSelectedIndex(rulesList
+					.getChannel(channel) - 1);
+			SwingUtil.addMouseWheelForCombobox(channelComboBox[channel - 1]);
+			channelComboBox[channel - 1].addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(ItemEvent arg0) {
+					int index = ArrayUtils.indexOf(channelComboBox,
+							arg0.getSource()) + 1; // 0-based to 1-based
+					rulesList.setChannel(index,
+							channelComboBox[index - 1].getSelectedIndex() + 1); // 1-based
 																				// to
 																				// 0-based
-			SwingUtil.addMouseWheelForCombobox(blueChannelComboBox);
-			blueChannelComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannel(3,
-							blueChannelComboBox.getSelectedIndex() + 1); // 0-based
-					// to
-					// 1-based
 				}
 			});
 		}
-		return blueChannelComboBox;
+		return channelComboBox[channel - 1];
 	}
 
-	private JComboBox getBlueChannelContrastComboBox() {
-		if (blueChannelContrastComboBox == null) {
-			blueChannelContrastComboBox = new JComboBox(ContrastMethod.values());
-			blueChannelContrastComboBox.setRenderer(contrastListCellRenderer);
+	/**
+	 * returns the corresponding Contrast JComboBox for a given channel
+	 * 
+	 * @param channel
+	 *            RGB-Channel where 1=red, 2=green, 3=blue
+	 * @return
+	 */
+	private JComboBox getChannelContrastComboBox(int channel) {
+		if (channelContrastComboBox[channel - 1] == null) {
+			channelContrastComboBox[channel - 1] = new JComboBox(
+					ContrastMethod.values());
+			channelContrastComboBox[channel - 1]
+					.setRenderer(contrastListCellRenderer);
+			SwingUtil
+					.addMouseWheelForCombobox(channelContrastComboBox[channel - 1]);
+			channelContrastComboBox[channel - 1].setSelectedItem(rulesList
+					.getChannelMethod(channel));
 
-			SwingUtil.addMouseWheelForCombobox(blueChannelContrastComboBox);
-			blueChannelContrastComboBox.setSelectedItem(rulesList
-					.getChannelMethod(3));
-			blueChannelContrastComboBox.addItemListener(new ItemListener() {
+			channelContrastComboBox[channel - 1]
+					.addItemListener(new ItemListener() {
 
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannelMethod(3,
-							(ContrastMethod) blueChannelContrastComboBox
-									.getSelectedItem());
-				}
-			});
+						@Override
+						public void itemStateChanged(ItemEvent arg0) {
+							int index = ArrayUtils.indexOf(
+									channelContrastComboBox, arg0.getSource()) + 1; // 0-based
+																					// to
+																					// 1-based
+							rulesList
+									.setChannelMethod(
+											index,
+											(ContrastMethod) channelContrastComboBox[index - 1] // 1-based
+																								// to
+																								// 0-based
+													.getSelectedItem());
+						}
+					});
 		}
-		return blueChannelContrastComboBox;
+		return channelContrastComboBox[channel - 1];
 	}
 
-	private JComboBox getBlueChannelGammaComboBox() {
-		if (blueChannelGammaComboBox == null) {
-			blueChannelGammaComboBox = new JComboBox(
+	/**
+	 * returns the corresponding GammaValue JComboBox for a given channel
+	 * 
+	 * @param channel
+	 *            RGB-Channel where 1=red, 2=green, 3=blue
+	 * @return
+	 */
+	private JComboBox getChannelGammaComboBox(int channel) {
+		if (channelGammaComboBox[channel - 1] == null) {
+			channelGammaComboBox[channel - 1] = new JComboBox(
 					AbstractStyleEditGUI.GAMMA_VALUES);
-			SwingUtil.addMouseWheelForCombobox(blueChannelGammaComboBox);
-			blueChannelGammaComboBox.setSelectedItem(Double.valueOf(rulesList
-					.getGammaValue(3).toString()));
-			blueChannelGammaComboBox.addItemListener(new ItemListener() {
+			SwingUtil
+					.addMouseWheelForCombobox(channelGammaComboBox[channel - 1]);
+			channelGammaComboBox[channel - 1].setSelectedItem(Double
+					.valueOf(rulesList.getGammaValue(channel).toString()));
+			channelGammaComboBox[channel - 1]
+					.addItemListener(new ItemListener() {
 
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setGammaValue(3, Double
-							.valueOf(blueChannelGammaComboBox.getSelectedItem()
-									.toString()));
-				}
-			});
+						@Override
+						public void itemStateChanged(ItemEvent arg0) {
+							int index = ArrayUtils.indexOf(
+									channelGammaComboBox, arg0.getSource()) + 1; // 0-based
+																					// to
+																					// 1-based
+							rulesList.setGammaValue(index, Double
+									.valueOf(channelGammaComboBox[index - 1] // 1-based
+																				// to
+																				// 0-based
+											.getSelectedItem().toString()));
+						}
+					});
 		}
-		return blueChannelGammaComboBox;
+		return channelGammaComboBox[channel - 1];
 	}
 
-	private JLabel getBlueJLabel() {
-		if (blueJLabel == null) {
-			blueJLabel = new JLabel(
-					GpUtil.R("RasterRulesListRGB.Gui.BlueChannel"));
+	/**
+	 * returns the corresponding JLabel for a given channel
+	 * 
+	 * @param channel
+	 *            RGB-Channel where 1=red, 2=green, 3=blue
+	 * @return
+	 */
+	private JLabel getChannelJLabel(int channel) {
+		if (channelJLabel[channel - 1] == null) {
+			channelJLabel[channel - 1] = new JLabel(GpUtil.R(
+					"RasterRulesListRGB.GUI.RGBChannel",
+					getChannelName(channel)));
 		}
-		return blueJLabel;
+		return channelJLabel[channel - 1];
 	}
 
+	/**
+	 * convenience method to transform channel indexes to channel names
+	 * 
+	 * @param channel
+	 *            RGBChannel where 1=red, 2=green, 3=blue
+	 * @return String holding the channel name
+	 */
+	private String getChannelName(int channel) {
+		if (channel == 1)
+			return GpUtil.R("RasterRulesListRGB.Gui.Red");
+		if (channel == 2)
+			return GpUtil.R("RasterRulesListRGB.Gui.Green");
+		if (channel == 3)
+			return GpUtil.R("RasterRulesListRGB.Gui.Blue");
+		else
+			return "";
+	}
+
+	/**
+	 * this method returns an explanation on what the ContrastMethods and
+	 * GammaValues do
+	 * 
+	 * @return
+	 */
 	private JLabel getContrastDescriptionJLabel() {
 		if (contrastDescriptionJLabel == null) {
 			contrastDescriptionJLabel = new JLabel(
@@ -169,7 +232,7 @@ public class RasterRulesList_RGB_GUI extends
 		return contrastDescriptionJLabel;
 	}
 
-private JLabel getContrastJLabel() {
+	private JLabel getContrastJLabel() {
 		if (contrastJLabel == null) {
 			contrastJLabel = new JLabel(
 					GpUtil.R("RasterRulesListRGB.Gui.Contrast"));
@@ -238,173 +301,12 @@ private JLabel getContrastJLabel() {
 		return globalMethodComboBox;
 	}
 
-	private JComboBox getGreenChannelComboBox() {
-		if (greenChannelComboBox == null) {
-			greenChannelComboBox = new JComboBox(getBands());
-			greenChannelComboBox.setSelectedIndex(rulesList.getChannel(2) - 1); // 1-based
-																				// to
-																				// 0-based
-			SwingUtil.addMouseWheelForCombobox(greenChannelComboBox);
-			greenChannelComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannel(2,
-							greenChannelComboBox.getSelectedIndex() + 1); // 0-based
-																			// to
-																			// 1-based
-				}
-			});
-		}
-		return greenChannelComboBox;
-	}
-
-	private JComboBox getGreenChannelContrastComboBox() {
-		if (greenChannelContrastComboBox == null) {
-			greenChannelContrastComboBox = new JComboBox(
-					ContrastMethod.values());
-			greenChannelContrastComboBox.setRenderer(contrastListCellRenderer);
-
-			greenChannelContrastComboBox.setSelectedItem(rulesList
-					.getChannelMethod(2));
-			SwingUtil.addMouseWheelForCombobox(greenChannelContrastComboBox);
-			greenChannelContrastComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannelMethod(2,
-							(ContrastMethod) greenChannelContrastComboBox
-									.getSelectedItem());
-				}
-			});
-		}
-		return greenChannelContrastComboBox;
-	}
-
-	private JComboBox getGreenChannelGammaComboBox() {
-		if (greenChannelGammaComboBox == null) {
-			greenChannelGammaComboBox = new JComboBox(
-					AbstractStyleEditGUI.GAMMA_VALUES);
-			SwingUtil.addMouseWheelForCombobox(greenChannelGammaComboBox);
-			greenChannelGammaComboBox.setSelectedItem(Double.valueOf(rulesList
-					.getGammaValue(2).toString()));
-			greenChannelGammaComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setGammaValue(2, Double
-							.valueOf(greenChannelGammaComboBox
-									.getSelectedItem().toString()));
-				}
-			});
-		}
-		return greenChannelGammaComboBox;
-	}
-
-	private JLabel getGreenJLabel() {
-		if (greenJLabel == null) {
-			greenJLabel = new JLabel(
-					GpUtil.R("RasterRulesListRGB.Gui.GreenChannel"));
-		}
-		return greenJLabel;
-	}
-
 	private JLabel getPerChannelJLabel() {
 		if (perChannelJLabel == null) {
 			perChannelJLabel = new JLabel(
 					GpUtil.R("RasterRulesListRGB.Gui.PerChannel"));
 		}
 		return perChannelJLabel;
-	}
-
-	private JComboBox getRedChannelComboBox() {
-		if (redChannelComboBox == null) {
-			redChannelComboBox = new JComboBox(getBands());
-			redChannelComboBox.setSelectedIndex(rulesList.getChannel(1) - 1); // 1-based
-																				// to
-																				// 0-based
-			SwingUtil.addMouseWheelForCombobox(redChannelComboBox);
-			redChannelComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannel(1,
-							redChannelComboBox.getSelectedIndex() + 1); // 0-based
-																		// to
-																		// 1-based
-				}
-			});
-		}
-		return redChannelComboBox;
-	}
-
-	private JComboBox getRedChannelContrastComboBox() {
-		if (redChannelContrastComboBox == null) {
-			redChannelContrastComboBox = new JComboBox(ContrastMethod.values());
-			redChannelContrastComboBox.setSelectedItem(rulesList
-					.getChannelMethod(1));
-
-			redChannelContrastComboBox.setRenderer(contrastListCellRenderer);
-
-			// redChannelContrastComboBox = new JComboBox(
-			// getContrastEnhancementMethods());
-			SwingUtil.addMouseWheelForCombobox(redChannelContrastComboBox);
-			redChannelContrastComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setChannelMethod(1,
-							(ContrastMethod) redChannelContrastComboBox
-									.getSelectedItem());
-				}
-			});
-		}
-		return redChannelContrastComboBox;
-	}
-
-	//	private JComboBox getChannelGammaComboBox(int channel){
-//		if(channelGammaComboBox[channel-1]== null){
-//			channelGammaComboBox[channel-1] = new JComboBox(AbstractStyleEditGUI.GAMMA_VALUES);
-//			SwingUtil.addMouseWheelForCombobox(channelGammaComboBox[channel-1]);
-//			channelGammaComboBox[channel-1].setSelectedItem(Double.valueOf(rulesList
-//					.getGammaValue(channel).toString()));
-//			channelGammaComboBox[channel-1].addItemListener(new ItemListener() {
-//
-//				@Override
-//				public void itemStateChanged(ItemEvent arg0) {
-//					rulesList.setGammaValue(1, Double
-//							.valueOf(channelGammaComboBox[1].getSelectedItem()
-//									.toString()));
-//				}
-//			});
-//		}
-//	}
-	private JComboBox getRedChannelGammaComboBox() {
-		if (redChannelGammaComboBox == null) {
-			redChannelGammaComboBox = new JComboBox(
-					AbstractStyleEditGUI.GAMMA_VALUES);
-			SwingUtil.addMouseWheelForCombobox(redChannelGammaComboBox);
-			redChannelGammaComboBox.setSelectedItem(Double.valueOf(rulesList
-					.getGammaValue(1).toString()));
-			redChannelGammaComboBox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rulesList.setGammaValue(1, Double
-							.valueOf(redChannelGammaComboBox.getSelectedItem()
-									.toString()));
-				}
-			});
-		}
-		return redChannelGammaComboBox;
-	}
-
-	private JLabel getRedJLabel() {
-		if (redJLabel == null) {
-			redJLabel = new JLabel(
-					GpUtil.R("RasterRulesListRGB.Gui.RedChannel"));
-		}
-		return redJLabel;
 	}
 
 	private void initialize() {
@@ -419,18 +321,21 @@ private JLabel getContrastJLabel() {
 		add(getGlobalGammaComboBox(), "cell 3 3, wrap 15");
 		add(getPerChannelJLabel(), "split, span");
 		add(new JSeparator(), "growx, wrap");
-		add(getRedJLabel());
-		add(getRedChannelComboBox(), "growx");
-		add(getRedChannelContrastComboBox(), "growx");
-		add(getRedChannelGammaComboBox());
-		add(getGreenJLabel());
-		add(getGreenChannelComboBox(), "growx");
-		add(getGreenChannelContrastComboBox(), "growx");
-		add(getGreenChannelGammaComboBox());
-		add(getBlueJLabel());
-		add(getBlueChannelComboBox(), "growx");
-		add(getBlueChannelContrastComboBox(), "growx");
-		add(getBlueChannelGammaComboBox(), "wrap 10");
+		// red
+		add(getChannelJLabel(1));
+		add(getChannelComboBox(1), "growx");
+		add(getChannelContrastComboBox(1), "growx");
+		add(getChannelGammaComboBox(1));
+		// green
+		add(getChannelJLabel(2));
+		add(getChannelComboBox(2), "growx");
+		add(getChannelContrastComboBox(2), "growx");
+		add(getChannelGammaComboBox(2));
+		// blue
+		add(getChannelJLabel(3));
+		add(getChannelComboBox(3), "growx");
+		add(getChannelContrastComboBox(3), "growx");
+		add(getChannelGammaComboBox(3), "wrap 10");
 		add(getContrastDescriptionJLabel(), "span, south");
 	}
 
