@@ -337,7 +337,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		return jContentPane;
 	}
 
-	StylerMapView getStylerMapView() {
+	public StylerMapView getStylerMapView() {
 		if (stylerMapView == null) {
 			stylerMapView = new StylerMapView(this);
 			stylerMapView.getMapManager().addMapLayerListListener(
