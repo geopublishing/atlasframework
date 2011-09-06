@@ -8,7 +8,7 @@
  * Contributors:
  *     Stefan A. Tzeggai - initial API and implementation
  ******************************************************************************/
-package org.geopublishing.atlasStyler.swing;
+package org.geopublishing.atlasStyler.svg.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -27,6 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +49,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -56,6 +56,8 @@ import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASProps;
+import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.FreeMapSymbols;
@@ -63,7 +65,10 @@ import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
+import org.geopublishing.atlasStyler.swing.GraphicEditGUI;
+import org.geopublishing.atlasStyler.swing.JScrollPaneSymbols;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.data.DataUtilities;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Mark;
@@ -71,11 +76,13 @@ import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.FileExtensionFilter;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
@@ -87,7 +94,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 	protected static final Dimension SVGICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
-	protected static final String PROPERTY_UPDATED = "Property Updated event ID";
+	public static final String PROPERTY_UPDATED = "Property Updated event ID";
 
 	private JPanel jContentPane = null;
 
@@ -125,12 +132,13 @@ public class SVGSelector extends CancellableDialogAdapter {
 	private final ExternalGraphic[] backup;
 
 	protected JLabel notOnlineLabel = new JLabel(
-			AtlasStylerVector.R("SVGSelector.notOnlineErrorLabel"));
+			ASUtil.R("SVGSelector.notOnlineErrorLabel"));
 
 	/**
 	 * The String KEY is URL.toString
 	 */
 	final static HashMap<String, List<Object>> cachedRuleLists = new HashMap<String, List<Object>>();
+
 
 	/**
 	 * @throws MalformedURLException
@@ -140,7 +148,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 	 */
 	public SVGSelector(Window owner, GeometryForm geomForm,
 			ExternalGraphic[] preSelection) throws MalformedURLException {
-		super(owner, "SVG selection/auswahl"); // TODO i8n
+		super(owner, ASUtil.R("SVGSelector.window.title"));
 		this.geometryForm = geomForm;
 		backup = preSelection;
 
@@ -177,8 +185,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 	@Override
 	public void cancel() {
 
-		SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null,
-				backup);
+		firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, backup);
 
 	}
 
@@ -251,8 +258,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 			gridBagConstraints5.fill = GridBagConstraints.HORIZONTAL;
 			gridBagConstraints5.gridy = 0;
 			jLabelExplanation = new JLabel();
-			jLabelExplanation.setText(AtlasStylerVector
-					.R("SVGSelector.Heading.HTML"));
+			jLabelExplanation.setText(ASUtil.R("SVGSelector.Heading.HTML"));
 			jPanel = new JPanel();
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelExplanation, gridBagConstraints5);
@@ -329,18 +335,46 @@ public class SVGSelector extends CancellableDialogAdapter {
 			jButtonSelfURL.setToolTipText(ASUtil
 					.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
 
-			jButtonSelfURL.setAction(new AbstractAction(ASUtil
-					.R("ExternalGraphicsSelector.button.manual_URL")) {
-
-				private static final long serialVersionUID = 8310624537837831402L;
+			jButtonSelfURL.setAction(new AbstractAction(ASUtil.R("SymbolSelector.Tabs.LocalSymbols")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// i18n
-					JOptionPane
-							.showMessageDialog(
-									SVGSelector.this,
-									"This button will allow to browse any external URL for SVGs. (in the future/on request)");
+
+					File startFolder = ASProps.get(Keys.lastLocalSvgSelected) == null ? new File(
+							System.getProperty("user.home")) : new File(ASProps
+							.get(Keys.lastLocalSvgSelected));
+							
+					File svgFile = GpUtil.chooseFileOpenFallback(
+							SVGSelector.this, startFolder,
+							ASUtil.R("SelectLocalSVGFileAction.window.title"),
+							new FileExtensionFilter(ASUtil.FILTER_SVG));
+
+					if (svgFile != null) {
+						// Remember the last SVG file location
+						ASProps.set(Keys.lastLocalSvgSelected,
+								svgFile.getAbsolutePath());
+					} else
+						return;
+
+					URL svgUrl = IOUtil.fileToURL(svgFile);
+					
+					LOGGER.info(svgUrl);
+					
+					ExternalGraphic eg = StylingUtil.STYLE_BUILDER
+							.createExternalGraphic(svgUrl,
+									GraphicEditGUI.SVG_MIMETYPE);
+					final ExternalGraphic[] egs = new ExternalGraphic[] { eg };
+					
+
+					SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							SVGSelector.this.firePropertyChange(
+									SVGSelector.PROPERTY_UPDATED, null, egs);
+							SVGSelector.this.okClose();
+						}
+					});
+
 				}
 			});
 		}
@@ -370,8 +404,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 			jList = new JList();
 			jList.setModel(new DefaultListModel());
 
-			jList.setToolTipText("Double click with left mouse-button.");//
-			// i8n
+			jList.setToolTipText(ASUtil.R("SVGSelector.list.tooltip"));//
 
 			// The JList has to react on click
 			jList.addMouseListener(new MouseAdapter() {
@@ -522,19 +555,16 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 						styleName.setText("Folder: " + dirName); // i8n
 						styleAuthor.setText("");
-						description
-								.setText("double click to enter this folder"); // i8n
+						description.setText(ASUtil
+								.R("SVGSelector.list.tooltip"));
 					}
 
 					if (isSelected) {
 						fullCell.setBorder(BorderFactory.createEtchedBorder(
 								Color.YELLOW, Color.BLACK));
-
-						// fullCell.setBackground(Color.yellow);
 					} else {
 						fullCell.setBorder(BorderFactory.createEtchedBorder(
 								Color.WHITE, Color.GRAY));
-						// fullCell.setBackground(Color.white);
 					}
 
 					return fullCell;
@@ -555,6 +585,10 @@ public class SVGSelector extends CancellableDialogAdapter {
 		return jList;
 	}
 
+	/**
+	 * Generates a String key under which the SVG-Component are cached for
+	 * faster GUI.
+	 */
 	String getKey(SingleRuleList rl) {
 		return url.getFile() + rl.getStyleName();
 	}
@@ -562,7 +596,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 	public void changeURL(URL newUrl) {
 		url = newUrl;
 
-		LOGGER.debug("Changing URL to " + url.getFile());
+		LOGGER.debug("Changing " + this.getClass().getSimpleName() + " URL to "
+				+ url.getFile());
 
 		jList = null;
 		rescan(false);

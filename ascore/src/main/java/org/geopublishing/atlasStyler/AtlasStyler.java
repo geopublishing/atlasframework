@@ -232,6 +232,7 @@ public abstract class AtlasStyler {
 
 	public AtlasStyler(MapLayer mapLayer, HashMap<String, Object> params,
 			Boolean withDefaults) {
+		
 		// this.mapLegend = mapLegend;
 		this.mapLayer = mapLayer;
 
@@ -338,6 +339,13 @@ public abstract class AtlasStyler {
 		if (styleCached == null)
 			return;
 
+		fireStyleChangedEvents(ev);
+	}
+
+	/**
+	 * Fires an event without checking for any idQuite or forced settings.
+	 */
+	public void fireStyleChangedEvents(StyleChangedEvent ev) {
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			try {
@@ -489,10 +497,10 @@ public abstract class AtlasStyler {
 
 	/**
 	 * Returns a StyleChangedEvent or a RasterStyleChangedEvent
-	 * 
-	 * @return
 	 */
-	abstract StyleChangedEvent getStyleChangeEvent();
+	StyleChangedEvent getStyleChangeEvent() {
+		return new StyleChangedEvent(getStyle());
+	}
 
 	public abstract StyledLayerInterface<?> getStyledInterface();
 

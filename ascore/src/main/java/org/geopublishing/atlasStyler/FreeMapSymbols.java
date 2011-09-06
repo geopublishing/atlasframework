@@ -22,6 +22,9 @@ public class FreeMapSymbols {
 	static public final String POINT_URL = BASE_URL + "point";
 	static public final String POLYGON_URL = BASE_URL + "polygon";
 
-	public static final String SVG_URL = BASE_URL + "svg";
+	/**
+	 * Links to SVGs should never change, since it could break existing SLDs. So we feature versions of the SVG folder.
+	 */
+	public static final String SVG_URL = BASE_URL + "svg/v1.1";
 
 }

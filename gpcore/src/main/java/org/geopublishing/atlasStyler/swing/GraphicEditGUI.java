@@ -44,6 +44,7 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.MARKTYPE;
+import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.renderer.style.SVGGraphicFactory;
 import org.geotools.styling.ExternalGraphic;
@@ -63,6 +64,9 @@ import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
+/**
+ * A GUI to select/edait a SLD graphic symbol. It can often refers to a SVG.
+ */
 public class GraphicEditGUI extends AbstractStyleEditGUI {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
@@ -115,7 +119,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private JComboBox jComboBoxFillOpacity = null;
 
 	private final JLabel jLabelRotation = new JLabel(
-			AtlasStylerVector.R("RotationLabel"));
+			ASUtil.R("RotationLabel"));
 
 	private JComboBox jComboBoxGraphicRotation = null;
 
@@ -1005,164 +1009,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		}
 		return jCheckBoxStroke;
 	}
-
-	//
-	// /**
-	// * This method initializes jCheckBox
-	// *
-	// * @return javax.swing.JCheckBox
-	// */
-	// private JCheckBox getJCheckBoxDisplacement() {
-	// if (jCheckBoxDisplacement == null) {
-	// jCheckBoxDisplacement = new JCheckBox();
-	//
-	// jCheckBoxDisplacement.addActionListener(new ActionListener() {
-	// public void actionPerformed(ActionEvent e) {
-	// boolean onOff = jCheckBoxDisplacement.isSelected();
-	//
-	// // /***********************************************************
-	// // * Intervention because GT is not rendering it
-	// // */
-	// // JOptionPane.showMessageDialog(GraphicEditGUI_Mig.this,
-	// // AtlasStyler.R("NotWorkingInGT24.Displacement"),
-	// // "GeoTools 2.4 doesn't honour displacement tags",
-	// // JOptionPane.WARNING_MESSAGE);
-	//
-	// if (onOff) {
-	// // If available, read the stored values from the GUI
-	// // elements
-	// Number dx = (Number) jComboBoxDisplacementX
-	// .getSelectedItem();
-	// Number dy = (Number) jComboBoxDisplacementY
-	// .getSelectedItem();
-	// if (dx == null)
-	// dx = 0f;
-	// if (dy == null)
-	// dy = 0f;
-	//
-	// Displacement dis = ASUtil.SB.createDisplacement(dx
-	// .doubleValue(), dy.doubleValue());
-	//
-	// graphic.setDisplacement(dis);
-	// } else {
-	// graphic.setDisplacement(null);
-	// }
-	//
-	// getJPanelDisplacement().setEnabled(onOff);
-	//
-	// firePropertyChange(PROPERTY_UPDATED, null, null);
-	// }
-	//
-	// });
-	// jCheckBoxDisplacement
-	// .setSelected(graphic.getDisplacement() != null);
-	// }
-	//
-	// return jCheckBoxDisplacement;
-	// }
-	//
-	// /**
-	// * This method initializes jPanel2
-	// *
-	// * @return javax.swing.JPanel
-	// */
-	// private JPanel getJPanelDisplacement() {
-	// if (jPanelDisplacement == null) {
-	//
-	// jPanelDisplacement = new JPanel(new MigLayout("w 100%"));
-	//
-	// jLabelDisplacementY = new JLabel(AtlasStyler.R("VerticalLabel"));
-	// jLabelDisplacementX = new JLabel(AtlasStyler.R("HorizontalLabel"));
-	// jPanelDisplacement.setBorder(BorderFactory
-	// .createTitledBorder(AtlasStyler
-	// .R("GraphicEdit.Displacement.Title")));
-	//
-	// jPanelDisplacement.add(jLabelDisplacementX);
-	// jPanelDisplacement.add(getJComboBoxDisplacementX(), "gapx");
-	// jPanelDisplacement.add(jLabelDisplacementY);
-	// jPanelDisplacement.add(getJComboBoxDisplacementY());
-	// }
-	// return jPanelDisplacement;
-	// }
-	//
-	// /**
-	// * This method initializes jComboBox
-	// *
-	// * @return javax.swing.JComboBox
-	// */
-	// private JComboBox getJComboBoxDisplacementX() {
-	// if (jComboBoxDisplacementX == null) {
-	// jComboBoxDisplacementX = new JComboBox();
-	// jComboBoxDisplacementX.setModel(new DefaultComboBoxModel(
-	// DISPLACEMENT_VALUES));
-	//
-	// if (graphic.getDisplacement() == null) {
-	// jComboBoxDisplacementX.setEnabled(false);
-	// jLabelDisplacementX.setEnabled(false);
-	// } else {
-	// jComboBoxDisplacementX.setSelectedItem(Float.valueOf(graphic
-	// .getDisplacement().getDisplacementX().toString()));
-	// }
-	//
-	// jComboBoxDisplacementX.addItemListener(new ItemListener() {
-	//
-	// public void itemStateChanged(ItemEvent e) {
-	// if (e.getStateChange() == ItemEvent.SELECTED) {
-	//
-	// Displacement d = graphic.getDisplacement();
-	// d.setDisplacementX(ASUtil.ff2.literal(e.getItem()));
-	//
-	// graphic.setDisplacement(d);
-	//
-	// firePropertyChange(PROPERTY_UPDATED, null, null);
-	// }
-	//
-	// }
-	// });
-	// SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementX);
-	// }
-	// return jComboBoxDisplacementX;
-	// }
-	//
-	// /**
-	// * This method initializes jComboBox
-	// *
-	// * @return javax.swing.JComboBox
-	// */
-	// private JComboBox getJComboBoxDisplacementY() {
-	// if (jComboBoxDisplacementY == null) {
-	// jComboBoxDisplacementY = new JComboBox();
-	// jComboBoxDisplacementY.setModel(new DefaultComboBoxModel(
-	// DISPLACEMENT_VALUES));
-	//
-	// if (graphic.getDisplacement() == null) {
-	// jComboBoxDisplacementY.setEnabled(false);
-	// jLabelDisplacementY.setEnabled(false);
-	// } else {
-	// jComboBoxDisplacementY.setSelectedItem(Float.valueOf(graphic
-	// .getDisplacement().getDisplacementY().toString()));
-	// }
-	//
-	// jComboBoxDisplacementY.addItemListener(new ItemListener() {
-	//
-	// public void itemStateChanged(ItemEvent e) {
-	// if (e.getStateChange() == ItemEvent.SELECTED) {
-	//
-	// Displacement d = graphic.getDisplacement();
-	// d.setDisplacementY(ASUtil.ff2.literal(e.getItem()));
-	//
-	// graphic.setDisplacement(d);
-	//
-	// firePropertyChange(PROPERTY_UPDATED, null, null);
-	// }
-	//
-	// }
-	// });
-	// SwingUtil.addMouseWheelForCombobox(jComboBoxDisplacementY);
-	// }
-	// return jComboBoxDisplacementY;
-	// }
-
+ 
 	/**
 	 * This method initializes jPanel2
 	 * 

@@ -458,11 +458,6 @@ public class AtlasStylerVector extends AtlasStyler {
 		return fontFamilies;
 	}
 
-	@Override
-	StyleChangedEvent getStyleChangeEvent() {
-		return new StyleChangedEvent(getStyle());
-	}
-
 	public StyledFeaturesInterface<?> getStyledFeatures() {
 		return styledFeatures;
 	}

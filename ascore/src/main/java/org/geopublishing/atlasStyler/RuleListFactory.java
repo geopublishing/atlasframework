@@ -11,7 +11,6 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;

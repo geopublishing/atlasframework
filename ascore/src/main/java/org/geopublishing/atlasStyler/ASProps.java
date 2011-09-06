@@ -75,7 +75,9 @@ public abstract class ASProps {
 		logLevel,
 		/** List of WFS servers encoded in one String **/
 		wfsList, /** JFrame starts maximized? */
-		windowMaximized
+		windowMaximized,
+		/** Path to the last locally selected SVG**/
+		lastLocalSvgSelected
 
 	}
 

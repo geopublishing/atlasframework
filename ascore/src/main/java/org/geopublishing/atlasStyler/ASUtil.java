@@ -118,7 +118,10 @@ public class ASUtil {
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
 
 	public static final FileNameExtensionFilter FILTER_SLD = new FileNameExtensionFilter(
-			"SLD", "sld", "xml");
+			"SLD", "sld", "xml", "SLD", "XML");
+	
+	public static final FileNameExtensionFilter FILTER_SVG = new FileNameExtensionFilter(
+			"SVG", "svg", "SVG");
 	
 	public static final FileNameExtensionFilter FILTER_GML = new FileNameExtensionFilter(
 			"GML", "gml", "GML");

@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler.swing;
+package org.geopublishing.atlasStyler.svg.swing;
 
 import static org.junit.Assert.assertTrue;
 
@@ -37,11 +37,11 @@ public class SVGSelectorTest extends TestingClass {
 	@Test
 	public void testSvgSelectorGui() throws Throwable {
 
-		if (!TestingUtil.isInteractive())
+		if (!TestingUtil.hasGui())
 			return;
 		SVGSelector svgSelector = new SVGSelector(null, GeometryForm.POLYGON,
 				null);
 		svgSelector.changeURL(new URL(FreeMapSymbols.SVG_URL + "/" + "osm"));
-		TestingUtil.testGui(svgSelector);
+		TestingUtil.testGui(svgSelector,600);
 	}
 }

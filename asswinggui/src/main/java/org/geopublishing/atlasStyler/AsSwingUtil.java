@@ -95,7 +95,7 @@ public class AsSwingUtil extends ASUtil {
 
 			return new File(fileDialog.getParentDirectory(), selectedFileName);
 		} catch (Exception e) {
-			return chooseFileOpenFallback(parent, startFolder, title, filters);
+			return GpUtil.chooseFileOpenFallback(parent, startFolder, title, filters);
 		}
 	}
 
@@ -125,42 +125,6 @@ public class AsSwingUtil extends ASUtil {
 			chooser.setAcceptAllFileFilterUsed(false);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			chooser.setFileFilter(filters[filters.length - 1].toJFileChooserFilter());
-		}
-		if (title != null)
-			chooser.setDialogTitle(title);
-
-		int ret = chooser.showOpenDialog(parent);
-		if (ret == JFileChooser.APPROVE_OPTION)
-			return chooser.getSelectedFile();
-		return null;
-	}
-
-	/**
-	 * Performs a file OPEN choose as a fallback
-	 * 
-	 * @param parent
-	 *            component for the dialog (can be {@code null})
-	 * @param startFolder
-	 *            start folder for the chooser (if {@code null} "/" is used)
-	 * @param filter
-	 *            defines which files can be selected. Only the last filter in the list will be offered due to
-	 *            limitations
-	 * @return {@code null} if the dialog was not approved
-	 * 
-	 *         TODO move to schmitz-swt
-	 */
-	public static File chooseFileOpenFallback(Component parent, File startFolder, String title,
-			FileExtensionFilter... filters) {
-		if (startFolder == null)
-			startFolder = new File("/");
-
-		JFileChooser chooser = new JFileChooser(startFolder);
-		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-
-		if (filters != null) {
-			chooser.setAcceptAllFileFilterUsed(false);
-			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(filters[0].toJFileChooserFilter());
 		}
 		if (title != null)
 			chooser.setDialogTitle(title);
