@@ -780,15 +780,21 @@ public class TextRuleList extends AbstractRulesList {
 		 */
 		try {
 
-			if (filter.equals(oldClassesEnabledFilter)) {
+			if (filter.equals(Filter.EXCLUDE)) {
+				setClassEnabled(idx, false);
+			} else if (filter.equals(Filter.INCLUDE)) {
+				setClassEnabled(idx, true);
+			} else if (filter.equals(oldClassesEnabledFilter)) {
 				setClassEnabled(idx, true);
 			} else if (filter.equals(oldClassesDisabledFilter)) {
 				setClassEnabled(idx, false);
 			} else {
 				List<?> andChildren = ((AndImpl) filter).getChildren();
-				if (andChildren.get(0).equals(StylingUtil.LABEL_CLASS_DISABLED_FILTER)) {
+				if (andChildren.get(0).equals(
+						StylingUtil.LABEL_CLASS_DISABLED_FILTER)) {
 					setClassEnabled(idx, false);
-				} else if (andChildren.get(0).equals(StylingUtil.LABEL_CLASS_ENABLED_FILTER)) {
+				} else if (andChildren.get(0).equals(
+						StylingUtil.LABEL_CLASS_ENABLED_FILTER)) {
 					setClassEnabled(idx, true);
 				} else {
 					throw new RuntimeException(andChildren.get(0).toString()
