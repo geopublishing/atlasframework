@@ -60,7 +60,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 
 				final AtlasStylerGUI asg = (AtlasStylerGUI) wizardData
 						.get(ImportWizard.ATLAS_STYLER_GUI);
-
+				
 				try {
 					progress.setBusy(dbServer.toString());
 
@@ -115,7 +115,7 @@ public class ImportWizardResultProducer_DB extends ImportWizardResultProducer
 
 						Summary summary = Summary
 								.create(new JScrollPane(getSummaryPanelShapefile(start,
-										countFeatures, dbSfs, importedSldFile)),
+										countFeatures, dbSfs, importedSldFile, asg)),
 										"ok");
 
 						progress.finished(summary);

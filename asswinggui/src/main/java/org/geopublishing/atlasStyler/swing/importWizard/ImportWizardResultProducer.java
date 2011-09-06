@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,6 +14,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AsSwingUtil;
+import org.geopublishing.atlasStyler.swing.AtlasStylerGUI;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geotools.data.FeatureSource;
@@ -132,7 +134,7 @@ public abstract class ImportWizardResultProducer implements
 	 *            <code>null</code> if no .sld has been impoerted.
 	 */
 	JPanel getSummaryPanelShapefile(long startTime, int countFeatures,
-			final StyledFS dbSfs, File importedSld) {
+			final StyledFS dbSfs, File importedSld, AtlasStylerGUI asg) {
 		JPanel summaryPanel = new JPanel(new MigLayout("wrap 1"));
 
 		summaryPanel.add(new JLabel(AsSwingUtil
@@ -170,13 +172,15 @@ public abstract class ImportWizardResultProducer implements
 			summaryPanel.add(new JLabel(ASUtil
 					.R("ImportWizard.SummaryText.DefaultStyleHasBeenApplied")));
 		} else {
-			summaryPanel
-					.add(new JLabel(
 							ASUtil.R(
 									"ImportWizard.SummaryText.LoadedStyleFromFileAndAppliedSuccessfully",
 									IOUtil.escapePath(importedSld
-											.getAbsolutePath()))));
+											.getAbsolutePath()));
 		}
+		
+
+		summaryPanel.add(new JButton(new OpenAtlasStylerAction(asg, dbSfs)));
+		
 		return summaryPanel;
 	}
 

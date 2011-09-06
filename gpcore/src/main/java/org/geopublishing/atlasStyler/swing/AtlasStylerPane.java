@@ -29,7 +29,6 @@ import org.geopublishing.atlasStyler.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;

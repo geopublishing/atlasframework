@@ -175,15 +175,6 @@ public class AVDialogManager {
 								final MapLayer mapLayer = (MapLayer) constArgs[1];
 								final MapLegend mapLegend = (MapLegend) constArgs[2];
 
-								// // Create a copy of the Style.. otherwise
-								// some
-								// // updates where not detected
-								// DuplicatingStyleVisitor dsv = new
-								// DuplicatingStyleVisitor();
-								// dsv.visit(mapLayer.getStyle());
-								// Style importStyleCopy = (Style)
-								// dsv.getCopy();
-
 								/***********************************************************************
 								 * First create the AtlasStyler ....
 								 */
@@ -203,8 +194,6 @@ public class AVDialogManager {
 								final MapLayerLegend mapLayerLegend = mapLegend
 										.getLayerLegendForId(styledLayer
 												.getId());
-
-								final AtlasStyler atlasStylerFinal = atlasStyler;
 
 								// This listener informs the MapLayerLegend,
 								// resulting in a new legend and repained
