@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [
+<!ATTLIST svg
+	xmlns:attrib CDATA #IMPLIED
+>
+]>
+<svg width="29" height="50" viewBox="702827.31 -4708302.8 34.91 52.21" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:attrib="http://www.carto.net/attrib/">
+	<g id="e:\ardito\wp4\tabellasimboli\deciduosvg" fill="none" stroke="black" stroke-width="0.02" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M702835.89 -4708251.86l17.4 0l-17.4 .03M702844.59 -4708251.86l0 -12.8M702844.59 -4708264.66l-11.4 -.13l-2.25 -.83l-1.4 -1.63l-1.05 -3.17l-.35 -3.08l0 -4.1l.23 -3.3l2.7 -7.27l2 -4.13l2.6 -4.33l2.8 -2.6l2.82 -1.87l2.35 -.48l1.78 0l2.92 .95l2.83 1.65l1.9 1.75l2 2.57l1.97 3.53l1.9 3.9l1.4 3.88l1.05 5.52l0 4.45l-.2 2.73l-.72 2.45l-.9 2.03l-2.05 1.5l-9.27 0l-3.65 0" />
+	</g>
+</svg>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3460"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="dolina.svg">
+  <defs
+     id="defs3462" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata3465">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3502">
+      <line
+         x1="381.42435"
+         y1="532.44965"
+         x2="370.24817"
+         y2="533.62469"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:3.12497997;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line136" />
+      <path
+         d="M 361.81573,546.97459 L 361.80198,546.96209 L 361.76073,546.96209 L 361.69448,546.94959 L 361.60198,546.93709 L 361.48698,546.92459 L 361.34823,546.89959 L 361.18948,546.87459 L 361.00823,546.83709 L 360.80948,546.79959 L 360.59199,546.74959 L 360.35699,546.71209 L 360.10574,546.64959 L 359.83949,546.59959 L 359.55949,546.52459 L 359.26699,546.46209 L 358.96325,546.3871 L 358.3245,546.21209 L 357.652,546.0121 L 356.95451,545.7871 L 356.24201,545.5246 L 355.52202,545.2371 L 354.80327,544.9246 L 354.09578,544.5746 L 353.40703,544.19961 L 352.74704,543.77461 L 352.43079,543.54961 L 352.12454,543.32461 L 351.82954,543.07461 L 351.54704,542.82461 L 351.2783,542.57462 L 351.02455,542.29962 L 350.7858,542.02462 L 350.56455,541.72462 L 350.3608,541.42462 L 350.17705,541.11212 L 350.0133,540.79963 L 349.8708,540.46213 L 349.75081,540.11213 L 349.65456,539.76214 L 349.58206,539.39964 L 349.53581,539.02464 L 349.51581,538.63714 L 349.52456,538.22464 L 349.56206,537.81215 L 349.63081,537.39965 L 349.72956,536.96215 L 349.8608,536.51216 L 350.02455,536.04966 L 350.22455,535.57466 L 350.45955,535.08716 L 350.7308,534.58717 L 351.0408,534.07467 L 351.38829,533.54968 L 351.77704,532.99968 L 352.20579,532.44968 C 361.81573,520.49976 373.20191,516.97478 379.85811,516.97478 C 386.51307,516.97478 398.29299,520.69976 399.85548,524.62474 C 401.43048,528.53721 400.04298,537.74965 395.73051,540.09963 C 391.42429,542.44962 384.76933,546.18709 379.46686,546.97459 C 374.1644,547.74959 366.12195,547.74959 366.12195,547.74959 L 361.81573,546.97459 z "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path138" />
+    </g>
+  </g>
+</svg>

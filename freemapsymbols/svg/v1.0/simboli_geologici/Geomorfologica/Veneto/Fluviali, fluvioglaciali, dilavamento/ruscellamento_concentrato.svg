@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg5315"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="ruscellamento_concentrato.svg">
+  <defs
+     id="defs5317" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata5320">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g5357">
+      <path
+         d="M 360.74259,516.62478 L 360.73759,516.63728 L 360.72384,516.63728 L 360.70134,516.64978 L 360.66884,516.67479 L 360.63009,516.68729 L 360.58134,516.71228 L 360.52634,516.74978 L 360.46384,516.77478 L 360.39384,516.81229 L 360.31634,516.86228 L 360.23384,516.91229 L 360.14384,516.96228 L 360.04885,517.01228 L 359.94759,517.07478 L 359.7301,517.19978 L 359.49385,517.34978 L 359.2401,517.49978 L 358.97385,517.67478 L 358.6951,517.86228 L 358.40761,518.06228 L 358.11386,518.27477 L 357.81511,518.49977 L 357.51511,518.73727 L 357.21511,518.97477 L 356.91886,519.23727 L 356.62762,519.49976 L 356.34387,519.77476 L 356.07012,520.06226 L 355.80887,520.34976 L 355.56387,520.64976 L 355.33513,520.96226 L 355.12638,521.27475 L 354.94013,521.59975 L 354.77888,521.92475 L 354.70763,522.08725 L 354.64388,522.26225 L 354.58763,522.42475 L 354.53888,522.59975 L 354.49763,522.76224 L 354.46513,522.93725 L 354.44138,523.11224 L 354.42638,523.28724 L 354.42013,523.46224 L 354.42388,523.63724 C 354.61013,527.36221 358.3451,529.0247 361.29383,530.87469 C 364.24382,532.71218 365.34631,536.07466 364.24382,538.09965 C 363.13508,540.13713 361.66008,541.04963 361.66008,542.52462"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path160" />
+      <polygon
+         transform="matrix(1.249992,0,0,-1.249992,251.5683,926.4722)"
+         points="88.516,302.3 85.43,308.64 91.605,308.64 88.516,302.3 "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:black;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="polygon162" />
+      <polygon
+         transform="matrix(1.249992,0,0,-1.249992,251.5683,926.4722)"
+         points="88.516,302.3 85.43,308.64 91.605,308.64 88.516,302.3 "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="polygon164" />
+      <path
+         d="M 390.7424,516.62478 L 390.7424,516.63728 L 390.7299,516.63728 L 390.7049,516.64978 L 390.6674,516.67479 L 390.6299,516.68729 L 390.5799,516.71228 L 390.5299,516.74978 L 390.4674,516.77478 L 390.3924,516.81229 L 390.3174,516.86228 L 390.2299,516.91229 L 390.14241,516.96228 L 390.04241,517.01228 L 389.9424,517.07478 L 389.7299,517.19978 L 389.4924,517.34978 L 389.24241,517.49978 L 388.97991,517.67478 L 388.69241,517.86228 L 388.40492,518.06228 L 388.11741,518.27477 L 387.81742,518.49977 L 387.51742,518.73727 L 387.21742,518.97477 L 386.91743,519.23727 L 386.62992,519.49976 L 386.34243,519.77476 L 386.06743,520.06226 L 385.80493,520.34976 L 385.56743,520.64976 L 385.32993,520.96226 L 385.12993,521.27475 L 384.94244,521.59975 L 384.77994,521.92475 L 384.70494,522.08725 L 384.64244,522.26225 L 384.59244,522.42475 L 384.54244,522.59975 L 384.49244,522.76224 L 384.46744,522.93725 L 384.44244,523.11224 L 384.42994,523.28724 L 384.41744,523.46224 L 384.42994,523.63724 C 384.60494,527.36221 388.34241,529.0247 391.2924,530.87469 C 394.24237,532.71218 395.34237,536.07466 394.24237,538.09965 C 393.12989,540.13713 391.6549,541.04963 391.6549,542.52462"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path166" />
+      <polygon
+         transform="matrix(1.249992,0,0,-1.249992,251.5683,926.4722)"
+         points="112.52,302.3 109.43,308.64 115.61,308.64 112.52,302.3 "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:black;stroke-width:0;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="polygon168" />
+      <polygon
+         transform="matrix(1.249992,0,0,-1.249992,251.5683,926.4722)"
+         points="112.52,302.3 109.43,308.64 115.61,308.64 112.52,302.3 "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:0.2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="polygon170" />
+    </g>
+  </g>
+</svg>

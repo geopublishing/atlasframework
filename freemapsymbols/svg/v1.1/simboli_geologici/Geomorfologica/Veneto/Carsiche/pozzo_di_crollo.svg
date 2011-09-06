@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3460"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="pozzo_di_crollo.svg">
+  <defs
+     id="defs3462" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata3465">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3509">
+      <path
+         d="M 385.2253,519.59017 L 388.84778,520.34017 C 391.88026,527.85262 389.71278,536.40257 390.97277,544.21502 C 386.1578,545.81501 361.72421,544.84001 361.72421,544.84001 C 360.60171,537.69006 358.62923,530.65261 359.09797,523.34015"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path156" />
+      <path
+         d="M 385.2253,519.59017 C 379.47784,519.72767 366.30418,520.52767 360.53296,520.21517"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path158" />
+      <path
+         d="M 371.78289,533.06509 L 371.78664,532.89009 L 371.79914,532.72759 L 371.82039,532.57759 L 371.84789,532.41509 L 371.88414,532.2651 L 371.92789,532.10259 L 371.97789,531.95259 L 372.03539,531.8151 L 372.10039,531.6651 L 372.17164,531.5276 L 372.24914,531.3901 L 372.33289,531.2651 L 372.42164,531.1401 L 372.51789,531.0151 L 372.61913,530.9026 L 372.72538,530.7901 L 372.83663,530.6901 L 372.95414,530.5776 L 373.07538,530.4901 L 373.20164,530.40261 L 373.33163,530.31511 L 373.46663,530.2401 L 373.60538,530.16511 L 373.74788,530.1026 L 373.89413,530.04011 L 374.04413,529.9901 L 374.19663,529.95261 L 374.35163,529.91511 L 374.51037,529.89011 L 374.67162,529.86511 L 374.83537,529.85261 L 375.00037,529.85261 C 376.77286,529.85261 378.2141,531.2901 378.2141,533.06509 C 378.2141,534.84008 376.77286,536.27757 375.00037,536.27757 C 373.22288,536.27757 371.78289,534.84008 371.78289,533.06509 z "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:black;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path160" />
+    </g>
+  </g>
+</svg>
