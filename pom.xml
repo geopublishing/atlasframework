@@ -6,7 +6,7 @@
 	<groupId>org.geopublishing</groupId>
 	<artifactId>gp-atlas-framework</artifactId>
 	<name>Geopublishing software</name>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.9-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>Geopublisher (including AtlasStyler) applications.
 	</description>

@@ -4,13 +4,13 @@
 	<groupId>org.geopublishing.atlasStyler</groupId>
 	<artifactId>asswinggui</artifactId>
 	<packaging>jar</packaging>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.9-SNAPSHOT</version>
 	<name>AtlasStyler Swing GUI</name>
 	<url>http://en.geopublishing.org/AtlasStyler</url>
 	<parent>
 		<groupId>org.geopublishing</groupId>
 		<artifactId>gp-parent</artifactId>
-		<version>1.8-SNAPSHOT</version>
+		<version>1.9-SNAPSHOT</version>
 	</parent>
 
 
@@ -303,7 +303,7 @@
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
-			<version>1.8-SNAPSHOT</version>
+			<version>1.9-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
@@ -311,7 +311,7 @@
 		<dependency>
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
-			<version>1.8-SNAPSHOT</version>
+			<version>1.9-SNAPSHOT</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
