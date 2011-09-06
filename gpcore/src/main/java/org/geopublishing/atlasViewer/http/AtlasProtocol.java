@@ -14,6 +14,8 @@ import java.awt.Component;
 import java.awt.Window;
 import java.io.File;
 import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.SwingUtilities;
 
@@ -22,6 +24,7 @@ import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
@@ -44,7 +47,7 @@ import de.schmitzm.swing.SwingUtil;
  */
 public enum AtlasProtocol {
 
-	MAP, PDF, BROWSER, IMAGE, HTML;
+	MAP, PDF, BROWSER, IMAGE, HTML, VIDEO, LAYER;
 
 	final static private Logger LOGGER = Logger.getLogger(AtlasProtocol.class);
 
@@ -116,7 +119,8 @@ public enum AtlasProtocol {
 				String dpeId = AtlasProtocol.PDF.cutOff(destURL.toString());
 				DpEntry dpe = atlasConfig.getDataPool().get(dpeId);
 				if (dpe != null && dpe instanceof DpMediaPDF) {
-					AtlasProtocol.PDF.performPDF(parent, AVSwingUtil.getUrl(dpe,parent),dpe.getTitle().toString());
+					AtlasProtocol.PDF.performPDF(parent, AVSwingUtil.getUrl(
+							dpe, parent), dpe.getTitle().toString());
 				} else {
 					/**
 					 * 2. THis is a relative link to a PDF file?
@@ -300,6 +304,22 @@ public enum AtlasProtocol {
 			parentWindow.dispose();
 		}
 
+	}
+
+	/**
+	 * Liefert <code>true</code> wenn in dem angegebenen HTML-Dokument die ID
+	 * des DPE auftaucht. Es wird einfach vermutet, dass es sich dann um einen
+	 * LInk handelt.
+	 */
+	public static boolean findReferencesInHtml(URL url, DpMedia dpm) {
+		if (url == null)
+			return false;
+
+		String html = IOUtil.readURLasString(url);
+
+		String regex = Pattern.quote("&#47;&#47;" + dpm.getId());
+		Matcher matcher = Pattern.compile(regex).matcher(html);
+		return matcher.find();
 	}
 
 }

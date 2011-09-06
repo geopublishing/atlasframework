@@ -30,13 +30,14 @@ import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.JPanel;
 
 /**
- * A html editor based on SimplyHTML.
+ * A html editor based on DJ native swing FCK JavaScript HTML Editor
  */
-public class HTMLEditPaneJHTMLEditor extends JPanel implements
-		HTMLEditPaneInterface, HTMLEditorListener {
+public class HTMLEditPaneJHTMLEditor extends
+		HTMLEditPaneInterface implements HTMLEditorListener {
+	private static final long serialVersionUID = -6452873259788176352L;
+
 	private final Logger LOGGER = LangUtil.createLogger(this);
 
 	/**
@@ -68,7 +69,7 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 *            supported); if <code>null</code> "FCK" is used
 	 */
 	public HTMLEditPaneJHTMLEditor(String editorType, AtlasConfigEditable ace) {
-		super(new BorderLayout());
+		setLayout(new BorderLayout());
 		this.ace = ace;
 		if (editorType == null)
 			editorType = "FCK";
@@ -126,11 +127,6 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 */
 	@Override
 	public void removeAllTabs() {
-		// for (int i=0; i<tabs.getTabCount(); i++) {
-		// TabbedJHTMLEditor editor =
-		// (TabbedJHTMLEditor)tabs.getTabComponentAt(i);
-		// editor.htmlEditor.dispose(); // something like that necessary???
-		// }
 		editURLs.clear();
 		tabs.removeAll();
 	}
@@ -141,22 +137,36 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 */
 	@Override
 	public void saveHTML(HTMLEditorSaveEvent event) {
-		saveHTML(event.getHTMLEditor(), null);
+		saveHTML(event.getHTMLEditor(), null, null);
 	}
 
-	private void showSuccessMessage(Vector<String> copiedFiles) {
-		JOptionPane.showMessageDialog(
-				this,
-				copiedFiles.size() == 0 ? GpSwingUtil
-						.R("HTMLEditPaneJHTMLEditor.save.success")
-						: GpSwingUtil.R(
-								"HTMLEditPaneJHTMLEditor.save.success2",
-								copiedFiles.size(),
-								"\n- "
-										+ LangUtil.stringConcatWithSep("\n- ",
-												(Collection) copiedFiles)),
-				GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
-				JOptionPane.INFORMATION_MESSAGE);
+	private void showSuccessMessage(Vector<String> copiedFiles,
+			Vector<String> deletedFiles) {
+
+		if (deletedFiles != null && deletedFiles.size() > 0) {
+			
+			JOptionPane.showMessageDialog(this,
+					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.deleted",
+							deletedFiles.get(0)), GpSwingUtil
+							.R("HTMLEditPaneJHTMLEditor.save.title"),
+					JOptionPane.INFORMATION_MESSAGE);
+			
+		} else {
+
+			JOptionPane.showMessageDialog(
+					this,
+					copiedFiles.size() == 0 ? GpSwingUtil
+							.R("HTMLEditPaneJHTMLEditor.save.success")
+							: GpSwingUtil.R(
+									"HTMLEditPaneJHTMLEditor.save.success2",
+									copiedFiles.size(),
+									"\n- "
+											+ LangUtil.stringConcatWithSep(
+													"\n- ",
+													(Collection) copiedFiles)),
+					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 
 	/**
@@ -168,15 +178,26 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	 *            stores names of the image files copied to map folder (can be
 	 *            {@code null}, if not {@code null} the copied files are only
 	 *            stored in the list and a success message is NOT given)
+	 * @param deletedFiles
+	 *            Stores the names of the files deleted because they were empty.
 	 */
 	protected void saveHTML(JHTMLEditor editor,
-			Vector<String> collectCopiedFiles) {
+			Vector<String> collectCopiedFiles, Vector<String> deletedFiles) {
 		URL sourceURL = editURLs.get(editor);
 		String htmlContent = editor.getHTMLContent();
 
 		if (htmlContent == null) {
 			LOGGER.warn(JHTMLEditor.class.getSimpleName()
 					+ " asked to save a NULL HTML content! Ignoring...");
+			return;
+		}
+
+		if (LangUtil.removeWhitespacesToNull(htmlContent) == null) {
+			// Delete the empty file.
+			File sourceHTMLFile = IOUtil.urlToFile(sourceURL);
+			sourceHTMLFile.delete();
+			if (deletedFiles != null)
+				deletedFiles.add(sourceHTMLFile.getAbsolutePath());
 			return;
 		}
 
@@ -224,8 +245,10 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			// To avoid multiple "success" dialogs when method is
 			// called for all editors the dialog is only shown
 			// if no global list is given
-			if (collectCopiedFiles == null)
-				showSuccessMessage(copiedFiles);
+			if (collectCopiedFiles == null){
+				fireChangeEvents();
+				showSuccessMessage(copiedFiles, deletedFiles);
+			}
 		} catch (Exception err) {
 			ExceptionDialog.show(editor, err,
 					GpSwingUtil.R("HTMLEditPaneJHTMLEditor.save.title"),
@@ -272,9 +295,12 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 			case JOptionPane.YES_OPTION:
 				// save changed files
 				Vector<String> copiedFiles = new Vector<String>();
+				Vector<String> deletedFiles = new Vector<String>();
 				for (JHTMLEditor editor : changedURLs)
-					saveHTML(editor, copiedFiles);
-				showSuccessMessage(copiedFiles);
+					saveHTML(editor, copiedFiles, deletedFiles);
+				fireChangeEvents();
+				showSuccessMessage(copiedFiles, deletedFiles);
+
 				return true;
 			case JOptionPane.NO_OPTION:
 				// do not save the changes, just return TRUE to close the dialog
@@ -433,6 +459,11 @@ public class HTMLEditPaneJHTMLEditor extends JPanel implements
 	@Override
 	public void notifyDirtyStateChanged(HTMLEditorDirtyStateEvent arg0) {
 		LOGGER.info(arg0);
-
 	}
+
+	@Override
+	public Dimension getPreferredSize() {
+		return null;
+	}
+
 }

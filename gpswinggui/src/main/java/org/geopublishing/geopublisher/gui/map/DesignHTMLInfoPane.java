@@ -61,8 +61,11 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 		}
 	};
 
+	private URL url;
+
 	@Override
 	public void showDocument(URL url) {
+		this.url = url;
 		if (url == null) {
 		    htmlPane.showDocument(GeopublisherGUI.R("DesignHTMLPanel.NoHTML.Message", I18NUtil
 					.getFirstLocaleForLang(Translation.getActiveLang())
@@ -108,7 +111,7 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
 		
         JPopupMenu popupMenu = new JPopupMenu();
         /** Edit HTML info files... */
-        popupMenu.add(new MapPoolEditHTMLAction(map));
+        popupMenu.add(new MapPoolEditHTMLAction(map, GeopublisherGUI.getInstance().getJFrame()));
         /** Delete HTML info files... */
         popupMenu.add(new MapPoolDeleteAllHTMLAction(
                 getComponent(), map));
@@ -116,6 +119,15 @@ public class DesignHTMLInfoPane implements HTMLInfoPaneInterface {
         
 		/** As this is a WeakHashMapSet, we don't have to remove it... **/
 		ace.getMapPool().addChangeListener(listenForMapChanges);
+	}
+
+	public void reload() {
+		showDocument(url);
+	}
+	
+	public void reload(URL url) {
+		this.url = url;
+		showDocument(url);
 	}
 
 }

@@ -60,11 +60,9 @@ public class DpEntryLinkJPanel extends JPanel {
 			Box box = Box.createVerticalBox();
 			final List<String> languages = dpe.getAtlasConfig().getLanguages();
 
-			for (int i = 0; i < languages.size(); i++) {
+			for (String lang : languages) {
 				final JTextField linkToMeTextfield;
-				linkToMeTextfield = new JTextField("<a href=\"pdf://"
-						+ dpe.getId() + "\">"
-						+ dpe.getTitle().get(languages.get(i)) + "</a>");
+				linkToMeTextfield = new JTextField(dpe.getInternalLink());
 				linkToMeTextfield.setEditable(false);
 				JPanel oneLine = new JPanel(new BorderLayout());
 				oneLine.add(linkToMeTextfield, BorderLayout.CENTER);

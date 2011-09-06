@@ -1,12 +1,10 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import static org.junit.Assert.assertEquals;
 
 import java.awt.Color;
 import java.io.IOException;
 
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geotools.styling.ColorMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,4 +49,5 @@ public class RasterRulesList_DistinctValuesTest extends RasterRulesListColormapT
 		assertEquals("B",rld.get(2.).toString());
 		assertEquals("C",rld.get(3.).toString());
 	}
+	
 }

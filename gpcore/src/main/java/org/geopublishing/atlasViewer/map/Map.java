@@ -27,6 +27,7 @@ import org.geopublishing.atlasViewer.dp.DpRef;
 import org.geopublishing.atlasViewer.dp.layer.DpLayer;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.swing.JNLPSwingUtil;
 import org.geopublishing.geopublisher.GpUtil;
@@ -628,7 +629,8 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 
 			final List<String> languages = ac.getLanguages();
 
-			final double qmTitle = I18NUtil.qmTranslation(languages, getTitle());
+			final double qmTitle = I18NUtil
+					.qmTranslation(languages, getTitle());
 			final double qmDesc = I18NUtil.qmTranslation(languages, getDesc());
 
 			// final double qmKeywords = I18NUtil.qmTranslation(languages,
@@ -1147,4 +1149,37 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		}
 		return cacheUsedCrs;
 	}
+
+	/**
+	 * Liefert einen HTML a-Link in the requested langauge der innerhalb von
+	 * Atlas-HTML-Dokuemnten verwendet werden kann um auf ein DPE zu verlinken.
+	 */
+	public String getInternalLink(String lang) {
+		return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase()
+				+ "://" + getId() + "\">" + getTitle().get(lang) + "</a>";
+	}
+
+	/**
+	 * Liefert einen HTML a-Link in the requested language der innerhalb von
+	 * Atlas-HTML-Dokuemnten verwendet werden kann um auf ein DPE zu verlinken.
+	 */
+	public String getInternalLink() {
+		return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase()
+				+ "://" + getId() + "\">" + getTitle().toString() + "</a>";
+	}
+
+	/**
+	 * Returns <code>true</code> is any of the HTML documents for this map
+	 * contain a reference to the given {@link DpMedia}.
+	 */
+	public boolean referencesInHtml(DpMedia dpe) {
+		for (String lang : getAc().getLanguages()) {
+			URL infoURL = getInfoURL(lang);
+			if (AtlasProtocol.findReferencesInHtml(infoURL, dpe)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }

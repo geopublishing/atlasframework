@@ -4,13 +4,13 @@
 	<groupId>org.geopublishing.atlasViewer</groupId>
 	<artifactId>avswinggui</artifactId>
 	<packaging>jar</packaging>
-	<version>1.8-SNAPSHOT</version>
+	<version>1.8</version>
 	<name>AtlasViewer Swing GUI</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 	<parent>
 		<groupId>org.geopublishing</groupId>
 		<artifactId>gp-parent</artifactId>
-		<version>1.8-SNAPSHOT</version>
+		<version>1.8</version>
 	</parent>
 
 	<properties>
@@ -126,7 +126,7 @@
 		<dependency>
 			<groupId>org.geopublishing.atlasStyler</groupId>
 			<artifactId>ascore</artifactId>
-			<version>1.8-SNAPSHOT</version>
+			<version>1.8</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>
@@ -134,7 +134,7 @@
 		<dependency>
 			<groupId>org.geopublishing.geopublisher</groupId>
 			<artifactId>gpcore</artifactId>
-			<version>1.8-SNAPSHOT</version>
+			<version>1.8</version>
 			<scope>compile</scope>
 			<type>jar</type>
 		</dependency>

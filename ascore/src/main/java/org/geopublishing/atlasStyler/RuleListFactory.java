@@ -10,7 +10,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorLineRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPointRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorPolygonRuleList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
@@ -215,10 +215,10 @@ public class RuleListFactory {
 		case RASTER_COLORMAP_RAMPS:
 			return new RasterRulesList_Ramps(
 					(StyledRasterInterface) styledLayer, withDefaults);
-			
-		case RASTER_RGB:
-			return new RasterRulesListRGB(
-					(StyledRasterInterface) styledLayer, withDefaults);
+
+//		case RASTER_RGB:
+//			return new RasterRulesListRGB((StyledRasterInterface) styledLayer,
+//					withDefaults);
 
 		case TEXT_LABEL:
 			return createTextRulesList(withDefaults);
@@ -395,14 +395,14 @@ public class RuleListFactory {
 		return quantitiesRuleList;
 	}
 
-	private RasterRulesListColormap importRasterRulesList(FeatureTypeStyle fts) {
+	private RasterRulesList importRasterRulesList(FeatureTypeStyle fts) {
 		if (!(styledLayer instanceof StyledRasterInterface))
 			return null;
 		StyledRasterInterface<?> styledRaster = (StyledRasterInterface<?>) styledLayer;
 
 		String metaInfoString = fts.getName();
 
-		RasterRulesListColormap rasterRulesList = null;
+		RasterRulesList rasterRulesList = null;
 
 		// Try to just look at the ColorMapType
 		final List<RasterSymbolizer> rsList = new ArrayList<RasterSymbolizer>();
@@ -434,6 +434,11 @@ public class RuleListFactory {
 			// .startsWith(RulesListType.RASTER_COLORMAP_RAMPS
 			// .toString())) {
 			// rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
+//		} else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
+//				.toString()) 
+////		TODO		|| hat kein metrMETAiNFO aber hat eien RS mit ChannelSelection 
+//				) {
+//			rasterRulesList = new RasterRulesListRGB(styledRaster, false);
 		}
 
 		if (rasterRulesList != null)

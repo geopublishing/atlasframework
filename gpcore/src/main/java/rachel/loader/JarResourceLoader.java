@@ -46,6 +46,8 @@ public class JarResourceLoader implements ResourceLoader {
 		// don't verify jar
 
 		init(file, jarFile);
+		
+		file.deleteOnExit();
 	}
 
 	public JarResourceLoader(File file) throws IOException {

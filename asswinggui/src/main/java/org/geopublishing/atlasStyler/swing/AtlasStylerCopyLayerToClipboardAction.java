@@ -14,10 +14,10 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
@@ -28,18 +28,22 @@ import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
+import de.schmitzm.swing.SwingUtil;
 
 public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 	private static final long serialVersionUID = 4726448851995462364L;
 
-	static private final Logger LOGGER = Logger.getLogger(AtlasStylerCopyLayerToClipboardAction.class);;
+	static private final Logger LOGGER = Logger
+			.getLogger(AtlasStylerCopyLayerToClipboardAction.class);;
 
 	private final StyledLayerInterface<?> styledLayer;
 
 	private final Component owner;
 
-	public AtlasStylerCopyLayerToClipboardAction(Component owner, StyledLayerInterface<?> styledLayer) {
-		super(ASUtil.R("AtlasStylerGUI.copyLayerToClipboard"), Icons.ICON_EXPORT);
+	public AtlasStylerCopyLayerToClipboardAction(Component owner,
+			StyledLayerInterface<?> styledLayer) {
+		super(ASUtil.R("AtlasStylerGUI.copyLayerToClipboard"),
+				Icons.ICON_EXPORT);
 		this.owner = owner;
 		this.styledLayer = styledLayer;
 	}
@@ -47,24 +51,44 @@ public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		File tempFile;
+		File tempFile = null;
 		try {
 			tempFile = File.createTempFile("atlasStylerClipboard", ".sld");
-		} catch (IOException e2) {
-			throw new RuntimeException(e2);
-		}
-		
-		try {
-			StylingUtil.saveStyleToSld(styledLayer.getStyle(), tempFile);
-			
-			List<Exception> es = StylingUtil.validateSld(new FileInputStream(tempFile));
+
+			Object[] options = { ASUtil.R("ExportToClipboard.Normal"),
+					ASUtil.R("ExportToClipboard.Optimized") };
+
+			// TODO create new method in AVSwingUtil like
+			// AVSwingUtil.showMessageDialog and replace this
+			SwingUtil.checkOnEDT();
+			int versionToCopy = JOptionPane
+					.showOptionDialog(
+							owner,
+							ASUtil.R("ExportToClipboard.ProductiveOrNormalVersion.msg"),
+							ASUtil.R("ExportToClipboard.ProductiveOrNormalVersion.title"),
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE, null, options,
+							options[0]);
+
+			if (versionToCopy == JOptionPane.YES_OPTION)
+				StylingUtil.saveStyleToSld(styledLayer.getStyle(), tempFile);
+			else if (versionToCopy == JOptionPane.NO_OPTION)
+				StylingUtil.saveStyleToSld(StylingUtil.optimizeStyle(
+						styledLayer.getStyle(),
+						AtlasStylerSaveAsLayerToSLDAction
+								.getOptimizedTitle(styledLayer)), tempFile);
+
+			List<Exception> es = StylingUtil.validateSld(new FileInputStream(
+					tempFile));
 			if (es.size() > 0) {
 				ExceptionDialog.show(
 						owner,
-						new IllegalStateException(ASUtil.R("AtlasStylerExport.WarningSLDNotValid",
-								IOUtil.escapePath(styledLayer.getSldFile())), es.get(0)));
+						new IllegalStateException(ASUtil.R(
+								"AtlasStylerExport.WarningSLDNotValid",
+								IOUtil.escapePath(styledLayer.getSldFile())),
+								es.get(0)));
 			}
-			
+
 			LangUtil.copyToClipboard(IOUtil.readFileAsString(tempFile));
 
 		} catch (Exception e1) {
@@ -72,7 +96,8 @@ public class AtlasStylerCopyLayerToClipboardAction extends AbstractAction {
 			ExceptionDialog.show(owner, e1);
 			return;
 		} finally {
-			tempFile.delete();
+			if (tempFile != null)
+				tempFile.delete();
 		}
 	}
 }

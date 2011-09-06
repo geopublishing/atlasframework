@@ -22,6 +22,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geotools.data.ows.Layer;
 import org.geotools.map.MapLayer;
@@ -534,4 +535,19 @@ public abstract class DpLayer<E, CHART_STYLE_IMPL extends ChartStyle> extends
 	public void setSldFile(File sldFile) {
 		throw new NotImplementedException();
 	}
+	
+	@Override
+	public String getInternalLink(String lang) {
+		return "<a href=\""+AtlasProtocol.LAYER.toString().toLowerCase()+"://"
+		+ getId() + "\">" + getTitle().get(lang)
+		+ "</a>";
+	}
+	
+	@Override
+	public String getInternalLink() {
+		return "<a href=\""+AtlasProtocol.LAYER.toString().toLowerCase()+"://"
+		+ getId() + "\">" + getTitle().toString()
+		+ "</a>";
+	}
+
 }

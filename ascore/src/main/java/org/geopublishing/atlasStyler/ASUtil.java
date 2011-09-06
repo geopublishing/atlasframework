@@ -65,7 +65,6 @@ import org.geotools.styling.Mark;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Rule;
-import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Stroke;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
@@ -134,8 +133,6 @@ public class ASUtil {
 			ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP");
 
 	public static final StyleBuilder SB = StylingUtil.STYLE_BUILDER;
-
-	public final static SLDTransformer sldTransformer = new SLDTransformer();
 
 	public static final String PRODUCTION_FILENAME_PART = "production";
 

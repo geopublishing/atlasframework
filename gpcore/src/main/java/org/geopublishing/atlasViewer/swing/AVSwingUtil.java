@@ -240,20 +240,6 @@ public class AVSwingUtil extends GpCoreUtil {
 		final File localTempFile = File.createTempFile(ATLAS_TEMP_FILE_BASE_ID
 				+ IOUtil.cleanFilename(title), postFix);
 
-		// new AtlasExportTask(owner, AVUtil.R("dialog.title.wait")) {
-		//
-		// @Override
-		// protected Boolean doInBackground() throws Exception {
-		// FileUtils.copyURLToFile(url, localTempFile);
-		// localTempFile.deleteOnExit();
-		// String msg = "downloaded to " + localTempFile;
-		// LOGGER.debug(msg);
-		// log.debug(msg);
-		// return true;
-		// }
-		//
-		// }.run();
-
 		new AtlasSwingWorker<Void>(owner) {
 
 			@Override

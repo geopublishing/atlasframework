@@ -49,15 +49,6 @@ import de.schmitzm.i18n.Translation;
 
 public class TextRuleList extends AbstractRulesList {
 
-	/** A Filter to mark a {@link TextSymbolizer} class as disabled **/
-	public final static PropertyIsEqualTo classDisabledFilter = ff.equals(
-			ff.literal("LABEL_CLASS_DISABLED"), ff.literal("YES"));
-
-	/** A Filter to mark a {@link TextSymbolizer} class as enabled **/
-	public final static PropertyIsEqualTo classEnabledFilter = ff.equals(
-			ff.literal("LABEL_CLASS_ENABLED"),
-			ff.literal("LABEL_CLASS_ENABLED"));
-
 	/** All default text rule names start with this **/
 	public static final String DEFAULT_CLASS_RULENAME = "DEFAULT";
 
@@ -71,8 +62,7 @@ public class TextRuleList extends AbstractRulesList {
 	 * not used anymore and only for backward compatibility. Will be removed in
 	 * 2.0
 	 **/
-	public static final PropertyIsEqualTo oldClassesDisabledFilter = ff.equals(
-			ff.literal("1"), ff.literal("2"));
+	public static final PropertyIsEqualTo oldClassesDisabledFilter = RulesListInterface.oldAllClassesDisabledFilter;
 
 	/**
 	 * A Filter to mark that not ALL classes have been disabled by the
@@ -80,8 +70,7 @@ public class TextRuleList extends AbstractRulesList {
 	 * not used anymore and only for backward compatibility. Will be removed in
 	 * 2.0
 	 **/
-	public static final PropertyIsEqualTo oldClassesEnabledFilter = ff.equals(
-			ff.literal("1"), ff.literal("1"));
+	public static final PropertyIsEqualTo oldClassesEnabledFilter = RulesListInterface.OldAllClassesEnabledFilter;
 
 	/**
 	 * A piece of {@link Filter} that is only true, if the rendering language is
@@ -207,9 +196,9 @@ public class TextRuleList extends AbstractRulesList {
 
 		// Is this class enabled?
 		if (isClassEnabled(idx)) {
-			filter = ff.and(classEnabledFilter, filter);
+			filter = ff.and(StylingUtil.LABEL_CLASS_ENABLED_FILTER, filter);
 		} else {
-			filter = ff.and(classDisabledFilter, filter);
+			filter = ff.and(StylingUtil.LABEL_CLASS_DISABLED_FILTER, filter);
 		}
 
 		return filter;
@@ -791,15 +780,21 @@ public class TextRuleList extends AbstractRulesList {
 		 */
 		try {
 
-			if (filter.equals(oldClassesEnabledFilter)) {
+			if (filter.equals(Filter.EXCLUDE)) {
+				setClassEnabled(idx, false);
+			} else if (filter.equals(Filter.INCLUDE)) {
+				setClassEnabled(idx, true);
+			} else if (filter.equals(oldClassesEnabledFilter)) {
 				setClassEnabled(idx, true);
 			} else if (filter.equals(oldClassesDisabledFilter)) {
 				setClassEnabled(idx, false);
 			} else {
 				List<?> andChildren = ((AndImpl) filter).getChildren();
-				if (andChildren.get(0).equals(classDisabledFilter)) {
+				if (andChildren.get(0).equals(
+						StylingUtil.LABEL_CLASS_DISABLED_FILTER)) {
 					setClassEnabled(idx, false);
-				} else if (andChildren.get(0).equals(classEnabledFilter)) {
+				} else if (andChildren.get(0).equals(
+						StylingUtil.LABEL_CLASS_ENABLED_FILTER)) {
 					setClassEnabled(idx, true);
 				} else {
 					throw new RuntimeException(andChildren.get(0).toString()

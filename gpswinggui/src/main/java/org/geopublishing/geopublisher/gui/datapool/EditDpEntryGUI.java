@@ -24,7 +24,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
-import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
+import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
 import de.schmitzm.i18n.Translation;
@@ -81,8 +81,8 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 					null, new DpEntryUsageJPanel(dpe), null,
 					tabbedPane.getTabCount());
 
-			/** A tab with general settings **/
-			if (dpe instanceof DpMediaPDF) {
+			/** A tab with hints how to link to this DPE from HTML **/
+			if (dpe instanceof DpMedia) {
 				tabbedPane.insertTab(
 						GeopublisherGUI.R("EditDpEntryGUI.link.tab"), // i8n
 						null, new DpEntryLinkJPanel(dpe), null,

@@ -16,6 +16,7 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntryType;
+import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 
 import de.schmitzm.jfree.chart.style.ChartStyle;
@@ -46,5 +47,19 @@ public class DpMediaPDF extends DpMedia<ChartStyle> {
 	@Override
 	public void exportWithGUI(Component owner) throws IOException {
 		LOGGER.info("not implemented"); // TODO
+	}
+
+	@Override
+	public String getInternalLink(String lang) {
+		return "<a href=\""+AtlasProtocol.PDF.toString().toLowerCase()+"://"
+		+ getId() + "\">" + getTitle().get(lang)
+		+ "</a>";
+	}
+	
+	@Override
+	public String getInternalLink() {
+		return "<a href=\""+AtlasProtocol.PDF.toString().toLowerCase()+"://"
+		+ getId() + "\">" + getTitle().toString()
+		+ "</a>";
 	}
 }

@@ -70,7 +70,6 @@ public class RasterClassification extends Classification {
 
 		DoubleArrayList valuesAL;
 		valuesAL = getStatistics().elements();
-		// new double[] {0.4,3,4,2,5.,22.,4.,2.,33.,12.}
 		double[] elements = Arrays.copyOf(valuesAL.elements(), getStatistics()
 				.size());
 		hds.addSeries(1, elements, histogramBins);
@@ -155,7 +154,6 @@ public class RasterClassification extends Classification {
 			GridCoverage2D coverage = getStyledRaster().getGeoObject().read(
 					null);
 
-//			stats = new DynamicBin1D();
 			stats = new DynamicBin1D();
 			
 			noDataValuesCount.set(0);
@@ -205,46 +203,10 @@ public class RasterClassification extends Classification {
 				stats.addAllOf(doubleArrayList);
 				
 				
-				LOGGER.info("Added "+doubleArrayList.size()+" to statistics");
-				LOGGER.info(stats.size()+" in stats");
+//				LOGGER.debug("Added "+doubleArrayList.size()+" to statistics");
+//				LOGGER.debug(stats.size()+" in stats");
 				doubleArrayList.clear();
 			}
-
-			// Forget about the count of NODATA values
-
-			// System.out.println(stat.mean());
-			// System.out.println(stat.quantile(0.5));
-			// System.out.println(stat.min());
-			// System.out.println(stat.max());
-
-			// GridCoverage2D coverage = styledRaster.getGeoObject().read(null);
-			// final OperationJAI op = new OperationJAI("Histogram");
-			// ParameterValueGroup params = op.getParameters();
-			// params.parameter("Source").setValue(coverage);
-			//
-			// coverage = (GridCoverage2D) op.doOperation(params, null);
-			// final Histogram hist = (Histogram) coverage
-			// .getProperty("histogram");
-			// stats = hist;
-			//
-			// // Search for the bin with the NODATA value (if NODATA != null)
-			// if (styledRaster.getNodataValue() != null) {
-			//
-			// double low = getStatistics().getLowValue(band);
-			// double high = getStatistics().getHighValue(band);
-			//
-			// int countBins = -1;
-			//
-			// // Das ist bestimmt noch falsch!
-			// for (double d = low; d < high; d += 1.) {
-			// countBins++;
-			// if (d == styledRaster.getNodataValue()) {
-			// noDataValuesCount = getStatistics().getBinSize(band,
-			// (int) d);
-			// }
-			// continue;
-			// }
-			// }
 
 		}
 		return stats;

@@ -68,13 +68,13 @@ import org.geotools.factory.Hints;
 import org.geotools.map.event.MapLayerListEvent;
 import org.geotools.map.event.MapLayerListListener;
 import org.geotools.styling.NamedLayer;
-import org.geotools.styling.SLDTransformer;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyledLayerDescriptor;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import de.schmitzm.geotools.MapContextManagerInterface;
 import de.schmitzm.geotools.map.event.MapLayerListAdapter;
+import de.schmitzm.geotools.org.geotools.styling.SLDTransformer;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledFeatureSourceInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
@@ -337,7 +337,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		return jContentPane;
 	}
 
-	StylerMapView getStylerMapView() {
+	public StylerMapView getStylerMapView() {
 		if (stylerMapView == null) {
 			stylerMapView = new StylerMapView(this);
 			stylerMapView.getMapManager().addMapLayerListListener(
@@ -445,7 +445,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	public JToggleButton getJTButtonShowXML() {
 		final JToggleButton jButtonShowXML = new JToggleButton(
-				AtlasStylerVector.R("AtlasStylerGUI.toolbarButton.show_xml"));
+				ASUtil.R("AtlasStylerGUI.toolbarButton.show_xml"));
 		jButtonShowXML.setSelected(false);
 
 		jButtonShowXML.addActionListener(new AbstractAction() {
