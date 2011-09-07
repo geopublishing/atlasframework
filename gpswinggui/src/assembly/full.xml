@@ -16,6 +16,14 @@
 			<includes>
 				<include>README_standalone.txt</include>
 				<include>start_Geopublisher.bat</include>
+			</includes>
+		</fileSet>
+
+		<fileSet>
+			<filtered>false</filtered>
+			<directory>src/assembly/resources/</directory>
+			<outputDirectory>/Geopublisher-${project.version}</outputDirectory>
+			<includes>
 				<include>msvcr71.dll</include>
 			</includes>
 		</fileSet>
