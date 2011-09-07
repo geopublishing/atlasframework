@@ -16,9 +16,18 @@
 			<includes>
 				<include>README_standalone.txt</include>
 				<include>start_AtlasStyler.bat</include>
-				<!--			<include>msvcr71.dll</include>-->
 			</includes>
 		</fileSet>
+
+		<fileSet>
+			<filtered>false</filtered>
+			<directory>src/assembly/resources/</directory>
+			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
+			<includes>
+				<include>msvcr71.dll</include>
+			</includes>
+		</fileSet>
+
 
 		<fileSet>
 			<!-- Make the linux start_AtlasStyler.sh executable -->
@@ -32,7 +41,6 @@
 			<fileMode>0755</fileMode>
 		</fileSet>
 
-		<!--
 		<fileSet>
 			<filtered>false</filtered>
 			<directory>target</directory>
@@ -41,7 +49,6 @@
 			</includes>
 			<outputDirectory>/AtlasStyler-${project.version}</outputDirectory>
 		</fileSet>
-		-->
 
 	</fileSets>
 
