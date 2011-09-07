@@ -102,6 +102,8 @@ import de.schmitzm.versionnumber.ReleaseUtil.License;
 public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 	static {
+		AsSwingUtil.initAsLogging();
+
 		// Vom Benutzer hinzugefügte Übersetzungen aktivieren
 		ResourceProvider.setAutoResetResourceBundle(true, "Translation", true);
 	}
@@ -126,12 +128,6 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 	public AtlasStylerGUI() {
 		LOGGER.info("Starting " + AtlasStylerGUI.class.getSimpleName() + "... "
 				+ ReleaseUtil.getVersionInfo(GpCoreUtil.class));
-		//
-		// // Setting up the logger from a XML configuration file. This is also
-		// // done in ASProps, as it is eventually called earlier.
-		// DOMConfigurator.configure(AsSwingUtil.class.getResource("/as_log4j.xml"));
-
-		AsSwingUtil.initAsLogging();
 
 		// Output information about the LGPL license
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
