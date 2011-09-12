@@ -112,7 +112,8 @@ public abstract class Classification {
 
 	public void dispose() {
 		listeners.clear();
-		stats.clear();
+		if (stats != null)
+			stats.clear();
 	}
 
 	/**
