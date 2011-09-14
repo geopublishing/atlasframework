@@ -42,6 +42,9 @@ public class RasterRulesList_RGB_GUI extends
 	private JLabel globalJLabel;
 	private JLabel perChannelJLabel;
 
+	/**
+	 * Paints nice labels for the values of a {@link JComboBox} that shows different types of {@link ContrastMethod}s
+	 */
 	DefaultListCellRenderer contrastListCellRenderer = new DefaultListCellRenderer() {
 
 		@Override

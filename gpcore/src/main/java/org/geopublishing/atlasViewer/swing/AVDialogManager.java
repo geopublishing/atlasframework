@@ -26,7 +26,6 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geotools.map.MapLayer;
-import org.geotools.styling.Style;
 
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
@@ -216,11 +215,9 @@ public class AVDialogManager {
 											@Override
 											public void changed(
 													StyleChangedEvent e) {
-												final Style style = atlasStylerFinal
-														.getStyle();
-												styledLayer.setStyle(style);
+												styledLayer.setStyle(e.getStyle());
 												mapLayerLegend
-														.updateStyle(style);
+														.updateStyle(e.getStyle());
 											}
 
 										});

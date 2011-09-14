@@ -17,12 +17,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -33,7 +39,9 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geotools.data.FeatureSource;
+import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Style;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -42,10 +50,14 @@ import de.schmitzm.geotools.gui.XMapPane;
 import de.schmitzm.geotools.gui.XMapPaneEvent;
 import de.schmitzm.geotools.map.event.JMapPaneListener;
 import de.schmitzm.geotools.map.event.ScaleChangedEvent;
+import de.schmitzm.geotools.org.geotools.styling.visitor.DuplicatingStyleVisitor;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
+import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
@@ -97,11 +109,6 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	private final XMapPane previewMapPane;
 
-	// /**
-	// * If <code>true</code> the GUI hides the more compilcated parts.
-	// */
-	// private boolean easy;
-
 	/**
 	 * Creates an AtlasStyler {@link JDialog} which allows to create a
 	 * SymbologyEncoding(SE) and StyledLayerDescriptor(SLD) for a
@@ -142,7 +149,7 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 		Double newDenominator = sce.getNewScaleDenominator();
 
-//		LOGGER.info("new scale in preview XMapPane  = " + newDenominator);
+		// LOGGER.info("new scale in preview XMapPane  = " + newDenominator);
 		for (PropertyChangeListener l : scaleChangeListeners) {
 			l.propertyChange(new PropertyChangeEvent(sce,
 					"scale change in preview", null, newDenominator));
@@ -295,13 +302,104 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 	@Override
 	public boolean okClose() {
+
+		// Check if any SVGs with file:// are used. If so, copy them to the .sld
+		// locations and change the references.
+		boolean changed = false; // = copyLocalExternalGraphicSvgToRelativePath();
+
 		// If not automatic update is enabled, we have to fire our
 		// changes now!
-		if (!atlasStyler.isAutomaticPreview()) {
+		if (!changed && !atlasStyler.isAutomaticPreview()) {
 			atlasStyler.fireStyleChangedEvents(true);
 		}
 
 		return super.okClose();
+	}
+
+	/**
+	 * Check if any SVGs with file:// are used. If so, copy them to the .sld
+	 * locations and change the references.<br/>
+	 * 
+	 * @return <code>true</code> if the Style has been changed and an Event with
+	 *         the new Style has been fired.
+	 */
+	private boolean copyLocalExternalGraphicSvgToRelativePath() {
+
+		final AtomicBoolean potentialChange = new AtomicBoolean();
+
+		DuplicatingStyleVisitor visitor = new DuplicatingStyleVisitor() {
+			@Override
+			public void visit(ExternalGraphic exgr) {
+				URL uri = null;
+				try {
+					uri = exgr.getLocation();
+				} catch (MalformedURLException huh) {
+				}
+				
+
+				String format = exgr.getFormat();
+
+				if (uri.getProtocol().equals("file")) {
+					String path = uri.getPath();
+
+					if (path.startsWith("/") || path.startsWith("\\")) {
+						try {
+							File newFile = IOUtil.copyUrl(uri, atlasStyler
+									.getStyledInterface().getSldFile()
+									.getParentFile(), true);
+
+							uri = new URL("file",null,newFile.getName());
+							potentialChange.set(true);
+						} catch (Exception e) {
+							ExceptionDialog
+									.show(StylerDialog.this,
+											new RuntimeException(
+													"Could not convert external graphic '"
+															+ path
+															+ "' to a local reference.",
+													e));
+						}
+					}
+
+				}
+
+				ExternalGraphic copy = sf.createExternalGraphic(uri, format);
+				copy.setCustomProperties(copy(exgr.getCustomProperties()));
+
+				if (STRICT && !copy.equals(exgr)) {
+					throw new IllegalStateException(
+							"Was unable to duplicate provided ExternalGraphic:"
+									+ exgr);
+				}
+				pages.push(copy);
+			}
+		};
+
+		Style styleOriginal = atlasStyler.getStyle();
+		visitor.visit(styleOriginal);
+		final Style styleFixed = (Style) visitor.getCopy();
+
+		if (potentialChange.get()
+				&& StylingUtil.isStyleDifferent(styleFixed, styleOriginal)) {
+
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					atlasStyler.fireStyleChangedEvents(new StyleChangedEvent(
+							styleFixed));
+				}
+			});
+
+			String msg = ASUtil.R("Styler.SVGReferencesChangedToLocal");
+			JOptionPane.showMessageDialog(
+					SwingUtil.getParentWindowComponent(StylerDialog.this), msg);
+
+			return true;
+		}
+
+		return false;
+
 	}
 
 	/**

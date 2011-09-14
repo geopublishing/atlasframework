@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.geopublishing.geopublisher;
 
+import java.awt.Component;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -37,6 +39,11 @@ import de.schmitzm.swing.formatter.MbDecimalFormatter;
 import de.schmitzm.versionnumber.ReleaseUtil;
 
 public class GpUtil {
+	
+	static {
+		// https://issues.apache.org/bugzilla/show_bug.cgi?id=27970
+		System.setProperty("org.apache.batik.warn_destination", "false");
+	}
 
 	private static final Logger LOGGER = Logger.getLogger(GpUtil.class);
 
@@ -198,5 +205,44 @@ public class GpUtil {
 		}
 
 	}
+	
+
+	/**
+	 * Performs a file OPEN choose as a fallback
+	 * 
+	 * @param parent
+	 *            component for the dialog (can be {@code null})
+	 * @param startFolder
+	 *            start folder for the chooser (if {@code null} "/" is used)
+	 * @param filter
+	 *            defines which files can be selected. Only the last filter in the list will be offered due to
+	 *            limitations
+	 * @return {@code null} if the dialog was not approved
+	 */
+	public static File chooseFileOpenFallback(Component parent, File startFolder, String title,
+			FileExtensionFilter... filters) {
+		if (startFolder == null)
+			startFolder = new File("/");
+		
+		if (startFolder.isFile())
+			startFolder = startFolder.getParentFile();
+
+		JFileChooser chooser = new JFileChooser(startFolder);
+		chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+		if (filters != null) {
+			chooser.setAcceptAllFileFilterUsed(false);
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setFileFilter(filters[0].toJFileChooserFilter());
+		}
+		if (title != null)
+			chooser.setDialogTitle(title);
+
+		int ret = chooser.showOpenDialog(parent);
+		if (ret == JFileChooser.APPROVE_OPTION)
+			return chooser.getSelectedFile();
+		return null;
+	}
+
 
 }

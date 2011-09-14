@@ -838,7 +838,7 @@ public class GpSwingUtil extends GpUtil {
 	 * Copies a file to a relative path.
 	 * 
 	 * @param parent
-	 *            parent component for info dialogs (if {@code} no dialogs will
+	 *            parent component for info dialogs (if <code>null</code> no dialogs will
 	 *            be shown!)
 	 * @param source
 	 *            source file

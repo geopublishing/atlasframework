@@ -11,12 +11,10 @@ import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
 import org.geotools.styling.Symbolizer;
 
-import de.schmitzm.geotools.data.rld.RasterLegendData;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
-import de.schmitzm.geotools.styling.StyledLayerUtil;
 
 public class AtlasStylerRaster extends AtlasStyler {
 
@@ -77,11 +75,6 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public void cancel() {
 		super.cancel();
 
-//		// Apply the RasterLegendData if it is a raster
-//		if (this != null) {
-//			backupRasterLegend.copyTo(getStyledRaster().getLegendMetaData());
-//		}
-
 		for (final StyleChangeListener l : listeners) {
 			// LOGGER.debug("fires a StyleChangedEvent... ");
 			l.changed(new StyleChangedEvent(backupStyle));
@@ -93,18 +86,18 @@ public class AtlasStylerRaster extends AtlasStyler {
 	public AbstractRulesList copyRulesList(RulesListInterface rl) {
 		return null;
 	}
-
-	@Override
-	StyleChangedEvent getStyleChangeEvent() {
-		RasterLegendData rlm = new RasterLegendData(false);
-		try {
-			rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false, null);
-		} catch (Exception e) {
-			// Happens if there are no classes, and hence no entries in the
-			// colormap.
-		}
-		return new RasterStyleChangedEvent(getStyle());
-	}
+//
+//	@Override
+//	StyleChangedEvent getStyleChangeEvent() {
+////		RasterLegendData rlm = new RasterLegendData(false);
+////		try {
+////			rlm = StyledLayerUtil.generateRasterLegendData(getStyle(), false, null);
+////		} catch (Exception e) {
+////			// Happens if there are no classes, and hence no entries in the
+////			// colormap.
+////		}
+//		return new RasterStyleChangedEvent(getStyle());
+//	}
 
 	@Override
 	public StyledLayerInterface<?> getStyledInterface() {

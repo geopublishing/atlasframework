@@ -131,11 +131,6 @@ public class AtlasStylerDialog extends StylerDialog {
 				@Override
 				public void changed(StyleChangedEvent e) {
 
-//					if (e instanceof RasterStyleChangedEvent) {
-//						((RasterStyleChangedEvent) e).getLegendMetadata()
-//								.copyTo(dpLayerRaster.getLegendMetaData());
-//					}
-
 					Style style = e.getStyle();
 					if (layerStyle == null) {
 						// The edited Style was a default Style

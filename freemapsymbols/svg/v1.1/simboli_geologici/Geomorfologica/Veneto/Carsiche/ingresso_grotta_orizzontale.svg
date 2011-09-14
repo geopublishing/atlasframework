@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg3460"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto/Fluviali, fluvioglaciali, dilavamento"
+   sodipodi:docname="ingresso_grotta_orizzontale.svg">
+  <defs
+     id="defs3462" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="312"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata3465">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path132"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:2.49998403;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 357.35636,546.54334 L 357.35636,546.53084 L 357.35636,546.46834 L 357.35636,546.36834 L 357.35636,546.23084 L 357.35636,546.04335 L 357.35636,545.83084 L 357.36886,545.59335 L 357.38136,545.30585 L 357.38136,545.00585 L 357.40636,544.65586 L 357.41886,544.29336 L 357.44386,543.89335 L 357.46886,543.46836 L 357.50636,543.01837 L 357.59386,542.05587 L 357.69386,541.00587 L 357.83136,539.88088 L 358.00636,538.68089 L 358.20636,537.4434 L 358.45636,536.15591 L 358.74385,534.84341 L 359.06886,533.50592 L 359.44385,532.15594 L 359.88135,530.81844 L 360.36884,529.48095 L 360.90634,528.16846 L 361.51884,526.88096 L 362.19384,525.64348 L 362.93132,524.44348 L 363.33133,523.88098 L 363.74382,523.31849 L 364.18132,522.781 L 364.63132,522.26849 L 365.10631,521.781 L 365.59381,521.306 L 366.10631,520.856 L 366.6438,520.43101 L 367.2063,520.03101 L 367.78129,519.66851 L 368.38129,519.31852 L 369.00629,519.00601 L 369.65628,518.73102 L 370.31878,518.48102 L 371.01877,518.26852 L 371.73127,518.09352 L 372.46877,517.95602 L 373.24376,517.85602 L 374.03125,517.79353 L 374.85625,517.76853 C 392.58114,517.76853 392.64364,546.14334 392.64364,546.14334 L 360.60634,546.95584" />
+  </g>
+</svg>
