@@ -28,7 +28,7 @@ import javax.swing.DefaultComboBoxModel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
-import org.geotools.data.DefaultQuery;
+import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.jfree.chart.JFreeChart;
@@ -292,7 +292,7 @@ public class FeatureClassification extends Classification {
 			// .getFeatureCollectionFiltered();
 
 			Filter filter = getStyledFeatures().getFilter();
-			DefaultQuery query = new DefaultQuery(getStyledFeatures()
+			Query query = new Query(getStyledFeatures()
 					.getSchema().getTypeName(), filter);
 			List<String> propNames = new ArrayList<String>();
 			propNames.add(value_field_name);

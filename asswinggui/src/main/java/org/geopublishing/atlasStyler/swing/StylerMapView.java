@@ -164,6 +164,12 @@ public class StylerMapView extends MapView {
 					getSplitPane().setDividerLocation(0.5);
 				}
 
+				@Override
+				public void layerPreDispose(MapLayerListEvent event) {
+					// TODO Auto-generated method stub
+					
+				}
+
 			});
 		}
 

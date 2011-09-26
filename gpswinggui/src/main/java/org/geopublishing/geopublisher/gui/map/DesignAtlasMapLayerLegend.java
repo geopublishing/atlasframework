@@ -47,9 +47,9 @@ import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.geopublishing.geopublisher.swing.GpSwingUtil;
 import org.geotools.data.FeatureSource;
 import org.geotools.feature.FeatureCollection;
+import org.geotools.map.FeatureLayer;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
-import org.geotools.swing.utils.MapLayerUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -96,7 +96,7 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 					+ dpLayer.getBrokenException().getLocalizedMessage();
 		}
 
-		if (!hasVisibleAttributes() && MapLayerUtils.isGridLayer(getMapLayer())) {
+		if (!hasVisibleAttributes() && (getLayer() instanceof FeatureLayer)) {
 			newtt += "<b>&lowast;</b> <b>"
 					+ GeopublisherGUI
 							.R("DesignAtlasMapLayer.TT.layerHasNoVisibleAttribute")

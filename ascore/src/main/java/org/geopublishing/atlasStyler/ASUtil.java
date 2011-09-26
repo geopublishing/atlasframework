@@ -56,7 +56,6 @@ import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geotools.brewer.color.BrewerPalette;
 import org.geotools.brewer.color.ColorBrewer;
 import org.geotools.brewer.color.PaletteType;
-import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
@@ -442,24 +441,23 @@ public class ASUtil {
 			}
 		}
 
-		if (graphic.getMarks() != null) {
-
-			for (final Mark m : graphic.getMarks()) {
-				final Expression mSize = m.getSize();
-				if (mSize != null && mSize != Expression.NIL) {
-					try {
-						final Float mSizeFloat = Float
-								.valueOf(mSize.toString());
-						if (mSizeFloat > maxSize) {
-							maxSize = mSizeFloat;
-						}
-					} catch (final Exception e) {
-						LOGGER.error(e);
-					}
-				}
-
-			}
-		}
+//		if (graphic.getMarks() != null) {
+			// TODO Stefan Tzeggai 12.9.11 GT8 Migration
+//			for (final Mark m : graphic.getMarks()) {
+//				final Expression mSize = m.getSize();
+//				if (mSize != null && mSize != Expression.NIL) {
+//					try {
+//						final Float mSizeFloat = Float
+//								.valueOf(mSize.toString());
+//						if (mSizeFloat > maxSize) {
+//							maxSize = mSizeFloat;
+//						}
+//					} catch (final Exception e) {
+//						LOGGER.error(e);
+//					}
+//				}
+//			}
+//		}
 
 		// TODO external graphics sizes
 		return maxSize;
@@ -814,7 +812,7 @@ public class ASUtil {
 			final Dimension size, final SimpleFeatureType featureType) {
 		// TODO Caching?
 
-		final Rule rule = CommonFactoryFinder.getStyleFactory(null)
+		final Rule rule = StylingUtil.STYLE_FACTORY
 				.createRule();
 
 		rule.setSymbolizers(new Symbolizer[] { symb });
@@ -981,20 +979,20 @@ public class ASUtil {
 			graphic.setSize(ASUtil.ff2.literal(newSize));
 		}
 
-		else if (graphic.getMarks() != null) {
-
-			for (final Mark m : graphic.getMarks()) {
-				final Expression mSize = m.getSize();
-				if (mSize != null && mSize != Expression.NIL) {
-					final Float newSize = Float.valueOf(mSize.toString())
-							* factor;
-					// System.out.println("Changed a Mark's size from to "
-					// + Double.valueOf(m.getSize().toString()) + " to "
-					// + newSize);
-					m.setSize(ASUtil.ff2.literal(newSize));
-				}
-			}
-		}
+//		else if (graphic.getMarks() != null) {
+//			// TODO Stefan Tzeggai 12.9.11 GT8 Migration
+//			for (final Mark m : graphic.getMarks()) {
+//				final Expression mSize = m.getSize();
+//				if (mSize != null && mSize != Expression.NIL) {
+//					final Float newSize = Float.valueOf(mSize.toString())
+//							* factor;
+//					// System.out.println("Changed a Mark's size from to "
+//					// + Double.valueOf(m.getSize().toString()) + " to "
+//					// + newSize);
+//					m.setSize(ASUtil.ff2.literal(newSize));
+//				}
+//			}
+//		}
 	}
 
 	/**

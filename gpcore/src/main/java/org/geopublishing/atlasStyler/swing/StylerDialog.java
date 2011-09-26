@@ -43,6 +43,7 @@ import org.geopublishing.atlasStyler.StyleChangedEvent;
 import org.geotools.data.FeatureSource;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Style;
+import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -50,7 +51,6 @@ import de.schmitzm.geotools.gui.XMapPane;
 import de.schmitzm.geotools.gui.XMapPaneEvent;
 import de.schmitzm.geotools.map.event.JMapPaneListener;
 import de.schmitzm.geotools.map.event.ScaleChangedEvent;
-import de.schmitzm.geotools.org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.io.IOUtil;

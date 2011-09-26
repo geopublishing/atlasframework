@@ -502,6 +502,12 @@ public class MapLegend extends JXTaskPaneContainer implements
 						recreateLayerList();
 					}
 				}
+
+				@Override
+				public void layerPreDispose(MapLayerListEvent event) {
+					// TODO Auto-generated method stub
+					
+				}
 			});
 
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));

@@ -14,6 +14,7 @@ import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.SelectedChannelType;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleBuilder;
+import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,7 +22,6 @@ import org.opengis.style.ContrastMethod;
 import org.xml.sax.SAXException;
 
 import de.schmitzm.geotools.FilterUtil;
-import de.schmitzm.geotools.org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil;

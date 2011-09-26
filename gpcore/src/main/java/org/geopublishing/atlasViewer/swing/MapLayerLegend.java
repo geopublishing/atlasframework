@@ -61,6 +61,7 @@ import org.geopublishing.atlasViewer.swing.plaf.WindowsMapLayerLegendPaneUI;
 import org.geotools.data.Query;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.jdbc.JDBCFeatureSource;
+import org.geotools.map.Layer;
 import org.geotools.map.MapContext;
 import org.geotools.map.MapLayer;
 import org.geotools.styling.Style;
@@ -74,14 +75,12 @@ import org.opengis.filter.Filter;
 
 import de.schmitzm.geotools.MapContextManagerInterface;
 import de.schmitzm.geotools.feature.FeatureOperationTreeFilter;
-import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.gui.AtlasFeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.FeatureLayerFilterDialog;
 import de.schmitzm.geotools.gui.GeoMapPane;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
-import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.SwingUtil;
 
@@ -703,25 +702,29 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 * @return Does the {@link JMenuItem} to open the AtlasStyler appear?
 	 */
 	public boolean isStyleEditable() {
-		final boolean rasterStylable = styledLayer instanceof StyledRasterInterface
-				&& StyledLayerUtil
-						.isStyleable((StyledRasterInterface<?>) styledLayer);
-		/**
-		 * getMapLayer().getFeatureSource()
-		 * .getClass().getSimpleName().contains("WFSFeatureStore"))
-		 * 
-		 * We are doing a string comparison here, because 1. we don't want a
-		 * dependency to gt-wfs only for one instance of, and 2. because the
-		 * FeatureUtil.getLayerSourceObject queries the WFS and hence takes
-		 * time-
-		 * 
-		 * Stefan Tzeggai, 22.10.2010
-		 */
-
-		final boolean featureStylable = (getMapLayer().getFeatureSource()
-				.getClass().getSimpleName().contains("WFS"))
-				|| (FeatureUtil.getLayerSourceObject(getMapLayer()) instanceof FeatureCollection);
-		return featureStylable || rasterStylable;
+		return true;
+//		final boolean rasterStylable = styledLayer instanceof StyledRasterInterface
+//				&& StyledLayerUtil
+//						.isStyleable((StyledRasterInterface<?>) styledLayer);
+//
+//		if (rasterStylable)
+//			return true;
+//		/**
+//		 * getMapLayer().getFeatureSource()
+//		 * .getClass().getSimpleName().contains("WFSFeatureStore"))
+//		 * 
+//		 * We are doing a string comparison here, because 1. we don't want a
+//		 * dependency to gt-wfs only for one instance of, and 2. because the
+//		 * FeatureUtil.getLayerSourceObject queries the WFS and hence takes
+//		 * time-
+//		 * 
+//		 * Stefan Tzeggai, 22.10.2010
+//		 */
+//
+//		final boolean featureStylable = (getLayer().tolgetFeatureSource() != null && getMapLayer()
+//				.getFeatureSource().getClass().getSimpleName().contains("WFS"))
+//				|| (FeatureUtil.getLayerSourceObject(getMapLayer()) instanceof FeatureCollection);
+//		return featureStylable || rasterStylable;
 	}
 
 	/**
@@ -879,6 +882,15 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 	 */
 	public MapLayer getMapLayer() {
 		return mapLayer;
+	}
+	
+	/**
+	 * Access to the Geotool's {@link MapLayer} that is presented in this
+	 * legend.
+	 */
+	public Layer getLayer() {
+		if (mapLayer == null) return null;
+		return mapLayer.toLayer();
 	}
 
 	/**
