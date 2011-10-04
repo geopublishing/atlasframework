@@ -49,7 +49,6 @@ import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
-import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.internal.AMLUtil;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
@@ -61,7 +60,6 @@ import org.geotools.filter.text.cql2.CQL;
 import org.geotools.styling.Style;
 import org.jfree.util.Log;
 import org.opengis.filter.Filter;
-import org.w3c.dom.Attr;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -332,12 +330,12 @@ public class AMLExporter {
 		final Element atlas = document.createElementNS(AMLUtil.AMLURI, "atlas");
 
 		// Linking this XML to the AtlasML Schema
-		final Attr namespaces = document.createAttributeNS(
-				"http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
-		namespaces.setValue(AMLUtil.AMLURI + " http://localhost:"
-				+ Webserver.DEFAULTPORT
-				+ "/skrueger/atlas/resource/AtlasML.xsd");
-		atlas.setAttributeNode(namespaces);
+//		final Attr namespaces = document.createAttributeNS(
+//				"http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
+//		namespaces.setValue(AMLUtil.AMLURI + " http://localhost:"
+//				+ Webserver.DEFAULTPORT
+//				+ "/AtlasML.xsd");
+//		atlas.setAttributeNode(namespaces);
 
 		// Storing the version this atlas.xml is being created with inside the
 		// atlas.xml

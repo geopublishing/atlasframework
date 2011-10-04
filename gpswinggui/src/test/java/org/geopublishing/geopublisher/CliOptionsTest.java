@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.geopublisher.CliOptions.Errors;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.export.JarExportUtil;
@@ -86,6 +87,7 @@ public class CliOptionsTest extends TestingClass {
 
 	@Test
 	public void testsLoadWithGUIandSaveAndExit() throws Throwable {
+		Webserver webserver = new Webserver();
 
 		if (TestingUtil.HASGUI) {
 

@@ -127,18 +127,20 @@ public class AMLImport {
 	 * Parses Atlas XML file and returns a DOM document. If validating is true,
 	 * the contents is validated against the XSD specified in the file.
 	 */
-	public DocumentBuilder getDocumentBuilder(final boolean validating)
+	public DocumentBuilder getDocumentBuilder()
 			throws SAXException, IOException, ParserConfigurationException {
 		// Create a builder factory
+		
 		final DocumentBuilderFactory factory = DocumentBuilderFactory
 				.newInstance();
 
 		factory.setNamespaceAware(true);
+		factory.setValidating(false);
+		
 		final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
 		final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
-		factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
-
-		factory.setValidating(false);
+		
+//		factory.setAttribute(JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA);
 
 		// Create the builder and parse the file
 		final DocumentBuilder documentBuilder = factory.newDocumentBuilder();
@@ -164,6 +166,8 @@ public class AMLImport {
 			}
 
 		});
+		
+		factory.isValidating();
 
 		return documentBuilder;
 	}
@@ -206,25 +210,9 @@ public class AMLImport {
 		 */
 
 		try {
-			// // if (validate)
-			// // info(AtlasViewer.R("info.validating_atlas.xml"));
-			// URL testSchemaUrl = new URL(
-			// "http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd");
-			// try {
-			// testSchemaUrl.openStream().close();
-			// } catch (Exception e) {
-			// LOGGER
-			// .warn("Validation disabled because 'http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd' can't be found. My Webserver is running on "
-			// + Webserver.PORT);
-			// validate = false;
-			// }
-
-			if (validate)
-				LOGGER.debug("Since switching to Geotools 2.6 the Xerces libary is used for XML parsing and somehow the validation of atlas.xml doesn't work anymore. It is disabled.");
-			validate = false;
-
-			DocumentBuilder builder = getDocumentBuilder(validate);
-			Document xml = builder.parse(atlasXmlAsStream);
+			
+			DocumentBuilder db = getDocumentBuilder();
+			Document xml = db.parse(atlasXmlAsStream);
 			parseAtlasConfig(atlasConfig, xml);
 
 		} catch (final SAXException ex) {
@@ -261,8 +249,7 @@ public class AMLImport {
 
 		try {
 			Document xml;
-			DocumentBuilder builder;
-			builder = getDocumentBuilder(false);
+			DocumentBuilder builder = getDocumentBuilder();
 
 			File atlasXmlFile = new File(atlasDir,
 					AtlasConfig.ATLASDATA_DIRNAME + "/"
