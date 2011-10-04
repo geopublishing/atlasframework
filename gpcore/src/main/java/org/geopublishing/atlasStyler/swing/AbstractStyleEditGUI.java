@@ -11,6 +11,8 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
@@ -45,8 +47,7 @@ import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
 /**
- * Parent-class covering all GUI {@link JPanel}s allowing to edit
- * {@link AbstractRulesList}
+ * Parent-class covering all GUI {@link JPanel}s allowing to edit {@link AbstractRulesList}
  */
 public abstract class AbstractStyleEditGUI extends JPanel {
 
@@ -61,7 +62,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	/** Values used or JCOmboBoxes offering a "space-arround" setting **/
 	final public static Integer[] SPACE_AROUND_VALUES = new Integer[] { 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25,
 			30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-	
+
 	/** A renderer designed to visualize the Halo Radius values properly **/
 	final public static DefaultListCellRenderer HALO_RADIUS_VALUES_RENDERER = new DefaultListCellRenderer() {
 
@@ -89,10 +90,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 	final public static Float[] DISPLACEMENT_VALUES = new Float[] { 0f, 0.5f, 1.f, 1.5f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f,
 			8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f };
-	
+
 	/**
-	 * A renderer designed to visualize thePOINTDISPLACEMENT_VALUES_RENDERER
-	 * nicely
+	 * A renderer designed to visualize thePOINTDISPLACEMENT_VALUES_RENDERER nicely
 	 **/
 	final public static DefaultListCellRenderer DISPLACEMENT_VALUES_RENDERER = new DefaultListCellRenderer() {
 
@@ -143,8 +143,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	}
 
 	/**
-	 * A renderer designed to visualize thePOINTDISPLACEMENT_VALUES_RENDERER
-	 * nicely
+	 * A renderer designed to visualize thePOINTDISPLACEMENT_VALUES_RENDERER nicely
 	 **/
 	final public static DefaultListCellRenderer POINTDISPLACEMENT_VALUES_RENDERER = new DefaultListCellRenderer() {
 
@@ -237,8 +236,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	protected static final String PROPERTY_UPDATED = "UPDATE_PREVIEWS";
 
 	/**
-	 * Pro AbstarctStyleEditGUI kann/darf nur ein SVG selector aufgemacht
-	 * werden.
+	 * Pro AbstarctStyleEditGUI kann/darf nur ein SVG selector aufgemacht werden.
 	 */
 	private SVGSelector selectExternalGraphicDialog;
 
@@ -308,17 +306,22 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 				try {
 					URL url = externalGraphic.getLocation();
-					
+
 					if (externalGraphic.getFormat().contains("svg")) {
-						// TODO PNG
 						icon = svgFactory.getIcon(null, FilterUtil.FILTER_FAC2.literal(url.toExternalForm()),
 								externalGraphic.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
 					} else if (externalGraphic.getFormat().contains("png")) {
 						BufferedImage bi = ImageIO.read(url);
-						icon = new ImageIcon(bi);
+						//resize image
+						BufferedImage scaledIcon = new BufferedImage(EXT_GRAPHIC_BUTTON_WIDTH,
+								EXT_GRAPHIC_BUTTON_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+						Graphics2D graphics2D = scaledIcon.createGraphics();
+						graphics2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+						graphics2D.drawImage(bi,0,0,EXT_GRAPHIC_BUTTON_WIDTH,EXT_GRAPHIC_BUTTON_HEIGHT,null);
+						icon = new ImageIcon(scaledIcon);
+						graphics2D.dispose();
 					}
 
-					
 				} catch (Exception e) {
 					LOGGER.error("Creating SVG/PNG icon failed", e);
 				}
