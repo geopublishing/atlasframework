@@ -70,13 +70,7 @@ import de.schmitzm.swing.SwingUtil;
 public class GraphicEditGUI extends AbstractStyleEditGUI {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://http://freemapsymbols.org/svg";
 
-	public static final String SVG_MIMETYPE = "image/svg+xml";
-
-	private static final int EXT_GRAPHIC_BUTTON_HEIGHT = 34;
-
-	private static final int EXT_GRAPHIC_BUTTON_WIDTH = 34;
 
 	private final Graphic graphic;
 
@@ -146,8 +140,6 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private JPanel jPanelExternalGraphic = null;
 
 	private final JLabel jLabelEG = new JLabel();
-
-	private JButton jButtonExtGraphic;
 
 	private SVGSelector selectExternalGraphicDialog;
 
@@ -1031,127 +1023,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 					.createTitledBorder(AtlasStylerVector
 							.R("GraphicEdit.ExternalGraphic.Title")));
 			jPanelExternalGraphic.add(jLabelEG, gridBagConstraints31);
-			jPanelExternalGraphic.add(getJButtonExtGraphic(),
+			jPanelExternalGraphic.add(getJButtonExtGraphic(geometryForm, graphic),
 					gridBagConstraints32);
 		}
 		return jPanelExternalGraphic;
 	}
 
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private JButton getJButtonExtGraphic() {
-		if (jButtonExtGraphic == null) {
-			jButtonExtGraphic = new JButton();
-
-			jButtonExtGraphic.setAction(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					openExternalGraphicSelector();
-				}
-
-			});
-
-			jButtonExtGraphic.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
-					EXT_GRAPHIC_BUTTON_HEIGHT);
-
-			updateExternalGraphicButton();
-
-		}
-		return jButtonExtGraphic;
-	}
-
-	private void updateExternalGraphicButton() {
-		// Update the Button Icon
-		SVGGraphicFactory svgFactory = new SVGGraphicFactory();
-		Icon icon = null;
-		if ((graphic.getExternalGraphics() != null)
-				&& (graphic.getExternalGraphics().length > 0)) {
-			ExternalGraphic externalGraphic = graphic.getExternalGraphics()[0];
-			if (externalGraphic == null) {
-				throw new IllegalArgumentException(
-						"ExternalGraphicsArray contains null");
-			}
-
-			try {
-				URL url = externalGraphic.getLocation();
-
-				icon = svgFactory.getIcon(null,
-						FilterUtil.FILTER_FAC2.literal(url.toExternalForm()),
-						externalGraphic.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
-				// if (renderedImage != null)
-				// icon = new ImageIcon(renderedImage);
-			} catch (Exception e) {
-				LOGGER.error("Creating SVG icon failed", e);
-			}
-		}
-		;
-
-		if (icon == null) {
-			// Generating the icon failed, use an empty default
-			icon = new ImageIcon(new BufferedImage(EXT_GRAPHIC_BUTTON_WIDTH,
-					EXT_GRAPHIC_BUTTON_HEIGHT, BufferedImage.TYPE_INT_ARGB));
-		}
-
-		jButtonExtGraphic.setIcon(icon);
-		jButtonExtGraphic.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
-				EXT_GRAPHIC_BUTTON_HEIGHT);
-
-		// Repack the window if it makes sense
-		final Window parentWindow = SwingUtil.getParentWindow(this);
-		if (parentWindow != null)
-			parentWindow.pack();
-
-	}
-
-	protected void openExternalGraphicSelector() {
-		try {
-			if (selectExternalGraphicDialog == null) {
-
-				selectExternalGraphicDialog = new SVGSelector(
-						SwingUtil.getParentWindow(GraphicEditGUI.this),
-						geometryForm, graphic.getExternalGraphics());
-
-				selectExternalGraphicDialog.setModal(true);
-				selectExternalGraphicDialog
-						.addPropertyChangeListener(new PropertyChangeListener() {
-
-							@Override
-							public void propertyChange(PropertyChangeEvent evt) {
-
-								if (evt.getPropertyName().equals(
-										SVGSelector.PROPERTY_UPDATED)) {
-
-									ExternalGraphic[] egs = (ExternalGraphic[]) evt
-											.getNewValue();
-									
-									graphic.graphicalSymbols().clear();
-									
-									if (egs != null) {
-										graphic.graphicalSymbols().addAll(Arrays.asList(egs));
-									} 
-
-									GraphicEditGUI.this.firePropertyChange(
-											AbstractStyleEditGUI.PROPERTY_UPDATED,
-											null, null);
-
-									updateExternalGraphicButton();
-								}
-							}
-
-						});
-
-			}
-			selectExternalGraphicDialog.setVisible(true);
-
-		} catch (Exception e1) {
-			ExceptionDialog
-					.show(SwingUtil
-							.getParentWindowComponent(GraphicEditGUI.this), e1);
-		}
-
-	}
 }

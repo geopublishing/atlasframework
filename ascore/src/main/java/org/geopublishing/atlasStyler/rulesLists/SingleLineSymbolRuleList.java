@@ -14,9 +14,14 @@ import java.awt.Color;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geotools.styling.Graphic;
+import org.geotools.styling.GraphicImpl;
 import org.geotools.styling.LineSymbolizer;
+import org.geotools.styling.StrokeImpl;
+import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Expression;
+import org.opengis.style.Stroke;
 
 import com.vividsolutions.jts.geom.LineString;
 
@@ -40,6 +45,16 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public void addNewDefaultLayer() {
+//		
+//		LineSymbolizer ls = StylingUtil.STYLE_BUILDER.createLineSymbolizer();
+//		
+//		StrokeImpl stroke = (StrokeImpl) StylingUtil.STYLE_BUILDER.createStroke();
+//		stroke.setGraphicStroke();
+//
+//		ls.setStroke(stroke);
+		
+//		addSymbolizer(ls);
+		
 		addSymbolizer(ASUtil.createDefaultSymbolizer(getGeometryDescriptor()));
 	}
 

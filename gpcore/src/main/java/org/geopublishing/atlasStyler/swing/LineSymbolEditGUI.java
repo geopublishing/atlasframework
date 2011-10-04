@@ -60,11 +60,13 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -75,24 +77,31 @@ import javax.swing.JTextField;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.apache.xalan.xsltc.compiler.sym;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geotools.styling.Graphic;
 import org.geotools.styling.LineSymbolizer;
+import org.geotools.styling.StyleImpl;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
+import org.opengis.style.AnchorPoint;
+import org.opengis.style.Displacement;
+import org.opengis.style.GraphicStroke;
+import org.opengis.style.GraphicalSymbol;
+import org.opengis.style.StyleVisitor;
 
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ColorButton;
 import de.schmitzm.swing.SwingUtil;
 
 public class LineSymbolEditGUI extends AbstractStyleEditGUI {
-	private static final String[] LINEJOIN_VALUES = new String[] { "mitre",
-			"round", "bevel" };
+	private static final String[] LINEJOIN_VALUES = new String[] { "mitre", "round", "bevel" };
 
-	private static final String[] LINECAP_VALUES = new String[] { "butt",
-			"round", "square" };
+	private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
 
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
@@ -100,14 +109,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel jPanelStroke;
 
-	private final JLabel jLabelStrokeColor = new JLabel(
-			AtlasStylerVector.R("ColorLabel"));
+	private final JLabel jLabelStrokeColor = new JLabel(AtlasStylerVector.R("ColorLabel"));
 
-	private final JLabel jLabelStrokeWidth = new JLabel(
-			AtlasStylerVector.R("WidthLabel"));
+	private final JLabel jLabelStrokeWidth = new JLabel(AtlasStylerVector.R("WidthLabel"));
 
-	private final JLabel jLabelStrokeOpacity = new JLabel(
-			AtlasStylerVector.R("OpacityLabel"));
+	private final JLabel jLabelStrokeOpacity = new JLabel(AtlasStylerVector.R("OpacityLabel"));
 
 	private ColorButton jButtonStrokeColor;
 
@@ -117,13 +123,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	// private JPanel jPanelLineStyle = null;
 
-	private final JLabel jLabelLineJoin = new JLabel(
-			AtlasStylerVector.R("LinejoinLabel"));
+	private final JLabel jLabelLineJoin = new JLabel(AtlasStylerVector.R("LinejoinLabel"));
 
 	private JComboBox jComboBoxLinejoin = null;
 
-	private final JLabel jLabelLinecap = new JLabel(
-			AtlasStylerVector.R("LinecapLabel"));
+	private final JLabel jLabelLinecap = new JLabel(AtlasStylerVector.R("LinecapLabel"));
 
 	private JComboBox jComboBoxLineCap = null;
 
@@ -139,8 +143,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JComboBox jComboBoxPerpendicularOffset = null;
 
-	public LineSymbolEditGUI(
-			final org.geotools.styling.LineSymbolizer symbolizer) {
+	private JPanel jPanelGraphicStroke;
+
+	public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
 		this.symbolizer = symbolizer;
 		initialize();
 	}
@@ -151,6 +156,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		this.add(getJPanelStroke(), "sgx");
 		// this.add(getJPanelLineStyle(), "sgx");
 		this.add(getJPanelDashArray(), "sgx");
+
+		this.add(getJPanelGraphicStroke(), "sgx");
 	}
 
 	/**
@@ -174,7 +181,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			// wraps here
 			jPanelStroke.add(jLabelLineJoin, "split 5");
 			jPanelStroke.add(getJComboBoxLineJoin(), "");
-			jPanelStroke.add(getJComboBoxPerpendicularOffset(),"");
+			jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
 			jPanelStroke.add(new JLabel(), "growx 100");
 			jPanelStroke.add(jLabelLinecap, "");
 			jPanelStroke.add(getJComboBoxLineCap(), "");
@@ -182,7 +189,6 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jPanelStroke;
 	}
-
 
 	/**
 	 * This method initializes jButton
@@ -197,22 +203,16 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				public void actionPerformed(final ActionEvent e) {
 					Color color = null;
 
-					final String substring = symbolizer.getStroke().getColor()
-							.toString();
+					final String substring = symbolizer.getStroke().getColor().toString();
 					color = Color.decode(substring);
 
-					final Color newColor = AVSwingUtil.showColorChooser(
-							LineSymbolEditGUI.this,
-							AtlasStylerVector.R("Stroke.ColorChooserDialog.Title"),
-							color);
+					final Color newColor = AVSwingUtil.showColorChooser(LineSymbolEditGUI.this,
+							AtlasStylerVector.R("Stroke.ColorChooserDialog.Title"), color);
 
 					if (newColor != null) {
-						symbolizer.getStroke().setColor(
-								StylingUtil.STYLE_BUILDER
-										.colorExpression(newColor));
+						symbolizer.getStroke().setColor(StylingUtil.STYLE_BUILDER.colorExpression(newColor));
 
-						LineSymbolEditGUI.this.firePropertyChange(
-								PROPERTY_UPDATED, null, null);
+						LineSymbolEditGUI.this.firePropertyChange(PROPERTY_UPDATED, null, null);
 
 						jButtonStrokeColor.setColor(newColor);
 
@@ -222,8 +222,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			});
 
-			if (symbolizer.getStroke() != null
-					&& symbolizer.getStroke().getColor() != null) {
+			if (symbolizer.getStroke() != null && symbolizer.getStroke().getColor() != null) {
 				jButtonStrokeColor.setColor(StylingUtil.getColorFromExpression(symbolizer.getStroke().getColor()));
 			} else {
 				jButtonStrokeColor.setEnabled(false);
@@ -244,11 +243,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			jComboBoxStrokeWidth = new JComboBox();
 
-			jComboBoxStrokeWidth
-					.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
+			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
 			jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
-			ASUtil.selectOrInsert(jComboBoxStrokeWidth, symbolizer.getStroke()
-					.getWidth());
+			ASUtil.selectOrInsert(jComboBoxStrokeWidth, symbolizer.getStroke().getWidth());
 
 			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
 
@@ -256,8 +253,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						symbolizer.getStroke().setWidth(
-								ASUtil.ff2.literal(e.getItem()));
+						symbolizer.getStroke().setWidth(ASUtil.ff2.literal(e.getItem()));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -279,11 +275,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JComboBox getJComboBoxStrokeOpacity() {
 		if (jComboBoxStrokeOpacity == null) {
 			jComboBoxStrokeOpacity = new OpacityJComboBox();
-			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(
-					OPACITY_VALUES));
+			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
 
-			if (symbolizer.getStroke() != null
-					&& symbolizer.getStroke().getOpacity() != null) {
+			if (symbolizer.getStroke() != null && symbolizer.getStroke().getOpacity() != null) {
 				Expression opacity = symbolizer.getStroke().getOpacity();
 				ASUtil.selectOrInsert(jComboBoxStrokeOpacity, opacity);
 			} else {
@@ -296,8 +290,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						symbolizer.getStroke().setOpacity(
-								ASUtil.ff2.literal(e.getItem()));
+						symbolizer.getStroke().setOpacity(ASUtil.ff2.literal(e.getItem()));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}
@@ -345,8 +338,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			/** Preset when started * */
 			String preset;
 			try {
-				final Expression lineJoin = symbolizer.getStroke()
-						.getLineJoin();
+				final Expression lineJoin = symbolizer.getStroke().getLineJoin();
 				preset = ((Literal) lineJoin).toString();
 			} catch (final Exception e) {
 				preset = LINEJOIN_VALUES[0];
@@ -358,14 +350,12 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jComboBoxLinejoin.setRenderer(new DefaultListCellRenderer() {
 
 				@Override
-				public Component getListCellRendererComponent(final JList list,
-						final Object value, final int index,
+				public Component getListCellRendererComponent(final JList list, final Object value, final int index,
 						final boolean isSelected, final boolean cellHasFocus) {
-					final Component p = super.getListCellRendererComponent(
-							list, value, index, isSelected, cellHasFocus);
+					final Component p = super
+							.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 					if (p instanceof JLabel)
-						((JLabel) p).setText(ASUtil
-								.R("AtlasStyler.LineJoin.Values." + value));
+						((JLabel) p).setText(ASUtil.R("AtlasStyler.LineJoin.Values." + value));
 					return p;
 				}
 			});
@@ -378,8 +368,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
 						final Object itemStringValue = e.getItem();
-						symbolizer.getStroke().setLineJoin(
-								ASUtil.ff2.literal(itemStringValue));
+						symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(itemStringValue));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}
@@ -418,14 +407,12 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jComboBoxLineCap.setRenderer(new DefaultListCellRenderer() {
 
 				@Override
-				public Component getListCellRendererComponent(final JList list,
-						final Object value, final int index,
+				public Component getListCellRendererComponent(final JList list, final Object value, final int index,
 						final boolean isSelected, final boolean cellHasFocus) {
-					final Component p = super.getListCellRendererComponent(
-							list, value, index, isSelected, cellHasFocus);
+					final Component p = super
+							.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 					if (p instanceof JLabel)
-						((JLabel) p).setText(ASUtil
-								.R("AtlasStyler.LineCap.Values." + value));
+						((JLabel) p).setText(ASUtil.R("AtlasStyler.LineCap.Values." + value));
 					return p;
 				}
 			});
@@ -438,8 +425,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
 						final Object itemStringValue = e.getItem();
-						symbolizer.getStroke().setLineCap(
-								ASUtil.ff2.literal(itemStringValue));
+						symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(itemStringValue));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}
@@ -452,33 +438,37 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		return jComboBoxLineCap;
 	}
 
-	/**
-	 * This method initializes jPanel1
-	 * 
-	 * @return javax.swing.JPanel
-	 */
 	private JPanel getJPanelDashArray() {
 		if (jPanelDashArray == null) {
 			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jLabelDashOffset = new JLabel(
-					AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashOffset"));
-			jLabelDashPattern = new JLabel(
-					AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashPattern"));
-			jPanelDashArray.setBorder(BorderFactory
-					.createTitledBorder(AtlasStylerVector
-							.R("LineSymbolEdit.DashedLine.Title")));
-			final JLabel lineExplanation = new JLabel(
-					AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
+			jLabelDashOffset = new JLabel(AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashOffset"));
+			jLabelDashPattern = new JLabel(AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashPattern"));
+			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+					.R("LineSymbolEdit.DashedLine.Title")));
+			final JLabel lineExplanation = new JLabel(AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
 			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
 
 			jPanelDashArray.add(jLabelDashPattern, "split 4");
-			jPanelDashArray.add(getJTextFieldDashPattern(),
-					"grow x, width ::200");
+			jPanelDashArray.add(getJTextFieldDashPattern(), "grow x, width ::200");
 			jPanelDashArray.add(jLabelDashOffset, "gap unrel");
 			jPanelDashArray.add(getJComboBoxDashOffset(), "");
 		}
 		return jPanelDashArray;
+	}
+
+	private JPanel getJPanelGraphicStroke() {
+		if (jPanelGraphicStroke == null) {
+			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
+			
+			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
+			graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic();
+			symbolizer.getStroke().setGraphicStroke(graphicStroke);
+			
+			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.LINE, graphicStroke));
+
+		}
+		return jPanelGraphicStroke;
 	}
 
 	/**
@@ -500,8 +490,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 				@Override
 				public void keyReleased(final KeyEvent e) {
-					if ((e.getKeyCode() == KeyEvent.VK_ENTER)
-							|| (e.getKeyCode() == KeyEvent.VK_TAB)) {
+					if ((e.getKeyCode() == KeyEvent.VK_ENTER) || (e.getKeyCode() == KeyEvent.VK_TAB)) {
 						updateDashFromtextfield();
 					}
 				}
@@ -525,8 +514,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			});
 
-			jTextFieldDashPattern.setToolTipText(AtlasStylerVector
-					.R("LineSymbolEditGUI.dashPattern_tooltip"));
+			jTextFieldDashPattern.setToolTipText(AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
 		}
 		return jTextFieldDashPattern;
 	}
@@ -549,11 +537,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				count++;
 			} catch (final NumberFormatException e) {
 				updateTextFieldDashPattern();
-				JOptionPane
-						.showMessageDialog(
-								LineSymbolEditGUI.this,
-								AtlasStylerVector
-										.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
+				JOptionPane.showMessageDialog(LineSymbolEditGUI.this,
+						AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
 				return;
 			}
 		}
@@ -578,8 +563,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	 */
 	private JComboBox getJComboBoxDashOffset() {
 		if (jComboBoxDashOffset == null) {
-			jComboBoxDashOffset = new JComboBox(new DefaultComboBoxModel(
-					DISPLACEMENT_VALUES));
+			jComboBoxDashOffset = new JComboBox(new DefaultComboBoxModel(DISPLACEMENT_VALUES));
 
 			jComboBoxDashOffset.addItemListener(new ItemListener() {
 
@@ -587,8 +571,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 
-						symbolizer.getStroke().setDashOffset(
-								ASUtil.ff2.literal(e.getItem()));
+						symbolizer.getStroke().setDashOffset(ASUtil.ff2.literal(e.getItem()));
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -597,8 +580,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			});
 
-			ASUtil.selectOrInsert(jComboBoxDashOffset, symbolizer.getStroke()
-					.getDashOffset());
+			ASUtil.selectOrInsert(jComboBoxDashOffset, symbolizer.getStroke().getDashOffset());
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxDashOffset);
 		}
@@ -606,10 +588,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	}
 
 	private JComboBox getJComboBoxPerpendicularOffset() {
-		if(jComboBoxPerpendicularOffset == null){
-			jComboBoxPerpendicularOffset = new JComboBox(new DefaultComboBoxModel(
-					DISPLACEMENT_VALUES));
-			
+		if (jComboBoxPerpendicularOffset == null) {
+			jComboBoxPerpendicularOffset = new JComboBox(new DefaultComboBoxModel(DISPLACEMENT_VALUES));
+
 			if (symbolizer.getPerpendicularOffset() != null) {
 				Expression offset = symbolizer.getPerpendicularOffset();
 				ASUtil.selectOrInsert(jComboBoxPerpendicularOffset, offset);
@@ -635,6 +616,5 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jComboBoxPerpendicularOffset;
 	}
-
 
 }
