@@ -97,8 +97,8 @@ public class ASUtil {
 	 * Package {@code skrueger.sld} zur Verfuegung stellt. Diese sind in
 	 * properties-Datein unter {@code skrueger.sld} hinterlegt.
 	 */
-	private final static ResourceProvider RESOURCE = ResourceProvider
-			.newInstance("locales.AtlasStylerTranslation", Locale.ENGLISH);
+	private final static ResourceProvider RESOURCE = ResourceProvider.newInstance("locales.AtlasStylerTranslation",
+			Locale.ENGLISH);
 
 	private static BrewerPalette arthursPalette;
 	/**
@@ -116,21 +116,21 @@ public class ASUtil {
 
 	public static final FilterFactory2 ff2 = FeatureUtil.FILTER_FACTORY2;
 
-	public static final FileNameExtensionFilter FILTER_SLD = new FileNameExtensionFilter(
-			"SLD", "sld", "xml", "SLD", "XML");
-	
-	public static final FileNameExtensionFilter FILTER_SVG = new FileNameExtensionFilter(
-			"SVG", "svg", "SVG");
-	
-	public static final FileNameExtensionFilter FILTER_GML = new FileNameExtensionFilter(
-			"GML", "gml", "GML");
+	public static final FileNameExtensionFilter FILTER_SLD = new FileNameExtensionFilter("SLD", "sld", "xml", "SLD",
+			"XML");
+
+	public static final FileNameExtensionFilter FILTER_SVG = new FileNameExtensionFilter("SVG", "svg", "SVG");
+	public static final FileNameExtensionFilter FILTER_PNG = new FileNameExtensionFilter("PNG", "png", "PNG");
+
+	public static final FileNameExtensionFilter FILTER_EXTERNALGRAPHIC_FORMATS = new FileNameExtensionFilter(
+			"SVG/PNG", "svg", "SVG", "png", "PNG");
+
+	public static final FileNameExtensionFilter FILTER_GML = new FileNameExtensionFilter("GML", "gml", "GML");
 	public static final FileNameExtensionFilter FILTER_ALLSUPPORTED = new FileNameExtensionFilter(
-			ASUtil.R("Filetype_AllSupported"), "shp", "SHP", "zip", "ZIP",
-			"gml", "GML", "tif", "TIF", "tiff", "TIFF", "a00", "asc", "ASC",
-			"txt", "ascii", "ASCII");
+			ASUtil.R("Filetype_AllSupported"), "shp", "SHP", "zip", "ZIP", "gml", "GML", "tif", "TIF", "tiff", "TIFF",
+			"a00", "asc", "ASC", "txt", "ascii", "ASCII");
 	public static final FileNameExtensionFilter FILTER_RASTERSUPPORTED = new FileNameExtensionFilter(
-			ASUtil.R("Filetype_ImportableRaster"), "tif", "TIF", "tiff",
-			"TIFF", "a00", "asc", "ASC", "txt");
+			ASUtil.R("Filetype_ImportableRaster"), "tif", "TIF", "tiff", "TIFF", "a00", "asc", "ASC", "txt");
 	public static final FileNameExtensionFilter FILTER_SHAPE = new FileNameExtensionFilter(
 			ASUtil.R("Filetype_ShapeOrShapeAsZip"), "shp", "SHP", "zip", "ZIP");
 
@@ -149,8 +149,7 @@ public class ASUtil {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public static String askForString(final Component owner,
-			final String preset, final String question) {
+	public static String askForString(final Component owner, final String preset, final String question) {
 
 		// As we are working with that stupid static String, we only allow one
 		// open Dialog
@@ -175,8 +174,7 @@ public class ASUtil {
 			 */
 			@Override
 			protected JRootPane createRootPane() {
-				final KeyStroke stroke = KeyStroke.getKeyStroke(
-						KeyEvent.VK_ESCAPE, 0);
+				final KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 				final JRootPane rootPane = new JRootPane();
 				rootPane.registerKeyboardAction(new ActionListener() {
 
@@ -188,8 +186,7 @@ public class ASUtil {
 
 				}, stroke, JComponent.WHEN_IN_FOCUSED_WINDOW);
 
-				final KeyStroke strokeEnter = KeyStroke.getKeyStroke(
-						KeyEvent.VK_ENTER, 0);
+				final KeyStroke strokeEnter = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
 				rootPane.registerKeyboardAction(new ActionListener() {
 
 					@Override
@@ -274,8 +271,7 @@ public class ASUtil {
 	 * Creates a default Style that is compatible with {@link AtlasStylerVector}
 	 * .
 	 */
-	public static Style createDefaultStyle(
-			final StyledLayerInterface<?> styledLayer) {
+	public static Style createDefaultStyle(final StyledLayerInterface<?> styledLayer) {
 		final Style loadStyle = StylingUtil.createDefaultStyle(styledLayer);
 
 		if (!(styledLayer instanceof StyledFeaturesInterface<?>)) {
@@ -293,8 +289,7 @@ public class ASUtil {
 		// final Style compatibleStyle = new
 		// AtlasStyler((StyledFeaturesInterface<?>) styledLayer,
 		// loadStyle, null, null).getStyle();
-		SingleRuleList<? extends Symbolizer> singleRulesList = new RuleListFactory(
-				styledFs).createSingleRulesList(
+		SingleRuleList<? extends Symbolizer> singleRulesList = new RuleListFactory(styledFs).createSingleRulesList(
 				AtlasStylerVector.getRuleTitleFor(styledFs), true);
 
 		Style defaultStyle = StylingUtil.STYLE_BUILDER.createStyle();
@@ -303,8 +298,7 @@ public class ASUtil {
 		return defaultStyle;
 	}
 
-	public static Symbolizer createDefaultSymbolizer(
-			final GeometryDescriptor geomType) {
+	public static Symbolizer createDefaultSymbolizer(final GeometryDescriptor geomType) {
 
 		switch (FeatureUtil.getGeometryForm(geomType)) {
 		case POINT:
@@ -324,10 +318,8 @@ public class ASUtil {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public static SimpleFeatureType createFeatureType(
-			final GeometryDescriptor defaultGeometry) {
-		return FeatureUtil.createFeatureType(defaultGeometry.getType()
-				.getBinding());
+	public static SimpleFeatureType createFeatureType(final GeometryDescriptor defaultGeometry) {
+		return FeatureUtil.createFeatureType(defaultGeometry.getType().getBinding());
 	}
 
 	private static BrewerPalette getArthursPalette() throws IOException {
@@ -349,29 +341,20 @@ public class ASUtil {
 			 * 
 			 * dunkel rot R: 168 G:0 B:0
 			 */
-			arthursPalette = StylingUtil.createBrewerPalette("BlGrRe",
-					new Color[] { new Color(0, 38, 115), new Color(0, 0, 255),
-							new Color(51, 194, 225), new Color(182, 255, 143),
-							new Color(255, 200, 0), new Color(255, 0, 0),
-							new Color(168, 0, 0) });
+			arthursPalette = StylingUtil.createBrewerPalette("BlGrRe", new Color[] { new Color(0, 38, 115),
+					new Color(0, 0, 255), new Color(51, 194, 225), new Color(182, 255, 143), new Color(255, 200, 0),
+					new Color(255, 0, 0), new Color(168, 0, 0) });
 
 			for (int i = 2; i < 6; i++) {
-				arthursPalette.getPaletteSuitability().setSuitability(i,
-						new String[] { "?", "?", "?", "?", "?", "?" });
+				arthursPalette.getPaletteSuitability().setSuitability(i, new String[] { "?", "?", "?", "?", "?", "?" });
 			}
 
-			arthursPalette.getColorScheme().setSampleScheme(2,
-					new int[] { 1, 5 });
-			arthursPalette.getColorScheme().setSampleScheme(3,
-					new int[] { 1, 3, 5 });
-			arthursPalette.getColorScheme().setSampleScheme(4,
-					new int[] { 1, 2, 4, 5 });
-			arthursPalette.getColorScheme().setSampleScheme(5,
-					new int[] { 1, 2, 3, 4, 5 });
-			arthursPalette.getColorScheme().setSampleScheme(6,
-					new int[] { 0, 1, 2, 3, 4, 5 });
-			arthursPalette.getColorScheme().setSampleScheme(7,
-					new int[] { 0, 1, 2, 3, 4, 5, 6 });
+			arthursPalette.getColorScheme().setSampleScheme(2, new int[] { 1, 5 });
+			arthursPalette.getColorScheme().setSampleScheme(3, new int[] { 1, 3, 5 });
+			arthursPalette.getColorScheme().setSampleScheme(4, new int[] { 1, 2, 4, 5 });
+			arthursPalette.getColorScheme().setSampleScheme(5, new int[] { 1, 2, 3, 4, 5 });
+			arthursPalette.getColorScheme().setSampleScheme(6, new int[] { 0, 1, 2, 3, 4, 5 });
+			arthursPalette.getColorScheme().setSampleScheme(7, new int[] { 0, 1, 2, 3, 4, 5, 6 });
 		}
 		return arthursPalette;
 	}
@@ -386,11 +369,9 @@ public class ASUtil {
 	 *            Attribute name
 	 * @return -1 if not attribute with that name is found
 	 */
-	public static int getAttribIndex(final SimpleFeatureType schema,
-			final String attName) {
+	public static int getAttribIndex(final SimpleFeatureType schema, final String attName) {
 		for (int position = 0; position < schema.getAttributeCount(); position++) {
-			if (schema.getAttributeDescriptors().get(position).getLocalName()
-					.equals(attName))
+			if (schema.getAttributeDescriptors().get(position).getLocalName().equals(attName))
 				return position;
 		}
 		return -1;
@@ -406,11 +387,9 @@ public class ASUtil {
 	 *            Attribute name
 	 * @return <code>null</code> if no attribute with that name is found
 	 */
-	public static AttributeDescriptor getAttribType(
-			final SimpleFeatureType schema, final String attName) {
+	public static AttributeDescriptor getAttribType(final SimpleFeatureType schema, final String attName) {
 		for (int position = 0; position < schema.getAttributeCount(); position++) {
-			if (schema.getAttributeDescriptors().get(position).getLocalName()
-					.equals(attName))
+			if (schema.getAttributeDescriptors().get(position).getLocalName().equals(attName))
 				return schema.getAttributeDescriptors().get(position);
 		}
 		return null;
@@ -441,23 +420,23 @@ public class ASUtil {
 			}
 		}
 
-//		if (graphic.getMarks() != null) {
-			// TODO Stefan Tzeggai 12.9.11 GT8 Migration
-//			for (final Mark m : graphic.getMarks()) {
-//				final Expression mSize = m.getSize();
-//				if (mSize != null && mSize != Expression.NIL) {
-//					try {
-//						final Float mSizeFloat = Float
-//								.valueOf(mSize.toString());
-//						if (mSizeFloat > maxSize) {
-//							maxSize = mSizeFloat;
-//						}
-//					} catch (final Exception e) {
-//						LOGGER.error(e);
-//					}
-//				}
-//			}
-//		}
+		// if (graphic.getMarks() != null) {
+		// TODO Stefan Tzeggai 12.9.11 GT8 Migration
+		// for (final Mark m : graphic.getMarks()) {
+		// final Expression mSize = m.getSize();
+		// if (mSize != null && mSize != Expression.NIL) {
+		// try {
+		// final Float mSizeFloat = Float
+		// .valueOf(mSize.toString());
+		// if (mSizeFloat > maxSize) {
+		// maxSize = mSizeFloat;
+		// }
+		// } catch (final Exception e) {
+		// LOGGER.error(e);
+		// }
+		// }
+		// }
+		// }
 
 		// TODO external graphics sizes
 		return maxSize;
@@ -506,8 +485,7 @@ public class ASUtil {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public static String getClipboardContents(final Object requestor) {
-		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
-				.getContents(requestor);
+		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(requestor);
 		if (t != null) {
 			final DataFlavor df = DataFlavor.stringFlavor;
 			if (df != null) {
@@ -537,8 +515,7 @@ public class ASUtil {
 	public static SingleLineSymbolRuleList getDefaultLineTemplate() {
 		final SingleLineSymbolRuleList rl = new SingleLineSymbolRuleList("");
 
-		final LineSymbolizer symb = (LineSymbolizer) ASUtil
-				.createDefaultSymbolizer(rl.getGeometryDescriptor());
+		final LineSymbolizer symb = (LineSymbolizer) ASUtil.createDefaultSymbolizer(rl.getGeometryDescriptor());
 		rl.addSymbolizer(symb);
 
 		return rl;
@@ -552,8 +529,7 @@ public class ASUtil {
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList getDefaultNoDataSymbol(
-			final GeometryForm form, final Color... colors) {
+	public static SingleRuleList getDefaultNoDataSymbol(final GeometryForm form, final Color... colors) {
 		return getDefaultNoDataSymbol(form, 1., colors);
 	}
 
@@ -565,28 +541,24 @@ public class ASUtil {
 	 * @param colors
 	 *            none or one or two color paramters that will be used.
 	 */
-	public static SingleRuleList<? extends Symbolizer> getDefaultNoDataSymbol(
-			final GeometryForm form, final double opacity_fill,
-			final Color... colors) {
+	public static SingleRuleList<? extends Symbolizer> getDefaultNoDataSymbol(final GeometryForm form,
+			final double opacity_fill, final Color... colors) {
 		final SingleRuleList<? extends Symbolizer> rl;
 
 		final Color defaultWhite = colors.length > 0 ? colors[0] : Color.WHITE;
-		final Color defaultGray = colors.length > 1 ? colors[1]
-				: Color.LIGHT_GRAY;
+		final Color defaultGray = colors.length > 1 ? colors[1] : Color.LIGHT_GRAY;
 
 		switch (form) {
 		case POINT:
 			rl = new SinglePointSymbolRuleList("");
 			// A white circle is the default NODATA symbol for points
-			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null,
-					SB.createMark("circle", defaultWhite), null, opacity_fill,
-					8., 0.)));
+			rl.addSymbolizer(SB.createPointSymbolizer(SB.createGraphic(null, SB.createMark("circle", defaultWhite),
+					null, opacity_fill, 8., 0.)));
 			break;
 		case POLYGON:
 			rl = new SinglePolygonSymbolRuleList("");
 			// A 50% white fill is the default NODATA symbol for polygons
-			rl.addSymbolizer(SB.createPolygonSymbolizer(
-					SB.createStroke(defaultGray, 1, opacity_fill),
+			rl.addSymbolizer(SB.createPolygonSymbolizer(SB.createStroke(defaultGray, 1, opacity_fill),
 					SB.createFill(defaultWhite, opacity_fill)));
 			break;
 		default:
@@ -606,8 +578,7 @@ public class ASUtil {
 			for (final String lang : AtlasStylerVector.getLanguages()) {
 
 				// Try to find a default for every language
-				final String localized = R(new Locale(lang),
-						"NoDataLegendEntry.Default");
+				final String localized = R(new Locale(lang), "NoDataLegendEntry.Default");
 				nodT.put(lang, localized);
 			}
 
@@ -629,16 +600,14 @@ public class ASUtil {
 	}
 
 	public static SinglePolygonSymbolRuleList getDefaultPolygonTemplate() {
-		final SinglePolygonSymbolRuleList rl = new SinglePolygonSymbolRuleList(
-				"");
+		final SinglePolygonSymbolRuleList rl = new SinglePolygonSymbolRuleList("");
 
 		rl.addSymbolizer(createDefaultSymbolizer(rl.getGeometryDescriptor()));
 
 		return rl;
 	}
 
-	public static SingleRuleList<? extends Symbolizer> getDefaultTemplate(
-			final GeometryForm geomForm) {
+	public static SingleRuleList<? extends Symbolizer> getDefaultTemplate(final GeometryForm geomForm) {
 		if (geomForm == GeometryForm.POINT) {
 			return getDefaultPointTemplate();
 		} else if (geomForm == GeometryForm.LINE) {
@@ -656,16 +625,12 @@ public class ASUtil {
 				private static final long serialVersionUID = -7498350601156304636L;
 
 				@Override
-				public Component getTableCellRendererComponent(
-						final JTable table, final Object value,
-						final boolean isSelected, final boolean hasFocus,
-						final int row, final int column) {
-					final JLabel label = (JLabel) super
-							.getTableCellRendererComponent(table, value,
-									isSelected, hasFocus, row, column);
+				public Component getTableCellRendererComponent(final JTable table, final Object value,
+						final boolean isSelected, final boolean hasFocus, final int row, final int column) {
+					final JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected,
+							hasFocus, row, column);
 
-					final NumberFormat doubleFormat = NumberFormat
-							.getNumberInstance();
+					final NumberFormat doubleFormat = NumberFormat.getNumberInstance();
 					doubleFormat.setMinimumFractionDigits(3);
 					doubleFormat.setMaximumFractionDigits(3);
 					doubleFormat.setMinimumIntegerDigits(1);
@@ -690,15 +655,13 @@ public class ASUtil {
 	/**
 	 * @return an image using the AtlasStyler's default size
 	 */
-	public static BufferedImage getFillGraphicImage(final Graphic fillGraphic,
-			final Color color, final Color backgroundColor,
-			final SimpleFeatureType featuretype) {
-		return getGraphicImage(fillGraphic, color, backgroundColor, 1.,
-				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featuretype);
+	public static BufferedImage getFillGraphicImage(final Graphic fillGraphic, final Color color,
+			final Color backgroundColor, final SimpleFeatureType featuretype) {
+		return getGraphicImage(fillGraphic, color, backgroundColor, 1., AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE,
+				featuretype);
 	}
 
-	public static BufferedImage getFillImage(final Fill fill,
-			final Dimension size, final SimpleFeatureType featureType) {
+	public static BufferedImage getFillImage(final Fill fill, final Dimension size, final SimpleFeatureType featureType) {
 
 		final PolygonSymbolizer symb = SB.createPolygonSymbolizer(null, fill);
 
@@ -708,19 +671,14 @@ public class ASUtil {
 	/**
 	 * @return an image using the AtlasStyler's default size
 	 */
-	public static BufferedImage getFillImage(final Fill fill,
-			final SimpleFeatureType featureType) {
-		return getFillImage(fill,
-				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
+	public static BufferedImage getFillImage(final Fill fill, final SimpleFeatureType featureType) {
+		return getFillImage(fill, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
 	}
 
-	public static BufferedImage getGraphicImage(final Graphic graphic,
-			final Color color, final Color backgroundColor,
-			final double opacity, final Dimension size,
-			final SimpleFeatureType featureType) {
+	public static BufferedImage getGraphicImage(final Graphic graphic, final Color color, final Color backgroundColor,
+			final double opacity, final Dimension size, final SimpleFeatureType featureType) {
 
-		final Fill fill = SB.createFill(color, backgroundColor, opacity,
-				graphic);
+		final Fill fill = SB.createFill(color, backgroundColor, opacity, graphic);
 
 		return getFillImage(fill, size, featureType);
 	}
@@ -736,8 +694,7 @@ public class ASUtil {
 	 * @return
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public static Literal getLiteralForField(final AttributeDescriptor at,
-			final Number number) {
+	public static Literal getLiteralForField(final AttributeDescriptor at, final Number number) {
 
 		final Class<?> c = at.getType().getBinding();
 
@@ -766,8 +723,7 @@ public class ASUtil {
 	 * @param numClasses
 	 *            -1 may be passed.
 	 */
-	public static BrewerPalette[] getPalettes(
-			final PaletteType paletteTypeGraduation, final int numClasses) {
+	public static BrewerPalette[] getPalettes(final PaletteType paletteTypeGraduation, final int numClasses) {
 
 		ColorBrewer brewer;
 		try {
@@ -777,8 +733,7 @@ public class ASUtil {
 			brewer = ColorBrewer.instance();
 		}
 
-		BrewerPalette[] palettes = brewer.getPalettes(paletteTypeGraduation,
-				numClasses);
+		BrewerPalette[] palettes = brewer.getPalettes(paletteTypeGraduation, numClasses);
 
 		try {
 			final BrewerPalette arthursPalette = getArthursPalette();
@@ -798,45 +753,36 @@ public class ASUtil {
 	 * übersetzt ist.
 	 */
 	public static String[] getSupportedLanguages() {
-		final Set<Locale> availableLocales = ResourceProvider
-				.getAvailableLocales(RESOURCE, true);
-		final ArrayList<String> list = new ArrayList<String>(
-				availableLocales.size());
+		final Set<Locale> availableLocales = ResourceProvider.getAvailableLocales(RESOURCE, true);
+		final ArrayList<String> list = new ArrayList<String>(availableLocales.size());
 		for (final Locale l : availableLocales) {
 			list.add(l.getLanguage());
 		}
 		return list.toArray(new String[0]);
 	}
 
-	public static BufferedImage getSymbolizerImage(final Symbolizer symb,
-			final Dimension size, final SimpleFeatureType featureType) {
+	public static BufferedImage getSymbolizerImage(final Symbolizer symb, final Dimension size,
+			final SimpleFeatureType featureType) {
 		// TODO Caching?
 
-		final Rule rule = StylingUtil.STYLE_FACTORY
-				.createRule();
+		final Rule rule = StylingUtil.STYLE_FACTORY.createRule();
 
 		rule.setSymbolizers(new Symbolizer[] { symb });
 
-		final LegendIconFeatureRenderer renderer = LegendIconFeatureRenderer
-				.getInstance();
+		final LegendIconFeatureRenderer renderer = LegendIconFeatureRenderer.getInstance();
 
-		final BufferedImage image = renderer.createImageForRule(rule,
-				featureType, size);
+		final BufferedImage image = renderer.createImageForRule(rule, featureType, size);
 
 		return image;
 	}
 
-	public static BufferedImage getSymbolizerImage(final Symbolizer symbolizer,
-			final SimpleFeatureType featureType) {
-		return getSymbolizerImage(symbolizer,
-				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
+	public static BufferedImage getSymbolizerImage(final Symbolizer symbolizer, final SimpleFeatureType featureType) {
+		return getSymbolizerImage(symbolizer, AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE, featureType);
 	}
 
-	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(
-			final FeatureTypeStyle fts) {
+	public static SingleLineSymbolRuleList importLineTemplateFromFirstRule(final FeatureTypeStyle fts) {
 
-		SingleLineSymbolRuleList tempRL = new SingleLineSymbolRuleList(
-				fts.getName());
+		SingleLineSymbolRuleList tempRL = new SingleLineSymbolRuleList(fts.getName());
 
 		try {
 
@@ -849,8 +795,7 @@ public class ASUtil {
 			tempRL.reverseSymbolizers();
 
 		} catch (final Exception e) {
-			LOGGER.warn("Error " + e.getLocalizedMessage()
-					+ " while importing the template RL. Using default");
+			LOGGER.warn("Error " + e.getLocalizedMessage() + " while importing the template RL. Using default");
 			LOGGER.error(e);
 			tempRL = getDefaultLineTemplate();
 
@@ -859,10 +804,8 @@ public class ASUtil {
 		return tempRL;
 	}
 
-	public static SinglePointSymbolRuleList importPointTemplateFromFirstRule(
-			final FeatureTypeStyle importFTS) {
-		SinglePointSymbolRuleList tempRL = new SinglePointSymbolRuleList(
-				importFTS.getName());
+	public static SinglePointSymbolRuleList importPointTemplateFromFirstRule(final FeatureTypeStyle importFTS) {
+		SinglePointSymbolRuleList tempRL = new SinglePointSymbolRuleList(importFTS.getName());
 
 		try {
 
@@ -874,8 +817,7 @@ public class ASUtil {
 			tempRL.reverseSymbolizers();
 
 		} catch (final Exception e) {
-			LOGGER.warn("Error " + e.getLocalizedMessage()
-					+ " while importing the template RL. Using default");
+			LOGGER.warn("Error " + e.getLocalizedMessage() + " while importing the template RL. Using default");
 			LOGGER.error(e);
 			tempRL = getDefaultPointTemplate();
 		}
@@ -883,10 +825,8 @@ public class ASUtil {
 		return tempRL;
 	}
 
-	public static SinglePolygonSymbolRuleList importPolygonTemplateFromFirstRule(
-			final FeatureTypeStyle importFTS) {
-		SinglePolygonSymbolRuleList tempRL = new SinglePolygonSymbolRuleList(
-				importFTS.getName());
+	public static SinglePolygonSymbolRuleList importPolygonTemplateFromFirstRule(final FeatureTypeStyle importFTS) {
+		SinglePolygonSymbolRuleList tempRL = new SinglePolygonSymbolRuleList(importFTS.getName());
 
 		try {
 
@@ -899,8 +839,7 @@ public class ASUtil {
 			tempRL.reverseSymbolizers();
 
 		} catch (final Exception e) {
-			LOGGER.warn("Error " + e.getLocalizedMessage()
-					+ " while importing the template RL. Using default");
+			LOGGER.warn("Error " + e.getLocalizedMessage() + " while importing the template RL. Using default");
 			LOGGER.error(e);
 			tempRL = getDefaultPolygonTemplate();
 		}
@@ -912,8 +851,7 @@ public class ASUtil {
 	 * jtable.html
 	 */
 	public static boolean isClipboardContainingText(final Object requestor) {
-		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard()
-				.getContents(requestor);
+		final Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(requestor);
 		return t != null
 				&& (t.isDataFlavorSupported(DataFlavor.stringFlavor) || t
 						.isDataFlavorSupported(DataFlavor.plainTextFlavor));
@@ -928,8 +866,7 @@ public class ASUtil {
 	 * @param values
 	 *            optional values
 	 */
-	public static String R(final Locale locale, final String key,
-			final Object... values) {
+	public static String R(final Locale locale, final String key, final Object... values) {
 		String string = RESOURCE.getString(key, locale, values);
 		if (string.equals("???")) {
 			string = "???" + key;
@@ -965,8 +902,7 @@ public class ASUtil {
 
 	}
 
-	public static void replaceGraphicSize(final Graphic graphic,
-			final Float factor) {
+	public static void replaceGraphicSize(final Graphic graphic, final Float factor) {
 		if (graphic == null)
 			return;
 
@@ -979,20 +915,20 @@ public class ASUtil {
 			graphic.setSize(ASUtil.ff2.literal(newSize));
 		}
 
-//		else if (graphic.getMarks() != null) {
-//			// TODO Stefan Tzeggai 12.9.11 GT8 Migration
-//			for (final Mark m : graphic.getMarks()) {
-//				final Expression mSize = m.getSize();
-//				if (mSize != null && mSize != Expression.NIL) {
-//					final Float newSize = Float.valueOf(mSize.toString())
-//							* factor;
-//					// System.out.println("Changed a Mark's size from to "
-//					// + Double.valueOf(m.getSize().toString()) + " to "
-//					// + newSize);
-//					m.setSize(ASUtil.ff2.literal(newSize));
-//				}
-//			}
-//		}
+		// else if (graphic.getMarks() != null) {
+		// // TODO Stefan Tzeggai 12.9.11 GT8 Migration
+		// for (final Mark m : graphic.getMarks()) {
+		// final Expression mSize = m.getSize();
+		// if (mSize != null && mSize != Expression.NIL) {
+		// final Float newSize = Float.valueOf(mSize.toString())
+		// * factor;
+		// // System.out.println("Changed a Mark's size from to "
+		// // + Double.valueOf(m.getSize().toString()) + " to "
+		// // + newSize);
+		// m.setSize(ASUtil.ff2.literal(newSize));
+		// }
+		// }
+		// }
 	}
 
 	/**
@@ -1000,8 +936,7 @@ public class ASUtil {
 	 * 
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
-	public static void replacePolygonSymbolizerSize(final PolygonSymbolizer ps,
-			final Float factor) {
+	public static void replacePolygonSymbolizerSize(final PolygonSymbolizer ps, final Float factor) {
 		if (ps == null)
 			return;
 
@@ -1020,8 +955,7 @@ public class ASUtil {
 	 *            interval breaks
 	 * @return a new {@link TreeSet}
 	 */
-	public static TreeSet<Double> roundLimits(final TreeSet<Double> breaksList,
-			final Integer limitsDigits) {
+	public static TreeSet<Double> roundLimits(final TreeSet<Double> breaksList, final Integer limitsDigits) {
 		// No round -> use the original values
 		if (limitsDigits == null)
 			return breaksList;
@@ -1050,13 +984,11 @@ public class ASUtil {
 
 		doubleVal = Math.floor(doubleVal * 100f) / 100f;
 
-		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
-				.getModel());
+		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox.getModel());
 		final int indexOf = model.getIndexOf(doubleVal);
 
 		if (indexOf < 0) {
-			LOGGER.info("The Double expression " + doubleVal
-					+ " had to be inserted into the ComboBox");
+			LOGGER.info("The Double expression " + doubleVal + " had to be inserted into the ComboBox");
 
 			final int size = model.getSize();
 			final Set<Double> doubles = new TreeSet<Double>();
@@ -1079,8 +1011,7 @@ public class ASUtil {
 		model.setSelectedItem(doubleVal);
 	}
 
-	public static void selectOrInsert(final JComboBox comboBox,
-			final Expression expression) {
+	public static void selectOrInsert(final JComboBox comboBox, final Expression expression) {
 		if (expression instanceof Literal) {
 			final Literal lit = (Literal) expression;
 
@@ -1100,8 +1031,7 @@ public class ASUtil {
 				final Float floatVal = Float.valueOf(lit.toString());
 				selectOrInsert(comboBox, floatVal);
 			} else {
-				throw new RuntimeException("selectOrInsert neede for type "
-						+ comboBox.getItemAt(0));
+				throw new RuntimeException("selectOrInsert neede for type " + comboBox.getItemAt(0));
 			}
 		}
 
@@ -1139,13 +1069,11 @@ public class ASUtil {
 		// Round the value to the second decimal digit
 		floatVal = (float) Math.floor(floatVal * 100f) / 100f;
 
-		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
-				.getModel());
+		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox.getModel());
 		final int indexOf = model.getIndexOf(floatVal);
 
 		if (indexOf < 0) {
-			LOGGER.info("The float expression " + floatVal
-					+ " had to be inserted into the ComboBox");
+			LOGGER.info("The float expression " + floatVal + " had to be inserted into the ComboBox");
 
 			final int size = model.getSize();
 			final Set<Float> floats = new TreeSet<Float>();
@@ -1168,16 +1096,13 @@ public class ASUtil {
 		model.setSelectedItem(floatVal);
 	}
 
-	public static void selectOrInsert(final JComboBox comboBox,
-			Integer integerVal) {
+	public static void selectOrInsert(final JComboBox comboBox, Integer integerVal) {
 
-		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
-				.getModel());
+		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox.getModel());
 		final int indexOf = model.getIndexOf(integerVal);
 
 		if (indexOf < 0) {
-			LOGGER.info("The integer expression " + integerVal
-					+ " had to be inserted into the ComboBox");
+			LOGGER.info("The integer expression " + integerVal + " had to be inserted into the ComboBox");
 
 			final int size = model.getSize();
 			final Set<Integer> integers = new TreeSet<Integer>();
@@ -1200,16 +1125,13 @@ public class ASUtil {
 		model.setSelectedItem(integerVal);
 	}
 
-	public static void selectOrInsert(final JComboBox comboBox,
-			final String stringVal) {
+	public static void selectOrInsert(final JComboBox comboBox, final String stringVal) {
 
-		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox
-				.getModel());
+		final DefaultComboBoxModel model = ((DefaultComboBoxModel) comboBox.getModel());
 		final int indexOf = model.getIndexOf(stringVal);
 
 		if (indexOf < 0) {
-			LOGGER.info("The string expression " + stringVal
-					+ " had to be inserted into the ComboBox");
+			LOGGER.info("The string expression " + stringVal + " had to be inserted into the ComboBox");
 
 			final int size = model.getSize();
 			final Set<String> strings = new TreeSet<String>();
@@ -1231,13 +1153,14 @@ public class ASUtil {
 		}
 		model.setSelectedItem(stringVal);
 	}
-	
+
 	/**
 	 * Changes the name of the original .sld file to the optimized version
 	 */
 	public static File changeToOptimizedFilename(File sldFile) {
 		String pathname = sldFile.getAbsolutePath().replaceAll("\\.sld", "." + PRODUCTION_FILENAME_PART + ".sld")
-				.replaceAll("\\.SLD", "." + PRODUCTION_FILENAME_PART + ".SLD").replaceAll("\\.xml", "." + PRODUCTION_FILENAME_PART + ".xml")
+				.replaceAll("\\.SLD", "." + PRODUCTION_FILENAME_PART + ".SLD")
+				.replaceAll("\\.xml", "." + PRODUCTION_FILENAME_PART + ".xml")
 				.replaceAll("\\.XML", "." + PRODUCTION_FILENAME_PART + ".XML");
 		return new File(pathname);
 	}

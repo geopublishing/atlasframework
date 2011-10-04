@@ -285,6 +285,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	public static final String OPENMAPSYMBOLS_SVG_SERVERBASENAME = "http://http://freemapsymbols.org/svg";
 
 	public static final String SVG_MIMETYPE = "image/svg+xml";
+	public static final String PNG_MIMETYPE = "image/png";
 
 	private static final int EXT_GRAPHIC_BUTTON_HEIGHT = 34;
 
