@@ -60,7 +60,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	/** Values used or JCOmboBoxes offering a "space-arround" setting **/
 	final public static Integer[] SPACE_AROUND_VALUES = new Integer[] { 0, 1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 25,
 			30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100 };
-
+	
 	/** A renderer designed to visualize the Halo Radius values properly **/
 	final public static DefaultListCellRenderer HALO_RADIUS_VALUES_RENDERER = new DefaultListCellRenderer() {
 
@@ -88,6 +88,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 	final public static Float[] DISPLACEMENT_VALUES = new Float[] { 0f, 0.5f, 1.f, 1.5f, 2.f, 3.f, 4.f, 5.f, 6.f, 7.f,
 			8.f, 9.f, 10.f, 11.f, 12.f, 13.f, 14.f, 15.f, 16.f, 17.f, 18.f, 19.f, 20.f };
+	
 	/**
 	 * A renderer designed to visualize thePOINTDISPLACEMENT_VALUES_RENDERER
 	 * nicely
@@ -356,5 +357,5 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 		return jButtonExtGraphic;
 	}
 
-	private JButton jButtonExtGraphic;
+	protected JButton jButtonExtGraphic;
 }

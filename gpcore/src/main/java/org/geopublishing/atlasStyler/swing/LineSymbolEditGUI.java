@@ -60,42 +60,35 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.apache.xalan.xsltc.compiler.sym;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.LineSymbolizer;
-import org.geotools.styling.StyleImpl;
+import org.geotools.styling.Mark;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
-import org.opengis.style.AnchorPoint;
-import org.opengis.style.Displacement;
-import org.opengis.style.GraphicStroke;
-import org.opengis.style.GraphicalSymbol;
-import org.opengis.style.StyleVisitor;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ColorButton;
+import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
 public class LineSymbolEditGUI extends AbstractStyleEditGUI {
@@ -145,6 +138,21 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel jPanelGraphicStroke;
 
+	/**
+	 * When switching the {@link Graphic} to use an {@link ExternalGraphic} we backup the old {@link Mark}
+	 **/
+	protected Mark backupMark = null;
+	/**
+	 * When switching the {@link Graphic} to use a {@link Mark} we backup the old {@link ExternalGraphic}
+	 **/
+	protected ExternalGraphic backupExternalGraphic = null;
+
+	private JComboBox jComboBoxStyleType;
+
+	private JComboBox jComboBoxHeightExtGraphic;
+
+	private JComboBox jComboBoxWidthExtGraphic;
+
 	public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
 		this.symbolizer = symbolizer;
 		initialize();
@@ -153,11 +161,43 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private void initialize() {
 		// this.setSize(310, 280);
 		this.setLayout(new MigLayout("wrap 1"));
+		this.add(getJComboBoxStyleType(), "sgx");
 		this.add(getJPanelStroke(), "sgx");
 		// this.add(getJPanelLineStyle(), "sgx");
 		this.add(getJPanelDashArray(), "sgx");
 
 		this.add(getJPanelGraphicStroke(), "sgx");
+	}
+
+	private JComboBox getJComboBoxStyleType() {
+		if (jComboBoxStyleType == null) {
+			jComboBoxStyleType = new JComboBox();
+			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Normal", "Ext Graphics" })); // i8n
+			jComboBoxStyleType.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(final ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						if (e.getItem().toString().equals("Normal")) {
+							getJPanelGraphicStroke().setEnabled(false);
+							getJPanelDashArray().setEnabled(true);
+							getJPanelStroke().setEnabled(true);
+						} else {
+							getJPanelGraphicStroke().setEnabled(true);
+							getJPanelDashArray().setEnabled(false);
+							getJPanelStroke().setEnabled(false);
+						}
+
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxStyleType);
+		}
+		return jComboBoxStyleType;
 	}
 
 	/**
@@ -459,16 +499,76 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel getJPanelGraphicStroke() {
 		if (jPanelGraphicStroke == null) {
-			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			
+			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[grow]"));
+			jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder("External Graphic")); // i8n
+
 			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
 			graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic();
 			symbolizer.getStroke().setGraphicStroke(graphicStroke);
-			
+
 			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.LINE, graphicStroke));
+			jPanelGraphicStroke.add(getJComboxBoxWidthExtGraphic());
+			jPanelGraphicStroke.add(getJComboxBoxHeightExtGraphic());
+			jPanelGraphicStroke.setEnabled(false);
 
 		}
 		return jPanelGraphicStroke;
+	}
+
+	private JComboBox getJComboxBoxHeightExtGraphic() {
+		if (jComboBoxHeightExtGraphic == null) {
+			jComboBoxHeightExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
+
+			if (jButtonExtGraphic != null) {
+				Integer height = jButtonExtGraphic.getHeight();
+				ASUtil.selectOrInsert(jComboBoxHeightExtGraphic, height);
+			} else {
+				// set default?
+			}
+
+			jComboBoxHeightExtGraphic.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(final ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						jButtonExtGraphic.setSize((Integer) e.getItem(), jButtonExtGraphic.getSize().height);
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxHeightExtGraphic);
+		}
+		return jComboBoxHeightExtGraphic;
+	}
+
+	private JComboBox getJComboxBoxWidthExtGraphic() {
+		if (jComboBoxWidthExtGraphic == null) {
+			jComboBoxWidthExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
+
+			if (jButtonExtGraphic != null) {
+				Integer height = jButtonExtGraphic.getHeight();
+				ASUtil.selectOrInsert(jComboBoxWidthExtGraphic, height);
+			} else {
+				// set default?
+			}
+
+			jComboBoxWidthExtGraphic.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(final ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						jButtonExtGraphic.setSize(jButtonExtGraphic.getSize().width, (Integer) e.getItem());
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxWidthExtGraphic);
+		}
+		return jComboBoxWidthExtGraphic;
 	}
 
 	/**
@@ -616,5 +716,4 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jComboBoxPerpendicularOffset;
 	}
-
 }

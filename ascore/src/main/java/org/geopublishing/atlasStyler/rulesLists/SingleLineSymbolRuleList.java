@@ -83,7 +83,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	public Color getColor() {
 
 		for (LineSymbolizer ps : getSymbolizers()) {
-
+			
 			Color foundColor = StylingUtil.getLineSymbolizerColor(ps);
 			if (foundColor != null)
 				return foundColor;
