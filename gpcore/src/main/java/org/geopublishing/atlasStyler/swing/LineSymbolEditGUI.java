@@ -91,9 +91,8 @@ import de.schmitzm.swing.ColorButton;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
-
 public class LineSymbolEditGUI extends AbstractStyleEditGUI {
-	
+
 	private static final String[] LINEJOIN_VALUES = new String[] { "mitre", "round", "bevel" };
 
 	private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
@@ -141,7 +140,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JComboBox jComboBoxPerpendicularOffset = null;
 
 	private JPanel jPanelGraphicStroke;
-	
+
 	protected ExternalGraphic backupExternalGraphic = null;
 
 	private JComboBox jComboBoxStyleType;
@@ -205,8 +204,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 						getJPanelGraphicStroke().setEnabled(!b);
 						getJPanelDashArray().setEnabled(b);
 						getJPanelStroke().setEnabled(b);
-						
-						// Will be enabled, whe GT8 support "PerpendicualOffset" for LineSymbolizer
+
+						// Will be enabled, whe GT8 support "PerpendicualOffset"
+						// for LineSymbolizer
 						getJComboBoxPerpendicularOffset().setEnabled(false);
 						jLabelPerpendicularOffset.setEnabled(false);
 
@@ -230,8 +230,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JPanel getJPanelStroke() {
 		if (jPanelStroke == null) {
 			jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil
-					.R("LineSymbolEdit.LineStyle.Title")));
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil.R("LineSymbolEdit.LineStyle.Title")));
 
 			jPanelStroke.add(jLabelStrokeColor, "split 6");
 			jPanelStroke.add(getJButtonStrokeColor(), "");
@@ -528,7 +527,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			if (graphicStroke == null) {
 				// Ein default SVG auswählen
-				ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic("http://www.geopublishing.org/icon64_AS.png", "image/png");
+				ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic(
+						"http://www.geopublishing.org/icon64_AS.png", "image/png");
 				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic(eg, null, null);
 			}
 
@@ -568,24 +568,25 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jComboBoxSizeExtGraphic;
 	}
-	
+
 	private OpacityJComboBox getJComboxBoxOpacityExtGraphic() {
 		if (jComboBoxOpacityExtGraphic == null) {
 			jComboBoxOpacityExtGraphic = new OpacityJComboBox();
 			jComboBoxOpacityExtGraphic.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
 
-			Expression graphicOpacity = ASUtil.ff2.literal("1.0");
-			
-			if(symbolizer.getStroke().getGraphicStroke()!=null)
-				graphicOpacity = symbolizer.getStroke().getGraphicStroke().getOpacity();
-			
-			ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, graphicOpacity);
-			
+			float graphicOpacity = 1f;
+
+			if (symbolizer.getStroke().getGraphicStroke() != null
+					&& symbolizer.getStroke().getGraphicStroke().getOpacity() != null) {
+				ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, symbolizer.getStroke().getGraphicStroke().getOpacity());
+			} else
+				ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, graphicOpacity);
+
 			jComboBoxOpacityExtGraphic.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						symbolizer.getStroke().getGraphicStroke().setOpacity(ASUtil.ff2.literal(e.getItem()));
+						symbolizer.getStroke().getGraphicStroke().setOpacity(ASUtil.ff2.literal(jComboBoxOpacityExtGraphic.getSelectedItem()));
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}
 				}

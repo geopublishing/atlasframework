@@ -305,6 +305,8 @@ public class StylerDialog extends CancellableDialogAdapter {
 
 		// Check if any SVGs with file:// are used. If so, copy them to the .sld
 		// locations and change the references.
+//		TODO
+//		boolean changed = copyLocalExternalGraphicSvgToRelativePath();
 		boolean changed = false; // = copyLocalExternalGraphicSvgToRelativePath();
 
 		// If not automatic update is enabled, we have to fire our
