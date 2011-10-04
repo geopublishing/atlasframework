@@ -98,6 +98,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
 
+	private static OpacityJComboBox jComboBoxOpacityExtGraphic = null;
+
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
 	private final LineSymbolizer symbolizer;
@@ -147,6 +149,12 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JComboBox jComboBoxSizeExtGraphic;
 
 	protected Graphic backupStroke;
+
+	private JLabel jLabelComboBoxOpacityExtGraphic = new JLabel(ASUtil.R("OpacityLabel"));
+
+	private JLabel jLabelComboBoxSizeExtGraphic = new JLabel(ASUtil.R("SizeLabel"));
+
+	private JLabel jLabelButtonExtGraphic = new JLabel(ASUtil.R("Icon"));
 
 	public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
 		this.symbolizer = symbolizer;
@@ -513,7 +521,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel getJPanelGraphicStroke() {
 		if (jPanelGraphicStroke == null) {
-			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 2", "[r][l]"));
+			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[l][l][l]"));
 			jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder("External Graphic")); // i8n
 
 			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
@@ -524,12 +532,16 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic(eg, null, null);
 			}
 
+			jPanelGraphicStroke.add(jLabelButtonExtGraphic);
+			jPanelGraphicStroke.add(jLabelComboBoxSizeExtGraphic);
+			jPanelGraphicStroke.add(jLabelComboBoxOpacityExtGraphic);
 			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, backupStroke));
 
 			jPanelGraphicStroke.add(getJComboxBoxSizeExtGraphic());
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				jPanelGraphicStroke.setEnabled(false);
 			}
+			jPanelGraphicStroke.add(getJComboxBoxOpacityExtGraphic());
 
 		}
 		return jPanelGraphicStroke;
@@ -539,6 +551,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		if (jComboBoxSizeExtGraphic == null) {
 			jComboBoxSizeExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
 
+			jComboBoxSizeExtGraphic.setSelectedIndex(0);
 			jComboBoxSizeExtGraphic.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
@@ -554,6 +567,33 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			SwingUtil.addMouseWheelForCombobox(jComboBoxSizeExtGraphic);
 		}
 		return jComboBoxSizeExtGraphic;
+	}
+	
+	private OpacityJComboBox getJComboxBoxOpacityExtGraphic() {
+		if (jComboBoxOpacityExtGraphic == null) {
+			jComboBoxOpacityExtGraphic = new OpacityJComboBox();
+			jComboBoxOpacityExtGraphic.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
+
+			Expression graphicOpacity = ASUtil.ff2.literal("1.0");
+			
+			if(symbolizer.getStroke().getGraphicStroke()!=null)
+				graphicOpacity = symbolizer.getStroke().getGraphicStroke().getOpacity();
+			
+			ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, graphicOpacity);
+			
+			jComboBoxOpacityExtGraphic.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(final ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						symbolizer.getStroke().getGraphicStroke().setOpacity(ASUtil.ff2.literal(e.getItem()));
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+					}
+				}
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
+		}
+		return jComboBoxOpacityExtGraphic;
 	}
 
 	/**
