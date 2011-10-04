@@ -118,6 +118,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private final JLabel jLabelLineJoin = new JLabel(AtlasStylerVector.R("LinejoinLabel"));
 
+	private final JLabel jLabelPerpendicularOffset = new JLabel("Perpend. Offset");// i8n
+
 	private JComboBox jComboBoxLinejoin = null;
 
 	private final JLabel jLabelLinecap = new JLabel(AtlasStylerVector.R("LinecapLabel"));
@@ -151,6 +153,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JComboBox jComboBoxWidthExtGraphic;
 
+	protected Graphic backupStroke;
+
 	public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
 		this.symbolizer = symbolizer;
 		initialize();
@@ -171,17 +175,29 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		if (jComboBoxStyleType == null) {
 			jComboBoxStyleType = new JComboBox();
 			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Normal", "Ext Graphics" })); // i8n
+			
+			if (symbolizer.getStroke().getGraphicStroke() == null) {
+				getJPanelGraphicStroke().setEnabled(false);
+				getJPanelDashArray().setEnabled(true);
+				getJPanelStroke().setEnabled(true);
+			}
 			jComboBoxStyleType.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (e.getItem().toString().equals("Normal")) {
+							backupStroke = symbolizer.getStroke().getGraphicStroke();
 							getJPanelGraphicStroke().setEnabled(false);
+							symbolizer.getStroke().setGraphicStroke(null);
 							getJPanelDashArray().setEnabled(true);
 							getJPanelStroke().setEnabled(true);
+							getJComboBoxPerpendicularOffset().setEnabled(false); //until proper implementation in geotools
 						} else {
+							if (backupStroke!=null)
+								symbolizer.getStroke().setGraphicStroke(backupStroke);
 							getJPanelGraphicStroke().setEnabled(true);
+							
 							getJPanelDashArray().setEnabled(false);
 							getJPanelStroke().setEnabled(false);
 						}
@@ -217,8 +233,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jPanelStroke.add(getJComboBoxStrokeOpacity(), "");
 
 			// wraps here
-			jPanelStroke.add(jLabelLineJoin, "split 5");
+			jPanelStroke.add(jLabelLineJoin, "split 6");
 			jPanelStroke.add(getJComboBoxLineJoin(), "");
+			jPanelStroke.add(jLabelPerpendicularOffset, "");
 			jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
 			jPanelStroke.add(new JLabel(), "growx 100");
 			jPanelStroke.add(jLabelLinecap, "");
@@ -497,7 +514,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel getJPanelGraphicStroke() {
 		if (jPanelGraphicStroke == null) {
-			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[grow]"));
+			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 2", "[r][l]"));
 			jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder("External Graphic")); // i8n
 
 			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
@@ -508,7 +525,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, graphicStroke));
 			jPanelGraphicStroke.add(getJComboxBoxWidthExtGraphic());
-			jPanelGraphicStroke.setEnabled(false);
+			if (symbolizer.getStroke().getGraphicStroke() == null) {
+				jPanelGraphicStroke.setEnabled(false);
+			}
 
 		}
 		return jPanelGraphicStroke;
@@ -684,6 +703,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			});
 
 			SwingUtil.addMouseWheelForCombobox(jComboBoxPerpendicularOffset);
+
+			// disabled until supported by geotools
+			jComboBoxPerpendicularOffset.setEnabled(false);
 		}
 		return jComboBoxPerpendicularOffset;
 	}
