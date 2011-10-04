@@ -496,11 +496,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JPanel getJPanelDashArray() {
 		if (jPanelDashArray == null) {
 			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jLabelDashOffset = new JLabel(AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashOffset"));
-			jLabelDashPattern = new JLabel(AtlasStylerVector.R("LineSymbolEdit.DashedLine.DashPattern"));
-			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+			jLabelDashOffset = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashOffset"));
+			jLabelDashPattern = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashPattern"));
+			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("LineSymbolEdit.DashedLine.Title")));
-			final JLabel lineExplanation = new JLabel(AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
+			final JLabel lineExplanation = new JLabel(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
 			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
 

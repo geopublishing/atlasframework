@@ -452,17 +452,17 @@ public class ASUtil {
 	public static Float getBiggestSize(final PolygonSymbolizer ps, Float maxSize) {
 
 		maxSize = getBiggestSize(ps.getFill(), maxSize);
-		maxSize = getBiggestWidth(ps.getStroke(), maxSize);
+		maxSize = getBiggestStrokeWidthOrGraphicSize(ps.getStroke(), maxSize);
 
 		return maxSize;
 	}
 
 	public static Float getBiggestWidth(final LineSymbolizer ps, Float maxSize) {
-		maxSize = getBiggestWidth(ps.getStroke(), maxSize);
+		maxSize = getBiggestStrokeWidthOrGraphicSize(ps.getStroke(), maxSize);
 		return maxSize;
 	}
 
-	public static Float getBiggestWidth(final Stroke stroke, Float maxSize) {
+	public static Float getBiggestStrokeWidthOrGraphicSize(final Stroke stroke, Float maxSize) {
 		if (stroke == null)
 			return maxSize;
 		

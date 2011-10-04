@@ -126,7 +126,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			singleSymbolRuleList.fireEvents(new RuleChangedEvent(
 					"SymbolEditorGUI propagator", singleSymbolRuleList));
 
-			LOGGER.debug("Propagating...");
+//			LOGGER.debug("Propagating...");
 		}
 	};
 

@@ -367,11 +367,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				// LOGGER.info("Should update the size to
 				// "+singleSymbolRuleList
 				// .getSizeBiggest());
-				if (((DefaultComboBoxModel) jComboBoxSize.getModel())
-						.getIndexOf(singleSymbolRuleList.getSizeBiggest()) < 0) {
-					((DefaultComboBoxModel) jComboBoxSize.getModel())
-							.addElement(singleSymbolRuleList.getSizeBiggest());
-				}
+//				if (((DefaultComboBoxModel) jComboBoxSize.getModel())
+//						.getIndexOf(singleSymbolRuleList.getSizeBiggest()) < 0) {
+//					((DefaultComboBoxModel) jComboBoxSize.getModel())
+//							.addElement(singleSymbolRuleList.getSizeBiggest());
+//				}
 				ASUtil.selectOrInsert(jComboBoxSize,
 						singleSymbolRuleList.getSizeBiggest());
 				// jComboBoxSize.setSelectedItem(singleSymbolRuleList

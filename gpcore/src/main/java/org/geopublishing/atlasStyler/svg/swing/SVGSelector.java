@@ -435,7 +435,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 							 * A Symbol has been selected. Throws an event.
 							 */
 
-							if (geometryForm == GeometryForm.POLYGON) {
 								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
 								PolygonSymbolizer symbolizer = rl.getSymbolizers().get(0);
 								egs = symbolizer.getFill().getGraphicFill().getExternalGraphics();
@@ -445,7 +444,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 										SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, egs);
 									}
 								});
-							}
 
 						} else if (value instanceof SinglePointSymbolRuleList) {
 							/***************************************************
@@ -689,23 +687,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 						String newNameWithOutEnding = path.substring(0, path.length() - 4);
 						newNameWithOutEnding = newNameWithOutEnding
 								.substring(newNameWithOutEnding.lastIndexOf("/") + 1);
-
-						// /*******************************************************
-						// * Now we create the URL that points to a local,
-						// * relative directoy <sld:OnlineResource
-						// * xmlns:xlink="http://www.w3.org/1999/xlink"
-						// * xlink:type="simple" xlink:href=
-						// * "file:openmapsymbols/svg/health/hospital.svg"/>
-						// */
-						// String localPath = path;
-						// if (path.startsWith("/"))
-						// localPath = path.substring(1);
-						// URL urlLocal = new URL("file:" + localPath);
-						//
-						// /** ExternalGraphic to local Graphic * */
-						// ExternalGraphic egLocal = ASUtil.SB
-						// .createExternalGraphic(urlLocal,
-						// GraphicEditGUI.SVG_MIMETYPE);
 
 						/** ExternalGraphic to online Graphic * */
 						ExternalGraphic eg = ASUtil.SB.createExternalGraphic(url, GraphicEditGUI.SVG_MIMETYPE);
