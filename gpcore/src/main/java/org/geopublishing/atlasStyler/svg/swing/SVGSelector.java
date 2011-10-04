@@ -34,12 +34,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,7 +75,8 @@ import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.data.DataUtilities;
 import org.geotools.styling.ExternalGraphic;
-import org.geotools.styling.Mark;
+import org.geotools.styling.GraphicImpl;
+import org.geotools.styling.LineSymbolizer;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 
@@ -138,7 +140,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 	/**
 	 * The String KEY is URL.toString
 	 */
-	final static HashMap<String, List<Object>> cachedRuleLists = new HashMap<String, List<Object>>();
+	final static Map<String, List<Object>> cachedRuleLists = new ConcurrentHashMap<String, List<Object>>();
 
 	/**
 	 * @throws MalformedURLException
@@ -710,46 +712,25 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 						final SingleRuleList symbolRuleList;
 
+						GraphicImpl g = (GraphicImpl) ASUtil.createDefaultGraphic();
+						g.setSize(ASUtil.ff.literal(SVGICON_SIZE.height));
+						g.graphicalSymbols().clear();
+						g.graphicalSymbols().add(eg);
+
 						if (geometryForm == GeometryForm.POINT) {
 							symbolRuleList = new SinglePointSymbolRuleList("");
-
 							symbolRuleList.addNewDefaultLayer();
-							PointSymbolizer symb = (PointSymbolizer) symbolRuleList.getSymbolizers().get(0);
-							symb.getGraphic().setMarks(Mark.MARKS_EMPTY);
-							symb.getGraphic().setSize(ASUtil.ff.literal(SVGICON_SIZE.height)); // TODO
-							// height
-							// vs.
-							// WIDTH?
-
-							/**
-							 * Using local as the default SVG base, as we
-							 * suppose it to be faster
-							 */
-							symb.getGraphic().setExternalGraphics(new ExternalGraphic[] { eg });
+							((PointSymbolizer) symbolRuleList.getSymbolizers().get(0)).setGraphic(g);
 
 						} else if (geometryForm == GeometryForm.LINE) {
 							symbolRuleList = new SingleLineSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
-							// TODO line .. naja.. klappt bestimmt auch nicht
+							((LineSymbolizer) symbolRuleList.getSymbolizers().get(0)).getStroke().setGraphicStroke(g);
 
 						} else {
 							symbolRuleList = new SinglePolygonSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
-							PolygonSymbolizer symb = (PolygonSymbolizer) symbolRuleList.getSymbolizers().get(0);
-							if (symb.getFill().getGraphicFill() == null) {
-								symb.getFill().setGraphicFill(ASUtil.createDefaultGraphic());
-							}
-							symb.getFill().getGraphicFill().setMarks(Mark.MARKS_EMPTY);
-							symb.getFill().getGraphicFill().setSize(ASUtil.ff.literal(SVGICON_SIZE.height)); // TODO
-							// height
-							// vs.
-							// width
-							// ?
-							// wie
-							// oben
-
-							symb.getFill().getGraphicFill().setExternalGraphics(new ExternalGraphic[] { eg });
-
+							((PolygonSymbolizer) symbolRuleList.getSymbolizers().get(0)).getFill().setGraphicFill(g);
 						}
 
 						symbolRuleList.setStyleName(newNameWithOutEnding);
