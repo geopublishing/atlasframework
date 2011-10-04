@@ -176,12 +176,13 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JComboBox getJComboBoxStyleType() {
 		if (jComboBoxStyleType == null) {
 			jComboBoxStyleType = new JComboBox();
-			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Normal", "Ext Graphics" })); // i8n
+			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Einfache Linie", "Ext Graphics" })); // i8n
 
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				getJPanelGraphicStroke().setEnabled(false);
 				getJPanelDashArray().setEnabled(true);
 				getJPanelStroke().setEnabled(true);
+				jComboBoxStyleType.setSelectedIndex(1);
 			}
 			jComboBoxStyleType.addItemListener(new ItemListener() {
 
@@ -250,7 +251,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jPanelStroke.add(getJComboBoxLineJoin(), "");
 			jPanelStroke.add(jLabelPerpendicularOffset, "");
 			jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
-			jPanelStroke.add(new JLabel(), "growx 100");
+			jPanelStroke.add(new JLabel(), "");
 			jPanelStroke.add(jLabelLinecap, "");
 			jPanelStroke.add(getJComboBoxLineCap(), "");
 
