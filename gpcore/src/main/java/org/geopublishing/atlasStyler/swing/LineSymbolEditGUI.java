@@ -137,6 +137,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JComboBox jComboBoxDashOffset = null;
 
+	private JComboBox jComboBoxPerpendicularOffset = null;
+
 	public LineSymbolEditGUI(
 			final org.geotools.styling.LineSymbolizer symbolizer) {
 		this.symbolizer = symbolizer;
@@ -172,6 +174,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			// wraps here
 			jPanelStroke.add(jLabelLineJoin, "split 5");
 			jPanelStroke.add(getJComboBoxLineJoin(), "");
+			jPanelStroke.add(getJComboBoxPerpendicularOffset(),"");
 			jPanelStroke.add(new JLabel(), "growx 100");
 			jPanelStroke.add(jLabelLinecap, "");
 			jPanelStroke.add(getJComboBoxLineCap(), "");
@@ -179,6 +182,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jPanelStroke;
 	}
+
 
 	/**
 	 * This method initializes jButton
@@ -600,5 +604,37 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		}
 		return jComboBoxDashOffset;
 	}
+
+	private JComboBox getJComboBoxPerpendicularOffset() {
+		if(jComboBoxPerpendicularOffset == null){
+			jComboBoxPerpendicularOffset = new JComboBox(new DefaultComboBoxModel(
+					DISPLACEMENT_VALUES));
+			
+			if (symbolizer.getPerpendicularOffset() != null) {
+				Expression offset = symbolizer.getPerpendicularOffset();
+				ASUtil.selectOrInsert(jComboBoxPerpendicularOffset, offset);
+			} else {
+				// set default?
+			}
+
+			jComboBoxPerpendicularOffset.addItemListener(new ItemListener() {
+
+				@Override
+				public void itemStateChanged(final ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+
+						symbolizer.setPerpendicularOffset(ASUtil.ff2.literal(e.getItem()));
+
+						firePropertyChange(PROPERTY_UPDATED, null, null);
+					}
+				}
+
+			});
+
+			SwingUtil.addMouseWheelForCombobox(jComboBoxPerpendicularOffset);
+		}
+		return jComboBoxPerpendicularOffset;
+	}
+
 
 }
