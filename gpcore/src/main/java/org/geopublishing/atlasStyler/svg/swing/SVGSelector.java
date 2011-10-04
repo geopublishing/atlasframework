@@ -29,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -71,7 +70,6 @@ import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasStyler.swing.GraphicEditGUI;
 import org.geopublishing.atlasStyler.swing.JScrollPaneSymbols;
-import org.geopublishing.atlasViewer.swing.HTMLInfoPaneInterface;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.data.DataUtilities;
@@ -255,7 +253,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 			jPanel.setLayout(new GridBagLayout());
 			jPanel.add(jLabelExplanation, gridBagConstraints5);
 			jPanel.add(getJTextFieldURL(), gridBagConstraints6);
-			jPanel.add(getJButtoneSelfURL(), gridBagConstraints7);
+			jPanel.add(getJButtonSelfURL(), gridBagConstraints7);
 			jPanel.add(getJButtonUp(), gridBagConstraints9);
 		}
 		return jPanel;
@@ -321,7 +319,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 	 * 
 	 * @return javax.swing.JButton
 	 */
-	private JButton getJButtoneSelfURL() {
+	private JButton getJButtonSelfURL() {
 		if (jButtonSelfURL == null) {
 			jButtonSelfURL = new JButton();
 			jButtonSelfURL.setToolTipText(ASUtil.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
@@ -371,7 +369,6 @@ public class SVGSelector extends CancellableDialogAdapter {
 					LOGGER.info(imageUrl);
 
 					String mimetype = GraphicEditGUI.PNG_MIMETYPE;
-					;
 					if (imageUrl.getFile().toLowerCase().endsWith("svg")) {
 						mimetype = GraphicEditGUI.SVG_MIMETYPE;
 					}
@@ -429,11 +426,12 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 						Object value = jList.getModel().getElementAt(i);
 
+						final ExternalGraphic[] egs;
+
 						if (value instanceof SinglePolygonSymbolRuleList) {
 							/***************************************************
-							 * A SVG Symbol has been selected. Throws an event.
+							 * A Symbol has been selected. Throws an event.
 							 */
-							final ExternalGraphic[] egs;
 
 							if (geometryForm == GeometryForm.POLYGON) {
 								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
@@ -449,9 +447,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 						} else if (value instanceof SinglePointSymbolRuleList) {
 							/***************************************************
-							 * A SVG Symbol has been selected. Throws an event.
+							 * A Symbol has been selected. Throws an event.
 							 */
-							final ExternalGraphic[] egs;
 
 							if (geometryForm == GeometryForm.POINT) {
 								final SinglePointSymbolRuleList rl = (SinglePointSymbolRuleList) value;
@@ -691,21 +688,22 @@ public class SVGSelector extends CancellableDialogAdapter {
 						newNameWithOutEnding = newNameWithOutEnding
 								.substring(newNameWithOutEnding.lastIndexOf("/") + 1);
 
-						/*******************************************************
-						 * Now we create the URL that points to a local,
-						 * relative directoy <sld:OnlineResource
-						 * xmlns:xlink="http://www.w3.org/1999/xlink"
-						 * xlink:type="simple" xlink:href=
-						 * "file:openmapsymbols/svg/health/hospital.svg"/>
-						 */
-						String localPath = path;
-						if (path.startsWith("/"))
-							localPath = path.substring(1);
-						URL urlLocal = new URL("file:" + localPath);
-
-						/** ExternalGraphic to local Graphic * */
-						ExternalGraphic egLocal = ASUtil.SB
-								.createExternalGraphic(urlLocal, GraphicEditGUI.SVG_MIMETYPE);
+						// /*******************************************************
+						// * Now we create the URL that points to a local,
+						// * relative directoy <sld:OnlineResource
+						// * xmlns:xlink="http://www.w3.org/1999/xlink"
+						// * xlink:type="simple" xlink:href=
+						// * "file:openmapsymbols/svg/health/hospital.svg"/>
+						// */
+						// String localPath = path;
+						// if (path.startsWith("/"))
+						// localPath = path.substring(1);
+						// URL urlLocal = new URL("file:" + localPath);
+						//
+						// /** ExternalGraphic to local Graphic * */
+						// ExternalGraphic egLocal = ASUtil.SB
+						// .createExternalGraphic(urlLocal,
+						// GraphicEditGUI.SVG_MIMETYPE);
 
 						/** ExternalGraphic to online Graphic * */
 						ExternalGraphic eg = ASUtil.SB.createExternalGraphic(url, GraphicEditGUI.SVG_MIMETYPE);
@@ -727,7 +725,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 							 * Using local as the default SVG base, as we
 							 * suppose it to be faster
 							 */
-							symb.getGraphic().setExternalGraphics(new ExternalGraphic[] { eg, egLocal });
+							symb.getGraphic().setExternalGraphics(new ExternalGraphic[] { eg });
 
 						} else if (geometryForm == GeometryForm.LINE) {
 							symbolRuleList = new SingleLineSymbolRuleList("");
@@ -750,7 +748,7 @@ public class SVGSelector extends CancellableDialogAdapter {
 							// wie
 							// oben
 
-							symb.getFill().getGraphicFill().setExternalGraphics(new ExternalGraphic[] { eg, egLocal });
+							symb.getFill().getGraphicFill().setExternalGraphics(new ExternalGraphic[] { eg });
 
 						}
 

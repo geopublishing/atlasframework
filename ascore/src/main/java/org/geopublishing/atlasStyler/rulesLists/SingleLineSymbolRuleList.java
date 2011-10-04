@@ -14,14 +14,9 @@ import java.awt.Color;
 
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geotools.styling.Graphic;
-import org.geotools.styling.GraphicImpl;
 import org.geotools.styling.LineSymbolizer;
-import org.geotools.styling.StrokeImpl;
-import org.geotools.styling.Symbolizer;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.expression.Expression;
-import org.opengis.style.Stroke;
 
 import com.vividsolutions.jts.geom.LineString;
 
@@ -45,16 +40,17 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public void addNewDefaultLayer() {
-//		
-//		LineSymbolizer ls = StylingUtil.STYLE_BUILDER.createLineSymbolizer();
-//		
-//		StrokeImpl stroke = (StrokeImpl) StylingUtil.STYLE_BUILDER.createStroke();
-//		stroke.setGraphicStroke();
-//
-//		ls.setStroke(stroke);
-		
-//		addSymbolizer(ls);
-		
+		//
+		// LineSymbolizer ls = StylingUtil.STYLE_BUILDER.createLineSymbolizer();
+		//
+		// StrokeImpl stroke = (StrokeImpl)
+		// StylingUtil.STYLE_BUILDER.createStroke();
+		// stroke.setGraphicStroke();
+		//
+		// ls.setStroke(stroke);
+
+		// addSymbolizer(ls);
+
 		addSymbolizer(ASUtil.createDefaultSymbolizer(getGeometryDescriptor()));
 	}
 
@@ -68,8 +64,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	 */
 	@Override
 	public SingleRuleList clone(boolean copyListeners) {
-		SingleLineSymbolRuleList clone = new SingleLineSymbolRuleList(
-				getTitle());
+		SingleLineSymbolRuleList clone = new SingleLineSymbolRuleList(getTitle());
 		copyTo(clone);
 		return clone;
 	}
@@ -94,8 +89,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public GeometryDescriptor getGeometryDescriptor() {
-		return FeatureUtil.createFeatureType(LineString.class)
-				.getGeometryDescriptor();
+		return FeatureUtil.createFeatureType(LineString.class).getGeometryDescriptor();
 	}
 
 	@Override
@@ -103,9 +97,20 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 		return getSymbolizers().get(idx).getClass().getSimpleName();
 	}
 
+	/**
+	 * return <code>null</code> if not rotatable graphicStroke is used. Return
+	 * 0. if one is used but it is not rotated.
+	 */
 	@Override
 	public Double getRotation() {
-		// TODO Auto-generated method stub
+		for (LineSymbolizer ls : getSymbolizers()) {
+			if (ls.getStroke() == null)
+				continue;
+			if (ls.getStroke().getGraphicStroke() == null)
+				continue;
+			Expression rotation = ls.getStroke().getGraphicStroke().getRotation();
+			return rotation != null ? Double.valueOf(rotation.toString()) : 0.;
+		}
 		return null;
 	}
 
@@ -123,8 +128,7 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public boolean hasRotation() {
-		// TODO Auto-generated method stub
-		return false;
+		return getRotation() != null;
 	}
 
 	/**
@@ -146,8 +150,26 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 	}
 
 	@Override
-	public void setRotation(Double size) {
-		// TODO Auto-generated method stub
+	public void setRotation(Double rot) {
+		pushQuite();
+		try {
+			for (LineSymbolizer ls : getSymbolizers()) {
+
+				if (ls.getStroke() == null)
+					continue;
+
+				if (ls.getStroke().getGraphicStroke() != null) {
+
+					Double dif = rot - getRotation();
+
+					Double newRot = (Double.valueOf(ls.getStroke().getGraphicStroke().getRotation().toString()) + dif) % 360;
+					ls.getStroke().getGraphicStroke().setRotation(ASUtil.ff2.literal(newRot));
+				}
+				fireEvents(new RuleChangedEvent("setRotation to " + rot, this));
+			}
+		} finally {
+			popQuite();
+		}
 	}
 
 	@Override
@@ -160,19 +182,27 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 		Float factor = newMax / getSizeBiggest();
 
-		for (LineSymbolizer ps : getSymbolizers()) {
+		for (LineSymbolizer ls : getSymbolizers()) {
 
-			if (ps.getStroke() == null)
+			if (ls.getStroke() == null)
 				continue;
 
-			Expression width = ps.getStroke().getWidth();
-			if (width != null) {
-				float newSize = Float.valueOf(width.toString()) * factor;
+			if (ls.getStroke().getGraphicStroke() != null) {
+				Expression size = ls.getStroke().getGraphicStroke().getSize();
+				if (size != null) {
+					float newSize = Float.valueOf(size.toString()) * factor;
+					ls.getStroke().getGraphicStroke().setSize(ASUtil.ff2.literal(newSize));
+				}
 
-				ps.getStroke().setWidth(ASUtil.ff2.literal(newSize));
+			} else {
+
+				Expression width = ls.getStroke().getWidth();
+				if (width != null) {
+					float newSize = Float.valueOf(width.toString()) * factor;
+					ls.getStroke().setWidth(ASUtil.ff2.literal(newSize));
+				}
 			}
 
-			// TODO What about graphic lines etc...
 		}
 
 		fireEvents(new RuleChangedEvent("SetWidth to " + newMax, this));

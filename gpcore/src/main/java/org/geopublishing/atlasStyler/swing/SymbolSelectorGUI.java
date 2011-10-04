@@ -22,7 +22,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.Arrays;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -310,26 +309,15 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				 */
 				jComboBoxSize.setModel(new DefaultComboBoxModel(
 						AbstractStyleEditGUI.WIDTH_VALUES));
-
-				// jComboBoxSize.setRenderer(AbstractEditGUI.WIDTH_VALUES_RENDERER);
-
-				if (!Arrays.asList(AbstractStyleEditGUI.WIDTH_VALUES).contains(
-						singleSymbolRuleList.getSizeBiggest())) {
-				}
-
 			} else {
 				/***************************************************************
 				 * This is about Graphic Sizes
 				 */
 				jComboBoxSize.setModel(new DefaultComboBoxModel(
 						AbstractStyleEditGUI.SIZE_VALUES));
-
-				if (!Arrays.asList(AbstractStyleEditGUI.SIZE_VALUES).contains(
-						singleSymbolRuleList.getSizeBiggest())) {
-					// TODO Value not in list!
-				}
-
 			}
+			
+			ASUtil.selectOrInsert(jComboBoxSize, singleSymbolRuleList.getSizeBiggest());
 
 			singleSymbolRuleList
 					.addListener(sizeComboBoxReactsToStyleChangesListener);

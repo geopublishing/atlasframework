@@ -1,0 +1,153 @@
+[INFO] 
+NOTE: Maven is executing in offline mode. Any artifacts not already in your local
+repository will be inaccessible.
+
+[INFO] Scanning for projects...
+[WARNING] 
+	Profile with id: 'w2buero' has not been activated.
+
+[WARNING] 
+	Profile with id: '_resourceOperationRemove' has not been activated.
+
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building AtlasStyler Swing GUI
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[WARNING] Overriding profile: 'null' (source: pom) with new instance from source: pom
+[WARNING] Overriding profile: 'null' (source: pom) with new instance from source: pom
+[WARNING] Overriding profile: 'null' (source: pom) with new instance from source: pom
+[INFO] [dependency:tree {execution: default-cli}]
+[INFO] org.geopublishing.atlasStyler:asswinggui:jar:1.9-SNAPSHOT
+[INFO] +- org.swinglabs:swingx:jar:1.6.1:compile
+[INFO] |  +- com.jhlabs:filters:jar:2.0.235:compile
+[INFO] |  \- org.swinglabs:swing-worker:jar:1.1:compile
+[INFO] +- javax.media:jai_core:jar:1.1.3:compile
+[INFO] +- org.geotools:gt-image:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools:gt-main:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools:gt-api:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- com.vividsolutions:jts:jar:1.12:compile
+[INFO] |  |  \- jdom:jdom:jar:1.0:compile
+[INFO] |  \- org.geotools:gt-coverage:jar:8-SNAPSHOT:compile
+[INFO] |     +- javax.media:jai_imageio:jar:1.1:compile
+[INFO] |     +- it.geosolutions.imageio-ext:imageio-ext-tiff:jar:1.1.0:compile
+[INFO] |     |  +- it.geosolutions.imageio-ext:imageio-ext-utilities:jar:1.1.0:compile
+[INFO] |     |  \- javax.media:jai_codec:jar:1.1.3:compile
+[INFO] |     +- org.jaitools:jt-zonalstats:jar:1.2.0:compile
+[INFO] |     \- org.jaitools:jt-utils:jar:1.2.0:compile
+[INFO] +- chrriis.dj:DJNativeSwing:jar:1.0.1:compile
+[INFO] |  +- chrriis.dj:DJNativeSwing-SWT:jar:1.0.1:compile
+[INFO] |  +- chrriis.dj:FCKeditor:jar:2.6.6:compile
+[INFO] |  +- chrriis.dj:TinyMCE:jar:3.2.1:compile
+[INFO] |  +- com.sun.jna:jna:jar:3.0.9:compile
+[INFO] |  +- com.sun:jna_WindowUtils:jar:1.0:compile
+[INFO] |  \- org.eclipse.swt:swt-gtk-linux:jar:x86_64:3.7M5:compile
+[INFO] +- org.geopublishing.geopublisher:gpcore:test-jar:tests:1.9-SNAPSHOT:test
+[INFO] |  \- com.sun:tools:jar:1.6.0.20:system
+[INFO] +- org.geopublishing.atlasStyler:ascore:test-jar:tests:1.9-SNAPSHOT:test
+[INFO] +- de.schmitzm:schmitzm-gt:test-jar:tests:2.7-SNAPSHOT:test
+[INFO] +- de.schmitzm:schmitzm-core:test-jar:tests:2.7-SNAPSHOT:test
+[INFO] +- javax.jnlp:jnlp:jar:1.6:compile
+[INFO] +- org.geopublishing.atlasStyler:ascore:jar:1.9-SNAPSHOT:compile
+[INFO] |  +- jfree:jfreechart:jar:1.0.13:compile
+[INFO] |  |  \- jfree:jcommon:jar:1.0.13:compile
+[INFO] |  +- de.schmitzm:schmitzm-gt:jar:2.7-SNAPSHOT:compile
+[INFO] |  |  +- de.schmitzm:schmitzm-core:jar:2.7-SNAPSHOT:compile
+[INFO] |  |  |  +- javax.mail:mail:jar:1.4.1:compile
+[INFO] |  |  |  |  \- javax.activation:activation:jar:1.1:compile
+[INFO] |  |  |  +- commons-io:commons-io:jar:1.4:compile
+[INFO] |  |  |  +- com.miglayout:miglayout:jar:swing:3.7.4:compile
+[INFO] |  |  |  +- com.toedter:jcalendar:jar:1.3.3:compile
+[INFO] |  |  |  +- net.jini:jini-ext:jar:2.1:compile
+[INFO] |  |  |  +- org.jdom:jdom:jar:1.1:compile
+[INFO] |  |  |  +- commons-cli:commons-cli:jar:1.2:compile
+[INFO] |  |  |  \- commons-lang:commons-lang:jar:2.3:compile
+[INFO] |  |  +- org.geotools:gt-epsg-hsql:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- hsqldb:hsqldb:jar:1.8.0.7:compile
+[INFO] |  |  +- org.geotools.xsd:gt-xsd-sld:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- org.geotools.xsd:gt-xsd-core:jar:8-SNAPSHOT:compile
+[INFO] |  |  |     +- org.geotools:gt-graph:jar:8-SNAPSHOT:compile
+[INFO] |  |  |     +- picocontainer:picocontainer:jar:1.2:compile
+[INFO] |  |  |     +- commons-jxpath:commons-jxpath:jar:1.3:compile
+[INFO] |  |  |     \- org.eclipse.xsd:xsd:jar:2.6.0:compile
+[INFO] |  |  +- xerces:xercesImpl:jar:2.9.1:compile
+[INFO] |  |  |  \- xml-apis:xml-apis:jar:1.3.04:compile
+[INFO] |  |  +- org.geotools:gt-shapefile-renderer:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  +- org.geotools:gt-shapefile:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- org.geotools:gt-data:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools:gt-geotiff:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools:gt-swing:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools:gt-arcgrid:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- it.geosolutions.imageio-ext:imageio-ext-arcgrid:jar:1.1.0:compile
+[INFO] |  |  |     \- it.geosolutions.imageio-ext:imageio-ext-streams:jar:1.1.0:compile
+[INFO] |  |  \- commons-logging:commons-logging:jar:1.0.4:compile
+[INFO] |  +- org.geotools:gt-render:jar:8-SNAPSHOT:compile
+[INFO] |  |  \- org.geotools:gt-cql:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools:gt-svg:jar:8-SNAPSHOT:compile
+[INFO] |  |  \- org.apache.xmlgraphics:batik-transcoder:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:fop:jar:0.94:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:xmlgraphics-commons:jar:1.2:compile
+[INFO] |  |     |  +- org.apache.avalon.framework:avalon-framework-api:jar:4.3.1:compile
+[INFO] |  |     |  \- org.apache.avalon.framework:avalon-framework-impl:jar:4.3.1:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-awt-util:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-bridge:jar:1.7:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:batik-anim:jar:1.7:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:batik-css:jar:1.7:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:batik-ext:jar:1.7:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:batik-parser:jar:1.7:compile
+[INFO] |  |     |  +- org.apache.xmlgraphics:batik-script:jar:1.7:compile
+[INFO] |  |     |  \- xalan:xalan:jar:2.6.0:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-dom:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-gvt:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-svg-dom:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-svggen:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-util:jar:1.7:compile
+[INFO] |  |     +- org.apache.xmlgraphics:batik-xml:jar:1.7:compile
+[INFO] |  |     \- xml-apis:xml-apis-ext:jar:1.3.04:compile
+[INFO] |  +- org.geotools:gt-brewer:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools.jdbc:gt-jdbc-postgis:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- postgresql:postgresql:jar:8.4-701.jdbc3:compile
+[INFO] |  |  \- org.geotools:gt-jdbc:jar:8-SNAPSHOT:compile
+[INFO] |  |     +- commons-dbcp:commons-dbcp:jar:1.3:compile
+[INFO] |  |     \- commons-collections:commons-collections:jar:3.1:compile
+[INFO] |  \- colt:colt:jar:1.2.0:compile
+[INFO] +- org.geopublishing.geopublisher:gpcore:jar:1.9-SNAPSHOT:compile
+[INFO] |  +- de.schmitzm:schmitzm-jfree-gt:jar:2.7-SNAPSHOT:compile
+[INFO] |  |  \- de.schmitzm:schmitzm-jfree:jar:2.7-SNAPSHOT:compile
+[INFO] |  +- org.geopublishing:gsrcj:jar:0.5:compile
+[INFO] |  \- org.geopublishing:gpsync:jar:2.0-SNAPSHOT:compile
+[INFO] +- log4j:log4j:jar:1.2.14:compile
+[INFO] +- junit:junit:jar:4.8.1:test
+[INFO] +- org.geotools:gt-wfs:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools:gt-xml:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools:gt-referencing:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- java3d:vecmath:jar:1.3.2:compile
+[INFO] |  |  +- commons-pool:commons-pool:jar:1.5.4:compile
+[INFO] |  |  \- org.geotools:gt-metadata:jar:8-SNAPSHOT:compile
+[INFO] |  |     \- org.geotools:gt-opengis:jar:8-SNAPSHOT:compile
+[INFO] |  |        \- net.java.dev.jsr-275:jsr-275:jar:1.0-beta-2:compile
+[INFO] |  +- org.geotools.xsd:gt-xsd-wfs:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools.xsd:gt-xsd-filter:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  +- org.geotools.xsd:gt-xsd-gml2:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- org.geotools.xsd:gt-xsd-gml3:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools.xsd:gt-xsd-fes:jar:8-SNAPSHOT:compile
+[INFO] |  |  \- org.geotools.xsd:gt-xsd-ows:jar:8-SNAPSHOT:compile
+[INFO] |  +- org.geotools.ogc:net.opengis.wfs:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.geotools.ogc:net.opengis.ows:jar:8-SNAPSHOT:compile
+[INFO] |  |  |  \- org.geotools.ogc:org.w3.xlink:jar:8-SNAPSHOT:compile
+[INFO] |  |  +- org.eclipse.emf:common:jar:2.6.0:compile
+[INFO] |  |  \- org.eclipse.emf:ecore:jar:2.6.1:compile
+[INFO] |  +- xpp3:xpp3:jar:1.1.3.4.O:compile
+[INFO] |  \- commons-httpclient:commons-httpclient:jar:3.1:compile
+[INFO] |     \- commons-codec:commons-codec:jar:1.2:compile
+[INFO] +- net.java.wizard:wizard:jar:0.998.2:compile
+[INFO] +- ant:ant-nodeps:jar:1.6.5:provided
+[INFO] \- ant-contrib:ant-contrib:jar:1.0b3:provided
+[INFO]    \- ant:ant:jar:1.5:provided
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3 seconds
+[INFO] Finished at: Tue Oct 04 15:34:42 CEST 2011
+[INFO] Final Memory: 38M/339M
+[INFO] ------------------------------------------------------------------------

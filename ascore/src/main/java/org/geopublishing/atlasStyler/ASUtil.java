@@ -465,13 +465,27 @@ public class ASUtil {
 	public static Float getBiggestWidth(final Stroke stroke, Float maxSize) {
 		if (stroke == null)
 			return maxSize;
-
-		if (stroke.getWidth() != null && stroke.getWidth() != Expression.NIL) {
-			final Float size = Float.valueOf(stroke.getWidth().toString());
-			if (size > maxSize) {
-				maxSize = size;
+		
+		if (stroke.getGraphicStroke() != null) {
+			
+			// If the Stroke uses a GrphicStroke, use it's size
+			
+			if (stroke.getGraphicStroke().getSize() != null && stroke.getGraphicStroke().getSize() != Expression.NIL) {
+				final Float size = Float.valueOf(stroke.getGraphicStroke().getSize().toString());
+				if (size > maxSize) {
+					maxSize = size;
+				}
+			}
+			
+		} else {
+			if (stroke.getWidth() != null && stroke.getWidth() != Expression.NIL) {
+				final Float size = Float.valueOf(stroke.getWidth().toString());
+				if (size > maxSize) {
+					maxSize = size;
+				}
 			}
 		}
+
 
 		return maxSize;
 	}
