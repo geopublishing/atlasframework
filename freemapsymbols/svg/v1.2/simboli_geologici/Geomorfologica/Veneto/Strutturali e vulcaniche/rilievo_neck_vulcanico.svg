@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg4317"
+   sodipodi:version="0.32"
+   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/beppe/Desktop/Grafie/Geomorfologica/Veneto"
+   sodipodi:docname="rilievo_neck_vulcanico.svg">
+  <defs
+     id="defs4319" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.6"
+     inkscape:cx="375"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="959"
+     inkscape:window-height="589"
+     inkscape:window-x="262"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata4322">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Livello 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g7006">
+      <line
+         x1="363.25632"
+         y1="520.61853"
+         x2="386.74368"
+         y2="544.09332"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line238" />
+      <line
+         x1="363.25632"
+         y1="544.09332"
+         x2="386.74368"
+         y2="520.61853"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line240" />
+      <line
+         x1="374.99374"
+         y1="515.75604"
+         x2="374.99374"
+         y2="548.96832"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line242" />
+      <line
+         x1="358.39386"
+         y1="532.35596"
+         x2="391.60614"
+         y2="532.35596"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.24999201;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line244" />
+      <path
+         d="M 363.19382,532.70592 L 363.20632,532.08092 L 363.25632,531.48092 L 363.33132,530.86843 L 363.43132,530.28094 L 363.56882,529.70594 L 363.73132,529.13094 L 363.91882,528.56845 L 364.13132,528.03095 L 364.38132,527.49345 L 364.64381,526.98095 L 364.93131,526.46846 L 365.2438,525.98096 L 365.5813,525.51847 L 365.9313,525.05597 L 366.3063,524.61847 L 366.7063,524.20597 L 367.1313,523.80598 L 367.55629,523.43098 L 368.01879,523.06848 L 368.48128,522.74348 L 368.96878,522.43099 L 369.48128,522.13098 L 369.99377,521.86849 L 370.53128,521.63099 L 371.06877,521.41849 L 371.63127,521.23099 L 372.20626,521.06849 L 372.78126,520.93099 L 373.36875,520.81849 L 373.96875,520.74349 L 374.58125,520.70599 L 375.20624,520.681 C 381.8437,520.681 387.21867,526.06846 387.21867,532.70592 C 387.21867,539.34337 381.8437,544.71834 375.20624,544.71834 C 368.56879,544.71834 363.19382,539.34337 363.19382,532.70592 z "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:white;fill-opacity:1;fill-rule:nonzero;stroke:white;stroke-width:0;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path246" />
+      <path
+         d="M 363.19382,532.70592 L 363.20632,532.08092 L 363.25632,531.48092 L 363.33132,530.86843 L 363.43132,530.28094 L 363.56882,529.70594 L 363.73132,529.13094 L 363.91882,528.56845 L 364.13132,528.03095 L 364.38132,527.49345 L 364.64381,526.98095 L 364.93131,526.46846 L 365.2438,525.98096 L 365.5813,525.51847 L 365.9313,525.05597 L 366.3063,524.61847 L 366.7063,524.20597 L 367.1313,523.80598 L 367.55629,523.43098 L 368.01879,523.06848 L 368.48128,522.74348 L 368.96878,522.43099 L 369.48128,522.13098 L 369.99377,521.86849 L 370.53128,521.63099 L 371.06877,521.41849 L 371.63127,521.23099 L 372.20626,521.06849 L 372.78126,520.93099 L 373.36875,520.81849 L 373.96875,520.74349 L 374.58125,520.70599 L 375.20624,520.681 C 381.8437,520.681 387.21867,526.06846 387.21867,532.70592 C 387.21867,539.34337 381.8437,544.71834 375.20624,544.71834 C 368.56879,544.71834 363.19382,539.34337 363.19382,532.70592 z "
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:white;fill-opacity:1;stroke:black;stroke-width:1.37748957;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path248" />
+      <line
+         x1="374.99374"
+         y1="528.00598"
+         x2="374.99374"
+         y2="536.71838"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.49999034;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line250" />
+      <line
+         x1="370.64377"
+         y1="532.35596"
+         x2="379.35623"
+         y2="532.35596"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;letter-spacing:normal;word-spacing:normal;text-anchor:start;fill:none;fill-opacity:1;stroke:black;stroke-width:1.49999034;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:10.43299961;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="line252" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,52 @@
+Welcome to the Sodipodi Flag collection
+
+This is meant to be a collection of flags which you can freely use for software,school and University papers, newspapers, books and whatever you could possibly use flags for. The flag collection is put in the public domain, check out our license files in the license directory for details about that.
+
+If you want to contribute a flag, be sure to go through the public domain dedication process found here:
+http://creativecommons.org/license/publicdomain-2
+
+Following that process you will eventually get to page where you are offered to cut and paste some code/text.
+As part of that you will see something looking like this:
+<!-- /Creative Commons Public Domain -->
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:title>SVG graphic of Puerto Rico flag</dc:title>
+   <dc:rights><Agent>
+      <dc:title>Ricardo Veguilla González</dc:title>
+   </Agent></dc:rights>
+   <license rdf:resource="http://web.resource.org/cc/PublicDomain" />
+</Work>
+
+<License rdf:about="http://web.resource.org/cc/PublicDomain">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+</License>
+</rdf:RDF>
+-->
+
+Please paste that into your SVG file using a text editor before sending it to us.
+
+The flags are categorized as follows:
+Nations - United Nations recognized nations
+Regions - Regions in Nations with their own flag, like US states
+Organisations - International organizations with their own flag, like UN and EU
+Historic - Flags of now gone countries or organisations
+Naval - Naval versions of national flags
+3z2 and 4x3 - Flags from other categories altered to fit certain aspect ratios
+
+The CREDITS files contains the names of all those who have contributed these flags to the public domain.
+
+Small note on duplicates
+When we get duplicates of flags we already have there are a few 'rules' we apply which decides what version will be used and who gets credited for it.
+
+1. We always use the most correct flag
+2. We always use the best drawn version if they are both correct
+3. For flags that are an improved version of earlier flag we subjectivly assign the credit based on our evalution of who deserves it most. Sometime we even list the credit as shared.
+
+Converting filenames to ISO country codes
+This package also includes a perl script by Timur I. Bakeyev which let you convert the filenames of most of the flags to using the 'cc.svg' format for their names.
