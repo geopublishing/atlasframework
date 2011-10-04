@@ -153,7 +153,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JComboBox jComboBoxStyleType;
 
-	private JComboBox jComboBoxWidthExtGraphic;
+	private JComboBox jComboBoxSizeExtGraphic;
 
 	protected Graphic backupStroke;
 
@@ -538,7 +538,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, backupStroke));
 
-			jPanelGraphicStroke.add(getJComboxBoxWidthExtGraphic());
+			jPanelGraphicStroke.add(getJComboxBoxSizeExtGraphic());
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				jPanelGraphicStroke.setEnabled(false);
 			}
@@ -547,18 +547,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		return jPanelGraphicStroke;
 	}
 
-	private JComboBox getJComboxBoxWidthExtGraphic() {
-		if (jComboBoxWidthExtGraphic == null) {
-			jComboBoxWidthExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
+	private JComboBox getJComboxBoxSizeExtGraphic() {
+		if (jComboBoxSizeExtGraphic == null) {
+			jComboBoxSizeExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
 
-			if (jButtonExtGraphic != null) {
-				Integer height = jButtonExtGraphic.getHeight();
-				ASUtil.selectOrInsert(jComboBoxWidthExtGraphic, height);
-			} else {
-				// set default?
-			}
-
-			jComboBoxWidthExtGraphic.addItemListener(new ItemListener() {
+			jComboBoxSizeExtGraphic.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -570,9 +563,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			});
 
-			SwingUtil.addMouseWheelForCombobox(jComboBoxWidthExtGraphic);
+			SwingUtil.addMouseWheelForCombobox(jComboBoxSizeExtGraphic);
 		}
-		return jComboBoxWidthExtGraphic;
+		return jComboBoxSizeExtGraphic;
 	}
 
 	/**
