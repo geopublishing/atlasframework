@@ -91,7 +91,9 @@ import de.schmitzm.swing.ColorButton;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 
+
 public class LineSymbolEditGUI extends AbstractStyleEditGUI {
+	
 	private static final String[] LINEJOIN_VALUES = new String[] { "mitre", "round", "bevel" };
 
 	private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
@@ -102,11 +104,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private JPanel jPanelStroke;
 
-	private final JLabel jLabelStrokeColor = new JLabel(AtlasStylerVector.R("ColorLabel"));
+	private final JLabel jLabelStrokeColor = new JLabel(ASUtil.R("ColorLabel"));
 
-	private final JLabel jLabelStrokeWidth = new JLabel(AtlasStylerVector.R("WidthLabel"));
+	private final JLabel jLabelStrokeWidth = new JLabel(ASUtil.R("WidthLabel"));
 
-	private final JLabel jLabelStrokeOpacity = new JLabel(AtlasStylerVector.R("OpacityLabel"));
+	private final JLabel jLabelStrokeOpacity = new JLabel(ASUtil.R("OpacityLabel"));
 
 	private ColorButton jButtonStrokeColor;
 
@@ -116,13 +118,13 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	// private JPanel jPanelLineStyle = null;
 
-	private final JLabel jLabelLineJoin = new JLabel(AtlasStylerVector.R("LinejoinLabel"));
+	private final JLabel jLabelLineJoin = new JLabel(ASUtil.R("LinejoinLabel"));
 
 	private final JLabel jLabelPerpendicularOffset = new JLabel("Perpend. Offset");// i8n
 
 	private JComboBox jComboBoxLinejoin = null;
 
-	private final JLabel jLabelLinecap = new JLabel(AtlasStylerVector.R("LinecapLabel"));
+	private final JLabel jLabelLinecap = new JLabel(ASUtil.R("LinecapLabel"));
 
 	private JComboBox jComboBoxLineCap = null;
 
@@ -180,41 +182,34 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				getJPanelGraphicStroke().setEnabled(false);
-				getJPanelDashArray().setEnabled(true);
-				getJPanelStroke().setEnabled(true);
+				jComboBoxStyleType.setSelectedIndex(0);
+			} else {
+				getJPanelDashArray().setEnabled(false);
+				getJPanelStroke().setEnabled(false);
 				jComboBoxStyleType.setSelectedIndex(1);
 			}
+
 			jComboBoxStyleType.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						if (e.getItem().toString().equals("Normal")) {
 
+						boolean b = jComboBoxStyleType.getSelectedIndex() == 0;
+
+						if (b) {
 							backupStroke = symbolizer.getStroke().getGraphicStroke();
 							symbolizer.getStroke().setGraphicStroke(null);
-
-							getJPanelGraphicStroke().setEnabled(false);
-							getJPanelDashArray().setEnabled(true);
-							getJPanelStroke().setEnabled(true);
-							getJComboBoxPerpendicularOffset().setEnabled(false); // until
-																					// proper
-																					// implementation
-																					// in
-																					// geotools
-							jLabelPerpendicularOffset.setEnabled(false);
-							
 						} else {
 							if (backupStroke != null)
 								symbolizer.getStroke().setGraphicStroke(backupStroke);
-							else {
-							}
-
-							getJPanelGraphicStroke().setEnabled(true);
-
-							getJPanelDashArray().setEnabled(false);
-							getJPanelStroke().setEnabled(false);
 						}
+
+						getJPanelGraphicStroke().setEnabled(!b);
+						getJPanelDashArray().setEnabled(b);
+						getJPanelStroke().setEnabled(b);
+						getJComboBoxPerpendicularOffset().setEnabled(!b);
+						jLabelPerpendicularOffset.setEnabled(!b);
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -276,7 +271,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 					color = Color.decode(substring);
 
 					final Color newColor = AVSwingUtil.showColorChooser(LineSymbolEditGUI.this,
-							AtlasStylerVector.R("Stroke.ColorChooserDialog.Title"), color);
+							ASUtil.R("Stroke.ColorChooserDialog.Title"), color);
 
 					if (newColor != null) {
 						symbolizer.getStroke().setColor(StylingUtil.STYLE_BUILDER.colorExpression(newColor));
@@ -611,7 +606,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 			});
 
-			jTextFieldDashPattern.setToolTipText(AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_tooltip"));
+			jTextFieldDashPattern.setToolTipText(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
 		}
 		return jTextFieldDashPattern;
 	}
@@ -635,7 +630,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			} catch (final NumberFormatException e) {
 				updateTextFieldDashPattern();
 				JOptionPane.showMessageDialog(LineSymbolEditGUI.this,
-						AtlasStylerVector.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
+						ASUtil.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
 				return;
 			}
 		}
