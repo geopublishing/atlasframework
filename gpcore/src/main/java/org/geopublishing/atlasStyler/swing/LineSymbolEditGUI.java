@@ -116,8 +116,6 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
 	private OpacityJComboBox jComboBoxStrokeOpacity;
 
-	// private JPanel jPanelLineStyle = null;
-
 	private final JLabel jLabelLineJoin = new JLabel(ASUtil.R("LinejoinLabel"));
 
 	private final JLabel jLabelPerpendicularOffset = new JLabel("Perpend. Offset");// i8n
@@ -141,16 +139,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JComboBox jComboBoxPerpendicularOffset = null;
 
 	private JPanel jPanelGraphicStroke;
-
-	/**
-	 * When switching the {@link Graphic} to use an {@link ExternalGraphic} we
-	 * backup the old {@link Mark}
-	 **/
-	protected Mark backupMark = null;
-	/**
-	 * When switching the {@link Graphic} to use a {@link Mark} we backup the
-	 * old {@link ExternalGraphic}
-	 **/
+	
 	protected ExternalGraphic backupExternalGraphic = null;
 
 	private JComboBox jComboBoxStyleType;
@@ -208,8 +197,10 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 						getJPanelGraphicStroke().setEnabled(!b);
 						getJPanelDashArray().setEnabled(b);
 						getJPanelStroke().setEnabled(b);
-						getJComboBoxPerpendicularOffset().setEnabled(!b);
-						jLabelPerpendicularOffset.setEnabled(!b);
+						
+						// Will be enabled, whe GT8 support "PerpendicualOffset" for LineSymbolizer
+						getJComboBoxPerpendicularOffset().setEnabled(false);
+						jLabelPerpendicularOffset.setEnabled(false);
 
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -231,7 +222,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JPanel getJPanelStroke() {
 		if (jPanelStroke == null) {
 			jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("LineSymbolEdit.LineStyle.Title")));
 
 			jPanelStroke.add(jLabelStrokeColor, "split 6");
@@ -528,7 +519,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
 
 			if (graphicStroke == null) {
-				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic();
+				// Ein default SVG auswählen
+				ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic("http://www.geopublishing.org/icon64_AS.png", "image/png");
+				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic(eg, null, null);
 			}
 
 			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, backupStroke));
