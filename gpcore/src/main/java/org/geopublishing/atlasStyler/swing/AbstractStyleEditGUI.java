@@ -20,6 +20,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Arrays;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -307,13 +308,19 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 				try {
 					URL url = externalGraphic.getLocation();
+					
+					if (externalGraphic.getFormat().contains("svg")) {
+						// TODO PNG
+						icon = svgFactory.getIcon(null, FilterUtil.FILTER_FAC2.literal(url.toExternalForm()),
+								externalGraphic.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
+					} else if (externalGraphic.getFormat().contains("png")) {
+						BufferedImage bi = ImageIO.read(url);
+						icon = new ImageIcon(bi);
+					}
 
-					icon = svgFactory.getIcon(null, FilterUtil.FILTER_FAC2.literal(url.toExternalForm()),
-							externalGraphic.getFormat(), EXT_GRAPHIC_BUTTON_HEIGHT);
-					// if (renderedImage != null)
-					// icon = new ImageIcon(renderedImage);
+					
 				} catch (Exception e) {
-					LOGGER.error("Creating SVG icon failed", e);
+					LOGGER.error("Creating SVG/PNG icon failed", e);
 				}
 			}
 		}
