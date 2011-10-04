@@ -141,11 +141,13 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 	private JPanel jPanelGraphicStroke;
 
 	/**
-	 * When switching the {@link Graphic} to use an {@link ExternalGraphic} we backup the old {@link Mark}
+	 * When switching the {@link Graphic} to use an {@link ExternalGraphic} we
+	 * backup the old {@link Mark}
 	 **/
 	protected Mark backupMark = null;
 	/**
-	 * When switching the {@link Graphic} to use a {@link Mark} we backup the old {@link ExternalGraphic}
+	 * When switching the {@link Graphic} to use a {@link Mark} we backup the
+	 * old {@link ExternalGraphic}
 	 **/
 	protected ExternalGraphic backupExternalGraphic = null;
 
@@ -175,7 +177,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 		if (jComboBoxStyleType == null) {
 			jComboBoxStyleType = new JComboBox();
 			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Normal", "Ext Graphics" })); // i8n
-			
+
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				getJPanelGraphicStroke().setEnabled(false);
 				getJPanelDashArray().setEnabled(true);
@@ -187,17 +189,28 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						if (e.getItem().toString().equals("Normal")) {
+
 							backupStroke = symbolizer.getStroke().getGraphicStroke();
-							getJPanelGraphicStroke().setEnabled(false);
 							symbolizer.getStroke().setGraphicStroke(null);
+
+							getJPanelGraphicStroke().setEnabled(false);
 							getJPanelDashArray().setEnabled(true);
 							getJPanelStroke().setEnabled(true);
-							getJComboBoxPerpendicularOffset().setEnabled(false); //until proper implementation in geotools
-						} else {
-							if (backupStroke!=null)
-								symbolizer.getStroke().setGraphicStroke(backupStroke);
-							getJPanelGraphicStroke().setEnabled(true);
+							getJComboBoxPerpendicularOffset().setEnabled(false); // until
+																					// proper
+																					// implementation
+																					// in
+																					// geotools
+							jLabelPerpendicularOffset.setEnabled(false);
 							
+						} else {
+							if (backupStroke != null)
+								symbolizer.getStroke().setGraphicStroke(backupStroke);
+							else {
+							}
+
+							getJPanelGraphicStroke().setEnabled(true);
+
 							getJPanelDashArray().setEnabled(false);
 							getJPanelStroke().setEnabled(false);
 						}
@@ -498,8 +511,7 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
 			jLabelDashOffset = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashOffset"));
 			jLabelDashPattern = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashPattern"));
-			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(ASUtil
-					.R("LineSymbolEdit.DashedLine.Title")));
+			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(ASUtil.R("LineSymbolEdit.DashedLine.Title")));
 			final JLabel lineExplanation = new JLabel(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
 			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
@@ -518,12 +530,13 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder("External Graphic")); // i8n
 
 			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
-			if (graphicStroke == null) {
-				graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic();
-			}
-			symbolizer.getStroke().setGraphicStroke(graphicStroke);
 
-			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, graphicStroke));
+			if (graphicStroke == null) {
+				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic();
+			}
+
+			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, backupStroke));
+
 			jPanelGraphicStroke.add(getJComboxBoxWidthExtGraphic());
 			if (symbolizer.getStroke().getGraphicStroke() == null) {
 				jPanelGraphicStroke.setEnabled(false);
@@ -543,12 +556,12 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 			} else {
 				// set default?
 			}
-			final Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
 
 			jComboBoxWidthExtGraphic.addItemListener(new ItemListener() {
 				@Override
 				public void itemStateChanged(final ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
+						final Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
 						graphicStroke.setSize(ASUtil.ff2.literal(e.getItem()));
 						firePropertyChange(PROPERTY_UPDATED, null, null);
 					}

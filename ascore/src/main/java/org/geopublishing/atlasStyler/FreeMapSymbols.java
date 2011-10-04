@@ -25,6 +25,6 @@ public class FreeMapSymbols {
 	/**
 	 * Links to SVGs should never change, since it could break existing SLDs. So we feature versions of the SVG folder.
 	 */
-	public static final String SVG_URL = BASE_URL + "svg/v1.1";
+	public static final String SVG_URL = BASE_URL + "svg/v1.2";
 
 }
