@@ -190,7 +190,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	static {
 		SIZE_VALUES = new Float[100];
 		for (int i = 0; i < 48; i++) {
-			SIZE_VALUES[i] = i + 3f;
+			SIZE_VALUES[i] = i + 0f;
 		}
 		for (int i = 48; i < 60; i++) {
 			SIZE_VALUES[i] = SIZE_VALUES[i - 1] + 10;
@@ -206,6 +206,20 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 		}
 
 	}
+	/** A renderer designed to visualize the Size values properly for the external graphics**/
+        final public static DefaultListCellRenderer SIZE_VALUES_RENDERER = new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+                                boolean cellHasFocus) {
+                        final JLabel prototype = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected,
+                                        cellHasFocus);
+                        if (value.equals(0f)) {
+                                prototype.setText(ASUtil.R("Original.Size"));
+                        }
+                        return prototype;
+                }
+        };
 
 	final public static Float[] WIDTH_VALUES;
 	static {

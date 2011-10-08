@@ -75,12 +75,10 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.LineSymbolizer;
-import org.geotools.styling.Mark;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 
@@ -93,656 +91,676 @@ import de.schmitzm.swing.SwingUtil;
 
 public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
-	private static final String[] LINEJOIN_VALUES = new String[] { "mitre", "round", "bevel" };
+    private static final String[] LINEJOIN_VALUES = new String[] { "mitre", "round", "bevel" };
 
-	private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
+    private static final String[] LINECAP_VALUES = new String[] { "butt", "round", "square" };
 
-	private static OpacityJComboBox jComboBoxOpacityExtGraphic = null;
+    private static OpacityJComboBox jComboBoxOpacityExtGraphic = null;
 
-	protected Logger LOGGER = LangUtil.createLogger(this);
+    protected Logger LOGGER = LangUtil.createLogger(this);
 
-	private final LineSymbolizer symbolizer;
+    private final LineSymbolizer symbolizer;
 
-	private JPanel jPanelStroke;
+    private JPanel jPanelStroke;
 
-	private final JLabel jLabelStrokeColor = new JLabel(ASUtil.R("ColorLabel"));
+    private final JLabel jLabelStrokeColor = new JLabel(ASUtil.R("ColorLabel"));
 
-	private final JLabel jLabelStrokeWidth = new JLabel(ASUtil.R("WidthLabel"));
+    private final JLabel jLabelStrokeWidth = new JLabel(ASUtil.R("WidthLabel"));
 
-	private final JLabel jLabelStrokeOpacity = new JLabel(ASUtil.R("OpacityLabel"));
+    private final JLabel jLabelStrokeOpacity = new JLabel(ASUtil.R("OpacityLabel"));
 
-	private ColorButton jButtonStrokeColor;
+    private ColorButton jButtonStrokeColor;
 
-	private JComboBox jComboBoxStrokeWidth;
+    private JComboBox jComboBoxStrokeWidth;
 
-	private OpacityJComboBox jComboBoxStrokeOpacity;
+    private OpacityJComboBox jComboBoxStrokeOpacity;
 
-	private final JLabel jLabelLineJoin = new JLabel(ASUtil.R("LinejoinLabel"));
+    private final JLabel jLabelLineJoin = new JLabel(ASUtil.R("LinejoinLabel"));
 
-	private final JLabel jLabelPerpendicularOffset = new JLabel("Perpend. Offset");// i8n
+    private final JLabel jLabelPerpendicularOffset = new JLabel(ASUtil.R("Perpendicular.Offset"));
 
-	private JComboBox jComboBoxLinejoin = null;
+    private JComboBox jComboBoxLinejoin = null;
 
-	private final JLabel jLabelLinecap = new JLabel(ASUtil.R("LinecapLabel"));
+    private final JLabel jLabelLinecap = new JLabel(ASUtil.R("LinecapLabel"));
 
-	private JComboBox jComboBoxLineCap = null;
+    private JComboBox jComboBoxLineCap = null;
 
-	private JPanel jPanelDashArray = null;
+    private JPanel jPanelDashArray = null;
 
-	private JTextField jTextFieldDashPattern = null;
+    private JTextField jTextFieldDashPattern = null;
 
-	private JLabel jLabelDashPattern = null;
+    private JLabel jLabelDashPattern = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashPattern"));
 
-	private JLabel jLabelDashOffset = null;
+    private JLabel jLabelDashOffset = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashOffset"));
 
-	private JComboBox jComboBoxDashOffset = null;
+    private JComboBox jComboBoxDashOffset = null;
 
-	private JComboBox jComboBoxPerpendicularOffset = null;
+    private JComboBox jComboBoxPerpendicularOffset = null;
 
-	private JPanel jPanelGraphicStroke;
+    private JPanel jPanelGraphicStroke;
 
-	protected ExternalGraphic backupExternalGraphic = null;
+    protected ExternalGraphic backupExternalGraphic = null;
 
-	private JComboBox jComboBoxStyleType;
+    private JComboBox jComboBoxStyleType;
 
-	private JComboBox jComboBoxSizeExtGraphic;
+    private JComboBox jComboBoxSizeExtGraphic;
 
-	protected Graphic backupStroke;
+    private JLabel jLabelComboBoxOpacityExtGraphic = new JLabel(ASUtil.R("OpacityLabel"));
 
-	private JLabel jLabelComboBoxOpacityExtGraphic = new JLabel(ASUtil.R("OpacityLabel"));
+    private JLabel jLabelComboBoxSizeExtGraphic = new JLabel(ASUtil.R("SizeLabel"));
 
-	private JLabel jLabelComboBoxSizeExtGraphic = new JLabel(ASUtil.R("SizeLabel"));
+    private JLabel jLabelButtonExtGraphic = new JLabel(ASUtil.R("Icon"));
 
-	private JLabel jLabelButtonExtGraphic = new JLabel(ASUtil.R("Icon"));
+    protected Graphic backupStroke;
 
-	public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
-		this.symbolizer = symbolizer;
-		initialize();
-	}
+    private JLabel lineExplanation = new JLabel(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
-	private void initialize() {
-		// this.setSize(310, 280);
-		this.setLayout(new MigLayout("wrap 1"));
-		this.add(getJComboBoxStyleType(), "sgx");
-		this.add(getJPanelStroke(), "sgx");
-		// this.add(getJPanelLineStyle(), "sgx");
-		this.add(getJPanelDashArray(), "sgx");
+    public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
+        this.symbolizer = symbolizer;
+        initialize();
+    }
 
-		this.add(getJPanelGraphicStroke(), "sgx");
-	}
+    private void initialize() {
+        // this.setSize(310, 280);
+        this.setLayout(new MigLayout("wrap 1"));
+        this.add(getJComboBoxStyleType(), "sgx");
+        this.add(getJPanelStroke(), "sgx");
+        // this.add(getJPanelLineStyle(), "sgx");
+        this.add(getJPanelDashArray(), "sgx");
 
-	private JComboBox getJComboBoxStyleType() {
-		if (jComboBoxStyleType == null) {
-			jComboBoxStyleType = new JComboBox();
-			jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { "Einfache Linie", "Ext Graphics" })); // i8n
+        this.add(getJPanelGraphicStroke(), "sgx");
+    }
 
-			if (symbolizer.getStroke().getGraphicStroke() == null) {
-				getJPanelGraphicStroke().setEnabled(false);
-				jComboBoxStyleType.setSelectedIndex(0);
-			} else {
-				getJPanelDashArray().setEnabled(false);
-				getJPanelStroke().setEnabled(false);
-				jComboBoxStyleType.setSelectedIndex(1);
-			}
+    private JComboBox getJComboBoxStyleType() {
+        if (jComboBoxStyleType == null) {
+            jComboBoxStyleType = new JComboBox();
+            jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { ASUtil.R("LineSymbolEditGui.StyleType.Line"),
+                    ASUtil.R("LineSymbolEditGui.StyleType.ExternalGraphic") }));
 
-			jComboBoxStyleType.addItemListener(new ItemListener() {
+            if (symbolizer.getStroke().getGraphicStroke() == null) {
+                getJPanelGraphicStroke().setEnabled(false);
+                getJPanelStroke().setEnabled(true);
+                getJPanelDashArray().setEnabled(true);
+                getJComboBoxPerpendicularOffset().setEnabled(false);
+                jLabelPerpendicularOffset.setEnabled(false);
+                jComboBoxStyleType.setSelectedIndex(0);
+            } else {
+                getJPanelDashArray().setEnabled(false);
+                getJPanelStroke().setEnabled(false);
+                getJPanelGraphicStroke().setEnabled(true);
+                jComboBoxStyleType.setSelectedIndex(1);
+            }
 
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						boolean b = jComboBoxStyleType.getSelectedIndex() == 0;
-
-						if (b) {
-							backupStroke = symbolizer.getStroke().getGraphicStroke();
-							symbolizer.getStroke().setGraphicStroke(null);
-						} else {
-							if (backupStroke != null)
-								symbolizer.getStroke().setGraphicStroke(backupStroke);
-						}
-
-						getJPanelGraphicStroke().setEnabled(!b);
-						getJPanelDashArray().setEnabled(b);
-						getJPanelStroke().setEnabled(b);
-
-						// Will be enabled, whe GT8 support "PerpendicualOffset"
-						// for LineSymbolizer
-						getJComboBoxPerpendicularOffset().setEnabled(false);
-						jLabelPerpendicularOffset.setEnabled(false);
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxStyleType);
-		}
-		return jComboBoxStyleType;
-	}
-
-	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
-	 */
-	private JPanel getJPanelStroke() {
-		if (jPanelStroke == null) {
-			jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil.R("LineSymbolEdit.LineStyle.Title")));
-
-			jPanelStroke.add(jLabelStrokeColor, "split 6");
-			jPanelStroke.add(getJButtonStrokeColor(), "");
-			jPanelStroke.add(jLabelStrokeWidth, "gap unrel");
-			jPanelStroke.add(getJComboBoxStrokeWidth(), "");
-			jPanelStroke.add(jLabelStrokeOpacity, "gap unrel");
-			jPanelStroke.add(getJComboBoxStrokeOpacity(), "");
-
-			// wraps here
-			jPanelStroke.add(jLabelLineJoin, "split 6");
-			jPanelStroke.add(getJComboBoxLineJoin(), "");
-			jPanelStroke.add(jLabelPerpendicularOffset, "");
-			jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
-			jPanelStroke.add(new JLabel(), "");
-			jPanelStroke.add(jLabelLinecap, "");
-			jPanelStroke.add(getJComboBoxLineCap(), "");
-
-		}
-		return jPanelStroke;
-	}
-
-	/**
-	 * This method initializes jButton
-	 * 
-	 * @return javax.swing.JButton
-	 */
-	private ColorButton getJButtonStrokeColor() {
-		if (jButtonStrokeColor == null) {
-			jButtonStrokeColor = new ColorButton(new AbstractAction() {
-
-				@Override
-				public void actionPerformed(final ActionEvent e) {
-					Color color = null;
-
-					final String substring = symbolizer.getStroke().getColor().toString();
-					color = Color.decode(substring);
-
-					final Color newColor = AVSwingUtil.showColorChooser(LineSymbolEditGUI.this,
-							ASUtil.R("Stroke.ColorChooserDialog.Title"), color);
-
-					if (newColor != null) {
-						symbolizer.getStroke().setColor(StylingUtil.STYLE_BUILDER.colorExpression(newColor));
-
-						LineSymbolEditGUI.this.firePropertyChange(PROPERTY_UPDATED, null, null);
-
-						jButtonStrokeColor.setColor(newColor);
-
-					}
-
-				}
-
-			});
-
-			if (symbolizer.getStroke() != null && symbolizer.getStroke().getColor() != null) {
-				jButtonStrokeColor.setColor(StylingUtil.getColorFromExpression(symbolizer.getStroke().getColor()));
-			} else {
-				jButtonStrokeColor.setEnabled(false);
-				jLabelStrokeColor.setEnabled(false);
-			}
-
-		}
-		return jButtonStrokeColor;
-	}
-
-	/**
-	 * This method initializes jComboBox1
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getJComboBoxStrokeWidth() {
-		if (jComboBoxStrokeWidth == null) {
-
-			jComboBoxStrokeWidth = new JComboBox();
-
-			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
-			jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
-			ASUtil.selectOrInsert(jComboBoxStrokeWidth, symbolizer.getStroke().getWidth());
-
-			jComboBoxStrokeWidth.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						symbolizer.getStroke().setWidth(ASUtil.ff2.literal(e.getItem()));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
-		}
-		return jComboBoxStrokeWidth;
-	}
-
-	/**
-	 * This method initializes jComboBox1
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getJComboBoxStrokeOpacity() {
-		if (jComboBoxStrokeOpacity == null) {
-			jComboBoxStrokeOpacity = new OpacityJComboBox();
-			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
-
-			if (symbolizer.getStroke() != null && symbolizer.getStroke().getOpacity() != null) {
-				Expression opacity = symbolizer.getStroke().getOpacity();
-				ASUtil.selectOrInsert(jComboBoxStrokeOpacity, opacity);
-			} else {
-				// set default?
-			}
-
-			jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						symbolizer.getStroke().setOpacity(ASUtil.ff2.literal(e.getItem()));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
-		}
-		return jComboBoxStrokeOpacity;
-	}
-
-	// /**
-	// * This method initializes jPanel
-	// *
-	// * @return javax.swing.JPanel
-	// */
-	// private JPanel getJPanelLineStyle() {
-	// if (jPanelLineStyle == null) {
-	// jLabelLinecap = new JLabel(AtlasStyler.R("LinecapLabel"));
-	// jLabelLineJoin = new JLabel(AtlasStyler.R("LinejoinLabel"));
-	// jPanelLineStyle = new JPanel(new MigLayout("", "grow"));
-	// jPanelLineStyle.setBorder(BorderFactory
-	// .createTitledBorder(AtlasStyler
-	// .R("LineSymbolEdit.LineStyle.Title")));
-	//
-	// jPanelLineStyle.add(jLabelLineJoin, "split 5");
-	// jPanelLineStyle.add(getJComboBoxLineJoin(), "");
-	// jPanelLineStyle.add(new JLabel(), "growx 100");
-	// jPanelLineStyle.add(jLabelLinecap, "");
-	// jPanelLineStyle.add(getJComboBoxLineCap(), "");
-	// }
-	// return jPanelLineStyle;
-	// }
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getJComboBoxLineJoin() {
-		if (jComboBoxLinejoin == null) {
-			jComboBoxLinejoin = new JComboBox(LINEJOIN_VALUES);
-
-			/** Preset when started * */
-			String preset;
-			try {
-				final Expression lineJoin = symbolizer.getStroke().getLineJoin();
-				preset = ((Literal) lineJoin).toString();
-			} catch (final Exception e) {
-				preset = LINEJOIN_VALUES[0];
-				symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(preset));
-			}
-
-			// The combobox conatins the original Strings as used inside SLD,
-			// but the renderer puts nicer expressions there
-			jComboBoxLinejoin.setRenderer(new DefaultListCellRenderer() {
-
-				@Override
-				public Component getListCellRendererComponent(final JList list, final Object value, final int index,
-						final boolean isSelected, final boolean cellHasFocus) {
-					final Component p = super
-							.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if (p instanceof JLabel)
-						((JLabel) p).setText(ASUtil.R("AtlasStyler.LineJoin.Values." + value));
-					return p;
-				}
-			});
-
-			jComboBoxLinejoin.setSelectedItem(preset);
-			jComboBoxLinejoin.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						final Object itemStringValue = e.getItem();
-						symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(itemStringValue));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
-
-		}
-		return jComboBoxLinejoin;
-	}
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getJComboBoxLineCap() {
-		if (jComboBoxLineCap == null) {
-			jComboBoxLineCap = new JComboBox(LINECAP_VALUES);
-
-			/** Preset when started * */
-			String preset;
-			try {
-				final Expression lineCap = symbolizer.getStroke().getLineCap();
-				preset = ((Literal) lineCap).toString();
-			} catch (final Exception e) {
-				preset = LINECAP_VALUES[0];
-				symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(preset));
-			}
-			jComboBoxLineCap.setSelectedItem(preset);
-
-			// The combobox conatins the original Strings as used inside SLD,
-			// but the renderer puts nicer expressions there
-			jComboBoxLineCap.setRenderer(new DefaultListCellRenderer() {
-
-				@Override
-				public Component getListCellRendererComponent(final JList list, final Object value, final int index,
-						final boolean isSelected, final boolean cellHasFocus) {
-					final Component p = super
-							.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-					if (p instanceof JLabel)
-						((JLabel) p).setText(ASUtil.R("AtlasStyler.LineCap.Values." + value));
-					return p;
-				}
-			});
-
-			jComboBoxLineCap.setSelectedItem(preset);
-			jComboBoxLineCap.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						final Object itemStringValue = e.getItem();
-						symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(itemStringValue));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxLineCap);
-		}
-		return jComboBoxLineCap;
-	}
-
-	private JPanel getJPanelDashArray() {
-		if (jPanelDashArray == null) {
-			jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
-			jLabelDashOffset = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashOffset"));
-			jLabelDashPattern = new JLabel(ASUtil.R("LineSymbolEdit.DashedLine.DashPattern"));
-			jPanelDashArray.setBorder(BorderFactory.createTitledBorder(ASUtil.R("LineSymbolEdit.DashedLine.Title")));
-			final JLabel lineExplanation = new JLabel(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
-
-			jPanelDashArray.add(lineExplanation, "grow x, width ::500");
-
-			jPanelDashArray.add(jLabelDashPattern, "split 4");
-			jPanelDashArray.add(getJTextFieldDashPattern(), "grow x, width ::200");
-			jPanelDashArray.add(jLabelDashOffset, "gap unrel");
-			jPanelDashArray.add(getJComboBoxDashOffset(), "");
-		}
-		return jPanelDashArray;
-	}
-
-	private JPanel getJPanelGraphicStroke() {
-		if (jPanelGraphicStroke == null) {
-			jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[l][l][l]"));
-			jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder("External Graphic")); // i8n
-
-			Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
-
-			if (graphicStroke == null) {
-				// Ein default SVG auswählen
-				ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic(
-						"http://www.geopublishing.org/icon64_AS.png", "image/png");
-				backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic(eg, null, null);
-			}
-
-			jPanelGraphicStroke.add(jLabelButtonExtGraphic);
-			jPanelGraphicStroke.add(jLabelComboBoxSizeExtGraphic);
-			jPanelGraphicStroke.add(jLabelComboBoxOpacityExtGraphic);
-			jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, backupStroke));
-
-			jPanelGraphicStroke.add(getJComboxBoxSizeExtGraphic());
-			if (symbolizer.getStroke().getGraphicStroke() == null) {
-				jPanelGraphicStroke.setEnabled(false);
-			}
-			jPanelGraphicStroke.add(getJComboxBoxOpacityExtGraphic());
-
-		}
-		return jPanelGraphicStroke;
-	}
-
-	private JComboBox getJComboxBoxSizeExtGraphic() {
-		if (jComboBoxSizeExtGraphic == null) {
-			jComboBoxSizeExtGraphic = new JComboBox(new DefaultComboBoxModel(SPACE_AROUND_VALUES));
-
-			jComboBoxSizeExtGraphic.setSelectedIndex(0);
-			jComboBoxSizeExtGraphic.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						final Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
-						graphicStroke.setSize(ASUtil.ff2.literal(e.getItem()));
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxSizeExtGraphic);
-		}
-		return jComboBoxSizeExtGraphic;
-	}
-
-	private OpacityJComboBox getJComboxBoxOpacityExtGraphic() {
-		if (jComboBoxOpacityExtGraphic == null) {
-			jComboBoxOpacityExtGraphic = new OpacityJComboBox();
-			jComboBoxOpacityExtGraphic.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
-
-			float graphicOpacity = 1f;
-
-			if (symbolizer.getStroke().getGraphicStroke() != null
-					&& symbolizer.getStroke().getGraphicStroke().getOpacity() != null) {
-				ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, symbolizer.getStroke().getGraphicStroke().getOpacity());
-			} else
-				ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, graphicOpacity);
-
-			jComboBoxOpacityExtGraphic.addItemListener(new ItemListener() {
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-						symbolizer.getStroke().getGraphicStroke().setOpacity(ASUtil.ff2.literal(jComboBoxOpacityExtGraphic.getSelectedItem()));
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
-		}
-		return jComboBoxOpacityExtGraphic;
-	}
-
-	/**
-	 * This method initializes jTextField
-	 * 
-	 * @return javax.swing.JTextField
-	 */
-	private JTextField getJTextFieldDashPattern() {
-		if (jTextFieldDashPattern == null) {
-			jTextFieldDashPattern = new JTextField(12);
-
-			updateTextFieldDashPattern();
-
-			jTextFieldDashPattern.addKeyListener(new KeyListener() {
-
-				@Override
-				public void keyPressed(final KeyEvent e) {
-				}
-
-				@Override
-				public void keyReleased(final KeyEvent e) {
-					if ((e.getKeyCode() == KeyEvent.VK_ENTER) || (e.getKeyCode() == KeyEvent.VK_TAB)) {
-						updateDashFromtextfield();
-					}
-				}
-
-				@Override
-				public void keyTyped(final KeyEvent e) {
-				}
-
-			});
-
-			jTextFieldDashPattern.addFocusListener(new FocusListener() {
-
-				@Override
-				public void focusGained(final FocusEvent e) {
-				}
-
-				@Override
-				public void focusLost(final FocusEvent e) {
-					updateDashFromtextfield();
-				}
-
-			});
-
-			jTextFieldDashPattern.setToolTipText(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
-		}
-		return jTextFieldDashPattern;
-	}
-
-	private void updateDashFromtextfield() {
-		final String text = jTextFieldDashPattern.getText();
-		if ((text == null) || (text.trim().equals(""))) {
-			symbolizer.getStroke().setDashArray(null);
-			firePropertyChange(PROPERTY_UPDATED, null, null);
-			return;
-		}
-
-		final String[] strings = text.split(" ");
-		final float[] dashArrays = new float[strings.length];
-		int count = 0;
-		for (final String s : strings) {
-			try {
-				final float f = Float.valueOf(s);
-				dashArrays[count] = f;
-				count++;
-			} catch (final NumberFormatException e) {
-				updateTextFieldDashPattern();
-				JOptionPane.showMessageDialog(LineSymbolEditGUI.this,
-						ASUtil.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
-				return;
-			}
-		}
-		symbolizer.getStroke().setDashArray(dashArrays);
-		firePropertyChange(PROPERTY_UPDATED, null, null);
-	}
-
-	private void updateTextFieldDashPattern() {
-		final float[] dashArrays = symbolizer.getStroke().getDashArray();
-		String text = "";
-		if (dashArrays != null)
-			for (final float f : dashArrays) {
-				text += f + " ";
-			}
-		getJTextFieldDashPattern().setText(text);
-	}
-
-	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
-	 */
-	private JComboBox getJComboBoxDashOffset() {
-		if (jComboBoxDashOffset == null) {
-			jComboBoxDashOffset = new JComboBox(new DefaultComboBoxModel(DISPLACEMENT_VALUES));
-
-			jComboBoxDashOffset.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						symbolizer.getStroke().setDashOffset(ASUtil.ff2.literal(e.getItem()));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-
-					}
-				}
-
-			});
-
-			ASUtil.selectOrInsert(jComboBoxDashOffset, symbolizer.getStroke().getDashOffset());
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxDashOffset);
-		}
-		return jComboBoxDashOffset;
-	}
-
-	private JComboBox getJComboBoxPerpendicularOffset() {
-		if (jComboBoxPerpendicularOffset == null) {
-			jComboBoxPerpendicularOffset = new JComboBox(new DefaultComboBoxModel(DISPLACEMENT_VALUES));
-
-			if (symbolizer.getPerpendicularOffset() != null) {
-				Expression offset = symbolizer.getPerpendicularOffset();
-				ASUtil.selectOrInsert(jComboBoxPerpendicularOffset, offset);
-			} else {
-				// set default?
-			}
-
-			jComboBoxPerpendicularOffset.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(final ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
-						symbolizer.setPerpendicularOffset(ASUtil.ff2.literal(e.getItem()));
-
-						firePropertyChange(PROPERTY_UPDATED, null, null);
-					}
-				}
-
-			});
-
-			SwingUtil.addMouseWheelForCombobox(jComboBoxPerpendicularOffset);
-
-			// disabled until supported by geotools
-			jComboBoxPerpendicularOffset.setEnabled(false);
-		}
-		return jComboBoxPerpendicularOffset;
-	}
+            jComboBoxStyleType.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        boolean b = jComboBoxStyleType.getSelectedIndex() == 0;
+
+                        if (b) {
+                            backupStroke = symbolizer.getStroke().getGraphicStroke();
+                            symbolizer.getStroke().setGraphicStroke(null);
+                        } else {
+                            if (backupStroke != null)
+                                symbolizer.getStroke().setGraphicStroke(backupStroke);
+                        }
+
+                        getJPanelGraphicStroke().setEnabled(!b);
+                        getJPanelDashArray().setEnabled(b);
+                        getJPanelStroke().setEnabled(b);
+
+                        // Will be enabled, whe GT8 support "PerpendicualOffset"
+                        // for LineSymbolizer
+                        getJComboBoxPerpendicularOffset().setEnabled(false);
+                        jLabelPerpendicularOffset.setEnabled(false);
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxStyleType);
+        }
+        return jComboBoxStyleType;
+    }
+
+    /**
+     * This method initializes jPanel
+     * 
+     * @return javax.swing.JPanel
+     */
+    private JPanel getJPanelStroke() {
+        if (jPanelStroke == null) {
+            jPanelStroke = new JPanel(new MigLayout("wrap 1", "[grow]"));
+            jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil
+                    .R("LineSymbolEdit.LineStyle.Title")));
+
+            jPanelStroke.add(jLabelStrokeColor, "split 6");
+            jPanelStroke.add(getJButtonStrokeColor(), "");
+            jPanelStroke.add(jLabelStrokeWidth, "gap unrel");
+            jPanelStroke.add(getJComboBoxStrokeWidth(), "");
+            jPanelStroke.add(jLabelStrokeOpacity, "gap unrel");
+            jPanelStroke.add(getJComboBoxStrokeOpacity(), "");
+
+            // wraps here
+            jPanelStroke.add(jLabelLineJoin, "split 6");
+            jPanelStroke.add(getJComboBoxLineJoin(), "");
+            jPanelStroke.add(jLabelPerpendicularOffset, "");
+            jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
+            jPanelStroke.add(new JLabel(), "");
+            jPanelStroke.add(jLabelLinecap, "");
+            jPanelStroke.add(getJComboBoxLineCap(), "");
+
+        }
+        return jPanelStroke;
+    }
+
+    /**
+     * This method initializes jButton
+     * 
+     * @return javax.swing.JButton
+     */
+    private ColorButton getJButtonStrokeColor() {
+        if (jButtonStrokeColor == null) {
+            jButtonStrokeColor = new ColorButton(new AbstractAction() {
+
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    Color color = null;
+
+                    final String substring = symbolizer.getStroke().getColor().toString();
+                    color = Color.decode(substring);
+
+                    final Color newColor = AVSwingUtil.showColorChooser(LineSymbolEditGUI.this,
+                            ASUtil.R("Stroke.ColorChooserDialog.Title"), color);
+
+                    if (newColor != null) {
+                        symbolizer.getStroke().setColor(
+                                StylingUtil.STYLE_BUILDER.colorExpression(newColor));
+
+                        LineSymbolEditGUI.this.firePropertyChange(PROPERTY_UPDATED, null, null);
+
+                        jButtonStrokeColor.setColor(newColor);
+
+                    }
+
+                }
+
+            });
+
+            if (symbolizer.getStroke() != null && symbolizer.getStroke().getColor() != null) {
+                jButtonStrokeColor.setColor(StylingUtil.getColorFromExpression(symbolizer
+                        .getStroke().getColor()));
+            } else {
+                jButtonStrokeColor.setEnabled(false);
+                jLabelStrokeColor.setEnabled(false);
+            }
+
+        }
+        return jButtonStrokeColor;
+    }
+
+    /**
+     * This method initializes jComboBox1
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getJComboBoxStrokeWidth() {
+        if (jComboBoxStrokeWidth == null) {
+
+            jComboBoxStrokeWidth = new JComboBox();
+
+            jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
+            jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
+            ASUtil.selectOrInsert(jComboBoxStrokeWidth, symbolizer.getStroke().getWidth());
+
+            jComboBoxStrokeWidth.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        symbolizer.getStroke().setWidth(ASUtil.ff2.literal(e.getItem()));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeWidth);
+        }
+        return jComboBoxStrokeWidth;
+    }
+
+    /**
+     * This method initializes jComboBox1
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getJComboBoxStrokeOpacity() {
+        if (jComboBoxStrokeOpacity == null) {
+            jComboBoxStrokeOpacity = new OpacityJComboBox();
+            jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
+
+            if (symbolizer.getStroke() != null && symbolizer.getStroke().getOpacity() != null) {
+                Expression opacity = symbolizer.getStroke().getOpacity();
+                ASUtil.selectOrInsert(jComboBoxStrokeOpacity, opacity);
+            } else {
+                // set default?
+            }
+
+            jComboBoxStrokeOpacity.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        symbolizer.getStroke().setOpacity(ASUtil.ff2.literal(e.getItem()));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxStrokeOpacity);
+        }
+        return jComboBoxStrokeOpacity;
+    }
+
+    // /**
+    // * This method initializes jPanel
+    // *
+    // * @return javax.swing.JPanel
+    // */
+    // private JPanel getJPanelLineStyle() {
+    // if (jPanelLineStyle == null) {
+    // jLabelLinecap = new JLabel(AtlasStyler.R("LinecapLabel"));
+    // jLabelLineJoin = new JLabel(AtlasStyler.R("LinejoinLabel"));
+    // jPanelLineStyle = new JPanel(new MigLayout("", "grow"));
+    // jPanelLineStyle.setBorder(BorderFactory
+    // .createTitledBorder(AtlasStyler
+    // .R("LineSymbolEdit.LineStyle.Title")));
+    //
+    // jPanelLineStyle.add(jLabelLineJoin, "split 5");
+    // jPanelLineStyle.add(getJComboBoxLineJoin(), "");
+    // jPanelLineStyle.add(new JLabel(), "growx 100");
+    // jPanelLineStyle.add(jLabelLinecap, "");
+    // jPanelLineStyle.add(getJComboBoxLineCap(), "");
+    // }
+    // return jPanelLineStyle;
+    // }
+
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getJComboBoxLineJoin() {
+        if (jComboBoxLinejoin == null) {
+            jComboBoxLinejoin = new JComboBox(LINEJOIN_VALUES);
+
+            /** Preset when started * */
+            String preset;
+            try {
+                final Expression lineJoin = symbolizer.getStroke().getLineJoin();
+                preset = ((Literal) lineJoin).toString();
+            } catch (final Exception e) {
+                preset = LINEJOIN_VALUES[0];
+                symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(preset));
+            }
+
+            // The combobox conatins the original Strings as used inside SLD,
+            // but the renderer puts nicer expressions there
+            jComboBoxLinejoin.setRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list, final Object value,
+                        final int index, final boolean isSelected, final boolean cellHasFocus) {
+                    final Component p = super.getListCellRendererComponent(list, value, index,
+                            isSelected, cellHasFocus);
+                    if (p instanceof JLabel)
+                        ((JLabel) p).setText(ASUtil.R("AtlasStyler.LineJoin.Values." + value));
+                    return p;
+                }
+            });
+
+            jComboBoxLinejoin.setSelectedItem(preset);
+            jComboBoxLinejoin.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        final Object itemStringValue = e.getItem();
+                        symbolizer.getStroke().setLineJoin(ASUtil.ff2.literal(itemStringValue));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
+
+        }
+        return jComboBoxLinejoin;
+    }
+
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getJComboBoxLineCap() {
+        if (jComboBoxLineCap == null) {
+            jComboBoxLineCap = new JComboBox(LINECAP_VALUES);
+
+            /** Preset when started * */
+            String preset;
+            try {
+                final Expression lineCap = symbolizer.getStroke().getLineCap();
+                preset = ((Literal) lineCap).toString();
+            } catch (final Exception e) {
+                preset = LINECAP_VALUES[0];
+                symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(preset));
+            }
+            jComboBoxLineCap.setSelectedItem(preset);
+
+            // The combobox conatins the original Strings as used inside SLD,
+            // but the renderer puts nicer expressions there
+            jComboBoxLineCap.setRenderer(new DefaultListCellRenderer() {
+
+                @Override
+                public Component getListCellRendererComponent(final JList list, final Object value,
+                        final int index, final boolean isSelected, final boolean cellHasFocus) {
+                    final Component p = super.getListCellRendererComponent(list, value, index,
+                            isSelected, cellHasFocus);
+                    if (p instanceof JLabel)
+                        ((JLabel) p).setText(ASUtil.R("AtlasStyler.LineCap.Values." + value));
+                    return p;
+                }
+            });
+
+            jComboBoxLineCap.setSelectedItem(preset);
+            jComboBoxLineCap.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        final Object itemStringValue = e.getItem();
+                        symbolizer.getStroke().setLineCap(ASUtil.ff2.literal(itemStringValue));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxLineCap);
+        }
+        return jComboBoxLineCap;
+    }
+
+    private JPanel getJPanelDashArray() {
+        if (jPanelDashArray == null) {
+            jPanelDashArray = new JPanel(new MigLayout("wrap 1", "[grow]"));
+            jPanelDashArray.setBorder(BorderFactory.createTitledBorder(ASUtil
+                    .R("LineSymbolEdit.DashedLine.Title")));
+            jPanelDashArray.add(lineExplanation, "grow x, width ::500");
+
+            jPanelDashArray.add(jLabelDashPattern, "split 4");
+            jPanelDashArray.add(getJTextFieldDashPattern(), "grow x, width ::200");
+            jPanelDashArray.add(jLabelDashOffset, "gap unrel");
+            jPanelDashArray.add(getJComboBoxDashOffset(), "");
+        }
+        return jPanelDashArray;
+    }
+
+    private JPanel getJPanelGraphicStroke() {
+        if (jPanelGraphicStroke == null) {
+            jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[l][l][l]"));
+            jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder(ASUtil.R("External.Graphic.BorderTitle")));
+
+            Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
+
+            if (graphicStroke == null) {
+                // Ein default SVG auswählen
+                ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic(
+                        "http://www.geopublishing.org/icon64_AS.png", "image/png");
+                backupStroke = graphicStroke = StylingUtil.STYLE_BUILDER.createGraphic(eg, null,
+                        null);
+            }
+
+            jPanelGraphicStroke.add(jLabelButtonExtGraphic);
+            jPanelGraphicStroke.add(jLabelComboBoxSizeExtGraphic);
+            jPanelGraphicStroke.add(jLabelComboBoxOpacityExtGraphic);
+            jPanelGraphicStroke.add(getJButtonExtGraphic(GeometryForm.ANY, graphicStroke));
+
+            jPanelGraphicStroke.add(getJComboxBoxSizeExtGraphic());
+            if (symbolizer.getStroke().getGraphicStroke() == null) {
+                jPanelGraphicStroke.setEnabled(false);
+            }
+            jPanelGraphicStroke.add(getJComboxBoxOpacityExtGraphic());
+
+        }
+        return jPanelGraphicStroke;
+    }
+
+    private JComboBox getJComboxBoxSizeExtGraphic() {
+        if (jComboBoxSizeExtGraphic == null) {
+            jComboBoxSizeExtGraphic = new JComboBox(new DefaultComboBoxModel(SIZE_VALUES));
+            jComboBoxSizeExtGraphic.setRenderer(SIZE_VALUES_RENDERER);
+
+            Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
+            if (graphicStroke != null) {
+                ASUtil.selectOrInsert(jComboBoxSizeExtGraphic, graphicStroke.getSize());
+            } else {
+                ASUtil.selectOrInsert(jComboBoxSizeExtGraphic, 0);
+            }
+
+            jComboBoxSizeExtGraphic.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        final Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
+                        graphicStroke.setSize(ASUtil.ff2.literal(e.getItem()));
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxSizeExtGraphic);
+        }
+        return jComboBoxSizeExtGraphic;
+    }
+
+    private OpacityJComboBox getJComboxBoxOpacityExtGraphic() {
+        if (jComboBoxOpacityExtGraphic == null) {
+            jComboBoxOpacityExtGraphic = new OpacityJComboBox();
+            jComboBoxOpacityExtGraphic.setModel(new DefaultComboBoxModel(OPACITY_VALUES));
+
+            float graphicOpacity = 1f;
+
+            if (symbolizer.getStroke().getGraphicStroke() != null
+                    && symbolizer.getStroke().getGraphicStroke().getOpacity() != null) {
+                ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, symbolizer.getStroke()
+                        .getGraphicStroke().getOpacity());
+            } else
+                ASUtil.selectOrInsert(jComboBoxOpacityExtGraphic, graphicOpacity);
+
+            jComboBoxOpacityExtGraphic.addItemListener(new ItemListener() {
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        symbolizer.getStroke().getGraphicStroke()
+                                .setOpacity(ASUtil.ff2.literal(e.getItem()));
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
+        }
+        return jComboBoxOpacityExtGraphic;
+    }
+
+    /**
+     * This method initializes jTextField
+     * 
+     * @return javax.swing.JTextField
+     */
+    private JTextField getJTextFieldDashPattern() {
+        if (jTextFieldDashPattern == null) {
+            jTextFieldDashPattern = new JTextField(12);
+
+            updateTextFieldDashPattern();
+
+            jTextFieldDashPattern.addKeyListener(new KeyListener() {
+
+                @Override
+                public void keyPressed(final KeyEvent e) {
+                }
+
+                @Override
+                public void keyReleased(final KeyEvent e) {
+                    if ((e.getKeyCode() == KeyEvent.VK_ENTER)
+                            || (e.getKeyCode() == KeyEvent.VK_TAB)) {
+                        updateDashFromtextfield();
+                    }
+                }
+
+                @Override
+                public void keyTyped(final KeyEvent e) {
+                }
+
+            });
+
+            jTextFieldDashPattern.addFocusListener(new FocusListener() {
+
+                @Override
+                public void focusGained(final FocusEvent e) {
+                }
+
+                @Override
+                public void focusLost(final FocusEvent e) {
+                    updateDashFromtextfield();
+                }
+
+            });
+
+            jTextFieldDashPattern.setToolTipText(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
+        }
+        return jTextFieldDashPattern;
+    }
+
+    private void updateDashFromtextfield() {
+        final String text = jTextFieldDashPattern.getText();
+        if ((text == null) || (text.trim().equals(""))) {
+            symbolizer.getStroke().setDashArray(null);
+            firePropertyChange(PROPERTY_UPDATED, null, null);
+            return;
+        }
+
+        final String[] strings = text.split(" ");
+        final float[] dashArrays = new float[strings.length];
+        int count = 0;
+        for (final String s : strings) {
+            try {
+                final float f = Float.valueOf(s);
+                dashArrays[count] = f;
+                count++;
+            } catch (final NumberFormatException e) {
+                updateTextFieldDashPattern();
+                JOptionPane.showMessageDialog(LineSymbolEditGUI.this,
+                        ASUtil.R("LineSymbolEditGUI.dashPattern_illegalDashPatternFormatMessage"));
+                return;
+            }
+        }
+        symbolizer.getStroke().setDashArray(dashArrays);
+        firePropertyChange(PROPERTY_UPDATED, null, null);
+    }
+
+    private void updateTextFieldDashPattern() {
+        final float[] dashArrays = symbolizer.getStroke().getDashArray();
+        String text = "";
+        if (dashArrays != null)
+            for (final float f : dashArrays) {
+                text += f + " ";
+            }
+        getJTextFieldDashPattern().setText(text);
+    }
+
+    /**
+     * This method initializes jComboBox
+     * 
+     * @return javax.swing.JComboBox
+     */
+    private JComboBox getJComboBoxDashOffset() {
+        if (jComboBoxDashOffset == null) {
+            jComboBoxDashOffset = new JComboBox(new DefaultComboBoxModel(DISPLACEMENT_VALUES));
+
+            jComboBoxDashOffset.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        symbolizer.getStroke().setDashOffset(ASUtil.ff2.literal(e.getItem()));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+
+                    }
+                }
+
+            });
+
+            ASUtil.selectOrInsert(jComboBoxDashOffset, symbolizer.getStroke().getDashOffset());
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxDashOffset);
+        }
+        return jComboBoxDashOffset;
+    }
+
+    private JComboBox getJComboBoxPerpendicularOffset() {
+        if (jComboBoxPerpendicularOffset == null) {
+            jComboBoxPerpendicularOffset = new JComboBox(new DefaultComboBoxModel(
+                    DISPLACEMENT_VALUES));
+
+            if (symbolizer.getPerpendicularOffset() != null) {
+                Expression offset = symbolizer.getPerpendicularOffset();
+                ASUtil.selectOrInsert(jComboBoxPerpendicularOffset, offset);
+            } else {
+                // set default?
+            }
+
+            jComboBoxPerpendicularOffset.addItemListener(new ItemListener() {
+
+                @Override
+                public void itemStateChanged(final ItemEvent e) {
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+
+                        symbolizer.setPerpendicularOffset(ASUtil.ff2.literal(e.getItem()));
+
+                        firePropertyChange(PROPERTY_UPDATED, null, null);
+                    }
+                }
+
+            });
+
+            SwingUtil.addMouseWheelForCombobox(jComboBoxPerpendicularOffset);
+
+            // disabled until supported by geotools
+            jComboBoxPerpendicularOffset.setEnabled(false);
+        }
+        return jComboBoxPerpendicularOffset;
+    }
 }
