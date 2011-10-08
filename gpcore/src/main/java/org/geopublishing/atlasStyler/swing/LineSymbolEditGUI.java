@@ -174,7 +174,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
     private JComboBox getJComboBoxStyleType() {
         if (jComboBoxStyleType == null) {
             jComboBoxStyleType = new JComboBox();
-            jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] { ASUtil.R("LineSymbolEditGui.StyleType.Line"),
+            jComboBoxStyleType.setModel(new DefaultComboBoxModel(new String[] {
+                    ASUtil.R("LineSymbolEditGui.StyleType.Line"),
                     ASUtil.R("LineSymbolEditGui.StyleType.ExternalGraphic") }));
 
             if (symbolizer.getStroke().getGraphicStroke() == null) {
@@ -527,7 +528,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
     private JPanel getJPanelGraphicStroke() {
         if (jPanelGraphicStroke == null) {
             jPanelGraphicStroke = new JPanel(new MigLayout("wrap 3", "[l][l][l]"));
-            jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder(ASUtil.R("External.Graphic.BorderTitle")));
+            jPanelGraphicStroke.setBorder(BorderFactory.createTitledBorder(ASUtil
+                    .R("External.Graphic.BorderTitle")));
 
             Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
 
@@ -601,8 +603,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
                 @Override
                 public void itemStateChanged(final ItemEvent e) {
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        symbolizer.getStroke().getGraphicStroke()
-                                .setOpacity(ASUtil.ff2.literal(e.getItem()));
+                        Graphic graphicStroke = symbolizer.getStroke().getGraphicStroke();
+                        graphicStroke.setOpacity(ASUtil.ff2.literal(e.getItem()));
                         firePropertyChange(PROPERTY_UPDATED, null, null);
                     }
                 }
