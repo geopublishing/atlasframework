@@ -184,6 +184,14 @@ Technical details:
 			<arg line='-b ${REPO.DIR} includedeb natty ${TARGETDEB}' />
 		</exec>
 
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for oneiric to the repo">
+			<arg line='-b ${REPO.DIR} includedeb oneiric ${TARGETDEB}' />
+		</exec>
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for preceise to the repo">
+			<arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
+		</exec>
+
 
 		<!-- MAEMO -->
 		<!--
