@@ -19,5 +19,5 @@ then
   echo "Using 64bit SWT native libs for 64-bit Java..."
 fi
 
-java -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp $SWTJAR:$JAI:~/.Geopublishing:gpswinggui-${project.version}.jar org.geopublishing.geopublisher.swing.GeopublisherGUI ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17}
+java -Xmx320m -Dfile.encoding=UTF8  -Djava.library.path=. -cp ~/.Geopublishing:$SWTJAR:$JAI:gpswinggui-${project.version}.jar org.geopublishing.geopublisher.swing.GeopublisherGUI ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17}
 
