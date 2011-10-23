@@ -117,7 +117,7 @@ The package contains the tutorials, documentation and some demo data for Geopubl
                         <arg line='-b ${REPO.DIR} includedeb oneiric ${TARGETDEB}' />
                 </exec> 
                 
-                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for preceise to the repo">
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for precise to the repo">
                         <arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
                 </exec>
 
