@@ -84,7 +84,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 	public static final String[] FONT_WEIGHTS = { "normal", "bold" };
 
 	private static final JLabel LinePlacementPerpendicularGap = new JLabel(
-			AtlasStylerVector
+			ASUtil
 					.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
 
 	/** The font sizes that can be selected. */
