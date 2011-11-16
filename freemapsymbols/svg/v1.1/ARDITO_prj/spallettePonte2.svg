@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- author: pirla -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+
+width="10px"
+   height="10px"
+   overflow="visible"
+   preserveAspectRatio="xMinYMin meet" 
+
+ viewBox="0 -50 100 50" 
+xmlns="http://www.w3.org/2000/svg" 
+xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>complex cartographic stroking</title>
+<defs>
+    <path id="ponte" fill="none" d="M 20 -10 L 30 -15 L 40 -15 L 50 -10"/>
+    
+    <marker id="inizio" 
+		viewBox="0 0 10 20"
+    		refX="4"  refY="8" 
+    		markerUnits="strokeWidth" 
+    		markerWidth="1"
+    		markerHeight="16" 
+    		stroke="black" 
+    		stroke-width="1" 
+    fill="none" orient="auto">
+      <path d="M 0 0 L 4 3.5 M 4 12.5 L 0 16"></path>
+   </marker>
+ 
+   <marker id="fine" 
+		viewBox="0 0 10 20"
+    		refX="0"  refY="8" 
+    		markerUnits="strokeWidth" 
+    		markerWidth="1"
+    		markerHeight="16" 
+    		stroke="black" 
+    		stroke-width="1" 
+    fill="none" orient="auto">
+      <path d="M 4 0 L 0 3.5 M 0 12.5 L 4 16"></path>
+   </marker>
+ 
+</defs>	
+	
+	<g transform="translate(0, 0)">
+	<use xlink:href="#ponte" stroke="black" stroke-width="4.5"
+	 marker-start="url(#inizio)"
+	 marker-end="url(#fine)"
+	 />
+	<use xlink:href="#ponte" stroke="white" stroke-width="4.0"/>
+	
+<!--	<use xlink:href="#strada" stroke="white" stroke-width="1" stroke-dasharray="3,8"/>  -->
+	</g>
+
+</svg>
