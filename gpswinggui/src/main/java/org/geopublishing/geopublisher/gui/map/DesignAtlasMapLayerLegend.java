@@ -215,9 +215,10 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	 */
 	@Override
 	public boolean isFilterable() {
-		boolean hasFeatures = FeatureUtil
-				.getWrappedGeoObject((FeatureSource<SimpleFeatureType, SimpleFeature>) getMapLayer()
-						.getFeatureSource()) instanceof FeatureCollection;
+		final MapLayer mapLayer = getMapLayer();
+//		final FeatureSource<SimpleFeatureType, SimpleFeature> featureSource = (FeatureSource<SimpleFeatureType, SimpleFeature>) mapLayer
+//				.getFeatureSource();
+		boolean hasFeatures = getMapLayer().getFeatureSource() != null;
 
 		boolean hasVisibleAttributes = hasVisibleAttributes();
 
