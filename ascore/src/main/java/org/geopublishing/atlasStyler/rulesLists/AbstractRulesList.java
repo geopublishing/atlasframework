@@ -174,10 +174,10 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			RulesListType[] rls = new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 					RASTER_COLORMAP_INTERVALS };
 
-//			if (as.getBands() > 1){
-//				// No specific Band selected, use RGB 
-//				rls = LangUtil.extendArray(rls, RASTER_RGB );
-//			}
+			if (as.getBands() > 1){
+				// No specific Band selected, use RGB 
+				rls = LangUtil.extendArray(rls, RASTER_RGB );
+			}
 			return rls;
 		}
 
