@@ -10,11 +10,15 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.dp.layer;
 
+import java.lang.reflect.Array;
+
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geotools.coverage.grid.GridCoverage2D;
 
 import de.schmitzm.geotools.data.rld.RasterLegendData;
+import de.schmitzm.i18n.Translation;
 import de.schmitzm.jfree.chart.style.ChartStyle;
+import de.schmitzm.lang.LangUtil;
 
 /**
  * This class represents any {@link GridCoverage2D} that is read from one file.
@@ -23,26 +27,36 @@ import de.schmitzm.jfree.chart.style.ChartStyle;
  * 
  * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
  */
-public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle>
-		extends DpLayer<E, CHART_STYLE_IMPL> {
+public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle> extends
+        DpLayer<E, CHART_STYLE_IMPL> {
 
-	public Double getNodataValue() {
-		return nodataValue;
-	}
+    public Double getNodataValue() {
+        return nodataValue;
+    }
 
-	public void setNodataValue(Double nodataValue) {
-		this.nodataValue = nodataValue;
-	}
+    public void setNodataValue(Double nodataValue) {
+        this.nodataValue = nodataValue;
+    }
 
-	private Double nodataValue;
+    private Double nodataValue;
+    private Translation[] bandNames;
 
-	public DpLayerRaster(AtlasConfig ac) {
-		super(ac);
-	}
+    public DpLayerRaster(AtlasConfig ac) {
+        super(ac);
+    }
 
-	abstract public RasterLegendData getLegendMetaData();
+    abstract public RasterLegendData getLegendMetaData();
 
-	abstract public void setLegendMetaData(
-			RasterLegendData parseRasterLegendData);
+    abstract public void setLegendMetaData(RasterLegendData parseRasterLegendData);
+
+    public Translation[] getBandNames() {
+        return bandNames;
+    }
+
+    public void setBandNames(Translation... bands) {
+        for (Translation a : bands) {
+            LangUtil.extendArray(bandNames, a);
+        }
+    }
 
 }

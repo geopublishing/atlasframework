@@ -88,6 +88,10 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 						null, new DpEntryLinkJPanel(dpe), null,
 						tabbedPane.getTabCount());
 			}
+			
+			if (dpe instanceof DpLayerRaster){
+			    tabbedPane.insertTab("aa", null, new DpEntryLinkJPanel(dpe), null, tabbedPane.getTabCount());
+			}
 
 			/** A tab with DpEntryType specific stuff **/
 			if (1 == 2) {
@@ -182,8 +186,13 @@ public class EditDpEntryGUI extends CancellableTabbedDialogAdapter {
 			final TranslationEditJPanel c = new TranslationEditJPanel(
 					GeopublisherGUI.R("EditDPEDialog.TranslateKeywords"),
 					dpe.getKeywords(), langs);
+			
+			dpeTranslationTab = new TranslationsAskJPanel(a, b, c,null);
 
-			dpeTranslationTab = new TranslationsAskJPanel(a, b, c);
+			if(dpe instanceof DpLayerRaster){
+			    
+			}
+
 		}
 		return dpeTranslationTab;
 	}

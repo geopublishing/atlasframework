@@ -1104,6 +1104,12 @@ public class AMLExporter {
 		if (!dpe.getKeywords().isEmpty())
 			element.appendChild(exportTranslation(document, "keywords",
 					dpe.getKeywords()));
+		
+		// Creating optional aml:bands tag
+		if(dpe.getBandNames().length!=0){
+		    for (Translation a:dpe.getBandNames())
+		    element.appendChild(exportTranslation(document, "bands", a));
+		}
 
 		// Creating a aml:dataDirname tag...
 		final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
