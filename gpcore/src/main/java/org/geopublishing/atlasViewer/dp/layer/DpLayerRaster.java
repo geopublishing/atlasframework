@@ -39,7 +39,7 @@ public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle> exte
     }
 
     private Double nodataValue;
-    private Translation[] bandNames;
+    private Translation[] bandNames = new Translation[] {};
 
     public DpLayerRaster(AtlasConfig ac) {
         super(ac);
@@ -55,7 +55,7 @@ public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle> exte
 
     public void setBandNames(Translation... bands) {
         for (Translation a : bands) {
-            LangUtil.extendArray(bandNames, a);
+            bandNames = LangUtil.extendArray(bandNames, a);
         }
     }
 

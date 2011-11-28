@@ -787,7 +787,7 @@ public class AMLImport {
 		} catch (Exception e) {
 			dpe.setNodataValue(null);
 		}
-
+		
 		final NodeList childNodes = node.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			final Node n = childNodes.item(i);
@@ -816,6 +816,8 @@ public class AMLImport {
 					dpe.setKeywords(parseTranslation(ac.getLanguages(), n));
 				} else if (name.equals(AMLUtil.TAG_ADDITIONAL_STYLE)) {
 					dpe.addLayerStyle(parseLayerStyle(ac, n, dpe));
+				} else if (name.equals("bands")){
+					dpe.setBandNames(parseTranslation(ac.getLanguages(),n));
 				}
 			}
 		}

@@ -1099,7 +1099,7 @@ public class AMLExporter {
 
 		// Creating aml:desc tag
 		element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
-
+		
 		// Creating optinal aml:keywords tag
 		if (!dpe.getKeywords().isEmpty())
 			element.appendChild(exportTranslation(document, "keywords",
