@@ -39,7 +39,7 @@ public abstract class DpLayerRaster<E, CHART_STYLE_IMPL extends ChartStyle> exte
     }
 
     private Double nodataValue;
-    private Translation[] bandNames = new Translation[] {};
+    protected Translation[] bandNames = new Translation[] {};
 
     public DpLayerRaster(AtlasConfig ac) {
         super(ac);

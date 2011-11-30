@@ -42,6 +42,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.http.AtlasProtocol;
 import org.geopublishing.atlasViewer.http.Webserver;
@@ -177,8 +178,11 @@ public class ClickInfoPanel extends JPanel {
 					for (final double value : gcValue) {
 						i++;
 
-						final JLabel key = new JLabel(GpCoreUtil.R(
-								"ClickInfoPanel.label_for_band", i));
+						DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) layerManager.getStyledObjects().get(0);
+						JLabel key = new JLabel(dplrr.getBandNames()[i-1].toString()+":");
+						if(dplrr.getBandNames()[i-1].toString().isEmpty()){
+						    key = new JLabel(GpCoreUtil.R("ClickInfoPanel.label_for_band", i));
+						}
 						key.setFont(DEFAULT_FONT);
 						panel.add(key);
 

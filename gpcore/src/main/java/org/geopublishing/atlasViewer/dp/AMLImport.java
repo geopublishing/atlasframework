@@ -817,7 +817,7 @@ public class AMLImport {
 		} else if (name.equals(AMLUtil.TAG_ADDITIONAL_STYLE)) {
 		    dpe.addLayerStyle(parseLayerStyle(ac, n, dpe));
 		} else if (name.equals("band")) {
-		    dpe.setBandNames(parseTranslation(ac.getLanguages(), n.getFirstChild().getNextSibling()));
+		    dpe.setBandNames(parseTranslation(ac.getLanguages(), n));
 		}
 	    }
 	}
