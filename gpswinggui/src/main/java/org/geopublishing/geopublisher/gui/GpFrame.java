@@ -473,8 +473,7 @@ public class GpFrame extends JFrame {
 		final AtlasConfigEditable ace = gp.getAce();
 		JMenu optionsMenu = new JMenu(R("MenuBar.OptionsMenu"));
 
-		final JMenuItem optionsMenuItem = new JMenuItem(new AbstractAction(
-				"Einstellungen") {
+		final JMenuItem optionsMenuItem = new JMenuItem(new AbstractAction(R("GpOptionsDialog.title")) {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
