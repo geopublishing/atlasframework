@@ -164,14 +164,14 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * the local maven repository. This on the other hand expects you to
 	 * "mvn install" the JARs there whenever important changes happened to them.
 	 */
+	// TODO UGLY!
+	private static String GPVERSION = "1.9-SNAPSHOT";
 	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.7-SNAPSHOT.jar";
 	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.7-SNAPSHOT.jar";
 	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.7-SNAPSHOT.jar";
 	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.7-SNAPSHOT.jar";
 	public static final String GSRCJ_JARNAME = "gsrcj-0.5.jar";
-	public static final String GPSYNC_JARNAME = "gpsync-2.0-SNAPSHOT.jar";
-	// TODO UGLY!
-	private static String GPVERSION = "1.9-SNAPSHOT";
+	public static final String GPSYNC_JARNAME = "gpsync-"+GPVERSION+".jar";
 	/**
 	 * Filename of the gpcore jar
 	 */
@@ -940,7 +940,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		if (jarName.contains(GSRCJ_JARNAME))
 			path = "org/geopublishing/gsrcj/0.5";
 		if (jarName.contains(GPSYNC_JARNAME))
-			path = "org/geopublishing/gpsync/1.0";
+			path = "org/geopublishing/gpsync/"+GPVERSION;
 
 		/*
 		 * ./gt-data-2.6.1.jar and other geotool jars
