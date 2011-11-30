@@ -59,6 +59,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.expression.Expression;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.gui.SelectableXMapPane;
@@ -84,8 +85,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 	public static final String[] FONT_WEIGHTS = { "normal", "bold" };
 
 	private static final JLabel LinePlacementPerpendicularGap = new JLabel(
-			ASUtil
-					.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
+			ASUtil.R("TextRuleListGUI.LinePlacement.PerpendicularGap"));
 
 	/** The font sizes that can be selected. */
 	public static final Double[] SIZES = { 6., 7., 8., 9., 10., 11., 12., 14.,
@@ -1244,10 +1244,16 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 		if (features == null)
 			return new JPanel();
 
+		CoordinateReferenceSystem crs = features.getSchema()
+				.getCoordinateReferenceSystem();
+		if (crs == null)
+			return new JPanel();
+
 		MapContext context = new DefaultMapContext();
 		context.addLayer(features, createPreviewStyle());
 		previewMapPane.setLocalContext(context);
 		final MapLayer layer = context.getLayer(0);
+
 		ReferencedEnvelope bounds;
 		try {
 			bounds = layer.getBounds();
@@ -1521,7 +1527,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 			case POINT:
 			case POLYGON:
 
-				// Avoid nulls and fill with default if needed
+			// Avoid nulls and fill with default if needed
 			{
 
 				if (rulesList.getSymbolizer().getLabelPlacement() == null
