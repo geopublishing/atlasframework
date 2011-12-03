@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.dp.layer;
 
-import java.lang.reflect.Array;
-
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geotools.coverage.grid.GridCoverage2D;
 

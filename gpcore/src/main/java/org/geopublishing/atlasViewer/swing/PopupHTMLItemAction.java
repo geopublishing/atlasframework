@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.GpCoreUtil;
