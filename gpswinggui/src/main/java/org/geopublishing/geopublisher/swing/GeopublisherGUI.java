@@ -202,8 +202,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	public GeopublisherGUI(final boolean askToOpenLastAtlas) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(GpCoreUtil.class));
-
+		
 		GpUtil.initGpLogging();
+		
+		LOGGER.debug("checking for correct permissions on tmpdir");
+		GpUtil.checkAndResetTmpDir("/var/tmp");
 
 		LOGGER.debug("java.nio.charset.Charset.defaultCharset().name(): "
 				+ java.nio.charset.Charset.defaultCharset().name());
