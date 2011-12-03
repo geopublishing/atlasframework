@@ -205,6 +205,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
 		GpUtil.initGpLogging();
 
+		LOGGER.debug("checking for correct permissions on tmpdir");
+		GpUtil.checkAndResetTmpDir("/var/tmp");
+		
 		LOGGER.debug("java.nio.charset.Charset.defaultCharset().name(): "
 				+ java.nio.charset.Charset.defaultCharset().name());
 

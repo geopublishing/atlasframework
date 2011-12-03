@@ -12,6 +12,7 @@ package org.geopublishing.geopublisher;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Locale;
 import java.util.Set;
@@ -20,7 +21,9 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 import javax.xml.parsers.FactoryConfigurationError;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -242,6 +245,30 @@ public class GpUtil {
 		if (ret == JFileChooser.APPROVE_OPTION)
 			return chooser.getSelectedFile();
 		return null;
+	}
+	
+	/**
+	 * this method checks for permission on java.io.tmpdir and changes it to a
+	 * given path if files in current tmpDir may not be executed. (Possibly due
+	 * to noexec mountoption on /tmp)
+	 */
+	public static void checkAndResetTmpDir(String path) {
+		if (SystemUtils.IS_OS_UNIX) {
+			String tmpDir = System.getProperty("java.io.tmpdir");
+			try {
+				File file = File.createTempFile("geopublisher", "tmpDirTest",
+						new File(tmpDir));
+				file.setExecutable(true);
+				if (!file.canExecute()) {
+					System.setProperty("java.io.tmpdir", path);
+					LOGGER.debug("tmpDir has no execute rights, changing to "
+							+ path);
+				}
+				FileUtils.deleteQuietly(file);
+			} catch (IOException e) {
+				LOGGER.log(Level.ERROR, e);
+			}
+		}
 	}
 
 
