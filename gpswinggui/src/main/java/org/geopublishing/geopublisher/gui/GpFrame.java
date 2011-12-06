@@ -845,6 +845,8 @@ public class GpFrame extends JFrame {
 
 			atlasJMenu.add(new GpMenuItem(R("MenuBar.AtlasMenu.EditAboutInfo"),
 					ActionCmds.editAboutInfo));
+			
+			atlasJMenu.add(new GpMenuItem(R("Menubar.AtlasMenu.EditTermsOfUseInfo"),ActionCmds.editTermsOfUseInfo));
 
 			// ******************************************************************
 			// Set rendering quality for the atlas-product

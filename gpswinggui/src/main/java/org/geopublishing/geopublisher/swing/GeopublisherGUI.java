@@ -102,7 +102,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	 * A enumeration of actions. Mainly accessible through the {@link JMenuBar}
 	 */
 	public enum ActionCmds {
-		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, importWizard
+		changeLnF, editAboutInfo, editAtlasLanguages, editAtlasParams, editPopupInfo, exitGP, exportAtlasTranslations, exportJarsAtlas, newAtlas, saveAtlas, showImagesInfo, previewAtlas, previewAtlasLive, exportAtlasCSV, importWizard, editTermsOfUseInfo
 	}
 
 	/** A singleton pattern for the {@link GeopublisherGUI} instance **/
@@ -394,6 +394,31 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					.set(getJFrame(),
 							org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup,
 							"true");
+		}  else if (cmd.equals(ActionCmds.editTermsOfUseInfo.toString())) {
+
+			final List<String> tabTitles = new ArrayList<String>(ace
+					.getLanguages().size());
+
+			for (int i = 0; i < ace.getLanguages().size(); i++) {
+				final String titleTranslated = ace.getTitle().get(
+						ace.getLanguages().get(i));
+				final String title = R(
+						"EditTermsOfUseWindow.TabName",
+						titleTranslated == null || titleTranslated.equals("") ? "..."
+								: titleTranslated,
+						new Locale(ace.getLanguages().get(i))
+								.getDisplayLanguage(new Locale(Translation
+										.getActiveLang())));
+
+				tabTitles.add(title);
+			}
+
+			final String title = GpUtil.R("EditTermsOfUseWindow.EditorTitle");
+			String key = GpSwingUtil.openHTMLEditorsKey(ace
+					.getTermsOfUseHtMLFiles(getJFrame()));
+			Window instanceFor = GPDialogManager.dm_HtmlEditor.getInstanceFor(
+					key, getJFrame(), ace, ace.getTermsOfUseHtMLFiles(getJFrame()),
+					tabTitles, title);
 		}
 
 		else if (cmd.equals(ActionCmds.exportAtlasTranslations.toString())) {

@@ -65,7 +65,7 @@ public class AVProps {
 							// antialiasing shoudl become map-specific
 		LastExportFolder
 		// Last folder anything was exported to
-		, showPopupOnStartup, logLevel
+		, showPopupOnStartup, logLevel, termsOfUseAccepted
 //		, rasterReader
 	}
 

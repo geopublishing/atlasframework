@@ -208,6 +208,13 @@ public class AtlasMenuBar extends JMenuBar {
 		if (atlasViewer.getAtlasConfig().getPopupHTMLURL() != null) {
 			fileMenu.add(getPopupHTMLItem());
 		}
+		
+		/**
+		 * The MenuItem to open the terms-of-use, if defined
+		 */
+		if (atlasViewer.getAtlasConfig().getTermsOfUseHTMLURL() !=null){
+		    fileMenu.add(getTermsOfUseHTMLItem());
+		}
 
 		/**
 		 * The MenuItem EXIT to end the application
@@ -221,6 +228,15 @@ public class AtlasMenuBar extends JMenuBar {
 				atlasViewer);
 
 		JMenuItem popupHtmlMenuItem = new AtlasMenuItem(popupHTMLItemAction);
+
+		return popupHtmlMenuItem;
+	}
+	
+	private JMenuItem getTermsOfUseHTMLItem() {
+		TermsOfUseHTMLItemAction termsOfUseHTMLItemAction = new TermsOfUseHTMLItemAction(
+				atlasViewer);
+
+		JMenuItem popupHtmlMenuItem = new AtlasMenuItem(termsOfUseHTMLItemAction);
 
 		return popupHtmlMenuItem;
 	}

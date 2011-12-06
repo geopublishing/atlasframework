@@ -815,4 +815,49 @@ public class AtlasConfigEditable extends AtlasConfig {
 
 	}
 
+	/**
+	 * @return {@link List} of {@link File}s to the HTML Terms of use documents for all
+	 *         languages. The order of the {@link File}s equals the order of the
+	 *         languages in getLanguages(). If the files do not exist they will
+	 *         be created with defaults.
+	 * @throws IOException
+	 *             If the default files can not be created.
+	 */
+	public List<File> getTermsOfUseHtMLFiles(Window owner) {
+		ArrayList<File> urls = new ArrayList<File>();
+
+		for (String lang : getLanguages()) {
+			File termsOfUseHTMLfile = new File(getAboutDir(), "termsofuse_" + lang
+					+ ".html");
+			try {
+
+				if (!termsOfUseHTMLfile.exists()) {
+					/**
+					 * Create a default HTML About window
+					 */
+
+					FileWriter fw = new FileWriter(termsOfUseHTMLfile);
+					fw.write("<html> <body> <p> "
+							+ GpUtil.R(
+									"EditTermsOfUseWindow.TabName",
+									(getTitle().get(lang) != null && getTitle()
+											.get(lang).equals("")) ? "..."
+											: getTitle().get(lang),
+									new Locale(lang)
+											.getDisplayLanguage(new Locale(
+													Translation.getActiveLang())))
+							+ " </p> </body> </html>");
+					fw.flush();
+					fw.close();
+				}
+				urls.add(termsOfUseHTMLfile);
+			} catch (Exception e) {
+				ExceptionDialog.show(owner, new AtlasException(
+						"Couldn't create the default HTML terms of use file.", e));
+			}
+
+		}
+		return urls;
+	}
+
 }
