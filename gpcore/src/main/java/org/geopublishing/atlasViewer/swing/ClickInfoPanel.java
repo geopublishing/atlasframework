@@ -177,8 +177,7 @@ public class ClickInfoPanel extends JPanel {
 					int i = 0;
 					for (final double value : gcValue) {
 						i++;
-
-						DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) layerManager.getStyledObjects().get(0);
+						DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) layerManager.getStyledObjectFor(layer);
 						JLabel key = new JLabel(dplrr.getBandNames()[i-1].toString()+":");
 						if(dplrr.getBandNames()[i-1].toString().isEmpty()){
 						    key = new JLabel(GpCoreUtil.R("ClickInfoPanel.label_for_band", i));
