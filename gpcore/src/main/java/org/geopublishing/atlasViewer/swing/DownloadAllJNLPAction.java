@@ -5,22 +5,16 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
 import javax.jnlp.UnavailableServiceException;
-import javax.sql.rowset.Joinable;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.SwingWorker;
 
-import org.apache.commons.collections.set.CompositeSet.SetMutator;
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.taskdefs.Sleep;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 
 import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasStatusDialog;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
-import de.schmitzm.testing.SwingUtilTest;
 
 public class DownloadAllJNLPAction extends AbstractAction {
 
