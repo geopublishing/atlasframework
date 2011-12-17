@@ -32,26 +32,30 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 	HTMLInfoPaneInterface htmlInfoJPane;
 	OkButton okButton;
 
+	public AtlasTermsOfUseDialog(Component parentGUI, AtlasConfig atlasConfig) {
+		this(parentGUI, atlasConfig, false);
+	}
+
 	/** Creates new form AtlasAboutDialog2 */
-	public AtlasTermsOfUseDialog(Component parentGUI, 
-			AtlasConfig atlasConfig) {
-		super(SwingUtil.getParentWindow(parentGUI),
-				ModalityType.MODELESS);
+	public AtlasTermsOfUseDialog(Component parentGUI, AtlasConfig atlasConfig,
+			boolean modal) {
+		super(SwingUtil.getParentWindow(parentGUI), ModalityType.MODELESS);
 
 		this.atlasConfig = atlasConfig;
-
+		setModal(modal); // True to block further code processing in ex. DownloadAllJNLPAction
 		initGUI();
 	}
 
 	private void initGUI() {
-		// setExtendedState(Frame.MAXIMIZED_BOTH);
 		JComponent htmlComponent = getHtmlInfoJPane();
 		Dimension fullScreen = getToolkit().getScreenSize();
-		final Dimension dialogSize = new Dimension((int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
+		final Dimension dialogSize = new Dimension(
+				(int) (fullScreen.width * 0.5), (int) (fullScreen.height * 0.5));
 
 		setTitle(atlasConfig.getTitle().toString());
 
-		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]", "[top][top,fill]"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]",
+				"[top][top,fill]"));
 
 		contentPane.add(getTitleJLabel(), "growx, push");
 		contentPane.add(getLogoJLabel(), "right");
@@ -64,9 +68,9 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 		setSize(dialogSize);
 		SwingUtil.centerFrameOnScreen(this);
-		
+
 		setVisible(true);
-		
+
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -103,8 +107,8 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 	public JComponent getHtmlInfoJPane() {
 		if (htmlInfoJPane == null) {
-			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(atlasConfig.getTermsOfUseHTMLURL(),
-					atlasConfig);
+			htmlInfoJPane = GpCoreUtil.createHTMLInfoPane(
+					atlasConfig.getTermsOfUseHTMLURL(), atlasConfig);
 		}
 		return htmlInfoJPane.getComponent();
 	}
@@ -118,9 +122,10 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					atlasConfig.getProperties()
-					.set(org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
-							"true");
+					atlasConfig
+							.getProperties()
+							.set(org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
+									"true");
 					dispose();
 				}
 
