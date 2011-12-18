@@ -33,16 +33,15 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 	OkButton okButton;
 
 	public AtlasTermsOfUseDialog(Component parentGUI, AtlasConfig atlasConfig) {
-		this(parentGUI, atlasConfig, false);
+		this(parentGUI, atlasConfig, ModalityType.MODELESS);
 	}
 
 	/** Creates new form AtlasAboutDialog2 */
 	public AtlasTermsOfUseDialog(Component parentGUI, AtlasConfig atlasConfig,
-			boolean modal) {
-		super(SwingUtil.getParentWindow(parentGUI), ModalityType.MODELESS);
+			ModalityType modal) {
+		super(SwingUtil.getParentWindow(parentGUI), modal);
 
 		this.atlasConfig = atlasConfig;
-		setModal(modal); // True to block further code processing in ex. DownloadAllJNLPAction
 		initGUI();
 	}
 

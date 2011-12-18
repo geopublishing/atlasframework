@@ -1,6 +1,7 @@
 package org.geopublishing.atlasViewer.swing;
 
 import java.awt.Component;
+import java.awt.Dialog.ModalityType;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
@@ -75,7 +76,7 @@ public class DownloadAllJNLPAction extends AbstractAction {
 					// org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
 					// true)
 					AtlasTermsOfUseDialog aboutWindow = new AtlasTermsOfUseDialog(
-							owner, atlasViewer.getAtlasConfig(), true);
+							owner, atlasViewer.getAtlasConfig(), ModalityType.APPLICATION_MODAL);
 				}
 
 				final String[] parts = haveToDownload
