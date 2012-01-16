@@ -59,6 +59,7 @@ import org.geopublishing.atlasViewer.GpCoreUtil;
 import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataUtilities;
@@ -136,6 +137,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		JNLPUtil.registerAsSingleInstance(AtlasStylerGUI.this, true);
 
+		LOGGER.debug("checking for correct permissions on tmpdir");
+		GpUtil.checkAndResetTmpDir("/var/tmp");
+		
 		initialize();
 
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
