@@ -1942,7 +1942,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		info("Create " + zipFile.getName());
 		try {
-			IOUtil.zipDir(targetDirDISK2, zipFile, targetDirDISK2);
+			IOUtil.zipDir(targetDirDISK2, zipFile);
 
 		} catch (Exception e) {
 			throw new AtlasExportException("Failed to create ZIP file "
