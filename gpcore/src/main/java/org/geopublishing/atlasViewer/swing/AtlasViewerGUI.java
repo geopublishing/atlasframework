@@ -67,6 +67,7 @@ import org.geopublishing.atlasViewer.http.Webserver;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.internal.AtlasMenuItem;
+import org.geopublishing.geopublisher.GpUtil;
 
 import rachel.http.loader.WebClassResourceLoader;
 import rachel.http.loader.WebResourceManager;
@@ -162,6 +163,9 @@ public class AtlasViewerGUI implements ActionListener, SingleInstanceListener {
 		 * Register this as single instance
 		 */
 		JNLPUtil.registerAsSingleInstance(AtlasViewerGUI.this, true);
+		
+		LOGGER.debug("checking for correct permissions on tmpdir");
+		GpUtil.checkAndResetTmpDir("/var/tmp");
 
 	}
 
