@@ -232,22 +232,6 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 	public JPopupMenu getToolMenu() {
 		JPopupMenu menu = super.getToolMenu();
 
-//		/**
-//		 * Offer the OLD AtlasStylerRaster
-//		 */
-//		if (dpLayer instanceof StyledGridCoverageReaderInterface) {
-//			menu.add(new AbstractAction("OLD RasterStyler", Icons.ICON_STYLE) {
-//
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					GPDialogManager.dm_OldAtlasRasterStyler.getInstanceFor(
-//							dpLayer, DesignAtlasMapLayerLegend.this, ace,
-//							DesignAtlasMapLayerLegend.this);
-//				}
-//
-//			});
-//		}
-
 		menu.addSeparator();
 
 		/**
@@ -501,6 +485,27 @@ public class DesignAtlasMapLayerLegend extends AtlasMapLayerLegend {
 				});
 		showStylerInLegendOnOff.setSelected(dpLayer.isStylerInLegend());
 		menu.add(showStylerInLegendOnOff);
+		
+		/**
+		 * Add a new MenuItem, to switch "exportable" on/off
+		 */
+		JCheckBoxMenuItem allowExportOnOff = new JCheckBoxMenuItem(
+				
+				// i8n
+				
+				new AbstractAction(
+						GeopublisherGUI.R("EditDPEDialog.IsDpeExportable")) {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						JCheckBoxMenuItem checkBoxMenuItem = (JCheckBoxMenuItem) e
+								.getSource();
+						dpLayer.setExportable(checkBoxMenuItem.isSelected());
+					}
+					
+				});
+		allowExportOnOff.setSelected(dpLayer.isExportable());
+		menu.add(allowExportOnOff);
 
 		/**
 		 * Add a new MenuItem, to switch "anklickbar" on/off

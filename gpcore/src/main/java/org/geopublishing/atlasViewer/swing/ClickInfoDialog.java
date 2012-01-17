@@ -29,6 +29,7 @@ import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geotools.geometry.DirectPosition2D;
@@ -45,6 +46,7 @@ import de.schmitzm.geotools.gui.XMapPane;
 import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
 import de.schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
 import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
+import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
 
 /**
@@ -56,6 +58,10 @@ import de.schmitzm.swing.SwingUtil;
  */
 public class ClickInfoDialog extends JDialog {
 	final ClickInfoPanel clickInfoPanel;
+
+	/**
+	 * Is <code>null</code>, wenn wir im AS sind.
+	 */
 	private final AtlasConfig atlasConfig;
 
 	Boolean userMovedTheWindow = false;
@@ -207,13 +213,19 @@ public class ClickInfoDialog extends JDialog {
 
 		// Set the title of the dialog to the translated title the layer
 		try {
-			setTitle(atlasConfig.getDataPool().get(
-					objectSelectionEvent.getSourceLayer().getTitle())
-					.getTitle().toString());
+			String title = objectSelectionEvent.getSourceLayer().getTitle();
+			if (atlasConfig != null) {
+				setTitle(atlasConfig.getDataPool()
+						.get(title)
+						.getTitle().toString());
+			} else {
+				title = StringUtils.right(title,25);
+				setTitle(title);
+			}
 		} catch (Exception e) {
-			LOGGER.error(e);
+			LOGGER.error(e.getMessage(), e);
 		}
-
+		
 		XMapPane mapPane = objectSelectionEvent.getSource();
 		// If it is a feature, let it blink for a moment
 		if (source instanceof XMapPane
@@ -225,21 +237,24 @@ public class ClickInfoDialog extends JDialog {
 			// Create a fake Feature and let it blink a moment
 			final GridCoverageValueSelectedEvent gridSelection = (GridCoverageValueSelectedEvent) objectSelectionEvent;
 
-			// TODO Help Martin, warum kann ich kein feake Feature mit correctem CRS erstellen? 
+			// TODO Help Martin, warum kann ich kein feake Feature mit correctem
+			// CRS erstellen?
 			Point2D selectionPoint = gridSelection.getSelectionPoint();
 
 			CoordinateReferenceSystem crs = mapPane.getMapContext()
 					.getCoordinateReferenceSystem();
-			
+
 			SimpleFeatureType fakeFeatureType = FeatureUtil.createFeatureType(
 					Point.class, crs);
-			
+
 			SimpleFeature fakeFeature = FeatureUtil.createFeature(
 					fakeFeatureType, true, "fake raster selection",
 					new DirectPosition2D(crs, selectionPoint.getX(),
 							selectionPoint.getY()));
 
-			System.out.println("crs = " + fakeFeature.getFeatureType().getCoordinateReferenceSystem());
+			System.out.println("crs = "
+					+ fakeFeature.getFeatureType()
+							.getCoordinateReferenceSystem());
 
 			mapPane.blink(fakeFeature);
 		}

@@ -177,10 +177,17 @@ public class ClickInfoPanel extends JPanel {
 					int i = 0;
 					for (final double value : gcValue) {
 						i++;
-						DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) layerManager.getStyledObjectFor(layer);
-						JLabel key = new JLabel(dplrr.getBandNames()[i-1].toString()+":");
-						if(dplrr.getBandNames()[i-1].toString().isEmpty()){
-						    key = new JLabel(GpCoreUtil.R("ClickInfoPanel.label_for_band", i));
+						JLabel defLabel = new JLabel(GpCoreUtil.R("ClickInfoPanel.label_for_band", i));
+						JLabel key = defLabel;
+						
+						StyledLayerInterface<?> styledObjectFor = layerManager.getStyledObjectFor(layer);
+						
+						if (styledObjectFor instanceof DpLayerRaster_Reader) {
+							DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) styledObjectFor;
+							key = new JLabel(dplrr.getBandNames()[i-1].toString()+":");
+							if(dplrr.getBandNames()[i-1].toString().isEmpty()){
+								key = defLabel;
+							}
 						}
 						key.setFont(DEFAULT_FONT);
 						panel.add(key);
@@ -249,7 +256,7 @@ public class ClickInfoPanel extends JPanel {
 						5, getYPad()); // xPad, yPad
 
 			} catch (final Exception e) {
-				LOGGER.error(e);
+				LOGGER.error(e.getMessage(),e);
 			}
 		}
 

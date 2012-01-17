@@ -132,6 +132,9 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		// Output information about the LGPL license
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
+		
+		LOGGER.debug("checking for correct permissions on tmpdir");
+		GpUtil.checkAndResetTmpDir("/var/tmp");
 
 		System.setProperty("file.encoding", "UTF-8");
 		

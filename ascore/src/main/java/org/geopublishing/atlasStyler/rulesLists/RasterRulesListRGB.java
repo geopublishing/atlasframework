@@ -156,11 +156,17 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 		ContrastEnhancement rsCe = StylingUtil.STYLE_FACTORY
 				.createContrastEnhancement();
-		// rsCe.setMethod(getRSMethod()); //does not work in geotools < 8.0
-		if (getRSMethod() == null)
-			rsCe.setType(FilterUtil.FILTER_FAC2.literal("NONE"));
-		else
+//		 rsCe.setMethod(getRSMethod()); //does not work in geotools < 8.0
+
+		if (getRSMethod() == null || getRSMethod() == ContrastMethod.NONE) {
+			// GT 2.7 does not know about NONE
+		} else {
+			// if (getRSMethod() == null)
+			// rsCe.setType(FilterUtil.FILTER_FAC2.literal("NONE"));
+			// else
 			rsCe.setType(FilterUtil.FILTER_FAC2.literal(getRSMethod().name()));
+		}
+
 		rsCe.setGammaValue(getRSGamma());
 
 		ContrastEnhancement redCe = StylingUtil.STYLE_FACTORY
@@ -188,15 +194,15 @@ public class RasterRulesListRGB extends RasterRulesList {
 
 		ChannelSelection cs = StylingUtil.STYLE_FACTORY.channelSelection(redT,
 				greenT, blueT);
-		if (getChannelMethod(1) != null)
+		if (getChannelMethod(1) != null && getChannelMethod(1) != ContrastMethod.NONE)
 			((ContrastEnhancement) cs.getRGBChannels()[0]
 					.getContrastEnhancement()).setType(ff
 					.literal(getChannelMethod(1).name()));
-		if (getChannelMethod(2) != null)
+		if (getChannelMethod(2) != null && getChannelMethod(2) != ContrastMethod.NONE)
 			((ContrastEnhancement) cs.getRGBChannels()[1]
 					.getContrastEnhancement()).setType(ff
 					.literal(getChannelMethod(2).name()));
-		if (getChannelMethod(3) != null)
+		if (getChannelMethod(3) != null && getChannelMethod(3) != ContrastMethod.NONE)
 			((ContrastEnhancement) cs.getRGBChannels()[2]
 					.getContrastEnhancement()).setType(ff
 					.literal(getChannelMethod(3).name()));
@@ -265,7 +271,7 @@ public class RasterRulesListRGB extends RasterRulesList {
 						SelectedChannelType[] rgbChannels = cs.getRGBChannels();
 						setChannel(1, Integer.valueOf(rgbChannels[0]
 								.getChannelName()));
-						
+
 						// null is returned when no method is specified
 						if (rgbChannels[0].getContrastEnhancement().getMethod() != null) {
 							setChannelMethod(
@@ -274,9 +280,9 @@ public class RasterRulesListRGB extends RasterRulesList {
 											.getContrastEnhancement()
 											.getMethod().name().toString()));
 						} else {
-							setChannelMethod(1, ContrastMethod.NONE); 
+							setChannelMethod(1, ContrastMethod.NONE);
 						}
-						
+
 						if (rgbChannels[0].getContrastEnhancement()
 								.getGammaValue() != null) {
 							setGammaValue(

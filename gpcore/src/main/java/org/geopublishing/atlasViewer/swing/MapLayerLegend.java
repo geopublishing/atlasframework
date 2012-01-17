@@ -629,11 +629,17 @@ public class MapLayerLegend extends JXTaskPane implements DragSourceListener,
 		 * Button to export the layer to a local folder
 		 */
 		if (isExportable()) {
+			
+			// Mache mathode, und dann in Atlas... überschrieben...
+			
 			toolPopup.add(new JMenuItem(new AbstractAction(GpCoreUtil
 					.R("LayerToolMenu.export"), Icons.ICON_EXPORT) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+					// TODO MJ, u.U. einmal die AGB anzeigen
+					
 					export();
 				}
 
