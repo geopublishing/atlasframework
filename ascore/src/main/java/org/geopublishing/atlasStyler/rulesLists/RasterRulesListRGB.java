@@ -44,9 +44,9 @@ public class RasterRulesListRGB extends RasterRulesList {
 			channels[1] = Math.min(2, getStyledRaster().getBandCount());
 			channels[2] = Math.min(3, getStyledRaster().getBandCount());
 
-			channelMethod[0] = ContrastMethod.NORMALIZE;
-			channelMethod[1] = ContrastMethod.NORMALIZE;
-			channelMethod[2] = ContrastMethod.NORMALIZE;
+			channelMethod[0] = ContrastMethod.NONE;
+			channelMethod[1] = ContrastMethod.NONE;
+			channelMethod[2] = ContrastMethod.NONE;
 		}
 
 	}

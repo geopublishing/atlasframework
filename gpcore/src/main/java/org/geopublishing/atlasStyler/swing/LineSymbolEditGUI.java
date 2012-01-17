@@ -458,9 +458,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
             });
 
             SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
-            jComboBoxLinejoin.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jComboBoxLinejoin.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
             jComboBoxLinejoin.setEnabled(false);
-            jLabelLineJoin.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jLabelLineJoin.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
 
         }
         return jComboBoxLinejoin;
@@ -624,8 +624,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
             SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
             jComboBoxOpacityExtGraphic.setEnabled(false); // TODO not working in GT<=2.7
-            jComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
-            jLabelComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
+            jLabelComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
         }
         return jComboBoxOpacityExtGraphic;
     }
@@ -777,8 +777,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
             // disabled until supported by geotools
             jComboBoxPerpendicularOffset.setEnabled(false);
-            jComboBoxPerpendicularOffset.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
-            jLabelPerpendicularOffset.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jComboBoxPerpendicularOffset.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
+            jLabelPerpendicularOffset.setToolTipText(ASUtil.R("NotWorkingWithGeotools.Tooltip"));
         }
         return jComboBoxPerpendicularOffset;
     }
