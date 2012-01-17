@@ -182,15 +182,17 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
                 getJPanelGraphicStroke().setEnabled(false);
                 getJPanelStroke().setEnabled(true);
                 getJPanelDashArray().setEnabled(true);
-                getJComboBoxPerpendicularOffset().setEnabled(false);
-                jLabelPerpendicularOffset.setEnabled(false);
+                getJComboBoxPerpendicularOffset().setEnabled(false); // GT<=2.7
+                jLabelPerpendicularOffset.setEnabled(false); // GT<=2.7
+                getJComboBoxLineJoin().setEnabled(false); // GT<=2.7
+                jLabelLineJoin.setEnabled(false); // GT<=2.7
                 jComboBoxStyleType.setSelectedIndex(0);
             } else {
                 getJPanelDashArray().setEnabled(false);
                 getJPanelStroke().setEnabled(false);
                 getJPanelGraphicStroke().setEnabled(true);
                 getJComboxBoxOpacityExtGraphic().setEnabled(false); // TODO not working in GT<=2.7
-                jLabelComboBoxOpacityExtGraphic.setEnabled(false);
+                jLabelComboBoxOpacityExtGraphic.setEnabled(false); // GT<=2.7
                 jComboBoxStyleType.setSelectedIndex(1);
             }
 
@@ -220,6 +222,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
                         jLabelPerpendicularOffset.setEnabled(false);
                         getJComboxBoxOpacityExtGraphic().setEnabled(false);
                         jLabelComboBoxOpacityExtGraphic.setEnabled(false);
+                        getJComboBoxLineJoin().setEnabled(false);
+                        jLabelLineJoin.setEnabled(false);
+                        
 
                         firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -252,10 +257,10 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
             jPanelStroke.add(getJComboBoxStrokeOpacity(), "");
 
             // wraps here
-            jPanelStroke.add(jLabelLineJoin, "split 6");
-            jPanelStroke.add(getJComboBoxLineJoin(), "");
-            jPanelStroke.add(jLabelLinecap, "");
+            jPanelStroke.add(jLabelLinecap, "split 6");
             jPanelStroke.add(getJComboBoxLineCap(), "");
+            jPanelStroke.add(jLabelLineJoin, "");
+            jPanelStroke.add(getJComboBoxLineJoin(), "");
             jPanelStroke.add(new JLabel(), "");
             jPanelStroke.add(jLabelPerpendicularOffset, "");
             jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
@@ -453,6 +458,9 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
             });
 
             SwingUtil.addMouseWheelForCombobox(jComboBoxLinejoin);
+            jComboBoxLinejoin.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jComboBoxLinejoin.setEnabled(false);
+            jLabelLineJoin.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
 
         }
         return jComboBoxLinejoin;
@@ -616,7 +624,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
             SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
             jComboBoxOpacityExtGraphic.setEnabled(false); // TODO not working in GT<=2.7
-            jComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.opacityExtGraphic.Tooltip"));
+            jComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jLabelComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
         }
         return jComboBoxOpacityExtGraphic;
     }
@@ -768,6 +777,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
             // disabled until supported by geotools
             jComboBoxPerpendicularOffset.setEnabled(false);
+            jComboBoxPerpendicularOffset.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
+            jLabelPerpendicularOffset.setToolTipText(ASUtil.R("LineSymbolEditGUI.notWorkingWithGeotools.Tooltip"));
         }
         return jComboBoxPerpendicularOffset;
     }
