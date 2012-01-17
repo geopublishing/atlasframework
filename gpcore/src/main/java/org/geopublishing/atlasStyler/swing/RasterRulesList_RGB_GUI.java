@@ -28,6 +28,7 @@ import de.schmitzm.swing.SwingUtil;
 public class RasterRulesList_RGB_GUI extends
 		AbstractRulesListGui<RasterRulesListRGB> {
 
+	ContrastMethod[] contrastMethods = new ContrastMethod[]{ContrastMethod.NONE,ContrastMethod.HISTOGRAM};
 	private AtlasStylerRaster atlasStyler;
 	private JLabel[] channelJLabel = new JLabel[3];
 	private JLabel descriptionJLabel;
@@ -129,8 +130,7 @@ public class RasterRulesList_RGB_GUI extends
 	 */
 	private JComboBox getChannelContrastComboBox(int channel) {
 		if (channelContrastComboBox[channel - 1] == null) {
-			channelContrastComboBox[channel - 1] = new JComboBox(
-					ContrastMethod.values());
+			channelContrastComboBox[channel - 1] = new JComboBox(contrastMethods);
 			channelContrastComboBox[channel - 1]
 					.setRenderer(contrastListCellRenderer);
 			SwingUtil
@@ -157,6 +157,8 @@ public class RasterRulesList_RGB_GUI extends
 						}
 					});
 		}
+		channelContrastComboBox[channel - 1].setEnabled(false);
+		channelContrastComboBox[channel-1].setToolTipText(GpUtil.R("NotWorkingWithGeotools.Tooltip"));
 		return channelContrastComboBox[channel - 1];
 	}
 
@@ -295,21 +297,50 @@ public class RasterRulesList_RGB_GUI extends
 
 	private JComboBox getGlobalMethodComboBox() {
 		if (globalMethodComboBox == null) {
-			globalMethodComboBox = new JComboBox(ContrastMethod.values());
+			globalMethodComboBox = new JComboBox(contrastMethods);
 			globalMethodComboBox.setRenderer(contrastListCellRenderer);
 
 			SwingUtil.addMouseWheelForCombobox(globalMethodComboBox);
 			globalMethodComboBox.setSelectedItem(rulesList.getRSMethod());
+			controlComboBoxes(globalMethodComboBox.getSelectedItem()
+					.toString());
 			globalMethodComboBox.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
 					rulesList.setRSMethod((ContrastMethod) globalMethodComboBox
 							.getSelectedItem());
+					controlComboBoxes(globalMethodComboBox.getSelectedItem()
+							.toString());
 				}
 			});
 		}
 		return globalMethodComboBox;
+	}
+
+	/**
+	 * Controls the few working combinations of ContrastMethods and GammaValues
+	 * with GT<=2.7
+	 * 
+	 * @param method
+	 */
+	protected void controlComboBoxes(String method) {
+		if (method.equals("ContrastMethod[NONE]")) {
+			getGlobalGammaComboBox().setEnabled(false);
+			getGlobalGammaComboBox().setSelectedItem(1.0);
+			getChannelGammaComboBox(1).setEnabled(false);
+			getChannelGammaComboBox(1).setSelectedItem(1.0);
+			getChannelGammaComboBox(2).setEnabled(false);
+			getChannelGammaComboBox(2).setSelectedItem(1.0);
+			getChannelGammaComboBox(3).setEnabled(false);
+			getChannelGammaComboBox(3).setSelectedItem(1.0);
+		} else if (method.equals("ContrastMethod[HISTOGRAM]")) {
+			getGlobalGammaComboBox().setEnabled(true);
+			getChannelGammaComboBox(1).setEnabled(true);
+			getChannelGammaComboBox(2).setEnabled(true);
+			getChannelGammaComboBox(3).setEnabled(true);
+		}
+
 	}
 
 	private JLabel getPerChannelJLabel() {
