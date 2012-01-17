@@ -501,14 +501,12 @@ public class RasterRulesList_Distinctvalues_GUI extends
 													getRulesList().getValues()
 															.get(index));
 									transLabel = new TranslationEditJPanel(
-											title,
-											translation, AtlasStylerVector
-													.getLanguages());
+											title, translation,
+											AtlasStylerVector.getLanguages());
 
 									ask = new TranslationAskJDialog(
 											RasterRulesList_Distinctvalues_GUI.this,
-											title,
-											transLabel);
+											title, transLabel);
 									ask.addPropertyChangeListener(new PropertyChangeListener() {
 
 										@Override

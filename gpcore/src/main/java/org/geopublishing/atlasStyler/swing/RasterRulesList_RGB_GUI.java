@@ -15,6 +15,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.ArrayUtils;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.geopublisher.GpUtil;
 import org.opengis.style.ContrastMethod;
 
@@ -43,7 +44,8 @@ public class RasterRulesList_RGB_GUI extends
 	private JLabel perChannelJLabel;
 
 	/**
-	 * Paints nice labels for the values of a {@link JComboBox} that shows different types of {@link ContrastMethod}s
+	 * Paints nice labels for the values of a {@link JComboBox} that shows
+	 * different types of {@link ContrastMethod}s
 	 */
 	DefaultListCellRenderer contrastListCellRenderer = new DefaultListCellRenderer() {
 
@@ -73,12 +75,18 @@ public class RasterRulesList_RGB_GUI extends
 	private Object[] getBands() {
 		if (bands == null) {
 			int n = atlasStyler.getBands();
+			DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) rulesList
+					.getStyledRaster();
 			bands = new Object[0];
-			for (int i = 0; i < n; i++)
-				bands = LangUtil
-						.extendArray(bands,
-								(GpUtil.R("RasterRulesListRGB.Gui.Channel")
+			for (int i = 0; i < n; i++) {
+				String bandName = dplrr.getBandNames()[i].toString();
+				bands = LangUtil.extendArray(
+						bands,
+						!bandName.isEmpty() ? bandName + " ("
+								+ String.valueOf(i + 1) + ")"
+								: (GpUtil.R("RasterRulesListRGB.Gui.Channel")
 										+ " " + (i + 1)));
+			}
 		}
 		return bands;
 	}

@@ -21,8 +21,10 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.swing.Icons;
 
+import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SmallButton;
@@ -51,8 +53,6 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 	 * a field.
 	 */
 	final private RuleChangeListener_GuiEnabledDisabled listenerEnableDisableGUIwhenRLenabledDisabled;
-
-
 
 	class RuleChangeListener_GuiEnabledDisabled implements RuleChangeListener {
 
@@ -114,12 +114,12 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 
 		return button;
 	}
-	
 
 	/**
-	 * Actually belongs to a new abstract class 
+	 * Actually belongs to a new abstract class
 	 */
 	private JPanel bandModeSelectionPanel;
+
 	protected JPanel getBandModeCombobox(final RasterRulesListColormap rlcm) {
 		if (bandModeSelectionPanel == null) {
 			bandModeSelectionPanel = new JPanel(new MigLayout());
@@ -127,10 +127,16 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 			// i8n
 			bandModeSelectionPanel.add(new JLabel("Band:"));
 
+			DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) rlcm.getStyledRaster();
 			// i8n
 			String[] items = new String[0];
 			for (int b = 0; b < rlcm.getStyledRaster().getBandCount(); b++) {
-				items = LangUtil.extendArray(items, String.valueOf(b + 1));
+				String bandName = dplrr.getBandNames()[b].toString();
+				items = LangUtil.extendArray(
+						items,
+						!bandName.isEmpty() ? bandName + " ("
+								+ String.valueOf(b + 1) + ")" : ""
+								+ String.valueOf(b + 1));
 			}
 			final JComboBox bandModeSelectionJCombobox = new JComboBox(items);
 			SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
