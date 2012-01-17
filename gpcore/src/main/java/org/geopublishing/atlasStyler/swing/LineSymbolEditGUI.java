@@ -189,6 +189,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
                 getJPanelDashArray().setEnabled(false);
                 getJPanelStroke().setEnabled(false);
                 getJPanelGraphicStroke().setEnabled(true);
+                getJComboxBoxOpacityExtGraphic().setEnabled(false); // TODO not working in GT<=2.7
+                jLabelComboBoxOpacityExtGraphic.setEnabled(false);
                 jComboBoxStyleType.setSelectedIndex(1);
             }
 
@@ -216,6 +218,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
                         // for LineSymbolizer
                         getJComboBoxPerpendicularOffset().setEnabled(false);
                         jLabelPerpendicularOffset.setEnabled(false);
+                        getJComboxBoxOpacityExtGraphic().setEnabled(false);
+                        jLabelComboBoxOpacityExtGraphic.setEnabled(false);
 
                         firePropertyChange(PROPERTY_UPDATED, null, null);
 
@@ -250,11 +254,11 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
             // wraps here
             jPanelStroke.add(jLabelLineJoin, "split 6");
             jPanelStroke.add(getJComboBoxLineJoin(), "");
-            jPanelStroke.add(jLabelPerpendicularOffset, "");
-            jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
-            jPanelStroke.add(new JLabel(), "");
             jPanelStroke.add(jLabelLinecap, "");
             jPanelStroke.add(getJComboBoxLineCap(), "");
+            jPanelStroke.add(new JLabel(), "");
+            jPanelStroke.add(jLabelPerpendicularOffset, "");
+            jPanelStroke.add(getJComboBoxPerpendicularOffset(), "");
 
         }
         return jPanelStroke;
@@ -611,6 +615,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
             });
 
             SwingUtil.addMouseWheelForCombobox(jComboBoxOpacityExtGraphic);
+            jComboBoxOpacityExtGraphic.setEnabled(false); // TODO not working in GT<=2.7
+            jComboBoxOpacityExtGraphic.setToolTipText(ASUtil.R("LineSymbolEditGUI.opacityExtGraphic.Tooltip"));
         }
         return jComboBoxOpacityExtGraphic;
     }
