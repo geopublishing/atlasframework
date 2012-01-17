@@ -10,9 +10,13 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
+import java.awt.Frame;
+import java.awt.Dialog.ModalityType;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.apache.log4j.Logger;
@@ -39,6 +43,7 @@ import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.SwingUtil;
 
 /**
  * An extension to an ordinary {@link MapLayerLegend}. The difference is, that
@@ -85,7 +90,7 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	}
 
 	/**
-	 * Returns true, is the layer has visible attributes defined or is of type
+	 * Returns true, is the layer has visible attributes defined or is of atlastype
 	 * grid. When this method returns <code>true</code>, it makes sense to show
 	 * clickInfo for this layer.
 	 */
@@ -296,6 +301,32 @@ public class AtlasMapLayerLegend extends MapLayerLegend {
 	public void updateStyle(Style style) {
 		super.updateStyle(style);
 		atlasMapLegend.showOrHideSearchButton();
+	}
+	
+	/**
+	 * Override to implement terms of use
+	 */
+	@Override
+	public void export() {
+		if (exportable == null)
+			return;
+		final Frame owner = SwingUtil.getParentFrame(this);
+		try {
+			if (map.getAc().getTermsOfUseHTMLURL() != null) {
+				AtlasTermsOfUseDialog aboutWindow = new AtlasTermsOfUseDialog(
+						owner, map.getAc(), ModalityType.APPLICATION_MODAL);
+				if(!aboutWindow.isAccepted()){
+					AVSwingUtil.showMessageDialog(owner,
+							AvUtil.R("AcceptTermsOfUse"));
+					return;
+				}
+			}
+			exportable.exportWithGUI(owner);
+		} catch (final IOException e) {
+			final String msg = GpCoreUtil
+					.R("LayerPaneGroup.JOptionPane.ShowMessageDialog.export_failed");
+			JOptionPane.showMessageDialog(owner, msg); // i8ndone
+		}
 	}
 
 	/**

@@ -20,6 +20,7 @@ import net.miginfocom.swing.MigLayout;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.GpCoreUtil;
 
+import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
@@ -31,6 +32,17 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 	JLabel logoJLabel;
 	HTMLInfoPaneInterface htmlInfoJPane;
 	OkButton okButton;
+	boolean accepted = false;
+
+	private CancelButton cancelButton;;
+
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
 
 	public AtlasTermsOfUseDialog(Component parentGUI, AtlasConfig atlasConfig) {
 		this(parentGUI, atlasConfig, ModalityType.MODELESS);
@@ -53,8 +65,8 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 		setTitle(atlasConfig.getTitle().toString());
 
-		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[fill]",
-				"[top][top,fill]"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 2", "[]",
+				"[top][top]"));
 
 		contentPane.add(getTitleJLabel(), "growx, push");
 		contentPane.add(getLogoJLabel(), "right");
@@ -62,7 +74,8 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 			htmlComponent = new JScrollPane(getHtmlInfoJPane());
 		}
 		contentPane.add(htmlComponent, "span 2, grow");
-		contentPane.add(getOkButton(), "tag ok, span 2");
+		contentPane.add(getCancelButton(), "tag cancel, skip 1, split 2");
+		contentPane.add(getOkButton(), "tag ok");
 		setContentPane(contentPane);
 
 		setSize(dialogSize);
@@ -70,6 +83,27 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 		setVisible(true);
 
+	}
+
+	private CancelButton getCancelButton() {
+		if (cancelButton == null) {
+			cancelButton = new CancelButton();
+			cancelButton.addKeyListener(keyEscDispose);
+			cancelButton.requestFocus();
+			cancelButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// atlasConfig
+					// .getProperties()
+					// .set(org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
+					// "false");
+					setAccepted(false);
+					dispose();
+				}
+			});
+		}
+		return cancelButton;
 	}
 
 	// Pressing ESC disposes the Dialog
@@ -121,16 +155,15 @@ public class AtlasTermsOfUseDialog extends javax.swing.JDialog {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					atlasConfig
-							.getProperties()
-							.set(org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
-									"true");
+					// atlasConfig
+					// .getProperties()
+					// .set(org.geopublishing.atlasViewer.AVProps.Keys.termsOfUseAccepted,
+					// "true");
+					setAccepted(true);
 					dispose();
 				}
-
 			});
 		}
-
 		return okButton;
 	}
 
