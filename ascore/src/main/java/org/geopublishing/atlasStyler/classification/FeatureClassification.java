@@ -28,7 +28,7 @@ import javax.swing.DefaultComboBoxModel;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent.CHANGETYPES;
-import org.geotools.data.Query;
+import org.geotools.data.DefaultQuery;
 import org.geotools.feature.FeatureCollection;
 import org.geotools.feature.FeatureIterator;
 import org.jfree.chart.JFreeChart;
@@ -79,10 +79,10 @@ public class FeatureClassification extends Classification {
 	 * Caches up to 8 Statistics. Remember, that the {@link DynamicBin1D}
 	 * actually keeps the data in memory!
 	 */
-	private final Map<String, DynamicBin1D> staticStatsCache = Collections
+	protected final Map<String, DynamicBin1D> staticStatsCache = Collections
 			.synchronizedMap(new LimitedHashMap<String, DynamicBin1D>(8));
 
-	private boolean cacheEnabled = true;
+	protected boolean cacheEnabled = true;
 	/**
 	 * The styled Feature this {@link Classification} works on.
 	 */
@@ -250,7 +250,7 @@ public class FeatureClassification extends Classification {
 	 * @return A combination of StyledFeatures, Value_Field and Norm_Field. This
 	 *         String is the Key for the {@link #staticStatsCache}.
 	 */
-	private String getKey() {
+	protected String getKey() {
 		return "ID=" + getStyledFeatures().getId() + "TITLE=" + getStyledFeatures().getTitle() + " VALUE="
 				+ value_field_name + " NORM=" + normalizer_field_name
 				+ " FILTER=" + getStyledFeatures().getFilter();
@@ -292,7 +292,7 @@ public class FeatureClassification extends Classification {
 			// .getFeatureCollectionFiltered();
 
 			Filter filter = getStyledFeatures().getFilter();
-			Query query = new Query(getStyledFeatures()
+			DefaultQuery query = new DefaultQuery(getStyledFeatures()
 					.getSchema().getTypeName(), filter);
 			List<String> propNames = new ArrayList<String>();
 			propNames.add(value_field_name);
