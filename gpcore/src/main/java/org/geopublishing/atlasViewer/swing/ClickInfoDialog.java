@@ -247,7 +247,7 @@ public class ClickInfoDialog extends JDialog {
 			SimpleFeatureType fakeFeatureType = FeatureUtil.createFeatureType(
 					Point.class, crs);
 
-			SimpleFeature fakeFeature = FeatureUtil.createFeature(
+			SimpleFeature fakeFeature = FeatureUtil.createFeatureInstance(
 					fakeFeatureType, true, "fake raster selection",
 					new DirectPosition2D(crs, selectionPoint.getX(),
 							selectionPoint.getY()));
