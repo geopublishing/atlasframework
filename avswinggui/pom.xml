@@ -178,7 +178,7 @@
 			<!-- A HTML renderer in Java -->
 			<groupId>lobo</groupId>
 			<artifactId>cobra-gp</artifactId>
-			<version>0.98.4</version>
+			<version>0.98.5</version>
 		</dependency>
 
 
