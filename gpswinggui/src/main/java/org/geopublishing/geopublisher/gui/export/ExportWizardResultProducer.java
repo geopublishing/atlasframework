@@ -173,7 +173,7 @@ public class ExportWizardResultProducer implements WizardResultProducer {
 					progress.failed(GeopublisherGUI.R("ExportWizard.Result.FTPException"), false);
 					return;
 				} catch (Exception e) {
-					if (e.getMessage().contains("400")) {
+					if (e.getMessage() != null && e.getMessage().contains("400")) {
 						progress.failed(
 								GeopublisherGUI.R("ExportWizard.Result.AtlasBelongsToAnotherUser", ace.getBaseName()),
 								false);
