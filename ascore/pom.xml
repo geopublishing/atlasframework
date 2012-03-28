@@ -90,13 +90,9 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.geotools.jdbc</groupId>
-			<artifactId>gt-jdbc-postgis</artifactId>
-			<version>${geotools.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
+		<!-- Sollte über schmitzm-gt kommen <dependency> <groupId>org.geotools.jdbc</groupId> 
+			<artifactId>gt-jdbc-postgis</artifactId> <version>${geotools.version}</version> 
+			<type>jar</type> <scope>compile</scope> </dependency> -->
 
 		<dependency>
 			<groupId>log4j</groupId>
@@ -210,7 +206,8 @@
 
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
