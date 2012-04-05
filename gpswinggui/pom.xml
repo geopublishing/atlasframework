@@ -182,6 +182,7 @@
 								<keypass>wasser</keypass>
 								<storepass>wasser</storepass>
 								<alias>IMPETUS</alias>
+ 								<verify>true</verify>
 							</sign>
 
 							<verbose>false</verbose>
