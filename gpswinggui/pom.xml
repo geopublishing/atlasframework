@@ -148,10 +148,6 @@
 
 						<configuration>
 
-							<arguments>
-							        <argument>-digestalg</argument>
-							        <argument>SHA1</argument>
-							</arguments>
 
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
@@ -189,6 +185,10 @@
 							    <storepass>wasser</storepass>
   							    <alias>IMPETUS</alias>
 						            <verify>true</verify>
+							<arguments>
+							        <argument>-digestalg</argument>
+							        <argument>SHA1</argument>
+							</arguments>
 							</sign>
 
 							<verbose>false</verbose>
