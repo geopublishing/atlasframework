@@ -100,7 +100,7 @@
 							<arguments>
 							    <argument>-digestalg</argument>
 							    <argument>${jarsigner.digestalg}</argument>
-                 				        </argument>
+                 				        </arguments>
 
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
