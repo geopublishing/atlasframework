@@ -96,6 +96,12 @@
 						</executions>
 
 						<configuration>
+
+							<arguments>
+							    <argument>-digestalg</argument>
+							    <argument>${jarsigner.digestalg}</argument>
+                 				        </argument>
+
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
 							<dependencies>
