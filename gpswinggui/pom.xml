@@ -185,14 +185,14 @@
 							    <storepass>wasser</storepass>
   							    <alias>IMPETUS</alias>
 						            <verify>true</verify>
+						        </sign>
+
+							<verbose>false</verbose>
+							<excludeTransitive>false</excludeTransitive>
 							<arguments>
 							        <argument>-digestalg</argument>
 							        <argument>SHA1</argument>
 							</arguments>
-							</sign>
-
-							<verbose>false</verbose>
-							<excludeTransitive>false</excludeTransitive>
 
 							<pack200>true</pack200>
 							<gzip>true</gzip>
