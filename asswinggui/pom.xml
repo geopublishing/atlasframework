@@ -99,7 +99,7 @@
 
 							<arguments>
 							    <argument>-digestalg</argument>
-							    <argument>${jarsigner.digestalg}</argument>
+							    <argument>sha-1</argument>
                  				        </arguments>
 
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
