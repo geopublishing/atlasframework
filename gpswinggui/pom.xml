@@ -191,7 +191,7 @@
 							<excludeTransitive>false</excludeTransitive>
 							<arguments>
 							        <argument>-digestalg</argument>
-							        <argument>SHA1</argument>
+								<argument>${jarsigner.digestalg}</argument>
 							</arguments>
 
 							<pack200>true</pack200>
