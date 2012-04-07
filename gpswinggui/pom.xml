@@ -188,7 +188,7 @@
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
 
-							<pack200>true</pack200>
+							<pack200>false</pack200>
 							<gzip>true</gzip>
 
 						</configuration>
