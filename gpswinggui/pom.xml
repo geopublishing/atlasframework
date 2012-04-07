@@ -195,7 +195,7 @@
 							
 							<arguments>
 							    <argument>-digestalg</argument>
-							    <argument>SHA-256</argument>
+							    <argument>SHA1</argument>
 							 </arguments>
 
 
