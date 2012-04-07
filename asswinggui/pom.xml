@@ -82,9 +82,9 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
+						<groupId>org.codehaus.mojo.webstart</groupId>
 						<artifactId>webstart-maven-plugin</artifactId>
-						<version>1.0-beta-3</version>
+						<version>1.0-beta-2</version>
 
 						<executions>
 							<execution>
@@ -96,11 +96,6 @@
 						</executions>
 
 						<configuration>
-
-							<arguments>
-							    <argument>-digestalg</argument>
-							    <argument>SHA1</argument>
-                 				        </arguments>
 
 							<resourcesDirectory>${project.basedir}/src/main/jnlp/</resourcesDirectory>
 
@@ -145,7 +140,6 @@
 							<pack200>true</pack200>
 							<gzip>true</gzip>
 
-							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
 						</configuration>
 					</plugin>
 
