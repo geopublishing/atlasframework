@@ -145,6 +145,7 @@
 							<pack200>true</pack200>
 							<gzip>true</gzip>
 
+							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
 						</configuration>
 					</plugin>
 
