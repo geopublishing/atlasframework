@@ -197,8 +197,7 @@
 							    <argument>-digestalg SHA1</argument>
 						    </arguments>
 
-
-
+						    <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
 
 						</configuration>
 					</plugin>
