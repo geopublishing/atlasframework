@@ -141,9 +141,10 @@
 							<gzip>true</gzip>
 
 							<arguments>
-							    <argument>-digestalg</argument>
-							    <argument>SHA1</argument>
-							 </arguments>
+								<argument>-sigalg</argument><argument>MD5withRSA</argument>
+								<argument>-digestalg</argument><argument>SHA1</argument>
+							</arguments>
+
 
 						</configuration>
 					</plugin>
