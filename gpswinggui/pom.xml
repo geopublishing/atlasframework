@@ -185,17 +185,17 @@
 								<storepass>wasser</storepass>
 								<alias>IMPETUS</alias>
 								<verify>true</verify>
+								<arguments>
+									<argument>-sigalg</argument><argument>MD5withRSA</argument>
+									<argument>-digestalg</argument><argument>SHA1</argument>
+								</arguments>
 							</sign>
 
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
 							
 							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-							<arguments>
-								<argument>-sigalg</argument><argument>MD5withRSA</argument>
-								<argument>-digestalg</argument><argument>SHA1</argument>
-							</arguments>
-
+						
 							<pack200>true</pack200>
 							<gzip>true</gzip>
 
