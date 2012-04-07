@@ -133,9 +133,9 @@
 				<plugins>
 
 					<plugin>
-						<groupId>org.codehaus.mojo.webstart</groupId>
+						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>webstart-maven-plugin</artifactId>
-						<version>1.0-beta-2</version>
+						<version>1.0-beta-3</version>
 
 						<executions>
 							<execution>
@@ -192,6 +192,12 @@
 
 							<pack200>true</pack200>
 							<gzip>true</gzip>
+							
+							<arguments>
+							    <argument>-digestalg</argument>
+							    <argument>SHA1</argument>
+							 </arguments>
+
 
 						</configuration>
 					</plugin>
