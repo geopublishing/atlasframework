@@ -189,7 +189,8 @@
 
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
-	
+							
+							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
 							<arguments>
 								<argument>-sigalg</argument><argument>MD5withRSA</argument>
 								<argument>-digestalg</argument><argument>SHA1</argument>
