@@ -4,7 +4,6 @@
 	<groupId>org.geopublishing.atlasViewer</groupId>
 	<artifactId>avswinggui</artifactId>
 	<packaging>jar</packaging>
-	<version>1.9-SNAPSHOT</version>
 	<name>AtlasViewer Swing GUI</name>
 	<url>http://en.geopublishing.org/Geopublisher</url>
 	<parent>

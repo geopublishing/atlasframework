@@ -80,7 +80,7 @@
 					</archive>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
@@ -108,7 +108,8 @@
 
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -262,12 +263,12 @@
 		</dependency>
 
 		<dependency>
-			  <groupId>org.geotools</groupId>
-			  <artifactId>gt-charts</artifactId>
-			  <version>${geotools.version}</version>
-			  <type>jar</type>
-			  <scope>compile</scope>
-                </dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-charts</artifactId>
+			<version>${geotools.version}</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- <dependency> -->
 		<!-- <groupId>org.geotools</groupId> -->

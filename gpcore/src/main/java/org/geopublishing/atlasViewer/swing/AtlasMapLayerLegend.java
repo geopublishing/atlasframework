@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.geopublishing.atlasViewer.swing;
 
-import java.awt.Frame;
 import java.awt.Dialog.ModalityType;
+import java.awt.Frame;
 import java.io.IOException;
 import java.util.ArrayList;
 

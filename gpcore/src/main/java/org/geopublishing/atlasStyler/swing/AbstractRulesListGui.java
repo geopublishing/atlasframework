@@ -24,7 +24,6 @@ import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.swing.Icons;
 
-import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SmallButton;

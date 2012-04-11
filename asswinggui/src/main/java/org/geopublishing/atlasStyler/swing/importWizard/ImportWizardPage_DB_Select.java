@@ -89,19 +89,32 @@ public class ImportWizardPage_DB_Select extends WizardPage {
 				try {
 					String[] typeNames = dbDs.getTypeNames();
 
-					String[] describedTablesWithGeometry = dbServer
-							.getDescribedTablesWithGeometry();
-					for (String s : typeNames.clone()) {
-						if (!ArrayUtils
-								.contains(describedTablesWithGeometry, s)) {
+//					String[] describedTablesWithGeometry = dbServer
+//							.getDescribedTablesWithGeometry();
+//					for (String s : typeNames.clone()) {
+//						if (!ArrayUtils
+//								.contains(describedTablesWithGeometry, s)) {
+//							typeNames = (String[]) ArrayUtils.remove(typeNames,
+//									ArrayUtils.indexOf(typeNames, s));
+//							log.debug("Table "
+//									+ s
+//									+ " has been removed from the list of available types, since it is not described in geometry columns");
+//						}
+//					}
+
+					for (String tableName : typeNames.clone()) {
+						
+						if (!dbServer.isGeometryColumnDescribed(tableName))
+{
 							typeNames = (String[]) ArrayUtils.remove(typeNames,
-									ArrayUtils.indexOf(typeNames, s));
+									ArrayUtils.indexOf(typeNames, tableName));
+							
 							log.debug("Table "
-									+ s
+									+ tableName
 									+ " has been removed from the list of available types, since it is not described in geometry columns");
 						}
 					}
-
+					
 					dbServer.setCachedTypeNames(typeNames);
 
 					return typeNames;

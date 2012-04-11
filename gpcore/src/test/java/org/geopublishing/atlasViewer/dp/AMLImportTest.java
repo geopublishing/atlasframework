@@ -7,32 +7,20 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
-import java.util.Set;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
-import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.TransformException;
-import org.xml.sax.SAXException;
 
 import de.schmitzm.geotools.LogoPosition;
 import de.schmitzm.geotools.gui.ScalePanel;
-import de.schmitzm.geotools.styling.StyledRasterInterface;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.testing.TestingClass;
 

@@ -46,7 +46,6 @@ import de.schmitzm.geotools.gui.XMapPane;
 import de.schmitzm.geotools.map.event.FeatureSelectedEvent;
 import de.schmitzm.geotools.map.event.GridCoverageValueSelectedEvent;
 import de.schmitzm.geotools.map.event.ObjectSelectionEvent;
-import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
 
 /**
