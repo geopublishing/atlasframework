@@ -22,7 +22,6 @@ import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
@@ -46,7 +45,6 @@ import org.geotools.styling.Graphic;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.FilterUtil;
-import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
@@ -384,12 +382,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	protected void openChartGraphicEditor(final Graphic graphic) {
 		try {
 
-			Vector<String> numericalAttributeNames = FeatureUtil
-					.getNumericalFieldNames(asv.getStyledFeatures().getSchema());
-
 			ChartSymbolEditDialog selectChartSymbolDialog = new ChartSymbolEditDialog(
 					SwingUtil.getParentWindow(AbstractStyleEditGUI.this),
-					graphic.getExternalGraphics(), numericalAttributeNames);
+					graphic, asv);
 
 			selectChartSymbolDialog.setModal(true);
 			selectChartSymbolDialog
@@ -404,14 +399,14 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 							if (evt.getPropertyName().equals(
 									ChartSymbolEditDialog.PROPERTY_UPDATED)) {
 
-								ExternalGraphic[] egs = (ExternalGraphic[]) evt
+								Graphic egs = (Graphic) evt
 										.getNewValue();
 
 								graphic.graphicalSymbols().clear();
 
 								if (egs != null) {
 									graphic.graphicalSymbols().addAll(
-											Arrays.asList(egs));
+											Arrays.asList(egs.getExternalGraphics()));
 								}
 
 								AbstractStyleEditGUI.this.firePropertyChange(

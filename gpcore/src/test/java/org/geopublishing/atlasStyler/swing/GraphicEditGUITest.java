@@ -32,9 +32,10 @@ public class GraphicEditGUITest extends TestingClass {
 			return;
 
 		Graphic g = StylingUtil.STYLE_BUILDER.createGraphic();
-		GraphicEditGUI graphicEditGUI = new GraphicEditGUI(AsTestingUtil.getAtlasStyler(TestDatasetsVector.countryShp), g,
+		GraphicEditGUI graphicEditGUI = new GraphicEditGUI(
+				AsTestingUtil.getAtlasStyler(TestDatasetsVector.countryShp), g,
 				GeometryForm.POINT);
-		TestingUtil.testGui(graphicEditGUI,120);
+		TestingUtil.testGui(graphicEditGUI, 220);
 	}
 
 }

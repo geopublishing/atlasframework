@@ -60,7 +60,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private final Graphic graphic;
 
-	private JComboBox<MARKTYPE> jComboBoxMarkType = null;
+	private JComboBox  jComboBoxMarkType = null;
 
 	private JPanel jPanelStroke = null;
 
@@ -70,21 +70,21 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private final JLabel jLabelStrokeWidth = new JLabel();
 
-	private JComboBox<Float> jComboBoxStrokeWidth = null;
+	private JComboBox  jComboBoxStrokeWidth = null;
 
 	private final JLabel jLabelStrokeOpacity = new JLabel();
 
-	private JComboBox<Float> jComboBoxStrokeOpacity = null;
+	private JComboBox  jComboBoxStrokeOpacity = null;
 
 	private JPanel jPanel = null;
 
 	private JLabel jLabelSize = null;
 
-	private JComboBox<Float> jComboBoxGraphicSize = null;
+	private JComboBox  jComboBoxGraphicSize = null;
 
 	private JLabel jLabelOpacity = null;
 
-	private JComboBox<Float> jComboBoxGraphicOpacity = null;
+	private JComboBox jComboBoxGraphicOpacity = null;
 
 	protected boolean mark_mode = true;
 
@@ -96,11 +96,11 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private JLabel jLabelFillOpacity = new JLabel();
 
-	private JComboBox<Float> jComboBoxFillOpacity = null;
+	private JComboBox jComboBoxFillOpacity = null;
 
 	private final JLabel jLabelRotation = new JLabel(ASUtil.R("RotationLabel"));
 
-	private JComboBox<Double> jComboBoxGraphicRotation = null;
+	private JComboBox jComboBoxGraphicRotation = null;
 
 	private JCheckBox jCheckBoxFill = null;
 
@@ -202,15 +202,15 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<MARKTYPE> getJComboBoxMarkType() {
+	private JComboBox getJComboBoxMarkType() {
 		if (jComboBoxMarkType == null) {
-			jComboBoxMarkType = new JComboBox<MARKTYPE>(
-					new DefaultComboBoxModel<MARKTYPE>(MARKTYPE.values()));
+			jComboBoxMarkType = new JComboBox(
+					new DefaultComboBoxModel(MARKTYPE.values()));
 
 			// This renderer will use the labels from the localization
 			jComboBoxMarkType.setRenderer(new DefaultListCellRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList<?> list,
+				public Component getListCellRendererComponent(JList  list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 
@@ -478,12 +478,12 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Float> getJComboBoxStrokeWidth() {
+	private JComboBox getJComboBoxStrokeWidth() {
 		if (jComboBoxStrokeWidth == null) {
 
-			jComboBoxStrokeWidth = new JComboBox<Float>();
+			jComboBoxStrokeWidth = new JComboBox ();
 
-			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel<Float>(
+			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel(
 					WIDTH_VALUES));
 
 			jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
@@ -529,7 +529,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Float> getJComboBoxStrokeOpacity() {
+	private JComboBox getJComboBoxStrokeOpacity() {
 		if (jComboBoxStrokeOpacity == null) {
 			jComboBoxStrokeOpacity = new JComboBox();
 			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(
@@ -610,10 +610,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Float> getJComboBoxGraphicSize() {
+	private JComboBox getJComboBoxGraphicSize() {
 		if (jComboBoxGraphicSize == null) {
-			jComboBoxGraphicSize = new JComboBox<Float>();
-			jComboBoxGraphicSize.setModel(new DefaultComboBoxModel<Float>(
+			jComboBoxGraphicSize = new JComboBox();
+			jComboBoxGraphicSize.setModel(new DefaultComboBoxModel(
 					SIZE_VALUES));
 
 			Expression size = graphic.getSize();
@@ -651,10 +651,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Float> getJComboBoxGraphicOpacity() {
+	private JComboBox getJComboBoxGraphicOpacity() {
 		if (jComboBoxGraphicOpacity == null) {
-			jComboBoxGraphicOpacity = new JComboBox<Float>();
-			jComboBoxGraphicOpacity.setModel(new DefaultComboBoxModel<Float>(
+			jComboBoxGraphicOpacity = new JComboBox();
+			jComboBoxGraphicOpacity.setModel(new DefaultComboBoxModel(
 					OPACITY_VALUES));
 
 			Expression opacity = graphic.getOpacity();
@@ -790,10 +790,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Float> getJComboBoxFillOpacity() {
+	private JComboBox getJComboBoxFillOpacity() {
 		if (jComboBoxFillOpacity == null) {
-			jComboBoxFillOpacity = new JComboBox<Float>();
-			jComboBoxFillOpacity.setModel(new DefaultComboBoxModel<Float>(
+			jComboBoxFillOpacity = new JComboBox();
+			jComboBoxFillOpacity.setModel(new DefaultComboBoxModel(
 					OPACITY_VALUES));
 
 			if (mark_mode) {
@@ -832,10 +832,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox<Double> getJComboBoxGraphicRotation() {
+	private JComboBox getJComboBoxGraphicRotation() {
 		if (jComboBoxGraphicRotation == null) {
-			jComboBoxGraphicRotation = new JComboBox<Double>(
-					new DefaultComboBoxModel<Double>(ROTATION_VALUES));
+			jComboBoxGraphicRotation = new JComboBox(
+					new DefaultComboBoxModel(ROTATION_VALUES));
 			jComboBoxGraphicRotation.setRenderer(ROTATION_VALUES_RENDERER);
 
 			jComboBoxGraphicRotation.setSelectedItem(Double.valueOf(graphic
