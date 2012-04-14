@@ -128,13 +128,12 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	protected static final int COLIDX_VALUE = 1;
 	protected static final int COLIDX_LABEL = 2;
 
-	protected final AtlasStylerVector atlasStyler;
-	protected AtlasStylerVector asv;
+	protected final AtlasStylerVector asv;
 
 	public UniqueValuesGUI(UniqueValuesRuleList rl,
 			AtlasStylerVector atlasStyler) {
 		super(rl);
-		this.atlasStyler = atlasStyler;
+		this.asv = atlasStyler;
 		initialize();
 		rulesList.fireEvents(new RuleChangedEvent("GUI created for "
 				+ this.getClass().getSimpleName()
@@ -165,7 +164,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 */
 	private AttributesJComboBox getJComboBoxValueField() {
 		AttributesJComboBox jComboBoxValueAttribute = new AttributesJComboBox(
-				atlasStyler, FeatureUtil.getValueFieldNames(rulesList
+				asv, FeatureUtil.getValueFieldNames(rulesList
 						.getStyledFeatures().getSchema()));
 
 		jComboBoxValueAttribute.setSelectedItem(rulesList
@@ -278,7 +277,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 */
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
-			
+
 			// TODO SymbolButton?!
 			jButtonTemplate = new JButton();
 			jButtonTemplate.setToolTipText(ASUtil
@@ -299,9 +298,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 							.copy();
 
 					SymbolSelectorGUI gui = new SymbolSelectorGUI(
-							UniqueValuesGUI.this, asv,
-							ASUtil
-									.R("UniqueValuesGUI.selectTemplateDialog.dialogTitle"),
+							UniqueValuesGUI.this,
+							asv,
+							ASUtil.R("UniqueValuesGUI.selectTemplateDialog.dialogTitle"),
 							template);
 
 					/***********************************************************
@@ -381,11 +380,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					if (rulesList.getPropertyFieldName() == null) {
-						JOptionPane
-								.showMessageDialog(
-										UniqueValuesGUI.this,
-										ASUtil
-												.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
+						JOptionPane.showMessageDialog(
+								UniqueValuesGUI.this,
+								ASUtil.R("UniqueValuesRuleList.AddAllValues.Error.NoAttribSelected"));
 						return;
 					}
 
@@ -402,12 +399,11 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 					};
 					try {
 						Integer added = findUniques.executeModal();
-						JOptionPane
-								.showMessageDialog(
-										UniqueValuesGUI.this,
-										ASUtil
-												.R("UniqueValuesRuleList.AddAllValues.DoneMsg",
-														added));
+						JOptionPane.showMessageDialog(
+								UniqueValuesGUI.this,
+								ASUtil.R(
+										"UniqueValuesRuleList.AddAllValues.DoneMsg",
+										added));
 					} catch (CancellationException ce) {
 						// findUniques.cancel(true);
 						return;
@@ -739,10 +735,9 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 									if (val.equals(UniqueValuesRuleList.ALLOTHERS_IDENTIFICATION_VALUE)) {
 										/** We are in the default rule* */
 										transLabel = new TranslationEditJPanel(
-												ASUtil
-														.R("UniqueValuesGUI.LabelForClass",
-																ASUtil
-																		.R("UniqueValuesGUI.AllOthersSymbol.label")),
+												ASUtil.R(
+														"UniqueValuesGUI.LabelForClass",
+														ASUtil.R("UniqueValuesGUI.AllOthersSymbol.label")),
 												translation, AtlasStylerVector
 														.getLanguages());
 									} else {
@@ -761,11 +756,10 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 										}
 
 										transLabel = new TranslationEditJPanel(
-												ASUtil
-														.R("UniqueValuesGUI.LabelForClass",
-																rulesList
-																		.getValues()
-																		.get(index)),
+												ASUtil.R(
+														"UniqueValuesGUI.LabelForClass",
+														rulesList.getValues()
+																.get(index)),
 												translation, AtlasStylerVector
 														.getLanguages());
 									}
@@ -835,8 +829,8 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 							SymbolSelectorGUI gui = new SymbolSelectorGUI(
 									SwingUtil
-											.getParentWindow(UniqueValuesGUI.this),asv,
-									"Change symbol for "
+											.getParentWindow(UniqueValuesGUI.this),
+									asv, "Change symbol for "
 											+ rulesList.getLabels().get(row),
 									editSymbol);
 
@@ -910,7 +904,6 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	// private Color unselectedForeground;
 	//
 	// private Color unselectedBackground;
-
 
 	private DefaultTableModel getTableModel() {
 
@@ -1054,8 +1047,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	 * @return void
 	 */
 	private void initialize() {
-		JLabel jLabelHeading = new JLabel(
-				ASUtil.R("UniqueValues.Heading"));
+		JLabel jLabelHeading = new JLabel(ASUtil.R("UniqueValues.Heading"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 		this.setLayout(new MigLayout("inset 1, gap 1, wrap 1, fillx"));

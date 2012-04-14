@@ -137,6 +137,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	public SymbolEditorGUI(Component owner, AtlasStylerVector asv,
 			SingleRuleList<? extends Symbolizer> singleSymbolRuleList) {
 		super(owner, DIALOG_TITLE);
+		
+		if (asv == null) throw new IllegalStateException("asv may not be null here!");
 
 		this.asv = asv;
 

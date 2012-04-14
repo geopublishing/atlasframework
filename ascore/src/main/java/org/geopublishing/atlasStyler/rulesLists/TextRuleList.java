@@ -708,7 +708,7 @@ public class TextRuleList extends AbstractRulesList {
 							&& ruleName.equals(RULENAME_DONTIMPORT))
 						continue;
 
-					if (ruleName.startsWith(DEFAULT_CLASS_RULENAME)
+					if ( (ruleName != null && ruleName.startsWith(DEFAULT_CLASS_RULENAME))
 							|| (filter != null && filter.equals(oldClassesEnabledFilter))
 							|| (filter != null && filter.equals(oldClassesDisabledFilter))
 							|| idx == 0) {

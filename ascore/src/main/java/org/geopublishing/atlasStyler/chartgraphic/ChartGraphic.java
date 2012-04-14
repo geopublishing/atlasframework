@@ -53,7 +53,29 @@ public class ChartGraphic {
 
 			url.append("&chd=t:");
 			for (String att : attributes) {
-				url.append("${" + att + "}");
+
+				if (chartType == ChartTyp.p || chartType == ChartTyp.p3
+						|| chartType == ChartTyp.lc) {
+
+					// Sum up all others in this "row" to 100
+					StringBuffer allOthers = new StringBuffer();
+
+					for (String a : attributes) {
+						allOthers.append(a);
+						allOthers.append("+");
+					}
+					allOthers.setLength(allOthers.length() - 1);
+
+					url.append("${100 * " + att + " / (" + allOthers + ")}");
+
+				} else {
+
+					// For Barcharts scale all numbers so that maxValue equals
+					// 100.
+
+					url.append("${" + att + " * 100. / " + getMaxValue() + "}");
+
+				}
 
 				if (chartType == ChartTyp.p || chartType == ChartTyp.p3
 						|| chartType == ChartTyp.lc)
@@ -74,8 +96,11 @@ public class ChartGraphic {
 
 		}
 
-		// Chart Background Color works: set it fully transparent here. backgrouds can be defined with other symbolizers 
+		// Chart Background Color works: set it fully transparent here.
+		// backgrouds can be defined with other symbolizers
 		url.append("&chf=bg,s,FFFFFF00");
+
+		// url.append("&chdl=NASDAQ|FTSE100|DOW");
 
 		// System.err.println("&chf=bg,s," + getBackgroundColorString());
 
@@ -128,6 +153,12 @@ public class ChartGraphic {
 
 		return isChart.get();
 	}
+
+	/**
+	 * Scale the data, so that his {@link #maxValue} is transformed to 100. -
+	 * which is by Eastwood-default the top of the value axis.
+	 */
+	private Double maxValue = 100.;
 
 	/**
 	 * Returns <code>true</code> if the given Graphic is an ExternalGraphic with
@@ -192,23 +223,23 @@ public class ChartGraphic {
 
 					// Read the ATTRIBUTE NAMES from the Style
 					Pattern nextAtt = RegexCache.getInstance().getPattern(
-							"\\$\\{(.*?)\\}");
+							"\\$\\{([^ ]*?)( .*?|)\\}");
 					Matcher m = nextAtt.matcher(url);
-					while (m.find()) {
+					while (m.find() && m.groupCount() > 0) {
 						attributes.add(m.group(1));
 					}
 
 					// Read the COLORS from the Style
 					Pattern colorPart = RegexCache.getInstance().getPattern(
-							"chco=(.*?)([&].*|$)");
+							"chco=([^&]*?)(&.*|$)");
 					m = colorPart.matcher(url);
-					if (m.find() && m.groupCount() > 0) {
+					if (m.find() && m.groupCount() == 2) {
 						String colorstr = m.group(1);
 						Pattern nextColor = RegexCache.getInstance()
-								.getPattern("(......)([&,].*|$)");
+								.getPattern("([a-f,A-F,0-9]{6,6})(?:[&,]|$)?");
 						m = nextColor.matcher(colorstr);
 						int count = 0;
-						while (m.find()) {
+						while (m.find() && m.groupCount() == 1) {
 							colors.put(attributes.get(count),
 									Color.decode("#" + m.group(1)));
 							count++;
@@ -222,6 +253,16 @@ public class ChartGraphic {
 					if (m.find() && m.groupCount() == 2) {
 						imageWidth = Integer.valueOf(m.group(1));
 						imageHeight = Integer.valueOf(m.group(2));
+					}
+
+					// Try to find a maxValue
+					Pattern maxValuePattern = RegexCache
+							.getInstance()
+							.getPattern(
+									"\\$\\{([^ \\*]*?) \\* 100\\. / ([^ \\*]*)\\}");
+					m = maxValuePattern.matcher(url);
+					if (m.find() && m.groupCount() == 2) {
+						maxValue = Double.valueOf(m.group(2));
 					}
 
 					break;
@@ -246,22 +287,22 @@ public class ChartGraphic {
 	/**
 	 * Value between 0 and 1 for the transparency of the background
 	 */
-//	private float opacity = 0f;
-//
-//	private Color bgColor = Color.white;
+	// private float opacity = 0f;
+	//
+	// private Color bgColor = Color.white;
 
-//	/**
-//	 * Creates a Color string like FFFFFFTT, where the 4th Hex-Byte represents
-//	 * transparenzy.
-//	 */
-//	private String getBackgroundColorString() {
-//
-//		return SwingUtil.convertColorToHex(
-//				new Color(getBgColor().getRed() / 255f,
-//						getBgColor().getGreen() / 255f,
-//						getBgColor().getBlue() / 255f, getOpacity()), true,
-//				false).toUpperCase();
-//	}
+	// /**
+	// * Creates a Color string like FFFFFFTT, where the 4th Hex-Byte represents
+	// * transparenzy.
+	// */
+	// private String getBackgroundColorString() {
+	//
+	// return SwingUtil.convertColorToHex(
+	// new Color(getBgColor().getRed() / 255f,
+	// getBgColor().getGreen() / 255f,
+	// getBgColor().getBlue() / 255f, getOpacity()), true,
+	// false).toUpperCase();
+	// }
 
 	public void addAttribute(String att) {
 
@@ -398,38 +439,55 @@ public class ChartGraphic {
 			fireEvents(new ChartGraphicChangedEvent());
 		}
 	}
-//
-//	public float getOpacity() {
-//		return opacity;
-//	}
-//
-//	public void setOpacity(float opacity) {
-//
-//		if (this.opacity != opacity) {
-//
-//			if (opacity > 1f)
-//				opacity = 1f;
-//			if (opacity < 0f)
-//				opacity = 0f;
-//			this.opacity = opacity;
-//
-//			fireEvents(new ChartGraphicChangedEvent());
-//		}
-//	}
-//
-//	public Color getBgColor() {
-//		if (bgColor == null)
-//			return Color.white;
-//		return bgColor;
-//	}
-//
-//	public void setBgColor(Color bgColor) {
-//		// Mit Absicht kein Check:
-//		if (this.bgColor != bgColor) {
-//			this.bgColor = bgColor;
-//			fireEvents(new ChartGraphicChangedEvent());
-//		}
-//	}
+
+	//
+	// public float getOpacity() {
+	// return opacity;
+	// }
+	//
+	// public void setOpacity(float opacity) {
+	//
+	// if (this.opacity != opacity) {
+	//
+	// if (opacity > 1f)
+	// opacity = 1f;
+	// if (opacity < 0f)
+	// opacity = 0f;
+	// this.opacity = opacity;
+	//
+	// fireEvents(new ChartGraphicChangedEvent());
+	// }
+	// }
+	//
+	// public Color getBgColor() {
+	// if (bgColor == null)
+	// return Color.white;
+	// return bgColor;
+	// }
+	//
+	// public void setBgColor(Color bgColor) {
+	// // Mit Absicht kein Check:
+	// if (this.bgColor != bgColor) {
+	// this.bgColor = bgColor;
+	// fireEvents(new ChartGraphicChangedEvent());
+	// }
+	// }
+
+	public Double getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(Double maxValue) {
+		if (this.maxValue != maxValue) {
+
+			if (maxValue == null || maxValue == 0)
+				maxValue = 100.;
+			this.maxValue = maxValue;
+
+			if (chartType != ChartTyp.p && chartType != ChartTyp.p3)
+				fireEvents(new ChartGraphicChangedEvent());
+		}
+	}
 
 	private Integer imageWidth;
 	private Integer imageHeight;

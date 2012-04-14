@@ -130,9 +130,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 * @param title
 	 *            May be <code>null</code> to use default title
 	 */
-	public SymbolSelectorGUI(Component owner, AtlasStylerVector asv, String title,
-			final SingleRuleList singleSymbolRuleList) {
+	public SymbolSelectorGUI(Component owner, AtlasStylerVector asv,
+			String title, final SingleRuleList singleSymbolRuleList) {
 		super(owner);
+		if (asv == null)
+			throw new IllegalStateException("asv may not be null here!");
 		this.asv = asv;
 		if (title != null)
 			setTitle(title);
@@ -317,8 +319,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				jComboBoxSize.setModel(new DefaultComboBoxModel(
 						AbstractStyleEditGUI.SIZE_VALUES));
 			}
-			
-			ASUtil.selectOrInsert(jComboBoxSize, singleSymbolRuleList.getSizeBiggest());
+
+			ASUtil.selectOrInsert(jComboBoxSize,
+					singleSymbolRuleList.getSizeBiggest());
 
 			singleSymbolRuleList
 					.addListener(sizeComboBoxReactsToStyleChangesListener);
@@ -368,11 +371,11 @@ public class SymbolSelectorGUI extends AtlasDialog {
 				// LOGGER.info("Should update the size to
 				// "+singleSymbolRuleList
 				// .getSizeBiggest());
-//				if (((DefaultComboBoxModel) jComboBoxSize.getModel())
-//						.getIndexOf(singleSymbolRuleList.getSizeBiggest()) < 0) {
-//					((DefaultComboBoxModel) jComboBoxSize.getModel())
-//							.addElement(singleSymbolRuleList.getSizeBiggest());
-//				}
+				// if (((DefaultComboBoxModel) jComboBoxSize.getModel())
+				// .getIndexOf(singleSymbolRuleList.getSizeBiggest()) < 0) {
+				// ((DefaultComboBoxModel) jComboBoxSize.getModel())
+				// .addElement(singleSymbolRuleList.getSizeBiggest());
+				// }
 				ASUtil.selectOrInsert(jComboBoxSize,
 						singleSymbolRuleList.getSizeBiggest());
 				// jComboBoxSize.setSelectedItem(singleSymbolRuleList
@@ -496,7 +499,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	}
 
 	private final AtlasStylerVector asv;
-	
+
 	/**
 	 * This method initializes jButton
 	 * 
@@ -506,8 +509,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		if (jButtonProperties == null) {
 			jButtonProperties = new JButton(new AbstractAction(
 					ASUtil.R("SymbolSelector.EditSymbol")) {
-
-
 
 				@Override
 				public void actionPerformed(ActionEvent e) {

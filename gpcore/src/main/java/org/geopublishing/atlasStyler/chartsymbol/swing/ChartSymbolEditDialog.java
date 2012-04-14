@@ -50,8 +50,10 @@ import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
 import org.geopublishing.atlasStyler.swing.ColorTableCellRenderer;
 import org.geotools.styling.Graphic;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
+import org.opengis.feature.simple.SimpleFeatureType;
 
 import de.schmitzm.geotools.feature.FeatureUtil;
+import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
@@ -93,7 +95,7 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 	};
 
 	public ChartSymbolEditDialog(Component parentWindow, Graphic importThis,
-			AtlasStylerVector asv) {
+			final AtlasStylerVector asv) {
 		super(parentWindow);
 		this.asv = asv;
 
@@ -102,8 +104,9 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 		importThis.accept(backupCopy);
 		backup = (Graphic) backupCopy.getCopy();
 
-		numericalAttributeNames = FeatureUtil.getNumericalFieldNames(asv
-				.getStyledFeatures().getSchema());
+		StyledFeaturesInterface<?> styledFeatures = asv.getStyledFeatures();
+		SimpleFeatureType schema = styledFeatures.getSchema();
+		numericalAttributeNames = FeatureUtil.getNumericalFieldNames(schema);
 
 		chartGraphic = new ChartGraphic(importThis);
 
@@ -142,10 +145,58 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			jContentPane.add(new JScrollPane(getAttributesJTable()), "wrap");
 
 			jContentPane.add(getChartImageSizePanel(), "wrap");
+			jContentPane.add(getScalingPanel(), "wrap");
 
 			jContentPane.add(getJPanelButtons(), "bottom");
 		}
 		return jContentPane;
+	}
+
+	JPanel scalingPanel;
+
+	private Component getScalingPanel() {
+		if (scalingPanel == null) {
+			scalingPanel = new JPanel(new MigLayout());
+
+			final JTextField inputMaxValue = new JTextField(20);
+
+			inputMaxValue.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							extracted();
+						}
+
+						private void extracted() {
+							try {
+								chartGraphic.setMaxValue(Double
+										.valueOf(inputMaxValue.getText()));
+							} catch (Exception e) {
+								chartGraphic.setMaxValue(null);
+							}
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							extracted();
+						}
+
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							extracted();
+						}
+					});
+			if (chartGraphic.getMaxValue() != null)
+				inputMaxValue.setText("" + chartGraphic.getMaxValue());
+			else
+				inputMaxValue.setText(""+100);
+			
+			scalingPanel.add(new JLabel("Max Value:"));
+			scalingPanel.add(inputMaxValue,"wrap");
+
+		}
+		return scalingPanel;
 	}
 
 	JPanel chartImageSizePanel;
@@ -160,10 +211,10 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void removeUpdate(DocumentEvent e) {
-							extracted(inputWidth);
+							extracted();
 						}
 
-						private void extracted(final JTextField inputWidth) {
+						private void extracted() {
 							try {
 								chartGraphic.setImageWidth(Integer
 										.valueOf(inputWidth.getText()));
@@ -174,12 +225,12 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void insertUpdate(DocumentEvent e) {
-							extracted(inputWidth);
+							extracted();
 						}
 
 						@Override
 						public void changedUpdate(DocumentEvent e) {
-							extracted(inputWidth);
+							extracted();
 						}
 					});
 			if (chartGraphic.getImageWidth() != null)
@@ -194,10 +245,10 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void removeUpdate(DocumentEvent e) {
-							extracted(inputHeight);
+							extracted();
 						}
 
-						private void extracted(final JTextField inputHeight) {
+						private void extracted() {
 							try {
 								chartGraphic.setImageHeight(Integer
 										.valueOf(inputHeight.getText()));
@@ -208,12 +259,12 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 						@Override
 						public void insertUpdate(DocumentEvent e) {
-							extracted(inputHeight);
+							extracted();
 						}
 
 						@Override
 						public void changedUpdate(DocumentEvent e) {
-							extracted(inputHeight);
+							extracted();
 						}
 					});
 			if (chartGraphic.getImageHeight() != null)
@@ -228,7 +279,6 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			chartImageSizePanel.add(new JLabel("px width"), "");
 			chartImageSizePanel.add(inputHeight, "");
 			chartImageSizePanel.add(new JLabel("px height"), "wrap");
-
 
 		}
 		return chartImageSizePanel;

@@ -1,5 +1,7 @@
 package org.geopublishing.atlasStyler.chartgraphic;
 
+import java.util.regex.Matcher;
+
 import org.apache.log4j.Logger;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
@@ -7,7 +9,13 @@ import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.regex.RegexCache;
 
+/**
+ * When a dynamic Chart Symvol is previewed, the freemarker(?) expressions (like
+ * "${COUNTHOUSES}") are replaced with fixed values;
+ */
 public class ChartGraphicPreivewFixStyleVisitor extends DuplicatingStyleVisitor {
+
+	final static String regex = "\\$\\{.*?\\}";
 
 	@Override
 	public ExternalGraphic copy(ExternalGraphic eg) {
@@ -18,11 +26,26 @@ public class ChartGraphicPreivewFixStyleVisitor extends DuplicatingStyleVisitor 
 		String url2;
 		try {
 			url2 = eg.getLocation().toString();
-			String regex = "\\$\\{.*?\\}";
-			while (RegexCache.getInstance().getPattern(regex).matcher(url2)
+
+			// Assume a Bar-Chart:
+			// Howmany placeholders to we have?
+
+			int count = 0;
+			Matcher m = RegexCache.getInstance().getPattern(regex).matcher(url2);
+			while (m
 					.find()) {
-				url2 = url2.replaceFirst(regex, ((int) (Math.random() * 100))
+				count++;
+			}
+			
+			int count2 = 0;
+			m = RegexCache.getInstance().getPattern(regex).matcher(url2);
+			while (m
+					.find()) {
+				count2++;
+				url2 = url2.replaceFirst(regex, (int) (100. / (double) count * count2)
 						+ "");
+				// url2 = url2.replaceFirst(regex, ((int) (Math.random() * 100))
+				// + "");
 			}
 
 			ExternalGraphic externalGraphic2 = StylingUtil.STYLE_BUILDER
