@@ -709,8 +709,8 @@ public class TextRuleList extends AbstractRulesList {
 						continue;
 
 					if (ruleName.startsWith(DEFAULT_CLASS_RULENAME)
-							|| filter.equals(oldClassesEnabledFilter)
-							|| filter.equals(oldClassesDisabledFilter)
+							|| (filter != null && filter.equals(oldClassesEnabledFilter))
+							|| (filter != null && filter.equals(oldClassesDisabledFilter))
 							|| idx == 0) {
 						// Do not store the filter imported for default rules.
 						getClassesFilters().add(DEFAULT_FILTER_ALL_OTHERS);

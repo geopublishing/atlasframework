@@ -42,11 +42,11 @@ import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geotools.renderer.style.SVGGraphicFactory;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
+import org.geotools.styling.StyleBuilder;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
@@ -70,6 +70,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 	final public static Float[] OPACITY_VALUES = new Float[] { 0.1f, .2f, .3f,
 			.4f, .5f, .6f, .7f, .8f, .9f, 1.f };
+	
+	final public static Float[] OPACITY_VALUES_WITH_ZERO = new Float[] { 0f, 0.1f, .2f, .3f,
+		.4f, .5f, .6f, .7f, .8f, .9f, 1.f };
 
 	/** Values used for JCOmboBoxes offering a Halo setting **/
 	final public static Float[] HALO_RADIUS_VALUES = new Float[] { 0.f, .5f,
@@ -484,13 +487,19 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 							"application/chart")) {
 						// A chart preview image is created by replacing all
 						// ATTRIBUTE-Holders with number between 0 and 100
-						Symbolizer symbolizer = StylingUtil.STYLE_BUILDER
+						Symbolizer symbolizer = new StyleBuilder()
 								.createPointSymbolizer(ChartGraphic
 										.getFixDataSymbolizer(graphic));
 
 						if (symbolizer != null) {
 							// and then render it with geotools like any other
 							// stlye
+							icon = new ImageIcon(ASUtil.getSymbolizerImage(
+									symbolizer, new Dimension(
+											EXT_GRAPHIC_BUTTON_WIDTH,
+											EXT_GRAPHIC_BUTTON_HEIGHT), asv
+											.getStyledFeatures().getSchema()));
+							
 							icon = new ImageIcon(ASUtil.getSymbolizerImage(
 									symbolizer, new Dimension(
 											EXT_GRAPHIC_BUTTON_WIDTH,

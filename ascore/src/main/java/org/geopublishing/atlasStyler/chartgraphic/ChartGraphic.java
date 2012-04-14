@@ -9,6 +9,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.SwingUtilities;
+
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geotools.styling.ExternalGraphic;
@@ -27,6 +29,78 @@ import de.schmitzm.swing.SwingUtil;
  * https://developers.google.com/chart/image/docs/chart_playground
  */
 public class ChartGraphic {
+
+	public enum ChartTyp {
+		p, p3, bhg, bvg, bhs, bvs, bvo, lc;
+
+		/**
+		 * @return a human-readable and translated Title
+		 */
+		public String getTitle() {
+			return ASUtil.R("ChartTyp." + this.toString());
+		}
+	}
+
+	public ExternalGraphic getChartGraphic() {
+
+		StringBuffer url = new StringBuffer("http://chart?cht="
+				+ getChartType());
+
+		// StringBuffer url = new StringBuffer(
+		// "http://chart?cht=bvg&chs=50x100&chd=t:${MEAT}|${DEMSTAT}&chco=4D89F9,C6D9FD");
+		// Data
+		if (attributes.size() > 0) {
+
+			url.append("&chd=t:");
+			for (String att : attributes) {
+				url.append("${" + att + "}");
+
+				if (chartType == ChartTyp.p || chartType == ChartTyp.p3
+						|| chartType == ChartTyp.lc)
+					url.append(",");
+				else
+					url.append("|");
+			}
+			url.setLength(url.length() - 1);
+
+			// Write colors:
+			url.append("&chco=");
+			for (String att : attributes) {
+				url.append(SwingUtil.convertColorToHex(getColor(att), false,
+						false));
+				url.append(",");
+			}
+			url.setLength(url.length() - 1);
+
+		}
+
+		// Chart Background Color works: set it fully transparent here. backgrouds can be defined with other symbolizers 
+		url.append("&chf=bg,s,FFFFFF00");
+
+		// System.err.println("&chf=bg,s," + getBackgroundColorString());
+
+		// Bar Chart Gaps don't seem to work :-/
+		// https://developers.google.com/chart/image/docs/gallery/bar_charts#chbh
+		// url.append("&chbh=a,5,15");
+		// // Chart Margins don't seem to work :-/
+		// //
+		// https://developers.google.com/chart/image/docs/chart_params#gcharts_chart_margins
+		// url.append("&chma=1,1,1,1");
+		//
+		// // Hiding chart axes don't seem to work :-/
+		// url.append("&chxt=");
+
+		int w = imageWidth == null ? DEFAULT_WIDTH : imageWidth;
+		int h = imageHeight == null ? DEFAULT_HEIGHT : imageHeight;
+		url.append("&chs=" + w + "x" + h);
+
+		System.err.println(url);
+
+		ExternalGraphic crt = StylingUtil.STYLE_BUILDER.createExternalGraphic(
+				url.toString(), "application/chart");
+
+		return crt;
+	}
 
 	/**
 	 * Mapping of the colors for the attributes
@@ -100,13 +174,21 @@ public class ChartGraphic {
 	 */
 	private void importChartFromGraphic(Graphic importThis) {
 
+		if (importThis == null)
+			return;
+
 		for (GraphicalSymbol gs : importThis.graphicalSymbols()) {
 			if (gs instanceof ExternalGraphic) {
+
 				ExternalGraphic eg = (ExternalGraphic) gs;
 				try {
 					if (eg.getLocation() == null)
 						continue;
 					String url = eg.getLocation().toString();
+
+					/*
+					 * Parse the URL-Parameters, but do NOT CALL THE SETTERS!
+					 */
 
 					// Read the ATTRIBUTE NAMES from the Style
 					Pattern nextAtt = RegexCache.getInstance().getPattern(
@@ -118,12 +200,12 @@ public class ChartGraphic {
 
 					// Read the COLORS from the Style
 					Pattern colorPart = RegexCache.getInstance().getPattern(
-							"chco=(.*[,&])");
+							"chco=(.*?)([&].*|$)");
 					m = colorPart.matcher(url);
 					if (m.find() && m.groupCount() > 0) {
 						String colorstr = m.group(1);
 						Pattern nextColor = RegexCache.getInstance()
-								.getPattern("(......)[,&]");
+								.getPattern("(......)([&,].*|$)");
 						m = nextColor.matcher(colorstr);
 						int count = 0;
 						while (m.find()) {
@@ -131,8 +213,18 @@ public class ChartGraphic {
 									Color.decode("#" + m.group(1)));
 							count++;
 						}
-
 					}
+
+					// Read any size from the Style
+					Pattern sizePart = RegexCache.getInstance().getPattern(
+							"chs=(\\d+)x(\\d+)");
+					m = sizePart.matcher(url);
+					if (m.find() && m.groupCount() == 2) {
+						imageWidth = Integer.valueOf(m.group(1));
+						imageHeight = Integer.valueOf(m.group(2));
+					}
+
+					break;
 
 				} catch (MalformedURLException e) {
 					LOGGER.warn(e, e);
@@ -147,60 +239,29 @@ public class ChartGraphic {
 		this(null);
 	}
 
-	public enum ChartTyp {
-		p, bhs, bvg;
-
-		/**
-		 * @return a human-readable and translated Title
-		 */
-		public String getTitle() {
-			return ASUtil.R("ChartTyp." + this.toString());
-		}
-	}
-
 	private ChartTyp chartType = ChartTyp.bvg;
 
 	List<String> attributes = new ArrayList<String>();
 
-	public ExternalGraphic getChartGraphic() {
+	/**
+	 * Value between 0 and 1 for the transparency of the background
+	 */
+//	private float opacity = 0f;
+//
+//	private Color bgColor = Color.white;
 
-		StringBuffer url = new StringBuffer("http://chart?cht="
-				+ getChartType());
-
-		// StringBuffer url = new StringBuffer(
-		// "http://chart?cht=bvg&chs=50x100&chd=t:${MEAT}|${DEMSTAT}&chco=4D89F9,C6D9FD");
-		// Data
-		if (attributes.size() > 0) {
-
-			url.append("&chd=t:");
-			for (String att : attributes) {
-				url.append("${" + att + "}");
-
-				if (chartType == ChartTyp.p)
-					url.append(",");
-				else
-					url.append("|");
-			}
-			url.setLength(url.length() - 1);
-
-			// Write colors:
-			url.append("&chco=");
-			for (String att : attributes) {
-				url.append(SwingUtil.convertColorToHex(getColor(att), false,
-						false));
-				url.append(",");
-			}
-			url.setLength(url.length() - 1);
-
-		}
-
-		url.append("&chs=50x50");
-
-		ExternalGraphic crt = StylingUtil.STYLE_BUILDER.createExternalGraphic(
-				url.toString(), "application/chart");
-
-		return crt;
-	}
+//	/**
+//	 * Creates a Color string like FFFFFFTT, where the 4th Hex-Byte represents
+//	 * transparenzy.
+//	 */
+//	private String getBackgroundColorString() {
+//
+//		return SwingUtil.convertColorToHex(
+//				new Color(getBgColor().getRed() / 255f,
+//						getBgColor().getGreen() / 255f,
+//						getBgColor().getBlue() / 255f, getOpacity()), true,
+//				false).toUpperCase();
+//	}
 
 	public void addAttribute(String att) {
 
@@ -249,6 +310,9 @@ public class ChartGraphic {
 
 	static final Logger LOGGER = Logger.getLogger(ChartGraphic.class);
 
+	public static final int DEFAULT_WIDTH = 60;
+	public static final int DEFAULT_HEIGHT = 60;
+
 	public static Symbolizer getFixDataSymbolizer(Symbolizer sym) {
 		ChartGraphicPreivewFixStyleVisitor visitor = new ChartGraphicPreivewFixStyleVisitor();
 		sym.accept(visitor);
@@ -281,11 +345,20 @@ public class ChartGraphic {
 		listeners.clear();
 	}
 
-	public void fireEvents(ChartGraphicChangedEvent cgce) {
+	public void fireEvents(final ChartGraphicChangedEvent cgce) {
 
-		for (ChartGraphicChangeListener l : listeners) {
+		for (final ChartGraphicChangeListener l : listeners) {
 			try {
-				l.changed(cgce);
+
+				SwingUtilities.invokeLater(new Runnable() {
+
+					@Override
+					public void run() {
+						l.changed(cgce);
+					}
+
+				});
+
 			} catch (Exception e) {
 				LOGGER.error("While fireEvents: " + cgce, e);
 			}
@@ -302,4 +375,62 @@ public class ChartGraphic {
 			fireEvents(new ChartGraphicChangedEvent());
 		}
 	}
+
+	public Integer getImageWidth() {
+		return imageWidth;
+	}
+
+	public void setImageWidth(Integer imageWidth) {
+		if (this.imageWidth != imageWidth) {
+			this.imageWidth = imageWidth;
+			fireEvents(new ChartGraphicChangedEvent());
+		}
+
+	}
+
+	public Integer getImageHeight() {
+		return imageHeight;
+	}
+
+	public void setImageHeight(Integer imageHeight) {
+		if (this.imageHeight != imageHeight) {
+			this.imageHeight = imageHeight;
+			fireEvents(new ChartGraphicChangedEvent());
+		}
+	}
+//
+//	public float getOpacity() {
+//		return opacity;
+//	}
+//
+//	public void setOpacity(float opacity) {
+//
+//		if (this.opacity != opacity) {
+//
+//			if (opacity > 1f)
+//				opacity = 1f;
+//			if (opacity < 0f)
+//				opacity = 0f;
+//			this.opacity = opacity;
+//
+//			fireEvents(new ChartGraphicChangedEvent());
+//		}
+//	}
+//
+//	public Color getBgColor() {
+//		if (bgColor == null)
+//			return Color.white;
+//		return bgColor;
+//	}
+//
+//	public void setBgColor(Color bgColor) {
+//		// Mit Absicht kein Check:
+//		if (this.bgColor != bgColor) {
+//			this.bgColor = bgColor;
+//			fireEvents(new ChartGraphicChangedEvent());
+//		}
+//	}
+
+	private Integer imageWidth;
+	private Integer imageHeight;
 }

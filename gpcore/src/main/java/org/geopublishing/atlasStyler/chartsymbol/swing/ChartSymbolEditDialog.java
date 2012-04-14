@@ -22,11 +22,15 @@ import javax.swing.AbstractAction;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -55,7 +59,6 @@ import de.schmitzm.swing.table.ColorEditor;
 
 /**
  * Swing dialog to create/define a chartsymbol.
- * 
  * 
  * @see http://docs.geotools.org/latest/userguide/library/render/chart.html
  */
@@ -127,9 +130,6 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 	}
 
 	/**
-	 * This method initializes jContentPane
-	 * 
-	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
@@ -141,27 +141,97 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 			jContentPane.add(new JScrollPane(getAttributesJTable()), "wrap");
 
-			//
-			// jContentPane.add(new JButton(new AbstractAction("ggoo") {
-			//
-			// @Override
-			// public void actionPerformed(ActionEvent e) {
-			// ChartGraphic chartGraphic = new ChartGraphic();
-			// chartGraphic.addAttribute(numericalAttributeNames.get(0));
-			// chartGraphic.addAttribute(numericalAttributeNames.get(1));
-			// chartGraphic.addAttribute(numericalAttributeNames.get(2));
-			//
-			// ExternalGraphic[] egs = new ExternalGraphic[] { chartGraphic
-			// .getChartGraphic() };
-			//
-			// ChartSymbolEditDialog.this.firePropertyChange(
-			// SVGSelector.PROPERTY_UPDATED, null, egs);
-			// }
-			// }), "wrap");
+			jContentPane.add(getChartImageSizePanel(), "wrap");
 
 			jContentPane.add(getJPanelButtons(), "bottom");
 		}
 		return jContentPane;
+	}
+
+	JPanel chartImageSizePanel;
+
+	private Component getChartImageSizePanel() {
+		if (chartImageSizePanel == null) {
+
+			// Width
+			final JTextField inputWidth = new JTextField(5);
+			inputWidth.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							extracted(inputWidth);
+						}
+
+						private void extracted(final JTextField inputWidth) {
+							try {
+								chartGraphic.setImageWidth(Integer
+										.valueOf(inputWidth.getText()));
+							} catch (Exception e) {
+								chartGraphic.setImageWidth(null);
+							}
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							extracted(inputWidth);
+						}
+
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							extracted(inputWidth);
+						}
+					});
+			if (chartGraphic.getImageWidth() != null)
+				inputWidth.setText("" + chartGraphic.getImageWidth());
+			else
+				inputWidth.setText("" + ChartGraphic.DEFAULT_WIDTH);
+
+			// Height
+			final JTextField inputHeight = new JTextField(5);
+			inputHeight.getDocument().addDocumentListener(
+					new DocumentListener() {
+
+						@Override
+						public void removeUpdate(DocumentEvent e) {
+							extracted(inputHeight);
+						}
+
+						private void extracted(final JTextField inputHeight) {
+							try {
+								chartGraphic.setImageHeight(Integer
+										.valueOf(inputHeight.getText()));
+							} catch (Exception e) {
+								chartGraphic.setImageHeight(null);
+							}
+						}
+
+						@Override
+						public void insertUpdate(DocumentEvent e) {
+							extracted(inputHeight);
+						}
+
+						@Override
+						public void changedUpdate(DocumentEvent e) {
+							extracted(inputHeight);
+						}
+					});
+			if (chartGraphic.getImageHeight() != null)
+				inputHeight.setText("" + chartGraphic.getImageHeight());
+			else
+				inputHeight.setText("" + ChartGraphic.DEFAULT_HEIGHT);
+
+			chartImageSizePanel = new JPanel(new MigLayout());
+			chartImageSizePanel.add(new JLabel(
+					"Define a base size for the chart image."), "wrap");
+			chartImageSizePanel.add(inputWidth, "split 4");
+			chartImageSizePanel.add(new JLabel("px width"), "");
+			chartImageSizePanel.add(inputHeight, "");
+			chartImageSizePanel.add(new JLabel("px height"), "wrap");
+
+
+		}
+		return chartImageSizePanel;
 	}
 
 	JButton addAttributeJButton;
