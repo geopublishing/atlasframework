@@ -26,8 +26,8 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 	 * {@link SingleRuleList}. The button image will have the default size
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
-	public EditSymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList,
+	public EditSymbolButton(AtlasStylerVector asv, SingleRuleList singleSymbolRuleList) {
+		this(asv, singleSymbolRuleList,
 				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
@@ -55,9 +55,9 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the given dimensions.
 	 */
-	public EditSymbolButton(final SingleRuleList singleSymbolRuleList,
+	public EditSymbolButton(final AtlasStylerVector asv, final SingleRuleList singleSymbolRuleList,
 			Dimension size) {
-		super(singleSymbolRuleList, size);
+		super(asv, singleSymbolRuleList, size);
 
 		addActionListener(new ActionListener() {
 
@@ -72,7 +72,7 @@ public class EditSymbolButton extends UpdatingSymbolButton {
 				backup = template.copy();
 
 				final SymbolSelectorGUI gui = new SymbolSelectorGUI(
-						EditSymbolButton.this,
+						EditSymbolButton.this, asv,
 						ASUtil.R("SymbolSelector.ForTemplate.Title"), template);
 
 				gui.addPropertyChangeListener(listenCancelOkForSelectionInSymbolSelectionGUI);

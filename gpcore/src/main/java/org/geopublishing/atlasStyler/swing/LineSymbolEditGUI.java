@@ -75,6 +75,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
@@ -155,7 +156,8 @@ public class LineSymbolEditGUI extends AbstractStyleEditGUI {
 
     private JLabel lineExplanation = new JLabel(ASUtil.R("LineSymbolEditGUI.dashPattern_tooltip"));
 
-    public LineSymbolEditGUI(final org.geotools.styling.LineSymbolizer symbolizer) {
+    public LineSymbolEditGUI(final AtlasStylerVector asv, final org.geotools.styling.LineSymbolizer symbolizer) {
+    	super(asv);
         this.symbolizer = symbolizer;
         initialize();
     }

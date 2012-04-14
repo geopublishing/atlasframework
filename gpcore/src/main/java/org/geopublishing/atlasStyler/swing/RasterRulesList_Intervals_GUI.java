@@ -34,13 +34,13 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
 import org.geopublishing.atlasStyler.classification.ClassificationChangeEvent;
 import org.geopublishing.atlasStyler.classification.ClassificationChangedAdapter;
 import org.geopublishing.atlasStyler.classification.RasterClassification;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Intervals;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.brewer.color.BrewerPalette;
 

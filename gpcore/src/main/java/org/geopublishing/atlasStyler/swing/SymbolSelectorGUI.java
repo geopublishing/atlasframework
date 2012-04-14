@@ -130,9 +130,10 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 * @param title
 	 *            May be <code>null</code> to use default title
 	 */
-	public SymbolSelectorGUI(Component owner, String title,
+	public SymbolSelectorGUI(Component owner, AtlasStylerVector asv, String title,
 			final SingleRuleList singleSymbolRuleList) {
 		super(owner);
+		this.asv = asv;
 		if (title != null)
 			setTitle(title);
 		else
@@ -494,6 +495,8 @@ public class SymbolSelectorGUI extends AtlasDialog {
 		dispose();
 	}
 
+	private final AtlasStylerVector asv;
+	
 	/**
 	 * This method initializes jButton
 	 * 
@@ -502,7 +505,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JButton getJButtonProperties() {
 		if (jButtonProperties == null) {
 			jButtonProperties = new JButton(new AbstractAction(
-					AtlasStylerVector.R("SymbolSelector.EditSymbol")) {
+					ASUtil.R("SymbolSelector.EditSymbol")) {
+
+
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -512,7 +517,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 					 * with RuleListe as a KEY
 					 */
 					SymbolEditorGUI symbolEditorGUI = new SymbolEditorGUI(
-							SymbolSelectorGUI.this, singleSymbolRuleList);
+							SymbolSelectorGUI.this, asv, singleSymbolRuleList);
 					symbolEditorGUI.setModal(true);
 					symbolEditorGUI.setVisible(true);
 				}
@@ -530,7 +535,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JButton getJButtonSave() {
 		if (jButtonSave == null) {
 			jButtonSave = new JButton(new AbstractAction(
-					AtlasStylerVector.R("SymbolSelector.SaveToFile")) {
+					ASUtil.R("SymbolSelector.SaveToFile")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {

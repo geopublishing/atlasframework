@@ -20,19 +20,23 @@ import de.schmitzm.swing.SwingUtil;
  * "make sense" for the given {@link FeatureType} are presented.
  * 
  */
-public class RulesListJComboBox extends JComboBox {
+public class RulesListJComboBox extends JComboBox<RulesListType> {
 
-	private final DefaultComboBoxModel model;
+	private static final long serialVersionUID = -5625980802182080799L;
+	
+	private final DefaultComboBoxModel<RulesListType> model;
 
 	public RulesListJComboBox(AtlasStyler as) {
 
 		SwingUtil.addMouseWheelForCombobox(this, false);
 		RulesListType[] valuesFor = RulesListType.valuesFor(as);
 		Arrays.sort(valuesFor);
-		model = new DefaultComboBoxModel(valuesFor);
+		model = new DefaultComboBoxModel<RulesListType>(valuesFor);
 		setModel(model);
 
 		setRenderer(new DefaultListCellRenderer() {
+
+			private static final long serialVersionUID = -457353262119405038L;
 
 			@Override
 			public Component getListCellRendererComponent(JList list,

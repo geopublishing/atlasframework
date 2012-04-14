@@ -903,7 +903,7 @@ public class GraduatedColorQuantitiesGUI extends
 			noDataPanel.add(noDataLabelButton, "gap 0");
 
 			// A button to change the NODATA symbol
-			SymbolButton noDataSymbolButton = new EditSymbolButton(
+			SymbolButton noDataSymbolButton = new EditSymbolButton(atlasStyler,
 					rulesList.getNoDataSymbol(), new Dimension(14, 14));
 			noDataPanel.add(noDataSymbolButton, "gap 0, wrap");
 
@@ -1057,7 +1057,7 @@ public class GraduatedColorQuantitiesGUI extends
 	 */
 	private JButton getJButtonTemplate() {
 		if (jButtonTemplate == null) {
-			jButtonTemplate = new EditSymbolButton(rulesList.getTemplate(),
+			jButtonTemplate = new EditSymbolButton(atlasStyler, rulesList.getTemplate(),
 					ICON_SIZE);
 
 			// final ImageIcon imageIcon = new ImageIcon(rulesList.getTemplate()

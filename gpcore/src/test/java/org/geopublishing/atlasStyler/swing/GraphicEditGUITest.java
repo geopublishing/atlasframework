@@ -10,6 +10,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
 
@@ -31,9 +32,9 @@ public class GraphicEditGUITest extends TestingClass {
 			return;
 
 		Graphic g = StylingUtil.STYLE_BUILDER.createGraphic();
-		GraphicEditGUI graphicEditGUI = new GraphicEditGUI(g,
+		GraphicEditGUI graphicEditGUI = new GraphicEditGUI(AsTestingUtil.getAtlasStyler(TestDatasetsVector.countryShp), g,
 				GeometryForm.POINT);
-		TestingUtil.testGui(graphicEditGUI);
+		TestingUtil.testGui(graphicEditGUI,120);
 	}
 
 }

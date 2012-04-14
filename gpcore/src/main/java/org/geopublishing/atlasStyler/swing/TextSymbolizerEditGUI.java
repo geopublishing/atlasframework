@@ -91,8 +91,6 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 	public static final Double[] SIZES = { 6., 7., 8., 9., 10., 11., 12., 14.,
 			16., 18., 20., 22., 24., 28., 36., 48., 72. };
 
-	final AtlasStylerVector atlasStyler;
-
 	private ColorButton jButtonColor;
 
 	private ColorButton jButtonColorHalo;
@@ -179,8 +177,8 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 	public TextSymbolizerEditGUI(TextRuleList rulesList,
 			AtlasStylerVector atlasStyler,
 			FeatureCollection<SimpleFeatureType, SimpleFeature> previewFeatures) {
+		super(atlasStyler);
 		this.rulesList = rulesList;
-		this.atlasStyler = atlasStyler;
 
 		initialize(previewFeatures);
 
@@ -197,7 +195,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 		final Style style = StylingUtil.STYLE_BUILDER.createStyle();
 
 		// We use the actual styling defined as the default
-		final RulesListInterface lastChangedRuleList = atlasStyler
+		final RulesListInterface lastChangedRuleList = asv
 				.getLastChangedRuleList();
 		if (lastChangedRuleList != null) {
 			style.featureTypeStyles().add(lastChangedRuleList.getFTS());
@@ -216,7 +214,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 					.getNumericalFieldNames(rulesList.getStyledFeatures()
 							.getSchema(), true, true);
 
-			jComboBoxPriorityField = new AttributesJComboBox(atlasStyler,
+			jComboBoxPriorityField = new AttributesJComboBox(asv,
 					numericalFieldNamesWithEmpty);
 
 			jComboBoxPriorityField.addItemListener(new ItemListener() {
@@ -617,7 +615,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 
 			jComboBoxFont = new JComboBox();
 
-			List<Literal>[] fontFamilies = atlasStyler.getAvailableFonts();
+			List<Literal>[] fontFamilies = asv.getAvailableFonts();
 
 			/**
 			 * This renderer present the items of type Collection<Literal>
@@ -777,7 +775,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 			 * Label for the selection of the value attribute
 			 */
 
-			jComboBoxLabelField = new AttributesJComboBox(atlasStyler,
+			jComboBoxLabelField = new AttributesJComboBox(asv,
 					FeatureUtil.getValueFieldNamesPrefereStrings(rulesList
 							.getStyledFeatures().getSchema(), true));
 			jComboBoxLabelField.addItemListener(new ItemListener() {
@@ -829,7 +827,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 					.getValueFieldNamesPrefereStrings(rulesList
 							.getStyledFeatures().getSchema(), true);
 
-			jComboBoxLabelField2 = new AttributesJComboBox(atlasStyler,
+			jComboBoxLabelField2 = new AttributesJComboBox(asv,
 					valueFieldNamesPrefereStrings);
 			/**
 			 * Update the Label in the TextRuleList
@@ -1188,7 +1186,7 @@ public class TextSymbolizerEditGUI extends AbstractStyleEditGUI {
 					"left, gap right unrel");
 		}
 
-		if (atlasStyler.getDataMap().get(StylerDialog.EXPERT_MODE) != null) {
+		if (asv.getDataMap().get(StylerDialog.EXPERT_MODE) != null) {
 			// <VendorOption name="followLine">true</VendorOption>
 			jPanelLinePlacement
 					.add(new JLabel(

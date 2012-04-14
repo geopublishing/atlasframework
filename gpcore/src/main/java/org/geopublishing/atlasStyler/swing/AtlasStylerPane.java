@@ -25,12 +25,12 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStylerRaster;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.RulesListsList;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasStyler.rulesLists.TextRuleList;
@@ -161,7 +161,7 @@ public class AtlasStylerPane extends JSplitPane implements ClosableSubwindows {
 
 		// Vector RulesLists:
 		if (ruleList instanceof SingleRuleList)
-			newEditorGui = new SingleSymbolGUI((SingleRuleList<?>) ruleList);
+			newEditorGui = new SingleSymbolGUI((AtlasStylerVector) atlasStyler, (SingleRuleList<?>) ruleList);
 		else if (ruleList instanceof UniqueValuesRuleList)
 			newEditorGui = new UniqueValuesGUI((UniqueValuesRuleList) ruleList,
 					(AtlasStylerVector) atlasStyler);

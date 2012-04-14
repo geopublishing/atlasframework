@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.io.IOException;
 
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormapTest;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Intervals;
 import org.geotools.styling.ColorMap;
 import org.junit.Before;
 import org.junit.Test;

@@ -40,6 +40,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.ChartGraphic;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
@@ -126,16 +127,18 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 			singleSymbolRuleList.fireEvents(new RuleChangedEvent(
 					"SymbolEditorGUI propagator", singleSymbolRuleList));
 
-//			LOGGER.debug("Propagating...");
+			// LOGGER.debug("Propagating...");
 		}
 	};
 
 	/**
 	 * @param selectorGUI
 	 */
-	public SymbolEditorGUI(Component owner,
+	public SymbolEditorGUI(Component owner, AtlasStylerVector asv,
 			SingleRuleList<? extends Symbolizer> singleSymbolRuleList) {
 		super(owner, DIALOG_TITLE);
+		
+		this.asv = asv;
 
 		this.singleSymbolRuleList = (SingleRuleList<Symbolizer>) singleSymbolRuleList;
 
@@ -193,6 +196,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		// System.out.println("generating a new layer image");
 
 		Rule rule = CommonFactoryFinder.getStyleFactory(null).createRule();
+		
+		if (ChartGraphic.isChart(symb) )
+			symb = ChartGraphic.getFixDataSymbolizer(symb);
 
 		rule.setSymbolizers(new Symbolizer[] { symb });
 
@@ -252,7 +258,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 					.addPropertyChangeListener(listenerUpdatePreview);
 
 			jPanelPreview = new JPanel(new MigLayout(),
-					AtlasStylerVector.R("SymbolSelector.Preview.BorderTitle"));
+					ASUtil.R("SymbolSelector.Preview.BorderTitle"));
 			jPanelPreview.add(jLabelPreviewIcon, "center");
 
 		}
@@ -267,7 +273,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	private JPanel getJPanelLayers() {
 		JPanel jPanelLayers;
 		jPanelLayers = new JPanel(new MigLayout(),
-				AtlasStylerVector.R("SymbolEditor.SymbolLayers"));
+				ASUtil.R("SymbolEditor.SymbolLayers"));
 		jPanelLayers.add(new JScrollPane(getJTableLayers()), "wrap, top, w "
 				+ (SYMBOL_SIZE.width + 30) + ", h " + (SYMBOL_SIZE.height * 3)); // ,"top, wrap, growy, shrinkx"
 		// jPanelLayers.add(new JScrollPane(getJTableLayers()),"wrap");
@@ -281,6 +287,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	}
 
 	private Symbolizer guiIsUpToDateForThisSymbolizer = null;
+	
+	final private AtlasStylerVector asv;
 
 	/**
 	 * This method initializes jPanel2
@@ -291,10 +299,11 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		if (jPanelProperties == null) {
 			jPanelProperties = new JPanel(new BorderLayout());
 			jPanelProperties.setBorder(BorderFactory
-					.createTitledBorder(AtlasStylerVector
+					.createTitledBorder(ASUtil
 							.R("SymbolEditor.Properties")));
 
 			addPropertyChangeListener(new PropertyChangeListener() {
+
 
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -331,15 +340,15 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 							case POINT:
 								Graphic graphic = ((PointSymbolizer) selectedSymbolizer)
 										.getGraphic();
-								symbolEditGUI = new GraphicEditGUI(graphic,
+								symbolEditGUI = new GraphicEditGUI(asv, graphic,
 										GeometryForm.POINT);
 								break;
 							case LINE:
-								symbolEditGUI = new LineSymbolEditGUI(
+								symbolEditGUI = new LineSymbolEditGUI(asv, 
 										((org.geotools.styling.LineSymbolizer) selectedSymbolizer));
 								break;
 							case POLYGON:
-								symbolEditGUI = new PolygonSymbolEditGUI(
+								symbolEditGUI = new PolygonSymbolEditGUI(asv, 
 										((PolygonSymbolizer) selectedSymbolizer));
 								break;
 							default:
@@ -402,7 +411,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 								return new JLabel(new ImageIcon(
 										(BufferedImage) value));
 							else
-								return new JLabel("add a layer to your symbol");
+								return new JLabel("add a layer to your symbol"); //i8n
 							// TODO// Default// Image
 							// that
 							// tells
@@ -559,7 +568,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 				}
 
 			});
-			jButtonNewLayer.setToolTipText(AtlasStylerVector
+			jButtonNewLayer.setToolTipText(ASUtil
 					.R("SymbolEditor.Action.AddSymbolLayer.TT"));
 		}
 		return jButtonNewLayer;
@@ -679,7 +688,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 					});
 
 			jButtonLayerDown.setEnabled(false);
-			jButtonLayerDown.setToolTipText(AtlasStylerVector
+			jButtonLayerDown.setToolTipText(ASUtil
 					.R("SymbolEditor.Action.MoveUpSymbolLayerDown.TT"));
 		}
 		return jButtonLayerDown;
@@ -755,7 +764,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 					});
 			jButtonLayerUp.setEnabled(false);
-			jButtonLayerUp.setToolTipText(AtlasStylerVector
+			jButtonLayerUp.setToolTipText(ASUtil
 					.R("SymbolEditor.Action.MoveUpSymbolLayerUp.TT"));
 		}
 		return jButtonLayerUp;

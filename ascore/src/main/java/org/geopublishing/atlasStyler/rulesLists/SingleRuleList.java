@@ -454,6 +454,30 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		}
 	}
 
+	/**
+	 * @param row
+	 * @param delta
+	 *            -1 to move the row one up
+	 */
+	public void move(int row, int delta) {
+
+		if (row + delta < 0 || row + delta > getSymbolizers().size())
+			throw new IllegalArgumentException("Can't move Symbolizer idx "
+					+ row + " by " + delta);
+
+		// Something is selected
+
+		getSymbolizers().add(row + delta, getSymbolizers().remove(row));
+		//
+		// Symbolizer symbolizer = getSymbolizers().remove(from);
+		//
+		// symbolizers.insertElementAt(symbolizer,
+		// jTableLayers.getSelectedRow() + 1);
+
+		fireEvents(new RuleChangedEvent("Index " + row + " moved up/down to "
+				+ (row + delta), this));
+	}
+
 	@Override
 	public void parseMetaInfoString(String metaInfoString, FeatureTypeStyle fts) {
 	}
@@ -637,30 +661,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			fireEvents(new RuleChangedEvent("visiblility in legend changed",
 					this));
 		}
-	}
-
-	/**
-	 * @param row
-	 * @param delta
-	 *            -1 to move the row one up
-	 */
-	public void move(int row, int delta) {
-
-		if (row + delta < 0 || row + delta > getSymbolizers().size())
-			throw new IllegalArgumentException("Can't move Symbolizer idx "
-					+ row + " by " + delta);
-
-		// Something is selected
-
-		getSymbolizers().add(row + delta, getSymbolizers().remove(row));
-		//
-		// Symbolizer symbolizer = getSymbolizers().remove(from);
-		//
-		// symbolizers.insertElementAt(symbolizer,
-		// jTableLayers.getSelectedRow() + 1);
-
-		fireEvents(new RuleChangedEvent("Index " + row + " moved up/down to "
-				+ (row + delta), this));
 	}
 
 }

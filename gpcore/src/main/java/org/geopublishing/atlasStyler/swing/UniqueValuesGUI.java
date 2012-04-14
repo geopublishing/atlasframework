@@ -129,6 +129,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 	protected static final int COLIDX_LABEL = 2;
 
 	protected final AtlasStylerVector atlasStyler;
+	protected AtlasStylerVector asv;
 
 	public UniqueValuesGUI(UniqueValuesRuleList rl,
 			AtlasStylerVector atlasStyler) {
@@ -298,7 +299,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 							.copy();
 
 					SymbolSelectorGUI gui = new SymbolSelectorGUI(
-							UniqueValuesGUI.this,
+							UniqueValuesGUI.this, asv,
 							ASUtil
 									.R("UniqueValuesGUI.selectTemplateDialog.dialogTitle"),
 							template);
@@ -834,7 +835,7 @@ public class UniqueValuesGUI extends AbstractRulesListGui<UniqueValuesRuleList> 
 
 							SymbolSelectorGUI gui = new SymbolSelectorGUI(
 									SwingUtil
-											.getParentWindow(UniqueValuesGUI.this),
+											.getParentWindow(UniqueValuesGUI.this),asv,
 									"Change symbol for "
 											+ rulesList.getLabels().get(row),
 									editSymbol);

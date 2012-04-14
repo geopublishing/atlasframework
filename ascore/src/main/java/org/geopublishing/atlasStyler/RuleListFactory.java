@@ -13,6 +13,7 @@ import org.geopublishing.atlasStyler.rulesLists.GraduatedColorRuleList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListRGB;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_DistinctValues;
+import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Intervals;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesList_Ramps;
 import org.geopublishing.atlasStyler.rulesLists.SingleLineSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
@@ -47,28 +48,6 @@ public class RuleListFactory {
 	private static final Logger LOGGER = LangUtil
 			.createLogger(AtlasStylerVector.class);
 
-	static public SingleLineSymbolRuleList createSingleLineSymbolRulesList(
-			Translation title, boolean withDefaults) {
-		SingleLineSymbolRuleList singleLineSymbolRuleList = new SingleLineSymbolRuleList(
-				title);
-
-		if (withDefaults) {
-			singleLineSymbolRuleList.addNewDefaultLayer();
-		}
-		return singleLineSymbolRuleList;
-	}
-
-	/**
-	 * @return an {@link GraduatedColorRuleList} for the given
-	 *         {@link GeometryAttributeType}
-	 * 
-	 * @param geometryAttributeType
-	 *            {@link GeometryAttributeType} that defines
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
-	 * @param title
-	 */
-
 	static public SinglePointSymbolRuleList createSinglePointSymbolRulesList(
 			Translation title, boolean withDefaults) {
 
@@ -81,6 +60,17 @@ public class RuleListFactory {
 		return singlePointSymbolRuleList;
 	}
 
+	
+	static public SingleLineSymbolRuleList createSingleLineSymbolRulesList(
+			Translation title, boolean withDefaults) {
+		SingleLineSymbolRuleList singleLineSymbolRuleList = new SingleLineSymbolRuleList(
+				title);
+		
+		if (withDefaults) {
+			singleLineSymbolRuleList.addNewDefaultLayer();
+		}
+		return singleLineSymbolRuleList;
+	}
 	static public SinglePolygonSymbolRuleList createSinglePolygonSymbolRulesList(
 			Translation title, boolean withDefaults) {
 		SinglePolygonSymbolRuleList singlePolygonSymbolRuleList = new SinglePolygonSymbolRuleList(
@@ -93,6 +83,7 @@ public class RuleListFactory {
 		}
 		return singlePolygonSymbolRuleList;
 	}
+	
 
 	static public SingleRuleList<? extends Symbolizer> createSingleRulesList(
 			Translation title, final GeometryForm geometryForm,
@@ -182,6 +173,15 @@ public class RuleListFactory {
 		Translation title = AtlasStyler.getRuleTitleFor(styledLayer);
 
 		switch (rlType) {
+
+		case SINGLE_SYMBOL_POINT:
+		case SINGLE_SYMBOL_POINT_FOR_POLYGON:
+			return createSinglePointSymbolRulesList(title, withDefaults);
+		case SINGLE_SYMBOL_LINE:
+			return createSingleLineSymbolRulesList(title, withDefaults);
+		case SINGLE_SYMBOL_POLYGON:
+			return createSinglePolygonSymbolRulesList(title, withDefaults);
+
 		case QUANTITIES_COLORIZED_LINE:
 			return createGraduatedColorLineRulesList(withDefaults);
 		case QUANTITIES_COLORIZED_POINT:
@@ -189,14 +189,6 @@ public class RuleListFactory {
 			return createGraduatedColorPointRulesList(withDefaults);
 		case QUANTITIES_COLORIZED_POLYGON:
 			return createGraduatedColorPolygonRulesList(withDefaults);
-
-		case SINGLE_SYMBOL_LINE:
-			return createSingleLineSymbolRulesList(title, withDefaults);
-		case SINGLE_SYMBOL_POINT:
-		case SINGLE_SYMBOL_POINT_FOR_POLYGON:
-			return createSinglePointSymbolRulesList(title, withDefaults);
-		case SINGLE_SYMBOL_POLYGON:
-			return createSinglePolygonSymbolRulesList(title, withDefaults);
 
 		case UNIQUE_VALUE_LINE:
 			return createUniqueValuesLineRulesList(withDefaults);
@@ -434,11 +426,12 @@ public class RuleListFactory {
 			// .startsWith(RulesListType.RASTER_COLORMAP_RAMPS
 			// .toString())) {
 			// rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
-//		} else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
-//				.toString()) 
-////		TODO		|| hat kein metrMETAiNFO aber hat eien RS mit ChannelSelection 
-//				) {
-//			rasterRulesList = new RasterRulesListRGB(styledRaster, false);
+			// } else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
+			// .toString())
+			// // TODO || hat kein metrMETAiNFO aber hat eien RS mit
+			// ChannelSelection
+			// ) {
+			// rasterRulesList = new RasterRulesListRGB(styledRaster, false);
 		}
 
 		if (rasterRulesList != null)

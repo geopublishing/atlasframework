@@ -30,6 +30,7 @@ import javax.swing.JRootPane;
 import javax.swing.KeyStroke;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
@@ -62,6 +63,8 @@ public class GraphicEditGUIinDialog extends JDialog {
 	/** Backup fill of the graphic that this dialog deals with **/
 	private final Graphic backupGraphicFill;
 
+	private final AtlasStylerVector asv;
+
 	/**
 	 * Since the registerKeyboardAction() method is part of the JComponent class
 	 * definition, you must define the Escape keystroke and register the
@@ -87,9 +90,10 @@ public class GraphicEditGUIinDialog extends JDialog {
 		return rootPane;
 	}
 
-	public GraphicEditGUIinDialog(Component owner, final Fill fill) {
-		super(SwingUtil.getParentWindow(owner), AtlasStylerVector
+	public GraphicEditGUIinDialog(AtlasStylerVector asv, Component owner, final Fill fill) {
+		super(SwingUtil.getParentWindow(owner), ASUtil
 				.R("GraphicEditGUIinDialog.Title"));
+		this.asv = asv;
 
 		this.fill = fill;
 		graphicFill = fill.getGraphicFill();
@@ -162,7 +166,7 @@ public class GraphicEditGUIinDialog extends JDialog {
 	private JPanel getJPanelEditGUI() {
 		if (jPanelEditGUI == null) {
 
-			jPanelEditGUI = new GraphicEditGUI(graphicFill,
+			jPanelEditGUI = new GraphicEditGUI(asv, graphicFill,
 					GeometryForm.POLYGON);
 
 			// Update the Preview if the Icon is changed ... will change

@@ -49,8 +49,9 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	 * @param singleSymbolRuleList
 	 * @param openWindows
 	 */
-	public SingleSymbolGUI(final SingleRuleList<?> singleSymbolRuleList) {
+	public SingleSymbolGUI(AtlasStylerVector asv, final SingleRuleList<?> singleSymbolRuleList) {
 		super(singleSymbolRuleList);
+		this.asv = asv;
 		if (singleSymbolRuleList == null)
 			throw new IllegalStateException(
 					"A GUI can not be created if no RuleList is provided.");
@@ -71,6 +72,8 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 
 	};
 
+	final protected AtlasStylerVector asv;
+
 	/**
 	 * This method initializes this
 	 * 
@@ -78,12 +81,12 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	 */
 	private void initialize() {
 		JLabel jLabelSymbol = new JLabel(
-				AtlasStylerVector.R("SingleSymbolGUI.Symbol.Label"));
-		jLabelSymbol.setToolTipText(AtlasStylerVector
+				ASUtil.R("SingleSymbolGUI.Symbol.Label"));
+		jLabelSymbol.setToolTipText(ASUtil
 				.R("SingleSymbolGUI.Symbol.TT"));
 
 		JLabel jLabelHeading = new JLabel(
-				AtlasStylerVector.R("SingleSymbolGUI.Heading.Label"));
+				ASUtil.R("SingleSymbolGUI.Heading.Label"));
 		jLabelHeading.setFont(jLabelHeading.getFont().deriveFont(
 				AVSwingUtil.HEADING_FONT_SIZE));
 
@@ -93,8 +96,8 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 		this.add(getJButtonSymbol(), "wrap");
 
 		JLabel jLabelTranslation = new JLabel(
-				AtlasStylerVector.R("SingleSymbolGUI.Label.Label"));
-		jLabelTranslation.setToolTipText(AtlasStylerVector
+				ASUtil.R("SingleSymbolGUI.Label.Label"));
+		jLabelTranslation.setToolTipText(ASUtil
 				.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
 		this.add(getjLabelTranslationEdit(), "wrap");
@@ -107,8 +110,8 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	 */
 	private EditSymbolButton getJButtonSymbol() {
 		if (jButtonSymbolSelector == null) {
-			jButtonSymbolSelector = new EditSymbolButton(rulesList);
-			jButtonSymbolSelector.setToolTipText(AtlasStylerVector
+			jButtonSymbolSelector = new EditSymbolButton(asv, rulesList);
+			jButtonSymbolSelector.setToolTipText(ASUtil
 					.R("SingleSymbolGUI.Symbol.TT"));
 		}
 		return jButtonSymbolSelector;

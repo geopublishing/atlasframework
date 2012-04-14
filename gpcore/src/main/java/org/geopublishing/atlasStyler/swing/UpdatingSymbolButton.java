@@ -22,8 +22,8 @@ public class UpdatingSymbolButton extends SymbolButton {
 	 * {@link SingleRuleList}. The button image will have the default size
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
-	public UpdatingSymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList,
+	public UpdatingSymbolButton(final AtlasStylerVector asv, SingleRuleList singleSymbolRuleList) {
+		this(asv, singleSymbolRuleList,
 				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
@@ -31,9 +31,9 @@ public class UpdatingSymbolButton extends SymbolButton {
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the given dimensions.
 	 */
-	public UpdatingSymbolButton(final SingleRuleList singleSymbolRuleList,
+	public UpdatingSymbolButton(final AtlasStylerVector asv, final SingleRuleList singleSymbolRuleList,
 			Dimension size) {
-		super(singleSymbolRuleList, size);
+		super(asv, singleSymbolRuleList, size);
 		if (singleSymbolRuleList != null)
 			singleSymbolRuleList.addListener(listener);
 	}

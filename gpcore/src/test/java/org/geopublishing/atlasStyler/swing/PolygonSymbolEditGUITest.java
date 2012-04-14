@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
 
@@ -29,7 +30,7 @@ public class PolygonSymbolEditGUITest extends TestingClass {
 
 		ps.setFill(null);
 		ps.setStroke(null);
-		PolygonSymbolEditGUI polygonSymbolEditGUI = new PolygonSymbolEditGUI(ps);
+		PolygonSymbolEditGUI polygonSymbolEditGUI = new PolygonSymbolEditGUI(AsTestingUtil.getAtlasStyler(TestDatasetsVector.countryShp),ps);
 		// assertFalse(polygonSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());
 		// polygonSymbolEditGUI.getJCheckBoxFillGraphic().doClick();
 		// assertTrue(polygonSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());

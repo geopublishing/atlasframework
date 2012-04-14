@@ -92,12 +92,19 @@ import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.swingworker.AtlasSwingWorker;
 
-// TODO Convert to AtlasDialog and add a local Database of SVG/PNG symbols
+/**
+ * Swing GUI dialog to choos an SVG graphic from freemapsymbols.org
+ */
 public class SVGSelector extends CancellableDialogAdapter {
-	static private final Logger LOGGER = LangUtil.createLogger(SVGSelector.class);
+	static private final Logger LOGGER = LangUtil
+			.createLogger(SVGSelector.class);
 
 	protected static final Dimension SVGICON_SIZE = AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE;
 
+	/**
+	 * A property changed event with this ID is fired, when the ExternalGraphic
+	 * has been changed.
+	 */
 	public static final String PROPERTY_UPDATED = "Property Updated event ID";
 
 	private JPanel jContentPane = null;
@@ -135,7 +142,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 	private final ExternalGraphic[] backup;
 
-	protected JLabel notOnlineLabel = new JLabel(ASUtil.R("SVGSelector.notOnlineErrorLabel"));
+	protected JLabel notOnlineLabel = new JLabel(
+			ASUtil.R("SVGSelector.notOnlineErrorLabel"));
 
 	/**
 	 * The String KEY is URL.toString
@@ -148,8 +156,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 	 * @param preSelection
 	 *            Which SVG is preselected. May be <code>null</code>
 	 */
-	public SVGSelector(Window owner, GeometryForm geomForm, ExternalGraphic[] preSelection)
-			throws MalformedURLException {
+	public SVGSelector(Window owner, GeometryForm geomForm,
+			ExternalGraphic[] preSelection) throws MalformedURLException {
 		super(owner, ASUtil.R("SVGSelector.window.title"));
 		this.geometryForm = geomForm;
 		backup = preSelection;
@@ -159,12 +167,15 @@ public class SVGSelector extends CancellableDialogAdapter {
 		try {
 			if (preSelection != null && preSelection.length > 0) {
 				URL location = preSelection[0].getLocation();
-				String preselectedFolderUrl = location.toExternalForm().substring(0,
-						location.toExternalForm().lastIndexOf("/") + 1);
-				if ((preselectedFolderUrl.startsWith(FreeMapSymbols.SVG_URL) && (preselectedFolderUrl.endsWith("/")))) {
+				String preselectedFolderUrl = location.toExternalForm()
+						.substring(0,
+								location.toExternalForm().lastIndexOf("/") + 1);
+				if ((preselectedFolderUrl.startsWith(FreeMapSymbols.SVG_URL) && (preselectedFolderUrl
+						.endsWith("/")))) {
 					url = new URL(preselectedFolderUrl);
 				} else {
-					LOGGER.info(SVGSelector.class.getSimpleName() + " ignores the preselected URL = "
+					LOGGER.info(SVGSelector.class.getSimpleName()
+							+ " ignores the preselected URL = "
 							+ preSelection[0].getLocation());
 				}
 			}
@@ -183,15 +194,12 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 	@Override
 	public void cancel() {
-
+		// Reset any changes by promoting the backed-up symbol 
 		firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, backup);
-
 	}
 
 	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
+	 * This method initializes a panel with OK and Close buttons
 	 */
 	private JPanel getJPanelButtons() {
 		if (jPanelButtons == null) {
@@ -324,33 +332,46 @@ public class SVGSelector extends CancellableDialogAdapter {
 	private JButton getJButtonSelfURL() {
 		if (jButtonSelfURL == null) {
 			jButtonSelfURL = new JButton();
-			jButtonSelfURL.setToolTipText(ASUtil.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
+			jButtonSelfURL.setToolTipText(ASUtil
+					.R("ExternalGraphicsSelector.button.manual_URL_ToolTip"));
 
-			jButtonSelfURL.setAction(new AbstractAction(ASUtil.R("SymbolSelector.Tabs.LocalSymbols")) {
+			jButtonSelfURL.setAction(new AbstractAction(ASUtil
+					.R("SymbolSelector.Tabs.LocalSymbols")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
-					File startFolder = ASProps.get(Keys.lastLocalSvgSelected) == null ? new File(System
-							.getProperty("user.home")) : new File(ASProps.get(Keys.lastLocalSvgSelected));
+					File startFolder = ASProps.get(Keys.lastLocalSvgSelected) == null ? new File(
+							System.getProperty("user.home")) : new File(ASProps
+							.get(Keys.lastLocalSvgSelected));
 
 					// try to use an HTML view based on Lobo/Cobra
 					File graphicFile = null;
 					try {
-						Class<?> clazz = Class.forName("org.geopublishing.atlasStyler.AsSwingUtil");
+						Class<?> clazz = Class
+								.forName("org.geopublishing.atlasStyler.AsSwingUtil");
 						for (Method m : clazz.getMethods()) {
 							if (m.getName().equals("chooseFileOpen")) {
-								graphicFile = (File) m.invoke(null, SVGSelector.this, startFolder,
-										ASUtil.R("SelectLocalSVGFileAction.window.title"), new FileExtensionFilter[] {
-												new FileExtensionFilter(ASUtil.FILTER_SVG),
-												new FileExtensionFilter(ASUtil.FILTER_PNG) });
+								graphicFile = (File) m.invoke(
+										null,
+										SVGSelector.this,
+										startFolder,
+										ASUtil.R("SelectLocalSVGFileAction.window.title"),
+										new FileExtensionFilter[] {
+												new FileExtensionFilter(
+														ASUtil.FILTER_SVG),
+												new FileExtensionFilter(
+														ASUtil.FILTER_PNG) });
 
 							}
 						}
 					} catch (Exception e1) {
-						graphicFile = GpUtil.chooseFileOpenFallback(SVGSelector.this, startFolder, ASUtil
-								.R("SelectLocalSVGFileAction.window.title"), new FileExtensionFilter(
-								ASUtil.FILTER_EXTERNALGRAPHIC_FORMATS));
+						graphicFile = GpUtil.chooseFileOpenFallback(
+								SVGSelector.this,
+								startFolder,
+								ASUtil.R("SelectLocalSVGFileAction.window.title"),
+								new FileExtensionFilter(
+										ASUtil.FILTER_EXTERNALGRAPHIC_FORMATS));
 					}
 
 					// File graphicFile =
@@ -362,7 +383,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 					if (graphicFile != null) {
 						// Remember the last SVG file location
-						ASProps.set(Keys.lastLocalSvgSelected, graphicFile.getAbsolutePath());
+						ASProps.set(Keys.lastLocalSvgSelected,
+								graphicFile.getAbsolutePath());
 					} else
 						return;
 
@@ -375,13 +397,15 @@ public class SVGSelector extends CancellableDialogAdapter {
 						mimetype = GraphicEditGUI.SVG_MIMETYPE;
 					}
 
-					ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic(imageUrl, mimetype);
+					ExternalGraphic eg = StylingUtil.STYLE_BUILDER
+							.createExternalGraphic(imageUrl, mimetype);
 					final ExternalGraphic[] egs = new ExternalGraphic[] { eg };
 
 					SwingUtilities.invokeLater(new Runnable() {
 						@Override
 						public void run() {
-							SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, egs);
+							SVGSelector.this.firePropertyChange(
+									SVGSelector.PROPERTY_UPDATED, null, egs);
 							SVGSelector.this.okClose();
 						}
 					});
@@ -424,7 +448,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 				public void mouseClicked(MouseEvent e) {
 					int i = jList.locationToIndex(e.getPoint());
 
-					if ((e.getClickCount() == 2) && (e.getButton() == MouseEvent.BUTTON1)) {
+					if ((e.getClickCount() == 2)
+							&& (e.getButton() == MouseEvent.BUTTON1)) {
 
 						Object value = jList.getModel().getElementAt(i);
 
@@ -435,15 +460,19 @@ public class SVGSelector extends CancellableDialogAdapter {
 							 * A Symbol has been selected. Throws an event.
 							 */
 
-								final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
-								PolygonSymbolizer symbolizer = rl.getSymbolizers().get(0);
-								egs = symbolizer.getFill().getGraphicFill().getExternalGraphics();
-								SwingUtilities.invokeLater(new Runnable() {
-									@Override
-									public void run() {
-										SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, egs);
-									}
-								});
+							final SinglePolygonSymbolRuleList rl = (SinglePolygonSymbolRuleList) value;
+							PolygonSymbolizer symbolizer = rl.getSymbolizers()
+									.get(0);
+							egs = symbolizer.getFill().getGraphicFill()
+									.getExternalGraphics();
+							SwingUtilities.invokeLater(new Runnable() {
+								@Override
+								public void run() {
+									SVGSelector.this.firePropertyChange(
+											SVGSelector.PROPERTY_UPDATED, null,
+											egs);
+								}
+							});
 
 						} else if (value instanceof SinglePointSymbolRuleList) {
 							/***************************************************
@@ -452,12 +481,16 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 							if (geometryForm == GeometryForm.POINT) {
 								final SinglePointSymbolRuleList rl = (SinglePointSymbolRuleList) value;
-								PointSymbolizer symbolizer = rl.getSymbolizers().get(0);
-								egs = symbolizer.getGraphic().getExternalGraphics();
+								PointSymbolizer symbolizer = rl
+										.getSymbolizers().get(0);
+								egs = symbolizer.getGraphic()
+										.getExternalGraphics();
 								SwingUtilities.invokeLater(new Runnable() {
 									@Override
 									public void run() {
-										SVGSelector.this.firePropertyChange(SVGSelector.PROPERTY_UPDATED, null, egs);
+										SVGSelector.this.firePropertyChange(
+												SVGSelector.PROPERTY_UPDATED,
+												null, egs);
 									}
 								});
 							}
@@ -479,12 +512,14 @@ public class SVGSelector extends CancellableDialogAdapter {
 			jList.setCellRenderer(new ListCellRenderer() {
 
 				@Override
-				public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+				public Component getListCellRendererComponent(JList list,
+						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 
 					JPanel fullCell = new JPanel(new BorderLayout());
 					fullCell.setSize(JScrollPaneSymbols.size);
-					fullCell.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 5));
+					fullCell.setBorder(BorderFactory.createEmptyBorder(2, 4, 2,
+							5));
 
 					fullCell.setBackground(Color.white);
 					JPanel infos = new JPanel(new BorderLayout());
@@ -497,7 +532,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 					JLabel description = new JLabel();
 					infos.add(description, BorderLayout.CENTER);
 					description.setFont(description.getFont().deriveFont(8f));
-					styleAuthor.setFont(styleAuthor.getFont().deriveFont(9f).deriveFont(Font.ITALIC));
+					styleAuthor.setFont(styleAuthor.getFont().deriveFont(9f)
+							.deriveFont(Font.ITALIC));
 					fullCell.add(infos, BorderLayout.CENTER);
 
 					if (value instanceof SingleRuleList<?>) {
@@ -522,14 +558,16 @@ public class SVGSelector extends CancellableDialogAdapter {
 							weakImageCache.put(getKey(rl), symbolImage);
 						}
 
-						fullCell.add(new JLabel(new ImageIcon(symbolImage)), BorderLayout.WEST);
+						fullCell.add(new JLabel(new ImageIcon(symbolImage)),
+								BorderLayout.WEST);
 
 						styleName.setText(rl.getStyleName());
 						styleAuthor.setText(rl.getStyleTitle());
 						description.setText(rl.getStyleAbstract());
 
 						fullCell.setToolTipText("Double-click to use ExternalGraphic "
-								+ IOUtil.escapePath(url.toString() + rl.getStyleName() + ".svg"));
+								+ IOUtil.escapePath(url.toString()
+										+ rl.getStyleName() + ".svg"));
 
 					} else if (value instanceof URL) {
 						/**
@@ -543,18 +581,23 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 						URL dirUrl = (URL) value;
 						String string = dirUrl.getFile();
-						String dirName = string.substring(0, string.lastIndexOf("/"));
-						dirName = dirName.substring(dirName.lastIndexOf("/") + 1, dirName.length());
+						String dirName = string.substring(0,
+								string.lastIndexOf("/"));
+						dirName = dirName.substring(
+								dirName.lastIndexOf("/") + 1, dirName.length());
 
 						styleName.setText("Folder: " + dirName); // i8n
 						styleAuthor.setText("");
-						description.setText(ASUtil.R("SVGSelector.list.tooltip"));
+						description.setText(ASUtil
+								.R("SVGSelector.list.tooltip"));
 					}
 
 					if (isSelected) {
-						fullCell.setBorder(BorderFactory.createEtchedBorder(Color.YELLOW, Color.BLACK));
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.YELLOW, Color.BLACK));
 					} else {
-						fullCell.setBorder(BorderFactory.createEtchedBorder(Color.WHITE, Color.GRAY));
+						fullCell.setBorder(BorderFactory.createEtchedBorder(
+								Color.WHITE, Color.GRAY));
 					}
 
 					return fullCell;
@@ -586,14 +629,16 @@ public class SVGSelector extends CancellableDialogAdapter {
 	public void changeURL(URL newUrl) {
 		url = newUrl;
 
-		LOGGER.debug("Changing " + this.getClass().getSimpleName() + " URL to " + url.getFile());
+		LOGGER.debug("Changing " + this.getClass().getSimpleName() + " URL to "
+				+ url.getFile());
 
 		jList = null;
 		rescan(false);
 		jScrollPane1.setViewportView(getJList());
 		jTextFieldURL.setText(url.getFile());
 
-		jButtonUp.setEnabled(!url.toString().equals(FreeMapSymbols.SVG_URL + "/"));
+		jButtonUp.setEnabled(!url.toString().equals(
+				FreeMapSymbols.SVG_URL + "/"));
 
 	}
 
@@ -607,7 +652,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 			jButtonUp = new JButton();
 			jButtonUp.setIcon(Icons.ICON_DIR_UP_SMALL);
 			jButtonUp.setMargin(new Insets(0, 0, 0, 0));
-			jButtonUp.setEnabled(!url.toString().equals(FreeMapSymbols.SVG_URL + "/"));
+			jButtonUp.setEnabled(!url.toString().equals(
+					FreeMapSymbols.SVG_URL + "/"));
 
 			// This button is only enabled if we are not on the root level
 			jButtonUp.addActionListener(new AbstractAction() {
@@ -631,7 +677,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 				}
 			});
 
-			jButtonUp.setToolTipText(ASUtil.R("ExternalGraphicsSelector.button.directory_up_ToolTip"));
+			jButtonUp.setToolTipText(ASUtil
+					.R("ExternalGraphicsSelector.button.directory_up_ToolTip"));
 
 		}
 		return jButtonUp;
@@ -643,7 +690,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	private AtlasSwingWorker<List<Object>> getWorker() {
-		AtlasSwingWorker<List<Object>> swingWorker = new AtlasSwingWorker<List<Object>>(SVGSelector.this) {
+		AtlasSwingWorker<List<Object>> swingWorker = new AtlasSwingWorker<List<Object>>(
+				SVGSelector.this) {
 
 			@Override
 			protected List<Object> doInBackground() throws Exception {
@@ -656,23 +704,27 @@ public class SVGSelector extends CancellableDialogAdapter {
 
 				BufferedReader in = null;
 				try {
-					in = new BufferedReader(new InputStreamReader(index.openStream()));
+					in = new BufferedReader(new InputStreamReader(
+							index.openStream()));
 
 					// Parsing the APACHE OUTPUT
 
 					// Sorting them alphabetically by using a set
-					SortedSet<URL> sortedSymbolUrls = new TreeSet(new Comparator<URL>() {
+					SortedSet<URL> sortedSymbolUrls = new TreeSet(
+							new Comparator<URL>() {
 
-						@Override
-						public int compare(URL o1, URL o2) {
-							return o1.toExternalForm().compareTo(o2.toExternalForm());
-						}
-					});
+								@Override
+								public int compare(URL o1, URL o2) {
+									return o1.toExternalForm().compareTo(
+											o2.toExternalForm());
+								}
+							});
 					String line;
 
 					while ((line = in.readLine()) != null) {
 
-						parseSldFileanmeFromApacheOutput(entriesForTheList, sortedSymbolUrls, line);
+						parseSldFileanmeFromApacheOutput(entriesForTheList,
+								sortedSymbolUrls, line);
 					}
 
 					for (final URL url : sortedSymbolUrls) {
@@ -684,16 +736,20 @@ public class SVGSelector extends CancellableDialogAdapter {
 						 * exists
 						 */
 						// Name without .sld
-						String newNameWithOutEnding = path.substring(0, path.length() - 4);
+						String newNameWithOutEnding = path.substring(0,
+								path.length() - 4);
 						newNameWithOutEnding = newNameWithOutEnding
-								.substring(newNameWithOutEnding.lastIndexOf("/") + 1);
+								.substring(newNameWithOutEnding
+										.lastIndexOf("/") + 1);
 
 						/** ExternalGraphic to online Graphic * */
-						ExternalGraphic eg = ASUtil.SB.createExternalGraphic(url, GraphicEditGUI.SVG_MIMETYPE);
+						ExternalGraphic eg = ASUtil.SB.createExternalGraphic(
+								url, GraphicEditGUI.SVG_MIMETYPE);
 
 						final SingleRuleList symbolRuleList;
 
-						GraphicImpl g = (GraphicImpl) ASUtil.createDefaultGraphic();
+						GraphicImpl g = (GraphicImpl) ASUtil
+								.createDefaultGraphic();
 						g.setSize(ASUtil.ff.literal(SVGICON_SIZE.height));
 						g.graphicalSymbols().clear();
 						g.graphicalSymbols().add(eg);
@@ -701,22 +757,27 @@ public class SVGSelector extends CancellableDialogAdapter {
 						if (geometryForm == GeometryForm.POINT) {
 							symbolRuleList = new SinglePointSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
-							((PointSymbolizer) symbolRuleList.getSymbolizers().get(0)).setGraphic(g);
+							((PointSymbolizer) symbolRuleList.getSymbolizers()
+									.get(0)).setGraphic(g);
 
 						} else if (geometryForm == GeometryForm.LINE) {
 							symbolRuleList = new SingleLineSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
-							((LineSymbolizer) symbolRuleList.getSymbolizers().get(0)).getStroke().setGraphicStroke(g);
+							((LineSymbolizer) symbolRuleList.getSymbolizers()
+									.get(0)).getStroke().setGraphicStroke(g);
 
 						} else {
 							symbolRuleList = new SinglePolygonSymbolRuleList("");
 							symbolRuleList.addNewDefaultLayer();
-							((PolygonSymbolizer) symbolRuleList.getSymbolizers().get(0)).getFill().setGraphicFill(g);
+							((PolygonSymbolizer) symbolRuleList
+									.getSymbolizers().get(0)).getFill()
+									.setGraphicFill(g);
 						}
 
 						symbolRuleList.setStyleName(newNameWithOutEnding);
 
-						String key = url.getFile() + symbolRuleList.getStyleName();
+						String key = url.getFile()
+								+ symbolRuleList.getStyleName();
 						if (weakImageCache.get(key) == null) {
 							/**
 							 * Render the image now
@@ -724,7 +785,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 							// LOGGER.debug("Rendering an Image for the cache.
 							// key = "+key );
 							try {
-								weakImageCache.put(key, symbolRuleList.getImage());
+								weakImageCache.put(key,
+										symbolRuleList.getImage());
 							} catch (Exception e) {
 								ExceptionDialog.show(SVGSelector.this, e);
 							}
@@ -736,7 +798,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 				} catch (java.net.UnknownHostException e) {
 					// This is handled in the done() method.
 				} catch (Exception e) {
-					ExceptionDialog.show(SwingUtil.getParentWindowComponent(SVGSelector.this), e);
+					ExceptionDialog.show(SwingUtil
+							.getParentWindowComponent(SVGSelector.this), e);
 				} finally {
 					if (in != null)
 						in.close();
@@ -809,7 +872,8 @@ public class SVGSelector extends CancellableDialogAdapter {
 	final static Pattern dirPattern = Pattern.compile("\"[^\"/]*/\"");
 	final static Pattern svgFilePattern = Pattern.compile("\"[^\"]*.svg\"");
 
-	void parseSldFileanmeFromApacheOutput(List<Object> entriesForTheList, Set<URL> sortedSymbolURLStrings, String line)
+	void parseSldFileanmeFromApacheOutput(List<Object> entriesForTheList,
+			Set<URL> sortedSymbolURLStrings, String line)
 			throws MalformedURLException {
 
 		Matcher matcher = svgFilePattern.matcher(line);

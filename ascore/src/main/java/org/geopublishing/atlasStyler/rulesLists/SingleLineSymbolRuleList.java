@@ -40,17 +40,6 @@ public class SingleLineSymbolRuleList extends SingleRuleList<LineSymbolizer> {
 
 	@Override
 	public void addNewDefaultLayer() {
-		//
-		// LineSymbolizer ls = StylingUtil.STYLE_BUILDER.createLineSymbolizer();
-		//
-		// StrokeImpl stroke = (StrokeImpl)
-		// StylingUtil.STYLE_BUILDER.createStroke();
-		// stroke.setGraphicStroke();
-		//
-		// ls.setStroke(stroke);
-
-		// addSymbolizer(ls);
-
 		addSymbolizer(ASUtil.createDefaultSymbolizer(getGeometryDescriptor()));
 	}
 

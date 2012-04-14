@@ -101,11 +101,24 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	 */
 	public enum RulesListType {
 
-		QUANTITIES_COLORIZED_LINE("/images/line_graduated_colors.png",
+		// SINGLESYMBOL
+		SINGLE_SYMBOL_POINT("/images/point_single_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		SINGLE_SYMBOL_LINE("/images/line_single_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/point_single_symbol.png",
+				"StylerSelection.single_symbol_centroids"),
+
+		SINGLE_SYMBOL_POLYGON("/images/polygon_single_symbol.png",
+				"StylerSelection.single_symbol"),
+
+		// QUANTITIES COLORED
+		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
-		// Quant Colored
-		QUANTITIES_COLORIZED_POINT("/images/point_graduated_colors.png",
+		QUANTITIES_COLORIZED_LINE("/images/line_graduated_colors.png",
 				"StylerSelection.quantities_colored"),
 
 		QUANTITIES_COLORIZED_POINT_FOR_POLYGON(
@@ -126,28 +139,11 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		RASTER_COLORMAP_RAMPS("/images/raster_colormap_ramps.png",
 				"StylerSelection.raster_ramp"),
 
-		// Raster RGBs
-		RASTER_RGB("/images/raster_rgb.png",
-				"StylerSelection.raster_rgb"),
+		// RASTER RGB / Bands
+		RASTER_RGB("/images/raster_rgb.png", "StylerSelection.raster_rgb"),
 
-		SINGLE_SYMBOL_LINE("/images/single_line_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		// POINTs
-		SINGLE_SYMBOL_POINT("/images/single_point_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		SINGLE_SYMBOL_POINT_FOR_POLYGON("/images/single_point_symbol.png",
-				"StylerSelection.single_symbol_centroids"),
-
-		SINGLE_SYMBOL_POLYGON("/images/single_polygon_symbol.png",
-				"StylerSelection.single_symbol"),
-
-		// TEST
+		// TEXT
 		TEXT_LABEL("/images/text_labeling.png", "StylerSelection.textLabeling"),
-
-		UNIQUE_VALUE_LINE("/images/line_unique_values.png",
-				"StylerSelection.categories_unique_values"),
 
 		// UUNIQUE VALUES
 		UNIQUE_VALUE_POINT("/images/point_unique_values.png",
@@ -155,6 +151,9 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 		UNIQUE_VALUE_POINT_FOR_POLYGON("/images/point_unique_values.png",
 				"StylerSelection.categories_unique_values_centroids"),
+
+		UNIQUE_VALUE_LINE("/images/line_unique_values.png",
+				"StylerSelection.categories_unique_values"),
 
 		UNIQUE_VALUE_POLYGON("/images/polygon_unique_values.png",
 				"StylerSelection.categories_unique_values");
@@ -170,13 +169,13 @@ public abstract class AbstractRulesList implements RulesListInterface {
 			// return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 			// RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
 			// Removed one...
-			
-			RulesListType[] rls = new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
-					RASTER_COLORMAP_INTERVALS };
 
-			if (as.getBands() > 1){
-				// No specific Band selected, use RGB 
-				rls = LangUtil.extendArray(rls, RASTER_RGB );
+			RulesListType[] rls = new RulesListType[] {
+					RASTER_COLORMAP_DISTINCTVALUES, RASTER_COLORMAP_INTERVALS };
+
+			if (as.getBands() > 1) {
+				// No specific Band selected, use RGB
+				rls = LangUtil.extendArray(rls, RASTER_RGB);
 			}
 			return rls;
 		}
@@ -187,11 +186,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		}
 
 		/**
-		 * Returns an Array of vector RulesLists available for the given Schema
-		 * 
-		 * @param gf
-		 * @param schema
-		 * @return
+		 * Returns an Array of vector RulesLists suitable for the given Schema
 		 */
 		public static RulesListType[] valuesFor(GeometryForm gf,
 				SimpleFeatureType schema) {
@@ -213,9 +208,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 					rtls = LangUtil.extendArray(rtls,
 							QUANTITIES_COLORIZED_POINT);
 				return rtls;
-			}
-
-			if (gf == GeometryForm.LINE) {
+			} else if (gf == GeometryForm.LINE) {
 
 				RulesListType[] rtls = new RulesListType[] { SINGLE_SYMBOL_LINE };
 
@@ -223,13 +216,10 @@ public abstract class AbstractRulesList implements RulesListInterface {
 					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_LINE,
 							TEXT_LABEL);
 				if (hasNumeric)
-					rtls = LangUtil
-							.extendArray(rtls, QUANTITIES_COLORIZED_LINE);
+					rtls = LangUtil.extendArray(rtls,
+							QUANTITIES_COLORIZED_LINE);
 				return rtls;
-
-			}
-
-			if (gf == GeometryForm.POLYGON) {
+			} else if (gf == GeometryForm.POLYGON) {
 
 				RulesListType[] rtls = new RulesListType[] {
 						SINGLE_SYMBOL_POLYGON, SINGLE_SYMBOL_POINT_FOR_POLYGON, };
@@ -240,27 +230,25 @@ public abstract class AbstractRulesList implements RulesListInterface {
 				if (hasNumeric)
 					rtls = LangUtil.extendArray(rtls,
 							QUANTITIES_COLORIZED_POLYGON,
-							QUANTITIES_COLORIZED_POINT_FOR_POLYGON);
+							QUANTITIES_COLORIZED_POINT_FOR_POLYGON
+							);
 				return rtls;
 
-			}
-
-			if (gf == GeometryForm.ANY) {
+			} else if (gf == GeometryForm.ANY) {
 
 				RulesListType[] rtls = new RulesListType[] {
 						SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_LINE,
 						SINGLE_SYMBOL_POLYGON };
 
 				if (hasText || hasNumeric)
-					rtls = LangUtil
-							.extendArray(rtls, UNIQUE_VALUE_POLYGON,
-									UNIQUE_VALUE_POLYGON, UNIQUE_VALUE_LINE,
-									TEXT_LABEL);
+					rtls = LangUtil.extendArray(rtls, TEXT_LABEL,
+							UNIQUE_VALUE_POINT, UNIQUE_VALUE_LINE,
+							UNIQUE_VALUE_POLYGON);
 				if (hasNumeric)
 					rtls = LangUtil.extendArray(rtls,
-							QUANTITIES_COLORIZED_POLYGON,
 							QUANTITIES_COLORIZED_POINT,
-							QUANTITIES_COLORIZED_LINE);
+							QUANTITIES_COLORIZED_LINE,
+							QUANTITIES_COLORIZED_POLYGON);
 				return rtls;
 
 			}
@@ -728,7 +716,8 @@ public abstract class AbstractRulesList implements RulesListInterface {
 
 			if (and1.getChildren().get(0) instanceof And) {
 				And and2 = (And) and1.getChildren().get(0);
-				if (and2.getChildren().get(0).equals(StylingUtil.RL_FILTER_APPLIED_FILTER)) {
+				if (and2.getChildren().get(0)
+						.equals(StylingUtil.RL_FILTER_APPLIED_FILTER)) {
 
 					// Import the rule list filter
 					setRlFilter(and2.getChildren().get(1));

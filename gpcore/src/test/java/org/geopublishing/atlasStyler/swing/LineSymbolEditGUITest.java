@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
 
@@ -28,7 +29,8 @@ public class LineSymbolEditGUITest extends TestingClass {
 			return;
 
 		// ps.setStroke(null);
-		LineSymbolEditGUI lineSymbolEditGUI = new LineSymbolEditGUI(ps);
+		LineSymbolEditGUI lineSymbolEditGUI = new LineSymbolEditGUI(
+				AsTestingUtil.getAtlasStyler(TestDatasetsVector.countryShp), ps);
 		// assertFalse(lineSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());
 		// lineSymbolEditGUI.getJCheckBoxFillGraphic().doClick();
 		// assertTrue(lineSymbolEditGUI.getJCheckBoxFillGraphic().isSelected());

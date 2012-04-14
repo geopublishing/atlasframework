@@ -1,4 +1,4 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.rulesLists;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geopublishing.atlasStyler.AtlasStyler;
 import org.geopublishing.atlasStyler.AtlasStyler.LANGUAGE_MODE;
+import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.classification.CLASSIFICATION_METHOD;
-import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
-import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
 import org.geotools.styling.ColorMap;
 import org.geotools.styling.ColorMapEntry;
 import org.geotools.styling.FeatureTypeStyle;

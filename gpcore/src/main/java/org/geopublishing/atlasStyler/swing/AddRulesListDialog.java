@@ -23,6 +23,8 @@ import de.schmitzm.swing.SwingUtil;
 
 public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 
+	private static final long serialVersionUID = -423737577157193930L;
+
 	private final RulesListJComboBox jComboBoxRuleListType;
 
 	private final AtlasStyler atlasStyler;
@@ -35,8 +37,6 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 		super(owner, ASUtil.R("AddRulesListDialog.title",
 				atlasStyler.getTitle()));
 
-		// Just copy the title of StylerDialog now..
-		// atlasStyler.getStyledFeatures().getTitle()
 		this.owner = owner;
 		this.atlasStyler = atlasStyler;
 
@@ -63,9 +63,6 @@ public class AddRulesListDialog extends AtlasDialog implements Cancellable {
 		il.invalidate();
 		il.validate();
 		il.repaint();
-
-		// pack();
-
 	}
 
 	private JPanel getImageLabel() {

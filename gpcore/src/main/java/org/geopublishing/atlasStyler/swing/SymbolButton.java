@@ -11,7 +11,6 @@
 package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
@@ -30,14 +29,15 @@ public class SymbolButton extends JButton {
 	private BufferedImage bImage;
 	private final Dimension iconSize;
 	SingleRuleList singleSymbolRuleList;
+	final protected AtlasStylerVector asv;
 
 	/**
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the default size
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
-	public SymbolButton(SingleRuleList singleSymbolRuleList) {
-		this(singleSymbolRuleList,
+	public SymbolButton(AtlasStylerVector as, SingleRuleList singleSymbolRuleList) {
+		this(as, singleSymbolRuleList,
 				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
@@ -45,7 +45,9 @@ public class SymbolButton extends JButton {
 	 * Creates a {@link JButton} with a preview image of the given
 	 * {@link SingleRuleList}. The button image will have the given dimensions.
 	 */
-	public SymbolButton(SingleRuleList singleSymbolRuleList, Dimension iconSize) {
+	public SymbolButton(AtlasStylerVector as, SingleRuleList singleSymbolRuleList, Dimension iconSize) {
+		
+		this.asv = as;
 
 		this.iconSize = iconSize;
 		// bImage = singleSymbolRuleList.getImage(iconSize);
@@ -61,8 +63,8 @@ public class SymbolButton extends JButton {
 	 * button image will have the default size
 	 * {@link AtlasStylerVector#DEFAULT_SYMBOL_PREVIEW_SIZE}.
 	 */
-	public SymbolButton(Symbolizer symbolizer, SimpleFeatureType featureType) {
-		this(symbolizer, featureType,
+	public SymbolButton(AtlasStylerVector asv, Symbolizer symbolizer, SimpleFeatureType featureType) {
+		this(asv, symbolizer, featureType,
 				AtlasStylerVector.DEFAULT_SYMBOL_PREVIEW_SIZE);
 	}
 
@@ -71,11 +73,10 @@ public class SymbolButton extends JButton {
 	 * {@link Symbolizer} applied to a given {@link SimpleFeatureType}. The
 	 * button image will have the given dimensions.
 	 */
-	public SymbolButton(Symbolizer symbolizer, SimpleFeatureType featureType,
+	public SymbolButton(AtlasStylerVector asv, Symbolizer symbolizer, SimpleFeatureType featureType,
 			Dimension iconSize) {
-		// image = new ImageIcon(ASUtil.getSymbolizerImage(symbolizer, iconSize,
-		// featureType));
-
+		this.asv = asv;
+		
 		this.iconSize = iconSize;
 		bImage = ASUtil.getSymbolizerImage(symbolizer, iconSize, featureType);
 		init();
@@ -83,25 +84,7 @@ public class SymbolButton extends JButton {
 
 	private void init() {
 		setIcon(new ImageIcon(bImage));
-		// setContentAreaFilled(false);
 		setIconTextGap(0);
-		// setSize(iconSize);
-	}
-
-	// @Override
-	// public Icon getIcon() {
-	// return image;
-	// }
-
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
-		// // setIcon(new ImageIcon(bImage));
-		// g.drawImage(bImage, 0, 0, null);
-		// g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
-		// g.drawRect(1, 1, bImage.getWidth() - 1, bImage.getHeight() - 1);
-		// g.setColor(Color.WHITE);
-		// g.drawString(getText(), 3, bImage.getHeight() - 3);
 	}
 
 	public void setSingleSymbolRuleList(SingleRuleList singleSymbolRuleList) {

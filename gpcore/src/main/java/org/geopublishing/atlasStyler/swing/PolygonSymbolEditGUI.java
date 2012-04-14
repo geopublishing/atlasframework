@@ -104,8 +104,9 @@ public class PolygonSymbolEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @param graphic
 	 */
-	public PolygonSymbolEditGUI(
+	public PolygonSymbolEditGUI(final AtlasStylerVector asv, 
 			final org.geotools.styling.PolygonSymbolizer symbolizer) {
+		super(asv);
 		this.symbolizer = symbolizer;
 		initialize();
 	}
@@ -199,7 +200,7 @@ public class PolygonSymbolEditGUI extends AbstractStyleEditGUI {
 												.createGraphic()));
 					}
 
-					JDialog editFillGraphicJDialog = new GraphicEditGUIinDialog(
+					JDialog editFillGraphicJDialog = new GraphicEditGUIinDialog(asv,
 							SwingUtil
 									.getParentWindow(PolygonSymbolEditGUI.this),
 							symbolizer.getFill());

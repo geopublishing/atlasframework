@@ -36,7 +36,6 @@ import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.MARKTYPE;
-import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Fill;
@@ -59,11 +58,9 @@ import de.schmitzm.swing.SwingUtil;
 public class GraphicEditGUI extends AbstractStyleEditGUI {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-
-
 	private final Graphic graphic;
 
-	private JComboBox jComboBoxMarkType = null;
+	private JComboBox<MARKTYPE> jComboBoxMarkType = null;
 
 	private JPanel jPanelStroke = null;
 
@@ -73,21 +70,21 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private final JLabel jLabelStrokeWidth = new JLabel();
 
-	private JComboBox jComboBoxStrokeWidth = null;
+	private JComboBox<Float> jComboBoxStrokeWidth = null;
 
 	private final JLabel jLabelStrokeOpacity = new JLabel();
 
-	private JComboBox jComboBoxStrokeOpacity = null;
+	private JComboBox<Float> jComboBoxStrokeOpacity = null;
 
 	private JPanel jPanel = null;
 
 	private JLabel jLabelSize = null;
 
-	private JComboBox jComboBoxGraphicSize = null;
+	private JComboBox<Float> jComboBoxGraphicSize = null;
 
 	private JLabel jLabelOpacity = null;
 
-	private JComboBox jComboBoxGraphicOpacity = null;
+	private JComboBox<Float> jComboBoxGraphicOpacity = null;
 
 	protected boolean mark_mode = true;
 
@@ -99,12 +96,11 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private JLabel jLabelFillOpacity = new JLabel();
 
-	private JComboBox jComboBoxFillOpacity = null;
+	private JComboBox<Float> jComboBoxFillOpacity = null;
 
-	private final JLabel jLabelRotation = new JLabel(
-			ASUtil.R("RotationLabel"));
+	private final JLabel jLabelRotation = new JLabel(ASUtil.R("RotationLabel"));
 
-	private JComboBox jComboBoxGraphicRotation = null;
+	private JComboBox<Double> jComboBoxGraphicRotation = null;
 
 	private JCheckBox jCheckBoxFill = null;
 
@@ -114,23 +110,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	Fill rememberFill;
 
-	// private JCheckBox jCheckBoxDisplacement = null;
-	//
-	// private JPanel jPanelDisplacement = null;
-	//
-	// private JLabel jLabelDisplacementX = null;
-	//
-	// private JComboBox jComboBoxDisplacementX = null;
-	//
-	// private JLabel jLabelDisplacementY = null;
-	//
-	// private JComboBox jComboBoxDisplacementY = null;
-
 	private JPanel jPanelExternalGraphic = null;
-
-	private final JLabel jLabelEG = new JLabel();
-
-	private SVGSelector selectExternalGraphicDialog;
 
 	/**
 	 * When switching the {@link Graphic} to use a {@link Mark} we backup the
@@ -154,7 +134,9 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 *            Optionally defines how the graphic will be used, so that it
 	 *            can make a good preview.
 	 */
-	public GraphicEditGUI(final Graphic graphic_, GeometryForm geomForm) {
+	public GraphicEditGUI(final AtlasStylerVector asv, final Graphic graphic_, GeometryForm geomForm) {
+		super(asv);
+		
 		this.geometryForm = geomForm;
 
 		/**
@@ -200,7 +182,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private void initialize() {
 
 		setLayout(new MigLayout("wrap 2"));
-		this.add(new JLabel(AtlasStylerVector.R("GraphicEdit.Type")));
+		this.add(new JLabel(ASUtil.R("GraphicEdit.Type")));
 		this.add(getJComboBoxMarkType());
 		this.add(getJPanelGraphic(), "span 2");
 
@@ -220,15 +202,15 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxMarkType() {
+	private JComboBox<MARKTYPE> getJComboBoxMarkType() {
 		if (jComboBoxMarkType == null) {
-			jComboBoxMarkType = new JComboBox(new DefaultComboBoxModel(
-					MARKTYPE.values()));
+			jComboBoxMarkType = new JComboBox<MARKTYPE>(
+					new DefaultComboBoxModel<MARKTYPE>(MARKTYPE.values()));
 
 			// This renderer will use the labels from the localization
 			jComboBoxMarkType.setRenderer(new DefaultListCellRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList list,
+				public Component getListCellRendererComponent(JList<?> list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 
@@ -236,8 +218,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 							.getListCellRendererComponent(list, value, index,
 									isSelected, cellHasFocus);
 
-					fromSuper.setText(AtlasStylerVector.R("Marktyp."
-							+ value.toString() + ".Label"));
+					fromSuper.setText(ASUtil.R("Marktyp." + value.toString()
+							+ ".Label"));
 
 					return fromSuper;
 				}
@@ -347,7 +329,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	protected void updateToMarkMode() {
 		// External Graphic
-		getJPanelExternalgraphic().setEnabled(!mark_mode);
+		getJPanelExternalGraphic().setEnabled(!mark_mode);
 
 		// Fill Panel
 		getJCheckBoxFill().setEnabled(mark_mode);
@@ -371,7 +353,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 				Stroke s = someMark.getStroke();
 				if (s != null) {
-					jButtonStrokeColor.setColor( StylingUtil.getColorFromExpression(s.getColor()));
+					jButtonStrokeColor.setColor(StylingUtil
+							.getColorFromExpression(s.getColor()));
 				} else {
 					getJButtonStrokeColor().setEnabled(false);
 					jLabelStrokeColor.setEnabled(false);
@@ -401,7 +384,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			gridBagConstraints8.gridx = 4;
 			gridBagConstraints8.insets = new Insets(0, 15, 0, 0);
 			gridBagConstraints8.gridy = 0;
-			jLabelStrokeOpacity.setText(AtlasStylerVector.R("OpacityLabel"));
+			jLabelStrokeOpacity.setText(ASUtil.R("OpacityLabel"));
 			GridBagConstraints gridBagConstraints7 = new GridBagConstraints();
 			gridBagConstraints7.fill = GridBagConstraints.NONE;
 			gridBagConstraints7.gridy = 0;
@@ -412,7 +395,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			gridBagConstraints6.gridx = 2;
 			gridBagConstraints6.insets = new Insets(0, 15, 0, 0);
 			gridBagConstraints6.gridy = 0;
-			jLabelStrokeWidth.setText(AtlasStylerVector.R("WidthLabel"));
+			jLabelStrokeWidth.setText(ASUtil.R("WidthLabel"));
 			GridBagConstraints gridBagConstraints5 = new GridBagConstraints();
 			gridBagConstraints5.gridx = 1;
 			gridBagConstraints5.insets = new Insets(5, 5, 5, 5);
@@ -421,10 +404,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			gridBagConstraints4.gridx = 0;
 			gridBagConstraints4.insets = new Insets(0, 5, 0, 0);
 			gridBagConstraints4.gridy = 0;
-			jLabelStrokeColor.setText(AtlasStylerVector.R("ColorLabel"));
+			jLabelStrokeColor.setText(ASUtil.R("ColorLabel"));
 			jPanelStroke = new JPanel();
 			jPanelStroke.setLayout(new GridBagLayout());
-			jPanelStroke.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+			jPanelStroke.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("GraphicEdit.Stroke.Title")));
 			jPanelStroke.add(jLabelStrokeColor, gridBagConstraints4);
 			jPanelStroke.add(getJButtonStrokeColor(), gridBagConstraints5);
@@ -460,8 +443,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 						}
 
 						Color newColor = AVSwingUtil.showColorChooser(
-								GraphicEditGUI.this, AtlasStylerVector
-										.R("Stroke.ColorChooserDialog.Title"),
+								GraphicEditGUI.this,
+								ASUtil.R("Stroke.ColorChooserDialog.Title"),
 								oldColor);
 
 						if (newColor != null && newColor != oldColor) {
@@ -495,13 +478,13 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxStrokeWidth() {
+	private JComboBox<Float> getJComboBoxStrokeWidth() {
 		if (jComboBoxStrokeWidth == null) {
 
-			jComboBoxStrokeWidth = new JComboBox();
+			jComboBoxStrokeWidth = new JComboBox<Float>();
 
-			jComboBoxStrokeWidth
-					.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
+			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel<Float>(
+					WIDTH_VALUES));
 
 			jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
 
@@ -546,7 +529,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxStrokeOpacity() {
+	private JComboBox<Float> getJComboBoxStrokeOpacity() {
 		if (jComboBoxStrokeOpacity == null) {
 			jComboBoxStrokeOpacity = new JComboBox();
 			jComboBoxStrokeOpacity.setModel(new DefaultComboBoxModel(
@@ -590,10 +573,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		if (jPanel == null) {
 			jPanel = new JPanel(new MigLayout("wrap 2"));
 
-			jLabelOpacity = new JLabel(AtlasStylerVector.R("OpacityLabel"));
-			jLabelSize = new JLabel(AtlasStylerVector.R("SizeLabel"));
+			jLabelOpacity = new JLabel(ASUtil.R("OpacityLabel"));
+			jLabelSize = new JLabel(ASUtil.R("SizeLabel"));
 
-			jPanel.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
+			jPanel.setBorder(BorderFactory.createTitledBorder(ASUtil
 					.R("GraphicEdit.Graphic.Title")));
 
 			JPanel generalSettingsPanel = new JPanel();
@@ -617,7 +600,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			// jPanel.add(getJPanelDisplacement(), "left, sgx2");
 
 			jPanel.add(new JLabel(), "right, sgx"); // Gap
-			jPanel.add(getJPanelExternalgraphic(), "left, sgx2");
+			jPanel.add(getJPanelExternalGraphic(), "left, sgx2");
 		}
 		return jPanel;
 	}
@@ -627,11 +610,11 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxGraphicSize() {
+	private JComboBox<Float> getJComboBoxGraphicSize() {
 		if (jComboBoxGraphicSize == null) {
-			jComboBoxGraphicSize = new JComboBox();
-			jComboBoxGraphicSize
-					.setModel(new DefaultComboBoxModel(SIZE_VALUES));
+			jComboBoxGraphicSize = new JComboBox<Float>();
+			jComboBoxGraphicSize.setModel(new DefaultComboBoxModel<Float>(
+					SIZE_VALUES));
 
 			Expression size = graphic.getSize();
 
@@ -668,10 +651,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxGraphicOpacity() {
+	private JComboBox<Float> getJComboBoxGraphicOpacity() {
 		if (jComboBoxGraphicOpacity == null) {
-			jComboBoxGraphicOpacity = new JComboBox();
-			jComboBoxGraphicOpacity.setModel(new DefaultComboBoxModel(
+			jComboBoxGraphicOpacity = new JComboBox<Float>();
+			jComboBoxGraphicOpacity.setModel(new DefaultComboBoxModel<Float>(
 					OPACITY_VALUES));
 
 			Expression opacity = graphic.getOpacity();
@@ -738,8 +721,9 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			jLabelFillColor.setText(AtlasStylerVector.R("ColorLabel"));
 			jPanelFill = new JPanel();
 			jPanelFill.setLayout(new GridBagLayout());
-			jPanelFill.setBorder(BorderFactory.createTitledBorder(AtlasStylerVector
-					.R("GraphicEdit.Fill.Title")));
+			jPanelFill.setBorder(BorderFactory
+					.createTitledBorder(AtlasStylerVector
+							.R("GraphicEdit.Fill.Title")));
 			jPanelFill.add(jLabelFillColor, gridBagConstraints15);
 			jPanelFill.add(getJButtonFillColor(), gridBagConstraints16);
 			jPanelFill.add(jLabelFillOpacity, gridBagConstraints17);
@@ -749,9 +733,6 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	}
 
 	/**
-	 * This method initializes jComboBox
-	 * 
-	 * @return javax.swing.JComboBox
 	 */
 	private JButton getJButtonFillColor() {
 		if (jButtonFillColor == null) {
@@ -767,8 +748,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 					Color newColor = AVSwingUtil.showColorChooser(
 							GraphicEditGUI.this,
-							AtlasStylerVector.R("Fill.ColorChooserDialog.Title"),
-							color);
+							ASUtil.R("Fill.ColorChooserDialog.Title"), color);
 
 					if (newColor != null) {
 						Expression colorExpression = StylingUtil.STYLE_BUILDER
@@ -790,7 +770,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			if (mark_mode) {
 				Fill f = graphic.getMarks()[0].getFill();
 				if (f != null) {
-					jButtonFillColor.setColor( StylingUtil.getColorFromExpression(f.getColor()));
+					jButtonFillColor.setColor(StylingUtil
+							.getColorFromExpression(f.getColor()));
 				} else {
 					jButtonFillColor.setEnabled(false);
 					jLabelFillColor.setEnabled(false);
@@ -809,10 +790,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxFillOpacity() {
+	private JComboBox<Float> getJComboBoxFillOpacity() {
 		if (jComboBoxFillOpacity == null) {
-			jComboBoxFillOpacity = new JComboBox();
-			jComboBoxFillOpacity.setModel(new DefaultComboBoxModel(
+			jComboBoxFillOpacity = new JComboBox<Float>();
+			jComboBoxFillOpacity.setModel(new DefaultComboBoxModel<Float>(
 					OPACITY_VALUES));
 
 			if (mark_mode) {
@@ -851,10 +832,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxGraphicRotation() {
+	private JComboBox<Double> getJComboBoxGraphicRotation() {
 		if (jComboBoxGraphicRotation == null) {
-			jComboBoxGraphicRotation = new JComboBox(new DefaultComboBoxModel(
-					ROTATION_VALUES));
+			jComboBoxGraphicRotation = new JComboBox<Double>(
+					new DefaultComboBoxModel<Double>(ROTATION_VALUES));
 			jComboBoxGraphicRotation.setRenderer(ROTATION_VALUES_RENDERER);
 
 			jComboBoxGraphicRotation.setSelectedItem(Double.valueOf(graphic
@@ -990,30 +971,31 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		}
 		return jCheckBoxStroke;
 	}
- 
+
 	/**
-	 * This method initializes jPanel2
-	 * 
-	 * @return javax.swing.JPanel
+	 * This method initializes the Panel which allows to define an
+	 * ExternalGraphic.
 	 */
-	private JPanel getJPanelExternalgraphic() {
+	private JPanel getJPanelExternalGraphic() {
 		if (jPanelExternalGraphic == null) {
-			GridBagConstraints gridBagConstraints32 = new GridBagConstraints();
-			gridBagConstraints32.gridx = 1;
-			gridBagConstraints32.gridy = 0;
-			GridBagConstraints gridBagConstraints31 = new GridBagConstraints();
-			gridBagConstraints31.gridx = 0;
-			gridBagConstraints31.gridy = 0;
-			gridBagConstraints31.insets = new Insets(5, 5, 5, 5);
-			jLabelEG.setText(AtlasStylerVector.R("ExternalGraphicLabel"));
 			jPanelExternalGraphic = new JPanel();
-			jPanelExternalGraphic.setLayout(new GridBagLayout());
+			jPanelExternalGraphic.setLayout(new MigLayout());
 			jPanelExternalGraphic.setBorder(BorderFactory
-					.createTitledBorder(AtlasStylerVector
+					.createTitledBorder(ASUtil
 							.R("GraphicEdit.ExternalGraphic.Title")));
-			jPanelExternalGraphic.add(jLabelEG, gridBagConstraints31);
-			jPanelExternalGraphic.add(getJButtonExtGraphic(geometryForm, graphic),
-					gridBagConstraints32);
+
+			// The first button is for images like SVG etc.
+			jPanelExternalGraphic.add(
+					new JLabel(ASUtil.R("ExternalGraphicLabel")), "");
+			jPanelExternalGraphic.add(
+					getJButtonExtGraphic(geometryForm, graphic), "");
+
+			// An external graphic may also be a chart provided by eastwood /
+			// gt-charts
+			jPanelExternalGraphic.add(
+					new JLabel(ASUtil.R("ChartGraphicLabel")), "gap 70");
+			jPanelExternalGraphic.add(
+					getJButtonChartGraphic(geometryForm, graphic), "");
 		}
 		return jPanelExternalGraphic;
 	}
