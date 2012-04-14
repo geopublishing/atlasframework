@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
-import org.geopublishing.atlasStyler.ChartGraphic;
+import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic;
 import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geotools.styling.ExternalGraphic;
 

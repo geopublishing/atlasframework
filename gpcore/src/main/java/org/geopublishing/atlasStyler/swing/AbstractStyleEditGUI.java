@@ -36,7 +36,7 @@ import javax.swing.JList;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.ChartGraphic;
+import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic;
 import org.geopublishing.atlasStyler.chartsymbol.swing.ChartSymbolEditDialog;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
@@ -48,6 +48,7 @@ import org.geotools.styling.Symbolizer;
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.ExceptionDialog;
 import de.schmitzm.swing.JPanel;
@@ -488,8 +489,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 							"application/chart")) {
 						// A chart preview image is created by replacing all
 						// ATTRIBUTE-Holders with number between 0 and 100
-						Symbolizer symbolizer = ChartGraphic
-								.getFixDataSymbolizer(graphic);
+						Symbolizer symbolizer = StylingUtil.STYLE_BUILDER
+								.createPointSymbolizer(ChartGraphic
+										.getFixDataSymbolizer(graphic));
 
 						if (symbolizer != null) {
 							// and then render it with geotools like any other

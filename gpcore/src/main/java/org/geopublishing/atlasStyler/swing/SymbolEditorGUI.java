@@ -40,9 +40,9 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.ChartGraphic;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.factory.CommonFactoryFinder;
@@ -137,7 +137,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	public SymbolEditorGUI(Component owner, AtlasStylerVector asv,
 			SingleRuleList<? extends Symbolizer> singleSymbolRuleList) {
 		super(owner, DIALOG_TITLE);
-		
+
 		this.asv = asv;
 
 		this.singleSymbolRuleList = (SingleRuleList<Symbolizer>) singleSymbolRuleList;
@@ -196,8 +196,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 		// System.out.println("generating a new layer image");
 
 		Rule rule = CommonFactoryFinder.getStyleFactory(null).createRule();
-		
-		if (ChartGraphic.isChart(symb) )
+
+		if (ChartGraphic.isChart(symb))
 			symb = ChartGraphic.getFixDataSymbolizer(symb);
 
 		rule.setSymbolizers(new Symbolizer[] { symb });
@@ -244,9 +244,8 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	};
 
 	/**
-	 * This method initializes jPanel
-	 * 
-	 * @return javax.swing.JPanel
+	 * This Panel shows one previerw icon, which is the sum of all layers
+	 * (Symbolizers) listed in {@link #getJPanelLayers()}
 	 */
 	private JPanel getJPanelPreview() {
 		if (jPanelPreview == null) {
@@ -266,9 +265,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	}
 
 	/**
-	 * This method initializes jPanel1
-	 * 
-	 * @return javax.swing.JPanel
+	 * This panel shows the layers (Sybolizers) that this Symbol consists of.
+	 * The composite of these layers (Symbolizers) is previewd in
+	 * {@link #getJPanelPreview()}
 	 */
 	private JPanel getJPanelLayers() {
 		JPanel jPanelLayers;
@@ -287,7 +286,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	}
 
 	private Symbolizer guiIsUpToDateForThisSymbolizer = null;
-	
+
 	final private AtlasStylerVector asv;
 
 	/**
@@ -298,12 +297,10 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	private JPanel getJPanelProperties() {
 		if (jPanelProperties == null) {
 			jPanelProperties = new JPanel(new BorderLayout());
-			jPanelProperties.setBorder(BorderFactory
-					.createTitledBorder(ASUtil
-							.R("SymbolEditor.Properties")));
+			jPanelProperties.setBorder(BorderFactory.createTitledBorder(ASUtil
+					.R("SymbolEditor.Properties")));
 
 			addPropertyChangeListener(new PropertyChangeListener() {
-
 
 				@Override
 				public void propertyChange(PropertyChangeEvent evt) {
@@ -340,15 +337,17 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 							case POINT:
 								Graphic graphic = ((PointSymbolizer) selectedSymbolizer)
 										.getGraphic();
-								symbolEditGUI = new GraphicEditGUI(asv, graphic,
-										GeometryForm.POINT);
+								symbolEditGUI = new GraphicEditGUI(asv,
+										graphic, GeometryForm.POINT);
 								break;
 							case LINE:
-								symbolEditGUI = new LineSymbolEditGUI(asv, 
+								symbolEditGUI = new LineSymbolEditGUI(
+										asv,
 										((org.geotools.styling.LineSymbolizer) selectedSymbolizer));
 								break;
 							case POLYGON:
-								symbolEditGUI = new PolygonSymbolEditGUI(asv, 
+								symbolEditGUI = new PolygonSymbolEditGUI(
+										asv,
 										((PolygonSymbolizer) selectedSymbolizer));
 								break;
 							default:
@@ -411,7 +410,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 								return new JLabel(new ImageIcon(
 										(BufferedImage) value));
 							else
-								return new JLabel("add a layer to your symbol"); //i8n
+								return new JLabel("add a layer to your symbol"); // i8n
 							// TODO// Default// Image
 							// that
 							// tells

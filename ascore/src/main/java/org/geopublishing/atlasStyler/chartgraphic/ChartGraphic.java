@@ -1,22 +1,18 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.chartgraphic;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
+import org.geotools.renderer.lite.gridcoverage2d.StyleVisitorAdapter;
 import org.geotools.styling.ExternalGraphic;
 import org.geotools.styling.Graphic;
-import org.geotools.styling.LineSymbolizer;
-import org.geotools.styling.PointSymbolizer;
-import org.geotools.styling.PolygonSymbolizer;
 import org.geotools.styling.Symbolizer;
-import org.opengis.style.Fill;
-import org.opengis.style.GraphicFill;
-import org.opengis.style.GraphicalSymbol;
 
 import de.schmitzm.geotools.styling.StylingUtil;
-import de.schmitzm.regex.RegexCache;
 
 /**
  * https://developers.google.com/chart/image/docs/chart_params
@@ -31,29 +27,18 @@ public class ChartGraphic {
 	public static boolean isChart(Symbolizer symbolizer) {
 		if (symbolizer == null)
 			return false;
-		if (symbolizer instanceof PointSymbolizer) {
-			Graphic graphic = ((PointSymbolizer) symbolizer).getGraphic();
-			return isChart(graphic);
-		} else if (symbolizer instanceof PolygonSymbolizer) {
-			Fill fill = ((PolygonSymbolizer) symbolizer).getFill();
-			if (fill == null)
-				return false;
-			GraphicFill gf = fill.getGraphicFill();
-			if (gf == null)
-				return false;
-			// TODO
-			// TODO
-			return false;
-			// return isChart(gf.graphicalSymbols());
-		} else if (symbolizer instanceof LineSymbolizer) {
-			org.geotools.styling.Stroke fill = ((LineSymbolizer) symbolizer)
-					.getStroke();
-			if (fill == null)
-				return false;
-			Graphic graphic = fill.getGraphicStroke();
-			return isChart(graphic);
-		}
-		return false;
+		
+		final AtomicBoolean isChart = new AtomicBoolean(false);
+		StyleVisitorAdapter v = new StyleVisitorAdapter() {
+			
+			@Override
+			public void visit(ExternalGraphic eg) {
+				isChart.set(isChart(eg));
+			}
+		};
+		symbolizer.accept(v);
+		
+		return isChart.get();
 	}
 
 	/**
@@ -61,21 +46,29 @@ public class ChartGraphic {
 	 * a URL that starts with "http://chart?"
 	 */
 	public static boolean isChart(Graphic graphic) {
+		if (graphic == null)
+			return false;
+		final AtomicBoolean isChart = new AtomicBoolean(false);
+		StyleVisitorAdapter v = new StyleVisitorAdapter() {
+			
+			@Override
+			public void visit(ExternalGraphic eg) {
+				isChart.set(isChart(eg));
+			}
+		};
+		graphic.accept(v);
+		
+		return isChart.get();
+	}
+
+	public static boolean isChart(ExternalGraphic eg) {
 		try {
-			if (graphic == null)
-				return false;
-			List<GraphicalSymbol> graphicalSymbols = graphic.graphicalSymbols();
-			if (graphicalSymbols.size() == 0)
-				return false;
-			GraphicalSymbol graphicalSymbol = graphicalSymbols.get(0);
-			if (!(graphicalSymbol instanceof ExternalGraphic))
-				return false;
-			ExternalGraphic eg = (ExternalGraphic) graphicalSymbol;
 			if (eg.getLocation() == null)
 				return false;
 			if (eg.getLocation().toString().toLowerCase()
 					.startsWith("http://chart?"))
 				return true;
+
 		} catch (MalformedURLException e) {
 		}
 		return false;
@@ -152,51 +145,16 @@ public class ChartGraphic {
 	static final Logger LOGGER = Logger.getLogger(ChartGraphic.class);
 
 	public static Symbolizer getFixDataSymbolizer(Symbolizer sym) {
-		if (!isChart(sym))
-			return null;
-		if (sym instanceof PointSymbolizer) {
-			return getFixDataSymbolizer(((PointSymbolizer) sym).getGraphic());
-		} else {
-			// TODO
-			// TODO
-			LOGGER.warn("TODO");
-		}
-
-		return null;
-
+		ChartGraphicPreivewFixStyleVisitor visitor = new ChartGraphicPreivewFixStyleVisitor();
+		sym.accept(visitor);
+		return (Symbolizer) visitor.getCopy();
 	}
 
-	public static Symbolizer getFixDataSymbolizer(Graphic graphic) {
+	public static Graphic getFixDataSymbolizer(Graphic graphic) {
 
-		if (!isChart(graphic))
-			return null;
-
-		ExternalGraphic externalGraphic = graphic.getExternalGraphics()[0];
-
-		String url2;
-		try {
-			url2 = externalGraphic.getLocation().toString();
-			String regex = "\\$\\{.*?\\}";
-			while (RegexCache.getInstance().getPattern(regex).matcher(url2)
-					.find()) {
-				url2 = url2.replaceFirst(regex, ((int) (Math.random() * 100))
-						+ "");
-			}
-
-			ExternalGraphic externalGraphic2 = StylingUtil.STYLE_BUILDER
-					.createExternalGraphic(url2, externalGraphic.getFormat());
-			Graphic graphic2 = StylingUtil.STYLE_BUILDER.createGraphic(
-					externalGraphic2, null, null);
-
-			PointSymbolizer symbolizer = StylingUtil.STYLE_BUILDER
-					.createPointSymbolizer(graphic2);
-
-			return symbolizer;
-		} catch (MalformedURLException e) {
-			LOGGER.error("Could not create a fixed data chart symbolizer", e);
-			return null;
-		}
-
+		ChartGraphicPreivewFixStyleVisitor visitor = new ChartGraphicPreivewFixStyleVisitor();
+		graphic.accept(visitor);
+		return (Graphic) visitor.getCopy();
 	}
 
 }

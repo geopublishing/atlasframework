@@ -1,9 +1,10 @@
-package org.geopublishing.atlasStyler;
+package org.geopublishing.atlasStyler.chartgraphic;
 
 import static org.junit.Assert.assertNotNull;
 
 import java.util.Vector;
 
+import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geotools.styling.ExternalGraphic;
 import org.junit.Test;

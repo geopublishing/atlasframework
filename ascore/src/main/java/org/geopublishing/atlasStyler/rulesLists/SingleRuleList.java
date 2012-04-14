@@ -29,6 +29,7 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.chartgraphic.ChartGraphicPreivewFixStyleVisitor;
 import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
@@ -232,9 +233,17 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 */
 	public BufferedImage getImage(Dimension size) {
 
+		Rule rule = getRule();
+		// Since this rule might well contain any ChartSymbols (which can not be
+		// previewed without modification) we have to check all Symbolizers and
+		// change any Chart-Symbolizers for proper preview.
+		DuplicatingStyleVisitor sv = new ChartGraphicPreivewFixStyleVisitor();
+		sv.visit(rule);
+		rule = (Rule) sv.getCopy();
+
 		BufferedImage image = LegendIconFeatureRenderer
 				.getInstance()
-				.createImageForRule(getRule(),
+				.createImageForRule(rule,
 						ASUtil.createFeatureType(getGeometryDescriptor()), size);
 
 		return image;
