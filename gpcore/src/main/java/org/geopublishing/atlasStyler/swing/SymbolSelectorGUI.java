@@ -197,7 +197,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	private JPanel getJPanelPreview() {
 		if (jPanelPreview == null) {
 			jPanelPreview = new JPanel(new MigLayout("align center, w 100"),
-					AtlasStylerVector.R("SymbolSelector.Preview.BorderTitle"));
+					ASUtil.R("SymbolSelector.Preview.BorderTitle"));
 			jLabelPreviewIcon.setOpaque(false);
 			jPanelPreview.add(jLabelPreviewIcon, "align center");
 			singleSymbolRuleList
@@ -215,9 +215,9 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 */
 	private JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {
-			jLabelRotation = new JLabel(AtlasStylerVector.R("RotationLabel"));
-			jLabelSize = new JLabel(AtlasStylerVector.R("SizeLabel"));
-			jLabelColor = new JLabel(AtlasStylerVector.R("ColorLabel"));
+			jLabelRotation = new JLabel(ASUtil.R("RotationLabel"));
+			jLabelSize = new JLabel(ASUtil.R("SizeLabel"));
+			jLabelColor = new JLabel(ASUtil.R("ColorLabel"));
 			jPanelOptions = new JPanel(new MigLayout("wrap 2"));
 			jPanelOptions.setBorder(BorderFactory
 					.createEmptyBorder(5, 15, 5, 5));

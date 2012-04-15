@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.swing;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,6 +18,7 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import net.miginfocom.swing.MigLayout;
@@ -26,17 +28,20 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
+import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geotools.styling.Symbolizer;
 
+import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
 
-public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? extends Symbolizer>> implements
+public class SingleSymbolGUI extends
+		AbstractRulesListGui<SingleRuleList<? extends Symbolizer>> implements
 		ClosableSubwindows {
 	protected static final Logger LOGGER = LangUtil
 			.createLogger(SingleSymbolGUI.class);
@@ -49,7 +54,8 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	 * @param singleSymbolRuleList
 	 * @param openWindows
 	 */
-	public SingleSymbolGUI(AtlasStylerVector asv, final SingleRuleList<?> singleSymbolRuleList) {
+	public SingleSymbolGUI(AtlasStylerVector asv,
+			final SingleRuleList<?> singleSymbolRuleList) {
 		super(singleSymbolRuleList);
 		this.asv = asv;
 		if (singleSymbolRuleList == null)
@@ -66,8 +72,7 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 
 		@Override
 		public void changed(RuleChangedEvent e) {
-			jButtonSymbolSelector.setIcon(new ImageIcon(rulesList
-					.getImage()));
+			jButtonSymbolSelector.setIcon(new ImageIcon(rulesList.getImage()));
 		}
 
 	};
@@ -82,8 +87,7 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	private void initialize() {
 		JLabel jLabelSymbol = new JLabel(
 				ASUtil.R("SingleSymbolGUI.Symbol.Label"));
-		jLabelSymbol.setToolTipText(ASUtil
-				.R("SingleSymbolGUI.Symbol.TT"));
+		jLabelSymbol.setToolTipText(ASUtil.R("SingleSymbolGUI.Symbol.TT"));
 
 		JLabel jLabelHeading = new JLabel(
 				ASUtil.R("SingleSymbolGUI.Heading.Label"));
@@ -93,14 +97,42 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 		this.setLayout(new MigLayout());
 		this.add(jLabelHeading, "span 2, wrap");
 		this.add(jLabelSymbol);
-		this.add(getJButtonSymbol(), "wrap");
+		this.add(getJButtonSymbol(), "");
+		this.add(getJCheckBoxCentroid(), "wrap");
 
 		JLabel jLabelTranslation = new JLabel(
 				ASUtil.R("SingleSymbolGUI.Label.Label"));
-		jLabelTranslation.setToolTipText(ASUtil
-				.R("SingleSymbolGUI.Label.TT"));
+		jLabelTranslation.setToolTipText(ASUtil.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
 		this.add(getjLabelTranslationEdit(), "wrap");
+	}
+
+	JCheckBox jCheckBoxCentroid = null;
+
+	/**
+	 * TODO return An empty panel if the styled type is not Polygon
+	 */
+	private Component getJCheckBoxCentroid() {
+
+		if (!(getRulesList().getGeometryForm() != GeometryForm.POLYGON && asv
+				.getStyledFeatures().getGeometryForm() == GeometryForm.POLYGON))
+			return new JLabel();
+
+		if (jCheckBoxCentroid == null
+				&& getRulesList() instanceof SinglePointSymbolRuleList) {
+			final SinglePointSymbolRuleList spsrl = (SinglePointSymbolRuleList) getRulesList();
+
+			jCheckBoxCentroid = new JCheckBox(new AbstractAction("Centroids (gs 2.6+)") { //i8n
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					spsrl.setUseCentroidFunction(jCheckBoxCentroid.isSelected());
+				}
+			});
+
+			jCheckBoxCentroid.setSelected(spsrl.isUseCentroidFunction());
+		}
+		return jCheckBoxCentroid;
 	}
 
 	/**
@@ -165,8 +197,7 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 								if (evt.getPropertyName()
 										.equals(TranslationAskJDialog.PROPERTY_APPLY_AND_CLOSE)) {
 
-									rulesList
-											.setRuleTitle(translation);
+									rulesList.setRuleTitle(translation);
 									jLabelTranslationEdit.setText(translation
 											.toString());
 								}
@@ -209,9 +240,8 @@ public class SingleSymbolGUI extends AbstractRulesListGui<SingleRuleList<? exten
 	@Override
 	public void dispose() {
 		// Not needed because its a weak listener list, but can't be bad:
-		rulesList
-				.removeListener(listenToChangesInTheRulesToUpdateButton);
-		
+		rulesList.removeListener(listenToChangesInTheRulesToUpdateButton);
+
 		super.dispose();
 	}
 

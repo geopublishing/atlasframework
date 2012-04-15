@@ -43,6 +43,7 @@ import org.opengis.util.InternationalString;
 import de.schmitzm.data.Copyable;
 import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.LegendIconFeatureRenderer;
+import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicPreviewFixStyleVisitor;
@@ -55,6 +56,12 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			.createLogger(SingleRuleList.class);
 
 	private String label = "title missing";
+
+	/**
+	 * Intended use: Set true if you want a point symbolizer on a multi-polygon
+	 * geometry to paint only the centroid, not the center of each polygon.
+	 */
+	private boolean useCentroidFunction = false;
 
 	/**
 	 * This {@link Vector} represents a list of all {@link Symbolizer}s that
@@ -234,7 +241,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	public BufferedImage getImage(Dimension size) {
 
 		Rule rule = getRule();
-		
+
 		// Since this rule might well contain any ChartSymbols (which can not be
 		// previewed without modification) we have to check all Symbolizers and
 		// change any Chart-Symbolizers for proper preview.
@@ -283,6 +290,20 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		// AtlasStyler.importStyle when importing a SingleRulesList
 		List<Symbolizer> symbolizers = new ArrayList<Symbolizer>();
 		for (Symbolizer ps : getSymbolizers()) {
+
+			// Set or remove Any centroid function
+
+			if (isUseCentroidFunction()) {
+				String geoColumn = "default";
+				if (ps.getGeometryPropertyName() != null)
+					geoColumn = ps.getGeometryPropertyName();
+
+				ps.setGeometry(FeatureUtil.FILTER_FACTORY2.function("centroid",
+						StylingUtil.STYLE_BUILDER
+								.attributeExpression(geoColumn)));
+			} else
+				ps.setGeometryPropertyName(null);
+
 			symbolizers.add(ps);
 		}
 		Collections.reverse(symbolizers);
@@ -418,9 +439,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
-//			if (StylingUtil.sldToString(styles[0]).contains("the_geom")) {
-//				LOGGER.warn("The imported symbol contains a ref to the_geom!");
-//			}
+			// if (StylingUtil.sldToString(styles[0]).contains("the_geom")) {
+			// LOGGER.warn("The imported symbol contains a ref to the_geom!");
+			// }
 
 			// Transforming
 			// http://freemapsymbols.org/point/Circle.sld to
@@ -454,9 +475,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		} catch (RuntimeException e) {
 			LOGGER.error("Error reading URL " + url, e);
 			throw e;
-//		} catch (TransformerException e) {
-//			LOGGER.error("Error reading URL " + url, e);
-//			throw new RuntimeException("Error reading URL " + url, e);
+			// } catch (TransformerException e) {
+			// LOGGER.error("Error reading URL " + url, e);
+			// throw new RuntimeException("Error reading URL " + url, e);
 		} finally {
 			pushQuite();
 		}
@@ -668,6 +689,26 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			this.visibleInLegend = visibleInLegend;
 			fireEvents(new RuleChangedEvent("visiblility in legend changed",
 					this));
+		}
+	}
+
+	/**
+	 * Intended use: Set true if you want a point symbolizer on a multi-polygon
+	 * geometry to paint only the centroid, not the center of each polygon.
+	 */
+	public boolean isUseCentroidFunction() {
+		return useCentroidFunction;
+	}
+
+	/**
+	 * Intended use: Set true if you want a point symbolizer on a multi-polygon
+	 * geometry to paint only the centroid, not the center of each polygon.
+	 */
+	public void setUseCentroidFunction(boolean useCentroidFunction) {
+		if (useCentroidFunction != this.useCentroidFunction) {
+			this.useCentroidFunction = useCentroidFunction;
+			fireEvents(new RuleChangedEvent("setUseCentroidFunction to "
+					+ useCentroidFunction, this));
 		}
 	}
 

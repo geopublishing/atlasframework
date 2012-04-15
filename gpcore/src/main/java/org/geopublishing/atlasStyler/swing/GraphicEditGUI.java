@@ -60,7 +60,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private final Graphic graphic;
 
-	private JComboBox  jComboBoxMarkType = null;
+	private JComboBox jComboBoxMarkType = null;
 
 	private JPanel jPanelStroke = null;
 
@@ -70,17 +70,17 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 	private final JLabel jLabelStrokeWidth = new JLabel();
 
-	private JComboBox  jComboBoxStrokeWidth = null;
+	private JComboBox jComboBoxStrokeWidth = null;
 
 	private final JLabel jLabelStrokeOpacity = new JLabel();
 
-	private JComboBox  jComboBoxStrokeOpacity = null;
+	private JComboBox jComboBoxStrokeOpacity = null;
 
 	private JPanel jPanel = null;
 
 	private JLabel jLabelSize = null;
 
-	private JComboBox  jComboBoxGraphicSize = null;
+	private JComboBox jComboBoxGraphicSize = null;
 
 	private JLabel jLabelOpacity = null;
 
@@ -134,9 +134,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 *            Optionally defines how the graphic will be used, so that it
 	 *            can make a good preview.
 	 */
-	public GraphicEditGUI(final AtlasStylerVector asv, final Graphic graphic_, GeometryForm geomForm) {
+	public GraphicEditGUI(final AtlasStylerVector asv, final Graphic graphic_,
+			GeometryForm geomForm) {
 		super(asv);
-		
+
 		this.geometryForm = geomForm;
 
 		/**
@@ -174,16 +175,11 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		initialize();
 	}
 
-	/**
-	 * This method initializes this
-	 * 
-	 * @return void
-	 */
 	private void initialize() {
 
 		setLayout(new MigLayout("wrap 2"));
-		this.add(new JLabel(ASUtil.R("GraphicEdit.Type")));
-		this.add(getJComboBoxMarkType());
+		this.add(new JLabel(ASUtil.R("GraphicEdit.Type")), "split 2");
+		this.add(getJComboBoxMarkType(), "");
 		this.add(getJPanelGraphic(), "span 2");
 
 		this.setSize(310, 302); // TODO do we like that ?
@@ -198,19 +194,16 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 * these marks may be made solid or hollow depending on Fill and Stroke
 	 * elements. These elements are discussed in Sections 11.2.2 and 11.1.3,
 	 * respectively.
-	 * 
-	 * 
-	 * @return javax.swing.JComboBox
 	 */
 	private JComboBox getJComboBoxMarkType() {
 		if (jComboBoxMarkType == null) {
-			jComboBoxMarkType = new JComboBox(
-					new DefaultComboBoxModel(MARKTYPE.values()));
+			jComboBoxMarkType = new JComboBox(new DefaultComboBoxModel(
+					MARKTYPE.values()));
 
 			// This renderer will use the labels from the localization
 			jComboBoxMarkType.setRenderer(new DefaultListCellRenderer() {
 				@Override
-				public Component getListCellRendererComponent(JList  list,
+				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
 
@@ -481,10 +474,10 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private JComboBox getJComboBoxStrokeWidth() {
 		if (jComboBoxStrokeWidth == null) {
 
-			jComboBoxStrokeWidth = new JComboBox ();
+			jComboBoxStrokeWidth = new JComboBox();
 
-			jComboBoxStrokeWidth.setModel(new DefaultComboBoxModel(
-					WIDTH_VALUES));
+			jComboBoxStrokeWidth
+					.setModel(new DefaultComboBoxModel(WIDTH_VALUES));
 
 			jComboBoxStrokeWidth.setRenderer(WIDTH_VALUES_RENDERER);
 
@@ -613,8 +606,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private JComboBox getJComboBoxGraphicSize() {
 		if (jComboBoxGraphicSize == null) {
 			jComboBoxGraphicSize = new JComboBox();
-			jComboBoxGraphicSize.setModel(new DefaultComboBoxModel(
-					SIZE_VALUES));
+			jComboBoxGraphicSize
+					.setModel(new DefaultComboBoxModel(SIZE_VALUES));
 
 			Expression size = graphic.getSize();
 
@@ -834,8 +827,8 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	 */
 	private JComboBox getJComboBoxGraphicRotation() {
 		if (jComboBoxGraphicRotation == null) {
-			jComboBoxGraphicRotation = new JComboBox(
-					new DefaultComboBoxModel(ROTATION_VALUES));
+			jComboBoxGraphicRotation = new JComboBox(new DefaultComboBoxModel(
+					ROTATION_VALUES));
 			jComboBoxGraphicRotation.setRenderer(ROTATION_VALUES_RENDERER);
 
 			jComboBoxGraphicRotation.setSelectedItem(Double.valueOf(graphic
