@@ -42,7 +42,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.factory.CommonFactoryFinder;
@@ -58,6 +57,7 @@ import com.vividsolutions.jts.geom.Point;
 import de.schmitzm.geotools.LegendIconFeatureRenderer;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.JPanel;
@@ -137,8 +137,9 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	public SymbolEditorGUI(Component owner, AtlasStylerVector asv,
 			SingleRuleList<? extends Symbolizer> singleSymbolRuleList) {
 		super(owner, DIALOG_TITLE);
-		
-		if (asv == null) throw new IllegalStateException("asv may not be null here!");
+
+		if (asv == null)
+			throw new IllegalStateException("asv may not be null here!");
 
 		this.asv = asv;
 
@@ -195,14 +196,15 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 	public BufferedImage getSymbolImage(Symbolizer symb, Color bg) {
 
 		// TODO Caching?
-		// System.out.println("generating a new layer image");
 
-		Rule rule = CommonFactoryFinder.getStyleFactory(null).createRule();
-
+		// Dynamic ChartGraphics have to be fixed first so that they use static
+		// values
 		if (ChartGraphic.isChart(symb))
 			symb = ChartGraphic.getFixDataSymbolizer(symb);
 
-		rule.setSymbolizers(new Symbolizer[] { symb });
+		final Rule rule = CommonFactoryFinder.getStyleFactory(null)
+				.createRule();
+		rule.symbolizers().add(symb);
 
 		final LegendIconFeatureRenderer renderer = LegendIconFeatureRenderer
 				.getInstance();
@@ -215,7 +217,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 							FeatureUtil.createFeatureType(Point.class),
 							SYMBOL_SIZE, bg);
 		} catch (Exception e) {
-			LOGGER.warn(e.getMessage());
+			LOGGER.warn(e.getMessage(), e);
 			image = new BufferedImage(SYMBOL_SIZE.width, SYMBOL_SIZE.height,
 					BufferedImage.TYPE_INT_ARGB);
 		}

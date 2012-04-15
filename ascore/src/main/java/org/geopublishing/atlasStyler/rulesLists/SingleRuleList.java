@@ -29,7 +29,6 @@ import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleChangeListener;
 import org.geopublishing.atlasStyler.RuleChangedEvent;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphicPreivewFixStyleVisitor;
 import org.geotools.styling.Description;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.PointSymbolizer;
@@ -46,6 +45,7 @@ import de.schmitzm.geotools.FilterUtil;
 import de.schmitzm.geotools.LegendIconFeatureRenderer;
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicPreviewFixStyleVisitor;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 
@@ -234,10 +234,11 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	public BufferedImage getImage(Dimension size) {
 
 		Rule rule = getRule();
+		
 		// Since this rule might well contain any ChartSymbols (which can not be
 		// previewed without modification) we have to check all Symbolizers and
 		// change any Chart-Symbolizers for proper preview.
-		DuplicatingStyleVisitor sv = new ChartGraphicPreivewFixStyleVisitor();
+		DuplicatingStyleVisitor sv = new ChartGraphicPreviewFixStyleVisitor();
 		sv.visit(rule);
 		rule = (Rule) sv.getCopy();
 
@@ -403,8 +404,6 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 
 	/**
 	 * This fires an event to all {@link RuleChangeListener}s.
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
 	 */
 	public boolean loadURL(URL url) {
 		pushQuite();
@@ -419,9 +418,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 			setStyleTitle(styles[0].getTitle());
 			setStyleAbstract(styles[0].getAbstract());
 
-			if (StylingUtil.sldToString(styles[0]).contains("the_geom")) {
-				LOGGER.warn("The imported symbol contains a ref to the_geom!");
-			}
+//			if (StylingUtil.sldToString(styles[0]).contains("the_geom")) {
+//				LOGGER.warn("The imported symbol contains a ref to the_geom!");
+//			}
 
 			// Transforming
 			// http://freemapsymbols.org/point/Circle.sld to
@@ -455,9 +454,9 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		} catch (RuntimeException e) {
 			LOGGER.error("Error reading URL " + url, e);
 			throw e;
-		} catch (TransformerException e) {
-			LOGGER.error("Error reading URL " + url, e);
-			throw new RuntimeException("Error reading URL " + url, e);
+//		} catch (TransformerException e) {
+//			LOGGER.error("Error reading URL " + url, e);
+//			throw new RuntimeException("Error reading URL " + url, e);
 		} finally {
 			pushQuite();
 		}

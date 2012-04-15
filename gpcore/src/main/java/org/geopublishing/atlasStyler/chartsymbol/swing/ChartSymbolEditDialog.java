@@ -41,10 +41,6 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphic.ChartTyp;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphicChangeListener;
-import org.geopublishing.atlasStyler.chartgraphic.ChartGraphicChangedEvent;
 import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
 import org.geopublishing.atlasStyler.swing.ColorTableCellRenderer;
@@ -55,6 +51,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic.ChartTyp;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangeListener;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangedEvent;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
 import de.schmitzm.swing.table.ColorEditor;
@@ -190,10 +190,10 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			if (chartGraphic.getMaxValue() != null)
 				inputMaxValue.setText("" + chartGraphic.getMaxValue());
 			else
-				inputMaxValue.setText(""+100);
-			
+				inputMaxValue.setText("" + 100);
+
 			scalingPanel.add(new JLabel("Max Value:"));
-			scalingPanel.add(inputMaxValue,"wrap");
+			scalingPanel.add(inputMaxValue, "wrap");
 
 		}
 		return scalingPanel;
