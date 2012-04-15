@@ -310,9 +310,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	public static final String SVG_MIMETYPE = "image/svg+xml";
 	public static final String PNG_MIMETYPE = "image/png";
 
-	private static final int EXT_GRAPHIC_BUTTON_HEIGHT = 34;
+	protected static final int EXT_GRAPHIC_BUTTON_HEIGHT = 34;
 
-	private static final int EXT_GRAPHIC_BUTTON_WIDTH = 34;
+	protected static final int EXT_GRAPHIC_BUTTON_WIDTH = 34;
 
 	/**
 	 * Reuse one {@link SVGSelector} dialog per {@link AbstractStyleEditGUI}.
@@ -361,9 +361,9 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 													null, null);
 
 									updateExternalGraphicButton(
-											jButtonExtGraphic, graphic);
-									updateExternalGraphicButton(
-											jButtonChartGraphic, null);
+											jButtonExtGraphicPreview, graphic);
+//									updateExternalGraphicButton(
+//											jButtonChartGraphic, null);
 								}
 							}
 
@@ -416,10 +416,10 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 										AbstractStyleEditGUI.PROPERTY_UPDATED,
 										null, null);
 
-								updateExternalGraphicButton(jButtonExtGraphic,
+								updateExternalGraphicButton(jButtonExtGraphicPreview,
 										null);
-								updateExternalGraphicButton(
-										jButtonChartGraphic, graphic);
+//								updateExternalGraphicButton(
+//										jButtonChartGraphic, graphic);
 							}
 						}
 
@@ -540,7 +540,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 		if (jButtonExtGraphic == null) {
 			jButtonExtGraphic = new JButton();
 
-			jButtonExtGraphic.setAction(new AbstractAction() {
+			jButtonExtGraphic.setAction(new AbstractAction(ASUtil.R("ExternalGraphicLabel")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -549,16 +549,13 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 			});
 
-			jButtonExtGraphic.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
-					EXT_GRAPHIC_BUTTON_HEIGHT);
-
-			updateExternalGraphicButton(jButtonExtGraphic, graphic);
-
 		}
 		return jButtonExtGraphic;
 	}
 
 	protected JButton jButtonExtGraphic;
+	
+	protected JButton jButtonExtGraphicPreview;
 
 	/**
 	 * This {@link JButton} shows a preview of a selected external graphic. When
@@ -569,7 +566,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 		if (jButtonChartGraphic == null) {
 			jButtonChartGraphic = new JButton();
 
-			jButtonChartGraphic.setAction(new AbstractAction() {
+			jButtonChartGraphic.setAction(new AbstractAction(ASUtil.R("ChartGraphicLabel")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -577,11 +574,6 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 				}
 
 			});
-
-			jButtonChartGraphic.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
-					EXT_GRAPHIC_BUTTON_HEIGHT);
-
-			updateExternalGraphicButton(jButtonChartGraphic, graphic);
 
 		}
 		return jButtonChartGraphic;

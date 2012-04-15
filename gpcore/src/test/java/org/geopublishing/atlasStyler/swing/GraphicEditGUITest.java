@@ -38,4 +38,9 @@ public class GraphicEditGUITest extends TestingClass {
 		TestingUtil.testGui(graphicEditGUI, 220);
 	}
 
+	public void testGetJPanelExternalGraphic()
+	 throws Exception {
+	
+	}
+
 }

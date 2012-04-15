@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -31,11 +32,14 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
+import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
+import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
+import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.TranslationAskJDialog;
 import de.schmitzm.swing.TranslationEditJPanel;
@@ -97,32 +101,48 @@ public class SingleSymbolGUI extends
 		this.setLayout(new MigLayout());
 		this.add(jLabelHeading, "span 2, wrap");
 		this.add(jLabelSymbol);
-		this.add(getJButtonSymbol(), "");
-		this.add(getJCheckBoxCentroid(), "wrap");
+		this.add(getJButtonSymbol(), "wrap");
 
 		JLabel jLabelTranslation = new JLabel(
 				ASUtil.R("SingleSymbolGUI.Label.Label"));
 		jLabelTranslation.setToolTipText(ASUtil.R("SingleSymbolGUI.Label.TT"));
 		this.add(jLabelTranslation);
 		this.add(getjLabelTranslationEdit(), "wrap");
+
+		this.add(getJCheckBoxCentroid(), "span 2");
 	}
 
-	JCheckBox jCheckBoxCentroid = null;
+	JPanel jPanelCentroid = null;
 
 	/**
-	 * TODO return An empty panel if the styled type is not Polygon
+	 * Allows to add a "centroid" function to the geometry property for all
+	 * symbolizers in this {@link SinglePointSymbolRuleList}.
+	 * 
+	 * http://docs.geoserver.org/stable/en/user/styling
+	 * /sld-extensions/geometry-transformations.html
 	 */
 	private Component getJCheckBoxCentroid() {
 
+		/**
+		 * We only want to update or add the GeoemtryProperty for
+		 * PointSymbolizers working on Polygon geometries:
+		 */
 		if (!(getRulesList().getGeometryForm() != GeometryForm.POLYGON && asv
 				.getStyledFeatures().getGeometryForm() == GeometryForm.POLYGON))
 			return new JLabel();
 
-		if (jCheckBoxCentroid == null
+		if (jPanelCentroid == null
 				&& getRulesList() instanceof SinglePointSymbolRuleList) {
+
+			jPanelCentroid = new JPanel(new MigLayout());
 			final SinglePointSymbolRuleList spsrl = (SinglePointSymbolRuleList) getRulesList();
 
-			jCheckBoxCentroid = new JCheckBox(new AbstractAction("Centroids (gs 2.6+)") { //i8n
+			jPanelCentroid.setBorder(BorderFactory.createTitledBorder(ASUtil
+					.R("SingleSymbolGUI.AddFunctionCentroids")));
+
+			final JCheckBox jCheckBoxCentroid = new JCheckBox();
+			jCheckBoxCentroid.setAction(new AbstractAction("<html>"+ASUtil
+					.R("SingleSymbolGUI.AddFunctionCentroids")) {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -131,8 +151,15 @@ public class SingleSymbolGUI extends
 			});
 
 			jCheckBoxCentroid.setSelected(spsrl.isUseCentroidFunction());
+
+			jPanelCentroid.add(jCheckBoxCentroid, "wrap");
+			jPanelCentroid
+					.add(new JLabel(
+							ASUtil.R("SingleSymbolGUI.AddFunctionCentroids.explained")),
+							"w 100");
+
 		}
-		return jCheckBoxCentroid;
+		return jPanelCentroid;
 	}
 
 	/**

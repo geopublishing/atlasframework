@@ -178,7 +178,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 
 			upper.add(getJPanelPreview(), "center, split 2, growx");
 			upper.add(getJPanelLayers(), "wrap");
-			upper.add(jPanelProperties2, "top");
+			upper.add(jPanelProperties2, "span 2, top");
 
 			jContentPane.add(upper, BorderLayout.CENTER);
 			jContentPane.add(getJPanelButtons(), BorderLayout.SOUTH);
@@ -318,7 +318,7 @@ public class SymbolEditorGUI extends CancellableDialogAdapter {
 						if (selectedSymbolizer == null) {
 							jPanelProperties.removeAll();
 							jPanelProperties.add(
-									new JLabel(AtlasStylerVector
+									new JLabel(ASUtil
 											.R("SymbolEditor.SelectALayer")),
 									BorderLayout.CENTER);
 						} else {

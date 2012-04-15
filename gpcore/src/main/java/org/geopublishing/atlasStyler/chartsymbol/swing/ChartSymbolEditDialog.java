@@ -40,6 +40,7 @@ import javax.swing.table.TableModel;
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.log4j.Logger;
+import org.geopublishing.atlasStyler.ASUtil;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.svg.swing.SVGSelector;
 import org.geopublishing.atlasStyler.swing.AttributesJComboBox;
@@ -52,7 +53,7 @@ import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic;
-import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic.ChartTyp;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic.ChartGraphicTyp;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangeListener;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangedEvent;
 import de.schmitzm.lang.LangUtil;
@@ -96,7 +97,7 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 	public ChartSymbolEditDialog(Component parentWindow, Graphic importThis,
 			final AtlasStylerVector asv) {
-		super(parentWindow);
+		super(parentWindow, ASUtil.R("ChartSymbolEditDialog.title"));
 		this.asv = asv;
 
 		// Copy the Graphic as a backup in case cancel is selected.
@@ -423,15 +424,15 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 	private JComboBox getChartTypCombobox() {
 		if (chartTypCombobox == null) {
-			chartTypCombobox = new JComboBox(ChartTyp.values());
+			chartTypCombobox = new JComboBox(ChartGraphicTyp.values());
 			chartTypCombobox.setRenderer(new DefaultListCellRenderer() {
 
 				@Override
 				public Component getListCellRendererComponent(JList list,
 						Object value, int index, boolean isSelected,
 						boolean cellHasFocus) {
-					if (value instanceof ChartTyp)
-						value = ((ChartTyp) value).getTitle();
+					if (value instanceof ChartGraphicTyp)
+						value = ((ChartGraphicTyp) value).getTitle();
 					return super.getListCellRendererComponent(list, value,
 							index, isSelected, cellHasFocus);
 				}
@@ -445,7 +446,7 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					chartGraphic.setChartType((ChartTyp) e.getItem());
+					chartGraphic.setChartType((ChartGraphicTyp) e.getItem());
 				}
 			});
 		}

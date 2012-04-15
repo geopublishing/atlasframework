@@ -179,7 +179,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 
 		setLayout(new MigLayout("wrap 2"));
 		this.add(new JLabel(ASUtil.R("GraphicEdit.Type")), "split 2");
-		this.add(getJComboBoxMarkType(), "");
+		this.add(getJComboBoxMarkType(), "wrap");
 		this.add(getJPanelGraphic(), "span 2");
 
 		this.setSize(310, 302); // TODO do we like that ?
@@ -978,15 +978,22 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 							.R("GraphicEdit.ExternalGraphic.Title")));
 
 			// The first button is for images like SVG etc.
-			jPanelExternalGraphic.add(
-					new JLabel(ASUtil.R("ExternalGraphicLabel")), "");
+			// jPanelExternalGraphic.add(
+			// new JLabel(ASUtil.R("ExternalGraphicLabel")), "");
+			jButtonExtGraphicPreview = new JButton();
+			jButtonExtGraphicPreview.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
+					EXT_GRAPHIC_BUTTON_HEIGHT);
+
+			updateExternalGraphicButton(jButtonExtGraphicPreview, graphic);
+			jPanelExternalGraphic.add(jButtonExtGraphicPreview, "");
+
 			jPanelExternalGraphic.add(
 					getJButtonExtGraphic(geometryForm, graphic), "");
 
 			// An external graphic may also be a chart provided by eastwood /
 			// gt-charts
-			jPanelExternalGraphic.add(
-					new JLabel(ASUtil.R("ChartGraphicLabel")), "gap 70");
+			// jPanelExternalGraphic.add(
+			// new JLabel(ASUtil.R("ChartGraphicLabel")), "gap 70");
 			jPanelExternalGraphic.add(
 					getJButtonChartGraphic(geometryForm, graphic), "");
 		}
