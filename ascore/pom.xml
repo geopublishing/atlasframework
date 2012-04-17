@@ -21,6 +21,13 @@
 			<artifactId>jfreechart</artifactId>
 			<version>1.0.14</version>
 			<scope>compile</scope>
+                        <exclusions>
+                                <exclusion>
+<!-- Avoid signing problems mit bcmail-jdk14-138.jar -->
+                                        <groupId>com.lowagie</groupId>
+                                        <artifactId>itext</artifactId>
+                                </exclusion>
+                        </exclusions>
 		</dependency>
 
 		<dependency>
