@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlas xmlns="http://www.wikisquare.de/AtlasML" atlasBasename="chartatlas" buildVersion="201204171638" jnlpBaseUrl="http://atlas.geopublishing.org/hosted/chartatlas/" majVersion="1" mapLogoPosition="BOTTOMRIGHT" minVersion="9">
+  <name>
+    <translation lang="de">chartAtlas</translation>
+  </name>
+  <desc>
+    <translation lang="de">Testing Atlas for new Chartfunction</translation>
+  </desc>
+  <creator>
+    <translation lang="de">geopublishing.org</translation>
+  </creator>
+  <copyright>
+    <translation lang="de"></translation>
+  </copyright>
+  <atlasversion>0.0</atlasversion>
+  <gpHoster auth="false"/>
+  <supportedLanguages>
+    <language lang="de"/>
+  </supportedLanguages>
+  <vectorLayer exportable="false" id="vector_01822481557" showFilterInLegend="true" showStylerInLegend="true" showTableInLegend="true">
+    <name>
+      <translation lang="de">waypoints_wgs_84.shp</translation>
+    </name>
+    <desc>
+      <translation lang="de"></translation>
+    </desc>
+    <keywords>
+      <translation lang="de"></translation>
+    </keywords>
+    <dataDirname>vector_01822481557_waypoints_wgs_84</dataDirname>
+    <filename>waypoints_wgs_84.shp</filename>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="ALTITUDE" namespace="" visible="true" weight="10">
+      <name>
+        <translation lang="de">ALTITUDE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="AREA_HA" namespace="" visible="true" weight="18">
+      <name>
+        <translation lang="de">AREA_HA</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="CLUSTER" namespace="" visible="true" weight="3">
+      <name>
+        <translation lang="de">CLUSTER</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="COFFEE_FAR" namespace="" visible="true" weight="17">
+      <name>
+        <translation lang="de">COFFEE_FAR</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="COMMENTS" namespace="" visible="true" weight="29">
+      <name>
+        <translation lang="de">COMMENTS</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="DATE_TIME" namespace="" visible="true" weight="9">
+      <name>
+        <translation lang="de">DATE_TIME</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="DISTRIBUTI" namespace="" visible="true" weight="19">
+      <name>
+        <translation lang="de">DISTRIBUTI</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="ETHNIC" namespace="" visible="true" weight="11">
+      <name>
+        <translation lang="de">ETHNIC</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="FAMILIES" namespace="" visible="true" weight="13">
+      <name>
+        <translation lang="de">FAMILIES</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="FARMERS" namespace="" visible="true" weight="16">
+      <name>
+        <translation lang="de">FARMERS</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="GPS" namespace="" visible="true" weight="6">
+      <name>
+        <translation lang="de">GPS</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="HABITANTS" namespace="" visible="true" weight="12">
+      <name>
+        <translation lang="de">HABITANTS</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="HOUSEHOLDS" namespace="" visible="true" weight="14">
+      <name>
+        <translation lang="de">HOUSEHOLDS</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="ID" namespace="" visible="true" weight="1">
+      <name>
+        <translation lang="de">ID</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="LAND_TITLE" namespace="" visible="true" weight="15">
+      <name>
+        <translation lang="de">LAND_TITLE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="LATITUDE" namespace="" visible="true" weight="7">
+      <name>
+        <translation lang="de">LATITUDE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="LONGITUDE" namespace="" visible="true" weight="8">
+      <name>
+        <translation lang="de">LONGITUDE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="MARKET_CHA" namespace="" visible="true" weight="23">
+      <name>
+        <translation lang="de">MARKET_CHA</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="MEASURES_N" namespace="" visible="true" weight="28">
+      <name>
+        <translation lang="de">MEASURES_N</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="ORIGIN_KNO" namespace="" visible="true" weight="25">
+      <name>
+        <translation lang="de">ORIGIN_KNO</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE1" namespace="" visible="true" weight="30">
+      <name>
+        <translation lang="de">PICTURE1</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE2" namespace="" visible="true" weight="32">
+      <name>
+        <translation lang="de">PICTURE2</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE3" namespace="" visible="true" weight="34">
+      <name>
+        <translation lang="de">PICTURE3</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE4" namespace="" visible="true" weight="36">
+      <name>
+        <translation lang="de">PICTURE4</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE5" namespace="" visible="true" weight="38">
+      <name>
+        <translation lang="de">PICTURE5</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE6" namespace="" visible="true" weight="40">
+      <name>
+        <translation lang="de">PICTURE6</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE7" namespace="" visible="true" weight="42">
+      <name>
+        <translation lang="de">PICTURE7</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PICTURE8" namespace="" visible="true" weight="44">
+      <name>
+        <translation lang="de">PICTURE8</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="POTENTIAL" namespace="" visible="true" weight="27">
+      <name>
+        <translation lang="de">POTENTIAL</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PRICE" namespace="" visible="true" weight="24">
+      <name>
+        <translation lang="de">PRICE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="PROCESSING" namespace="" visible="true" weight="22">
+      <name>
+        <translation lang="de">PROCESSING</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE1" namespace="" visible="true" weight="31">
+      <name>
+        <translation lang="de">TITLE1</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE2" namespace="" visible="true" weight="33">
+      <name>
+        <translation lang="de">TITLE2</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE3" namespace="" visible="true" weight="35">
+      <name>
+        <translation lang="de">TITLE3</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE4" namespace="" visible="true" weight="37">
+      <name>
+        <translation lang="de">TITLE4</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE5" namespace="" visible="true" weight="39">
+      <name>
+        <translation lang="de">TITLE5</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE6" namespace="" visible="true" weight="41">
+      <name>
+        <translation lang="de">TITLE6</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE7" namespace="" visible="true" weight="43">
+      <name>
+        <translation lang="de">TITLE7</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="TITLE8" namespace="" visible="true" weight="45">
+      <name>
+        <translation lang="de">TITLE8</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="VARIETY" namespace="" visible="true" weight="20">
+      <name>
+        <translation lang="de">VARIETY</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="VILLAGE" namespace="" visible="true" weight="2">
+      <name>
+        <translation lang="de">VILLAGE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="WILLINGNES" namespace="" visible="true" weight="26">
+      <name>
+        <translation lang="de">WILLINGNES</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="X_VALUE" namespace="" visible="true" weight="4">
+      <name>
+        <translation lang="de">X_VALUE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="YIELD" namespace="" visible="true" weight="21">
+      <name>
+        <translation lang="de">YIELD</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+      <nodataValue/>
+    </dataAttribute>
+    <dataAttribute functionA="0.0" functionX="1.0" localname="Y_VALUE" namespace="" visible="true" weight="5">
+      <name>
+        <translation lang="de">Y_VALUE</translation>
+      </name>
+      <desc>
+        <translation lang="de"></translation>
+      </desc>
+    </dataAttribute>
+  </vectorLayer>
+  <mapPool startMap="map_00074545388">
+    <map gridPanelFormatter="1_lat_lon" gridPanelVisible="true" id="map_00074545388" previewMaxMapExtendInGP="false" scaleUnits="METRIC" scaleVisible="true">
+      <name>
+        <translation lang="de">chartTestMap</translation>
+      </name>
+      <desc>
+        <translation lang="de">small chart Test map</translation>
+      </desc>
+      <keywords>
+        <translation lang="de"></translation>
+      </keywords>
+      <datapoolRef id="vector_01822481557"/>
+    </map>
+  </mapPool>
+  <group>
+    <name>
+      <translation lang="de">chartAtlas</translation>
+    </name>
+    <desc>
+      <translation lang="de">Testing Atlas for new Chartfunction</translation>
+    </desc>
+    <keywords>
+      <translation lang="default"></translation>
+    </keywords>
+  </group>
+  <fonts/>
+</atlas>

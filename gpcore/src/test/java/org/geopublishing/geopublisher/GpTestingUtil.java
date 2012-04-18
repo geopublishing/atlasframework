@@ -49,7 +49,8 @@ public class GpTestingUtil extends GTTestingUtil {
 		// on getAce()
 
 		small("/atlases/ChartDemoAtlas/atlas.gpa"), rasters(
-				"/atlases/rastersAtlas/atlas.gpa");
+				"/atlases/rastersAtlas/atlas.gpa"), charts(
+						"/atlases/chartAtlas/atlas.gpa");
 
 		private final String resourceLocation;
 
