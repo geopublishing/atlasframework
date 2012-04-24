@@ -10,17 +10,24 @@ import static org.junit.Assert.fail;
 import java.util.Iterator;
 import java.util.Random;
 
+import org.geopublishing.atlasStyler.AtlasStylerVector;
+import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
+import org.geotools.styling.PointSymbolizer;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.LogoPosition;
 import de.schmitzm.geotools.gui.ScalePanel;
+import de.schmitzm.geotools.styling.StylingUtil;
+import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic;
+import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.testing.TestingClass;
 
@@ -167,4 +174,39 @@ public class AMLImportTest extends TestingClass {
         assertTrue(bandNames[0].toString().equals("a"));
         assertTrue(bandNames[1].toString().equals("b"));
     }
+    
+//    @Test
+//    public void testImportExportBarChart() throws Exception{
+//    	AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.charts);
+//        Iterator<DpLayerVector> vectorLayers = ace.getDataPool().getVectorLayers().iterator();
+//        DpLayerVector dplv = vectorLayers.next();
+////        dplv.get
+//    }
+    /**
+     * AtlasStylerVector atlasStyler = AsTestingUtil
+				.getAtlasStyler(TestDatasetsVector.countryShp);
+     * 
+     * if (StylingUtil.getTextSymbolizers(rule.getSymbolizers())
+						.size() == rule.getSymbolizers().length)
+					continue;
+
+				if (ChartGraphic.isChart(rule.symbolizers().get(0))) {
+     * PointSymbolizer pointSymbolizer = (PointSymbolizer) rule
+							.symbolizers().get(0);
+
+					ChartGraphic cg = new ChartGraphic(
+							pointSymbolizer.getGraphic());
+							
+							<sld:PointSymbolizer>
+        <sld:Geometry>
+          <ogc:PropertyName>the_geom</ogc:PropertyName>
+        </sld:Geometry>
+        <sld:Graphic>
+          <sld:ExternalGraphic>
+            <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://chart?cht=bvg&amp;chl=male|female&amp;chd=t:${100 * 2 / (2 + 3)},${100 * 3 / (2 + 3)}&amp;chs=200x100&amp;chf=bg,s,FFFFFF00"/>
+            <sld:Format>application/chart</sld:Format>
+          </sld:ExternalGraphic>
+        </sld:Graphic>
+      </sld:PointSymbolizer>
+     */
 }
