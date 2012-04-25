@@ -32,11 +32,9 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.SinglePointSymbolRuleList;
 import org.geopublishing.atlasStyler.rulesLists.SingleRuleList;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
-import org.geopublishing.geopublisher.GpUtil;
 import org.geotools.styling.Symbolizer;
 
 import de.schmitzm.geotools.feature.FeatureUtil.GeometryForm;
-import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;

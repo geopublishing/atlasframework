@@ -417,7 +417,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 										null, null);
 
 								updateExternalGraphicButton(jButtonExtGraphicPreview,
-										null);
+										graphic);
 //								updateExternalGraphicButton(
 //										jButtonChartGraphic, graphic);
 							}
@@ -557,10 +557,6 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	
 	protected JButton jButtonExtGraphicPreview;
 
-	/**
-	 * This {@link JButton} shows a preview of a selected external graphic. When
-	 * clicken, it opens the dialog to choose an external graphic URL.
-	 */
 	protected JButton getJButtonChartGraphic(final GeometryForm geometryForm,
 			final Graphic graphic) {
 		if (jButtonChartGraphic == null) {

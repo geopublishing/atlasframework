@@ -209,9 +209,6 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	}
 
 	/**
-	 * This method initializes jPanel1
-	 * 
-	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelOptions() {
 		if (jPanelOptions == null) {

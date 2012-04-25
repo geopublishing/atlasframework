@@ -88,7 +88,7 @@
 		     package="${PROGNAME}"
 		     section="science"
 		     recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc"
-		     depends="sun-java6-jre | openjdk-6-jre | icedtea6"
+		     depends="oracle-java7-installer | sun-java6-jre | openjdk-6-jre | oracle-jdk7-installer | openjdk-7-jre | openjdk-7-jdk | icedtea6"
 		     priority="extra"
 		>
 			<version upstream="${version.upstream}" />
@@ -202,11 +202,14 @@ Technical details:
 
 	</target>
 
+	<!--
+	https://trac.wikisquare.de/gp/ticket/51
 	<target name="clean-repository" description="Delete all packages stored in the repository.">
 		<mkdir dir="${REPO.DIR}" />
 		<delete dir="${REPO.DIR}/db" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/dists" verbose="true" description="resetting the repository" />
 		<delete dir="${REPO.DIR}/pool" verbose="true" description="resetting the repository" />
 	</target>
+	-->
 
 </project>

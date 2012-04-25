@@ -88,8 +88,8 @@
 		     package="${PROGNAME}"
 		     section="science"
 		     recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc"
-		     depends="sun-java6-jre | openjdk-6-jre | icedtea6"
-		     priority="extra"
+			 depends="oracle-java7-installer | sun-java6-jre | openjdk-6-jre | oracle-jdk7-installer | openjdk-7-jre | openjdk-7-jdk | icedtea6 , xulrunner-1.9.2"
+			 priority="extra"
 		>
 			<version upstream="${version.upstream}" />
 
