@@ -48,10 +48,10 @@ public class RuleListFactory {
 	private static final Logger LOGGER = LangUtil
 			.createLogger(AtlasStylerVector.class);
 
-	static public SinglePointSymbolRuleList createSinglePointSymbolRulesList(
+	static public SinglePointSymbolRuleList createSinglePointSymbolRulesList(RulesListType rlType,
 			Translation title, boolean withDefaults) {
 
-		SinglePointSymbolRuleList singlePointSymbolRuleList = new SinglePointSymbolRuleList(
+		SinglePointSymbolRuleList singlePointSymbolRuleList = new SinglePointSymbolRuleList(rlType,
 				title);
 
 		if (withDefaults) {
@@ -92,7 +92,7 @@ public class RuleListFactory {
 		case LINE:
 			return createSingleLineSymbolRulesList(title, withDefaults);
 		case POINT:
-			return createSinglePointSymbolRulesList(title, withDefaults);
+			return createSinglePointSymbolRulesList(RulesListType.SINGLE_SYMBOL_POINT, title, withDefaults);
 		case POLYGON:
 			return createSinglePolygonSymbolRulesList(title, withDefaults);
 		case ANY:
@@ -122,9 +122,9 @@ public class RuleListFactory {
 		return graduatedColorLineRuleList;
 	}
 
-	public GraduatedColorRuleList createGraduatedColorPointRulesList(
+	public GraduatedColorRuleList createGraduatedColorPointRulesList(RulesListType rlType,
 			boolean withDefaults) {
-		GraduatedColorPointRuleList graduatedColorPointRuleList = new GraduatedColorPointRuleList(
+		GraduatedColorPointRuleList graduatedColorPointRuleList = new GraduatedColorPointRuleList(rlType,
 				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return graduatedColorPointRuleList;
 	}
@@ -153,7 +153,7 @@ public class RuleListFactory {
 
 		switch (geometryFrom) {
 		case POINT:
-			return createGraduatedColorPointRulesList(withDefaults);
+			return createGraduatedColorPointRulesList(RulesListType.QUANTITIES_COLORIZED_POINT,withDefaults);
 		case LINE:
 			return createGraduatedColorLineRulesList(withDefaults);
 		case ANY:
@@ -176,7 +176,7 @@ public class RuleListFactory {
 
 		case SINGLE_SYMBOL_POINT:
 		case SINGLE_SYMBOL_POINT_FOR_POLYGON:
-			return createSinglePointSymbolRulesList(title, withDefaults);
+			return createSinglePointSymbolRulesList(rlType, title, withDefaults);
 		case SINGLE_SYMBOL_LINE:
 			return createSingleLineSymbolRulesList(title, withDefaults);
 		case SINGLE_SYMBOL_POLYGON:
@@ -186,7 +186,7 @@ public class RuleListFactory {
 			return createGraduatedColorLineRulesList(withDefaults);
 		case QUANTITIES_COLORIZED_POINT:
 		case QUANTITIES_COLORIZED_POINT_FOR_POLYGON:
-			return createGraduatedColorPointRulesList(withDefaults);
+			return createGraduatedColorPointRulesList(rlType,withDefaults);
 		case QUANTITIES_COLORIZED_POLYGON:
 			return createGraduatedColorPolygonRulesList(withDefaults);
 
@@ -194,7 +194,7 @@ public class RuleListFactory {
 			return createUniqueValuesLineRulesList(withDefaults);
 		case UNIQUE_VALUE_POINT:
 		case UNIQUE_VALUE_POINT_FOR_POLYGON:
-			return createUniqueValuesPointRulesList(withDefaults);
+			return createUniqueValuesPointRulesList(rlType, withDefaults);
 		case UNIQUE_VALUE_POLYGON:
 			return createUniqueValuesPolygonRulesList(withDefaults);
 
@@ -247,9 +247,9 @@ public class RuleListFactory {
 		return uniqueValuesLineRuleList;
 	}
 
-	public UniqueValuesPointRuleList createUniqueValuesPointRulesList(
+	public UniqueValuesPointRuleList createUniqueValuesPointRulesList(RulesListType rlType,
 			boolean withDefaults) {
-		UniqueValuesPointRuleList uniqueValuesPointRuleList = new UniqueValuesPointRuleList(
+		UniqueValuesPointRuleList uniqueValuesPointRuleList = new UniqueValuesPointRuleList(rlType,
 				(StyledFeaturesInterface<?>) styledLayer, withDefaults);
 		return uniqueValuesPointRuleList;
 	}
@@ -277,7 +277,7 @@ public class RuleListFactory {
 		case LINE:
 			return createUniqueValuesLineRulesList(withDefaults);
 		case POINT:
-			return createUniqueValuesPointRulesList(withDefaults);
+			return createUniqueValuesPointRulesList(RulesListType.UNIQUE_VALUE_POINT, withDefaults);
 		case ANY:
 			LOGGER.warn("returns a GraduatedColorPolygonRuleList for GeometryForm ANY");
 		case POLYGON:
@@ -349,12 +349,21 @@ public class RuleListFactory {
 		GraduatedColorRuleList quantitiesRuleList = null;
 
 		/***********************************************************
+		 * Importing a QUANTITIES_COLORIZED_POINT_FOR_POLYGON RuleList
+		 */
+		if (metaInfoString.startsWith(RulesListType.QUANTITIES_COLORIZED_POINT_FOR_POLYGON
+				.toString())) {
+			
+			quantitiesRuleList = createGraduatedColorPointRulesList(RulesListType.QUANTITIES_COLORIZED_POINT_FOR_POLYGON,false);
+			
+		}
+		/***********************************************************
 		 * Importing a QUANTITIES_COLORIZED_POINT RuleList
 		 */
-		if (metaInfoString.startsWith(RulesListType.QUANTITIES_COLORIZED_POINT
+		else if (metaInfoString.startsWith(RulesListType.QUANTITIES_COLORIZED_POINT
 				.toString())) {
 
-			quantitiesRuleList = createGraduatedColorPointRulesList(false);
+			quantitiesRuleList = createGraduatedColorPointRulesList(RulesListType.QUANTITIES_COLORIZED_POINT,false);
 
 		}
 
@@ -455,11 +464,18 @@ public class RuleListFactory {
 			SingleRuleList<? extends Symbolizer> singleRuleList = null;
 
 			/***********************************************************
+			 * Importing a SINGLE_SYMBOL_POINT_FOR_POLYGON RuleList
+			 */
+			if (metaInfoString.startsWith(RulesListType.SINGLE_SYMBOL_POINT_FOR_POLYGON
+					.toString())) {
+				singleRuleList = createSinglePointSymbolRulesList(RulesListType.SINGLE_SYMBOL_POINT_FOR_POLYGON, title, false);
+			} else
+			/***********************************************************
 			 * Importing a SINGLE_SYMBOL_POINT RuleList
 			 */
 			if (metaInfoString.startsWith(RulesListType.SINGLE_SYMBOL_POINT
 					.toString())) {
-				singleRuleList = createSinglePointSymbolRulesList(title, false);
+				singleRuleList = createSinglePointSymbolRulesList(RulesListType.SINGLE_SYMBOL_POINT, title, false);
 			} else
 			/***********************************************************
 			 * Importing a SINGLE_SYMBOL_LINE RuleList
@@ -525,11 +541,13 @@ public class RuleListFactory {
 			/***********************************************************
 			 * Importing a UNIQUE_VALUE_POINT RuleList
 			 */
-			if (metaInfoString.startsWith(RulesListType.UNIQUE_VALUE_POINT
+			if (metaInfoString.startsWith(RulesListType.UNIQUE_VALUE_POINT_FOR_POLYGON
 					.toString())) {
-				uniqueRuleList = createUniqueValuesPointRulesList(false);
-			} else if (metaInfoString
-					.startsWith(RulesListType.UNIQUE_VALUE_LINE.toString())) {
+				uniqueRuleList = createUniqueValuesPointRulesList(RulesListType.UNIQUE_VALUE_POINT_FOR_POLYGON, false);
+			} else if (metaInfoString.startsWith(RulesListType.UNIQUE_VALUE_POINT
+					.toString())) {
+				uniqueRuleList = createUniqueValuesPointRulesList(RulesListType.UNIQUE_VALUE_POINT, false);
+			} else if (metaInfoString.startsWith(RulesListType.UNIQUE_VALUE_LINE.toString())) {
 				uniqueRuleList = createUniqueValuesLineRulesList(false);
 			} else if (metaInfoString
 					.startsWith(RulesListType.UNIQUE_VALUE_POLYGON.toString())) {

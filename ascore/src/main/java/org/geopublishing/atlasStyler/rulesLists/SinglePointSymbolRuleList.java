@@ -35,14 +35,18 @@ public class SinglePointSymbolRuleList extends SingleRuleList<PointSymbolizer> {
 		return null;
 	}
 
+	public SinglePointSymbolRuleList(RulesListType type, String title) {
+		super(type, title, GeometryForm.POINT);
+	}
+
+	public SinglePointSymbolRuleList(RulesListType type, Translation title) {
+		super(type, title, GeometryForm.POINT);
+	}
+	
 	public SinglePointSymbolRuleList(String title) {
-		super(RulesListType.SINGLE_SYMBOL_POINT, title, GeometryForm.POINT);
+		super(RulesListType.SINGLE_SYMBOL_POINT,title, GeometryForm.POINT);
 	}
-
-	public SinglePointSymbolRuleList(Translation title) {
-		super(RulesListType.SINGLE_SYMBOL_POINT, title, GeometryForm.POINT);
-	}
-
+	
 	@Override
 	public void addNewDefaultLayer() {
 		Graphic graphic = ASUtil.createDefaultGraphic();

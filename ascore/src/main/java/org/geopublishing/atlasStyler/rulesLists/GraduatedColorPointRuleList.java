@@ -21,9 +21,9 @@ import de.schmitzm.lang.LangUtil;
 public class GraduatedColorPointRuleList extends GraduatedColorRuleList {
 	protected Logger LOGGER = LangUtil.createLogger(this);
 
-	public GraduatedColorPointRuleList(
+	public GraduatedColorPointRuleList(RulesListType rlType,
 			StyledFeaturesInterface<?> styledFeatures, boolean withDefaults) {
-		super(RulesListType.QUANTITIES_COLORIZED_POINT, styledFeatures,
+		super(rlType, styledFeatures,
 				GeometryForm.POINT, withDefaults);
 	}
 
