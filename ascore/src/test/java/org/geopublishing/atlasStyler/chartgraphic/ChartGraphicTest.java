@@ -43,6 +43,11 @@ public class ChartGraphicTest extends TestingClass {
 	public void testInOutUrl2() throws Exception {
 		extracted("http://chart?cht=bvg&chd=t:${ObjectID * 100. / 100.0}|${STTID * 100. / 100.0}|${STTCL * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62");
 	}
+	
+	@Test
+	public void testInOutUrl4() throws Exception {
+		extracted("http://chart?cht=bvg&chd=t:${ObjectID * 100. / 88.0}|${STTID * 100. / 88.0}|${STTCL * 100. / 88.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62");
+	}
 
 	@Test
 	public void testInOutUrl3() throws Exception {
@@ -107,7 +112,7 @@ public class ChartGraphicTest extends TestingClass {
 		Style style = StylingUtil.STYLE_BUILDER.createStyle(ps);
 
 		JPanel legendPanel = StyledLayerUtil.createLegendSwingPanel(style,
-				FeatureUtil.createFeatureType(Point.class), 20, 15, null);
+				FeatureUtil.createFeatureType(Point.class), 20, 15, null, null);
 
 		TestingUtil.testGui(legendPanel, 50);
 	}

@@ -58,6 +58,7 @@ import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangeListener;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangedEvent;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.table.ColorEditor;
 
 /**
@@ -449,6 +450,8 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 					chartGraphic.setChartType((ChartGraphicTyp) e.getItem());
 				}
 			});
+			
+			SwingUtil.addMouseWheelForCombobox(chartTypCombobox);
 		}
 		return chartTypCombobox;
 	}
