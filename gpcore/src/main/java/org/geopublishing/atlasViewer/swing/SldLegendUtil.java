@@ -98,9 +98,10 @@ public class SldLegendUtil {
 
 		JPanel oneStyleLegendBox;
 		if (styledLayer instanceof StyledFeaturesInterface) {
+			StyledFeaturesInterface styledFeaturesInterface = (StyledFeaturesInterface) styledLayer;
 			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(style,
-					((StyledFeaturesInterface) styledLayer).getSchema(),
-					ICONWIDTH, ICONHEIGHT, scaleDenominator);
+					styledFeaturesInterface.getSchema(),
+					ICONWIDTH, ICONHEIGHT, scaleDenominator, styledFeaturesInterface.getAttributeMetaDataMap());
 		} else if (styledLayer instanceof StyledRasterInterface<?>) {
 			oneStyleLegendBox = StyledLayerUtil.createLegendSwingPanel(
 					(StyledRasterInterface<?>) styledLayer, style, ICONWIDTH,

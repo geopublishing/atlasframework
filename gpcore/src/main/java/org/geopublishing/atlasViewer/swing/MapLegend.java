@@ -349,7 +349,10 @@ public class MapLegend extends JXTaskPaneContainer implements
 		// ****************************************************************************
 		geoMapPane.getMapPane().addMapPaneListener(new JMapPaneListener() {
 
-			private MapLayerLegend lastSpecialGroup;
+			// https://trac.wikisquare.de/gp/ticket/65 (Beim öffnen der Legende
+			// einer Karte werden alle Styles aufgelistet, nicht die für die
+			// zoomstufe relevanten)
+			boolean first = true;
 
 			@Override
 			public void performMapPaneEvent(XMapPaneEvent e) {
@@ -360,12 +363,17 @@ public class MapLegend extends JXTaskPaneContainer implements
 					// Iterate over all layer-ids
 					for (StyledLayerInterface<?> sl : rememberId2StyledLayer
 							.values()) {
-						if (StyledLayerUtil.hasScalechangeAnyEffect(
-								sl.getStyle(), sce.getOldScaleDenominator(),
-								sce.getNewScaleDenominator())) {
+
+						if (first
+								|| StyledLayerUtil.hasScalechangeAnyEffect(
+										sl.getStyle(),
+										sce.getOldScaleDenominator(),
+										sce.getNewScaleDenominator())) {
 							rememberId2MapLayerLegend.remove(sl.getId());
 						}
 					}
+
+					first = false;
 					recreateLayerList();
 				}
 			}
@@ -503,11 +511,11 @@ public class MapLegend extends JXTaskPaneContainer implements
 					}
 				}
 
-//				@Override
-//				public void layerPreDispose(MapLayerListEvent event) {
-//					// TODO Auto-generated method stub
-//					
-//				}
+				// @Override
+				// public void layerPreDispose(MapLayerListEvent event) {
+				// // TODO Auto-generated method stub
+				//
+				// }
 			});
 
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));

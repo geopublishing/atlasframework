@@ -245,7 +245,7 @@ public class AtlasMapView extends MapView implements MapContextManagerInterface 
 		 * And right after that we dare to start painting the XMapPane
 		 */
 		getGeoMapPane().getMapPane().setPainting(true);
-
+		
 		/**
 		 * A {@link JMapPaneListener} is registered with the {@link XMapPane}
 		 * that listens for events of type {@link ObjectSelectionEvent}.
