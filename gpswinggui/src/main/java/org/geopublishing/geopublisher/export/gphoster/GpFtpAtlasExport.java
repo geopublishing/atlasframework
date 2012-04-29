@@ -116,7 +116,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 					if (cancel.get() == true) {
 						log.info("FTP Upload " + zipFilename
 								+ " cancelled, deleting zip on ftp");
-						ftpClient.delete(gpSync.getAtlasname() + ".zip");
+						ftpClient.delete(zipFilename);
 						log.debug("deleting " + zipFilename
 								+ " on ftp finished");
 					} else {
