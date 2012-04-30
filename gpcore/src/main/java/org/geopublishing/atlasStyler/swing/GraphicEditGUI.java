@@ -19,6 +19,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -980,7 +982,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			// The first button is for images like SVG etc.
 			// jPanelExternalGraphic.add(
 			// new JLabel(ASUtil.R("ExternalGraphicLabel")), "");
-			jButtonExtGraphicPreview = new JButton();
+			jButtonExtGraphicPreview = new JLabel();
 			jButtonExtGraphicPreview.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
 					EXT_GRAPHIC_BUTTON_HEIGHT);
 

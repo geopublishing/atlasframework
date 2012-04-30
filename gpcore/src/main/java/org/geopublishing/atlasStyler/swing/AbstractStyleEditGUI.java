@@ -441,7 +441,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 	 * @param graphic
 	 *            the {@link Graphic} to show
 	 */
-	protected void updateExternalGraphicButton(final JButton button,
+	protected void updateExternalGraphicButton(final JLabel button,
 			final Graphic graphic) {
 		// Update the Button Icon
 		SVGGraphicFactory svgFactory = new SVGGraphicFactory();
@@ -523,7 +523,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 		button.setIcon(icon);
 		button.setSize(EXT_GRAPHIC_BUTTON_WIDTH, EXT_GRAPHIC_BUTTON_HEIGHT);
-
+		button.repaint();
 		// Repack the window if it makes sense
 		final Window parentWindow = SwingUtil.getParentWindow(this);
 		if (parentWindow != null)
@@ -555,7 +555,7 @@ public abstract class AbstractStyleEditGUI extends JPanel {
 
 	protected JButton jButtonExtGraphic;
 	
-	protected JButton jButtonExtGraphicPreview;
+	protected JLabel jButtonExtGraphicPreview;
 
 	protected JButton getJButtonChartGraphic(final GeometryForm geometryForm,
 			final Graphic graphic) {
