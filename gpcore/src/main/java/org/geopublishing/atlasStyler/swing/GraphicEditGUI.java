@@ -12,6 +12,7 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -26,6 +27,7 @@ import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -65,6 +67,9 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 	private JComboBox jComboBoxMarkType = null;
 
 	private JPanel jPanelStroke = null;
+	
+
+	protected static final String PROPERTY_UPDATE_PREVIEWS = "UPDATE_PREVIEWS";
 
 	private final JLabel jLabelStrokeColor = new JLabel();
 
@@ -986,6 +991,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 			jButtonExtGraphicPreview.setSize(EXT_GRAPHIC_BUTTON_WIDTH,
 					EXT_GRAPHIC_BUTTON_HEIGHT);
 
+			GraphicEditGUI.this.addPropertyChangeListener(listenerUpdatePreviewExtChartGraphic);
 			updateExternalGraphicButton(jButtonExtGraphicPreview, graphic);
 			jPanelExternalGraphic.add(jButtonExtGraphicPreview, "");
 
@@ -1001,5 +1007,17 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		}
 		return jPanelExternalGraphic;
 	}
+	
+	final PropertyChangeListener listenerUpdatePreviewExtChartGraphic = new PropertyChangeListener() {
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+
+			if (evt.getPropertyName().equals(PROPERTY_UPDATE_PREVIEWS)) {
+				updateExternalGraphicButton(jButtonExtGraphicPreview, graphic);
+			}
+		}
+
+	};
 
 }
