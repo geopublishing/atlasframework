@@ -992,7 +992,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 					EXT_GRAPHIC_BUTTON_HEIGHT);
 
 			GraphicEditGUI.this.addPropertyChangeListener(listenerUpdatePreviewExtChartGraphic);
-			updateExternalGraphicButton(jButtonExtGraphicPreview, graphic);
+			updateExternalGraphicLabel(jButtonExtGraphicPreview, graphic);
 			jPanelExternalGraphic.add(jButtonExtGraphicPreview, "");
 
 			jPanelExternalGraphic.add(
@@ -1014,7 +1014,7 @@ public class GraphicEditGUI extends AbstractStyleEditGUI {
 		public void propertyChange(PropertyChangeEvent evt) {
 
 			if (evt.getPropertyName().equals(PROPERTY_UPDATE_PREVIEWS)) {
-				updateExternalGraphicButton(jButtonExtGraphicPreview, graphic);
+				updateExternalGraphicLabel(jButtonExtGraphicPreview, graphic);
 			}
 		}
 
