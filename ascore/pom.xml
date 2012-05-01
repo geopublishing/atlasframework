@@ -36,6 +36,17 @@
 			<version>${schmitzm.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
+			<exclusions>
+				<exclusion>
+                                	<groupId>jfree</groupId>
+                        	        <artifactId>jfreechart</artifactId>
+				</exclusion>
+
+				<exclusion>
+                                	<groupId>org.jfree</groupId>
+                        	        <artifactId>jfreechart</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
