@@ -15,7 +15,7 @@
 
 	<properties>
 		<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-		<swt.version>3.7M5</swt.version>
+<!-- 		<swt.version>3.7M5</swt.version> -->
 	</properties>
 
 	<build>
@@ -63,11 +63,11 @@
 
 			<dependencies>
 				<!-- On GISBERT add SWT JARs for ALL Systems! -->
-				<dependency>
-					<groupId>de.wikisquare</groupId>
-					<artifactId>swt</artifactId>
-					<version>${swt.version}</version>
-				</dependency>
+<!-- 				<dependency> -->
+<!-- 					<groupId>de.wikisquare</groupId> -->
+<!-- 					<artifactId>swt</artifactId> -->
+<!-- 					<version>${swt.version}</version> -->
+<!-- 				</dependency> -->
 
 				<!-- On GISBERT add JAI JARs for ALL Systems! -->
 				<dependency>
@@ -103,9 +103,9 @@
 								<excludes>
 
 									<!-- SWT -->
-									<exclude>org.eclipse.swt:swt-windows</exclude>
-									<exclude>org.eclipse.swt:swt-gtk-linux</exclude>
-									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude>
+<!-- 									<exclude>org.eclipse.swt:swt-windows</exclude> -->
+<!-- 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude> -->
+<!-- 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude> -->
 
 									<!-- JAI -->
 									<exclude>com.sun.media:jai_codec-linux</exclude>
