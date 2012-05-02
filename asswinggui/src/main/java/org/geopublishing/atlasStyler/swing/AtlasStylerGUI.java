@@ -688,7 +688,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			try {
 				NativeInterface.open();
 			} catch (Throwable e) {
-				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.");
+				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
 			}
 
 			SwingUtilities.invokeLater(new Runnable() {
@@ -706,7 +706,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 			try {
 				NativeInterface.runEventPump();
 			} catch (Throwable e) {
-				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.");
+				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
 			}
 
 		} else {

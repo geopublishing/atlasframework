@@ -782,7 +782,11 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	private File askLoadAtlasNativeSWt() {
 
 		try {
-			NativeInterface.open();
+			try {
+				NativeInterface.open();
+			} catch (Throwable e) {
+				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
+			}
 
 			JDirectoryDialog fileDialog = new JDirectoryDialog();
 			fileDialog.setTitle(GpUtil.R("CreateAtlas.Dialog.Title"));

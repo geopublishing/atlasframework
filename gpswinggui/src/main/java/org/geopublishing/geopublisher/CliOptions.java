@@ -30,6 +30,9 @@ import de.schmitzm.versionnumber.ReleaseUtil.License;
  * This class manages all the command line options of Geopublisher.
  */
 public class CliOptions extends Options {
+	
+	final static Logger LOGGER = Logger.getLogger(CliOptions.class);
+	
     public static final String VERBOSE = "v";
     public static final String HELP = "h";
     public static final String EXPORT = "e";
@@ -279,7 +282,11 @@ public class CliOptions extends Options {
 
                 final File awcFileToLoad = awcFile;
 
-                NativeInterface.open();
+                try {
+    				NativeInterface.open();
+    			} catch (Throwable e) {
+					LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
+    			}
                 SwingUtilities.invokeLater(new Runnable() {
 
                     @Override
@@ -303,7 +310,13 @@ public class CliOptions extends Options {
 
                     }
                 });
-                NativeInterface.runEventPump();
+                
+                try {
+    				NativeInterface.runEventPump();
+    			} catch (Throwable e) {
+    				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
+    			}
+                
                 return -1;
             } else {
 
