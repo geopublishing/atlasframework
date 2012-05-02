@@ -132,12 +132,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 
 		// Output information about the LGPL license
 		LOGGER.info(ReleaseUtil.getLicense(License.LGPL3, "AtlasStyler"));
-		
+
 		LOGGER.debug("checking for correct permissions on tmpdir");
 		GpUtil.checkAndResetTmpDir("/var/tmp");
 
 		System.setProperty("file.encoding", "UTF-8");
-		
+
 		LOGGER.debug("checking for correct permissions on tmpdir");
 		GpUtil.checkAndResetTmpDir("/var/tmp");
 
@@ -368,11 +368,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 								openDs.dispose();
 						}
 
-//						@Override
-//						public void layerPreDispose(MapLayerListEvent event) {
-//							// TODO Auto-generated method stub
-//							
-//						}
+						// @Override
+						// public void layerPreDispose(MapLayerListEvent event)
+						// {
+						// // TODO Auto-generated method stub
+						//
+						// }
 
 					});
 		}
@@ -683,19 +684,30 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		boolean addedIndexes = checkFixIndexCreation(args);
 
 		if (!addedIndexes) {
-			NativeInterface.open();
+
+			try {
+				NativeInterface.open();
+			} catch (Throwable e) {
+				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.");
+			}
+
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					AtlasStylerGUI asg = new AtlasStylerGUI();
 
-					// // TODO Switch to Apache Commons-CLI
+					// TODO Switch to Apache Commons-CLI
 					if (args.length != 0) {
 						LOGGER.warn("Sorry, command line arguments are ignored in this version. Please contact geopublishing.org if you need this function.");
 					}
 					asg.setVisible(true);
 				}
 			});
-			NativeInterface.runEventPump();
+
+			try {
+				NativeInterface.runEventPump();
+			} catch (Throwable e) {
+				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.");
+			}
 
 		} else {
 			LOGGER.info("Not starting GUI because command line parameter addFix was passed");
