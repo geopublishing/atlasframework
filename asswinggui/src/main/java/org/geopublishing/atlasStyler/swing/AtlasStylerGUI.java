@@ -368,12 +368,12 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 								openDs.dispose();
 						}
 
-						// @Override
-						// public void layerPreDispose(MapLayerListEvent event)
-						// {
-						// // TODO Auto-generated method stub
-						//
-						// }
+						 @Override
+						 public void layerPreDispose(MapLayerListEvent event)
+						 {
+						 // TODO Auto-generated method stub
+						
+						 }
 
 					});
 		}

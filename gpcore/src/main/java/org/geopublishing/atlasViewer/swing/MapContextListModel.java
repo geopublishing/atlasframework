@@ -78,11 +78,11 @@ public final class MapContextListModel implements ListModel {
 
 			}
 //
-//			@Override
-//			public void layerPreDispose(MapLayerListEvent event) {
-//				// TODO Auto-generated method stub
-//				
-//			}
+			@Override
+			public void layerPreDispose(MapLayerListEvent event) {
+				// GT 2.7.4
+				
+			}
 
 		});
 	}
