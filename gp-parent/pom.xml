@@ -27,7 +27,7 @@
 	</licenses>
 
 	<properties>
-		<geotools.version>2.7.3</geotools.version>
+		<geotools.version>2.7.4</geotools.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<schmitzm.version>2.7-SNAPSHOT</schmitzm.version>
 	</properties>
