@@ -19,12 +19,12 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -49,6 +49,8 @@ import org.geotools.styling.Graphic;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
+import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -58,6 +60,7 @@ import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangeListener;
 import de.schmitzm.geotools.styling.chartsymbols.ChartGraphicChangedEvent;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.CancellableDialogAdapter;
+import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SwingUtil;
 import de.schmitzm.swing.table.ColorEditor;
 
@@ -95,6 +98,8 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 					SVGSelector.PROPERTY_UPDATED, null, g);
 		}
 	};
+
+	private JPanel settingsPanel;
 
 	public ChartSymbolEditDialog(Component parentWindow, Graphic importThis,
 			final AtlasStylerVector asv) {
@@ -145,20 +150,31 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			jContentPane.add(getAddAttributeJButton(), "wrap");
 
 			jContentPane.add(new JScrollPane(getAttributesJTable()), "wrap");
-
-			jContentPane.add(getChartImageSizePanel(), "wrap");
-			jContentPane.add(getScalingPanel(), "wrap");
+			jContentPane.add(getSettingsPanel(), "wrap");
 
 			jContentPane.add(getJPanelButtons(), "bottom");
 		}
 		return jContentPane;
 	}
 
+	private JPanel getSettingsPanel() {
+		if (settingsPanel == null) {
+			settingsPanel = new JPanel(new MigLayout());
+			settingsPanel.setBorder(BorderFactory.createTitledBorder(ASUtil
+					.R("ChartSymbolEdit.Settings.Title")));
+			settingsPanel.add(getChartImageSizePanel(), "wrap");
+			settingsPanel.add(getScalingPanel(), "wrap");
+		}
+		return settingsPanel;
+	}
+
 	JPanel scalingPanel;
 
-	private Component getScalingPanel() {
+	private JButton maxValueButton;
+
+	private JPanel getScalingPanel() {
 		if (scalingPanel == null) {
-			scalingPanel = new JPanel(new MigLayout());
+			scalingPanel = new JPanel(new MigLayout("wrap 3"));
 
 			final JTextField inputMaxValue = new JTextField(20);
 
@@ -194,16 +210,56 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			else
 				inputMaxValue.setText("" + 100);
 
-			scalingPanel.add(new JLabel("Max Value:"));
-			scalingPanel.add(inputMaxValue, "wrap");
+			scalingPanel
+					.add(new JLabel(
+							ASUtil.R("ChartSymbolEditDialog.ScalingPanel.Explanation")),
+							"span 3");
+			scalingPanel.add(new JLabel(ASUtil
+					.R("ChartSymbolEditDialog.ScalingPanel.MaxValue")));
+			scalingPanel.add(inputMaxValue);
+			scalingPanel.add(getMaxValueButton());
 
 		}
 		return scalingPanel;
 	}
 
+	private JButton getMaxValueButton() {
+		if (maxValueButton == null) {
+			maxValueButton = new JButton(
+					new AbstractAction(
+							ASUtil.R("ChartSymbolEditDialog.ScalingPanel.MaxValueButton.Title")) {
+						@Override
+						public void actionPerformed(ActionEvent e) {
+//							Filter filter = asv.getStyledFeatures().getFilter();
+//							DefaultQuery query = new DefaultQuery(asv.getStyledFeatures()
+//									.getSchema().getTypeName(), filter);
+//							List<String> propNames = new ArrayList<String>();
+//							propNames.add(value_field_name);
+//							query.setPropertyNames(propNames);
+//							FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
+//									.getFeatureSource().getFeatures(query);
+//							query.setPropertyNames(propNames);
+//							final FeatureIterator<SimpleFeature> iterator = features.features();
+//							try {
+//							while (iterator.hasNext()) {
+//								final SimpleFeature f = iterator.next();
+//								f
+//								.getAttribute(value_field_name)
+//								WERT = f.getAttribute(value_field_name)
+//							} finally {
+//								features.close(iterator);
+//							}
+//							
+						}
+
+					});
+		}
+		return maxValueButton;
+	}
+
 	JPanel chartImageSizePanel;
 
-	private Component getChartImageSizePanel() {
+	private JPanel getChartImageSizePanel() {
 		if (chartImageSizePanel == null) {
 
 			// Width
@@ -275,12 +331,15 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 				inputHeight.setText("" + ChartGraphic.DEFAULT_HEIGHT);
 
 			chartImageSizePanel = new JPanel(new MigLayout());
-			chartImageSizePanel.add(new JLabel(
-					"Define a base size for the chart image."), "wrap");
-			chartImageSizePanel.add(inputWidth, "split 4");
-			chartImageSizePanel.add(new JLabel("px width"), "");
-			chartImageSizePanel.add(inputHeight, "");
-			chartImageSizePanel.add(new JLabel("px height"), "wrap");
+			chartImageSizePanel
+					.add(new JLabel(
+							ASUtil.R("ChartSymbolEditDialog.ChartImageSizePanel.Label")),
+							"wrap");
+			chartImageSizePanel.add(new JLabel(ASUtil.R("WidthLabel")),
+					"split 4");
+			chartImageSizePanel.add(inputWidth, "");
+			chartImageSizePanel.add(new JLabel(ASUtil.R("HeightLabel")), "");
+			chartImageSizePanel.add(inputHeight, "wrap");
 
 		}
 		return chartImageSizePanel;
@@ -448,9 +507,15 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					chartGraphic.setChartType((ChartGraphicTyp) e.getItem());
+					if (e.getItem().toString().equals("p")
+							|| e.getItem().toString().equals("p3"))
+						getScalingPanel().setEnabled(false);
+					else
+						getScalingPanel().setEnabled(true);
 				}
+
 			});
-			
+
 			SwingUtil.addMouseWheelForCombobox(chartTypCombobox);
 		}
 		return chartTypCombobox;

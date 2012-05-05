@@ -94,8 +94,17 @@ public class ChartGraphicTest extends TestingClass {
 		// "http://chart?cht=bvg&chd=t:11|40|90&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
 		// String url =
 		// "http://chart?cht=p3&amp;chd=t:SQKM_CNTRY,SQMI_CNTRY&amp;chco=ff0000,990099&amp;chf=bg,s,FFFFFF00&amp;chs=60x62";
-		String url = "http://chart?cht=bvg&chd=t:${POP_CNTRY * 100. / 100.0}|${SQKM_CNTRY * 100. / 100.0}|${SQMI_CNTRY * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
+		String url = "http://chart?cht=bvg&chd=t:${POP_CNTRY * 100. / 100}|${SQKM_CNTRY * 100. / 10000.0}|${SQMI_CNTRY * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
+		String url2 = "http://chart?cht=bhg&chd=t:${POP_CNTRY * 100. / 100}|${SQKM_CNTRY * 100. / 10000.0}|${SQMI_CNTRY * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
+		String url3 = "http://chart?cht=bvg&chd=t:${POP_CNTRY * 100. / 1000000000.0}|${SQKM_CNTRY * 100. / 10000.0}|${SQMI_CNTRY * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
+		String url4 = "http://chart?cht=bhg&chd=t:${POP_CNTRY * 100. / 1000000000.0}|${SQKM_CNTRY * 100. / 10000.0}|${SQMI_CNTRY * 100. / 100.0}&chco=990099,ff0000,000066&chf=bg,s,FFFFFF00&chs=60x62";
+		drawChart(url);
+		drawChart(url2);
+		drawChart(url3);
+		drawChart(url4);
+	}
 
+	private void drawChart(String url) throws Throwable {
 		ExternalGraphic eg = StylingUtil.STYLE_BUILDER.createExternalGraphic(
 				url, "application/chart");
 
@@ -116,4 +125,6 @@ public class ChartGraphicTest extends TestingClass {
 
 		TestingUtil.testGui(legendPanel, 50);
 	}
+	
+	
 }
