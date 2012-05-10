@@ -33,6 +33,7 @@ import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.And;
 import org.opengis.filter.Filter;
+import org.opengis.filter.IncludeFilter;
 
 import de.schmitzm.geotools.GTUtil;
 import de.schmitzm.geotools.feature.FeatureUtil;
@@ -216,8 +217,8 @@ public abstract class AbstractRulesList implements RulesListInterface {
 					rtls = LangUtil.extendArray(rtls, UNIQUE_VALUE_LINE,
 							TEXT_LABEL);
 				if (hasNumeric)
-					rtls = LangUtil.extendArray(rtls,
-							QUANTITIES_COLORIZED_LINE);
+					rtls = LangUtil
+							.extendArray(rtls, QUANTITIES_COLORIZED_LINE);
 				return rtls;
 			} else if (gf == GeometryForm.POLYGON) {
 
@@ -230,8 +231,7 @@ public abstract class AbstractRulesList implements RulesListInterface {
 				if (hasNumeric)
 					rtls = LangUtil.extendArray(rtls,
 							QUANTITIES_COLORIZED_POLYGON,
-							QUANTITIES_COLORIZED_POINT_FOR_POLYGON
-							);
+							QUANTITIES_COLORIZED_POINT_FOR_POLYGON);
 				return rtls;
 
 			} else if (gf == GeometryForm.ANY) {
@@ -427,15 +427,15 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		for (Rule r : rules) {
 			applyScaleDominators(r);
 
-			// If this RuleList is disabled, add a HIDE IN LEGEND hint to the
-			// Legend, so schmitzm will ignore the layer
-			if (!isEnabled()) {
-				if (r.getName() != null
-						&& !r.getName().contains(
-								StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
-					r.setName(r.getName() + "_"
-							+ StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
-			}
+			// // If this RuleList is disabled, add a HIDE IN LEGEND hint to the
+			// // Legend, so schmitzm will ignore the layer
+			// if (!isEnabled()) {
+			// if (r.getName() != null
+			// && !r.getName().contains(
+			// StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT))
+			// r.setName(r.getName() + "_"
+			// + StyledLayerUtil.HIDE_IN_LAYER_LEGEND_HINT);
+			// }
 		}
 
 		return rules;
@@ -673,8 +673,9 @@ public abstract class AbstractRulesList implements RulesListInterface {
 	private Filter parseRuleListEnabledDisabledFilter(Filter filter) {
 		if (!(filter instanceof AndImpl)) {
 			setEnabled(true);
-			LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
-					+ filter);
+			if (!(filter instanceof IncludeFilter))
+				LOGGER.warn("Couldn't interpret whether this RulesList is disabled or enabled. Assuming it is enabled. Expected an AndFilter, but was "
+						+ filter);
 			return filter;
 		} else
 			try {

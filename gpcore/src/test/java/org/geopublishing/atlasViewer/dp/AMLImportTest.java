@@ -10,24 +10,17 @@ import static org.junit.Assert.fail;
 import java.util.Iterator;
 import java.util.Random;
 
-import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.swing.AsTestingUtil;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerVector;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GpTestingUtil;
 import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
-import org.geotools.styling.PointSymbolizer;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.LogoPosition;
 import de.schmitzm.geotools.gui.ScalePanel;
-import de.schmitzm.geotools.styling.StylingUtil;
-import de.schmitzm.geotools.styling.chartsymbols.ChartGraphic;
-import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.testing.TestingClass;
 

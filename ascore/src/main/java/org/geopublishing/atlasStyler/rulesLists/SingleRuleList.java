@@ -38,6 +38,7 @@ import org.geotools.styling.Symbolizer;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.type.GeometryDescriptor;
 import org.opengis.filter.Filter;
+import org.opengis.filter.expression.Function;
 import org.opengis.util.InternationalString;
 
 import de.schmitzm.data.Copyable;
@@ -140,8 +141,24 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 	 *            The symbolizers to add.
 	 */
 	public boolean addSymbolizers(List<? extends Symbolizer> symbolizers) {
+
+		// Wenn einer der Symbolizer die Geometrie mit einer
+		// "centroid"-Funktion versehen hat, dann wird das bemerkt.
+		// https://trac.wikisquare.de/gp/ticket/81
+		for (Symbolizer s : symbolizers) {
+			if (s.getGeometry() != null && s.getGeometry() instanceof Function) {
+				Function f = (Function) s.getGeometry();
+				if (f.getName() != null
+						&& f.getName().equalsIgnoreCase("centroid")) {
+					setUseCentroidFunction(true);
+					continue;
+				}
+			}
+		}
+
 		boolean add = layers
 				.addAll((Collection<? extends SymbolizerType>) symbolizers);
+		
 		if (add)
 			fireEvents(new RuleChangedEvent("Added " + symbolizers.size()
 					+ " symbolizers", this));
@@ -390,6 +407,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 		try {
 
 			final List<? extends Symbolizer> symbs = rule.symbolizers();
+
 			addSymbolizers(symbs);
 			reverseSymbolizers();
 
@@ -495,13 +513,7 @@ public abstract class SingleRuleList<SymbolizerType extends Symbolizer> extends
 					+ row + " by " + delta);
 
 		// Something is selected
-
 		getSymbolizers().add(row + delta, getSymbolizers().remove(row));
-		//
-		// Symbolizer symbolizer = getSymbolizers().remove(from);
-		//
-		// symbolizers.insertElementAt(symbolizer,
-		// jTableLayers.getSelectedRow() + 1);
 
 		fireEvents(new RuleChangedEvent("Index " + row + " moved up/down to "
 				+ (row + delta), this));

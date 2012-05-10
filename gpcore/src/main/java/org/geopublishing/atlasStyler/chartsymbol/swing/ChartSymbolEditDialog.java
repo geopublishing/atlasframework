@@ -49,8 +49,6 @@ import org.geotools.styling.Graphic;
 import org.geotools.styling.visitor.DuplicatingStyleVisitor;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import de.schmitzm.geotools.data.amd.AttributeMetadataImpl;
-import de.schmitzm.geotools.data.amd.AttributeMetadataInterface;
 import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
@@ -172,11 +170,11 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 	private JButton maxValueButton;
 
+	final JTextField inputMaxValue = new JTextField(20);
+
 	private JPanel getScalingPanel() {
 		if (scalingPanel == null) {
 			scalingPanel = new JPanel(new MigLayout("wrap 3"));
-
-			final JTextField inputMaxValue = new JTextField(20);
 
 			inputMaxValue.getDocument().addDocumentListener(
 					new DocumentListener() {
@@ -217,7 +215,8 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 			scalingPanel.add(new JLabel(ASUtil
 					.R("ChartSymbolEditDialog.ScalingPanel.MaxValue")));
 			scalingPanel.add(inputMaxValue);
-			scalingPanel.add(getMaxValueButton());
+
+			// scalingPanel.add(getMaxValueButton());
 
 		}
 		return scalingPanel;
@@ -230,26 +229,30 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 							ASUtil.R("ChartSymbolEditDialog.ScalingPanel.MaxValueButton.Title")) {
 						@Override
 						public void actionPerformed(ActionEvent e) {
-//							Filter filter = asv.getStyledFeatures().getFilter();
-//							DefaultQuery query = new DefaultQuery(asv.getStyledFeatures()
-//									.getSchema().getTypeName(), filter);
-//							List<String> propNames = new ArrayList<String>();
-//							propNames.add(value_field_name);
-//							query.setPropertyNames(propNames);
-//							FeatureCollection<SimpleFeatureType, SimpleFeature> features = getStyledFeatures()
-//									.getFeatureSource().getFeatures(query);
-//							query.setPropertyNames(propNames);
-//							final FeatureIterator<SimpleFeature> iterator = features.features();
-//							try {
-//							while (iterator.hasNext()) {
-//								final SimpleFeature f = iterator.next();
-//								f
-//								.getAttribute(value_field_name)
-//								WERT = f.getAttribute(value_field_name)
-//							} finally {
-//								features.close(iterator);
-//							}
-//							
+							// Filter filter =
+							// asv.getStyledFeatures().getFilter();
+							// DefaultQuery query = new
+							// DefaultQuery(asv.getStyledFeatures()
+							// .getSchema().getTypeName(), filter);
+							// List<String> propNames = new ArrayList<String>();
+							// propNames.add(value_field_name);
+							// query.setPropertyNames(propNames);
+							// FeatureCollection<SimpleFeatureType,
+							// SimpleFeature> features = getStyledFeatures()
+							// .getFeatureSource().getFeatures(query);
+							// query.setPropertyNames(propNames);
+							// final FeatureIterator<SimpleFeature> iterator =
+							// features.features();
+							// try {
+							// while (iterator.hasNext()) {
+							// final SimpleFeature f = iterator.next();
+							// f
+							// .getAttribute(value_field_name)
+							// WERT = f.getAttribute(value_field_name)
+							// } finally {
+							// features.close(iterator);
+							// }
+							//
 						}
 
 					});
@@ -416,8 +419,12 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 
 				@Override
 				public boolean isCellEditable(int row, int column) {
-					if (column == COLIDX_COLOR)
+					if (column == COLIDX_COLOR) {
+						if (chartGraphic.getChartType() == ChartGraphicTyp.lc
+								&& row > 0)
+							return false;
 						return true;
+					}
 					return false;
 				}
 
@@ -430,6 +437,8 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 				public void setValueAt(Object aValue, int row, int column) {
 					if (column == COLIDX_COLOR) {
 						chartGraphic.setColor(row, (Color) aValue);
+						if (chartGraphic.getChartType() == ChartGraphicTyp.lc)
+							fireTableDataChanged();
 					}
 				}
 
@@ -438,8 +447,12 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 					if (column == COLIDX_NAME)
 						return chartGraphic.getAttributes().get(row);
 
-					if (column == COLIDX_COLOR)
+					if (column == COLIDX_COLOR) {
+						if (chartGraphic.getChartType() == ChartGraphicTyp.lc)
+							return chartGraphic.getColor(0);
+
 						return chartGraphic.getColor(row);
+					}
 
 					if (column == COLIDX_DELETE)
 						return new JButton(new AbstractAction("X") {
@@ -507,13 +520,9 @@ public class ChartSymbolEditDialog extends CancellableDialogAdapter {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					chartGraphic.setChartType((ChartGraphicTyp) e.getItem());
-					if (e.getItem().toString().equals("p")
-							|| e.getItem().toString().equals("p3"))
-						getScalingPanel().setEnabled(false);
-					else
-						getScalingPanel().setEnabled(true);
+					getScalingPanel().setEnabled(
+							((ChartGraphicTyp) e.getItem()).isBar());
 				}
-
 			});
 
 			SwingUtil.addMouseWheelForCombobox(chartTypCombobox);
