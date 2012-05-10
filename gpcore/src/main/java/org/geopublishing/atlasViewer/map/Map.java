@@ -1155,7 +1155,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * Atlas-HTML-Dokuemnten verwendet werden kann um auf ein DPE zu verlinken.
 	 */
 	public String getInternalLink(String lang) {
-		return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase()
+		return "<a href=\"" + AtlasProtocol.MAP.toString().toLowerCase()
 				+ "://" + getId() + "\">" + getTitle().get(lang) + "</a>";
 	}
 
@@ -1164,7 +1164,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 	 * Atlas-HTML-Dokuemnten verwendet werden kann um auf ein DPE zu verlinken.
 	 */
 	public String getInternalLink() {
-		return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase()
+		return "<a href=\"" + AtlasProtocol.MAP.toString().toLowerCase()
 				+ "://" + getId() + "\">" + getTitle().toString() + "</a>";
 	}
 
