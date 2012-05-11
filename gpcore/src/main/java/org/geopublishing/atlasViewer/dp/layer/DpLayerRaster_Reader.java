@@ -403,7 +403,7 @@ public class DpLayerRaster_Reader extends
 	//
 	// return 0.;
 	// }
-	LOGGER.warn("DpLayerRaster.getMaxResolution() not yet implemented for AbstractGridCoverage2DReader!");
+//	LOGGER.warn("DpLayerRaster.getMaxResolution() not yet implemented for AbstractGridCoverage2DReader!");
 	return null;
 	// MS-01.ec
     }

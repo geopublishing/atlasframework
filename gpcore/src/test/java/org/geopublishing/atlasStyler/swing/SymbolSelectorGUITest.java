@@ -1,16 +1,7 @@
 package org.geopublishing.atlasStyler.swing;
 
-import static org.junit.Assert.assertEquals;
-
-import javax.swing.JComboBox;
-
-import org.geopublishing.atlasStyler.AtlasStylerVector;
-import org.geopublishing.atlasStyler.RuleListFactory;
-import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
 import org.junit.Test;
 
-import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
-import de.schmitzm.i18n.Translation;
 import de.schmitzm.testing.TestingUtil;
 
 public class SymbolSelectorGUITest {

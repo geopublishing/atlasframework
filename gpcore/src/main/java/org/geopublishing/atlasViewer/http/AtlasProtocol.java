@@ -192,18 +192,10 @@ public enum AtlasProtocol {
 	@Override
 	public String toString() {
 		switch (this) {
-		case BROWSER:
-			return "browser";
-		case HTML:
-			return "html";
-		case MAP:
-			return "map";
 		case IMAGE:
 			return "img";
-		case PDF:
-			return "pdf";
 		default:
-			throw new IllegalArgumentException("Protocol Enum not known!?");
+			return super.toString().toLowerCase();
 		}
 	}
 

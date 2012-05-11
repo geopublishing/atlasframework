@@ -56,7 +56,7 @@
   <update check="always" policy="always"/>
   
   <resources>
-    <java href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Dfile.encoding=UTF-8" max-heap-size="320m" version="1.6.0_14+"/>
+    <java href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Dfile.encoding=UTF-8" max-heap-size="380m" version="1.6.0_14+"/>
 
     <property name="jnlp.packEnabled" value="true"/>
 	<property name="file.encoding" value="UTF-8"/>
