@@ -298,7 +298,7 @@ public class SymbolSelectorGUI extends AtlasDialog {
 	 * 
 	 * @return javax.swing.JComboBox
 	 */
-	private JComboBox getJComboBoxSize() {
+	protected JComboBox getJComboBoxSize() {
 		if (jComboBoxSize == null) {
 			jComboBoxSize = new JComboBox();
 
