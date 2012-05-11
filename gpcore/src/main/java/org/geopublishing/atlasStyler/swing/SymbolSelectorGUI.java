@@ -22,6 +22,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -334,9 +335,10 @@ public class SymbolSelectorGUI extends AtlasDialog {
 			/** Change in the COmboBox * */
 			jComboBoxSize.addItemListener(new ItemListener() {
 
+				AtomicBoolean busy = new AtomicBoolean(false);
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (e.getStateChange() == ItemEvent.SELECTED && busy.compareAndSet(false, true)) {
 						Float size = (Float) jComboBoxSize.getSelectedItem();
 
 						// System.out.println("do set from
@@ -405,9 +407,10 @@ public class SymbolSelectorGUI extends AtlasDialog {
 
 			jComboBoxRotation.addItemListener(new ItemListener() {
 
+				AtomicBoolean busy = new AtomicBoolean(false);
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
+					if (e.getStateChange() == ItemEvent.SELECTED && busy.compareAndSet(false, true)) {
 						Double size = (Double) jComboBoxRotation
 								.getSelectedItem();
 

@@ -204,8 +204,8 @@ public class SinglePolygonSymbolRuleList extends
 			return;
 
 		Float factor = newMax / getSizeBiggest();
-		LOGGER.debug("setSize Polygon by factor = " + factor + "for "
-				+ newMax + "  / " + getSizeBiggest() + " ");
+		LOGGER.debug("setSize Polygon, increate biggstSize by FaKtor = " + factor + " ("
+				+ newMax + "  / " + getSizeBiggest() + ")");
 
 		for (PolygonSymbolizer ps : getSymbolizers()) {
 

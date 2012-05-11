@@ -1022,9 +1022,7 @@ public class ASUtil {
 	}
 
 	/**
-	 * Replaces the "main" color in a given {@link PolygonSymbolizer} element
-	 * 
-	 * @author <a href="mailto:skpublic@wikisquare.de">Stefan Alfons Tzeggai</a>
+	 * Replaces the "main" size in a given {@link PolygonSymbolizer} element
 	 */
 	public static void replacePolygonSymbolizerSize(final PolygonSymbolizer ps,
 			final Float factor) {
