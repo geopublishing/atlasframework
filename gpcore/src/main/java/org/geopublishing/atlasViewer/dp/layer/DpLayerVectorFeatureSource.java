@@ -50,6 +50,7 @@ import de.schmitzm.geotools.styling.StyledLayerUtil;
 import de.schmitzm.i18n.Translation;
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.jfree.feature.style.FeatureChartStyle;
+import de.schmitzm.lang.LangUtil;
 
 public abstract class DpLayerVectorFeatureSource
 		extends
@@ -165,8 +166,21 @@ public abstract class DpLayerVectorFeatureSource
 			 * 
 			 * But what can i do against it?
 			 */
-			dataStore.dispose();
+
+			/**
+			 * Wenn eine andere Karte mit dem selben Layer im GP noch offen ist,
+			 * dann sorgt #dispose() dafür, dass dort eine NPE kommt.
+			 * 
+			 * Deshalb hier nur auf <code>null</code> setzen und hoffen, dass
+			 * finalize das macht.
+			 * 
+			 * #88 (Wenn ein Datastore in einer offenen Karte disposed wird,
+			 * gibts in einer anderen offenen Map NPE)
+			 */
+			// dataStore.dispose();
 			dataStore = null;
+
+			LangUtil.gc();
 		}
 	}
 
@@ -475,7 +489,7 @@ public abstract class DpLayerVectorFeatureSource
 							IOUtil.changeUrlExt(url, "shp.xml"),
 							IOUtil.changeFileExt(file, "shp.xml"));
 
-//					publish("done");
+					// publish("done");
 
 					success = true;
 				} catch (Exception e) {
