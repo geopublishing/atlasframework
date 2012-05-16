@@ -4,21 +4,15 @@ import static org.junit.Assert.assertEquals;
 
 import javax.swing.JComboBox;
 
-import org.apache.commons.httpclient.util.LangUtils;
 import org.geopublishing.atlasStyler.AtlasStylerVector;
 import org.geopublishing.atlasStyler.RuleListFactory;
 import org.geopublishing.atlasStyler.rulesLists.SinglePolygonSymbolRuleList;
-import org.geotools.styling.FeatureTypeStyle;
-import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.PolygonSymbolizer;
 import org.junit.Test;
-import org.opengis.style.Fill;
 
-import de.schmitzm.geotools.styling.StyledFeaturesInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
 import de.schmitzm.geotools.testing.GTTestingUtil.TestDatasetsVector;
 import de.schmitzm.i18n.Translation;
-import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingUtil;
 
 public class SymbolSelectorGUITest {

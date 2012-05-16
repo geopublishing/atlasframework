@@ -307,11 +307,19 @@ public enum AtlasProtocol {
 		if (url == null)
 			return false;
 
-		String html = IOUtil.readURLasString(url);
+		try {
 
-		String regex = Pattern.quote("&#47;&#47;" + dpm.getId());
-		Matcher matcher = Pattern.compile(regex).matcher(html);
-		return matcher.find();
+			String html = IOUtil.readURLasString(url);
+
+			String regex = Pattern.quote("&#47;&#47;" + dpm.getId());
+			Matcher matcher = Pattern.compile(regex).matcher(html);
+			return matcher.find();
+
+		} catch (Exception e) {
+			LOGGER.error("Fehler beim Analysieren des HTML unter " + url
+					+ " auf referenzen. Im Zweifelsfall return true");
+			return true;
+		}
 	}
 
 }
