@@ -138,6 +138,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	public final static String ARJAR_FILENAME = "atlas_resources.jar";
 
 	/**
+	 * If <code>true</code>, unused DPEs are not exported
+	 */
+	private boolean filterUnused = true;
+
+	/**
 	 * The filename of the JNLP file which can be used to start the atlas from
 	 * the Internet.
 	 */
@@ -1448,7 +1453,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				startUpMap = ace.getMapPool().get(startMapID);
 			}
 
-			for (final DpEntry<?> dpe : ace.getUsedDpes()) {
+			for (final DpEntry<?> dpe : filterUnused ? ace.getUsedDpes() : ace
+					.getDataPool().values()) {
 
 				resources.appendChild(document.createComment("Datapoolentry "
 						+ dpe.getTitle().toString()));
@@ -2376,6 +2382,14 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 */
 	public void setOverwriteJnlpBaseUrl(URL jwsUrl) {
 		overwriteJnlpUrl = jwsUrl;
+	}
+
+	public boolean isFilterUnused() {
+		return filterUnused;
+	}
+
+	public void setFilterUnused(boolean filterUnused) {
+		this.filterUnused = filterUnused;
 	}
 
 }
