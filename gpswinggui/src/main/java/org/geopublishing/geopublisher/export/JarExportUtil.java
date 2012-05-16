@@ -1832,8 +1832,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			// File[] listOfIndexJars = new File[] { targetJar };
 			// Creating a JAR for every DpEntry
 			LOGGER.debug("Creating a JAR for every DpEntry used");
-			for (final DpEntry<?> dpe : ace.getUsedDpes()) {
-
+			for (final DpEntry<?> dpe : filterUnused ? ace.getUsedDpes() : ace
+					.getDataPool().values()) {
 				createJarFromDpe(dpe);
 			}
 
@@ -2018,7 +2018,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
 		// für DISK exportiert wird.
-		
+
 		// Native Libs nicht mehr mitkopieren, kann komplett entfernt werden?
 		if (toDisk) {
 			libs = LangUtil.extendArray(libs, getNativeLibNames());
@@ -2050,8 +2050,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 			// Unnice, but remove all ant-related dependencies. They are only
 			// part of the build provess:
-			atlasDependecies = atlasDependecies.replaceAll(
-					"\\./ant-.*?\\.jar", "").replaceAll("::", ":");
+			atlasDependecies = atlasDependecies.replaceAll("\\./ant-.*?\\.jar",
+					"").replaceAll("::", ":");
 
 			// Add the new libs to the existing list
 			libs = atlasDependecies.split(":");
