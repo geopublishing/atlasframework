@@ -2012,7 +2012,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		// Native libs auch entpackt und einzeln in LIB ordner kopieren, wenn
 		// für DISK exportiert wird.
-
+		
 		// Native Libs nicht mehr mitkopieren, kann komplett entfernt werden?
 		if (toDisk) {
 			libs = LangUtil.extendArray(libs, getNativeLibNames());
@@ -2045,7 +2045,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			// Unnice, but remove all ant-related dependencies. They are only
 			// part of the build provess:
 			atlasDependecies = atlasDependecies.replaceAll(
-					"\\./ant-.*?-.*?\\.jar", "").replaceAll("::", ":");
+					"\\./ant-.*?\\.jar", "").replaceAll("::", ":");
 
 			// Add the new libs to the existing list
 			libs = atlasDependecies.split(":");
