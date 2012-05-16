@@ -125,7 +125,6 @@ public enum AtlasProtocol {
 					/**
 					 * 2. THis is a relative link to a PDF file?
 					 */
-
 					String basePath = currURL;
 					final int lastSlashPos = basePath.lastIndexOf('/');
 					if (lastSlashPos >= 0)
@@ -137,6 +136,14 @@ public enum AtlasProtocol {
 
 					URL pdfUrl = new URL(pdfUrlString);
 
+//					http://127.0.0.1:7272/ad/data/pdf_01604578613_wateravailabilitytotalarea/wateravailabilitytotalarea.pdf
+//					if(!new File(pdfUrl.getFile()).exists()){
+//						int lastSlashPos2 = basePath.lastIndexOf('/');
+//						if (lastSlashPos2 >= 0)
+//							basePath = basePath.substring(0, basePath.lastIndexOf('/'));
+//						basePath = basePath.replaceFirst("html", "data");
+//						pdfUrl = new URL(basePath + '/'+pdfPathOrName + pdfPathOrName);
+//					}
 					LOGGER.debug("pdfPathOrName = " + pdfPathOrName);
 					LOGGER.debug("pdfUrl = " + pdfUrlString);
 					AtlasProtocol.PDF.performPDF(parent, pdfUrl, new File(
