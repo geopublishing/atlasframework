@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chartStyle id="chartstyle_00380832398" type="SCATTER" legend="true" tooltips="true" urls="true" orientation="vertical" regrLineVisible="true">
+<chartStyle id="chartstyle_00380832398" type="SCATTER" legend="true" tooltips="true" urls="true" orientation="vertical" regrLineVisible="true" regrInfoVisible="true">
   <border visible="false" />
   <title paint="#000000">en{scatterplot}</title>
   <desc paint="#808080">en{Bandwidth vs. Freedom of Press score}</desc>

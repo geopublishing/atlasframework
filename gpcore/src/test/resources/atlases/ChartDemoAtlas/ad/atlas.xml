@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<atlas xmlns="http://www.wikisquare.de/AtlasML" atlasBasename="chartdemo" buildVersion="201010040842" majVersion="1" minVersion="6" schemaLocation="http://www.wikisquare.de/AtlasML http://localhost:7272/skrueger/atlas/resource/AtlasML.xsd">
+<atlas xmlns="http://www.wikisquare.de/AtlasML" atlasBasename="chartdemo" buildVersion="201205171655" jnlpBaseUrl="http://atlas.geopublishing.org/hosted/chartdemo/" majVersion="1" mapLogoPosition="BOTTOMRIGHT" minVersion="9">
   <name>
     <translation lang="en">Geopublisher Chart Demo Atlas</translation>
   </name>
@@ -13,9 +13,23 @@
     <translation lang="en">You have to mention this atlas when reusing any content. Data is royalty free.</translation>
   </copyright>
   <atlasversion>0.0</atlasversion>
+  <gpHoster auth="false"/>
   <supportedLanguages>
     <language lang="en"/>
   </supportedLanguages>
+  <pdfMedia exportable="false" id="pdf_00320581851_mini">
+    <name>
+      <translation lang="en">mini.pdf</translation>
+    </name>
+    <desc>
+      <translation lang="en">small pdf</translation>
+    </desc>
+    <keywords>
+      <translation lang="en"></translation>
+    </keywords>
+    <dataDirname>pdf_00320581851_mini</dataDirname>
+    <filename>mini.pdf</filename>
+  </pdfMedia>
   <pdfMedia exportable="false" id="pdf_02034337607_geopublisher_1.4_chart_creation_tutorial">
     <name>
       <translation lang="en">Chart Creation Tutorial</translation>
