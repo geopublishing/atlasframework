@@ -136,14 +136,22 @@ public enum AtlasProtocol {
 
 					URL pdfUrl = new URL(pdfUrlString);
 
-//					http://127.0.0.1:7272/ad/data/pdf_01604578613_wateravailabilitytotalarea/wateravailabilitytotalarea.pdf
-//					if(!new File(pdfUrl.getFile()).exists()){
-//						int lastSlashPos2 = basePath.lastIndexOf('/');
-//						if (lastSlashPos2 >= 0)
-//							basePath = basePath.substring(0, basePath.lastIndexOf('/'));
-//						basePath = basePath.replaceFirst("html", "data");
-//						pdfUrl = new URL(basePath + '/'+pdfPathOrName + pdfPathOrName);
-//					}
+					/*
+					 * Workaround for pdfs only being used as links. 
+					 * They dont get listed in the dataPool for some reason
+					 * @see https://trac.wikisquare.de/gp/ticket/91
+					 */
+					if(!new File(pdfUrl.getFile()).exists()){
+						int lastSlashPos2 = basePath.lastIndexOf('/');
+						if (lastSlashPos2 >= 0)
+							basePath = basePath.substring(0, basePath.lastIndexOf('/'));
+						basePath = basePath.replaceFirst("html", "data");
+						String[] split = pdfPathOrName.split("_");
+						pdfUrlString = basePath + '/'+pdfPathOrName + '/';
+						for (int i=2;i < split.length;i++) //case there is an "_" in the pdfs name
+							pdfUrlString+=split[i];
+						pdfUrl = new URL(pdfUrlString + ".pdf");
+					}
 					LOGGER.debug("pdfPathOrName = " + pdfPathOrName);
 					LOGGER.debug("pdfUrl = " + pdfUrlString);
 					AtlasProtocol.PDF.performPDF(parent, pdfUrl, new File(
