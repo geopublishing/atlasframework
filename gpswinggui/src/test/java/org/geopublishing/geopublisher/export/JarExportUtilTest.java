@@ -216,7 +216,7 @@ public class JarExportUtilTest extends TestingClass {
 		jarExportUtil.ATLAS_TEMP_FILE_EXPORTINSTANCE_ID, 1);
 
 	// Expected first entry in the datapool
-	String expected = "pdf_02034337607_geopublisher_1.4_chart_creation_tutorial";
+	String expected = "pdf_00320581851_mini";
 
 	File expectedDpeJarFileLoaction = new File(jarExportUtil.getTempDir(),
 		expected);
@@ -451,7 +451,7 @@ public class JarExportUtilTest extends TestingClass {
 		atlasExportTesttDir, false, true, false);
 
 	File dpeJarFileExpected = new File(jarExportUtil.getTempDir(),
-		"pdf_02034337607_geopublisher_1.4_chart_creation_tutorial.jar");
+		"pdf_00320581851_mini.jar");
 
 	dpeJarFileExpected.delete();
 	assertFalse(dpeJarFileExpected.exists());
