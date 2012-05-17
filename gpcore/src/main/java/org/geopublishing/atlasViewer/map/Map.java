@@ -476,7 +476,7 @@ public class Map extends DefaultMutableTreeNode implements Comparable<Object>,
 		final String urlString = "http://127.0.0.1:" + Webserver.PORT + "/"
 				+ AtlasConfig.ATLASDATA_DIRNAME + "/"
 				+ AtlasConfig.HTML_DIRNAME + "/" + getId() + "/" + "index_"
-				+ Translation.getActiveLang() + ".html";
+				+ activeLang + ".html";
 		// LOGGER.debug("URLstring fuer HTML mapinfo = " + urlString);
 
 		try {

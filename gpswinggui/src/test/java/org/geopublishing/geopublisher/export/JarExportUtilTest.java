@@ -21,6 +21,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -41,6 +42,7 @@ import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GpTestingUtil;
+import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geopublishing.geopublisher.GpUtil;
 import org.geopublishing.geopublisher.exceptions.AtlasExportException;
 import org.geotools.data.DataUtilities;
@@ -50,6 +52,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.io.IOUtil;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.testing.TestingClass;
 import de.schmitzm.testing.TestingUtil;
@@ -531,6 +534,21 @@ public class JarExportUtilTest extends TestingClass {
 	    });
 	}
 	FileUtils.deleteDirectory(jeu.getTempDir());
+    }
+    
+    @Test
+    @Ignore
+    public void testImportExportPdfMedia() throws Exception {
+    	AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
+    	Iterator<DpEntry<? extends ChartStyle>> iterator = ace.getDataPool().values().iterator();
+    	DpEntry pdf = iterator.next();
+    	while(!pdf.getFilename().equals("mini.pdf")){
+    		pdf = iterator.next();
+    	}
+    	File exportDir = GpTestingUtil.createAtlasExportTesttDir();
+    	JarExportUtil jarExportUtil = new JarExportUtil(ace, null, exportDir, false, true, false);
+		jarExportUtil.export();
+		FileUtils.deleteDirectory(jarExportUtil.getTempDir());
     }
 
 }

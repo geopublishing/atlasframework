@@ -326,7 +326,7 @@ public enum AtlasProtocol {
 
 			String html = IOUtil.readURLasString(url);
 
-			String regex = Pattern.quote("&#47;&#47;" + dpm.getId());
+			String regex = "&#47;&#47;|[//]?" + dpm.getId();
 			Matcher matcher = Pattern.compile(regex).matcher(html);
 			return matcher.find();
 
