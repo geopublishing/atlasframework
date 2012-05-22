@@ -33,6 +33,7 @@ import org.geopublishing.atlasViewer.swing.AtlasPopupDialog;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.HTMLBrowserWindow;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;
@@ -148,8 +149,9 @@ public enum AtlasProtocol {
 						basePath = basePath.replaceFirst("html", "data");
 						String[] split = pdfPathOrName.split("_");
 						pdfUrlString = basePath + '/'+pdfPathOrName + '/';
-						for (int i=2;i < split.length;i++) //case there is an "_" in the pdfs name
-							pdfUrlString+=split[i];
+						pdfUrlString+=split[2];
+						for (int i=3;i < split.length;i++) //case there is an "_" in the pdfs name
+							pdfUrlString+='_'+split[i];
 						pdfUrl = new URL(pdfUrlString + ".pdf");
 					}
 					LOGGER.debug("pdfPathOrName = " + pdfPathOrName);
