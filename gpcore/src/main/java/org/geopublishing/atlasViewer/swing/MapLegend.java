@@ -472,8 +472,10 @@ public class MapLegend extends JXTaskPaneContainer implements
 				@Override
 				public void layerAdded(MapLayerListEvent event) {
 					// LOGGER.debug("layerAdded MapLayerListListener");
-					recreateLayerList();
-				}
+					event.getLayer().getStyle().featureTypeStyles().get(0).rules().size();
+					recreateLayerList(); 
+					event.getLayer().getStyle().featureTypeStyles().get(0).rules().size();
+					}
 
 				@Override
 				public void layerChanged(MapLayerListEvent event) {
@@ -641,7 +643,7 @@ public class MapLegend extends JXTaskPaneContainer implements
 
 			// Adding the Layer to the mapContext, listeners will do the rest
 			boolean b;
-			if (idx < 0)
+			if (idx < 0) 
 				b = getGeoMapPane().getMapContext().addLayer(mapLayer);
 			else
 				b = getGeoMapPane().getMapContext().addLayer(idx, mapLayer);

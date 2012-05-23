@@ -33,7 +33,6 @@ import org.geopublishing.atlasViewer.swing.AtlasPopupDialog;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
 import org.geopublishing.atlasViewer.swing.ClickInfoDialog;
 import org.geopublishing.atlasViewer.swing.HTMLBrowserWindow;
-import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import de.schmitzm.io.IOUtil;
 import de.schmitzm.swing.ExceptionDialog;

@@ -95,15 +95,18 @@ public class XMLCodeFrame extends AtlasDialog {
 								textScrollPaneProduction);
 
 						setStyleXMLforLayer(evt.getLayer().getStyle(), textPane);
-						setStyleXMLforLayer(getOptimizedStyle(evt),textPaneProduction);
+						setStyleXMLforLayer(getOptimizedStyle(evt),
+								textPaneProduction);
 					}
 
 					private Style getOptimizedStyle(MapLayerListEvent evt) {
-						return StylingUtil.optimizeStyle(evt
-								.getLayer().getStyle(), "AtlasStyler "
-								+ ReleaseUtil.getVersionInfo(AtlasStyler.class)
+						return StylingUtil.optimizeStyle(
+								evt.getLayer().getStyle(),
+								"AtlasStyler "
+										+ ReleaseUtil
+												.getVersionInfo(AtlasStyler.class)
 
-								+ ", Export-Mode: PRODUCTION");
+										+ ", Export-Mode: PRODUCTION");
 					}
 
 					private String getLayername(MapLayerListEvent evt) {
@@ -147,7 +150,8 @@ public class XMLCodeFrame extends AtlasDialog {
 								.getView();
 
 						setStyleXMLforLayer(evt.getLayer().getStyle(), textPane);
-						setStyleXMLforLayer(getOptimizedStyle(evt), textPaneProduction);
+						setStyleXMLforLayer(getOptimizedStyle(evt),
+								textPaneProduction);
 
 						getTabbedPane().setSelectedIndex(oldSelected);
 
@@ -206,7 +210,7 @@ public class XMLCodeFrame extends AtlasDialog {
 	}
 
 	/**
-	 * Converts a {@link Style} to String and shwos it inside a
+	 * Converts a {@link Style} to String and shows it inside a
 	 * {@link JTextPane}. If an error occurs, the error is shown in the
 	 * {@link JTextPane}.
 	 */
