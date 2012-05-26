@@ -301,6 +301,7 @@ public class GpSwingUtil extends GpUtil {
 	public static void cleanFolder(AtlasConfigEditable ace,
 			final Component owner) {
 
+		File[] unreferencedDirs = new File[0];
 		// ****************************************************************************
 		// now list all directories in ad/html and check whether they are
 		// actually used
@@ -323,91 +324,122 @@ public class GpSwingUtil extends GpUtil {
 				}
 			}
 
-			if (isReferenced)
-				continue;
-
-			LOGGER.info("The map directory " + IOUtil.escapePath(dir)
-					+ " is not referenced in the atlas.");
-
-			askToDeleteUnreferencedFolder(ace.getHtmlDir(), owner, dir);
-
-		}
-
-		// ****************************************************************************
-		// now list all directories in ad/data and check whether they are
-		// actually used
-		// ****************************************************************************
-		for (File dir : ace.getDataDir().listFiles()) {
-			if (!dir.isDirectory())
-				continue;
-			if (dir.getName().startsWith(".")) {
-				continue;
-			}
-
-			boolean isReferenced = false;
-			for (DpEntry<?> dpe : ace.getDataPool().values()) {
-				if (dpe.getDataDirname().equals(dir.getName())) {
-					isReferenced = true;
-					break;
+			// ****************************************************************************
+			// now list all directories in ad/data and check whether they are
+			// actually used
+			// ****************************************************************************
+			if (!isReferenced) {
+				for (DpEntry<?> dpe : ace.getDataPool().values()) {
+					if (dpe.getDataDirname().equals(dir.getName())) {
+						isReferenced = true;
+						break;
+					}
 				}
 			}
 
 			if (isReferenced)
 				continue;
 
+			unreferencedDirs = LangUtil.extendArray(unreferencedDirs, dir);
 			LOGGER.info("The directory " + IOUtil.escapePath(dir)
 					+ " is not referenced in the atlas.");
 
-			askToDeleteUnreferencedFolder(ace.getDataDir(), owner, dir);
-
 		}
+
+		if(unreferencedDirs.length > 0)
+		askToDeleteUnreferencedFolders(unreferencedDirs, owner);
+		
 	}
-
+	
 	/**
-	 * Asks to delete a file or folder and returns <code>true</code> if the file
-	 * has been deleted.
+	 * Asks to delete unreferenced Folders and returns <code>true</code> if they
+	 * have been deleted.
+	 * 
+	 * @param unrefDirs
+	 * @param owner
+	 * @return
 	 */
-	private static boolean askToDeleteUnreferencedFolder(File dir,
-			final Component owner, File d) {
-
+	private static boolean askToDeleteUnreferencedFolders(File[] unrefDirs,
+			Component owner) {
 		boolean askDelete = true;
-		if (owner != null)
-			askDelete = AVSwingUtil
-					.askOKCancel(
-							owner,
-							GpSwingUtil
-									.R("UnreferencedDirectoryFoundInAtlasDataDir_AskIfItShouldBeDeleted",
-											IOUtil.escapePath(dir), d.getName()));
+		if (owner != null) {
+			CleanUnreferencedFoldersDialog cufd = new CleanUnreferencedFoldersDialog(
+					unrefDirs, owner);
+			askDelete = cufd.isAccepted();
+		}
 		if (askDelete) {
-			if (owner != null)
-				LOGGER.info("User allowed to delete folder "
-						+ IOUtil.escapePath(d) + ".");
-			else
-				LOGGER.info("Automatically delete folder "
-						+ IOUtil.escapePath(d) + ".");
+			for (File d : unrefDirs) {
+				if ((d.isDirectory() && new File(d, ".svn").exists())) {
+					LOGGER.info("Please use:\nsvn del \""
+							+ IOUtil.escapePath(d) + "\" && svn commit \""
+							+ IOUtil.escapePath(d)
+							+ "\" -m \"deleted an unused directory\"");
 
-			if ((d.isDirectory() && new File(d, ".svn").exists())) {
-				LOGGER.info("Please use:\nsvn del \"" + IOUtil.escapePath(d)
-						+ "\" && svn commit \"" + IOUtil.escapePath(d)
-						+ "\" -m \"deleted an unused directory\"");
-
-				if (owner != null)
-					AVSwingUtil
-							.showMessageDialog(
-									owner,
-									GpSwingUtil
-											.R("UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",
-													d.getName(),
-													IOUtil.escapePath(d)));
-			} else {
-
-				// Just delete the directory!
-
-				return FileUtils.deleteQuietly(d);
+					if (owner != null)
+						AVSwingUtil
+								.showMessageDialog(
+										owner,
+										GpSwingUtil
+												.R("UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",
+														d.getName(),
+														IOUtil.escapePath(d)));
+				} else {
+					FileUtils.deleteQuietly(d);
+				}
 			}
+			return true;
 		}
 		return false;
 	}
+
+//	/**
+//	 * Asks to delete a file or folder and returns <code>true</code> if the file
+//	 * has been deleted.
+//	 * 
+//	 * TODO MJ ST Obsolete?
+//	 * Auskommentiert seit 26.5.2012
+//	 */
+//	private static boolean askToDeleteUnreferencedFolder(File dir,
+//			final Component owner, File d) {
+//
+//		boolean askDelete = true;
+//		if (owner != null)
+//			askDelete = AVSwingUtil
+//					.askOKCancel(
+//							owner,
+//							GpSwingUtil
+//									.R("UnreferencedDirectoryFoundInAtlasDataDir_AskIfItShouldBeDeleted",
+//											IOUtil.escapePath(dir), d.getName()));
+//		if (askDelete) {
+//			if (owner != null)
+//				LOGGER.info("User allowed to delete folder "
+//						+ IOUtil.escapePath(d) + ".");
+//			else
+//				LOGGER.info("Automatically delete folder "
+//						+ IOUtil.escapePath(d) + ".");
+//
+//			if ((d.isDirectory() && new File(d, ".svn").exists())) {
+//				LOGGER.info("Please use:\nsvn del \"" + IOUtil.escapePath(d)
+//						+ "\" && svn commit \"" + IOUtil.escapePath(d)
+//						+ "\" -m \"deleted an unused directory\"");
+//
+//				if (owner != null)
+//					AVSwingUtil
+//							.showMessageDialog(
+//									owner,
+//									GpSwingUtil
+//											.R("UnreferencedDirectoryFoundInAtlasDataDir_WillNotBeDeletedDueToSvnButOfferTheCommand",
+//													d.getName(),
+//													IOUtil.escapePath(d)));
+//			} else {
+//
+//				// Just delete the directory!
+//
+//				return FileUtils.deleteQuietly(d);
+//			}
+//		}
+//		return false;
+//	}
 
 	/**
 	 * Save the {@link AtlasConfig} to its project directory
@@ -635,11 +667,12 @@ public class GpSwingUtil extends GpUtil {
 	 *            changes.
 	 * @param tabTitles
 	 * @param windowTitle
-	 * @param htmlListener 
+	 * @param htmlListener
 	 */
 	public static Window openHTMLEditors(Component owner,
 			AtlasConfigEditable ace, List<File> htmlFiles,
-			List<String> tabTitles, String windowTitle, PropertyChangeListener htmlListener) {
+			List<String> tabTitles, String windowTitle,
+			PropertyChangeListener htmlListener) {
 
 		if (tabTitles.size() != htmlFiles.size())
 			throw new IllegalArgumentException(
@@ -649,10 +682,10 @@ public class GpSwingUtil extends GpUtil {
 		 * We open the HTML editor to edit the About information.
 		 */
 		final HTMLEditPaneInterface htmlEditor = createHTMLEditPane(ace);
-		
+
 		if (htmlListener != null)
 			htmlEditor.addChangeListener(htmlListener);
-		
+
 		JComponent htmlEditorPanel = htmlEditor.getComponent();
 		// JHTMLEditor has problems when not running in frame!!
 		// So we have to use JFrame for all implementations of
@@ -838,8 +871,8 @@ public class GpSwingUtil extends GpUtil {
 	 * Copies a file to a relative path.
 	 * 
 	 * @param parent
-	 *            parent component for info dialogs (if <code>null</code> no dialogs will
-	 *            be shown!)
+	 *            parent component for info dialogs (if <code>null</code> no
+	 *            dialogs will be shown!)
 	 * @param source
 	 *            source file
 	 * @param basePath
