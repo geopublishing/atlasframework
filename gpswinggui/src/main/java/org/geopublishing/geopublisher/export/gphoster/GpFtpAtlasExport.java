@@ -87,7 +87,7 @@ public class GpFtpAtlasExport extends AbstractAtlasExporter {
 			final FTPClient ftpClient = new FTPClient();
 			try { // quit ftp connection
 				ftpClient.setRemoteHost(gphc.getFtpHostname());
-				ftpClient.setTimeout(5000);
+				ftpClient.setTimeout(20000);
 				ftpClient.connect();
 				// TODO Generate programatically!
 				ftpClient.login("geopublisher", "g9e8o7p6u5b4l3i2s1h0er");
