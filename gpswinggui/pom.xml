@@ -463,6 +463,11 @@
 					<groupId>com.miglayout</groupId>
 					<artifactId>miglayout</artifactId>
 				</exclusion>
+				<!-- newer Version via schmitzm, 1.6 instead of 1.2 -->
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
