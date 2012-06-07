@@ -171,12 +171,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 * "mvn install" the JARs there whenever important changes happened to them.
 	 */
 	// TODO UGLY!
-	private static String GPVERSION = "1.9-SNAPSHOT";
-	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.7-SNAPSHOT.jar";
-	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.7-SNAPSHOT.jar";
-	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.7-SNAPSHOT.jar";
-	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.7-SNAPSHOT.jar";
-	public static final String SCHMITZM_JARNAME5 = "schmitzm-db-2.7-SNAPSHOT.jar";
+	private static String GPVERSION = "1.9";
+	public static final String SCHMITZM_JARNAME1 = "schmitzm-core-2.7.jar";
+	public static final String SCHMITZM_JARNAME2 = "schmitzm-gt-2.7.jar";
+	public static final String SCHMITZM_JARNAME3 = "schmitzm-jfree-gt-2.7.jar";
+	public static final String SCHMITZM_JARNAME4 = "schmitzm-jfree-2.7.jar";
+	public static final String SCHMITZM_JARNAME5 = "schmitzm-db-2.7.jar";
 	public static final String GSRCJ_JARNAME = "gsrcj-0.5.jar";
 	public static final String GPSYNC_JARNAME = "gpsync-" + GPVERSION + ".jar";
 	/**
@@ -937,15 +937,15 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		 * classpath-string as relative paths.
 		 */
 		if (jarName.contains(SCHMITZM_JARNAME1))
-			path = "de/schmitzm/schmitzm-core/2.7-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-core/2.7";
 		if (jarName.contains(SCHMITZM_JARNAME2))
-			path = "de/schmitzm/schmitzm-gt/2.7-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-gt/2.7";
 		if (jarName.contains(SCHMITZM_JARNAME3))
-			path = "de/schmitzm/schmitzm-jfree-gt/2.7-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-jfree-gt/2.7";
 		if (jarName.contains(SCHMITZM_JARNAME4))
-			path = "de/schmitzm/schmitzm-jfree/2.7-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-jfree/2.7";
 		if (jarName.contains(SCHMITZM_JARNAME5))
-			path = "de/schmitzm/schmitzm-db/2.7-SNAPSHOT";
+			path = "de/schmitzm/schmitzm-db/2.7";
 		if (jarName.contains(GSRCJ_JARNAME))
 			path = "org/geopublishing/gsrcj/0.5";
 		if (jarName.contains(GPSYNC_JARNAME))
