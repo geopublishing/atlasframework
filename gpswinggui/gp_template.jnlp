@@ -6,7 +6,7 @@
     <homepage href="http://en.geopublishing.org/Geopublisher"/>    
     <vendor>en.geopublishing.org</vendor>
     <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startGP.gif"/>    
+    <icon kind="splash" href="startGP_en.gif"/>    
 	<shortcut online="true">
 	  <desktop/>
 	  <menu submenu="Geopublishing"/>
@@ -21,7 +21,7 @@
     <homepage href="http://de.geopublishing.org/Geopublisher"/>    
     <vendor>de.geopublishing.org</vendor>
     <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startGP.gif"/>    
+    <icon kind="splash" href="startGP_de.gif"/>    
 	<shortcut online="true">
 	  <desktop/>
 	  <menu submenu="Geopublishing"/>
@@ -36,7 +36,7 @@
     <homepage href="http://fr.geopublishing.org/Geopublisher"/>    
     <vendor>fr.geopublishing.org</vendor>
     <icon kind="default" href="icon64_GP.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startGP.gif"/>    
+    <icon kind="splash" href="startGP_fr.gif"/>    
 	<shortcut online="true">
 	  <desktop/>
 	  <menu submenu="Geopublishing"/>

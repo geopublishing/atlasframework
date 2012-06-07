@@ -7,7 +7,7 @@
     <homepage href="http://en.geopublishing.org/AtlasStyler"/>    
     <vendor>en.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startAS.gif"/>    
+    <icon kind="splash" href="startAS_en.gif"/>    
     
 	<shortcut online="true">
 	  <desktop/>
@@ -23,7 +23,7 @@
     <homepage href="http://de.geopublishing.org/AtlasStyler"/>    
     <vendor>de.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startAS.gif"/>    
+    <icon kind="splash" href="startAS_en.gif"/>    
     
 	<shortcut online="true">
 	  <desktop/>
@@ -39,7 +39,7 @@
     <homepage href="http://fr.geopublishing.org/AtlasStyler"/>    
     <vendor>fr.geopublishing.org</vendor>
     <icon kind="default" href="icon64_AS.gif" height="64" width="64"/> 
-    <icon kind="splash" href="startAS.gif"/>    
+    <icon kind="splash" href="startAS_en.gif"/>    
     
 	<shortcut online="true">
 	  <desktop/>
