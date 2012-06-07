@@ -343,6 +343,13 @@
 			<artifactId>gt-wfs</artifactId>
 			<version>${geotools.version}</version>
 			<type>jar</type>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+			</exclusions>
+
 		</dependency>
 
 		<dependency>
