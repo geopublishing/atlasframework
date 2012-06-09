@@ -125,7 +125,8 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 
 			// i8n
 			bandModeSelectionPanel.add(new JLabel("Band:"));
-
+			
+			if (rlcm.getStyledRaster() instanceof DpLayerRaster_Reader) {
 			DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) rlcm.getStyledRaster();
 			// i8n
 			String[] items = new String[0];
@@ -151,7 +152,7 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 
 			// Initialiseren der JComboBox
 			bandModeSelectionJCombobox.setSelectedIndex(rlcm.getBand());
-
+			}
 		}
 		return bandModeSelectionPanel;
 	}
