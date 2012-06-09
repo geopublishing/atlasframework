@@ -21,9 +21,17 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
+import org.geopublishing.atlasViewer.dp.layer.DpLayer;
+import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
+import org.hamcrest.core.IsInstanceOf;
 
+import de.schmitzm.geotools.styling.StyledGridCoverageReader;
+import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
+import de.schmitzm.geotools.styling.StyledRasterInterface;
+import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SmallButton;
@@ -126,31 +134,37 @@ abstract public class AbstractRulesListGui<RLT extends RulesListInterface>
 			// i8n
 			bandModeSelectionPanel.add(new JLabel("Band:"));
 
-			DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) rlcm.getStyledRaster();
-			// i8n
-			String[] items = new String[0];
-			for (int b = 0; b < rlcm.getStyledRaster().getBandCount(); b++) {
-				String bandName = dplrr.getBandNames()[b].toString();
-				items = LangUtil.extendArray(
-						items,
-						!bandName.isEmpty() ? bandName + " ("
-								+ String.valueOf(b + 1) + ")" : ""
-								+ String.valueOf(b + 1));
-			}
-			final JComboBox bandModeSelectionJCombobox = new JComboBox(items);
-			SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
+			if (rlcm.getStyledRaster() instanceof DpLayerRaster_Reader) {
+				DpLayerRaster_Reader dplrr = (DpLayerRaster_Reader) rlcm
+						.getStyledRaster();
 
-			bandModeSelectionPanel.add(bandModeSelectionJCombobox);
-			bandModeSelectionJCombobox.addItemListener(new ItemListener() {
-
-				@Override
-				public void itemStateChanged(ItemEvent arg0) {
-					rlcm.setBand(bandModeSelectionJCombobox.getSelectedIndex());
+				// i8n
+				String[] items = new String[0];
+				for (int b = 0; b < rlcm.getStyledRaster().getBandCount(); b++) {
+					String bandName = dplrr.getBandNames()[b].toString();
+					items = LangUtil.extendArray(
+							items,
+							!bandName.isEmpty() ? bandName + " ("
+									+ String.valueOf(b + 1) + ")" : ""
+									+ String.valueOf(b + 1));
 				}
-			});
+				final JComboBox bandModeSelectionJCombobox = new JComboBox(
+						items);
+				SwingUtil.addMouseWheelForCombobox(bandModeSelectionJCombobox);
 
-			// Initialiseren der JComboBox
-			bandModeSelectionJCombobox.setSelectedIndex(rlcm.getBand());
+				bandModeSelectionPanel.add(bandModeSelectionJCombobox);
+				bandModeSelectionJCombobox.addItemListener(new ItemListener() {
+
+					@Override
+					public void itemStateChanged(ItemEvent arg0) {
+						rlcm.setBand(bandModeSelectionJCombobox
+								.getSelectedIndex());
+					}
+				});
+
+				// Initialiseren der JComboBox
+				bandModeSelectionJCombobox.setSelectedIndex(rlcm.getBand());
+			}
 
 		}
 		return bandModeSelectionPanel;
