@@ -14,20 +14,19 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.swing.Icons;
+import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.AtlasGPAFileFilter;
 import org.geopublishing.geopublisher.GPProps;
 import org.geopublishing.geopublisher.GPProps.Keys;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 import org.netbeans.spi.wizard.WizardPage;
 
-
-
 public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 	/*
 	 * The short description label that appears on the left side of the wizard
 	 */
-	JLabel explanationJLabel = new JLabel(GeopublisherGUI
-			.R("ImportWizard.GPA.FolderSelection.Explanation"));
+	JLabel explanationJLabel = new JLabel(
+			GeopublisherGUI.R("ImportWizard.GPA.FolderSelection.Explanation"));
 
 	private final String validationImportSourceTypeFailedMsg_NotExists = GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotExists");
@@ -38,10 +37,15 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 	private final String validationImportSourceTypeFailedMsg_NotGpa = GeopublisherGUI
 			.R("ImportWizard.GPA.FolderSelection.ValidationError.NotGPA");
 
+	private final String validationImportSourceTypeFailedMsg_CanntImportFromItself = GeopublisherGUI
+			.R("ImportWizard.GPA.FolderSelection.ValidationError.CantImportFromItself");
+
 	private JButton folderChooserJButton;
+
 	JTextField folderJTextField;
-	final private JLabel folderTextFieldJLabel = new JLabel(GeopublisherGUI
-			.R("ImportWizard.Folder.FolderTextBoxLabel"));
+
+	final private JLabel folderTextFieldJLabel = new JLabel(
+			GeopublisherGUI.R("ImportWizard.Folder.FolderTextBoxLabel"));
 
 	public static String getDescription() {
 		return GeopublisherGUI.R("ImportWizard.GPA.FolderSelection");
@@ -64,6 +68,12 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 
 		if (!gpa.canRead()) {
 			return validationImportSourceTypeFailedMsg_CantRead;
+		}
+
+		AtlasConfigEditable ace = (AtlasConfigEditable) getWizardData(ImportWizard.ACE);
+		if (gpa.getAbsoluteFile().getParent()
+				.equals(ace.getAd().getAbsoluteFile().getParent())) {
+			return validationImportSourceTypeFailedMsg_CanntImportFromItself;
 		}
 
 		if (!new AtlasGPAFileFilter().accept(gpa)
@@ -118,8 +128,7 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 							.R("ImportWizard.GPA.WhereFrom.DialogTitle"));
 					dc.setMultiSelectionEnabled(false);
 
-					if ((dc
-							.showOpenDialog(ImportWizardPage_GPA_SelectFolder.this) != JFileChooser.APPROVE_OPTION)
+					if ((dc.showOpenDialog(ImportWizardPage_GPA_SelectFolder.this) != JFileChooser.APPROVE_OPTION)
 							|| dc.getSelectedFile() == null) {
 						return;
 					}
@@ -136,8 +145,8 @@ public class ImportWizardPage_GPA_SelectFolder extends WizardPage {
 					 * Radically store the path into the properties now - it
 					 * really sucks to select that path all the time
 					 */
-					GPProps.set(Keys.LAST_IMPORTED_GPA, importGpaAtlasXML
-							.getAbsolutePath());
+					GPProps.set(Keys.LAST_IMPORTED_GPA,
+							importGpaAtlasXML.getAbsolutePath());
 					GPProps.store();
 
 				}
