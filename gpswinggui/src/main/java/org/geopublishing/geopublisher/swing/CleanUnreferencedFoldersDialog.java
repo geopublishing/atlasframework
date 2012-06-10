@@ -17,6 +17,11 @@ import de.schmitzm.swing.CancelButton;
 import de.schmitzm.swing.OkButton;
 import de.schmitzm.swing.SwingUtil;
 
+/**
+ * 
+ * @author Michael Janik
+ *
+ */
 public class CleanUnreferencedFoldersDialog extends JDialog {
 
 	private File[] unrefDirs;
@@ -33,7 +38,7 @@ public class CleanUnreferencedFoldersDialog extends JDialog {
 	}
 
 	private void initGui() {
-		JPanel contentPane = new JPanel(new MigLayout("wrap 2"));
+		JPanel contentPane = new JPanel(new MigLayout("wrap 2","grow","grow"));
 		contentPane.add(explanationLabel, "span 2");
 		contentPane.add(getUnreferencedDirsList(), "span 2, grow");
 		contentPane.add(getCancelButton(), "right, skip 1, split 2, tag cancel");
