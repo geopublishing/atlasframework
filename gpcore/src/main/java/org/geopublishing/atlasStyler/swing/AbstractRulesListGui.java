@@ -21,17 +21,9 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.RasterRulesListColormap;
 import org.geopublishing.atlasStyler.rulesLists.RulesListInterface;
-import org.geopublishing.atlasViewer.dp.layer.DpLayer;
-import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster_Reader;
 import org.geopublishing.atlasViewer.swing.Icons;
-import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
-import org.hamcrest.core.IsInstanceOf;
 
-import de.schmitzm.geotools.styling.StyledGridCoverageReader;
-import de.schmitzm.geotools.styling.StyledGridCoverageReaderInterface;
-import de.schmitzm.geotools.styling.StyledRasterInterface;
-import de.schmitzm.jfree.chart.style.ChartStyle;
 import de.schmitzm.lang.LangUtil;
 import de.schmitzm.swing.JPanel;
 import de.schmitzm.swing.SmallButton;
