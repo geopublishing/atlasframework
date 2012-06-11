@@ -1,9 +1,9 @@
 package org.geopublishing.atlasViewer.swing;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-
+import org.apache.commons.lang.ArrayUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,8 +23,8 @@ public class AtlasViewerGUITest {
 		String[] args = new String[] { "-t", "/Desktop" };
 		args = AtlasViewerGUI.checkTestModeArgument(args);
 		assertTrue(AtlasViewerGUI.isTestMode());
-		assertTrue(Arrays.asList(args).contains("/Desktop"));
-		assertTrue(Arrays.asList(args).contains("-t"));
+		assertTrue(ArrayUtils.contains(args, "/Desktop"));
+		assertFalse(ArrayUtils.contains(args, "-t"));
 	}
 
 }
