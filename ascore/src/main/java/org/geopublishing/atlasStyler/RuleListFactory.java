@@ -429,18 +429,16 @@ public class RuleListFactory {
 								.toString())) {
 			rasterRulesList = new RasterRulesList_Intervals(styledRaster, false);
 
+			
 			// NOT YET
 			// } else if (cmt == ColorMap.TYPE_RAMP
 			// || metaInfoString
 			// .startsWith(RulesListType.RASTER_COLORMAP_RAMPS
 			// .toString())) {
 			// rasterRulesList = new RasterRulesList_Ramps(styledRaster, false);
-			// } else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
-			// .toString())
-			// // TODO || hat kein metrMETAiNFO aber hat eien RS mit
-			// ChannelSelection
-			// ) {
-			// rasterRulesList = new RasterRulesListRGB(styledRaster, false);
+			 } else if (metaInfoString.startsWith(RulesListType.RASTER_RGB
+			 .toString())) {
+				 rasterRulesList = new RasterRulesListRGB(styledRaster, false);
 		}
 
 		if (rasterRulesList != null)

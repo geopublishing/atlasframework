@@ -57,7 +57,7 @@ public class RulesListPopup extends JPopupMenu {
 
 	private void addXMLMenuItems(final RulesListInterface rulesList) {
 
-		add(new AbstractAction(AtlasStylerVector.R("RulesListPopup.copyXML"),
+		add(new AbstractAction(ASUtil.R("RulesListPopup.copyXML"),
 				Icons.ICON_XML) {
 
 			@Override
@@ -68,13 +68,32 @@ public class RulesListPopup extends JPopupMenu {
 					String xmlString = StylingUtil.toXMLString(fts);
 					LangUtil.copyToClipboard(xmlString);
 					JOptionPane.showMessageDialog(RulesListPopup.this,
-							AtlasStylerVector.R("RulesListPopup.copyXML.done",
+							ASUtil.R("RulesListPopup.copyXML.done",
 									xmlString.length()));
 				} catch (Exception ee) {
 					ExceptionDialog.show(RulesListPopup.this, ee);
 				}
 			}
 		});
+		
+//		add(new AbstractAction("Paste from Clipboard",
+//				Icons.ICON_XML) {
+//
+//			@Override
+//			public void actionPerformed(final ActionEvent e) {
+//				// Copy XML from ClipBoard
+//				FeatureTypeStyle fts = rulesList.getFTS();
+//				try {
+//					String xmlString = LangUtil.pasteFromClipboard();
+//					
+//					JOptionPane.showMessageDialog(RulesListPopup.this,
+//							ASUtil.R("RulesListPopup.copyXML.done",
+//									xmlString.length()));
+//				} catch (Exception ee) {
+//					ExceptionDialog.show(RulesListPopup.this, ee);
+//				}
+//			}
+//		});
 
 	}
 
