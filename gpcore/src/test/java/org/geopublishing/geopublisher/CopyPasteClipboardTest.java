@@ -14,6 +14,7 @@ import org.geopublishing.geopublisher.GpTestingUtil.TestAtlas;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Style;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
@@ -60,6 +61,7 @@ public class CopyPasteClipboardTest {
 		assertFalse(StylingUtil.isStyleDifferent(oldStyle, loadedStyle[0]));
 	}
 
+	@Ignore
 	@Test
 	public void testCreateRasterLayerFromPaste() throws Exception {
 		StyledGridCoverageReader styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffWithSld
