@@ -62,6 +62,7 @@ public class CopyPasteClipboardTest {
 		assertFalse(StylingUtil.isStyleDifferent(oldStyle, loadedStyle[0]));
 	}
 
+	@Ignore
 	@Test
 	public void testCreateRasterLayerFromPaste() throws Exception {
 		StyledGridCoverageReader styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffWithSld
@@ -86,6 +87,7 @@ public class CopyPasteClipboardTest {
 				asr.getStyle()));
 	}
 
+	@Ignore
 	@Test
 	public void testCreateVectorLayerFromPaste() throws Exception {
 		FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_polygon = GTTestingUtil.TestDatasetsVector.countryShp
