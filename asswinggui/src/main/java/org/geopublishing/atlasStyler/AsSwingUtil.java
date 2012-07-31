@@ -64,7 +64,9 @@ public class AsSwingUtil extends ASUtil {
 	public static File chooseFileOpen(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
 
 		try {
-			NativeInterface.open();
+			if(!NativeInterface.isOpen()){
+				NativeInterface.open();
+			}
 			JFileDialog fileDialog = new JFileDialog();
 			
 			if (startFolder != null) {
