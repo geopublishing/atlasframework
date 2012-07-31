@@ -12,6 +12,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.geopublishing.atlasStyler.ASProps.Keys;
 import org.geopublishing.geopublisher.GpUtil;
 
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.DialogType;
 import chrriis.dj.nativeswing.swtimpl.components.JFileDialog.SelectionMode;
@@ -63,6 +64,7 @@ public class AsSwingUtil extends ASUtil {
 	public static File chooseFileOpen(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
 
 		try {
+			NativeInterface.open();
 			JFileDialog fileDialog = new JFileDialog();
 			
 			if (startFolder != null) {
