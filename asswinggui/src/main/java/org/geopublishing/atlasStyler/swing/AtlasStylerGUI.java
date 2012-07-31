@@ -686,6 +686,7 @@ public class AtlasStylerGUI extends JFrame implements SingleInstanceListener {
 		if (!addedIndexes) {
 
 			try {
+				NativeInterface.initialize();
 				NativeInterface.open();
 			} catch (Throwable e) {
 				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
