@@ -57,7 +57,12 @@ public class AtlasStylerMapLayerLegend extends MapLayerLegend {
 		toolPopup.insert(new JMenuItem(new AtlasStylerCopyLayerToClipboardAction(this, styledLayer)),2);
 		
 		// We are in AtlasStyler. Offer to paste the SLD from clipboard
-		toolPopup.insert(new JMenuItem(new AtlasStylerPasteLayerFromClipboardAction(this, styledLayer)),3);
+		JMenuItem pasteFromClipBoard = new JMenuItem(new AtlasStylerPasteLayerFromClipboardAction(this, styledLayer));
+		// TODO MJ better method to check if we actually have a valid style in clipboard
+		if(!LangUtil.pasteFromClipboard().startsWith("<?xml")){
+			pasteFromClipBoard.setEnabled(false);
+		}
+		toolPopup.insert(pasteFromClipBoard,3);
 
 		return toolPopup;
 	}

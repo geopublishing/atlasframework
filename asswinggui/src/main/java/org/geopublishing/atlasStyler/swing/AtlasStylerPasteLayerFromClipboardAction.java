@@ -53,6 +53,7 @@ public class AtlasStylerPasteLayerFromClipboardAction extends AbstractAction {
 		if (styledLayer instanceof StyledFS) {// vector
 			if (RulesListType.isVectorStyle(pastedSLD[0])) {
 				styledLayer.setStyle(pastedSLD[0]);
+				owner.repaint();
 			} else {
 				AVSwingUtil.showMessageDialog(owner, ASUtil.R("AtlasStylerGUI.pasteLayerFromClipboard.warning"));
 
@@ -61,6 +62,7 @@ public class AtlasStylerPasteLayerFromClipboardAction extends AbstractAction {
 		} else if (styledLayer instanceof StyledGridCoverageReader) {// raster
 			if (RulesListType.isRasterStyle(pastedSLD[0])) {
 				styledLayer.setStyle(pastedSLD[0]);
+				owner.repaint();
 			} else {
 				AVSwingUtil.showMessageDialog(owner, ASUtil.R("AtlasStylerGUI.pasteLayerFromClipboard.warning"));
 			}

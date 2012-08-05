@@ -21,7 +21,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 
 import de.schmitzm.geotools.styling.StyledLayerInterface;
