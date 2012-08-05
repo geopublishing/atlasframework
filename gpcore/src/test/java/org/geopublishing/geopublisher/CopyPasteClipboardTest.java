@@ -114,6 +114,7 @@ public class CopyPasteClipboardTest {
 				asv.getStyle()));
 	}
 
+	@Ignore
 	@Test
 	public void testRasterImportDifferentBandCount() throws Exception {
 		StyledGridCoverageReader styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffRGBWithoutSLD
