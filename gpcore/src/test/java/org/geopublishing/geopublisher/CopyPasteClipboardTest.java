@@ -104,12 +104,45 @@ public class CopyPasteClipboardTest {
 		String pastedXml = LangUtil.pasteFromClipboard();
 
 		Style[] pastedSLD = StylingUtil.loadSLD(pastedXml);
-		
+
 		FeatureSource<SimpleFeatureType, SimpleFeature> featureSource_kreise = GTTestingUtil.TestDatasetsVector.kreise
 				.getFeatureSource();
-		
+
 		AtlasStylerVector asv2 = new AtlasStylerVector(featureSource_kreise);
 		asv2.importStyle(pastedSLD[0]);
-		assertFalse(StylingUtil.isStyleDifferent(asv2.getStyle(), asv.getStyle()));
+		assertFalse(StylingUtil.isStyleDifferent(asv2.getStyle(),
+				asv.getStyle()));
+	}
+
+	@Test
+	public void testRasterImportDifferentBandCount() throws Exception {
+		StyledGridCoverageReader styledRaster = GTTestingUtil.TestDatasetsRaster.geotiffRGBWithoutSLD
+				.getStyled();
+		RasterRulesListRGB rl = new RasterRulesListRGB(styledRaster, true);
+		AtlasStylerRaster asr = new AtlasStylerRaster(styledRaster); // 3 band
+		asr.addRulesList(rl);
+		asr.importStyle(asr.getStyle());
+
+		StyledGridCoverageReader styled = GTTestingUtil.TestDatasetsRaster.arcAscii
+				.getStyled();
+		RasterRulesListRGB rl2 = new RasterRulesListRGB(styled, true);
+		AtlasStylerRaster asr2 = new AtlasStylerRaster(styled); // 1band
+		asr2.addRulesList(rl2);
+		asr2.importStyle(asr2.getStyle());
+		for (FeatureTypeStyle bla : asr2.getStyle().featureTypeStyles()){
+			System.out.println(StylingUtil.toXMLString(bla));
+		}
+
+		LangUtil.copyToClipboard(StylingUtil.toXMLString(asr.getStyle()));
+		String pastedXml = LangUtil.pasteFromClipboard();
+		Style[] pastedSLD = StylingUtil.loadSLD(pastedXml);
+
+		System.out.println("before: \n"
+				+ StylingUtil.toXMLString(asr2.getStyle()));
+		System.out.println(asr2.getBands());
+		asr2.importStyle(pastedSLD[0]);
+		System.out.println("after: \n"
+				+ StylingUtil.toXMLString(asr2.getStyle()));
+		System.out.println(asr2.getBands());
 	}
 }

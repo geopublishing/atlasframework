@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.geopublishing.atlasStyler.rulesLists;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.geopublishing.atlasStyler.RuleChangedEvent;
 import org.geotools.filter.AndImpl;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Rule;
+import org.geotools.styling.Style;
 import org.geotools.util.SimpleInternationalString;
 import org.geotools.util.WeakHashSet;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -166,6 +168,33 @@ public abstract class AbstractRulesList implements RulesListInterface {
 				return valuesFor((AtlasStylerRaster) as);
 		}
 
+		/**
+		 * 
+		 * @return All possible values for a {@link AtlasStylerRaster}
+		 */
+		public static RulesListType[] valuesForRaster() {
+			RulesListType[] rls = new RulesListType[] {
+					RASTER_COLORMAP_DISTINCTVALUES, RASTER_COLORMAP_INTERVALS,
+					RASTER_COLORMAP_RAMPS, RASTER_RGB };
+			return rls;
+		}
+
+		/**
+		 * 
+		 * @return All possible values for a {@link AtlasStylerVector}
+		 */
+		public static RulesListType[] valuesForVector() {
+			RulesListType[] rls = new RulesListType[] { SINGLE_SYMBOL_LINE,
+					SINGLE_SYMBOL_POINT, SINGLE_SYMBOL_POINT_FOR_POLYGON,
+					SINGLE_SYMBOL_POLYGON, QUANTITIES_COLORIZED_LINE,
+					QUANTITIES_COLORIZED_POINT,
+					QUANTITIES_COLORIZED_POINT_FOR_POLYGON,
+					QUANTITIES_COLORIZED_POLYGON, UNIQUE_VALUE_LINE,
+					UNIQUE_VALUE_POINT, UNIQUE_VALUE_POINT_FOR_POLYGON,
+					UNIQUE_VALUE_POLYGON };
+			return rls;
+		}
+
 		public static RulesListType[] valuesFor(AtlasStylerRaster as) {
 			// return new RulesListType[] { RASTER_COLORMAP_DISTINCTVALUES,
 			// RASTER_COLORMAP_INTERVALS, RASTER_COLORMAP_RAMPS };
@@ -298,6 +327,35 @@ public abstract class AbstractRulesList implements RulesListInterface {
 		public String getTitle() {
 			return ASUtil.R(i8nKey);
 		}
+
+		public static RulesListType getTypeForStyle(Style style) {
+			String name = style.featureTypeStyles().get(0).getName();
+			RulesListType rlt = null;
+			for (RulesListType type : RulesListType.values()) {
+				if (name.startsWith(type.toString()))
+					rlt = type;
+			}
+			return rlt;
+
+		}
+
+		public static boolean isRasterStyle(Style style) {
+			RulesListType type = getTypeForStyle(style);
+			if (type.name().startsWith("RASTER"))
+				return true;
+			return false;
+		}
+
+		public static boolean isVectorStyle(Style style) {
+			RulesListType type = getTypeForStyle(style);
+			for (RulesListType values : valuesForVector()){
+				if(values.name().equals(type.name()))
+					return true;
+			}
+			return false;
+
+		}
+
 	}
 
 	/**
