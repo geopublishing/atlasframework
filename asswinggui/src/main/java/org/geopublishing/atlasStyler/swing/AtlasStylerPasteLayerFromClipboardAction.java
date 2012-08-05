@@ -12,32 +12,21 @@ package org.geopublishing.atlasStyler.swing;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.JOptionPane;
 
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasStyler.ASUtil;
-import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList;
 import org.geopublishing.atlasStyler.rulesLists.AbstractRulesList.RulesListType;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geotools.styling.Style;
-import org.hamcrest.core.IsInstanceOf;
-import org.opengis.style.FeatureTypeStyle;
 
-import de.schmitzm.geotools.feature.FeatureUtil;
 import de.schmitzm.geotools.styling.StyledFS;
 import de.schmitzm.geotools.styling.StyledGridCoverageReader;
 import de.schmitzm.geotools.styling.StyledLayerInterface;
 import de.schmitzm.geotools.styling.StylingUtil;
-import de.schmitzm.io.IOUtil;
 import de.schmitzm.lang.LangUtil;
-import de.schmitzm.swing.ExceptionDialog;
-import de.schmitzm.swing.SwingUtil;
 
 public class AtlasStylerPasteLayerFromClipboardAction extends AbstractAction {
 
