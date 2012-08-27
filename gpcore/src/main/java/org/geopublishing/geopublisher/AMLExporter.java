@@ -46,6 +46,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerRaster;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
+import org.geopublishing.atlasViewer.dp.media.DpMediaPICTURE;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
@@ -439,6 +440,8 @@ public class AMLExporter {
 			} else if (de instanceof DpMediaPDF) {
 				exDpe = exportDatapoolMediaPdf(document, (DpMediaPDF) de);
 
+			} else if (de instanceof DpMediaPICTURE) {
+				exDpe = exportDatapoolMediaPicture(document, (DpMediaPICTURE) de);
 			}
 			atlas.appendChild(exDpe);
 
@@ -456,6 +459,39 @@ public class AMLExporter {
 		document.appendChild(atlas);
 		// LOGGER.debug("AtlasConfig converted to JDOM Document");
 		return document;
+	}
+
+	private Node exportDatapoolMediaPicture(Document document, final DpMediaPICTURE dpe) {
+		// LOGGER.debug("exportDatapoolMediaPDF " + dpe + " to AML");
+				final Element element = document.createElementNS(AMLUtil.AMLURI,
+						"pictureMedia");
+				element.setAttribute("id", dpe.getId());
+				element.setAttribute("exportable", dpe.isExportable().toString());
+
+				// Creating a aml:name tag...
+				element.appendChild(exportTranslation(document, "name", dpe.getTitle()));
+
+				// Creating aml:desc tag
+				element.appendChild(exportTranslation(document, "desc", dpe.getDesc()));
+
+				// Creating optinal aml:keywords tag
+				if (!dpe.getKeywords().isEmpty())
+					element.appendChild(exportTranslation(document, "keywords",
+							dpe.getKeywords()));
+
+				// Creating a aml:dataDirname tag...
+				final Element datadirname = document.createElementNS(AMLUtil.AMLURI,
+						"dataDirname");
+				datadirname.appendChild(document.createTextNode(dpe.getDataDirname()));
+				element.appendChild(datadirname);
+
+				// Creating a aml:filename tag...
+				final Element filename = document.createElementNS(AMLUtil.AMLURI,
+						"filename");
+				filename.appendChild(document.createTextNode(dpe.getFilename()));
+				element.appendChild(filename);
+
+				return element;
 	}
 
 	/**

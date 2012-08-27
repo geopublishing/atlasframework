@@ -20,9 +20,11 @@ import javax.swing.filechooser.FileFilter;
 import org.apache.log4j.Logger;
 import org.geopublishing.atlasViewer.AtlasConfig;
 import org.geopublishing.atlasViewer.dp.DpEntry;
+import org.geopublishing.atlasViewer.dp.media.DpMediaPICTURE;
 import org.geopublishing.atlasViewer.exceptions.AtlasImportException;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.dp.media.DpMediaPDFTester;
+import org.geopublishing.geopublisher.dp.media.DpMediaPICTURETester;
 import org.geopublishing.geopublisher.gui.datapool.layer.DpLayerVectorFeatureSourceTester;
 
 /**
@@ -51,6 +53,8 @@ public class DpEntryFactory {
 				return true;
 			if (DpMediaPDFTester.FILEFILTER.accept(f))
 				return true;
+			if (DpMediaPICTURETester.FILEFILTER.accept(f))
+				return true;
 			return false;
 		}
 	};
@@ -60,6 +64,7 @@ public class DpEntryFactory {
 	static {
 		testers.add(new DpLayerVectorFeatureSourceTester());
 		testers.add(new DpMediaPDFTester());
+		testers.add(new DpMediaPICTURETester());
 		testers.add(new DpLayerRasterReaderTester());
 	}
 

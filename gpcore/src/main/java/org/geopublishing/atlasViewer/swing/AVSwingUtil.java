@@ -7,7 +7,9 @@ import java.awt.Desktop;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -173,8 +175,8 @@ public class AVSwingUtil extends GpCoreUtil {
 					@Override
 					public void run() {
 						resultAskOkCancel.set(JOptionPane.OK_OPTION == JOptionPane
-								.showConfirmDialog(owner, question,
-										GpCoreUtil.R("GeneralQuestionDialogTitle"),
+								.showConfirmDialog(owner, question, GpCoreUtil
+										.R("GeneralQuestionDialogTitle"),
 										JOptionPane.OK_CANCEL_OPTION,
 										JOptionPane.QUESTION_MESSAGE, null));
 
@@ -610,12 +612,14 @@ public class AVSwingUtil extends GpCoreUtil {
 	 * 
 	 * @throws NoSuchMethodException
 	 */
-	public static void lauchHTMLviewer(final Component owner, final URL url) {
+	public static Exception lauchHTMLviewer(final Component owner, final URL url) {
 		try {
 			lauchHTMLviewer(owner, url.toURI());
 		} catch (final URISyntaxException use) {
-			throw new RuntimeException("Could not open HTML.", use);
+			// throw new RuntimeException("Could not open HTML.", use);
+			return use;
 		}
+		return null;
 	}
 
 	/**
@@ -713,6 +717,22 @@ public class AVSwingUtil extends GpCoreUtil {
 						"Could not open internal HTMLBrowserWindow.", mue);
 			}
 		}
+	}
+
+	/**
+	 * This method takes an url to a picture and embeds it in html to open a
+	 * popup window. Convenience method for a new PicturePopupDialog
+	 * 
+	 * @param URL to picture
+	 */
+	public static Exception showImageAsHtmlPopup(final Component owner, final URL url, AtlasConfig ac) {
+		Exception ex = null;
+		try {
+		    new PicturePopupDialog(owner, ac, url);
+		} catch (Exception e) {
+			ex = e;
+		}
+		return ex;
 	}
 
 	//
