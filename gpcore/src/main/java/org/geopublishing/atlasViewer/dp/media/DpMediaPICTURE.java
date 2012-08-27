@@ -22,41 +22,44 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class DpMediaPICTURE extends DpMedia<ChartStyle> {
-	static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);
+    static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);
 
-	public DpMediaPICTURE(AtlasConfig ac) {
-		super(ac);
-		setType(DpEntryType.PICTURE);
+    /**
+     * All suffixes that will be accepted as PICTURE
+     */
+    public static final String[] POSSIBLESUFFIXES = { ".gif", ".jpg", ".jpeg", ".png" };
+
+    public DpMediaPICTURE(AtlasConfig ac) {
+	super(ac);
+	setType(DpEntryType.PICTURE);
+    }
+
+    @Override
+    public Object show(Component owner) {
+	Exception error = AVSwingUtil.showImageAsHtmlPopup(owner, AVSwingUtil.getUrl(this, owner),
+		ac);
+
+	if (error != null) {
+	    setBrokenException(error);
 	}
 
-	@Override
-	public Object show(Component owner) {
-		Exception error = AVSwingUtil.showImageAsHtmlPopup(owner,
-				AVSwingUtil.getUrl(this, owner), ac);
+	return error;
+    }
 
-		if (error != null) {
-			setBrokenException(error);
-		}
+    @Override
+    public void exportWithGUI(Component owner) throws IOException {
+	LOGGER.info("not implemented"); // TODO
+    }
 
-		return error;
-	}
+    @Override
+    public String getInternalLink(String lang) {
+	return "<a href=\"" + AtlasProtocol.PICTURE.toString().toLowerCase() + "://" + getId()
+		+ "\">" + getTitle().get(lang) + "</a>";
+    }
 
-	@Override
-	public void exportWithGUI(Component owner) throws IOException {
-		LOGGER.info("not implemented"); // TODO
-	}
-
-	@Override
-	public String getInternalLink(String lang) {
-		return "<a href=\""+AtlasProtocol.IMAGE.toString().toLowerCase()+"://"
-		+ getId() + "\">" + getTitle().get(lang)
-		+ "</a>";
-	}
-	
-	@Override
-	public String getInternalLink() {
-		return "<a href=\""+AtlasProtocol.IMAGE.toString().toLowerCase()+"://"
-		+ getId() + "\">" + getTitle().toString()
-		+ "</a>";
-	}
+    @Override
+    public String getInternalLink() {
+	return "<a href=\"" + AtlasProtocol.PICTURE.toString().toLowerCase() + "://" + getId()
+		+ "\">" + getTitle().toString() + "</a>";
+    }
 }

@@ -22,44 +22,42 @@ import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import de.schmitzm.jfree.chart.style.ChartStyle;
 
 public class DpMediaPDF extends DpMedia<ChartStyle> {
-	static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);
+    static private final Logger LOGGER = Logger.getLogger(DpMediaPDF.class);
 
-	public DpMediaPDF(AtlasConfig ac) {
-		super(ac);
-		setType(DpEntryType.PDF);
+    public DpMediaPDF(AtlasConfig ac) {
+	super(ac);
+	setType(DpEntryType.PDF);
+    }
+
+    /**
+     * Tries to open a PDF viewer of the host system.
+     */
+    @Override
+    public Object show(Component owner) {
+	Exception error = AVSwingUtil.launchPDFViewer(owner, AVSwingUtil.getUrl(this, owner),
+		getTitle().toString());
+
+	if (error != null) {
+	    setBrokenException(error);
 	}
 
-	/**
-	 * Tries to open a PDF viewer of the host system.
-	 */
-	@Override
-	public Object show(Component owner) {
-		Exception error = AVSwingUtil.launchPDFViewer(owner,
-				AVSwingUtil.getUrl(this, owner), getTitle().toString());
+	return error;
+    }
 
-		if (error != null) {
-			setBrokenException(error);
-		}
+    @Override
+    public void exportWithGUI(Component owner) throws IOException {
+	LOGGER.info("not implemented"); // TODO
+    }
 
-		return error;
-	}
+    @Override
+    public String getInternalLink(String lang) {
+	return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase() + "://" + getId() + "\">"
+		+ getTitle().get(lang) + "</a>";
+    }
 
-	@Override
-	public void exportWithGUI(Component owner) throws IOException {
-		LOGGER.info("not implemented"); // TODO
-	}
-
-	@Override
-	public String getInternalLink(String lang) {
-		return "<a href=\""+AtlasProtocol.PDF.toString().toLowerCase()+"://"
-		+ getId() + "\">" + getTitle().get(lang)
-		+ "</a>";
-	}
-	
-	@Override
-	public String getInternalLink() {
-		return "<a href=\""+AtlasProtocol.PDF.toString().toLowerCase()+"://"
-		+ getId() + "\">" + getTitle().toString()
-		+ "</a>";
-	}
+    @Override
+    public String getInternalLink() {
+	return "<a href=\"" + AtlasProtocol.PDF.toString().toLowerCase() + "://" + getId() + "\">"
+		+ getTitle().toString() + "</a>";
+    }
 }
