@@ -160,7 +160,7 @@ public enum AtlasProtocol {
 	    if (AtlasProtocol.PICTURE.test(evDesc) && (atlasConfig != null)) {
 		String dpeId = AtlasProtocol.PICTURE.cutOff(destURL.toString());
 		DpEntry dpe = atlasConfig.getDataPool().get(dpeId);
-		if (dpe != null && dpe instanceof DpMediaPDF) {
+		if (dpe != null && dpe instanceof DpMediaPICTURE) {
 		    AtlasProtocol.PICTURE.performPicture(parent, AVSwingUtil.getUrl(dpe, parent),
 			    atlasConfig);
 		} else {
