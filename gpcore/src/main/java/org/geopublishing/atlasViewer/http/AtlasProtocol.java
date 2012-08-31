@@ -13,6 +13,7 @@ package org.geopublishing.atlasViewer.http;
 import java.awt.Component;
 import java.awt.Window;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,6 +27,7 @@ import org.geopublishing.atlasViewer.JNLPUtil;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.media.DpMedia;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
+import org.geopublishing.atlasViewer.dp.media.DpMediaPICTURE;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AVSwingUtil;
 import org.geopublishing.atlasViewer.swing.AtlasAboutDialog;
@@ -47,7 +49,7 @@ import de.schmitzm.swing.SwingUtil;
  */
 public enum AtlasProtocol {
 
-	MAP, PDF, BROWSER, IMAGE, HTML, VIDEO, LAYER;
+	MAP, PDF, BROWSER, PICTURE, IMAGE, HTML, VIDEO, LAYER;
 
 	final static private Logger LOGGER = Logger.getLogger(AtlasProtocol.class);
 
@@ -136,25 +138,8 @@ public enum AtlasProtocol {
 
 					URL pdfUrl = new URL(pdfUrlString);
 
-					/*
-					 * Workaround for pdfs only being used as links. 
-					 * They dont get listed in the dataPool for some reason
-					 * @see https://trac.wikisquare.de/gp/ticket/91
-					 */
-					if(!new File(pdfUrl.getFile()).exists()){
-						int lastSlashPos2 = basePath.lastIndexOf('/');
-						if (lastSlashPos2 >= 0)
-							basePath = basePath.substring(0, basePath.lastIndexOf('/'));
-						basePath = basePath.replaceFirst("html", "data");
-						String[] split = pdfPathOrName.split("_");
-						pdfUrlString = basePath + '/'+pdfPathOrName + '/';
-						pdfUrlString+=split[2];
-						for (int i=3;i < split.length;i++) //case there is an "_" in the pdfs name
-							pdfUrlString+='_'+split[i];
-						pdfUrl = new URL(pdfUrlString + ".pdf");
-					}
-					LOGGER.debug("pdfPathOrName = " + pdfPathOrName);
-					LOGGER.debug("pdfUrl = " + pdfUrlString);
+					pdfUrl = dpMediaOnlyUsedAsLinksUrlFix(pdfUrl, basePath,
+							pdfPathOrName);
 					AtlasProtocol.PDF.performPDF(parent, pdfUrl, new File(
 							pdfPathOrName).getName());
 				}
@@ -169,6 +154,41 @@ public enum AtlasProtocol {
 						AtlasProtocol.MAP.cutOff(destURL.toString()),
 						atlasConfig);
 				return true; // stop standard link processing
+			}
+			
+			/**
+			 * Is this a picture:// link?
+			 */
+			if (AtlasProtocol.PICTURE.test(evDesc) && (atlasConfig != null)) {
+				String dpeId = AtlasProtocol.PICTURE.cutOff(destURL.toString());
+				DpEntry dpe = atlasConfig.getDataPool().get(dpeId);
+				if (dpe != null && dpe instanceof DpMediaPICTURE) {
+					AtlasProtocol.PICTURE.performPicture(parent,
+							AVSwingUtil.getUrl(dpe, parent), atlasConfig);
+				} else {
+					/**
+					 * 2. THis is a relative link to a PICTURE file?
+					 */
+					String basePath = currURL;
+					final int lastSlashPos = basePath.lastIndexOf('/');
+					if (lastSlashPos >= 0)
+						basePath = basePath.substring(0, lastSlashPos);
+
+					String picturePathOrName = AtlasProtocol.PICTURE
+							.cutOff(evDesc);
+
+					String pictureUrlString = basePath + "/"
+							+ picturePathOrName;
+
+					URL pictureUrl = new URL(pictureUrlString);
+
+					pictureUrl = dpMediaOnlyUsedAsLinksUrlFix(pictureUrl,
+							basePath, picturePathOrName);
+					AtlasProtocol.PICTURE.performPicture(parent, pictureUrl,
+							atlasConfig);
+
+				}
+				return true;
 			}
 
 			/**
@@ -203,6 +223,43 @@ public enum AtlasProtocol {
 		// do nothing -> standard process will open the linked
 		// document
 		return false;
+	}
+	
+	/*
+	 * Workaround for pdfs or pictures only being used as links. They dont get
+	 * listed in the dataPool for some reason
+	 * 
+	 * @see https://trac.wikisquare.de/gp/ticket/91
+	 */
+	private static URL dpMediaOnlyUsedAsLinksUrlFix(URL mediaUrl,
+			String basePath, String mediaPathOrName)
+			throws MalformedURLException {
+		URL url = mediaUrl;
+		if (!new File(mediaUrl.getFile()).exists()) {
+			int lastSlashPos2 = basePath.lastIndexOf('/');
+			if (lastSlashPos2 >= 0)
+				basePath = basePath.substring(0, basePath.lastIndexOf('/'));
+			basePath = basePath.replaceFirst("html", "data");
+			String[] split = mediaPathOrName.split("_");
+			String mediaUrlString = basePath + '/' + mediaPathOrName + '/';
+			mediaUrlString += split[2];
+			for (int i = 3; i < split.length; i++)
+				// case there is an "_" in the pdfs name
+				mediaUrlString += '_' + split[i];
+
+			// Here we have to try all different possible suffixes for PICTURE
+			// because the information is not in the link itself
+			if (mediaPathOrName.startsWith("picture")) { // DpMediaPICTURE
+				for (String suffix : DpMediaPICTURE.POSSIBLESUFFIXES) {
+					url = new URL(mediaUrlString + suffix);
+					if (IOUtil.urlExists(url))
+						return url;
+				}
+			} else { // DpMediaPDF
+				url = new URL(mediaUrlString + ".pdf");
+			}
+		}
+		return url;
 	}
 
 	@Override
@@ -244,6 +301,13 @@ public enum AtlasProtocol {
 	 */
 	public void performBrowser(Component owner, URL url) {
 		AVSwingUtil.lauchHTMLviewer(owner, url);
+	}
+	
+	/**
+	 * Opens the Picture
+	 */
+	public void performPicture(Component owner, URL url, AtlasConfig ac) {
+		AVSwingUtil.showImageAsHtmlPopup(owner, url, ac);
 	}
 
 	/**
@@ -327,7 +391,7 @@ public enum AtlasProtocol {
 
 			String html = IOUtil.readURLasString(url);
 
-			String regex = "&#47;&#47;|[//]?" + dpm.getId();
+			String regex = "(&#47;&#47;|[//])?" + dpm.getId();
 			Matcher matcher = Pattern.compile(regex).matcher(html);
 			return matcher.find();
 

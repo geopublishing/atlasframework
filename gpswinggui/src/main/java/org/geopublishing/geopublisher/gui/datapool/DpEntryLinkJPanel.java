@@ -25,6 +25,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
+import org.geopublishing.atlasViewer.dp.media.DpMediaPICTURE;
+import org.geopublishing.atlasViewer.swing.AvUtil;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
 
@@ -48,11 +50,13 @@ public class DpEntryLinkJPanel extends JPanel {
 		ace = (AtlasConfigEditable) dpe.getAtlasConfig();
 
 		// LInks zum PDF als HTML Interne LInks...
-		if (dpe instanceof DpMediaPDF) {
+		if (dpe instanceof DpMediaPDF || dpe instanceof DpMediaPICTURE) {
 
 			JPanel linktoPanel = new JPanel(new MigLayout("w 100%, wrap"));
 			linktoPanel.setBorder(BorderFactory
-					.createTitledBorder("Link to this PDF")); // i8n
+					.createTitledBorder((dpe instanceof DpMediaPDF) ? 
+							AvUtil.R("DpEntryLinkJPanel.PDF") :
+							AvUtil.R("DpEntryLinkJPanel.PICTURE")));
 
 			linktoPanel.add(new JLabel(GeopublisherGUI
 					.R("MapPreferences.LinkToThisMap.Label")));

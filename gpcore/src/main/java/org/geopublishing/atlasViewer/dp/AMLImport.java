@@ -33,6 +33,7 @@ import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSource;
 import org.geopublishing.atlasViewer.dp.layer.DpLayerVectorFeatureSourceShapefile;
 import org.geopublishing.atlasViewer.dp.layer.LayerStyle;
 import org.geopublishing.atlasViewer.dp.media.DpMediaPDF;
+import org.geopublishing.atlasViewer.dp.media.DpMediaPICTURE;
 import org.geopublishing.atlasViewer.dp.media.DpMediaVideo;
 import org.geopublishing.atlasViewer.exceptions.AtlasException;
 import org.geopublishing.atlasViewer.exceptions.AtlasFatalException;
@@ -420,6 +421,17 @@ public class AMLImport {
 			ac.getDataPool().add(pdf);
 		}
 
+		// LOGGER.debug("Starting to parse Picture layers...");
+		// aml:pictureMedia
+		final NodeList pictureMedia = xml.getElementsByTagNameNS(
+				AMLUtil.AMLURI, "pictureMedia");
+		for (int i = 0; i < pictureMedia.getLength(); i++) {
+			final Node node = pictureMedia.item(i);
+			final DpMediaPICTURE picture = AMLImport.parseDatapoolPicture(node,
+					ac);
+			ac.getDataPool().add(picture);
+		}
+
 		// LOGGER.debug("Starting to parse maps...");
 		// aml:mapPool
 		final Node rootMapPoolNode = xml.getElementsByTagNameNS(AMLUtil.AMLURI,
@@ -592,6 +604,58 @@ public class AMLImport {
 					"ac= null in parseMediaPdfVideo(Node node, Atlasconfig ac)");
 		}
 		final DpMediaPDF dpe = new DpMediaPDF(ac);
+
+		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
+		// ****************************************************************************
+		// The exportable attribute is optional and defaults to false
+		// ****************************************************************************
+		try {
+			dpe.setExportable(Boolean.valueOf(node.getAttributes()
+					.getNamedItem("exportable").getNodeValue()));
+		} catch (Exception e) {
+			dpe.setExportable(false);
+		}
+
+		final NodeList childNodes = node.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			final Node n = childNodes.item(i);
+			final String name = n.getLocalName();
+			// Cancel if it's an attribute
+			if (!n.hasChildNodes())
+				continue;
+
+			if (name.equals("filename")) {
+				final String value = n.getFirstChild().getNodeValue();
+				dpe.setFilename(value);
+			} else if (name.equals("name")) {
+				dpe.setTitle(AMLImport.parseTranslation(ac.getLanguages(), n));
+			} else if (name.equals("dataDirname")) {
+				final String value = n.getFirstChild().getNodeValue();
+				dpe.setDataDirname(value);
+			} else if (name.equals("desc")) {
+				dpe.setDesc(AMLImport.parseTranslation(ac.getLanguages(), n));
+			} else if (name.equals("keywords")) {
+				dpe.setKeywords(AMLImport.parseTranslation(ac.getLanguages(), n));
+			}
+		}
+		return dpe;
+	}
+
+	/**
+	 * Parse a aml:PdfMedia tag to a {@link DpMediaPDF} instance
+	 * 
+	 * @param node
+	 * @param ac
+	 * @return
+	 * @throws AtlasRecoverableException
+	 */
+	private static DpMediaPICTURE parseDatapoolPicture(Node node, AtlasConfig ac)
+			throws AtlasRecoverableException {
+		if (ac == null) {
+			throw new IllegalArgumentException(
+					"ac= null in parseMediaPicture(Node node, Atlasconfig ac)");
+		}
+		final DpMediaPICTURE dpe = new DpMediaPICTURE(ac);
 
 		dpe.setId(node.getAttributes().getNamedItem("id").getNodeValue());
 		// ****************************************************************************

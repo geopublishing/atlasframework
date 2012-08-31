@@ -94,6 +94,12 @@ public class Icons {
 
 	public static final ImageIcon ICON_PDF_SMALL = new ImageIcon(
 			Icons.class.getResource("/icons/small/pdf.png"));
+	
+	public static final ImageIcon ICON_PICTURE_BIG = new ImageIcon(
+			Icons.class.getResource("/icons/big/picture.png"));
+
+	public static final ImageIcon ICON_PICTURE_SMALL = new ImageIcon(
+			Icons.class.getResource("/icons/small/picture.png"));
 
 	public static final ImageIcon ICON_HTML_BIG = new ImageIcon(
 			Icons.class.getResource("/icons/big/html.png"));

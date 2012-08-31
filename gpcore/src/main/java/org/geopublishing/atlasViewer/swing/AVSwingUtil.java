@@ -988,4 +988,20 @@ public class AVSwingUtil extends GpCoreUtil {
 		}
 	}
 
+	/**
+	 * This method takes an url to a picture and embeds it in html to open a
+	 * popup window. Convenience method for a new PicturePopupDialog
+	 * 
+	 * @param URL to picture
+	 */
+	public static Exception showImageAsHtmlPopup(final Component owner, final URL url, AtlasConfig ac) {
+		Exception ex = null;
+		try {
+		    new PicturePopupDialog(owner, ac, url);
+		} catch (Exception e) {
+			ex = e;
+		}
+		return ex;
+	}
+
 }

@@ -23,7 +23,7 @@ import org.geopublishing.atlasViewer.swing.Icons;
  * 
  */
 public enum DpEntryType {
-	UNKNOWN, PDF, GML, RASTER, VECTOR, VIDEO, RASTER_GEOTIFF, RASTER_ARCASCII, RASTER_IMAGEWORLD, VECTOR_SHP_POINT, VECTOR_SHP_LINE, VECTOR_SHP_POLY;
+	UNKNOWN, PDF, GML, PICTURE, RASTER, VECTOR, VIDEO, RASTER_GEOTIFF, RASTER_ARCASCII, RASTER_IMAGEWORLD, VECTOR_SHP_POINT, VECTOR_SHP_LINE, VECTOR_SHP_POLY;
 
 	/**
 	 * Provides a small icon this {@link DpEntryType}
@@ -76,6 +76,9 @@ public enum DpEntryType {
 
 		} else if (type == DpEntryType.PDF) {
 			icon = Icons.ICON_PDF_SMALL;
+			
+		} else if (type == DpEntryType.PICTURE) {
+			icon = Icons.ICON_PICTURE_SMALL;
 
 		} else {
 			icon = Icons.ICON_UNKOWN_SMALL;
@@ -125,6 +128,9 @@ public enum DpEntryType {
 
 		} else if (type == DpEntryType.PDF) {
 			icon = Icons.ICON_PDF_BIG;
+			
+		} else if (type == DpEntryType.PICTURE) {
+			icon = Icons.ICON_PICTURE_BIG;
 
 		} else {
 			icon = Icons.ICON_UNKOWN_BIG;
