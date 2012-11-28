@@ -596,6 +596,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					FilterUtil.BlacklistedFilesFilter,
 					FilterUtil.BlacklistedFoldersFilter);
 			for (File f : listFiles) {
+				if(IOUtil.getFileExt(f).equals(".html")){
+					String htmlString = IOUtil.readFileAsString(f);
+					if (htmlString.contains("\\")){
+								GpCoreUtil.convertWindowsToLinuxSlashesInHtmlSrcTags(IOUtil.fileToURL(f));
+					}
+				}
 				String relFileName = f.getAbsolutePath().substring(
 						baseDir.getAbsolutePath().length() + 1);
 				listRelFileNames.add(relFileName);

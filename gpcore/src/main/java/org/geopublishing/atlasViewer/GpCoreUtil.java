@@ -12,9 +12,11 @@ package org.geopublishing.atlasViewer;
 
 import java.awt.Component;
 import java.awt.FontMetrics;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -24,6 +26,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.measure.unit.Unit;
 import javax.swing.JDialog;
@@ -47,6 +51,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.lang.SystemUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
+import org.eclipse.emf.ecore.xml.type.internal.RegEx;
 import org.geopublishing.atlasViewer.dp.DpEntry;
 import org.geopublishing.atlasViewer.map.Map;
 import org.geopublishing.atlasViewer.swing.AtlasViewerGUI;
@@ -551,7 +556,9 @@ public class GpCoreUtil {
 			AtlasConfig ac) {
 
 		HTMLInfoPaneInterface htmlInfoPane = null;
-
+		String htmlString = IOUtil.readURLasString(url);
+		if (htmlString.contains("\\"))
+			url = convertWindowsToLinuxSlashesInHtmlSrcTags(url);
 		// // try to use an HTML view based on DJ project
 		// htmlInfoPane = (HTMLInfoPaneInterface)LangUtil.instantiateObject(
 		// "org.geopublishing.atlasViewer.swing.HTMLInfoJWebBrowser",
@@ -579,6 +586,39 @@ public class GpCoreUtil {
 	}
 
 	/**
+	 * This method converts backslashes to forwardslashes in any html document.
+	 * Backslashes dont work in linux environments and when using the atlas out
+	 * of a .jar geopublisher expects forwardslashes
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public static URL convertWindowsToLinuxSlashesInHtmlSrcTags(URL url) {
+		String htmlString = IOUtil.readURLasString(url);
+		File tempFile = null;
+		Pattern p = Pattern.compile(
+				"(<[^>]+(?:src|href)=\"[^\"]*)\\\\([^\"]*\"[^>]*>)",
+				Pattern.MULTILINE | Pattern.CASE_INSENSITIVE);
+		Matcher m = p.matcher(htmlString);
+
+		while (m.find()) {
+			htmlString = m.replaceAll("$1/$2");
+			m = p.matcher(htmlString);
+		}
+		try {
+			tempFile = IOUtil.createTemporaryFile("tmp", ".html", true);
+			InputStream bais = new ByteArrayInputStream(htmlString.getBytes());
+			IOUtil.writeStreamToFile(bais, tempFile);
+			IOUtil.copyFileNoException(null, tempFile, IOUtil.urlToFile(url),
+					false);
+		} catch (IOException e) {
+		}
+
+		return url;
+
+	}
+
+	/**
 	 * Factory method to create an html viewport.
 	 * 
 	 * @param map
@@ -587,5 +627,5 @@ public class GpCoreUtil {
 	public static HTMLInfoPaneInterface createHTMLInfoPane(Map map) {
 		return createHTMLInfoPane(map.getInfoURL(), map.getAc());
 	}
-	
+
 }
