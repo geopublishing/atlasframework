@@ -676,9 +676,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		for (final String libName : getJarAndNativeLibNames()) {
 
-			if (libName.equals("./batik-js-1.7.jar")) {
-				System.out.println("bla");
-			}
 			checkAbort();
 
 			File destination = new File(targetLibDir, libName);
