@@ -41,25 +41,25 @@
 						</configuration>
 					</execution>
 					<!-- <execution> -->
-					<!-- <id>unpack native libs</id> -->
-					<!-- <phase>compile</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>unpack</goal> -->
-					<!-- </goals> -->
-					<!-- <configuration> -->
-					<!-- <artifactItems> -->
-					<!-- <artifactItem> -->
-					<!-- <groupId>org.geopublishing</groupId> -->
-					<!-- <artifactId>gpnatives</artifactId> -->
-					<!-- <version>${project.version}</version> -->
-					<!-- vorher auskommentiert? <classifier>${build.type}</classifier> -->
-					<!-- <type>jar</type> -->
-					<!-- <overWrite>true</overWrite> -->
-					<!-- <outputDirectory>${project.build.directory}/natives</outputDirectory> -->
-					<!-- </artifactItem> -->
-					<!-- </artifactItems> -->
-					<!-- </configuration> -->
-					<!-- </execution> -->
+						<!-- <id>unpack native libs</id> -->
+						<!-- <phase>compile</phase> -->
+						<!-- <goals> -->
+							<!-- <goal>unpack</goal> -->
+							<!-- </goals> -->
+						<!-- <configuration> -->
+							<!-- <artifactItems> -->
+								<!-- <artifactItem> -->
+									<!-- <groupId>org.geopublishing</groupId> -->
+									<!-- <artifactId>gpnatives</artifactId> -->
+									<!-- <version>${project.version}</version> -->
+									<!-- vorher auskommentiert? <classifier>${build.type}</classifier> -->
+									<!-- <type>jar</type> -->
+									<!-- <overWrite>true</overWrite> -->
+									<!-- <outputDirectory>${project.build.directory}/natives</outputDirectory> -->
+									<!-- </artifactItem> -->
+								<!-- </artifactItems> -->
+							<!-- </configuration> -->
+						<!-- </execution> -->
 				</executions>
 			</plugin>
 
@@ -139,6 +139,13 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!--Maven 2.2.1 does not automagically find this as a dependency, so we add this by hand.
+		     Will be obsolete once we switch to maven 3-->
+		<dependency>
+			<groupId>org.apache.xmlgraphics</groupId>
+			<artifactId>batik-js</artifactId>
+			<version>1.7</version>
+		</dependency>
 
 		<dependency>
 			<!-- Test dependency -->
