@@ -676,7 +676,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		for (final String libName : getJarAndNativeLibNames()) {
 
-			if (libName.equals("./postgresql-9.1-901.jdbc4.jar")) {
+			if (libName.equals("./batik-js-1.7.jar")) {
 				System.out.println("bla");
 			}
 			checkAbort();
@@ -988,7 +988,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 		if (path == null) {
 			path = findFileInDirectory(m2repo, jarName.substring(2));
-			if (path != null) {
+			if(path!=null){
 				path = path.replace(m2repo.toString(), "");
 				path = path.replace(jarName.substring(2), "");
 			}
