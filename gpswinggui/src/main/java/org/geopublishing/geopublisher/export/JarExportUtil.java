@@ -40,6 +40,8 @@ import java.util.regex.Pattern;
 
 import javax.jnlp.BasicService;
 import javax.jnlp.ServiceManager;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -425,6 +427,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	private URL overwriteJnlpUrl = null;
 
 	/**
+	 * Used for findFileinDirectory()
+	 */
+	private static boolean foundFile;
+	private static String filePath;
+
+	/**
 	 * Initializes an {@link JarExportUtil} object to do the real work. The
 	 * constructor already creates a temp dir that start with
 	 * ATLAS_TEMP_FILE_EXPORTINSTANCE_ID.
@@ -596,10 +604,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					FilterUtil.BlacklistedFilesFilter,
 					FilterUtil.BlacklistedFoldersFilter);
 			for (File f : listFiles) {
-				if(IOUtil.getFileExt(f).equals(".html")){
+				if (IOUtil.getFileExt(f).equals(".html")) {
 					String htmlString = IOUtil.readFileAsString(f);
-					if (htmlString.contains("\\")){
-								GpCoreUtil.convertWindowsToLinuxSlashesInHtmlSrcTags(IOUtil.fileToURL(f));
+					if (htmlString.contains("\\")) {
+						GpCoreUtil
+								.convertWindowsToLinuxSlashesInHtmlSrcTags(IOUtil
+										.fileToURL(f));
 					}
 				}
 				String relFileName = f.getAbsolutePath().substring(
@@ -666,6 +676,9 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 		for (final String libName : getJarAndNativeLibNames()) {
 
+			if (libName.equals("./postgresql-9.1-901.jdbc4.jar")) {
+				System.out.println("bla");
+			}
 			checkAbort();
 
 			File destination = new File(targetLibDir, libName);
@@ -709,8 +722,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				 */
 				if (toJws && libName.endsWith(".jar")) {
 					try {
-						URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
-								libName + ".pack.gz");
+						// URL fromURLPackGZ = DataUtilities.extendURL(fromURL,
+						// libName + ".pack.gz");
+						//
+						// final File destinationPackGz = new File(targetLibDir,
+						// libName + ".pack.gz");
+
+						URL fromURLPackGZ = new URL(fromURL + ".pack.gz");
 
 						final File destinationPackGz = new File(targetLibDir,
 								libName + ".pack.gz");
@@ -968,7 +986,13 @@ public class JarExportUtil extends AbstractAtlasExporter {
 				path = "org/geotools/jdbc/" + matcher.group(1) + "/"
 						+ matcher.group(2);
 		}
-
+		if (path == null) {
+			path = findFileInDirectory(m2repo, jarName.substring(2));
+			if (path != null) {
+				path = path.replace(m2repo.toString(), "");
+				path = path.replace(jarName.substring(2), "");
+			}
+		}
 		if (path == null)
 			return null;
 
@@ -983,6 +1007,33 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		fromURL = DataUtilities.fileToURL(file);
 
 		return fromURL;
+	}
+
+	/**
+	 * traverses the given parentDirectory recursively to find fileName and
+	 * returns the filePath or null
+	 * 
+	 * @param parentDirectory
+	 * @param fileName
+	 * @return
+	 */
+	private static String findFileInDirectory(File parentDirectory,
+			String fileName) {
+		if (foundFile) {
+			return filePath;
+		}
+		File[] files = parentDirectory.listFiles();
+		for (File file : files) {
+			if (file.getName().equals(fileName)) {
+				foundFile = true;
+				filePath = file.getAbsolutePath();
+				break;
+			}
+			if (file.isDirectory()) {
+				findFileInDirectory(file, fileName);
+			}
+		}
+		return filePath;
 	}
 
 	private URL getNativeLibraryURL(String nativeName) {
