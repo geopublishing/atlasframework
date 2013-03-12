@@ -202,6 +202,14 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>de.schmitzm</groupId>
+			<artifactId>schmitzm-regex</artifactId>
+			<version>${schmitzm.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<version>0.5</version>
