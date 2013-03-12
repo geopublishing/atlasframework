@@ -207,8 +207,7 @@
 			<groupId>de.schmitzm</groupId>
 			<artifactId>schmitzm-regex</artifactId>
 			<version>${schmitzm.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
