@@ -4,3 +4,6 @@
 /asswinggui/target/
 /avswinggui/target/
 /gpswinggui/target/
+/gpdoc/target/
+nb-configuration.xml
+*.*~
