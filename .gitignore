@@ -7,3 +7,4 @@
 /gpdoc/target/
 nb-configuration.xml
 *.*~
+/target/
