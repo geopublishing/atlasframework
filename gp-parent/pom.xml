@@ -64,11 +64,9 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://svn.wald.intevation.org/svn/atlas-framework/trunk
+        <connection>scm:git@github.com:geopublishing/atlasframework.git
 		</connection>
-		<url>https://svn.wald.intevation.org/svn/atlas-framework/trunk</url>
-		<developerConnection>scm:svn:https://svn.wald.intevation.org/svn/atlas-framework/trunk/gp-atlas-framework
-		</developerConnection>
+        <url>https://github.com/geopublishing/atlasframework</url>
 	</scm>
 
 	<build>
