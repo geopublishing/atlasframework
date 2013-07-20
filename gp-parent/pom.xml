@@ -64,8 +64,8 @@
 	</developers>
 
 	<scm>
-        <connection>scm:git@github.com:geopublishing/atlasframework.git
-		</connection>
+        <connection>scm:git:ssh://github.com:geopublishing/atlasframework.git</connection>
+        <developerConnection>scm:git:ssh://github.com:geopublishing/atlasframework.git</developerConnection>
         <url>https://github.com/geopublishing/atlasframework</url>
 	</scm>
 
@@ -140,7 +140,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-4</version>
+				<version>1.2</version>
 				<executions>
 					<execution>
 						<id>buildnumber in phase initialize</id>
