@@ -207,7 +207,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					SCHMITZM_JARNAME3, SCHMITZM_JARNAME4, SCHMITZM_JARNAME5,
 					GSRCJ_JARNAME, ASCORE_JARNAME, GPSYNC_JARNAME,
 					GPCORE_JARNAME, AVSWINGGUI_JARNAME
-			// , GPNATIVES_JARNAME
+//			 , GPNATIVES_JARNAME
 			}));
 
 	/**
@@ -2109,7 +2109,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 			// Add the new libs to the existing list
 			libs = atlasDependecies.split(":");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new AtlasExportException(propertiesName + " not found!", e);
 		}
 
