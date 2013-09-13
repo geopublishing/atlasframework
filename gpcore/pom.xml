@@ -77,6 +77,12 @@
 							</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
+
+						<!-- http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/no_redeploy.html -->
+						<manifestEntries>
+							<Permissions>all-permissions</Permissions>
+							<Codebase>*</Codebase>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
@@ -84,7 +90,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.0-beta-4</version>
+				<version>1.0</version>
 				<executions>
 					<execution>
 						<id>buildnumber in phase initialize</id>
