@@ -71,38 +71,45 @@
 							<mainClass>${mainClass}</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
+
+						<!-- http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/no_redeploy.html -->
+						<manifestEntries>
+							<Permissions>all-permissions</Permissions>
+							<Codebase>*</Codebase>
+						</manifestEntries>
+
 					</archive>
 				</configuration>
 			</plugin>
 
 			<!-- <plugin> -->
-				<!-- <groupId>org.apache.maven.plugins</groupId> -->
-				<!-- <artifactId>maven-dependency-plugin</artifactId> -->
-				<!-- <version>2.1</version> -->
-				<!-- <executions> -->
-					<!-- <execution> -->
-						<!-- <id>unpack native libs</id> -->
-						<!-- <phase>compile</phase> -->
-						<!-- <goals> -->
-							<!-- <goal>unpack</goal> -->
-							<!-- </goals> -->
-						<!-- <configuration> -->
-							<!-- <artifactItems> -->
-								<!-- <artifactItem> -->
-									<!-- <groupId>org.geopublishing</groupId> -->
-									<!-- <artifactId>gpnatives</artifactId> -->
-									<!-- <version>${project.version}</version> -->
-									<!-- <classifier>${build.type}</classifier> -->
-									<!-- <type>jar</type> -->
-									<!-- <overWrite>true</overWrite> -->
-									<!-- <outputDirectory>${project.build.directory}/natives -->
-										<!-- </outputDirectory> -->
-									<!-- </artifactItem> -->
-								<!-- </artifactItems> -->
-							<!-- </configuration> -->
-						<!-- </execution> -->
-					<!-- </executions> -->
-				<!-- </plugin> -->
+			<!-- <groupId>org.apache.maven.plugins</groupId> -->
+			<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+			<!-- <version>2.1</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>unpack native libs</id> -->
+			<!-- <phase>compile</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>unpack</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <artifactItems> -->
+			<!-- <artifactItem> -->
+			<!-- <groupId>org.geopublishing</groupId> -->
+			<!-- <artifactId>gpnatives</artifactId> -->
+			<!-- <version>${project.version}</version> -->
+			<!-- <classifier>${build.type}</classifier> -->
+			<!-- <type>jar</type> -->
+			<!-- <overWrite>true</overWrite> -->
+			<!-- <outputDirectory>${project.build.directory}/natives -->
+			<!-- </outputDirectory> -->
+			<!-- </artifactItem> -->
+			<!-- </artifactItems> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 
@@ -188,15 +195,17 @@
 							</sign>
 
 							<arguments>
-								<argument>-sigalg</argument><argument>MD5withRSA</argument>
-								<argument>-digestalg</argument><argument>SHA1</argument>
+								<argument>-sigalg</argument>
+								<argument>MD5withRSA</argument>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
 							</arguments>
 
 							<verbose>false</verbose>
 							<excludeTransitive>false</excludeTransitive>
-							
+
 							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-						
+
 							<pack200>false</pack200>
 							<gzip>true</gzip>
 
@@ -232,44 +241,44 @@
 					</plugin>
 
 					<!-- <plugin> -->
-						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-						<!-- <version>0.1.0-SNAPSHOT</version> -->
-						<!-- <executions> -->
-							<!-- <execution> -->
-								<!-- <phase>package</phase> -->
-								<!-- <goals> -->
-									<!-- <goal>jsmoothcompile</goal> -->
-									<!-- </goals> -->
-								<!-- </execution> -->
-							<!-- </executions> -->
-						<!-- <configuration> -->
-							<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
-							<!-- <setExeName>false</setExeName> -->
-							<!-- <setJarName>true</setJarName> -->
-							<!-- <includeDependencies>true</includeDependencies> -->
-							<!-- </configuration> -->
-						<!-- </plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
 					<!-- <plugin> -->
-						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-						<!-- <version>0.1.0-SNAPSHOT</version> -->
-						<!-- <executions> -->
-							<!-- <execution> -->
-								<!-- <phase>package</phase> -->
-								<!-- <goals> -->
-									<!-- <goal>jsmoothcompile</goal> -->
-									<!-- </goals> -->
-								<!-- </execution> -->
-							<!-- </executions> -->
-						<!-- <configuration> -->
-							<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
-							<!-- <setExeName>false</setExeName> -->
-							<!-- <setJarName>true</setJarName> -->
-							<!-- <includeDependencies>true</includeDependencies> -->
-							<!-- </configuration> -->
-						<!-- </plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -291,6 +300,23 @@
 								<goals>
 									<goal>attached</goal>
 								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<artifactId>exec-maven-plugin</artifactId>
+						<groupId>org.codehaus.mojo</groupId>
+						<executions>
+							<execution>
+								<id>fixGpSign</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>fixGpSignFind.sh</executable>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -519,12 +545,12 @@
 		</dependency>
 
 		<!-- <dependency> -->
-			<!-- <groupId>log4j</groupId> -->
-			<!-- <artifactId>log4j</artifactId> -->
-			<!-- <version>1.2.14</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.14</version> -->
+		<!-- <type>jar</type> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>javax.jnlp</groupId>

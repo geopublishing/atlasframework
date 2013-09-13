@@ -47,6 +47,11 @@
 						<manifest>
 							<mainClass>${mainClass}</mainClass>
 						</manifest>
+						<!-- http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/no_redeploy.html -->
+						<manifestEntries>
+							<Permissions>all-permissions</Permissions>
+							<Codebase>*</Codebase>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
