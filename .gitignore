@@ -8,3 +8,6 @@
 nb-configuration.xml
 *.*~
 /target/
+*.project
+*.settings/
+*.classpath/
