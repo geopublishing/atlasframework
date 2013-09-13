@@ -77,6 +77,13 @@
 							</mainClass>
 							<addClasspath>true</addClasspath>
 						</manifest>
+
+
+						<!-- http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/no_redeploy.html -->
+						<manifestEntries>
+							<Permissions>all-permissions</Permissions>
+							<Codebase>*</Codebase>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
@@ -84,7 +91,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.2</version>
+				<version>1.2</version>
 				<executions>
 					<execution>
 						<id>buildnumber in phase initialize</id>
@@ -202,7 +209,7 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>de.schmitzm</groupId>
 			<artifactId>schmitzm-regex</artifactId>
