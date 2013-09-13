@@ -207,7 +207,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 					SCHMITZM_JARNAME3, SCHMITZM_JARNAME4, SCHMITZM_JARNAME5,
 					GSRCJ_JARNAME, ASCORE_JARNAME, GPSYNC_JARNAME,
 					GPCORE_JARNAME, AVSWINGGUI_JARNAME
-//			 , GPNATIVES_JARNAME
+			// , GPNATIVES_JARNAME
 			}));
 
 	/**
@@ -985,7 +985,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		}
 		if (path == null) {
 			path = findFileInDirectory(m2repo, jarName.substring(2));
-			if(path!=null){
+			if (path != null) {
 				path = path.replace(m2repo.toString(), "");
 				path = path.replace(jarName.substring(2), "");
 			}

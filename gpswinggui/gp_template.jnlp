@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jnlp codebase="http://www.geopublishing.org/gp-${project.version}/" href="http://www.geopublishing.org/gp-${project.version}/gp.jnlp" spec="1.0+">
+<jnlp codebase="http://www.geopublishing.org/gp-${project.version}/" href="http://www.geopublishing.org/gp-${project.version}/gp.jnlp" spec="6.0+">
   <information>
     <title>Geopublisher Atlas Author ${project.version}</title>
     <description>A software to create interactive multimedia atlases</description>
@@ -52,7 +52,7 @@
   <update check="always" policy="always"/>
   
   <resources>
-    <java href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Dfile.encoding=UTF-8" max-heap-size="320m" version="1.6.0_18+"/>
+    <java href="http://java.sun.com/products/autodl/j2se" java-vm-args="-Dfile.encoding=UTF-8" max-heap-size="320m" version="1.7+"/>
     <property name="jnlp.packEnabled" value="true"/>
     <property name="sun.awt.disableMixing" value="true"/>
 	<property name="file.encoding" value="UTF-8"/>
