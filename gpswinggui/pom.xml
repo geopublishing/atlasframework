@@ -323,7 +323,7 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-									<executable>fixGpSignFind.sh</executable>
+                                    <executable>/usr/local/bin/fixGpSignFind.sh</executable>
 								</configuration>
 							</execution>
 						</executions>
