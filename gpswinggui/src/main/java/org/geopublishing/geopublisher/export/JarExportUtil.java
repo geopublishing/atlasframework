@@ -40,8 +40,6 @@ import java.util.regex.Pattern;
 
 import javax.jnlp.BasicService;
 import javax.jnlp.ServiceManager;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -2109,7 +2107,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 
 			// Add the new libs to the existing list
 			libs = atlasDependecies.split(":");
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			throw new AtlasExportException(propertiesName + " not found!", e);
 		}
 
@@ -2208,6 +2206,10 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		mainAtts.put(new Name("SplashScreen-Image"),
 				AtlasConfig.SPLASHSCREEN_RESOURCE_NAME);
 
+		// http://docs.oracle.com/javase/7/docs/technotes/guides/jweb/no_redeploy.html
+		mainAtts.put(new Attributes.Name("Permissions"), "all-permissions");
+		mainAtts.put(new Attributes.Name("Codebase"), "*");
+
 		return manifest;
 	}
 
@@ -2237,10 +2239,28 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	 *             jarsigner .html
 	 *             http://java.sun.com/javase/6/docs/technotes/tools/windows
 	 *             /keytool.html
+	 * @throws IOException
 	 */
-	private void jarSign(final File jarFile) throws AtlasExportException {
+	private void jarSign(final File jarFile) throws AtlasExportException,
+			IOException {
 
 		SwingUtil.checkNotOnEDT(); // i8n
+
+		// TODO Merge Codebase and Secutiry into Manifest
+		File tf = File.createTempFile("AtlasTempFile__", "manifest");
+		String[] xmds = new String[] { "ufm", jarFile.getAbsolutePath(),
+				tf.getAbsolutePath() };
+		try {
+			FileUtils.writeStringToFile(tf,
+					"Permissions: all-permissions\nCodebase: *\n");
+			final Main jartool = new Main(System.out, System.err, "jar");
+			jartool.run(xmds);
+		} catch (Exception e) {
+			LOGGER.error(e);
+			throw new AtlasExportException("Exception while adding manifest\n "
+					+ jarFile + " with\n '"
+					+ LangUtil.stringConcatWithSep(",", xmds) + "'", e);
+		}
 
 		info("Signing JAR " + jarFile.getName());
 
