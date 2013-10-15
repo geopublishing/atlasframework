@@ -142,6 +142,7 @@ public class CliOptionsTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testExportWithForce() throws Throwable {
 
 		File expDir = GpTestingUtil.createAtlasExportTesttDir();
@@ -162,6 +163,7 @@ public class CliOptionsTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testExport() throws Throwable {
 
 		File expDir = GpTestingUtil.createAtlasExportTesttDir();
@@ -177,6 +179,7 @@ public class CliOptionsTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testExportDISKonlyZipped() throws Throwable {
 
 		File expDir = GpTestingUtil.createAtlasExportTesttDir();

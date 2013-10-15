@@ -103,6 +103,7 @@ public class JarExportUtilTest extends TestingClass {
 		libNameChecked);
     }
 
+    @Ignore
     @Test
     public void testExportAtlasLibsNoSignNoGUI() throws Exception {
 	assertNotNull(atlasExportTesttDir);
@@ -264,6 +265,7 @@ public class JarExportUtilTest extends TestingClass {
     }
 
     @Test
+    @Ignore
     public void testExportAtlasLibsSignNoGUI() throws Exception {
 
 	assertNotNull(atlasExportTesttDir);
