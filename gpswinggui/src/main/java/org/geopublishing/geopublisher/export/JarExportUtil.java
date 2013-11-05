@@ -403,12 +403,6 @@ public class JarExportUtil extends AbstractAtlasExporter {
     private URL overwriteJnlpUrl = null;
 
     /**
-     * Used for findFileinDirectory()
-     */
-    private static boolean foundFile;
-    private static String filePath;
-
-    /**
      * Initializes an {@link JarExportUtil} object to do the real work. The
      * constructor already creates a temp dir that start with
      * ATLAS_TEMP_FILE_EXPORTINSTANCE_ID.
@@ -929,10 +923,14 @@ public class JarExportUtil extends AbstractAtlasExporter {
 		path = "org/geotools/jdbc/" + matcher.group(1) + "/" + matcher.group(2);
 	}
 	if (path == null) {
-	    path = findFileInDirectory(m2repo, jarName.substring(2));
+	    String cleanedJarName = jarName;
+	    if(jarName.startsWith("./")){
+		cleanedJarName  = jarName.substring(2);
+	    }
+	    path = findFileInDirectory(m2repo, cleanedJarName);
 	    if (path != null) {
 		path = path.replace(m2repo.toString(), "");
-		path = path.replace(jarName.substring(2), "");
+		path = path.replace(cleanedJarName, "");
 	    }
 	}
 	if (path == null)
@@ -960,7 +958,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
      * @return
      */
     private static String findFileInDirectory(File parentDirectory, String fileName) {
-	foundFile = false;
+	boolean foundFile = false;
+	String filePath = null;
 	if (foundFile) {
 	    return filePath;
 	}
