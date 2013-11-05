@@ -13,6 +13,7 @@ package org.geopublishing.geopublisher.export;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -401,6 +402,12 @@ public class JarExportUtil extends AbstractAtlasExporter {
      * <code>null</code>, the value from the <code>atlas.xml</code> is used.
      */
     private URL overwriteJnlpUrl = null;
+
+    /**
+     * Used for findFileinDirectory()
+     */
+    private static boolean foundFile;
+    private static String filePath;
 
     /**
      * Initializes an {@link JarExportUtil} object to do the real work. The
@@ -924,10 +931,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	}
 	if (path == null) {
 	    String cleanedJarName = jarName;
-	    if(jarName.startsWith("./")){
-		cleanedJarName  = jarName.substring(2);
+	    if (jarName.startsWith("./")) {
+		cleanedJarName = jarName.substring(2);
 	    }
-	    path = findFileInDirectory(m2repo, cleanedJarName);
+	    path = findFileInDirectories(m2repo, cleanedJarName);
+//	    path = findFileInDirectory(m2repo, cleanedJarName);
 	    if (path != null) {
 		path = path.replace(m2repo.toString(), "");
 		path = path.replace(cleanedJarName, "");
@@ -956,10 +964,11 @@ public class JarExportUtil extends AbstractAtlasExporter {
      * @param parentDirectory
      * @param fileName
      * @return
+     * @deprecated Broken, use findFileInDirectories instead
      */
     private static String findFileInDirectory(File parentDirectory, String fileName) {
-	boolean foundFile = false;
-	String filePath = null;
+	foundFile = false;
+	// filePath = null;
 	if (foundFile) {
 	    return filePath;
 	}
@@ -975,6 +984,20 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	    }
 	}
 	return filePath;
+    }
+
+    private static String findFileInDirectories(File parentDirectory, String fileName) {
+	FileFilter filter = new FileFilter() {
+	    @Override
+	    public boolean accept(File pathname) {
+		return pathname.isFile();
+	    }
+	};
+	List<File> findFiles = IOUtil.findFiles(parentDirectory, filter, true);
+	if (!findFiles.isEmpty())
+	    return findFiles.get(0).toString();
+	else
+	    return null;
     }
 
     private URL getNativeLibraryURL(String nativeName) {
