@@ -28,6 +28,7 @@ import org.geotools.styling.SelectedChannelType;
 import org.geotools.styling.Style;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.opengis.filter.expression.Literal;
 import org.opengis.referencing.FactoryException;
@@ -200,6 +201,7 @@ public class DpLayerRasterEdTest extends TestingClass {
 	}
 
 	@Test
+	@Ignore
 	public void testTransparencyOfGeotiffWithSLD_AVJARafterExport() throws Throwable {
 		// assertNotNull(atlasExportTesttDir);
 		exportAtlas();
