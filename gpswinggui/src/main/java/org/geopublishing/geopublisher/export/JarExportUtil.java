@@ -934,8 +934,8 @@ public class JarExportUtil extends AbstractAtlasExporter {
 	    if (jarName.startsWith("./")) {
 		cleanedJarName = jarName.substring(2);
 	    }
-	    path = findFileInDirectories(m2repo, cleanedJarName);
-//	    path = findFileInDirectory(m2repo, cleanedJarName);
+//	    path = findFileInDirectories(m2repo, cleanedJarName);
+	    path = findFileInDirectory(m2repo, cleanedJarName);
 	    if (path != null) {
 		path = path.replace(m2repo.toString(), "");
 		path = path.replace(cleanedJarName, "");
