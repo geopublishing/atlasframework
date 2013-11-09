@@ -201,7 +201,6 @@ public class DpLayerRasterEdTest extends TestingClass {
 	}
 
 	@Test
-	@Ignore
 	public void testTransparencyOfGeotiffWithSLD_AVJARafterExport() throws Throwable {
 		// assertNotNull(atlasExportTesttDir);
 		exportAtlas();

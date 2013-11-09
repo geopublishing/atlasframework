@@ -103,7 +103,6 @@ public class JarExportUtilTest extends TestingClass {
 		libNameChecked);
     }
 
-    @Ignore
     @Test
     public void testExportAtlasLibsNoSignNoGUI() throws Exception {
 	assertNotNull(atlasExportTesttDir);
@@ -265,7 +264,6 @@ public class JarExportUtilTest extends TestingClass {
     }
 
     @Test
-    @Ignore
     public void testExportAtlasLibsSignNoGUI() throws Exception {
 
 	assertNotNull(atlasExportTesttDir);
@@ -539,7 +537,6 @@ public class JarExportUtilTest extends TestingClass {
     }
     
     @Test
-    @Ignore
     public void testImportExportPdfMedia() throws Exception {
     	AtlasConfigEditable ace = GpTestingUtil.getAtlasConfigE(TestAtlas.small);
     	Iterator<DpEntry<? extends ChartStyle>> iterator = ace.getDataPool().values().iterator();
