@@ -83,33 +83,33 @@
 			</plugin>
 
 			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-dependency-plugin</artifactId> -->
-			<!-- <version>2.1</version> -->
-			<!-- <executions> -->
-			<!-- <execution> -->
-			<!-- <id>unpack native libs</id> -->
-			<!-- <phase>compile</phase> -->
-			<!-- <goals> -->
-			<!-- <goal>unpack</goal> -->
-			<!-- </goals> -->
-			<!-- <configuration> -->
-			<!-- <artifactItems> -->
-			<!-- <artifactItem> -->
-			<!-- <groupId>org.geopublishing</groupId> -->
-			<!-- <artifactId>gpnatives</artifactId> -->
-			<!-- <version>${project.version}</version> -->
-			<!-- <classifier>${build.type}</classifier> -->
-			<!-- <type>jar</type> -->
-			<!-- <overWrite>true</overWrite> -->
-			<!-- <outputDirectory>${project.build.directory}/natives -->
-			<!-- </outputDirectory> -->
-			<!-- </artifactItem> -->
-			<!-- </artifactItems> -->
-			<!-- </configuration> -->
-			<!-- </execution> -->
-			<!-- </executions> -->
-			<!-- </plugin> -->
+				<!-- <groupId>org.apache.maven.plugins</groupId> -->
+				<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+				<!-- <version>2.1</version> -->
+				<!-- <executions> -->
+					<!-- <execution> -->
+						<!-- <id>unpack native libs</id> -->
+						<!-- <phase>compile</phase> -->
+						<!-- <goals> -->
+							<!-- <goal>unpack</goal> -->
+							<!-- </goals> -->
+						<!-- <configuration> -->
+							<!-- <artifactItems> -->
+								<!-- <artifactItem> -->
+									<!-- <groupId>org.geopublishing</groupId> -->
+									<!-- <artifactId>gpnatives</artifactId> -->
+									<!-- <version>${project.version}</version> -->
+									<!-- <classifier>${build.type}</classifier> -->
+									<!-- <type>jar</type> -->
+									<!-- <overWrite>true</overWrite> -->
+									<!-- <outputDirectory>${project.build.directory}/natives -->
+										<!-- </outputDirectory> -->
+									<!-- </artifactItem> -->
+								<!-- </artifactItems> -->
+							<!-- </configuration> -->
+						<!-- </execution> -->
+					<!-- </executions> -->
+				<!-- </plugin> -->
 		</plugins>
 	</build>
 
@@ -140,13 +140,13 @@
 				<plugins>
 
 					<!-- <plugin> -->
-					<!-- <groupId>org.apache.maven.plugins</groupId> -->
-					<!-- <artifactId>maven-deploy-plugin</artifactId> -->
-					<!-- <version>2.4</version> -->
-					<!-- <configuration> -->
-					<!-- <skip>true</skip> -->
-					<!-- </configuration> -->
-					<!-- </plugin> -->
+						<!-- <groupId>org.apache.maven.plugins</groupId> -->
+						<!-- <artifactId>maven-deploy-plugin</artifactId> -->
+						<!-- <version>2.4</version> -->
+						<!-- <configuration> -->
+							<!-- <skip>true</skip> -->
+							<!-- </configuration> -->
+						<!-- </plugin> -->
 
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -248,44 +248,44 @@
 					</plugin>
 
 					<!-- <plugin> -->
-					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-					<!-- <version>0.1.0-SNAPSHOT</version> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <phase>package</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>jsmoothcompile</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- <configuration> -->
-					<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
-					<!-- <setExeName>false</setExeName> -->
-					<!-- <setJarName>true</setJarName> -->
-					<!-- <includeDependencies>true</includeDependencies> -->
-					<!-- </configuration> -->
-					<!-- </plugin> -->
+						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+						<!-- <version>0.1.0-SNAPSHOT</version> -->
+						<!-- <executions> -->
+							<!-- <execution> -->
+								<!-- <phase>package</phase> -->
+								<!-- <goals> -->
+									<!-- <goal>jsmoothcompile</goal> -->
+									<!-- </goals> -->
+								<!-- </execution> -->
+							<!-- </executions> -->
+						<!-- <configuration> -->
+							<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
+							<!-- <setExeName>false</setExeName> -->
+							<!-- <setJarName>true</setJarName> -->
+							<!-- <includeDependencies>true</includeDependencies> -->
+							<!-- </configuration> -->
+						<!-- </plugin> -->
 
 					<!-- <plugin> -->
-					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-					<!-- <version>0.1.0-SNAPSHOT</version> -->
-					<!-- <executions> -->
-					<!-- <execution> -->
-					<!-- <phase>package</phase> -->
-					<!-- <goals> -->
-					<!-- <goal>jsmoothcompile</goal> -->
-					<!-- </goals> -->
-					<!-- </execution> -->
-					<!-- </executions> -->
-					<!-- <configuration> -->
-					<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
-					<!-- <setExeName>false</setExeName> -->
-					<!-- <setJarName>true</setJarName> -->
-					<!-- <includeDependencies>true</includeDependencies> -->
-					<!-- </configuration> -->
-					<!-- </plugin> -->
+						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+						<!-- <version>0.1.0-SNAPSHOT</version> -->
+						<!-- <executions> -->
+							<!-- <execution> -->
+								<!-- <phase>package</phase> -->
+								<!-- <goals> -->
+									<!-- <goal>jsmoothcompile</goal> -->
+									<!-- </goals> -->
+								<!-- </execution> -->
+							<!-- </executions> -->
+						<!-- <configuration> -->
+							<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
+							<!-- <setExeName>false</setExeName> -->
+							<!-- <setJarName>true</setJarName> -->
+							<!-- <includeDependencies>true</includeDependencies> -->
+							<!-- </configuration> -->
+						<!-- </plugin> -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -323,7 +323,10 @@
 									<goal>exec</goal>
 								</goals>
 								<configuration>
-                                    <executable>/usr/local/bin/fixGpSignFind.sh</executable>
+									<executable>/usr/local/bin/fixGpSignFind.sh</executable>
+									<arguments>
+										<argument>gp-1.9</argument>
+									</arguments>
 								</configuration>
 							</execution>
 						</executions>
@@ -552,12 +555,12 @@
 		</dependency>
 
 		<!-- <dependency> -->
-		<!-- <groupId>log4j</groupId> -->
-		<!-- <artifactId>log4j</artifactId> -->
-		<!-- <version>1.2.14</version> -->
-		<!-- <type>jar</type> -->
-		<!-- <scope>compile</scope> -->
-		<!-- </dependency> -->
+			<!-- <groupId>log4j</groupId> -->
+			<!-- <artifactId>log4j</artifactId> -->
+			<!-- <version>1.2.14</version> -->
+			<!-- <type>jar</type> -->
+			<!-- <scope>compile</scope> -->
+			<!-- </dependency> -->
 
 		<dependency>
 			<groupId>javax.jnlp</groupId>
@@ -647,7 +650,7 @@
 			</snapshots>
 			<id>releases.artifactory.wikisquare.de</id>
 			<name>Releases for geopublishing.org - powered by wikisquare.de
-            </name>
+			</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-releases</url>
 		</repository>
 
@@ -659,9 +662,9 @@
 			</snapshots>
 			<id>snapshots.artifactory.wikisquare.de</id>
 			<name>Snapshots for geopublishing.org - powered by wikisquare.de
-            </name>
+			</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots
-            </url>
+			</url>
 		</repository>
 	</repositories>
 
@@ -670,14 +673,14 @@
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-snapshots</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local
-            </url>
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
 		<repository>
 			<id>artifactory.wikisquare.de</id>
 			<name>artifactory.wikisquare.de-releases</name>
 			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local
-            </url>
+			</url>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
@@ -692,7 +695,7 @@
 			</snapshots>
 			<id>plugins-snapshots.artifactory.wikisquare.de</id>
 			<url>http://artifactory.wikisquare.de/artifactory/plugins-snapshots
-            </url>
+			</url>
 		</pluginRepository>
 
 		<pluginRepository>
@@ -702,7 +705,7 @@
 			</snapshots>
 			<id>plugins-releases.artifactory.wikisquare.de</id>
 			<url>http://artifactory.wikisquare.de/artifactory/plugins-releases
-            </url>
+			</url>
 		</pluginRepository>
 
 	</pluginRepositories>
