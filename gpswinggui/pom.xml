@@ -332,6 +332,9 @@
 								</goals>
 								<configuration>
 									<executable>/usr/local/bin/fixGpSignFind.sh</executable>
+									<arguments>
+										<argument>gp-2.0-SNAPSHOT</argument>
+									</arguments>
 								</configuration>
 							</execution>
 						</executions>
