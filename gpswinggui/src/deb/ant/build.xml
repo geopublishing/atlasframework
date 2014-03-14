@@ -1,21 +1,21 @@
 <!--
   Copyright (c) 2010 Stefan A. Tzeggai.
-  
+
   This file is part of the Geopublisher application - An authoring tool to facilitate the publication and distribution of geoproducts in form of online and/or offline end-user GIS.
   http://www.geopublishing.org
-  
+
   Geopublisher is part of the Geopublishing Framework hosted at:
   http://wald.intevation.org/projects/atlas-framework/
-  
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License
   as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
-  
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License (license.txt)
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -24,50 +24,50 @@
 
 <project basedir="${mvn.basedir}/src/deb/ant">
 	<property name="SNAPSHOT"
-	          value="-testing"
-	          description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty."
-	/>
+		value="-testing"
+		description="Set to -testing is this is a SNAPSHOT release. For stable release leave empty."
+		/>
 	<property name="PROGNAME"
-	          value="geopublisher${SNAPSHOT}"
-	          description="the name of the program / the .deb name without any versions"
-	/>
+		value="geopublisher${SNAPSHOT}"
+		description="the name of the program / the .deb name without any versions"
+		/>
 	<property name="FOLDERINZIPNAME" value="Geopublisher-${mvn.project.version}" />
 	<taskdef name="deb"
-	         classname="com.googlecode.ant_deb_task.Deb"
-	         classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
-	/>
+		classname="com.googlecode.ant_deb_task.Deb"
+		classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
+		/>
 	<taskdef name="desktopEntry"
-	         classname="com.googlecode.ant_deb_task.DesktopEntry"
-	         classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
-	/>
+		classname="com.googlecode.ant_deb_task.DesktopEntry"
+		classpath="${mvn.basedir}/src/deb/ant/lib/ant-deb-0.0.1.jar"
+		/>
 	<property name="FULLZIP"
-	          value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip"
-	          description="Path to the -full.zip file that has been created by maven-assembly process."
-	/>
+		value="${mvn.basedir}/target/${mvn.project.artifactId}-${mvn.project.version}-full.zip"
+		description="Path to the -full.zip file that has been created by maven-assembly process."
+		/>
 	<property name="TARGET.DEB.DIR"
-	          value="${mvn.basedir}/target/deb"
-	          description="Subfolder in maven target directory where all files are created."
-	/>
+		value="${mvn.basedir}/target/deb"
+		description="Subfolder in maven target directory where all files are created."
+		/>
 	<property name="REPO.DIR"
-	          value="/var/www/www.geopublishing.org/htdocs/repository"
-	          description="Path the the linux repository directory on the server"
-	/>
+		value="/var/www/www.geopublishing.org/htdocs/repository"
+		description="Path the the linux repository directory on the server"
+		/>
 	<property name="version.upstream"
-	          value="${mvn.project.version}.${mvn.buildNumber}"
-	          description="The upstream version of the .deb package, containing the svn revision"
-	/>
+		value="${mvn.project.version}.${mvn.buildNumber}"
+		description="The upstream version of the .deb package, containing the svn revision"
+		/>
 	<property name="TARGETDEB" value="${TARGET.DEB.DIR}/dist/${PROGNAME}_${version.upstream}-1_all.deb" />
 
 	<target name="create-desktop-entrys" description="Creates a .desktop files in build folder so it can be added to .deb later">
 		<mkdir dir="${TARGET.DEB.DIR}/build" />
 		<desktopEntry toFile="${TARGET.DEB.DIR}/build/${PROGNAME}.desktop"
-		              name="${PROGNAME}"
-		              comment="Publish maps and geoproducts easily"
-		              description="An atlas authoring system to publish maps and geoproducts easily."
-		              exec="/usr/bin/${PROGNAME}"
-		              icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm"
-		              categories="Education;Science;Geography;Geoscience;Java"
-		/>
+			name="${PROGNAME}"
+			comment="Publish maps and geoproducts easily"
+			description="An atlas authoring system to publish maps and geoproducts easily."
+			exec="/usr/bin/${PROGNAME}"
+			icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm"
+			categories="Education;Science;Geography;Geoscience;Java"
+			/>
 	</target>
 
 
@@ -77,45 +77,45 @@
 		<echo message="Basedir is ${basedir} , targetDebDir = ${TARGET.DEB.DIR} " />
 
 		<unzip src="${FULLZIP}"
-		       dest="${TARGET.DEB.DIR}/build"
-		       description="uncompress the .zip that we are repacking as a .deb"
-		/>
+			dest="${TARGET.DEB.DIR}/build"
+			description="uncompress the .zip that we are repacking as a .deb"
+			/>
 
 		<echo message="Upstream-Version is ${version.upstream}" />
 		<echo message="Icon should be at ${mvn.basedir}/src/deb/logos/${PROGNAME}.xpm" />
 
 		<deb todir="${TARGET.DEB.DIR}/dist"
-		     package="${PROGNAME}"
-		     section="science"
-		     recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc"
-			 depends="oracle-java7-installer | sun-java6-jre | openjdk-6-jre | oracle-jdk7-installer | openjdk-7-jre | openjdk-7-jdk | icedtea6 , xulrunner-1.9.2"
-			 priority="extra"
-		>
+			package="${PROGNAME}"
+			section="science"
+			recommends="geopublishing-doc${SNAPSHOT}, qgis, openoffice.org-calc"
+			depends="oracle-java7-installer | sun-java6-jre | openjdk-6-jre | oracle-jdk7-installer | openjdk-7-jre | openjdk-7-jdk | icedtea6 , xulrunner-1.9.2"
+			priority="extra"
+			>
 			<version upstream="${version.upstream}" />
 
 			<maintainer name="Stefan A. Tzeggai" email="tzeggai@wikisquare.de" />
 
 			<description synopsis="A GUI tool to publish maps as online and offline atlases based on OGC standards.">
-This is the testing version of Geopublisher. Use very carefully and please report exciting problems.				
-				
-Geopublisher is an atlas authoring system which allows easy publication of geo-data, documents, images, videos, and statistics in form of digital multimedia atlases. These atlases can be understood as minimal, pre-configured end-user GIS which offer selected functionality only where its meaningful.
-Geopublisher provides tools for quality assurance and multilingual meta-data management. No in-depth knowledge of HTML, SLD or XML is required to create an atlas. Atlases can be directly published on CD, DVD, memory stick, external hard-drive or the Internet. The software is platform-independent and Open-Source.
-Features as a glance:
+				This is the testing version of Geopublisher. Use very carefully and please report exciting problems.				
 
-Geopublisher software has some unique features which make it especially applicable in the fields of international research, participatory GIS, capacity building, and development cooperation. These features include:
-    * Atlases created with Geopublisher are simplified end-user GIS with selected functionality available only where it's meaningful.
-    * Hybrid online and offline atlases make geo-data accessible in areas beyond the digital divide.
-    * Multilingual management of meta-data avoids redundancies and allows for the quick release of updated atlases.
-    * Integrated WYSIWYG editors for SLD and HTML allow geopublishing without knowledge of SLD, XML or HTML.
-    * All software is Free and Open-Source Software compliant with OGC standards.
-    * Geopublisher + QuantumGIS + OpenOffice provide a free Open-Source Geopublishing desktop.
+				Geopublisher is an atlas authoring system which allows easy publication of geo-data, documents, images, videos, and statistics in form of digital multimedia atlases. These atlases can be understood as minimal, pre-configured end-user GIS which offer selected functionality only where its meaningful.
+				Geopublisher provides tools for quality assurance and multilingual meta-data management. No in-depth knowledge of HTML, SLD or XML is required to create an atlas. Atlases can be directly published on CD, DVD, memory stick, external hard-drive or the Internet. The software is platform-independent and Open-Source.
+				Features as a glance:
 
-Technical details:
-    * Platform independence: developed in Java, Geopublisher and its atlases run on Mac OS, Windows and Linux.
-    * Styling based on OGC SLD/SE standard.
-    * Offline atlases run directly from any media - Java does not have to be installed.
-    * Supports tiled image pyramids for big raster data.
-            </description>
+				Geopublisher software has some unique features which make it especially applicable in the fields of international research, participatory GIS, capacity building, and development cooperation. These features include:
+				* Atlases created with Geopublisher are simplified end-user GIS with selected functionality available only where it's meaningful.
+				* Hybrid online and offline atlases make geo-data accessible in areas beyond the digital divide.
+				* Multilingual management of meta-data avoids redundancies and allows for the quick release of updated atlases.
+				* Integrated WYSIWYG editors for SLD and HTML allow geopublishing without knowledge of SLD, XML or HTML.
+				* All software is Free and Open-Source Software compliant with OGC standards.
+				* Geopublisher + QuantumGIS + OpenOffice provide a free Open-Source Geopublishing desktop.
+
+				Technical details:
+				* Platform independence: developed in Java, Geopublisher and its atlases run on Mac OS, Windows and Linux.
+				* Styling based on OGC SLD/SE standard.
+				* Offline atlases run directly from any media - Java does not have to be installed.
+				* Supports tiled image pyramids for big raster data.
+			</description>
 
 			<tarfileset dir="${TARGET.DEB.DIR}/build/${FOLDERINZIPNAME}" prefix="usr/share/${PROGNAME}">
 				<!-- Copy everything except the start scripts which need executable flags -->
@@ -141,9 +141,9 @@ Technical details:
 
 
 	<target name="add-deb-to-repo"
-	        depends="create-deb"
-	        description="Imports the .deb into the repository using a tool called 'reprepro'."
-	>
+		depends="create-deb"
+		description="Imports the .deb into the repository using a tool called 'reprepro'."
+		>
 
 		<!-- DEBIAN -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
@@ -184,13 +184,23 @@ Technical details:
 			<arg line='-b ${REPO.DIR} includedeb natty ${TARGETDEB}' />
 		</exec>
 
-                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for oneiric to the repo">
-                        <arg line='-b ${REPO.DIR} includedeb oneiric ${TARGETDEB}' />
-                </exec> 
-                
-                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for preceise to the repo">
-                        <arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
-                </exec>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for oneiric to the repo">
+			<arg line='-b ${REPO.DIR} includedeb oneiric ${TARGETDEB}' />
+		</exec> 
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for precise to the repo">
+			<arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
+		</exec>
+
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for quantal to the repo">
+			<arg line='-b ${REPO.DIR} includedeb quantal ${TARGETDEB}' />
+		</exec>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for raring to the repo">
+			<arg line='-b ${REPO.DIR} includedeb raring ${TARGETDEB}' />
+		</exec>
+		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for saucy to the repo">
+			<arg line='-b ${REPO.DIR} includedeb saucy ${TARGETDEB}' />
+		</exec>
 
 	</target>
 
