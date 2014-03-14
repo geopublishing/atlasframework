@@ -191,6 +191,18 @@ Technical details:
                 <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for preceise to the repo">
                         <arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
                 </exec>
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for quantal to the repo">
+                        <arg line='-b ${REPO.DIR} includedeb quantal ${TARGETDEB}' />
+                </exec>
+
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for raring to the repo">
+                        <arg line='-b ${REPO.DIR} includedeb raring ${TARGETDEB}' />
+                </exec>
+
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for saucy to the repo">
+                        <arg line='-b ${REPO.DIR} includedeb saucy ${TARGETDEB}' />
+                </exec>
+
 
 	</target>
 
