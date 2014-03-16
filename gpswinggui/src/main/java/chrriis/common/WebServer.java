@@ -990,7 +990,7 @@ public class WebServer {
 		// Open file chooser
 		FileExtensionFilter filter = null;
 		if ("Image".equals(type))
-			filter = GpSwingUtil.GIS_FILE_FILTER;
+			filter = GpSwingUtil.IMAGE_FILE_FILTER;
 		// i8n
 		final File choosenFile = GpSwingUtil.chooseImageFile(ed, fileBrowserStartFolder, filter,
 				"Image".equals(type) ? "Choose an image" : "Choose file");
