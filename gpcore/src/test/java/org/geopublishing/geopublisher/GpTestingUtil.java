@@ -109,7 +109,7 @@ public class GpTestingUtil extends GTTestingUtil {
 		}
 	}
 
-	static AtlasConfigEditable getAtlasConfigE(String atlasDir)
+	public static AtlasConfigEditable getAtlasConfigE(String atlasDir)
 			throws FactoryException, TransformException, AtlasException,
 			SAXException, IOException, ParserConfigurationException {
 

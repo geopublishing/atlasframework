@@ -40,111 +40,104 @@ import de.schmitzm.swing.SwingUtil;
 /**
  * This dialog allows to edit title, description and visibility of the columns.
  */
-public class EditAttributesJDialog extends CancellableDialogAdapter implements
-		Checkable {
+public class EditAttributesJDialog extends CancellableDialogAdapter implements Checkable {
 
-	private DpLayerVectorFeatureSource dplv;
-	
-	private AttributeMetadataMap backupAttributeMetadataMap;
+    private DpLayerVectorFeatureSource dplv;
 
-	private AttribTranslationJTable attribTranslationJTable;
+    private AttributeMetadataMap backupAttributeMetadataMap;
 
-	public EditAttributesJDialog(Component owner,
-			DpLayerVectorFeatureSource dpLayerVectorFeatureSource) {
-		super(SwingUtil.getParentWindow(owner), GeopublisherGUI.R(
-				"Attributes.Edit.Dialog.Title", dpLayerVectorFeatureSource
-						.getTitle()));
-		dplv = dpLayerVectorFeatureSource;
+    private AttribTranslationJTable attribTranslationJTable;
 
-		backup();
+    public EditAttributesJDialog(Component owner,
+	    DpLayerVectorFeatureSource dpLayerVectorFeatureSource) {
+	super(SwingUtil.getParentWindow(owner), GeopublisherGUI.R("Attributes.Edit.Dialog.Title",
+		dpLayerVectorFeatureSource.getTitle()));
+	dplv = dpLayerVectorFeatureSource;
 
-		final JPanel cp = new JPanel(new BorderLayout());
-		attribTranslationJTable = new AttribTranslationJTable(
-				dplv);
-		cp.add(new JScrollPane(attribTranslationJTable), BorderLayout.CENTER);
-		
-		JPanel buttons = new JPanel(new MigLayout());
-		CancelButton cancelB = new CancelButton( );
-		cancelB.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cancelClose();
-			}
-		});
-		OkButton okB = new OkButton( );
-		okB.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				okClose();
-			}
-		});
-		buttons.add( okB, "tag ok");
-		buttons.add( cancelB, "tag cancel");
-		cp.add(buttons, BorderLayout.SOUTH);
-		
-		cp.add(new JLabel(GeopublisherGUI.R("EditAttributesDialog.explanation.html")), BorderLayout.NORTH);
+	backup();
 
-		setContentPane(cp);
+	final JPanel cp = new JPanel(new BorderLayout());
+	attribTranslationJTable = new AttribTranslationJTable(dplv);
+	cp.add(new JScrollPane(attribTranslationJTable), BorderLayout.CENTER);
 
-		pack();
-		
-		SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER,
-				SwingUtil.EAST);
+	JPanel buttons = new JPanel(new MigLayout());
+	CancelButton cancelB = new CancelButton();
+	cancelB.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		cancelClose();
+	    }
+	});
+	OkButton okB = new OkButton();
+	okB.addActionListener(new ActionListener() {
+
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+		okClose();
+	    }
+	});
+	buttons.add(okB, "tag ok");
+	buttons.add(cancelB, "tag cancel");
+	cp.add(buttons, BorderLayout.SOUTH);
+
+	cp.add(new JLabel(GeopublisherGUI.R("EditAttributesDialog.explanation.html")),
+		BorderLayout.NORTH);
+
+	setContentPane(cp);
+
+	pack();
+
+	SwingUtil.setRelativeFramePosition(this, owner, SwingUtil.BOUNDS_OUTER, SwingUtil.EAST);
+    }
+
+    private void backup() {
+	backupAttributeMetadataMap = dplv.getAttributeMetaDataMap().copy();
+
+    }
+
+    @Override
+    public void cancel() {
+	backupAttributeMetadataMap.copyTo(dplv.getAttributeMetaDataMap());
+    }
+
+    @Override
+    public boolean okClose() {
+	if (checkValidInputs()) {
+	    dispose();
+	    // Closing all related attribute tables
+	    AVDialogManager.dm_AttributeTable.disposeInstanceFor(dplv);
+	    return true;
 	}
+	return false;
+    }
 
-	private void backup() {
-		backupAttributeMetadataMap = dplv.getAttributeMetaDataMap().copy();
+    @Override
+    public boolean checkValidInputs() {
+	for (AttributeMetadataImpl amd : dplv.getAttributeMetaDataMap().values()) {
 
-	}
-
-	@Override
-	public void cancel() {
-		backupAttributeMetadataMap.copyTo(dplv.getAttributeMetaDataMap());
-	}
-
-	@Override
-	public boolean okClose() {
-		if (checkValidInputs()) {
-			dispose();
-			// Closing all related attribute tables 
-			AVDialogManager.dm_AttributeTable.disposeInstanceFor(dplv);
-			return true;
-		}
+	    if (!Translation.checkValid(amd.getTitle())) {
+		JOptionPane
+			.showMessageDialog(this, SwingUtil
+				.R("TranslationAskJDialog.ErrorMsg.InvalidCharacterInTranslation"));
 		return false;
+	    }
+
+	    if (!Translation.checkValid(amd.getDesc())) {
+		JOptionPane
+			.showMessageDialog(this, SwingUtil
+				.R("TranslationAskJDialog.ErrorMsg.InvalidCharacterInTranslation"));
+		return false;
+	    }
 	}
+	return true;
+    }
 
-	@Override
-	public boolean checkValidInputs() {
-		for (AttributeMetadataImpl amd : dplv.getAttributeMetaDataMap().values()) {
-
-			if (!Translation.checkValid(amd.getTitle())) {
-				JOptionPane
-						.showMessageDialog(
-								this,
-								SwingUtil
-										.R("TranslationAskJDialog.ErrorMsg.InvalidCharacterInTranslation"));
-				return false;
-			}
-
-			if (!Translation.checkValid(amd.getDesc())) {
-				JOptionPane
-						.showMessageDialog(
-								this,
-								SwingUtil
-										.R("TranslationAskJDialog.ErrorMsg.InvalidCharacterInTranslation"));
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * May be called outside to 
-	 */
-	public void refreshTable() {
-		((DefaultTableModel)attribTranslationJTable.getModel()).fireTableDataChanged();
-	}
+    /**
+     * May be called outside to
+     */
+    public void refreshTable() {
+	((DefaultTableModel) attribTranslationJTable.getModel()).fireTableDataChanged();
+    }
 
 }
