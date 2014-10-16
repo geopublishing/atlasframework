@@ -610,6 +610,7 @@ public class JarExportUtil extends AbstractAtlasExporter {
 			checkAbort();
 
 			// We HAVE TO create a new JarTool instance of every calL!
+			//TODO the jar cmd tool is only available if jdk is installed -> dont invoke cmd
 			final Main jartool = new Main(System.out, System.err, "jar");
 
 			if (!targetJar.exists()) {
