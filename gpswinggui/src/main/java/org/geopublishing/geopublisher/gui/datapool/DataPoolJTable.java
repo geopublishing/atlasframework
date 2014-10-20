@@ -157,7 +157,7 @@ public class DataPoolJTable extends JTable {
 		public int getRowCount() {
 			return getDataPool().size();
 		}
-
+		
 		/**
 		 * For correct sorting of the columns
 		 */
@@ -361,7 +361,6 @@ public class DataPoolJTable extends JTable {
 	private void init() {
 		final TableModel model = new DataPoolTableModel();
 		setModel(model);
-
 		/**
 		 * Use Java 1.6 to make the columns sortable:
 		 */

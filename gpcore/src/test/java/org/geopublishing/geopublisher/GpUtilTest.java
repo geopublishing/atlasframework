@@ -128,7 +128,7 @@ public class GpUtilTest extends TestingClass {
 	params.put("url", file.toURI().toURL());
 	params.put("create spatial index", Boolean.TRUE);
 
-	ShapefileDataStore newDataStore = (ShapefileDataStore) dataStore;
+	ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
 
 	newDataStore.createSchema(vector.getSchema());
 
@@ -136,12 +136,12 @@ public class GpUtilTest extends TestingClass {
 	SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
 	SimpleFeatureType SHAPE_TYPE = featureSource.getSchema();
 	System.out.println("SHAPE:" + SHAPE_TYPE);
-	 if (featureSource instanceof FeatureStore) {
+	 if (featureSource instanceof SimpleFeatureStore) {
 	     // we have write access to the feature data
-	     FeatureStore featureStore = (FeatureStore) featureSource;
+	     SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
 
 	     // add some new features
-	     Transaction t = new DefaultTransaction("add");
+	     Transaction t = new DefaultTransaction("create");
 	     featureStore.setTransaction(t);
 	     try {
 	         featureStore.addFeatures( collection );

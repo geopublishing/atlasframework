@@ -93,6 +93,23 @@ public class DataPoolJPopupMenu extends JPopupMenu {
 
 						});
 				add(attributeTableJMenuItem);
+				
+				/*******************************************************************
+				 * Shapefile Editor
+				 */
+				JMenuItem shapefileEditorJMenuItem = new JMenuItem(
+						new AbstractAction(
+								GpCoreUtil.R("LayerToolMenu.shpeditor.tt"),
+								Icons.ICON_TABLE) {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								AVDialogManager.dm_ShapefileEditor
+										.getInstanceFor(dpfs, owner, dpfs, null);
+							}
+
+						});
+				add(shapefileEditorJMenuItem);
 //
 //				/***************************************************************
 //				 * Translate and change visibility of attributes
