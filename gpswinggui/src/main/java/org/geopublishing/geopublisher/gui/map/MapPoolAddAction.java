@@ -19,6 +19,7 @@ import org.geopublishing.atlasViewer.map.MapPool;
 import org.geopublishing.atlasViewer.swing.Icons;
 import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 import org.geopublishing.geopublisher.swing.GeopublisherGUI;
+import org.geopublishing.geopublisher.swing.GpSwingUtil;
 
 
 
@@ -47,6 +48,9 @@ public class MapPoolAddAction extends AbstractAction {
 		}
 		
 		mapPoolJTable.select(newMap.getId());
+		
+		// create default HTML files
+		GpSwingUtil.getHTMLFilesFor(newMap);
 		
 		GPDialogManager.dm_EditMapEntry.getInstanceFor(newMap, this.mapPoolJTable, newMap);
 		
