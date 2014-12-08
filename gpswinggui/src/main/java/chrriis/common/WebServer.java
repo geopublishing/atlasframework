@@ -704,7 +704,7 @@ public class WebServer {
 					}
 					boolean isPrintRequestsDebug = Boolean.parseBoolean(NSSystemProperty.WEBSERVER_DEBUG_PRINTREQUESTS
 							.get());
-					String printDataProperty = NSSystemProperty.WEBSERVER_DEBUG_PRINTDATA.get();
+					String printDataProperty = NSSystemProperty.WEBSERVER_DEBUG_PRINTPORT.get();
 					boolean isPrintDataDebug = false;
 					long printDataCount = -1;
 					if (printDataProperty != null) {

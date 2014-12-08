@@ -56,7 +56,7 @@ public class EditMapJDialog extends CancellableTabbedDialogAdapter {
 
 		ace = (AtlasConfigEditable) map.getAc();
 		this.map = map;
-
+		
 		// Create a backup to we can cancel
 		backupMap = map.copy();
 

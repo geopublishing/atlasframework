@@ -19,6 +19,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
+import chrriis.common.UIUtils;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorDirtyStateEvent;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorListener;
@@ -73,6 +74,7 @@ public class HTMLEditPaneJHTMLEditor extends
 		this.ace = ace;
 		if (editorType == null)
 			editorType = "FCK";
+		UIUtils.setPreferredLookAndFeel();
 		NativeInterface.open();
 		this.editorType = editorType;
 		this.tabs = new JTabbedPane();
