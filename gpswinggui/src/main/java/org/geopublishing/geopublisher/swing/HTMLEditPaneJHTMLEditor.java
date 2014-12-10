@@ -75,7 +75,14 @@ public class HTMLEditPaneJHTMLEditor extends
 		if (editorType == null)
 			editorType = "FCK";
 		UIUtils.setPreferredLookAndFeel();
-		NativeInterface.open();
+		if (!NativeInterface.isOpen()) {
+		    NativeInterface.open();
+		    new Thread(new Runnable() {
+		        public void run() {
+		            NativeInterface.runEventPump();
+		        }
+		    }).start();
+		}
 		this.editorType = editorType;
 		this.tabs = new JTabbedPane();
 		this.tabs.setTabPlacement(JTabbedPane.TOP);

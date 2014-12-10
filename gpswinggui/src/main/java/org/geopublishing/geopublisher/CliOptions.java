@@ -283,6 +283,7 @@ public class CliOptions extends Options {
                 final File awcFileToLoad = awcFile;
 
                 try {
+                	NativeInterface.initialize();
     				NativeInterface.open();
     			} catch (Throwable e) {
 					LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
@@ -312,6 +313,7 @@ public class CliOptions extends Options {
                 });
                 
                 try {
+                	NativeInterface.initialize();
     				NativeInterface.runEventPump();
     			} catch (Throwable e) {
     				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);

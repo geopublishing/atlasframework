@@ -83,33 +83,33 @@
 			</plugin>
 
 			<!-- <plugin> -->
-				<!-- <groupId>org.apache.maven.plugins</groupId> -->
-				<!-- <artifactId>maven-dependency-plugin</artifactId> -->
-				<!-- <version>2.1</version> -->
-				<!-- <executions> -->
-					<!-- <execution> -->
-						<!-- <id>unpack native libs</id> -->
-						<!-- <phase>compile</phase> -->
-						<!-- <goals> -->
-							<!-- <goal>unpack</goal> -->
-							<!-- </goals> -->
-						<!-- <configuration> -->
-							<!-- <artifactItems> -->
-								<!-- <artifactItem> -->
-									<!-- <groupId>org.geopublishing</groupId> -->
-									<!-- <artifactId>gpnatives</artifactId> -->
-									<!-- <version>${project.version}</version> -->
-									<!-- <classifier>${build.type}</classifier> -->
-									<!-- <type>jar</type> -->
-									<!-- <overWrite>true</overWrite> -->
-									<!-- <outputDirectory>${project.build.directory}/natives -->
-										<!-- </outputDirectory> -->
-									<!-- </artifactItem> -->
-								<!-- </artifactItems> -->
-							<!-- </configuration> -->
-						<!-- </execution> -->
-					<!-- </executions> -->
-				<!-- </plugin> -->
+			<!-- <groupId>org.apache.maven.plugins</groupId> -->
+			<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+			<!-- <version>2.1</version> -->
+			<!-- <executions> -->
+			<!-- <execution> -->
+			<!-- <id>unpack native libs</id> -->
+			<!-- <phase>compile</phase> -->
+			<!-- <goals> -->
+			<!-- <goal>unpack</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			<!-- <artifactItems> -->
+			<!-- <artifactItem> -->
+			<!-- <groupId>org.geopublishing</groupId> -->
+			<!-- <artifactId>gpnatives</artifactId> -->
+			<!-- <version>${project.version}</version> -->
+			<!-- <classifier>${build.type}</classifier> -->
+			<!-- <type>jar</type> -->
+			<!-- <overWrite>true</overWrite> -->
+			<!-- <outputDirectory>${project.build.directory}/natives -->
+			<!-- </outputDirectory> -->
+			<!-- </artifactItem> -->
+			<!-- </artifactItems> -->
+			<!-- </configuration> -->
+			<!-- </execution> -->
+			<!-- </executions> -->
+			<!-- </plugin> -->
 		</plugins>
 	</build>
 
@@ -140,9 +140,9 @@
 					<artifactId>libmlib_jai-linux</artifactId>
 					<version>1.1.3</version>
 				</dependency>
-				
+
 				<!-- when building the zip only runtime dependencies are considered. 
-				     somehow this does not make it into the zip, so we add it manually -->
+					somehow this does not make it into the zip, so we add it manually -->
 				<dependency>
 					<groupId>commons-codec</groupId>
 					<artifactId>commons-codec</artifactId>
@@ -257,44 +257,44 @@
 					</plugin>
 
 					<!-- <plugin> -->
-						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-						<!-- <version>0.1.0-SNAPSHOT</version> -->
-						<!-- <executions> -->
-							<!-- <execution> -->
-								<!-- <phase>package</phase> -->
-								<!-- <goals> -->
-									<!-- <goal>jsmoothcompile</goal> -->
-									<!-- </goals> -->
-								<!-- </execution> -->
-							<!-- </executions> -->
-						<!-- <configuration> -->
-							<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
-							<!-- <setExeName>false</setExeName> -->
-							<!-- <setJarName>true</setJarName> -->
-							<!-- <includeDependencies>true</includeDependencies> -->
-							<!-- </configuration> -->
-						<!-- </plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
 					<!-- <plugin> -->
-						<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
-						<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
-						<!-- <version>0.1.0-SNAPSHOT</version> -->
-						<!-- <executions> -->
-							<!-- <execution> -->
-								<!-- <phase>package</phase> -->
-								<!-- <goals> -->
-									<!-- <goal>jsmoothcompile</goal> -->
-									<!-- </goals> -->
-								<!-- </execution> -->
-							<!-- </executions> -->
-						<!-- <configuration> -->
-							<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
-							<!-- <setExeName>false</setExeName> -->
-							<!-- <setJarName>true</setJarName> -->
-							<!-- <includeDependencies>true</includeDependencies> -->
-							<!-- </configuration> -->
-						<!-- </plugin> -->
+					<!-- <groupId>com.mindtree.techworks.insight.releng</groupId> -->
+					<!-- <artifactId>maven-jsmooth-plugin</artifactId> -->
+					<!-- <version>0.1.0-SNAPSHOT</version> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>jsmoothcompile</goal> -->
+					<!-- </goals> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- <configuration> -->
+					<!-- <jsmoothFile>target/classes/Geopublisher64.jsmooth</jsmoothFile> -->
+					<!-- <setExeName>false</setExeName> -->
+					<!-- <setJarName>true</setJarName> -->
+					<!-- <includeDependencies>true</includeDependencies> -->
+					<!-- </configuration> -->
+					<!-- </plugin> -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -422,7 +422,7 @@
 
 		<dependency>
 			<groupId>org.geotools</groupId>
-			<artifactId>gt-shapefile</artifactId>
+			<artifactId>gt-shapefile-renderer</artifactId>
 			<version>${geotools.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
@@ -509,12 +509,8 @@
 					<artifactId>miglayout</artifactId>
 				</exclusion>
 				<!-- newer Version via schmitzm, 1.6 instead of 1.2 -->
-				<!--
-				<exclusion>
-					<groupId>commons-codec</groupId>
-					<artifactId>commons-codec</artifactId>
-				</exclusion>
-				-->
+				<!-- <exclusion> <groupId>commons-codec</groupId> <artifactId>commons-codec</artifactId> 
+					</exclusion> -->
 			</exclusions>
 		</dependency>
 
@@ -566,12 +562,12 @@
 		</dependency>
 
 		<!-- <dependency> -->
-			<!-- <groupId>log4j</groupId> -->
-			<!-- <artifactId>log4j</artifactId> -->
-			<!-- <version>1.2.14</version> -->
-			<!-- <type>jar</type> -->
-			<!-- <scope>compile</scope> -->
-			<!-- </dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.14</version> -->
+		<!-- <type>jar</type> -->
+		<!-- <scope>compile</scope> -->
+		<!-- </dependency> -->
 
 		<dependency>
 			<groupId>javax.jnlp</groupId>
@@ -643,9 +639,21 @@
 		<dependency>
 			<groupId>chrriis.dj</groupId>
 			<artifactId>DJNativeSwing</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 
+	<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJNativeSwing-SWT</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		
 	</dependencies>
 
 </project>
