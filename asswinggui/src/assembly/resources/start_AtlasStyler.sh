@@ -6,8 +6,17 @@
 #  You should have received a copy of the GNU Lesser General Public License along with this library;  if not, write to the Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110, USA
 echo "Starting AtlasStyler..."
 
+export SWTJAR="swt-gtk-linux-${swt.version}-x86.jar"
+
 export JAI=jai_core-linux-1.1.3.jar:jai_codec-linux-1.1.3.jar
 
 mkdir ~/.Geopublishing &> /dev/null
+java -version &> ~/.Geopublishing/javaversion
 
-java -Xmx160m -Dfile.encoding=UTF8 -Djava.library.path=. -cp ~/.Geopublishing:$JAI:asswinggui-${project.version}.jar org.geopublishing.atlasStyler.swing.AtlasStylerGUI ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17}
+if [[ `cat ~/.Geopublishing/javaversion` == *64-Bit* ]]
+then
+  export SWTJAR="swt-gtk-linux-${swt.version}-x86_64.jar"
+  echo "Using 64bit SWT native libs for 64-bit Java..."
+fi
+
+java -Xmx160m -Dfile.encoding=UTF8 -Djava.library.path=. -cp ~/.Geopublishing:$SWTJAR:$JAI:asswinggui-${project.version}.jar org.geopublishing.atlasStyler.swing.AtlasStylerGUI ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11} ${12} ${13} ${14} ${15} ${16} ${17}
