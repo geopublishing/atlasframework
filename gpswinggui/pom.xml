@@ -16,7 +16,7 @@
 
 	<properties>
 		<mainClass>org.geopublishing.geopublisher.swing.GeopublisherGUI</mainClass>
-		<swt.version>3.7M5</swt.version>
+		<swt.version>4.4</swt.version>
 	</properties>
 
 	<build>
@@ -642,7 +642,7 @@
 			<version>1.0.2</version>
 		</dependency>
 
-	<dependency>
+		<dependency>
 			<groupId>chrriis.dj</groupId>
 			<artifactId>DJNativeSwing-SWT</artifactId>
 			<version>1.0.2</version>
@@ -653,7 +653,13 @@
 			<artifactId>jna</artifactId>
 			<version>4.0.0</version>
 		</dependency>
-		
+
+		<dependency>
+			<groupId>de.wikisquare</groupId>
+			<artifactId>swt</artifactId>
+			<version>${swt.version}</version>
+		</dependency>
+
 	</dependencies>
 
 </project>

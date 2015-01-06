@@ -24,15 +24,18 @@ import de.schmitzm.versionnumber.ReleaseUtil;
 public class AsSwingUtil extends ASUtil {
 
 	/**
-	 * Setting up the logger from a XML configuration file. We do that again in GPPros, as it outputs log messages
-	 * first. Does not change the configuration if there are already appenders defined.
+	 * Setting up the logger from a XML configuration file. We do that again in
+	 * GPPros, as it outputs log messages first. Does not change the
+	 * configuration if there are already appenders defined.
 	 */
 	public static void initAsLogging() throws FactoryConfigurationError {
 		if (Logger.getRootLogger().getAllAppenders().hasMoreElements())
 			return;
-		DOMConfigurator.configure(ASProps.class.getResource("/geopublishing_log4j.xml"));
+		DOMConfigurator.configure(ASProps.class
+				.getResource("/geopublishing_log4j.xml"));
 
-		Logger.getRootLogger().addAppender(Logger.getLogger("dummy").getAppender("asFileLogger"));
+		Logger.getRootLogger().addAppender(
+				Logger.getLogger("dummy").getAppender("asFileLogger"));
 
 		// Apply the LOG level configured in the user-specific application
 		// .properties file
@@ -45,7 +48,8 @@ public class AsSwingUtil extends ASUtil {
 		ExceptionDialog.setMailDestinationAddress("tzeggai@wikisquare.de");
 
 		// Add application version number to Exception mails
-		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil.getVersionInfo(GpUtil.class));
+		ExceptionDialog.addAdditionalAppInfo(ReleaseUtil
+				.getVersionInfo(GpUtil.class));
 	}
 
 	/**
@@ -61,17 +65,24 @@ public class AsSwingUtil extends ASUtil {
 	 * 
 	 *         TODO move to schmitz-swt
 	 */
-	public static File chooseFileOpen(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
+	public static File chooseFileOpen(Component parent, File startFolder,
+			String title, FileExtensionFilter... filters) {
 
 		try {
-			if(!NativeInterface.isOpen()){
+			if (!NativeInterface.isOpen()) {
 				NativeInterface.open();
+				new Thread(new Runnable() {
+					public void run() {
+						NativeInterface.runEventPump();
+					}
+				}).start();
 			}
 			JFileDialog fileDialog = new JFileDialog();
-			
+
 			if (startFolder != null) {
 				if (startFolder.isDirectory())
-					fileDialog.setParentDirectory(startFolder.getAbsolutePath());
+					fileDialog
+							.setParentDirectory(startFolder.getAbsolutePath());
 				else
 					fileDialog.setParentDirectory(startFolder.getParent());
 			}
@@ -80,12 +91,14 @@ public class AsSwingUtil extends ASUtil {
 
 			String[] extensions = new String[0];
 			for (FileExtensionFilter filter : filters) {
-				extensions = LangUtil.extendArray(extensions, filter.toNativeFileFilter()[0]);
+				extensions = LangUtil.extendArray(extensions,
+						filter.toNativeFileFilter()[0]);
 			}
 
 			String[] descriptions = new String[0];
 			for (FileExtensionFilter filter : filters) {
-				descriptions = LangUtil.extendArray(descriptions, filter.toNativeFileFilter()[1]);
+				descriptions = LangUtil.extendArray(descriptions,
+						filter.toNativeFileFilter()[1]);
 			}
 
 			fileDialog.setExtensionFilters(extensions, descriptions, 0);
@@ -99,7 +112,8 @@ public class AsSwingUtil extends ASUtil {
 
 			return new File(fileDialog.getParentDirectory(), selectedFileName);
 		} catch (Exception e) {
-			return GpUtil.chooseFileOpenFallback(parent, startFolder, title, filters);
+			return GpUtil.chooseFileOpenFallback(parent, startFolder, title,
+					filters);
 		}
 	}
 
@@ -111,14 +125,14 @@ public class AsSwingUtil extends ASUtil {
 	 * @param startFolder
 	 *            start folder for the chooser (if {@code null} "/" is used)
 	 * @param filter
-	 *            defines which files can be selected. Only the last filter in the list will be offered due to
-	 *            limitations
+	 *            defines which files can be selected. Only the last filter in
+	 *            the list will be offered due to limitations
 	 * @return {@code null} if the dialog was not approved
 	 * 
 	 *         TODO move to schmitz-swt
 	 */
-	public static File chooseFileSaveFallback(Component parent, File startFolder, String title,
-			FileExtensionFilter... filters) {
+	public static File chooseFileSaveFallback(Component parent,
+			File startFolder, String title, FileExtensionFilter... filters) {
 		if (startFolder == null)
 			startFolder = new File("/");
 
@@ -128,7 +142,8 @@ public class AsSwingUtil extends ASUtil {
 		if (filters != null) {
 			chooser.setAcceptAllFileFilterUsed(false);
 			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			chooser.setFileFilter(filters[filters.length - 1].toJFileChooserFilter());
+			chooser.setFileFilter(filters[filters.length - 1]
+					.toJFileChooserFilter());
 		}
 		if (title != null)
 			chooser.setDialogTitle(title);
@@ -139,14 +154,16 @@ public class AsSwingUtil extends ASUtil {
 		return null;
 	}
 
-	public static File chooseFileSave(Component parent, File startFolder, String title, FileExtensionFilter... filters) {
+	public static File chooseFileSave(Component parent, File startFolder,
+			String title, FileExtensionFilter... filters) {
 		try {
 			JFileDialog fileDialog = new JFileDialog();
 			// fileDialog.setTitle(GpSwingUtil.R("CreateAtlas.Dialog.Title"));
-			
+
 			if (startFolder != null) {
 				if (startFolder.isDirectory())
-					fileDialog.setParentDirectory(startFolder.getCanonicalPath());
+					fileDialog.setParentDirectory(startFolder
+							.getCanonicalPath());
 				else {
 					fileDialog.setParentDirectory(startFolder.getParent());
 					fileDialog.setSelectedFileName(startFolder.getName());
@@ -158,17 +175,19 @@ public class AsSwingUtil extends ASUtil {
 
 			String[] extensions = new String[0];
 			for (FileExtensionFilter filter : filters) {
-				extensions = LangUtil.extendArray(extensions, filter.toNativeFileFilter()[0]);
+				extensions = LangUtil.extendArray(extensions,
+						filter.toNativeFileFilter()[0]);
 			}
 
 			String[] descriptions = new String[0];
 			for (FileExtensionFilter filter : filters) {
-				descriptions = LangUtil.extendArray(descriptions, filter.toNativeFileFilter()[1]);
+				descriptions = LangUtil.extendArray(descriptions,
+						filter.toNativeFileFilter()[1]);
 			}
 
 			fileDialog.setExtensionFilters(extensions, descriptions, 0);
 			fileDialog.setTitle(title);
-			
+
 			fileDialog.show(parent);
 
 			String selectedFileName = fileDialog.getSelectedFileName();

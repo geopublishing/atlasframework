@@ -15,7 +15,7 @@
 
 	<properties>
 		<mainClass>org.geopublishing.atlasStyler.swing.AtlasStylerGUI</mainClass>
-<!-- 		<swt.version>3.7M5</swt.version> -->
+		<swt.version>4.4</swt.version>
 	</properties>
 
 	<build>
@@ -68,11 +68,11 @@
 
 			<dependencies>
 				<!-- On GISBERT add SWT JARs for ALL Systems! -->
-<!-- 				<dependency> -->
-<!-- 					<groupId>de.wikisquare</groupId> -->
-<!-- 					<artifactId>swt</artifactId> -->
-<!-- 					<version>${swt.version}</version> -->
-<!-- 				</dependency> -->
+				<!-- <dependency> -->
+				<!-- <groupId>de.wikisquare</groupId> -->
+				<!-- <artifactId>swt</artifactId> -->
+				<!-- <version>${swt.version}</version> -->
+				<!-- </dependency> -->
 
 				<!-- On GISBERT add JAI JARs for ALL Systems! -->
 				<dependency>
@@ -108,9 +108,9 @@
 								<excludes>
 
 									<!-- SWT -->
-<!-- 									<exclude>org.eclipse.swt:swt-windows</exclude> -->
-<!-- 									<exclude>org.eclipse.swt:swt-gtk-linux</exclude> -->
-<!-- 									<exclude>org.eclipse.swt:swt-cocoa-macosx</exclude> -->
+									<!-- <exclude>org.eclipse.swt:swt-windows</exclude> -->
+									<!-- <exclude>org.eclipse.swt:swt-gtk-linux</exclude> -->
+									<!-- <exclude>org.eclipse.swt:swt-cocoa-macosx</exclude> -->
 
 									<!-- JAI -->
 									<exclude>com.sun.media:jai_codec-linux</exclude>
@@ -145,8 +145,10 @@
 							<gzip>true</gzip>
 
 							<arguments>
-								<argument>-sigalg</argument><argument>MD5withRSA</argument>
-								<argument>-digestalg</argument><argument>SHA1</argument>
+								<argument>-sigalg</argument>
+								<argument>MD5withRSA</argument>
+								<argument>-digestalg</argument>
+								<argument>SHA1</argument>
 							</arguments>
 
 
@@ -336,6 +338,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJNativeSwing</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>chrriis.dj</groupId>
+			<artifactId>DJNativeSwing-SWT</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -363,76 +377,19 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>de.wikisquare</groupId>
+			<artifactId>swt</artifactId>
+			<version>${swt.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.0.0</version>
+		</dependency>
 
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<!-- Releases for geopublishing.org & more by www.wikisquare.de -->
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>releases.artifactory.wikisquare.de</id>
-			<name>Releases for geopublishing.org - powered by wikisquare.de
-			</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-releases</url>
-		</repository>
-
-		<repository>
-			<!-- Snapshot releases geopublishing.org & more by www.wikisquare.de -->
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<id>snapshots.artifactory.wikisquare.de</id>
-			<name>Snapshots for geopublishing.org - powered by wikisquare.de
-			</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots
-			</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<snapshotRepository>
-			<id>artifactory.wikisquare.de</id>
-			<name>artifactory.wikisquare.de-snapshots</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-snapshots-local
-			</url>
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
-		<repository>
-			<id>artifactory.wikisquare.de</id>
-			<name>artifactory.wikisquare.de-releases</name>
-			<url>http://artifactory.wikisquare.de/artifactory/libs-releases-local
-			</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-	</distributionManagement>
-
-	<pluginRepositories>
-
-		<pluginRepository>
-			<!-- Plugins needed to create exe files -->
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-			<id>plugins-snapshots.artifactory.wikisquare.de</id>
-			<url>http://artifactory.wikisquare.de/artifactory/plugins-snapshots
-			</url>
-		</pluginRepository>
-
-		<pluginRepository>
-			<!-- Plugins needed to create exe files -->
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>plugins-releases.artifactory.wikisquare.de</id>
-			<url>http://artifactory.wikisquare.de/artifactory/plugins-releases
-			</url>
-		</pluginRepository>
-
-	</pluginRepositories>
-
 
 </project>

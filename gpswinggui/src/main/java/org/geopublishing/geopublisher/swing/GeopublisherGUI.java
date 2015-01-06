@@ -86,7 +86,6 @@ import de.schmitzm.versionnumber.ReleaseUtil;
  */
 public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 
-
 	static {
 		// Do not use bold font as default, its ugly!
 		Font oldLabelFont = UIManager.getFont("Label.font");
@@ -202,9 +201,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	public GeopublisherGUI(final boolean askToOpenLastAtlas) {
 		LOGGER.info("Starting " + GeopublisherGUI.class.getSimpleName()
 				+ "... " + ReleaseUtil.getVersionInfo(GpCoreUtil.class));
-		
+
 		GpUtil.initGpLogging();
-		
+
 		LOGGER.debug("checking for correct permissions on tmpdir");
 		GpUtil.checkAndResetTmpDir("/var/tmp");
 
@@ -394,7 +393,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 					.set(getJFrame(),
 							org.geopublishing.atlasViewer.AVProps.Keys.showPopupOnStartup,
 							"true");
-		}  else if (cmd.equals(ActionCmds.editTermsOfUseInfo.toString())) {
+		} else if (cmd.equals(ActionCmds.editTermsOfUseInfo.toString())) {
 
 			final List<String> tabTitles = new ArrayList<String>(ace
 					.getLanguages().size());
@@ -417,8 +416,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			String key = GpSwingUtil.openHTMLEditorsKey(ace
 					.getTermsOfUseHtMLFiles(getJFrame()));
 			Window instanceFor = GPDialogManager.dm_HtmlEditor.getInstanceFor(
-					key, getJFrame(), ace, ace.getTermsOfUseHtMLFiles(getJFrame()),
-					tabTitles, title);
+					key, getJFrame(), ace,
+					ace.getTermsOfUseHtMLFiles(getJFrame()), tabTitles, title);
 		}
 
 		else if (cmd.equals(ActionCmds.exportAtlasTranslations.toString())) {
@@ -462,7 +461,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 				// /**
 				// * Clean it with SimplyHTML
 				// */
-				// DocumentPane documentPane = new DocumentPane(exportFile.toURI()
+				// DocumentPane documentPane = new
+				// DocumentPane(exportFile.toURI()
 				// .toURL(), 0);
 				// documentPane.saveDocument();
 				// documentPane = null;
@@ -785,7 +785,9 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			try {
 				NativeInterface.open();
 			} catch (Throwable e) {
-				LOGGER.warn("Couldn't initialize the SWT subsystem. Trying fallback to Swing.",e);
+				LOGGER.warn(
+						"Couldn't initialize the SWT subsystem. Trying fallback to Swing.",
+						e);
 			}
 
 			JDirectoryDialog fileDialog = new JDirectoryDialog();
