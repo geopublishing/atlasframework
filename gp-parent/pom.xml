@@ -1,287 +1,297 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.geopublishing</groupId>
-	<artifactId>gp-parent</artifactId>
-	<name>gp-parent</name>
-	<version>2.0-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<description>General settings and descriptions of all Geopublishing
-		modules</description>
-	<issueManagement>
-		<system>gforge</system>
-		<url>http://wald.intevation.org/tracker/?group_id=37</url>
-	</issueManagement>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.geopublishing</groupId>
+    <artifactId>gp-parent</artifactId>
+    <name>gp-parent</name>
+    <version>2.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <description>General settings and descriptions of all Geopublishing
+        modules</description>
+    <issueManagement>
+        <system>gforge</system>
+        <url>http://wald.intevation.org/tracker/?group_id=37</url>
+    </issueManagement>
 
-	<licenses>
-		<license>
-			<name>Lesser General Public License (LGPL)</name>
-			<url>http://www.gnu.org/copyleft/lgpl.txt</url>
-		</license>
-		<license>
-			<name>General Public License (LGPL)</name>
-			<url>http://www.gnu.org/copyleft/gpl.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Lesser General Public License (LGPL)</name>
+            <url>http://www.gnu.org/copyleft/lgpl.txt</url>
+        </license>
+        <license>
+            <name>General Public License (LGPL)</name>
+            <url>http://www.gnu.org/copyleft/gpl.txt</url>
+        </license>
+    </licenses>
 
-	<properties>
-		<geotools.version>2.7.5</geotools.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<schmitzm.version>2.8-SNAPSHOT</schmitzm.version>
-	</properties>
+    <properties>
+        <geotools.version>2.7.5</geotools.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <schmitzm.version>2.8-SNAPSHOT</schmitzm.version>
+    </properties>
 
-	<organization>
-		<name>geopublishing.org</name>
-		<url>http://www.geopublishing.org</url>
-	</organization>
+    <organization>
+        <name>geopublishing.org</name>
+        <url>http://www.geopublishing.org</url>
+    </organization>
 
-	<developers>
-		<developer>
-			<id>alfonx</id>
-			<name>Stefan A. Tzeggai</name>
-			<email>tzeggai@wikisquare.de</email>
-			<url>http://www.wikisquare.de</url>
-			<organization>wikisquare.de</organization>
-			<organizationUrl>http://www.wikisquare.de</organizationUrl>
-			<timezone>GMT+1</timezone>
-			<roles>
-				<role>Developer</role>
-				<role>Maven package maintainer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>mschmitz</id>
-			<name>Martin Schmitz</name>
-			<timezone>GMT+1</timezone>
-			<organization>wikisquare.de</organization>
-			<organizationUrl>http://www.wikisquare.de</organizationUrl>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <id>alfonx</id>
+            <name>Stefan A. Tzeggai</name>
+            <email>tzeggai@wikisquare.de</email>
+            <url>http://www.wikisquare.de</url>
+            <organization>wikisquare.de</organization>
+            <organizationUrl>http://www.wikisquare.de</organizationUrl>
+            <timezone>GMT+1</timezone>
+            <roles>
+                <role>Developer</role>
+                <role>Maven package maintainer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>mschmitz</id>
+            <name>Martin Schmitz</name>
+            <timezone>GMT+1</timezone>
+            <organization>wikisquare.de</organization>
+            <organizationUrl>http://www.wikisquare.de</organizationUrl>
+            <roles>
+                <role>Developer</role>
+            </roles>
+        </developer>
+        <developser>
+            <id>michaeljanik</id>
+            <name>Michael Janik</name>
+            <email>mail@michael-janik.org</email>
+            <url>http://www.michael-janik.org</url>
+            <timezone>GMT+1</timezone>
+            <roles>
+                <role>Developer</role>
+            </roles>
 
-	<scm>
-        <connection>scm:git:ssh://github.com:geopublishing/atlasframework.git</connection>
-        <developerConnection>scm:git:ssh://github.com:geopublishing/atlasframework.git</developerConnection>
-        <url>https://github.com/geopublishing/atlasframework</url>
-	</scm>
+        </developers>
 
-	<build>
+        <scm>
+            <connection>scm:git:ssh://github.com:geopublishing/atlasframework.git</connection>
+            <developerConnection>scm:git:ssh://github.com:geopublishing/atlasframework.git</developerConnection>
+            <url>https://github.com/geopublishing/atlasframework</url>
+        </scm>
 
-		<!-- Explicitly setting the final name! Do not remove -->
-		<finalName>${project.artifactId}-${project.version}</finalName>
-		<resources>
+        <build>
 
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>export/export.keystore</include>
-					<include>export/jsmooth/autodownload-wrapper/*</include>
-					<include>geopublishing_log4j.xml</include>
-					<include>autoPublish/build.xml</include>
-				</includes>
-			</resource>
+            <!-- Explicitly setting the final name! Do not remove -->
+            <finalName>${project.artifactId}-${project.version}</finalName>
+            <resources>
 
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
-				<excludes>
-					<exclude>export/export.keystore</exclude>
-					<exclude>export/jsmooth/autodownload-wrapper/*</exclude>
-					<exclude>geopublishing_log4j.xml</exclude>
-					<exclude>autoPublish/build.xml</exclude>
-				</excludes>
-			</resource>
+                <resource>
+                    <filtering>false</filtering>
+                    <directory>src/main/resources</directory>
+                    <includes>
+                        <include>export/export.keystore</include>
+                        <include>export/jsmooth/autodownload-wrapper/*</include>
+                        <include>geopublishing_log4j.xml</include>
+                        <include>autoPublish/build.xml</include>
+                    </includes>
+                </resource>
 
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/assembly</directory>
-				<includes>
-					<include>*.jsmooth</include>
-				</includes>
-			</resource>
+                <resource>
+                    <filtering>true</filtering>
+                    <directory>src/main/resources</directory>
+                    <excludes>
+                        <exclude>export/export.keystore</exclude>
+                        <exclude>export/jsmooth/autodownload-wrapper/*</exclude>
+                        <exclude>geopublishing_log4j.xml</exclude>
+                        <exclude>autoPublish/build.xml</exclude>
+                    </excludes>
+                </resource>
 
-		</resources>
+                <resource>
+                    <filtering>true</filtering>
+                    <directory>src/assembly</directory>
+                    <includes>
+                        <include>*.jsmooth</include>
+                    </includes>
+                </resource>
 
-		<testResources>
-			<testResource>
-				<!-- <filtering>true</filtering> -->
-				<directory>src/test/resources</directory>
-			</testResource>
-		</testResources>
+            </resources>
 
-		<plugins>
+            <testResources>
+                <testResource>
+                    <!-- <filtering>true</filtering> -->
+                    <directory>src/test/resources</directory>
+                </testResource>
+            </testResources>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
+            <plugins>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
 <!---->
-			<!-- <plugin> -->
-			<!-- <groupId>org.apache.maven.plugins</groupId> -->
-			<!-- <artifactId>maven-eclipse-plugin</artifactId> -->
-			<!-- <version>2.5.1</version> -->
-			<!-- <configuration> -->
-			<!-- <downloadSources>true</downloadSources> -->
-			<!-- <downloadJavadocs>false</downloadJavadocs> -->
-			<!-- </configuration> -->
-			<!-- </plugin> -->
+                        <!-- <plugin> -->
+                            <!-- <groupId>org.apache.maven.plugins</groupId> -->
+                            <!-- <artifactId>maven-eclipse-plugin</artifactId> -->
+                            <!-- <version>2.5.1</version> -->
+                            <!-- <configuration> -->
+                                <!-- <downloadSources>true</downloadSources> -->
+                                <!-- <downloadJavadocs>false</downloadJavadocs> -->
+                                <!-- </configuration> -->
+                            <!-- </plugin> -->
 
 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<id>buildnumber in phase initialize</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>create</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
-						<svn>javasvn</svn> </providerImplementations> -->
-					<format>{0,date,yyyyMMddHHmm}</format>
-					<items>
-						<item>timestamp</item>
-					</items>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
-				<configuration>
-					<archive>
-						<index>false</index>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<!-- children modules only define their mainClass here -->
-						</manifest>
-						<manifestEntries>
-							<Implementation-Version>${project.version}
-							</Implementation-Version>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>buildnumber-maven-plugin</artifactId>
+                            <version>1.2</version>
+                            <executions>
+                                <execution>
+                                    <id>buildnumber in phase initialize</id>
+                                    <phase>initialize</phase>
+                                    <goals>
+                                        <goal>create</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                            <configuration>
+                                <!-- <doCheck>false</doCheck> <doUpdate>false</doUpdate> <providerImplementations> 
+                                                <svn>javasvn</svn> </providerImplementations> -->
+                                        <format>{0,date,yyyyMMddHHmm}</format>
+                                        <items>
+                                            <item>timestamp</item>
+                                        </items>
+                                    </configuration>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-jar-plugin</artifactId>
+                                    <version>2.3.1</version>
+                                    <configuration>
+                                        <archive>
+                                            <index>false</index>
+                                            <manifest>
+                                                <addClasspath>true</addClasspath>
+                                                <!-- children modules only define their mainClass here -->
+                                            </manifest>
+                                            <manifestEntries>
+                                                <Implementation-Version>${project.version}
+                                                </Implementation-Version>
+                                                <Implementation-Build>${buildNumber}</Implementation-Build>
+                                            </manifestEntries>
+                                        </archive>
+                                    </configuration>
+                                    <executions>
+                                        <execution>
+                                            <goals>
+                                                <goal>jar</goal>
+                                                <goal>test-jar</goal>
+                                            </goals>
+                                        </execution>
+                                    </executions>
+                                </plugin>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-source-plugin</artifactId>
+                                    <executions>
+                                        <execution>
+                                            <id>attach-sources</id>
+                                            <goals>
+                                                <goal>jar</goal>
+                                            </goals>
+                                        </execution>
+                                    </executions>
+                                </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.16</version>
-				<configuration>
-					<systemProperties>
-						<property>
-							<name>java.library.path</name>
-							<value>${project.build.directory}/natives</value>
-						</property>
-					</systemProperties>
+                                <plugin>
+                                    <groupId>org.apache.maven.plugins</groupId>
+                                    <artifactId>maven-surefire-plugin</artifactId>
+                                    <version>2.16</version>
+                                    <configuration>
+                                        <systemProperties>
+                                            <property>
+                                                <name>java.library.path</name>
+                                                <value>${project.build.directory}/natives</value>
+                                            </property>
+                                        </systemProperties>
 
-				</configuration>
-			</plugin>
+                                    </configuration>
+                                </plugin>
 
-		</plugins>
+                            </plugins>
 
-		<!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
-	</build>
+                            <!-- <finalName>${project.artifactId}-${project.version}-r${buildNumber}</finalName> -->
+                        </build>
 
-	<profiles>
-		<profile>
-			<id>gisbert</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.16</version>
-						<configuration>
-							<systemProperties>
-								<property>
-									<name>java.library.path</name>
-									<value>${project.build.directory}/natives</value>
-								</property>
-							</systemProperties>
+                        <profiles>
+                            <profile>
+                                <id>gisbert</id>
+                                <build>
+                                    <plugins>
+                                        <plugin>
+                                            <groupId>org.apache.maven.plugins</groupId>
+                                            <artifactId>maven-surefire-plugin</artifactId>
+                                            <version>2.16</version>
+                                            <configuration>
+                                                <systemProperties>
+                                                    <property>
+                                                        <name>java.library.path</name>
+                                                        <value>${project.build.directory}/natives</value>
+                                                    </property>
+                                                </systemProperties>
 
-							<excludes>
-								<exclude>**/*InteractiveTest.java</exclude>
-							</excludes>
+                                                <excludes>
+                                                    <exclude>**/*InteractiveTest.java</exclude>
+                                                </excludes>
 
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+                                            </configuration>
+                                        </plugin>
+                                    </plugins>
+                                </build>
+                            </profile>
+                        </profiles>
 
-	<dependencies>
+                        <dependencies>
 
-		<dependency>
-			<!-- For i8n correction -->
-			<groupId>ant</groupId>
-			<artifactId>ant-nodeps</artifactId>
-			<version>1.6.5</version>
-			<scope>provided</scope>
-		</dependency>
+                            <dependency>
+                                <!-- For i8n correction -->
+                                <groupId>ant</groupId>
+                                <artifactId>ant-nodeps</artifactId>
+                                <version>1.6.5</version>
+                                <scope>provided</scope>
+                            </dependency>
 
-		<dependency>
-			<!-- For i8n correction -->
-			<groupId>ant-contrib</groupId>
-			<artifactId>ant-contrib</artifactId>
-			<version>1.0b3</version>
-			<type>jar</type>
-			<scope>provided</scope>
-		</dependency>
+                            <dependency>
+                                <!-- For i8n correction -->
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <type>jar</type>
+                                <scope>provided</scope>
+                            </dependency>
 
-		<dependency>
-			<!-- not needed if not traversed -->
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
+                            <dependency>
+                                <!-- not needed if not traversed -->
+                                <groupId>junit</groupId>
+                                <artifactId>junit</artifactId>
+                                <version>4.8.1</version>
+                                <type>jar</type>
+                                <scope>test</scope>
+                            </dependency>
 
-		<dependency>
-			<!-- Logging with log4j. Die MVN dependency fuer 1.2.15 ist defekt. -->
-			<!-- downgraded -->
-			<!-- to 1.2.14 http://jira.codehaus.org/browse/MEV-649 -->
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.14</version>
-		</dependency>
-	</dependencies>
-</project>
+                            <dependency>
+                                <!-- Logging with log4j. Die MVN dependency fuer 1.2.15 ist defekt. -->
+                                <!-- downgraded -->
+                                <!-- to 1.2.14 http://jira.codehaus.org/browse/MEV-649 -->
+                                <groupId>log4j</groupId>
+                                <artifactId>log4j</artifactId>
+                                <version>1.2.14</version>
+                            </dependency>
+                        </dependencies>
+                    </project>
