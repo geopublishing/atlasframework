@@ -65,6 +65,7 @@ import org.geopublishing.geopublisher.gui.internal.GPDialogManager;
 
 import rachel.http.loader.WebResourceManager;
 import rachel.loader.FileResourceLoader;
+import chrriis.common.UIUtils;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JDirectoryDialog;
 import de.schmitzm.i18n.SwitchLanguageDialog;
@@ -784,6 +785,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 		try {
 			try {
 				NativeInterface.open();
+				UIUtils.setPreferredLookAndFeel();
+				NativeInterface.runEventPump();
 			} catch (Throwable e) {
 				LOGGER.warn(
 						"Couldn't initialize the SWT subsystem. Trying fallback to Swing.",
