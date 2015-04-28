@@ -671,8 +671,8 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return;
 		// If there was an open Atlas, it is closed now.
 
-//		final File atlasDir = askLoadAtlasNativeSWt();
-		final File atlasDir = askLoadAtlas();
+		final File atlasDir = askLoadAtlasNativeSWt();
+//		final File atlasDir = askLoadAtlas();
 		if (atlasDir == null)
 			return;
 
