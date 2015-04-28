@@ -671,7 +671,7 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			return;
 		// If there was an open Atlas, it is closed now.
 
-		final File atlasDir = askLoadAtlasNativeSWt();
+		 final File atlasDir = askLoadAtlasNativeSWt();
 //		final File atlasDir = askLoadAtlas();
 		if (atlasDir == null)
 			return;
@@ -782,12 +782,10 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 	}
 
 	private File askLoadAtlasNativeSWt() {
-
 		try {
 			try {
 				NativeInterface.open();
 				UIUtils.setPreferredLookAndFeel();
-				NativeInterface.runEventPump();
 			} catch (Throwable e) {
 				LOGGER.warn(
 						"Couldn't initialize the SWT subsystem. Trying fallback to Swing.",
@@ -806,12 +804,12 @@ public class GeopublisherGUI implements ActionListener, SingleInstanceListener {
 			if (selectedFileName == null)
 				return null;
 
+			NativeInterface.runEventPump();
 			return new File(selectedFileName);
 		} catch (Throwable e) {
 			// Fallback
 			return askLoadAtlas();
 		}
-
 	}
 
 	/**

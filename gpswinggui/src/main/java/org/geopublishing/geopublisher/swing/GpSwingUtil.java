@@ -641,7 +641,7 @@ public class GpSwingUtil extends GpUtil {
 		}
 		//
 		// // use editor based on SimplyHTML
-		// htmlEditPane = new HTMLEditPaneSimplyHTML();
+//		 htmlEditPane = new HTMLEditPaneSimplyHTML();
 
 		return htmlEditPane;
 	}
