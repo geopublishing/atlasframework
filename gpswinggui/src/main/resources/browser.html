@@ -5,7 +5,8 @@
 <body>
 	<script type="text/javascript">
 		if ( ${approve} ) {
-			window.opener.SetUrl( "${fileTemplate}" ) ;
+			/* window.opener.SetUrl( "${fileTemplate}" ) ; */
+			window.opener.CKEDITOR.tools.callFunction(1, "${fileTemplate}");
 		}
 		window.close() ;
 	</script>

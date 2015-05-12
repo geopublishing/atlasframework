@@ -964,11 +964,11 @@ public class WebServer {
 		String resourcePath = httpRequest.getResourcePath();
 		final Pattern pattern = Pattern.compile("JHTMLEditor/(\\d+?)/editor");
 		Matcher matcher = pattern.matcher(resourcePath);
-		if (!matcher.find()) {
-			JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.", "Error", JOptionPane.ERROR_MESSAGE);
-			return null;
+		int instanceId = 1;
+		if (matcher.find()) {
+			instanceId = Integer.valueOf(matcher.group(1));
+//			JOptionPane.showMessageDialog(null, "JHTMLEditor instance not found.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		final int instanceId = Integer.valueOf(matcher.group(1));
 		final Object object = ObjectRegistry.getInstance().get(instanceId);
 		return (JHTMLEditor) object;
 	}
@@ -985,8 +985,11 @@ public class WebServer {
 	public static WebServerContent performFileBrowsing(HTTPRequest httpRequest) {
 		final JHTMLEditor ed = (JHTMLEditor) determineJHTMLEditorFromRegistry(httpRequest);
 		final File fileBrowserStartFolder = ed.getFileBrowserStartFolder();
-		final String type = httpRequest.getQueryParameterMap().get("Type");
+		String type = httpRequest.getQueryParameterMap().get("Type");
 
+		if(type==null){
+		  type="Image"; //default	
+		}
 		// Open file chooser
 		FileExtensionFilter filter = null;
 		if ("Image".equals(type))
@@ -1035,7 +1038,7 @@ public class WebServer {
 		// Because Geopublisher (with HTML editor) runs on local
 		// system, we want to use a "normal" file chooser.
 		// System.out.println(httpRequest.getResourcePath());
-		if (parameter.contains("editor/filemanager/browser/default/browser.html")) {
+		if (parameter.contains("filemanager/browser/default/browser.html")) {
 			WebServerContent content = performFileBrowsing(httpRequest);
 			if (content != null)
 				return content;

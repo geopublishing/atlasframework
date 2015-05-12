@@ -632,7 +632,7 @@ public class GpSwingUtil extends GpUtil {
 				"org.geopublishing.geopublisher.swing.HTMLEditPaneJHTMLEditor",
 				true, // fallback if class can not be
 						// loaded
-				"FCK", ace);
+				"CK", ace);
 
 		if (htmlEditPane != null) {
 			LOGGER.info("Using " + LangUtil.getSimpleClassName(htmlEditPane)
