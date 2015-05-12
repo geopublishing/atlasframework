@@ -10,16 +10,20 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.geopublishing.geopublisher.AtlasConfigEditable;
 
 import chrriis.common.UIUtils;
+import chrriis.common.WebServer;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorDirtyStateEvent;
 import chrriis.dj.nativeswing.swtimpl.components.HTMLEditorListener;
@@ -73,7 +77,7 @@ public class HTMLEditPaneJHTMLEditor extends
 		setLayout(new BorderLayout());
 		this.ace = ace;
 		if (editorType == null)
-			editorType = "FCK";
+			editorType = "CK";
 		UIUtils.setPreferredLookAndFeel();
 		if (!NativeInterface.isOpen()) {
 		    NativeInterface.open();
@@ -120,13 +124,25 @@ public class HTMLEditPaneJHTMLEditor extends
 	@Override
 	public void addEditorTab(String title, URL url, int idx) {
 		JHTMLEditor editor = createJHTMLEditor(editorType, url);
-
+		
 		// add a listener for the save operation
 		editor.addHTMLEditorListener(this);
 		// add source file to map (for the new editor tab)
 		editURLs.put(editor, url);
 
 		String htmlContent = IOUtil.readURLasString(url);
+		
+//		Pattern p = Pattern.compile("(<img src=\")(.*?)\"");
+//		htmlContent = StringEscapeUtils.unescapeHtml(htmlContent);
+//		Matcher m = p.matcher(htmlContent);
+//		while(m.find()){
+//			File folder = new File(url.getFile()).getParentFile();
+//			File image = new File(folder.getAbsolutePath()+"/"+m.group(2));
+//			if(image.exists()){
+//			String newpath = ace.getBrowserURLString(image);
+//			htmlContent = htmlContent.replaceAll(m.group(2),newpath);
+//			}
+//		}
 		editor.setHTMLContent(htmlContent);
 		tabs.addTab(title, editor);
 	}
@@ -367,6 +383,19 @@ public class HTMLEditPaneJHTMLEditor extends
 		// + "'");
 		// }
 
+		if(editorType.equalsIgnoreCase("CK")){
+			Map<String, String> optionMap = new HashMap<String, String>();
+			optionMap.put("autoGrow_onStartup","'true'");
+			optionMap.put("baseHref", "'"+baseHrefStr+"'");
+//			optionMap.put("plugins","'image'");
+			htmlEditor = new JHTMLEditor(
+					JHTMLEditor.HTMLEditorImplementation.CKEditor,
+					JHTMLEditor.CKEditorOptions
+							.setOptions(optionMap));
+
+//			htmlEditor.setFileBrowserStartFolder(browseStartupFolder);
+			return htmlEditor;
+		}
 		if (editorType.equalsIgnoreCase("FCK")) {
 			// Create FCK as editor
 			String configScript = "";
@@ -439,26 +468,40 @@ public class HTMLEditPaneJHTMLEditor extends
 					FCKEditorOptions
 							.setCustomJavascriptConfiguration(configScript));
 
-			htmlEditor.setFileBrowserStartFolder(browseStartupFolder);
+//			htmlEditor.setFileBrowserStartFolder(browseStartupFolder);
 			return htmlEditor;
 		}
 
 		if (editorType.equalsIgnoreCase("TinyMCE")) {
 			// Create TinyMCE as editor
-			final String configScript = "theme_advanced_buttons1: 'bold,italic,underline,strikethrough,sub,sup,|,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,removeformat',"
-					+ "theme_advanced_buttons2: 'undo,redo,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,forecolor,backcolor,bullist,numlist,|,outdent,indent,blockquote,|,table',"
-					+ "theme_advanced_buttons3: '',"
-					+ "theme_advanced_toolbar_location: 'top',"
-					+ "theme_advanced_toolbar_align: 'left'," +
-					// Language can be configured when language packs are added
-					// to the classpath. Language packs can be found here:
-					// http://tinymce.moxiecode.com/download_i18n.php
-					// "language: 'de'," +
-					"plugins: 'table,paste'";
-
+		Map<String, String> optionMap = new HashMap<String, String>();
+		optionMap.put("theme_advanced_buttons1", "'bold,italic,underline,strikethrough,sub,sup,|,charmap,|,justifyleft,justifycenter,justifyright,justifyfull,|,hr,removeformat'");
+	    optionMap.put("theme_advanced_buttons2", "'undo,redo,|,cut,copy,paste,pastetext,pasteword,|,search,replace,|,forecolor,backcolor,bullist,numlist,|,outdent,indent,blockquote,|,table,link,image'");
+	    optionMap.put("theme_advanced_buttons3", "''");
+	    optionMap.put("theme_advanced_toolbar_location", "'top'");
+	    optionMap.put("theme_advanced_toolbar_align", "'left'");
+	    // Language can be configured when language packs are added to the classpath. Language packs can be found here: http://tinymce.moxiecode.com/download_i18n.php
+//	    optionMap.put("language", "'de'");
+	    optionMap.put("plugins", "'table,paste,contextmenu,searchreplace,media'");
+	    optionMap.put("image_advtab", "true");
+		
+		/**
+		 * selector: "textarea",
+            theme: "modern",
+            plugins: [
+                "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                "searchreplace wordcount visualblocks visualchars code fullscreen",
+                "insertdatetime media nonbreaking save table contextmenu directionality",
+                "emoticons template paste textcolor moxiemanager"
+            ],
+            toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link code image | forecolor backcolor emoticons",
+            image_advtab: true,
+            statusbar : false,
+            menubar : false,
+		 */
 			htmlEditor = new JHTMLEditor(
 					JHTMLEditor.HTMLEditorImplementation.TinyMCE,
-					TinyMCEOptions.setCustomHTMLHeaders(configScript));
+					JHTMLEditor.TinyMCEOptions.setOptions(optionMap));
 			return htmlEditor;
 		}
 		throw new UnsupportedOperationException(
