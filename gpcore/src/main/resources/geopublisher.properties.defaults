@@ -15,8 +15,8 @@ startJVMWithXmx=512
 windowMaximized=0
 NativeLibs=libmlib_jai.so mlib_jai_mmx.dll mlib_jai_util.dll mlib_jai.dll libgdal.so
 compressJARs=1
-sigp=wasser
-signingAlias=IMPETUS
+sigp=ohphee4Luhoo6giex6al
+signingAlias=glowa
 bugReportEmail=bugreport@geopublishing.org
 MinimumJavaVersion=1.6.0_22
 JWSStartScript=<script src\="http\://java.com/js/deployJava.js"></script>\n<script>\n var url \= "__JNLPURL__";\n deployJava.createWebStartLaunchButton(url, "__MINJAVAVERSION__");\n</script>

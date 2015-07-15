@@ -47,7 +47,7 @@
 		<mkdir dir="${TARGET.DEB.DIR}/dist" />
 		<mkdir dir="${TARGET.DEB.DIR}/buildIcon" />
 
-		<get src="http://atlas.geopublishing.org/workingcopies/ChartDemoAtlas_WorkingCopy.zip" dest="${TARGET.DEB.DIR}/build/ChartDemoAtlas_WorkingCopy.zip" description="Download the lastest version of the chart atlas workingcopy" />
+                <!--<get src="http://atlas.geopublishing.org/workingcopies/ChartDemoAtlas_WorkingCopy.zip" dest="${TARGET.DEB.DIR}/build/ChartDemoAtlas_WorkingCopy.zip" description="Download the lastest version of the chart atlas workingcopy" />-->
 
 		<desktopEntry toFile="${TARGET.DEB.DIR}/buildIcon/${PROGNAME}.desktop" name="Geopublishing documentation" comment="Documentation for Geopublisher and AtlasStyler" exec="xdg-open file:///usr/share/doc/geopublishing/index.html" icon="/usr/share/${PROGNAME}/${PROGNAME}.xpm" categories="Education;Science;Geography;Geoscience;Java" />
 
@@ -77,8 +77,7 @@ The package contains the tutorials, documentation and some demo data for Geopubl
 	</target>
 
 	<target name="add-deb-to-repo" depends="create-doc-deb" description="Imports the .deb into the repository using a tool called 'reprepro'.">
-
-		<!-- DEBIAN -->
+            <!--
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
 		</exec>
@@ -88,7 +87,6 @@ The package contains the tutorials, documentation and some demo data for Geopubl
 		</exec>
 
 
-		<!-- UBUNTU -->
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
 			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
 		</exec>
@@ -120,7 +118,7 @@ The package contains the tutorials, documentation and some demo data for Geopubl
                 <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for precise to the repo">
                         <arg line='-b ${REPO.DIR} includedeb precise ${TARGETDEB}' />
                 </exec>
-
+-->
 	</target>
 
 

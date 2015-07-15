@@ -139,14 +139,13 @@
 		</deb>
 	</target>
 
-
 	<target name="add-deb-to-repo"
 		depends="create-deb"
 		description="Imports the .deb into the repository using a tool called 'reprepro'."
-		>
+                >
 
-		<!-- DEBIAN -->
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
+                <!--
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for lenny to the repo">
 			<arg line='-b ${REPO.DIR} includedeb lenny ${TARGETDEB}' />
 		</exec>
 
@@ -158,9 +157,7 @@
 			<arg line='-b ${REPO.DIR} includedeb sid ${TARGETDEB}' />
 		</exec>
 
-
-		<!-- UBUNTU -->
-		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
+                <exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for hardy to the repo">
 			<arg line='-b ${REPO.DIR} includedeb hardy ${TARGETDEB}' />
 		</exec>
 
@@ -201,10 +198,8 @@
 		<exec executable="/usr/bin/reprepro" failonerror="true" description="Import the .deb for saucy to the repo">
 			<arg line='-b ${REPO.DIR} includedeb saucy ${TARGETDEB}' />
 		</exec>
-
+-->
 	</target>
-
-
 	<target name="clean-repository" description="Delete all packages stored in the repository.">
 
 		<mkdir dir="${REPO.DIR}" />
@@ -213,6 +208,5 @@
 		<delete dir="${REPO.DIR}/pool" verbose="true" description="resetting the repository" />
 
 	</target>
-
 </project>
 
